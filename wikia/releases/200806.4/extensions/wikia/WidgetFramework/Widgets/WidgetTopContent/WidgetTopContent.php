@@ -70,24 +70,26 @@ function WidgetTopContent($id, $params) {
 // AJAX support for dynamic change of widget "tabs"
 function WidgetTopContentGetSection($id, $functionName) {
 
-    wfProfileIn(__METHOD__);
+	wfProfileIn(__METHOD__);
 
-    // get list from DataProvider
-    $provider = & DataProvider::singleton();
-    $articles =& $provider->$functionName();
+	// get list from DataProvider
+	$provider = & DataProvider::singleton();
+	$articles =& $provider->$functionName();
     
-    // make items list    
-    $items = array();
+	// make items list    
+	$items = array();
     
-    if ( is_array($articles) && count($articles) > 0 ) {
-	foreach ($articles as $article) {
-	    $items[] = array( 'href' => $article['url'], 'name' => $article['text'] );
+	if ( is_array($articles) && count($articles) > 0 ) {
+		foreach ($articles as $article) {
+			if ($article['text'] != 'Not a valid Wikia') {
+				$items[] = array( 'href' => $article['url'], 'name' => $article['text'] );
+			}
+		}
 	}
-    }
     
-    wfProfileOut(__METHOD__);
+	wfProfileOut(__METHOD__);
 
-    return WidgetFrameworkWrapLinks($items);
+	return WidgetFrameworkWrapLinks($items);
 }
 
 // get list of sections
