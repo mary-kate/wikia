@@ -1940,7 +1940,8 @@ YAHOO.widget.AutoComplete.prototype._onContainerResize = function(v,oSelf) {
  */
 YAHOO.widget.AutoComplete.prototype._onTextboxKeyDown = function(v,oSelf) {
     var nKeyCode = v.keyCode;
-
+    var isMac = (navigator.userAgent.toLowerCase().indexOf("mac") != -1);
+    
     switch (nKeyCode) {
         case 9: // tab
             // select an item or clear out
@@ -1957,7 +1958,7 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyDown = function(v,oSelf) {
             }
             break;
         case 13: // enter
-            if(!YAHOO.env.ua.webkit) {
+            if(!isMac) {
                 if(oSelf._oCurItem) {
                     if(oSelf._nKeyCode != nKeyCode) {
                         if(oSelf._bContainerOpen) {
@@ -1975,8 +1976,10 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyDown = function(v,oSelf) {
             oSelf._toggleContainer(false);
             return;
         case 39: // right
-            oSelf._jumpSelection();
-            break;
+            if (!isMac) {
+ 	    	oSelf._jumpSelection();
+            }
+	    break;
         case 38: // up
             YAHOO.util.Event.stopEvent(v);
             oSelf._moveSelection(nKeyCode);
@@ -2001,7 +2004,7 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyPress = function(v,oSelf) {
     var nKeyCode = v.keyCode;
 
         //Expose only to Mac browsers, where stopEvent is ineffective on keydown events (bug 790337)
-        if(YAHOO.env.ua.webkit) {
+        if(YAHOO.env.ua.webkit) {        
             switch (nKeyCode) {
             case 9: // tab
                 if(oSelf._oCurItem) {
@@ -2023,6 +2026,7 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyPress = function(v,oSelf) {
                     oSelf._toggleContainer(false);
                 }
                 break;
+
             default:
                 break;
             }
