@@ -128,6 +128,7 @@ $MF['monaco_non_loggedin_js']['source'] = array_merge($MF['monaco_non_loggedin_j
 $MF['monaco_css']['source'] = array(
 	'common/yui/2.5.1/container/assets/container.css',
 	'common/yui/2.5.1/tabview/assets/tabview.css',
+	'common/shared.css',
 	'monaco/css/monobook_modified.css',
 	'monaco/css/reset_modified.css',
 	'monaco/css/root.css',
