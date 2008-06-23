@@ -60,7 +60,7 @@ function getLinkSuggest() {
 	}
 
 	if(!empty($namespace) || $namespace === 0) {
-		$query = strtolower($query);
+		$query = addslashes(strtolower($query));
 		$results = array();
 		$pageIds = array();
 
