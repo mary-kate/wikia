@@ -3,20 +3,30 @@
  *
  *
  * DB accessable external objects, all revisions from all databases are merged
- * in one table
+ * in one table. Class is singleton
  *
  */
 
-/**
- * External database storage will use one (or more) separate connection pools
- * from what the main wiki uses. If we load many revisions, such as when doing
- * bulk backups or maintenance, we want to keep them around over the lifetime
- * of the script.
- *
- * Associative array of LoadBalancer objects, indexed by cluster name.
- */
-global $wgExternalLoadBalancers;
-$wgExternalLoadBalancers = array();
+$wgDefaultExternalStore = "MERGED://archive";
+
+#CREATE TABLE `revision` (
+#  `id` int(10) NOT NULL auto_increment,
+#  `rev_wikia_id` int(8) unsigned NOT NULL,
+#  `rev_id` int(10) unsigned NOT NULL,
+#  `rev_page_id` int(10) unsigned NOT NULL,
+#  `rev_namespace` int(10) unsigned NOT NULL default '0',
+#  `rev_user` int(10) unsigned NOT NULL default '0',
+#  `rev_user_text` varchar(255) character set latin1 collate latin1_bin NOT NULL default '',
+#  `rev_timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
+#  `rev_text` mediumtext NOT NULL,
+#  PRIMARY KEY  (`id`),
+#  UNIQUE KEY `rev_id` (`rev_wikia_id`,`rev_id`),
+#  KEY `rev_page_id` (`rev_wikia_id`,`rev_page_id`,`rev_id`),
+#  KEY `rev_namespace` (`rev_wikia_id`,`rev_page_id`,`rev_namespace`),
+#  KEY `rev_user` (`rev_wikia_id`,`rev_user`,`rev_timestamp`),
+#  KEY `rev_user_text` (`rev_wikia_id`,`rev_user_text`,`rev_timestamp`)
+#) ENGINE=InnoDB DEFAULT CHARSET=utf8
+
 
 /**
  * One-step cache variable to hold base blobs; operations that
@@ -29,14 +39,29 @@ $wgExternalBlobCache = array();
 
 class ExternalStoreMerged {
 
+	static $balancers = array();
+
+	/**
+	 *  __construct
+	 *
+	 *  We just need to have it private for singleton
+	 *
+	 *  @author Krzysztof Krzyżaniak <eloy@wikia.com>
+	 *  @access private
+	 */
+	private function __construct() {
+		parent::__construct();
+	}
+
+
 	/** @todo Document.*/
 	function &getLoadBalancer( $cluster ) {
-		global $wgExternalServers, $wgExternalLoadBalancers;
-		if ( !array_key_exists( $cluster, $wgExternalLoadBalancers ) ) {
-			$wgExternalLoadBalancers[$cluster] = LoadBalancer::newFromParams( $wgExternalServers[$cluster] );
+		global $wgExternalServers;
+		if( !array_key_exists( $cluster, $balancers ) ) {
+			$balancers[ $cluster ] = LoadBalancer::newFromParams( $wgExternalServers[ $cluster ] );
 		}
-		$wgExternalLoadBalancers[$cluster]->allowLagged(true);
-		return $wgExternalLoadBalancers[$cluster];
+		$balancers[ $cluster ]->allowLagged(true);
+		return $balancers[ $cluster ];
 	}
 
 	/** @todo Document.*/
@@ -132,7 +157,7 @@ class ExternalStoreMerged {
 	function store( $cluster, $data ) {
 		$fname = __METHOD__;
 
-		$dbw =& $this->getMaster( $cluster );
+		$dbw = $this->getMaster( $cluster );
 
 		$id = $dbw->nextSequenceValue( 'blob_blob_id_seq' );
 		$dbw->insert( $this->getTable( $dbw ), array( 'blob_id' => $id, 'blob_text' => $data ), $fname );
