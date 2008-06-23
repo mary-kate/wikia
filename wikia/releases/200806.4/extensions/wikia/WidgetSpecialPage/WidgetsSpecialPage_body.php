@@ -79,7 +79,7 @@ class WidgetsSpecialPage extends SpecialPage
 			$data = $wgWidgets[$widget];
 			
 			// don't list some widgets on special page
-			if ( isset($data['listable']) && ($data['listable'] == false) ) {
+			if ( (isset($data['listable']) && ($data['listable'] == false)) || empty($data['desc']) ) {
 			    continue;
 			}
 			
