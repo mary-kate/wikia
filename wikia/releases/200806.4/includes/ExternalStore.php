@@ -52,14 +52,13 @@ class ExternalStore {
 	 * class itself as a parameter.
 	 * Returns the URL of the stored data item, or false on error
 	 */
-	static function insert( $url, $data ) {
+	static function insert( $url, $data, &$revision = null ) {
 		list( $proto, $params ) = explode( '://', $url, 2 );
 		$store =& ExternalStore::getStoreObject( $proto );
 		if ( $store === false ) {
 			return false;
 		} else {
-			return $store->store( $params, $data );
+			return $store->store( $params, $data, $revision );
 		}
 	}
 }
-
