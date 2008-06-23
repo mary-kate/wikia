@@ -245,7 +245,7 @@ function WidgetShoutBoxAddMessage($msg) {
 			wfDebug('Shoutbox: msg #' . $insertId. " added\n");
 
 			// add msg also to memcache entry - avoid using unecessary updates queries
-			$key = wfMemcKey('widget::shoutbox::messages');
+			$key = wfMemcKey('widget::shoutbox::messages:1');
 			$msgs = $wgMemc->get($key);
 
 			if (is_array($msgs)) {
@@ -281,7 +281,7 @@ function WidgetShoutBoxGetMessages() {
     wfProfileIn(__METHOD__);
 
     // try memcache
-    $key = wfMemcKey('widget::shoutbox::messages');
+    $key = wfMemcKey('widget::shoutbox::messages:1');
     $msgs = $wgMemc->get($key);
 
     // return cached messages list
@@ -304,7 +304,11 @@ function WidgetShoutBoxGetMessages() {
 		'u.user_name AS user'
     );
 
-    $conds   = array( 'wikia' => WidgetShoutBoxGenerateHostname(), 'u.user_id = s.user' );
+    $wikia = WidgetShoutBoxGenerateHostname();
+
+    wfDebug("Getting messages for wikia '$wikia'\n");
+
+    $conds   = array( 'wikia' => $wikia, 'u.user_id = s.user' );
     $options = array( 'LIMIT' => 50, 'ORDER BY' => 'time DESC' );
 
     // do query
@@ -375,7 +379,12 @@ function WidgetShoutBoxGetOnline() {
 // for compatibility with previous widget framework
 function WidgetShoutBoxGenerateHostname() {
     wfProfileIn( __METHOD__ );
-    global $wgServer;
+    global $wgServer, $wgCityId;
+
+    // #3094: dirty fix for dofus
+    if ($wgCityId == 602) {
+        return 'dofus.wikia.com';
+    }
 
     if ( isset( $wgServer ) ) {
         $host = substr( $wgServer, strpos( $wgServer, "://" ) + 3 );
