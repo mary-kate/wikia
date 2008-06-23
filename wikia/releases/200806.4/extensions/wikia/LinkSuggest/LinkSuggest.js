@@ -13,6 +13,8 @@ YAHOO.lang.extend(YAHOO.example.AutoCompleteTextArea, YAHOO.widget.AutoComplete,
 	_suggestionSuccessful: false,
 
 	_onTextboxKeyDown2: function(v,oSelf) {	
+		YAHOO.log('KeyDown  code: #' + v.keyCode);		
+
 		if ((v.keyCode == 221)) { //double brackets
 			var text = oSelf._elTextbox.value.replace(/\r/g, "");
 			var caret = oSelf.getCaret(oSelf._elTextbox);			
@@ -28,9 +30,13 @@ YAHOO.lang.extend(YAHOO.example.AutoCompleteTextArea, YAHOO.widget.AutoComplete,
 
 	// #2761
 	_onTextboxKeyPress2: function(v,oSelf) {
-		if (v.keyCode==38 || v.keyCode==40) {
-			YAHOO.log('stopEvent');
-			YAHOO.util.Event.stopEvent(v);
+		YAHOO.log('KeyPress code: #' + v.keyCode);
+
+		if (v.keyCode == 38 || v.keyCode == 40) {
+			YAHOO.util.Event.preventDefault(v);
+		}
+		else if (v.keyCode == 13) {
+			YAHOO.util.Event.preventDefault(v);
 		}
 	},
 
