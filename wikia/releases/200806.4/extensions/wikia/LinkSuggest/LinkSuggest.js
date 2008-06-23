@@ -13,8 +13,6 @@ YAHOO.lang.extend(YAHOO.example.AutoCompleteTextArea, YAHOO.widget.AutoComplete,
 	_suggestionSuccessful: false,
 
 	_onTextboxKeyDown2: function(v,oSelf) {	
-		YAHOO.log('KeyDown  code: #' + v.keyCode);		
-
 		if ((v.keyCode == 221)) { //double brackets
 			var text = oSelf._elTextbox.value.replace(/\r/g, "");
 			var caret = oSelf.getCaret(oSelf._elTextbox);			
@@ -32,12 +30,38 @@ YAHOO.lang.extend(YAHOO.example.AutoCompleteTextArea, YAHOO.widget.AutoComplete,
 	_onTextboxKeyPress2: function(v,oSelf) {
 		YAHOO.log('KeyPress code: #' + v.keyCode);
 
-		if (v.keyCode == 38 || v.keyCode == 40) {
-			YAHOO.util.Event.preventDefault(v);
+		switch(v.keyCode) {
+			// up/dowm
+			case 38:
+			case 40:
+				YAHOO.util.Event.preventDefault(v);
+				YAHOO.log('UP/DOWN: stopEvent()');
+				break;
+			
+			// enter
+			case 13:
+				 if(oSelf._oCurItem) {
+                    			if(oSelf._nKeyCode != v.keyCode) {
+                        			if(oSelf._bContainerOpen) {
+                            				YAHOO.util.Event.stopEvent(v);
+                        				YAHOO.log('ENTER: stopEvent()');
+						}
+                    			}
+                    			oSelf._selectItem(oSelf._oCurItem);
+                		}
+                		else {
+                    			oSelf._toggleContainer(false);
+                		}
+			break;
+	
+			// right
+			case 39:
+				oSelf._jumpSelection();
+				YAHOO.util.Event.preventDefault(v);
+				YAHOO.log('RIGHT: stopEvent()');
+			break;
 		}
-		else if (v.keyCode == 13) {
-			YAHOO.util.Event.preventDefault(v);
-		}
+
 	},
 
 	_moveSelection: function(nKeyCode) {
