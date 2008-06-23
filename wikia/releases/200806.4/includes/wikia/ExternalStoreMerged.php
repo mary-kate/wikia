@@ -152,9 +152,11 @@ class ExternalStoreMerged {
 	 *
 	 * @param $cluster String: the cluster name
 	 * @param $data String: the data item
+	 * @param Revision	$revision	Revision object
+	 * 
 	 * @return string URL
 	 */
-	function store( $cluster, $data ) {
+	function store( $cluster, $data, &$revision ) {
 		$fname = __METHOD__;
 
 		$dbw = $this->getMaster( $cluster );
