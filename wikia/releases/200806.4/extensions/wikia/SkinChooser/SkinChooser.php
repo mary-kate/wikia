@@ -314,37 +314,6 @@ function WikiaGetSkin ($user) {
 		$wgDefaultSkin='quartz';
 	}
 
-/*
-	# Cookie clean-up
-	if(count($_COOKIE) > 0) { # Does have any cookie?
-		if(isset($_COOKIE[$wgCookiePrefix.'useskin'])) { # Does have 'useskin' variable in cookie?
-			if($_COOKIE[$wgCookiePrefix.'useskin'] == 'default') { # When 'useskin' variable equals 'default'
-				if($wgOldDefaultSkin == 'monobook') { # When 'wgOldDefaulSkin' variable value is monobook
-					$skinpref = array('monobook', '', 0);
-				} else {
-					$skinpref = array($wgDefaultSkin, $wgDefaultTheme, 0);
-				}
-				$skinpref = join('-', $skinpref);
-				setcookie( $wgCookiePrefix.'skinpref', $skinpref, time() + $wgCookieExpiration, $wgCookiePath, $wgCookieDomain, $wgCookieSecure );
-				$_COOKIE[$wgCookiePrefix.'skinpref'] = $skinpref;
-			} else if($_COOKIE[$wgCookiePrefix.'useskin'] != 'new') { # When 'useskin' variable different then 'default' and 'new'
-				$useskin = $_COOKIE[$wgCookiePrefix.'useskin'];
-				$useskinA = split('-', $useskin);
-				if(count($useskinA) == 3) {
-					global $wgCookieExpiration, $wgCookiePath, $wgCookieDomain, $wgCookieSecure, $wgCookiePrefix;
-					$exp = time() + $wgCookieExpiration;
-					$skinpref = join('-',$useskinA);
-					setcookie( $wgCookiePrefix.'skinpref', $skinpref, $exp, $wgCookiePath, $wgCookieDomain, $wgCookieSecure );
-					$_COOKIE[$wgCookiePrefix.'skinpref'] = $skinpref;
-				}
-			}
-			# Unset 'useskin' variable from cookie
-			setcookie( $wgCookiePrefix.'useskin', false, time() + $wgCookieExpiration, $wgCookiePath, $wgCookieDomain, $wgCookieSecure );
-			unset($_COOKIE[$wgCookiePrefix.'useskin']);
-		}
-	}
-*/
-
 	# Get skin logic
 	if(!$user->isLoggedIn()) { # If user is not logged in
 		if(count($_COOKIE) > 0 && isset($_COOKIE[$wgCookiePrefix.'skinpref'])) { # If user has cookie with variable 'skinpref'
