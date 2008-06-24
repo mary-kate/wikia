@@ -43,7 +43,7 @@ class AdServer {
 		if(!empty($wgCurse)) { $skin = 'curse'; }
 		if(!empty($wgForceSkin)) { $skin = $wgForceSkin; }
 
-		$key = wfMemcKey('adlist', $skin, $wgAdServingType);
+		$key = wfMemcKey('Aadlist', $skin, $wgAdServingType);
 
 		if($wgRequest->getVal('action') != 'purge') {
 			$this->adsConfig = $wgMemc->get($key);
@@ -69,7 +69,7 @@ class AdServer {
 				array('ad_zone', 'ad_pos', 'ad_keywords', 'domain', 'ad_server'),
 				"(city_id={$cityID} OR (city_id=0 AND ((ad_lang=(SELECT SUBSTRING(city_lang,1,2) FROM $sharedDB.city_list WHERE city_id={$cityID}) AND ad_cat=(SELECT ad_cat FROM $sharedDB.city_list WHERE city_id={$cityID})) OR (ad_lang=(SELECT SUBSTRING(city_lang,1,2) FROM $sharedDB.city_list WHERE city_id={$cityID}) AND ad_cat='') OR (ad_lang='' AND ad_cat=(SELECT ad_cat FROM $sharedDB.city_list WHERE city_id={$cityID})) OR (ad_lang='' AND ad_cat='')))) AND city_ads.ad_skin='{$skin}'",
 				'AdServer::loadAdsConfig',
-				'ORDER BY city_id, ad_lang, ad_cat'
+				array('ORDER BY' => 'city_id, ad_lang, ad_cat')
 			);
 
 			while($row = $db->fetchObject($res)) {

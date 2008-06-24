@@ -3,26 +3,25 @@
 $wgUserStatsTrackWeekly = true;
 $wgUserStatsTrackMonthly = true;
 
-$wgUserStatsPointValues["edit"] = 25;
-$wgUserStatsPointValues["vote"] = 10;
-$wgUserStatsPointValues["comment"] = 35;
-$wgUserStatsPointValues["comment_plus"] = 15;
-$wgUserStatsPointValues["comment_ignored"] = -50;
-$wgUserStatsPointValues["opinions_created"] = 100;
-$wgUserStatsPointValues["opinions_pub"] = 100;
-$wgUserStatsPointValues["referral_complete"] = 5000;
-$wgUserStatsPointValues["friend"] = 25;
-$wgUserStatsPointValues["foe"] = 25;
-$wgUserStatsPointValues["gift_rec"] = 50;
-$wgUserStatsPointValues["gift_sent"] = 25;
-$wgUserStatsPointValues["points_winner_weekly"] = 1000;
-$wgUserStatsPointValues["points_winner_monthly"] = 4000;
-$wgUserStatsPointValues["user_image"] = 100;
-$wgUserStatsPointValues["facebook"] = 250;
-$wgUserStatsPointValues["poll_vote"] = 5;
-$wgUserStatsPointValues["quiz_points"] = 1;
-$wgUserStatsPointValues["quiz_created"] = 35;
-
+$wgUserStatsPointValues["edit"] = 50;
+$wgUserStatsPointValues["vote"] = 0;
+$wgUserStatsPointValues["comment"] = 0;
+$wgUserStatsPointValues["comment_plus"] = 0;
+$wgUserStatsPointValues["comment_ignored"] = 0;
+$wgUserStatsPointValues["opinions_created"] = 0;
+$wgUserStatsPointValues["opinions_pub"] = 0;
+$wgUserStatsPointValues["referral_complete"] = 0;
+$wgUserStatsPointValues["friend"] = 0;
+$wgUserStatsPointValues["foe"] = 0;
+$wgUserStatsPointValues["gift_rec"] = 0;
+$wgUserStatsPointValues["gift_sent"] = 0;
+$wgUserStatsPointValues["points_winner_weekly"] = 0;
+$wgUserStatsPointValues["points_winner_monthly"] = 0;
+$wgUserStatsPointValues["user_image"] = 1000;
+$wgUserStatsPointValues["poll_vote"] = 0;
+$wgUserStatsPointValues["quiz_points"] = 0;
+$wgUserStatsPointValues["quiz_created"] = 0;
+$wgNamespacesForEditPoints = array(0);
 class UserStatsTrack{
 
 	//for referencing purposes

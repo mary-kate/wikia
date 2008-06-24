@@ -352,6 +352,8 @@ function hideCarousel(e) {
 var carouselObj = null;
 var carouselLoaded = false;
 var carouselLength = 0;
+var carouselVisible = null;
+getNumberForCarousel();
 
 function showCarousel(e) {
 	if (Dom.get("headerMenuUser")) {
@@ -430,8 +432,8 @@ function showCarousel(e) {
 				//nextElement: (skin == 'quartz') ? "next-arrow" : "carousel-next",
 				prevElement: (skin == 'quartz') ? "carousel-prev" : "carousel-prev",
 				nextElement: (skin == 'quartz') ? "carousel-next" : "carousel-next",
-				numVisible: getNumberForCarousel(),
-				scrollInc: getNumberForCarousel()
+				numVisible: carouselVisible,
+				scrollInc: carouselVisible
 			});
 		} else {
 			if(skin != 'quartz') {
@@ -440,9 +442,7 @@ function showCarousel(e) {
 			}
 		}
 
-		Event.addListener(window, 'resize', function() {
-			carouselObj.setProperty('numVisible', getNumberForCarousel());
-		});
+		Event.addListener(window, 'resize', getNumberForCarousel); 
 	}
 }
 
@@ -451,9 +451,9 @@ function getNumberForCarousel() {
 		var widgetEl = Dom.get('widget_cockpit_list').firstChild;
 		var widgetElWidth = parseInt(Dom.getStyle(widgetEl,'width'))+(parseInt(Dom.getStyle(widgetEl,'margin-right'))*2);
 		var carouselWidth = parseInt(Dom.getX('next-arrow')-Dom.getX('prev-arrow')-32);
-		return Math.floor(carouselWidth / widgetElWidth);
+		carouselVisible = Math.floor(carouselWidth / widgetElWidth);
 	} else {
-		return Math.floor((Dom.getViewportWidth() - 60) / (55 + 145 + 5));
+		carouselVisible = Math.floor((Dom.getViewportWidth() - 60) / (55 + 145 + 5));
 	}
 }
 
