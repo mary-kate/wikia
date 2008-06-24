@@ -17,6 +17,7 @@ function wfSharedMessages() {
 }
 
 function wfGetSharedMessage($messageTitle, $message){
+	$text = '';
 	if(preg_match('/^shared-(.*)/i', $messageTitle, $messageParts)) {
 		global $wgContLang, $wgLang;
 		$sharedMessageName = $wgContLang->ucfirst($messageParts[1]);
@@ -30,14 +31,14 @@ function wfGetSharedMessage($messageTitle, $message){
 				&& $wgLang->getCode() != 'en' ) {
 			$title = Title::makeTitle(NS_MEDIAWIKI, $sharedMessageName . '/' . $wgLang->getCode());
 			$text = getSharedMessageText($title);
-			if( $text ) {
-				return $text;
-			}
 		}
-		$title = Title::makeTitle(NS_MEDIAWIKI, $sharedMessageName);
-		$text = getSharedMessageText($title);
+
+		if( empty( $text ) ) {
+			$title = Title::makeTitle(NS_MEDIAWIKI, $sharedMessageName);
+			$text = getSharedMessageText($title);
+		}
  	}
- 	if(isset($text)) {
+ 	if( !empty( $text ) ) {
  		$message = $text;
  	}
 	return true;
