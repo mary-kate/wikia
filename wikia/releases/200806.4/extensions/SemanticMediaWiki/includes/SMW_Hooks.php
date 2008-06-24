@@ -130,10 +130,13 @@ function smwfSaveHook(&$article, &$user, &$text) {
 function smwfUndeleteHook(&$title, $create) {
 	global $smwgIP ;
 	include_once($smwgIP . '/includes/SMW_Factbox.php');
-	if ($create) {
-		SMWFactbox::setNewArticle();
+	if ($title instanceof Title) {
+		SMWFactbox::initStorage($title);
+		if ($create) {
+			SMWFactbox::setNewArticle();
+		}
+		SMWFactbox::storeData(smwfIsSemanticsProcessed($title->getNamespace()));
 	}
-	SMWFactbox::storeData(smwfIsSemanticsProcessed($title->getNamespace()));
 	return true; // always return true, in order not to stop MW's hook processing!
 }
 
