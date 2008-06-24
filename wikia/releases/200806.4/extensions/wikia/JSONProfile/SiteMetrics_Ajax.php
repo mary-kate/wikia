@@ -21,7 +21,7 @@ function wfQueryCounter($callback){
         global $wgMemc, $wgRequest;
         $dbr =& wfGetDB( DB_MASTER );
         
-        $key = wfMemcKey( 'wikiasearch' , 'metrics' , 'querycounter', 'queryrate' );
+        $key = wfMemcKey( 'wikiasearch' , 'metrics' , 'querycounters', 'queryrate' );
         $obj = $wgMemc->get($key);
         
 	if(!$obj || ($obj && time() - $obj["at"] > 3600) ){
@@ -30,35 +30,57 @@ function wfQueryCounter($callback){
                 $res = $dbr->query($sql);
                 $row = $dbr->fetchObject($res);                
                 $totalQueryCount = $row->the_sum;
-                
+
                 // get today's queries
                 $sql = "SELECT SUM(num_queries) AS the_sum, COUNT(*) AS the_count FROM metrics_hourly_queries WHERE DATE(created_at)=DATE(NOW());";
                 $res = $dbr->query($sql);
                 $row = $dbr->fetchObject($res);
                 
                 // query rate in seconds
-                $rate = $row->the_sum / ($row->the_count * 60 * 60);
+                $rateQuery = $row->the_sum / ($row->the_count * 60 * 60);
+
+                // total contribtuions
+                $sql = "SELECT SUM(`count`) AS the_sum FROM metrics_ktops;";
+                $res = $dbr->query($sql);
+                $row = $dbr->fetchObject($res);                
+                $totalContributionCount = $row->the_sum;
                 
+                // get today's contributions
+                $sql = "SELECT SUM(`count`) AS the_sum, COUNT(*) AS the_count FROM metrics_ktops WHERE DATE(created_at)=DATE(NOW());";
+                $res = $dbr->query($sql);
+                $row = $dbr->fetchObject($res);
+                
+                // query rate in seconds
+                $rateContribution = $row->the_sum / ($row->the_count * 60 * 60);
+
                 // figure out the last hour we have
                 $sql = "SELECT UNIX_TIMESTAMP(created_at) AS the_time FROM metrics_hourly_queries ORDER BY created_at DESC LIMIT 1";
                 $res = $dbr->query($sql);
                 $row = $dbr->fetchObject($res);
                 $lastTime = $row->the_time;
                 
-                $obj["rate"] = round($rate, 4);
+                $obj["contributionRate"] = round($rateContribution, 4);
+                $obj["queryRate"] = round($rateQuery, 4);
                 $obj["at"] = time();
                 
         }else{
+                $totalContributionCount = $obj["contributions"];
                 $totalQueryCount = $obj["queries"];
-                $rate = $obj["rate"];
+                
+                $rateContribution = $obj["contributionRate"];
+                $rateQuery = $obj["queryRate"];
+                
                 $lastTime = $obj["at"];
         }
         
         // diff between the last data point in seconds
         $timeDiff = time() - $lastTime;
-        $totalQueryCount = $totalQueryCount + ($timeDiff * $rate);
-                
+        $totalQueryCount = $totalQueryCount + ($timeDiff * $rateQuery);
+        $totalContributionCount = $totalContributionCount + ($timeDiff * $rateContribution);
+        
+        $obj["at"] = time();
         $obj["queries"] = round($totalQueryCount);
+        $obj["contributions"] = round($totalContributionCount);
         
         $wgMemc->set( $key, $obj );
         
