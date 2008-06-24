@@ -1,0 +1,70 @@
+<?php
+/**
+ * Internationalisation file for ConfigureWiki extension.
+ *
+ * @addtogroup Extensions
+ */
+
+
+$wgRequestWikiMessages = array();
+$wgRequestWikiMessages['en'] = array(
+    "requestwiki_pagetitle" => 'Request Wiki',
+    "requestwiki" => "Request Wiki Form",
+    "requestwiki_startinginfo" => "Wikia communities are a great way to collaborate with passionate people on any topic imaginable.",
+    "requestwiki_question1" => "Is your wiki unique?",
+    "requestwiki_question1submit" => "Search for title",
+    "requestwiki_question1more" => "<em>Wikia has wiki communities on over 2,750 topics! Before requesting a new wiki, check to see if we already have a community that needs your help.</em>",
+    "requestwiki_question1tip" => "<em>For best results, try a single word or short phrase, like 'sport' or 'star wars'</em>",
+    "requestwiki_question2" => "Will your wiki attract lots of contributors?",
+    "requestwiki_question2more" => "<em>It's no fun to edit alone so we want to make sure your topic is broad enough that it will attract a community.</em>",
+    "requestwiki_question3" => "Are you happy for everyone to edit this wiki, and for it to be under a free content license?",
+    "requestwiki_question3more" => "<em>Anyone can join in on a Wikia wikis, that way anyone can improve the content. And Wikia wikis use the same free licence as Wikipedia, so the content will always stay free!</em>",
+    "requestwiki_question4" => "Do you agree to Wikia's <a href=\"http://www.wikia.com/wiki/Terms_of_use\">terms of use</a>?",
+    "requestwiki_question" => "If you answered <strong>yes</strong> to these four questions, click I agree:",
+    "requestwiki_description" => "Description of wiki",
+    "requestwiki_descriptionhint" => "Please tell us about this wiki. What will this wiki be about? What sort of articles will be included?",
+    "requestwiki_name" => "Name for the wiki",
+    "requestwiki_namehint" => "The \"name\" is the part of the URL that identifies the wiki. For example, for http://cars.wikia.com, the name is \"cars\". The name cannot contain special characters (like $, @, or -) and must be a single lower-case word without spaces.",
+    "requestwiki_descriptionpage" => "Description page title",
+    "requestwiki_descriptionpagehint" => "Description page title hint",
+    "requestwiki_descriptionenglish" => "Description of the wiki in English",
+    "requestwiki_descriptionenglishhint" => "We have people able to help in several languages, including German, Spanish, Polish, Chinese, and Japanese. But it may help us if you can summarise your request in English.",
+    "requestwiki_title" => "Title for the wiki",
+    "requestwiki_titlehint" => "The title for the wiki is used for the browser title bar, for one of the \"namepaces\" or sections of the wiki, and is generally used to describe the wiki. For example, the title of http://cars.wikia.com might be \"Cars Wiki\".",
+    "requestwiki_date" => "Date",
+    "requestwiki_datehint" => "The date field is set by the system, it's just for information.",
+    "requestwiki_category" => "Category",
+    "requestwiki_categoryhint" => "Which category should this wiki be in? For example, sports, or arts, or hobbies? Look through the <a href=\"http://www.wikia.com/wiki/Category:Wikia_categories\">Wikia categories</a> for ideas or select a category from the cloud above.",
+    "requestwiki_community" => "Community",
+    "requestwiki_communityhint" => "Please give us some more information to help us with this request. For example: Who will edit this wiki? Is there already a community around this topic? How will you promote the wiki to ensure at least 20 people join? Give links to forums on this topic if you know of any.",
+    "requestwiki_comments" => "Comments",
+    "requestwiki_commentshint" => "Comments hint",
+    "requestwiki_language" => "Default language for this wiki",
+    "requestwiki_languagehint" => "The language you select here will be the default language for the wiki.",
+    "requestwiki_questions" => "Questions",
+    "requestwiki_questionshint" => "Questions hint",
+    "requestwiki_starting" => "Starting a wiki is easy!",
+    "requestwiki_errorempty" => "This field cannot be empty.",
+    "requestwiki_autoconfirmedinfo" => "Please <a href=\"$1\">confirm Your email</a> before requesting new Wiki",
+    "requestwiki_logininfo" => "Please <a href=\"$1\">log in</a> before requesting a new Wiki.",
+    "requestwiki_request_id" => "Action",
+    "requestwiki_request_name" => "Proposed name",
+    "requestwiki_request_language" => "Language",
+    "requestwiki_request_title" => "Title",
+    "requestwiki_request_timestamp" => "History",
+    "requestwiki_request_category" => "Category",
+    "requestwiki_founder" => "Requester's username",
+    "requestwiki_nametooshort" => "This name is too short, name should have at least 3 characters.",
+    "requestwiki_noexact" => "Looks like we don't have such wiki",
+    "requestwiki_inprogress" => "Someone already requested that name",
+    "requestwiki_usedname" => "Sorry, this name is already taken.",
+    "requestwiki_badname" => "The name cannot contain special characters (like $, @, or -) and must be a single lower-case word without spaces.",
+    "requestwiki_pagexists" => "There is $0 page and it doesn't look like page created by RequestWiki",
+    "requestwiki_validname" => "Name is valid",
+    "requestwiki_save" => "Submit Request",
+    "requestwiki_agree" => "I agree",
+    "requestwiki_thanks" => "<p>Thank you for your request. It has been saved successfully and will be looked at by our staff as soon as possible. We will be in touch shortly to let you know if your request has been accepted.</p><p>If you want to make changes to your form, please use the \"edit this request\" button on the request page.</p>",
+    "requestwiki_thanks_link" => "Click here to go to the request page",
+    "requestwiki_usernamehint" => "Note: username have to be existed in shared database."
+);
+?>
