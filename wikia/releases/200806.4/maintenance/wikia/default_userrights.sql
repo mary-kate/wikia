@@ -107,6 +107,7 @@ insert into user_groups(ug_user, ug_group) values
 
 delete from user_groups where ug_user in (
 /*AnnElida*/792759,
+/*Bola*/126681,
 /*Datrio*/57466,
 /*Jnewcombe*/801589,
 /*JoePlay*/171752,
@@ -124,6 +125,7 @@ delete from user_groups where ug_user in (
 ) and ug_group="helper";
 insert into user_groups(ug_user, ug_group) values
 (/*AnnElida*/792759,'helper'),
+(/*Bola*/126681,'helper'),
 (/*Datrio*/57466,'helper'),
 (/*Jnewcombe*/801589,'helper'),
 (/*JoePlay*/171752,'helper'),
