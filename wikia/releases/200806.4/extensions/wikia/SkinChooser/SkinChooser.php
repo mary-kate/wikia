@@ -35,31 +35,22 @@ function SetThemeForPreferences($pref) {
 
 $wgHooks['SavePreferencesHook'][] = 'SavePreferencesSkinChooser';
 function SavePreferencesSkinChooser($pref) {
-	global $wgUser;
-	global $wgDefaultSkin, $wgDefaultTheme;
-	global $wgMemc;
+	global $wgUser, $wgCityId, $wgAdminSkin;
 
 	# Save setting for admin skin
 	if(!empty($pref->mAdminSkin)) {
-
 		$ug = $wgUser->getGroups();
 		if( in_array('staff', $ug) || in_array('sysop', $ug) ) {
 			$adminSkin = getAdminSkin();
-
 			if($pref->mAdminSkin != $adminSkin) {
-				$articleTitle = Title::newFromText ("AdminSkin", NS_MEDIAWIKI);
-				$article = new Article ($articleTitle);
-
 				if($pref->mAdminSkin == 'ds') {
-					$article->doDeleteArticle("Set admin skin to default skin");
+					WikiFactory::SetVarById(599, $wgCityId, null);
+					$wgAdminSkin = null;
 				} else {
-					$article->doEdit($pref->mAdminSkin, "Set new default skin");
+					WikiFactory::SetVarById(599, $wgCityId, $pref->mAdminSkin);
+					$wgAdminSkin = $pref->mAdminSkin;
 				}
-
-				//$article->doPurge();
-				//$key = wfMemcKey('AdminSkin');
-				//$wgMemc->replace($key, $pref->mAdminSkin);
-
+				WikiFactory::clearCache(599);
 			}
 		}
 	}
@@ -374,22 +365,11 @@ function WikiaGetSkin ($user) {
 		}
 
 		$user->mSkin->themename = $userTheme;
-	}/* else {
-		$userTheme = null;
-	} */
+	}
 	return false;
 }
 
 function getAdminSkin() {
-	$data = null;
-	if(!$data){
-		$revision = Revision::newFromTitle(Title::makeTitle(NS_MEDIAWIKI, "AdminSkin"));
-		if(is_object($revision)) {
-			$data = $revision->getText();
-		}
-		if(empty($data)) {
-			$data = 'ds'; # default skin
-		}
-	}
-	return $data == 'ds' ? null : $data;
+	global $wgAdminSkin;
+	return $wgAdminSkin;
 }
