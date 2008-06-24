@@ -164,10 +164,54 @@ class ExternalStoreMerged {
 	 * @return string URL
 	 */
 	function store( $cluster, $data, &$revision ) {
+		global $wgCityId;
+
+		if( !isset( $wgCityId ) ) {
+			/**
+			 * it's not wiki factory cluster
+			 */
+			return false;
+		}
 		$dbw = $this->getMaster( $cluster );
+		$page = $revision->getPage();
 
 		$dbw->begin();
-		#--- fill revision table
+		/**
+		 * fill revision table
+		 */
+		$ret = $dbw->insert(
+			$this->getTable( "revisions" ),
+			array(
+				"id" => null,
+				"rev_wikia_id" => $wgCityId,
+				"rev_id" => $revision->getId(),
+				"rev_page_id" => $page->getId(),
+				"rev_namespace" => $page->getNamespace(),
+				"rev_user" => "",
+				"rev_user_text" => "",
+				"rev_text" => $data
+			)
+		);
+		#--- well, assume for while that everything went fine
+		if( $ret ) {
+			/**
+			 * insert or update
+			 */
+			$dbw->insert(
+				$this->getTable( "pages" ),
+				array(
+					"page_wikia_id" => $wgCityId,
+					"page_id"	=> $page->getId(),
+					"page_namespace" => $page->getNamespace(),
+					"page_title" => "",
+					"page_counter" => 0,
+					"page_edits" => 0,
+				)
+			);
+		}
+		else {
+			$dbw->rollback();
+		}
 		#--- fill page table
 		$dbw->commit();
 		return "MERGED://$cluster/$id";
