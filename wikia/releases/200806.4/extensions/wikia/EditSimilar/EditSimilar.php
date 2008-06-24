@@ -297,7 +297,14 @@ class EditSimilar {
 					font-size:0.9em;
 				}
 			</style>
-		") ;
+		");
+		$wgOut->addScript ("
+			<script type=\"text/javascript\">
+				if (YAHOO.Wikia && YAHOO.Wikia.Tracker) {
+					YAHOO.Wikia.Tracker.trackByStr(null, 'userengagement/editSimilar_view');
+				}
+			</script>
+		");
 		if ($wgUser->isLoggedIn () ) {		
 			$link = "<div class=\"editsimilar_dismiss\">[<span class=\"plainlinks\"><a href=\"" . $wgScript .  "?title=Special:Preferences#prefsection-4\" id=\"editsimilar_preferences\">" . wfMsg('editsimilar-link-disable') . "</a></span>]</div><div style=\"display:block\">&nbsp;</div>" ;
 		} else {

@@ -256,7 +256,7 @@ function wfQuestionGameVote($answer,$key,$id, $points){
 			$stats->incStatField("quiz_correct");
 			
 			//add to point total
-			if( ! $wgUser->isBlocked() ){
+			if( ! $wgUser->isBlocked() && is_numeric( $points ) ){
 				$stats->incStatField("quiz_points",$points);
 			}
 			

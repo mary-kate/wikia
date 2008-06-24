@@ -72,7 +72,7 @@ FCKToolbarItems.GetItem = function( itemName )
 		case 'Underline'	: oItem = new FCKToolbarButton( 'Underline'     , FCKLang.Underline, null, null, true, true, 22 ) ; break ;
 		case 'StrikeThrough': oItem = new FCKToolbarButton( 'StrikeThrough' , FCKLang.StrikeThrough, null, null, true, true, 23 ) ; break ;
 		case 'Link'			: oItem = new FCKToolbarButton( 'Link'          , FCKLang.InsertLinkLbl, FCKLang.InsertLink, null, true, true, 34 ) ; break ;
-
+		case 'Rule'             : oItem = new FCKToolbarButton( 'Rule'                  , FCKLang.InsertLineLbl, FCKLang.InsertLine, null, true, true, 40 ) ; break ;
 		default:
 			return FCKToolbarItems.OldGetItem( itemName );
 	}
@@ -97,6 +97,7 @@ FCKToolbarButton.prototype.Click = function()
 			case 'Underline' 	: window.parent.insertTags ('<u>', '</u>', 'Underlined text') ; CMode = true ; break ;
 			case 'StrikeThrough': window.parent.insertTags ('<strike>', '</strike>', 'Strikethrough text') ; CMode = true ; break ;
 			case 'Link' 		: window.parent.insertTags ('[[', ']]', 'Internal link') ; CMode = true ; break ;
+			case 'Rule'             : window.parent.insertTags ('\n----\n', '', '') ; CMode = true ; break ;
 		}
 	}
 	
@@ -884,3 +885,43 @@ FCK.ContextMenu.RegisterListener({
 		}
 	}
 }) ;
+
+/* patch for 2.6.1 */
+if (window.parent.FCKeditor.prototype.VersionBuild > 18219)
+{
+        FCKToolbarSet.prototype.RefreshModeState = function( editorInstance )
+        {
+                if ( FCK.Status != FCK_STATUS_COMPLETE )
+                        return ;
+
+                var oToolbarSet = editorInstance ? editorInstance.ToolbarSet : this ;
+                var aItems = oToolbarSet.ItemsWysiwygOnly ;
+
+                if ( FCK.EditMode == FCK_EDITMODE_WYSIWYG )
+                {
+                        for ( var i = 0 ; i < aItems.length ; i++ )
+                                aItems[i].Enable() ;
+
+                        oToolbarSet.RefreshItemsState( editorInstance ) ;
+                }
+                else
+                {
+                        oToolbarSet.RefreshItemsStateOverride( editorInstance ) ;
+                }
+
+                for ( var j = 0 ; j < aItems.length ; j++ )
+                        aItems[j].Disable() ;
+        }
+
+        FCKToolbarSet.prototype.RefreshItemsStateOverride = function( editorInstance )
+        {
+                var aItems = ( editorInstance ? editorInstance.ToolbarSet : this ).ItemsContextSensitive ;
+
+                for ( var i = 0 ; i < aItems.length ; i++ )
+                {
+                        if (!aItems[i].SourceView)
+                                aItems[i].RefreshState() ;
+                }
+        }
+}
+

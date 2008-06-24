@@ -27,13 +27,13 @@ YAHOO.Wikia.Tracker = {
 		Event.addListener('editsimilar_links', 'click', function(e) {
 			var el = Event.getTarget(e);
 			if((el.nodeName == 'A') && (el.id != 'editsimilar_preferences')) {
-				YAHOO.Wikia.Tracker.trackByStr(e, 'UserEngagement/editSimilarLink');
+				YAHOO.Wikia.Tracker.trackByStr(e, 'userengagement/editSimilar_click');
 			}
 		});
 
 		// EditSimilar extension - preferences link (Bartek)
 		Event.addListener('editsimilar_preferences', 'click', function(e) {
-			YAHOO.Wikia.Tracker.trackByStr(e, 'UserEngagement/editSimilar/editSimilarPrefs');
+			YAHOO.Wikia.Tracker.trackByStr(e, 'userengagement/editSimilar/editSimilarPrefs');
 		});
 
 		// CreateAPage extension (Bartek)

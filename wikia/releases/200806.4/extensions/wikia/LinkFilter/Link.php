@@ -27,17 +27,17 @@ require_once ("{$wgLinkFilterDirectory}/LinkFilter_AjaxFunctions.php" );
 
 //default setup for displaying sections
 $wgLinkPageDisplay['leftcolumn'] = true;
-$wgLinkPageDisplay['rightcolumn'] = true;
+$wgLinkPageDisplay['rightcolumn'] = false;
 $wgLinkPageDisplay['author'] = true;
-$wgLinkPageDisplay['author_articles'] = true;
-$wgLinkPageDisplay['recent_editors'] = true;
-$wgLinkPageDisplay['recent_voters'] = true;
-$wgLinkPageDisplay['left_ad'] = true;
-$wgLinkPageDisplay['popular_articles'] = true;
-$wgLinkPageDisplay['in_the_news'] = true;
+$wgLinkPageDisplay['author_articles'] = false;
+$wgLinkPageDisplay['recent_editors'] = false;
+$wgLinkPageDisplay['recent_voters'] = false;
+$wgLinkPageDisplay['left_ad'] = false;
+$wgLinkPageDisplay['popular_articles'] = false;
+$wgLinkPageDisplay['in_the_news'] = false;
 $wgLinkPageDisplay['comments_of_day'] = true;
 $wgLinkPageDisplay['games'] = true;
-$wgLinkPageDisplay['new_links'] = true;
+$wgLinkPageDisplay['new_links'] = false;
 
 $wgGroupPermissions['linkadmin']["read"]  = true;
 $wgGroupPermissions['no_link_submit']["read"]  = true;

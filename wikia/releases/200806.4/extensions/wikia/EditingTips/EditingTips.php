@@ -125,8 +125,8 @@ function AddEditingTips($o) {
 
 	$html = '<dl id="editingTips" class="accordion-menu widget reset" style="display: none"><dt class="color1" style="cursor:text"><div class="widgetToolbox"><div class="close" id="editingTips_close"><span></span></div></div>Editing Tips</dt>';
 	$first = true;
-	foreach(getEditingTips() as $tip) {
-		$html .= '<dt '.($first ? 'id="firstTip" ' : '').'class="a-m-t">'.$tip['title'].'</dt><dd class="a-m-d"><div class="bd">'.$tip['body'].'</div></dd>';
+	foreach(getEditingTips() as $tid => $tip) {
+		$html .= '<dt '.($first ? 'id="firstTip" ' : 'id="editingTip-'.$tid.'"').'class="a-m-t">'.$tip['title'].'</dt><dd class="a-m-d"><div class="bd">'.$tip['body'].'</div></dd>';
 		$first = false;
 	}
 	$html .= '</dl>';

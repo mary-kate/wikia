@@ -87,7 +87,9 @@ YAHOO.util.Event.onDOMReady(function() {
 			return;
 		}
 
-		YAHOO.Wikia.Tracker.trackByStr(e, 'editingTips/expand/' + el.childNodes[0].innerHTML );
+		tipId = (el.id == 'firstTip') ? 1 : (el.id.split('-')[1]);
+
+		YAHOO.Wikia.Tracker.trackByStr(e, 'editingTips/expand/' + tipId);
 	});
 
 	YAHOO.util.Event.addListener('editingTips_close', 'click', function(e) {YAHOO.Wikia.Tracker.trackByStr(e, 'editingTips/close')});
