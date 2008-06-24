@@ -103,7 +103,7 @@ $wgSkipSkins = array(
  * @name wgReleaseNumber
  * release number is used for building links
  */
-$HeadURL = split('/', '$HeadURL: https://svn.wikia-inc.com/svn/wikia/releases/200806.3/includes/wikia/DefaultSettings.php $');
+$HeadURL = split('/', '$HeadURL$');
 $wgReleaseNumber = $HeadURL[5];
 
 /**
