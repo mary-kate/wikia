@@ -174,6 +174,7 @@ class ExternalStoreMerged {
 		}
 		$dbw = $this->getMaster( $cluster );
 		$page = $revision->getPage();
+		$Title = $revision->getTitle();
 
 		$dbw->begin();
 		/**
@@ -185,8 +186,8 @@ class ExternalStoreMerged {
 				"id" => null,
 				"rev_wikia_id" => $wgCityId,
 				"rev_id" => $revision->getId(),
-				"rev_page_id" => $page->getId(),
-				"rev_namespace" => $page->getNamespace(),
+				"rev_page_id" => $page,
+				"rev_namespace" => $Title->getNamespace(),
 				"rev_user" => "",
 				"rev_user_text" => "",
 				"rev_text" => $data
@@ -197,22 +198,50 @@ class ExternalStoreMerged {
 			/**
 			 * insert or update
 			 */
-			$dbw->insert(
+			$Row = $dbw->selectRow(
 				$this->getTable( "pages" ),
-				array(
-					"page_wikia_id" => $wgCityId,
-					"page_id"	=> $page->getId(),
-					"page_namespace" => $page->getNamespace(),
-					"page_title" => "",
-					"page_counter" => 0,
-					"page_edits" => 0,
-				)
+				array( "page_id" ),
+				array( "page_id" => $page ),
+				__METHOD__
 			);
+			if( isset( $Row->page_id ) && !empty( $Row->page_id ) ) {
+				/**
+				 * update
+				 */
+				$dbw->update(
+					$this->getTable( "pages" ),
+					array(
+						"page_wikia_id"  => $wgCityId,
+						"page_namespace" => $Title->getNamespace(),
+						"page_title"     => $Title->getText(),
+						"page_counter"   => 0,
+						"page_edits"     => 0,
+					),
+					array(
+						"page_id"        => $page->getId(),
+					)
+				);
+			}
+			else {
+				/**
+				 * insert
+				 */
+				$dbw->insert(
+					$this->getTable( "pages" ),
+					array(
+						"page_wikia_id"  => $wgCityId,
+						"page_id"        => $page->getId(),
+						"page_namespace" => $Title->getNamespace(),
+						"page_title"     => $Title->getText(),
+						"page_counter"   => 0,
+						"page_edits"     => 0,
+					)
+				);
+			}
 		}
 		else {
 			$dbw->rollback();
 		}
-		#--- fill page table
 		$dbw->commit();
 		return "MERGED://$cluster/$id";
 	}
