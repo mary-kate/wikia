@@ -36,7 +36,7 @@ $wgWidgets['WidgetWikiPage'] = array(
 
 function WidgetWikiPage($id, $params) {
 
-	global $wgTitle;
+	global $wgTitle, $wgParser;
 
 	wfProfileIn(__METHOD__);
 	
@@ -50,19 +50,18 @@ function WidgetWikiPage($id, $params) {
 	// parse message and clean it up
 	//
 
-	$options = new ParserOptions();
-	$options->setMaxIncludeSize(50);
-
 	 // fixes #2774
 	if ( isset($params['_widgetTag']) ) {
 		// work-around for WidgetTag
 		$parser = new Parser();
 	}
 	else {
-		global $wgParser;
-		$parser = $wgParser;
+		$parser = & $wgParser;
 	}
 	
+	$options = new ParserOptions();
+	$options->setMaxIncludeSize(750);
+
 	// get content of MediaWiki:<title>
 	$article = WidgetFrameworkGetArticle($params['title'], NS_MEDIAWIKI);
 
@@ -71,7 +70,7 @@ function WidgetWikiPage($id, $params) {
 		$ret = $parser->parse( wfMsg('widgetwikipage', $params['title']), $wgTitle, $options )->getText();
 	}
 	else {
-		$ret = $parser->parse($article, $wgTitle, $options)->getText();
+		$ret = $parser->parse( $article, $wgTitle, $options )->getText();
 	}
 
 	wfProfileOut(__METHOD__);
