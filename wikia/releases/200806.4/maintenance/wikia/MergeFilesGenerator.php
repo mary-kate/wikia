@@ -7,7 +7,7 @@ define('MEDIAWIKI', 'true');
 require_once('extensions/wikia/MergeFiles/MergeFilesMinimal.php');
 require_once('extensions/wikia/MergeFiles/MergeFilesAdditional.php');
 
-$HeadURL = split('/', '$HeadURL: https://svn.wikia-inc.com/svn/wikia/releases/200806.3/maintenance/wikia/MergeFilesGenerator.php $');
+$HeadURL = split('/', '$HeadURL$');
 $wgReleaseNumber = $HeadURL[5];
 $targetPrefix = "/images/common/releases_{$wgReleaseNumber}/skins/";
 $java = "/usr/bin/java";
