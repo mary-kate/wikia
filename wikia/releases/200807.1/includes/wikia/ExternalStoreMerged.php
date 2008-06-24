@@ -1,12 +1,13 @@
 <?php
 /**
  * DB accessable external objects, all revisions from all databases are merged
- * in one table. Class is singleton
+ * in one table.
  *
  * Small ad: use openkomodo
  */
 
-$wgDefaultExternalStore = "MERGED://archive";
+$wgDefaultExternalStore = "merged://archive";
+$wgExternalStores = array("merged");
 
 #CREATE TABLE `revisions` (
 #  `id` int(10) NOT NULL auto_increment,
@@ -25,8 +26,8 @@ $wgDefaultExternalStore = "MERGED://archive";
 #  KEY `rev_user` (`rev_wikia_id`,`rev_user`,`rev_timestamp`),
 #  KEY `rev_user_text` (`rev_wikia_id`,`rev_user_text`,`rev_timestamp`)
 #) ENGINE=InnoDB DEFAULT CHARSET=utf8
-
-
+#
+#
 #CREATE TABLE `pages` (
 #  `page_wikia_id` int(8) unsigned NOT NULL,
 #  `page_id` int(10) unsigned NOT NULL,
@@ -47,32 +48,21 @@ $wgDefaultExternalStore = "MERGED://archive";
 global $wgExternalBlobCache;
 $wgExternalBlobCache = array();
 
+global $wgExternalMergeBalancers;
+$wgExternalMergeBalancers = array();
+
 class ExternalStoreMerged {
 
-	static private $mBalancers = array();
 	private $mDBbname	= "dataware";
-
-	/**
-	 *  __construct
-	 *
-	 *  We just need to have it private for singleton
-	 *
-	 *  @author Krzysztof Krzyżaniak <eloy@wikia.com>
-	 *  @access private
-	 */
-	private function __construct() {
-		parent::__construct();
-	}
-
 
 	/** @todo Document.*/
 	function &getLoadBalancer( $cluster ) {
-		global $wgExternalServers;
-		if( !array_key_exists( $cluster, $this->mBalancers ) ) {
-			$this->mBalancers[ $cluster ] = LoadBalancer::newFromParams( $wgExternalServers[ $cluster ] );
+		global $wgExternalServers, $wgExternalMergeBalancers;
+		if( !array_key_exists( $cluster, $wgExternalMergeBalancers ) ) {
+			$wgExternalMergeBalancers[ $cluster ] = LoadBalancer::newFromParams( $wgExternalServers[ $cluster ] );
 		}
-		$this->mBalancers[ $cluster ]->allowLagged(true);
-		return $this->mBalancers[ $cluster ];
+		$wgExternalMergeBalancers[ $cluster ]->allowLagged(true);
+		return $wgExternalMergeBalancers[ $cluster ];
 	}
 
 	/** @todo Document.*/
@@ -175,19 +165,20 @@ class ExternalStoreMerged {
 		$dbw = $this->getMaster( $cluster );
 		$page = $revision->getPage();
 		$Title = $revision->getTitle();
-
+		print_pre( $revision );
+		exit(0);
 		$dbw->begin();
 		/**
 		 * fill revision table
 		 */
 		$ret = $dbw->insert(
-			$this->getTable( "revisions" ),
+			$this->getTable( $dbw, "revisions" ),
 			array(
 				"id" => null,
 				"rev_wikia_id" => $wgCityId,
 				"rev_id" => $revision->getId(),
 				"rev_page_id" => $page,
-				"rev_namespace" => $Title->getNamespace(),
+				"rev_namespace" => 0,
 				"rev_user" => "",
 				"rev_user_text" => "",
 				"rev_text" => $data
@@ -199,7 +190,7 @@ class ExternalStoreMerged {
 			 * insert or update
 			 */
 			$Row = $dbw->selectRow(
-				$this->getTable( "pages" ),
+				$this->getTable( $dbw, "pages" ),
 				array( "page_id" ),
 				array( "page_id" => $page ),
 				__METHOD__
@@ -209,7 +200,7 @@ class ExternalStoreMerged {
 				 * update
 				 */
 				$dbw->update(
-					$this->getTable( "pages" ),
+					$this->getTable( $dbw, "pages" ),
 					array(
 						"page_wikia_id"  => $wgCityId,
 						"page_namespace" => $Title->getNamespace(),
@@ -227,7 +218,7 @@ class ExternalStoreMerged {
 				 * insert
 				 */
 				$dbw->insert(
-					$this->getTable( "pages" ),
+					$this->getTable( $dbw, "pages" ),
 					array(
 						"page_wikia_id"  => $wgCityId,
 						"page_id"        => $page->getId(),
@@ -243,6 +234,6 @@ class ExternalStoreMerged {
 			$dbw->rollback();
 		}
 		$dbw->commit();
-		return "MERGED://$cluster/$id";
+		return "merged://$cluster/$id";
 	}
 }
