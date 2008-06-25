@@ -437,10 +437,10 @@ function mwSetupToolbar() {
 		mwInsertEditButton(toolbar, mwCustomEditButtons[i]);
 	}
 
-	//if(skin != 'monaco') {
+	if(typeof wmu_back == "undefined") {
 		if (typeof mwWikiaUploadNamespace != 'undefined')
 			mwWikiaUploadButton(mwWikiaUploadNamespace, mwWikiaUploadTooltip); // Wikia
-	//}
+	}
 
 	return true;
 }
