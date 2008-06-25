@@ -77,7 +77,7 @@ class FCKeditor_MediaWiki
 	
 	public function onEditPageShowEditFormFields($pageEditor, $wgOut)
 	{
-		global $wgUser, $wgFCKEditorIsCompatible, $wgTitle, $wgVersion;
+		global $wgUser, $wgFCKEditorIsCompatible, $wgTitle, $wgVersion, $wgOut, $wgRequest ;
 
 		/*
 		If FCKeditor extension is enabled, BUT it shouldn't appear (because it's disabled by user, we have incompatible browser etc.)
@@ -106,7 +106,12 @@ class FCKeditor_MediaWiki
 			$pageEditor->textbox1 = $pa->mText;
 			}
 		}
-		
+		$FCKmode = $wgRequest->getVal ('FCKmode') ;
+		$wgOut->addHTML ("
+			<input type=\"hidden\" name=\"FCKmode\" id=\"FCKmode\" value=\"$FCKmode\" />
+                	<div id=\"FCKwarning\">" . wfMsg ('fck-noscript-warning') . "</div> 
+		") ;
+		                  	
 		return true;
 	}
 
@@ -294,6 +299,25 @@ class FCKeditor_MediaWiki
 			return true;
 		}
 
+		$wgOut->addHTML ("
+			<style type=\"text/css\">
+				#wpTextbox1 {
+					display: none ;
+				}
+				#FCKwarning {
+					display: none ;
+					font-weight: bold ;					
+				}
+			</style>
+			<noscript>
+			<style type=\"text/css\">
+				#FCKwarning {
+				display: block ;
+				}
+			</style>
+			</noscript>				
+		") ;
+
 		$options = new FCKeditorParserOptions();
 		$options->setTidy(true);
 		$parser = new FCKeditorParser();
@@ -390,6 +414,26 @@ function onLoadFCKeditor()
 		var edittools_markup = document.getElementById ('editpage-specialchars') ;
 		if (edittools_markup) {
 			edittools_markup.style.display = 'none' ;
+		}
+
+		var needToConfirm = true ;	
+	
+		/* comfirming exit from page */
+		function confirmExit(){
+			if (needToConfirm){
+				return "You have attempted to leave this page. If you have made any changes to the fields without clicking the Save button, your changes will be lost. Are you sure you want to exit this page?";
+			}
+		}
+
+		FCKeditor_OnComplete = function (FCKinstance) {
+			if ('source' == document.getElementById ("FCKmode").value) {
+				FCKinstance.SwitchEditMode () ;
+			}
+			window.onbeforeunload = confirmExit ;
+			var saveButton = document.getElementById ('wpSave') ;
+			var previewButton = document.getElementById ('wpPreview') ;				
+			var diffButton = document.getElementById ('wpDiff') ;				
+			saveButton.onclick = previewButton.onclick = diffButton.onclick =  function () {needToConfirm = false ;} ;
 		}
 
 		insertTags = function (tagOpen, tagClose, sampleText)
@@ -562,7 +606,6 @@ HEREDOC;
 */
 
 		$wgOut->addScript($script);
-
 		return true;
 	}
 

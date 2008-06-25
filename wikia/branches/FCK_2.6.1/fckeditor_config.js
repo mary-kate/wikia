@@ -16,7 +16,7 @@ FCKConfig.ToolbarSets['Wiki'] = [
 	'/',
 	['FontFormat'],
 	['Bold','Italic','Underline','StrikeThrough'],
-	['OrderedList','UnorderedList','Blockquote'],
+	['OrderedList','UnorderedList'],
 	['Link','Unlink'],
 	['About']
 ] ;

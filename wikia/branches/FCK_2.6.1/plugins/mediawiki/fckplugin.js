@@ -750,6 +750,7 @@ FCK.DataProcessor =
 		var loadHTMLFromAjax = function( result )
 		{
 			FCK.EditingArea.Textarea.value = result.responseText ;
+			parent.document.getElementById ('FCKmode').value = 'html' ;
 			original.apply( FCK, args ) ;
 		}
 		var edittools_markup = parent.document.getElementById ('editpage-specialchars') ;
@@ -769,12 +770,13 @@ FCK.DataProcessor =
 			if (edittools_markup) {			
 				edittools_markup.style.display = 'none' ;
 			}	
-
-			// Use Ajax to transform the Wikitext to HTML.
+			FCK.ToolbarSet.Items[0].Disable () ;			
+			// Use Ajax to transform the Wikitext to HTML.			
 			window.parent.sajax_request_type = 'POST' ;
 			window.parent.sajax_do_call( 'wfSajaxWikiToHTML', [FCK.EditingArea.Textarea.value], loadHTMLFromAjax ) ;
 		}
 		else {
+			parent.document.getElementById ('FCKmode').value = 'source' ;
 			original.apply( FCK, args ) ;
 			if (edittools_markup) {
 				edittools_markup.style.display = '' ;
@@ -921,7 +923,7 @@ if (window.parent.FCKeditor.prototype.VersionBuild > 18219)
 
 		for ( var i = 0 ; i < aItems.length ; i++ )
 		{
-			if (!aItems[i].SourceView)
+			if ( (!aItems[i].SourceView) || ('Source' == aItems[i].CommandName) )
 				aItems[i].RefreshState() ;		
 		}
 	}
