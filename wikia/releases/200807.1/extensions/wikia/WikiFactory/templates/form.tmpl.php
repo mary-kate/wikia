@@ -244,6 +244,7 @@ $Factory.Variable.filter = function ( e ) {
     values += "&editable=" + $Dom.get("wf-only-editable").checked;
     values += "&group=" + $Dom.get("wk-group-select").value;
     values += "&wiki=" + <?php echo $wiki->city_id ?>;
+	values += "&string=" + YAHOO.util.Dom.get( "wfOnlyWithString" ).value;
     $Connect.asyncRequest( 'GET', ajaxpath+"?action=ajax&rs=axWFactoryFilterVariables" + values, $Factory.FilterCallback );
 };
 
@@ -274,13 +275,14 @@ $Factory.Variable.submit = function () {
     $Connect.asyncRequest( 'POST', ajaxpath+"?action=ajax&rs=axWFactorySaveVariable", $Factory.ReplaceCallback );
 };
 
-$Event.addListener("wf-only-defined", "click", $Factory.Variable.filter );
-$Event.addListener("wf-only-editable", "click", $Factory.Variable.filter );
-$Event.addListener("wk-group-select", "change", $Factory.Variable.filter );
+YAHOO.util.Event.addListener("wf-only-defined", "click", $Factory.Variable.filter );
+YAHOO.util.Event.addListener("wf-only-editable", "click", $Factory.Variable.filter );
+YAHOO.util.Event.addListener("wfOnlyWithString", "keypress", $Factory.Variable.filter );
+YAHOO.util.Event.addListener("wk-group-select", "change", $Factory.Variable.filter );
 
-$Event.addListener("wk-variable-select", "click", $Factory.Variable.select, [ "wk-variable-select", 1] );
-$Event.addListener("wk-domain-add-submit", "click", $Factory.Domain.add, "wk-domain-add");
-$Event.addListener("wf-clear-cache", "click", $Factory.Variable.clear);
+YAHOO.util.Event.addListener("wk-variable-select", "click", $Factory.Variable.select, [ "wk-variable-select", 1] );
+YAHOO.util.Event.addListener("wk-domain-add-submit", "click", $Factory.Domain.add, "wk-domain-add");
+YAHOO.util.Event.addListener("wf-clear-cache", "click", $Factory.Variable.clear);
 
 /*]]>*/
 </script>
@@ -322,7 +324,7 @@ $Event.addListener("wf-clear-cache", "click", $Factory.Variable.clear);
             <li>
                 This wiki is <strong><?php echo $statuses[ $wiki->city_public ] ?></strong>.
 				            <? if(($statuses[$wiki->city_public] == 'disabled') && is_object($wikiRequest)): ?>
-				            	(<a href="/index.php?title=Special:CreateWiki&request=<?=$wikiRequest->request_id;?>&action=delete&doit=1">delete request for this wiki</a>)				            	 
+				            	(<a href="/index.php?title=Special:CreateWiki&request=<?=$wikiRequest->request_id;?>&action=delete&doit=1">delete request for this wiki</a>)
 				            <? elseif(($statuses[$wiki->city_public] == 'disabled') && ($wikiRequest != null)): ?>
 				             (<i>no wiki request were found with name: <?=$wikiRequest;?></i>)
 				            <? endif; ?>

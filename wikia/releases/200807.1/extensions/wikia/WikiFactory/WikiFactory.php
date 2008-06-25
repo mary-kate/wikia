@@ -777,12 +777,13 @@ class WikiFactory {
 	 * @param integer $group default 0: variable group
 	 * @param boolean $defined default false: only with values in city_variables
 	 * @param boolean $editable default false: only with cv_access_level > 1
+	 * @param boolean	$string	default false	only with $string in names
 	 *
 	 * @return mixed: array with variables
 	 */
 	static public function getVariables( $sort = "cv_name", $wiki = 0, $group = 0,
-		$defined = false, $editable = false
-	) {
+		$defined = false, $editable = false, $string = false )
+	{
 		$aVariables = array();
 		$aTables = array(
 			wfSharedTable("city_variables_pool"),
@@ -800,6 +801,10 @@ class WikiFactory {
 
 		if ( $editable === true ) {
 			$aWhere[] = "cv_access_level > 1";
+		}
+
+		if( $string ) {
+			$aWhere[] = "cv_name like '%$string%'";
 		}
 
 		if ( $defined === true && $wiki != 0 ) {
