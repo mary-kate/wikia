@@ -91,6 +91,7 @@ class WikiaMiniUpload {
 		$props['file'] = $file;
 		$props['name'] = $wgRequest->getFileName('wpUploadFile');
 		$props['mwname'] = $tempname;
+		$props['upload'] = true;
 		return $this->detailsPage($props);
 	}
 
@@ -140,7 +141,7 @@ class WikiaMiniUpload {
 				} else {
 					$temp_file = new LocalFile(Title::newFromText($mwname, 6), RepoGroup::singleton()->getLocalRepo());
 					$file = new LocalFile($title, RepoGroup::singleton()->getLocalRepo());
-					$file->upload($temp_file->getPath(), '', '');
+					$file->upload($temp_file->getPath(), '', ($wgRequest->getVal('CC_license') == 'true' ? "== Licensing ==\n{{cc-by-sa-3.0}}" : ''));
 					$temp_file->delete('');
 				}
 				$wgUser->addWatch($title);
