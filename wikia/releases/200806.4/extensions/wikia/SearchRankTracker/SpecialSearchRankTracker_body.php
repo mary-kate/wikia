@@ -247,7 +247,8 @@ class SearchRankTracker extends SpecialPage {
 
  	$aResponse = array(
 			'pageUrl' => urldecode($oTitle->getFullUrl()),
-			'result' => 'not_found'
+			'result' => 'not_found',
+			'mainPage' => SearchRankTracker::isWikiMainPage($oTitle)
 		);
  	
 		if($oArticle->exists()) {
@@ -265,6 +266,11 @@ class SearchRankTracker extends SpecialPage {
 		wfProfileOut( __METHOD__ );
 		return $sJson;
  }
- 
+
+	public static function isWikiMainPage($oTitle) {		
+		$sMainPage = wfMsgForContent('Mainpage');
+		
+		return ($oTitle->getText() == $sMainPage);
+	}
  	
 }
