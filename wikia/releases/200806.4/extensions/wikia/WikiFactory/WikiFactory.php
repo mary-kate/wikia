@@ -702,11 +702,14 @@ class WikiFactory {
 		/**
 		 * increase number in city_list
 		 */
+		if( ! is_numeric( $city_id ) ) {
+			return false;
+		}
 		$dbw = wfGetDB( DB_MASTER );
 		$dbw->update(
 			wfSharedTable( "city_list" ),
 			array(
-			   "city_factory_timestamp" => wfTimestampNow()
+				"city_factory_timestamp" => wfTimestampNow()
 			),
 			array(
 				"city_id" => $city_id
