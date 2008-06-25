@@ -164,9 +164,7 @@ class ExternalStoreMerged {
 		}
 		$dbw = $this->getMaster( $cluster );
 		$page = $revision->getPage();
-		$Title = $revision->getTitle();
-		print_pre( $revision );
-		exit(0);
+		$Title = Title::newFromID( $page );
 		$dbw->begin();
 		/**
 		 * fill revision table
@@ -176,11 +174,11 @@ class ExternalStoreMerged {
 			array(
 				"id" => null,
 				"rev_wikia_id" => $wgCityId,
-				"rev_id" => $revision->getId(),
+				"rev_id" => 0, #--- we don't know id
 				"rev_page_id" => $page,
 				"rev_namespace" => 0,
-				"rev_user" => "",
-				"rev_user_text" => "",
+				"rev_user" => $revision->getUser(),
+				"rev_user_text" => $revision->getUserText(),
 				"rev_text" => $data
 			)
 		);
