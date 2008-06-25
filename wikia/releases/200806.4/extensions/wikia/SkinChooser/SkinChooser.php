@@ -55,7 +55,7 @@ function SavePreferencesSkinChooser($pref) {
 					$wgAdminSkin = $pref->mAdminSkin;
 					$log->addEntry( 'var_set', $wgTitle, '', array(wfMsg('skin'), $pref->mAdminSkin));
 				}
-				WikiFactory::clearCache(599);
+				WikiFactory::clearCache( $wgCityId );
 			}
 		}
 	}
