@@ -14,7 +14,7 @@ if ( ! defined( 'MEDIAWIKI' ) )
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License 2.0 or later
  */
 
-$wgIFI_FlickrAPIKey = 'bac0bd138f5d0819982149f67c0ca734';
+$wgIFI_FlickrAPIKey = '';
 $wgIFI_CreditsTemplate = 'MediaWiki:Flickr'; // use this to format the image content with some key parameters
 $wgIFI_GetOriginal = true; // import the original version of the photo
 $wgIFI_PromptForFilename = true;  // prompt the user through javascript for the destination filename

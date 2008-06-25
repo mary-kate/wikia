@@ -55,6 +55,15 @@ body.mainpage {
 	width: 50%;
 	z-index: 2;
 }
+body.mainpage #adSpace1 {
+	height: 90px;
+	margin-bottom: 10px;
+}
+body.mainpage #adSpace0 {
+	float: right;
+	min-height: 250px;
+	width: 300px;
+}
 
 .clearfix:after {
     content: ".";

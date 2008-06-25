@@ -27,8 +27,8 @@ if( !defined( 'MEDIAWIKI' ) ) {
  * Use revision number
  */
 
-$wgStyleVersion         = '14222';
-$wgMergeStyleVersionJS  = '14222';
+$wgStyleVersion         = '14223';
+$wgMergeStyleVersionJS  = '14223';
 $wgMergeStyleVersionCSS = '14222';
 
 /**
@@ -110,3 +110,13 @@ $wgReleaseNumber = $HeadURL[5];
  * Enable FAST extension for this branch only
  */
 $wgEnableFASTExt = true;
+
+/**
+ * Definition of new log type (settings), related to ticket #2657,
+ * will be me moved to different configuration file
+ */
+$wgLogTypes[] = 'var_log';
+$wgLogHeaders['var_log'] = 'var_logheader';
+$wgLogNames['var_log'] = 'var_logtext';
+$wgLogNames['var_set'] = 'var_set';
+$wgLogActions['var_log/var_set'] = 'var_set';

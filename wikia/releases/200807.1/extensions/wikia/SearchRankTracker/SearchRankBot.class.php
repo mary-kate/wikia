@@ -90,7 +90,7 @@ class SearchRankBot {
 				foreach($wgSearchRankTrackerConfig['searchEngines'] as $sEngineName => $aEngineConfig) {
 					$oRankResults = $oSearchEntry->getRankResults($sEngineName, $iCurrentYear, $iCurrentMonth, $iCurrentDay);
 					if(!$oRankResults) {
-						$iRank = $this->getRank($sEngineName, $oSearchEntry->getPageUrl(), $oSearchEntry->getPhrase());
+						$iRank = $this->getRank($sEngineName, $oSearchEntry);
 					 $iResultInsertId = $oSearchEntry->setRankResult($sEngineName, $sCurrentTime, $iRank);
 					 if($iResultInsertId) {
 					 	$this->printDebug("=> ($sEngineName) Rank result saved. (rre_id: $iResultInsertId)");
@@ -112,26 +112,29 @@ class SearchRankBot {
 		$this->printDebug("Done.", $bVerbose);			
 	}
 	
-	public function getRank($sSearchEngine, $sUrl, $sPhrase ) {
+	public function getRank($sSearchEngine, $oSearchEntry ) {
 		$iRank = 0;
 		switch($sSearchEngine) {
 			case 'google':     
-				$iRank = $this->rankGoogle($sUrl, $sPhrase);  
+				$iRank = $this->rankGoogle($oSearchEntry);  
 				break;
 			case 'yahoo':      
-				$iRank = $this->rankYahoo($sUrl, $sPhrase);  
+				$iRank = $this->rankYahoo($oSearchEntry);  
 				break;
 			case 'MSN':      
-				$iRank = $this->rankMsn($sUrl, $sPhrase);  
+				$iRank = $this->rankMsn($oSearchEntry);  
 				break;
 			case 'altavista':   
-				$iRank = $this->rankAltavista($sUrl, $sPhrase);  
+				$iRank = $this->rankAltavista($oSearchEntry);  
 				break;
 		}
 		return $iRank;
 	}
 	
-	private function rankGoogle($sUrl, $sPhrase) {
+	private function rankGoogle($oSearchEntry) {
+		$sPhrase = $oSearchEntry->getPhrase();
+		$sUrl = $oSearchEntry->getPageUrl();
+
 		$iRank = 0;
 		$iCount = 0;
 		$iOffset = 0;
@@ -162,11 +165,20 @@ class SearchRankBot {
 						$this->printDebug("=> (google) Phrase: \"$sPhrase\", URL: $sUrl - found at position: $iCount");
 						break;
 					}
+					
+					// extra check for main page
+					if($oSearchEntry->isMainPage() && (strcmp($sLinkFiltered, $oSearchEntry->getWikiUrl()) == 0)) {
+						$iRank = $iCount;
+						$this->printDebug("=> (google) Phrase: \"$sPhrase\", URL: " . $oSearchEntry->getWikiUrl() . " (main page) - found at position: $iCount");
+						break;					
+					}
+					
 				}				
 			}
 			else {
 				// no links were found, end of results or invalid pattern.
-				$this->printDebug("=> (google) No links were found (invalid pattern?) - offset: $iOffset");				
+				$this->printDebug("=> (google) No links were found (end or results or invalid pattern) - offset: $iOffset");				
+				break;
 			}
 
    $iOffset += 100;
@@ -178,7 +190,10 @@ class SearchRankBot {
 		return $iRank;		
 	}
 
-	private function rankYahoo($sUrl, $sPhrase ) {
+	private function rankYahoo($oSearchEntry) {
+		$sPhrase = $oSearchEntry->getPhrase();
+		$sUrl = $oSearchEntry->getPageUrl();
+
 		$iRank = 0;
 		$iCount = 0;
 		$iOffset = 1;
@@ -212,11 +227,19 @@ class SearchRankBot {
 						$this->printDebug("=> (yahoo) Phrase: \"$sPhrase\", URL: $sUrl - found at position: $iCount" );
 						break;
 					}
+
+					// extra check for main page
+					if($oSearchEntry->isMainPage() && (strcmp(("http://" . $link[1]), $oSearchEntry->getWikiUrl()) == 0)) {
+						$iRank = $iCount;
+						$this->printDebug("=> (yahoo) Phrase: \"$sPhrase\", URL: " . $oSearchEntry->getWikiUrl() . " (main page) - found at position: $iCount");
+						break;					
+					}
 				}				
 			}
 			else {
 				// no links were found, end of results or invalid pattern.
-				$this->printDebug("=> (yahoo) No links were found (invalid pattern?) - offset: $iOffset");
+				$this->printDebug("=> (yahoo) No links were found (end of results or invalid pattern) - offset: $iOffset");
+				break;
 			}
 
 			$iOffset += 10;
@@ -228,7 +251,10 @@ class SearchRankBot {
 		return $iRank;
 	}
 
-	private function rankMsn($sUrl, $sPhrase) {
+	private function rankMsn($oSearchEntry) {
+		$sPhrase = $oSearchEntry->getPhrase();
+		$sUrl = $oSearchEntry->getPageUrl();
+
 		$iRank = 0;
 		$iCount = 0;
 		$iOffset = 1;
@@ -259,11 +285,19 @@ class SearchRankBot {
 						$this->printDebug("=> (MSN) Phrase: \"$sPhrase\", URL: $sUrl - found at position: $iCount");
 						break;
 					}
+
+					// extra check for main page
+					if($oSearchEntry->isMainPage() && (strcmp(('http://' . $sLinkFiltered), $oSearchEntry->getWikiUrl()) == 0)) {
+						$iRank = $iCount;
+						$this->printDebug("=> (MSN) Phrase: \"$sPhrase\", URL: " . $oSearchEntry->getWikiUrl() . " (main page) - found at position: $iCount");
+						break;					
+					}
 				}
 			}
 			else {
 				// no links were found, end of results or invalid pattern.
-				$this->printDebug("=> (MSN) No links were found (invalid pattern?) - offset: $iOffset");
+				$this->printDebug("=> (MSN) No links were found (end of results or invalid pattern) - offset: $iOffset");
+				break;
 			}
 
 			$iOffset += 10;
@@ -275,7 +309,10 @@ class SearchRankBot {
 		return $iRank;
 	}
 
-	private function rankAltavista($sUrl, $sPhrase) {
+	private function rankAltavista($oSearchEntry) {
+		$sPhrase = $oSearchEntry->getPhrase();
+		$sUrl = $oSearchEntry->getPageUrl();
+
 		$iRank = 0;
 		$iCount = 0;
 		$iOffset = 0;
@@ -302,11 +339,19 @@ class SearchRankBot {
 						$this->printDebug("=> (altavista) Phrase: \"$sPhrase\", URL: $sUrl - found at position: $iCount");
 						break;
 					}
+
+					// extra check for main page
+					if($oSearchEntry->isMainPage() && (strcmp(('http://' . $link[1]), $oSearchEntry->getWikiUrl()) == 0)) {
+						$iRank = $iCount;
+						$this->printDebug("=> (altavista) Phrase: \"$sPhrase\", URL: " . $oSearchEntry->getWikiUrl() . " (main page) - found at position: $iCount");
+						break;					
+					}
 				}
 			}
 			else {
 				// no links were found, end of results or invalid pattern.
-				$this->printDebug("=> (altavista) No links were found (invalid pattern?) - offset: $iOffset");
+				$this->printDebug("=> (altavista) No links were found (end of results or invalid pattern) - offset: $iOffset");
+				break;
 			}
 				
 			$iOffset += 10;

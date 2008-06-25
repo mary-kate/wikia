@@ -205,16 +205,15 @@ a.bigButton small {
 	background-repeat: no-repeat;
 	background-position: center center;
 	height: 155px;
-	left: 40px;
 	position: absolute;
 	text-indent: -1000px;
-	width: 135px;
+	width: 216px;
 	z-index: 3;
 }
 #wiki_logo a {
 	display: block;
 	height: 155px;
-	width: 135px;
+	width: 216px;
 	text-decoration: none;
 }
 #header_ad {
