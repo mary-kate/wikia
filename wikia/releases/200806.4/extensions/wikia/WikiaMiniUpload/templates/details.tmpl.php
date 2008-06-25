@@ -65,7 +65,16 @@ if($props['file']->media_type == 'BITMAP' || $props['file']->media_type == 'DRAW
 	</tr>
 	<tr class="ImageUploadNoBorder">
 		<td>&nbsp;</td>
-		<td><input type="submit" value="<?= wfMsg('wmu-insert2') ?>" onclick="WMU_insertImage(event, 'details');" /></td>
+		<td>
+			<input type="submit" value="<?= wfMsg('wmu-insert2') ?>" onclick="WMU_insertImage(event, 'details');" />
+<?php
+if(!empty($props['upload'])) {
+?>
+			<input type="checkbox" id="CC_license"/><label for="CC_license"><?= wfMsg('wmu-license-cc') ?></label>
+<?php
+}
+?>
+		</td>
 	</tr>
 </table>
 </div>

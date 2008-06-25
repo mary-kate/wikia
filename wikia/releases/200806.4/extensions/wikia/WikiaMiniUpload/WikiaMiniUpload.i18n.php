@@ -38,4 +38,5 @@ $messages['en'] = array(
 	'wmu-warn1' => 'You need to specify query first!',
 	'wmu-warn2' => 'You need to select file first!',
 	'wmu-imagelink' => '<b>New!</b> Add Images',
+	'wmu-license-cc' => 'Set a license for this image: Creative Commons Attribution-Share Alike 3.0'
 );
