@@ -40,6 +40,7 @@ $wgSearchRankTrackerConfig = array(
 // permissions
 $wgAvailableRights[] = 'searchranktracker';
 $wgGroupPermissions['staff']['searchranktracker'] = true;
+$wgGroupPermissions['searchranktracker']['searchranktracker'] = true;
 
 // classes
 $wgAutoloadClasses['SearchRankEntry'] = dirname(__FILE__) . '/SearchRankEntry.class.php';

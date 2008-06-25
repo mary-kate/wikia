@@ -35,31 +35,27 @@ function SetThemeForPreferences($pref) {
 
 $wgHooks['SavePreferencesHook'][] = 'SavePreferencesSkinChooser';
 function SavePreferencesSkinChooser($pref) {
-	global $wgUser;
-	global $wgDefaultSkin, $wgDefaultTheme;
-	global $wgMemc;
+	global $wgUser, $wgCityId, $wgAdminSkin, $wgTitle;
 
 	# Save setting for admin skin
 	if(!empty($pref->mAdminSkin)) {
-
 		$ug = $wgUser->getGroups();
 		if( in_array('staff', $ug) || in_array('sysop', $ug) ) {
 			$adminSkin = getAdminSkin();
-
 			if($pref->mAdminSkin != $adminSkin) {
-				$articleTitle = Title::newFromText ("AdminSkin", NS_MEDIAWIKI);
-				$article = new Article ($articleTitle);
+
+				$log = new LogPage('var_log');
 
 				if($pref->mAdminSkin == 'ds') {
-					$article->doDeleteArticle("Set admin skin to default skin");
+					WikiFactory::SetVarById(599, $wgCityId, null);
+					$wgAdminSkin = null;
+					$log->addEntry( 'var_set', $wgTitle, '', array(wfMsg('skin'), wfMsg('adminskin_ds')));
 				} else {
-					$article->doEdit($pref->mAdminSkin, "Set new default skin");
+					WikiFactory::SetVarById(599, $wgCityId, $pref->mAdminSkin);
+					$wgAdminSkin = $pref->mAdminSkin;
+					$log->addEntry( 'var_set', $wgTitle, '', array(wfMsg('skin'), $pref->mAdminSkin));
 				}
-
-				//$article->doPurge();
-				//$key = wfMemcKey('AdminSkin');
-				//$wgMemc->replace($key, $pref->mAdminSkin);
-
+				WikiFactory::clearCache(599);
 			}
 		}
 	}
@@ -314,37 +310,6 @@ function WikiaGetSkin ($user) {
 		$wgDefaultSkin='quartz';
 	}
 
-/*
-	# Cookie clean-up
-	if(count($_COOKIE) > 0) { # Does have any cookie?
-		if(isset($_COOKIE[$wgCookiePrefix.'useskin'])) { # Does have 'useskin' variable in cookie?
-			if($_COOKIE[$wgCookiePrefix.'useskin'] == 'default') { # When 'useskin' variable equals 'default'
-				if($wgOldDefaultSkin == 'monobook') { # When 'wgOldDefaulSkin' variable value is monobook
-					$skinpref = array('monobook', '', 0);
-				} else {
-					$skinpref = array($wgDefaultSkin, $wgDefaultTheme, 0);
-				}
-				$skinpref = join('-', $skinpref);
-				setcookie( $wgCookiePrefix.'skinpref', $skinpref, time() + $wgCookieExpiration, $wgCookiePath, $wgCookieDomain, $wgCookieSecure );
-				$_COOKIE[$wgCookiePrefix.'skinpref'] = $skinpref;
-			} else if($_COOKIE[$wgCookiePrefix.'useskin'] != 'new') { # When 'useskin' variable different then 'default' and 'new'
-				$useskin = $_COOKIE[$wgCookiePrefix.'useskin'];
-				$useskinA = split('-', $useskin);
-				if(count($useskinA) == 3) {
-					global $wgCookieExpiration, $wgCookiePath, $wgCookieDomain, $wgCookieSecure, $wgCookiePrefix;
-					$exp = time() + $wgCookieExpiration;
-					$skinpref = join('-',$useskinA);
-					setcookie( $wgCookiePrefix.'skinpref', $skinpref, $exp, $wgCookiePath, $wgCookieDomain, $wgCookieSecure );
-					$_COOKIE[$wgCookiePrefix.'skinpref'] = $skinpref;
-				}
-			}
-			# Unset 'useskin' variable from cookie
-			setcookie( $wgCookiePrefix.'useskin', false, time() + $wgCookieExpiration, $wgCookiePath, $wgCookieDomain, $wgCookieSecure );
-			unset($_COOKIE[$wgCookiePrefix.'useskin']);
-		}
-	}
-*/
-
 	# Get skin logic
 	if(!$user->isLoggedIn()) { # If user is not logged in
 		if(count($_COOKIE) > 0 && isset($_COOKIE[$wgCookiePrefix.'skinpref'])) { # If user has cookie with variable 'skinpref'
@@ -405,22 +370,11 @@ function WikiaGetSkin ($user) {
 		}
 
 		$user->mSkin->themename = $userTheme;
-	}/* else {
-		$userTheme = null;
-	} */
+	}
 	return false;
 }
 
 function getAdminSkin() {
-	$data = null;
-	if(!$data){
-		$revision = Revision::newFromTitle(Title::makeTitle(NS_MEDIAWIKI, "AdminSkin"));
-		if(is_object($revision)) {
-			$data = $revision->getText();
-		}
-		if(empty($data)) {
-			$data = 'ds'; # default skin
-		}
-	}
-	return $data == 'ds' ? null : $data;
+	global $wgAdminSkin;
+	return $wgAdminSkin;
 }

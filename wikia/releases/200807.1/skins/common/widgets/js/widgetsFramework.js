@@ -421,6 +421,7 @@ function showCarousel(e) {
 
 		if(skin == 'quartz') {
 			Dom.setStyle('widget_cockpit', 'display', '');
+			getNumberForCarousel();
 		}
 
 		if(carouselObj == null) {
@@ -447,10 +448,11 @@ function showCarousel(e) {
 }
 
 function getNumberForCarousel() {
-	if(skin == 'quartz') {
+	if(skin == 'quartz' && Dom.get('widget_cockpit_list')) {
 		var widgetEl = Dom.get('widget_cockpit_list').firstChild;
 		var widgetElWidth = parseInt(Dom.getStyle(widgetEl,'width'))+(parseInt(Dom.getStyle(widgetEl,'margin-right'))*2);
 		var carouselWidth = parseInt(Dom.getX('next-arrow')-Dom.getX('prev-arrow')-32);
+		Dom.setStyle('widget_cockpit_overlay', 'width', parseInt(carouselWidth/10)*10 + 'px');
 		carouselVisible = Math.floor(carouselWidth / widgetElWidth);
 	} else {
 		carouselVisible = Math.floor((Dom.getViewportWidth() - 60) / (55 + 145 + 5));

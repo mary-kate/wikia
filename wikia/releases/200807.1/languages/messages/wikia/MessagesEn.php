@@ -939,4 +939,7 @@ If you think this was sent in error, please let us know at support@wikia.com',
 'uploadvirus' => 'The file may contain a virus! Details: $1',
 'variantname-zh-cn' => '简体',
 'variantname-zh-tw' => '正體',
+'var_set' => 'set the $2 to "$3"',
+'var_logtext' => 'Settings log',
+'var_logheader' => '123'
 ) );
