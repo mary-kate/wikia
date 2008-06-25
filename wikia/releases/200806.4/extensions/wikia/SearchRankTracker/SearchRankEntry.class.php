@@ -11,6 +11,7 @@ class SearchRankEntry {
 	private $mPageUrl;
 	private $mPhrase;
 	private $mCreated;
+	private $mIsMainPage = false;
 	
  public function __construct($id = 0, $oRowData = null) {
 	 global $wgCityId;
@@ -47,12 +48,28 @@ class SearchRankEntry {
  	if(!empty($sPageName)) {
 	 	// setting full url
 	 	$oTitle = Title::newFromText($sPageName);
-			$this->mPageUrl = urldecode($oTitle->getFullUrl()); 		
+			$this->mPageUrl = urldecode($oTitle->getFullUrl());
+			
+			// checking whether is main page
+			$this->mIsMainPage = SearchRankTracker::isWikiMainPage($oTitle);		
  	}
 	}
 	
 	public function getPageUrl() {
 		return $this->mPageUrl;
+	}
+	
+	public function getWikiUrl() {
+		$sUrl = "";
+		if($this->mPageUrl) {
+			preg_match('/(http:\/\/[a-z0-9-_.]{1,})\//si', $this->mPageUrl, $aMatches);
+			$sUrl =  isset($aMatches[1]) ? $aMatches[1] : "";
+		}
+		return $sUrl;
+	}
+	
+	public function isMainPage() {
+		return $this->mIsMainPage;
 	}
 	
 	public function getPhrase() {
@@ -73,6 +90,7 @@ class SearchRankEntry {
 			$this->setCityId($data->ren_city_id);
 			$this->mPageName = $data->ren_page_name;
 			$this->mPageUrl = $data->ren_page_url;
+			$this->mIsMainPage = ($data->ren_is_main_page == '0') ? false : true;
 			$this->setPhrase($data->ren_phrase);
 			$this->mCreated = $data->ren_created;
 		}
@@ -101,6 +119,7 @@ class SearchRankEntry {
 			$fields = array();
 			$fields['ren_page_name'] = addslashes($this->mPageName);
 			$fields['ren_page_url'] = addslashes($this->mPageUrl);
+			$fields['ren_is_main_page'] = ($this->mIsMainPage() ? '1' : '0');
 			$fields['ren_phrase'] = addslashes($this->mPhrase);
 
 			$dbw->update(wfSharedTable('rank_entry'), $fields, array( 'ren_id' => $this->mId ), __METHOD__);
@@ -135,6 +154,7 @@ class SearchRankEntry {
 		$fields['ren_city_id'] = $this->mCityId;
 		$fields['ren_page_name'] = addslashes($this->mPageName);
 		$fields['ren_page_url'] = addslashes($this->mPageUrl);
+		$fields['ren_is_main_page'] = ($this->mIsMainPage ? '1' : '0');
 		$fields['ren_phrase'] = addslashes($this->mPhrase);
 		$fields['ren_created'] = date('Y-m-d H:i:s');
 		
@@ -213,5 +233,5 @@ class SearchRankEntry {
 		$dbw->insert(wfSharedTable('rank_result'), $fields, __METHOD__);	
 		return $dbw->insertId();
 	}
-	
+		
 }

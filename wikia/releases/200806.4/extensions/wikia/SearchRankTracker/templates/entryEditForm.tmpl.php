@@ -27,7 +27,11 @@ YW.SearchRank.pageCheckCallback = {
         	YD.get( "wiki-page-url" ).innerHTML = "<font color=\"red\">Page <a href=\""+respData["pageUrl"]+"\" target=\"_blank\">"+respData["pageUrl"]+"</a> not found.</font>";
         }
         else {
-        	YD.get( "wiki-page-url" ).innerHTML = "<a href=\""+respData["pageUrl"]+"\" target=\"_blank\">"+respData["pageUrl"]+"</a>";
+									var mainPage = "";
+									if (respData["mainPage"] == true) {
+									 mainPage = " <strong>(wiki main page)</strong>";	
+									}
+        	YD.get( "wiki-page-url" ).innerHTML = "<a href=\""+respData["pageUrl"]+"\" target=\"_blank\">"+respData["pageUrl"]+"</a>"+mainPage;
         }
     },
     failure: function( oResponse ) {
@@ -69,7 +73,7 @@ YE.addListener( "entry-page", "change", YW.SearchRank.pageCheck );
 	 			<input type="text" id="entry-page" name="entryPage" value="<?=$entry->getPageName();?>" tabindex="1" />
 					<div>
 						<label>URL:</label>
-						<div id='wiki-page-url'><?=$entry->getPageUrl()?("<a href=\"" . $entry->getPageUrl() . "\" targer=\"_blank\">" . $entry->getPageUrl() . "</a>"):"";?></div>
+						<div id='wiki-page-url'><?=$entry->getPageUrl()?("<a href=\"" . $entry->getPageUrl() . "\" targer=\"_blank\">" . $entry->getPageUrl() . "</a>" . ($entry->isMainPage() ? " <strong>(wiki main page)</strong>" : "") ):"";?></div>
 					</div>
 	 		</div>
 	 		<div class="row">
