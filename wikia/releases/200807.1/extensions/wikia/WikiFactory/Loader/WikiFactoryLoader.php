@@ -344,13 +344,8 @@ class WikiFactoryLoader {
 				/**
 				 * dofus exception
 				 */
-				if( in_array(
-					$this->mWikiID,
-					array(
-						602, 1982, 4533, 1177, 1630, 1112, 7491,
-						4763, 2278, 1922, 1809, 2791, 2788, 7645
-					) ) )
-				{
+				$dofus =  array( 602, 1982, 4533, 1177, 1630, 1112, 7491, 4763, 2278, 1922, 1809, 2791, 2788, 7645 );
+				if( in_array( $this->mWikiID, $dofus ) ) {
 					$uri = str_replace( "wiki/", "", $uri );
 				}
 				$target = "http://{$this->mCityHost}{$uri}";
