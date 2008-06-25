@@ -175,7 +175,7 @@ class clsWikiReadr {
 	  	$xml = preg_replace("'{{(.*?)}}'si",'',$xml);
 	  	 
 	  	$cnt=0;
-	  	$xml =  preg_replace("'<comment>(.*?)</comment>'si",'<comment>This page uses content from Wikipedia. The original article was/is at [[Wikipedia:' . $title . ']].  The following Wikipedia users contributed to this page: ' . implode( ',', $userlist ) . '</comment>',$xml,-1,&$cnt);
+	  	$xml =  preg_replace("'<comment>(.*?)</comment>'si",'<comment>This page uses content from Wikipedia. The original article was/is at [[Wikipedia:' . $title . ']].  The following Wikipedia users contributed to this page: ' . implode( ',', $userlist ) . '</comment>',$xml,-1,$cnt);
 		  
 		if($cnt==0){
 			$xml = str_replace("<contributor>Wikireadr</contributor>","<contributor>Wikireadr</contributor>\n<comment>This page uses content from Wikipedia. The original article was/is at [[Wikipedia:$title]]. The following users contributed to this page: " . implode( ', ', $userlist ) . "</comment>",$xml);	  	
