@@ -28,6 +28,10 @@
                     </option>
                     <? endforeach ?>
                 </select>
+				<br />
+				<label for="wf-only-withstring">variable name contains</label>
+				<br />
+				<input type="text" name="wfOnlyWithString" id="wfOnlyWithString" size="12" />
             </div>
     </form>
     <hr style="clear: both">

@@ -209,21 +209,21 @@ class WikiFactoryPage extends SpecialPage {
 		}
 
 		$oWikiRequest = null;
-		if(class_exists(CreateWikiForm)) {
+		if( class_exists( "CreateWikiForm" ) ) {
 			preg_match('/http:\/\/(\w{1,})./i', $this->mWiki->city_url, $matches);
 			$sRequestName = $matches[1];
 			if(!empty($sRequestName)) {
-				$oWikiRequest = CreateWikiForm::getRequestBy('request_name', $sRequestName);
+				$oWikiRequest = CreateWikiForm::getRequestBy( 'request_name', $sRequestName );
 				$oWikiRequest = is_object($oWikiRequest) ? $oWikiRequest : $sRequestName;
 			}
 		}
-		
+
 		$oTmpl = new EasyTemplate( dirname( __FILE__ ) . "/templates/" );
 		$oTmpl->set_vars( array(
-			"tab"		       => $this->mTab,
+			"tab"         => $this->mTab,
 			"hub"         => WikiFactoryHub::getInstance(),
 			"wiki"        => $this->mWiki,
-			"info"		      => $info,
+			"info"        => $info,
 			"title"       => $this->mTitle,
 			"groups"      => WikiFactory::getGroups(),
 			"domains"     => WikiFactory::getDomains( $this->mWiki->city_id ),

@@ -341,23 +341,25 @@ function axWFactoryDomainQuery( $input ) {
 function axWFactoryFilterVariables( )
 {
     global $wgRequest;
-    $bDefined = wfStrToBool( $wgRequest->getVal("defined", "false") );
-    $bEditable = wfStrToBool( $wgRequest->getVal("editable", "false") );
-    $iWikiID = $wgRequest->getVal("wiki", 0);
-    $iGroup = $wgRequest->getVal("group", 0);
+    $defined = wfStrToBool( $wgRequest->getVal("defined", "false") );
+    $editable = wfStrToBool( $wgRequest->getVal("editable", "false") );
+    $wiki_id = $wgRequest->getVal("wiki", 0);
+    $group = $wgRequest->getVal("group", 0);
+	$string = $wgRequest->getVal("string", false );
 
     #--- cache it?
-    $aVariables = WikiFactory::getVariables( "cv_name", $iWikiID, $iGroup, $bDefined, $bEditable );
-    $sSelector = "";
+    $Variables = WikiFactory::getVariables( "cv_name", $wiki_id, $group, $defined, $editable, $string );
+    $selector = "";
 
-    foreach( $aVariables as $oVar) {
-        $sSelector .= sprintf("<option value=\"%d\">%s</option>\n",
-            $oVar->cv_id, $oVar->cv_name
+    foreach( $Variables as $Var) {
+        $selector .= sprintf(
+			"<option value=\"%d\">%s</option>\n",
+            $Var->cv_id, $Var->cv_name
         );
     }
 
     return Wikia::json_encode(array(
-        "selector" => $sSelector,
+        "selector" => $selector,
     ));
 }
 
