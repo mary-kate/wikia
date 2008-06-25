@@ -119,7 +119,7 @@ class SearchRankEntry {
 			$fields = array();
 			$fields['ren_page_name'] = addslashes($this->mPageName);
 			$fields['ren_page_url'] = addslashes($this->mPageUrl);
-			$fields['ren_is_main_page'] = ($this->mIsMainPage() ? '1' : '0');
+			$fields['ren_is_main_page'] = ($this->mIsMainPage ? '1' : '0');
 			$fields['ren_phrase'] = addslashes($this->mPhrase);
 
 			$dbw->update(wfSharedTable('rank_entry'), $fields, array( 'ren_id' => $this->mId ), __METHOD__);
