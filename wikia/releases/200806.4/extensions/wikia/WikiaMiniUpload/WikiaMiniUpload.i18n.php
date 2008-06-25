@@ -14,8 +14,9 @@ $messages['en'] = array(
 	'wmu-existing' => 'Use Existing Image',
 	'wmu-overwrite' => 'Overwrite the existing image with yours',
 	'wmu-insert' => 'Insert',
-	'wmu-details-inf' => '<h1>File Name</h1>Specify a name for this file. Make it something descriptive.',
+	'wmu-details-inf' => '<h1>File Details</h1>Specify a name for this file. Make it something descriptive.',
 	'wmu-name' => 'Name',
+	'wmu-license' => 'License',
 	'wmu-details-inf2' => '<h1>Article Options</h1>Choose how you want this file to look in your article.',
 	'wmu-size' => 'Size',
 	'wmu-thumbnail' => 'Thumbnail',
@@ -38,5 +39,5 @@ $messages['en'] = array(
 	'wmu-warn1' => 'You need to specify query first!',
 	'wmu-warn2' => 'You need to select file first!',
 	'wmu-imagelink' => '<b>New!</b> Add Images',
-	'wmu-license-cc' => 'Set a license for this image: Creative Commons Attribution-Share Alike 3.0'
+	'wmu-license-cc' => 'Licenced under Creative Commons Attribution-Share Alike 3.0'
 );
