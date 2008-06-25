@@ -47,11 +47,11 @@ function SavePreferencesSkinChooser($pref) {
 				$log = new LogPage('var_log');
 
 				if($pref->mAdminSkin == 'ds') {
-					WikiFactory::SetVarById(599, $wgCityId, null);
+					WikiFactory::SetVarByName( "wgAdminSkin", $wgCityId, null);
 					$wgAdminSkin = null;
 					$log->addEntry( 'var_set', $wgTitle, '', array(wfMsg('skin'), wfMsg('adminskin_ds')));
 				} else {
-					WikiFactory::SetVarById(599, $wgCityId, $pref->mAdminSkin);
+					WikiFactory::SetVarByName( "wgAdminSkin", $wgCityId, $pref->mAdminSkin);
 					$wgAdminSkin = $pref->mAdminSkin;
 					$log->addEntry( 'var_set', $wgTitle, '', array(wfMsg('skin'), $pref->mAdminSkin));
 				}
