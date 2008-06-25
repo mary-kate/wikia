@@ -306,9 +306,7 @@ FCKToolbarSet.prototype.Load = function( toolbarSetName )
 						oToolbar.AddItem( oItem ) ;
 
 						this.Items.push( oItem ) ;
-						if (oItem.CommandName == 'Bold') {
-							alert (oItem.SourceView) ;
-						}
+
 						if ( !oItem.SourceView )
 							this.ItemsWysiwygOnly.push( oItem ) ;
 
