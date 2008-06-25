@@ -122,19 +122,37 @@ class ExternalStoreMerged {
 	function &fetchBlob( $cluster, $id, $itemID ) {
 		global $wgExternalBlobCache;
 		$cacheID = ( $itemID === false ) ? "$cluster/$id" : "$cluster/$id/";
-		if( isset( $wgExternalBlobCache[$cacheID] ) ) {
+		if( isset( $wgExternalBlobCache[ $cacheID ] ) ) {
 			wfDebug( __METHOD__.": cache hit on $cacheID\n" );
-			return $wgExternalBlobCache[$cacheID];
+			return $wgExternalBlobCache[ $cacheID ];
 		}
 
 		wfDebug( __METHOD__.": cache miss on $cacheID\n" );
 
+		/**
+		 * get revision from slave
+		 */
 		$dbr = $this->getSlave( $cluster );
-		#--- get revision from slave
+		$Row = $dbr->selectRow(
+			$this->getTable( $dbr, "revisions" ),
+			array( "rev_text" ),
+			array( "id" => $id ),
+			__METHOD__
+		);
+		$ret = isset( $Row->rev_text ) ? $Row->rev_text : false;
+
 		if ( $ret === false ) {
 			#--- get revision from master
 			$dbw = $this->getMaster( $cluster );
+			$Row = $dbw->selectRow(
+				$this->getTable( $dbw, "revisions" ),
+				array( "rev_text" ),
+				array( "id" => $id ),
+				__METHOD__
+			);
+			$ret = isset( $Row->rev_text ) ? $Row->rev_text : false;
 		}
+
 		if( $itemID !== false && $ret !== false ) {
 			// Unserialise object; caller extracts item
 			$ret = unserialize( $ret );
@@ -166,8 +184,9 @@ class ExternalStoreMerged {
 		$page = $revision->getPage();
 		$Title = Title::newFromID( $page );
 		$dbw->begin();
+
 		/**
-		 * fill revision table
+		 * fill revisions table
 		 */
 		$ret = $dbw->insert(
 			$this->getTable( $dbw, "revisions" ),
@@ -182,7 +201,8 @@ class ExternalStoreMerged {
 				"rev_text" => $data
 			)
 		);
-		#--- well, assume for while that everything went fine
+		$store_id = $dbw->insertId();
+
 		if( $ret ) {
 			/**
 			 * insert or update
@@ -230,8 +250,9 @@ class ExternalStoreMerged {
 		}
 		else {
 			$dbw->rollback();
+			return false;
 		}
 		$dbw->commit();
-		return "merged://$cluster/$id";
+		return "merged://$cluster/$store_id";
 	}
 }
