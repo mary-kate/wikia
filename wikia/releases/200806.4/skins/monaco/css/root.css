@@ -40,14 +40,14 @@ body.mainpage {
 	position: relative;
 	width: 100%;
 }
-#mainpage_accent1 {
+#background_accent1 {
 	background-repeat: no-repeat;
 	margin-right: 481px;
 	position: absolute;
 	right: 50%;
 	z-index: 2;
 }
-#mainpage_accent2 {
+#background_accent2 {
 	background-repeat: no-repeat;
 	background-position: 481px 0px;
 	left: 50%;
