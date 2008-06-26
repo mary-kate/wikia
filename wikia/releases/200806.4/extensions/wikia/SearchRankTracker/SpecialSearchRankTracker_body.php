@@ -137,7 +137,7 @@ class SearchRankTracker extends SpecialPage {
 	
 				$graph->title->Set( $this->mEntry->getPageName() . " - \"" . $this->mEntry->getPhrase() . "\"  (high:$iMin, low:$iMax)" );
 				$graph->yaxis->HideZeroLabel();
-				$graph->yaxis->SetLabelFormatCallback( create_function('$value', 'return round($value);') );
+				$graph->yaxis->SetLabelFormatCallback( create_function('$value', 'return round(-$value);') );
 				
 				$graph->ygrid->SetFill( true, '#EFEFEF@0.5', '#BBCCFF@0.5' );
 				$graph->xgrid->Show();
@@ -150,7 +150,7 @@ class SearchRankTracker extends SpecialPage {
 					$aPlotData = array();
 					foreach($aDataX as $sDate) {
 						if(isset($aData[$sDate])) {
-							$aPlotData[] = $aData[$sDate];
+							$aPlotData[] = -$aData[$sDate];
 						}
 						else {
 							$aPlotData[] = null;
