@@ -760,7 +760,7 @@ function disableWikiaWriter() {
 /**
  * @author Inez Korczynski
  */
-if(Math.round(Math.random() * 100) == 1 && wgIsArticle && (YAHOO.env.ua.gecko > 0 || YAHOO.env.ua.ie > 0)) {
+if(Math.round(Math.random() * 1000) == 1 && wgIsArticle && (YAHOO.env.ua.gecko > 0 || YAHOO.env.ua.ie > 0)) {
 
 	function generateGuid()	{
 		var result, i, j;
