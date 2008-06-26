@@ -24,6 +24,7 @@ function efWikiaUserActivity() {
 	'useractivity_group_user_message'=>'messages',
 	'useractivity group friend?' => 'friends',
 	'useractivity?' => 'Friend\'s Activity',
+	'site_activity_title' => 'Site Activity',
 	),
 	); 
 }
