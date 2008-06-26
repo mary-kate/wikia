@@ -21,7 +21,7 @@ function wfQueryCounter($callback){
         global $wgMemc, $wgRequest;
         $dbr =& wfGetDB( DB_MASTER );
         
-        $key = wfMemcKey( 'wikiasearch' , 'metrics' , 'querycounters', 'queryrate' );
+        $key = wfMemcKey( 'wikiasearch' , 'metric' , 'querycounter', 'queryrate' );
         $obj = $wgMemc->get($key);
         
 	if(!$obj || ($obj && time() - $obj["at"] > 3600) ){
@@ -32,7 +32,11 @@ function wfQueryCounter($callback){
                 $totalQueryCount = $row->the_sum;
 
                 // get today's queries
-                $sql = "SELECT SUM(num_queries) AS the_sum, COUNT(*) AS the_count FROM metrics_hourly_queries WHERE DATE(created_at)=DATE(NOW());";
+                $sql = "SELECT SUM(num_queries) AS the_sum, COUNT(*) AS the_count
+                        FROM metrics_hourly_queries
+                        WHERE DATE(created_at)=(
+                                SELECT DATE(created_at) FROM metrics_hourly_queries ORDER BY created_at DESC LIMIT 1
+                        );";
                 $res = $dbr->query($sql);
                 $row = $dbr->fetchObject($res);
                 
@@ -46,7 +50,11 @@ function wfQueryCounter($callback){
                 $totalContributionCount = $row->the_sum;
                 
                 // get today's contributions
-                $sql = "SELECT SUM(`count`) AS the_sum, COUNT(*) AS the_count FROM metrics_ktops WHERE DATE(created_at)=DATE(NOW());";
+                $sql = "SELECT SUM(`count`) AS the_sum, COUNT(*) AS the_count
+                        FROM metrics_ktops
+                        WHERE DATE(created_at)=(
+                                SELECT DATE(created_at) FROM metrics_ktops ORDER BY created_at DESC LIMIT 1
+                        );";
                 $res = $dbr->query($sql);
                 $row = $dbr->fetchObject($res);
                 
@@ -177,8 +185,7 @@ function createJSON($sql, $boundSQL){
 		foreach($monthBuckets as $key => $count){
 			$data[] = array("timestamp"=>$monthTimes[$key],
 				"date"=>$key,
-				"count"=>$count,
-				"movingAverage"=> "N/A");
+				"count"=>$count);
 		}
 	}
 	
@@ -362,9 +369,7 @@ function fetchSiteMetrics($metric, $callback){
 	// its set at 2 days to test right now
 	// assume each point is a day...
 	// this isnt used currently
-	$AVERAGE_TIME = 604800;
-	$AVERAGE_NUM = $AVERAGE_TIME / 86400;
-
+	
 	// go back a month by default
 	$DEFAULT_TIME = 86400 * 30;
 	
@@ -385,7 +390,7 @@ function fetchSiteMetrics($metric, $callback){
 		$endDateSql = date("Y-m-d 23:59:59", $endDate);
 		
 		// go back the AVERAGE_TIME so we'll have enough data to provide running averages	
-		$fixedStartDate = date("Y-m-d 00:00:00", $startDate-$AVERAGE_TIME);
+		$fixedStartDate = date("Y-m-d 00:00:00", $startDate);
 	
 		// if we have start and end dates then dont do the default query	
 		$hasTimeBound = ( !is_null($startDate) && !is_null($endDateSql) );
@@ -396,7 +401,7 @@ function fetchSiteMetrics($metric, $callback){
 	
 	// by default go back a while - but actually go back far enough to get running averages
 	$lastWeek = date("Y-m-d 00:00:00", time() - $DEFAULT_TIME);
-	$fixedLastWeek = date("Y-m-d 00:00:00", time() - ($DEFAULT_TIME + $AVERAGE_TIME) );
+	$fixedLastWeek = date("Y-m-d 00:00:00", time() - $DEFAULT_TIME );
 	
 	if($hasTimeBound){
 		$key = wfMemcKey( 'wikiasearch' , 'metrics' , $metric, $callback, $IsByMonth, $fixedStartDate,  $endDateSql);
@@ -666,9 +671,6 @@ function fetchQueryTrend($metric, $callback){
 function fetchKTTrend($metric, $callback){
 	global $wgRequest, $wgMemc;
 	
-        $AVERAGE_TIME = 604800;
-	$AVERAGE_NUM = $AVERAGE_TIME / 86400;
-
 	// go back a month by default
 	$DEFAULT_TIME = 86400 * 30;
         
