@@ -355,13 +355,8 @@ $wgAjaxExportList [] = 'wfCheckAddRelationshipJSON';
 function wfCheckAddRelationshipJSON($user_name="", $rel_type=1, $callback="handleAddRel"){
 	
 		global $wgUser, $wgOut, $wgRequest, $wgMessageCache, $IP, $wgUploadPath;
-
 		
 		$rel_JSON_array = array();
-		
-		
-		
-
 		
 		$rel_JSON_array["r_user_name"] = "";
 		$rel_JSON_array["avatar_img"] = "";
@@ -546,8 +541,7 @@ function wfAddRelationshipJSON(){
 
 		$rel = new UserRelationship($wgUser->getName() );
 		
-		if ($wgRequest->wasPosted() && $_SESSION["alreadysubmitted"] == false) {
-			
+		if ($wgRequest->wasPosted() ) {
 			
 			$user_name_to = $wgRequest->getVal("user_name");
 			$relationship_type = $wgRequest->getVal("rel_type");
@@ -559,7 +553,6 @@ function wfAddRelationshipJSON(){
 			
 			if ($user_name_to != "" && $relationship_type != "" && $wpSourceForm != "") {
 				
-				$_SESSION["alreadysubmitted"] = true;
 				$rel = $rel->addRelationshipRequest($user_name_to,$relationship_type,$message,true,$trust_type);
 				$user_id_to = User::idFromName($user_name_to);
 				$key = wfMemcKey( 'user', 'profile', 'notifupdated', $user_id_to );
