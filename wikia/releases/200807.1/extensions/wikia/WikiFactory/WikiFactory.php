@@ -47,6 +47,27 @@ class WikiFactory {
 		3 => "editable by user"
 	);
 
+	static public $mIsUsed = false;
+
+	/**
+	 * simple accessor and toggle flag method which shows if WikiFactory is used
+	 * at all. set in WikiFactoryLoader constructor to true, default false.
+	 *
+	 * @access public
+	 * @static
+	 * @author Krzysztof Krzyżaniak <eloy@wikia.com>
+	 *
+	 * @param boolean	$flag	if value not null set flag to $flag
+	 *
+	 * @return boolean	current value of self::$mIsUsed
+	 */
+	static public function isUsed( $flag = null ) {
+		if( !is_null( $flag ) ) {
+			self::$mIsUsed = (bool )$flag;
+		}
+		return self::$mIsUsed;
+	}
+
 	/**
 	 * getDomains
 	 *
@@ -226,8 +247,7 @@ class WikiFactory {
 	static public function SetVarById( $variable, $city_id, $value ) {
 		global $wgUser;
 
-		if (empty($variable) || empty($city_id)) {
-			error_log(__METHOD__.": we should not be here");
+		if( empty( $variable ) || empty( $city_id ) || self::isUsed() === false ) {
 			return;
 		}
 

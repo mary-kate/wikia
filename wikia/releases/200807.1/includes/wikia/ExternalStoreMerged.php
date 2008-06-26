@@ -227,7 +227,7 @@ class ExternalStoreMerged {
 						"page_edits"     => 0,
 					),
 					array(
-						"page_id"        => $page->getId(),
+						"page_id"        => $page,
 					)
 				);
 			}
@@ -239,7 +239,7 @@ class ExternalStoreMerged {
 					$this->getTable( $dbw, "pages" ),
 					array(
 						"page_wikia_id"  => $wgCityId,
-						"page_id"        => $page->getId(),
+						"page_id"        => $page,
 						"page_namespace" => $Title->getNamespace(),
 						"page_title"     => $Title->getText(),
 						"page_counter"   => 0,

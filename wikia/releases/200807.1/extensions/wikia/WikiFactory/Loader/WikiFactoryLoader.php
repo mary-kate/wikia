@@ -109,6 +109,8 @@ class WikiFactoryLoader {
 		$this->mNoRedirect = false;
 		$this->mDBhandler = null;
 
+		WikiFactory::isUsed( true );
+
 		/**
 		 * if run via commandline always take data from database,
 		 * never from cache
