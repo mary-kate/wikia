@@ -87,9 +87,15 @@ class WikiFactory {
 	 *
 	 */
 	static public function getDomains( $city_id = null, $extended = false ) {
+
+		if( ! self::isUsed() ) {
+			wfDebug( __METHOD__ . ": WikiFactory is not used.");
+			return null;
+		}
+
 		global $wgMemc;
 
-		wfProfileIn( __METHOD__ );
+ 		wfProfileIn( __METHOD__ );
 
 		$domains = array();
 		$condition = is_null( $city_id ) ? null : array( "city_id" => $city_id );
@@ -141,7 +147,15 @@ class WikiFactory {
 	 * @return boolean: true - added, false otherwise
 	 */
 	static public function addDomain( $wiki, $domain ) {
-		#--- domain should contain at least one dot
+
+		if( ! self::isUsed() ) {
+			wfDebug( __METHOD__ . ": WikiFactory is not used.");
+			return null;
+		}
+
+		/**
+		 * domain should contain at least one dot
+		 */
 		if( !strpos($domain, ".") ) {
 			return false;
 		}
@@ -202,15 +216,20 @@ class WikiFactory {
 	 */
 	static public function DomainToID( $domain ) {
 
+		if( ! self::isUsed() ) {
+			wfDebug( __METHOD__ . ": WikiFactory is not used.");
+			return null;
+		}
+
 		wfProfileIn( __METHOD__ );
-		$iWikiID = null;
+		$city_id = null;
 
 		$oMemc = wfGetCache( CACHE_MEMCACHED );
-		$aDomains = $oMemc->get( self::getDomainKey( $domain ) );
+		$domains = $oMemc->get( self::getDomainKey( $domain ) );
 
-		if( isset( $aDomains["id"] ) ) {
+		if( isset( $domains[ "id" ] ) ) {
 			#--- success, we have it from memcached!
-			$iWikiID = $aDomains["id"];
+			$city_id = $domains[ "id" ];
 		}
 		else {
 			#--- failure, getting from database
@@ -221,11 +240,11 @@ class WikiFactory {
 				array( "city_domain" => $domain ),
 				__METHOD__
 			);
-			$iWikiID = is_object( $oRow ) ? $oRow->city_id : null;
+			$city_id = is_object( $oRow ) ? $oRow->city_id : null;
 		}
 
 		wfProfileOut( __METHOD__ );
-		return $iWikiID;
+		return $city_id;
 	}
 
 	/**
@@ -245,9 +264,15 @@ class WikiFactory {
 	 * @return boolean: transaction status
 	 */
 	static public function SetVarById( $variable, $city_id, $value ) {
+
+		if( ! self::isUsed() ) {
+			wfDebug( __METHOD__ . ": WikiFactory is not used.");
+			return null;
+		}
+
 		global $wgUser;
 
-		if( empty( $variable ) || empty( $city_id ) || self::isUsed() === false ) {
+		if( empty( $variable ) || empty( $city_id ) ) {
 			return;
 		}
 
@@ -477,6 +502,12 @@ class WikiFactory {
 	 * @return id in city_list
 	 */
 	static public function DBtoID( $city_dbname ) {
+
+		if( ! self::isUsed() ) {
+			wfDebug( __METHOD__ . ": WikiFactory is not used.");
+			return null;
+		}
+
 		$dbr = wfGetDB( DB_SLAVE );
 
 		$oRow = $dbr->selectRow(
@@ -504,6 +535,11 @@ class WikiFactory {
 	 */
 	static public function IDtoDB( $city_id ) {
 
+		if( ! self::isUsed() ) {
+			wfDebug( __METHOD__ . ": WikiFactory is not used.");
+			return null;
+		}
+
 		$dbr = wfGetDB( DB_SLAVE );
 		$oRow = $dbr->selectRow(
 			array( wfSharedTable("city_list") ),
@@ -528,6 +564,12 @@ class WikiFactory {
 	 * @return mixed: database row with wiki params
 	 */
 	static public function getWikiByID( $id ) {
+
+		if( ! self::isUsed() ) {
+			wfDebug( __METHOD__ . ": WikiFactory is not used.");
+			return null;
+		}
+
 		/**
 		 * first from slave
 		 */
@@ -719,6 +761,12 @@ class WikiFactory {
 	 * @return boolean status
 	 */
 	static public function clearCache( $city_id ) {
+
+		if( ! self::isUsed() ) {
+			wfDebug( __METHOD__ . ": WikiFactory is not used.");
+			return null;
+		}
+
 		/**
 		 * increase number in city_list
 		 */
@@ -756,7 +804,13 @@ class WikiFactory {
 	 * @return mixed: array with groups
 	 */
 	static public function getGroups() {
-		$aGroups = array();
+
+		if( ! self::isUsed() ) {
+			wfDebug( __METHOD__ . ": WikiFactory is not used.");
+			return array();
+		}
+
+		$groups = array();
 
 		$dbr = wfGetDB( DB_MASTER );
 
@@ -775,12 +829,12 @@ class WikiFactory {
 			__METHOD__
 		);
 
-		while ($oRow = $dbr->fetchObject($oRes)) {
-			$aGroups[$oRow->cv_group_id] = $oRow->cv_group_name;
+		while( $oRow = $dbr->fetchObject( $oRes ) ) {
+			$groups[$oRow->cv_group_id] = $oRow->cv_group_name;
 		}
 		$dbr->freeResult( $oRes );
 
-		return $aGroups;
+		return $groups;
 	}
 
 	/**
@@ -804,6 +858,11 @@ class WikiFactory {
 	static public function getVariables( $sort = "cv_name", $wiki = 0, $group = 0,
 		$defined = false, $editable = false, $string = false )
 	{
+		if( ! self::isUsed() ) {
+			wfDebug( __METHOD__ . ": WikiFactory is not used.");
+			return null;
+		}
+
 		$aVariables = array();
 		$aTables = array(
 			wfSharedTable("city_variables_pool"),
@@ -933,6 +992,12 @@ class WikiFactory {
 	 * @return string: HTML form
 	 */
 	static public function setPublicStatus( $city_public, $city_id ) {
+
+		if( ! self::isUsed() ) {
+			wfDebug( __METHOD__ . ": WikiFactory is not used.");
+			return null;
+		}
+
 		wfProfileIn( __METHOD__ );
 
 		$dbw = wfGetDB( DB_MASTER );
@@ -968,6 +1033,12 @@ class WikiFactory {
 	 * @return string: path to file or null if id is not a number
 	 */
 	static private function loadVariableFromDB( $cv_id, $cv_name, $city_id ) {
+
+		if( ! self::isUsed() ) {
+			wfDebug( __METHOD__ . ": WikiFactory is not used.");
+			return null;
+		}
+
 		/**
 		 * $wiki could be empty, but we have to know which variable read
 		 */
