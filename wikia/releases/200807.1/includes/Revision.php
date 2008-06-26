@@ -717,6 +717,11 @@ class Revision {
 		);
 
 		$this->mId = !is_null($rev_id) ? $rev_id : $dbw->insertId();
+
+		if( strpos( $flags, "external" ) ) {
+			wfRunHooks( "RevisionInsertOn", array( $this, $data ) );
+		}
+		
 		wfProfileOut( $fname );
 		return $this->mId;
 	}
