@@ -34,7 +34,7 @@ $wgSearchRankTrackerConfig = array(
 		'MSN' => array( 'graphColor' => 'green', 'graphMark' => 7 ),
 		'altavista' => array( 'graphColor' => 'orange', 'graphMark' => 8)
 	),
-	'graphDaysBackNum' => 30
+	'graphDaysBackNum' => 61
 );
 
 // permissions
