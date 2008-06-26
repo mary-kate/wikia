@@ -103,6 +103,9 @@ function wfLinkFromTitle( &$title, &$article ){
 		$wgSupressPageTitle = true;
 		$wgSupressSubTitle = true;
 
+		global $wgEnableFASTExt;
+		$wgEnableFASTExt = false;
+		
 		require_once( "{$wgLinkFilterDirectory }/LinkPage.php" );
 		require_once ( "{$wgLinkFilterDirectory }/LinkFilter.i18n.php" );
 		foreach( efWikiaLinkFilter() as $lang => $messages ){
