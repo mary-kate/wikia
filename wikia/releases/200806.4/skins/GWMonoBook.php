@@ -71,7 +71,7 @@ class MonoBookTemplate extends QuickTemplate {
 
 		<?php print Skin::makeGlobalVariablesScript( $this->data ); ?>
 
-		<script type="<?php $this->text('jsmimetype') ?>" src="<?php $this->text('stylepath' ) ?>/monobook/allinone.js?<?php echo $GLOBALS['wgStyleVersion'] ?>"><!-- wikia js --></script>
+		<script type="<?php $this->text('jsmimetype') ?>" src="<?php $this->text('stylepath' ) ?>/monobook/allinone.js?<?php echo $GLOBALS['wgMergeStyleVersionJS'] ?>"><!-- wikia js --></script>
 <?php	if($this->data['jsvarurl'  ]) { ?>
 		<script type="<?php $this->text('jsmimetype') ?>" src="<?php $this->text('jsvarurl'  ) ?>"><!-- site js --></script>
 <?php	} ?>
