@@ -17,8 +17,8 @@ class UserBulletin {
 		6 => "basic profile",
 		7 => "personal profile",
 		8 => "work profile",
-		9 => "nudge",
-		10 => "nudgeback",
+		//9 => "nudge",
+		//10 => "nudgeback",
 		11 => "profile photo"
 	);
 	

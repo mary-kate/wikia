@@ -79,12 +79,12 @@ class Poke {
 				__METHOD__ );
 				$dbr->commit();
 				
-				$b = new UserBulletin();
-				$b->addBulletin($poke_from,"pokeback",$poke_to);
+				//$b = new UserBulletin();
+				//$b->addBulletin($poke_from,"pokeback",$poke_to);
 			}
 			else {
-				$b = new UserBulletin();
-				$b->addBulletin($poke_from,"poke",$poke_to);
+				//$b = new UserBulletin();
+				//$b->addBulletin($poke_from,"poke",$poke_to);
 			}
 			
 			$key = wfMemcKey( 'user', 'nudges', $poke_to );
