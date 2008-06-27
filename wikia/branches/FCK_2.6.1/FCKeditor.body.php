@@ -301,7 +301,7 @@ class FCKeditor_MediaWiki
 
 		$wgOut->addHTML ("
 			<style type=\"text/css\">
-				#wpTextbox1 {
+				#wpTextbox1, #editform .editOptions, #editform #wpSummaryLabel {
 					display: none ;
 				}
 				#FCKwarning {
@@ -430,8 +430,11 @@ function onLoadFCKeditor()
 				FCKinstance.SwitchEditMode () ;
 			}
 			window.onbeforeunload = confirmExit ;
-			var saveButton = document.getElementById ('wpSave') ;
+			var saveButton = document.getElementById ('wpSave') ;			
 			var previewButton = document.getElementById ('wpPreview') ;				
+			document.getElementById ('wpSummaryLabel').style.display = 'inline' ;
+			saveButton.parentNode.parentNode.style.display = 'inline' ;
+			
 			var diffButton = document.getElementById ('wpDiff') ;				
 			saveButton.onclick = previewButton.onclick = diffButton.onclick =  function () {needToConfirm = false ;} ;
 		}

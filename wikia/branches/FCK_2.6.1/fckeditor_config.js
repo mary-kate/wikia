@@ -25,7 +25,7 @@ FCKConfig.ToolbarSets['Wiki'] = [
 FCKConfig.PluginsPath = FCKConfig.EditorPath + '../plugins/' ;
 FCKConfig.Plugins.Add( 'mediawiki' ) ;
 
-FCKConfig.ForcePasteAsPlainText = true ;
+FCKConfig.ForcePasteAsPlainText = false ;
 FCKConfig.FontFormats	= 'p;h2;h3;h4;h5;h6;pre' ;
 
 FCKConfig.AutoDetectLanguage	= false ;
