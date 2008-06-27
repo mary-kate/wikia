@@ -372,8 +372,11 @@ FCK.DataProcessor =
 							stringBuilder.push( href ) ;
 							if ( htmlNode.innerHTML != '[n]' && (!isWikiUrl || href != htmlNode.innerHTML || !href.toLowerCase().StartsWith("category:")))
 							{
-								stringBuilder.push( isWikiUrl? '|' : ' ' ) ;
-								this._AppendChildNodes( htmlNode, stringBuilder, prefix ) ;
+       		 						if (href != htmlNode.innerHTML)
+								{
+									stringBuilder.push( isWikiUrl? '|' : ' ' ) ;
+									this._AppendChildNodes( htmlNode, stringBuilder, prefix ) ;
+								}
 							}
 							stringBuilder.push( isWikiUrl ? ']]' : ']' ) ;
 
