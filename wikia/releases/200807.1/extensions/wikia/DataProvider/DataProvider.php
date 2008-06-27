@@ -417,7 +417,7 @@ class DataProvider
 
 		if ( !is_array( $results ) ) {
 
-			$query = "SELECT rev_user, count(*) AS cnt FROM revision WHERE rev_user != 0 GROUP BY rev_user ORDER BY cnt DESC";
+			$query = "SELECT rev_user, count(*) AS cnt FROM revision WHERE rev_user != 0 AND rev_user NOT IN (SELECT ug_user FROM user_groups WHERE ug_group = 'staff') GROUP BY rev_user ORDER BY cnt DESC";
 			$dbr = &wfGetDB( DB_SLAVE );
 			$res = $dbr->query( $dbr->limitResult($query, $limit * 4, 0) );
 
