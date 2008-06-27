@@ -32,19 +32,19 @@
 FCKToolbarItems.RegisterItem( 'Source', new FCKToolbarButton( 'Source', 'Wikitext', null, FCK_TOOLBARITEM_ICONTEXT, true, true, 1 ) ) ;
 
 // Register our toolbar buttons.
-var tbButton = new FCKToolbarButton( 'MW_Template', 'Template', 'Insert/Edit Template' ) ;
+var tbButton = new FCKToolbarButton( 'MW_Template', 'Template', 'Insert/Edit Template', null, false, true ) ;
 tbButton.IconPath = FCKConfig.PluginsPath + 'mediawiki/images/tb_icon_template.gif' ;
 FCKToolbarItems.RegisterItem( 'MW_Template', tbButton ) ;
 
-tbButton = new FCKToolbarButton( 'MW_Ref', 'Reference', 'Insert/Edit Reference' ) ;
+tbButton = new FCKToolbarButton( 'MW_Ref', 'Reference', 'Insert/Edit Reference', null, false, true ) ;
 tbButton.IconPath = FCKConfig.PluginsPath + 'mediawiki/images/tb_icon_ref.gif' ;
 FCKToolbarItems.RegisterItem( 'MW_Ref', tbButton ) ;
 
-tbButton = new FCKToolbarButton( 'MW_Math', 'Formula', 'Insert/Edit Formula' ) ;
+tbButton = new FCKToolbarButton( 'MW_Math', 'Formula', 'Insert/Edit Formula', null, false, true ) ;
 tbButton.IconPath = FCKConfig.PluginsPath + 'mediawiki/images/tb_icon_math.gif' ;
 FCKToolbarItems.RegisterItem( 'MW_Math', tbButton ) ;
 
-tbButton = new FCKToolbarButton( 'MW_Special', 'Special Tag', 'Insert/Edit Special Tag' ) ;
+tbButton = new FCKToolbarButton( 'MW_Special', 'Special Tag', 'Insert/Edit Special Tag', null, false, true ) ;
 tbButton.IconPath = FCKConfig.PluginsPath + 'mediawiki/images/tb_icon_special.gif' ;
 FCKToolbarItems.RegisterItem( 'MW_Special', tbButton ) ;
 
@@ -55,6 +55,9 @@ FCKCommands.RegisterCommand( 'MW_Math', new FCKDialogCommand( 'MW_Math', 'Formul
 FCKCommands.RegisterCommand( 'MW_Special', new FCKDialogCommand( 'MW_Special', 'Special Tag Properties', FCKConfig.PluginsPath + 'mediawiki/dialogs/special.html', 400, 330 ) ) ; //YC
 FCKCommands.RegisterCommand( 'Link', new FCKDialogCommand( 'Link', FCKLang.DlgLnkWindowTitle, FCKConfig.PluginsPath + 'mediawiki/dialogs/link.html', 400, 250 ) ) ;
 FCKCommands.RegisterCommand( 'Image', new FCKDialogCommand( 'Image', FCKLang.DlgImgTitle, FCKConfig.PluginsPath + 'mediawiki/dialogs/image.html', 450, 300 ) ) ;
+FCKCommands.RegisterCommand ('Find', new FCKDialogCommand( 'Find', FCKLang.DlgFindAndReplaceTitle, FCKConfig.PluginsPath + 'mediawiki/dialogs/replace.html'             , 340, 230, null, null, 'Find' ) ) ;
+FCKCommands.RegisterCommand ('Replace', new FCKDialogCommand( 'Replace', FCKLang.DlgFindAndReplaceTitle, FCKConfig.PluginsPath + 'mediawiki/dialogs/replace.html'             , 340, 230, null, null, 'Replace' ) ) ;
+
 
 FCKToolbarItems.OldGetItem = FCKToolbarItems.GetItem;
 
@@ -67,11 +70,14 @@ FCKToolbarItems.GetItem = function( itemName )
 
 	switch ( itemName )
 	{
+                case 'Find'                             : oItem = new FCKToolbarButton( 'Find'          , FCKLang.Find, null, null, null, true, 16 ) ; break ;
+                case 'Replace'                  : oItem = new FCKToolbarButton( 'Replace'       , FCKLang.Replace, null, null, null, true, 17 ) ; break ;
 		case 'Bold'			: oItem = new FCKToolbarButton( 'Bold'          , FCKLang.Bold, null, null, true, true, 20 ) ; break ;
 		case 'Italic'		: oItem = new FCKToolbarButton( 'Italic'        , FCKLang.Italic, null, null, true, true, 21 ) ; break ;
 		case 'Underline'	: oItem = new FCKToolbarButton( 'Underline'     , FCKLang.Underline, null, null, true, true, 22 ) ; break ;
 		case 'StrikeThrough': oItem = new FCKToolbarButton( 'StrikeThrough' , FCKLang.StrikeThrough, null, null, true, true, 23 ) ; break ;
 		case 'Link'			: oItem = new FCKToolbarButton( 'Link'          , FCKLang.InsertLinkLbl, FCKLang.InsertLink, null, true, true, 34 ) ; break ;
+                case 'Table'                    : oItem = new FCKToolbarButton( 'Table'                 , FCKLang.InsertTableLbl, FCKLang.InsertTable, null, true, true, 39 ) ; break ;
 		case 'Rule'             : oItem = new FCKToolbarButton( 'Rule'                  , FCKLang.InsertLineLbl, FCKLang.InsertLine, null, true, true, 40 ) ; break ;
 
 		default:
@@ -99,6 +105,7 @@ FCKToolbarButton.prototype.Click = function()
 			case 'StrikeThrough': window.parent.insertTags ('<strike>', '</strike>', 'Strikethrough text') ; CMode = true ; break ;
 			case 'Link' 		: window.parent.insertTags ('[[', ']]', 'Internal link') ; CMode = true ; break ;
 			case 'Rule' 		: window.parent.insertTags ('\n----\n', '', '') ; CMode = true ; break ;
+			case 'Table' 		: window.parent.insertTags ('{| width="200" cellspacing="1" cellpadding="1" border="1"\n|-\n| \n| \n|-\n| \n| \n|-\n| \n| \n|}', '', '') ; CMode = true ; break ;
 		}
 	}
 	
