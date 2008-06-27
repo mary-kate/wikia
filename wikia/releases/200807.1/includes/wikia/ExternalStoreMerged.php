@@ -2,13 +2,8 @@
 /**
  * DB accessable external objects, all revisions from all databases are merged
  * in one table.
- *
- * Small ad: use openkomodo
  */
 
-$wgHooks[ "RevisionAfterInsertOn" ][] = 'ExternalStoreMerged__updateRevisionId';
-$wgDefaultExternalStore = "merged://archive";
-$wgExternalStores = array("merged");
 
 #CREATE TABLE `revisions` (
 #  `id` int(10) NOT NULL auto_increment,
@@ -21,7 +16,6 @@ $wgExternalStores = array("merged");
 #  `rev_timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
 #  `rev_text` mediumtext NOT NULL,
 #  PRIMARY KEY  (`id`),
-#  UNIQUE KEY `rev_id` (`rev_wikia_id`,`rev_id`),
 #  KEY `rev_page_id` (`rev_wikia_id`,`rev_page_id`,`rev_id`),
 #  KEY `rev_namespace` (`rev_wikia_id`,`rev_page_id`,`rev_namespace`),
 #  KEY `rev_user` (`rev_wikia_id`,`rev_user`,`rev_timestamp`),
@@ -40,18 +34,47 @@ $wgExternalStores = array("merged");
 #  KEY `page_namespace` (`page_wikia_id`,`page_namespace`,`page_title`)
 #) ENGINE=InnoDB DEFAULT CHARSET=utf8
 
-/**
- * One-step cache variable to hold base blobs; operations that
- * pull multiple revisions may often pull multiple times from
- * the same blob. By keeping the last-used one open, we avoid
- * redundant unserialization and decompression overhead.
- */
+$wgHooks[ "RevisionAfterInsertOn" ][] = 'wfExternalStoreMergedUpdateRevId';
+$wgDefaultExternalStore = "merged://archive";
+$wgExternalStores = array( "merged" );
+
 global $wgExternalBlobCache;
 $wgExternalBlobCache = array();
 
 global $wgExternalMergeBalancers;
 $wgExternalMergeBalancers = array();
 
+
+/**
+ * Hook called as "RevisionAfterInsertOn"
+ *
+ * @access public
+ * @author Krzysztof Krzyżaniak <eloy@wikia.com>
+ *
+ * @param object	$revision	Revision object
+ * @param string	$url		Saved url to external blob
+ */
+function wfExternalStoreMergedUpdateRevId( $revision, $url ) {
+
+	wfProfileIn( __METHOD__ );
+
+	$path = explode( "/", $url );
+	$store    = $path[0];
+	$cluster  = $path[2];
+	$id	      = $path[3];
+	$rev_id   = $revision->getId();
+
+	$ExStorage = new ExternalStoreMerged();
+	$ExStorage->updateRevisionId( $cluster, $id, $rev_id );
+
+	wfProfileOut( __METHOD__ );
+
+	return true;
+}
+
+/**
+ * @name ExternalStoreMerged
+ */
 class ExternalStoreMerged {
 
 	private $mDBbname	= "dataware";
@@ -258,32 +281,28 @@ class ExternalStoreMerged {
 	}
 
 	/**
-	 * Hook called as "RevisionAfterInsertOn"
+	 * Fetch a blob item out of the database; a cache of the last-loaded
+	 * blob will be kept so that multiple loads out of a multi-item blob
+	 * can avoid redundant database access and decompression.
 	 *
-	 * @static
 	 * @access public
 	 * @author Krzysztof Krzyżaniak <eloy@wikia.com>
+
+	 * @param string	$cluster	cluster name
+	 * @param integer	$id			blob id in cluster
+	 * @param integer	$rev_id		revision id for revisions table
 	 *
-	 * @param object	$revision	Revision object
-	 * @param string	$url		Saved url to external blob
+	 * @return boolean
 	 */
-	static public function updateRevisionId( $revision, $url ) {
+	public function updateRevisionId( $cluster, $id, $rev_id ) {
 
-		global $wgExternalServers, $wgExternalMergeBalancers;
+		$dbw = $this->getMaster( $cluster );
 
-		$path = explode( "/", $url );
-		$store    = $path[0];
-		$cluster  = $path[2];
-		$id	      = $path[3];
+		error_log( "{$cluster} {$id} {$rev_id}" );
 
-		if( !array_key_exists( $cluster, $wgExternalMergeBalancers ) ) {
-			$wgExternalMergeBalancers[ $cluster ] = LoadBalancer::newFromParams( $wgExternalServers[ $cluster ] );
-		}
-		$wgExternalMergeBalancers[ $cluster ]->allowLagged(true);
-		$dbw = $wgExternalMergeBalancers[ $cluster ]->getConnection( DB_MASTER );
 		return $dbw->update(
-			"revisions",
-			array( "rev_id" => $revision->getId() ),
+			$this->getTable( $dbw, "revisions" ),
+			array( "rev_id" => $rev_id ),
 			array( "id" => $id ),
 			__METHOD__
 		);
