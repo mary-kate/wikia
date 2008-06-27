@@ -31,8 +31,6 @@ FCKConfig.FontFormats	= 'p;h2;h3;h4;h5;h6;pre' ;
 FCKConfig.AutoDetectLanguage	= false ;
 FCKConfig.DefaultLanguage		= 'en' ;
 
-FCKConfig.useYUI	= true ;
-
 // FCKConfig.DisableObjectResizing = true ;
 
 FCKConfig.EditorAreaStyles = '\

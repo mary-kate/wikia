@@ -105,6 +105,22 @@ function wfSajaxSearchArticleFCKeditor( $term )
 
 	$term1 = str_replace( ' ', '_', $wgContLang->ucfirst( $term ) );
 	$term2 = str_replace( ' ', '_', $wgContLang->lc( $term ) );
+
+	// fix the namespace... 
+	$ns_seed = split (':', $term2) ;
+
+	if(count($ns_seed) > 1) {
+		$ns_name = $ns_seed [0];
+		$term2 = $ns_seed [1];
+		if(isset($ns_name)) {
+			$ns = Namespace::getCanonicalIndex(strtolower($ns_name));
+			$ns_name = $wgContLang->getFormattedNsText( $ns );
+		}
+
+	} else {
+		$title_name = $term2 ;
+	}
+
 	$term3 = str_replace( ' ', '_', $wgContLang->uc( $term ) );
 	$term = $term1;
 
@@ -126,7 +142,12 @@ function wfSajaxSearchArticleFCKeditor( $term )
 		if (isset($prefix) && !is_null($prefix)) {
 			$ret .= $prefix;
 		}
-		$ret .= $row->page_title ."\n";
+		
+		if (isset ($ns_name)) {
+			$ret .= $ns_name . ":" . str_replace ('_', ' ', $row->page_title) ."\n";
+		} else {
+			$ret .=  str_replace ('_', ' ', $row->page_title) ."\n";
+		}
 	}
 
 	$term = htmlspecialchars( $term );
