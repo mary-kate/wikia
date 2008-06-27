@@ -281,9 +281,7 @@ class ExternalStoreMerged {
 	}
 
 	/**
-	 * Fetch a blob item out of the database; a cache of the last-loaded
-	 * blob will be kept so that multiple loads out of a multi-item blob
-	 * can avoid redundant database access and decompression.
+	 * Update revision id, called in hook
 	 *
 	 * @access public
 	 * @author Krzysztof Krzyżaniak <eloy@wikia.com>
