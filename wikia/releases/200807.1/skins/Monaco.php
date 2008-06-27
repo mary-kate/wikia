@@ -1474,7 +1474,8 @@ if(count($wikiafooterlinks) > 0) {
 			<!-- SEARCH/NAVIGATION -->
 <?php
 	global $wgSitename;
-	$searchLabel = wfMsg('ilsubmit').' '.$wgSitename.'...';
+	$msgSearchLabel = wfMsg('Tooltip-search');
+	$searchLabel = wfEmptyMsg('Tooltip-search', $msgSearchLabel) ? (wfMsg('ilsubmit').' '.$wgSitename.'...') : $msgSearchLabel;
 ?>
 			<div class="widget" id="navigation_widget">
 				<div id="search_box" class="color1">
