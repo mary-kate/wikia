@@ -6,6 +6,7 @@
  * Small ad: use openkomodo
  */
 
+$wgHooks[ "RevisionAfterInsertOn" ][] = 'ExternalStoreMerged__updateRevisionId';
 $wgDefaultExternalStore = "merged://archive";
 $wgExternalStores = array("merged");
 
@@ -254,5 +255,37 @@ class ExternalStoreMerged {
 		}
 		$dbw->commit();
 		return "merged://$cluster/$store_id";
+	}
+
+	/**
+	 * Hook called as "RevisionAfterInsertOn"
+	 *
+	 * @static
+	 * @access public
+	 * @author Krzysztof Krzyżaniak <eloy@wikia.com>
+	 *
+	 * @param object	$revision	Revision object
+	 * @param string	$url		Saved url to external blob
+	 */
+	static public function updateRevisionId( $revision, $url ) {
+
+		global $wgExternalServers, $wgExternalMergeBalancers;
+
+		$path = explode( "/", $url );
+		$store    = $path[0];
+		$cluster  = $path[2];
+		$id	      = $path[3];
+
+		if( !array_key_exists( $cluster, $wgExternalMergeBalancers ) ) {
+			$wgExternalMergeBalancers[ $cluster ] = LoadBalancer::newFromParams( $wgExternalServers[ $cluster ] );
+		}
+		$wgExternalMergeBalancers[ $cluster ]->allowLagged(true);
+		$dbw = $wgExternalMergeBalancers[ $cluster ]->getConnection( DB_MASTER );
+		return $dbw->update(
+			"revisions",
+			array( "rev_id" => $revision->getId() ),
+			array( "id" => $id ),
+			__METHOD__
+		);
 	}
 }
