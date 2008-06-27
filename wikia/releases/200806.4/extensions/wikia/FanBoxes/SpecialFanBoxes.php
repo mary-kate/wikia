@@ -243,7 +243,7 @@ class FanBoxes extends SpecialPage {
 		$top_title = Title::makeTitle( NS_SPECIAL  , "TopUserBoxes"  );
 
 
-		$output .="<div class=\"lr-right\">
+		$output .="<div >
 			".wfMsgExt("userboxes-instructions","parse")."
 		</div>
 		
@@ -502,7 +502,7 @@ class FanBoxes extends SpecialPage {
 		$categories_label = "Categories";
 		$categories_help_text = "Categories help organize information on the site. To add multiple categories seperate them by commas.";
 
-		$output .= "<div class=\"category-section>";
+		$output .= "<div class=\"category-section\">";
 		$tagcloud = " <div id=\"create-tagcloud\" style=\"line-height: 25pt;width:600px;padding-bottom:15px;\">";
 		$tagnumber = 0;
 		$tabcounter=1;
