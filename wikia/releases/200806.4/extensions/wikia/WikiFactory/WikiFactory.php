@@ -384,7 +384,7 @@ class WikiFactory {
 	 * @return boolean: transaction status
 	 */
 	static public function setVarByName( $variable, $wiki, $value ) {
-		$oVariable = self::getVarByName( $cv_name, $wiki );
+		$oVariable = self::getVarByName( $variable, $wiki );
 		return WikiFactory::SetVarByID( $oVariable->cv_variable_id, $wiki, $value );
 	}
 
