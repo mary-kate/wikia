@@ -256,6 +256,7 @@ span.subpages {
 }
 .firstHeading {
 	margin-bottom: .1em;
+	overflow: visible;
 }
 
 /* user notification thing */
