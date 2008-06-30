@@ -127,7 +127,7 @@ class Editcount extends SpecialPage {
 
 		return $nscount;
 	}
-	
+
 	function editsByNsAll( $uid ) {
 		$fname = 'Editcount::editsByNsAll';
 		$nscount = array();
@@ -173,7 +173,7 @@ class Editcount extends SpecialPage {
 			$fname,
 			array( 'GROUP BY' => 'page_namespace' )
 		);
-	
+
 		return $res;
 	}
 
@@ -211,7 +211,7 @@ class EditcountHTML extends Editcount {
 		/* all wikis */
 		$this->nscountall = $nscountall;
 		$this->totalall = $totalall;
-		
+
 		$this->setHeaders();
 
 		$action = $wgTitle->escapeLocalUrl();
@@ -242,14 +242,14 @@ class EditcountHTML extends Editcount {
         wfProfileIn( __METHOD__ );
 
 		$total = wfMsgHtml( 'editcount_total' );
-		$wikiName = (class_exists("WikiFactory")) ? WikiFactory::IDtoDB($wgCityId) : $wgDBname;
+		$wikiName = $wgDBname;
 		/* current wiki */
 		$ftotal = $wgLang->formatNum( $this->total );
 		$percent = ($this->total > 0) ? wfPercent( $this->total / $this->total * 100 , 2 ) : wfPercent( 0 ); // @bug 4400
 		/* all wikis */
 		$ftotalall = $wgLang->formatNum( $this->totalall );
 		$percentall = ($this->totalall > 0) ? wfPercent( $this->totalall / $this->totalall * 100 , 2 ) : wfPercent( 0 );
-		
+
         $oTmpl = new EasyTemplate( dirname( __FILE__ ) . "/templates/" );
         $oTmpl->set_vars( array(
             "total"			=> $total,
@@ -269,4 +269,3 @@ class EditcountHTML extends Editcount {
         return $res;
 	}
 }
-
