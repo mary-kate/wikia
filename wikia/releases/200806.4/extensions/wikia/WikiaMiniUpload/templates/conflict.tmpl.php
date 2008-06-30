@@ -1,3 +1,4 @@
+<input id="ImageUploadExtraId" type="hidden" value="<?= urlencode($extraId) ?>" />
 <?php
 $file_mwname = new FakeLocalFile(Title::newFromText($mwname, 6), RepoGroup::singleton()->getLocalRepo());
 $file_name = new LocalFile(Title::newFromText($name, 6), RepoGroup::singleton()->getLocalRepo());

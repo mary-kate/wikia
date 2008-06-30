@@ -78,6 +78,7 @@ class WikiaMiniUpload {
 			$props['file'] = $file;
 			$props['name'] = preg_replace("/[^".Title::legalChars()."]|:/", '-', trim($flickrResult['title']).'.jpg');
 			$props['mwname'] = $tempname;
+			$props['extraId'] = $itemId;
 		}
 		return $this->detailsPage($props);
 	}
@@ -102,10 +103,11 @@ class WikiaMiniUpload {
 	}
 
 	function insertImage() {
-		global $wgRequest, $wgUser;
+		global $wgRequest, $wgUser, $IP;
 		$type = $wgRequest->getVal('type');
 		$name = $wgRequest->getVal('name');
 		$mwname = $wgRequest->getVal('mwname');
+		$extraId = $wgRequest->getVal('extraId');
 
 		if($name !== NULL) {
 			if($name == '') {
@@ -125,6 +127,8 @@ class WikiaMiniUpload {
 						$file_mwname = new FakeLocalFile(Title::newFromText($mwname, 6), RepoGroup::singleton()->getLocalRepo());
 						$file_name->upload($file_mwname->getPath(), '', '');
 						$file_mwname->delete('');
+
+						echo 'FiuFiu: '.$extraId;
 					} else if($type == 'existing') {
 						header('X-screen-type: existing');
 						$file = wfFindFile(Title::newFromText($name, 6));
@@ -135,13 +139,28 @@ class WikiaMiniUpload {
 					} else {
 						header('X-screen-type: conflict');
 						$tmpl = new EasyTemplate(dirname(__FILE__).'/templates/');
-						$tmpl->set_vars(array('name' => $name, 'mwname' => $mwname));
+						$tmpl->set_vars(array('name' => $name, 'mwname' => $mwname, 'extraId' => $extraId));
 						return $tmpl->execute('conflict');
 					}
 				} else {
 					$temp_file = new LocalFile(Title::newFromText($mwname, 6), RepoGroup::singleton()->getLocalRepo());
 					$file = new LocalFile($title, RepoGroup::singleton()->getLocalRepo());
-					$file->upload($temp_file->getPath(), '', ($wgRequest->getVal('CC_license') == 'true' ? "== Licensing ==\n{{cc-by-sa-3.0}}" : ''));
+
+					if(!empty($extraId)) {
+						require_once($IP.'/extensions/3rdparty/ImportFreeImages/phpFlickr-2.2.0/phpFlickr.php');
+						$flickrAPI = new phpFlickr('bac0bd138f5d0819982149f67c0ca734');
+						$flickrResult = $flickrAPI->photos_getInfo($extraId);
+
+						$nsid = $flickrResult['owner']['nsid']; // e.g. 49127042@N00
+						$username = $flickrResult['owner']['username']; // e.g. bossa67
+						$license = $flickrResult['license'];
+
+						$caption = '{{MediaWiki:Flickr'.intval($license).'|1='.wfEscapeWikiText($extraId).'|2='.wfEscapeWikiText($nsid).'|3='.wfEscapeWikiText($username).'}}';
+					} else {
+						$caption = $wgRequest->getVal('CC_license') == 'true' ? "== Licensing ==\n{{cc-by-sa-3.0}}" : '';
+					}
+
+					$file->upload($temp_file->getPath(), '', $caption);
 					$temp_file->delete('');
 				}
 				$wgUser->addWatch($title);
