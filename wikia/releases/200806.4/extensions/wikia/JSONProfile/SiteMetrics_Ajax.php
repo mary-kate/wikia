@@ -163,16 +163,7 @@ function fetchTopUsers($metric, $callback){
 	global $wgRequest, $wgMemc;
 	
         $dbr =& wfGetDB( DB_MASTER );
-	$lang = mysql_real_escape_string($wgRequest->getVal("lang", false));
-	
-	$hasLang = false;
-	$noCount = false;
-	
-	if($lang){
-		$keyMemcache = wfMemcKey( 'wikiasearch' , 'metricx' , $metric, $callback, $lang );
-	}else{
-		$keyMemcache = wfMemcKey( 'wikiasearch' , 'metricx' , $metric, $callback );
-	}
+	$keyMemcache = wfMemcKey( 'wikiasearch' , 'metriks' , $metric, $callback );
 	 
        $result = $wgMemc->get($keyMemcache);
        if($result){ return array("html" => $result, "key" => ""); }
@@ -186,6 +177,7 @@ function fetchTopUsers($metric, $callback){
 
         $sql = "SELECT user_name, SUM(`count`) AS the_count
                 FROM metrics_current_ktusers
+                WHERE user_name <> ''
                 GROUP BY user_name
                 ORDER BY the_count DESC LIMIT 500";
 
@@ -193,8 +185,8 @@ function fetchTopUsers($metric, $callback){
 	$data = array();
         
 	while ($row = $dbr->fetchObject( $res ) ) {
-		$i = array("username" => trim($row->user_name));
-		$data[] = $i;
+                $i = array("username" => trim($row->user_name), "contributions" => $row->the_count);
+                $data[] = $i;
 	}
         
 	$ret["messages"] = $messages;
