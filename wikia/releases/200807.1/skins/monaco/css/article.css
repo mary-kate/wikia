@@ -15,7 +15,7 @@
 	background-repeat: repeat-x;
 	color: white;
 	font-family: tahoma, sans-serif;
-	font-size: 15px;
+	font-size: 11pt;
 	margin: 2px 2px 0;
 	overflow: hidden;
 	padding: 0 5px;
@@ -134,7 +134,7 @@
 /*** ARTICLE FOOTER ***/
 #articleFooter {
 	border-top: 1px dashed #CCC;
-	font-size: 12px;
+	font-size: 9pt;
 	margin: 0;
 	overflow: hidden;
 	padding: 0;
@@ -151,10 +151,10 @@
 	border-left: 1px dashed #CCC;
 	width: 50%;
 }
-#articleFooter h1 {
+#articleFooter strong {
 	border: 0;
 	color: #333;
-	font-size: 13px;
+	font-size: 10pt;
 	font-weight: bold;
 	float: left;
 	line-height: 22px;
@@ -221,7 +221,7 @@
 	background: url(http://images.wikia.com/common/skins-1.12/quartz/images/share_hover_bg.png);
 	color: #FFF;
 	display: none;
-	font-size: 11px;
+	font-size: 8.5pt; 
 	font-weight: bold;
 	height: 21px;
 	left: -32px;
@@ -276,7 +276,7 @@
     background-color: #fff;
     color: #000000;
     border: solid 1px #aaaaaa;
-    font-size:12px;
+    font-size: 9pt;
     visibility: hidden;
     position: absolute;
     margin-top: -250px;

@@ -18,7 +18,7 @@
 .widget dt {
 	cursor: move;
 	font-family: tahoma, arial, sans-serif;
-	font-size: 12px;
+	font-size: 9pt;
 	font-weight: bold;
 	padding: 3px;
 }
@@ -26,7 +26,7 @@
 	cursor: default;
 }
 .widget dt.mini {
-	font-size: 11px;
+	font-size: 8pt;
 	padding: 2px;
 	text-align: center;
 }
@@ -68,7 +68,7 @@
 	margin-top: -2px;
 }
 .widget dd {
-	font-size: 12px;
+	font-size: 9pt;
 	padding: 7px;
 	margin: 0;
 	max-height: 250px;
@@ -76,7 +76,7 @@
 }
 .widget h1 {
 	font-family: tahoma, arial, sans-serif;
-	font-size: 13px;
+	font-size: 10pt;
 	font-weight: bold;
 }
 .widget li {
@@ -84,7 +84,7 @@
 }
 .widget .widgetViewControl {
 	border-bottom: 1px solid #AAA;
-	font-size: 12px;
+	font-size: 9pt;
 	margin-bottom: 5px;
 	padding-bottom: 5px;
 }
@@ -134,7 +134,7 @@
 }
 #search_field {
 	border: 1px solid #039;
-	font-size: 12px;
+	font-size: 9pt;
 	left: 5px;
 	height: 14px;
 	margin: 0;
@@ -201,7 +201,7 @@
 }
 #navigation em {
 	font-family: arial, sans-serif;
-	font-size: 22px;
+	font-size: 16pt;
 	font-weight: bold;
 	line-height: 20px;
 	position: absolute;
@@ -212,7 +212,7 @@
 	margin: 0;
 }
 #link_box {
-	font-size: 11px;
+	font-size: 8pt;
 	padding: 5px 0;
 }
 #link_box a {
@@ -233,7 +233,7 @@
 .yuimenuitemedit1 a,
 .yuimenuitemedit2 a {
 	text-align: right;
-	font-size: 11px;
+	font-size: 8pt;
 	padding: 2px 2px !important;
 }
 
@@ -263,7 +263,7 @@
 }
 .yui-ac-content li {
 	float: none !important;
-	font-size: 12px;
+	font-size: 9pt;
 	margin: 0 !important;
 	/*padding: 2px 5px !important;*/
 	padding: 1px 0px 0px 3px;
