@@ -21,5 +21,5 @@ $wgSpecialPages['SystemGiftManager'] = 'SystemGiftManager';
 $wgAutoloadClasses['SystemGiftManagerLogo'] = "{$wgSystemGiftsDirectory}/SpecialSystemGiftManagerLogo.php";
 $wgSpecialPages['SystemGiftManagerLogo'] = 'SystemGiftManagerLogo';
 
-require_once( "{$wgUserGiftsDirectory}/SpecialPopulateAwards.php" );
+//require_once( "{$wgUserGiftsDirectory}/SpecialPopulateAwards.php" );
 ?>
