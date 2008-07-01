@@ -119,8 +119,27 @@ function FASTfix(banner) {
 
 	}
 
+	if(banner == 'FAST1' || banner == 'FAST_HOME1') {
+		Dom.setStyle('adSpace' + curAdSpaceId, 'margin-left', 'auto');
+	}
+	Dom.setStyle('adSpace' + curAdSpaceId, 'width', adSizes[banner][0]+'px');
+	Dom.setStyle('adSpace' + curAdSpaceId, 'height', adSizes[banner][1]+'px');
+
 	return true;
 }
+
+var adSizes= new Array(11)
+adSizes["FAST1"] = [728,90];
+adSizes["FAST2"] = [300,250];
+adSizes["FAST3"] = [300,250];
+adSizes["FAST4"] = [300,250];
+adSizes["FAST5"] = [728,90];
+adSizes["FAST_HOME1"] = [728,90];
+adSizes["FAST6"] = [160,600];
+adSizes["FAST7"] = [160,600];
+adSizes["FAST_HOME3"] = [160,600];
+adSizes["FAST_HOME4"] = [160,600];
+adSizes["FAST_HOME2"] = [300,250];
 
 function FASTisCollisionBottom() {
 	var Dom = YAHOO.util.Dom;
