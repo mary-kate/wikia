@@ -187,3 +187,12 @@ ul.star-rating {
 	left: auto;
 	right: 221px;
 }
+
+/* ToC align fix */
+#toc ul {
+  text-align: right;
+}
+
+#toc ul ul {
+  margin: 0 2em 0 0;
+}
