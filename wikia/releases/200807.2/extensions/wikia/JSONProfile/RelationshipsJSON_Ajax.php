@@ -355,13 +355,8 @@ $wgAjaxExportList [] = 'wfCheckAddRelationshipJSON';
 function wfCheckAddRelationshipJSON($user_name="", $rel_type=1, $callback="handleAddRel"){
 	
 		global $wgUser, $wgOut, $wgRequest, $wgMessageCache, $IP, $wgUploadPath;
-
 		
 		$rel_JSON_array = array();
-		
-		
-		
-
 		
 		$rel_JSON_array["r_user_name"] = "";
 		$rel_JSON_array["avatar_img"] = "";
@@ -546,8 +541,7 @@ function wfAddRelationshipJSON(){
 
 		$rel = new UserRelationship($wgUser->getName() );
 		
-		if ($wgRequest->wasPosted() && $_SESSION["alreadysubmitted"] == false) {
-			
+		if ($wgRequest->wasPosted() ) {
 			
 			$user_name_to = $wgRequest->getVal("user_name");
 			$relationship_type = $wgRequest->getVal("rel_type");
@@ -559,7 +553,6 @@ function wfAddRelationshipJSON(){
 			
 			if ($user_name_to != "" && $relationship_type != "" && $wpSourceForm != "") {
 				
-				$_SESSION["alreadysubmitted"] = true;
 				$rel = $rel->addRelationshipRequest($user_name_to,$relationship_type,$message,true,$trust_type);
 				$user_id_to = User::idFromName($user_name_to);
 				$key = wfMemcKey( 'user', 'profile', 'notifupdated', $user_id_to );
@@ -982,5 +975,186 @@ function wfEditRelationshipJSON($user_name="", $trust_type=1, $callback="handle_
 	
 	
 	return "var json_rel=" . jsonify($rel_JSON_array) . ";\n\n{$callback}(json_rel);";
+}
+
+$wgAjaxExportList [] = 'wfFriendsActivityJSON';
+function wfFriendsActivityJSON($user_name="", $count = 25){
+	global $wgUser, $wgOut, $wgRequest, $IP, $wgMessageCache, $wgMemc;
+	$user_id = User::idFromName($user_name);
+	
+	if( $user_id > 0 ){
+		
+		$key = wfMemcKey( 'user', 'friendsactivity', $user_id );
+		$wgMemc->delete($key);
+		$data = $wgMemc->get( $key );
+		
+		if( !$data ){
+			$dbr =& wfGetDB( DB_MASTER );
+			$sql = "SELECT ub_id, ub_user_id, ub_user_name, ub_type, UNIX_TIMESTAMP(ub_date) as timestamp, ub_message FROM user_bulletin
+			WHERE ub_user_id IN (select r_user_id from user_relationship where r_user_id_relation = {$user_id}) order by ub_id desc LIMIT 0,{$count}";
+		
+			$res = $dbr->query($sql);
+			$bulletins = array();
+			while ($row = $dbr->fetchObject( $res ) ) {
+				 $type_name = UserBulletin::$bulletin_types[ $row->ub_type ];
+				 
+				 $user_name_display_m = "";
+				 if( $row->ub_type == 1 || $row->ub_type == 3){
+					$user_id_m = User::idFromName( $row->ub_message );
+					$user_name_display_m = user_name_display( $user_id_m, $row->ub_message );
+				 }
+				 $bulletins[] = array(
+					 "id"=>$row->ub_id,"timestamp"=>($row->timestamp ) , "ago" => get_time_ago( $row->timestamp ),
+					 "type"=>($row->ub_type ), "type_name" => $type_name,
+					 "user_name_display"=> user_name_display( $row->ub_user_id, $row->ub_user_name),
+					 "user_name" => $row->ub_user_name, "user_id" => $row->ub_user_id,
+					 "message" => $row->ub_message,
+					 "text" => UserBulletin::getBulletinText($type_name, $row->ub_message, $gender, $user_name_display_m)
+				);
+				
+			}
+			$wgMemc->set($key, $bulletins, 60 * 5);
+		}else{
+			$bulletins = $data;
+		}
+		
+		$profile_JSON_array["activity"] = array(
+			"time" => time(),
+			"user_name_display"=>user_name_display($id, $user_name),
+			//"r_avatar"=>$rp->getProfileImageURL("l"),
+			"title"=>"Friends Activity",
+			"activity_items"=>$bulletins,
+		);
+	}
+	
+	return "var json_bulletins=" . jsonify($profile_JSON_array) . ";\n\nhome_from_JSON(json_bulletins);";
+}
+
+$wgAjaxExportList [] = 'wfGetPeopleYouMayKnowJSON';
+function wfGetPeopleYouMayKnowJSON($callback="showPeople"  ){
+	
+	global $wgUser, $wgOut, $wgRequest, $IP, $wgMessageCache, $wgMemc;
+	
+			$rel_JSON_array = array();
+			$rel_JSON_array["r_user_name"] = "";
+			
+			if ($wgUser->isLoggedIn()) {
+				$rel_JSON_array["r_user_name"] = $wgUser->getName();
+			}
+			
+			$rel_JSON_array["error"] = 0;
+			$rel_JSON_array["status_message"] = "";
+						
+			if($wgUser->getID() == 0){
+				$rel_JSON_array["rel"] = array();
+				$rel_JSON_array["error"] = 1;
+				$rel_JSON_array["status_message"] = "You must login to see this page.";
+				
+				return "var json_rel=" . jsonify($rel_JSON_array) . ";\n\n{$callback}(json_rel);";
+				
+			}	
+			
+			//get your hide list
+			$key = wfMemcKey( 'mayknow', 'hide', $wgUser->getID() );
+			$data = $wgMemc->get( $key );
+			if( !is_array( $data ) ){
+				
+				$dbr =& wfGetDB( DB_SLAVE );
+				$res = $dbr->select( '`people_you_may_know_hide`', 
+						array('hide_user_id'),
+						array("user_id" => $wgUser->getID() ), __METHOD__, 
+						""
+				);
+				$may_know_hide = array();
+				while ($row = $dbr->fetchObject( $res ) ) {
+					$may_know_hide[] = $row->hide_user_id;
+				}
+				$wgMemc->set( $key, $may_know_hide );
+			}else{
+				$may_know_hide = $data;
+			}
+			
+			//Get your 20 random friends
+			$rel = new UserRelationship($wgUser->getName());
+			$friends = $rel->getRandomRelationships( 20 );
+			
+			$all_friends = $rel->getAllRelationships();
+			$all_friends[ $wgUser->getID() ] = array();
+			
+			$friends_full = array();
+			$may_know_bucket = array();
+			
+			//Load all of each friends friends
+			foreach( $friends as $friend ){
+			
+				$p = new ProfilePrivacy();
+				$p->loadPrivacyForUser( $friend["user_name"] );
+				
+				if( $p->getPrivacyCheckForUser("VIEW_FULL") && $p->getPrivacyCheckForUser("VIEW_FRIENDS") ){
+					$rel_of_friend = new UserRelationship( $friend["user_name"] );
+					$complete_friends_of_friend = $rel_of_friend->getAllRelationships();
+					$you_may_know =  array_diff_key($complete_friends_of_friend, $all_friends);
+				
+					foreach ($you_may_know as $friend) {
+						
+						if( in_array( $friend["user_id"] , $may_know_hide ) ) continue;
+						
+						if( !array_key_exists( $friend["user_id"], $may_know_bucket ) ){
+							$user =  Title::makeTitle( NS_USER  , $friend["user_name"]  );
+							$p = new ProfilePhoto( $friend["user_id"] );
+							
+							$friend["avatar"] = $p->getProfileImageURL("m");
+							$friend["user_name_display"] = user_name_display($friend["user_id"], $friend["user_name"]);
+							$friend["link"] = $user->escapeFullUrl();
+							$friends_full[] = $friend;
+							$may_know_bucket[$friend["user_id"]] = 1;
+						}else{
+							$may_know_bucket[$friend["user_id"]] = $may_know_bucket[$friend["user_id"]] + 1;
+						}
+					}
+				}
+			}
+		
+			$count= 25;
+			if( $count > count( $friends_full ) ){
+				$count = count( $friends_full );
+			}
+			
+			$rel_randomized_keys = array_rand( $friends_full, $count );
+			if( $count == 1 ){ //if one array_rand just returns index
+				$you_may_know_randomized[] = $friends_full[$rel_randomized_keys];
+			}else{
+				foreach( $rel_randomized_keys as $random ){
+					$friends_full[ $random ]["mutual_count"] = $may_know_bucket[ $friends_full[ $random ]["user_id"] ];
+					$you_may_know_randomized[] = $friends_full[ $random ];
+				}
+			}
+					
+
+			$rel_JSON_array["count"] = count($you_may_know_randomized);
+			$rel_JSON_array["rel"] = $you_may_know_randomized;
+			return "var json_rel=" . jsonify($rel_JSON_array) . ";\n\n{$callback}(json_rel);";
+
+}
+
+$wgAjaxExportList [] = 'wfPeopleYouMayKnowHideJSON';
+function wfPeopleYouMayKnowHideJSON($user_id = 0, $callback="handle_hide"){
+	global $wgUser, $wgMemc;
+	
+	
+	if ($wgUser->isLoggedIn()) {
+		$dbr =& wfGetDB( DB_MASTER );
+		$dbr->insert( '`people_you_may_know_hide`',
+		array(
+			'user_id' => $wgUser->getID(),
+			'hide_user_id' => $user_id
+			),__METHOD__
+		);	
+		$dbr->commit();
+		$key = wfMemcKey( 'mayknow', 'hide', $wgUser->getID() );
+		$wgMemc->delete($key);
+	}
+	return "void(0);";
+	
 }
 ?>

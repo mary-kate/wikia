@@ -3,6 +3,7 @@ CREATE TABLE `rank_entry` (
   `ren_city_id` int(11) default NULL,
   `ren_page_name` varchar(255) default NULL,
   `ren_page_url` varchar(255) default NULL,
+		`ren_is_main_page` enum('0','1') default '0',
   `ren_phrase` varchar(255) default NULL,
   `ren_created` datetime default NULL,
   PRIMARY KEY  (`ren_id`),

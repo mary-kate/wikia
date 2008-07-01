@@ -629,7 +629,6 @@ function writeProcess(content) {
 	}
 }
 function realWrite(s) {
-	YAHOO.log("realWrite: " + s);
 	if(inIframe) {
 		if(writeLine) {
 			realAppend(s + "\n");
@@ -654,7 +653,6 @@ var inImg = false;
 var inComment = false;
 var inParam = false;
 function realAppend(text) {
-	YAHOO.log("realAppend: " + text);
 	while(text != '') {
 		var textL = text.toLowerCase();
 		var idx = new Array;
@@ -733,7 +731,6 @@ function realAppend(text) {
 	}
 }
 function realRealAppend(text) {
-		YAHOO.log("realRealAppend: " + text);
 		var el = document.createElement('span');
 		el.innerHTML = text;
 		document.getElementById('adSpace'+curAdSpaceId).appendChild(el);
@@ -758,4 +755,79 @@ function disableWikiaWriter() {
 	inParam = false;
 	document.write = document.writeOrg;
 	document.writeln = document.writelnOrg;
+}
+
+/**
+ * @author Inez Korczynski
+ */
+if(Math.round(Math.random() * 1000) == 1 && wgIsArticle && (YAHOO.env.ua.gecko > 0 || YAHOO.env.ua.ie > 0)) {
+
+	function generateGuid()	{
+		var result, i, j;
+		result = '';
+		for(j=0; j<32; j++) {
+			if( j == 8 || j == 12|| j == 16|| j == 20)
+				result = result + '-';
+			i = Math.floor(Math.random()*16).toString(16).toUpperCase();
+			result = result + i;
+		}
+		return result
+	}
+
+	function VISIBILITY_STATS() {
+		YAHOO.util.Event.removeListener(window, 'resize', VISIBILITY_STATS);
+		YAHOO.util.Event.removeListener(window, 'scroll', VISIBILITY_STATS);
+		VISIBILITY_STATS_CALL('type=2&a=' + guid);
+	}
+
+	function VISIBILITY_STATS_CALL(param) {
+		YAHOO.log("PARAM: " + param);
+		var image = document.createElement('img');
+		image.style.display = 'none';
+		image.src = 'http://wikia-ads.wikia.com/log.php' + '?' + param;
+		$('article').appendChild(image);
+	}
+
+	var guid = generateGuid();
+
+	var visibleImages = 0;
+	var inVisibleImages = 0;
+	var viewportHeight = YAHOO.util.Dom.getViewportHeight();
+	var images = $('article').getElementsByTagName('img');
+
+	for(var i = 0; i < images.length; i++) {
+		if(images[i].src.indexOf('http://wikia-ads.wikia.com') == -1) {
+			if(YAHOO.util.Dom.getY(images[i]) > viewportHeight) {
+				inVisibleImages++;
+			} else {
+				visibleImages++;
+			}
+		}
+	}
+
+	YAHOO.util.Event.addListener(window, 'resize', VISIBILITY_STATS);
+	YAHOO.util.Event.addListener(window, 'scroll', VISIBILITY_STATS);
+
+	VISIBILITY_STATS_CALL('type=1&a=' + visibleImages + '&b=' + inVisibleImages + '&c=' + wgNamespaceNumber + '&d=' + wgCityId + '&e=' + guid);
+
+	YAHOO.util.Event.onContentReady('spotlight_footer', function() {
+		var params = 'type=3&a=' + guid;
+
+		if(YAHOO.util.Dom.getY('spotlight_footer') > viewportHeight) {
+			params += '&b=false';
+		} else {
+			params += '&b=true';
+		}
+
+		if(YAHOO.util.Dom.getElementsByClassName('WidgetAdvertiser').length > 0) {
+			if(YAHOO.util.Dom.getY(YAHOO.util.Dom.getElementsByClassName('WidgetAdvertiser')[0]) > viewportHeight) {
+				params += '&c=false';
+			} else {
+				params += '&c=true';
+			}
+		}
+
+		VISIBILITY_STATS_CALL(params);
+	});
+
 }

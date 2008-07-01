@@ -353,7 +353,6 @@ var carouselObj = null;
 var carouselLoaded = false;
 var carouselLength = 0;
 var carouselVisible = null;
-getNumberForCarousel();
 
 function showCarousel(e) {
 	if (Dom.get("headerMenuUser")) {
@@ -425,6 +424,7 @@ function showCarousel(e) {
 		}
 
 		if(carouselObj == null) {
+			getNumberForCarousel();
 			carouselObj = new YAHOO.extension.Carousel((skin == 'quartz') ? "mycarousel" : "widget_cockpit", {
 				wrap: false,
 				animationSpeed: 0.15,

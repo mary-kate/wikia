@@ -67,6 +67,11 @@ function wfUserProfileFromTitle( &$title, &$article ){
 		return false;
 	}
 	
+	if( NS_USER_WIKI == $title->getNamespace() ){
+		global $wgShowAds;
+		$wgShowAds = false;
+	}
+	
 	if ( strpos( $title->getText(), "/" ) === false && ( NS_USER == $title->getNamespace() || NS_USER_PROFILE == $title->getNamespace() ) ) {
 		if( !$wgRequest->getVal("action") ){
 			$wgSupressPageTitle = true;

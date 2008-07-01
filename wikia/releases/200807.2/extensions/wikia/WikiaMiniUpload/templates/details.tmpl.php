@@ -1,3 +1,4 @@
+<input id="ImageUploadExtraId" type="hidden" value="<?= isset($props['extraId']) ? urlencode($props['extraId']) : '' ?>" />
 <input id="ImageUploadMWname" type="hidden" value="<?= urlencode($props['mwname']) ?>" />
 <?php
 global $wgExtensionsPath;
@@ -5,10 +6,19 @@ if(isset($props['name'])) {
 ?>
 <div id="ImageUploadSection">
 	<?= wfMsg('wmu-details-inf') ?>
-	<table class="ImageUploadOptionsTable">
+	<table class="ImageUploadOptionsTable" style="width: 100%;">
 		<tr class="ImageUploadNoBorder">
 			<th><?= wfMsg('wmu-name') ?></th>
-			<td><input id="ImageUploadName" type="text" size="40" value="<?= $props['name'] ?>" /></td>
+			<td>
+			<?php
+			if(!empty($props['upload'])) {
+			?>
+			<span style="float: right; font-size: 8pt;"><input type="checkbox" id="CC_license"/> <label for="CC_license"><?= wfMsg('wmu-license-cc') ?></label></span>
+			<?php
+			}
+			?>
+			<input id="ImageUploadName" type="text" size="30" value="<?= $props['name'] ?>" />
+			</td>
 		</tr>
 	</table>
 </div>
@@ -65,7 +75,9 @@ if($props['file']->media_type == 'BITMAP' || $props['file']->media_type == 'DRAW
 	</tr>
 	<tr class="ImageUploadNoBorder">
 		<td>&nbsp;</td>
-		<td><input type="submit" value="<?= wfMsg('wmu-insert2') ?>" onclick="WMU_insertImage(event, 'details');" /></td>
+		<td>
+			<input type="submit" value="<?= wfMsg('wmu-insert2') ?>" onclick="WMU_insertImage(event, 'details');" />
+		</td>
 	</tr>
 </table>
 </div>
