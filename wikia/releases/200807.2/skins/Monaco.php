@@ -1598,6 +1598,41 @@ if(!empty($wgFASTSIDE) && isset($wgFASTSIDE[1])) {
 		<!-- /WIDGETS -->
 
 	</div>
+<script type="text/javascript">
+TieDivLib = new function() {
+
+  var tieObjects = Array();
+
+  var interval = 150;
+
+  var timer;
+
+  this.tie = function(source, target) {
+    tieObjects.push([source, target]);
+  }
+
+  this.fixPositions = function() {
+    for(i = 0; i < tieObjects.length; i++) {
+      if(YAHOO.util.Dom.getXY(tieObjects[i][0]) != YAHOO.util.Dom.getXY(tieObjects[i][1])) {
+        YAHOO.util.Dom.get(tieObjects[i][0]).style.top = YAHOO.util.Dom.getY(tieObjects[i][1]) + 'px';
+        YAHOO.util.Dom.get(tieObjects[i][0]).style.left = YAHOO.util.Dom.getX(tieObjects[i][1]) + 'px';
+        YAHOO.util.Dom.get(tieObjects[i][0]).style.position = 'absolute';
+        YAHOO.util.Dom.get(tieObjects[i][0]).style.zIndex = 1000;
+      }
+    }
+  }
+
+  this.startTie = function() {
+    timer = setTimeout(function(){TieDivLib.fixPositions();TieDivLib.startTie();}, interval);
+  }
+
+  this.stopTie = function() {
+    clearTimeout(timer);
+  }
+
+};
+TieDivLib.startTie();
+</script>
 <?php
 wfProfileOut( __METHOD__ . '-widgets');
 
@@ -1623,11 +1658,11 @@ if($wgAdServingType === 1) {
 	uasort($adsDisplayed, "cmpAds");
 	foreach($adsDisplayed as $adSpace => $ad) {
 ?>
+<div id="realAd<?=$adSpace?>">
 <script type="text/javascript">
 <!--//<![CDATA[
 if(document.getElementById('adSpace<?=$adSpace?>')<?=(substr($ad[1], 0, 4) == 'FAST' ? ' && FASTisValid("'.$ad[1].'")' : '') ?>) {
-	var adSpace<?=$adSpace?> = true;
-	document.write('<scr'+'ipt type="text/javascript">enableWikiaWriter(<?=$adSpace?>);</scr'+'ipt>');
+	curAdSpaceId = <?=$adSpace?>;
 	document.write('<scr'+'ipt type="text/javascript">');
 	document.write('var base_url = "http://wikia-ads.wikia.com/www/delivery/ajs.php";');
 	document.write('base_url += "?loc=" + escape(window.location);');
@@ -1663,14 +1698,12 @@ if($ad[1] == 'FAST_BOTTOM') {
 ?>
 	document.write('</scr'+'ipt>');
 	document.write('<scr'+'ipt type="text/javascript" src="'+base_url+'"></scr'+'ipt>');
+	document.write('<scr'+'ipt type="text/javascript">');
+	document.write('TieDivLib.tie("realAd<?=$adSpace?>", "adSpace"+curAdSpaceId);');
+	document.write('</scr'+'ipt>');
 }
 //]]>--></script>
-<script type="text/javascript">
-<!--//<![CDATA[
-if(typeof adSpace<?=$adSpace?> != 'undefined') {
-	document.write('<scr'+'ipt type="text/javascript">disableWikiaWriter();</scr'+'ipt>');
-}
-//]]>--></script>
+</div>
 <?php
 	}
 }
