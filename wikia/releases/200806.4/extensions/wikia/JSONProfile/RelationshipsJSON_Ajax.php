@@ -1076,7 +1076,8 @@ function wfGetPeopleYouMayKnowJSON($callback="showPeople"  ){
 			
 			//Get your 20 random friends
 			$rel = new UserRelationship($wgUser->getName());
-			$friends = $rel->getRandomRelationships( 20 );
+			//$friends = $rel->getRandomRelationships( 50 );
+			$friends = $rel->getAllRelationships();
 			
 			$all_friends = $rel->getAllRelationships();
 			$all_friends[ $wgUser->getID() ] = array();
@@ -1114,12 +1115,21 @@ function wfGetPeopleYouMayKnowJSON($callback="showPeople"  ){
 					}
 				}
 			}
-		
+			//go through each person and set mutual count
+			foreach( $friends_full as &$person ){
+				$person["mutual_count"] = $may_know_bucket[ $person["user_id"] ];
+			}
+			
+			usort($friends_full, "wfSortPeopleYouMayKnow");
+			
 			$count= 25;
 			if( $count > count( $friends_full ) ){
 				$count = count( $friends_full );
 			}
 			
+			$you_may_know_randomized = array_slice( $friends_full, 0, $count, true );
+			
+			/*
 			$rel_randomized_keys = array_rand( $friends_full, $count );
 			if( $count == 1 ){ //if one array_rand just returns index
 				$you_may_know_randomized[] = $friends_full[$rel_randomized_keys];
@@ -1129,14 +1139,22 @@ function wfGetPeopleYouMayKnowJSON($callback="showPeople"  ){
 					$you_may_know_randomized[] = $friends_full[ $random ];
 				}
 			}
-					
-
+			*/		
+			
 			$rel_JSON_array["count"] = count($you_may_know_randomized);
 			$rel_JSON_array["rel"] = $you_may_know_randomized;
 			return "var json_rel=" . jsonify($rel_JSON_array) . ";\n\n{$callback}(json_rel);";
 
 }
 
+function wfSortPeopleYouMayKnow($x, $y){
+	if ( $x["mutual_count"] > $y["mutual_count"] ){
+		return -1;
+	}else{
+		return 1;
+	}
+}
+	
 $wgAjaxExportList [] = 'wfPeopleYouMayKnowHideJSON';
 function wfPeopleYouMayKnowHideJSON($user_id = 0, $callback="handle_hide"){
 	global $wgUser, $wgMemc;
