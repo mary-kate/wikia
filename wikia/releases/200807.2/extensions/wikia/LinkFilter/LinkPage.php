@@ -35,6 +35,9 @@ class LinkPage extends Article{
 	function view(){
 		global $wgOut, $wgUser, $wgRequest, $wgTitle, $wgLinkPageDisplay;
 		
+		global $wgShowAds;
+		$wgShowAds = false;
+		
 		$sk = $wgUser->getSkin();
 	
 		$wgOut->setHTMLTitle( $wgTitle->getText() );

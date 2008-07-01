@@ -58,7 +58,7 @@ class WidgetsSpecialPage extends SpecialPage
 		$skinname = get_class($wgUser->getSkin());
 	
 		if ( !in_array( $skinname, array('SkinQuartz', 'SkinMonaco')) ) {  
-			$wgOut->addHTML( '<div id="widgets-info">' . wfMsgExt('widgets-specialpage-info', 'parse') . '</div>' );
+			$wgOut->addHTML( '<div id="widgets-info" class="plainlinks">' . wfMsgExt('widgets-specialpage-info', 'parse') . '</div>' );
 		}
 
 		// get list of widgets and load'em all

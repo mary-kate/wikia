@@ -975,7 +975,7 @@ echo '<link rel="apple-touch-icon" href="'. $wgLogo .'" />';
 <?php		wfProfileIn( __METHOD__ . '-body'); ?>
 
 <?
-	if ($wgTitle->mUrlform == str_replace( ' ', '_', trim( wfMsgForContent( 'mainpage' ) ) ) ) {
+	if ($wgTitle->getArticleId() == Title::newMainPage()->getArticleId()) {
 		$isMainpage = ' mainpage';
 	} else {
 		$isMainpage = null;

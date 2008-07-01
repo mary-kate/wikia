@@ -154,7 +154,7 @@ function WidgetSlideshowGetImagesFromSpecialPage()
 	foreach ($list as $row) {
 		list($imageName, $description) = explode(' ', trim($row, '* '), 2);
 		
-		$img = Image::newFromName( $imageName );
+		$img = wfFindFile( $imageName );
 			
 		if (is_object($img)) {
 			$url = Title::newFromText( $imageName, NS_IMAGE );
@@ -200,7 +200,7 @@ function WidgetSlideshowGetImagesFromNewest() {
 		
 	// format data and get image thumb src
 	while ( ($row = $dbr->fetchObject($res)) ) {
-		$img = Image::newFromName( $row->img_name );
+		$img = wfFindFile( $row->img_name );
 			
 		if (is_object($img)) {
 			$url = Title::newFromText( $row->img_name, NS_IMAGE );
@@ -245,7 +245,7 @@ function WidgetSlideshowGetImagesFromRandom() {
 		
 	// format data and get image thumb src
 	while ( ($row = $dbr->fetchObject($res)) ) {
-		$img = Image::newFromName( $row->img_name );
+		$img = wfFindFile( $row->img_name );
 			
 		if (is_object($img)) {
 			$url = Title::newFromText( $row->img_name, NS_IMAGE );
