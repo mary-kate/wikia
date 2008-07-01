@@ -29,7 +29,7 @@ class UserBulletin {
 		return $types[ $name ];
 	}
 	
-	static function getBulletinText( $name, $text, $gender=0 ){
+	static function getBulletinText( $name, $text, $gender=0, $user_name_display = "" ){
 		
 		//$params = split("|", $text);
 	
@@ -46,7 +46,7 @@ class UserBulletin {
 		*/
 		if ($gender) $gender_term = "her";
 		else $gender_term = "his";
-		$text = wfMsgExt("bulletin_$name", "parse", $text, $gender_term );
+		$text = wfMsgExt("bulletin_$name", "parse", $text, $gender_term, $user_name_display );
 		
 		//really bad hack because we want to parse=firstline, but don't want wrapping <p> tags
 		if( substr( $text, 0 , 3) == "<p>" ){
@@ -148,12 +148,19 @@ class UserBulletinList{
 		while ($row = $dbr->fetchObject( $res ) ) {
 			
 			$type_name = UserBulletin::$bulletin_types[ $row->ub_type ];
+			
+			$user_name_display_m = "";
+			 if( $row->ub_type == 1 || $row->ub_type == 3){
+				$user_id_m = User::idFromName( $row->ub_message );
+				$user_name_display_m = user_name_display( $user_id_m, $row->ub_message );
+			 }
 			 $bulletins[] = array(
 				 "id"=>$row->ub_id,"timestamp"=>($row->timestamp ) , "ago" => get_time_ago( $row->timestamp ),
 				 "type"=>($row->ub_type ), "type_name" => $type_name,
+				 "user_name_display"=> user_name_display( $row->ub_user_id, $row->ub_user_name),
 				 "user_name" => $this->user_name, "user_id" => $this->user_id,
 				 "message" => $row->ub_message,
-				 "text" => UserBulletin::getBulletinText($type_name, $row->ub_message, $gender)
+				 "text" => UserBulletin::getBulletinText($type_name, $row->ub_message, $gender, $user_name_display_m)
 			);
 			
 		}
