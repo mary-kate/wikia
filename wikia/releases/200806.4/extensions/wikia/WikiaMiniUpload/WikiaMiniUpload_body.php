@@ -125,10 +125,23 @@ class WikiaMiniUpload {
 						$title = Title::newFromText($name, 6);
 						$file_name = new LocalFile($title, RepoGroup::singleton()->getLocalRepo());
 						$file_mwname = new FakeLocalFile(Title::newFromText($mwname, 6), RepoGroup::singleton()->getLocalRepo());
-						$file_name->upload($file_mwname->getPath(), '', '');
-						$file_mwname->delete('');
 
-						echo 'FiuFiu: '.$extraId;
+						if(!empty($extraId)) {
+							require_once($IP.'/extensions/3rdparty/ImportFreeImages/phpFlickr-2.2.0/phpFlickr.php');
+							$flickrAPI = new phpFlickr('bac0bd138f5d0819982149f67c0ca734');
+							$flickrResult = $flickrAPI->photos_getInfo($extraId);
+
+							$nsid = $flickrResult['owner']['nsid']; // e.g. 49127042@N00
+							$username = $flickrResult['owner']['username']; // e.g. bossa67
+							$license = $flickrResult['license'];
+
+							$caption = '{{MediaWiki:Flickr'.intval($license).'|1='.wfEscapeWikiText($extraId).'|2='.wfEscapeWikiText($nsid).'|3='.wfEscapeWikiText($username).'}}';
+						} else {
+							$caption = '';
+						}
+
+						$file_name->upload($file_mwname->getPath(), '', $caption);
+						$file_mwname->delete('');
 					} else if($type == 'existing') {
 						header('X-screen-type: existing');
 						$file = wfFindFile(Title::newFromText($name, 6));
