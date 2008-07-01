@@ -28,3 +28,8 @@
 .WidgetCommunity dd {
     max-height: none;
 }
+* html .WidgetCommunity dd,
+* html .WidgetCommunity dt {
+	position: relative;
+}
+
