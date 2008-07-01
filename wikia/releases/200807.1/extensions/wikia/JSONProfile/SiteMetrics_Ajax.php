@@ -21,7 +21,7 @@ function wfQueryCounter($callback){
         global $wgMemc, $wgRequest;
         $dbr =& wfGetDB( DB_MASTER );
         
-        $key = wfMemcKey( 'wikiasearch' , 'metrics' , 'querycounters', 'queryrate' );
+        $key = wfMemcKey( 'wikiasearch' , 'metric' , 'querycounter', 'queryrate' );
         $obj = $wgMemc->get($key);
         
 	if(!$obj || ($obj && time() - $obj["at"] > 3600) ){
@@ -32,7 +32,11 @@ function wfQueryCounter($callback){
                 $totalQueryCount = $row->the_sum;
 
                 // get today's queries
-                $sql = "SELECT SUM(num_queries) AS the_sum, COUNT(*) AS the_count FROM metrics_hourly_queries WHERE DATE(created_at)=DATE(NOW());";
+                $sql = "SELECT SUM(num_queries) AS the_sum, COUNT(*) AS the_count
+                        FROM metrics_hourly_queries
+                        WHERE DATE(created_at)=(
+                                SELECT DATE(created_at) FROM metrics_hourly_queries ORDER BY created_at DESC LIMIT 1
+                        );";
                 $res = $dbr->query($sql);
                 $row = $dbr->fetchObject($res);
                 
@@ -46,7 +50,11 @@ function wfQueryCounter($callback){
                 $totalContributionCount = $row->the_sum;
                 
                 // get today's contributions
-                $sql = "SELECT SUM(`count`) AS the_sum, COUNT(*) AS the_count FROM metrics_ktops WHERE DATE(created_at)=DATE(NOW());";
+                $sql = "SELECT SUM(`count`) AS the_sum, COUNT(*) AS the_count
+                        FROM metrics_ktops
+                        WHERE DATE(created_at)=(
+                                SELECT DATE(created_at) FROM metrics_ktops ORDER BY created_at DESC LIMIT 1
+                        );";
                 $res = $dbr->query($sql);
                 $row = $dbr->fetchObject($res);
                 
@@ -95,39 +103,100 @@ function wfSiteMetricsJSON($metric, $callback){
 	
 	// figure out which metric we want
 	// these indexes match with the phpval properties from var METRICS = new Array(); in the javascript
-		
+        
 	switch($metric){
 		
 	// get the MW/site metrics
-	case 0: return fetchSiteMetrics($metric, $callback); break;
-	case 1: return fetchSiteMetrics($metric, $callback); break;
-	case 2: return fetchSiteMetrics($metric, $callback); break;
-	case 3: return fetchSiteMetrics($metric, $callback); break;
-	case 4: return fetchSiteMetrics($metric, $callback); break;
-	case 5: return fetchSiteMetrics($metric, $callback); break;
-  	case 6: return fetchSiteMetrics($metric, $callback); break;
-	case 7: return fetchSiteMetrics($metric, $callback); break;
+	case 0:
+	case 1:
+	case 2:
+	case 3:
+	case 4:
+	case 5:
+  	case 6:
+	case 7:
+               $payload = fetchSiteMetrics($metric, $callback);
+               break; 
 
 	// get the query data
-	case 8: return fetchQueryData($metric, $callback); break;
-	case 9: return fetchQueryData($metric, $callback); break;
-	case 10: return fetchQueryData($metric, $callback); break;
-	case 11: return fetchQueryData($metric, $callback); break;
+	case 8:
+	case 9:
+	case 10:
+        case 15:
+	case 11:
+                $payload = fetchQueryData($metric, $callback);
+                break;
 	
 	// get KT stats
-	case 12: return fetchKTStats($metric, $callback); break;
-	case 13: return fetchKTTrend($metric, $callback); break;
-	
-	// do trends on queries
-	case 14: return fetchQueryTrend($metric, $callback); break;
-	
-	// get the needed pages
-	case 15: return fetchQueryData($metric, $callback); break;
-	case 16: return fetchGlobalKTTrend($metric, $callback); break;
+	case 12:
+                $payload = fetchKTStats($metric, $callback);
+                break;
         
+	case 13:
+                $payload = fetchKTTrend($metric, $callback);
+                break;
+                
+	// do trends on queries
+	case 14:
+                $payload = fetchQueryTrend($metric, $callback); break;
+	
+	case 16:
+                $payload = fetchGlobalKTTrend($metric, $callback); break;
+        case 17:
+                $payload = fetchTopUsers($metric, $callback); break;
 	default: return "";
 	break;
 	}
+        
+        if(strlen($payload["key"]) > 2){
+                $wgMemc->set( $payload["key"], $payload["data"], 3600 );
+        }else{
+                
+        }
+        
+        return $payload["html"];
+}
+
+function fetchTopUsers($metric, $callback){
+        $dbr =& wfGetDB( DB_MASTER );
+        
+	global $wgRequest, $wgMemc;
+	
+        $dbr =& wfGetDB( DB_MASTER );
+	$keyMemcache = wfMemcKey( 'wikiasearch' , 'metriks' , $metric, $callback );
+	 
+       $result = $wgMemc->get($keyMemcache);
+       if($result){ return array("html" => $result, "key" => ""); }
+
+	$msg = efWikiaSiteMetrics();
+	$keys = array_keys($msg["en"]);
+	$messages = array();
+	
+	// get the i18n messages
+	foreach($keys as $key){ $messages[$key] = wfMsg($key); }
+
+        $sql = "SELECT user_name, SUM(`count`) AS the_count
+                FROM metrics_current_ktusers
+                WHERE user_name <> ''
+                GROUP BY user_name
+                ORDER BY the_count DESC LIMIT 500";
+
+	$res = $dbr->query($sql);
+	$data = array();
+        
+	while ($row = $dbr->fetchObject( $res ) ) {
+                $i = array("username" => trim($row->user_name), "contributions" => $row->the_count);
+                $data[] = $i;
+	}
+        
+	$ret["messages"] = $messages;
+	$ret["tableData"] = $data;
+	
+	$result = jsonify($ret);
+	$result = 'var metricData =' . $result . ";\n\n" . $callback .'(metricData, ' . $metric . ');';
+        
+	return array("data" => $result, "key" => $keyMemcache, "html" => $result);
+        
 }
 
 function createJSON($sql, $boundSQL){
@@ -136,12 +205,6 @@ function createJSON($sql, $boundSQL){
         $dbr =& wfGetDB( DB_MASTER );
         $IsByMonth = $wgRequest->getVal("month", false);
         $outputCSV = $wgRequest->getVal("csv", false);
-
-	// get the i18n messages
-	$msg = efWikiaSiteMetrics();
-	$keys = array_keys($msg["en"]);
-	$messages = array();
-	foreach($keys as $key){ $messages[$key] = wfMsg($key); }
 
 	$res = $dbr->query($sql);
         $data = array();
@@ -177,8 +240,7 @@ function createJSON($sql, $boundSQL){
 		foreach($monthBuckets as $key => $count){
 			$data[] = array("timestamp"=>$monthTimes[$key],
 				"date"=>$key,
-				"count"=>$count,
-				"movingAverage"=> "N/A");
+				"count"=>$count);
 		}
 	}
 	
@@ -339,32 +401,32 @@ function fetchGlobalKTTrend($metric, $callback){
                         ORDER BY created_at DESC LIMIT 365;';
                         
         $boundSQL = 'SELECT UNIX_TIMESTAMP(created_at) AS the_date FROM metrics_ktops ORDER BY created_at DESC LIMIT 1';
-        $key = wfMemcKey( 'wikiasearch' , 'metrics' , $metric, $callback, $IsByMonth, $startDateSql, $endDateSql );
+        $keyMemcache = wfMemcKey( 'wikiasearch' , 'metricsx' , $metric, $callback,
+                                        $IsByMonth, str_replace(" ", "", $startDateSql), str_replace(" ", "", $endDateSql) );
 	
-	$result = $wgMemc->get($key);
+	$result = $wgMemc->get($keyMemcache);
 	if(!$result){
                 $result = createJSON($sql, $boundSQL);
-                $wgMemc->set( $key, $result, 300 );
+        }else{
+                $keyMemcache = "";
         }
         
-        if($outputCSV){ return arrayToCSV($result); }
+        if($outputCSV){
+                $res = arrayToCSV($result);
+        }else{
+                $json = jsonify($result);
+                $res = 'var metricData =' . $json . ";\n\n" . $callback .'(metricData, ' . $metric . ');';
+	}
         
-        $result = jsonify($result);
-	$res = 'var metricData =' . $result . ";\n\n" . $callback .'(metricData, ' . $metric . ');';
-	
-	return $res;
+        if($key)
+                return array("data" => $result, "key" => $keyMemcache, "html" => $res);
+        else
+                return array("key" => $key, "html" => $res);
 }
 
 function fetchSiteMetrics($metric, $callback){
 	global $wgRequest, $wgMemc;
 	
-	// the time in seconds to provide running averages for
-	// its set at 2 days to test right now
-	// assume each point is a day...
-	// this isnt used currently
-	$AVERAGE_TIME = 604800;
-	$AVERAGE_NUM = $AVERAGE_TIME / 86400;
-
 	// go back a month by default
 	$DEFAULT_TIME = 86400 * 30;
 	
@@ -385,7 +447,7 @@ function fetchSiteMetrics($metric, $callback){
 		$endDateSql = date("Y-m-d 23:59:59", $endDate);
 		
 		// go back the AVERAGE_TIME so we'll have enough data to provide running averages	
-		$fixedStartDate = date("Y-m-d 00:00:00", $startDate-$AVERAGE_TIME);
+		$fixedStartDate = date("Y-m-d 00:00:00", $startDate);
 	
 		// if we have start and end dates then dont do the default query	
 		$hasTimeBound = ( !is_null($startDate) && !is_null($endDateSql) );
@@ -396,18 +458,15 @@ function fetchSiteMetrics($metric, $callback){
 	
 	// by default go back a while - but actually go back far enough to get running averages
 	$lastWeek = date("Y-m-d 00:00:00", time() - $DEFAULT_TIME);
-	$fixedLastWeek = date("Y-m-d 00:00:00", time() - ($DEFAULT_TIME + $AVERAGE_TIME) );
+	$fixedLastWeek = date("Y-m-d 00:00:00", time() - $DEFAULT_TIME );
 	
 	if($hasTimeBound){
-		$key = wfMemcKey( 'wikiasearch' , 'metrics' , $metric, $callback, $IsByMonth, $fixedStartDate,  $endDateSql);
+		$key = wfMemcKey( 'wikiasearch' , 'metricsx' , $metric, $callback,
+                                        $IsByMonth, str_replace(" ", "", $fixedStartDate),  str_replace(" ", "",$endDateSql) );
 	}else{
-		$key = wfMemcKey( 'wikiasearch' , 'metrics' , $metric, $callback, $IsByMonth, $fixedLastWeek);
+		$key = wfMemcKey( 'wikiasearch' , 'metricsx' , $metric, $callback, $IsByMonth, str_replace(" ", "", $fixedLastWeek) );
 	}
 	
-	$result = $wgMemc->get($key);
-	
-	if($result){ return $result; }
-
 	switch($metric){
 	case 0:
 		$sql = "SELECT count( * ) / 2 AS the_count, UNIX_TIMESTAMP(r_date) as the_date
@@ -562,19 +621,26 @@ function fetchSiteMetrics($metric, $callback){
 
 	default: die("NO"); break;
 	}
-	
+        
 	$result = $wgMemc->get($key);
-	if(!$result){
+	if($result){
+                $key = "";
+        }else{
                 $result = createJSON($sql, $boundSQL);
-                $wgMemc->set( $key, $result, 300 );
         }
         
-        if($outputCSV){ return arrayToCSV($result); }
+        if($outputCSV){
+                $res = arrayToCSV($result);
+        }else{
+                $json = jsonify($result);
+                $res = 'var metricData =' . $json . ";\n\n" . $callback .'(metricData, ' . $metric . ');';
+        }
         
-        $result = jsonify($result);
-	
-	$res = 'var metricData =' . $result . ";\n\n" . $callback .'(metricData, ' . $metric . ');';
-	return $res;
+        if($key)
+                return array("data" => $result, "key" => $key, "html" => $res);
+        else
+                return array("key" => $key, "html" => $res);
+
 }
 
 function arrayToCSV($data){
@@ -632,7 +698,7 @@ function fetchQueryTrend($metric, $callback){
                                                 FROM metrics_current_top_queries
                                                 WHERE `query`="' . $query.  '" AND `language`="' . $lang . '"
                                                 ORDER BY created_at DESC LIMIT 1';
-				$key = wfMemcKey( 'wikiasearch' , 'metrics' , $metric, $callback, $query, $lang, $IsByMonth, $startDateSql, $endDateSql );
+				$key = wfMemcKey( 'wikiasearch' , 'metricsx' , $metric, $callback, $query, $lang, $IsByMonth, str_replace(" ", "",$startDateSql), str_replace(" ", "",$endDateSql) );
 			}else{
 				$sql = 'SELECT SUM(`count`) AS the_count, `keyword` AS the_query, UNIX_TIMESTAMP(created_at) AS the_date
 					FROM metrics_current_ktkeywords
@@ -644,7 +710,7 @@ function fetchQueryTrend($metric, $callback){
                                 $boundSQL = 'SELECT UNIX_TIMESTAMP(created_at) AS the_date
                                                 FROM metrics_current_ktkeywords
                                                 WHERE `keyword`="' . $query.  '" ORDER BY created_at DESC LIMIT 1';
-				$key = wfMemcKey( 'wikiasearch' , 'metrics' , $metric, $callback, $query, $IsByMonth, $startDateSql, $endDateSql );
+				$key = wfMemcKey( 'wikiasearch' , 'metricsx' , $metric, $callback, $query, $IsByMonth, str_replace(" ", "",$startDateSql), str_replace(" ", "",$endDateSql) );
 			}
 		break;
 	}
@@ -652,23 +718,27 @@ function fetchQueryTrend($metric, $callback){
 	$result = $wgMemc->get($key);
 	if(!$result){
                 $result = createJSON($sql, $boundSQL);
-                $wgMemc->set( $key, $result, 300 );
+        }else{
+                $key = "";
         }
         
-        if($outputCSV){ return arrayToCSV($result); }
+        if($outputCSV){
+                $res = arrayToCSV($result);
+        }else{
+                $json = jsonify($result);
+                $res = 'var metricData =' . $json . ";\n\n" . $callback .'(metricData, ' . $metric . ');';
+        }
         
-        $result = jsonify($result);
-	
-	$res = 'var metricData =' . $result . ";\n\n" . $callback .'(metricData, ' . $metric . ');';
-	return $res;
+        if($key)
+                return array("data" => $result, "key" => $key, "html" => $res);
+        else
+                return array("key" => $key, "html" => $res);
+        
 }
 
 function fetchKTTrend($metric, $callback){
 	global $wgRequest, $wgMemc;
 	
-        $AVERAGE_TIME = 604800;
-	$AVERAGE_NUM = $AVERAGE_TIME / 86400;
-
 	// go back a month by default
 	$DEFAULT_TIME = 86400 * 30;
         
@@ -692,10 +762,7 @@ function fetchKTTrend($metric, $callback){
 	$endDateSql = date("Y-m-d 23:59:59", $endDate);
         $startDateSql = date("Y-m-d 00:00:00", $startDate);
         
-        $key = wfMemcKey( 'wikiasearch' , 'metricss' , $metric, $callback, $op, $IsByMonth, $startDateSql, $endDateSql);
-	$result = $wgMemc->get($key);
-	
-	if($result){ return $result; }
+        $key = wfMemcKey( 'wikiasearch' , 'metricssx' , $metric, $callback, $op, $IsByMonth, str_replace(" ", "",$startDateSql), str_replace(" ", "",$endDateSql) );
         
 	$sql = "SELECT SUM(`count`) AS the_count, op, UNIX_TIMESTAMP(created_at) AS the_date
                         FROM metrics_ktops
@@ -708,15 +775,21 @@ function fetchKTTrend($metric, $callback){
 	$result = $wgMemc->get($key);
 	if(!$result){
                 $result = createJSON($sql, $boundSQL);
-                $wgMemc->set( $key, $result, 300 );
+        }else{
+                $key = "";
         }
         
-        if($outputCSV){ return arrayToCSV($result); }
+        if($outputCSV){
+                $res = arrayToCSV($result);
+        }else{
+                $json = jsonify($result);
+                $res = 'var metricData =' . $json . ";\n\n" . $callback .'(metricData, ' . $metric . ');';
+        }
         
-        $result = jsonify($result);
-	
-	$res = 'var metricData =' . $result . ";\n\n" . $callback .'(metricData, ' . $metric . ');';
-	return $res;
+        if($key)
+                return array("data" => $result, "key" => $key, "html" => $res);
+        else
+                return array("key" => $key, "html" => $res);
 
 }
 
@@ -730,10 +803,12 @@ function fetchKTStats($metric, $callback){
 			FROM metrics_ktops
 			GROUP BY op
 			ORDER BY the_count DESC LIMIT 12;";
-	$key = wfMemcKey( 'wikiasearch' , 'metrics' , $metric, $callback );
+	$keyMemcache = wfMemcKey( 'wikiasearch' , 'metricsx' , $metric, $callback );
 	
-	$result = $wgMemc->get($key);	
-	if($result){ return $result; }
+	$result = $wgMemc->get($keyMemcache);	
+	if($result){
+                return array("key" => "", "html" => $result);
+        }
 	
 	// get the i18n messages
 	$msg = efWikiaSiteMetrics();
@@ -764,30 +839,32 @@ function fetchKTStats($metric, $callback){
 	$result = jsonify($ret);
 	$result = 'var metricData =' . $result . ";\n\n" . $callback .'(metricData, ' . $metric . ');';
 	
-	$wgMemc->set( $key, $result, 180 );
-	return $result;
-
+	return array("data" => $result, "key" => $keyMemcache, "html" => $result);
 }
 
 // grabs data for search and KT queries
 function fetchQueryData($metric, $callback){
 	global $wgRequest, $wgMemc;
 	
-	$dbr =& wfGetDB( DB_MASTER );
+        $dbr =& wfGetDB( DB_MASTER );
 	$lang = mysql_real_escape_string($wgRequest->getVal("lang", false));
 	
 	$hasLang = false;
 	$noCount = false;
 	
 	if($lang){
-		$key = wfMemcKey( 'wikiasearch' , 'metricsM' , $metric, $callback, $lang );
+		$keyMemcache = wfMemcKey( 'wikiasearch' , 'metricx' , $metric, $callback, $lang );
 	}else{
-		$key = wfMemcKey( 'wikiasearch' , 'metricsM' , $metric, $callback );
+		$keyMemcache = wfMemcKey( 'wikiasearch' , 'metricx' , $metric, $callback );
 	}
 	
-	$result = $wgMemc->get($key);
-	if($result){ return $result; }
-	
+        
+       $result = $wgMemc->get($keyMemcache);
+        
+        if($result){
+                return array("html" => $result, "key" => "");
+        }
+
 	switch($metric){
 		case 8: // all time top queries
 		$sql = "SELECT SUM(`count`) as the_count, `query` as the_query, `language` AS lang FROM metrics_current_top_queries"
@@ -866,9 +943,8 @@ function fetchQueryData($metric, $callback){
         
 	$result = jsonify($ret);
 	$result = 'var metricData =' . $result . ";\n\n" . $callback .'(metricData, ' . $metric . ');';
-	$wgMemc->set( $key, $result, 180 );
-	
-	return $result;
+        
+	return array("data" => $result, "key" => $keyMemcache, "html" => $result);
 }
 
 ?>

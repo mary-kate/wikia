@@ -389,8 +389,8 @@ class CreateWikiForm extends SpecialPage {
 		$sHubs =  $hub->getSelect( $iHubID );
 
         #--- get Talk page for requests
-        $oTitle = Title::newFromText( $wgContLang->ucfirst(trim( $request->request_name )), NS_TALK );
-        $oTalkPage = new Article( $oTitle /*title*/, 0 /*current id*/ );
+        $oTitle = wfRequestTitle( $request->request_name, $request->request_language );
+        $oTalkPage = new Article( $oTitle->getTalkPage() /*title*/, 0 /*current id*/ );
 
         $sTalkPage = $wgParser->parse( $oTalkPage->getContent(), $oTitle, new ParserOptions() );
 
