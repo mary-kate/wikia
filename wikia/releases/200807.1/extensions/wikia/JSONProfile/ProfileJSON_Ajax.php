@@ -1020,4 +1020,27 @@ function wfUpdateProfileBGJSON($user_name, $bg, $scroll=0) {
 
 }
 
+$wgAjaxExportList [] = 'wfGetURLContents';
+
+function wfGetURLContents($url, $callback) {
+	$html = file_get_contents( $url );
+	
+	preg_match("/<title[^>]*?>(.*?)<\/title>/si", $html, $matches );
+	$title = $matches[1];
+	
+	preg_match("/<body[^>]*?>(.*?)<\/body>/si", $html, $matches );
+	$body = $matches[1];
+	$body =  preg_replace('/<script[^>]*?>.*?<\/script>/si', '', $body);
+	
+	preg_match("/meta name=\"description\" content=\"(.*?)\"/si", $html, $matches );
+	$meta_description = $matches[1];
+	
+	$page = array();
+	$page["url"] = $url;
+	$page["html"] = $html;
+	$page["title"] = $title;
+	$page["body"] = $body;
+	$page["description"] = $meta_description;
+	return "var page=" . jsonify($page) . ";\n\n{$callback}(page);";
+}
 ?>

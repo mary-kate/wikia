@@ -40,14 +40,14 @@ body.mainpage {
 	position: relative;
 	width: 100%;
 }
-#mainpage_accent1 {
+#background_accent1 {
 	background-repeat: no-repeat;
 	margin-right: 481px;
 	position: absolute;
 	right: 50%;
 	z-index: 2;
 }
-#mainpage_accent2 {
+#background_accent2 {
 	background-repeat: no-repeat;
 	background-position: 481px 0px;
 	left: 50%;
@@ -55,16 +55,15 @@ body.mainpage {
 	width: 50%;
 	z-index: 2;
 }
-body.mainpage #adSpace1 {
+body.mainpage .FAST_HOME1 {
 	height: 90px;
 	margin-bottom: 10px;
 }
-body.mainpage #adSpace0 {
+body.mainpage .FAST_HOME2 {
 	float: right;
 	min-height: 250px;
 	width: 300px;
 }
-
 .clearfix:after {
     content: ".";
     display: block;

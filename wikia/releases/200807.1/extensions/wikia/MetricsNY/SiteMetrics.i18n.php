@@ -44,6 +44,7 @@ return array(
 			'sitemetrics-photo-uploads' => 'Photo Uploads',
 			'sitemetrics-status-updates' => 'Status Updates',
 			'sitemetrics-new-users' => 'New Users',
+			'sitemetrics-top-users' => 'Top Users',
 			'sitemetrics-invitations' => 'Invitations',
 			'sitemetrics-viral-metrics' => 'User Metrics',
 			'sitemetrics-social-metrics' => 'Social Metrics',
@@ -56,13 +57,14 @@ return array(
 			'sitemetrics-query-trend'=>'Query Trends',
 			'sitemetrics-edit-trend' => 'Total Contributions',
 			'sitemetrics-search-list-metrics' => 'Search Lists',
+			'sitemetrics-top-users' => 'Top Users',
 			'sitemetrics-topkt-message'=>'Below is a list of the search result with the most contributions.  Contributions include ratings, edits, spotlights, annotations, comments, and deletions.',
 			'sitemetrics-topqueries-recent'=>'Recent Top Queries',
 			'sitemetrics-topqueries-recent-message'=>'Below is a list of the most popular keywords over the past 6 hours.  If you click a keyword, you will see the number of queries by day',
 			'sitemetrics-topkt-recent'=>'Recent Top Contributions',
 			'sitemetrics-topkt-recent-message'=>'Below is a list of the most popular keywords in terms of contributions for over the past 6 hours,  If you click a keyword you will see a breakdown of contributions by day.',
 			'sitemetrics-most-wanted'=>'Wanted Results',
-			'sitemetrics-most-wanted-message'=>'Wanted Search Results lists keywords in the top 250 queries from the <a href="sitemetrics-topqueries-recent.html">Recent Top Queries</a> that do not appear in the top 250 keywords from the <a href="sitemetrics-topkt-recent.html">Recent Top Contributions</a> over the the last 6 hours.',
+			'sitemetrics-most-wanted-message'=>'Wanted Search Results lists keywords in the top 250 queries from the <a href="sitemetrics-topqueries-recent.html">Recent Top Queries</a> that do not appear in the top 250 keywords from the <a href="sitemetrics-topkt-recent.html">Recent Top Contributions</a> over the the last 6 hours. The list is only ordered by the most queried keyword.',
 			'sitemetrics-edit-actions'=>'Contribution Breakdown',
 			'sitemetrics-edit-actions-message'=>'Below is the breakdown of contributions to Wikia Search.  If you click a contribution, you will see the breakdown of that contribution by day'
 			

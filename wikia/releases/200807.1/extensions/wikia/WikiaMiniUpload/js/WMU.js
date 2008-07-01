@@ -275,6 +275,14 @@ function WMU_insertImage(e, type) {
 		}
 	}
 
+	if($('CC_license')) {
+		params.push('CC_license='+$('CC_license').checked);
+	}
+
+	if($('ImageUploadExtraId')) {
+		params.push('extraId='+$('ImageUploadExtraId').value);
+	}
+
 	if($('ImageUploadThumb')) {
 		params.push('size=' + ($('ImageUploadThumbOption').checked ? 'thumb' : 'full'));
 		params.push('width=' + $('ImageSize').innerHTML);

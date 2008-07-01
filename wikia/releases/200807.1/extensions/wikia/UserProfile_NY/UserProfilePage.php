@@ -43,6 +43,8 @@ class UserProfilePage extends Article{
 		
 		//User does not want social profile for User:user_name, so we just show header + page content
 		if( $wgTitle->getNamespace() == NS_USER && $this->profile_data["user_id"] && $this->profile_data["user_page_type"] == 0 ){
+			global $wgShowAds;
+			$wgShowAds = false;
 			parent::view();
 			return "";
 		}
