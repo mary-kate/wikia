@@ -429,10 +429,8 @@ function showCarousel(e) {
 				wrap: false,
 				animationSpeed: 0.15,
 				size: carouselLength,
-				//prevElement: (skin == 'quartz') ? "prev-arrow" : "carousel-prev",
-				//nextElement: (skin == 'quartz') ? "next-arrow" : "carousel-next",
-				prevElement: (skin == 'quartz') ? "carousel-prev" : "carousel-prev",
-				nextElement: (skin == 'quartz') ? "carousel-next" : "carousel-next",
+				prevElement: "carousel-prev",
+				nextElement: "carousel-next",
 				numVisible: carouselVisible,
 				scrollInc: carouselVisible
 			});
@@ -454,8 +452,22 @@ function getNumberForCarousel() {
 		var carouselWidth = parseInt(Dom.getX('next-arrow')-Dom.getX('prev-arrow')-32);
 		Dom.setStyle('widget_cockpit_overlay', 'width', parseInt(carouselWidth/10)*10 + 'px');
 		carouselVisible = Math.floor(carouselWidth / widgetElWidth);
-	} else {
-		carouselVisible = Math.floor((Dom.getViewportWidth() - 60) / (55 + 145 + 5));
+	} else if (skin == 'monaco') {
+		var carouselSize = parseInt(Dom.getViewportWidth() - 60);
+
+		carouselVisible = Math.floor(carouselSize / (55 + 145 + 5));
+		
+		// resize carousel (#3179)
+		var carousel = Dom.get('widget_cockpit_list').parentNode;
+		Dom.setStyle(carousel, 'width', carouselSize + 'px');
+	}
+
+	YAHOO.log('getNumberForCarousel(): ' + carouselVisible);
+
+	// and do config update (#3179)
+	if (carouselObj) {
+		carouselObj.setProperty('scrollInc',  carouselVisible);
+		carouselObj.setProperty('numVisible', carouselVisible);
 	}
 }
 
