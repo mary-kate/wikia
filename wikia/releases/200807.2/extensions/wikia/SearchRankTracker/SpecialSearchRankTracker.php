@@ -45,9 +45,6 @@ $wgGroupPermissions['ranktracker']['searchranktracker'] = true;
 // classes
 $wgAutoloadClasses['SearchRankEntry'] = dirname(__FILE__) . '/SearchRankEntry.class.php';
 $wgAutoloadClasses['SearchRankBot'] = dirname(__FILE__) . '/SearchRankBot.class.php';
-// jpgraph
-$wgAutoloadClasses['Graph'] = $IP . '/lib/jpgraph-2.3.3/src/jpgraph.php';
-$wgAutoloadClasses['LinePlot'] = $IP . '/lib/jpgraph-2.3.3/src/jpgraph_line.php';
 
 // Special page
 extAddSpecialPage(dirname(__FILE__) . '/SpecialSearchRankTracker_body.php', 'SearchRankTracker', 'SearchRankTracker');
