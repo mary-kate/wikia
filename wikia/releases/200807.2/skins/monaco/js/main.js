@@ -536,3 +536,38 @@ function AdGetColor(type) {
 	}
 
 }
+/**
+ * @author Inez Korczynski
+ */
+TieDivLib = new function() {
+
+  var tieObjects = Array();
+
+  var interval = 1000;
+
+  var timer;
+
+  this.tie = function(source, target) {
+    tieObjects.push([source, target]);
+  }
+
+  this.fixPositions = function() {
+    for(i = 0; i < tieObjects.length; i++) {
+      if(YAHOO.util.Dom.getXY(tieObjects[i][0]) != YAHOO.util.Dom.getXY(tieObjects[i][1])) {
+        YAHOO.util.Dom.get(tieObjects[i][0]).style.top = YAHOO.util.Dom.getY(tieObjects[i][1]) + 'px';
+        YAHOO.util.Dom.get(tieObjects[i][0]).style.left = YAHOO.util.Dom.getX(tieObjects[i][1]) + 'px';
+        YAHOO.util.Dom.get(tieObjects[i][0]).style.position = 'absolute';
+        YAHOO.util.Dom.get(tieObjects[i][0]).style.zIndex = 1000;
+      }
+    }
+  }
+
+  this.startTie = function() {
+    timer = setTimeout(function(){TieDivLib.fixPositions();TieDivLib.startTie();}, interval);
+  }
+
+  this.stopTie = function() {
+    clearTimeout(timer);
+  }
+
+};
