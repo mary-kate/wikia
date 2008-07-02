@@ -545,10 +545,12 @@ TieDivLib = new function() {
 
 	var count = 0;
 
+	var adjust = (YAHOO.env.ua.ie > 0) ? -2 : 0;
+
 	this.tie = function(source, target) {
 		tieObjects.push([source, target]);
 		$(source).style.position = 'absolute';
-		$(source).style.zIndex = 1000;
+		$(source).style.zIndex = 21;
 		TieDivLib.fixPositions();
 		setTimeout(TieDivLib.fixPositions, 150);
 	}
@@ -556,8 +558,8 @@ TieDivLib = new function() {
 	this.fixPositions = function() {
 		for(i = 0; i < tieObjects.length; i++) {
 			if(YAHOO.util.Dom.getXY(tieObjects[i][0]) != YAHOO.util.Dom.getXY(tieObjects[i][1])) {
-				$(tieObjects[i][0]).style.top = YAHOO.util.Dom.getY(tieObjects[i][1]) + 'px';
-				$(tieObjects[i][0]).style.left = YAHOO.util.Dom.getX(tieObjects[i][1]) + 'px';
+				$(tieObjects[i][0]).style.top = (YAHOO.util.Dom.getY(tieObjects[i][1]) + adjust) + 'px';
+				$(tieObjects[i][0]).style.left = (YAHOO.util.Dom.getX(tieObjects[i][1]) + adjust) + 'px';
 			}
 		}
 	}
