@@ -65,6 +65,10 @@ class UserRelationship {
 		$request_id = $dbr->insertId();
 		$dbr->commit();
 		
+		global $wgMemc;
+		$key = wfMemcKey( 'user_relationship', 'awaitingrequests', $this->user_id );
+		$wgMemc->delete( $key );
+		
 		$this->incNewRequestCount($user_id_to, $type);
 		
 		if($email)$this->sendRelationshipRequestEmail($user_id_to,$this->user_name,$type);
@@ -535,6 +539,30 @@ class UserRelationship {
 			}
 		}
 		return $rel_randomized;
+	}
+
+	public function getAwaitingRequests(){
+		global $wgMemc;
+		$key = wfMemcKey( 'user_relationship', 'awaitingrequests', $this->user_id );
+		$data = $wgMemc->get( $key );
+		if( !is_array( $data ) ){
+			$dbr =& wfGetDB( DB_SLAVE );
+			$res = $dbr->select( '`user_relationship_request`', 
+					array('ur_user_id_to'),
+					array("ur_user_id_from" => $this->user_id ), __METHOD__, 
+					""
+			);
+			$awaiting_requests = array();
+			while ($row = $dbr->fetchObject( $res ) ) {
+				$awaiting_requests[] = $row->ur_user_id_to;
+			}
+			$wgMemc->set( $key, $awaiting_requests );
+		}else{
+			$awaiting_requests = $data;
+		}
+	
+		return $awaiting_requests;	
+				
 	}
 	
 	public function getRelationshipIDs($type){
