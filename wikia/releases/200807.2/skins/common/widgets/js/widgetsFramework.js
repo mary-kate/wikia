@@ -327,6 +327,7 @@ YAHOO.extend(YAHOO.wikia.ddObject, YAHOO.util.DDProxy, {
 	},
 
 	onDrag: function(e) {
+		TieDivLib.fixPositions();
 		var y = Event.getPageY(e);
 		if(y < this.lastY) {
 			this.goingUp = true;
@@ -356,10 +357,10 @@ var carouselVisible = null;
 
 function showCarousel(e) {
 	if (Dom.get("headerMenuUser")) {
-		Dom.get("headerMenuUser").style.visibility = 'hidden';	
+		Dom.get("headerMenuUser").style.visibility = 'hidden';
 	}
 	Event.preventDefault(e);
-	
+
 	// macbre: scroll to top of the page
 	window.scrollTo(0,0);
 
@@ -441,7 +442,7 @@ function showCarousel(e) {
 			}
 		}
 
-		Event.addListener(window, 'resize', getNumberForCarousel); 
+		Event.addListener(window, 'resize', getNumberForCarousel);
 	}
 }
 
@@ -456,7 +457,7 @@ function getNumberForCarousel() {
 		var carouselSize = parseInt(Dom.getViewportWidth() - 60);
 
 		carouselVisible = Math.floor(carouselSize / (55 + 145 + 5));
-		
+
 		// resize carousel (#3179)
 		var carousel = Dom.get('widget_cockpit_list').parentNode;
 		Dom.setStyle(carousel, 'width', carouselSize + 'px');
