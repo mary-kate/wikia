@@ -82,8 +82,12 @@ class SearchRankTracker extends SpecialPage {
 	}
  	
 	private function renderGraph() {
-		global $wgOut, $wgSearchRankTrackerConfig;
+		global $wgOut, $wgSearchRankTrackerConfig, $wgAutoloadClasses, $IP;
 		wfProfileIn( __METHOD__ );
+
+		// jpgraph
+		$wgAutoloadClasses['Graph'] = $IP . '/lib/jpgraph-2.3.3/src/jpgraph.php';
+		$wgAutoloadClasses['LinePlot'] = $IP . '/lib/jpgraph-2.3.3/src/jpgraph_line.php';
 		
 		$wgOut = null;
 		
