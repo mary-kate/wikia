@@ -553,6 +553,7 @@ TieDivLib = new function() {
 		tieObjects.push([source, target]);
 		$(source).style.position = 'absolute';
 		$(source).style.zIndex = 5;
+		$(source).style.visibility = 'visible';
 		TieDivLib.process();
 	}
 
