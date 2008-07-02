@@ -353,7 +353,7 @@ class MultipleUploadForm extends UploadForm {
 wgAjaxUploadDestCheck = {$adc};
 wgAjaxLicensePreview = {$alp};
 
-var wgUploadWarningObj = {
+var wgMultiUploadWarningObj = {
 	'responseCache' : { '' : '&nbsp;' },
 	'nameToCheck' : '',
 	'typing': false,
@@ -383,7 +383,7 @@ var wgUploadWarningObj = {
 			}
 		}
 
-		this.timeoutID = window.setTimeout( 'wgUploadWarningObj.timeout()', this.delay );
+		this.timeoutID = window.setTimeout( 'wgMultiUploadWarningObj.timeout()', this.delay );
 	},
 
 	'checkNow': function (fname, i) {
@@ -463,7 +463,7 @@ function fillDestFilenameMulti(i) {
     var destFile = document.getElementById('wpDestFile_' + i);
     if (destFile) {
         destFile.value = fname;
-								wgUploadWarningObj.checkNow(fname, i);
+								wgMultiUploadWarningObj.checkNow(fname, i);
     }
 }
 </script>
@@ -481,7 +481,7 @@ EOT
 	for ($i = 0; $i < $wgMaxUploadFiles; $i++) {
 		$encDestFile = htmlspecialchars( $this->mDestFileArray[$i] );
 		if ( $useAjaxDestCheck ) {
-			$destOnkeyup = 'onkeyup="wgUploadWarningObj.keypress(' . $i . ');"';
+			$destOnkeyup = 'onkeyup="wgMultiUploadWarningObj.keypress(' . $i . ');"';
 		}
 		
 		$wgOut->addHTML("
