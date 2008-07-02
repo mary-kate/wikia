@@ -1626,7 +1626,7 @@ if($wgAdServingType === 1) {
 	uasort($adsDisplayed, "cmpAds");
 	foreach($adsDisplayed as $adSpace => $ad) {
 ?>
-<div id="realAd<?=$adSpace?>">
+<div id="realAd<?=$adSpace?>" style="visibility: hidden">
 <script type="text/javascript">
 <!--//<![CDATA[
 curAdSpaceId = -1;
