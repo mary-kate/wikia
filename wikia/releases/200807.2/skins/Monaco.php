@@ -1629,6 +1629,7 @@ if($wgAdServingType === 1) {
 <div id="realAd<?=$adSpace?>">
 <script type="text/javascript">
 <!--//<![CDATA[
+curAdSpaceId = -1;
 if(document.getElementById('adSpace<?=$adSpace?>')<?=(substr($ad[1], 0, 4) == 'FAST' ? ' && FASTisValid("'.$ad[1].'")' : '') ?>) {
 	curAdSpaceId = <?=$adSpace?>;
 	document.write('<scr'+'ipt type="text/javascript">');
@@ -1666,9 +1667,12 @@ if($ad[1] == 'FAST_BOTTOM') {
 ?>
 	document.write('</scr'+'ipt>');
 	document.write('<scr'+'ipt type="text/javascript" src="'+base_url+'"></scr'+'ipt>');
-	document.write('<scr'+'ipt type="text/javascript">');
-	document.write('TieDivLib.tie("realAd<?=$adSpace?>", "adSpace"+curAdSpaceId);');
-	document.write('</scr'+'ipt>');
+}
+//]]>--></script>
+<script type="text/javascript">
+<!--//<![CDATA[
+if(curAdSpaceId != -1) {
+	TieDivLib.tie("realAd<?=$adSpace?>", "adSpace"+curAdSpaceId);
 }
 //]]>--></script>
 </div>

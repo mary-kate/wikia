@@ -541,33 +541,41 @@ function AdGetColor(type) {
  */
 TieDivLib = new function() {
 
-  var tieObjects = Array();
+	var tieObjects = Array();
 
-  var interval = 1000;
+	var count = 0;
 
-  var timer;
+	this.tie = function(source, target) {
+		tieObjects.push([source, target]);
+		$(source).style.position = 'absolute';
+		$(source).style.zIndex = 1000;
+		TieDivLib.fixPositions();
+		setTimeout(TieDivLib.fixPositions, 150);
+	}
 
-  this.tie = function(source, target) {
-    tieObjects.push([source, target]);
-  }
+	this.fixPositions = function() {
+		for(i = 0; i < tieObjects.length; i++) {
+			if(YAHOO.util.Dom.getXY(tieObjects[i][0]) != YAHOO.util.Dom.getXY(tieObjects[i][1])) {
+				$(tieObjects[i][0]).style.top = YAHOO.util.Dom.getY(tieObjects[i][1]) + 'px';
+				$(tieObjects[i][0]).style.left = YAHOO.util.Dom.getX(tieObjects[i][1]) + 'px';
+			}
+		}
+	}
 
-  this.fixPositions = function() {
-    for(i = 0; i < tieObjects.length; i++) {
-      if(YAHOO.util.Dom.getXY(tieObjects[i][0]) != YAHOO.util.Dom.getXY(tieObjects[i][1])) {
-        YAHOO.util.Dom.get(tieObjects[i][0]).style.top = YAHOO.util.Dom.getY(tieObjects[i][1]) + 'px';
-        YAHOO.util.Dom.get(tieObjects[i][0]).style.left = YAHOO.util.Dom.getX(tieObjects[i][1]) + 'px';
-        YAHOO.util.Dom.get(tieObjects[i][0]).style.position = 'absolute';
-        YAHOO.util.Dom.get(tieObjects[i][0]).style.zIndex = 1000;
-      }
-    }
-  }
-
-  this.startTie = function() {
-    timer = setTimeout(function(){TieDivLib.fixPositions();TieDivLib.startTie();}, interval);
-  }
-
-  this.stopTie = function() {
-    clearTimeout(timer);
-  }
+	this.startTie = function() {
+		YAHOO.util.Event.addListener(window, 'resize', function() {
+			TieDivLib.fixPositions();
+			setTimeout(TieDivLib.fixPositions, 150);
+		});
+		YAHOO.util.Event.addListener(window, 'click', function() {
+			TieDivLib.fixPositions();
+			setTimeout(TieDivLib.fixPositions, 150);
+		});
+		YAHOO.util.Event.addListener(window, 'load', function() {
+			TieDivLib.fixPositions();
+			setTimeout(TieDivLib.fixPositions, 150);
+		});
+		YAHOO.util.Event.addListener(window, 'keydown', TieDivLib.fixPositions);
+	}
 
 };
