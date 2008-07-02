@@ -551,8 +551,7 @@ TieDivLib = new function() {
 		tieObjects.push([source, target]);
 		$(source).style.position = 'absolute';
 		$(source).style.zIndex = 21;
-		TieDivLib.fixPositions();
-		setTimeout(TieDivLib.fixPositions, 150);
+		TieDivLib.process();
 	}
 
 	this.fixPositions = function() {
@@ -564,19 +563,16 @@ TieDivLib = new function() {
 		}
 	}
 
+	this.process = function() {
+		TieDivLib.fixPositions();
+		setTimeout(TieDivLib.fixPositions, 150);
+		setTimeout(TieDivLib.fixPositions, 350);
+	}
+
 	this.startTie = function() {
-		YAHOO.util.Event.addListener(window, 'resize', function() {
-			TieDivLib.fixPositions();
-			setTimeout(TieDivLib.fixPositions, 150);
-		});
-		YAHOO.util.Event.addListener(window, 'click', function() {
-			TieDivLib.fixPositions();
-			setTimeout(TieDivLib.fixPositions, 150);
-		});
-		YAHOO.util.Event.addListener(window, 'load', function() {
-			TieDivLib.fixPositions();
-			setTimeout(TieDivLib.fixPositions, 150);
-		});
+		YAHOO.util.Event.addListener(window, 'resize', TieDivLib.process);
+		YAHOO.util.Event.addListener(window, 'click', TieDivLib.process);
+		YAHOO.util.Event.addListener(window, 'load', TieDivLib.process);
 		YAHOO.util.Event.addListener(window, 'keydown', TieDivLib.fixPositions);
 	}
 
