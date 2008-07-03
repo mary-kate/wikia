@@ -360,16 +360,16 @@ var wgMultiUploadWarningObj = {
 	'delay': 500, // ms
 	'timeoutID': false,
 
-	'keypress': function (i) {
+	'keypress': function (fieldIndex) {
 		if ( !wgAjaxUploadDestCheck || !sajax_init_object() ) return;
 
 		// Find file to upload
-		var destFile = document.getElementById('wpDestFile_' + i);
-		var warningElt = document.getElementById( 'wpDestFile_' + i + '-warning' );
+		var destFile = document.getElementById('wpDestFile_' + fieldIndex);
+		var warningElt = document.getElementById( 'wpDestFile_' + fieldIndex + '-warning' );
 		if ( !destFile || !warningElt ) return ;
 
 		this.nameToCheck = destFile.value ;
-		this.fileIndex = i;
+		//this.fileIndex = i;
 
 		// Clear timer 
 		if ( this.timeoutID ) {
@@ -378,27 +378,27 @@ var wgMultiUploadWarningObj = {
 		// Check response cache
 		for (cached in this.responseCache) {
 			if (this.nameToCheck == cached) {
-				this.setWarning(this.responseCache[this.nameToCheck]);
+				this.setWarning(this.responseCache[this.nameToCheck], fieldIndex);
 				return;
 			}
 		}
 
-		this.timeoutID = window.setTimeout( 'wgMultiUploadWarningObj.timeout()', this.delay );
+		this.timeoutID = window.setTimeout( 'wgMultiUploadWarningObj.timeout(' + fieldIndex + ')', this.delay );
 	},
 
-	'checkNow': function (fname, i) {
+	'checkNow': function (fname, fieldIndex) {
 		if ( !wgAjaxUploadDestCheck || !sajax_init_object() ) return;
 		if ( this.timeoutID ) {
 			window.clearTimeout( this.timeoutID );
 		}
 		this.nameToCheck = fname;
-		this.fileIndex = i;
-		this.timeout();
+		//this.fileIndex = i;
+		this.timeout(fieldIndex);
 	},
 	
-	'timeout' : function() {
+	'timeout' : function(fieldIndex) {
 		if ( !wgAjaxUploadDestCheck || !sajax_init_object() ) return;
-		injectSpinner( document.getElementById( 'wpUploadDescription_' + this.fileIndex ), 'destcheck_' + this.fileIndex );
+		injectSpinner( document.getElementById( 'wpUploadDescription_' + fieldIndex ), 'destcheck_' + fieldIndex );
 
 		// Get variables into local scope so that they will be preserved for the 
 		// anonymous callback. fileName is copied so that multiple overlapping 
@@ -407,19 +407,19 @@ var wgMultiUploadWarningObj = {
 		var fileName = this.nameToCheck;
 		sajax_do_call( 'UploadForm::ajaxGetExistsWarning', [this.nameToCheck], 
 			function (result) {
-				obj.processResult(result, fileName)
+				obj.processResult(result, fileName, fieldIndex)
 			}
 		);
 	},
 
-	'processResult' : function (result, fileName) {
-		removeSpinner( 'destcheck_' + this.fileIndex );
-		this.setWarning(result.responseText);
+	'processResult' : function (result, fileName, fieldIndex) {
+		removeSpinner( 'destcheck_' + fieldIndex );
+		this.setWarning(result.responseText, fieldIndex);
 		this.responseCache[fileName] = result.responseText;
 	},
 
-	'setWarning' : function (warning) {
-		var warningElt = document.getElementById( 'wpDestFile_' + this.fileIndex + '-warning' );
+	'setWarning' : function (warning, fieldIndex) {
+		var warningElt = document.getElementById( 'wpDestFile_' + fieldIndex + '-warning' );
 		var ackElt = document.getElementById( 'wpDestFileWarningAck' );
 		this.setInnerHTML(warningElt, warning);
 
