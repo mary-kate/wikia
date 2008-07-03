@@ -8,7 +8,7 @@
 CREATE TABLE `revisions` (
   `id` int(10) NOT NULL auto_increment,
   `rev_wikia_id` int(8) unsigned NOT NULL,
-  `rev_id` int(10) unsigned NOT NULL,
+  `rev_id` int(10) unsigned default NULL,
   `rev_page_id` int(10) unsigned NOT NULL,
   `rev_namespace` int(10) unsigned NOT NULL default '0',
   `rev_user` int(10) unsigned NOT NULL default '0',
