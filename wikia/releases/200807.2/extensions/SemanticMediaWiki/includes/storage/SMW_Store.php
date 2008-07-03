@@ -5,6 +5,12 @@
  * @author Markus Krötzsch
  */
 
+/**
+ * Protect against register_globals vulnerabilities.
+ * This line must be present before any global variable is referenced.
+ */
+if (!defined('MEDIAWIKI')) die();
+
 global $smwgIP;
 require_once($smwgIP . '/includes/SMW_SemanticData.php');
 require_once($smwgIP . '/includes/storage/SMW_Query.php');
@@ -115,6 +121,20 @@ abstract class SMWStore {
 ///// Reading methods /////
 
 	/**
+	 * Retrieve all data stored about the given subject and return it as a
+	 * SMWSemanticData container. There are no options: it just returns all
+	 * available data as shown in the page's Factbox.
+	 * $filter is an array of strings that are datatype IDs or special
+	 * property ids. If given, the function will only retreive values for 
+	 * these properties/properties of this type.
+	 *
+	 * Note: there is currently no guarantee that the store does not retrieve
+	 * more data than requested when a filter is used. Filtering just ensures that
+	 * only necessary requests are made, i.e. it improves performance.
+	 */
+	abstract function getSemanticData($subject, $filter = false);
+
+	/**
 	 * Get an array of all special values stored for the given subject and special property
 	 * (identified as usual by an integer constant). The result is an array which may contain
 	 * different kinds of contents depending on the special property that was requested.
@@ -192,13 +212,14 @@ abstract class SMWStore {
 	}
 
 	/**
-	 * Update the store to reflect a renaming of some article. The old and new title objects
-	 * are given. Since this is typically triggered when moving articles, the ID of the title
-	 * objects is normally not affected by the change, which is reflected by the value of $keepid.
-	 * If $keepid is true, the old and new id of the title is the id of $newtitle, and not the
-	 * id of $oldtitle.
+	 * Update the store to reflect a renaming of some article. Normally this happens when moving
+	 * pages in the wiki, and in this case there is also a new redirect page generated at the
+	 * old position. The title objects given are only used to specify the name of the title before
+	 * and after the move -- do not use their IDs for anything! The ID of the moved page is given in
+	 * $pageid, and the ID of the newly created redirect, if any, is given by $redirid. If no new
+	 * page was created, $redirid will be 0.
 	 */
-	abstract function changeTitle(Title $oldtitle, Title $newtitle, $keepid = true);
+	abstract function changeTitle(Title $oldtitle, Title $newtitle, $pageid, $redirid=0);
 
 ///// Query answering /////
 

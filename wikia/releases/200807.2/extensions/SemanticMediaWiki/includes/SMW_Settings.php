@@ -36,10 +36,12 @@ if (!isset($smwgNamespaceIndex)) {
 ###
 # This setting allows you to select in which cases you want to have a factbox
 # appear below an article. The default setting is "SMW_FACTBOX_NONEMPTY"
-# which shows only those factboxes that have some content. Other options:
+# which shows only those factboxes that have some content. Note that the Magic
+# Words __SHOWFACTBOX__ and __HIDEFACTBOX__ can be used to control Factbox 
+# display for individual pages. Other options for this setting include:
 ##
 $smwgShowFactbox = SMW_FACTBOX_NONEMPTY;
-//$smwgShowFactbox = SMW_FACTBOX_SPECIAL # show only if special properties were set
+// $smwgShowFactbox = SMW_FACTBOX_SPECIAL # show only if special properties were set
 //$smwgShowFactbox = SMW_FACTBOX_HIDDEN; # hide always
 //$smwgShowFactbox = SMW_FACTBOX_SHOWN; # show always, buggy and not recommended
 ##
@@ -95,7 +97,7 @@ $smwgQComparators = '<|>|!'; // List of comparator characters supported by queri
 ### Settings about printout of (especially inline) queries:
 $smwgQDefaultLimit = 50;    // Default number of rows returned in a query. Can be increased with <ask limit="num">...
 $smwgQMaxInlineLimit = 500; // Max number of rows ever printed in a single inline query on a single page.
-$smwgQPrintoutLimit = 10;   // Max number of supported printouts (added columns in result table, * statements)
+$smwgQPrintoutLimit = 10;   // Max number of supported printouts (added columns in result table, ?-statements)
 
 ### Formatting settings
 $smwgQDefaultLinking = 'all'; // Default linking behaviour. Can be one of "none", "subject", "all"
@@ -113,12 +115,14 @@ $smwgRSSWithPages = true; // Should RSS feeds deliver whole pages or just link t
 $smwgAllowRecursiveExport = false; // can normal users request recursive export?
 $smwgExportBacklinks = true; // should backlinks be included by default?
 $smwgOWLFullExport = false; // decides, if the RDF export will export, by default,
-// OWL Full or rather nice OWL DL. Can be overriden in the RDF export class.
+                            // OWL Full or rather nice OWL DL.
+                            // Can be overriden in the RDF export class.
 // global $smwgNamespace;                     // The Namespace of exported URIs.
 // $smwgNamespace = "http://example.org/id/"; // Will be set automatically if 
 // nothing is given, but in order to make pretty URIs you will need to set this
-// to something nice and adapt your Apache configuration appropriately. See the
-// documentation on http://ontoworld.org/wiki/Help:Cool_URIs
+// to something nice and adapt your Apache configuration appropriately. This is
+// done, e.g., on semanticweb.org, where URIs are of the form 
+// http://semanticweb.org/id/FOAF
 ##
 
 ###

@@ -6,6 +6,12 @@
  * @author Markus Krötzsch
  */
 
+/**
+ * Protect against register_globals vulnerabilities.
+ * This line must be present before any global variable is referenced.
+ */
+if (!defined('MEDIAWIKI')) die();
+
 global $smwgIP;
 require_once($smwgIP . '/includes/storage/SMW_Store.php');
 
@@ -31,7 +37,8 @@ class SMWQueryProcessor {
 							'template'   => 'SMWTemplateResultPrinter',
 							'count'      => 'SMWListResultPrinter',
 							'debug'      => 'SMWListResultPrinter',
-							'rss'        => 'SMWRSSResultPrinter');
+							'rss'        => 'SMWRSSResultPrinter',
+							'icalendar'  => 'SMWiCalendarResultPrinter');	
 
 	/**
 	 * Parse a query string given in SMW's query language to create
@@ -43,6 +50,10 @@ class SMWQueryProcessor {
 	 * The format string is used to specify the output format if already
 	 * known. Otherwise it will be determined from the parameters when 
 	 * needed. This parameter is just for optimisation in a common case.
+	 *
+	 * @TODO: this method contains too many special cases for certain 
+	 * printouts. Especially the case of rss, icalendar, etc. (no query) 
+	 * should be specified differently.
 	 */
 	static public function createQuery($querystring, $params, $inline = true, $format = '', $extraprintouts = array()) {
 		global $smwgQDefaultNamespaces;
@@ -52,12 +63,30 @@ class SMWQueryProcessor {
 		$qp->setDefaultNamespaces($smwgQDefaultNamespaces);
 		$desc = $qp->getQueryDescription($querystring);
 
+		if ($format == '') {
+			$format = SMWQueryProcessor::getResultFormat($params);
+		}
+		if ($format == 'count') {
+			$querymode = SMWQuery::MODE_COUNT;
+		} elseif ($format == 'debug') {
+			$querymode = SMWQuery::MODE_DEBUG;
+		} elseif (in_array($format, array('rss','icalendar'))) {
+			$querymode = SMWQuery::MODE_NONE;
+		} else {
+			$querymode = SMWQuery::MODE_INSTANCES;
+		}
+
 		if (array_key_exists('mainlabel', $params)) {
 			$mainlabel = $params['mainlabel'] . $qp->getLabel();
 		} else {
 			$mainlabel = $qp->getLabel();
 		}
-		if ( ( !$desc->isSingleton() || (count($desc->getPrintRequests()) + count($extraprintouts) == 0) ) && ($mainlabel != '-') ) {
+		if ( ($querymode == SMWQuery::MODE_NONE) ||
+		     ( ( !$desc->isSingleton() ||
+		         (count($desc->getPrintRequests()) + count($extraprintouts) == 0) 
+		       ) && ($mainlabel != '-') 
+		     )
+		   ) {
 			$desc->prependPrintRequest(new SMWPrintRequest(SMW_PRINT_THIS, $mainlabel));
 		}
 
@@ -67,16 +96,7 @@ class SMWQueryProcessor {
 		$query->addErrors($qp->getErrors()); // keep parsing errors for later output
 
 		// set query parameters:
-		if ($format == '') {
-			$format = SMWQueryProcessor::getResultFormat($params);
-		}
-		if ($format == 'count') {
-			$query->querymode = SMWQuery::MODE_COUNT;
-		} elseif ($format == 'debug') {
-			$query->querymode = SMWQuery::MODE_DEBUG;
-		} elseif ($format == 'rss') {
-			$query->querymode = SMWQuery::MODE_NONE;
-		}
+		$query->querymode = $querymode;
 		if ( (array_key_exists('offset',$params)) && (is_int($params['offset'] + 0)) ) {
 			$query->setOffset(max(0,trim($params['offset']) + 0));
 		}
@@ -92,16 +112,44 @@ class SMWQueryProcessor {
 				$query->setLimit($smwgQDefaultLimit);
 			}
 		}
-		if (array_key_exists('sort', $params)) {
-			$query->sort = true;
-			$query->sortkey = smwfNormalTitleDBKey($params['sort']);
-		}
-		if (array_key_exists('order', $params)) {
-			$order = strtolower(trim($params['order']));
-			if (('descending'==$order)||('reverse'==$order)||('desc'==$order)) {
-				$query->ascending = false;
+		// determine sortkeys and ascendings:
+		if ( array_key_exists('order', $params) ) {
+			$orders = explode( ',', $params['order'] );
+			foreach ($orders as $key => $order) { // normalise
+				$order = strtolower(trim($order));
+				if ( ('descending' != $order) && ('reverse' != $order) && ('desc' != $order) ) {
+					$orders[$key] = 'ASC';
+				} else {
+					$orders[$key] = 'DESC';
+				}
 			}
+		} else {
+			$orders = Array();
 		}
+		reset($orders);
+		if ( array_key_exists('sort', $params) ) {
+			$query->sort = true;
+			$query->sortkeys = Array();
+			foreach ( explode( ',', trim($params['sort']) ) as $sort ) {
+				$sort = smwfNormalTitleDBKey( trim($sort) ); // slight normalisation
+				$order = current($orders);
+				if ($order === false) { // default
+					$order = 'ASC';
+				}
+				if (array_key_exists($sort, $query->sortkeys) ) {
+					// maybe throw an error here?
+				} else {
+					$query->sortkeys[$sort] = $order;
+				}
+				next($orders);
+			}
+			if (current($orders) !== false) { // sort key remaining, apply to page name
+				$query->sortkeys[''] = current($orders);
+			}
+		} else { // sort by page title (main column) by default
+			$query->sortkeys[''] = (current($orders) != false)?current($orders):'ASC';
+		} // TODO: check and report if there are further order statements?
+
 		return $query;
 	}
 
@@ -116,7 +164,10 @@ class SMWQueryProcessor {
 		$querystring = '';
 		$printouts = array();
 		$params = array();
-		foreach ($rawparams as $param) {
+		foreach ($rawparams as $name => $param) {
+			if ( is_string($name) && ($name != '') ) { // accept 'name' => 'value' just as '' => 'name=value'
+				$param = $name . '=' . $param;
+			}
 			if ($param == '') {
 			} elseif ($param{0} == '?') { // print statement
 				$param = substr($param,1);
@@ -723,7 +774,7 @@ class SMWQueryParser {
 		if ($value == '*') { // printout statement
 			return;
 		}
-		$list = preg_split('/^(' . $smwgQComparators . ')/',$value, 2, PREG_SPLIT_DELIM_CAPTURE);
+		$list = preg_split('/^(' . $smwgQComparators . ')/u',$value, 2, PREG_SPLIT_DELIM_CAPTURE);
 		$comparator = SMW_CMP_EQ;
 		if (count($list) == 3) { // initial comparator found ($list[1] should be empty)
 			switch ($list[1]) {
@@ -855,7 +906,7 @@ class SMWQueryParser {
 		if ($stoppattern == '') {
 			$stoppattern = '\[\[|\]\]|::|:=|<q>|<\/q>|^' . $this->m_categoryprefix . '|\|\||\|';
 		}
-		$chunks = preg_split('/[\s]*(' . $stoppattern . ')[\s]*/', $this->m_curstring, 2, PREG_SPLIT_DELIM_CAPTURE);
+		$chunks = preg_split('/[\s]*(' . $stoppattern . ')[\s]*/u', $this->m_curstring, 2, PREG_SPLIT_DELIM_CAPTURE);
 		if (count($chunks) == 1) { // no matches anymore, strip spaces and finish
 			if ($consume) {
 				$this->m_curstring = '';

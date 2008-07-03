@@ -43,8 +43,9 @@ function smwfParserHook(&$parser, &$text, &$strip_state = null) {
 	                        )*)                 # all this zero or more times
 	                        (\|([^]]*))?        # Display text (like "text" in [[link|text]]), optional
 	                        \]\]                # End of link
-	                        /x';
+	                        /xu';
 	$text = preg_replace_callback($semanticLinkPattern, 'smwfParsePropertiesCallback', $text);
+
 	SMWFactbox::printFactbox($text);
 
 	// add link to RDF to HTML header
@@ -84,7 +85,7 @@ function smwfParsePropertiesCallback($semanticLink) {
 	} else { $valueCaption = false; }
 
 	//extract annotations and create tooltip
-	$properties = preg_split('/:[=:]/', $property);
+	$properties = preg_split('/:[=:]/u', $property);
 	foreach($properties as $singleprop) {
 		$dv = SMWFactbox::addProperty($singleprop,$value,$valueCaption, $smwgStoreAnnotations && $smwgTempStoreAnnotations);
 	}
@@ -128,7 +129,6 @@ function smwfSaveHook(&$article, &$user, &$text) {
 *  Restore semantic data if articles are undeleted.
 */
 function smwfUndeleteHook(&$title, $create) {
-	global $smwgIP ;
 	include_once($smwgIP . '/includes/SMW_Factbox.php');
 	if ($title instanceof Title) {
 		SMWFactbox::initStorage($title);
@@ -137,6 +137,8 @@ function smwfUndeleteHook(&$title, $create) {
 		}
 		SMWFactbox::storeData(smwfIsSemanticsProcessed($title->getNamespace()));
 	}
+
+	SMWFactbox::storeData(smwfIsSemanticsProcessed($title->getNamespace()));
 	return true; // always return true, in order not to stop MW's hook processing!
 }
 
@@ -154,7 +156,7 @@ function smwfDeleteHook(&$article, &$user, &$reason) {
 *  semantic properties are moved accordingly.
 */
 function smwfMoveHook(&$old_title, &$new_title, &$user, $pageid, $redirid) {
-	smwfGetStore()->changeTitle($old_title, $new_title);
+	smwfGetStore()->changeTitle($old_title, $new_title, $pageid, $redirid);
 	return true; // always return true, in order not to stop MW's hook processing!
 }
 
@@ -166,11 +168,9 @@ function smwfMoveHook(&$old_title, &$new_title, &$user, $pageid, $redirid) {
 function smwfShowListPage (&$title, &$article){
 	global $smwgIP;
 	if ($title->getNamespace() == SMW_NS_TYPE){
-		smwfInitUserMessages();
 		include_once($smwgIP . '/includes/articlepages/SMW_TypePage.php');
 		$article = new SMWTypePage($title);
 	} elseif ( $title->getNamespace() == SMW_NS_PROPERTY ) {
-		smwfInitUserMessages();
 		include_once($smwgIP . '/includes/articlepages/SMW_PropertyPage.php');
 		$article = new SMWPropertyPage($title);
 	}

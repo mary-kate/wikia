@@ -6,6 +6,12 @@
  * @author Markus Krötzsch
  */
 
+/**
+ * Protect against register_globals vulnerabilities.
+ * This line must be present before any global variable is referenced.
+ */
+if (!defined('MEDIAWIKI')) die();
+
 global $smwgIP;
 include_once($smwgIP . '/includes/SMW_SemanticData.php');
 
@@ -113,7 +119,7 @@ class SMWFactbox {
 		global $wgContLang;
 
 		list($onto_ns,$onto_section) = explode(':',$value,2);
-		$msglines = preg_split("([\n][\s]?)",wfMsgForContent("smw_import_$onto_ns")); // get the definition for "$namespace:$section"
+		$msglines = preg_split("/[\n][\s]?/u",wfMsgForContent("smw_import_$onto_ns")); // get the definition for "$namespace:$section"
 
 		if ( count($msglines) < 2 ) { //error: no elements for this namespace
 			/// TODO: use new Error DV
@@ -203,14 +209,24 @@ class SMWFactbox {
 	static function printFactbox(&$text) {
 		global $wgContLang, $wgServer, $smwgShowFactbox, $smwgShowFactboxEdit, $smwgStoreActive, $smwgIP, $wgRequest;
 		if (!$smwgStoreActive) return;
+		wfProfileIn("SMWFactbox::printFactbox (SMW)");
 
+		// Global settings:
 		if ( $wgRequest->getCheck('wpPreview') ) {
 			$showfactbox = $smwgShowFactboxEdit;
 		} else {
 			$showfactbox = $smwgShowFactbox;
 		}
+		// Page settings via Magic Words:
+		$mw = MagicWord::get('SMW_NOFACTBOX');
+		if ($mw->matchAndRemove($text)) {
+			$showfactbox = SMW_FACTBOX_HIDDEN;
+		}
+		$mw = MagicWord::get('SMW_SHOWFACTBOX');
+		if ($mw->matchAndRemove($text)) {
+			$showfactbox = SMW_FACTBOX_NONEMPTY;
+		}
 
-		wfProfileIn("SMWFactbox::printFactbox (SMW)");
 		switch ($showfactbox) {
 		case SMW_FACTBOX_HIDDEN: // never
 			wfProfileOut("SMWFactbox::printFactbox (SMW)");
@@ -258,9 +274,8 @@ class SMWFactbox {
 		global $wgContLang;
 
 		foreach(SMWFactbox::$semdata->getProperties() as $key => $property) {
-			$text .= '<tr><td class="smwpropname">';
 			if ($property instanceof Title) {
-				$text .= '<tr><td class="smwpropname">[[' . $property->getPrefixedText() . '|' . preg_replace('/[\s]/','&nbsp;',$property->getText(),2) . ']] </td><td class="smwprops">';
+				$text .= '<tr><td class="smwpropname">[[' . $property->getPrefixedText() . '|' . preg_replace('/[ ]/u','&nbsp;',$property->getText(),2) . ']] </td><td class="smwprops">';
 				// TODO: the preg_replace is a kind of hack to ensure that the left column does not get too narrow; maybe we can find something nicer later
 			} else { // special property
 				if ($key{0} == '_') continue; // internal special property without label

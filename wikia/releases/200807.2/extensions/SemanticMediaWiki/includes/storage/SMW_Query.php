@@ -6,6 +6,12 @@
  * @author Markus Krötzsch
  */
 
+/**
+ * Protect against register_globals vulnerabilities.
+ * This line must be present before any global variable is referenced.
+ */
+if (!defined('MEDIAWIKI')) die();
+
 global $smwgIP;
 require_once($smwgIP . '/includes/storage/SMW_Description.php');
 
@@ -26,8 +32,7 @@ class SMWQuery {
 	const MODE_NONE = 4;  // do nothing with the query
 
 	public $sort = false;
-	public $ascending = true;
-	public $sortkey = false;
+	public $sortkeys = array(); // format: "Property name" => "ASC" / "DESC" (note: order of entries also matters)
 	public $querymode = SMWQuery::MODE_INSTANCES;
 
 	protected $m_limit;
@@ -52,7 +57,7 @@ class SMWQuery {
 
 	public function setDescription(SMWDescription $description) {
 		$this->m_description = $description;
-		foreach ($extraprintouts as $printout) {
+		foreach ($this->m_extraprintouts as $printout) {
 			$this->m_description->addPrintRequest($printout);
 		}
 		$this->applyRestrictions();
