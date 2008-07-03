@@ -7,7 +7,13 @@
  * @author Louis Gerbarg
  */
 
-define('SF_VERSION','0.9.6');
+/**
+ * Protect against register_globals vulnerabilities.
+ * This line must be present before any global variable is referenced.
+ */
+if ( !defined( 'MEDIAWIKI' ) ) die();
+
+define('SF_VERSION','1.2.5');
 
 // constants for special properties
 define('SF_SP_HAS_DEFAULT_FORM', 1);
@@ -15,20 +21,27 @@ define('SF_SP_HAS_ALTERNATE_FORM', 2);
 
 $wgExtensionFunctions[] = 'sfgSetupExtension';
 $wgExtensionFunctions[] = 'sfgParserFunctions';
-$wgHooks['LanguageGetMagic'][] = 'sfgLanguageGetMagic';
-$wgExtensionMessagesFiles['SemanticForms'] = $sfgIP . '/languages/SF_Messages.php';
+$wgHooks['LanguageGetMagic'][] = 'sffLanguageGetMagic';
+$wgHooks['BrokenLink'][] = 'sffSetBrokenLink';
 
 require_once($sfgIP . '/includes/SF_ParserFunctions.php');
 require_once($sfgIP . '/languages/SF_Language.php');
+
+if (version_compare($wgVersion, '1.11', '>=' )) {
+	$wgExtensionMessagesFiles['SemanticForms'] = $sfgIP . '/languages/SF_Messages.php';
+} else {
+	$wgExtensionFunctions[] = 'sffLoadMessagesManually';
+}
 
 /**
  *  Do the actual intialisation of the extension. This is just a delayed init that makes sure
  *  MediaWiki is set up properly before we add our stuff.
  */
 function sfgSetupExtension() {
-	global $sfgVersion, $sfgNamespace, $sfgIP, $wgExtensionCredits, $wgArticlePath, $wgScriptPath, $wgServer;
+	global $sfgIP, $wgVersion, $wgExtensionCredits;
 
-	sffInitMessages();
+	if (version_compare($wgVersion, '1.11', '>=' ))
+		wfLoadExtensionMessages('SemanticForms');
 
 	/**********************************************/
 	/***** register specials                  *****/
@@ -43,12 +56,14 @@ function sfgSetupExtension() {
 	require_once($sfgIP . '/specials/SF_AddPage.php');
 	require_once($sfgIP . '/specials/SF_AddData.php');
 	require_once($sfgIP . '/specials/SF_EditData.php');
+	require_once($sfgIP . '/specials/SF_UploadWindow.php');
 
 	/**********************************************/
 	/***** register hooks                     *****/
 	/**********************************************/
 
 	require_once($sfgIP . '/includes/SF_FormEditTab.php');
+	require_once($sfgIP . '/includes/SF_AutocompleteAPI.php');
 
 	/**********************************************/
 	/***** create globals for outside hooks   *****/
@@ -95,8 +110,7 @@ function sffInitNamespaces() {
 	// Register namespace identifiers
 	if (!is_array($wgExtraNamespaces)) { $wgExtraNamespaces=array(); }
 	$wgExtraNamespaces = $wgExtraNamespaces + $sfgContLang->getNamespaces();
-	// this code doesn't work, for some reason - leave it out for now
-	//$wgNamespaceAliases = $wgNamespaceAliases + $sfgContLang->getNamespaceAliases();
+	$wgNamespaceAliases = $wgNamespaceAliases + $sfgContLang->getNamespaceAliases();
 
 	// Support subpages only for talk pages by default
 	$wgNamespacesWithSubpages = $wgNamespacesWithSubpages + array(
@@ -175,7 +189,7 @@ function sffInitMessages() {
 
 /**
  * Setting of message cache for versions of MediaWiki that do not support
- * wgExtensionFunctions - based on ceContributionScores() in
+ * wgExtensionMessageFiles - based on ceContributionScores() in
  * ContributionScores extension
  */
 function sffLoadMessagesManually() {
@@ -238,11 +252,9 @@ function sffTitleString($title) {
  * allows pages to spoof a normal edit page, that can preview, save,
  * etc.
  */
-function sffPrintRedirectForm($title, $page_contents, $edit_summary, $is_save, $is_preview, $is_diff, $is_minor_edit, $watch_this) {
+function sffPrintRedirectForm($title, $page_contents, $edit_summary, $is_save, $is_preview, $is_diff, $is_minor_edit, $watch_this, $start_time, $edit_time) {
 	$article = new Article($title);
 	$new_url = $title->getLocalURL('action=submit');
-	$starttime = wfTimestampNow();
-	$edittime = $article->getTimestamp();
 	global $wgUser;
 	if ( $wgUser->isLoggedIn() )
 		$token = htmlspecialchars($wgUser->editToken());
@@ -260,8 +272,8 @@ function sffPrintRedirectForm($title, $page_contents, $edit_summary, $is_save, $
 	<form id="editform" name="editform" method="post" action="$new_url">
 	<input type="hidden" name="wpTextbox1" id="wpTextbox1" value="$page_contents" />
 	<input type="hidden" name="wpSummary" value="$edit_summary" />
-	<input type="hidden" name="wpStarttime" value="$starttime" />
-	<input type="hidden" name="wpEdittime" value="$edittime" />
+	<input type="hidden" name="wpStarttime" value="$start_time" />
+	<input type="hidden" name="wpEdittime" value="$edit_time" />
 	<input type="hidden" name="wpEditToken" value="$token" />
 	<input type="hidden" name="$action" />
 
@@ -285,43 +297,6 @@ END;
  * (which should be a category, relation, or namespace page)
  */
 function sffGetDefaultForm($page_title, $page_namespace) {
-	$smw_version = SMW_VERSION;
-	if ($smw_version{0} == '0') {
-		return sffGetDefaultForm_0_7($page_title, $page_namespace);
-	} else {
-		return sffGetDefaultForm_1_0($page_title, $page_namespace);
-	}
-}
-
-// Version for SMW 0.7 and lower
-function sffGetDefaultForm_0_7($page_title, $page_namespace) {
-	global $sfgContLang;
-	$db = wfGetDB( DB_SLAVE );
-	$sf_props = $sfgContLang->getSpecialPropertiesArray();
-	$default_form_relation = str_replace(' ', '_', $sf_props[SF_SP_HAS_DEFAULT_FORM]);
-	$sql = "SELECT DISTINCT object_title FROM {$db->tableName('smw_relations')} " .
-	  "WHERE subject_title = '" . $db->strencode($page_title) .
-	  "' AND subject_namespace = '" . $page_namespace .
-	  "' AND (relation_title = '" . $db->strencode($default_form_relation) . "'";
-	// try aliases for SF_SP_HAS_DEFAULT_FORM, too
-	foreach ($sfgContLang->getSpecialPropertyAliases() as $alias => $property) {
-		if ($property == SF_SP_HAS_DEFAULT_FORM) {
-			$sql .= " OR relation_title = '" . str_replace(' ', '_', $alias) . "'";
-		}
-	}
-	$sql .= ") AND object_namespace = " . SF_NS_FORM;
-	$res = $db->query( $sql );
-	if ($db->numRows( $res ) > 0) {
-		$row = $db->fetchRow($res);
-		$form_name = $row[0];
-		return $form_name;
-	}
-	$db->freeResult($res);
-	return null;
-}
-
-// Version for SMW 1.0 and higher
-function sffGetDefaultForm_1_0($page_title, $page_namespace) {
 	if ($page_title == NULL)
 		return null;
 
@@ -365,40 +340,6 @@ function sffGetDefaultForm_1_0($page_title, $page_namespace) {
  * (which, for now, should always be a relation)
  */
 function sffGetAlternateForms($page_title, $page_namespace) {
-	$smw_version = SMW_VERSION;
-	if ($smw_version{0} == '0') {
-		return sffGetAlternateForms_0_7($page_title, $page_namespace);
-	} else {
-		return sffGetAlternateForms_1_0($page_title, $page_namespace);
-	}
-}
-
-// Version for SMW 0.7 and lower
-function sffGetAlternateForms_0_7($page_title, $page_namespace) {
-	global $sfgContLang;
-	$db = wfGetDB( DB_SLAVE );
-	$sf_props = $sfgContLang->getSpecialPropertiesArray();
-	$alternate_form_relation = str_replace(' ', '_', $sf_props[SF_SP_HAS_ALTERNATE_FORM]);
-	$sql = "SELECT DISTINCT object_title FROM {$db->tableName('smw_relations')} " .
-	  "WHERE subject_title = '" . $db->strencode($page_title) .
-	  "' AND subject_namespace = '" . $page_namespace .
-	  "' AND (relation_title = '" . $db->strencode($alternate_form_relation);
-	// try English version too, if this is in another language
-	if ($alternate_form_relation != "Has_alternate_form") {
-		$sql .= "' OR relation_title = 'Has_alternate_form";
-	}
-	$sql .= "') AND object_namespace = " . SF_NS_FORM;
-	$res = $db->query( $sql );
-	$form_names = array();
-	while ($row = $db->fetchRow($res)) {
-		$form_names[] = $row[0];
-	}
-	$db->freeResult($res);
-	return $form_names;
-}
-
-// Version for SMW 1.0 and higher
-function sffGetAlternateForms_1_0($page_title, $page_namespace) {
 	if ($page_title == NULL)
 		return null;
 
@@ -453,19 +394,17 @@ function sffGetAddDataLinkForPage($target_page_title, $page_title, $page_namespa
 }
 
 /**
- * Gets URL for form-based adding of a nonexistent (red-linked) page
+ * Sets the URL for form-based adding of a nonexistent (broken-linked, AKA
+ * red-linked) page
  */
-function sffAddDataLink($title) {
-	$smw_version = SMW_VERSION;
-	if ($smw_version{0} == '0') {
-		return sffAddDataLink_0_7($title);
-	} else {
-		return sffAddDataLink_1_0($title);
-	}
+function sffSetBrokenLink(&$linker, $title, $query, &$u, &$style, &$prefix, &$text, &$inside, &$trail) {
+	$link = sffAddDataLink($title);
+	if ($link != '')
+		$u = $link;
+	return true;
 }
 
-// Version for SMW 1.0 and higher
-function sffAddDataLink_1_0($title) {
+function sffAddDataLink($title) {
 	// get all properties pointing to this page, and if
 	// sffGetAddDataLinkForPage() returns a value with any of
 	// them, return that
@@ -493,37 +432,6 @@ function sffAddDataLink_1_0($title) {
 	// if nothing found still, return null
 	return null;
 }
-
-// Version for SMW 0.7 and lower
-function sffAddDataLink_0_7($title) {
-	// get all relations that have this page as an object,
-	// and see if any of them have a default form specified
-	$db = wfGetDB( DB_SLAVE );
-	$sql = "SELECT DISTINCT relation_title FROM {$db->tableName('smw_relations')} WHERE object_title = '" . $db->strencode($title->getDBkey()) . "' AND object_namespace = '" . $title->getNamespace() . "'";
-	$res = $db->query( $sql );
-	if ($db->numRows( $res ) > 0) {
-		while ($row = $db->fetchRow($res)) {
-			$relation = $row[0];
-			if ($add_data_link = sffGetAddDataLinkForPage($title, $relation, SMW_NS_RELATION)) {
-				return $add_data_link;
-			}
-		}
-	}
-	// if that didn't work, check if this page's namespace
-	// has a default form specified
-	$namespace = $title->getNsText();
-	if ('' === $namespace) {
-		// if it's in the main (blank) namespace, check for the file
-		// named with the word for "Main" in this language
-		$namespace = wfMsgForContent('sf_blank_namespace');
-	}
-	if ($add_data_link = sffGetAddDataLinkForPage($title, $namespace, NS_PROJECT)) {
-		return $add_data_link;
-	}
-	// if nothing found still, return null
-	return null;
-}
-
 
 /**
  * Helper function - gets names of categories for a page;
@@ -619,4 +527,173 @@ function sffGetMonthNames() {
 		wfMsgForContent('november'),
 		wfMsgForContent('december')
 	);
+}
+
+function sffGetAllPagesForProperty_orig($is_relation, $property_name, $substring = null) {
+  global $sfgMaxAutocompleteValues;
+
+  $fname = "sffGetAllPagesForProperty_orig";
+  $pages = array();
+  $db = wfGetDB( DB_SLAVE );
+  $sql_options = array();
+  $sql_options['LIMIT'] = $sfgMaxAutocompleteValues;
+  $property_field = ($is_relation) ? 'relation_title' : 'attribute_title'; 
+  $value_field = ($is_relation) ? 'object_title' : 'value_xsd'; 
+  $property_table = ($is_relation) ? 'smw_relations' : 'smw_attributes'; 
+  $conditions = "$property_field = '$property_name'";
+  if ($substring != null) {
+    $substring = str_replace(' ', '_', strtolower($substring));
+    $substring = str_replace('_', '\_', $substring);
+    $substring = str_replace("'", "\'", $substring);
+    $conditions .= " AND (LOWER($value_field) LIKE '" . $substring . "%' OR LOWER($value_field) LIKE '%\_" . $substring . "%')";
+  }
+  $sql_options['ORDER BY'] = $value_field;
+  $res = $db->select( $db->tableName($property_table),
+                      "DISTINCT $value_field",
+                      $conditions, $fname, $sql_options);
+  while ($row = $db->fetchRow($res)) {
+    if ($substring != null)
+      $pages[] = array('title' => str_replace('_', ' ', $row[0]));
+    else {
+      $cur_value = str_replace("'", "\'", $row[0]);
+      $pages[] = str_replace('_', ' ', $cur_value);
+    }
+  }
+  $db->freeResult($res);
+  return $pages;
+}
+
+function sffGetAllPagesForProperty_1_2($property_name, $substring = null) {
+	global $sfgMaxAutocompleteValues;
+
+	$store = smwfGetStore();
+	$requestoptions = new SMWRequestOptions();
+	$requestoptions->limit = $sfgMaxAutocompleteValues;
+	if ($substring != null) {
+		$requestoptions->addStringCondition($substring, SMWStringCondition::STRCOND_PRE);
+	}
+	$property = Title::newFromText($property_name, SMW_NS_PROPERTY);
+	$data_values = $store->getPropertyValues(null, $property, $requestoptions);
+	$pages = array();
+	foreach ($data_values as $dv) {
+		// getPropertyValues() gets many repeat values - we want
+		// only one of each value
+		$string_value = str_replace('_', ' ', $dv->getXSDValue());
+		if (array_search($string_value, $pages) === false)
+			$pages[] = $string_value;
+	}
+	// if there was a substring specified, also find values that have
+	// it after a space, not just at the beginning of the value
+	if ($substring != null) {
+		$requestoptions2 = new SMWRequestOptions();
+		$requestoptions2->limit = $sfgMaxAutocompleteValues;
+		$requestoptions2->addStringCondition(" $substring", SMWStringCondition::STRCOND_MID);
+		$data_values = $store->getPropertyValues(null, $property, $requestoptions2);
+		foreach ($data_values as $dv) {
+			$pages[] = $dv->getXSDValue();
+		}
+	}
+	return $pages;
+}
+
+/*
+ * Get all the pages that belong to a category and all its subcategories,
+ * down a certain number of levels - heavily based on SMW's
+ * SMWInlineQuery::includeSubcategories()
+ */
+function sffGetAllPagesForCategory($top_category, $num_levels, $substring = null) {
+  if (0 == $num_levels) return $top_category;
+  global $sfgMaxAutocompleteValues;
+
+  $db = wfGetDB( DB_SLAVE );
+  $fname = "sffGetAllPagesForCategory";
+  $categories = array($top_category);
+  $checkcategories = array($top_category);
+  $pages = array();
+  for ($level = $num_levels; $level > 0; $level--) {
+    $newcategories = array();
+    foreach ($checkcategories as $category) {
+      if ($substring != null) {
+        $substring = str_replace(' ', '_', strtolower($substring));
+        $substring = str_replace('_', '\_', $substring);
+        $substring = str_replace("'", "\'", $substring);
+        $conditions = 'cl_to = '. $db->addQuotes($category) . " AND (LOWER(page_title) LIKE '" . $substring . "%' OR LOWER(page_title) LIKE '%\_" . $substring . "%')";
+      } else {
+        $conditions = 'cl_to = '. $db->addQuotes($category);
+      }
+      $res = $db->select( // make the query
+        array('categorylinks', 'page'),
+        array('page_title', 'page_namespace'),
+        array('cl_from = page_id', $conditions),
+        $fname);
+        if ($res) {
+          while ($res && $row = $db->fetchRow($res)) {
+          if (array_key_exists('page_title', $row)) {
+            $page_namespace = $row['page_namespace'];
+            if ($page_namespace == NS_CATEGORY) { 
+              $new_category = $row[ 'page_title' ];
+              if (!in_array($new_category, $categories)) {
+                $newcategories[] = $new_category;
+              }
+            } else {
+              $cur_value = str_replace("_", " ", $row['page_title']);
+              if ($substring == null)
+                $pages[] = str_replace("'", "\'", $cur_value);
+              else
+                $pages[] = array('title' => $cur_value);
+              // return if we've reached the maximum number of allowed values
+              if (count($pages) > $sfgMaxAutocompleteValues)
+                return $pages;
+            }
+          }
+        }
+        $db->freeResult( $res );
+      }
+    }
+    if (count($newcategories) == 0) {
+      sort($pages);
+      return $pages;
+    } else {
+      $categories = array_merge($categories, $newcategories);
+    }
+    $checkcategories = array_diff($newcategories, array());
+  }
+  sort($pages);
+  return $pages;
+}
+
+function sffGetAllPagesForNamespace($namespace_name, $substring = null) {
+  // cycle through all the namespace names for this language, and if
+  // one matches the namespace specified in the form, add the names
+  // of all the pages in that namespace to $names_array
+  global $wgContLang;
+  $namespaces = $wgContLang->getNamespaces();
+  $db = wfGetDB( DB_SLAVE );
+  $fname = "sffGetAllPagesForNamespace";
+  $pages = array();
+  foreach ($namespaces as $ns_code => $ns_name) {
+    if ($ns_name == $namespace_name) {
+      $conditions = "page_namespace = $ns_code";
+      if ($substring != null) {
+        $substring = str_replace(' ', '_', strtolower($substring));
+        $substring = str_replace('_', '\_', $substring);
+        $substring = str_replace("'", "\'", $substring);
+        $conditions .= " AND (LOWER(page_title) LIKE '$substring%' OR LOWER(page_title) LIKE '%\_$substring%')";
+      }
+      $sql_options['ORDER BY'] = 'page_title';
+      $res = $db->select( $db->tableNames('page'),
+                          'page_title',
+                          $conditions, $fname, $sql_options);
+      while ($row = $db->fetchRow($res)) {
+        $cur_value = str_replace('_', ' ', $row[0]);
+        if ($substring == null) {
+          $pages[] = str_replace("'", "\'", $cur_value);
+        } else {
+          $pages[] = array('title' => $cur_value);
+        }
+      }
+      $db->freeResult($res);
+    }
+  }
+  return $pages;
 }
