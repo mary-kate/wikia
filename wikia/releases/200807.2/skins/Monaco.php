@@ -1583,7 +1583,7 @@ if(!empty($wgFASTSIDE) && isset($wgFASTSIDE[0])) {
 <?php		wfProfileOut( __METHOD__ . '-navigation'); ?>
 <?php		wfProfileIn( __METHOD__ . '-widgets'); ?>
 
-			<div id="sidebar_1" class="sidebar" style="height: 150px;">
+			<div id="sidebar_1" class="sidebar">
 			<?= WidgetFramework::getInstance()->Draw(1) ?>
 <?php
 if(!empty($wgFASTSIDE) && isset($wgFASTSIDE[1])) {
