@@ -457,10 +457,6 @@ function getNumberForCarousel() {
 		var carouselSize = parseInt(Dom.getViewportWidth() - 60);
 
 		carouselVisible = Math.floor(carouselSize / (55 + 145 + 5));
-
-		// resize carousel (#3179)
-		var carousel = Dom.get('widget_cockpit_list').parentNode;
-		Dom.setStyle(carousel, 'width', carouselSize + 'px');
 	}
 
 	YAHOO.log('getNumberForCarousel(): ' + carouselVisible);
@@ -494,6 +490,12 @@ function runWidgetInits() {
 		widgets = Dom.getElementsByClassName('widget', 'li');
 	} else if(skin == 'monaco') {
 		widgets = Dom.getElementsByClassName('widget', 'dl');
+
+		 // resize carousel (#3179)
+		var carousel = Dom.get('widget_cockpit_list').parentNode;
+		if (!YAHOO.env.ua.ie) {
+			Dom.addClass(carousel, 'carousel-clip-region-auto');
+		}
 	}
 	for(i = 0; i < widgets.length; i++) {
 		id = widgets[i].id;
