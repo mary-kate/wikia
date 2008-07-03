@@ -40,3 +40,10 @@ body.ns-0 #bodyContent table {
 #wikia_header #headerButtonHub {
 	margin-left: -30%;
 }
+
+/* widget dashboard (#2397) */
+.widget_dashboard .sidebar,
+.widget_dashboard .widget,
+.widget_dashboard .widgetToolbox {
+	position: relative;
+}

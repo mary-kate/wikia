@@ -279,7 +279,7 @@ a.bigButton small {
 	margin: 0 20px;
 	overflow: hidden; /* Secret to the clipping */
 	position: relative;
-	width: auto !important;
+	/*width: auto !important; will be recalculated by widgetsFramework.js */
 }
 #carousel-prev {
 	left: 0;
