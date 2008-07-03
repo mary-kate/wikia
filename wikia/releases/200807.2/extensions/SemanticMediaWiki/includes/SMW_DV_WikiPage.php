@@ -26,6 +26,7 @@ class SMWWikiPageValue extends SMWDataValue {
 		if ($value != '') {
 			$this->m_value = $value;
 			$this->m_title = NULL;
+			$this->m_dbkeyform = NULL;
 			if ($this->getTitle() !== NULL) {
 				$this->m_textform = $this->m_title->getText();
 				$this->m_dbkeyform = $this->m_title->getDBkey();
@@ -140,41 +141,28 @@ class SMWWikiPageValue extends SMWDataValue {
 		return array(rawurlencode(str_replace('_',' ',$this->m_dbkeyform)));
 	}
 
-	/**
-	 * Creates the export line for the RDF export
-	 *
-	 * @param string $QName The element name of this datavalue
-	 * @param ExportRDF $exporter the exporter calling this function
-	 * @return the line to be exported
-	 */
-	public function exportToRDF($QName, ExportRDF $exporter) {
-		if (!$this->isValid()) return '';
-
+	public function getExportData() { // default implementation: encode value as untyped string
+		if (!$this->isValid()) return NULL;
 		switch ($this->getNamespace()) {
 			case NS_MEDIA: // special handling for linking media files directly
 				$file = wfFindFile( $this->getTitle() );
 				if ($file) {
-					//$obj = $file->getFullURL();
+					//$name = $file->getFullURL();
 					/// TODO: the following just emulates getFullURL() which is not yet available in MW1.11:
-					$obj = $file->getUrl();
-					if( substr( $obj, 0, 1 ) == '/' ) {
+					$uri = $file->getUrl();
+					if( substr( $uri, 0, 1 ) == '/' ) {
 						global $wgServer;
-						$obj = $wgServer . $obj;
+						$uri = $wgServer . $uri;
 					}
+					return new SMWExpData(new SMWExpResource($uri, $this));
 				} else { // Medialink to non-existing file :-/
-					return "\t\t <!-- $QName points to the media object " . $this->getXSDValue() . " but no such file was uploaded. -->\n";
+					return NULL;
 				}
 			break;
-			case SMW_NS_PROPERTY: case NS_CATEGORY: // export would be OWL Full, check if this is desired
-				if (!$exporter->owlfull) {
-					return '';
-				} // < very bad coding: we omit the break deliberately :-o
-			default:
-				$obj = $exporter->getURI( $this->getTitle() );
+			default: // some true wiki page
+				return new SMWExpData(SMWExporter::getResourceElement($this));
 			break;
 		}
-
-		return "\t\t<$QName rdf:resource=\"$obj\"/>\n";
 	}
 
 ///// special interface for wiki page values

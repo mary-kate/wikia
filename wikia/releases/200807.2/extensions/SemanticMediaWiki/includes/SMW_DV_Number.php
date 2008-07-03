@@ -42,12 +42,12 @@ class SMWNumberValue extends SMWDataValue {
 		$kiloseparator = wfMsgForContent('smw_kiloseparator');
 
 		$parts = preg_split('/([-+]?\s*\d+(?:\\' . $kiloseparator . '\d\d\d)*' .
-		                      '(?:\\' . $decseparator . '\d+)?\s*(?:[eE][-+]?\d+)?)/',
+		                      '(?:\\' . $decseparator . '\d+)?\s*(?:[eE][-+]?\d+)?)/u',
 		                      trim(str_replace(array('&nbsp;','&thinsp;'), '', $value)),
 		                      2, PREG_SPLIT_DELIM_CAPTURE);
 
 		if (count($parts) >= 2) {
-			$numstring = str_replace($kiloseparator, '', preg_replace('/\s*/', '', $parts[1])); // simplify
+			$numstring = str_replace($kiloseparator, '', preg_replace('/\s*/u', '', $parts[1])); // simplify
 			if ($decseparator != '.') {
 				$numstring = str_replace($decseparator, '.', $numstring);
 			}
@@ -172,24 +172,22 @@ class SMWNumberValue extends SMWDataValue {
 		// available to the message are:
 		// $1: string of numerical value in English punctuation
 		// $2: string of integer version of value, in English punctuation
-		return array((string)$this->m_value, (string)round($this->m_value));
+		// $3: string of unit (if any)
+		return array((string)$this->m_value, (string)round($this->m_value), $this->m_unit);
 	}
 
 	public function isNumeric() {
 		return true;
 	}
 
-	/**
-	 * Creates the export line for the RDF export
-	 *
-	 * @param string $QName The element name of this datavalue
-	 * @param ExportRDF $exporter the exporter calling this function
-	 * @return the line to be exported
-	 */
-	public function exportToRDF($QName, ExportRDF $exporter) {
-		return "\t\t<$QName rdf:datatype=\"http://www.w3.org/2001/XMLSchema#double\">$this->m_value</$QName>\n";
+	public function getExportData() {
+		if ($this->isValid()) {
+			$lit = new SMWExpLiteral($this->m_value, $this, 'http://www.w3.org/2001/XMLSchema#double');
+			return new SMWExpData($lit);
+		} else {
+			return NULL;
+		}
 	}
-
 
 	/**
 	 * Transform a (typically unit-) string into a normalised form,

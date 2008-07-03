@@ -24,7 +24,6 @@ class SMWSpecialBrowse extends SpecialPage {
 	 * Constructor
 	 */
 	public function __construct() {
-		smwfInitUserMessages();
 		parent::__construct('Browse');
 	}
 
@@ -32,14 +31,17 @@ class SMWSpecialBrowse extends SpecialPage {
 		global $wgRequest, $wgOut, $wgUser,$wgContLang, $smwgIP;
 		include_once($smwgIP . '/includes/storage/SMW_Store.php');
 		include_once($smwgIP . '/includes/SMW_DataValueFactory.php');
-		include_once($smwgIP . '/includes/SMW_Infolink.php');
 
 		$skin = $wgUser->getSkin();
 
 		// get the GET parameters
 		$articletext = $wgRequest->getVal( 'article' );
 		// no GET parameters? Then try the URL
-		if ('' == $articletext) { $articletext = $query; }
+		if ('' == $articletext) {
+			$params = SMWInfolink::decodeParameters($query,false);
+			reset($params);
+			$articletext = current($params);
+		}
 		$article = SMWDataValueFactory::newTypeIDValue('_wpg', $articletext);
 		$limit = $wgRequest->getVal( 'limit' );
 		if ('' == $limit) $limit =  10;
@@ -141,8 +143,8 @@ class SMWSpecialBrowse extends SpecialPage {
 					// replace the last two whitespaces in the relation name with
 					// non-breaking spaces. Since there seems to be no PHP-replacer
 					// for the last two, a strrev ist done twice to turn it around.
-					// That's why nbsp is written backward.
-					$html .= ' &nbsp;<strong>' . $skin->makeKnownLinkObj($result, strrev(preg_replace('/[\s]/', ';psbn&', strrev(smwfT($result)), 2) )) . '</strong>' . $vsep . "\n"; // TODO makeLinkObj or makeKnownLinkObj?
+					// That's why nbsp is written backwards.
+					$html .= ' &nbsp;<strong>' . $skin->makeKnownLinkObj($result, strrev(preg_replace('/[\s]/u', ';psbn&', strrev(smwfT($result)), 2) )) . '</strong>' . $vsep . "\n"; // TODO makeLinkObj or makeKnownLinkObj?
 				}
 				if (($offset>0) || (count($inprop)>$limit)) $html .= $navigation;
 			}
@@ -156,7 +158,7 @@ class SMWSpecialBrowse extends SpecialPage {
 // 				foreach ($outrel as $result) {
 // 					$objectoptions = new SMWRequestOptions();
 // 					$objectoptions->limit = $innerlimit;
-// 					$html .=  '<strong>' . $skin->makeKnownLinkObj($result, preg_replace('/[\s]/', '&nbsp;', smwfT($result), 2)) . "</strong>&nbsp; \n";// TODO makeLinkObj or makeKnownLinkObj?
+// 					$html .=  '<strong>' . $skin->makeKnownLinkObj($result, preg_replace('/[\s]/u', '&nbsp;', smwfT($result), 2)) . "</strong>&nbsp; \n";// TODO makeLinkObj or makeKnownLinkObj?
 // 					$objects = &smwfGetStore()->getRelationObjects($article, $result, $objectoptions);
 // 					$objectcount = count($objects);
 // 					$count = 0;
@@ -175,7 +177,7 @@ class SMWSpecialBrowse extends SpecialPage {
 // 				}
 				foreach ($atts as $att) {
 					$objectoptions = new SMWRequestOptions();
-					$html .=  '<strong>' . $skin->makeKnownLinkObj($att, preg_replace('/[\s]/', '&nbsp;', smwfT($att), 2)) . "</strong>&nbsp; \n";
+					$html .=  '<strong>' . $skin->makeKnownLinkObj($att, preg_replace('/[\s]/u', '&nbsp;', smwfT($att), 2)) . "</strong>&nbsp; \n";
 					$objects = &smwfGetStore()->getPropertyValues($article->getTitle(), $att, $objectoptions);
 					$objectcount = count($objects);
 					$count = 0;

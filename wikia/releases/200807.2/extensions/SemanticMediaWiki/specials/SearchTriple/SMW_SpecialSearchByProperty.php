@@ -21,7 +21,6 @@ class SMWSearchByProperty extends SpecialPage {
 	 * Constructor
 	 */
 	public function __construct() {
-		smwfInitUserMessages();
 		parent::__construct('SearchByProperty');
 	}
 
@@ -33,15 +32,12 @@ class SMWSearchByProperty extends SpecialPage {
 		// get the GET parameters
 		$attributestring = $wgRequest->getVal( 'property' );
 		$valuestring = $wgRequest->getVal( 'value' );
+		$params = SMWInfolink::decodeParameters($query, false);
+		reset($params);
 		// no GET parameters? Then try the URL
-		if (('' == $attributestring) && ('' == $valuestring)) {
-			$queryparts = explode('::', $query);
-			$attributestring = $query;
-			if (count($queryparts) == 2) {
-				$attributestring = $queryparts[0];
-				$valuestring = str_replace("_", " ", $queryparts[1]);
-			}
-		}
+		if ($attributestring == '') $attributestring = current($params);
+		if ($valuestring == '') $valuestring = next($params);
+
 		$attribute = Title::newFromText( $attributestring, SMW_NS_PROPERTY );
 		if (NULL === $attribute) { $attributestring = ''; } else { $attributestring = $attribute->getText(); }
 
@@ -135,7 +131,6 @@ class SMWSearchByProperty extends SpecialPage {
 					$html .= wfMsg( 'smw_result_noresults' );
 				} else { // if there are plenty of results anyway
 					global $smwgIP;
-					include_once($smwgIP . '/includes/SMW_Infolink.php');
 					// no need to show the navigation bars when there is not enough to navigate
 					if (($offset>0) || ($count>$limit)) $html .= '<br />' . $navigation;
 					$html .= "<ul>\n";
