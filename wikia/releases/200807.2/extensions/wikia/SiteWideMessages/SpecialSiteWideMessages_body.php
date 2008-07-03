@@ -62,6 +62,7 @@ class SiteWideMessages extends SpecialPage {
 		$formData['userName'] = $wgRequest->getText('mUserName');
 		$formData['wikiName'] = $wgRequest->getText('mWikiName');
 		$formData['groupName'] = $wgRequest->getText('mGroupName');
+		$formData['groupNameS'] = $wgRequest->getText('mGroupNameS');
 		$formData['groupWikiName'] = $wgRequest->getText('mGroupWikiName');
 		$formData['expireTime'] = $wgRequest->getVal('mExpireTime');
 		$formData['hubId'] = intval($wgRequest->getVal('mHubId'));
@@ -83,6 +84,24 @@ class SiteWideMessages extends SpecialPage {
 		$DB->FreeResult($dbResult);
 
 		$formData['hubNames'] = $hubList;
+
+		//fetching group list	TODO: sprawdzic zapytanie i wynik - z jakiej bazy brac?
+		$DB = wfGetDB(DB_SLAVE);
+		$dbResult = $DB->Query (
+			  'SELECT DISTINCT ug_group'
+			. ' FROM ' . wfSharedTable('user_groups')
+			. ' ORDER BY ug_group'
+			. ';'
+			, __METHOD__
+		);
+
+		$groupList = array();
+		while ($row = $DB->FetchObject($dbResult)) {
+			$groupList[] = $row->ug_group;
+		}
+		$DB->FreeResult($dbResult);
+
+		$formData['groupNames'] = $groupList;
 
 		//handle different submit buttons in one form
 		$button = $wgRequest->getVal('mAction');
@@ -147,7 +166,8 @@ class SiteWideMessages extends SpecialPage {
 				$mRecipientId = $formData['sendMode'] == 'ALL' ? null : $wgUser->idFromName($formData['userName']);
 				//TODO: if $mRecipientId == 0 => error - no such user
 				$mText = $wgRequest->getText('mContent');
-				$result = $this->sendMessage($wgUser, $mRecipientId, $mText, $wgRequest->getVal('mExpireTime'), $formData['wikiName'], $formData['userName'], $formData['groupName'], $formData['sendMode'], $formData['groupMode'], $formData['groupWikiName'], $formData['hubId']);
+				$groupName = $formData['groupName'] == '' ? $formData['groupNameS'] : $formData['groupName'];
+				$result = $this->sendMessage($wgUser, $mRecipientId, $mText, $wgRequest->getVal('mExpireTime'), $formData['wikiName'], $formData['userName'], $groupName, $formData['sendMode'], $formData['groupMode'], $formData['groupWikiName'], $formData['hubId']);
 
 				if (is_null($result['msgId'])) {	//we have an error
 					$formData['messageContent'] = $wgRequest->getText('mContent');
@@ -280,8 +300,8 @@ class SiteWideMessages extends SpecialPage {
 			$result['errMsg'] = wfMsg('swm-error-no-such-wiki');
 		} elseif ($mSendMode == 'USER' && !User::idFromName($mRecipientName)) {
 			$result['errMsg'] = wfMsg('swm-error-no-such-user');
-		} elseif ($mSendMode == 'GROUP' && $mGroupName == '') {
-			$result['errMsg'] = wfMsg('swm-error-empty-group');
+//		} elseif ($mSendMode == 'GROUP' && $mGroupName == '') {
+//			$result['errMsg'] = wfMsg('swm-error-empty-group');
 		} else {
 			global $wgParser, $wgUser;
 			$title = Title::newFromText(uniqid('tmp'));

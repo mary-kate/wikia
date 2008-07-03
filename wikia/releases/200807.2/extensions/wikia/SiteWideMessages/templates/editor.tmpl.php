@@ -72,8 +72,8 @@
 							?>
 							</select>
 						</td>
-						<td rowspan="3">
-							<?= wfMsg('swm-label-mode-group-hint') ?>
+						<td>
+							<?= wfMsg('swm-label-mode-hub-hint') ?>
 						</td>
 					</tr>
 
@@ -85,7 +85,19 @@
 							<label for="mSendModeG"><?= wfMsg('swm-label-mode-group') ?></label>
 						</td>
 						<td>
-							<input name="mGroupName" id="mGroupName" type="text" size="48" value="<?= $formData['groupName'] ?>"/>
+							<select name="mGroupNameS" id="mGroupNameS" style="width:116px">
+							<?php
+							foreach ($formData['groupNames'] as $groupName) {
+								$groupName = htmlspecialchars($groupName);
+								$selected = $groupName == $formData['groupNameS'] ? ' selected="selected"' : '';
+								echo "\t\t\t\t\t\t\t\t<option value=\"$groupName\"$selected>$groupName</option>\n";
+							}
+							?>
+							</select>
+							<input name="mGroupName" id="mGroupName" type="text" size="28" value="<?= $formData['groupName'] ?>"/>
+						</td>
+						<td>
+							<?= wfMsg('swm-label-mode-group-hint') ?>
 						</td>
 					</tr>
 				</table>
