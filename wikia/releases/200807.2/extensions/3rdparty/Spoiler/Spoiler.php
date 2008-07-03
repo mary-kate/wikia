@@ -12,6 +12,7 @@
 # Modified February 2007 by Patrick Delancy for use in TibiaWiki ( http://tibia.erig.net/ )
 
 $wgExtensionFunctions[] = "wfSpoilerExtension";
+$wgExtensionMessagesFiles['SpoilerExtension'] = dirname(__FILE__) . '/Spoiler.i18n.php';
 $wgHooks['OutputPageBeforeHTML'][] = 'spoilerParserHook' ;
 
 function wfSpoilerExtension() {
@@ -92,6 +93,8 @@ function renderSpoiler( $input, $argv, &$parser ) {
 	$outputObj = $localParser->parse($input, $parser->mTitle, $parser->mOptions);
 	$spoilerId = wfMakeSpoilerId();
 
+	wfLoadExtensionMessages('SpoilerExtension');
+
 	// quick hack to get rid of 'undefined index' notices...
 	foreach (array('collapsed', 'contentstyle', 'footwarningtext', 'headwarningtext', 'linkstyle', 'linktext', 'spoilerstyle', 'warningstyle') as $a)
 	{
@@ -99,17 +102,17 @@ function renderSpoiler( $input, $argv, &$parser ) {
 	}
 
 	$output  = "<span onClick=\"toggleObjectVisibility('" . $spoilerId . "'); return false;\" style=\"" . ($argv["linkstyle"] == '' ? "cursor:pointer; background-color:#ffdddd; color:#000000; font-weight:bold; padding:4px 4px 2px 4px; border:solid red 1px; line-height: 24px;" : $argv["linkstyle"] ) . "\">";
-	$output .= ($argv["linktext"] == '' ? 'Click Here to Show/Hide Spoiler Information' : $argv["linktext"]) . "</span>";
+	$output .= ($argv["linktext"] == '' ? wfMsg('spoiler-showhide-label') : $argv["linktext"]) . "</span>";
 	$output .= "<div id=\"" . $spoilerId . "\" style=\"visibility:visible; position:relative; " . ($argv["spoilerstyle"] == '' ? "" : $argv["spoilerstyle"]) . "\">";
 	if (!in_array("hidewarning", array_values($argv))) {
 		$output .= "<div style=\"" . ($argv["warningstyle"] == '' ? "border-top: 2px red solid; border-bottom: 2px red solid; padding:3px; line-height: 22px;" : $argv["warningstyle"]) . "\">";
-		$output .= ($argv["headwarningtext"] == '' ? "<b>Spoiler warning:</b> <i>Quest and/or game spoiling details follow.</i>" : $argv["headwarningtext"]);
+		$output .= ($argv["headwarningtext"] == '' ? wfMsg('spoiler-warning') : $argv["headwarningtext"]);
 		$output .= "</div>";
 	}
 	$output .= "<div id=\"" . $spoilerId . "_content\" style=\"" . ($argv["contentstyle"] == '' ? "padding-top:4px; padding-bottom:4px;" : $argv["contentstyle"]) . "\">" . $outputObj->getText() . "</div>";
 	if (!in_array("hidewarning", array_values($argv))) {
 		$output .= "<div style=\"" . ($argv["warningstyle"] == '' ? "border-top: 2px red solid; border-bottom: 2px red solid; padding:3px; line-height: 22px;" : $argv["warningstyle"]) . "\">";
-		$output .= ($argv["footwarningtext"] == '' ? "<b>Spoiler ends here.</b>" : $argv["footwarningtext"]);
+		$output .= ($argv["footwarningtext"] == '' ? wfMsg('spoiler-endshere') : $argv["footwarningtext"]);
 		$output .= "</div>";
 	}
 	$output .= "</div>";
