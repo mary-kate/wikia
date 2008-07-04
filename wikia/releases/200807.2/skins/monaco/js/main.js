@@ -464,7 +464,11 @@ TieDivLib = new function() {
 	this.tie = function(source, target) {
 		tieObjects.push([source, target]);
 		$(source).style.position = 'absolute';
-		$(source).style.zIndex = 5;
+		if($(target).parentNode.parentNode.parentNode.parentNode.parentNode.id == 'spotlight_footer') {
+			$(source).style.zIndex = 4;
+		} else {
+			$(source).style.zIndex = 5;
+		}
 		$(source).style.visibility = 'visible';
 		TieDivLib.process();
 	}
@@ -484,8 +488,8 @@ TieDivLib = new function() {
 
 	this.process = function() {
 		TieDivLib.fixPositions();
-		setTimeout(TieDivLib.fixPositions, 150);
-		setTimeout(TieDivLib.fixPositions, 350);
+		setTimeout(TieDivLib.fixPositions, 180);
+		setTimeout(TieDivLib.fixPositions, 360);
 	}
 
 	this.startTie = function() {
@@ -493,6 +497,11 @@ TieDivLib = new function() {
 		YAHOO.util.Event.addListener(window, 'click', TieDivLib.process);
 		YAHOO.util.Event.addListener(window, 'load', TieDivLib.process);
 		YAHOO.util.Event.addListener(window, 'keydown', TieDivLib.fixPositions);
+		YAHOO.util.Event.addListener(window, 'focus', TieDivLib.fixPositions);
+	}
+
+	this.getTieObjects = function() {
+		return tieObjects;
 	}
 
 };

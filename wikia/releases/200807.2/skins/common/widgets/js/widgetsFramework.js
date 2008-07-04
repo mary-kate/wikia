@@ -221,6 +221,17 @@ YAHOO.extend(YAHOO.wikia.ddObject, YAHOO.util.DDProxy, {
 
 	startDrag: function(x, y) {
 		var clickEl = this.getEl();
+
+		if(YAHOO.util.Dom.hasClass(clickEl, 'WidgetAdvertiser')) {
+			var adSpaceId = clickEl.childNodes[1].childNodes[1].id;
+			var items = TieDivLib.getTieObjects();
+			for(var i = 0; i < items.length; i++) {
+				if(items[i][1] == adSpaceId) {
+					$(items[i][0]).style.visibility = 'hidden';
+				}
+			}
+		}
+
 		if (this.isThumb == false) {
 			Dom.setStyle(clickEl, 'visibility', 'hidden');
 		}
@@ -255,8 +266,20 @@ YAHOO.extend(YAHOO.wikia.ddObject, YAHOO.util.DDProxy, {
 		a.onComplete.subscribe(function() {
 			Dom.setStyle(proxyid, 'visibility', 'hidden');
 			Dom.setStyle(thisid, 'visibility', '');
+
+			if(YAHOO.util.Dom.hasClass(srcEl, 'WidgetAdvertiser')) {
+				var adSpaceId = srcEl.childNodes[1].childNodes[1].id;
+				var items = TieDivLib.getTieObjects();
+				for(var i = 0; i < items.length; i++) {
+					if(items[i][1] == adSpaceId) {
+						$(items[i][0]).style.visibility = 'visible';
+					}
+				}
+			}
+
 		});
 		a.animate();
+
 
 		if(this.isThumb == true) {
 			if(Dom.getStyle('ghost', 'display') == 'block') {
