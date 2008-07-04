@@ -70,7 +70,7 @@ function WidgetTips($id, $params) {
 
     wfProfileOut(__METHOD__);
 
-    return $wgOut->parse($tips[$tipId]) . $selector;
+    return $selector . $wgOut->parse($tips[$tipId]);
 }
 
 function WidgetTipsGetTips() {
