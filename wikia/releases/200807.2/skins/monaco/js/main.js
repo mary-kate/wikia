@@ -509,3 +509,53 @@ TieDivLib = new function() {
 	}
 
 };
+
+function ad_call(adSpaceId, zoneId, pos) {
+
+	curAdSpaceId = -1;
+
+	if(document.getElementById('adSpace' + adSpaceId)) {
+		if(pos.substring(0, 4) == 'FAST') {
+			if(!FASTisValid(pos)) {
+				return;
+			}
+		}
+
+		curAdSpaceId = adSpaceId;
+
+		document.write('<scr'+'ipt type="text/javascript">');
+		document.write('var base_url = "http://wikia-ads.wikia.com/www/delivery/ajs.php";');
+		document.write('base_url += "?loc=" + escape(window.location);');
+		document.write('if(typeof document.referrer != "undefined") base_url += "&referer=" + escape(document.referrer);');
+		document.write('if(typeof document.context != "undefined") base_url += "&context=" + escape(document.context);');
+		document.write('if(typeof document.mmm_fo != "undefined") base_url += "&mmm_fo=1";');
+		document.write('base_url += "&zoneid='+zoneId+'";');
+		document.write('base_url += "&cb=" + Math.floor(Math.random()*99999999999);');
+		document.write('if(typeof document.MAX_used != "undefined" && document.MAX_used != ",") base_url += "&exclude=" + document.MAX_used;');
+
+/**
+ * Parameters description
+ * 1 - collision
+ * 2 - no-collision
+ * 3 - logged in
+ * 4 - not logged in
+ */
+
+		if(pos == 'FAST_BOTTOM') {
+			document.write('if(FASTisCollisionBottom()) base_url += "&source=1";');
+		} else if(pos == 'FAST_TOP') {
+			if(wgUserName != null) {
+				document.write('if(FASTisCollisionTop()) base_url += "&source=13"; else base_url += "&source=23";');
+			} else {
+				document.write('if(FASTisCollisionTop()) base_url += "&source=14"; else base_url += "&source=24";');
+			}
+		}
+
+		document.write('</scr'+'ipt>');
+		document.write('<scr'+'ipt type="text/javascript" src="'+base_url+'"></scr'+'ipt>');
+
+		document.write('<scr'+'ipt type="text/javascript">');
+		document.write('if(curAdSpaceId != -1) { TieDivLib.tie("realAd'+adSpaceId+'", "adSpace"+curAdSpaceId); }');
+		document.write('</scr'+'ipt>');
+	}
+}
