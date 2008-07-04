@@ -136,6 +136,10 @@ function FASTfix(banner) {
 		Dom.setStyle('adSpace' + curAdSpaceId, 'margin-left', 'auto');
 	}
 
+	if(banner == 'FAST_HOME3' || banner == 'FAST_HOME4' || banner == 'FAST6' || banner == 'FAST7') {
+		Dom.setStyle('adSpace' + curAdSpaceId, 'margin', '0 auto');
+	}
+	
 	Dom.setStyle('adSpace' + curAdSpaceId, 'width', adSizes[banner][0]+'px');
 	Dom.setStyle('adSpace' + curAdSpaceId, 'height', adSizes[banner][1]+'px');
 
