@@ -468,6 +468,8 @@ TieDivLib = new function() {
 		$(source).style.position = 'absolute';
 		if($(target).parentNode.parentNode.parentNode.parentNode.parentNode.id == 'spotlight_footer') {
 			$(source).style.zIndex = 4;
+		} else if(YAHOO.util.Dom.hasClass($(target).parentNode.parentNode, 'WidgetAdvertiser')) {
+			$(source).style.zIndex = 6;
 		} else {
 			$(source).style.zIndex = 5;
 		}
