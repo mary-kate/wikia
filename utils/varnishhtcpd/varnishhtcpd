@@ -5,6 +5,11 @@
 # chkconfig: - 90 10
 # description: HTCP2Varnish purger
 
+#
+# Released under some license as perl AL || GPL
+#
+# Requires the second patch at http://varnish.projects.linpro.no/ticket/265
+#
 
 
 use strict;
