@@ -792,6 +792,18 @@ FCK.DataProcessor =
 	}
 })() ;
 
+(function()
+{
+	FCK.isInedible = function (value) {
+        if ( FCK.EditMode != FCK_EDITMODE_SOURCE ) {
+		if (FCK.EditorDocument.body.innerHTML.indexOf ("{{") >= 0 ) {
+			return true ;
+		}
+	}
+	return false ;
+	}
+})();
+
 // MediaWiki document processor.
 FCKDocumentProcessor.AppendNew().ProcessDocument = function( document )
 {

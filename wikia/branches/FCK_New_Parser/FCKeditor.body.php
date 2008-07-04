@@ -107,9 +107,11 @@ class FCKeditor_MediaWiki
 			}
 		}
 		$FCKmode = $wgRequest->getVal ('FCKmode') ;
+		$old_content = $pageEditor->getWikiContent();
 		$wgOut->addHTML ("
 			<input type=\"hidden\" name=\"FCKmode\" id=\"FCKmode\" value=\"$FCKmode\" />
                 	<div id=\"FCKwarning\">" . wfMsg ('fck-noscript-warning') . "</div> 
+			<textarea id=\"wpTextbox1_Backup\" name=\"wpTextbox1_Backup\" style=\"display: none;\">$old_content</textarea>
 		") ;
 		                  	
 		return true;
@@ -374,7 +376,8 @@ mwSetupToolbar = function() { return false ; } ;
 
 function onLoadFCKeditor()
 {
-	if ( document.getElementById('wpTextbox1') )
+	var oldTextbox = document.getElementById('wpTextbox1') ;
+	if ( oldTextbox )
 	{
 		var height = $wgFCKEditorHeight ;
 		
@@ -399,6 +402,9 @@ function onLoadFCKeditor()
 		height = ( !height || height < 300 ) ? 300 : height ;
 		
 		// Create the editor instance and replace the textarea.
+	
+		// make a backup holder just in case...
+
 		var oFCKeditor = new FCKeditor('wpTextbox1') ;
 		oFCKeditor.BasePath = '$wgScriptPath/$wgFCKEditorDir/' ;
 		oFCKeditor.Config['CustomConfigurationsPath'] = '$wgScriptPath/$wgFCKEditorExtDir/fckeditor_config.js' ;
@@ -429,14 +435,34 @@ function onLoadFCKeditor()
 			if ('source' == document.getElementById ("FCKmode").value) {
 				FCKinstance.SwitchEditMode () ;
 			}
-			window.onbeforeunload = confirmExit ;
+
+			// check here if we had something... inedible
+			// and if so, fall back immediately to a normal editor...
 			var saveButton = document.getElementById ('wpSave') ;			
 			var previewButton = document.getElementById ('wpPreview') ;				
-			document.getElementById ('wpSummaryLabel').style.display = 'inline' ;
-			saveButton.parentNode.parentNode.style.display = 'inline' ;
-			
 			var diffButton = document.getElementById ('wpDiff') ;				
-			saveButton.onclick = previewButton.onclick = diffButton.onclick =  function () {needToConfirm = false ;} ;
+
+			if (FCKinstance.isInedible ()) {
+                                var fckIframe = document.getElementById ("wpTextbox1___Frame")  ;
+				if (fckIframe) {
+					fckIframe.parentNode.removeChild (fckIframe) ;
+
+                                	var normalArea = document.getElementById ("wpTextbox1")  ;
+					var backupArea = document.getElementById ("wpTextbox1_Backup") ;
+					normalArea.value = backupArea.value ;
+					backupArea.parentNode.removeChild (backupArea) ;
+					                              					
+                                	var normalToolbar = document.getElementById ("toolbar")  ;
+
+					normalArea.style.display = 'inline' ;
+					normalToolbar.style.display = 'block' ;
+				}
+			} else {
+				window.onbeforeunload = confirmExit ;
+				saveButton.onclick = previewButton.onclick = diffButton.onclick = function () {needToConfirm = false ;} ;
+			}
+			document.getElementById ('wpSummaryLabel').style.display = 'inline' ;
+			saveButton.parentNode.parentNode.style.display = 'inline' ;			
 		}
 
 		insertTags = function (tagOpen, tagClose, sampleText)
