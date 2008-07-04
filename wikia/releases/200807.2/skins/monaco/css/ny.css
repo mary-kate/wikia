@@ -5,11 +5,7 @@
 }
 
 #widget_sidebar {
-	z-index:5;
-}
-
-#navigation_widget {
-	z-index:20;
+	z-index:6;
 }
 
 /* LISTPAGES */
