@@ -142,6 +142,10 @@ sub vcl_fetch {
 	}
 
 	set obj.http.X-Cacheable = "YES";
+	# enforce 30 second cacheabilit
+	if ( obj.ttl < 30) {
+		obj.ttl = 30s;
+	}
 	set obj.grace = 10s;
 	insert;
 }
