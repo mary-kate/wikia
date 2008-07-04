@@ -51,8 +51,8 @@ class WidgetsSpecialPage extends SpecialPage
 		$this->setHeaders();
 		
 		// load extension JS/CSS
-		$wgOut->addScript('<link rel="stylesheet" type="text/css" href="'.$wgExtensionsPath.'/wikia/WidgetSpecialPage/WidgetsSpecialPage.css?'.$wgStyleVersion.'" />');
-		$wgOut->addScript('<script type="text/javascript" src="'.$wgExtensionsPath.'/wikia/WidgetSpecialPage/WidgetsSpecialPage.js?'.$wgStyleVersion.'"></script>');
+		$wgOut->addScript('<link rel="stylesheet" type="text/css" href="'.$wgExtensionsPath.'/wikia/WidgetSpecialPage/WidgetsSpecialPage.css?'.$wgStyleVersion.'" />' . "\n");
+		$wgOut->addScript('<script type="text/javascript" src="'.$wgExtensionsPath.'/wikia/WidgetSpecialPage/WidgetsSpecialPage.js?'.$wgStyleVersion.'"></script>' . "\n");
 		
 		// detect skin
 		$skinname = get_class($wgUser->getSkin());
@@ -88,10 +88,10 @@ class WidgetsSpecialPage extends SpecialPage
 		
 			$wgOut->addHTML('<dl>'."\n\t".
 				'<dt class="' . $widget .'Thumb">'.
-				'<div class="widgets_thumb '.$widget.'Thumb" title="'.htmlspecialchars($name).'"'.
+				($wgUser->isLoggedIn() ? '<div class="add" id="widgets_special_page-' . $widget . '-add"></div>' : '').
+				'<div class="widgetsThumb '.$widget.'Thumb" title="'.htmlspecialchars($name).'"'.
 				'>&nbsp;</div></dt>'."\n\t".
 				'<dd><h4>'.htmlspecialchars($name).
-				($wgUser->isLoggedIn() ? '<div class="add" id="widgets_special_page-' . $widget . '-add"></div>' : '').
 				'</h4><p>'.htmlspecialchars($desc).'</p></dd>'."\n".'</dl>'.
 				"\n\n");
 		}

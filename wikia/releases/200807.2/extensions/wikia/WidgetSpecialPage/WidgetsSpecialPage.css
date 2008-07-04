@@ -1,4 +1,3 @@
-/* Special:Widgets */
 #widgetsSpecialPageList dl
 {
 	margin: 8px 5px;
@@ -10,10 +9,8 @@
 {
 	float: left;
 	background-image: none;
-}
-
-#widgetsSpecialPageList .widget_thumb
-{
+	position: relative;
+	display: block;
 	width: 50px;
 	height: 50px;
 }
@@ -37,18 +34,13 @@
 	clear: left;
 }
 
-#widgetsSpecialPageList dl .widgets_thumb
+#widgetsSpecialPageList dl dt .widgetsThumb
 {
-    height: 50px;
-    width: 50px;
+	height: 50px;
+	width: 50px;
 }
 
-#widgetsSpecialPageList dd h4
-{
-    position: relative;
-}
-
-#widgetsSpecialPageList dd h4 .add
+#widgetsSpecialPageList div.add
 {
 	background-image: url(http://images.wikia.com/skins/monaco/images/sprite.png);
 	clip: rect(0px 272px 16px 256px);
@@ -56,30 +48,12 @@
 	display: block;
 	height: 16px;
 	position: absolute;
-	top: 41px;
-	left: -284px;
+	right: -55px;
+	top: 42px;
 	width: 320px;
 	z-index: 100;
-}
-
-/* blocked widgets thumbs and descriptions */
-#widgetsSpecialPageList dl.blocked dt div
-{
-	opacity: 0.3;
-	cursor: default;
-}
-
-#widgetsSpecialPageList dl.blocked dd p
-{
-	color: #888888;
-}
-
-#widgetsSpecialPageList dl.blocked dd h4
-{
-	color: #aaaaaa !important;
 }
 
 #widgets-info {
 	margin: 25px 5px;
 }
-
