@@ -1,0 +1,286 @@
+#!/usr/bin/perl -T
+
+# varnishhtpcd      Translates multicast htcp to varnish local http purge
+#
+# chkconfig: - 90 10
+# description: HTCP2Varnish purger
+
+
+
+use strict;
+use URI;
+use warnings;
+use IO::Socket::INET;
+use Socket;
+use LWP;
+use Sys::Syslog qw(:DEFAULT setlogsock :macros);
+use Data::Dumper qw(Dumper);
+use Carp::Heavy;
+setlogsock('unix') || die "$!";;
+my @arguments = @ARGV;
+my $ip_add_membership;
+if($^O eq 'linux') {
+    $ip_add_membership = 35;
+} else {
+    die "no constants for non linux platforms";
+}
+
+use Getopt::Long;
+my %config = (
+              foreground => 0,
+              port    => 4827,
+              address => '224.0.0.85',
+              cache   => '127.0.0.1',
+              syslog   => 1,
+              debug    => 0,
+              name     => 'varnishhtcpd',
+              pidfile  => '',
+              loglevel => 1,
+              );
+
+my $uid = getpwnam('nobody');
+my $gid = getpwnam('nobody');
+
+my $results = GetOptions("foreground" => \$config{foreground},
+                         "port=i"     => \$config{port},
+                         "address=s"  => \$config{address},
+                         "cache=s"    => \$config{cache},
+                         "syslog"     => \$config{syslog},
+                         "debug"      => \$config{debug},
+                         "name=s"     => \$config{name},
+                         "pidfile=s"  => \$config{pidfile},
+                         "logleve=i"  => \$config{loglevel},
+                         );
+
+my $command = shift || 'start';
+$config{pidfile} = "/var/run/$config{name}.pid" unless $config{pidfile};
+$config{foreground} = 1 if($config{debug});
+
+if($command eq 'restart') {
+    openlog("$config{name}", 'ndelay,pid', LOG_DAEMON) if($config{syslog});
+    # we don't do anything on restart
+    stop();
+    closelog();
+    $command = 'start';
+}
+
+if($command eq 'status') {
+    if(my $pid = get_pid()) {
+        print "$config{name} is running on $pid\n";
+        exit 0;
+    } else {
+        print "$config{name} is not running\n";
+        exit 1;
+    }
+}
+if($command eq 'start') {
+    if(my $pid = get_pid()) {
+        #already running just return
+        openlog("$config{name}", 'ndelay,pid', LOG_DAEMON) if($config{syslog});
+        mylog(0, 'info', "exiting - process already running on $pid");
+        print STDERR "exiting - process already running on $pid\n";
+        exit 1;
+    }
+}
+
+if($command eq 'stop') {
+    openlog("$config{name}", 'ndelay,pid', LOG_DAEMON) if($config{syslog});
+    if(stop()) {
+        exit 0;
+    } else {
+        # no running
+        mylog(0, 'info', "failed to stop daemon - cannot find process");
+        print STDERR "$config{name} failed to stop daemon - cannot find process\n";
+        exit 1;
+    }
+}
+
+sub stop {
+    if(my $pid = get_pid()) {
+        while(check_pid($pid)) {
+            kill(2, $pid);
+            mylog(0, 'info', "sent SIGINT - waiting on stopped pid $pid");
+            print STDERR "sent SIGINT - waiting on stopped pid $pid\n";
+            sleep 1;
+        }
+        mylog(0, 'info',"Stopped $config{name} on $pid");
+        print STDERR "$config{name} stopped on $pid\n";
+        return $pid;
+    }
+    return 0;
+}
+
+sub get_pid {
+   if(-r $config{pidfile}) {
+        open(my $pidfile, "<$config{pidfile}") || die;
+        my $line = <$pidfile>;
+        close($pidfile);
+        $line =~/(\d+)/;
+        if(my $pid_to_check = $1) {
+            $ENV{PATH} = '';
+            return $pid_to_check if(check_pid($pid_to_check));
+        }
+    }
+   return 0;
+}
+
+sub check_pid {
+    my $pid = shift;
+    return !system("/bin/ps aux | /bin/grep $pid | /bin/grep -v grep | /bin/grep $config{name}");
+}
+
+
+daemonize() unless $config{foreground};
+
+{
+    if(my $pid = fork()) {
+
+        # this is the master session
+        # it makes sure to cleanup from the slave
+        # it stays as superuser
+
+        open(my $pidfile, "+>$config{pidfile}") || die;
+        openlog("$config{name}", 'ndelay,pid', LOG_DAEMON) if($config{syslog});
+        mylog(1, 'info', "started master session - child is $pid") || die "$!";
+        select($pidfile); $|++; select(STDOUT);
+        print $pidfile "$$";
+        $SIG{INT} = sub { kill(2,$pid) };
+        $0 = "$config{name} - waiting for child $pid"; 
+        waitpid($pid, 0);
+        mylog(1, 'info', "exiting master session - child is $pid") || die "$!";
+        unlink("/tmp/varnishhtcpd.$pid/etc/protocols") || die;
+        rmdir("/tmp/varnishhtcpd.$pid/etc/") || die;
+        rmdir("/tmp/varnishhtcpd.$pid/") || die;
+        unlink($config{pidfile}) || die $!;
+        exit;
+    }
+
+    openlog("$config{name} worker", 'ndelay,pid', LOG_DAEMON) if($config{syslog});
+    mylog(1, 'info', "started session - ready to listen on $config{address}:$config{port} purging to $config{cache}");
+    $0 = "$config{name} worker - starting up";
+
+}
+
+
+
+my $listen = IO::Socket::INET->new(
+                                   LocalPort => $config{port},
+                                   Type      => SOCK_DGRAM,
+                                   Proto     => 'udp',
+                                   ) || die;
+
+setsockopt($listen, 0, $ip_add_membership,,
+           pack("a4 a4", inet_aton("$config{address}"), inet_aton("0.0.0.0")))
+    || die "IP_ADD_MEMBERSHIP: $!"; 
+
+
+my $ua = LWP::UserAgent->new(keep_alive => 1);
+$ua->agent("HTCP Purger");
+$ua->proxy('http', "http://127.0.0.1:80/");
+my $req = HTTP::Request->new(PURGE => "http://$config{cache}/lvscheck.html");
+my $res = $ua->request($req);
+if($res->code != 200) {
+    die "FAILED @{[$res->status_line]}\n";    
+}
+
+# these are just so those functions are autoloaded
+$res->status_line;
+$res->is_success;
+$res->is_error;
+
+
+{
+    mkdir ("/tmp/varnishhtcpd.$$") || die;
+    chown($uid,$gid, "/tmp/varnishhtcpd.$$") || die;
+    chroot("/tmp/varnishhtcpd.$$") || die;
+    chdir("/");
+    drop_privs();
+    mkdir ("/etc") || die;
+    open(my $protocol, "+>/etc/protocols") || die;
+    print $protocol "tcp     6       TCP\n";
+    close($protocol);
+}
+
+while(1) {
+  my $raw;
+  my ($len, $datalen, $op, $id, $specifier,$extra);
+  my ($method, $url, $version, $nr3);
+  eval {
+    $0 = "$config{name} worker - waiting for net";
+    (my $peer = recv($listen, $raw, 512, 0)) || die "recv: $!";
+    my ($port, $addr) = sockaddr_in($peer);
+    
+    # reverse engineered from mediawiki SquidUpdate.php
+    
+    ($len, $datalen, $op, $id, $specifier,$extra) = unpack("nxxnCxNxxa*n", $raw);
+    
+    ($method, $url, $version, $nr3) = unpack("n/an/an/an", $specifier); 
+    
+    $0 = "$config{name} worker - purging $url";
+ #   return  unless($url =~/communitytest.wikia.com/);
+    print "Got [[[$url]]] from " . inet_ntoa($addr) . ":$port\n";
+    my $uri = URI->new($url);
+#    warn "$url";
+#    warn $uri->path_query;
+#    warn $uri->host;
+ 
+    my $req = HTTP::Request->new(PURGE => "$url");
+    $req->header("Accept-Encoding" => 'gzip');
+    my $res = $ua->request($req);
+    if($res->is_success()) {
+	warn "PURGED";
+    } else {
+	warn "FAILED @{[$res->status_line]}\n";
+    }
+
+  };
+  if($@) {
+    no warnings;
+    warn "$@\n";
+    warn "$len, $datalen, $op, $id, $specifier,$extra\n";
+    warn "$method, $url, $version, $nr3\n";
+    mylog(1, 'alert', "$@");
+    mylog(1, 'alert', "$len, $datalen, $op, $id, $specifier,$extra");
+    mylog(1, 'alert', "$method, $url, $version, $nr3");
+  }
+}
+
+exit;
+
+sub daemonize {
+  use POSIX qw(setsid);
+  defined(my $pid = fork) || die "Can't fork: $!";
+  if ($pid) {
+    print "$config{name} started on $pid\n";
+    exit 0;
+  }
+  setsid() || die "Can't start a new session: $!";
+  open (STDIN , '/dev/null') || die "Can't read /dev/null: $!";
+  open (STDOUT, '>/dev/null') || die "Can't write to /dev/null: $!";
+  open (STDERR, '>/dev/null') || die "Can't write to /dev/null: $!";
+
+}
+
+sub mylog {
+  my ($level, $prio, $msg) = @_;
+  return 1 if ($level > $config{loglevel});
+  if ($config{syslog}) {
+    syslog($prio, $msg) || die "$!";
+  } else {
+    print STDERR "$prio - $msg\n";
+  }
+}
+    
+
+
+
+sub drop_privs {
+  # drop user to nobody
+  $< = $uid;
+  $> = $uid;
+  # drop group to nobody
+  $( = $gid;
+  $) = $gid;
+}
+
+1;
