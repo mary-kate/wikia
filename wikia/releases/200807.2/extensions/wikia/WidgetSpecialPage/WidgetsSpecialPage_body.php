@@ -85,11 +85,13 @@ class WidgetsSpecialPage extends SpecialPage
 			
 			$name = isset($data['title'][$langCode]) ? $data['title'][$langCode] : $data['title']['en'];
 			$desc = isset($data['desc'][$langCode])  ? $data['desc'][$langCode]  : $data['desc']['en'];
+
+			$thumbClass = $widget . 'Thumb';
 		
 			$wgOut->addHTML('<dl>'."\n\t".
-				'<dt class="' . $widget .'Thumb">'.
+				'<dt class="' . ($skinname == 'SkinMonaco' ? $thumbClass : '') . '">'.
 				($wgUser->isLoggedIn() ? '<div class="add" id="widgets_special_page-' . $widget . '-add"></div>' : '').
-				'<div class="widgetsThumb '.$widget.'Thumb" title="'.htmlspecialchars($name).'"'.
+				'<div class="widgetsThumb ' . ($skinname == 'SkinQuartz' ? $thumbClass : '')  .'" title="'.htmlspecialchars($name).'"'.
 				'>&nbsp;</div></dt>'."\n\t".
 				'<dd><h4>'.htmlspecialchars($name).
 				'</h4><p>'.htmlspecialchars($desc).'</p></dd>'."\n".'</dl>'.
