@@ -68,11 +68,13 @@ function wfGetRelationshipsJSON($user_name="", $rel_type=1, $page=1, $callback="
 			*/
 			
 			$rel = new UserRelationship($user_name);
-			
+			$awaiting_requests = array();
 			$p = new ProfilePrivacy();
 			if( $rel->user_id != $wgUser->getID() ){
 				//SET UP PRIVACY
-				$p->loadPrivacyForUser( $user_name );	
+				$p->loadPrivacyForUser( $user_name );
+				$this_rel = new UserRelationship($wgUser->getName());
+				$awaiting_requests = $this_rel->getAwaitingRequests();
 			}
 			
 			if( $p->getPrivacyCheckForUser("VIEW_FULL") && $p->getPrivacyCheckForUser("VIEW_FRIENDS") ){
@@ -128,7 +130,8 @@ function wfGetRelationshipsJSON($user_name="", $rel_type=1, $page=1, $callback="
 					
 					$indivRelationship = UserRelationship::getUserRelationshipByID($relationship["user_id"],$wgUser->getID());
 				
-				
+					$relationship["awaiting_request"] = in_array( $relationship["user_id"], $awaiting_requests );
+						
 					//safetitles
 					$user =  Title::makeTitle(NS_USER, $relationship["user_name"]);
 					$add_relationship_link = Title::makeTitle(NS_SPECIAL,"AddRelationship");
@@ -862,6 +865,10 @@ function wfRelationshipRequestResponseJSON($response, $request_id, $callback="ha
 		$user_id_from = User::idFromName($user_name_from);
 		$rel_type = strtolower($request[0]["type"]);
 		
+		global $wgMemc;
+		$key = wfMemcKey( 'user_relationship', 'awaitingrequests', $user_id_from );
+		$wgMemc->delete( $key );
+		
 		$rel->updateRelationshipRequestStatus($request_id,$response);
 	
 		$p = new ProfilePhoto( $user_id_from );
@@ -1074,9 +1081,15 @@ function wfGetPeopleYouMayKnowJSON($callback="showPeople"  ){
 				$may_know_hide = $data;
 			}
 			
+			
+			
 			//Get your 20 random friends
 			$rel = new UserRelationship($wgUser->getName());
-			$friends = $rel->getRandomRelationships( 20 );
+			//$friends = $rel->getRandomRelationships( 50 );
+			$friends = $rel->getAllRelationships();
+			
+			//get your list of requests you sent and are pending
+			$awaiting_requests = $rel->getAwaitingRequests();
 			
 			$all_friends = $rel->getAllRelationships();
 			$all_friends[ $wgUser->getID() ] = array();
@@ -1099,6 +1112,8 @@ function wfGetPeopleYouMayKnowJSON($callback="showPeople"  ){
 						
 						if( in_array( $friend["user_id"] , $may_know_hide ) ) continue;
 						
+						$friend["awaiting_request"]= in_array( $friend["user_id"] , $awaiting_requests );
+						
 						if( !array_key_exists( $friend["user_id"], $may_know_bucket ) ){
 							$user =  Title::makeTitle( NS_USER  , $friend["user_name"]  );
 							$p = new ProfilePhoto( $friend["user_id"] );
@@ -1114,12 +1129,21 @@ function wfGetPeopleYouMayKnowJSON($callback="showPeople"  ){
 					}
 				}
 			}
-		
+			//go through each person and set mutual count
+			foreach( $friends_full as &$person ){
+				$person["mutual_count"] = $may_know_bucket[ $person["user_id"] ];
+			}
+			
+			usort($friends_full, "wfSortPeopleYouMayKnow");
+			
 			$count= 25;
 			if( $count > count( $friends_full ) ){
 				$count = count( $friends_full );
 			}
 			
+			$you_may_know_randomized = array_slice( $friends_full, 0, $count, true );
+			
+			/*
 			$rel_randomized_keys = array_rand( $friends_full, $count );
 			if( $count == 1 ){ //if one array_rand just returns index
 				$you_may_know_randomized[] = $friends_full[$rel_randomized_keys];
@@ -1129,14 +1153,22 @@ function wfGetPeopleYouMayKnowJSON($callback="showPeople"  ){
 					$you_may_know_randomized[] = $friends_full[ $random ];
 				}
 			}
-					
-
+			*/		
+			
 			$rel_JSON_array["count"] = count($you_may_know_randomized);
 			$rel_JSON_array["rel"] = $you_may_know_randomized;
 			return "var json_rel=" . jsonify($rel_JSON_array) . ";\n\n{$callback}(json_rel);";
 
 }
 
+function wfSortPeopleYouMayKnow($x, $y){
+	if ( $x["mutual_count"] > $y["mutual_count"] ){
+		return -1;
+	}else{
+		return 1;
+	}
+}
+	
 $wgAjaxExportList [] = 'wfPeopleYouMayKnowHideJSON';
 function wfPeopleYouMayKnowHideJSON($user_id = 0, $callback="handle_hide"){
 	global $wgUser, $wgMemc;
