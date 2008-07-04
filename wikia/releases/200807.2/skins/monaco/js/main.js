@@ -244,199 +244,111 @@ function editorAnimate(editorModeRequest) {
 		editorMode = 'wide';
 	}
 }
-
 //Skin Navigation
 var m_timer;
 var displayed_menus = new Array();
 var last_displayed = '';
 var last_over = '';
-
 function menuItemAction(e) {
 	clearTimeout(m_timer);
-
 	if (!e) var e = window.event;
 	e.cancelBubble = true;
 	if (e.stopPropagation) e.stopPropagation();
-
 	var source_id = '*';
 	try {source_id = e.target.id;}
 	catch (ex) {source_id = e.srcElement.id}
-
 	if (source_id.indexOf("a-") == 0) {
 		source_id = source_id.substr(2);
 	}
-
 	if (source_id && menuitem_array[source_id]) {
-		//if ($(last_over)) $(last_over).style.backgroundColor="#FFF";
 		if ($(last_over)) YAHOO.util.Dom.removeClass(last_over, "navigation-hover");
 		last_over = source_id;
-		//$(source_id).style.backgroundColor="#FFFCA9";
 		YAHOO.util.Dom.addClass(source_id, "navigation-hover");
-		check_item_in_array(menuitem_array[source_id]);
+		check_item_in_array(menuitem_array[source_id], source_id);
 	}
 }
-
-function check_item_in_array(item) {
+function check_item_in_array(item, source_id) {
 	clearTimeout(m_timer);
 	var sub_menu_item = 'sub-menu' + item;
-
 	if (last_displayed == '' || ((sub_menu_item.indexOf(last_displayed) != -1) && (sub_menu_item != last_displayed))) {
-		do_menuItemAction(item);
-	}
-	else {
+		do_menuItemAction(item, source_id);
+	} else {
 		var exit = false;
 		count = 0;
 		var the_last_displayed;
 		while( !exit && displayed_menus.length > 0 ) {
 			the_last_displayed = displayed_menus.pop();
-			if ((sub_menu_item.indexOf(the_last_displayed) == -1)) {
-				doClear(the_last_displayed, '');
+			if ((sub_menu_item.indexOf(the_last_displayed.item) == -1)) {
+				doClear(the_last_displayed.item, '');
+				YAHOO.util.Dom.removeClass(the_last_displayed.source, "navigation-hover");
 			}
 			else {
 				displayed_menus.push(the_last_displayed);
 				exit = true;
-				do_menuItemAction(item);
+				//do_menuItemAction(item, source_id);
 			}
-
 			count++;
 		}
-
-		do_menuItemAction(item);
+		do_menuItemAction(item, source_id);
 	}
 }
-
-function do_menuItemAction(item) {
+function do_menuItemAction(item, source_id) {
 	if ($('sub-menu'+item)) {
 		$('sub-menu'+item).style.display="block";
-		displayed_menus.push('sub-menu'+item);
+		YAHOO.util.Dom.addClass(source_id, "navigation-hover");
+		displayed_menus.push({"item":'sub-menu'+item,"source":source_id});
 		last_displayed = 'sub-menu'+item;
-		//YAHOO.util.Dom.addClass('sub-menu-item'+item, "navigation-hover");
 	}
-
 }
-
 function sub_menuItemAction(e) {
 	clearTimeout(m_timer);
-
 	if (!e) var e = window.event;
 	e.cancelBubble = true;
 	if (e.stopPropagation) e.stopPropagation();
-
 	var source_id = '*';
 	try {source_id = e.target.id;}
 	catch (ex) {source_id = e.srcElement.id}
-
 	if (source_id.indexOf("a-") == 0) {
 		source_id = source_id.substr(2);
 	}
-
 	if (source_id && submenuitem_array[source_id]) {
-
-		check_item_in_array(submenuitem_array[source_id]);
-
-		if (source_id.indexOf("_")) {
-
-			if (source_id.indexOf("_", source_id.indexOf("_"))) {
-				var second_start = source_id.substr(4 + source_id.indexOf("_")-1);
-				var second_uscore = second_start.indexOf("_");
-				try {
-					var source_id = source_id.substr(4,source_id.indexOf("_")+second_uscore-1);
-					if (menuitem_array[source_id]) {
-						//$(source_id).style.backgroundColor="#FFFCA9";
-						YAHOO.util.Dom.addClass(source_id, "navigation-hover");
-					}
-
-				}
-				catch (ex) {}
-			}
-			else {
-				var source_id = source_id.substr(4);
-				if (menuitem_array[source_id]) {
-					//$(source_id).style.backgroundColor="#FFFCA9";
-					YAHOO.util.Dom.addClass(source_id, "navigation-hover");
-				}
-			}
+		check_item_in_array(submenuitem_array[source_id], source_id);
+		for (var i=0; i<displayed_menus.length; i++) {
+			YAHOO.util.Dom.addClass(displayed_menus[i].source, "navigation-hover");
 		}
-
 	}
-
 }
-
 function clearBackground(e) {
-
-
 	if (!e) var e = window.event;
 	e.cancelBubble = true;
 	if (e.stopPropagation) e.stopPropagation();
-
 	var source_id = '*';
 	try {source_id = e.target.id;}
 	catch (ex) {source_id = e.srcElement.id}
-
-
+	var source_id = (source_id.indexOf("a-") == 0) ? source_id.substr(2) : source_id;
 	if (source_id && $(source_id) && menuitem_array[source_id]) {
-		//$(source_id).style.backgroundColor="#FFF";
 		YAHOO.util.Dom.removeClass(source_id, "navigation-hover");
 		clearMenu(e);
 	}
-
 }
-
-function resetMenuBackground(e) {
-
-	if (!e) var e = window.event;
-	e.cancelBubble = true;
-	if (e.stopPropagation) e.stopPropagation();
-
-	var source_id = '*';
-	try {source_id = e.target.id;}
-	catch (ex) {source_id = e.srcElement.id}
-
-	source_id = source_id.substr(2);
-
-	//$(source_id).style.backgroundColor="#FFFCA9";
-
-}
-
-
 function clearMenu(e) {
-
-	if (!e) var e = window.event;
-	e.cancelBubble = true;
-	if (e.stopPropagation) e.stopPropagation();
-
-	var source_id = '*';
-	try {source_id = e.target.id;}
-	catch (ex) {source_id = e.srcElement.id}
-		clearTimeout(m_timer);
-		m_timer = setTimeout(function() { doClearAll(); }, 300);
-
+	clearTimeout(m_timer);
+	m_timer = setTimeout(function() { doClearAll(); }, 300);
 }
 function doClear(item, type) {
-
 	if ($(type+item)) {
 		$(type+item).style.display="none";
 	}
-
 }
-
-
 function doClearAll() {
-	//if (displayed_menus.length && $("menu-item" + displayed_menus[0].substr(displayed_menus[0].indexOf("_")))) $("menu-item" + displayed_menus[0].substr(displayed_menus[0].indexOf("_"))).style.backgroundColor="#FFF";
-	if (displayed_menus.length && $("menu-item" + displayed_menus[0].substr(displayed_menus[0].indexOf("_")))) YAHOO.util.Dom.removeClass("menu-item" + displayed_menus[0].substr(displayed_menus[0].indexOf("_")), "navigation-hover");;
 	var the_last_displayed;
-	var exit = false;
-	while( !exit && displayed_menus.length > 0 ) {
+	while( displayed_menus.length > 0 ) {
 		the_last_displayed = displayed_menus.pop();
-
-		doClear(the_last_displayed, '');
-
+		doClear(the_last_displayed.item, '');
+		YAHOO.util.Dom.removeClass(the_last_displayed.source, "navigation-hover");
 	}
-
-		last_displayed = '';
-
+	last_displayed = '';
 }
-
 /**
  * Automatic color detection for Google AdSense
  * @author Inez Korczynski
