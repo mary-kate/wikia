@@ -20,7 +20,3 @@ body.rtl #articleFooter .actions li div {
 body.rtl #articleFooter .actions li div a {
 	direction: rtl;
 }
-
-body.rtl #articleFooter ul.actions li div {
-	margin: 0 20px 0 0;
-}
