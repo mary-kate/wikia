@@ -78,18 +78,19 @@ body {
 }
 
 #articleFooter ul.actions li div {
-	margin: 0 20px 0 0;
+	margin-right: 20px;
 }
 #articleFooter td.col2 {
 	border-left: 0;
 	border-right: 1px dashed #CCC;
 }
-#articleFooter h1 {
+#articleFooter strong {
 	float: right;
 	margin: 0 0 0 10px;
 }
 #share {
 	float: right;
+	top: 3px;
 }
 #shareDelicious {
 	left: auto;
@@ -131,8 +132,18 @@ body {
 	left: auto;
 	right: -112px;
 }
+#fe_permalink_icon {
+	left: auto;
+	right: -272px;
+}
+#fe_talk,
+#fe_permalink {
+	float: right;
+}
 ul.star-rating {
 	float: right;
+	direction: ltr;
+	top: 2px;
 }
 #unrateLink {
 	float: right;
