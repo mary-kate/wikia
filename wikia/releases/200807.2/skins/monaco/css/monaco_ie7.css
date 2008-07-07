@@ -1,0 +1,22 @@
+/* RTL fixes */
+body.rtl #articleFooter .actions li,
+body.rtl #articleFooter .actions li div a {
+	position: relative;
+}
+
+body.rtl #fe_talk,
+body.rtl #fe_permalink {
+	width: 40%;
+	position: relative;
+	right: -6px;
+}
+
+body.rtl #fe_talk div a,
+body.rtl #fe_permalink div a {
+	position: relative;
+	margin-right: 6px;
+}
+
+body.rtl #articleFooter ul.actions li div {
+	margin: 0 20px 0 0;
+}
