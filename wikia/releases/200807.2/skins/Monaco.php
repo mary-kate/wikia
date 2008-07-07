@@ -1624,9 +1624,11 @@ if($wgAdServingType === 1) {
 		else { return 100; }
 	}
 	uasort($adsDisplayed, "cmpAds");
+	echo '<div id="realAdsContainer">';
 	foreach($adsDisplayed as $adSpace => $ad) {
 ?><div id="realAd<?= $adSpace ?>" style="visibility: hidden"><script type="text/javascript">ad_call(<?= $adSpace ?>, '<?= $ad[0] ?>', '<?= $ad[1] ?>');</script></div><script type="text/javascript">if(curAdSpaceId != -1) { TieDivLib.tie("realAd<?= $adSpace ?>", "adSpace"+curAdSpaceId); }</script><?php
 	}
+	echo '</div>';
 }
 echo AdServer::getInstance()->getAd('js_bot2');
 echo AdServer::getInstance()->getAd('js_bot3');
