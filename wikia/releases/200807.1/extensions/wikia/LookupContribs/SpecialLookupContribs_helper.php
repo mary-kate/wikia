@@ -16,8 +16,7 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 class LookupContribsCore {
     var $mUsername, $mNumRecords;
 
-    public function __construct($username)
-    {
+    public function __construct($username) {
         $this->mUsername = $username;
     }
     
@@ -110,10 +109,10 @@ class LookupContribsCore {
 		if (!is_array ($cached) || LOOKUPCONTRIBS_NO_CACHE) { 
 			$dbs =& wfGetDBStats();
 			if (!is_null($dbs)) {
-				$query = "select ca_wikis_activity from `{$wgDBStats}`.`city_user_activity` where ca_user_text = {$dbs->addQuotes($username)}";
+				$query = "select ca_latest_activity from `{$wgDBStats}`.`city_user_activity` where ca_user_text = {$dbs->addQuotes($username)}";
 				$res = $dbs->query ($query);
 				if ($row = $dbs->fetchObject($res)) {
-					$userActivity = $row->ca_wikis_activity;
+					$userActivity = $row->ca_latest_activity;
 				}
 				$dbs->freeResult($res);
 				if (!LOOKUPCONTRIBS_NO_CACHE) {
