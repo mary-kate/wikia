@@ -634,6 +634,8 @@ class SkinMonaco extends SkinTemplate {
 		}
 
 		$css[] = array('url' => $wgStylePath.'/monaco/css/monaco_ltie7.css?'.$wgStyleVersion, 'cond' => 'if lt IE 7');
+		$css[] = array('url' => $wgStylePath.'/monaco/css/monaco_ie7.css?'.$wgStyleVersion, 'cond' => 'if IE 7');
+
 		$css[] = array('url' => $wgStylePath.'/common/commonPrint.css?'.$wgStyleVersion, 'param' => empty($tpl->data['printable']) ? 'media="print" ' : '');
 		$css[] = array('url' => $wgStylePath.'/monaco/css/print.css?'.$wgStyleVersion, 'param' => empty($tpl->data['printable']) ? 'media="print" ' : '');
 		// CSS - end
