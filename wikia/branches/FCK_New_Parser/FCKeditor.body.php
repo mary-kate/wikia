@@ -468,10 +468,11 @@ function onLoadFCKeditor()
 		insertTags = function (tagOpen, tagClose, sampleText)
 		{
 			var txtarea;
-
+			var isFCK = false ;
 			if ( !(typeof(FCK) == "undefined") && !(typeof(FCK.EditingArea) == "undefined") )
 			{
 				txtarea = FCK.EditingArea.Textarea ;
+				isFCK = true ;
 			}
 			else if (document.editform)
 			{
@@ -482,6 +483,7 @@ function onLoadFCKeditor()
 					SRCiframe = document.getElementById ('wpTextbox1___Frame') ;
 					if ( SRCiframe )
 					{
+						isFCK = true ;
 						if (window.frames["wpTextbox1___Frame"])
 							SRCdoc = window.frames["wpTextbox1___Frame"].document ;
 						else
@@ -516,16 +518,20 @@ function onLoadFCKeditor()
 
 			if ( document.selection  && document.selection.createRange ) 
 			{ // IE/Opera
-
+				if (isFCK) {				
+					var inDocument = window.frames["wpTextbox1___Frame"].document ;
+				} else {
+					var inDocument = document ;
+				}
 				//save window scroll position
-				if ( document.documentElement && document.documentElement.scrollTop )
-					var winScroll = document.documentElement.scrollTop ;
+				if ( inDocument.documentElement && inDocument.documentElement.scrollTop )
+					var winScroll = inDocument.documentElement.scrollTop ;
 				else if ( document.body )
-					var winScroll = document.body.scrollTop ;
+					var winScroll = inDocument.body.scrollTop ;
 
 				//get current selection
 				txtarea.focus() ;
-				var range = document.selection.createRange() ;
+				var range = inDocument.selection.createRange() ;
 				selText = range.text ;
 				//insert tags
 				if (!selText) {
@@ -547,10 +553,10 @@ function onLoadFCKeditor()
 				}
 				range.select();
 				//restore window scroll position
-				if ( document.documentElement && document.documentElement.scrollTop )
-					document.documentElement.scrollTop = winScroll ;
+				if ( inDocument.documentElement && inDocument.documentElement.scrollTop )
+					inDocument.documentElement.scrollTop = winScroll ;
 				else if ( document.body )
-					document.body.scrollTop = winScroll ;
+					inDocument.body.scrollTop = winScroll ;
 
 			} 
 			else if ( txtarea.selectionStart || txtarea.selectionStart == '0' ) 
