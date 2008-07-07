@@ -470,6 +470,8 @@ TieDivLib = new function() {
 			$(source).style.zIndex = 4;
 		} else if(YAHOO.util.Dom.hasClass($(target).parentNode.parentNode, 'WidgetAdvertiser')) {
 			$(source).style.zIndex = 6;
+		} else if($(target).parentNode.parentNode.id == 'widget_sidebar') {
+			$(source).style.zIndex = 6;
 		} else {
 			$(source).style.zIndex = 5;
 		}
