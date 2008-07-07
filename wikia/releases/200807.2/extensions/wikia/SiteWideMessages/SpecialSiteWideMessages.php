@@ -57,9 +57,18 @@ function SiteWideMessagesInit() {
 		$wgHooks['UserRetrieveNewTalks'][] = 'SiteWideMessagesUserNewTalks';
 		$wgHooks['OutputPageParserOutput'][] = 'SiteWideMessagesGetUserMessages';
 		$wgHooks['EditPage::showEditForm:initial'][] = 'SiteWideMessagesArticleEditor';
+		$wgHooks['AbortDiffCache'][] = 'SiteWideMessagesAbortDiffCache';
 	}
 }
 
+/**
+ * Used to cancel cashing diff when user has some messages - important security issue
+ *
+ */
+function SiteWideMessagesAbortDiffCache($oDiffEngine) {
+	$msgContent = SiteWideMessagesGetUserMessagesContent(false, false, true, false);
+	return !(wfIsTalkPageForCurrentUserDisplayed() && $msgContent != '');
+}
 
 /**
  * Load JS/CSS for extension

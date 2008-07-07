@@ -470,7 +470,9 @@ CONTROL;
 		
 		// Save to cache for 7 days
 		// Only do this for public revs, otherwise an admin can view the diff and a non-admin can nab it!
-		if ( $this->mOldRev && $this->mOldRev->isDeleted(Revision::DELETED_TEXT) ) {
+		if ( !wfRunHooks('AbortDiffCache', array(&$this))) {
+			wfIncrStats( 'diff_uncacheable' );
+		} else if ( $this->mOldRev && $this->mOldRev->isDeleted(Revision::DELETED_TEXT) ) {
 			wfIncrStats( 'diff_uncacheable' );
 		} else if ( $this->mNewRev && $this->mNewRev->isDeleted(Revision::DELETED_TEXT) ) {
 			wfIncrStats( 'diff_uncacheable' );
