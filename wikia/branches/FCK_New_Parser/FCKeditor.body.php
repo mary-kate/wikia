@@ -110,7 +110,7 @@ class FCKeditor_MediaWiki
 		$old_content = $pageEditor->getWikiContent();
 		$wgOut->addHTML ("
 			<input type=\"hidden\" name=\"FCKmode\" id=\"FCKmode\" value=\"$FCKmode\" />
-                	<div id=\"FCKwarning\">" . wfMsg ('fck-noscript-warning') . "</div> 
+                	<div id=\"FCKwarning\" style=\"display: none\">" . wfMsg ('fck-noscript-warning') . "</div> 
 			<textarea id=\"wpTextbox1_Backup\" name=\"wpTextbox1_Backup\" style=\"display: none;\">$old_content</textarea>
 		") ;
 		                  	
@@ -307,14 +307,14 @@ class FCKeditor_MediaWiki
 					display: none ;
 				}
 				#FCKwarning {
-					display: none ;
+					display: none !important;
 					font-weight: bold ;					
 				}
 			</style>
 			<noscript>
 			<style type=\"text/css\">
 				#FCKwarning {
-				display: block ;
+				display: block !important;
 				}
 			</style>
 			</noscript>				
