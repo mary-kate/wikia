@@ -445,3 +445,7 @@ div.widget_cockpit_controls {
 .WidgetRelatedCommunitiesThumb div {
 	background-image: url(../../common/widgets/icons/widget_related_communities.png);
 }
+.WidgetBookmarkThumb div {
+        background-image: url(../../common/widgets/icons/widget_bookmark.png);
+}
+
