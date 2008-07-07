@@ -555,9 +555,5 @@ function ad_call(adSpaceId, zoneId, pos) {
 
 		document.write('</scr'+'ipt>');
 		document.write('<scr'+'ipt type="text/javascript" src="'+base_url+'"></scr'+'ipt>');
-
-		document.write('<scr'+'ipt type="text/javascript">');
-		document.write('if(curAdSpaceId != -1) { TieDivLib.tie("realAd'+adSpaceId+'", "adSpace"+curAdSpaceId); }');
-		document.write('</scr'+'ipt>');
 	}
 }
