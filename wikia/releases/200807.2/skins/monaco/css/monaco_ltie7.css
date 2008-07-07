@@ -48,7 +48,6 @@ body.ns-0 #bodyContent table {
 #navigation .menu-item {
 	z-index: 20;
 	position: relative;
-	border: solid 1px red;
 }
 /* widget dashboard (#2397) */
 .widget_dashboard .sidebar,
