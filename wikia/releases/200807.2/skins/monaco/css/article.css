@@ -179,7 +179,7 @@
 #articleFooter img.sprite {
 	background: url(../images/sprite.png);
 	height: 16px;
-	margin-right: 16px;
+	margin: 0 16px;
 	position: absolute;
 	width: 320px;
 }
@@ -220,7 +220,7 @@
 }
 #fe_permalink {
 	float: left;
-	margin-left: 25px;
+	margin: 0 25px;
 	clear: none !important;
 }
 #share {
