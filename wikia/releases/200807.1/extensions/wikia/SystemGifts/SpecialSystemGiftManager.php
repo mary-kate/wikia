@@ -60,6 +60,7 @@ class SystemGiftManager extends SpecialPage {
 	}
 	
 	function displayGiftList(){
+		$output = "<div>";
 		$gifts = SystemGifts::getGiftList($per_page,$page);
 		if($gifts){
 			foreach ($gifts as $gift) {
