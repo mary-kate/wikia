@@ -1,6 +1,9 @@
 body {
 	direction: rtl;	
 }
+#wikia_page {
+	overflow: hidden;
+}
 .reset caption, .reset th {
 	text-align: right;
 }
