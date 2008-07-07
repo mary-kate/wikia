@@ -41,6 +41,15 @@ body.ns-0 #bodyContent table {
 	margin-left: -30%;
 }
 
+/* ads fix */
+#monaco_shrinkwrap_main,
+#navigation_widget,
+#navigation,
+#navigation .menu-item {
+	z-index: 20;
+	position: relative;
+	border: solid 1px red;
+}
 /* widget dashboard (#2397) */
 .widget_dashboard .sidebar,
 .widget_dashboard .widget,

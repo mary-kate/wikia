@@ -169,6 +169,7 @@
 	line-height: 1.5em;
 	padding: 2px 0;
 	position: relative;
+	clear: both;
 }
 #articleFooter ul.actions li div {
 	display: inline;
@@ -209,6 +210,18 @@
 #fe_report_icon {
 	clip: rect(0px 224px 16px 208px);
 	left: -208px;
+}
+#fe_permalink_icon {
+        clip: rect(0px 64px 16px 48px);
+        left: -48px;
+}
+#fe_talk {
+	float: left;
+}
+#fe_permalink {
+	float: left;
+	margin-left: 25px;
+	clear: none !important;
 }
 #share {
 	float: left;
