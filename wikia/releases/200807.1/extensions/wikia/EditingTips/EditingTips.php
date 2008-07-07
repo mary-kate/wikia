@@ -91,7 +91,7 @@ function AddEditingToggles($o) {
 	if(get_class($wgUser->getSkin()) == 'SkinMonaco') {
 		wfLoadExtensionMessages('EditingTips');
 		$wgHooks['EditPage::showEditForm:fields'][] = 'AddEditingTips';
-		$wgOut->addHtml('<div id="editingTipsToggleDiv" style="float: left; margin-top:20px">');
+		$wgOut->addHtml('<div id="editingTipsToggleDiv" style="clear:both; margin-top:20px">');
 		if(count(getEditingTips()) > 0) {
 			$wgOut->addHtml('<a href="" id="toggleEditingTips">'. (isEditingTipsEnabled() ? wfMsg ('editingtips_hide') : wfMsg ('editingtips_show') ).'</a> - ');
 		}
