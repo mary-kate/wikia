@@ -22,7 +22,7 @@ var WMU_orgThumbSize = null;
 if(skin == 'monaco') {
 	addOnloadHook(function () {
 		if(document.forms.editform) {
-			addButton(stylepath + '/../extensions/wikia/WikiaMiniUpload/images/button_wmu.png', 'Wikia Mini Upload', '', '', '', 'mw-editbutton-wmu');
+			addButton(stylepath + '/../extensions/wikia/WikiaMiniUpload/images/button_wmu.png', wmu_imagebutton, '', '', '', 'mw-editbutton-wmu');
 			WMU_addHandler();
 		}
 	});
