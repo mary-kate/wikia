@@ -457,9 +457,9 @@ TieDivLib = new function() {
 
 	var count = 0;
 
-	var adjustY = (YAHOO.env.ua.ie > 0) ? -2 : 0;
+	var adjustY = ((YAHOO.env.ua.ie > 0) ? 2 : 0) + YAHOO.util.Dom.getY('monaco_shrinkwrap_main');
 
-	var adjustX = (YAHOO.env.ua.ie > 0) ? -YAHOO.util.Dom.getX('wikia_header') : 0;
+	var adjustX = (YAHOO.env.ua.ie > 0) ? YAHOO.util.Dom.getX('wikia_header') : 0;
 
 	var inProcess = false;
 
@@ -484,8 +484,8 @@ TieDivLib = new function() {
 			inProcess = true;
 			for(i = 0; i < tieObjects.length; i++) {
 				if(YAHOO.util.Dom.getXY(tieObjects[i][0]) != YAHOO.util.Dom.getXY(tieObjects[i][1])) {
-					$(tieObjects[i][0]).style.top = (YAHOO.util.Dom.getY(tieObjects[i][1]) + adjustY) + 'px';
-					$(tieObjects[i][0]).style.left = (YAHOO.util.Dom.getX(tieObjects[i][1]) + adjustX) + 'px';
+					$(tieObjects[i][0]).style.top = (YAHOO.util.Dom.getY(tieObjects[i][1]) - adjustY) + 'px';
+					$(tieObjects[i][0]).style.left = (YAHOO.util.Dom.getX(tieObjects[i][1]) - adjustX) + 'px';
 				}
 			}
 			inProcess = false;
