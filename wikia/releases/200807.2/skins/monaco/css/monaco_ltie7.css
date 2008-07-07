@@ -58,6 +58,9 @@ body.rtl #fe_permalink div a {
 body.rtl #articleFooter ul.actions li div {
         margin: 0 20px 0 0;
 }
+body.ltr #articleFooter ul.actions li div {
+	margin: 0 0 0 20px;
+}
 
 
 /* ads fix */

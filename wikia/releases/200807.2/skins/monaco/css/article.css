@@ -180,7 +180,7 @@
 #articleFooter img.sprite {
 	background: url(../images/sprite.png);
 	height: 16px;
-	margin: 0 16px;
+	margin-right: 16px;
 	position: absolute;
 	width: 320px;
 }
