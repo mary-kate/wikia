@@ -27,7 +27,7 @@ function WMUSetup($editform) {
 		$wgOut->addScript('<script type="text/javascript" src="'.$wgStylePath.'/common/yui/2.5.1/slider/slider-min.js?'.$wgStyleVersion.'"></script>');
 		$wgOut->addScript('<script type="text/javascript" src="'.$wgExtensionsPath.'/wikia/WikiaMiniUpload/js/WMU.js?'.$wgStyleVersion.'"></script>');
 		$wgOut->addScript('<link rel="stylesheet" type="text/css" href="'.$wgExtensionsPath.'/wikia/WikiaMiniUpload/css/WMU.css?'.$wgStyleVersion.'" />');		
-		if ($editform->ImageSeparator) {
+		if (isset ($editform->ImageSeparator)) {
 			$sep = $editform->ImageSeparator ;
 			$marg = 'margin-left:5px;' ;
 		} else {
