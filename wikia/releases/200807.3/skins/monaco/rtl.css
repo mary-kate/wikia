@@ -31,6 +31,22 @@ body {
     padding: 0px !important;
 }
 
+/* fixing widget carousel */
+#widget_cockpit .carousel-clip-region {
+	direction: ltr;
+}
+#carousel-prev {
+	right: 0;
+	left: auto;
+}
+#carousel-next {
+	left: 0;
+	right: auto;
+}
+#widget_cockpit_list li {
+	direction: rtl;
+}
+
 /*** MAY BE UNNECESSARY, CHECK A COMPUTER SET TO A RTL LANGUAGE ***/
 #wikia_logo {
 	direction: ltr;
