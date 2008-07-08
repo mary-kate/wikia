@@ -32,7 +32,7 @@ function WMUSetup($editform) {
 			$marg = 'margin-left:5px;' ;
 		} else {
 			$sep = '' ;
-			$marg =  '' ;
+			$marg =  'clear: both;' ;
 			$editform->ImageSeparator = ' - ' ;
 		}
 		$wgOut->addHtml('<div style="float: left; margin-top: 20px;' . $marg .'"><a href="#" id="wmuLink">' . $sep . wfMsg ('wmu-imagelink') . '</a></div>');
