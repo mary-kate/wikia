@@ -144,6 +144,12 @@ function wfSiteMetricsJSON($metric, $callback){
                 $payload = fetchGlobalKTTrend($metric, $callback); break;
         case 17:
                 $payload = fetchTopUsers($metric, $callback); break;
+        case 18:
+                $payload = fetchWfMessages($metric, $callback); break;
+        case 19:
+               $payload = fetchTrends($metric, $callback);
+                return $payload;
+                break;
 	default: return "";
 	break;
 	}
@@ -155,6 +161,154 @@ function wfSiteMetricsJSON($metric, $callback){
         }
         
         return $payload["html"];
+}
+
+function fetchTrends($metric, $callback){
+
+        function cmp($a, $b)
+        {
+                if ($a["timestamp"] == $b["timestamp"]) {
+                    return 0;
+                }
+                return ($a["timestamp"] < $b["timestamp"]) ? -1 : 1;
+        }
+
+	global $wgRequest, $wgMemc;
+	
+	// go back a month by default
+	$DEFAULT_TIME = 86400 * 30;
+        
+        $dbr =& wfGetDB( DB_MASTER );
+        
+	// grab some query params
+	$queries = $_REQUEST["query"];        
+	$lang = mysql_real_escape_string($wgRequest->getVal("lang", false));
+        
+        $payload = array();
+        
+        $minDate = time();
+        $maxDate = 0;
+        $globalMax = 0;
+        
+        $sql = 'SELECT UNIX_TIMESTAMP(DATE(created_at)) AS the_date FROM metrics_current_top_queries
+                        GROUP BY UNIX_TIMESTAMP(DATE(created_at))
+                        ORDER BY created_at DESC LIMIT 365;';
+        
+        $res = $dbr->query($sql);
+        $timeStamps = array();
+        
+        // get the data into an array
+        $res = $dbr->query($sql);
+        while ($row = $dbr->fetchObject( $res ) ) {
+                $timeStamps[] = $row->the_date;
+        }
+        
+        foreach($queries as $q){
+                
+                $times = array();
+                
+                $q = trim( mysql_real_escape_string($q) );
+                
+                $sql = 'SELECT SUM(`count`) AS the_count, `query` AS the_query, UNIX_TIMESTAMP(DATE(created_at)) AS the_date
+			FROM metrics_current_top_queries
+			WHERE `query`="' . $q.  '" ';
+                        
+                if($lang)
+                        $sql .= ' AND `language`="' . $lang . '" ';
+                        
+                $sql .= '   GROUP BY UNIX_TIMESTAMP(DATE(created_at))  ';
+		
+                $sql .= ' ORDER BY created_at DESC
+                          LIMIT 365;';
+                
+                $key = wfMemcKey( 'wikiasearch' , 'metriks' , $metric, $callback, $q );
+                
+                if(true || !$data = $wgMemc->get($key)){
+                
+                        $res = $dbr->query($sql);
+                        $data = array();
+        
+                        // get the data into an array
+                        $res = $dbr->query($sql);
+                        while ($row = $dbr->fetchObject( $res ) ) {
+                                $data[] = array( "count" => round($row->the_count), "timestamp" => $row->the_date );
+                                $times[] = $row->the_date;
+                        }
+                        
+                        foreach( array_diff($timeStamps, $times) as $t ){
+                                $data[] = array( "count" => 0, "timestamp" => $t );
+                        }
+                        
+                        usort($data, "cmp");
+                        
+                        $wgMemc->set($key, $data);
+                }
+                
+                $max = 0;
+                $finalData = array();
+                
+                foreach($data as $d){
+                        
+                        $max = $max < $d["count"] ? $d["count"] : $max;
+                        $minDate = $d["timestamp"] < $minDate ? $d["timestamp"] : $minDate;
+                        $maxDate = $d["timestamp"] > $maxDate ? $d["timestamp"] : $maxDate;
+                        $globalMax = $globalMax < $max ? $max : $globalMax;
+                        
+                        $finalData[] = $d["count"];
+                }
+                
+                $payload[$q] = $finalData;
+                $payload["keys"][] = array("key" => $q, "max" => $max );
+                
+        }
+        
+        $payload["maxDate"] = date("m/d/y", $maxDate);
+        $payload["minDate"] = date("m/d/y", $minDate);
+        $payload["max"] = round($globalMax * 1.30);
+        
+        $result = 'var metricData =' . jsonify($payload) . ";\n\n" . $callback .'(metricData, ' . $metric . ');';
+        
+        return $result;
+}
+
+function fetchWfMessages($metric, $callback){
+        
+        global $wgMemc;
+        
+        $key = wfMemcKey( 'wikiasearch' , 'metriks' , $metric, $callback );
+        
+        if( $res = $wgMemc->get($key) )
+                return $res;
+        
+        $dbr =& wfGetDB( DB_MASTER );
+        
+	$msg = efWikiaSiteMetrics();
+	$keys = array_keys($msg["en"]);
+	$messages = array();
+	
+	// get the i18n messages
+	foreach($keys as $key){ $messages[$key] = wfMsg($key); }
+        
+        $languages = array();
+        $sql = "SELECT `language` FROM metrics_current_top_queries
+                        GROUP BY `language`
+                        ORDER BY `language` ASC LIMIT 500;";
+        $res = $dbr->query($sql);
+        while ($row = $dbr->fetchObject( $res ) ) {
+                $languages[] = $row->language;
+        }
+        
+	$result["languages"] = $languages;        
+        $result["messages"] = $messages;
+        $result["tableData"] = array();
+        
+        $result = 'var metricData =' . jsonify($result) . ";\n\n" . $callback .'(metricData, ' . $metric . ');';
+        
+	$ret["html"] = $result;
+        
+        $wgMemc->set($key, $ret);
+        
+        return $ret;
 }
 
 function fetchTopUsers($metric, $callback){
