@@ -148,11 +148,20 @@ CREATE TABLE IF NOT EXISTS `page_visited` (
   KEY `page_visited_cnt_inx` (`count`)
 ) ENGINE=InnoDB;
 
+CREATE TABLE IF NOT EXISTS `poll_info` ( 
+		`poll_id` VARCHAR(32),
+		`poll_txt` TEXT,
+		`poll_date` DATETIME,
+		`poll_title` VARCHAR(255),
+		`poll_domain` VARCHAR(10),
+		PRIMARY KEY  (`poll_id`)
+) Engine=InnoDB;
+
 CREATE TABLE IF NOT EXISTS `poll_vote` ( 
 		`poll_id` VARCHAR(32), 
 		`poll_user` VARCHAR(255), 
 		`poll_ip` VARCHAR(255), 
 		`poll_answer` INTEGER(3), 
-		`poll_date` DATETIME, 
+		`poll_date` DATETIME, 	
 			PRIMARY KEY  (`poll_id`,`poll_user`) 
 ) Engine=InnoDB;
