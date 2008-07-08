@@ -92,6 +92,7 @@ function AddEditingToggles($o) {
 		wfLoadExtensionMessages('EditingTips');
 		$wgHooks['EditPage::showEditForm:fields'][] = 'AddEditingTips';
 		$wgOut->addHtml('<div id="editingTipsToggleDiv" style="float: left; margin-top:20px; margin-right:5px;">');
+		$o->ImageSeparator = ' - ' ;
 		if(count(getEditingTips()) > 0) {
 			$wgOut->addHtml('<a href="" id="toggleEditingTips">'. (isEditingTipsEnabled() ? wfMsg ('editingtips_hide') : wfMsg ('editingtips_show') ).'</a> - ');
 		}

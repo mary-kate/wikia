@@ -26,8 +26,9 @@ function WMUSetup($editform) {
 		$wgOut->addScript('<script type="text/javascript" src="'.$wgStylePath.'/common/yui/2.5.1/get/get-min.js?'.$wgStyleVersion.'"></script>');
 		$wgOut->addScript('<script type="text/javascript" src="'.$wgStylePath.'/common/yui/2.5.1/slider/slider-min.js?'.$wgStyleVersion.'"></script>');
 		$wgOut->addScript('<script type="text/javascript" src="'.$wgExtensionsPath.'/wikia/WikiaMiniUpload/js/WMU.js?'.$wgStyleVersion.'"></script>');
-		$wgOut->addScript('<link rel="stylesheet" type="text/css" href="'.$wgExtensionsPath.'/wikia/WikiaMiniUpload/css/WMU.css?'.$wgStyleVersion.'" />');
-		$wgOut->addHtml('<div style="float: left; margin-top: 20px;"><a href="#" id="wmuLink">' . wfMsg ('wmu-imagelink') . '</a></div>');
+		$wgOut->addScript('<link rel="stylesheet" type="text/css" href="'.$wgExtensionsPath.'/wikia/WikiaMiniUpload/css/WMU.css?'.$wgStyleVersion.'" />');		
+		isset ($editform->ImageSeparator) ? $sep = $editform->ImageSeparator : $sep = '' ;
+		$wgOut->addHtml('<div style="float: left; margin-top: 20px;"><a href="#" id="wmuLink">' . $sep . wfMsg ('wmu-imagelink') . '</a></div>');
 	}
 	return true;
 }
