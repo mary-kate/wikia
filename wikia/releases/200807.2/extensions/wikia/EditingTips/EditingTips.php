@@ -96,7 +96,7 @@ function AddEditingToggles($o) {
 			$marg = 'margin-left:5px;' ;
                 } else {
                         $sep = '' ;
-			$marg = '' ;
+			$marg = 'clear: both;' ;
                         $o->ImageSeparator = ' - ' ;
                 }
 		$wgOut->addHtml('<div id="editingTipsToggleDiv" style="float: left; margin-top:20px; '. $marg . '">');
