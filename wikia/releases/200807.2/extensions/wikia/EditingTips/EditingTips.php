@@ -91,10 +91,18 @@ function AddEditingToggles($o) {
 	if(get_class($wgUser->getSkin()) == 'SkinMonaco') {
 		wfLoadExtensionMessages('EditingTips');
 		$wgHooks['EditPage::showEditForm:fields'][] = 'AddEditingTips';
-		$wgOut->addHtml('<div id="editingTipsToggleDiv" style="float: left; margin-top:20px; margin-right:5px;">');
-		$o->ImageSeparator = ' - ' ;
+                if ($o->ImageSeparator) {
+                        $sep = $o->ImageSeparator ;
+			$marg = 'margin-left:5px;' ;
+                } else {
+                        $sep = '' ;
+			$marg = '' ;
+                        $o->ImageSeparator = ' - ' ;
+                }
+		$wgOut->addHtml('<div id="editingTipsToggleDiv" style="float: left; margin-top:20px; '. $marg . '">');
+
 		if(count(getEditingTips()) > 0) {
-			$wgOut->addHtml('<a href="" id="toggleEditingTips">'. (isEditingTipsEnabled() ? wfMsg ('editingtips_hide') : wfMsg ('editingtips_show') ).'</a> - ');
+			$wgOut->addHtml('<a href="" id="toggleEditingTips">'. $sep . (isEditingTipsEnabled() ? wfMsg ('editingtips_hide') : wfMsg ('editingtips_show') ).'</a> - ');
 		}
 		$wgOut->addHtml('<a href="" id="toggleWideScreen">' . wfMsg ('editingtips_enter_widescreen') .'</a></div>');
 		$wgOut->addHtml('
