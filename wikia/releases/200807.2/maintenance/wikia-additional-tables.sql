@@ -147,3 +147,12 @@ CREATE TABLE IF NOT EXISTS `page_visited` (
   PRIMARY KEY (`article_id`),
   KEY `page_visited_cnt_inx` (`count`)
 ) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `poll_vote` ( 
+		`poll_id` VARCHAR(32), 
+		`poll_user` VARCHAR(255), 
+		`poll_ip` VARCHAR(255), 
+		`poll_answer` INTEGER(3), 
+		`poll_date` DATETIME, 
+			PRIMARY KEY  (`poll_id`,`poll_user`) 
+) Engine=InnoDB;
