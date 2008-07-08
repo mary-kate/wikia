@@ -1599,6 +1599,7 @@ if(!empty($wgFASTSIDE) && isset($wgFASTSIDE[1])) {
 
 		</div>
 		<!-- /WIDGETS -->
+	</div>
 <?php
 wfProfileOut( __METHOD__ . '-widgets');
 
