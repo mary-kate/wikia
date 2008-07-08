@@ -86,32 +86,36 @@ Event.onDOMReady(function() {
 Event.onContentReady("background_strip", function() {
 	function pos(menuId, buttonId, side) {
 		Event.addListener(buttonId, 'click', function() {
+
+			// #3187
+			var headerY = parseInt(Dom.getY('wikia_header'));
+			Dom.setStyle(menuId, 'top', headerY + (menuId == 'headerMenuHub' ? 50 : 32) + 'px');
+
 			if (Dom.get('headerMenuHub') && Dom.get('headerMenuUser')) {
 				Dom.setStyle(['headerMenuUser', 'headerMenuHub'], 'visibility', 'hidden');
-			}
-			if(menuId == 'headerMenuUser') {
-				var buttonCenter = Dom.getViewportWidth() - (Dom.getX(this) + this.offsetWidth/2) - 10;
-			} else {
-				var buttonCenter = YAHOO.util.Dom.getX(this) + this.offsetWidth/2;
-			}
-			var menuWidth = Dom.get(menuId).offsetWidth;
-			if((buttonCenter - (menuWidth/2)) < 10) {
-				targetRight = 10;
-			} else {
-				targetRight = buttonCenter - (menuWidth/2);
 			}
 			
 			// #3108
 			if (Dom.hasClass('body', 'rtl')) {
+				if(menuId == 'headerMenuUser') {
+					var buttonCenter = Dom.getViewportWidth() - (Dom.getX(this) + this.offsetWidth/2) - 10;
+				} else {
+					var buttonCenter = YAHOO.util.Dom.getX(this) + this.offsetWidth/2;
+				}
+				var menuWidth = Dom.get(menuId).offsetWidth;
+				if((buttonCenter - (menuWidth/2)) < 10) {
+					targetRight = 10;
+				} else {
+					targetRight = buttonCenter - (menuWidth/2);
+				}
 				Dom.setStyle(menuId, side, targetRight + 'px');
 			}
 
-			if (YAHOO.util.Dom.get(menuId).style.visibility == 'visible') {
-				YAHOO.util.Dom.get(menuId).style.visibility = 'hidden';
+			if (Dom.getStyle(menuId, 'visibility') == 'visible') {
+				Dom.setStyle(menuId, 'visibility', 'hidden');
 			} else {
-				YAHOO.util.Dom.get(menuId).style.visibility = 'visible';
+				Dom.setStyle(menuId, 'visibility', 'visible');
 			}
-			//Dom.setStyle(menuId, side, targetRight + 'px');
 		});
 		var headerMenuTimer;
 		Event.addListener(menuId, 'mouseout', function() {
