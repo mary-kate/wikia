@@ -1,0 +1,30 @@
+body, html
+{
+    background-color: #fff !important;
+    background-image: none !important;
+    padding: 10px;
+}
+
+#wikia_page
+{
+    margin: 0 auto;
+    width: 750px;
+    padding: 0;
+    background: #fff !important;
+    min-height: 1px;
+    border: none;
+}
+
+#wikia_header,
+#background_strip,
+#widget_sidebar,
+#page_bar,
+#articleFooter,
+#monaco_footer,
+#adSpace0,
+#adSpace1,
+#adSpace2,
+#adSpace3
+{
+    display: none;
+}
