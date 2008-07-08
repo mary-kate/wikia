@@ -47,6 +47,30 @@ body {
 	direction: rtl;
 }
 
+/* editing tips */
+.editingTips #bodyContent {
+	margin-left: 216px
+}
+.editingTips #widget_sidebar {
+	display: block !important
+}
+.editingWide #widget_sidebar {
+	display: none !important
+}
+.editingWide .accordion-menu {
+	display: none !important
+}
+.editingWide #bodyContent {
+	margin-left: 0px
+}
+.editingWide #wikiPreview {
+	margin-left: 216px
+}
+.editingWide #wikia_page {
+	margin-right: 5px
+}
+
+
 /*** MAY BE UNNECESSARY, CHECK A COMPUTER SET TO A RTL LANGUAGE ***/
 #wikia_logo {
 	direction: ltr;
