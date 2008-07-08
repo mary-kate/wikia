@@ -91,7 +91,7 @@ function AddEditingToggles($o) {
 	if(get_class($wgUser->getSkin()) == 'SkinMonaco') {
 		wfLoadExtensionMessages('EditingTips');
 		$wgHooks['EditPage::showEditForm:fields'][] = 'AddEditingTips';
-                if ($o->ImageSeparator) {
+                if (isset ($o->ImageSeparator)) {
                         $sep = $o->ImageSeparator ;
 			$marg = 'margin-left:5px;' ;
                 } else {
