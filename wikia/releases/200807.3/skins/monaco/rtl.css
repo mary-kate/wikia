@@ -64,8 +64,11 @@ body {
 	margin-left: 0px
 }
 .editingWide #wikiPreview {
-	margin-left: 0px;
+	margin-left: 0px !important;
 	margin-right: 216px;
+}
+.editingTips #wikiPreview {
+	margin-left: -216px;
 }
 .editingWide #wikia_page {
 	margin-right: 5px
