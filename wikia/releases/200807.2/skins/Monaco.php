@@ -1599,9 +1599,6 @@ if(!empty($wgFASTSIDE) && isset($wgFASTSIDE[1])) {
 
 		</div>
 		<!-- /WIDGETS -->
-<script type="text/javascript">
-TieDivLib.startTie();
-</script>
 <?php
 wfProfileOut( __METHOD__ . '-widgets');
 
@@ -1625,11 +1622,58 @@ if($wgAdServingType === 1) {
 		else { return 100; }
 	}
 	uasort($adsDisplayed, "cmpAds");
-	echo '<div id="realAdsContainer">';
 	foreach($adsDisplayed as $adSpace => $ad) {
-?><div id="realAd<?= $adSpace ?>" style="visibility: hidden"><script type="text/javascript">ad_call(<?= $adSpace ?>, '<?= $ad[0] ?>', '<?= $ad[1] ?>');</script></div><script type="text/javascript">if(curAdSpaceId != -1) { TieDivLib.tie("realAd<?= $adSpace ?>", "adSpace"+curAdSpaceId); }</script><?php
+?>
+<script type="text/javascript">
+<!--//<![CDATA[
+if(document.getElementById('adSpace<?=$adSpace?>')<?=(substr($ad[1], 0, 4) == 'FAST' ? ' && FASTisValid("'.$ad[1].'")' : '') ?>) {
+	var adSpace<?=$adSpace?> = true;
+	document.write('<scr'+'ipt type="text/javascript">enableWikiaWriter(<?=$adSpace?>);</scr'+'ipt>');
+	document.write('<scr'+'ipt type="text/javascript">');
+	document.write('var base_url = "http://wikia-ads.wikia.com/www/delivery/ajs.php";');
+	document.write('base_url += "?loc=" + escape(window.location);');
+	document.write('if(typeof document.referrer != "undefined") base_url += "&referer=" + escape(document.referrer);');
+	document.write('if(typeof document.context != "undefined") base_url += "&context=" + escape(document.context);');
+	document.write('if(typeof document.mmm_fo != "undefined") base_url += "&mmm_fo=1";');
+	document.write('base_url += "&zoneid=<?=$ad[0]?>";');
+	document.write('base_url += "&cb=" + Math.floor(Math.random()*99999999999);');
+	document.write('if(typeof document.MAX_used != "undefined" && document.MAX_used != ",") base_url += "&exclude=" + document.MAX_used;');
+<?php
+/**
+ * Parameters description
+ * 1 - collision
+ * 2 - no-collision
+ * 3 - logged in
+ * 4 - not logged in
+ */
+if($ad[1] == 'FAST_BOTTOM') {
+?>
+	document.write('if(FASTisCollisionBottom()) base_url += "&source=1";');
+<?php
+} else if($ad[1] == 'FAST_TOP') {
+	if($wgUser->isLoggedIn()) {
+?>
+	document.write('if(FASTisCollisionTop()) base_url += "&source=13"; else base_url += "&source=23";');
+<?php
+	} else {
+?>
+	document.write('if(FASTisCollisionTop()) base_url += "&source=14"; else base_url += "&source=24";');
+<?php
 	}
-	echo '</div></div>';
+}
+?>
+	document.write('</scr'+'ipt>');
+	document.write('<scr'+'ipt type="text/javascript" src="'+base_url+'"></scr'+'ipt>');
+}
+//]]>--></script>
+<script type="text/javascript">
+<!--//<![CDATA[
+if(typeof adSpace<?=$adSpace?> != 'undefined') {
+	document.write('<scr'+'ipt type="text/javascript">disableWikiaWriter();</scr'+'ipt>');
+}
+//]]>--></script>
+<?php
+	}
 }
 echo AdServer::getInstance()->getAd('js_bot2');
 echo AdServer::getInstance()->getAd('js_bot3');

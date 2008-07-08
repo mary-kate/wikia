@@ -100,7 +100,7 @@ Event.onContentReady("background_strip", function() {
 			} else {
 				targetRight = buttonCenter - (menuWidth/2);
 			}
-
+			
 			// #3108
 			if (Dom.hasClass('body', 'rtl')) {
 				Dom.setStyle(menuId, side, targetRight + 'px');
@@ -448,112 +448,298 @@ function AdGetColor(type) {
 	}
 
 }
+
+/**
+ * Tricky code delay ad loading
+ * @author Inez Korczynski
+ */
+var curAdSpaceId = 0;
+var writeLine;
+var inScript = false;
+var inIframe = false;
+var writeBuffer = '';
+function writeFake(s) {
+	writeLine = false;
+	writeProcess(s);
+}
+function writelnFake(s) {
+	writeLine = true;
+	writeProcess(s);
+}
+function writeProcess(content) {
+	while(content != '') {
+		var contentLower = content.toLowerCase();
+		var openIndex = contentLower.indexOf('<script');
+		var closeIndex = contentLower.indexOf('</script');
+
+		var openIframeIndex = contentLower.indexOf('<iframe');
+		var closeIframeIndex = contentLower.indexOf('</iframe');
+
+		var documentWrite = false;
+
+		if(openIframeIndex > -1) {
+			documentWrite = contentLower.substring(openIframeIndex-18, openIframeIndex-2) == 'document.writeln';
+			if(!documentWrite) {
+				documentWrite = contentLower.substring(openIframeIndex-16, openIframeIndex-2) == 'document.write';
+			}
+			if(documentWrite) {
+				if(closeIframeIndex > -1) {
+					if(closeIframeIndex > openIframeIndex) {
+						closeIframeIndex = -1;
+					}
+				}
+				openIframeIndex = -1;
+			}
+		}
+
+		if(!inScript && openIframeIndex > -1) {
+			if(openIframeIndex > 0) {
+				realWrite(content.substring(0,openIframeIndex));
+			}
+			inIframe = true;
+			if(closeIframeIndex > -1) {
+				inIframe = false;
+				realAppend(content.substring(openIframeIndex, closeIframeIndex+9));
+				content = content.substring(closeIframeIndex+9);
+			} else {
+				realAppend(content.substring(openIframeIndex, content.length));
+				content = '';
+			}
+		} else if(!inScript && closeIframeIndex > -1) {
+			inIframe = false;
+			realAppend(content.substring(0,closeIframeIndex+9));
+			content = content.substring(closeIframeIndex+9, content.length);
+		} else if(openIndex > -1) {
+			if(openIndex > 0) {
+				if(inScript) {
+					realWrite(content.substring(0,openIndex));
+				} else {
+					realAppend(content.substring(0,openIndex));
+				}
+			}
+			inScript = true;
+			if(closeIndex > -1) {
+				inScript = false;
+				realWrite(content.substring(openIndex, closeIndex+9));
+				content = content.substring(closeIndex+9);
+			} else {
+				realWrite(content.substring(openIndex, content.length));
+				content = '';
+			}
+		} else if(closeIndex > -1) {
+			inScript = false;
+			realWrite(content.substring(0,closeIndex+9));
+			content = content.substring(closeIndex+9, content.length);
+		} else {
+			if(inScript) {
+				realWrite(content);
+			} else {
+				realAppend(content);
+			}
+			content = '';
+		}
+	}
+}
+function realWrite(s) {
+	if(inIframe) {
+		if(writeLine) {
+			realAppend(s + "\n");
+		} else {
+			realAppend(s);
+		}
+		return;
+	}
+	if(writeLine) {
+		document.writelnOrg(s);
+	} else {
+		document.writeOrg(s);
+	}
+}
+var buffer = '';
+var lastTag = '';
+var tagDeep = 0;
+var startOpening = false;
+var startClosing = false;
+var inBr = false;
+var inImg = false;
+var inComment = false;
+var inParam = false;
+function realAppend(text) {
+	while(text != '') {
+		var textL = text.toLowerCase();
+		var idx = new Array;
+		idx['open'] = textL.indexOf('<'); // open index
+		idx['close'] = textL.indexOf('>'); // close index
+		idx['img'] = textL.indexOf('<img'); // open img index
+		idx['br'] = textL.indexOf('<br'); // open br index
+		idx['tclose'] = textL.indexOf('/>'); // total close index
+		if(idx['open'] > -1 && (idx['close'] == -1 || idx['open'] < idx['close']) && (idx['img'] == -1 || idx['open'] < idx['img']) && (idx['tclose'] == -1 || idx['open'] < idx['tclose']) && (idx['br'] == -1 || idx['open'] < idx['br'])) {
+			buffer += text.substring(0, idx['open'] + 1);
+			text = text.substring(idx['open'] + 1);
+			if(text.substring(0, 1) == '!') {
+				inComment = true;
+			}
+			if(text.toLowerCase().substring(0, 5) == 'param') {
+				inParam = true;
+			}
+			if(text.substring(0, 1) == '/') {
+				startClosing = true;
+			} else {
+				startOpening = true;
+			}
+			lastTag = 'open';
+		} else if(idx['tclose'] > -1 && (idx['open'] == -1 || idx['tclose'] <= idx['open']) && (idx['close'] == -1 || idx['tclose'] < idx['close']) && (idx['img'] == -1 || idx['tclose'] < idx['img']) && (idx['br'] == -1 || idx['tclose'] < idx['br'])) {
+			buffer += text.substring(0, idx['tclose'] + 2);
+			text = text.substring(idx['tclose'] + 2);
+			if(lastTag == 'img') {
+				inImg = false;
+			} else if(lastTag == 'br') {
+				inBr = false;
+			}
+			lastTag = 'tclose';
+		} else if(idx['close'] > -1 && (idx['open'] == -1 || idx['close'] < idx['open']) && (idx['img'] == -1 || idx['close'] < idx['img']) && (idx['tclose'] == -1 || idx['close'] < idx['tclose']) && (idx['br'] == -1 || idx['close'] < idx['br'])) {
+			buffer += text.substring(0, idx['close'] + 1);
+			text = text.substring(idx['close'] + 1);
+
+			if(inParam == true) {
+				inParam  = false;
+				startOpening = false;
+			} else if(inComment == true) {
+				inComment = false;
+			} else if(lastTag == 'img') {
+				inImg = false;
+			} else if(lastTag == 'br') {
+				inBr = false;
+			} else {
+				if(startOpening) {
+					tagDeep++;
+					startOpening = false;
+				} else if(startClosing) {
+					tagDeep--;
+					startClosing = false;
+				}
+			}
+			lastTag = 'close';
+		} else if(idx['img'] > -1 && (idx['open'] == -1 || idx['img'] <= idx['open']) && (idx['close'] == -1 || idx['img'] < idx['close']) && (idx['tclose'] == -1 || idx['img'] < idx['tclose']) && (idx['br'] == -1 || idx['img'] < idx['br'])) {
+			buffer += '<img';
+			text = text.substring(idx['img'] + 4);
+			lastTag = 'img';
+			inImg = true;
+		} else if(idx['br'] > -1 && (idx['open'] == -1 || idx['br'] <= idx['open']) && (idx['close'] == -1 || idx['br'] < idx['close']) && (idx['tclose'] == -1 || idx['br'] < idx['tclose']) && (idx['img'] == -1 || idx['br'] < idx['img'])) {
+			buffer += '<br';
+			text = text.substring(idx['br'] + 3);
+			lastTag = 'br';
+			inBr = true;
+		} else if(idx['open'] == -1 && idx['close'] == -1 && idx['img'] == -1 && idx['tclose'] == -1 && idx['br'] == -1) {
+			buffer += text;
+			text = '';
+		} else {
+			text = '';
+		}
+		if(tagDeep == 0 && startOpening == false && startClosing == false && inImg == false && inBr == false) {
+			realRealAppend(buffer);
+			buffer = '';
+		}
+	}
+}
+function realRealAppend(text) {
+		var el = document.createElement('span');
+		el.innerHTML = text;
+		document.getElementById('adSpace'+curAdSpaceId).appendChild(el);
+}
+function enableWikiaWriter(adSpaceId) {
+	curAdSpaceId = adSpaceId
+	document.writeOrg = document.write;
+	document.writelnOrg = document.writeln;
+	document.write = writeFake;
+	document.writeln = writelnFake;
+}
+function disableWikiaWriter() {
+	writeBuffer = '';
+	buffer = '';
+	lastTag = '';
+	tagDeep = 0;
+	startOpening = false;
+	startClosing = false;
+	inImg = false;
+	inBr = false;
+	inComment = false;
+	inParam = false;
+	document.write = document.writeOrg;
+	document.writeln = document.writelnOrg;
+}
+
 /**
  * @author Inez Korczynski
  */
-TieDivLib = new function() {
+if(Math.round(Math.random() * 1000) == 1 && wgIsArticle && (YAHOO.env.ua.gecko > 0 || YAHOO.env.ua.ie > 0)) {
 
-	var tieObjects = Array();
-
-	var count = 0;
-
-	var adjustY = ((YAHOO.env.ua.ie > 0) ? 2 : 0) + YAHOO.util.Dom.getY('monaco_shrinkwrap_main');
-
-	var adjustX = (YAHOO.env.ua.ie > 0) ? YAHOO.util.Dom.getX('wikia_header') : 0;
-
-	var inProcess = false;
-
-	this.tie = function(source, target) {
-		tieObjects.push([source, target]);
-		$(source).style.position = 'absolute';
-		if($(target).parentNode.parentNode.parentNode.parentNode.parentNode.id == 'spotlight_footer') {
-			$(source).style.zIndex = 4;
-		} else if(YAHOO.util.Dom.hasClass($(target).parentNode.parentNode, 'WidgetAdvertiser')) {
-			$(source).style.zIndex = 6;
-		} else if($(target).parentNode.parentNode.id == 'widget_sidebar') {
-			$(source).style.zIndex = 6;
-		} else {
-			$(source).style.zIndex = 5;
+	function generateGuid()	{
+		var result, i, j;
+		result = '';
+		for(j=0; j<32; j++) {
+			if( j == 8 || j == 12|| j == 16|| j == 20)
+				result = result + '-';
+			i = Math.floor(Math.random()*16).toString(16).toUpperCase();
+			result = result + i;
 		}
-		$(source).style.visibility = 'visible';
-		TieDivLib.process();
+		return result
 	}
 
-	this.fixPositions = function() {
-		if(!inProcess) {
-			inProcess = true;
-			for(i = 0; i < tieObjects.length; i++) {
-				if(YAHOO.util.Dom.getXY(tieObjects[i][0]) != YAHOO.util.Dom.getXY(tieObjects[i][1])) {
-					$(tieObjects[i][0]).style.top = (YAHOO.util.Dom.getY(tieObjects[i][1]) - adjustY) + 'px';
-					$(tieObjects[i][0]).style.left = (YAHOO.util.Dom.getX(tieObjects[i][1]) - adjustX) + 'px';
-				}
-			}
-			inProcess = false;
-		}
+	function VISIBILITY_STATS() {
+		YAHOO.util.Event.removeListener(window, 'resize', VISIBILITY_STATS);
+		YAHOO.util.Event.removeListener(window, 'scroll', VISIBILITY_STATS);
+		VISIBILITY_STATS_CALL('type=2&a=' + guid);
 	}
 
-	this.process = function() {
-		TieDivLib.fixPositions();
-		setTimeout(TieDivLib.fixPositions, 180);
-		setTimeout(TieDivLib.fixPositions, 360);
+	function VISIBILITY_STATS_CALL(param) {
+		YAHOO.log("PARAM: " + param);
+		var image = document.createElement('img');
+		image.style.display = 'none';
+		image.src = 'http://wikia-ads.wikia.com/log.php' + '?' + param;
+		$('article').appendChild(image);
 	}
 
-	this.startTie = function() {
-		YAHOO.util.Event.addListener(window, 'resize', TieDivLib.process);
-		YAHOO.util.Event.addListener(window, 'click', TieDivLib.process);
-		YAHOO.util.Event.addListener(window, 'load', TieDivLib.process);
-		YAHOO.util.Event.addListener(window, 'keydown', TieDivLib.fixPositions);
-		YAHOO.util.Event.addListener(window, 'focus', TieDivLib.fixPositions);
-	}
+	var guid = generateGuid();
 
-	this.getTieObjects = function() {
-		return tieObjects;
-	}
+	var visibleImages = 0;
+	var inVisibleImages = 0;
+	var viewportHeight = YAHOO.util.Dom.getViewportHeight();
+	var images = $('article').getElementsByTagName('img');
 
-};
-
-function ad_call(adSpaceId, zoneId, pos) {
-
-	curAdSpaceId = -1;
-
-	if(document.getElementById('adSpace' + adSpaceId)) {
-		if(pos.substring(0, 4) == 'FAST') {
-			if(!FASTisValid(pos)) {
-				return;
-			}
-		}
-
-		curAdSpaceId = adSpaceId;
-
-		document.write('<scr'+'ipt type="text/javascript">');
-		document.write('var base_url = "http://wikia-ads.wikia.com/www/delivery/ajs.php";');
-		document.write('base_url += "?loc=" + escape(window.location);');
-		document.write('if(typeof document.referrer != "undefined") base_url += "&referer=" + escape(document.referrer);');
-		document.write('if(typeof document.context != "undefined") base_url += "&context=" + escape(document.context);');
-		document.write('if(typeof document.mmm_fo != "undefined") base_url += "&mmm_fo=1";');
-		document.write('base_url += "&zoneid='+zoneId+'";');
-		document.write('base_url += "&cb=" + Math.floor(Math.random()*99999999999);');
-		document.write('if(typeof document.MAX_used != "undefined" && document.MAX_used != ",") base_url += "&exclude=" + document.MAX_used;');
-
-/**
- * Parameters description
- * 1 - collision
- * 2 - no-collision
- * 3 - logged in
- * 4 - not logged in
- */
-
-		if(pos == 'FAST_BOTTOM') {
-			document.write('if(FASTisCollisionBottom()) base_url += "&source=1";');
-		} else if(pos == 'FAST_TOP') {
-			if(wgUserName != null) {
-				document.write('if(FASTisCollisionTop()) base_url += "&source=13"; else base_url += "&source=23";');
+	for(var i = 0; i < images.length; i++) {
+		if(images[i].src.indexOf('http://wikia-ads.wikia.com') == -1) {
+			if(YAHOO.util.Dom.getY(images[i]) > viewportHeight) {
+				inVisibleImages++;
 			} else {
-				document.write('if(FASTisCollisionTop()) base_url += "&source=14"; else base_url += "&source=24";');
+				visibleImages++;
+			}
+		}
+	}
+
+	YAHOO.util.Event.addListener(window, 'resize', VISIBILITY_STATS);
+	YAHOO.util.Event.addListener(window, 'scroll', VISIBILITY_STATS);
+
+	VISIBILITY_STATS_CALL('type=1&a=' + visibleImages + '&b=' + inVisibleImages + '&c=' + wgNamespaceNumber + '&d=' + wgCityId + '&e=' + guid);
+
+	YAHOO.util.Event.onContentReady('spotlight_footer', function() {
+		var params = 'type=3&a=' + guid;
+
+		if(YAHOO.util.Dom.getY('spotlight_footer') > viewportHeight) {
+			params += '&b=false';
+		} else {
+			params += '&b=true';
+		}
+
+		if(YAHOO.util.Dom.getElementsByClassName('WidgetAdvertiser').length > 0) {
+			if(YAHOO.util.Dom.getY(YAHOO.util.Dom.getElementsByClassName('WidgetAdvertiser')[0]) > viewportHeight) {
+				params += '&c=false';
+			} else {
+				params += '&c=true';
 			}
 		}
 
-		document.write('</scr'+'ipt>');
-		document.write('<scr'+'ipt type="text/javascript" src="'+base_url+'"></scr'+'ipt>');
-	}
+		VISIBILITY_STATS_CALL(params);
+	});
+
 }

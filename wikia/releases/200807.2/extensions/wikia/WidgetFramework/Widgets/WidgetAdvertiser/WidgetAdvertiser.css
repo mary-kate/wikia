@@ -5,7 +5,6 @@
 .WidgetAdvertiser dd {
 	padding: 0;
 	overflow: hidden;
-	z-index: 5;
 }
 .WidgetAdvertiser h1,
 .WidgetAdvertiser .widgetToolbox {
