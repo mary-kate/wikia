@@ -98,6 +98,7 @@ class GiftManager extends SpecialPage {
 	}
 	
 	function displayGiftList(){
+		$output = "<div>";
 		$gifts = Gifts::getManagedGiftList($per_page,$page);
 		if($gifts){
 			foreach ($gifts as $gift) {
