@@ -47,38 +47,51 @@ class ExternalStorageUpdate {
 		$this->mPageId = $revision->getPage();
 	}
 
-
+	/**
+	 * doUpdate
+	 *
+	 * called on deferred update loop
+	 *
+	 * @access public
+	 * @author Krzysztof Krzyżaniak (eloy) <eloy@wikia.com>
+	 *
+	 * @return boolean status of operation
+	 */
 	public function doUpdate() {
+
+		global $wgCityId;
+
 		$path = explode( "/", $this->mUrl );
 		$store    = $path[0];
 		$cluster  = $path[2];
 		$id	      = $path[3];
 
-		$title    = $Title = Title::newFromID( $this->mPageId );
+		$Title    = Title::newFromID( $this->mPageId );
 
 		/**
 		 * we should not call this directly, we'll use new loadbalancer factory
 		 * when 1.13 will be alive
 		 */
-		$external = new ExternalStoreDB();
+		$external = new ExternalStoreDB( $cluster );
 		$dbw = $external->getMaster();
+
+		return;
 
 		/**
 		 * explicite transaction
 		 */
 		$dbw->begin();
 		$ret = $dbw->insert(
-			array( "revisions" ),
+			array( "blobs" ),
 			array(
-				"id" => null,
-				"rev_wikia_id" => $wgCityId,
-				"rev_id" => 0, #--- we don't know id
-				"rev_page_id" => $page,
-				"rev_namespace" => 0,
-				"rev_user" => $revision->getUser(),
-				"rev_user_text" => $revision->getUserText(),
-				"rev_text" => $data
-			)
+				"rev_id"        => $this->mRevision->getId(),
+				"rev_user"      => $this->mRevision->getUser(),
+				"rev_page_id"   => $this->mPageId,
+				"rev_wikia_id"  => $wgCityId,
+				"rev_namespace" => $Title->getNamespace(),
+				"rev_user_text" => $this->mRevision->getUserText(),
+			),
+			array( "blob_id" => $id )
 		);
 		$store_id = $dbw->insertId();
 		if( $store_id ) {
@@ -86,44 +99,44 @@ class ExternalStorageUpdate {
 			 * insert or update
 			 */
 			$Row = $dbw->selectRow(
-					$this->getTable( $dbw, "pages" ),
-					array( "page_id" ),
-					array( "page_id" => $page ),
-					__METHOD__
+				"pages",
+				array( "page_id" ),
+				array( "page_id" => $this->mPageId ),
+				__METHOD__
 			);
 			if( isset( $Row->page_id ) && !empty( $Row->page_id ) ) {
-					/**
-					 * update
-					 */
-					$dbw->update(
-							$this->getTable( $dbw, "pages" ),
-							array(
-									"page_wikia_id"  => $wgCityId,
-									"page_namespace" => $Title->getNamespace(),
-									"page_title"     => $Title->getText(),
-									"page_counter"   => 0,
-									"page_edits"     => 0,
-							),
-							array(
-									"page_id"        => $page,
-							)
-					);
+				/**
+				 * update
+				 */
+				$dbw->update(
+					"pages",
+					array(
+						"page_wikia_id"  => $wgCityId,
+						"page_namespace" => $Title->getNamespace(),
+						"page_title"     => $Title->getText(),
+					),
+					array(
+						"page_id"        => $this->mPageId,
+					),
+					__METHOD_
+				);
 			}
 			else {
-					/**
-					 * insert
-					 */
-					$dbw->insert(
-							$this->getTable( $dbw, "pages" ),
-							array(
-									"page_wikia_id"  => $wgCityId,
-									"page_id"        => $page,
-									"page_namespace" => $Title->getNamespace(),
-									"page_title"     => $Title->getText(),
-									"page_counter"   => 0,
-									"page_edits"     => 0,
-							)
-					);
+				/**
+				 * insert
+				 */
+				$dbw->insert(
+					"pages",
+					array(
+						"page_wikia_id"  => $wgCityId,
+						"page_id"        => $this->mPageId,
+						"page_namespace" => $Title->getNamespace(),
+						"page_title"     => $Title->getText(),
+						"page_counter"   => 0,
+						"page_edits"     => 0,
+					),
+					__METHOD_
+				);
 			}
 		}
 
@@ -133,10 +146,9 @@ class ExternalStorageUpdate {
 	static public function addDeferredUpdate( &$revision, &$url, &$flags ) {
 		global $wgDeferredUpdateList;
 
+		error_log( $flags );
 		$u = new ExternalStorageUpdate( $url, $revision );
 		array_push( $wgDeferredUpdateList, $u );
-
-		error_log( __METHOD__ . ": bangladesz" );
 
 		return true;
 	}
