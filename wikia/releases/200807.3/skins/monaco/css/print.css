@@ -1,20 +1,17 @@
-body, html
-{
-    background-color: #fff !important;
-    background-image: none !important;
-    padding: 10px;
+body, html {
+	background-color: #fff !important;
+	background-image: none !important;
+	padding: 10px 0;
 }
-
-#wikia_page
-{
-    margin: 0 auto;
-    width: 750px;
-    padding: 0;
-    background: #fff !important;
-    min-height: 1px;
-    border: none;
+#wikia_page {
+	margin: 0 auto;
+	width: 750px;
+	padding: 0;
+	background: #fff !important;
+	min-height: 1px;
+	border: none;
+	position: static;
 }
-
 #wikia_header,
 #background_strip,
 #widget_sidebar,
@@ -24,7 +21,6 @@ body, html
 #adSpace0,
 #adSpace1,
 #adSpace2,
-#adSpace3
-{
-    display: none;
+#adSpace3 {
+	display: none;
 }
