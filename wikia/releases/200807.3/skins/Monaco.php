@@ -1090,7 +1090,7 @@ if( $custom_user_data ) {
 		</div>
 	</div>
 
-	<div class="monaco_shrinkwrap" style="position: absolute; top: 0; z-index: 10;">
+	<div class="monaco_shrinkwrap" style="position: absolute; top: 0; z-index: 20">
 <?php
 	if(!empty($categorylist)) {
 ?>
