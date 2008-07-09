@@ -5,13 +5,13 @@ body {
 	margin: 0;
 }
 #wikia_page {
-	width: 100%;
 	padding: 0;
 	margin: 0;
 	background: #fff !important;
 	min-height: 0px;
 	border: none;
 	position: static;
+	overflow: visible;
 }
 #article {
 	padding: 0;
