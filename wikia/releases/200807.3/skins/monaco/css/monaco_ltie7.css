@@ -71,6 +71,13 @@ body.ltr #articleFooter ul.actions li div {
 	z-index: 20;
 	position: relative;
 }
+
+/* user menu fix */
+#monaco_shrinkwrap_main,
+#wikia_page {
+	z-index: 1 !important;
+}
+
 /* widget dashboard (#2397) */
 .widget_dashboard .sidebar,
 .widget_dashboard .widget,
