@@ -1655,7 +1655,6 @@ if($ad[1] == 'FAST_BOTTOM') {
 ?>
 	document.write('if(FASTisCollisionTop()) base_url += "&source=14"; else base_url += "&source=24";');
 <?php
-	}
 }
 ?>
 	document.write('</scr'+'ipt>');
