@@ -941,5 +941,7 @@ If you think this was sent in error, please let us know at support@wikia.com',
 'variantname-zh-tw' => '正體',
 'var_set' => 'set the $2 to "$3"',
 'var_logtext' => 'Settings log',
-'var_logheader' => '123'
+'var_logheader' => '123',
+'tog-showAds' => '<b>Show advertisements</b><br/>Select this option to see article pages as logged-out users see them.<br/><br/>',
+
 ) );
