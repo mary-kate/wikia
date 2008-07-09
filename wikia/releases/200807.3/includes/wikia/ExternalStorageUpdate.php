@@ -80,7 +80,7 @@ class ExternalStorageUpdate {
 		 */
 		$dbw->begin();
 		$ret = $dbw->update(
-			array( "blobs" ),
+			"blobs",
 			array(
 				"rev_id"        => $this->mRevision->getId(),
 				"rev_user"      => $this->mRevision->getUser(),
@@ -117,7 +117,7 @@ class ExternalStorageUpdate {
 					array(
 						"page_id"        => $this->mPageId,
 					),
-					__METHOD_
+					__METHOD__
 				);
 			}
 			else {
