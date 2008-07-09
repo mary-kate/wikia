@@ -248,11 +248,11 @@ class Revision {
 	}
 
 	/**
-	 * Return the list of revision fields that should be selected to create 
+	 * Return the list of revision fields that should be selected to create
 	 * a new revision.
 	 */
 	static function selectFields() {
-		return array( 
+		return array(
 			'rev_id',
 			'rev_page',
 			'rev_text_id',
@@ -281,11 +281,11 @@ class Revision {
 			$this->mMinorEdit = intval( $row->rev_minor_edit );
 			$this->mTimestamp =         $row->rev_timestamp;
 			$this->mDeleted   = intval( $row->rev_deleted );
-			
+
 			if( !isset( $row->rev_len ) || is_null( $row->rev_len ) )
 				$this->mSize = null;
 			else
-				$this->mSize = intval( $row->rev_len ); 
+				$this->mSize = intval( $row->rev_len );
 
 			if( isset( $row->page_latest ) ) {
 				$this->mCurrent   = ( $row->rev_id == $row->page_latest );
@@ -317,7 +317,7 @@ class Revision {
 			$this->mTimestamp = isset( $row['timestamp']  ) ? strval( $row['timestamp']  ) : wfTimestamp( TS_MW );
 			$this->mDeleted   = isset( $row['deleted']    ) ? intval( $row['deleted']    ) : 0;
 			$this->mSize      = isset( $row['len']        ) ? intval( $row['len']        ) : null;
-			
+
 			// Enforce spacing trimming on supplied text
 			$this->mComment   = isset( $row['comment']    ) ?  trim( strval( $row['comment'] ) ) : null;
 			$this->mText      = isset( $row['text']       ) ? rtrim( strval( $row['text']    ) ) : null;
@@ -434,7 +434,7 @@ class Revision {
 	function getRawUserText() {
 		return $this->mUserText;
 	}
-	
+
 	/**
 	 * Fetch revision comment if it's available to all users
 	 * @return string
@@ -481,7 +481,7 @@ class Revision {
 			return $this->getRawText();
 		}
 	}
-	
+
 	/**
 	 * Fetch revision text without regard for view restrictions
 	 * @return string
@@ -493,7 +493,7 @@ class Revision {
 		}
 		return $this->mText;
 	}
-	
+
 	/**
 	 * Fetch revision text if it's available to THIS user
 	 * @return string
@@ -657,7 +657,7 @@ class Revision {
 	 */
 	function insertOn( &$dbw ) {
 		global $wgDefaultExternalStore;
-		
+
 		$fname = 'Revision::insertOn';
 		wfProfileIn( $fname );
 
@@ -717,6 +717,9 @@ class Revision {
 		);
 
 		$this->mId = !is_null($rev_id) ? $rev_id : $dbw->insertId();
+
+		wfRunHooks( "RevisionInsertOnAfter", array( &$this, &$data ) );
+		
 		wfProfileOut( $fname );
 		return $this->mId;
 	}
@@ -731,7 +734,7 @@ class Revision {
 	function loadText() {
 		$fname = 'Revision::loadText';
 		wfProfileIn( $fname );
-		
+
 		// Caching may be beneficial for massive use of external storage
 		global $wgRevisionCacheExpiry, $wgMemc;
 		$key = wfMemcKey( 'revisiontext', 'textid', $this->getTextId() );
@@ -742,7 +745,7 @@ class Revision {
 				return $text;
 			}
 		}
-		
+
 		// If we kept data for lazy extraction, use it now...
 		if ( isset( $this->mTextRow ) ) {
 			$row = $this->mTextRow;
@@ -750,7 +753,7 @@ class Revision {
 		} else {
 			$row = null;
 		}
-		
+
 		if( !$row ) {
 			// Text data is immutable; check slaves first.
 			$dbr = wfGetDB( DB_SLAVE );
@@ -770,11 +773,11 @@ class Revision {
 		}
 
 		$text = Revision::getRevisionText( $row );
-		
+
 		if( $wgRevisionCacheExpiry ) {
 			$wgMemc->set( $key, $text, $wgRevisionCacheExpiry );
 		}
-		
+
 		wfProfileOut( $fname );
 
 		return $text;
@@ -820,7 +823,7 @@ class Revision {
 		wfProfileOut( __METHOD__ );
 		return $revision;
 	}
-	
+
 	/**
 	 * Determine if the current user is allowed to view a particular
 	 * field of this revision, if it's marked as deleted.
@@ -849,17 +852,17 @@ class Revision {
 	 */
 	static function getTimestampFromID( $id ) {
 		$dbr = wfGetDB( DB_SLAVE );
-		$timestamp = $dbr->selectField( 'revision', 'rev_timestamp', 
+		$timestamp = $dbr->selectField( 'revision', 'rev_timestamp',
 			array( 'rev_id' => $id ), __METHOD__ );
 		if ( $timestamp === false ) {
 			# Not in slave, try master
 			$dbw = wfGetDB( DB_MASTER );
-			$timestamp = $dbw->selectField( 'revision', 'rev_timestamp', 
+			$timestamp = $dbw->selectField( 'revision', 'rev_timestamp',
 				array( 'rev_id' => $id ), __METHOD__ );
 		}
 		return $timestamp;
 	}
-	
+
 	static function countByPageId( $db, $id ) {
 		$row = $db->selectRow( 'revision', 'COUNT(*) AS revCount',
 			array( 'rev_page' => $id ), __METHOD__ );
@@ -868,7 +871,7 @@ class Revision {
 		}
 		return 0;
 	}
-	
+
 	static function countByTitle( $db, $title ) {
 		$id = $title->getArticleId();
 		if( $id ) {
@@ -885,6 +888,3 @@ define( 'MW_REV_DELETED_TEXT', Revision::DELETED_TEXT );
 define( 'MW_REV_DELETED_COMMENT', Revision::DELETED_COMMENT );
 define( 'MW_REV_DELETED_USER', Revision::DELETED_USER );
 define( 'MW_REV_DELETED_RESTRICTED', Revision::DELETED_RESTRICTED );
-
-
-
