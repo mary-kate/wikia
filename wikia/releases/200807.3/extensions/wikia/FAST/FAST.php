@@ -36,7 +36,7 @@ function fastGetConfig() {
 			$fastConfig[] = 'FAST_HOME4';
 		}
 	} else {
-		if($wgUser->isLoggedIn()) {
+		if(!$wgUser->isLoggedIn()) {
 			if($isContentPage && $isView) {
 				$fastConfig[] = 'FAST_SIDE';
 			}
