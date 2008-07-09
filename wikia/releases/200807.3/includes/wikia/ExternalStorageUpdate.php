@@ -5,8 +5,9 @@
  */
 
 /**+ tables definition
-CREATE TABLE `revisions` (
-  `id` int(10) NOT NULL auto_increment,
+
+CREATE TABLE `blobs` (
+  `blob_id` int(10) NOT NULL auto_increment,
   `rev_wikia_id` int(8) unsigned NOT NULL,
   `rev_id` int(10) unsigned default NULL,
   `rev_page_id` int(10) unsigned NOT NULL,
@@ -14,14 +15,13 @@ CREATE TABLE `revisions` (
   `rev_user` int(10) unsigned NOT NULL default '0',
   `rev_user_text` varchar(255) character set latin1 collate latin1_bin NOT NULL default '',
   `rev_timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
-  `rev_text` mediumtext NOT NULL,
-  PRIMARY KEY  (`id`),
+  `blob_text` mediumtext NOT NULL,
+  PRIMARY KEY  (`blob_id`),
   KEY `rev_page_id` (`rev_wikia_id`,`rev_page_id`,`rev_id`),
   KEY `rev_namespace` (`rev_wikia_id`,`rev_page_id`,`rev_namespace`),
   KEY `rev_user` (`rev_wikia_id`,`rev_user`,`rev_timestamp`),
   KEY `rev_user_text` (`rev_wikia_id`,`rev_user_text`,`rev_timestamp`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
-
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `pages` (
   `page_wikia_id` int(8) unsigned NOT NULL,
@@ -35,7 +35,7 @@ CREATE TABLE `pages` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 **/
 
-$wgHooks[ "RevisionInsertOnAfter" ][] = array( "ExternalStorageUpdate::addDeferredUpdate") ;
+$wgHooks[ "RevisionInsertOnAfter" ][] = array( "ExternalStorageUpdate::addDeferredUpdate" ) ;
 
 class ExternalStorageUpdate {
 
@@ -72,16 +72,14 @@ class ExternalStorageUpdate {
 		 * we should not call this directly, we'll use new loadbalancer factory
 		 * when 1.13 will be alive
 		 */
-		$external = new ExternalStoreDB( $cluster );
-		$dbw = $external->getMaster();
-
-		return;
+		$external = new ExternalStoreDB();
+		$dbw = $external->getMaster( $cluster );
 
 		/**
 		 * explicite transaction
 		 */
 		$dbw->begin();
-		$ret = $dbw->insert(
+		$ret = $dbw->update(
 			array( "blobs" ),
 			array(
 				"rev_id"        => $this->mRevision->getId(),
@@ -91,10 +89,11 @@ class ExternalStorageUpdate {
 				"rev_namespace" => $Title->getNamespace(),
 				"rev_user_text" => $this->mRevision->getUserText(),
 			),
-			array( "blob_id" => $id )
+			array( "blob_id" => $id ),
+			__METHOD__
 		);
-		$store_id = $dbw->insertId();
-		if( $store_id ) {
+
+		if( $ret ) {
 			/**
 			 * insert or update
 			 */
@@ -139,17 +138,35 @@ class ExternalStorageUpdate {
 				);
 			}
 		}
+		else {
+			$dbw->rollback();
+		}
 
 		$dbw->commit();
 	}
 
+	/**
+	 * addDeferredUpdate
+	 *
+	 * static method called as hook
+	 *
+	 * @static
+	 * @access public
+	 * @author Krzysztof Krzyżaniak <eloy@wikia.com>
+	 *
+	 * @param Revision	$revision	revision object
+	 * @param string	$url		url to external object
+	 * @param string	$flags		flags for this revision
+	 *
+	 * @return true means process other hooks
+	 */
 	static public function addDeferredUpdate( &$revision, &$url, &$flags ) {
 		global $wgDeferredUpdateList;
 
-		error_log( $flags );
-		$u = new ExternalStorageUpdate( $url, $revision );
-		array_push( $wgDeferredUpdateList, $u );
-
+		if( strpos( $flags, "external" ) !== false ) {
+			$u = new ExternalStorageUpdate( $url, $revision );
+			array_push( $wgDeferredUpdateList, $u );
+		}
 		return true;
 	}
 };
