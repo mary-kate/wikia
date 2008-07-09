@@ -137,12 +137,11 @@ class ExternalStorageUpdate {
 					__METHOD_
 				);
 			}
+			$dbw->commit();
 		}
 		else {
 			$dbw->rollback();
 		}
-
-		$dbw->commit();
 	}
 
 	/**
