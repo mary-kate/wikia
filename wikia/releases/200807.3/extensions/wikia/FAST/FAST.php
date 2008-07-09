@@ -10,8 +10,13 @@ $wgExtensionCredits['other'][] = array(
 
 $wgHooks['AfterCategoryPageView'][] = 'fastProcessCategory';
 $wgHooks['OutputPageBeforeHTML'][] = 'fastProcess';
-
+$wgHooks['UserToggles'][] = 'fastUserToggle';
 $wgFASTCalled = false;
+
+function fastUserToggle(&$extraToggle) {
+	$extraToggle[] = 'showAds';
+	return true;
+}
 
 function fastGetConfig() {
 	global $wgTitle, $wgRequest, $wgUser, $wgEnableFAST_HOME2;
@@ -20,6 +25,12 @@ function fastGetConfig() {
 	$isContentPage = in_array($wgTitle->getNamespace(), array(NS_MAIN, NS_IMAGE, NS_CATEGORY)) || $wgTitle->getNamespace() >= 100;
 	$isView = $wgRequest->getVal('action', 'view') == 'view';
 	$isPreview = $wgRequest->getVal('wpPreview') != '' && $wgRequest->getVal('action') == 'submit';
+
+	if($wgUser->isLoggedIn()) {
+		$showAds = $wgUser->getOption('showAds');
+	} else {
+		$showAds = true;
+	}
 
 	$fastConfig = array();
 
@@ -36,7 +47,7 @@ function fastGetConfig() {
 			$fastConfig[] = 'FAST_HOME4';
 		}
 	} else {
-		if(!$wgUser->isLoggedIn()) {
+		if($showAds) {
 			if($isContentPage && $isView) {
 				$fastConfig[] = 'FAST_SIDE';
 			}
