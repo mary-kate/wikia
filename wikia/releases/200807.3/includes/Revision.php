@@ -718,8 +718,8 @@ class Revision {
 
 		$this->mId = !is_null($rev_id) ? $rev_id : $dbw->insertId();
 
-		wfRunHooks( "RevisionInsertOnAfter", array( &$this, &$data ) );
-		
+		wfRunHooks( "RevisionInsertOnAfter", array( &$this, &$data, &$flags ) );
+
 		wfProfileOut( $fname );
 		return $this->mId;
 	}
