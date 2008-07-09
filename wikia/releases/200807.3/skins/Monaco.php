@@ -1652,11 +1652,6 @@ if($ad[1] == 'FAST_BOTTOM') {
 	document.write('if(FASTisCollisionBottom()) base_url += "&source=1";');
 <?php
 } else if($ad[1] == 'FAST_TOP') {
-	if($wgUser->isLoggedIn()) {
-?>
-	document.write('if(FASTisCollisionTop()) base_url += "&source=13"; else base_url += "&source=23";');
-<?php
-	} else {
 ?>
 	document.write('if(FASTisCollisionTop()) base_url += "&source=14"; else base_url += "&source=24";');
 <?php
