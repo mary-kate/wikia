@@ -32,6 +32,8 @@ function fastGetConfig() {
 		$showAds = true;
 	}
 
+	$showAds = $wgRequest->getBool('showads', $showAds);
+
 	$fastConfig = array();
 
 	if($mainpage) {
