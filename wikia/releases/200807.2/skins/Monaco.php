@@ -1631,9 +1631,6 @@ echo AdServer::getInstance()->getAd('js_bot2');
 echo AdServer::getInstance()->getAd('js_bot3');
 echo AdServer::getInstance()->getAd('js_bot4');
 $this->html('bottomscripts'); /* JS call to runBodyOnloadHook */
-if(!empty($skin->newuemsgjs)) {
-	echo $skin->newuemsgjs;
-}
 $this->html('reporttime');
 wfRunHooks('SpecialFooter');
 wfProfileOut( __METHOD__ . '-body');
