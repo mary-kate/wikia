@@ -149,7 +149,7 @@ class FCKeditor_MediaWiki
 
 	public function registerHooks() {
 		global $wgHooks, $wgExtensionFunctions;
-
+        	
 		$wgHooks['UserToggles'][]                       = array($this, 'onUserToggles');
 		$wgHooks['MessagesPreLoad'][]                   = array($this, 'onMessagesPreLoad');
 		$wgHooks['ParserAfterTidy'][]                   = array($this, 'onParserAfterTidy');
@@ -287,7 +287,7 @@ class FCKeditor_MediaWiki
 		global $wgFCKEditorToolbarSet, $wgFCKEditorIsCompatible;
 		global $wgFCKEditorExtDir, $wgFCKEditorDir, $wgFCKEditorHeight, $wgUser;
 		global $wgStylePath, $wgStyleVersion, $wgDefaultSkin, $wgExtensionFunctions;
-		global $wgFCKWikiTextBeforeParse;
+		global $wgFCKWikiTextBeforeParse, $wgFCKEditorDomain;
 
 		if (!$wgUser->getOption( 'showtoolbar' ) || $wgUser->getOption( 'riched_disable' ) || !$wgFCKEditorIsCompatible) {
 			return true;
@@ -406,6 +406,10 @@ function onLoadFCKeditor()
 		// make a backup holder just in case...
 
 		var oFCKeditor = new FCKeditor('wpTextbox1') ;
+		var domain = '$wgFCKEditorDomain' ;
+		if (domain != '') {
+			document.domain = '$wgFCKEditorDomain' ;
+		}
 		oFCKeditor.BasePath = '$wgFCKEditorDir/' ;
 		oFCKeditor.Config['CustomConfigurationsPath'] = '$wgFCKEditorExtDir/fckeditor_config.js?$wgStyleVersion' ;
 		oFCKeditor.Config['EditorAreaCSS'] = "$wgFCKEditorExtDir/css/fckeditor.css?$wgStyleVersion" ;
