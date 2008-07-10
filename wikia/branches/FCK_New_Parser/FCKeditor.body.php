@@ -345,7 +345,7 @@ class FCKeditor_MediaWiki
 		//End of CSS trick
 
 		$script = <<<HEREDOC
-<script type="text/javascript" src="$wgFCKEditorDir/fckeditor.js"></script>
+<script type="text/javascript" src="$wgFCKEditorDir/fckeditor.js?$wgStyleVersion"></script>
 <script type="text/javascript"> 
 var sEditorAreaCSS = '$printsheet,/mediawiki/skins/monobook/main.css?{$wgStyleVersion}';
 </script>
@@ -407,8 +407,8 @@ function onLoadFCKeditor()
 
 		var oFCKeditor = new FCKeditor('wpTextbox1') ;
 		oFCKeditor.BasePath = '$wgFCKEditorDir/' ;
-		oFCKeditor.Config['CustomConfigurationsPath'] = '$wgFCKEditorExtDir/fckeditor_config.js' ;
-		oFCKeditor.Config['EditorAreaCSS'] = "$wgFCKEditorExtDir/css/fckeditor.css" ;
+		oFCKeditor.Config['CustomConfigurationsPath'] = '$wgFCKEditorExtDir/fckeditor_config.js?$wgStyleVersion' ;
+		oFCKeditor.Config['EditorAreaCSS'] = "$wgFCKEditorExtDir/css/fckeditor.css?$wgStyleVersion" ;
 		oFCKeditor.Height = height ;
 		oFCKeditor.ToolbarSet = '$wgFCKEditorToolbarSet' ;
 		oFCKeditor.ReplaceTextarea() ;
