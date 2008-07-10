@@ -35,7 +35,7 @@ CREATE TABLE `pages` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 **/
 
-$wgHooks[ "RevisionInsertOnAfter" ][] = array( "ExternalStorageUpdate::addDeferredUpdate" ) ;
+$wgHooks[ "RevisionInsertComplete" ][] = array( "ExternalStorageUpdate::addDeferredUpdate" ) ;
 
 class ExternalStorageUpdate {
 
