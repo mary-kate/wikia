@@ -79,18 +79,30 @@ class UserRelationship {
 	public function sendRelationshipRequestEmail($user_id_to,$user_from,$type){
 		$user = User::newFromId($user_id_to);
 		$user->loadFromId();
+		
+		$user_from_obj = User::newFromName($user_from);
+		if( is_object( $user_from_obj ) ){
+			$user_from_obj->load();
+			$user_from_display =  trim($user_from_obj->getRealName());
+		}
+		if( !$user_from_display ){
+			$user_from_display = $user_from;
+		}
+		
 		if(  $user->getEmail() && $user->getIntOption("notifyfriendrequest",1) ){ //if($user->isEmailConfirmed()  && $user->getIntOption("notifyfriendrequest",1)){
 			$request_link = Title::makeTitle( NS_SPECIAL , "ViewRelationshipRequests"  );
 			$update_profile_link = Title::makeTitle( NS_SPECIAL , "UpdateProfile"  );
 			if($type==1){
 				$subject = wfMsgExt( 'friend_request_subject', 'parsemag',
-					$user_from
+					$user_from,
+					$user_from_display
 				 );
 				$body = wfMsgExt( 'friend_request_body', 'parsemag',
 					(( trim($user->getRealName()) )?$user->getRealName():$user->getName()),
 					$user_from,
 					$request_link->getFullURL(),
-					$update_profile_link->getFullURL()
+					$update_profile_link->getFullURL(),
+					$user_from_display
 				);
 			}else{
 				$subject = wfMsgExt( 'foe_request_subject', 'parsemag',
@@ -110,18 +122,30 @@ class UserRelationship {
 	public function sendRelationshipAcceptEmail($user_id_to, $user_from, $type){
 		$user = User::newFromId($user_id_to);
 		$user->loadFromId();
+		
+		$user_from_obj = User::newFromName($user_from);
+		if( is_object( $user_from_obj ) ){
+			$user_from_obj->load();
+			$user_from_display =  trim($user_from_obj->getRealName());
+		}
+		if( !$user_from_display ){
+			$user_from_display = $user_from;
+		}
+		
 		if(  $user->getEmail() && $user->getIntOption("notifyfriendrequest",1) ){ //if($user->isEmailConfirmed()  && $user->getIntOption("notifyfriendrequest",1)){
 			$user_link = Title::makeTitle( NS_USER ,  $user_from  );
 			$update_profile_link = Title::makeTitle( NS_SPECIAL , "UpdateProfile"  );
 			if($type==1){
 				$subject = wfMsgExt( 'friend_accept_subject', 'parsemag',
-					$user_from
+					$user_from,
+					$user_from_display
 				 );
 				$body = wfMsgExt( 'friend_accept_body', 'parsemag',
 					(( trim($user->getRealName()) )?$user->getRealName():$user->getName()),
 					$user_from,
 					$user_link->getFullURL(),
-					$update_profile_link->getFullURL()
+					$update_profile_link->getFullURL(),
+					$user_from_display
 				);
 			}else{
 				$subject = wfMsgExt( 'foe_accept_subject', 'parsemag',
@@ -141,18 +165,30 @@ class UserRelationship {
 	public function sendRelationshipRemoveEmail($user_id_to, $user_from, $type){
 		$user = User::newFromId($user_id_to);
 		$user->loadFromId();
+		
+		$user_from_obj = User::newFromName($user_from);
+		if( is_object( $user_from_obj ) ){
+			$user_from_obj->load();
+			$user_from_display =  trim($user_from_obj->getRealName());
+		}
+		if( !$user_from_display ){
+			$user_from_display = $user_from;
+		}
+		
 		if($user->isEmailConfirmed() && $user->getIntOption("notifyfriendrequest",1)){
 			$user_link = Title::makeTitle( NS_USER ,  $user_from  );
 			$update_profile_link = Title::makeTitle( NS_SPECIAL , "UpdateProfile"  );
 			if($type==1){
 				$subject = wfMsgExt( 'friend_removed_subject','parsemag',
-					$user_from
+					$user_from,
+					$user_from_display
 				 );
 				$body = wfMsgExt( 'friend_removed_body','parsemag',
 					(( trim($user->getRealName()) )?$user->getRealName():$user->getName()),
 					$user_from,
 					$user_link->getFullURL(),
-					$update_profile_link->getFullURL()
+					$update_profile_link->getFullURL(),
+					$user_from_display
 				);
 			}else{
 				$subject = wfMsgExt( 'foe_removed_subject','parsemag',
