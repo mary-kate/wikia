@@ -159,6 +159,10 @@ function WikiaSkinPreferences($pref) {
 			$wgOut->addHTML('</tr>');
 		}
 
+		if($skinKey == 'monaco') {
+			$wgOut->addHTML('<tr><td colspan=2>'.$pref->getToggle('showAds').'</td></tr>');
+		}
+
 		$wgOut->addHTML('</table>');
 		$wgOut->addHTML('</div>');
 
