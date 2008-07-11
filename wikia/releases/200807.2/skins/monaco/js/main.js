@@ -703,11 +703,15 @@ function ad_call(adSpaceId, zoneId, pos) {
  * 3 - logged in
  * 4 - not logged in
  */
-		if(pos == 'FAST_BOTTOM') {
-			document.write('if(FASTisCollisionBottom()) base_url += "&source=1";');
+ 		var source = Array();
+ 		source.push('cat=' + wgWikiaAdvertiserCategory);
+ 		source.push('lang=' + wgContentLanguage);
+		if(pos == 'FAST_BOTTOM' && FASTisCollisionBottom()) {
+			source.push('fast=1');
 		} else if(pos == 'FAST_TOP') {
-			document.write('if(FASTisCollisionTop()) base_url += "&source=14"; else base_url += "&source=24";');
+			source.push('fast=' + (FASTisCollisionTop() ? '14' : '24'));
 		}
+		document.write('base_url += "&source='+source.join(';')+'";');
 		document.write('</scr'+'ipt>');
 		document.write('<scr'+'ipt type="text/javascript" src="'+base_url+'"></scr'+'ipt>');
 	}
