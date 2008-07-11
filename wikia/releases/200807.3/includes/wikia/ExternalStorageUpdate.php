@@ -44,7 +44,6 @@ class ExternalStorageUpdate {
 	public function __construct( $url, $revision ) {
 		$this->mUrl = $url;
 		$this->mRevision = $revision;
-		$this->mPageId = $revision->getPage();
 	}
 
 	/**
@@ -66,7 +65,12 @@ class ExternalStorageUpdate {
 		$cluster  = $path[2];
 		$id	      = $path[3];
 
-		$Title    = Title::newFromID( $this->mPageId );
+		$this->mPageId = $this->mRevision->getPage();
+		$Title = Title::newFromID( $this->mPageId );
+		if( ! $Title  ) {
+			error_log( __METHOD__.": title is null, page id = {$this->mPageId}" );
+			return false;
+		}
 
 		/**
 		 * we should not call this directly, we'll use new loadbalancer factory
@@ -142,6 +146,7 @@ class ExternalStorageUpdate {
 		else {
 			$dbw->rollback();
 		}
+		return true;
 	}
 
 	/**
