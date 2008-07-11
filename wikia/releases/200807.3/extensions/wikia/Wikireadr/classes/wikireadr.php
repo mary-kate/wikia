@@ -38,8 +38,11 @@ class clsWikiReadr {
 	    return $res ;
 	   }
 	  }	
-	  
+	
+	    $lic = '';
+		  
 	  if(!empty($params['ismedia'])){ // license info required
+	
 	    $lic = $this->get_lic($xml);
 	  	if($lic == '' ) {
 	  		return array('content' => '','pages' => array(),'images' => array(), 'imagekey' => '', 'talkcontent' => '', 'title' => '', 'nolicence' => '1');
@@ -82,13 +85,12 @@ class clsWikiReadr {
   	  $categories = array();
   	  $extlinks = array();
 
-      $url = $params['api'].'api.php?action=query&prop=revisions|links|images|langlinks|extlinks&format=php&rvprop=user&rvlimit=1&redirects&titles='.urlencode(str_replace(' ','_',$title));
+      $url = $params['api'].'api.php?action=query&prop=revisions|links|images|langlinks|extlinks&format=php&pllimit=500&rvprop=user&rvlimit=1&redirects&titles='.urlencode(str_replace(' ','_',$title));
       $res = unserialize($this->get_url_content( $url ,'GET' ,'' , $url));
       
       $url = $params['api'].'api.php?action=query&prop=revisions&format=php&rvprop=user&rvlimit=500&redirects&titles='.urlencode(str_replace(' ','_',$title));
       $usr = unserialize($this->get_url_content( $url ,'GET' ,'' , $url));
       $userlist = array();
-        
         
        foreach($usr['query']['pages'] as $key => $value){
    	    if(empty($value['links'])){
@@ -181,7 +183,7 @@ class clsWikiReadr {
 			$xml = str_replace("<contributor>Wikireadr</contributor>","<contributor>Wikireadr</contributor>\n<comment>This page uses content from Wikipedia. The original article was/is at [[Wikipedia:$title]]. The following users contributed to this page: " . implode( ', ', $userlist ) . "</comment>",$xml);	  	
 		}
 		
-  	 if( $params['ismedia'] === true ){
+  	 if( ( !empty( $params['ismedia']) ) && ( $params['ismedia'] === true ) ){
 	    //put additional attribution flag
 	    $ul = '';
 	    
