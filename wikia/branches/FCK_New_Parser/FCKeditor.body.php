@@ -406,10 +406,11 @@ function onLoadFCKeditor()
 		// make a backup holder just in case...
 
 		var oFCKeditor = new FCKeditor('wpTextbox1') ;
-		var domain = '$wgFCKEditorDomain' ;
-		if (domain != '') {
-			document.domain = '$wgFCKEditorDomain' ;
-		}
+                oFCKeditor.Domain = '$wgFCKEditorDomain' ;
+                if (oFCKeditor.Domain != '') {
+                        document.domain = oFCKeditor.Domain ;
+                }
+
 		oFCKeditor.BasePath = '$wgFCKEditorDir/' ;
 		oFCKeditor.Config['CustomConfigurationsPath'] = '$wgFCKEditorExtDir/fckeditor_config.js?$wgStyleVersion' ;
 		oFCKeditor.Config['EditorAreaCSS'] = "$wgFCKEditorExtDir/css/fckeditor.css?$wgStyleVersion" ;
