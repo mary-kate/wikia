@@ -27,8 +27,8 @@ if( !defined( 'MEDIAWIKI' ) ) {
  * Use revision number
  */
 
-$wgStyleVersion         = '259';
-$wgMergeStyleVersionJS  = '259';
+$wgStyleVersion         = '260';
+$wgMergeStyleVersionJS  = '260';
 $wgMergeStyleVersionCSS = '257';
 
 /**
