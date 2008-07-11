@@ -109,7 +109,7 @@ function fastProcess(&$out, &$text, $category = false) {
 		} else {
 			$adContainer = AdServer::getInstance()->getAd('FAST5');
 		}
-		$text .= '<div id="fast_bottom_ads" style="display: none;"><a name="Advertisement"></a><h2><span class="mw-headline">Advertisement</span></h2>'.$adContainer.'</div>';
+		$text .= '<div id="fast_bottom_ads" style="display: none;"><a name="Advertisement"></a><h2><span class="mw-headline">'.wfMsg('fast-adv').'</span></h2>'.$adContainer.'</div>';
 	}
 
 	if(in_array('FAST_SIDE', $fastConfig)) {
