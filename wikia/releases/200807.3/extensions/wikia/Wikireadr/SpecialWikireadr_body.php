@@ -47,10 +47,10 @@ class Wikireadr extends SpecialPage {
 		
 	    $oTmpl = new EasyTemplate( dirname( __FILE__ ) . "/templates/" );
 		
-		if(!empty($_REQUEST['action'])){
-			$a = $_REQUEST['action'];
-		}else{
+		if( empty( $_REQUEST['action'] ) ){
 			$a = '';
+		}else{
+			$a = $_REQUEST['action'];
 		}
 		switch ($a){
 		 
@@ -165,7 +165,7 @@ class Wikireadr extends SpecialPage {
 			$page['pageexist'] = $this->WikiReadrGetArticle( trim( $value ), NS_MAIN ); 
 			$pages[] = $page;
 		}
-		
+	
 		return $pages;
 	}	
 	
