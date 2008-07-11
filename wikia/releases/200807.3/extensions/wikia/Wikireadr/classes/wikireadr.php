@@ -85,7 +85,7 @@ class clsWikiReadr {
   	  $categories = array();
   	  $extlinks = array();
 
-      $url = $params['api'].'api.php?action=query&prop=revisions|links|images|langlinks|extlinks&format=php&pllimit=500&rvprop=user&rvlimit=1&redirects&titles='.urlencode(str_replace(' ','_',$title));
+      $url = $params['api'].'api.php?action=query&prop=revisions|links|images|langlinks|extlinks&format=php&pllimit=500&lllimit=500&imlimit=500&ellimit=500&&rvprop=user&rvlimit=1&redirects&titles='.urlencode(str_replace(' ','_',$title));
       $res = unserialize($this->get_url_content( $url ,'GET' ,'' , $url));
       
       $url = $params['api'].'api.php?action=query&prop=revisions&format=php&rvprop=user&rvlimit=500&redirects&titles='.urlencode(str_replace(' ','_',$title));
