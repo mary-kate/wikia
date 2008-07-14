@@ -138,6 +138,9 @@ var initTracker = function() {
 	// Article footer
 	Event.addListener(['articleFooterActions', 'articleFooterActions2'], 'click', function(e) {
 		var el = Event.getTarget(e);
+		if(el.nodeName == 'IMG') {
+			el = el.parentNode;
+		}
 		if(el.nodeName == 'A') {
 			Tracker.trackByStr(e, 'ArticleFooter/' + el.id.split('_')[1]);
 		}
