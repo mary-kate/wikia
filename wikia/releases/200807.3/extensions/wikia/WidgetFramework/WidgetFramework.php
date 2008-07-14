@@ -84,19 +84,21 @@ class WidgetFramework {
 		global $isWidgetCommunity, $isWidgetSidebar, $isWidgetWikiaToolbox, $isWidgetLanguages;
 		$isWidgetCommunity = $isWidgetSidebar = $isWidgetWikiaToolbox = $isWidgetLanguages = false;
 
-		function tempFunc($item, $key) {
-			if($item == 'WidgetCommunity') {
-				global $isWidgetCommunity;
-				$isWidgetCommunity = true;
-			} else if($item == 'WidgetSidebar') {
-				global $isWidgetSidebar;
-				$isWidgetSidebar = true;
-			} else if($item == 'WidgetWikiaToolbox') {
-				global $isWidgetWikiaToolbox;
-				$isWidgetWikiaToolbox = true;
-			} else if($item == 'WidgetLanguages') {
-				global $isWidgetLanguages;
-				$isWidgetLanguages = true;
+		if (!function_exists('tempFunc')) {
+			function tempFunc($item, $key) {
+				if($item == 'WidgetCommunity') {
+					global $isWidgetCommunity;
+					$isWidgetCommunity = true;
+				} else if($item == 'WidgetSidebar') {
+					global $isWidgetSidebar;
+					$isWidgetSidebar = true;
+				} else if($item == 'WidgetWikiaToolbox') {
+					global $isWidgetWikiaToolbox;
+					$isWidgetWikiaToolbox = true;
+				} else if($item == 'WidgetLanguages') {
+					global $isWidgetLanguages;
+					$isWidgetLanguages = true;
+				}
 			}
 		}
 
