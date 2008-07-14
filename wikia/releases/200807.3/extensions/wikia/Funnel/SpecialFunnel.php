@@ -25,7 +25,6 @@ $wgExtensionCredits['specialpage'][] = array(
 	'description' => 'Funnel Redirects',
 );
 
-$bot = true;
 
 $wgSpecialPages['Funnel'] = array( /*class*/ 'Funnel', /*name*/ 'Funnel', false, false );
 
@@ -58,6 +57,4 @@ function wfFunnel(){
  return true;	 
 }
 
-if($bot) {
- $wgHooks['BeforePageDisplay'][] = array( 'wfFunnel', array() );
-}
+$wgHooks['BeforePageDisplay'][] = array( 'wfFunnel', array() );
