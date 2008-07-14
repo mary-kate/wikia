@@ -21,7 +21,7 @@ $wgExtensionFunctions[] = 'wfMultiDeleteSetup';
 $wgExtensionCredits['specialpage'][] = array(
    'name' => 'Multi Delete',
    'author' => 'Bartek Łapiński',
-   'version' => '2.09' ,
+   'version' => '2.10' ,
    'description' => 'deletes a batch of pages or a page on multiple wikis'
 );
 
@@ -395,7 +395,7 @@ class MultiDeleteForm {
 		$result_array = array_values ($result_array) ;
 
 		//list( $limit, $offset ) = $wgRequest->getLimitOffset() ;
-                $limit = '5000' ;
+                $limit = '10000' ;
 		$offset = 0 ;
 		( count ($result_array) < ($limit + $offset) ) ? $range = count ($result_array) : $range = ($limit + $offset)  ;
 		for ($i = $offset; $i < $range; $i++) {
