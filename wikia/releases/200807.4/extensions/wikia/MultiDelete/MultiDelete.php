@@ -21,7 +21,7 @@ $wgExtensionFunctions[] = 'wfMultiDeleteSetup';
 $wgExtensionCredits['specialpage'][] = array(
    'name' => 'Multi Delete',
    'author' => 'Bartek Łapiński',
-   'version' => '2.09' ,
+   'version' => '2.11' ,
    'description' => 'deletes a batch of pages or a page on multiple wikis'
 );
 
@@ -126,7 +126,23 @@ class MultiDeleteForm {
                                         array (
                                                 wfMsg ('multidelete_this_wiki') => 'one',
                                                 wfMsg ('multidelete_all_wikis') => 'all' ,
-						wfMsg ('multidelete_selected_wikis') => 'selected'
+						wfMsg ('multidelete_selected_wikis') => 'selected' ,
+						wfMsg ('multidelete_brazilian_portuguese_wikis') => 'lang:pt-br' ,
+						wfMsg ('multidelete_hebrew_wikis') => 'lang:he' ,
+                                        	wfMsg ('multidelete_chinese_wikis') => 'lang:zh',
+						wfMsg ('multidelete_polish_wikis') => 'lang:pl' ,
+						wfMsg ('multidelete_czech_wikis') => 'lang:cs' ,
+						wfMsg ('multidelete_portuguese_wikis') => 'lang:pt' ,
+						wfMsg ('multidelete_dutch_wikis') => 'lang:nl' ,
+						wfMsg ('multidelete_italian_wikis') => 'lang:it' ,
+						wfMsg ('multidelete_russian_wikis') => 'lang:ru' ,
+						wfMsg ('multidelete_english_wikis') => 'lang:en' ,
+						wfMsg ('multidelete_japanese_wikis') => 'lang:ja' ,
+						wfMsg ('multidelete_finnish_wikis') => 'lang:fi' ,
+						wfMsg ('multidelete_spanish_wikis') => 'lang:es' ,
+						wfMsg ('multidelete_french_wikis') => 'lang:fr' ,
+						wfMsg ('multidelete_swedish_wikis') => 'lang:sv' ,
+						wfMsg ('multidelete_german_wikis') => 'lang:de' ,					
                                         ),
                                         $scRange,
                                         1
@@ -200,7 +216,7 @@ class MultiDeleteForm {
         }
 
 	/* wraps up multi deletes */
-	function multiDelete ($mode = MULTIDELETE_THIS, $user = false, $line = '', $filename = null, $filename2 = null ) {
+	function multiDelete ($mode = MULTIDELETE_THIS, $user = false, $line = '', $filename = null, $filename2 = null, $lang = '') {
 		global $wgUser, $wgOut ;
 
 		/* todo all messages should really be as _messages_ , not plain texts */
@@ -255,7 +271,7 @@ class MultiDeleteForm {
 
 		/* get wiki array */
 		if ($mode == MULTIDELETE_ALL) {
-	                $wikis = $this->fetchWikis () ;
+	                $wikis = $this->fetchWikis ($lang) ;
 		}  else if ($mode == MULTIDELETE_SELECTED) {
 			$pre_wikis = array () ;
 			if ($filename2) {
@@ -395,7 +411,7 @@ class MultiDeleteForm {
 		$result_array = array_values ($result_array) ;
 
 		//list( $limit, $offset ) = $wgRequest->getLimitOffset() ;
-                $limit = '5000' ;
+                $limit = '10000' ;
 		$offset = 0 ;
 		( count ($result_array) < ($limit + $offset) ) ? $range = count ($result_array) : $range = ($limit + $offset)  ;
 		for ($i = $offset; $i < $range; $i++) {
@@ -416,10 +432,11 @@ class MultiDeleteForm {
 
 	/*	get the list of wikis from database
 	*/
-	function fetchWikis () {
+	function fetchWikis ($lang = '') {
 		global $wgSharedDB ;
 		$dbr =& wfGetDB (DB_SLAVE);
-		$query = "SELECT city_dbname, city_id, city_url, city_title, city_path FROM `{$wgSharedDB}`.city_list" ;
+		'' != $lang ? $extra = " WHERE city_lang = '$lang'" : $extra = '' ;
+		$query = "SELECT city_dbname, city_id, city_url, city_title, city_path FROM `{$wgSharedDB}`.city_list" . $extra ;
 		$res = $dbr->query ($query) ;
 		$wiki_array = array () ;
 		while ($row = $dbr->fetchObject($res)) {
@@ -654,6 +671,9 @@ class MultiDeleteForm {
 	        	$this->multiDelete (MULTIDELETE_ALL, $this->mUser, $this->mPage, $this->mFileTemp) ;
 		} else if ($this->mRange == 'selected') {
 	        	$this->multiDelete (MULTIDELETE_SELECTED, $this->mUser, $this->mPage, $this->mFileTemp, $this->mWikiTemp) ;
+		} else if (strpos ($this->mRange, 'lang:') !== false) {
+			$lang = substr ($this->mRange, 5) ;
+			$this->multiDelete (MULTIDELETE_ALL, $this->mUser, $this->mPage, $this->mFileTemp, '', $lang) ;
 		}
 	}
 
