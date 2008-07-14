@@ -416,10 +416,11 @@ class MultiDeleteForm {
 
 	/*	get the list of wikis from database
 	*/
-	function fetchWikis () {
+	function fetchWikis ($lang = '') {
 		global $wgSharedDB ;
 		$dbr =& wfGetDB (DB_SLAVE);
-		$query = "SELECT city_dbname, city_id, city_url, city_title, city_path FROM `{$wgSharedDB}`.city_list" ;
+		'' != $lang ? $extra = " AND city_lang = '$lang'" : $extra = '' ;
+		$query = "SELECT city_dbname, city_id, city_url, city_title, city_path FROM `{$wgSharedDB}`.city_list" . $extra ;
 		$res = $dbr->query ($query) ;
 		$wiki_array = array () ;
 		while ($row = $dbr->fetchObject($res)) {
