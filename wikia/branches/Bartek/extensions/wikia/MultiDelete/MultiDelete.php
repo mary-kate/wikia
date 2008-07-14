@@ -21,7 +21,7 @@ $wgExtensionFunctions[] = 'wfMultiDeleteSetup';
 $wgExtensionCredits['specialpage'][] = array(
    'name' => 'Multi Delete',
    'author' => 'Bartek Łapiński',
-   'version' => '2.10' ,
+   'version' => '2.11' ,
    'description' => 'deletes a batch of pages or a page on multiple wikis'
 );
 
