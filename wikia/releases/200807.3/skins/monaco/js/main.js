@@ -147,13 +147,15 @@ Event.onDOMReady(function() {
 		Event.preventDefault(e);
 		YAHOO.util.Connect.asyncRequest('GET', wgScriptPath+'/api.php?action=delete&list=wkvoteart&format=json&wkpage='+wgArticleId, callback);
 		YAHOO.util.Dom.addClass('star-rating', 'star-rating-progress');
-		 Dom.setStyle('unrateLink', 'display', 'none');
+		Dom.setStyle('unrateLink', 'display', 'none');
+		YAHOO.Wikia.Tracker.trackByStr(e, 'ArticleFooter/vote/unrate');
 	});
 	Event.addListener(['star1','star2','star3','star4','star5'], 'click', function(e) {
 		Event.preventDefault(e);
 		var rating = this.id.substr(4,1);
 		YAHOO.util.Connect.asyncRequest('GET', wgScriptPath+'/api.php?action=insert&list=wkvoteart&format=json&wkvote='+rating+'&wkpage='+wgArticleId, callback);
 		YAHOO.util.Dom.addClass('star-rating', 'star-rating-progress');
+		YAHOO.Wikia.Tracker.trackByStr(e, 'ArticleFooter/vote/' + rating);
 	});
 
 	// fix for IE6(#1843)

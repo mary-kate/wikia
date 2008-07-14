@@ -135,6 +135,21 @@ var initTracker = function() {
 		}
 	});
 
+	// Article footer
+	Event.addListener(['articleFooterActions', 'articleFooterActions2'], 'click', function(e) {
+		var el = Event.getTarget(e);
+		if(el.nodeName == 'A') {
+			Tracker.trackByStr(e, 'ArticleFooter/' + el.id.split('_')[1]);
+		}
+	});
+
+	Event.addListener('share', 'click', function(e) {
+		var el = Event.getTarget(e);
+		if(el.nodeName == 'A') {
+			Tracker.trackByStr(e, 'ArticleFooter/share/' + el.id.substring(5,el.id.length-2));
+		}
+	});
+
 	// Footer links
 	Event.addListener('wikia_footer', 'click', function(e) {
 		var el = Event.getTarget(e);
