@@ -1257,10 +1257,10 @@ if(!$custom_article_footer && $displayArticleFooter) {
 				<table cellspacing="0">
 					<tr>
 						<td class="col1">
-							<ul class="actions">
-								<li><a rel="nofollow" id="fe_edit_icon" href="<?= $wgTitle->getEditURL() ?>"><img src="<?= $wgStylePath ?>/monobook/blank.gif" id="fe_edit_icon" class="sprite" alt="<?= wfMsg('edit') ?>" /></a> <div><?= wfMsg('footer_1', $wgSitename) ?> <a rel="nofollow" href="<?= $wgTitle->getEditURL() ?>"><?= wfMsg('footer_1.5') ?></a></div></li>
-								<li id="fe_talk"><a rel="nofollow" id="fe_talk_icon" href="<?= $this->data['content_actions']['history']['href'] ?>"><img src="<?= $wgStylePath ?>/monobook/blank.gif" id="fe_talk_icon" class="sprite" alt="<?= wfMsg('history_short') ?>" /></a> <div><a rel="nofollow" href="<?=$this->data['content_actions']['history']['href']?>"><?=$this->data['content_actions']['history']['text']?></a></div></li>
-								<!--<li id="fe_permalink"><a rel="nofollow" id="fe_permalink_icon" href="<?= $this->data['nav_urls']['permalink']['href'] ?>"><img src="<?= $wgStylePath ?>/monobook/blank.gif" id="fe_permalink_icon" class="sprite" alt="<?= wfMsg('permalink') ?>" /></a> <div><a rel="nofollow" href="<?=$this->data['nav_urls']['permalink']['href']?>"><?=$this->data['nav_urls']['permalink']['text']?></a></div></li>-->
+							<ul class="actions" id="articleFooterActions">
+								<li><a rel="nofollow" id="fe_edit_icon" href="<?= $wgTitle->getEditURL() ?>"><img src="<?= $wgStylePath ?>/monobook/blank.gif" id="fe_edit_icon" class="sprite" alt="<?= wfMsg('edit') ?>" /></a> <div><?= wfMsg('footer_1', $wgSitename) ?> <a id="fe_edit_link" rel="nofollow" href="<?= $wgTitle->getEditURL() ?>"><?= wfMsg('footer_1.5') ?></a></div></li>
+								<li id="fe_talk"><a rel="nofollow" id="fe_talk_icon" href="<?= $this->data['content_actions']['history']['href'] ?>"><img src="<?= $wgStylePath ?>/monobook/blank.gif" id="fe_talk_icon" class="sprite" alt="<?= wfMsg('history_short') ?>" /></a> <div><a id="fe_talk_link" rel="nofollow" href="<?=$this->data['content_actions']['history']['href']?>"><?=$this->data['content_actions']['history']['text']?></a></div></li>
+								<li id="fe_permalink"><a rel="nofollow" id="fe_permalink_icon" href="<?= $this->data['nav_urls']['permalink']['href'] ?>"><img src="<?= $wgStylePath ?>/monobook/blank.gif" id="fe_permalink_icon" class="sprite" alt="<?= wfMsg('permalink') ?>" /></a> <div><a id="fe_permalink_link" rel="nofollow" href="<?=$this->data['nav_urls']['permalink']['href']?>"><?=$this->data['nav_urls']['permalink']['text']?></a></div></li>
 
 <?php
 	$timestamp = $wgArticle->getTimestamp();
@@ -1313,7 +1313,7 @@ if(!$custom_article_footer && $displayArticleFooter) {
 							</div>
 						</td>
 						<td class="col2">
-							<ul class="actions">
+							<ul class="actions" id="articleFooterActions2">
 								<li><a rel="nofollow" id="fe_random_icon" href="<?= Skin::makeSpecialUrl( 'Randompage' ) ?>"><img src="<?= $wgStylePath ?>/monobook/blank.gif" id="fe_random_icon" class="sprite" alt="<?= wfMsg('randompage') ?>" /></a> <div><a rel="nofollow" id="fe_random_link" href="<?= Skin::makeSpecialUrl( 'Randompage' ) ?>"><?= wfMsg('footer_6') ?></a></div></li>
 <?php
 	global $wgProblemReportsEnable;
