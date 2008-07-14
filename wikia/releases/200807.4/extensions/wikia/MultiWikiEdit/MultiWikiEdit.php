@@ -21,7 +21,7 @@ $wgExtensionFunctions[] = 'wfMultiWikiEditSetup';
 $wgExtensionCredits['specialpage'][] = array(
    'name' => 'Multi Wiki Edit',
    'author' => 'Bartek Łapiński',
-   'version' => '2.05' ,
+   'version' => '2.11' ,
    'description' => 'edits a batch of pages on this wiki or a page on multiple wikis'
 );
 
@@ -145,7 +145,23 @@ class MultiWikiEditForm {
                                         array (
                                                 wfMsg ('multiwikiedit_this_wiki') => 'one',
                                                 wfMsg ('multiwikiedit_all_wikis') => 'all' ,
-						wfMsg ('multiwikiedit_selected_wikis') => 'selected'
+						wfMsg ('multiwikiedit_selected_wikis') => 'selected' ,
+                                                wfMsg ('multidelete_brazilian_portuguese_wikis') => 'lang:pt-br' ,
+                                                wfMsg ('multidelete_hebrew_wikis') => 'lang:he' ,
+                                                wfMsg ('multidelete_chinese_wikis') => 'lang:zh',
+                                                wfMsg ('multidelete_polish_wikis') => 'lang:pl' ,
+                                                wfMsg ('multidelete_czech_wikis') => 'lang:cs' ,
+                                                wfMsg ('multidelete_portuguese_wikis') => 'lang:pt' ,
+                                                wfMsg ('multidelete_dutch_wikis') => 'lang:nl' ,
+                                                wfMsg ('multidelete_italian_wikis') => 'lang:it' ,
+                                                wfMsg ('multidelete_russian_wikis') => 'lang:ru' ,
+                                                wfMsg ('multidelete_english_wikis') => 'lang:en' ,
+                                                wfMsg ('multidelete_japanese_wikis') => 'lang:ja' ,
+                                                wfMsg ('multidelete_finnish_wikis') => 'lang:fi' ,
+                                                wfMsg ('multidelete_spanish_wikis') => 'lang:es' ,
+                                                wfMsg ('multidelete_french_wikis') => 'lang:fr' ,
+                                                wfMsg ('multidelete_swedish_wikis') => 'lang:sv' ,
+                                                wfMsg ('multidelete_german_wikis') => 'lang:de' ,
                                         ),
                                         $this->mMode,
                                         1
@@ -262,7 +278,7 @@ class MultiWikiEditForm {
         }
 
 	/* wraps up multi edits */
-	function multiEdit ($mode = MULTIWIKIEDIT_THIS, $user = false, $line = '', $filename = null, $filename2 = null ) {
+	function multiEdit ($mode = MULTIWIKIEDIT_THIS, $user = false, $line = '', $filename = null, $filename2 = null, $lang = '') {
 		global $wgUser, $wgOut ;
 
 		/* todo all messages should really be as _messages_ , not plain texts */
@@ -317,7 +333,7 @@ class MultiWikiEditForm {
 
 		/* get wiki array */
 		if ($mode == MULTIWIKIEDIT_ALL) {
-	                $wikis = $this->fetchWikis () ;
+	                $wikis = $this->fetchWikis ($lang) ;
 		}  else if ($mode == MULTIWIKIEDIT_SELECTED) {
 			$pre_wikis = array () ;
 			if ($filename2) {
@@ -475,10 +491,11 @@ class MultiWikiEditForm {
 
 	/*	get the list of wikis from database
 	*/
-	function fetchWikis () {
+	function fetchWikis ($lang = '') {
 		global $wgSharedDB ;
 		$dbr =& wfGetDB (DB_SLAVE);
-		$query = "SELECT city_dbname, city_id, city_url, city_title, city_path FROM `{$wgSharedDB}`.city_list" ;
+		'' != $lang ? $extra = " WHERE city_lang = '$lang'" : $extra = '' ;
+		$query = "SELECT city_dbname, city_id, city_url, city_title, city_path FROM `{$wgSharedDB}`.city_list" . $extra ;
 		$res = $dbr->query ($query) ;
 		$wiki_array = array () ;
 		while ($row = $dbr->fetchObject($res)) {
@@ -729,6 +746,9 @@ class MultiWikiEditForm {
 	        	$this->multiEdit (MULTIWIKIEDIT_ALL, $this->mUser, $this->mPage, $this->mFileTemp) ;
 		} else if ($this->mRange == 'selected') {
 	        	$this->multiEdit (MULTIWIKIEDIT_SELECTED, $this->mUser, $this->mPage, $this->mFileTemp, $this->mWikiTemp) ;
+		} else if (strpos ($this->mRange, 'lang:') !== false) { 
+	                $lang = substr ($this->mRange, 5) ; 
+	                $this->multiEdit (MULTIWIKIEDIT_ALL, $this->mUser, $this->mPage, $this->mFileTemp, '', $lang) ; 
 		}
 	}
 
