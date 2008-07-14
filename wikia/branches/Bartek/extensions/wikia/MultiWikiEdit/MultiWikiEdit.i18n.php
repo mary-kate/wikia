@@ -46,6 +46,22 @@ $messages['en'] = array(
                         'multiwikiedit_select_yourself' => 'you' ,
                         'multiwikiedit_no_page' => 'Please specify at least one page to edit OR choose a file containing page list.' ,
                         'multiwikiedit_split_results' => "Your article count was too high to be done in a single task. It has been split into '''$1''' tasks instead, with a maximum chunk size of '''$2''' articles." ,
-                        'multiwikiedit_max_display_size' => "Multiwikiedit has currently a maximum number of articles in the confirm phase. Your query has been capped at '''$1''' articles. Choose your articles and save task. After that, consider running it again to catch all the remaining articles." 
+                        'multiwikiedit_max_display_size' => "Multiwikiedit has currently a maximum number of articles in the confirm phase. Your query has been capped at '''$1''' articles. Choose your articles and save task. After that, consider running it again to catch all the remaining articles." ,
+                        'multidelete_brazilian_portuguese_wikis' => 'all brazilian portuguese wikis' ,
+                        'multidelete_hebrew_wikis' => 'all hebrew wikis' ,
+                        'multidelete_chinese_wikis' => 'all chinese wikis',
+                        'multidelete_polish_wikis' => 'all polish wikis' ,
+                        'multidelete_czech_wikis' => 'all czech wikis' ,
+                        'multidelete_portuguese_wikis' => 'all portuguese wikis' ,
+                        'multidelete_dutch_wikis' => 'all dutch wikis' ,
+                        'multidelete_italian_wikis' => 'all italian wikis' ,
+                        'multidelete_russian_wikis' => 'all russian wikis' ,
+                        'multidelete_english_wikis' => 'all english wikis' ,
+                        'multidelete_japanese_wikis' => 'all japanese wikis' ,
+                        'multidelete_finnish_wikis' => 'all finnish wikis' ,
+                        'multidelete_spanish_wikis' => 'all spanish wikis' ,
+                        'multidelete_french_wikis' => 'all french wikis' ,
+                        'multidelete_swedish_wikis' => 'all swedish wikis' ,
+                        'multidelete_german_wikis' => 'all german wikis' ,
                 ) ;
 
