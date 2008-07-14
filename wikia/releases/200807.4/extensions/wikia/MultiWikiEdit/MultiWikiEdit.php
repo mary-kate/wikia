@@ -467,7 +467,7 @@ class MultiWikiEditForm {
 		/* now, renumerate array */
 		$result_array = array_values ($result_array) ;
 
-                $limit = '5000' ;
+                $limit = '10000' ;
 		$offset = 0 ;
 		( count ($result_array) < ($limit + $offset) ) ? $range = count ($result_array) : $range = ($limit + $offset) ;
 		for ($i = $offset; $i < $range; $i++) {
