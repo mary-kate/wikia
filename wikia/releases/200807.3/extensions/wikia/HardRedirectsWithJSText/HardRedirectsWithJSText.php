@@ -38,45 +38,51 @@ $wgExtensionCredits['specialpage'][] = array(
         'description' => 'This extension enables Hard Redirects (301), and implements the "Redirected From" text with javascript. The benefit is for SEO, there is only one page for each article  (minimize duplicate content)'
 );
 
-$wgHooks['ArticleViewHeader'][]='jsRedirectedFrom';
+$wgHooks['ArticleViewHeader'][]='jsRedirectedFromDiv';
 $wgHooks['BeforeRedirect'][]='hardRedirectWithCookie'; // Note this hook does not exist in core. You must add it to Wiki.php (see header)
+$wgHooks['BeforePageDisplay'][]='jsRedirectedFromText';
 
 /* With hard redirects enabled, we always always print the redirectMsg div, and 
  * then use Javascript to check for a cookie to display it or not. Note that we
  * always display it so that the MD5 of the page is equal for Google's duplicate
  * content check
  */
-function jsRedirectedFrom($article, $outputDone, $pcache){
-	global $wgOut, $wgEnableHardRedirectsWithJSText, $wgCookiePrefix;
+function jsRedirectedFromDiv($article, $outputDone, $pcache){
+	global $wgOut, $wgEnableHardRedirectsWithJSText;
 	if (! $wgEnableHardRedirectsWithJSText){
 		return true;
 	}
 
 	// Set up the subtitle "Redirected From"
 	$wgOut->setSubtitle('<div id="redirectMsg" class="redirectMsg" style="display:none"></div>');
+	return true;
+}
 
-	$wgOut->addHtml('
-	<script>
-	  if (! YAHOO.util.Cookie ){
-            // Not sure if this is part of allinone. If it becomes that way, we can remove this.
-            alert("downloading");
-	    document.write(\'<script src="http://yui.yahooapis.com/2.5.1/build/cookie/cookie-beta-min.js"></\'+"script>");
-	  }      
-	  var rdCookie="' . addslashes($wgCookiePrefix) . 'RedirectedFrom";
-	  var rdText="' . addslashes(wfMsg('redirectedfrom')) . '";
-	  var rdVal=YAHOO.util.Cookie.get(rdCookie);
+// Fill in the text in the div created above. In a separate hook so the javascript is at the bottom of the page.
+function jsRedirectedFromText($out, $skin){
+	global $wgEnableHardRedirectsWithJSText, $wgCookiePrefix;
+	if (! $wgEnableHardRedirectsWithJSText){
+		return true;
+	}
+ 
+	// Supposedly this will be part of all in one, when it is, remove this.
+	$out->addScript('<script src="http://yui.yahooapis.com/2.5.1/build/cookie/cookie-beta-min.js"></script>');
+	$out->addInlineScript('
+	  var jsrdCookie="' . addslashes($wgCookiePrefix) . 'RedirectedFrom";
+	  var jsrdText="' . addslashes(wfMsg('redirectedfrom')) . '";
+	  var jsrdVal=YAHOO.util.Cookie.get(jsrdCookie);
 
-	  if (rdVal){
-	    var rdVals=rdVal.split("|"); // RedirectFrom cookie has $url|$linktext
+	  if (jsrdVal != null){
+	    var rdVals=jsrdVal.split("|"); // RedirectFrom cookie has $url|$linktext
 	    var rdLink="<a href=\"" + rdVals[0] + "?redirect=no\">" + rdVals[1] + "</a></span>";
-	    YAHOO.util.Dom.get("redirectMsg").innerHTML=rdText.replace(/\$1/, rdLink);
+	    YAHOO.util.Dom.get("redirectMsg").innerHTML=jsrdText.replace(/\$1/, rdLink);
 	    YAHOO.util.Dom.setStyle("redirectMsg", "display", "");
-	    YAHOO.util.Cookie.remove(rdCookie);
-	  }
-	 </script>');
+	    YAHOO.util.Cookie.remove(jsrdCookie);
+	  }');
 
 	return true;
 }
+
 
 /* Hard redirect them to the new url with 301.
  * Append the query string if there is one.
@@ -95,7 +101,7 @@ function hardRedirectWithCookie($wgTitle, $target){
 	      			time() + 30, $wgCookiePath, $wgCookieDomain, $wgCookieSecure );
  		}
 
-		$wgOut->redirect( $target->getFullURL(getenv('QUERY_STRING')), '301' );
+		$wgOut->redirect( $target->getFullURL(), '301' );
   	}
 	return true;
 }
