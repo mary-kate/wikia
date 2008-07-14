@@ -15,7 +15,7 @@ if ( ! defined( 'MEDIAWIKI' ) )
  */
 
 // change this parameter to limit the # of files one can upload
-$wgMaxUploadFiles = 5;
+$wgMaxUploadFiles = empty($wgMaxUploadFiles) ? 5 : $wgMaxUploadFiles;
 
 $wgAvailableRights [] = 'multipleupload';
 $wgGroupPermissions ['staff']['multipleupload'] = true;
