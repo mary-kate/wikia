@@ -53,7 +53,7 @@ $wgAntiBotPayloadTypes = array(
 );
 
 # Load plugins
-foreach ( glob( dirname( __FILE__ ) . '/active/*.php' ) as $file ) {
+foreach ( glob( dirname( __FILE__ ) . '../../../wikia-extras/trunk/AntiBot/active/*.php' ) as $file ) {
 	require( $file );
 }
 
