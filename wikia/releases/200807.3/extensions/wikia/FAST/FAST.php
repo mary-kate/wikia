@@ -91,8 +91,18 @@ function fastProcess(&$out, &$text, $category = false) {
 			$text = AdServer::getInstance()->getAd('FAST_HOME1').$text;
 		}
 	}
-
-	$pos = strrpos($text, '</span></h2>');
+	
+	$headlineArray = array(
+		strrpos($text, '</span></h1>'),
+		strrpos($text, '</span></h2>'),
+		strrpos($text, '</span></h3>'),
+		strrpos($text, '</span></h4>'),
+		strrpos($text, '</span></h5>'),
+		strrpos($text, '</span></h6>')
+	);
+	rsort($headlineArray);
+	
+	$pos = $headlineArray[0];
 
 	if(in_array('FAST4', $fastConfig)) {
 		if($pos > -1) {
