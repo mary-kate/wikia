@@ -166,6 +166,10 @@ class SearchRankTracker extends SpecialPage {
 					$plot->SetColor($wgSearchRankTrackerConfig['searchEngines'][$sEngineName]['graphColor']);
 					$plot->SetLegend(ucfirst($sEngineName));
 					
+					if($sEngineName == 'google') {
+						$plot->SetWeight(2);
+					}
+					
 					$graph->Add($plot);				
 				}
 	
