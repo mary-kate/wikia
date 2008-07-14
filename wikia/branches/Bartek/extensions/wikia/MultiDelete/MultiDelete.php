@@ -216,7 +216,7 @@ class MultiDeleteForm {
         }
 
 	/* wraps up multi deletes */
-	function multiDelete ($mode = MULTIDELETE_THIS, $user = false, $line = '', $filename = null, $filename2 = null ) {
+	function multiDelete ($mode = MULTIDELETE_THIS, $user = false, $line = '', $filename = null, $filename2 = null, $lang = '') {
 		global $wgUser, $wgOut ;
 
 		/* todo all messages should really be as _messages_ , not plain texts */
@@ -271,7 +271,7 @@ class MultiDeleteForm {
 
 		/* get wiki array */
 		if ($mode == MULTIDELETE_ALL) {
-	                $wikis = $this->fetchWikis () ;
+	                $wikis = $this->fetchWikis ($lang) ;
 		}  else if ($mode == MULTIDELETE_SELECTED) {
 			$pre_wikis = array () ;
 			if ($filename2) {
@@ -435,7 +435,7 @@ class MultiDeleteForm {
 	function fetchWikis ($lang = '') {
 		global $wgSharedDB ;
 		$dbr =& wfGetDB (DB_SLAVE);
-		'' != $lang ? $extra = " AND city_lang = '$lang'" : $extra = '' ;
+		'' != $lang ? $extra = " WHERE city_lang = '$lang'" : $extra = '' ;
 		$query = "SELECT city_dbname, city_id, city_url, city_title, city_path FROM `{$wgSharedDB}`.city_list" . $extra ;
 		$res = $dbr->query ($query) ;
 		$wiki_array = array () ;
@@ -671,6 +671,9 @@ class MultiDeleteForm {
 	        	$this->multiDelete (MULTIDELETE_ALL, $this->mUser, $this->mPage, $this->mFileTemp) ;
 		} else if ($this->mRange == 'selected') {
 	        	$this->multiDelete (MULTIDELETE_SELECTED, $this->mUser, $this->mPage, $this->mFileTemp, $this->mWikiTemp) ;
+		} else if (strpos ($this->mRange, 'lang:') !== false) {
+			$lang = substr ($this->mRange, 5) ;
+			$this->multiDelete (MULTIDELETE_ALL, $this->mUser, $this->mPage, $this->mFileTemp, '', $lang) ;
 		}
 	}
 
