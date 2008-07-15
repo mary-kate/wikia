@@ -412,7 +412,7 @@ function onLoadFCKeditor()
                 }
 
 		oFCKeditor.BasePath = '$wgFCKEditorDir/' ;
-		oFCKeditor.Config['CustomConfigurationsPath'] = '$wgFCKEditorExtDir/fckeditor_config.js?$wgStyleVersion' ;
+		oFCKeditor.Config['CustomConfigurationsPath'] = '$wgFCKEditorExtDir/fckeditor_config.js?' ;
 		oFCKeditor.Config['EditorAreaCSS'] = "$wgFCKEditorExtDir/css/fckeditor.css?$wgStyleVersion" ;
 		oFCKeditor.Height = height ;
 		oFCKeditor.ToolbarSet = '$wgFCKEditorToolbarSet' ;
