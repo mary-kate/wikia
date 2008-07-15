@@ -17,16 +17,15 @@ $dir = dirname(__FILE__).'/';
 $wgExtensionMessagesFiles['WikiaMiniUpload'] = $dir.'/WikiaMiniUpload.i18n.php';
 $wgHooks['EditPage::showEditForm:initial2'][] = 'WMUSetup';
 
-// Called on every edit page to add references to JavaScript files
 function WMUSetup($editform) {
 	global $wgOut, $wgStylePath, $wgExtensionsPath, $wgStyleVersion, $wgHooks, $wgUser;
 	if(get_class($wgUser->getSkin()) == 'SkinMonaco') {
 		wfLoadExtensionMessages('WikiaMiniUpload');
 		$wgHooks['ExtendJSGlobalVars'][] = 'WMUSetupVars';
-		$wgOut->addScript('<script type="text/javascript" src="'.$wgStylePath.'/common/yui/2.5.1/get/get-min.js?'.$wgStyleVersion.'"></script>');
+		//$wgOut->addScript('<script type="text/javascript" src="'.$wgStylePath.'/common/yui/2.5.1/get/get-min.js?'.$wgStyleVersion.'"></script>');
 		$wgOut->addScript('<script type="text/javascript" src="'.$wgStylePath.'/common/yui/2.5.1/slider/slider-min.js?'.$wgStyleVersion.'"></script>');
 		$wgOut->addScript('<script type="text/javascript" src="'.$wgExtensionsPath.'/wikia/WikiaMiniUpload/js/WMU.js?'.$wgStyleVersion.'"></script>');
-		$wgOut->addScript('<link rel="stylesheet" type="text/css" href="'.$wgExtensionsPath.'/wikia/WikiaMiniUpload/css/WMU.css?'.$wgStyleVersion.'" />');		
+		$wgOut->addScript('<link rel="stylesheet" type="text/css" href="'.$wgExtensionsPath.'/wikia/WikiaMiniUpload/css/WMU.css?'.$wgStyleVersion.'" />');
 		if (isset ($editform->ImageSeparator)) {
 			$sep = $editform->ImageSeparator ;
 			$marg = 'margin-left:5px;' ;
@@ -42,7 +41,7 @@ function WMUSetup($editform) {
 
 function WMUSetupVars($vars) {
 	$vars['wmu_back'] = wfMsg('wmu-back');
-	$vars['wmu_imagebutton'] = wfMsg('wmu-imagebutton') ; 
+	$vars['wmu_imagebutton'] = wfMsg('wmu-imagebutton') ;
 	$vars['wmu_close'] = wfMsg('wmu-close');
 	$vars['wmu_warn1'] = wfMsg('wmu-warn1');
 	$vars['wmu_warn2'] = wfMsg('wmu-warn2');
