@@ -3,7 +3,6 @@
 	padding: 25px 10px 10px;
 	position: relative;
 	width: 722px;
-	color: #000 !important;
 }
 #ImageUploadBorder {
 	background-color: #000;
@@ -24,6 +23,7 @@
 	padding: 15px;
 	position: relative;
 	width: 670px;
+	color: #000 !important;
 }
 #ImageUpload h1 {
 	color: #222;
