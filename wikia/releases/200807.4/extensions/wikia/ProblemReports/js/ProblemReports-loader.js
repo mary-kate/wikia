@@ -9,7 +9,7 @@ YAHOO.util.Event.onDOMReady( function () {
 	YAHOO.util.Event.addListener(links, "click", function() {
 		if (wikiaProblemReportsDialog == false) {
 			YAHOO.log('ProblemReports: loading JS');
-			YAHOO.util.Get.script(wgExtensionsPath + '/wikia/ProblemReports/js/ProblemReports.js', {
+			YAHOO.util.Get.script(wgExtensionsPath + '/wikia/ProblemReports/js/ProblemReports.js?' + wgStyleVersion, {
 				onSuccess: function() {
 					YAHOO.log('ProblemReports: JS loaded');
 					wikiaProblemReportsDialog = new YAHOO.wikia.ProblemReportsDialog();
