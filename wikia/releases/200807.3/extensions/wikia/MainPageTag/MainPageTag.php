@@ -31,10 +31,10 @@ function wfMainPageTag_lcs( $input, $args, $parser ) {
 		$args['gutter'] = '10px'; 
 	}
 	if( $colOrder ) {
-		$html = 'LEFT COLUMN SECOND <div style="overflow: hidden; height: 1%; padding-right: '. $args['gutter'] .'"><div>';
+		$html = '<div style="overflow: hidden; height: 1%; padding-right: '. $args['gutter'] .'"><div>';
 	} else {
 		$gutter = 300 + trim($args['gutter'], 'px');
-		$html = 'LEFT COLUMN FIRST <div style="float: left; margin-right: -'. $gutter .'px; width: 100%; position: relative;"><div style="margin-right: '. $gutter .'px;">';
+		$html = '<div style="float: left; margin-right: -'. $gutter .'px; width: 100%; position: relative;"><div style="margin-right: '. $gutter .'px;">';
 	}
 	$colOrder = 'left';
 	return $html;
