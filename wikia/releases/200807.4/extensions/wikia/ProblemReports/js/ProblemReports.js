@@ -2,9 +2,7 @@
 //
 
 YAHOO.namespace('wikia');
-YAHOO.wikia.ProblemReportsDialog = function (links) {
-	this.init(links);
-}
+YAHOO.wikia.ProblemReportsDialog = function () {}
 
 YAHOO.wikia.ProblemReportsDialog.prototype = {
 
@@ -14,6 +12,11 @@ YAHOO.wikia.ProblemReportsDialog.prototype = {
 	// add onlick event for 'report a problem' action tabs
 	init: function(links) {
 		YAHOO.util.Event.addListener(links, "click", this.onClick, {ns: wgNamespaceNumber, title: wgTitle, obj: this});
+	},
+
+	// onClick event handler for lazy loading approach
+	fire: function() {
+		this.onClick(false, {ns: wgNamespaceNumber, title: wgTitle, obj: this});
 	},
 
 	// keep "elem" value length below 512 (+ 1)
@@ -26,7 +29,7 @@ YAHOO.wikia.ProblemReportsDialog.prototype = {
 	},
 
 	// callback for click on "report a problem" tab / link 
-	onClick: function(type, args) {
+	onClick: function(type,args) {
 
 		window.scrollTo(0,0);
 
@@ -82,10 +85,10 @@ YAHOO.wikia.ProblemReportsDialog.prototype = {
 			}, this);
 		}
 
-		// fill pr_browser with browser name, flash version and stuff
-		YAHOO.util.Dom.get('pr_browser').innerHTML = this.getUserInfo(); 
-
 		this.panel.show();
+
+		// fill pr_browser with browser name, flash version and stuff
+		YAHOO.util.Dom.get('pr_browser').innerHTML = this.getUserInfo();
 
 		// tracking
 		this.track('open');
@@ -226,9 +229,13 @@ YAHOO.wikia.ProblemReportsDialog.prototype = {
 
 }
 
-var wikiaProblemReportsDialog = false;
+if (typeof wikiaProblemReportsDialog == 'undefined') {
 
-// initialize report a problem dialog handling JS
-YAHOO.util.Event.onDOMReady( function () {
-    wikiaProblemReportsDialog = new YAHOO.wikia.ProblemReportsDialog(["fe_report_link", "ca-report-problem"]);
-});
+	var wikiaProblemReportsDialog = false;
+
+	// initialize report a problem dialog handling JS
+	YAHOO.util.Event.onDOMReady( function () {
+		wikiaProblemReportsDialog = new YAHOO.wikia.ProblemReportsDialog();
+		wikiaProblemReportsDialog.init(["fe_report_link", "ca-report-problem"]);
+	});
+}
