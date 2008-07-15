@@ -49,14 +49,14 @@ tbButton.IconPath = FCKConfig.PluginsPath + 'mediawiki/images/tb_icon_special.gi
 FCKToolbarItems.RegisterItem( 'MW_Special', tbButton ) ;
 
 // Override some dialogs.
-FCKCommands.RegisterCommand( 'MW_Template', new FCKDialogCommand( 'MW_Template', 'Template Properties', FCKConfig.PluginsPath + 'mediawiki/dialogs/template.html', 400, 330 ) ) ;
-FCKCommands.RegisterCommand( 'MW_Ref', new FCKDialogCommand( 'MW_Ref', 'Reference Properties', FCKConfig.PluginsPath + 'mediawiki/dialogs/ref.html', 400, 250 ) ) ;
-FCKCommands.RegisterCommand( 'MW_Math', new FCKDialogCommand( 'MW_Math', 'Formula', FCKConfig.PluginsPath + 'mediawiki/dialogs/math.html', 400, 300 ) ) ;
-FCKCommands.RegisterCommand( 'MW_Special', new FCKDialogCommand( 'MW_Special', 'Special Tag Properties', FCKConfig.PluginsPath + 'mediawiki/dialogs/special.html', 400, 330 ) ) ; //YC
-FCKCommands.RegisterCommand( 'Link', new FCKDialogCommand( 'Link', FCKLang.DlgLnkWindowTitle, FCKConfig.PluginsPath + 'mediawiki/dialogs/link.html', 400, 250 ) ) ;
-FCKCommands.RegisterCommand( 'Image', new FCKDialogCommand( 'Image', FCKLang.DlgImgTitle, FCKConfig.PluginsPath + 'mediawiki/dialogs/image.html', 450, 300 ) ) ;
-FCKCommands.RegisterCommand ('Find', new FCKDialogCommand( 'Find', FCKLang.DlgFindAndReplaceTitle, FCKConfig.PluginsPath + 'mediawiki/dialogs/replace.html'             , 340, 230, null, null, 'Find' ) ) ;
-FCKCommands.RegisterCommand ('Replace', new FCKDialogCommand( 'Replace', FCKLang.DlgFindAndReplaceTitle, FCKConfig.PluginsPath + 'mediawiki/dialogs/replace.html'             , 340, 230, null, null, 'Replace' ) ) ;
+FCKCommands.RegisterCommand( 'MW_Template', new FCKDialogCommand( 'MW_Template', 'Template Properties', FCKConfig.PluginsPath + 'mediawiki/dialogs/template.html?'  + window.parent.wgStyleVersion, 400, 330 ) ) ;
+FCKCommands.RegisterCommand( 'MW_Ref', new FCKDialogCommand( 'MW_Ref', 'Reference Properties', FCKConfig.PluginsPath + 'mediawiki/dialogs/ref.html?' + window.parent.wgStyleVersion, 400, 250 ) ) ;
+FCKCommands.RegisterCommand( 'MW_Math', new FCKDialogCommand( 'MW_Math', 'Formula', FCKConfig.PluginsPath + 'mediawiki/dialogs/math.html?' + window.parent.wgStyleVersion, 400, 300 ) ) ;
+FCKCommands.RegisterCommand( 'MW_Special', new FCKDialogCommand( 'MW_Special', 'Special Tag Properties', FCKConfig.PluginsPath + 'mediawiki/dialogs/special.html?' + window.parent.wgStyleVersion, 400, 330 ) ) ; //YC
+FCKCommands.RegisterCommand( 'Link', new FCKDialogCommand( 'Link', FCKLang.DlgLnkWindowTitle, FCKConfig.PluginsPath + 'mediawiki/dialogs/link.html?' + window.parent.wgStyleVersion, 400, 250 ) ) ;
+FCKCommands.RegisterCommand( 'Image', new FCKDialogCommand( 'Image', FCKLang.DlgImgTitle, FCKConfig.PluginsPath + 'mediawiki/dialogs/image.html?' + window.parent.wgStyleVersion, 450, 300 ) ) ;
+FCKCommands.RegisterCommand ('Find', new FCKDialogCommand( 'Find', FCKLang.DlgFindAndReplaceTitle, FCKConfig.PluginsPath + 'mediawiki/dialogs/replace.html?' + window.parent.wgStyleVersion, 340, 230, null, null, 'Find' ) ) ;
+FCKCommands.RegisterCommand ('Replace', new FCKDialogCommand( 'Replace', FCKLang.DlgFindAndReplaceTitle, FCKConfig.PluginsPath + 'mediawiki/dialogs/replace.html?' + window.parent.wgStyleVersion, 340, 230, null, null, 'Replace' ) ) ;
 
 
 FCKToolbarItems.OldGetItem = FCKToolbarItems.GetItem;
