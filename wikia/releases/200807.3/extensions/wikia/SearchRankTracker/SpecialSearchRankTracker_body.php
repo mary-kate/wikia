@@ -153,11 +153,11 @@ class SearchRankTracker extends SpecialPage {
 					// finall preparing data for y axis
 					$aPlotData = array();
 					foreach($aDataX as $sDate) {
-						if(isset($aData[$sDate])) {
+						if($aData[$sDate]) {
 							$aPlotData[] = -$aData[$sDate];
 						}
 						else {
-							$aPlotData[] = null;
+							$aPlotData[] = 'x';
 						}
 					}
 					
