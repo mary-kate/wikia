@@ -174,6 +174,8 @@ FCKeditor.prototype._GetIFrameHtml = function()
 	var sLink = this.BasePath + 'editor/' + sFile + '?InstanceName=' + encodeURIComponent( this.InstanceName ) ;
 	if (this.ToolbarSet)
 		sLink += '&amp;Toolbar=' + this.ToolbarSet ;
+	/* patch by Bartek for Wikia, 15.07.2008 */
+	sLink += '&' + wgStyleVersion ;
 
 	html = '<iframe id="' + this.InstanceName +
 		'___Frame" src="' + sLink +
