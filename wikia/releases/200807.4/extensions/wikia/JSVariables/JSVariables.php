@@ -34,6 +34,8 @@ function wfExtendJSGlobalVars($vars) {
 	$vars['wgIsMainpage'] = ($vars['wgMainpage'] == (empty($vars['wgCanonicalNamespace']) ?
 							$vars['wgTitle'] :
 							$vars['wgCanonicalNamespace'].':'.$vars['wgTitle']));
+
+	$vars['wgStyleVersion'] = isset($wgStyleVersion) ? $wgStyleVersion : '' ;
 	if(isset($wgUser->getSkin()->themename)) {
 		$vars['themename'] = $wgUser->getSkin()->themename;
 	}
