@@ -130,6 +130,7 @@
 	min-height: 200px;
 	padding: 10px;
 	position: relative;
+	overflow: auto;
 }
 
 /*** ARTICLE FOOTER ***/
