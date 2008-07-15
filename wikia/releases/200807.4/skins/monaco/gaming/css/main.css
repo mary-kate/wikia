@@ -112,7 +112,7 @@ body {
 	color: #FFF;
 	text-decoration: underline;
 }
-#articleFooter h1 {
+#articleFooter strong {
 	color: #FFF;
 }
 #preftoc li {
