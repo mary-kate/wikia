@@ -74,7 +74,7 @@ $MF['monobook_js']['source'] = array(
 	'monobook/main.js',
 	'monobook/tracker.js',
 	'common/tracker.js',
-	'../extensions/wikia/ProblemReports/js/ProblemReports-loeader.js',
+	'../extensions/wikia/ProblemReports/js/ProblemReports-loader.js',
 	'../extensions/wikia/onejstorule.js',
 );
 
