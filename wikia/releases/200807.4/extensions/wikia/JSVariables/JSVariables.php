@@ -6,7 +6,7 @@
 $wgHooks['ExtendJSGlobalVars'][] = 'wfExtendJSGlobalVars';
 
 function wfExtendJSGlobalVars($vars) {
-	global $wgCurse, $wgCityId, $wgEnableAjaxLogin, $wgUser, $wgDBname, $wgPrivateTracker, $wgWikiaAdvertiserCategory;
+	global $wgCurse, $wgCityId, $wgEnableAjaxLogin, $wgUser, $wgDBname, $wgPrivateTracker, $wgWikiaAdvertiserCategory, $wgExtensionsPath;
 
 	$cats = wfGetBreadCrumb();
 	$idx = count($cats)-2;
@@ -37,6 +37,8 @@ function wfExtendJSGlobalVars($vars) {
 	if(isset($wgUser->getSkin()->themename)) {
 		$vars['themename'] = $wgUser->getSkin()->themename;
 	}
+
+	$vars['wgExtensionsPath'] = $wgExtensionsPath;
 
 	return true;
 }
