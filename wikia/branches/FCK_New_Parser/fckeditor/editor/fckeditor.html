@@ -76,7 +76,8 @@ var FCK_IS_CUSTOM_DOMAIN = ( FCK_ORIGINAL_DOMAIN != FCK_RUNTIME_DOMAIN ) ;
 
 function LoadScript( url )
 {
-	document.write( '<scr' + 'ipt type="text/javascript" src="' + url + '"><\/scr' + 'ipt>' ) ;
+	/* patched by Bartek for Wikia, 15.07.2008 */
+	document.write( '<scr' + 'ipt type="text/javascript" src="' + url + '?' + window.parent.wgStyleVersion  + '"><\/scr' + 'ipt>' ) ;
 }
 
 // Main editor scripts.
