@@ -10,15 +10,11 @@ FCKConfig.mwScriptPath = '' ;
 FCKConfig.ToolbarSets['Wiki'] = [
 	['Source'],
 	['Cut','Copy','Paste'],
-	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
-	['SpecialChar','Table','Rule'],
-	['MW_Template','MW_Special','MW_Ref','MW_Math'],
-	'/',
+	['Undo','Redo'],
+	['SpecialChar', 'Table', 'Rule', 'MW_Template'],
 	['FontFormat'],
-	['Bold','Italic','Underline','StrikeThrough'],
-	['OrderedList','UnorderedList'],
-	['Link','Unlink'],
-	['About']
+	['Bold','Italic','Underline','StrikeThrough', 'OrderedList', 'UnorderedList'],
+	['Link'],
 ] ;
 
 // Load the extension plugins.
