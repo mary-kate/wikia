@@ -91,10 +91,6 @@ Event.onContentReady("background_strip", function() {
 			var headerY = parseInt(Dom.getY('wikia_header'));
 			Dom.setStyle(menuId, 'top', headerY + (menuId == 'headerMenuHub' ? 50 : 32) + 'px');
 
-			if (Dom.get('headerMenuHub') && Dom.get('headerMenuUser')) {
-				Dom.setStyle(['headerMenuUser', 'headerMenuHub'], 'visibility', 'hidden');
-			}
-			
 			// #3108
 			if (Dom.hasClass('body', 'rtl')) {
 				if(menuId == 'headerMenuUser') {
@@ -117,11 +113,15 @@ Event.onContentReady("background_strip", function() {
 				Dom.setStyle(menuId, 'visibility', 'visible');
 			}
 		});
-		var headerMenuTimer;
+		var headerMenuTimer, headerButtonTimer;
+		Event.addListener(buttonId, 'mouseout', function() {
+			headerButtonTimer = setTimeout("YAHOO.util.Dom.get('"+menuId+"').style.visibility = 'hidden';", 1500);
+		});
 		Event.addListener(menuId, 'mouseout', function() {
 			headerMenuTimer = setTimeout("YAHOO.util.Dom.get('"+menuId+"').style.visibility = 'hidden';", 300);
 		});
 		Event.addListener(menuId, 'mouseover', function() {
+			clearTimeout(headerButtonTimer);
 			clearTimeout(headerMenuTimer);
 		});
 	}
