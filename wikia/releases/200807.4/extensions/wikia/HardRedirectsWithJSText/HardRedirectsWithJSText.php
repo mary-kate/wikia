@@ -22,7 +22,6 @@
  *
  *
  * Code Review Notes:
- * Confirm that cacheability is the same as it was before.
  * Test "Moved" pages
  */
 
@@ -59,7 +58,7 @@ function jsRedirectedFromDiv($article, $outputDone, $pcache){
 }
 
 // Fill in the text in the div created above. In a separate hook so the javascript is at the bottom of the page.
-function jsRedirectedFromText($out, $skin){
+function jsRedirectedFromText($out){
 	global $wgEnableHardRedirectsWithJSText, $wgCookiePrefix;
 	if (! $wgEnableHardRedirectsWithJSText){
 		return true;
@@ -74,7 +73,9 @@ function jsRedirectedFromText($out, $skin){
 
 	  if (jsrdVal != null){
 	    var rdVals=jsrdVal.split("|"); // RedirectFrom cookie has $url|$linktext
-	    var rdLink="<a href=\"" + rdVals[0] + "?redirect=no\">" + rdVals[1] + "</a></span>";
+	    // php set_cookie uses "+", YUI uses decodeURIcomponent, which expects "%20"
+            var t=rdVals[1].replace(/\+/g, " "); 
+	    var rdLink="<a href=\"" + rdVals[0] + "?redirect=no\">" + t + "</a></span>";
 	    YAHOO.util.Dom.get("redirectMsg").innerHTML=jsrdText.replace(/\$1/, rdLink);
 	    YAHOO.util.Dom.setStyle("redirectMsg", "display", "");
 	    YAHOO.util.Cookie.remove(jsrdCookie);
