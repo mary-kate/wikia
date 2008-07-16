@@ -19,7 +19,9 @@ function wfMainPageTag() {
 }
 
 function wfMainPageTag_rcs( $input, $args, $parser ) {
+	global $colOrder;
 	$html = '<div style="position: relative; width: 300px; float: right; clear: right;"><div>';
+	$colOrder = 'right';
 	return $html;
 }
 

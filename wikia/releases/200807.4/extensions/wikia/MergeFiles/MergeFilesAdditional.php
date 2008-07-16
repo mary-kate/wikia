@@ -122,6 +122,7 @@ $MF['monaco_non_loggedin_js']['source'] = array(
 	'../extensions/wikia/ProblemReports/js/ProblemReports-loader.js',
 	'../extensions/wikia/onejstorule.js',
 	'../extensions/wikia/FAST/FAST.js',
+	'../extensions/wikia/Userengagement/Userengagement.js',
 );
 $MF['monaco_non_loggedin_js']['source'] = array_merge($MF['monaco_non_loggedin_js']['source'], $widgetsAssets['js']);
 
