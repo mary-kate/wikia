@@ -15,8 +15,10 @@ $wgHooks['SkinTemplateOutputPageBeforeExec'][] = 'CustomCategoryNameHook';
 function CustomCategoryNameHook($skintpl, $tpl) {
 	global $wgRequest;
 	if ($skintpl->mTitle->mNamespace == NS_CATEGORY && $wgRequest->getVal('action', 'view') == 'view') {
-		global $wgSitename;
-		$tpl->set('title', $skintpl->mTitle->getNsText() . ': ' . $wgSitename . ' ' . $skintpl->mTitle->getText());
+		$customCategoryName = wfMsg('custom-category-name');
+		if (!wfEmptyMsg('custom-category-name', $customCategoryName)) {
+			$tpl->set('title', $skintpl->mTitle->getNsText() . ': ' . $customCategoryName . ' ' . $skintpl->mTitle->getText());
+		}
 	}
 	return true;
 }
