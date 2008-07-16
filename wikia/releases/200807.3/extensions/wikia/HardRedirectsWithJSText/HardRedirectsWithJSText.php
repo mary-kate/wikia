@@ -101,7 +101,9 @@ function hardRedirectWithCookie($wgTitle, $target){
 	      			time() + 30, $wgCookiePath, $wgCookieDomain, $wgCookieSecure );
  		}
 
-		$wgOut->redirect( $target->getFullURL(), '301' );
+		if (($target !== false) && ($target instanceof Title)) {
+			$wgOut->redirect( $target->getFullURL(), '301' );
+		}
   	}
 	return true;
 }
