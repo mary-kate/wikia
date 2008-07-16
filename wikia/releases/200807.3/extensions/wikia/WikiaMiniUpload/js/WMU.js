@@ -19,16 +19,19 @@ var WMU_orgThumbSize = null;
 /*
  * Functions/methods
  */
+if(mwCustomEditButtons) {
+	mwCustomEditButtons[mwCustomEditButtons.length] = {
+		"imageFile": stylepath + '/../extensions/wikia/WikiaMiniUpload/images/button_wmu.png',
+		"speedTip": wmu_imagebutton,
+		"tagOpen": "",
+		"tagClose": "",
+		"sampleText": "",
+		"imageId": "mw-editbutton-wmu"};
+}
+
 if(skin == 'monaco') {
 	addOnloadHook(function () {
 		if(document.forms.editform) {
-			mwCustomEditButtons[mwCustomEditButtons.length] = {
-				"imageFile": stylepath + '/../extensions/wikia/WikiaMiniUpload/images/button_wmu.png',
-				"speedTip": wmu_imagebutton,
-				"tagOpen": "",
-				"tagClose": "",
-				"sampleText": "",
-				"imageId": "mw-editbutton-wmu"};
 			WMU_addHandler();
 		}
 	});
