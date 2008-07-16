@@ -74,7 +74,7 @@ function jsRedirectedFromText($out){
 
 	  if (jsrdVal != null){
 	    var rdVals=jsrdVal.split("|"); // RedirectFrom cookie has $url|$linktext
-	    var rdLink="<a href=\"" + rdVals[0] + "?redirect=no\">" + rdVals[1].replace(/\+/, " ") + "</a></span>";
+	    var rdLink="<a href=\"" + rdVals[0] + "?redirect=no\">" + rdVals[1].replace(/\+/g, " ") + "</a></span>";
 	    YAHOO.util.Dom.get("redirectMsg").innerHTML=jsrdText.replace(/\$1/, rdLink);
 	    YAHOO.util.Dom.setStyle("redirectMsg", "display", "");
 	    YAHOO.util.Cookie.remove(jsrdCookie);
