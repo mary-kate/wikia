@@ -38,6 +38,7 @@ class LoginForm {
 	var $mName, $mPassword, $mRetype, $mReturnTo, $mCookieCheck, $mPosted;
 	var $mAction, $mCreateaccount, $mCreateaccountMail, $mMailmypassword;
 	var $mLoginattempt, $mRemember, $mEmail, $mDomain, $mLanguage;
+	var $wpBirthYear, $wpBirthMonth, $wpBirthDay;
 
 	/**
 	 * Constructor
@@ -64,6 +65,10 @@ class LoginForm {
 		$this->mAction = $request->getVal( 'action' );
 		$this->mRemember = $request->getCheck( 'wpRemember' );
 		$this->mLanguage = $request->getText( 'uselang' );
+
+		$this->wpBirthYear = $request->getVal( 'wpBirthYear' );
+		$this->wpBirthMonth = $request->getVal( 'wpBirthMonth' );
+		$this->wpBirthDay = $request->getVal( 'wpBirthDay' );
 
 		if( $wgEnableEmail ) {
 			$this->mEmail = $request->getText( 'wpEmail' );
@@ -208,6 +213,28 @@ class LoginForm {
 		global $wgMemc, $wgAccountCreationThrottle;
 		global $wgAuth, $wgMinimalPasswordLength;
 		global $wgEmailConfirmToEdit;
+
+		//new registration - start [Marooned [at] wikia-inc.com]
+		//check if the date has been choosen
+		if ($this->wpBirthYear == -1 || $this->wpBirthMonth == -1 || $this->wpBirthDay == -1) {
+			$this->mainLoginForm( wfMsg( 'userlogin-bad-birthday' ) );
+			return null;
+		}
+
+		$userBirthDay = strtotime($this->wpBirthYear . '-' . $this->wpBirthMonth . '-' . $this->wpBirthDay);
+		if($userBirthDay > strtotime('-13 years')) {
+			$wgOut->setPageTitle( wfMsg('userlogin-unable-title') );
+			$wgOut->setRobotpolicy( 'noindex,nofollow' );
+			$wgOut->setArticleRelated( false );
+			$wgOut->addWikiText( wfMsg('userlogin-unable-info') );
+			if ( !empty( $this->mReturnTo ) ) {
+				$wgOut->returnToMain( true, $this->mReturnTo );
+			} else {
+				$wgOut->returnToMain( true );
+			}
+			return null;
+		}
+		//new registration - end
 
 		// If the user passes an invalid domain, something is fishy
 		if( !$wgAuth->validDomain( $this->mDomain ) ) {
@@ -865,5 +892,3 @@ class LoginForm {
 		return $skin->makeKnownLinkObj( $self, htmlspecialchars( $text ), implode( '&', $attr ) );
 	}
 }
-
-
