@@ -112,79 +112,12 @@ global $ue_events, $wgUser, $wgEnableUserengagementExt, $wgCookiePath, $wgCookie
   		return true;
   	}
 
-$txtjs =
-<<<EOT
-   <script type="text/javascript">
-	/*<![CDATA[*/
-
-	var e = YAHOO.util.Event;
-	e.onDOMReady(submitUserengagement);
-
-	function readUeCookie(name) {
-	var nameEQ = name + "=";
-	var ca = document.cookie.split(';');
-	for(var i=0;i < ca.length;i++) {
-		var c = ca[i];
-		while (c.charAt(0)==' ') c = c.substring(1,c.length);
-		if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-	}
-	return null;
-}
-
-	function submitUserengagement(){
-	  var dacookie = readUeCookie("wgWikiaUserEngagement");
-	  if(!dacookie){
-	  	return(0);
-	  }
-
-	  var oData = parseInt(dacookie.charAt(0));
-	      oData = oData + 1;
-	  	  var handleSuccess = function(o){
-			if(o.responseText !== undefined){
-			   var aData = YAHOO.Tools.JSONParse(o.responseText);
-			   var div = document.getElementById('ue_msg');
-			   div.innerHTML = '';
-			   if(aData["response"]!=''){
-			    if(aData["msg_id"]!=''){
-			     var uemsgTracker = YAHOO.Wikia.Tracker;
-			     uemsgTracker.trackByStr(null, 'userengagement/msg_view' + aData["msg_id"]);
-			    }
-			   	div.innerHTML = aData["response"];
-			   	div.style.display = "block";
-				document.getElementsByTagName('body')[0].style.width = '100%';
-			   }
-			}
-		  };
-
-		var handleFailure = function(o){
-		  return true;
-		};
-
-	var callback =
-	{
-	  success:handleSuccess,
-	  failure:handleFailure,
-	  timeout: 50000
-	};
-
-	 if((!isNaN(oData)) && (oData < 9)){
-		var ajaxpath = "{$GLOBALS["wgScriptPath"]}/index.php";
-		var postData = "?action=ajax&rs=UserengagementAjax&m="+oData;
-		var request = YAHOO.util.Connect.asyncRequest('GET', ajaxpath+postData, callback, postData);
-	 }
-	}
-	/*]]>*/
-	</script>
-EOT;
-
-
     if ( !empty( $wgEnableUserengagementExt ) && $param['status'] == 'on' )
 	{
 		// include external CSS (#2784)
         global $wgOut, $wgExtensionsPath, $wgStyleVersion;
         $wgOut->addScript('<link rel="stylesheet" type="text/css" href="'.$wgExtensionsPath.'/wikia/Userengagement/Userengagement.css?'.$wgStyleVersion.'" />');
 		$skin = &$wgUser->getSkin();
-		$skin->newuemsgjs = $txtjs;
 		$skin->newuemsg = '<div id="ue_msg" class="usermessage userengagement" style="display: none"></div>';
 
 		if( !empty( $_SESSION[md5($_SERVER['REMOTE_ADDR']) . '_ue_id'])) {
