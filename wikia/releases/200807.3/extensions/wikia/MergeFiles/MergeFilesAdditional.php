@@ -32,14 +32,15 @@ $widgetsAssets = getWidgetsAssets();
 global $MF;
 
 $MF['quartz_js']['source'] = array(
-	'common/yui/2.5.1/utilities/utilities.js',
-	'common/yui/2.5.1/container/container.js',
-	'common/yui/2.5.1/autocomplete/autocomplete.js',
-	'common/yui/2.5.1/logger/logger.js',
-	'common/yui/2.5.1/menu/menu.js',
-	'common/yui/2.5.1/tabview/tabview.js',
-	'common/yui/2.4.0/3rdpart/tools.js',
-	'common/yui/2.4.0/3rdpart/carousel.js',
+	'common/yui_2.5.2/utilities/utilities.js',
+	'common/yui_2.5.2/container/container.js',
+	'common/yui_2.5.2/autocomplete/autocomplete.js',
+	'common/yui_2.5.2/logger/logger.js',
+	'common/yui_2.5.2/menu/menu.js',
+	'common/yui_2.5.2/tabview/tabview.js',
+	'common/yui_extra/tools-min.js',
+	'common/yui_extra/carousel-min.js',
+
 	'common/urchin.js',
 	'quartz/js/main.js',
 	'quartz/js/usermenu.js',
@@ -62,13 +63,14 @@ $MF['quartz_js']['source'] = array_merge($MF['quartz_js']['source'], $widgetsAss
 $MF['quartz_css']['source'] = $widgetsAssets['css'];
 
 $MF['monobook_js']['source'] = array(
-	'common/yui/2.5.1/utilities/utilities.js',
-	'common/yui/2.5.1/container/container.js',
-	'common/yui/2.5.1/autocomplete/autocomplete.js',
-	'common/yui/2.5.1/logger/logger.js',
-	'common/yui/2.5.1/menu/menu.js',
-	'common/yui/2.5.1/tabview/tabview.js',
-	'common/yui/2.4.0/3rdpart/tools.js',
+	'common/yui_2.5.2/utilities/utilities.js',
+	'common/yui_2.5.2/container/container.js',
+	'common/yui_2.5.2/autocomplete/autocomplete.js',
+	'common/yui_2.5.2/logger/logger.js',
+	'common/yui_2.5.2/menu/menu.js',
+	'common/yui_2.5.2/tabview/tabview.js',
+	'common/yui_extra/tools-min.js',
+
 	'common/urchin.js',
 	'common/wikibits.js',
 	'monobook/main.js',
@@ -79,16 +81,18 @@ $MF['monobook_js']['source'] = array(
 );
 
 $MF['monaco_loggedin_js']['source'] = array(
+	'common/yui_2.5.2/utilities/utilities.js',
+	'common/yui_2.5.2/container/container.js',
+	'common/yui_2.5.2/autocomplete/autocomplete.js',
+	'common/yui_2.5.2/animation/animation-min.js',
+	'common/yui_2.5.2/logger/logger.js',
+	'common/yui_2.5.2/menu/menu.js',
+	'common/yui_2.5.2/tabview/tabview.js',
+	'common/yui_extra/tools-min.js',
+	'common/yui_extra/carousel-min.js',
+
 	'common/ajax.js',
-	'common/yui/2.5.1/utilities/utilities.js',
-	'common/yui/2.5.1/container/container.js',
-	'common/yui/2.5.1/autocomplete/autocomplete.js',
-	'common/yui/2.5.1/tabview/tabview.js',
-	'common/yui/2.5.1/animation/animation-min.js',
-	'common/yui/2.4.0/3rdpart/tools.js',
 	'common/urchin.js',
-	'common/yui/2.4.0/3rdpart/carousel.js',
-	'common/yui/2.5.1/logger/logger.js',
 	'common/wikibits.js',
 	'monaco/js/tracker.js',
 	'common/tracker.js',
@@ -103,21 +107,24 @@ $MF['monaco_loggedin_js']['source'] = array(
 $MF['monaco_loggedin_js']['source'] = array_merge($MF['monaco_loggedin_js']['source'], $widgetsAssets['js']);
 
 $MF['monaco_non_loggedin_js']['source'] = array(
+	'common/yui_2.5.2/utilities/utilities.js',
+	'common/yui_2.5.2/container/container.js',
+	'common/yui_2.5.2/autocomplete/autocomplete.js',
+	'common/yui_2.5.2/animation/animation-min.js',
+	'common/yui_2.5.2/logger/logger.js',
+	'common/yui_2.5.2/menu/menu.js',
+	'common/yui_2.5.2/tabview/tabview.js',
+	'common/yui_extra/tools-min.js',
+	'common/yui_extra/carousel-min.js',
+
 	'common/ajax.js',
-	'common/yui/2.5.1/utilities/utilities.js',
-	'common/yui/2.5.1/container/container.js',
-	'common/yui/2.5.1/autocomplete/autocomplete.js',
-	'common/yui/2.5.1/tabview/tabview.js',
-	'common/yui/2.5.1/animation/animation-min.js',
-	'common/yui/2.4.0/3rdpart/tools.js',
 	'common/urchin.js',
-	'common/yui/2.5.1/logger/logger.js',
 	'common/wikibits.js',
 	'monaco/js/tracker.js',
 	'common/tracker.js',
 	'monaco/js/main.js',
 	'common/widgets/js/widgetsConfig.js',
-        'common/widgets/js/widgetsFramework.js',
+	'common/widgets/js/widgetsFramework.js',
 	'../extensions/wikia/AjaxLogin/AjaxLogin.js',
 	'../extensions/wikia/ProblemReports/js/ProblemReports.js',
 	'../extensions/wikia/onejstorule.js',
@@ -127,8 +134,8 @@ $MF['monaco_non_loggedin_js']['source'] = array(
 $MF['monaco_non_loggedin_js']['source'] = array_merge($MF['monaco_non_loggedin_js']['source'], $widgetsAssets['js']);
 
 $MF['monaco_css']['source'] = array(
-	'common/yui/2.5.1/container/assets/container.css',
-	'common/yui/2.5.1/tabview/assets/tabview.css',
+	'common/yui_2.5.2/container/assets/container.css',
+	'common/yui_2.5.2/tabview/assets/tabview.css',
 	'common/shared.css',
 	'monaco/css/monobook_modified.css',
 	'monaco/css/reset_modified.css',
@@ -141,4 +148,3 @@ $MF['monaco_css']['source'] = array(
 	'monaco/css/ny.css',
 );
 $MF['monaco_css']['source'] = array_merge($MF['monaco_css']['source'], $widgetsAssets['css']);
-
