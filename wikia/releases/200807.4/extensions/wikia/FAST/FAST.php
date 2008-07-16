@@ -91,8 +91,18 @@ function fastProcess(&$out, &$text, $category = false) {
 			$text = AdServer::getInstance()->getAd('FAST_HOME1').$text;
 		}
 	}
-
-	$pos = strrpos($text, '</span></h2>');
+	
+	$headlineArray = array(
+		strrpos($text, '</span></h1>'),
+		strrpos($text, '</span></h2>'),
+		strrpos($text, '</span></h3>'),
+		strrpos($text, '</span></h4>'),
+		strrpos($text, '</span></h5>'),
+		strrpos($text, '</span></h6>')
+	);
+	rsort($headlineArray);
+	
+	$pos = $headlineArray[0];
 
 	if(in_array('FAST4', $fastConfig)) {
 		if($pos > -1) {
@@ -109,7 +119,7 @@ function fastProcess(&$out, &$text, $category = false) {
 		} else {
 			$adContainer = AdServer::getInstance()->getAd('FAST5');
 		}
-		$text .= '<div id="fast_bottom_ads" style="display: none;"><a name="Advertisement"></a><h2><span class="mw-headline">Advertisement</span></h2>'.$adContainer.'</div>';
+		$text .= '<div id="fast_bottom_ads" style="display: none;"><a name="Advertisement"></a><h2><span class="mw-headline">'.wfMsg('fast-adv').'</span></h2>'.$adContainer.'</div>';
 	}
 
 	if(in_array('FAST_SIDE', $fastConfig)) {

@@ -416,9 +416,14 @@ class DataProvider
 		$results = $wgMemc->get( $memckey );
 
 		if ( !is_array( $results ) ) {
-
-			$query = "SELECT rev_user, count(*) AS cnt FROM revision WHERE rev_user != 0 GROUP BY rev_user ORDER BY cnt DESC";
+			$query = "select rev_user, rev_cnt as cnt from user_rev_cnt where rev_user != 0 and rev_user NOT IN (SELECT ug_user FROM user_groups WHERE ug_group = 'staff')  order by rev_cnt desc";
 			$dbr = &wfGetDB( DB_SLAVE );
+			if ($dbr->tableExists("user_rev_cnt") === false) {
+				$query = "select rev_user, cnt from ";
+				$query .= "(SELECT rev_user, count(0) as cnt FROM revision where rev_user > 0 and rev_user not in (select ug_user from user_groups where ug_group = 'staff') ";
+				$query .= "GROUP BY rev_user) as c ";
+				$query .= "ORDER BY cnt desc";
+			}
 			$res = $dbr->query( $dbr->limitResult($query, $limit * 4, 0) );
 
 			$results = array();

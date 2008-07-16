@@ -676,76 +676,45 @@ function disableWikiaWriter() {
 }
 
 /**
+ * Tricky code delay ad loading
  * @author Inez Korczynski
  */
-if(Math.round(Math.random() * 1000) == 1 && wgIsArticle && (YAHOO.env.ua.gecko > 0 || YAHOO.env.ua.ie > 0)) {
-
-	function generateGuid()	{
-		var result, i, j;
-		result = '';
-		for(j=0; j<32; j++) {
-			if( j == 8 || j == 12|| j == 16|| j == 20)
-				result = result + '-';
-			i = Math.floor(Math.random()*16).toString(16).toUpperCase();
-			result = result + i;
-		}
-		return result
-	}
-
-	function VISIBILITY_STATS() {
-		YAHOO.util.Event.removeListener(window, 'resize', VISIBILITY_STATS);
-		YAHOO.util.Event.removeListener(window, 'scroll', VISIBILITY_STATS);
-		VISIBILITY_STATS_CALL('type=2&a=' + guid);
-	}
-
-	function VISIBILITY_STATS_CALL(param) {
-		YAHOO.log("PARAM: " + param);
-		var image = document.createElement('img');
-		image.style.display = 'none';
-		image.src = 'http://wikia-ads.wikia.com/log.php' + '?' + param;
-		$('article').appendChild(image);
-	}
-
-	var guid = generateGuid();
-
-	var visibleImages = 0;
-	var inVisibleImages = 0;
-	var viewportHeight = YAHOO.util.Dom.getViewportHeight();
-	var images = $('article').getElementsByTagName('img');
-
-	for(var i = 0; i < images.length; i++) {
-		if(images[i].src.indexOf('http://wikia-ads.wikia.com') == -1) {
-			if(YAHOO.util.Dom.getY(images[i]) > viewportHeight) {
-				inVisibleImages++;
-			} else {
-				visibleImages++;
+function ad_call(adSpaceId, zoneId, pos) {
+	curAdSpaceId = -1;
+	if($('adSpace' + adSpaceId)) {
+		if(pos.substring(0, 4) == 'FAST') {
+			if(!FASTisValid(pos)) {
+				return;
 			}
 		}
+		curAdSpaceId = adSpaceId;
+		document.write('<scr'+'ipt type="text/javascript">enableWikiaWriter('+adSpaceId+');</scr'+'ipt>');
+		document.write('<scr'+'ipt type="text/javascript">');
+		document.write('var base_url = "http://wikia-ads.wikia.com/www/delivery/ajs.php";');
+		document.write('base_url += "?loc=" + escape(window.location);');
+		document.write('if(typeof document.referrer != "undefined") base_url += "&referer=" + escape(document.referrer);');
+		document.write('if(typeof document.context != "undefined") base_url += "&context=" + escape(document.context);');
+		document.write('if(typeof document.mmm_fo != "undefined") base_url += "&mmm_fo=1";');
+		document.write('base_url += "&zoneid='+zoneId+'";');
+		document.write('base_url += "&cb=" + Math.floor(Math.random()*99999999999);');
+		document.write('if(typeof document.MAX_used != "undefined" && document.MAX_used != ",") base_url += "&exclude=" + document.MAX_used;');
+/**
+ * Parameters description
+ * 1 - collision
+ * 2 - no-collision
+ * 3 - logged in
+ * 4 - not logged in
+ */
+ 		var source = Array();
+ 		source.push('cat=' + wgWikiaAdvertiserCategory);
+ 		source.push('lang=' + wgContentLanguage);
+		if(pos == 'FAST_BOTTOM' && FASTisCollisionBottom()) {
+			source.push('fast=1');
+		} else if(pos == 'FAST_TOP') {
+			source.push('fast=' + (FASTisCollisionTop() ? '14' : '24'));
+		}
+		document.write('base_url += "&source='+source.join(';')+'";');
+		document.write('</scr'+'ipt>');
+		document.write('<scr'+'ipt type="text/javascript" src="'+base_url+'"></scr'+'ipt>');
 	}
-
-	YAHOO.util.Event.addListener(window, 'resize', VISIBILITY_STATS);
-	YAHOO.util.Event.addListener(window, 'scroll', VISIBILITY_STATS);
-
-	VISIBILITY_STATS_CALL('type=1&a=' + visibleImages + '&b=' + inVisibleImages + '&c=' + wgNamespaceNumber + '&d=' + wgCityId + '&e=' + guid);
-
-	YAHOO.util.Event.onContentReady('spotlight_footer', function() {
-		var params = 'type=3&a=' + guid;
-
-		if(YAHOO.util.Dom.getY('spotlight_footer') > viewportHeight) {
-			params += '&b=false';
-		} else {
-			params += '&b=true';
-		}
-
-		if(YAHOO.util.Dom.getElementsByClassName('WidgetAdvertiser').length > 0) {
-			if(YAHOO.util.Dom.getY(YAHOO.util.Dom.getElementsByClassName('WidgetAdvertiser')[0]) > viewportHeight) {
-				params += '&c=false';
-			} else {
-				params += '&c=true';
-			}
-		}
-
-		VISIBILITY_STATS_CALL(params);
-	});
-
 }

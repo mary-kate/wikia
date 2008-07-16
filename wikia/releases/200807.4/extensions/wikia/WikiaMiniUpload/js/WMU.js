@@ -22,7 +22,13 @@ var WMU_orgThumbSize = null;
 if(skin == 'monaco') {
 	addOnloadHook(function () {
 		if(document.forms.editform) {
-			addButton(stylepath + '/../extensions/wikia/WikiaMiniUpload/images/button_wmu.png', wmu_imagebutton, '', '', '', 'mw-editbutton-wmu');
+			mwCustomEditButtons[mwCustomEditButtons.length] = {
+				"imageFile": stylepath + '/../extensions/wikia/WikiaMiniUpload/images/button_wmu.png',
+				"speedTip": wmu_imagebutton,
+				"tagOpen": "",
+				"tagClose": "",
+				"sampleText": "",
+				"imageId": "mw-editbutton-wmu"};
 			WMU_addHandler();
 		}
 	});
@@ -48,47 +54,45 @@ function WMU_show() {
 		return;
 	}
 
-	//YAHOO.util.Get.css(stylepath + '/../extensions/wikia/WikiaMiniUpload/css/WMU.css', { onSuccess: function() {
-		var html = '';
-		html += '<div class="reset" id="ImageUpload">';
-		html += '	<div id="ImageUploadBorder"></div>';
-		html += '	<div id="ImageUploadProgress1" class="ImageUploadProgress"></div>';
-		html += '	<div id="ImageUploadBack"><div></div><a href="#">' + wmu_back + '</a></div>';
-		html += '	<div id="ImageUploadClose"><div></div><a href="#">' + wmu_close + '</a></div>';
-		html += '	<div id="ImageUploadBody">';
-		html += '		<div id="ImageUploadError"></div>';
-		html += '		<div id="ImageUploadMain"></div>';
-		html += '		<div id="ImageUploadDetails" style="display: none;"></div>';
-		html += '		<div id="ImageUploadConflict" style="display: none;"></div>';
-		html += '		<div id="ImageUploadSummary" style="display: none;"></div>';
-		html += '	</div>';
-		html += '</div>';
+	var html = '';
+	html += '<div class="reset" id="ImageUpload">';
+	html += '	<div id="ImageUploadBorder"></div>';
+	html += '	<div id="ImageUploadProgress1" class="ImageUploadProgress"></div>';
+	html += '	<div id="ImageUploadBack"><div></div><a href="#">' + wmu_back + '</a></div>';
+	html += '	<div id="ImageUploadClose"><div></div><a href="#">' + wmu_close + '</a></div>';
+	html += '	<div id="ImageUploadBody">';
+	html += '		<div id="ImageUploadError"></div>';
+	html += '		<div id="ImageUploadMain"></div>';
+	html += '		<div id="ImageUploadDetails" style="display: none;"></div>';
+	html += '		<div id="ImageUploadConflict" style="display: none;"></div>';
+	html += '		<div id="ImageUploadSummary" style="display: none;"></div>';
+	html += '	</div>';
+	html += '</div>';
 
-		var element = document.createElement('div');
-		element.id = 'WMU_div';
-		element.style.width = '722px';
-		element.style.height = '437px';
-		element.innerHTML = html;
+	var element = document.createElement('div');
+	element.id = 'WMU_div';
+	element.style.width = '722px';
+	element.style.height = '437px';
+	element.innerHTML = html;
 
-		document.body.appendChild(element);
+	document.body.appendChild(element);
 
-		WMU_panel = new YAHOO.widget.Panel('WMU_div', {
-			modal: true,
-			constraintoviewport: true,
-			draggable: false,
-			close: false,
-			fixedcenter: true,
-			underlay: "none",
-			visible: false,
-			zIndex: 1500
-		});
-		WMU_panel.render();
-		WMU_panel.show();
-		WMU_loadMain();
+	WMU_panel = new YAHOO.widget.Panel('WMU_div', {
+		modal: true,
+		constraintoviewport: true,
+		draggable: false,
+		close: false,
+		fixedcenter: true,
+		underlay: "none",
+		visible: false,
+		zIndex: 1500
+	});
+	WMU_panel.render();
+	WMU_panel.show();
+	WMU_loadMain();
 
-		YAHOO.util.Event.addListener('ImageUploadBack', 'click', WMU_back);
-		YAHOO.util.Event.addListener('ImageUploadClose', 'click', WMU_close);
-	//}});
+	YAHOO.util.Event.addListener('ImageUploadBack', 'click', WMU_back);
+	YAHOO.util.Event.addListener('ImageUploadClose', 'click', WMU_close);
 }
 
 function WMU_loadMain() {

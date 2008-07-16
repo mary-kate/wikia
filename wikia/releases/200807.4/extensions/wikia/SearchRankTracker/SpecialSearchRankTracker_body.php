@@ -153,11 +153,11 @@ class SearchRankTracker extends SpecialPage {
 					// finall preparing data for y axis
 					$aPlotData = array();
 					foreach($aDataX as $sDate) {
-						if(isset($aData[$sDate])) {
+						if($aData[$sDate]) {
 							$aPlotData[] = -$aData[$sDate];
 						}
 						else {
-							$aPlotData[] = null;
+							$aPlotData[] = 'x';
 						}
 					}
 					
@@ -165,6 +165,10 @@ class SearchRankTracker extends SpecialPage {
 					$plot->mark->SetType($wgSearchRankTrackerConfig['searchEngines'][$sEngineName]['graphMark']);
 					$plot->SetColor($wgSearchRankTrackerConfig['searchEngines'][$sEngineName]['graphColor']);
 					$plot->SetLegend(ucfirst($sEngineName));
+					
+					if($sEngineName == 'google') {
+						$plot->SetWeight(2);
+					}
 					
 					$graph->Add($plot);				
 				}

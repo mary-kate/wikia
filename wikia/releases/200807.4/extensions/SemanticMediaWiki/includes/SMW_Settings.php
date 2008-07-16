@@ -73,8 +73,8 @@ $smwgPropertyPagingLimit = 25; // use smaller value since property lists are muc
 # Especially meant to prevent overly high server-load by complex queries.
 ##
 $smwgQEnabled = true;         // (De)activates all query related features and interfaces
-$smwgQMaxSize = 12;           // Maximal number of conditions in queries, use format="debug" for example sizes
-$smwgQMaxDepth = 4;           // Maximal property depth of queries, e.g. [[rel::<q>[[rel2::Test]]</q>]] has depth 2
+if (empty($smwgQMaxSize))  $smwgQMaxSize = 12;           // Maximal number of conditions in queries, use format="debug" for example sizes
+if (empty($smwgQMaxDepth)) $smwgQMaxDepth = 4;           // Maximal property depth of queries, e.g. [[rel::<q>[[rel2::Test]]</q>]] has depth 2
 $smwgQSubcategoryDepth = 10;  // Restrict level of sub-category inclusion (steps within category hierarchy)
 $smwgQSubpropertyDepth = 10;  // Restrict level of sub-property inclusion (steps within property hierarchy)
                               // (Use 0 to disable hierarchy-inferencing in queries)
@@ -135,7 +135,8 @@ $smwgOWLFullExport = false; // decides, if the RDF export will export, by defaul
 # during full RDF export, unless they are referred to from another
 # article.
 ##
-$smwgNamespacesWithSemanticLinks = array(
+# Only set if not overridden in WikiFactory, trac #3241
+if (empty($smwgNamespacesWithSemanticLinks)) $smwgNamespacesWithSemanticLinks = array(
 	              NS_MAIN => true,
 	              NS_TALK => false,
 	              NS_USER => true,
