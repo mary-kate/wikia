@@ -85,7 +85,7 @@ class SiteWideMessages extends SpecialPage {
 
 		$formData['hubNames'] = $hubList;
 
-		//fetching group list	TODO: sprawdzic zapytanie i wynik - z jakiej bazy brac?
+		//fetching group list
 		$DB = wfGetDB(DB_SLAVE);
 		$dbResult = $DB->Query (
 			  'SELECT DISTINCT ug_group'

@@ -340,6 +340,9 @@ YAHOO.extend(YAHOO.wikia.ddObject, YAHOO.util.DDProxy, {
 
 function hideCarousel(e) {
 	Event.preventDefault(e);
+
+	carouselShown = false;
+
 	if(skin == 'quartz') {
 		Dom.setStyle('widget_cockpit', 'display', 'none');
 	} else {
@@ -353,12 +356,15 @@ var carouselObj = null;
 var carouselLoaded = false;
 var carouselLength = 0;
 var carouselVisible = null;
+var carouselShown = false;
 
 function showCarousel(e) {
 	if (Dom.get("headerMenuUser")) {
 		Dom.get("headerMenuUser").style.visibility = 'hidden';	
 	}
 	Event.preventDefault(e);
+
+	carouselShown = true;
 	
 	// macbre: scroll to top of the page
 	window.scrollTo(0,0);
@@ -462,10 +468,9 @@ function getNumberForCarousel() {
 		Dom.setStyle(carousel, 'width', carouselSize + 'px');
 	}
 
-	YAHOO.log('getNumberForCarousel(): ' + carouselVisible);
-
-	// and do config update (#3179)
-	if (carouselObj) {
+	// and do config update (#3179) only when carousel is shown (IE6 is veeeery strange)
+	if (carouselObj && carouselShown) {
+		YAHOO.log('getNumberForCarousel(): ' + carouselVisible);
 		carouselObj.setProperty('scrollInc',  carouselVisible);
 		carouselObj.setProperty('numVisible', carouselVisible);
 	}

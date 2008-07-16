@@ -46,7 +46,7 @@ class SystemGiftManager extends SpecialPage {
 						);
 				$wgOut->addHTML("<span class='view-status'>The gift has been saved</span><br><br>");
 			}
-			
+			$g->update_system_gifts();
 			$wgOut->addHTML($this->displayForm($gift_id));
 		}else{
 			$gift_id = $wgRequest->getVal( 'id' );

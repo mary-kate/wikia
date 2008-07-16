@@ -62,7 +62,7 @@ function SiteWideMessagesInit() {
 }
 
 /**
- * Used to cancel cashing diff when user has some messages - important security issue
+ * Used to cancel caching diff when user has some messages - important security issue
  *
  */
 function SiteWideMessagesAbortDiffCache($oDiffEngine) {
