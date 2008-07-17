@@ -8,7 +8,7 @@ if( !defined( 'MEDIAWIKI' ) ) {
 }
 
 $wgExtensionFunctions[] = 'wfMainPageTag';
-$colOrder = null;
+$MainPageTagState = 0;
 
 function wfMainPageTag() {
 	global $wgParser;
@@ -19,25 +19,25 @@ function wfMainPageTag() {
 }
 
 function wfMainPageTag_rcs( $input, $args, $parser ) {
-	global $colOrder;
+	global $MainPageTagState;
 	$html = '<div style="position: relative; width: 300px; float: right; clear: right;"><div>';
-	$colOrder = 'right';
+	$MainPageTagState = 1;
 	return $html;
 }
 
 function wfMainPageTag_lcs( $input, $args, $parser ) {
-	global $colOrder;
+	global $MainPageTagState;
 	if(!isset($args['gutter'])) {
 		$args['gutter'] = '10';
 	}
 	$args['gutter'] = str_replace('px', '', $args['gutter']);
-	if($colOrder) {
+	if($MainPageTagState === 1) {
 		$html = '<div style="overflow: hidden; height: 1%; padding-right: '. $args['gutter'] .'px"><div>';
+		$MainPageTagState = 0;
 	} else {
 		$gutter = 300 + $args['gutter'];
 		$html = '<div style="float: left; margin-right: -'. $gutter .'px; width: 100%; position: relative;"><div style="margin-right: '. $gutter .'px;">';
 	}
-	$colOrder = 'left';
 	return $html;
 }
 
