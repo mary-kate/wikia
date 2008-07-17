@@ -134,11 +134,11 @@ $Factory.Domain.Callback = {
         for (var i=0;i<aDomains.length;i++) {
             var id = $Factory.randid();
             var li = $Dom.create("li", aDomains[i], {id: id},[
-                YAHOO.Tools.makeTextObject(" ["),
+                document.createTextNode( " [" ),
                 $Dom.create("a", "change", {id: id + "change", href: "#"}),
-                YAHOO.Tools.makeTextObject("] ["),
+                document.createTextNode("] ["),
                 $Dom.create("a", "remove", {id: id + "remove", href: "#"}),
-                YAHOO.Tools.makeTextObject("]")
+                document.createTextNode("]")
             ]);
             $Event.addListener(id + "change", "click", $Factory.Domain.change, [id, 1, aDomains[i]]);
             $Event.addListener(id + "remove", "click", $Factory.Domain.remove, [id, 1, aDomains[i]]);
@@ -199,11 +199,11 @@ $Factory.Domain.remove = function ( e, data ) {
             var id = $Factory.randid();
             document.getElementById( data[0] ).innerHTML = "";
             var prompt = $Dom.create("span", "Remove "+data[2]+"?", {className: "prompt"},[
-                YAHOO.Tools.makeTextObject(" ["),
+                document.createTextNode(" ["),
                 $Dom.create("a", "Yes", {id: id+"remove", href: "#"}),
-                YAHOO.Tools.makeTextObject("] ["),
+                document.createTextNode("] ["),
                 $Dom.create("a", "Cancel", {id: id+"cancel", href: "#"}),
-                YAHOO.Tools.makeTextObject("]")
+                document.createTextNode("]")
             ]);
             document.getElementById( data[0] ).appendChild(prompt);
             $Event.addListener(id+"cancel", "click", $Factory.Domain.remove, [data[0], 2, data[2]]);
