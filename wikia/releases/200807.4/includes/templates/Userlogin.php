@@ -277,6 +277,8 @@ class UsercreateTemplate extends QuickTemplate {
 				<?php if( $this->data['createemail'] ) { ?>
 				<input type='submit' name="wpCreateaccountMail" id="wpCreateaccountMail" value="<?php $this->msg('createaccountmail') ?>" />
 				<?php } ?>
+				<span id="wpFormerror" class="inputError"><?= wfMsg('userlogin-form-error') ?></span>
+
 			</td>
 		</tr>
 		<?php if( $this->data['useemail'] ) { ?>
