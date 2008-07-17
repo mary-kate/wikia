@@ -143,6 +143,9 @@ class UsercreateTemplate extends QuickTemplate {
 			if (errorDate) {
 				document.getElementById('wpBirtherror').style.display = 'inline';
 			}
+			if (errorNick || errorEmail || errorPass || errorRetype || errorDate) {
+				document.getElementById('wpFormerror').style.display = 'inline';
+			}
 			return !(errorNick || errorEmail || errorPass || errorRetype || errorDate);
 		}
 
