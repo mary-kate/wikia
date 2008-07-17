@@ -27,13 +27,14 @@ function wfMainPageTag_rcs( $input, $args, $parser ) {
 
 function wfMainPageTag_lcs( $input, $args, $parser ) {
 	global $colOrder;
-	if( !isset( $args['gutter'] ) ) {
-		$args['gutter'] = '10px';
+	if(!isset($args['gutter'])) {
+		$args['gutter'] = '10';
 	}
-	if( $colOrder ) {
-		$html = '<div style="overflow: hidden; height: 1%; padding-right: '. $args['gutter'] .'"><div>';
+	$args['gutter'] = str_replace('px', '', $args['gutter']);
+	if($colOrder) {
+		$html = '<div style="overflow: hidden; height: 1%; padding-right: '. $args['gutter'] .'px"><div>';
 	} else {
-		$gutter = 300 + trim($args['gutter'], 'px');
+		$gutter = 300 + $args['gutter'];
 		$html = '<div style="float: left; margin-right: -'. $gutter .'px; width: 100%; position: relative;"><div style="margin-right: '. $gutter .'px;">';
 	}
 	$colOrder = 'left';
