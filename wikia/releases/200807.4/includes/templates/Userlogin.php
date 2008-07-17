@@ -185,7 +185,7 @@ class UsercreateTemplate extends QuickTemplate {
 					<option value="-1"><?php $this->msg('userlogin-choose-year') ?></option>
 					<?php
 					$maxYear = date('Y');
-					for($year=1900; $year<=$maxYear; $year++) {
+					for($year=$maxYear; $year>=1900; $year--) {
 						echo "\t\t\t\t\t<option value=\"$year\">$year</option>";
 					}
 					?>
