@@ -29,7 +29,7 @@ function WidgetLanguages($id, $params) {
     $out = '';
     if(isset($skin->language_urls)) {
     	$language = $wgContLang->getLanguageName($wgLanguageCode);
-		$out = '<select onChange="window.location.href = this.options[this.selectedIndex].value;"><option value="0">'.$language.'</option>';
+		$out = '<select onChange="WidgetLanguagesHandleRedirect(this);"><option value="0">'.$language.'</option>';
 		if(is_array($skin->language_urls)) {
 			foreach($skin->language_urls as $key => $val) {
 				$out .= '<option value="'.htmlspecialchars($val['href']).'">'.$val['text'].'</option>';
