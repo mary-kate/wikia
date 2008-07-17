@@ -19,6 +19,8 @@ function wfMainPageTag() {
 }
 
 function wfMainPageTag_rcs( $input, $args, $parser ) {
+	error_log("INEZS TEST: wfMainPageTag_rcs called");
+
 	global $colOrder;
 	$html = '<div style="position: relative; width: 300px; float: right; clear: right;"><div>';
 	$colOrder = 'right';
@@ -26,13 +28,19 @@ function wfMainPageTag_rcs( $input, $args, $parser ) {
 }
 
 function wfMainPageTag_lcs( $input, $args, $parser ) {
+	error_log("INEZS TEST: wfMainPageTag_lcs called");
+
 	global $colOrder;
-	if( !isset( $args['gutter'] ) ) { 
-		$args['gutter'] = '10px'; 
+	if( !isset( $args['gutter'] ) ) {
+		$args['gutter'] = '10px';
 	}
 	if( $colOrder ) {
+		error_log("INEZS TEST: colOrder set");
+
 		$html = '<div style="overflow: hidden; height: 1%; padding-right: '. $args['gutter'] .'"><div>';
 	} else {
+		error_log("INEZS TEST: colOrder !set");
+
 		$gutter = 300 + trim($args['gutter'], 'px');
 		$html = '<div style="float: left; margin-right: -'. $gutter .'px; width: 100%; position: relative;"><div style="margin-right: '. $gutter .'px;">';
 	}
@@ -41,6 +49,8 @@ function wfMainPageTag_lcs( $input, $args, $parser ) {
 }
 
 function wfMainPageTag_ec( $input, $args, $parser ) {
+	error_log("INEZS TEST: wfMainPageTag_ec called");
+
 	$html = '</div></div>';
 	return $html;
 }
