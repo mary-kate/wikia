@@ -65,86 +65,91 @@ class ExternalStorageUpdate {
 		$cluster  = $path[2];
 		$id	      = $path[3];
 
-		$this->mPageId = $this->mRevision->getPage();
-		$Title = Title::newFromID( $this->mPageId );
-		if( ! $Title  ) {
-			error_log( __METHOD__.": title is null, page id = {$this->mPageId}" );
-			return false;
-		}
+		if( $this->mRevision instanceof Revision ) {
+			$this->mPageId = $this->mRevision->getPage();
+			$Title = Title::newFromID( $this->mPageId );
+			if( ! $Title  ) {
+				error_log( __METHOD__.": title is null, page id = {$this->mPageId}" );
+				return false;
+			}
 
-		/**
-		 * we should not call this directly, we'll use new loadbalancer factory
-		 * when 1.13 will be alive
-		 */
-		$external = new ExternalStoreDB();
-		$dbw = $external->getMaster( $cluster );
-
-		/**
-		 * explicite transaction
-		 */
-		$dbw->begin();
-		$ret = $dbw->update(
-			"blobs",
-			array(
-				"rev_id"        => $this->mRevision->getId(),
-				"rev_user"      => $this->mRevision->getUser(),
-				"rev_page_id"   => $this->mPageId,
-				"rev_wikia_id"  => $wgCityId,
-				"rev_namespace" => $Title->getNamespace(),
-				"rev_user_text" => $this->mRevision->getUserText(),
-			),
-			array( "blob_id" => $id ),
-			__METHOD__
-		);
-
-		if( $ret ) {
 			/**
-			 * insert or update
+			 * we should not call this directly, we'll use new loadbalancer factory
+			 * when 1.13 will be alive
 			 */
-			$Row = $dbw->selectRow(
-				"pages",
-				array( "page_id" ),
-				array( "page_id" => $this->mPageId ),
+			$external = new ExternalStoreDB();
+			$dbw = $external->getMaster( $cluster );
+
+			/**
+			 * explicite transaction
+			 */
+			$dbw->begin();
+			$ret = $dbw->update(
+				"blobs",
+				array(
+					"rev_id"        => $this->mRevision->getId(),
+					"rev_user"      => $this->mRevision->getUser(),
+					"rev_page_id"   => $this->mPageId,
+					"rev_wikia_id"  => $wgCityId,
+					"rev_namespace" => $Title->getNamespace(),
+					"rev_user_text" => $this->mRevision->getUserText(),
+				),
+				array( "blob_id" => $id ),
 				__METHOD__
 			);
-			if( isset( $Row->page_id ) && !empty( $Row->page_id ) ) {
+
+			if( $ret ) {
 				/**
-				 * update
+				 * insert or update
 				 */
-				$dbw->update(
+				$Row = $dbw->selectRow(
 					"pages",
-					array(
-						"page_wikia_id"  => $wgCityId,
-						"page_namespace" => $Title->getNamespace(),
-						"page_title"     => $Title->getText(),
-					),
-					array(
-						"page_id"        => $this->mPageId,
-					),
+					array( "page_id" ),
+					array( "page_id" => $this->mPageId ),
 					__METHOD__
 				);
+				if( isset( $Row->page_id ) && !empty( $Row->page_id ) ) {
+					/**
+					 * update
+					 */
+					$dbw->update(
+						"pages",
+						array(
+							"page_wikia_id"  => $wgCityId,
+							"page_namespace" => $Title->getNamespace(),
+							"page_title"     => $Title->getText(),
+						),
+						array(
+							"page_id"        => $this->mPageId,
+						),
+						__METHOD__
+					);
+				}
+				else {
+					/**
+					 * insert
+					 */
+					$dbw->insert(
+						"pages",
+						array(
+							"page_wikia_id"  => $wgCityId,
+							"page_id"        => $this->mPageId,
+							"page_namespace" => $Title->getNamespace(),
+							"page_title"     => $Title->getText(),
+							"page_counter"   => 0,
+							"page_edits"     => 0,
+						),
+						__METHOD__
+					);
+				}
+				$dbw->commit();
 			}
 			else {
-				/**
-				 * insert
-				 */
-				$dbw->insert(
-					"pages",
-					array(
-						"page_wikia_id"  => $wgCityId,
-						"page_id"        => $this->mPageId,
-						"page_namespace" => $Title->getNamespace(),
-						"page_title"     => $Title->getText(),
-						"page_counter"   => 0,
-						"page_edits"     => 0,
-					),
-					__METHOD_
-				);
+				$dbw->rollback();
 			}
-			$dbw->commit();
 		}
 		else {
-			$dbw->rollback();
+			echo "revision object is not Revision instance\n";
 		}
 		return true;
 	}
