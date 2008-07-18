@@ -45,6 +45,8 @@ function wfFunnel(){
   $canonicalUrl = $wgTitle->mUrlform; 
   $wgMainpage = str_replace( ' ', '_', trim( wfMsgForContent( 'mainpage' ) ) );
 
+  $params['title'] = '';	
+
   if( ( $wgLanguageCode == 'en' ) && ( trim( $params['title'] ) != '' ) && ( $isContent ) ){ 
   	if( ( $canonicalUrl == 'Main_Page') && ( $wgMainpage != '' ) && ( $wgMainpage != 'Main_Page' ) ){
   	//this is page request via index.php?title=Blah then redirect in good way and only if title is only one otherwise we dont care
