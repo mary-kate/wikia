@@ -39,7 +39,7 @@ $wgExtensionCredits['parserhook'][] = array(
         'version'=>'0.1'
 );
 
-DEFINE( 'TIMEMARKER_SAMPLERATE', 5 ); //samplerate to use 1= every one request to process 
+DEFINE( 'TIMEMARKER_SAMPLERATE', 100 ); //samplerate to use 1= every one request to process 
  
 $wgHooks['BeforePageDisplay'][] = 'tm_html';
 
