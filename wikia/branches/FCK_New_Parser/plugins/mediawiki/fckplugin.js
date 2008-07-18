@@ -869,26 +869,6 @@ FCK.ContextMenu.RegisterListener({
 	{
 		if ( tagName == 'IMG' )
 		{
-			if ( tag.getAttribute( '_fck_mw_template' ) )
-			{
-				contextMenu.AddSeparator() ;
-				contextMenu.AddItem( 'MW_Template', 'Template Properties' ) ;
-			}
-			if ( tag.getAttribute( '_fck_mw_magic' ) )
-			{
-				contextMenu.AddSeparator() ;
-				contextMenu.AddItem( 'MW_MagicWord', 'Modify Magic Word' ) ;
-			}
-			if ( tag.getAttribute( '_fck_mw_ref' ) )
-			{
-				contextMenu.AddSeparator() ;
-				contextMenu.AddItem( 'MW_Ref', 'Reference Properties' ) ;
-			}
-			if ( tag.getAttribute( '_fck_mw_math' ) )
-			{
-				contextMenu.AddSeparator() ;
-				contextMenu.AddItem( 'MW_Math', 'Edit Formula' ) ;
-			}
 			if ( tag.getAttribute( '_fck_mw_special' ) || tag.getAttribute( '_fck_mw_nowiki' ) || tag.getAttribute( '_fck_mw_includeonly' ) || tag.getAttribute( '_fck_mw_noinclude' ) || tag.getAttribute( '_fck_mw_onlyinclude' ) || tag.getAttribute( '_fck_mw_gallery' )) //YC
 			{
 				contextMenu.AddSeparator() ;
