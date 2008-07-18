@@ -938,3 +938,26 @@ if (window.parent.FCKeditor.prototype.VersionBuild > 18219)
 	}
 }
 
+FCKContextMenu.prototype.SetMouseClickWindow = function( mouseClickWindow )
+{
+        if ( !FCKBrowserInfo.IsIE )
+        {
+                this._Document = mouseClickWindow.document ;
+                if ( FCKBrowserInfo.IsOpera && !( 'oncontextmenu' in document.createElement('foo') ) )
+                {
+                        this._Document.addEventListener( 'mousedown', FCKContextMenu_Document_OnMouseDown, false ) ;
+                        this._Document.addEventListener( 'mouseup', FCKContextMenu_Document_OnMouseUp, false ) ;
+                }
+                this._Document.addEventListener( 'mousedown', FCKContextMenu_Document_OnDoubleClick, false ) ;
+                this._Document.addEventListener( 'contextmenu', FCKContextMenu_Document_OnContextMenu, false ) ;
+        }
+}
+
+
+function FCKContextMenu_Document_OnDoubleClick (e) {
+	var el = e.target ;
+	while (el) {
+		return false ;
+	}
+}
+
