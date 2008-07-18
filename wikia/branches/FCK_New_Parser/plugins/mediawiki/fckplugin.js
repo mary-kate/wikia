@@ -31,6 +31,8 @@
 // Rename the "Source" buttom to "Wikitext".
 FCKToolbarItems.RegisterItem( 'Source', new FCKToolbarButton( 'Source', 'Wikitext', null, FCK_TOOLBARITEM_ICONTEXT, true, true, 1 ) ) ;
 
+FCK.RegisterDoubleClickHandler( FCKImage_OnDoubleClick, 'IMG' ) ;
+
 // Register our toolbar buttons.
 var tbButton = new FCKToolbarButton( 'MW_Template', 'Template', 'Insert/Edit Template', null, false, true ) ;
 tbButton.IconPath = FCKConfig.PluginsPath + 'mediawiki/images/tb_icon_template.gif' ;
@@ -928,16 +930,12 @@ FCKContextMenu.prototype.SetMouseClickWindow = function( mouseClickWindow )
                         this._Document.addEventListener( 'mousedown', FCKContextMenu_Document_OnMouseDown, false ) ;
                         this._Document.addEventListener( 'mouseup', FCKContextMenu_Document_OnMouseUp, false ) ;
                 }
-                this._Document.addEventListener( 'mousedown', FCKContextMenu_Document_OnDoubleClick, false ) ;
                 this._Document.addEventListener( 'contextmenu', FCKContextMenu_Document_OnContextMenu, false ) ;
         }
 }
 
-
-function FCKContextMenu_Document_OnDoubleClick (e) {
-	var el = e.target ;
-	while (el) {
-		return false ;
-	}
+function FCKImage_OnDoubleClick (img) {
+        if ( img.tagName == 'IMG' && img.getAttribute ('_fck_mw_template') )
+                FCKCommands.GetCommand( 'MW_Template' ).Execute() ;
 }
 
