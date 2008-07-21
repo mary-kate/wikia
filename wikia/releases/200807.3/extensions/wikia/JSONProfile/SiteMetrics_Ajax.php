@@ -21,7 +21,7 @@ function wfQueryCounter($callback){
         global $wgMemc, $wgRequest;
         $dbr =& wfGetDB( DB_MASTER );
         
-        $key = wfMemcKey( 'wikiasearch' , 'metric' , 'querycounter', 'queryrate' );
+        $key = wfMemcKey( 'wikiasearch' , 'metric' , 'querycounter', 'queryratesnew' );
         $obj = $wgMemc->get($key);
         
 	if(!$obj || ($obj && time() - $obj["at"] > 3600) ){
@@ -86,7 +86,7 @@ function wfQueryCounter($callback){
         $totalQueryCount = $totalQueryCount + ($timeDiff * $rateQuery);
         $totalContributionCount = $totalContributionCount + ($timeDiff * $rateContribution);
         
-        $obj["at"] = time();
+        // $obj["at"] = time();
         $obj["queries"] = round($totalQueryCount);
         $obj["contributions"] = round($totalContributionCount);
         
