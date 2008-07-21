@@ -61,11 +61,12 @@ function jsRedirectedFromDiv($article, $outputDone, $pcache){
 // Fill in the text in the div created above. In a separate hook so the javascript is at the bottom of the page.
 function jsRedirectedFromText($out){
 	global $wgEnableHardRedirectsWithJSText, $wgCookiePrefix;
+        global $wgCookiePath, $wgCookieDomain, $wgCookieSecure;
 	if (! $wgEnableHardRedirectsWithJSText){
 		return true;
 	}
  
-	// Supposedly this will be part of all in one, when it is, remove this.
+	// Supposedly this will be part of allinone, when it is, remove this.
 	$out->addScript('<script src="http://yui.yahooapis.com/2.5.1/build/cookie/cookie-beta-min.js"></script>');
 	$out->addInlineScript('
 	  var jsrdCookie="' . addslashes($wgCookiePrefix) . 'RedirectedFrom";
@@ -77,7 +78,12 @@ function jsRedirectedFromText($out){
 	    var rdLink="<a href=\"" + rdVals[0] + "?redirect=no\">" + rdVals[1].replace(/\+/g, " ") + "</a></span>";
 	    YAHOO.util.Dom.get("redirectMsg").innerHTML=jsrdText.replace(/\$1/, rdLink);
 	    YAHOO.util.Dom.setStyle("redirectMsg", "display", "");
-	    YAHOO.util.Cookie.remove(jsrdCookie);
+	    YAHOO.util.Cookie.remove(jsrdCookie, {
+		  domain: "' . $wgCookieDomain . '",
+		  path: "' . $wgCookiePath . '",
+		  secure: "' . $wgCookieSecure . '"
+		 }
+	    );
 	  }');
 
 	return true;
