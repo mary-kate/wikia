@@ -118,7 +118,8 @@ delete from user_groups where ug_user in (
 /*Rieke Hain*/26246,
 /*Richard1990*/25261,
 /*Splarka*/8245,
-/*Tommy6*/239851
+/*Tommy6*/239851,
+/*Uberfuzzy*/161697
 ) and ug_group="helper";
 insert into user_groups(ug_user, ug_group) values
 (/*AnnElida*/792759,'helper'),
@@ -135,7 +136,8 @@ insert into user_groups(ug_user, ug_group) values
 (/*Rieke Hain*/26246,'helper'),
 (/*Richard1990*/25261,'helper'),
 (/*Splarka*/8245,'helper'),
-(/*Tommy6*/239851,'helper')
+(/*Tommy6*/239851,'helper'),
+(/*Uberfuzzy*/161697, 'helper')
 ;
 
 delete from user_groups where ug_user in (
