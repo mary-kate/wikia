@@ -20,3 +20,7 @@ body.rtl #articleFooter .actions li div {
 body.rtl #articleFooter .actions li div a {
 	direction: rtl;
 }
+
+.ImageMapWrapper {
+	clear: both;
+}
