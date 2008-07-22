@@ -115,7 +115,6 @@ $MF['monaco_non_loggedin_js']['source'] = array(
 	'common/yui_2.5.2/menu/menu.js',
 	'common/yui_2.5.2/tabview/tabview.js',
 	'common/yui_extra/tools-min.js',
-	'common/yui_extra/carousel-min.js',
 
 	'common/ajax.js',
 	'common/urchin.js',
