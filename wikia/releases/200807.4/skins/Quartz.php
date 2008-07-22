@@ -450,9 +450,9 @@ class QuartzTemplate extends QuickTemplate {
 	<?= GetReferences('quartz_js') ?>
 
 	<!-- YUI CSS -->
-	<link rel="stylesheet" type="text/css" href="<?php $this->text('stylepath') ?>/common/yui/2.3.1/container/assets/container.css?<?= $GLOBALS['wgStyleVersion'] ?>"/>
-	<link rel="stylesheet" type="text/css" href="<?php $this->text('stylepath') ?>/common/yui/2.3.1/logger/assets/logger.css?<?= $GLOBALS['wgStyleVersion'] ?>"/>
-	<link rel="stylesheet" type="text/css" href="<?php $this->text('stylepath') ?>/common/yui/2.3.1/tabview/assets/tabview.css?<?= $GLOBALS['wgStyleVersion'] ?>"/>
+	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.5.2/build/container/assets/container.css"/>
+	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.5.2/build/logger/assets/logger.css"/>
+	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.5.2/build/tabview/assets/tabview.css"/>
 
 	<link rel="stylesheet" href="<?php $this->text('stylepath') ?>/quartz/css/main.css?<?= $GLOBALS['wgStyleVersion'] ?>" type="text/css" />
 <?php

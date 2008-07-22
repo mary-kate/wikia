@@ -127,7 +127,7 @@ class Block
 			$res = $db->resultObject( $db->select( 'ipblocks', '*', array( 'ipb_user' => $user ), 
 				__METHOD__, $options ) );
 			if ( $this->loadFromResult( $res, $killExpired ) ) {
-				error_log("MOLI: (3),'$address','$user','".intval($killExpired)."'");
+				error_log("MOLI: (1),'$address','$user','".intval($killExpired)."',");
 				return true;
 			}
 		}
@@ -145,7 +145,7 @@ class Block
 					$this->clear();
 					return false;
 				} else {
-					error_log("MOLI: (3),'$address','$user','".intval($killExpired)."'");
+					error_log("MOLI: (2),'$address','$user','".intval($killExpired)."',");
 					return true;
 				}
 			}
@@ -157,7 +157,7 @@ class Block
 				$this->clear();
 				return false;
 			} else {
-				error_log("MOLI: (3),'$address','$user','".intval($killExpired)."'");
+				error_log("MOLI: (3),'$address','$user','".intval($killExpired)."',");
 				return true;
 			}
 		}
@@ -170,7 +170,7 @@ class Block
 			}
 			$res = $db->resultObject( $db->select( 'ipblocks', '*', $conds, __METHOD__, $options ) );
 			if ( $this->loadFromResult( $res, $killExpired ) ) {
-				error_log("MOLI: (3),'$address','$user','".intval($killExpired)."'");
+				error_log("MOLI: (4),'$address','$user','".intval($killExpired)."',");
 				return true;
 			}
 		}
