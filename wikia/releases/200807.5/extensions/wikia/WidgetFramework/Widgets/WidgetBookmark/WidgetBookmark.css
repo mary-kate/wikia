@@ -1,6 +1,7 @@
 div.WidgetBookmark,
 .WidgetBookmark dd {
 	overflow: visible !important;
+	max-height: none;
 }
 
 .WidgetBookmark .WidgetBookmarkMenu {
