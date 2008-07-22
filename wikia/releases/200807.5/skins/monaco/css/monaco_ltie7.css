@@ -1,0 +1,143 @@
+#wikia_logo {
+	background-image: none;
+	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/skins/monaco/images/wikia_logo.png', sizingMethod='crop');
+}
+#wikia_logo.entertainment span {
+	background-image: none;
+	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/skins/monaco/images/hub_entertainment.png', sizingMethod='crop');
+}
+.headerMenuButton dt, .headerMenuButton dd {
+	background-image: none;
+	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/skins/monaco/images/header_button.png', sizingMethod='crop');
+}
+a.bigButton big, a.bigButton small {
+	background-image: none;
+	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/skins/monaco/images/big_button.png', sizingMethod='crop');
+}
+#page_controls div {
+	background: none;
+	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/skins/monaco/images/sprite.png', sizingMethod='crop');
+}
+#search_button {
+	background: none;
+	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/skins/monaco/images/search.png', sizingMethod='crop');
+}
+.shadow, #page_bar, #search_box {
+	background-image: none !important;
+}
+.widget dt div.close span, .widget dt div.edit span, .widget dt div.hide span, #widget_cockpit_close {
+	background-image: none;
+	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/skins/monaco/images/widget_sprite.png', sizingMethod='crop');
+}
+.staffSig {
+	background-image: none !important;
+	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://images.wikia.com/wikia/images/e/e9/WikiaStaff.png', sizingMethod='scale');
+}
+
+body.ns-0 #bodyContent table {
+	position: relative;
+}
+#wikia_header #headerButtonHub {
+	margin-left: -30%;
+}
+
+/* RTL fixes */
+body.rtl #fe_talk,
+body.rtl #fe_permalink {
+	width: 40%;
+	position: relative;
+	right: -6px;
+}
+
+body.rtl #fe_talk div a,
+body.rtl #fe_permalink div a {
+	position: relative;
+	margin-right: 6px;
+}
+
+body.rtl #articleFooter ul.actions li div {
+        margin: 0 20px 0 0;
+}
+body.ltr #articleFooter ul.actions li div {
+	margin: 0 0 0 20px;
+}
+
+
+/* ads fix */
+#monaco_shrinkwrap_main,
+#navigation_widget,
+#navigation,
+#navigation .menu-item {
+	z-index: 20;
+	position: relative;
+}
+
+/* user menu fix */
+#monaco_shrinkwrap_main,
+#wikia_page {
+	z-index: 1 !important;
+}
+
+/* widget dashboard (#2397) */
+.widget_dashboard .sidebar,
+.widget_dashboard .widget,
+.widget_dashboard .widgetToolbox {
+	position: relative;
+}
+
+#widgetsSpecialPageList dl
+{
+        margin: 8px 5px;
+        width: 400px;
+        float: left;
+	position: relative;
+}
+
+#widgetsSpecialPageList dt
+{
+        float: left;
+        position: relative;
+}
+
+#widgetsSpecialPageList dd
+{
+        margin-left: 70px
+}
+
+#widgetsSpecialPageList dd h4
+{
+        padding: 4px 0 0 0;
+}
+
+#widgetsSpecialPageCopyrights
+{
+        margin: 50px 0px 30px 0px;
+        color: #666666;
+        font-size: 0.8em;
+        text-align: center;
+        clear: left;
+}
+
+#widgetsSpecialPageList dl dt .widgetsThumb
+{
+        height: 50px;
+        width: 50px;
+}
+
+#widgetsSpecialPageList div.add
+{
+        background-image: url(http://images.wikia.com/skins/monaco/images/sprite.png);
+        clip: rect(0px 272px 16px 256px);
+        cursor: pointer;
+        display: block;
+        height: 16px;
+        position: absolute;
+        right: -55px;
+        top: 42px;
+        width: 320px;
+        z-index: 100;
+}
+
+.ImageMapWrapper {
+	clear: both;
+}
