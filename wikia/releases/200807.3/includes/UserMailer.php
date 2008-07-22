@@ -383,7 +383,6 @@ class EmailNotification {
 						$watchingUser->isEmailConfirmed() )
 					{
 						$this->compose( $watchingUser );
-						wfRunHooks('NotifyOnPageChangeComplete', array( &$this, &$watchingUser ));
 					}
 				}
 			}
@@ -526,6 +525,7 @@ class EmailNotification {
 		} else {
 			$this->sendPersonalised( $user );
 		}
+		wfRunHooks('NotifyOnPageChangeComplete', array( $this->title, $this->timestamp, &$user ));
 	}
 
 	/**
