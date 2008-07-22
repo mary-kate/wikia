@@ -20,8 +20,8 @@ foreach($MF as $group) {
 	foreach($group['source'] as $file) {
 		$temp = file_get_contents(dirname(__FILE__).'/../../skins/'.$wgStyleDirectory.'/'.$file) . "\n\n";
 		if($file == "common/yui/2.4.0/container/assets/container.css") {
-			$temp = str_replace("url(close12", "url(../../common/yui/2.4.0/container/assets/close12", $temp);
-			$temp = str_replace("url(\"",  "url(\"../../common/yui/2.4.0/container/assets/", $temp);
+			$temp = str_replace("url(close12", "url(../../common/yui_2.5.2/container/assets/close12", $temp);
+			$temp = str_replace("url(\"",  "url(\"../../common/yui_2.5.2/container/assets/", $temp);
 		}
 		$out .= $temp;
 		echo "...processing: {$file}\n";
@@ -39,7 +39,7 @@ foreach($MF as $group) {
 	$content = $headerComment.file_get_contents($targetPrefix.$group['target']);
 
 	if($group['type'] == 'css') {
-		$content = str_replace('(close12_1.gif)', '(../../common/yui/2.5.1/container/assets/close12_1.gif)', $content);
+		$content = str_replace('(close12_1.gif)', '(../../common/yui_2.5.2/container/assets/close12_1.gif)', $content);
 	}
 
 	file_put_contents($target, $content);
