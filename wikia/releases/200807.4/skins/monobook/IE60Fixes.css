@@ -87,3 +87,7 @@ div.tleft {
 body.rtl #preftoc a, body.rtl #preftoc a:active {
 	float: left;
 }
+
+.ImageMapWrapper {
+	clear: both;
+}

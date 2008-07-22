@@ -138,3 +138,6 @@ body.ltr #articleFooter ul.actions li div {
         z-index: 100;
 }
 
+.ImageMapWrapper {
+	clear: both;
+}
