@@ -17,6 +17,7 @@ require_once('commandLine.inc');
 
 // This is array which contain in order names of widgets to display in widget carousel
 $wgWidgetsOrderedList = array(
+	'WidgetBookmark',
 	'WidgetEditedRecently',
 	'WidgetLastWikis',
 	'WidgetMostVisited',
