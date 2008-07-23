@@ -399,7 +399,7 @@ function axWStatisticsWikiaList() {
 	}
 	
 	$memckey = wfMemcKey("wikiastatslist");
-	$main_select = "";//$wgMemc->get($memckey);
+	$main_select = $wgMemc->get($memckey);
 	
 	if (empty($main_select)) {
         $mStats = new WikiaGenericStats($wgUser->getID());
@@ -531,7 +531,7 @@ function axWStatisticsWikiaInfo($city) {
 		return;
 	}*/
 
-	$memckey = ""; #wfMemcKey("wikiastatscityinfo_$city");
+	$memckey = wfMemcKey("wikiastatscityinfo_$city");
 	$cityinfo = $wgMemc->get($memckey);
 	if (empty($cityinfo)) {
 		#---
