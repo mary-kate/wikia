@@ -935,7 +935,22 @@ FCKContextMenu.prototype.SetMouseClickWindow = function( mouseClickWindow )
 }
 
 function FCKImage_OnDoubleClick (img) {
-        if ( img.tagName == 'IMG' && img.getAttribute ('_fck_mw_template') )
-                FCKCommands.GetCommand( 'MW_Template' ).Execute() ;
+        if ( img.tagName == 'IMG') {
+		if (img.getAttribute ('_fck_mw_template') ) {
+	                FCKCommands.GetCommand( 'MW_Template' ).Execute() ;
+		}
+		if (img.getAttribute ('_fck_mw_magic') ) {
+	                FCKCommands.GetCommand( 'MW_Magic' ).Execute() ;
+		}
+		if (img.getAttribute ('_fck_mw_ref') ) {
+	                FCKCommands.GetCommand( 'MW_Ref' ).Execute() ;
+		}
+		if (img.getAttribute ('_fck_mw_math') ) {
+	                FCKCommands.GetCommand( 'MW_Math' ).Execute() ;
+		}
+		if ( img.getAttribute( '_fck_mw_special' ) || img.getAttribute( '_fck_mw_nowiki' ) || img.getAttribute( '_fck_mw_includeonly' ) || img.getAttribute( '_fck_mw_noinclude' ) || img.getAttribute( '_fck_mw_onlyinclude' ) || img.getAttribute( '_fck_mw_gallery' )) {
+	                FCKCommands.GetCommand( 'MW_Special' ).Execute() ;
+		}
+	}
 }
 
