@@ -15,31 +15,18 @@ function visible_wikians(rows, col, v)
 	
 	cels = rows[rows.length-3].getElementsByTagName('td');
 	cels[col].style.display = v;
-	//----
 
 	cels = rows[1].getElementsByTagName('td');
-	for (y = 1; y <= 3; y++)
-	{
-		cels[y].style.display = v;
-	}
+	for (y = 1; y <= 3; y++) { cels[y].style.display = v; }
 	
 	cels = rows[2].getElementsByTagName('td');
-	for (y = 0; y <= 1; y++)
-	{
-		cels[y].style.display = v;
-	}
+	for (y = 0; y <= 1; y++) { cels[y].style.display = v; }
 
 	cels = rows[rows.length-2].getElementsByTagName('td');
-	for (y = 1; y <= 3; y++)
-	{
-		cels[y].style.display = v;
-	}
+	for (y = 1; y <= 3; y++) { cels[y].style.display = v; }
 	
 	cels = rows[rows.length-1].getElementsByTagName('td');
-	for (y = 0; y <= 1; y++)
-	{
-		cels[y].style.display = v;
-	}
+	for (y = 0; y <= 1; y++) { cels[y].style.display = v; }
 }
 
 function visible_articles(rows, col, v)
@@ -49,32 +36,19 @@ function visible_articles(rows, col, v)
 	
 	cels = rows[rows.length-3].getElementsByTagName('td');
 	cels[2].style.display = v;
-	//----
 
 	cels = rows[1].getElementsByTagName('td');
-	for (y = 4; y <= 7; y++)
-	{
-		cels[y].style.display = v;
-	}
+	for (y = 4; y <= 7; y++) { cels[y].style.display = v; }
 	
 	cels = rows[2].getElementsByTagName('td');
-	for (y = 2; y <= 7; y++)
-	{
-		cels[y].style.display = v;
-	}
+	for (y = 2; y <= 7; y++) { cels[y].style.display = v; }
 	
 	// footers
 	cels = rows[rows.length-2].getElementsByTagName('td');
-	for (y = 4; y <= 7; y++)
-	{
-		cels[y].style.display = v;
-	}
+	for (y = 4; y <= 7; y++) { cels[y].style.display = v; }
 	
 	cels = rows[rows.length-1].getElementsByTagName('td');
-	for (y = 2; y <= 7; y++)
-	{
-		cels[y].style.display = v;
-	}
+	for (y = 2; y <= 7; y++) { cels[y].style.display = v; }
 }
 
 function visible_database(rows, col, v)
@@ -85,20 +59,13 @@ function visible_database(rows, col, v)
 	
 	cels = rows[rows.length-3].getElementsByTagName('td');
 	cels[3].style.display = v;
-	//----
 
 	cels = rows[1].getElementsByTagName('td');
-	for (y = 8; y <= 10; y++)
-	{
-		cels[y].style.display = v;
-	}
+	for (y = 8; y <= 10; y++) { cels[y].style.display = v; }
 	
 	// footers
 	cels = rows[rows.length-2].getElementsByTagName('td');
-	for (y = 8; y <= 10; y++)
-	{
-		cels[y].style.display = v;
-	}
+	for (y = 8; y <= 10; y++) { cels[y].style.display = v; }
 }
 
 function visible_links(rows, col, v)
@@ -109,24 +76,17 @@ function visible_links(rows, col, v)
 	
 	cels = rows[rows.length-3].getElementsByTagName('td');
 	cels[4].style.display = v;
-	//----
 
 	cels = rows[1].getElementsByTagName('td');
-	for (y = 11; y <= 15; y++)
-	{
-		cels[y].style.display = v;
-	}
+	for (y = 11; y <= 15; y++) { cels[y].style.display = v; }
 	
 	// footers
 	cels = rows[rows.length-2].getElementsByTagName('td');
-	for (y = 11; y <= 15; y++)
-	{
-		cels[y].style.display = v;
-	}
+	for (y = 11; y <= 15; y++) { cels[y].style.display = v; }
 	//
 }
 
-function visible_daily_usage(rows, col, v)
+function visible_image(rows, col, v)
 {
 	//--- main header and footer
 	var cels = rows[0].getElementsByTagName('td');
@@ -134,21 +94,37 @@ function visible_daily_usage(rows, col, v)
 	
 	cels = rows[rows.length-3].getElementsByTagName('td');
 	cels[5].style.display = v;
-	//----
 
 	cels = rows[1].getElementsByTagName('td');
-	for (y = 16; y <= 17; y++)
-	{
-		cels[y].style.display = v;
-	}
+	for (y = 16; y <= 17; y++) { cels[y].style.display = v; }
 	
 	// footers
 	cels = rows[rows.length-2].getElementsByTagName('td');
-	for (y = 16; y <= 17; y++)
-	{
-		cels[y].style.display = v;
-	}
+	for (y = 16; y <= 17; y++) { cels[y].style.display = v; }
 	//
+}
+
+function visible_daily_usage(rows, col, v)
+{
+	//--- main header and footer
+	var cels = rows[0].getElementsByTagName('td');
+	cels[6].style.display = v;
+	
+	cels = rows[rows.length-3].getElementsByTagName('td');
+	cels[6].style.display = v;
+
+	cels = rows[1].getElementsByTagName('td');
+	for (y = 18; y <= 19; y++) { cels[y].style.display = v; }
+
+	cels = rows[2].getElementsByTagName('td');
+	for (y = 8; y <= 10; y++) { cels[y].style.display = v; }
+		
+	// footers
+	cels = rows[rows.length-2].getElementsByTagName('td');
+	for (y = 18; y <= 19; y++) { cels[y].style.display = v; }
+	//
+	cels = rows[rows.length-1].getElementsByTagName('td');
+	for (y = 8; y <= 10; y++) { cels[y].style.display = v; }
 }
 
 function visible_column(col, col_to, show, text, div_hide) 
@@ -160,77 +136,58 @@ function visible_column(col, col_to, show, text, div_hide)
 	var rowStart = 3;
 	var rowEnd = rows.length-3;
 	
-	if (show == 1)
-	{
-		for (i = rowStart; i < rowEnd; i++)
-		{
+	if (show == 1)	{
+		for (i = rowStart; i < rowEnd; i++) {
 			var cels = rows[i].getElementsByTagName('td');
-			for (y = col; y <= col_to; y++)
-			{
+			for (y = col; y <= col_to; y++) {
 				cels[y].style.display = v;
 			}
 		}
 	}
 	
-	if (col == 1) //wikians headers and footer
-	{
+	if (col == 1) { //wikians headers and footer
 		visible_wikians(rows, col, v);
-	}
-	else if (col == 5) //article headers and footer
-	{
+	} else if (col == 5) { //article headers and footer
 		visible_articles(rows, col, v);
-	}
-	else if (col == 12) //database headers and footer
-	{
+	} else if (col == 12) { //database headers and footer
 		visible_database(rows, col, v);
-	}
-	else if (col == 15) //links headers and footer
-	{
+	} else if (col == 15) { //links headers and footer
 		visible_links(rows, col, v);
-	}
-	else if (col == 20) //daily headers and footer
-	{
+	} else if (col == 20) { //daily headers and footer
+		visible_image(rows, col, v);
+	} else if (col == 22) { //daily headers and footer
 		visible_daily_usage(rows, col, v);
 	}
 
-	if (show == 0)
-	{
-		for (i = rowStart; i < rowEnd; i++)
-		{
+	if (show == 0) {
+		for (i = rowStart; i < rowEnd; i++) {
 			var cels = rows[i].getElementsByTagName('td');
-			for (y = col; y <= col_to; y++)
-			{
+			for (y = col; y <= col_to; y++) {
 				cels[y].style.display = v;
 			}
 		}
 	}
 
 	var table_hidden = document.getElementById('ws-hide-table');
-	for (i = 1; i < 6; i++)
-	{
+	for (i = 1; i < 7; i++) {
 		var div_hidden = document.getElementById('ws-hide-div' + i);
-		if (show == 0)
-		{
-			if (!div_hidden)
-			{
-				table_hidden.innerHTML += "<div id=\"ws-hide-div"+i+"\" style=\"float:left; padding:4px; margin:2px;\"><a href=\"javascript:void(0)\" onClick=\"javascript:visible_column("+col+","+col_to+",1,'"+ text +"',"+i+");\"><?= wfMsg('wikiastats_show') ?> " + text + "</a></div>";
+		if (show == 0) {
+			if (!div_hidden) {
+				table_hidden.innerHTML += "<span id=\"ws-hide-div"+i+"\" style=\"float:left; padding:4px; margin:2px; width:auto;\"><a href=\"javascript:void(0)\" onClick=\"javascript:visible_column("+col+","+col_to+",1,'"+ text +"',"+i+");\"><?= wfMsg('wikiastats_show') ?> " + text + "</a></span>";
 				div_hidden = document.getElementById('ws-hide-div' + i);
 				div_hidden.style.background = "#ffdead";
+				div_hidden.style.clear = 'none';
 				break;
-			}
-			else if ((div_hidden) && (div_hidden.innerHTML == ""))
-			{
+			} else if ((div_hidden) && (div_hidden.innerHTML == "")) {
 				div_hidden.style.background = "#ffdead";
 				div_hidden.innerHTML = "<a href=\"javascript:void(0)\" onClick=\"javascript:visible_column("+col+","+col_to+",1,'"+ text +"',"+i+");\"><?= wfMsg('wikiastats_show') ?> " + text + "</a>";
 				div_hidden.style.margin = "2px";
 				div_hidden.style.padding = "4px";
+				div_hidden.style.clear = 'none';
 				break;
 			}
-		}
-		else
-		{
-			if (div_hide == i)
-			{
+		} else {
+			if (div_hide == i) {
 				div_hidden.innerHTML = "";
 				div_hidden.style.background = "";
 				div_hidden.style.margin = "0px";
@@ -254,15 +211,21 @@ YAHOO.namespace("Wikia.Statistics");
 
 YAHOO.Wikia.Statistics.MainStatisticCallback = 
 {
-    success: function( oResponse ) 
-    {
-		var resData = YAHOO.Tools.JSONParse(oResponse.responseText);
-		YD.get("ws-main-table").innerHTML = resData['text'];
-    	YD.get("ws-progress-bar").innerHTML = "&nbsp;";
-    	if (resData['code'] > 0)
-    	{
-    		if (document.getElementById( "wk-stats-city-id" ).value > 0)
-    		{
+    success: function( oResponse ) {
+    	var resCode = 0;
+    	if (oResponse.responseText != "") {
+    		resCode = 1;    		
+			YD.get("ws-main-table").innerHTML = oResponse.responseText;
+			YD.get("ws-progress-bar").innerHTML = "&nbsp;";
+		} else {
+			YD.get("ws-main-table").innerHTML = "<?= wfMsg("wikiastats_nostats_found") ?>";
+			YD.get("ws-progress-bar").innerHTML = "&nbsp;";
+		}
+		//var resData = YAHOO.Tools.JSONParse(oResponse.responseText);
+		//YD.get("ws-main-table").innerHTML = resData['text'];
+    	//YD.get("ws-progress-bar").innerHTML = "&nbsp;";
+    	if (resCode > 0) {
+    		if ( (document.getElementById( "wk-stats-city-id" )) && (document.getElementById( "wk-stats-city-id" ).value > 0) ) {
     			document.getElementById( "ws-edits-article" ).style.display = "block";
     			document.getElementById( "ws-active-wikians" ).style.display = "block";
     			document.getElementById( "wk-select-month-wikians-div" ).style.display = "none";
@@ -270,9 +233,8 @@ YAHOO.Wikia.Statistics.MainStatisticCallback =
     			document.getElementById( "ws-article-size" ).style.display = "block";
     			document.getElementById( "ws-namespace-count" ).style.display = "block";
     			document.getElementById( "ws-page-edits-count" ).style.display = "block";
-			}
-			else
-			{
+    			document.getElementById( "ws-other-stats-panel" ).style.display = "block";
+			} else {
     			document.getElementById( "ws-edits-article" ).style.display = "none";
     			document.getElementById( "ws-active-wikians" ).style.display = "none";
     			document.getElementById( "wk-select-month-wikians-div" ).style.display = "none";
@@ -280,11 +242,11 @@ YAHOO.Wikia.Statistics.MainStatisticCallback =
     			document.getElementById( "ws-article-size" ).style.display = "none";
     			document.getElementById( "ws-namespace-count" ).style.display = "none";
     			document.getElementById( "ws-page-edits-count" ).style.display = "none";
+    			document.getElementById( "ws-other-stats-panel" ).style.display = "none";
 			}
 		}
     },
-    failure: function( oResponse ) 
-    {
+    failure: function( oResponse ) {
         YD.get("ws-main-table").innerHTML = "<?= wfMsg("wikiastats_nostats_found") ?>";
     	YD.get("ws-progress-bar").innerHTML = "&nbsp;";
     }
@@ -417,7 +379,7 @@ YAHOO.Wikia.Statistics.DistribArticleEditsStats = function(e)
 	var params 	= "&rsargs[0]=" + city.value;
 	//---
     YE.preventDefault(e);
-    YD.get("ws-progress-edits-bar").innerHTML="&nbsp;<img src=\"/extensions/wikia/WikiaStats/images/progressbar.gif\" />";
+    YD.get("ws-progress-edits-bar").innerHTML="&nbsp;<img src=\"/extensions/wikia/WikiaStats/images/ajax_loader.gif\" />";
 	//---
     var baseurl = "/index.php?action=ajax&rs=axWStatisticsDistribEditsGenerate" + params;
     YAHOO.util.Connect.asyncRequest( "GET", baseurl, YAHOO.Wikia.Statistics.DistribEditsStatisticCallback);
@@ -432,7 +394,7 @@ YAHOO.Wikia.Statistics.WikiansRankStats = function(e)
 	var params 	= "&rsargs[0]=" + city.value + "&rsargs[1]=" + _month;
 	//---
     YE.preventDefault(e);
-    YD.get("ws-progress-wikians-bar").innerHTML="&nbsp;<img src=\"/extensions/wikia/WikiaStats/images/progressbar.gif\" />";
+    YD.get("ws-progress-wikians-bar").innerHTML="&nbsp;<img src=\"/extensions/wikia/WikiaStats/images/ajax_loader.gif\" />";
 	//---
     var baseurl = "/index.php?action=ajax&rs=axWStatisticsWikiansRank" + params;
     YAHOO.util.Connect.asyncRequest( "GET", baseurl, YAHOO.Wikia.Statistics.WikiansRankStatisticCallback);
@@ -446,7 +408,7 @@ YAHOO.Wikia.Statistics.AnonUsersStats = function(e)
 	var params 	= "&rsargs[0]=" + city.value;
 	//---
     YE.preventDefault(e);
-    YD.get("ws-progress-anon-bar").innerHTML="&nbsp;<img src=\"/extensions/wikia/WikiaStats/images/progressbar.gif\" />";
+    YD.get("ws-progress-anon-bar").innerHTML="&nbsp;<img src=\"/extensions/wikia/WikiaStats/images/ajax_loader.gif\" />";
 	//---
     var baseurl = "/index.php?action=ajax&rs=axWStatisticsAnonUsers" + params;
     YAHOO.util.Connect.asyncRequest( "GET", baseurl, YAHOO.Wikia.Statistics.UserAnonStatisticCallback);
@@ -471,7 +433,7 @@ YAHOO.Wikia.Statistics.ArticlesSizeStats = function(e)
 	
 	//---
     YE.preventDefault(e);
-    YD.get("ws-progress-article-bar").innerHTML="&nbsp;<img src=\"/extensions/wikia/WikiaStats/images/progressbar.gif\" />";
+    YD.get("ws-progress-article-bar").innerHTML="&nbsp;<img src=\"/extensions/wikia/WikiaStats/images/ajax_loader.gif\" />";
 	//---
     var baseurl = "/index.php?action=ajax&rs=axWStatisticsArticleSize" + params;
     YAHOO.util.Connect.asyncRequest( "GET", baseurl, YAHOO.Wikia.Statistics.UserArticlesStatisticCallback);
@@ -486,7 +448,7 @@ YAHOO.Wikia.Statistics.NamespaceStats = function(e)
 	
 	//---
     YE.preventDefault(e);
-    YD.get("ws-progress-namespace-bar").innerHTML="&nbsp;<img src=\"/extensions/wikia/WikiaStats/images/progressbar.gif\" />";
+    YD.get("ws-progress-namespace-bar").innerHTML="&nbsp;<img src=\"/extensions/wikia/WikiaStats/images/ajax_loader.gif\" />";
 	//---
     var baseurl = "/index.php?action=ajax&rs=axWStatisticsNamespaceCount" + params;
     YAHOO.util.Connect.asyncRequest( "GET", baseurl, YAHOO.Wikia.Statistics.NamespaceStatisticCallback);
@@ -500,7 +462,7 @@ YAHOO.Wikia.Statistics.PageEditsStats = function(e)
 	var params 	= "&rsargs[0]=" + city.value;
 	//---
     YE.preventDefault(e);
-    YD.get("ws-progress-page-edits-bar").innerHTML="&nbsp;<img src=\"/extensions/wikia/WikiaStats/images/progressbar.gif\" />";
+    YD.get("ws-progress-page-edits-bar").innerHTML="&nbsp;<img src=\"/extensions/wikia/WikiaStats/images/ajax_loader.gif\" />";
 	//---
     var baseurl = "/index.php?action=ajax&rs=axWStatisticsPageEdits" + params;
     YAHOO.util.Connect.asyncRequest( "GET", baseurl, YAHOO.Wikia.Statistics.PageEditsStatisticCallback);
@@ -543,7 +505,7 @@ function wk_show_page_edited_details(page_id)
 	//---
 	document.getElementById( "wk-page-edits-stats-page-id" ).value = page_id;
 	//---
-    YD.get("ws-progress-page-edits-bar").innerHTML="&nbsp;<img src=\"/extensions/wikia/WikiaStats/images/progressbar.gif\" />";
+    YD.get("ws-progress-page-edits-bar").innerHTML="&nbsp;<img src=\"/extensions/wikia/WikiaStats/images/ajax_loader.gif\" />";
 	//---
     var baseurl = "/index.php?action=ajax&rs=axWStatisticsPageEditsDetails" + params;
     YAHOO.util.Connect.asyncRequest( "GET", baseurl, YAHOO.Wikia.Statistics.PageEditsDetailsStatisticCallback);
@@ -561,22 +523,26 @@ YE.addListener("ws-page-edits-details-show", "click", YAHOO.Wikia.Statistics.Pag
 
 /*]]>*/
 </script>
-<div id="ws-upload">
-	<div id="ws-progress-bar"></div>
-	<div style="text-align:right;">
-	<?= wfMsg("wikiastats_info") ?>
-	<br />
-	<span class="wk-select-class"><select name="ws-domain" id="ws-domain" style="text-align:left; font-size:11px;">
 <?php 
+$select_stats = "";
+$selected_stats = "";
 foreach ($cityList as $domain => $city_id)
 {
 	$selected = ($city_id == $selCity) ? "selected" : "";
-?>
-	<option <?=$selected?> value="<?= $city_id ?>"><?= ucfirst($domain) ?></option>
-<?php 
+	if (!empty($selected)) {
+		$selected_stats = ucfirst($domain);		
+	}
+	$select_stats .= "<option $selected value=\"$city_id\">".ucfirst($domain)."</option>";
 }
 ?>	
-	</select></span>
+<fieldset>
+<legend class="legend-subtitle"><?=wfMsg('wikiastats_main_statistics_legend')?></legend>
+<div id="ws-upload">
+	<div id="ws-progress-bar"></div>
+	<div style="text-align:right; float:right;">
+	<?= wfMsg("wikiastats_info") ?>
+	<br />
+	<span class="wk-select-class"><select name="ws-domain" id="ws-domain" style="text-align:left; font-size:11px;"><?=$select_stats?></select></span>
 	<br />
 	<span class="wk-select-class"><?= wfMsg('wikiastats_daterange_from') ?> 
 	<select name="ws-date-month-from" id="ws-date-month-from" style="text-align:left; font-size:11px;">
@@ -645,103 +611,108 @@ if (!empty($main_tbl))
 }
 ?>
 </div>
+</fieldset>
+<? if ( !empty($main_tbl) && (empty($show_chart)) ) { if ($selCity > 0) { ?>
+<fieldset id="ws-other-stats-panel">
+<legend class="legend-subtitle"><?=wfMsg('wikiastats_other_statistics_legend')?></legend>
+<? } } ?>
 <!-- DISTRIBUTION OF ARTICLE EDITS OVER WIKIANS -->
-<div id="ws-progress-edits-bar"></div>
 <div id="ws-edits-article">
-	<div id="ws-edits-article-title">
-		<a href="javascript:void(0)" id="ws-edits-article-show"><?= wfMsg('wikiastats_distrib_article'); ?></a>
-		<br />
-		<span class="small"><?= wfMsg('wikiastats_distrib_article_subtext') ?></span>
-		<br />
+	<div id="ws-edits-article-title" style="clear:left;width:auto;float:left">
+		<a href="javascript:void(0)" id="ws-edits-article-show"><?= wfMsg('wikiastats_distrib_article'); ?></a><br />
+		<span class="small"><?= wfMsg('wikiastats_distrib_article_subtext') ?></span><br />
 		<span class="small"><?= wfMsg('wikiastats_distrib_article_counting') ?></span>
 	</div>
+	<div id="ws-progress-edits-bar"></div>
+	<div class="clear">&nbsp;</div>
 	<div id="ws-edits-article-table"></div>
 </div>
 <!-- END OF DISTRIBUTION OF ARTICLE EDITS OVER WIKIANS -->
 <!-- ACTIVE/ABSENT WIKIANS ORDERED BY NUMBER OF CONTRIBUTIONS -->
-<div id="ws-progress-wikians-bar"></div>
 <div id="ws-active-wikians">
-	<div id="ws-wikians-title">
-		<a href="javascript:void(0)" id="ws-wikians-rank-show"><?= wfMsg('wikiastats_active_absent_wikians'); ?></a>
-		<br />
+	<div id="ws-wikians-title" style="clear:left;width:auto;float:left">
+		<a href="javascript:void(0)" id="ws-wikians-rank-show"><?= wfMsg('wikiastats_active_absent_wikians'); ?></a><br />
 		<span class="small"><?= wfMsg('wikiastats_active_wikians_subtitle') ?></span>
 	</div>
-	<div style="text-align:right;" id="wk-select-month-wikians-div">
-	<?= wfMsg("wikiastats_active_wikians_date") ?>
-	<span class="wk-select-class"><select name="ws-wikians-active-month" id="ws-wikians-active-month" style="text-align:left; font-size:11px;">
+	<div id="ws-progress-wikians-bar"></div>
+	<div class="clear">&nbsp;</div>
+	<div style="text-align:left;" id="wk-select-month-wikians-div"><?= wfMsg("wikiastats_active_wikians_date") ?>
+		<span class="wk-select-class"><select name="ws-wikians-active-month" id="ws-wikians-active-month" style="text-align:left; font-size:11px;">
 <?php 
 for ($i = 1; $i <= 6; $i++)
 {
 	$month_name = ($i == 1) ? wfMsg('wikiastats_active_month') : wfMsg('wikiastats_active_months');
 	$selected = ""; //($i == $cur_month) ? "selected" : "" ;
 ?>
-	<option <?= $selected ?> value="<?= $i ?>"><?= $i . " " .$month_name ?></option>
+		<option <?= $selected ?> value="<?= $i ?>"><?= $i . " " .$month_name ?></option>
 <?php 
 }
 ?>	
-	</select></span>
-	<span class="wk-select-class"><input type="button" id="ws-wikians-active-btn" name="ws-wikians-active-btn" value=" ... "></span>
+		</select></span>
+		<span class="wk-select-class"><input type="button" id="ws-wikians-active-btn" name="ws-wikians-active-btn" value=" ... "></span>
 	</div>
 	<div id="ws-wikians-active-absent-table"></div>
 </div>
 <!-- END OF DISTRIBUTION OF ARTICLE EDITS OVER WIKIANS -->
 <!-- ANONYMOUS USERS -->
-<div id="ws-progress-anon-bar"></div>
 <div id="ws-anon-wikians">
-	<div id="ws-anon-users-title">
-		<a href="javascript:void(0)" id="ws-anon-users-show"><?= wfMsg('wikiastats_anon_wikians'); ?></a>
-		<br />
+	<div id="ws-anon-users-title" style="clear:left;width:auto;float:left">
+		<a href="javascript:void(0)" id="ws-anon-users-show"><?= wfMsg('wikiastats_anon_wikians'); ?></a><br />
 		<span class="small"><?= wfMsg('wikiastats_active_wikians_subtitle') ?></span>
 	</div>
+	<div id="ws-progress-anon-bar"></div>
+	<div class="clear">&nbsp;</div>
 	<div id="ws-anon-wikians-table"></div>
 </div>
 <!-- END OF ANONYMOUS USERS -->
 <!-- ARTICLE SIZE -->
-<div id="ws-progress-article-bar"></div>
 <div id="ws-article-size">
-	<div id="ws-articles-title">
+	<div id="ws-articles-title" style="clear:left;width:auto;float:left">
 		<?= wfMsg('wikiastats_article_size'); ?>
 		<br />
 		<span class="small"><?= wfMsg('wikiastats_article_size_subtitle') ?></span>
 		<br />
-		
 <?php
-	for ($s = 32, $i = 0 ; $i <= 13 ; $s *= 2 , $i++)
-	{
+	for ($s = 32, $i = 0 ; $i <= 13 ; $s *= 2 , $i++) {
 		$text = "&lt;&nbsp;".$s." B";
-		if ($s >= 1024)
-		{
+		if ($s >= 1024) {
 			$text = "&lt;&nbsp;".sprintf ("%.0f", $s/1024)." kB";
 		}
-		
 ?>		
-		<span class="medium" id="article-size-<?=$s?>" onClick="selectArticleSize('<?=$s?>');" style="border:1px inset white; cursor:pointer;"><?=$text?></span>
+		<span class="medium" id="article-size-<?=$s?>" onClick="selectArticleSize('<?=$s?>');" style="border:1px outset white; cursor:pointer; padding:2px;"><?=$text?></span>
 <?php
 	}
 ?>		
 		<span class="medium"><input type="button" class="medium" id="ws-article-size-show" value="<?= wfMsg('wikiastats_show') ?>"></span>
 	</div>
+	<div id="ws-progress-article-bar"></div>
+	<div class="clear">&nbsp;</div>
 	<div id="ws-articles-size-table"></div>
 </div>
 <!-- END OF ARTICLE SIZE -->
 <!-- NAMESPACE COUNTS -->
-<div id="ws-progress-namespace-bar"></div>
 <div id="ws-namespace-count">
-	<div id="ws-namespace-count-title">
+	<div id="ws-namespace-count-title" style="clear:left;width:auto;float:left">
 		<a href="javascript:void(0)" id="ws-namespace-count-show"><?= wfMsg('wikiastats_namespace_records'); ?></a>
 	</div>
+	<div id="ws-progress-namespace-bar"></div>
+	<div class="clear">&nbsp;</div>
 	<div id="ws-namespace-count-table"></div>
 </div>
 <!-- NAMESPACE COUNTS -->
 <!-- NUMBER OF PAGE EDITED -->
-<div id="ws-progress-page-edits-bar"></div>
 <div id="ws-page-edits-count">
-	<div id="ws-page-edits-count-title">
+	<div id="ws-page-edits-count-title" style="clear:left;width:auto;float:left">
 		<a href="javascript:void(0)" id="ws-page-edits-count-show"><?= wfMsg('wikiastats_page_edits'); ?></a>
 	</div>
+	<div id="ws-progress-page-edits-bar"></div>
+	<div class="clear">&nbsp;</div>
 	<div id="ws-page-edits-count-table"></div>
 </div>
-<?
+<? if ( !empty($main_tbl) && (empty($show_chart)) ) { if ($selCity > 0) { ?>
+</fieldset>
+<? 
+} } 
 if ( !empty($main_tbl) && (empty($show_chart)) )
 {
 	if ($selCity > 0)
