@@ -450,14 +450,15 @@ class ChangeLogPager extends TablePager {
 	 *
 	 */
 	function __construct( $wiki_id = false ) {
-		if( $wiki_id ) {
+		if( is_numeric( $wiki_id ) ) {
 			$this->mTitle = Title::makeTitle( NS_SPECIAL, "WikiFactory/{$wiki_id}/clog" );
+			$this->mWikiId = $wiki_id;
 		}
 		else {
 			$this->mTitle = Title::makeTitle( NS_SPECIAL, "WikiFactory/change.log" );
+			$this->mWikiId = false;
 		}
 		$this->mDefaultDirection = true;
-		$this->mWikiId = $wiki_id;
 		parent::__construct();
 	}
 
@@ -526,7 +527,7 @@ class ChangeLogPager extends TablePager {
 				break;
 
 			case "cv_value_old":
-				return var_export(unserialize( $value ), 1);
+				return var_export( unserialize( $value ), 1);
 				break;
 
 			case "cv_timestamp":
@@ -574,7 +575,7 @@ class ChangeLogPager extends TablePager {
 				wfSharedTable("city_list"),
 				wfSharedTable("city_variables_pool")
 			),
-			"fields" => array("*"),
+			"fields" => array( "*" ),
 			"conds" => array(
 				wfSharedTable("city_variables_log").".cv_variable_id = ".
 				wfSharedTable("city_variables_pool").".cv_id",
