@@ -232,7 +232,7 @@ class WikiFactoryPage extends SpecialPage {
 			"wikiRequest" => $oWikiRequest
 		);
 		if( $this->mTab === "clog" ) {
-			$pager = new ChangeLogPager( $this->mWiki );
+			$pager = new ChangeLogPager( $this->mWiki->city_id );
 			$vars[ "changelog" ] = array(
 				"limit"     => $pager->getForm(),
 				"body"      => $pager->getBody(),
@@ -480,7 +480,9 @@ class ChangeLogPager extends TablePager {
 	public function getFieldNames() {
 		if( !$this->mFieldNames ) {
 			$this->mFieldNames = array();
-			$this->mFieldNames["city_url"]      = "Wiki";
+			if( ! $this->mWikiId ) {
+				$this->mFieldNames["city_url"]      = "Wiki";
+			}
 			$this->mFieldNames["cv_name"]       = "Variable name";
 			$this->mFieldNames["cv_value_old"]  = "Changed value";
 			$this->mFieldNames["cv_timestamp"]  = "Changed";
