@@ -15,14 +15,16 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 #--- Add messages
 global $wgMessageCache, $wgWikiaStatsMessages;
 require_once ( dirname( __FILE__ ) . '/SpecialWikiaStats.i18n.php' );
-foreach( $wgWikiaStatsMessages as $key => $value ) 
-{
+foreach( $wgWikiaStatsMessages as $key => $value ) {
 	$wgMessageCache->addMessages( $wgWikiaStatsMessages[$key], $key );
 }
 
 class WikiaStatsClass extends SpecialPage 
 {
     var $mPosted, $mStats, $mSkinName;
+    var $userIsSpecial;
+
+    const USE_MEMC = 1;
 
     #--- constructor
     public function __construct()
@@ -36,6 +38,7 @@ class WikiaStatsClass extends SpecialPage
     public function execute( $subpage )
     {
         global $wgUser, $wgOut, $wgRequest;
+		global $wgStatsExcludedNonSpecialGroup;
 
         if ( $wgUser->isBlocked() ) {
             $wgOut->blockedPage();
@@ -50,6 +53,16 @@ class WikiaStatsClass extends SpecialPage
             return;
         }
 
+       	$t = intval($wgRequest->getVal("table"));
+		$this->userIsSpecial = 0;
+		$rights = $wgUser->getGroups(); 
+		foreach ($rights as $id => $right) {
+			if (in_array($right, array('staff', 'sysop', 'janitor', 'bureaucrat'))) {
+				$this->userIsSpecial = 1; 
+				break;
+			}
+		}
+		
         #--- WikiaGenericStats instance
         $this->mStats = new WikiaGenericStats($wgUser->getID());
 
@@ -71,16 +84,16 @@ class WikiaStatsClass extends SpecialPage
         	$wgOut->setSubtitle($prevPageLink . $mainPageLink);
 		}
         $wgOut->setRobotpolicy( "noindex,nofollow" );
-        
+		#---
+		$wgOut->addScript("<link rel=\"stylesheet\" type=\"text/css\" href=\"/extensions/wikia/WikiaStats/css/wikiastats.css\">\n");
+        #---
         switch ($this->mSkinName) {
             case "monobook": 
-            case "quartz"  : $wgOut->setArticleRelated( false ); break;
+            case "slate"   :
+            case "quartz"  : $this->disableWidgetBarCss(); $wgOut->setArticleRelated( false ); break;
             case "monaco"  : $this->disableWidgetBarCss(); break;
             default        : $wgOut->setArticleRelated( false ); break;
         }
-		#---
-		$wgOut->addHTML("<link rel=\"stylesheet\" type=\"text/css\" href=\"/extensions/wikia/WikiaStats/css/wikiastats.css\">\n");
-        #---
         if ($wgRequest->getVal("action") == "generate") {
             $this->mPosted = true;
         } 
@@ -90,19 +103,20 @@ class WikiaStatsClass extends SpecialPage
         } 
         elseif ($wgRequest->getVal("action") == "compare") 
         {
-        	$t = intval($wgRequest->getVal("table"));
-        	if ($t == 1)
-        	{
+        	if ($t == 1) {
         		$this->mainStatsTrendsForm();
-        	} 
-        	elseif ($t == 2)
-        	{
+        	} elseif ($t == 2) {
         		$this->mainStatsCreationHistoryForm();
-			}
-			elseif ($t > 2 && $t <= 23)
-			{
+			} elseif ($t > 2) { 
+				$memory_limit = ini_get("memory_limit");
 				$column = $wgRequest->getVal("table"); 
-				$this->mainStatsColumnHistoryForm($column); 
+				$cities = $wgRequest->getVal("cities"); 
+				if ( empty($this->userIsSpecial) && (is_array($wgStatsExcludedNonSpecialGroup)) && (in_array($t, $wgStatsExcludedNonSpecialGroup) )) {
+					// don't show wikians statistics
+					$this->mainSelectCityForm();
+				} else {
+					$this->mainStatsColumnHistoryForm($column, $cities); 
+				}
 			}
 		} else {
 			$this->mainSelectCityForm();
@@ -113,9 +127,12 @@ class WikiaStatsClass extends SpecialPage
     {
         global $wgUser, $wgOut, $wgCityId;
         global $wgMemc, $wgRequest, $wgContLang;
+        global $wgStatsExcludedNonSpecialGroup;
 
 		wfProfileIn( __METHOD__ );
-   		$main_select = $wgMemc->get('wikiastatsmainmenu');
+   		$main_select = "";
+   		
+   		if (self::USE_MEMC) $main_select = $wgMemc->get('wikiastatsmainmenu');
 	
 		if (empty($main_select))
 		{
@@ -125,7 +142,6 @@ class WikiaStatsClass extends SpecialPage
 				$cityStatsList = array_merge(array(0=>0) /*All stats*/, $cityStatsList);
 			}
 			$cityList = $this->mStats->getWikiaAllCityList();
-
 			$dateRange = $this->mStats->getRangeDateStatistics();
 
 			$oTmpl = new EasyTemplate( dirname( __FILE__ ) . "/templates/" );
@@ -138,10 +154,12 @@ class WikiaStatsClass extends SpecialPage
 				"wgCityId"	=> $wgCityId,
 				"dateRange" => $dateRange,
 				"MAX_NBR"	=> STATS_COLUMN_CITY_NBR,
+				"userIsSpecial"=> $this->userIsSpecial,
+				"wgStatsExcludedNonSpecialGroup" => $wgStatsExcludedNonSpecialGroup,
 			));
 			
 			$main_select = $oTmpl->execute("main-select");
-			$wgMemc->set("wikiastatsmainmenu", $main_select, 60*60*10);
+			$wgMemc->set("wikiastatsmainmenu", $main_select, 60*60*3);
 		}
         
         $wgOut->addHTML( $main_select );
@@ -155,20 +173,21 @@ class WikiaStatsClass extends SpecialPage
     {
         global $wgUser, $wgOut, $wgRequest;
         global $wgMemc;
+		global $wgStatsExcludedNonSpecialGroup;
 
 		wfProfileIn( __METHOD__ );
 		$memkey = "wikiastatsmainstatsform_".$city."_".$show_charts;
-   		$mainStats = $wgMemc->get($memkey);
+		$mainStats = "";
+		if (self::USE_MEMC) $mainStats = $wgMemc->get($memkey);
 
 		if (empty($mainStats)) {
 			$table_stats = "";
-			if ( (is_numeric($city)) && ($city >= 0) )
-			{
-				$main_stats = WikiaGenericStats::getWikiMainStatistics($city, '2004', '01', '', '', $show_charts);
+			if ( (is_numeric($city)) && ($city >= 0) ) {
+				$main_stats = $this->mStats->getWikiMainStatistics($city, '2004', '01', '', '', $show_charts);
 				$table_stats = $main_stats["text"];
 				unset($main_stats);
 			}
-
+			
 			$cityList = $this->mStats->getWikiaCityList();
 			$dateRange = $this->mStats->getRangeDateStatistics();
 
@@ -211,8 +230,6 @@ class WikiaStatsClass extends SpecialPage
 		#--- split table to get list of id of cities 
 		$array_sli = array_slice($cityOrderList, $select, STATS_TREND_CITY_NBR);
 		$splitCityList = array_merge(array(0 => 0) /* all stats */, (is_array($array_sli)) ? $array_sli : array());
-		//echo "<pre>".print_r($splitCityList, true)."</pre>";
-		//exit;
 		#---
 		$nbrCities = count($cityOrderList) + 1;
 		unset($cityOrderList);
@@ -260,7 +277,8 @@ class WikiaStatsClass extends SpecialPage
 
 		wfProfileIn( __METHOD__ );
 		$memkey = "wikiastatscreationhistory";
-   		$creationHistory = $wgMemc->get($memkey);
+   		$creationHistory = "";
+   		if (self::USE_MEMC) $creationHistory = $wgMemc->get($memkey);
 
 		if (empty($creationHistory)) {
 			#---
@@ -296,7 +314,7 @@ class WikiaStatsClass extends SpecialPage
 		wfProfileOut( __METHOD__ );
 	}
 	
-	private function mainStatsColumnHistoryForm($column)
+	private function mainStatsColumnHistoryForm($column, $cities = "")
 	{
 		global $wgUser, $wgOut, $wgRequest;
 
@@ -304,16 +322,20 @@ class WikiaStatsClass extends SpecialPage
 		#---
 		$page = intval($wgRequest->getVal('page'));
 		$select = STATS_COLUMN_CITY_NBR * $page;
+		
+		$citiesList = array();
+		if (!empty($cities)) {
+			$citiesList = split(";", $cities, 30);			
+		}
 
-		$columnStats = $this->mStats->getWikiCompareColumnsStats($column, false, $select);
-		if ($columnStats === false)
-		{
+		$columnStats = $this->mStats->getWikiCompareColumnsStats($column, $citiesList, $select);
+		if ($columnStats === false) {
 			wfProfileOut( __METHOD__ );
 			return '';
 		}
-		
 		list ($cityList,$nbrCities,$splitCityList,$columnHistory,$columnRange) = $columnStats;
-
+		unset($columnStats); $columnStats = false;
+		
 		$pager = $this->mStats->getStatisticsPager(count($cityList), $page, "/index.php?title=Special:WikiaStats&action=compare&table=$column", "", STATS_COLUMN_CITY_NBR, 0);
         $oTmpl = new EasyTemplate( dirname( __FILE__ ) . "/templates/" );
         $oTmpl->set_vars( array(
@@ -327,21 +349,25 @@ class WikiaStatsClass extends SpecialPage
             "columnHistory"	=> $columnHistory,
             "rangeColumns"	=> $columnRange,
             "pager"			=> $pager,
+            "cities"		=> $cities,
         ));
+        $output = $oTmpl->execute("column-stats-form");
         
-        $wgOut->addHTML( $oTmpl->execute("column-stats-form") );
-        
-        #---
         unset($columnHistory);
         unset($splitCityList);
         unset($cityList);
+        unset($nbrCities);
+        unset($columnRange);
+        
+        $wgOut->addHTML( $output );
+        #---
 		wfProfileOut( __METHOD__ );
 	}
 	
 	private function disableWidgetBarCss()
 	{
 	    global $wgOut; 
-		$wgOut->addHTML("<link rel=\"stylesheet\" type=\"text/css\" href=\"/extensions/wikia/WikiaStats/css/hideWidgets.css\">\n");
+		$wgOut->addScript("<link rel=\"stylesheet\" type=\"text/css\" href=\"/extensions/wikia/WikiaStats/css/hideWidgets.css\">\n");
     }
 }
 

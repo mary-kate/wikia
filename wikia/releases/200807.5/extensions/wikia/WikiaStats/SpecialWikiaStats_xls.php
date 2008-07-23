@@ -110,9 +110,12 @@ class WikiaStatsXLS {
 		$col_links = 15;
 		$this->writeXLSLabel(3, $col_links, wfMsg('wikiastats_links'));
 		$this->mergeXLSColsRows(3, $col_links, 3, $col_links + 4);
-		$col_usage = 20;
-		$this->writeXLSLabel(3, $col_usage, wfMsg('wikiastats_daily_usage'));
-		$this->mergeXLSColsRows(3, $col_usage, 3, $col_usage + 2);
+		$col_image = 20;
+		$this->writeXLSLabel(3, $col_image, wfMsg('wikiastats_images'));
+		$this->mergeXLSColsRows(3, $col_image, 3, $col_image + 1);
+		$col_users = 22;
+		$this->writeXLSLabel(3, $col_users, wfMsg('wikiastats_reg_users'));
+		$this->mergeXLSColsRows(3, $col_users, 3, $col_users + 3);
 
 		// second row
 		// date
@@ -162,11 +165,19 @@ class WikiaStatsXLS {
 		$this->mergeXLSColsRows(4, 18, 5, 18);
 		$this->writeXLSLabel(4,19,wfMsg('wikiastats_redirects'));
 		$this->mergeXLSColsRows(4, 19, 5, 19);
-		// usage
-		$this->writeXLSLabel(4,20,wfMsg('wikiastats_page_requests'));
+		// images
+		$this->writeXLSLabel(4,20,wfMsg('wikiastats_uploaded_images'));
 		$this->mergeXLSColsRows(4, 20, 5, 20);
-		$this->writeXLSLabel(4,21,wfMsg('wikiastats_visits'));
+		$this->writeXLSLabel(4,21,wfMsg('wikiastats_with_links'));
 		$this->mergeXLSColsRows(4, 21, 5, 21);
+		// unique users
+		$this->writeXLSLabel(4,22,wfMsg('wikiastats_total'));
+		$this->mergeXLSColsRows(4, 22, 5, 22);
+		$this->writeXLSLabel(4,23,wfMsg('wikistats_edited_in_namespace'));
+		$this->mergeXLSColsRows(4, 23, 4, 25);
+		$this->writeXLSLabel(5,23,wfMsg('wikistats_main_namespace'));
+		$this->writeXLSLabel(5,24,wfMsg('wikistats_user_namespace'));
+		$this->writeXLSLabel(5,25,wfMsg('wikistats_image_namespace'));		
 		
 		// monthly stats
 		$row = 6;
@@ -861,7 +872,7 @@ class WikiaStatsXLS {
 		foreach ($trend_stats as $column => $dateValues)
 		{
 			$col1 = 0; $col2 = $col1 + 4;
-			$linkText = array("wikians" => wfMsg('wikiastats_distrib_wikians'), "articles" => wfMsg('wikiastats_articles_text'), "database" => wfMsg('wikiastats_database'), "links" => wfMsg('wikiastats_links'), "usage" => wfMsg('wikiastats_daily_usage'));
+			$linkText = array("wikians" => wfMsg('wikiastats_distrib_wikians'), "articles" => wfMsg('wikiastats_articles_text'), "database" => wfMsg('wikiastats_database'), "links" => wfMsg('wikiastats_links'), "usage" => wfMsg('wikiastats_reg_users'));
 
 			$active = "";
 			if (($i >= 0) && ($i < 4)) {

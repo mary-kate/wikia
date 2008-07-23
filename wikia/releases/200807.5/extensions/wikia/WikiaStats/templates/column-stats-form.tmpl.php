@@ -4,11 +4,13 @@
 var YC = YAHOO.util.Connect;
 var YD = YAHOO.util.Dom;
 var YE = YAHOO.util.Event;
-
-ChangeColumnStats = function(e) 
-{
+ChangeColumnStats = function(e) {
 	var column = YD.get( "ws_column_stats" ).value;
-    var baseurl = "/index.php?title=Special:WikiaStats&action=compare&table=" + column;
+	var cities = "<?=$cities?>";
+    var baseurl = "/index.php?title=Special:WikiaStats&action=compare&table=" + column; 
+    if (cities) {
+    	baseurl += "&cities=" + cities;
+	}
     document.location = baseurl;
 };
 
@@ -26,7 +28,7 @@ $empty_row = "<td>&nbsp;</td>";
 $cityUrl = "<a href=\"/index.php?title=Special:WikiaStats&action=citystats&city=%s\">";
 $i = 0;
 ?>
-<div style="text-align:right; float:right;padding:5px;">
+<div style="text-align:right; float:left;padding:5px;">
 <select name="ws_column_stats" id="ws_column_stats" style="text-align:left; font-size:11px;">
 <? foreach ($rangeColumns as $id => $letter) { ?>
 <option value="<?=($id+3)?>" <?=(($column == ($id+3)) ? "selected" : "")?>><?=wfMsg("wikiastats_mainstats_short_column_" . $letter)?></option>
@@ -34,10 +36,10 @@ $i = 0;
 </select>
 </div>
 <div style="float:left; margin-left:auto;margin-right:auto;width:100%">
-<?=$pager?>
+<!--<?=$pager?>-->
 </div>
 <!-- table -->
-<div class="medium" style="float:left; width:auto; overflow-x:auto;">
+<div class="medium" style="float:left; width:auto;overflow-x:auto;">
 <table style="width:auto" class="ws-trend-table">
 <?
 $rows = array();
@@ -91,7 +93,7 @@ foreach ($columnHistory as $date => $dateValues)
 	$outDate = WikiaGenericStats::makeCorrectDate($date, ($date==date('Y-m')));
 ?>	
 <tr>
-<td class="eb-trend" style="width:90px;" nowrap><?=$outDate?></td>
+<td class="eb-trend" style="width:80px;" nowrap><strong><?=$outDate?></strong></td>
 <?
 	#---
 	foreach ($cityOrderList as $id => $city_id)
@@ -162,7 +164,7 @@ foreach ($columnHistory as $date => $dateValues)
 			}
 		}
 ?>
-<td class="eb-trend" nowrap style="width:40px;"><?=((!empty($output)) ? $output : "&nbsp;")?></td>
+<td class="eb-trend" nowrap style="width:30px;"><?=((!empty($output)) ? $output : "&nbsp;")?></td>
 <?
 	}
 ?>
@@ -175,6 +177,6 @@ foreach ($columnHistory as $date => $dateValues)
 </div>
 <div class="clear"></div>
 <div style="float:left; margin-left:auto;margin-right:auto;width:100%">
-<?=$pager?>
+<!--<?=$pager?>-->
 </div>
 <!-- e:<?= __FILE__ ?> -->

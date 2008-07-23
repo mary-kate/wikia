@@ -19,7 +19,7 @@ foreach ($cityOrderList as $id => $city_id)
 	#---
 	$empty_row .= "<td>&nbsp;</td>";
 	#---
-	$dbname = (array_key_exists($city_id, $cityList)) ? $cityList[$city_id]['dbname'] : "";
+	$dbname = (array_key_exists($city_id, $cityList)) ? $cityList[$city_id]['dbname'] : $city_id;
 	$wikiaName = ($city_id == 0) ? wfMsg('wikiastats_trend_all_wikia_text') : $dbname;
 	$rows[$k] .= "<td colspan=\"$colspan\" align=\"$align\"><strong><a href=\"/index.php?title=Special:WikiaStats&action=citystats&city=$city_id\">".$wikiaName."</a></strong></td>";
 	$loop++;
@@ -104,7 +104,7 @@ $KB = 1024;
 $i = 0;
 foreach ($trend_stats as $column => $dateValues)
 {
-	$linkText = array("wikians" => wfMsg('wikiastats_distrib_wikians'), "articles" => wfMsg('wikiastats_articles_text'), "database" => wfMsg('wikiastats_database'), "links" => wfMsg('wikiastats_links'), "usage" => wfMsg('wikiastats_daily_usage'));
+	$linkText = array("wikians" => wfMsg('wikiastats_distrib_wikians'), "articles" => wfMsg('wikiastats_articles_text'), "database" => wfMsg('wikiastats_database'), "links" => wfMsg('wikiastats_links'), "unique wikians" => wfMsg('wikiastats_reg_users'), "images" => wfMsg('wikiastats_images'));
 
 	$active = "";
 	if (($i >= 0) && ($i < 4)) {
@@ -119,44 +119,44 @@ foreach ($trend_stats as $column => $dateValues)
 	} elseif ( ($i >= 14) && ($i < 19) ) {
 		$active = $linkText["links"];
 		$linkText["links"] = "";
-	} elseif ( ($i >= 19) && ($i < 21) ) {
-		$active = $linkText["usage"];
+	} elseif ( ($i >= 19) && ($i < 23) ) {
+		$active = $linkText["unique wikians"];
 		$linkText["usage"] = "";
+	} elseif ( ($i >= 23) && ($i < 25) ) {
+		$active = $linkText["images"];
+		$linkText["images"] = "";
 	}
 ?>	
 <tr>
 <td colspan="<?= round(count($cityOrderList) + 3) ?>">
 <table width="100%" class="ws-trend-table-nobrd">
 <tr>
-<td width="100%" style="height:25px;"><a name="<?=strtolower($active)?>">
-<table style="width:100%;" class="ws-trend-table-wob-nobrd">
-<tr>
+	<td width="100%" style="height:25px;"><a name="<?=strtolower($active)?>">
+	<table style="width:100%;" class="ws-trend-table-wob-nobrd">
+	<tr>
 <?
 	$loop = 0;	
 	$links = array();
-	foreach ($linkText as $id => $name)
-	{
-		if (!empty($name))
-		{
-			$links[] = "<a href=\"/index.php?title=Special:WikiaStats&action=compare&table=1&page=$page#".$id."\">".$name."</a>";
+	foreach ($linkText as $id => $name) {
+		if (!empty($name)) {
+			$links[] = "<a href=\"/index.php?title=Special:WikiaStats&action=compare&table=1&page=$page#".$id."\" style=\"color:#800000\">".$name."</a>";
 		}
 		$loop++;
 	}
 ?>	        
-<td style="width:250px" nowrap>(<?=$column?>) <?= "<strong>".implode (" - ", $links)."</strong>" ?></td>
+<td style="width:250px; font-size:8pt;" nowrap>(<?=$column?>) <?= "<strong>".implode (" - ", $links)."</strong>" ?></td>
 <?
 	$roundCols = round( ( (count($cityOrderList) * 5) / 100), 0);
 	#---
-	for ($col = 0; $col < $roundCols; $col++)
-	{
+	for ($col = 0; $col < $roundCols; $col++) {
 ?>
-<td style="width:auto;text-align:center;" nowrap><strong><?= $active ?> - <a href="/index.php?title=Special:WikiaStats&action=compare&table=3"><?= wfMsg('wikiastats_mainstats_short_column_' . $column) ?></a></strong></td>
+<td style="width:auto;font-size:8pt;text-align:center;" nowrap><strong><?= $active ?> - <a style="color:#008000;" href="/index.php?title=Special:WikiaStats&action=compare&table=3"><?= wfMsg('wikiastats_mainstats_short_column_' . $column) ?></a></strong></td>
 <?		
 	}
 ?>	        
-</tr>
-</table>
-</td>
+	</tr>
+	</table>
+	</td>
 </tr>
 </table>
 </td>
@@ -286,22 +286,20 @@ foreach ($dateValues as $date => $cities)
 			}
 		}	
 ?>		
-<td class="eb-trend" nowrap style="<?=$backColor?> width:45px;">&nbsp;<?= (($trend == 1) ? "&#177 ".$out : $out) ?><?= ((($growth == 1) && ($out !== "") && (strpos($out,"%") === false)) ? "%" : "") ?></td>
+<td class="eb-trend" nowrap style="<?=$backColor?> width:40px;">&nbsp;<?= (($trend == 1) ? "&#177 ".$out : $out) ?><?= ((($growth == 1) && ($out !== "") && (strpos($out,"%") === false)) ? "%" : "") ?></td>
 <?		
 	}
 ?>
 </tr>
 <?	
-	if ($loop == 0)
-	{
+	if ($loop == 0) {
 ?>
 <tr style="background-color:#ffdead;font-size:1px"><?=$empty_row?></tr>
 <?	
-	}
-	$loop++;
+	} $loop++;
 }
 ?>
-<tr style="background-color:white;font-size:8pt;"><?=$empty_row?></tr>
+<tr style="height:20px;"><?=$empty_row?></tr>
 <?
 	$i++;
 }

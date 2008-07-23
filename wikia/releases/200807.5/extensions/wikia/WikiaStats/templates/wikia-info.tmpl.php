@@ -1,53 +1,37 @@
 <?php
-if (!empty($city_row))
+$outDate = "";
+$created = (is_object($city_row)) ? $city_row->city_created : null;
+if (!empty($created) && ($created != "0000-00-00 00:00:00"))
 {
-    $outDate = "";
-	$created = $city_row->city_created;
-	if (!empty($created) && ($created != "0000-00-00 00:00:00"))
-	{
-		$dateTime = explode(" ", $created);
-		#---
-		$dateArr = explode("-", $dateTime[0]);
-		#---
-		$stamp = mktime(0,0,0,$dateArr[1],$dateArr[2],$dateArr[0]);
-		$outDate = substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " " . $dateArr[2] .", ". $dateArr[0]. " ".$dateTime[1];
-	}
-    
-    #--- dbdumps ---
-    $full_url = "http://wikistats.wikia.com/dbdumps/".$city_row->city_dbname."/pages_full.xml.gz";
-    $current_url = "http://wikistats.wikia.com/dbdumps/".$city_row->city_dbname."/pages_current.xml.gz";
-
-    $full_dump_time = WikiaGenericStats::getFileMTimeRemove($full_url);
-    $outFullDumpTime = substr(wfMsg(strtolower(date("F",$full_dump_time))), 0, 3) . " " . date("d", $full_dump_time) .", ". date("Y", $full_dump_time). " ".date("H:i:s", $full_dump_time);
-    $current_dump_time = WikiaGenericStats::getFileMTimeRemove($current_url);
-    $outCurrentDumpTime = substr(wfMsg(strtolower(date("F",$current_dump_time))), 0, 3) . " " . date("d", $current_dump_time) .", ". date("Y", $current_dump_time). " ".date("H:i:s", $current_dump_time);
-
-    $full_dump_size = WikiaGenericStats::getUrlFilesize($full_url);
-    $current_dump_size = WikiaGenericStats::getUrlFilesize($current_url);
-
+	$dateTime = explode(" ", $created);
+	#---
+	$dateArr = explode("-", $dateTime[0]);
+	#---
+	$stamp = mktime(0,0,0,$dateArr[1],$dateArr[2],$dateArr[0]);
+	$outDate = substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " " . $dateArr[2] .", ". $dateArr[0]. " ".$dateTime[1];
+}
+$langName = (is_object($city_row)) ? $wgContLang->getLanguageName( $city_row->city_lang ) : " - ";
+$catName = (is_object($city_row) && !empty($cats) && array_key_exists($city, $cats)) ? $cats[$city]['name'] : " - ";
+$cityTitle = (is_object($city_row) && $city > 0) ? ucfirst($city_row->city_title) : (($city == 0) ? wfMsg("wikiastats_trend_all_wikia_text") : " - ");
+$cityUrl = (is_object($city_row) && $city > 0) ? "<a target=\"new\" href=\"".$city_row->city_url."\">".$city_row->city_url."</a>" : " - ";
+$rights = $user->getGroups(); $is_special = 0;
+foreach ($rights as $id => $right) {
+	if (in_array($right, array('staff', 'sysop', 'janitor', 'bureaucrat'))) {
+		$is_special = 1;
+	} 
+}
 ?>
 <!-- s:<?= __FILE__ ?> -->
 <!-- WIKI's INFORMATION -->	
-<table cellspacing="0" cellpadding="2" border="0" style="width:auto; font-family: arial,sans-serif,helvetica;">
-<tr>
-<td class="cityinfo" nowrap align="left">
-	<ul style="font-size:8.5pt">
-	 <li><strong><?= wfMsg('wikiastats_wikiname') ?></strong> <?= ucfirst($city_row->city_title) ?> (id: <?= $city_row->city_id ?>)</li>
-	 <li><strong><?= wfMsg('wikiastats_wikiurl') ?></strong> <a target="new" href="<?= $city_row->city_url ?>"><?= $city_row->city_url ?></a></li>
-<? if (!empty($outDate)) { ?>
-	 <li><strong><?= wfMsg('wikiastats_wikicreated') ?></strong> <?= $outDate ?></li>
+<table cellspacing="0" cellpadding="1" border="0" style="width:250px; font-size:8.5pt;font-family: verdana,arial,sans-serif,helvetica;">
+<? if ($is_special) { ?>
+<tr><td align="left"><strong><?= wfMsg('wikiastats_wikiid')?></strong> <?= (!empty($city)) ? $city : " - " ?></td></tr>
 <? } ?>
-	 <li><strong><?= wfMsg('wikiastats_dbdumps_stats') ?>:</strong>
-		<ul>
-		<li><strong><?=wfMsg('wikiastats_full_dump_stats')?>:</strong> <font style="color:gray;"><?=wfMsg('wikiastats_size').": ".$full_dump_size?>, <?= wfMsg('wikiastats_dbdump_generated') ?><?=$outFullDumpTime?> </font></li> 
-		<li><strong><?=wfMsg('wikiastats_current_dump_stats')?>:</strong> <font style="color:gray;"><?=wfMsg('wikiastats_size').": ".$current_dump_size?>, <?= wfMsg('wikiastats_dbdump_generated') ?><?=$outCurrentDumpTime?> </font></li>
-		</ul>
-	 </li>	
-	</ul> 
-</td>
-</tr>	
+<tr><td align="left"><strong><?= wfMsg('wikiastats_wikiname') ?></strong> <?= $cityTitle ?></td></tr>
+<tr><td align="left"><strong><?= wfMsg('wikiastats_wikiurl') ?></strong> <?= $cityUrl ?></td></tr>
+<tr><td align="left"><strong><?= wfMsg('wikiastats_wikilang') ?></strong> <?= (!empty($langName)) ? $langName : $city_row->city_lang ?></td></tr>
+<tr><td align="left"><strong><?= wfMsg('wikiastats_wikicategory') ?></strong> <?= $catName ?></td></tr>
+<tr><td align="left"><strong><?= wfMsg('wikiastats_wikicreated') ?></strong> <?= (!empty($outDate)) ? $outDate : " - " ?></td></tr>
+<tr><td align="left"><input type="hidden" id="ws-city-dbname" value="<?= (!empty($city_row)) ? $city_row->city_dbname : "ZZ" ?>"></td></tr>
 </table>
 <!-- END OF WIKI's INFORMATION -->
-<?php
-} 
-?>
