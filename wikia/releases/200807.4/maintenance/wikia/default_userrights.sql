@@ -89,16 +89,12 @@ insert into user_groups(ug_user, ug_group) values
 ;
 
 delete from user_groups where ug_user in (
-/*GHe*/21944,
 /*Greyman*/87167,
-/*JackPhenix*/36762,
 /*Jaymach*/7701,
 /*Uberfuzzy*/161697
 ) and ug_group="janitor";
 insert into user_groups(ug_user, ug_group) values
-(/*GHe*/21944,'janitor'),
 (/*Greyman*/87167,'janitor'),
-(/*JackPhoenix*/36762,'janitor'),
 (/*Jaymach*/7701,'janitor'),
 (/*Uberfuzzy*/161697, 'janitor')
 ;
