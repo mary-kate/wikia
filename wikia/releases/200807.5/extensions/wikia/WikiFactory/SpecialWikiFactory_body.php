@@ -219,7 +219,7 @@ class WikiFactoryPage extends SpecialPage {
 		}
 
 		$oTmpl = new EasyTemplate( dirname( __FILE__ ) . "/templates/" );
-		$oTmpl->set_vars( array(
+		$vars = array(
 			"tab"         => $this->mTab,
 			"hub"         => WikiFactoryHub::getInstance(),
 			"wiki"        => $this->mWiki,
@@ -230,7 +230,16 @@ class WikiFactoryPage extends SpecialPage {
 			"statuses" 	  => $this->mStatuses,
 			"variables"   => WikiFactory::getVariables(),
 			"wikiRequest" => $oWikiRequest
-		));
+		);
+		if( $this->mTab === "clog" ) {
+			$pager = new ChangeLogPager( $this->mWiki );
+			$vars[ "changelog" ] = array(
+				"limit"     => $pager->getForm(),
+				"body"      => $pager->getBody(),
+				"nav"       => $pager->getNavigationBar()
+			);
+		}
+		$oTmpl->set_vars( $vars );
 		$wgOut->addHTML( $oTmpl->execute("form") );
 	}
 
@@ -427,18 +436,28 @@ class ChangeLogPager extends TablePager {
 	public $mMessages = array();
 	public $mQueryConds = array();
 	public $mTitle;
+	public $mWikiId;
 
 	/**
 	 * __construct
 	 *
-	 * Public constructor
+	 * Public constructor with standard initializations
 	 *
-	 * @author eloy@wikia.com
+	 * @access public
+	 * @author Krzysztof Krzyżaniak <eloy@wikia.com>
+	 *
+	 * @param integer $wiki_id	wiki identifier in wiki factory
 	 *
 	 */
-	function __construct() {
-		$this->mTitle = Title::makeTitle( NS_SPECIAL, "WikiFactory/change.log" );
+	function __construct( $wiki_id = false ) {
+		if( $wiki_id ) {
+			$this->mTitle = Title::makeTitle( NS_SPECIAL, "WikiFactory/{$wiki_id}/clog" );
+		}
+		else {
+			$this->mTitle = Title::makeTitle( NS_SPECIAL, "WikiFactory/change.log" );
+		}
 		$this->mDefaultDirection = true;
+		$this->mWikiId = $wiki_id;
 		parent::__construct();
 	}
 
@@ -547,7 +566,7 @@ class ChangeLogPager extends TablePager {
 	 * @return array: query info
 	 */
 	function getQueryInfo() {
-		return array(
+		$query = array(
 			"tables" => array(
 				wfSharedTable("city_variables_log"),
 				wfSharedTable("city_list"),
@@ -561,6 +580,11 @@ class ChangeLogPager extends TablePager {
 				wfSharedTable("city_variables_log").".cv_city_id"
 			)
 		);
+
+		if( $this->mWikiId ) {
+			$query[ "conds" ][] = wfSharedTable("city_list").".city_id = " . $this->mWikiId;
+		}
+		return $query;
 	}
 
 	/**
