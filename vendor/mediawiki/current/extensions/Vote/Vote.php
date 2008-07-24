@@ -15,7 +15,8 @@ exit(1);
  
 $wgExtensionCredits['specialpage'][] = array(
 	'name' => 'Vote',
-	'version' => '2008-01-11',
+	'svn-date' => '$LastChangedDate: 2008-05-14 02:38:28 +0200 (śro, 14 maj 2008) $',
+	'svn-revision' => '$LastChangedRevision: 34773 $',
 	'author' => 'Rob Church',
 	'description' => 'Provides simple polling capabilities',
 	'url' => 'http://www.mediawiki.org/wiki/Extension:Vote',
@@ -36,6 +37,9 @@ $wgGroupPermissions['user']['vote'] = true;
  * Users who can view vote results
  */
 $wgGroupPermissions['bureaucrat']['voteadmin'] = true;
+
+$wgAvailableRights[] = 'vote';
+$wgAvailableRights[] = 'voteadmin';
 
 /**
  * Extension setup function

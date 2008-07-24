@@ -13,9 +13,10 @@
  * Objects of this class encapsulate the result of a query in SMW. They
  * provide access to the query result and printed data, and to some
  * relevant query parameters that were used.
- * 
+ *
  * While the API does not require this, it is ensured that every result row 
  * returned by this object has the same number of elements (columns).
+ * @note: AUTOLOADED
  */
 class SMWQueryResult {
 	protected $m_content; // array (table) of arrays (rows) of arrays (fields, SMWResultArray)
@@ -128,35 +129,87 @@ class SMWQueryResult {
 		return $this->m_query->getErrors();
 	}
 
+	public function addErrors($errors) {
+		$this->m_query->addErrors($errors);
+	}
+
+	/**
+	 * Create an SMWInfolink object representing a link to further query results.
+	 * This link can then be serialised or extended by further params first.
+	 * The optional $caption can be used to set the caption of the link (though this
+	 * can also be changed afterwards with SMWInfolink::setCaption()). If empty, the
+	 * message 'smw_iq_moreresults' is used as a caption.
+	 */
+	public function getQueryLink($caption = false) {
+		$params = array(trim($this->m_querystring));
+		foreach ($this->m_extraprintouts as $printout) {
+			$params[] = $printout->getSerialisation();
+		}
+		if ( count($this->m_query->sortkeys)>0 ) {
+			$psort  = '';
+			$porder = '';
+			$first = true;
+			foreach ( $this->m_query->sortkeys as $sortkey => $order ) {
+				if ( $first ) {
+					$first = false;
+				} else {
+					$psort  .= ',';
+					$porder .= ',';
+				}
+				$psort .= $sortkey;
+				$porder .= $order;
+			}
+			$params['sort'] = $psort;
+			$params['order'] = $porder;
+		}
+		if ($caption == false) {
+			$caption = ' ' . wfMsgForContent('smw_iq_moreresults'); // the space is right here, not in the QPs!
+		}
+		$result = SMWInfolink::newInternalLink($caption,':Special:Ask', false, $params);
+		// Note: the initial : prevents SMW from reparsing :: in the query string
+		return $result;
+	}
+
+
 	/**
 	 * Return URL of a page that displays those search results
 	 * (and enables browsing results, and is accessible even without
 	 * JavaScript enabled browsers).
+	 * @DEPRECATED (since >1.1) use getQueryLink
 	 */
 	public function getQueryURL() {
-		/// TODO implement (requires some way of generating/maintaining this URL as part of the query, and setting it when creating this result)
 		$title = Title::makeTitle(NS_SPECIAL, 'ask');
-		$params = 'query=' . urlencode($this->m_querystring);
-		if ($this->m_query->sortkey != false) {
-			$params .= '&sort=' . urlencode($this->m_query->sortkey);
-			if ($this->m_query->ascending) {
-				$params .= '&order=ASC';
-			} else {
-				$params .= '&order=DESC';
+		$params['query'] = $this->m_querystring;
+		if ( count($this->m_query->sortkeys)>0 ) {
+			$psort  = '';
+			$porder = '';
+			$first = true;
+			foreach ( $this->m_query->sortkeys as $sortkey => $order ) {
+				if ( $first ) {
+					$first = false;
+				} else {
+					$psort  .= ',';
+					$porder .= ',';
+				}
+				$psort .= $sortkey;
+				$porder .= $order;
 			}
+			$params['sort'] = $psort;
+			$params['order'] = $porder;
 		}
-		return $title->getFullURL($params);
+		return $title->getFullURL(SMWInfolink::encodeParameters($params,false));
 	}
 	
 	/**
 	 * Return titlestring of a page that displays those search results
 	 * (and enables browsing results, and is accessible even without
 	 * JavaScript enabled browsers).
+	 * @DEPRECATED (since >1.1) use getQueryLink
 	 */
 	public function getQueryTitle($prefixed = true) {
 		if ($prefixed) {
 			$title = Title::makeTitle(NS_SPECIAL, 'ask');
-			$titlestring = $title->getPrefixedText();
+			$titlestring = ':' . $title->getPrefixedText() . '/';
 		} else { // useful for further processing
 			$titlestring = '';
 		}
@@ -164,19 +217,24 @@ class SMWQueryResult {
 		foreach ($this->m_extraprintouts as $printout) {
 			$params[] = $printout->getSerialisation();
 		}
-		if ($this->m_query->sortkey != false) {
-			$params[] = 'sort=' . $this->m_query->sortkey;
-			if ($this->m_query->ascending) {
-				$params[] = 'order=ASC';
-			} else {
-				$params[] = 'order=DESC';
+		if ( count($this->m_query->sortkeys)>0 ) {
+			$psort  = '';
+			$porder = '';
+			$first = true;
+			foreach ( $this->m_query->sortkeys as $sortkey => $order ) {
+				if ( $first ) {
+					$first = false;
+				} else {
+					$psort  .= ',';
+					$porder .= ',';
+				}
+				$psort .= $sortkey;
+				$porder .= $order;
 			}
+			$params['sort'] = $psort;
+			$params['order'] = $porder;
 		}
-		foreach ($params as $p) {
-			$p = str_replace(array('/','=','-','%'),array('-2F','-3D','-2D','-'), rawurlencode($p));
-			if ($titlestring != '') $titlestring .= '/';
-			$titlestring .= $p;
-		}
+		$titlestring .= SMWInfolink::encodeParameters($params);
 		return $titlestring;
 	}
 }

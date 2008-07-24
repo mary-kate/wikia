@@ -11,7 +11,7 @@ if (!defined('MEDIAWIKI')) die();
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License 2.0 or later
  */
 
-define( 'TRANSLATE_VERSION', '8.12' );
+define( 'TRANSLATE_VERSION', '9 (2008-07-19:3)' );
 
 $wgExtensionCredits['specialpage'][] = array(
 	'name'           => 'Translate',
@@ -22,45 +22,40 @@ $wgExtensionCredits['specialpage'][] = array(
 	'url'            => 'http://www.mediawiki.org/wiki/Extension:Translate',
 );
 
+// Setup class autoloads
 $dir = dirname(__FILE__) . '/';
-$wgAutoloadClasses['TranslateTasks'] = $dir . 'TranslateTasks.php';
-$wgAutoloadClasses['TaskOptions'] = $dir . 'TranslateTasks.php';
-
-$wgAutoloadClasses['TranslateUtils'] = $dir . 'TranslateUtils.php';
-$wgAutoloadClasses['HTMLSelector'] = $dir . 'TranslateUtils.php';
-
-$wgAutoloadClasses['MessageChecks'] = $dir . 'MessageChecks.php';
-$wgAutoloadClasses['MessageGroups'] = $dir . 'MessageGroups.php';
-
-$wgAutoloadClasses['MessageCollection'] = $dir . 'Message.php';
-$wgAutoloadClasses['TMessage'] = $dir . 'Message.php';
-
-$wgAutoloadClasses['CoreExporter'] = $dir . 'Exporters.php';
-$wgAutoloadClasses['StandardExtensionExporter'] = $dir . 'Exporters.php';
-$wgAutoloadClasses['MultipleFileExtensionExporter'] = $dir . 'Exporters.php';
-
-
-$wgAutoloadClasses['TranslateEditAddons'] = $dir . 'TranslateEditAddons.php';
-$wgAutoloadClasses['languages'] = $IP . '/maintenance/language/languages.inc';
-$wgAutoloadClasses['MessageWriter'] = $IP . '/maintenance/language/writeMessagesArray.inc';
-
-
-$wgAutoloadClasses['SpecialTranslate'] = $dir . 'TranslatePage.php';
-$wgAutoloadClasses['SpecialMagic'] = $dir . 'SpecialMagic.php';
-$wgAutoloadClasses['SpecialTranslationChanges'] = $dir . 'SpecialTranslationChanges.php';
-
+require_once( $dir . '_autoload.php' );
+#require_once( $dir . 'MessageFunctions.php' );
 
 $wgExtensionMessagesFiles['Translate'] = $dir . 'Translate.i18n.php';
+$wgExtensionAliasesFiles['Translate'] = $dir . 'Translate.alias.php';
+$wgExtensionFunctions[] = 'efTranslateInit';
 
 $wgSpecialPages['Translate'] = 'SpecialTranslate';
 $wgSpecialPages['Magic'] = 'SpecialMagic';
 $wgSpecialPages['TranslationChanges'] = 'SpecialTranslationChanges';
+$wgSpecialPages['TranslationStats'] = 'SpecialTranslationStats';
+$wgSpecialPageGroups['Magic'] = 'wiki';
+$wgSpecialPageGroups['Translate'] = 'wiki';
+$wgSpecialPageGroups['TranslationChanges'] = 'changes';
+$wgSpecialPageGroups['TranslationStats'] = 'wiki';
 
 $wgHooks['EditPage::showEditForm:initial'][] = 'TranslateEditAddons::addTools';
+$wgHooks['OutputPageBeforeHTML'][] = 'TranslateEditAddons::addNavigation';
+$wgHooks['UserToggles'][] = 'TranslatePreferences::TranslateUserToggles';
+$wgHooks['SpecialRecentChangesQuery'][] = 'TranslateRcFilter::translationFilter';
+$wgHooks['SpecialRecentChangesPanel'][] = 'TranslateRcFilter::translationFilterForm';
+$wgHooks['SpecialPage_initList'][] = 'wfTranslateRemoveAllmessages';
+function wfTranslateRemoveAllmessages( $list ) {
+	unset( $list['Allmessages'] ); return true;
+}
+
+$wgAvailableRights[] = 'translate';
 
 define( 'TRANSLATE_FUZZY', '!!FUZZY!!' );
-define( 'TRANSLATE_INDEXFILE', $dir . 'messageindex.ser' );
-define( 'TRANSLATE_CHECKFILE', $dir . 'messagecheck.ser' );
+define( 'TRANSLATE_INDEXFILE', $dir . 'data/messageindex.ser' );
+define( 'TRANSLATE_CHECKFILE', $dir . 'data/messagecheck.ser' );
+define( 'TRANSLATE_ALIASFILE', $dir . 'aliases.txt' );
 
 #
 # Configuration variables
@@ -81,177 +76,61 @@ $wgTranslateCssLocation = $wgScriptPath . '/extensions/Translate';
 /** Language code for special documentation language */
 $wgTranslateDocumentationLanguageCode = false;
 
+/**
+ * Two-dimensional array of languages that cannot be translated.
+ * Input can be exact group name, first part before '-' or '*' for all.
+ * Second dimension should be language code mapped to reason for disabling.
+ * Reason is parsed as wikitext.
+ *
+ * Example:
+ * $wgTranslateBlacklist = array(
+ *     '*' => array( // All groups
+ *         'en' => 'English is the source language.',
+ *     ),
+ *     'core' => array( // Exact group
+ *         'mul' => 'Not a real language.',
+ *     ),
+ *     'ext' => array( // Wildcard-like group
+ *         'mul' => 'Not a real language',
+ *     ),
+ * );
+ */
+
+$wgTranslateBlacklist = array();
+
+/**
+ * Two-dimensional array of rules that blacklists certain authors from appearing
+ * in the exports. This is useful for keeping bots and people doing maintenance
+ * work in translations not to appear besides real translators everywhere.
+ *
+ * Rules are arrays, where first element is type: white or black. Whitelisting
+ * always overrules blacklisting. Second element should be a valid pattern that
+ * can be given a preg_match(). It will be matched against string of format
+ * "group-id;language;author name", without quotes.
+ * As an example by default we have rule that ignores all authors whose name
+ * ends in a bot for all languages and all groups.
+ */
+$wgTranslateAuthorBlacklist = array();
+$wgTranslateAuthorBlacklist[] = array( 'black', '/^.*;.*;.*Bot$/Ui' );
+
+$wgTranslateMessageNamespaces = array( NS_MEDIAWIKI );
+
 /** AC = Available classes */
 $wgTranslateAC = array(
 'core'                      => 'CoreMessageGroup',
 'core-mostused'             => 'CoreMostUsedMessageGroup',
-'ext-0-all'                 => 'AllMediawikiExtensionsGroup',
-'ext-0-wikimedia'           => 'AllWikimediaExtensionsGroup',
-'ext-advancedrandom'        => 'AdvancedRandomMessageGroup',
-'ext-ajaxquerypages'        => 'AjaxQueryPagesMessageGroup',
-'ext-ajaxshoweditors'       => 'AjaxShowEditorsMessageGroup',
-'ext-antispoof'             => 'AntiSpoofMessageGroup',
-'ext-assertedit'            => 'AssertEditMessageGroup',
-'ext-asksql'                => 'AsksqlMessageGroup',
-'ext-backandforth'          => 'BackAndForthMessageGroup',
-'ext-badimage'              => 'BadImageMessageGroup',
-'ext-blahtex'               => 'BlahtexMessageGroup',
-'ext-blocktitles'           => 'BlockTitlesMessageGroup',
-'ext-boardvote'             => 'BoardVoteMessageGroup',
-'ext-bookinformation'       => 'BookInformationMessageGroup',
-'ext-breadcrumbs'           => 'BreadCrumbsMessageGroup',
-'ext-call'                  => 'CallMessageGroup',
-'ext-categorystepper'       => 'CategoryStepperMessageGroup',
-'ext-categorytree'          => 'CategoryTreeMessageGroup',
-'ext-catfeed'               => 'CatFeedMessageGroup',
-'ext-centralauth'           => 'CentralAuthMessageGroup',
-'ext-centralnotice'         => 'CentralNoticeMessageGroup',
-'ext-changeauthor'          => 'ChangeAuthorMessageGroup',
-'ext-charinsert'            => 'CharInsertMessageGroup',
-'ext-checkuser'             => 'CheckUserMessageGroup',
-'ext-chemistry'             => 'ChemFunctionsMessageGroup',
-'ext-cite'                  => 'CiteMessageGroup',
-'ext-citespecial'           => 'CiteSpecialMessageGroup',
-'ext-cldr'                  => 'LanguageNamesMessageGroup',
-'ext-cleanchanges'          => 'CleanChangesMessageGroup',
-'ext-collection'            => 'CollectionMessageGroup',
-'ext-commentpages'          => 'CommentPagesMessageGroup',
-'ext-commentspammer'        => 'CommentSpammerMessageGroup',
-'ext-confirmaccount'        => 'ConfirmAccountMessageGroup',
-'ext-confirmedit'           => 'ConfirmEditMessageGroup',
-'ext-confirmeditfancycaptcha' => 'ConfirmEditFancyCaptchaMessageGroup',
-'ext-contactpage'           => 'ContactPageMessageGroup',
-'ext-contributionscores'    => 'ContributionScoresMessageGroup',
-'ext-contributionseditcount'=> 'ContributionseditcountMessageGroup',
-'ext-contributors'          => 'ContributorsMessageGroup',
-'ext-contributorsaddon'     => 'ContributorsAddonMessageGroup',
-'ext-countedits'            => 'CountEditsMessageGroup',
-'ext-crossnamespacelinks'   => 'CrossNamespaceLinksMessageGroup',
-'ext-crosswikiblock'        => 'CrosswikiBlockMessageGroup',
-'ext-crowdauthentication'   => 'CrowdAuthenticationMessageGroup',
-'ext-datatransfer'          => 'DataTransferMessageGroup',
-'ext-deletedcontribs'       => 'DeletedContribsMessageGroup',
-'ext-dismissablesitenotice' => 'DismissableSiteNoticeMessageGroup',
-'ext-doublewiki'            => 'DoubleWikiMessageGroup',
-'ext-duplicator'            => 'DuplicatorMessageGroup',
-'ext-editcount'             => 'EditcountMessageGroup',
-'ext-editown'               => 'EditOwnMessageGroup',
-'ext-edituser'              => 'EditUserMessageGroup',
-'ext-eval'                  => 'EvalMessageGroup',
-'ext-expandtemplates'       => 'ExpandTemplatesMessageGroup',
-'ext-farmer'                => 'FarmerMessageGroup',
-'ext-fckeditor'             => 'FCKeditorMessageGroup',
-'ext-findspam'              => 'FindSpamMessageGroup',
-'ext-flaggedrevs'           => 'FlaggedRevsMessageGroup',
-'ext-flaggedrevsmakereviewer' => 'FlaggedRevsMakeReviewerMessageGroup',
-'ext-forcepreview'          => 'ForcePreviewMessageGroup',
-'ext-formatemail'           => 'FormatEmailMessageGroup',
-'ext-gadgets'               => 'GadgetsMessageGroup',
-'ext-globalusage'           => 'GlobalUsageMessageGroup',
-'ext-googleanalytics'       => 'GoogleAnalyticsMessageGroup',
-'ext-googlemaps'            => 'GoogleMapsMessageGroup',
-'ext-i18ntags'              => 'I18nTagsMessageGroup',
-'ext-icon'                  => 'IconMessageGroup',
-'ext-imagemap'              => 'ImageMapMessageGroup',
-'ext-importfreeimages'      => 'ImportFreeImagesMessageGroup',
-'ext-importusers'           => 'ImportUsersMessageGroup',  
-'ext-inputbox'              => 'InputBoxMessageGroup',
-'ext-inspectcache'          => 'InspectCacheMessageGroup',
-'ext-intersection'          => 'IntersectionMessageGroup',
-'ext-interwiki'             => 'InterwikiMessageGroup',
-'ext-labeledsectiontransclusion' => 'LabeledSectionTransclusionMessageGroup',
-'ext-languageselector'      => 'LanguageSelectorMessageGroup',
-'ext-latexdoc'              => 'LatexDocMessageGroup',
-'ext-linksearch'            => 'LinkSearchMessageGroup',
-'ext-liquidthreads'         => 'LiquidThreadsMessageGroup',
-'ext-lookupuser'            => 'LookupUserMessageGroup',
-'ext-lucenesearch'          => 'LuceneSearchMessageGroup',
-'ext-mathstat'              => 'MathStatMessageGroup',
-'ext-mediafunctions'        => 'MediaFunctionsMessageGroup',
-'ext-metavidwiki'           => 'MetavidWikiMessageGroup',
-'ext-microid'               => 'MicroIDMessageGroup',
-'ext-minidonation'          => 'MiniDonationMessageGroup',
-'ext-minimumnamelength'     => 'MinimumNameLengthMessageGroup',
-'ext-minipreview'           => 'MiniPreviewMessageGroup',
-'ext-multiboilerplate'      => 'MultiBoilerplateMessageGroup',
-'ext-multiupload'           => 'MultiUploadMessageGroup',
-'ext-networkauth'           => 'NetworkAuthMessageGroup',
-'ext-newestpages'           => 'NewestPagesMessageGroup',
-'ext-news'                  => 'NewsMessageGroup',
-'ext-newuserlog'            => 'NewuserLogMessageGroup',
-'ext-newusermessage'        => 'NewUserMessageMessageGroup',
-'ext-newusernotif'          => 'NewUserNotifMessageGroup',
-'ext-nuke'                  => 'NukeMessageGroup',
-'ext-ogghandler'            => 'OggHandlerMessageGroup',
-#'ext-openid'                => 'OpenIDMessageGroup',
-'ext-oversight'             => 'OversightMessageGroup',
-'ext-pageby'                => 'PageByMessageGroup',
-'ext-passwordreset'         => 'PasswordResetMessageGroup',
-'ext-parserdifftest'        => 'ParserDiffTestMessageGroup',
-'ext-parserfunctions'       => 'ParserfunctionsMessageGroup',
-'ext-patroller'             => 'PatrollerMessageGroup',
-'ext-pdfhandler'            => 'PdfHandlerMessageGroup',
-'ext-player'                => 'PlayerMessageGroup',
-'ext-poem'                  => 'PoemMessageGroup',
-'ext-postcomment'           => 'PostCommentMessageGroup',
-'ext-povwatch'              => 'PovWatchMessageGroup',
-'ext-profilemonitor'        => 'ProfileMonitorMessageGroup',
-'ext-proofreadpage'         => 'ProofreadPageMessageGroup',
-'ext-protectsection'        => 'ProtectSectionMessageGroup',
-'ext-purge'                 => 'PurgeMessageGroup',
-'ext-purgecache'            => 'PurgeCacheMessageGroup',
-'ext-quiz'                  => 'QuizMessageGroup',
-'ext-randomimage'           => 'RandomImageMessageGroup',
-'ext-randomincategory'      => 'RandomInCategoryMessageGroup',
-'ext-randomrootpage'        => 'RandomRootpageMessageGroup',
-'ext-regexblock'            => 'RegexBlockMessageGroup',
-'ext-renameuser'            => 'RenameUserMessageGroup',
-'ext-review'                => 'ReviewMessageGroup',
-'ext-rightfunctions'        => 'RightFunctionsMessageGroup',
-'ext-scanset'               => 'ScanSetMessageGroup',
-'ext-seealso'               => 'SeealsoMessageGroup',
-'ext-selectcategory'        => 'SelectCategoryMessageGroup',
-'ext-semanticcalendar'      => 'SemanticCalendarMessageGroup',
-'ext-semanticdrilldown'     => 'SemanticDrilldownMessageGroup',
-'ext-semanticforms'         => 'SemanticFormsMessageGroup',
-'ext-showprocesslist'       => 'ShowProcesslistMessageGroup',
-'ext-signdocument'          => 'SignDocumentMessageGroup',
-'ext-signdocumentspecial'   => 'SignDocumentSpecialMessageGroup',
-'ext-signdocumentspecialcreate' => 'SignDocumentSpecialCreateMessageGroup',
-'ext-sitematrix'            => 'SiteMatrixMessageGroup',
-'ext-smoothgallery'         => 'SmoothGalleryMessageGroup',
-'ext-spamblacklist'         => 'SpamBlacklistMessageGroup',
-'ext-spamdifftool'          => 'SpamDiffToolMessageGroup',
-'ext-spamregex'             => 'SpamRegexMessageGroup',
-'ext-specialfilelist'       => 'SpecialFileListMessageGroup',
-'ext-specialform'           => 'SpecialFormMessageGroup',
-'ext-stalepages'            => 'StalePagesMessageGroup',
-'ext-syntaxhighlightgeshi'  => 'SyntaxHighlight_GeSHiMessageGroup',
-'ext-talkhere'              => 'TalkHereMessageGroup',
-'ext-templatelink'          => 'TemplateLinkMessageGroup',
-'ext-throttle'              => 'ThrottleMessageGroup',
-'ext-tidytab'               => 'TidyTabMessageGroup',
-'ext-titleblacklist'        => 'TitleBlacklistMessageGroup',
-'ext-timeline'              => 'TimelineMessageGroup',
-'ext-titlekey'              => 'TitleKeyMessageGroup',
-'ext-todo'                  => 'TodoMessageGroup',
-'ext-todotasks'             => 'TodoTasksMessageGroup',
-'ext-translate'             => 'TranslateMessageGroup',
-'ext-usagestatistics'       => 'UsageStatisticsMessageGroup',
-'ext-usercontactlinks'      => 'UserContactLinksMessageGroup',
-'ext-userimages'            => 'UserImagesMessageGroup',
-'ext-usermerge'             => 'UserMergeMessageGroup',
-'ext-usernameblacklist'     => 'UsernameBlacklistMessageGroup',
-'ext-userrightsnotif'       => 'UserRightsNotifMessageGroup',
-'ext-vote'                  => 'VoteMessageGroup',
-'ext-watchers'              => 'WatchersMessageGroup',
-'ext-webstore'              => 'WebStoreMessageGroup',
-'ext-whoiswatching'         => 'WhoIsWatchingMessageGroup',
-'ext-whosonline'            => 'WhosOnlineMessageGroup',
-'ext-wikidatalanguagemanager' => 'WikidataLanguageManagerMessageGroup',
-'ext-wikihiero'             => 'WikihieroMessageGroup',
-'out-freecol'               => 'FreeColMessageGroup',
 );
+
+/**
+ * Regexps for putting groups into subgroups. Deepest groups first.
+ */
+$wgTranslateGroupStructure = array(
+	'/^core/' => array( 'core' ),
+	'/^ext-flaggedrevs/' => array( 'ext', 'flaggedrevs' ),
+	'/^ext/' => array( 'ext' ),
+);
+
+$wgTranslateAddMWExtensionGroups = false;
 
 /** EC = Enabled classes */
 $wgTranslateEC = array();
@@ -265,9 +144,28 @@ $wgTranslateTasks = array(
 	'view'           => 'ViewMessagesTask',
 	'untranslated'   => 'ViewUntranslatedTask',
 	'optional'       => 'ViewOptionalTask',
+	'problematic'    => 'ViewProblematicTask',
 	'review'         => 'ReviewMessagesTask',
 	'reviewall'      => 'ReviewAllMessagesTask',
 	'export-as-po'   => 'ExportasPoMessagesTask',
 	'export'         => 'ExportMessagesTask',
 	'export-to-file' => 'ExportToFileMessagesTask',
+	'export-to-xliff'=> 'ExportToXliffMessagesTask',
 );
+
+$wgTranslatePHPlot = false;
+$wgTranslatePHPlotFont = '/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf';
+
+if ( $wgDebugComments ) {
+	require_once( "$dir/utils/MemProfile.php" );
+} else {
+	function wfMemIn() {}
+	function wfMemOut() {}
+}
+
+function efTranslateInit() {
+	global $wgTranslatePHPlot, $wgAutoloadClasses;
+	if ( $wgTranslatePHPlot ) {
+		$wgAutoloadClasses['PHPlot'] = $wgTranslatePHPlot;
+	}
+}

@@ -32,7 +32,8 @@ $wgIFI_ThumbType = "t"; // s for square t for thumbnail
 
 $wgExtensionCredits['specialpage'][] = array(
 	'name'           => 'ImportFreeImages',
-	'version'        => '2008-02-17',
+	'svn-date' => '$LastChangedDate: 2008-07-02 21:17:43 +0200 (śro, 02 lip 2008) $',
+	'svn-revision' => '$LastChangedRevision: 36940 $',
 	'author'         => 'Travis Derouin',
 	'description'    => 'Provides a way of importing properly licensed photos from flickr.',
 	'descriptionmsg' => 'importfreeimages-desc',
@@ -223,6 +224,7 @@ function wfSpecialImportFreeImages( $par )
 	global $wgUser, $wgOut, $wgRequest, $wgIFI_FlickrAPIKey, $wgEnableUploads;
 	global $wgIFI_ResultsPerPage, $wgIFI_FlickrSort, $wgIFI_FlickrLicense, $wgIFI_ResultsPerRow;
 	global $wgIFI_PromptForFilename, $wgIFI_FlickrSearchBy, $wgIFI_ThumbType;
+	wfSetupSession();
 	require_once("phpFlickr-2.2.0/phpFlickr.php");
 
 	$importPage = Title::makeTitle(NS_SPECIAL, "ImportFreeImages");
@@ -270,8 +272,10 @@ function wfSpecialImportFreeImages( $par )
 
 	$q = $wgRequest->getText( 'q' );
 
-	$wgOut->addHTML(wfMsg ('importfreeimages_description') . "<br/><br/>
-		<form method=GET action='" . $importPage->escapeFullURL() . "'>".wfMsg('search').
+	global $wgScript;
+	$wgOut->addHTML(wfMsg ('importfreeimages_description') . "<br /><br />
+		<form method=GET action=\"$wgScript\">".wfMsg('search').
+		Xml::hidden( 'title', $importPage->getPrefixedDbKey() ) .
 		": <input type=text name=q value='" . htmlspecialchars($q) . "'><input type=submit value=".wfMsg('search')."></form>");
 
 	if ($q != '') {
@@ -346,9 +350,9 @@ function wfSpecialImportFreeImages( $par )
 			$wgOut->addHTML( "
 				<td align='center' style='padding-top: 15px; border-bottom: 1px solid #ccc;'>
 					<font size=-2><a href='http://www.flickr.com/photos/$owner_esc/$id_esc/'>$title_esc</a>
-					<br/>$ownermsg: <a href='http://www.flickr.com/people/$owner_esc/'>$username_esc</a>
-					<br/><img src='$thumb_esc' />
-					<br/>(<a href='#' onclick='s2($url_js, $id_js, $owner_js, $username_js, $title_js);'>$importmsg</a>)</font>
+					<br />$ownermsg: <a href='http://www.flickr.com/people/$owner_esc/'>$username_esc</a>
+					<br /><img src='$thumb_esc' />
+					<br />(<a href='#' onclick='s2($url_js, $id_js, $owner_js, $username_js, $title_js);'>$importmsg</a>)</font>
 				</td>
 			" );
 			if ($i % $wgIFI_ResultsPerRow == ($wgIFI_ResultsPerRow - 1) ) $wgOut->addHTML("</tr>");
@@ -358,7 +362,7 @@ function wfSpecialImportFreeImages( $par )
 		$wgOut->addHTML("</form></table>");
 		if( $wgIFI_ResultsPerPage * $page < $photos['total'] ) {
 			$page++;
-			$wgOut->addHTML("<br/>" . $sk->makeLinkObj($importPage, wfMsg('importfreeimages_next', $wgIFI_ResultsPerPage), "p=$page&q=" . urlencode($q) ) );
+			$wgOut->addHTML("<br />" . $sk->makeLinkObj($importPage, wfMsg('importfreeimages_next', $wgIFI_ResultsPerPage), "p=$page&q=" . urlencode($q) ) );
 		}
 	}
 }

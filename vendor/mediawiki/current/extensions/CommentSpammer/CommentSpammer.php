@@ -15,11 +15,12 @@ if ( ! defined( 'MEDIAWIKI' ) ) {
 
 $wgExtensionFunctions[] = 'efCommentSpammer';
 $wgExtensionCredits['other'][] = array(
-        'name' => 'CommentSpammer',
-        'version' => '2008-01-08',
-        'author' => 'Nick Jenkins',
-        'url' => 'http://www.mediawiki.org/wiki/Extension:CommentSpammer',
-        'description' => 'Rejects edits from suspected comment spammers on a DNS blacklist.',
+	'name' => 'CommentSpammer',
+	'svn-date' => '$LastChangedDate: 2008-05-06 13:59:58 +0200 (wto, 06 maj 2008) $',
+	'svn-revision' => '$LastChangedRevision: 34306 $',
+	'author' => 'Nick Jenkins',
+	'url' => 'http://www.mediawiki.org/wiki/Extension:CommentSpammer',
+	'description' => 'Rejects edits from suspected comment spammers on a DNS blacklist.',
 	'descriptionmsg' => 'commentspammer-desc',
 );
 

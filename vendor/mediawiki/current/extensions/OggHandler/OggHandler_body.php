@@ -259,7 +259,7 @@ class OggHandler extends MediaHandler {
 		return new OggVideoDisplay( $file, $file->getURL(), $dstUrl, $width, $height, $length, $dstPath );
 	}
 
-	function canRender() { return true; }
+	function canRender( $file ) { return true; }
 	function mustRender( $file ) { return true; }
 
 	/*
@@ -492,7 +492,8 @@ class OggTransformOutput extends MediaTransformOutput {
 			$imgAttribs = array( 
 				'src' => $this->url,
 				'width' => $width,
-				'height' => $height );
+				'height' => $height,
+				'alt' => $alt );
 			$playerHeight = $height;
 		} else {
 			// Sound file
@@ -503,6 +504,7 @@ class OggTransformOutput extends MediaTransformOutput {
 					'src' => "$wgStylePath/common/images/icons/fileicon-ogg.png",
 					'width' => 125,
 					'height' => 125,
+					'alt' => $alt,
 				);
 			} else {
 				 // make an icon later if necessary
@@ -524,15 +526,16 @@ class OggTransformOutput extends MediaTransformOutput {
 				$imgAttribs = array( 
 					'src' => "$scriptPath/info.png",
 					'width' => 22,
-					'height' => 22
+					'height' => 22,
+					'alt' => $alt,
 				);
 				$linkAttribs['title'] = wfMsg( 'ogg-desc-link' );
 				$descIcon = Xml::tags( 'a', $linkAttribs, 
-					Xml::element( 'img', $imgAttribs, null ) );
+					Xml::element( 'img', $imgAttribs ) );
 				$thumb = '';
 			} elseif ( $imgAttribs ) {
 				$thumb = Xml::tags( 'a', $linkAttribs, 
-					Xml::element( 'img', $imgAttribs, null ) );
+					Xml::element( 'img', $imgAttribs ) );
 			} else {
 				$thumb = '';
 			}
@@ -541,7 +544,7 @@ class OggTransformOutput extends MediaTransformOutput {
 			// We don't respect the file-link option, click-through to download is not appropriate
 			$linkUrl = false;
 			if ( $imgAttribs ) {
-				$thumb = Xml::element( 'img', $imgAttribs, null );
+				$thumb = Xml::element( 'img', $imgAttribs );
 			} else {
 				$thumb = '';
 			}
@@ -576,8 +579,7 @@ class OggTransformOutput extends MediaTransformOutput {
 							'width' => 22,
 							'height' => 22,
 							'alt' => $msgStartPlayer
-						), 
-						null 
+						)
 					)
 				)
 			) .

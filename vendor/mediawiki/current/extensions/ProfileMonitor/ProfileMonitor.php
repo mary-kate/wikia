@@ -11,9 +11,11 @@ if (!defined('MEDIAWIKI')) die();
 $wgExtensionFunctions[] = 'efProfileMonitor';
 $wgExtensionCredits['specialpage'][] = array(
 	'name' => 'ProfileMonitor',
-	'version' => '2008-01-11',
+	'svn-date' => '$LastChangedDate: 2008-07-04 17:36:45 +0200 (pią, 04 lip 2008) $',
+	'svn-revision' => '$LastChangedRevision: 37061 $',
 	'author' => 'Rob Church',
 	'description' => 'Special page to search and inspect profiling data',
+	'descriptionmsg' => 'profiling-desc',
 	'url' => 'http://www.mediawiki.org/wiki/Extension:ProfileMonitor',
 );
 

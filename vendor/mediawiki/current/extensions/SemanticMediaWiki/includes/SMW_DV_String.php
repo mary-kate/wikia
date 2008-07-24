@@ -11,18 +11,19 @@
 class SMWStringValue extends SMWDataValue {
 
 	protected $m_value = ''; // XML-safe, HTML-safe, Wiki-compatible value representation
+	                         // however, this string might contain HTML entities such as &amp;
 
 	protected function parseUserValue($value) {
 		if ($value!='') {
 			$this->m_value = smwfXMLContentEncode($value);
-			if ( (strlen($this->m_value) > 255) && ($this->m_typeid !== '_txt') ) { // limit size (for DB indexing)
+			if ( (strlen($this->m_value) > 255) && ($this->m_typeid == '_str') ) { // limit size (for DB indexing)
 				$this->addError(wfMsgForContent('smw_maxstring', mb_substr($value, 0, 42) . ' <span class="smwwarning">[&hellip;]</span> ' . mb_substr($value, mb_strlen($this->m_value) - 42)));
 			}
 		} else {
 			$this->addError(wfMsgForContent('smw_emptystring'));
 		}
 		if ($this->m_caption === false) {
-			$this->m_caption = $value;
+			$this->m_caption = ($this->m_typeid=='_cod')?$this->getCodeDisplay($value):$value;
 		}
 		return true;
 	}
@@ -50,11 +51,7 @@ class SMWStringValue extends SMWDataValue {
 	}
 
 	public function getLongHTMLText($linker = NULL) {
-		if (!$this->isValid()) {
-			return $this->getErrorText();
-		} else {
-			return $this->getAbbValue($linker); // should be save (based on xsdvalue)
-		}
+		return $this->getLongWikiText($linker); // should be save (based on xsdvalue)
 	}
 
 	public function getXSDValue() {
@@ -66,7 +63,7 @@ class SMWStringValue extends SMWDataValue {
 	}
 
 	public function getInfolinks() {
-		if ($this->m_typeid !== '_txt') {
+		if ($this->m_typeid == '_str') {
 			return SMWDataValue::getInfolinks();
 		}
 		return $this->m_infolinks;
@@ -76,22 +73,20 @@ class SMWStringValue extends SMWDataValue {
 		// Create links to mapping services based on a wiki-editable message. The parameters 
 		// available to the message are:
 		// $1: urlencoded string
-		if ($this->m_typeid === '_txt') {
-			return false; // no services for Type:Text
+		if ($this->m_typeid != '_str') {
+			return false; // no services for Type:Text and Type:Code
 		} else {
 			return array(rawurlencode($this->m_value));
 		}
 	}
 
-	/**
-	 * Creates the export line for the RDF export
-	 *
-	 * @param string $QName The element name of this datavalue
-	 * @param ExportRDF $exporter the exporter calling this function
-	 * @return the line to be exported
-	 */
-	public function exportToRDF($QName, ExportRDF $exporter) {
-		return "\t\t<$QName rdf:datatype=\"http://www.w3.org/2001/XMLSchema#string\">$this->m_value</$QName>\n";
+	public function getExportData() {
+		if ($this->isValid()) {
+			$lit = new SMWExpLiteral(smwfHTMLtoUTF8($this->m_value), $this, 'http://www.w3.org/2001/XMLSchema#string');
+			return new SMWExpData($lit);
+		} else {
+			return NULL;
+		}
 	}
 
 	/**
@@ -99,17 +94,31 @@ class SMWStringValue extends SMWDataValue {
 	 */
 	protected function getAbbValue($linked) {
 		$len = mb_strlen($this->m_value);
-		if ($len > 255) {
+		$starttag = ($this->m_typeid=='_cod')?'<pre>':'';
+		$endtag = ($this->m_typeid=='_cod')?'</pre>':'';
+		if ( ($len > 255) && ($this->m_typeid != '_cod') ) {
 			if ( ($linked === NULL)||($linked === false) ) {
 				return mb_substr($this->m_value, 0, 42) . ' <span class="smwwarning">&hellip;</span> ' . mb_substr($this->m_value, $len - 42);
 			} else {
 				smwfRequireHeadItem(SMW_HEADER_TOOLTIP);
 				return mb_substr($this->m_value, 0, 42) . ' <span class="smwttpersist"> &hellip; <span class="smwttcontent">' . $this->m_value . '</span></span> ' . mb_substr($this->m_value, $len - 42);
 			}
+		} elseif ($len > 255) {
+			return $this->getCodeDisplay($this->m_value,true);
 		} else {
 			return $this->m_value;
 		}
 	}
 
+	/**
+	 * Special features for Type:Code formating.
+	 */
+	protected function getCodeDisplay($value, $scroll = false) {
+		$result = str_replace( array('<', '>', ' ', '://', '=', "'"), array('&lt;', '&gt;', '&nbsp;', '<!-- -->://<!-- -->', '&#x003D;', '&#x0027;'), $value);
+		if ($scroll) {
+			$result = "<div style=\"height:5em; overflow:auto;\">$result</div>";
+		}
+		return "<pre>$result</pre>";
+	}
 
 }

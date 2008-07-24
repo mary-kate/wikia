@@ -7,10 +7,23 @@
 
 if (!defined('MEDIAWIKI')) die();
 
-global $IP;
-require_once( "$IP/includes/SpecialPage.php" );
+class SFForms extends SpecialPage {
 
-SpecialPage::addPage( new SpecialPage('Forms','',true,'doSpecialForms',false) );
+	/**
+	 * Constructor
+	 */
+	function SFForms() {
+		SpecialPage::SpecialPage('Forms');
+		wfLoadExtensionMessages('SemanticForms');
+	}
+
+	function execute() {
+		$this->setHeaders();
+		list( $limit, $offset ) = wfCheckLimits();
+		$rep = new FormsPage();
+		return $rep->doQuery( $offset, $limit );
+	}
+}
 
 class FormsPage extends QueryPage {
 	function getName() {
@@ -54,17 +67,6 @@ class FormsPage extends QueryPage {
 
 	function formatResult($skin, $result) {
 		$title = Title::makeTitle( SF_NS_FORM, $result->value );
-		$text = $skin->makeLinkObj( $title, $title->getText() );
-		$ad = SpecialPage::getPage('AddPage');
-		$add_data_url = $ad->getTitle()->getFullURL() . "/" . $title->getText();
-		$text .= ' (<a href="' . $add_data_url . '">' . wfMsg('sf_forms_adddata') . '</a>)';
-
-		return $text;
+		return $skin->makeLinkObj( $title, $title->getText() );
 	}
-}
-
-function doSpecialForms() {
-	list( $limit, $offset ) = wfCheckLimits();
-	$rep = new FormsPage();
-	return $rep->doQuery( $offset, $limit );
 }

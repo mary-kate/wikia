@@ -166,12 +166,12 @@ class SMWLinearValue extends SMWNumberValue {
 			return;
 		}
 		$numdv = SMWDataValueFactory::newTypeIDValue('_num'); // used for parsing the factors
-		foreach ($factors as $factorstring) {
-			$numdv->setUserValue($factorstring);
+		foreach ($factors as $dv) {
+			$numdv->setUserValue($dv->getXSDValue());
 			if (!$numdv->isValid() || ($numdv->getNumericValue() === 0)) {
-				continue; // ignore problmatic conversions
+				continue; // ignore problematic conversions
 			}
-			$unit_aliases = preg_split('/\s*,\s*/', $numdv->getUnit());
+			$unit_aliases = preg_split('/\s*,\s*/u', $numdv->getUnit());
 			$first = true;
 			foreach ($unit_aliases as $unit) {
 				$unit = $this->normalizeUnit($unit);
@@ -204,7 +204,7 @@ class SMWLinearValue extends SMWNumberValue {
 		$values = smwfGetStore()->getSpecialValues($proptitle, SMW_SP_DISPLAY_UNITS);
 		$units = array();
 		foreach ($values as $value) { // Join all if many annotations exist. Discouraged (random order) but possible.
-			$units = $units + preg_split('/\s*,\s*/',$value->getXSDValue());
+			$units = $units + preg_split('/\s*,\s*/u',$value->getXSDValue());
 		}
 		foreach ($units as $unit) {
 			$unit = $this->normalizeUnit($unit);

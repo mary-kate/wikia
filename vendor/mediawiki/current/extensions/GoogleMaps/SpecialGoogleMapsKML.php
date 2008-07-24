@@ -27,25 +27,29 @@ class GoogleMapsKML extends SpecialPage {
 			array('icons' => 'http://maps.google.com/mapfiles/kml/pal4/{label}.png',
 			'icon' => 'icon57'));
 
-			$outputter = new GoogleMapsKmlOutputter($wgContLang,
+			$exporter = new GoogleMapsKmlExporter($wgContLang,
 			str_replace('{label}', $mapOptions['icon'], $mapOptions['icons']));
 
 			$wgParser->mOptions = ParserOptions::newFromUser( $wgUser );
 			$wgParser->mOptions->setEditSection( false );
 			$wgParser->mTitle = $wgTitle;
+                        $wgParser->clearState();
 
-			if (preg_match_all("/<googlemap(.*?)>(.*?)<\/googlemap>/s", $revision->getText(), $matches)) {
-				$outputter->addFileHeader();
+                        $localParser = new Parser();
+                        $localParser->mTitle = $title;
+                        $localParser->mOptions = $wgParser->mOptions;
+
+			if (preg_match_all("/<googlemap( .*?|)>(.*?)<\/googlemap>/s", $revision->getText(), $matches)) {
+				$exporter->addFileHeader();
 				for($i=0;$i<count($matches[2]);$i++) {
-					$attrs = Sanitizer::decodeTagAttributes($matches[1][$i]);
-					$mapOptions['syntax'] = isset($attrs['syntax']) ? $attrs['syntax'] : "0";
-					$outputter->addHeader(isset($attrs['title']) ? $attrs['title'] : "Map #".($i+1));
-					GoogleMaps::renderContent($matches[2][$i], &$wgParser, new Parser(),
-					$wgParser->mTitle, $wgParser->mOptions, $outputter, $mapOptions);
-					$outputter->addTrailer();
-				}
-				$outputter->addFileTrailer();
-				echo $outputter->render();
+                                    $attrs = Sanitizer::decodeTagAttributes($matches[1][$i]);
+                                    $mapOptions['version'] = isset($attrs['version']) ? $attrs['version'] : "0";
+                                    $exporter->addHeader(isset($attrs['title']) ? $attrs['title'] : "Map #".($i+1));
+                                    GoogleMaps::renderContent($matches[2][$i], $wgParser, $localParser, $exporter, $mapOptions);
+                                    $exporter->addTrailer();
+                                }
+				$exporter->addFileTrailer();
+				echo $exporter->render();
 			} else {
 				echo "No maps in $article!";
 			}

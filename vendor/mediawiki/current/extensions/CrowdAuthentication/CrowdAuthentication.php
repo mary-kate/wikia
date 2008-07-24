@@ -6,7 +6,7 @@
  * freely. This software is provided 'as-is', without any express or implied
  * warranty.
  */
-/* $Id: CrowdAuthentication.php 31252 2008-02-25 12:08:06Z siebrand $ */
+/* $Id: CrowdAuthentication.php 37957 2008-07-23 15:02:09Z tstarling $ */
 /*
  * AuthPlugin that authenticates users against Atlassian Crowd.
  *
@@ -25,7 +25,8 @@
 
 $wgExtensionCredits['other'][] = array(
 	'name'           => 'Crowd Authentication Plugin',
-	'version'        => '$Revision: 31252 $',
+	'svn-date'       => '$LastChangedDate: 2008-07-23 17:02:09 +0200 (śro, 23 lip 2008) $',
+	'svn-revision'   => '$LastChangedRevision: 37957 $',
 	'author'         => 'River Tarnell',
 	'description'    => 'Authentication plugin for Atlassian Crowd',
 	'descriptionmsg' => 'crowdauthentication-desc',

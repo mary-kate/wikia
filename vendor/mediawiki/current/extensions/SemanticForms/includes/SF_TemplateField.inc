@@ -8,105 +8,54 @@
  */
 
 class SFTemplateField {
-  var $field_name;
-  var $label;
-  var $semantic_field;
-  var $semantic_field_call;
-  var $is_relation;
-  var $field_type;
-  var $possible_values;
-  var $is_list;
+	var $field_name;
+	var $label;
+	var $semantic_field;
+	var $semantic_field_call;
+	var $is_relation;
+	var $field_type;
+	var $possible_values;
+	var $is_list;
 
-  function newWithValues($name, $label) {
-    $f = new SFTemplateField();
-    $f->field_name = str_replace('\\', '', $name);
-    $f->label = str_replace('\\', '', $label);
-    return $f;
-  }
+	function newWithValues($name, $label) {
+		$f = new SFTemplateField();
+		$f->field_name = str_replace('\\', '', $name);
+		$f->label = str_replace('\\', '', $label);
+		return $f;
+	}
 
-  function setTypeAndPossibleValues_0_7() {
-    // HACK - set type (to 'relation') if it's a relation
-    if ($this->is_relation) {
-      $this->field_type = 'relation';
-      return;
-    }
+	function setTypeAndPossibleValues() {
+		$proptitle = Title::newFromText($this->semantic_field, SMW_NS_PROPERTY);
+		if ($proptitle === NULL)
+			return;
+		$store = smwfGetStore();
+		$types = $store->getSpecialValues($proptitle, SMW_SP_HAS_TYPE);
+		// TODO - need handling for the case of more than one type
+		if (count($types) > 0)
+			$this->field_type = $types[0]->getWikiValue();
 
-    global $smwgContLang;
-    $fname = 'SFTemplateField::getPossibleValues';
+		// this returns an array of objects
+		$SMW_values = smwfGetStore()->getSpecialValues($proptitle, SMW_SP_POSSIBLE_VALUE);
+		foreach ($SMW_values as $value) {
+			$this->possible_values[] = $value->getXSDValue();
+		}
+		// HACK - if there were any possible values, set the field
+		// type to be 'enumeration', regardless of what the actual type is
+		if (count($this->possible_values) > 0) {
+			$this->field_type = 'enumeration';
+		}
+	}
 
-    $db = wfGetDB( DB_SLAVE );
-    // value has underscores in the database
-    $semantic_field_db_str = str_replace(' ', '_', $this->semantic_field);
-    $conditions = "subject_namespace = " . SMW_NS_ATTRIBUTE . " AND subject_title = '$semantic_field_db_str' AND property_id = 1";
-    $res = $db->select( $db->tableName('smw_specialprops'),
-                        'value_string',
-                        $conditions, $fname);
-    if ($db->numRows( $res ) > 0) {
-      if ($row = $db->fetchObject($res)) {
-        $this->field_type = $row->value_string;
-        // set possible values if it's an enumeration
-        if ($this->field_type == $smwgContLang->getDatatypeLabel('smw_enum')) {
-          $conditions = "subject_namespace = " . SMW_NS_ATTRIBUTE .
-            " AND subject_title = '$semantic_field_db_str' AND property_id = " .
-            SMW_SP_POSSIBLE_VALUE;
-          $res2 = $db->select( $db->tableName('smw_specialprops'),
-            'value_string', $conditions, $fname);
-          if ($db->numRows( $res2 ) > 0) {
-            while ($row = $db->fetchObject($res2)) {
-              $this->possible_values[] = $row->value_string;
-            }
-          }
-          $db->freeResult($res2);
-        }
-      }
-    }
-    $db->freeResult($res);
-    return array();
-  }
-
-  function setTypeAndPossibleValues_1_0() {
-    $proptitle = Title::newFromText($this->semantic_field, SMW_NS_PROPERTY);
-    if ($proptitle === NULL)
-      return;
-    $store = smwfGetStore();
-    $types = $store->getSpecialValues($proptitle, SMW_SP_HAS_TYPE);
-    // TODO - need handling for the case of more than one type
-    if (count($types) > 0)
-      $this->field_type = $types[0]->getWikiValue();
-
-    // this returns an array of objects
-    $SMW_values = smwfGetStore()->getSpecialValues($proptitle, SMW_SP_POSSIBLE_VALUE);
-    foreach ($SMW_values as $value) {
-      if ($value instanceof SMWDataValue) {
-        $this->possible_values[] = $value->getXSDValue();
-      } else {
-        // backwards compatibility with SMW 1.0 alpha 1 - still used, for
-        // now, by the Halo extension
-        $this->possible_values[] = $value;
-      }
-    }
-    // HACK - if there were any possible values, set the field
-    // type to be 'enumeration', regardless of what the actual type is
-    if (count($this->possible_values) > 0) {
-      $this->field_type = 'enumeration';
-    }
-  }
-
-  // setSemanticData() - called when template is parsed during the creation
-  // of a form
-  function setSemanticData($semantic_field, $is_relation, $is_list) {
-    $this->semantic_field = str_replace('\\', '', $semantic_field);
-    $this->is_relation = $is_relation;
-    $this->possible_values = array();
-    $this->is_list = $is_list;
-    // set field type and possible values, if any
-    $smw_version = SMW_VERSION;
-    if ($smw_version{0} == '0') {
-      $this->setTypeAndPossibleValues_0_7();
-    } else {
-      $this->setTypeAndPossibleValues_1_0();
-    }
-  }
+	// setSemanticData() - called when template is parsed during the creation
+	// of a form
+	function setSemanticData($semantic_field, $is_relation, $is_list) {
+		$this->semantic_field = str_replace('\\', '', $semantic_field);
+		$this->is_relation = $is_relation;
+		$this->possible_values = array();
+		$this->is_list = $is_list;
+		// set field type and possible values, if any
+		$this->setTypeAndPossibleValues();
+	}
 }
 
 function createTemplateText($template_name, $template_fields, $category, $aggregating_property, $aggregating_label, $template_format) {
@@ -185,9 +134,9 @@ END;
     $dummy_state = null;
     smwfRegisterInlineQueries($parser, $dummy_text, $dummy_state);
     if (in_array("ask", $parser->getFunctionHooks())) {
-      $text .= "{{#ask:format=\"list\"|[[$aggregating_property{{PAGENAME}}]]}}\n";
+      $text .= "{{#ask:format=\"list\"|[[$aggregating_property{{SUBJECTPAGENAME}}]]}}\n";
     } else {
-      $text .= "<ask format=\"list\">[[$aggregating_property{{PAGENAME}}]]</ask>\n";
+      $text .= "<ask format=\"list\">[[$aggregating_property{{SUBJECTPAGENAME}}]]</ask>\n";
     }
   }
   $text .= "|}\n";

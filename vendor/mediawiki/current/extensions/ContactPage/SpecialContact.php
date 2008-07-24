@@ -35,12 +35,12 @@ class SpecialContact extends SpecialPage {
 	 * @param $par Parameters passed to the page
 	 */
 	function execute( $par ) {
-		global $wgUser, $wgOut, $wgRequest, $wgEnableEmail, $wgContactUser, $wgContactSender;
+		global $wgUser, $wgOut, $wgRequest, $wgEnableEmail, $wgContactUser;
 
 		wfLoadExtensionMessages( 'ContactPage' );
 		$fname = "SpecialContact::execute";
 
-		if( !$wgEnableEmail || !$wgContactUser || !$wgContactSender) {
+		if( !$wgEnableEmail || !$wgContactUser ) {
 			$wgOut->showErrorPage( "nosuchspecialpage", "nospecialpagetext" );
 			return;
 		}
@@ -59,7 +59,7 @@ class SpecialContact extends SpecialPage {
 		if ( "success" == $action ) {
 			wfDebug( "$fname: success.\n" );
 			$f->showSuccess( );
-		} else if ( "submit" == $action && $wgRequest->wasPosted() ) {#
+		} else if ( "submit" == $action && $wgRequest->wasPosted() && $f->hasAllInfo() ) {
 			$token = $wgRequest->getVal( 'wpEditToken' );
 
 			if( $wgUser->isAnon() ) {
@@ -104,7 +104,7 @@ class EmailContactForm {
 	 */
 	function EmailContactForm( $target ) {
 		global $wgRequest, $wgUser;
-		global $wgCaptcha, $wgCaptchaTriggers;
+		global $wgCaptchaClass;
 
 		$this->target = $target;
 		$this->text = $wgRequest->getText( 'wpText' );
@@ -120,14 +120,35 @@ class EmailContactForm {
 		}
 
 		//prepare captcha if applicable
-		if ( $wgCaptcha && @$wgCaptchaTriggers['contactpage'] ) {
-			$wgCaptcha->trigger = 'contactpage';
-			$wgCaptcha->action = 'contact';
+		if ( $this->useCaptcha() ) {
+			$captcha = ConfirmEditHooks::getInstance();
+			$captcha->trigger = 'contactpage';
+			$captcha->action = 'contact';
 		}
 	}
 
+	function hasAllInfo() {
+		global $wgContactRequireAll;
+
+		if ( $this->text === NULL ) return false;
+		else $this->text = trim( $this->text );
+		if ( $this->text === '' ) return false;
+
+		if ( $wgContactRequireAll ) {
+			if ( $this->fromname === NULL ) return false;
+			else $this->fromname = trim( $this->fromname );
+			if ( $this->fromname === '' ) return false;
+
+			if ( $this->fromaddress === NULL ) return false;
+			else $this->fromaddress = trim( $this->fromaddress );
+			if ( $this->fromaddress === '' ) return false;
+		}
+
+		return true;
+	}
+
 	function showForm() {
-		global $wgOut, $wgUser, $wgContactSender;
+		global $wgOut, $wgUser, $wgContactRequireAll;
 
 		#TODO: show captcha
 
@@ -138,16 +159,16 @@ class EmailContactForm {
 			$this->subject = wfMsgForContent( "contactpage-defsubject" );
 		}
 
-		#$emf = wfMsg( "emailfrom" );
-		#$sender = $wgContactSender;
+		$msgSuffix = $wgContactRequireAll ? '-required' : '';
+
 		$emt = wfMsg( "emailto" );
 		$rcpt = $this->target->getName();
 		$emr = wfMsg( "emailsubject" );
 		$emm = wfMsg( "emailmessage" );
 		$ems = wfMsg( "emailsend" );
 		$emc = wfMsg( "emailccme" );
-		$emfn = wfMsg( "contactpage-fromname" );
-		$emfa = wfMsg( "contactpage-fromaddress" );
+		$emfn = wfMsg( "contactpage-fromname$msgSuffix" );
+		$emfa = wfMsg( "contactpage-fromaddress$msgSuffix" );
 		$encSubject = htmlspecialchars( $this->subject );
 		$encFromName = htmlspecialchars( $this->fromname );
 		$encFromAddress = htmlspecialchars( $this->fromaddress );
@@ -179,7 +200,7 @@ class EmailContactForm {
 <tr>
 <td></td>
 <td align='left'>
-<small>".wfMsg( "contactpage-formfootnotes" )."</small>
+<small>".wfMsg( "contactpage-formfootnotes$msgSuffix" )."</small>
 </td>
 </tr>
 </table>
@@ -194,10 +215,24 @@ class EmailContactForm {
 
 	}
 
+	function useCaptcha() {
+		global $wgCaptchaClass, $wgCaptchaTriggers, $wgUser;
+		if ( !$wgCaptchaClass ) return false; //no captcha installed
+		if ( !@$wgCaptchaTriggers['contactpage'] ) return false; //don't trigger on contact form
+
+		if( $wgUser->isAllowed( 'skipcaptcha' ) ) {
+			wfDebug( "EmailContactForm::useCaptcha: user group allows skipping captcha\n" );
+			return false;
+		}
+
+		return true;
+	}
+
 	function getCaptcha() {
-		global $wgCaptcha, $wgCaptchaTriggers;
-		if ( !$wgCaptcha ) return ""; //no captcha installed
-		if ( !@$wgCaptchaTriggers['contactpage'] ) return ""; //don't trigger on contact form
+		global $wgCaptcha;
+		if ( !$this->useCaptcha() ) return ""; 
+
+		wfSetupSession(); #NOTE: make sure we have a session. May be required for captchas to work.
 
 		return "<div class='captcha'>" .
 		$wgCaptcha->getForm() .
@@ -206,25 +241,38 @@ class EmailContactForm {
 	}
 
 	function passCaptcha() {
-		global $wgCaptcha, $wgCaptchaTriggers;
-		if ( !$wgCaptcha ) return true; //no captcha installed
-		if ( !@$wgCaptchaTriggers['contactpage'] ) return true; //don't trigger on contact form
+		global $wgCaptcha;
+		if ( !$this->useCaptcha() ) return true;
 
 		return $wgCaptcha->passCaptcha();
 	}
 
 	function doSubmit( ) {
-		global $wgOut, $wgContactSender, $wgContactSenderName;
+		global $wgOut;
+		global $wgEnableEmail, $wgUserEmailUseReplyTo, $wgEmergencyContact;
+		global $wgContactUser, $wgContactSender, $wgContactSenderName;
 
-		#TODO: check captcha
+		$csender = $wgContactSender ? $wgContactSender : $wgEmergencyContact;
+		$cname = $wgContactSenderName;
 
 		$fname = 'EmailContactForm::doSubmit';
 
 		wfDebug( "$fname: start\n" );
 
 		$to = new MailAddress( $this->target );
-		$from = new MailAddress( $wgContactSender, $wgContactSenderName );
-		$replyto = $this->fromaddress ? new MailAddress( $this->fromaddress, $this->fromname ) : NULL;
+		$replyto = NULL;
+
+		if ( !$this->fromaddress ) {
+			$from = new MailAddress( $csender, $cname );
+		}
+		else if ( $wgUserEmailUseReplyTo ) {
+			$from = new MailAddress( $csender, $cname );
+			$replyto = new MailAddress( $this->fromaddress, $this->fromname );
+		}
+		else {
+			$from = new MailAddress( $this->fromaddress, $this->fromname );
+		}
+
 		$subject = trim( $this->subject );
 
 		if ( $subject === "" ) {
@@ -234,12 +282,15 @@ class EmailContactForm {
 		if ( $this->fromname !== "" ) {
 			$subject = wfMsgForContent( "contactpage-subject-and-sender", $subject, $this->fromname );
 		}
+		else if ( $this->fromaddress !== "" ) {
+			$subject = wfMsgForContent( "contactpage-subject-and-sender", $subject, $this->fromaddress );
+		}
 
 		if( wfRunHooks( 'ContactForm', array( &$to, &$replyto, &$subject, &$this->text ) ) ) {
 
 			wfDebug( "$fname: sending mail from ".$from->toString()." to ".$to->toString()." replyto ".($replyto==null?'-/-':$replyto->toString())."\n" );
 
-			#HACK: in MW 1.9, replyto must be a string, in MW 1.0, it must be an object!
+			#HACK: in MW 1.9, replyto must be a string, in MW 1.10 it must be an object!
 			$ver = preg_replace( '![^\d._+]!', '', $GLOBALS['wgVersion'] );
 			$replyaddr = $replyto == null
 					? NULL : version_compare( $ver, '1.10', '<' )
@@ -248,7 +299,7 @@ class EmailContactForm {
 			$mailResult = userMailer( $to, $from, $subject, $this->text, $replyaddr );
 
 			if( WikiError::isError( $mailResult ) ) {
-				$wgOut->addHTML( wfMsg( "usermailererror" ) . $mailResult);
+				$wgOut->addWikiText( wfMsg( "usermailererror" ) . $mailResult->getMessage());
 			} else {
 
 				// if the user requested a copy of this mail, do this now,
@@ -264,7 +315,7 @@ class EmailContactForm {
 							// We can either show them an error, or we can say everything was fine,
 							// or we can say we sort of failed AND sort of succeeded. Of these options,
 							// simply saying there was an error is probably best.
-							$wgOut->addHTML( wfMsg( "usermailererror" ) . $ccResult);
+							$wgOut->addWikiText( wfMsg( "usermailererror" ) . $ccResult);
 							return;
 						}
 					}
@@ -285,7 +336,7 @@ class EmailContactForm {
 		global $wgOut;
 
 		$wgOut->setPagetitle( wfMsg( "emailsent" ) );
-		$wgOut->addHTML( wfMsg( "emailsenttext" ) );
+		$wgOut->addWikiText( wfMsg( "emailsenttext" ) );
 
 		$wgOut->returnToMain( false );
 	}

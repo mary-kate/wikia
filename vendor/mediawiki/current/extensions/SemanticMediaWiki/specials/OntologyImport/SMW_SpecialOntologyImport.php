@@ -9,18 +9,11 @@
  * TODO: The code below is still very very messy and undocumented. Cleanup needed!
  */
 
-if (!defined('MEDIAWIKI')) die();
-
-global $IP;
-require_once( "$IP/includes/SpecialPage.php" );
-
 SpecialPage::addPage( new SpecialPage('OntologyImport','delete',true,'doSpecialImportOntology',false) );
 
-
 function doSpecialImportOntology($par = NULL) {
-	global $IP, $smwgIP;
+	global $smwgIP;
 	require_once($smwgIP . '/includes/SMW_Storage.php');
-	require_once($IP . '/includes/Title.php' );
 
 	global $wgOut, $wgRequest, $wgUser;
 	global $wgServer; // "http://www.yourserver.org"
@@ -67,7 +60,7 @@ function doSpecialImportOntology($par = NULL) {
 	// input forms
 	$html .= '<form name="ontologyimport" action="" method="post" enctype="multipart/form-data">' . "\n" .
 			'<input type="hidden" name="action" value="displayontology" />' . "\n" .
-			'<input name="ontologyfile" type="file" size="50" /><br/><br/>' . "\n" .
+			'<input name="ontologyfile" type="file" size="50" /><br /><br />' . "\n" .
 			'<input type="submit" value="' . wfMsg(smw_oi_action) . '" />' . "\n" .
 			'</form>';
 
@@ -331,7 +324,7 @@ class SMWOntologyImport {
 		if ((count($statements) == 0) && !$need_to_map) return ''; // nothing to add
 
 		// TODO $message .= '<input type="checkbox" />'; one click to click all statements about an entity
-		$message .= wfMsg( 'smw_oi_statementsabout' ) . ' <a href="'. $t->getLocalURL() .'" '. $classnew .'title="'. $t->getPrefixedText() .'">'. $t->getPrefixedText() .'</a> <br/>' . "\n";
+		$message .= wfMsg( 'smw_oi_statementsabout' ) . ' <a href="'. $t->getLocalURL() .'" '. $classnew .'title="'. $t->getPrefixedText() .'">'. $t->getPrefixedText() .'</a> <br />' . "\n";
 
 		$snr = 0;
 		if ($need_to_map) {

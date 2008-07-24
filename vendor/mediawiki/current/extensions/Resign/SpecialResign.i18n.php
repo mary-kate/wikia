@@ -21,9 +21,12 @@ Remember: '''You cannot get your permissions back this way!''' You will have to 
 	'resign-logentry'  => 'removed permissions $2 from himself',
 );
 
-/* Arabic (Meno25) */
+/* Arabic (العربية) 
+* @author Meno25
+*/
 $messages['ar'] = array(
 	'resign' => 'استقالة',
+	'resign-desc'      => 'يمنح المستخدمين القدرة على [[Special:Resign|إزالة سماحاتهم]].',
 	'resign-text' => 'يمكنك \'\'\'إزالة صلاحياتك\'\'\' (مثال الصلاحيات الإدارية) في هذه الصفحة. من فضلك علم على الصلاحيات التي تود إزالتها.
 
 تذكر: \'\'\'لا يمكنك استرجاع صلاحياتك بهذه الطريقة!\'\'\' سيتوجب عليك إقناع بيروقرط أو ستيوارد لكي يعيد لك الصلاحيات. من فضلك استخدم هذه الصفحة بحرص شديد.',
@@ -114,11 +117,12 @@ Use esta páxina con moito tento.',
 
 $messages['he'] = array(
 	'resign'           => 'התפטרות',
+	'resign-desc'      => 'אפשרות למשתמשים [[Special:Resign|להסיר את הרשאותיהם]].',
 	'resign-text'      => "בדף זה תוכלו '''להסיר את ההרשאות שלכם''' (למשל, הרשאות מפעיל מערכת). אנא סמנו את ההרשאות שברצונכם להסיר.
 
 להזכירכם: '''אינכם יכולים לקבל בחזרה את ההרשאות בדרך זו!''' יהיה עליכם לשכנע ביורוקרט או דייל להעניק לכם את הרשאותיכם בחזרה. אנא השתמשו בדף זה בזהירות רבה.",
 	'resign-reason'    => 'סיבה:',
-	'resign-confirm'   => 'אני מאשר שברצוני להסיר את כל ההרשאות שלי שסימנתי, וידוע לי שלא אוכל לקבל אותן בחזרה בדרך זו.',
+	'resign-confirm'   => 'אני מאשר שברצוני להסיר את כל ההרשאות שלי שסימנתי.',
 	'resign-noconfirm' => 'אנא סמנו את תיבת הסימון כדי לאשר את ההסרה.',
 	'resign-nogroups'  => 'אנא בחרו את ההרשאות שברצונכם להסיר.',
 	'resign-success'   => "'''ההרשאות הוסרו בהצלחה.'''",
@@ -139,7 +143,7 @@ Kedźbu: \'\'\'Njemóžeš te prawa na tute wašnje wróćo dóstać!\'\'\' Dyrb
 );
 
 /** Hungarian (Magyar)
- * @author Bdanee
+ * @author Dani
  */
 $messages['hu'] = array(
 	'resign'           => 'Lemondás',
