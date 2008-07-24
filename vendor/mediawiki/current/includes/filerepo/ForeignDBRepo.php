@@ -2,17 +2,16 @@
 
 /**
  * A foreign repository with an accessible MediaWiki database
- * @ingroup FileRepo
  */
+
 class ForeignDBRepo extends LocalRepo {
 	# Settings
-	var $dbType, $dbServer, $dbUser, $dbPassword, $dbName, $dbFlags,
+	var $dbType, $dbServer, $dbUser, $dbPassword, $dbName, $dbFlags, 
 		$tablePrefix, $hasSharedCache;
-
+	
 	# Other stuff
 	var $dbConn;
 	var $fileFactory = array( 'ForeignDBFile', 'newFromTitle' );
-	var $fileFromRowFactory = array( 'ForeignDBFile', 'newFromRow' );
 
 	function __construct( $info ) {
 		parent::__construct( $info );
@@ -29,8 +28,8 @@ class ForeignDBRepo extends LocalRepo {
 	function getMasterDB() {
 		if ( !isset( $this->dbConn ) ) {
 			$class = 'Database' . ucfirst( $this->dbType );
-			$this->dbConn = new $class( $this->dbServer, $this->dbUser,
-				$this->dbPassword, $this->dbName, false, $this->dbFlags,
+			$this->dbConn = new $class( $this->dbServer, $this->dbUser, 
+				$this->dbPassword, $this->dbName, false, $this->dbFlags, 
 				$this->tablePrefix );
 		}
 		return $this->dbConn;
@@ -54,3 +53,5 @@ class ForeignDBRepo extends LocalRepo {
 		throw new MWException( get_class($this) . ': write operations are not supported' );
 	}
 }
+
+

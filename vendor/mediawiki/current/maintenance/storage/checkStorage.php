@@ -1,9 +1,7 @@
 <?php
+
 /**
  * Fsck for MediaWiki
- *
- * @file
- * @ingroup Maintenance ExternalStorage
  */
 
 define( 'CONCAT_HEADER', 'O:27:"concatenatedgziphistoryblob"' );
@@ -24,10 +22,8 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 
 //----------------------------------------------------------------------------------
 
-/**
- * @ingroup Maintenance ExternalStorage
- */
-class CheckStorage {
+class CheckStorage
+{
 	var $oldIdMap, $errors;
 	var $dbStore = null;
 

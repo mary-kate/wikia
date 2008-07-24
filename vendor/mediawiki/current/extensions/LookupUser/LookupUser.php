@@ -28,8 +28,6 @@ $wgExtensionMessagesFiles['LookupUser'] = $dir . 'LookupUser.i18n.php';
 
 $wgSpecialPages['LookupUser'] = 'LookupUserPage';
 $wgAvailableRights[] = 'lookupuser';
-$wgSpecialPageGroups['LookupUser'] = 'users';
-
 
 function wfSetupLookupUser() {
 	global $IP;
@@ -111,21 +109,11 @@ EOT
 					$optionsString .= "$name = $value <br />";
 				}
 				$name = $user->getName();
-				if( $user->getEmail() ) {
-					$email = $user->getEmail();
-				} else {
-					$email = wfMsg( 'lookupuser_no_email' );
-				}
-				if( $user->getRegistration() ) {
-					$registration = $wgLang->timeanddate( $user->getRegistration() );
-				} else {
-					$registration = wfMsg( 'lookupuser_no_registration' );
-				}
 				$wgOut->addWikiText( '*' . wfMsg( 'username' ) . ' [[User:' . $name . '|' . $name . ']] ([[User talk:' . $name . '|' . wfMsg( 'talkpagelinktext' ) . ']] | [[Special:Contributions/' . $name . '|' . wfMsg( 'contribslink' ) . ']])' );
 				$wgOut->addWikiText( '*' . wfMsg( 'lookupuser_id', $user->getId() ));
-				$wgOut->addWikiText( '*' . wfMsg( 'lookupuser_email', $email, $name ));
+				$wgOut->addWikiText( '*' . wfMsg( 'lookupuser_email', $user->getEmail(), $name ));
 				$wgOut->addWikiText( '*' . wfMsg( 'lookupuser_realname', $user->getRealName() ));
-				$wgOut->addWikiText( '*' . wfMsg( 'lookupuser_registration', $registration ));
+				$wgOut->addWikiText( '*' . wfMsg( 'lookupuser_registration', $wgLang->timeanddate( $user->mRegistration ) ));
 				$wgOut->addWikiText( '*' . wfMsg( 'lookupuser_touched', $wgLang->timeanddate( $user->mTouched ) ));
 				$wgOut->addWikiText( '*' . wfMsg( 'lookupuser_authenticated', $authenticated ));
 				$wgOut->addWikiText( '*' . wfMsg( 'lookupuser_useroptions' ) . '<br />' . $optionsString );

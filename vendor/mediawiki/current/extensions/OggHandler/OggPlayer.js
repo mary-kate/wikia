@@ -165,18 +165,17 @@ var wgOggPlayer = {
 		
 		if(navigator.mimeTypes && navigator.mimeTypes.length > 0) {
 			for ( var i = 0; i < navigator.mimeTypes.length; i++) {
-				var entry = navigator.mimeTypes[i];
-				var type = entry.type;
+				var type = navigator.mimeTypes[i].type;
 				var semicolonPos = type.indexOf( ';' );
 				if ( semicolonPos > -1 ) {
 					type = type.substr( 0, semicolonPos );
 				}
 
-				var plugin = entry.enabledPlugin;
-				// In case it is null or undefined
-				var pluginName = plugin && plugin.name ? plugin.name : '';
-				var pluginFilename = plugin && plugin.filename ? plugin.filename : '';
-				
+				var pluginName = navigator.mimeTypes[i].enabledPlugin ? navigator.mimeTypes[i].enabledPlugin.name : '';
+				if ( !pluginName ) {
+					// In case it is null or undefined
+					pluginName = '';
+				}
 				if ( javaEnabled && type == 'application/x-java-applet' ) {
 					this.clientSupports['cortado'] = true;
 					continue;
@@ -191,7 +190,6 @@ var wgOggPlayer = {
 					}
 					continue;
 				} else if ( uniqueMimesOnly ) {
-					// Could cause false positives if codecs are missing...
 					if ( type == 'application/x-vlc-player' ) {
 						this.clientSupports['vlc-mozilla'] = true;
 						continue;
@@ -202,14 +200,8 @@ var wgOggPlayer = {
 				}
 			
 				if ( type == 'video/quicktime' ) {
-					if ( pluginFilename.indexOf( 'libtotem' ) > -1 ) {
-						// Totem plugin on *nix...
-						// Will in fact play oggs, but we'll have a native
-						// plugin alongside it. Skip the entry.
-					} else {
-						this.clientSupports['quicktime-mozilla'] = true;
-						continue;
-					}
+					this.clientSupports['quicktime-mozilla'] = true;
+					continue;
 				}
 			}
 
@@ -505,7 +497,9 @@ var wgOggPlayer = {
 
 	'embedCortado' : function ( elt, params ) {
 		var statusHeight = 18;
-		var playerHeight = params.height + statusHeight;
+		// Given extra vertical space, cortado centres the video and then overlays the status 
+		// line, leaving an ugly black bar at the top. So we don't give it any.
+		var playerHeight = params.height < (statusHeight+1) ? (statusHeight+1) : params.height;
 
 		// Create the applet all at once
 		// In Opera, document.createElement('applet') immediately creates
@@ -521,7 +515,7 @@ var wgOggPlayer = {
 		    '  <param name="seekable"  value="true"/>' +
 		    '  <param name="autoPlay" value="true"/>' +
 		    '  <param name="showStatus"  value="show"/>' +
-		    '  <param name="showSpeaker" value="false"/>' +
+			'  <param name="showSpeaker" value="false"/>' +
 		    '  <param name="statusHeight"  value="' + statusHeight + '"/>' +
 		    '</applet>';
 
@@ -558,7 +552,7 @@ var wgOggPlayer = {
 		var controllerHeight = 16; // by observation
 		var extraAttribs = '';
 		if ( player == 'quicktime-activex' ) {
-			extraAttribs = 'classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B"';
+			extraAttribs = 'classid="clsid:02BF25D5..."';
 		}
 
 		elt.innerHTML += 

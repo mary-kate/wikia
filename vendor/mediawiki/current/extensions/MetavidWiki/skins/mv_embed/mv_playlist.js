@@ -196,7 +196,7 @@ mvPlayList.prototype = {
 		}
 	},
 	getSourceType:function(){
-		js_log('data type of: '+ this.src + ' = ' + typeof (this.data) + "\n"+ this.data);
+		//js_log('data type of: '+ this.src + ' = ' + typeof (this.data) + "\n"+ this.data);
 		this.srcType =null;
 		//if not external use different detection matrix
 		if(this.external_data){				
@@ -753,11 +753,6 @@ mvClip.prototype = {
 		if(this.img)init_pl_embed['thumbnail']=this.img;
 		this.embed = new PlMvEmbed(init_pl_embed);		
 		js_log('type of embed:' + typeof(this.embed) + 'seq:' + this.pp.sequencer+' pb:'+ this.embed.play_button);
-	},
-	//returns the mvClip representation of the clip ie stream_name?start_time/end_time
-	getMvClip:function(){
-		if(this.mvclip)return this.mvclip;
-		return false;
 	},
 	//@@todo group all remote data requests
 	//set src and image & title & desc from metavid source data 
@@ -1364,13 +1359,11 @@ var xspfPlaylist ={
 		//get the first instance of any of the meta tags (ok that may be the meta on the first clip)
 		//js_log('do loop on properties:' + properties);
 		for(i in properties){
-			js_log('on property: '+i);			
+			//js_log('on property: '+i);
 			tmpElm = this.data.getElementsByTagName(properties[i])[0];
 			if(tmpElm){
-				if(tmpElm.childNodes[0]){
-					this[i] = tmpElm.childNodes[0].nodeValue;
-					js_log('set pl property: ' + i+' to '+this[i]);
-				}
+				this[i] = tmpElm.childNodes[0].nodeValue;
+				js_log('set pl property: ' + i+' to '+this[i]);
 			}
 		}
 		var clips = this.data.getElementsByTagName("track");
@@ -1389,15 +1382,6 @@ var xspfPlaylist ={
 					}
 				}
 			}			
-			//add mvClip ref from info link: 
-			if(cur_clip.linkback){
-				//if mv linkback
-				mvInx = 'Stream:';
-				mvclippos = cur_clip.linkback.indexOf(mvInx);
-				if(mvclippos!==false){
-					cur_clip.mvclip=cur_clip.linkback.substr( mvclippos+mvInx.length );
-				}
-			}			
 			//set up the embed object now that all the values have been set
 			cur_clip.setUpEmbedObj();
 			//add the current clip to the clip list
@@ -1410,7 +1394,29 @@ var xspfPlaylist ={
 /* utility functions 
  * (could be combined with other stuff) 
  */
-
+ function do_request(req_url,callback){
+ 	js_log('do request: ' + req_url);
+		if( parseUri(document.URL).host != parseUri(req_url).host){
+			//@@TODO a DOM injection call to get data
+			js_log('callback: ' + callback + ' page at: ' + parseUri(document.URL).host + ' req:'+ parseUri(req_url).host);
+			$j.ajax({
+				type: "POST",
+				url:mv_embed_path + 'mv_data_proxy.php',
+				data:{url:req_url},
+				success:function(data){					
+					callback(data);
+				}
+			});
+		}else{
+			$j.ajax({
+				type: "GET",
+				url:req_url,
+				success:function(data){			
+					callback(data);
+				}
+			});
+		}	
+	}
 function getAbsolutePos(objectId) {
 	// Get an object left position from the upper left viewport corner
 	o = document.getElementById(objectId);

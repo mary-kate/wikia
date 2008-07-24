@@ -1,10 +1,9 @@
 <?php
 /**
- * See docs/skin.txt
+ * See skin.txt
  *
  * @todo document
- * @file
- * @ingroup Skins
+ * @addtogroup Skins
  */
 
 if( !defined( 'MEDIAWIKI' ) )
@@ -15,7 +14,7 @@ require_once( dirname(__FILE__) . '/MonoBook.php' );
 
 /**
  * @todo document
- * @ingroup Skins
+ * @addtogroup Skins
  */
 class SkinChick extends SkinTemplate {
 	function initPage( &$out ) {
@@ -23,7 +22,6 @@ class SkinChick extends SkinTemplate {
 		$this->skinname  = 'chick';
 		$this->stylename = 'chick';
 		$this->template  = 'MonoBookTemplate';
-		$this->fixfiles  = array( 'IE50', 'IE55', 'IE60' );
 	}
 }
 

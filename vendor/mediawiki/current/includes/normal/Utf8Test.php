@@ -21,7 +21,7 @@
  * Runs the UTF-8 decoder test at:
  * http://www.cl.cam.ac.uk/~mgk25/ucs/examples/UTF-8-test.txt
  *
- * @ingroup UtfNormal
+ * @addtogroup UtfNormal
  * @access private
  */
 
@@ -149,3 +149,5 @@ function testLine( $test, $line, &$total, &$success, &$failed ) {
 		print str_replace( "\n", "$len\n", $stripped );
 	}
 }
+
+

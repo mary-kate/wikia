@@ -1,8 +1,7 @@
 <?php
 /** Ingush (ГІалгІай Ğalğaj)
  *
- * @ingroup Language
- * @file
+ * @addtogroup Language
  *
  * @author Tagir
  * @author Siebrand
@@ -109,7 +108,8 @@ $messages = array(
 'nov'           => 'Ноя',
 'dec'           => 'Дек',
 
-# Categories related messages
+# Bits of text used by many pages
+'categories'            => 'Категореш',
 'pagecategories'        => '{{PLURAL:$1|Категори|Категореш}}',
 'category_header'       => '"$1" категори оагIонаш',
 'subcategories'         => 'Чура-категореш',
@@ -152,7 +152,7 @@ $messages = array(
 'editthispage'      => 'Хувца ер оагIув',
 'delete'            => 'Дiадаккха',
 'deletethispage'    => 'Дiайаккха ер оагIув',
-'undelete_short'    => 'Юхаметтаоттаде {{PLURAL:$1|oхувцам|$1 eхувцамаш}}',
+'undelete_short'    => 'ЮхаметтаоттадеU{PLURAL:$1|oхувцам$1 eхувцамаш}',
 'protect'           => 'Лораде',
 'protect_change'    => 'Лорадер хувца',
 'protectthispage'   => 'Лораде ер оагIув',
@@ -187,24 +187,25 @@ $messages = array(
 'jumptosearch'      => 'леха',
 
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
-'aboutsite'            => 'Описани {{SITENAME}}',
-'aboutpage'            => 'Project:Описани',
-'bugreports'           => 'Гiалата хоам',
-'bugreportspage'       => 'Project:Гiалата хоам',
-'currentevents'        => 'Хьанзар доалара хамаж',
-'currentevents-url'    => 'Project:Хьанзар доалара хама',
-'edithelp'             => 'Хувцамаш йие гIо',
-'edithelppage'         => 'Help:Хувцамаш йие гIо',
-'faq'                  => 'КХХ (Каста Хоатташ доа Хамаж)',
-'faqpage'              => 'Project:КХХ (Каста Хоатташ доа Хамаж)',
-'helppage'             => 'Help:Хьехар',
-'mainpage'             => 'Кертера оагIув',
-'mainpage-description' => 'Кертера оагIув',
-'policy-url'           => 'Project:Бокъонаш',
-'portal'               => 'Гiоз',
-'portal-url'           => 'Project:ГIоз',
-'privacy'              => 'Конфиденциальности бокъонаш',
-'privacypage'          => 'Project:Конфиденциальности бокъона',
+'aboutsite'         => 'Описани {{SITENAME}}',
+'aboutpage'         => 'Project:Описани',
+'bugreports'        => 'Гiалата хоам',
+'bugreportspage'    => 'Project:Гiалата хоам',
+'currentevents'     => 'Хьанзар доалара хамаж',
+'currentevents-url' => 'Project:Хьанзар доалара хама',
+'edithelp'          => 'Хувцамаш йие гIо',
+'edithelppage'      => 'Help:Хувцамаш йие гIо',
+'faq'               => 'КХХ (Каста Хоатташ доа Хамаж)',
+'faqpage'           => 'Project:КХХ (Каста Хоатташ доа Хамаж)',
+'helppage'          => 'Help:Хьехар',
+'mainpage'          => 'Кертера оагIув',
+'policy-url'        => 'Project:Бокъонаш',
+'portal'            => 'Гiоз',
+'portal-url'        => 'Project:ГIоз',
+'privacy'           => 'Конфиденциальности бокъонаш',
+'privacypage'       => 'Project:Конфиденциальности бокъона',
+'sitesupport'       => 'СагIа',
+'sitesupport-url'   => 'Project:СагIа',
 
 'badaccess'        => 'Чу валар гIалата',
 'badaccess-group0' => 'Хьо де воалара хьюна де пурам дац',
@@ -216,8 +217,5 @@ $messages = array(
 'versionrequiredtext' => '$1 MediaWiki верси йиза ер оагIув хьажа. [[Special:Version|version page]] хьажа.',
 
 'ok' => 'ОК',
-
-# Special:Categories
-'categories' => 'Категореш',
 
 );

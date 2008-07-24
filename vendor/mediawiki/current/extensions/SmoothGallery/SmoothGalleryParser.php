@@ -2,11 +2,12 @@
 
 class SmoothGalleryParser {
 
-	var $set;
+	var $special, $set;
 	var $argumentArray;
 	var $galleriesArray;
 
-	function SmoothGalleryParser( $input, $argv, &$parser, $calledAsSet=false ) {
+	function SmoothGalleryParser( $input, $argv, &$parser, $calledFromSpecial=false, $calledAsSet=false ) {
+		$this->special = $calledFromSpecial;
 		$this->set = $calledAsSet;
 		$this->parseArguments( $argv );
 		$this->parseGalleries( $input, $parser );
@@ -21,15 +22,29 @@ class SmoothGalleryParser {
 	}
 
 	function parseArguments( $argv ) {
+		global $wgSmoothGalleryUseDatabase;
+	
 		//Parse arguments, set defaults, and do sanity checks
 		if ( isset( $argv["height"] ) && is_numeric( $argv["height"] ) ) {
-			$this->argumentArray["height"] = $argv["height"] . "px";
+			if ( isset( $argv["special"] ) && !$wgSmoothGalleryUseDatabase ) {
+				//Creating a link instead, the special page is going to call this
+				//function again, so "px" will be appended.
+				$this->argumentArray["height"] = $argv["height"];
+			} else {
+				$this->argumentArray["height"] = $argv["height"] . "px";
+			}
 		} else {
 			$this->argumentArray["height"] = "300px";
 		}
 	
 		if ( isset( $argv["width"] ) && is_numeric( $argv["width"] ) ) {
-			$this->argumentArray["width"] = $argv["width"] . "px";
+			if ( isset( $argv["special"] ) && !$wgSmoothGalleryUseDatabase ) {
+				//Creating a link instead, the special page is going to call this
+				//function again, so "px" will be appended.
+				$this->argumentArray["width"] = $argv["width"];
+			} else {
+				$this->argumentArray["width"] = $argv["width"] . "px";
+			}
 		} else {
 			$this->argumentArray["width"] = "400px";
 		}
@@ -70,6 +85,12 @@ class SmoothGalleryParser {
 			$this->argumentArray["fallback"] = "gallery";
 		}
 	
+		if ( isset( $argv["special"] ) ) {
+			$this->argumentArray["special"] = $argv["special"];
+		} else {
+			$this->argumentArray["special"] = '';
+		}
+	
 		if ( isset( $argv["nolink"] ) && $argv["nolink"] == "true" ) {
 			$this->argumentArray["nolink"] = true;
 		} else {
@@ -78,14 +99,23 @@ class SmoothGalleryParser {
 	}
 	
 	function parseGalleries( $input, $parser ) {
+		global $wgSmoothGalleryUseDatabase;
+	
 		$this->galleriesArray = Array();
 	
 		if ( $this->set ) {
-			//This isn't currently working right, I need to enter
-			//a bug report with smooth gallery, so we'll leave
-			//the name alone for now.
-			#$this->galleriesArray["gallery_set_name"] = "MediaWikiSGallerySet" . mt_rand();
-			$this->galleriesArray["gallery_set_name"] = "MediaWikiSGallerySet";
+			//Give this gallery a random name so that we can have more than one gallery
+			//on a page. But don't do this on a special page, because it will cause
+			//us problems with javascript that uses the css classname
+			if ( $this->special ) {
+				$this->galleriesArray["gallery_set_name"] = "MediaWikiSGallerySet";
+			} else {
+				//This isn't currently working right, I need to enter
+				//a bug report with smooth gallery, so we'll leave
+				//the name alone for now.
+				#$this->galleriesArray["gallery_set_name"] = "MediaWikiSGallerySet" . mt_rand();
+				$this->galleriesArray["gallery_set_name"] = "MediaWikiSGallerySet";
+			}
 	
 			//parse set into seperate galleries
 			preg_match_all( "/<sgallery([\w]+)?[^>]*>(.*)<\/sgallery>/smU", $input, $galleries, PREG_SET_ORDER );
@@ -97,7 +127,11 @@ class SmoothGalleryParser {
 				//TOFIX:
 				//This couldn't possibly be right... If these are different
 				//galleries in a gallery set, shouldn't they have unique names?
-				$name = "MediaWikiSGallery" . $i;
+				if ( $this->special ) {
+					$name = "MediaWikiSGallery";
+				} else {
+					$name = "MediaWikiSGallery" . $i;
+				}
 	
 				$this->galleriesArray["galleries"][$i] = $this->parseGallery( $galleryInput[2], $parser );
 				$this->galleriesArray["galleries"][$i]["gallery_name"] = $name;
@@ -105,7 +139,11 @@ class SmoothGalleryParser {
 				$i++;
 			}
 		} else {
-			$name = "MediaWikiSGallery" . mt_rand();
+			if ( $this->special ) {
+				$name = "MediaWikiSGallery";
+			} else {
+				$name = "MediaWikiSGallery" . mt_rand();
+			}
 	
 			$this->galleriesArray["galleries"][0] = $this->parseGallery( $input, $parser);
 			$this->galleriesArray["galleries"][0]["gallery_name"] = $name;
@@ -117,7 +155,6 @@ class SmoothGalleryParser {
 	function parseGallery( $input, $parser ) {
 		global $wgTitle;
 		global $wgSmoothGalleryDelimiter;
-		global $wgSmoothGalleryAllowExternal;
 	
 		$galleryArray = Array();
 	
@@ -142,26 +179,6 @@ class SmoothGalleryParser {
 				$img_desc = $img_arr[1];
 			} else {
 				$img_desc = '';
-			}
-
-			if ( $wgSmoothGalleryAllowExternal &&
-			     ( ( strlen( $img ) >= 7 && substr( $img, 0, 7 ) == "http://" ) ||
-			       ( strlen( $img ) >= 7 && substr( $img, 0, 8 ) == "https://" ) )
-			   ) {
-				$imageArray["title"] = null;
-				//TODO: internationalize
-				$imageArray["heading"] = "External Image";
-				$imageArray["description"] = $img_desc;
-				$imageArray["full_url"] = $img;
-				$imageArray["view_url"] = $img;
-				$imageArray["full_thumb_url"] = $img;
-				$imageArray["icon_thumb_url"] = $img;
-				$imageArray["image_object"] = null;
-				$imageArray["external"] = true;
-
-				$galleryArray["images"][] = $imageArray;
-
-				continue;
 			}
 	
 			$title = Title::newFromText( $img, NS_IMAGE );
@@ -198,7 +215,6 @@ class SmoothGalleryParser {
 	
 	function parseImage( $title, $parser, $galleryArray, $getDescription=false ) {
 		global $wgUser;
-		global $wgSmoothGalleryThumbHeight, $wgSmoothGalleryThumbWidth;
 	
 		$imageArray = Array();
 	
@@ -242,7 +258,7 @@ class SmoothGalleryParser {
 			//We are going to show a carousel to the user; we need
 			//to make icon thumbnails
 			//$thumb_obj = $img_obj->getThumbnail( 120, 120 ); //would be nice to reuse images already loaded...
-			$thumb_obj = $img_obj->getThumbnail( $wgSmoothGalleryThumbWidth, $wgSmoothGalleryThumbHeight );
+			$thumb_obj = $img_obj->getThumbnail( 100, 75 );
 			if ( $thumb_obj ) {
 				$icon_thumb = $thumb_obj->getUrl();
 			}
@@ -268,7 +284,7 @@ class SmoothGalleryParser {
 
 			//convert wikitext to HTML
 			//TODO: find out why this doesn't work with special pages
-			if ( $parser ) {
+			if ( $parser && !$this->special ) {
 				$pout = $parser->recursiveTagParse( $fulldesc, $title, $parser->mOptions, true );
 				$fulldesc =  strip_tags( $pout );
 				#$fulldesc =  strip_tags( $pout->getText() );

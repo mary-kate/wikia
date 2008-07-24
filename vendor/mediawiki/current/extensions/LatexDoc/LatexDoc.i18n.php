@@ -8,10 +8,10 @@
 $messages = array();
 
 $messages['en'] = array(
-	'latexdoc_no_text'         => 'Page contains no text, cannot generate DVI',
+	'latexdoc_no_text' => 'Page contains no text, cannot generate DVI',
 	'latexdoc_cant_create_dir' => 'Cannot create temporary directory $1',
-	'latexdoc_cant_write'      => 'Cannot write to file $1',
-	'latexdoc_error'           => "LaTeX error
+	'latexdoc_cant_write' => 'Cannot write to file $1',
+	'latexdoc_error' => "LaTeX error
 
 Command: $1
 
@@ -65,17 +65,7 @@ $3',
  * @author Yekrats
  */
 $messages['eo'] = array(
-	'latexdoc_no_text'         => 'Pagxo enhavas neniom da teksto; ne eblas fari DVI',
-	'latexdoc_cant_create_dir' => 'Ne eblas krei provizoran dosierujon $1',
-	'latexdoc_cant_write'      => 'Ne povas skribi dosieron $1',
-	'latexdoc_error'           => 'LaTeX-eraro
-
-Komando: $1
-
-Eligo: $2
-
-$3',
-	'latexdoc_get_pdf'         => 'Akiri PDF-on',
+	'latexdoc_no_text' => 'Pagxo enhavas neniom da teksto; ne eblas fari DVI',
 );
 
 /** French (Français)
@@ -98,9 +88,8 @@ $3',
 );
 
 /** Galician (Galego)
- * @author Alma
  * @author Xosé
- * @author Toliño
+ * @author Alma
  */
 $messages['gl'] = array(
 	'latexdoc_no_text'         => 'A páxina non contén texto, non pode xenerar DVI',
@@ -115,26 +104,6 @@ Saída: $2
 $3',
 	'latexdoc_get_dvi'         => 'Obter DVI',
 	'latexdoc_get_pdf'         => 'Obter PDF',
-	'latexdoc-desc'            => 'Edición colaborativa de documentos LaTeX',
-);
-
-/** Hindi (हिन्दी)
- * @author Kaustubh
- */
-$messages['hi'] = array(
-	'latexdoc_no_text'         => 'पन्ने में कुछभी पाठ नहीं हैं, DVI नहीं बना सकतें हैं',
-	'latexdoc_cant_create_dir' => 'अस्थायी डाइरेक्टरी $1 नहीं बना पायें',
-	'latexdoc_cant_write'      => '$1 फ़ाईलमें लिख नहीं पायें',
-	'latexdoc_error'           => 'LaTeX गलती
-
-क्रिया: $1
-
-आउटपुट: $2
-
-$3',
-	'latexdoc_get_dvi'         => 'DVI बनायें',
-	'latexdoc_get_pdf'         => 'PDF बनायें',
-	'latexdoc-desc'            => 'LaTeX पन्नोंका एकत्रित संपादन',
 );
 
 /** Upper Sorbian (Hornjoserbsce)
@@ -157,7 +126,7 @@ $3',
 );
 
 /** Hungarian (Magyar)
- * @author Dani
+ * @author Bdanee
  */
 $messages['hu'] = array(
 	'latexdoc_no_text'         => 'Az oldal nem tartalmaz szöveget, nem lehet elkészíteni a DVI-t',
@@ -172,80 +141,6 @@ Kimenet: $2
 $3',
 	'latexdoc_get_dvi'         => 'DVI letöltése',
 	'latexdoc_get_pdf'         => 'PDF letöltése',
-);
-
-/** Javanese (Basa Jawa)
- * @author Meursault2004
- */
-$messages['jv'] = array(
-	'latexdoc_no_text'         => 'Kaca ora ngandhut tèks, ora bisa nggawé DVI',
-	'latexdoc_cant_create_dir' => 'Ora bisa nggawé dirèktori sementara $1',
-	'latexdoc_cant_write'      => 'Ora bisa nulis ing berkas $1',
-	'latexdoc_error'           => 'Kaluputan LaTeX
-
-Paréntah: $1
-
-Pituwas: $2
-
-$3',
-	'latexdoc_get_dvi'         => 'Gawé DVI',
-	'latexdoc_get_pdf'         => 'Gawé PDF',
-	'latexdoc-desc'            => 'Panyuntingan kolaboratif dokumèn-dokumèn LaTeX',
-);
-
-/** Khmer (ភាសាខ្មែរ)
- * @author Chhorran
- */
-$messages['km'] = array(
-	'latexdoc_no_text'         => 'ទំព័រ គ្មានអត្ថបទ, មិនអាចបង្កើត DVI',
-	'latexdoc_cant_create_dir' => 'មិនអាចបង្កើត ថតឯកសារ បណ្តោះអាសន្ន $1',
-	'latexdoc_cant_write'      => 'មិនអាចសរសេរ ក្នុង ឯកសារ $1',
-	'latexdoc_error'           => 'កំហុស LaTeX
-
-បញ្ជា ៖ $1
-
-លទ្ធផល ៖ $2
-
-$3',
-	'latexdoc_get_dvi'         => 'យក DVI',
-	'latexdoc_get_pdf'         => 'យក PDF',
-	'latexdoc-desc'            => 'សំណុំឯកសារ LaTeX',
-);
-
-/** Luxembourgish (Lëtzebuergesch)
- * @author Robby
- */
-$messages['lb'] = array(
-	'latexdoc_cant_create_dir' => 'Den temporäre Repertoire $1 kann net ugeluecht ginn',
-	'latexdoc_get_dvi'         => 'DVI kréien',
-	'latexdoc_get_pdf'         => 'PDF kréien',
-);
-
-/** Malayalam (മലയാളം)
- * @author Shijualex
- */
-$messages['ml'] = array(
-	'latexdoc_cant_write' => '$1 എന്ന പ്രമാണത്തിലേക്കു എഴുതുന്നതിനു കഴിഞ്ഞില്ല',
-	'latexdoc_get_pdf'    => 'PDF എടുക്കുക',
-);
-
-/** Marathi (मराठी)
- * @author Kaustubh
- */
-$messages['mr'] = array(
-	'latexdoc_no_text'         => 'पानावर काहीही मजकूर नाही, DVI तयार करू शकत नाही',
-	'latexdoc_cant_create_dir' => 'प्रासंगिक डिरेक्टरी $1 तयार करू शकलो नाही',
-	'latexdoc_cant_write'      => '$1 संचिकेत लिहू शकलो नाही',
-	'latexdoc_error'           => 'LaTeX त्रुटी
-
-क्रिया: $1
-
-आउटपुट: $2
-
-$3',
-	'latexdoc_get_dvi'         => 'DVI तयार करा',
-	'latexdoc_get_pdf'         => 'पीडिएफ तयार करा',
-	'latexdoc-desc'            => 'LaTeX पानांचे एकत्रित संपादन',
 );
 
 /** Dutch (Nederlands)
@@ -267,7 +162,7 @@ $3',
 	'latexdoc-desc'            => 'Collaboratief bewerken van LaTeX-documenten',
 );
 
-/** Norwegian (bokmål)‬ (‪Norsk (bokmål)‬)
+/** Norwegian (‪Norsk (bokmål)‬)
  * @author Jon Harald Søby
  */
 $messages['no'] = array(
@@ -297,14 +192,6 @@ $messages['oc'] = array(
 	'latexdoc_get_dvi'         => 'Obténer DVI',
 	'latexdoc_get_pdf'         => 'Obténer PDF',
 	'latexdoc-desc'            => 'Document LaTex.',
-);
-
-/** Polish (Polski)
- * @author McMonster
- */
-$messages['pl'] = array(
-	'latexdoc_cant_create_dir' => 'Nie można utworzyć katalogu tymczasowego $1',
-	'latexdoc_cant_write'      => 'Nie można pisać do pliku $1',
 );
 
 /** Portuguese (Português)
@@ -345,7 +232,7 @@ $3',
 );
 
 /** Russian (Русский)
- * @author Александр Сигачёв
+ * @author .:Ajvol:.
  */
 $messages['ru'] = array(
 	'latexdoc_no_text'         => 'Страница не содержит текста, невозможно создать DVI',
@@ -386,67 +273,16 @@ $3',
  * @author M.M.S.
  */
 $messages['sv'] = array(
-	'latexdoc_no_text'         => 'Sidan innehåller ingen text, kan inte generera DVI',
-	'latexdoc_cant_create_dir' => 'Kan inte skapa temporär mapp $1',
-	'latexdoc_cant_write'      => 'Kan inte skriva till filen $1',
-	'latexdoc_error'           => 'LaTeX fel
-
-Order: $1
-
-Produktion: $2
-
-$3',
-	'latexdoc_get_dvi'         => 'Hämta DVI',
-	'latexdoc_get_pdf'         => 'Hämta PDF',
-	'latexdoc-desc'            => 'Samarbetsvillig redigering av LaTeX-dokument',
+	'latexdoc_get_dvi' => 'Hämta DVI',
+	'latexdoc_get_pdf' => 'Hämta PDF',
 );
 
 /** Telugu (తెలుగు)
  * @author Veeven
  */
 $messages['te'] = array(
-	'latexdoc_no_text'         => 'పేజీలో పాఠ్యమేమీ లేదు, DVIని సృష్టించలేము',
-	'latexdoc_cant_create_dir' => '$1 అనే తాత్కాలిక డైరెక్టరీని సృష్టించలేకున్నాం',
-	'latexdoc_get_dvi'         => 'DVIని పొందండి',
-	'latexdoc_get_pdf'         => 'PDFని పొందండి',
-);
-
-/** Tajik (Cyrillic) (Тоҷикӣ/tojikī (Cyrillic))
- * @author Ibrahim
- */
-$messages['tg-cyrl'] = array(
-	'latexdoc_no_text'         => 'Саҳифаи дори матн нест, наметавон DVI тавлид кард',
-	'latexdoc_cant_create_dir' => 'Наметавон пӯшаи муваққатии $1 эҷод кард',
-	'latexdoc_cant_write'      => 'Наметавон ба парвандаи $1 навишт',
-	'latexdoc_error'           => 'Хатои LaTeX
-
-Фармон: $1
-
-Маҳсул: $2
-
-$3',
-	'latexdoc_get_dvi'         => 'Гирифтани DVI',
-	'latexdoc_get_pdf'         => 'Гирифтани PDF',
-	'latexdoc-desc'            => 'Вироиши ҳамдастии парвандаҳои LaTeX',
-);
-
-/** Vietnamese (Tiếng Việt)
- * @author Vinhtantran
- */
-$messages['vi'] = array(
-	'latexdoc_no_text'         => 'Trang không chúa ký tự, không thể tạo ra DVI',
-	'latexdoc_cant_create_dir' => 'Không thể tạo ra thư mục tạm $1',
-	'latexdoc_cant_write'      => 'Không thể ghi ra tập tin $1',
-	'latexdoc_error'           => 'Lỗi LaTeX
-
-Lệnh: $1
-
-Xuất: $2
-
-$3',
-	'latexdoc_get_dvi'         => 'Truy xuất DVI',
-	'latexdoc_get_pdf'         => 'Truy xuất PDF',
-	'latexdoc-desc'            => 'Sửa đổi tập thể các tài liệu LaTeX',
+	'latexdoc_no_text' => 'పేజీలో పాఠ్యమేమీ లేదు, DVIని సృష్టించలేము',
+	'latexdoc_get_pdf' => 'PDFని పొందండి',
 );
 
 /** Volapük (Volapük)

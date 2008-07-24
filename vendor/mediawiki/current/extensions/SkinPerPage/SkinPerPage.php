@@ -1,19 +1,6 @@
 <?php
-if (!defined('MEDIAWIKI')) die();
 
-/**
- * @addtogroup Extensions
- */
-
-$wgExtensionCredits['parserhook'][] = array(
-	'name'           => 'Skin per page',
-	'version'        => '1.0',
-	'author'         => 'Tim Starling',
-	'url'            => 'http://www.mediawiki.org/wiki/Extension:SkinPerPage',
-	'descriptionmsg' => 'skinperpage-desc',
-);
-
-$wgExtensionMessagesFiles['SkinPerPage'] = dirname( __FILE__ ) . "/SkinPerPage.i18n.php";
+$oldCredits = $wgExtensionCredits; // save extension credits
 
 $wgExtensionFunctions[] = array( 'SkinPerPage', 'setup' );
 $wgHooks['OutputPageParserOutput'][] = 'SkinPerPage::outputHook';
@@ -28,7 +15,7 @@ class SkinPerPage {
 		$parser->mOutput->spp_skin = trim( $text );
 		return '';
 	}
-
+	
 	static function outputHook( $out, $parserOutput ) {
 		global $wgUser;
 		if ( isset( $parserOutput->spp_skin ) ) {
@@ -37,3 +24,6 @@ class SkinPerPage {
 		return true;
 	}
 }
+
+// Restore extension credits
+$wgExtensionCredits = $oldCredits; 

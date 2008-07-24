@@ -17,24 +17,12 @@ $mvgIP = $IP . '/extensions/MetavidWiki';
 //include the global functions & init the extension 
 include_once('MV_GlobalFunctions.php');
 
-
-//if the search portlet should autoComplete
-//(causes the inclution of jquery into every page.. can slow things down a bit)   
-$mvEnableAutoComplete=true;
-
-//if you want every page have the little powered by metavid software link 
-//(note this is done with javascript rewrite client side to avoid complicated skin 
-//(normally you could just add it to your site skin)  
-$mvEnableJSLinkBack=true;
-
-//if you want mvd links to be rewritten client side as inline movie clips and link to the stream page
-$mvEnableJSMVDrewrite=true;
-
 ##########################
 # semanticWiki integration options
 ##########################
 //if you want to include spoken by relation in search results:  
 $mvSpokenByInSearchResult = true;
+
 
 #########################
 # metavid paths 
@@ -62,8 +50,9 @@ $mvServeImageRedirect=false;
 //the time in seconds of between image frames generated from movie clips.
 //(set pretty high for the metavid context where we load the images via scripts 
 // (early on we did less frequent image grabs)
+// that have less frequent frames for the same person showing up more than once
 //normally you would want a lower value like 5 seconds or so  
-$mvImageGranularityRate = '600'; 
+$mvImageGranularityRate = '200';
 //the ffmpeg command to generate thumbnail (to disable generating images set to '')
 $mvShellOggFrameGrab = '';
  
@@ -86,16 +75,13 @@ $mvDefaultStreamViewLength = 60*20; //20 min
 //default aspect ratio (should be derived from media resolution once we integrate with oggHandler)
 $mvDefaultAspectRatio = .75;
 
-//limit for media search results:
-$mvMediaSearchResultsLimit = 100; 
-
 #define how offten (in seconds) clients do http pull requests
-#to get new info when watching live broadcasts
+# new info when watching live broadcasts
 $mvLiveUpdateInterval = 5;
 
 //should be the same resolution as webstream encode.
 $mvDefaultVideoPlaybackRes = '320x240';
-$mvDefaultSearchVideoPlaybackRes='320x240';
+$mvDefaultSearchVideoPlaybackRes='160x120';
 $mvDefaultVideoIconSize = '80x60';
 
 /*
@@ -153,9 +139,7 @@ $mvStreamTypePermission['external_file']=array();
 
 $wgGroupPermissions['user']['mv_delete_mvd'] = true;
 $wgGroupPermissions['sysop']['mv_edit_stream']=true;
-$wgGroupPermissions['bot']['mv_edit_stream']=true;
-$wgAvailableRights[] = 'mv_delete_mvd';
-$wgAvailableRights[] = 'mv_edit_stream';
+
 ###
 # If you already have custom namespaces on your site, insert
 # $mvNamespaceIndex = ???; in your config before including the settings

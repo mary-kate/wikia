@@ -28,7 +28,7 @@ if (!defined('MEDIAWIKI')) {
 }
 
 /**
- * @ingroup API
+ * @addtogroup API
  */
 class ApiRollback extends ApiBase {
 
@@ -40,7 +40,7 @@ class ApiRollback extends ApiBase {
 		global $wgUser;
 		$this->getMain()->requestWriteMode();
 		$params = $this->extractRequestParams();
-
+		
 		$titleObj = NULL;
 		if(!isset($params['title']))
 			$this->dieUsageMsg(array('missingparam', 'title'));
@@ -62,12 +62,15 @@ class ApiRollback extends ApiBase {
 		$articleObj = new Article($titleObj);
 		$summary = (isset($params['summary']) ? $params['summary'] : "");
 		$details = null;
+		$dbw = wfGetDb(DB_MASTER);
+		$dbw->begin();
 		$retval = $articleObj->doRollback($username, $summary, $params['token'], $params['markbot'], $details);
 
 		if(!empty($retval))
 			// We don't care about multiple errors, just report one of them
 			$this->dieUsageMsg(current($retval));
 
+		$dbw->commit();
 		$current = $target = $summary = NULL;
 		extract($details);
 
@@ -82,9 +85,9 @@ class ApiRollback extends ApiBase {
 
 		$this->getResult()->addValue(null, $this->getModuleName(), $info);
 	}
-
+	
 	public function mustBePosted() { return true; }
-
+	
 	public function getAllowedParams() {
 		return array (
 			'title' => null,
@@ -120,6 +123,6 @@ class ApiRollback extends ApiBase {
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiRollback.php 35098 2008-05-20 17:13:28Z ialex $';
+		return __CLASS__ . ': $Id: ApiRollback.php 30222 2008-01-28 19:05:26Z catrope $';
 	}
 }

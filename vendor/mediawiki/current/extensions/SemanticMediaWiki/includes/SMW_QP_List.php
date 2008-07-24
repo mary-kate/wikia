@@ -18,33 +18,23 @@ class SMWListResultPrinter extends SMWResultPrinter {
 
 	protected $mSep = '';
 	protected $mTemplate = '';
-	protected $mUserParam = '';
 
 	protected function readParameters($params,$outputmode) {
 		SMWResultPrinter::readParameters($params,$outputmode);
 
 		if (array_key_exists('sep', $params)) {
 			$this->mSep = str_replace('_',' ',$params['sep']);
-			if ($outputmode != SMW_OUTPUT_WIKI) {
+			if ($outputmode==SMW_OUTPUT_HTML) {
 				$this->mSep = htmlspecialchars($this->mSep);
 			}
 		}
 		if (array_key_exists('template', $params)) {
 			$this->mTemplate = trim($params['template']);
 		}
-		if (array_key_exists('userparam', $params)) {
-			$this->mUserParam = trim($params['userparam']);
-		}
 	}
 
 	protected function getResultText($res,$outputmode) {
-		global $smwgStoreActive, $wgParser;
-		$parsetitle = $wgParser->getTitle();
-		if ($parsetitle === NULL) { // try that in emergency, needed in 1.11 in Special:Ask
-			global $wgTitle;
-			$parsetitle = $wgTitle;
-		}
-
+		global $wgTitle,$smwgStoreActive;
 		// print header
 		$result = $this->mIntro;
 		if ( ('ul' == $this->mFormat) || ('ol' == $this->mFormat) ) {
@@ -68,6 +58,7 @@ class SMWListResultPrinter extends SMWResultPrinter {
 		}
 
 		if ($this->mTemplate != '') {
+			global $wgParser;
 			$parser_options = new ParserOptions();
 			$parser_options->setEditSection(false);  // embedded sections should not have edit links
 			$parser = clone $wgParser;
@@ -88,7 +79,7 @@ class SMWListResultPrinter extends SMWResultPrinter {
 
 			$first_col = true;
 			if ($usetemplate) { // build template code
-				$wikitext = ($this->mUserParam)?"|userparam=$this->mUserParam":'';
+				$wikitext = '';
 				$i = 1; // explicitly number parameters for more robust parsing (values may contain "=")
 				foreach ($row as $field) {
 					$wikitext .= '|' . $i++ . '=';
@@ -134,40 +125,25 @@ class SMWListResultPrinter extends SMWResultPrinter {
 		if ($usetemplate) {
 			$old_smwgStoreActive = $smwgStoreActive;
 			$smwgStoreActive = false; // no annotations stored, no factbox printed
-			if ($outputmode == SMW_OUTPUT_WIKI) {
-				if ( method_exists($parser, 'getPreprocessor') ) {
-					$frame = $parser->getPreprocessor()->newFrame();
-					$dom = $parser->preprocessToDom( $result );
-					$result = $frame->expand( $dom );
-				} else {
-					$result = $parser->preprocess($result, $parsetitle, $parser_options);
-				}
-			} else { // SMW_OUTPUT_HTML, SMW_OUTPUT_FILE
-				$parserOutput = $parser->parse($result, $parsetitle, $parser_options);
+			if ($outputmode === SMW_OUTPUT_HTML) {
+				$parserOutput = $parser->parse($result, $wgTitle, $parser_options);
 				$result = $parserOutput->getText();
+			} else {
+				$result = $parser->preprocess($result, $wgTitle, $parser_options);
 			}
 			$smwgStoreActive = $old_smwgStoreActive;
 		}
 
-		if ( $this->mInline && $res->hasFurtherResults() && ($this->mSearchlabel !== '') &&
-		     ( ('ol' != $this->mFormat) || ($this->mSearchlabel) ) ) {
-			$link = $res->getQueryLink();
-			if ($this->mSearchlabel) {
-				$link->setCaption($this->mSearchlabel);
+		if ( $this->mInline && $res->hasFurtherResults() ) {
+			$label = $this->mSearchlabel;
+			if ($label === NULL) { //apply defaults
+				if ('ol' == $this->mFormat) $label = '';
+				else $label = wfMsgForContent('smw_iq_moreresults');
 			}
-			// not needed for 'ul' (see below):
-// 			if ($this->mSep != '') {
-// 				$link->setParameter($this->mSep,'sep');
-// 			}
-
-			$link->setParameter('ul','format'); // always use ul, other formats hardly work as search page output
-			if ($this->mTemplate != '') {
-				$link->setParameter($this->mTemplate,'template');
-				if (array_key_exists('link', $this->m_params)) { // linking may interfere with templates
-					$link->setParameter($this->m_params['link'],'link');
-				}
+			if (!$first_row) $result .= ' '; // relevant for list, unproblematic for ul/ol
+			if ($label != '') {
+				$result .= $rowstart . $this->getFurtherResultsLink($outputmode,$res,$label) . $rowend;
 			}
-			$result .= $rowstart . $link->getText($outputmode,$this->mLinker) . $rowend;
 		}
 
 		// print footer

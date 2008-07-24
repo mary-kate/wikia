@@ -30,7 +30,7 @@ function do_stream_attr_check($old_stream) {
 		$mvStream->duration = ($old_stream->adj_end_time - $old_stream->adj_start_time);
 	}	
 	$mvStream->updateStreamDB();
-	print "$old_stream->name update: duration:" .seconds2ntp($mvStream->duration) . ' startDay:' . date('m-d-y',$mvStream->date_start_time)."\n";
+	print "\nran stream db update: " .$mvStream->duration . ' ' . $mvStream->date_start_time."\n";
 	//if($i==3)die;
 	//$i++;
 }
@@ -41,7 +41,7 @@ function do_stream_file_check(& $old_stream) {
 	));
 	$file_list = $mvStream->getFileList();
 
-	//if ($old_stream->trascoded != 'none') {
+	if ($old_stream->trascoded != 'none') {
 		//print "transcode is: " . $old_stream->trascoded;
 		/*if ($old_stream->trascoded == 'low')
 			$set = array (
@@ -56,43 +56,43 @@ function do_stream_file_check(& $old_stream) {
 				'mv_ogg_high_quality',
 				'mv_ogg_low_quality'
 		);*/
-	//find the files and check for them on the servers:
-	//@@todo have multiple file locations for same file? 
-	$set=array();
-	foreach($mvVideoArchivePaths as $path){
-		if(url_exists($path . $old_stream->name . '.ogg')){
-			$set['mv_ogg_low_quality']=$path . $old_stream->name . '.ogg';
-			//force cap1 path @@todo remove!: 
-			//$set['mv_ogg_low_quality']='http://128.114.20.64/media/' . $old_stream->name . '.ogg';
+		//find the files and check for them on the servers:
+		//@@todo have multiple file locations for same file? 
+		$set=array();
+		foreach($mvVideoArchivePaths as $path){
+			if(url_exists($path . $old_stream->name . '.ogg')){
+				$set['mv_ogg_low_quality']=$path . $old_stream->name . '.ogg';
+				//force cap1 path @@todo remove!: 
+				$set['mv_ogg_low_quality']='http://128.114.20.64/media/' . $old_stream->name . '.ogg';
+			}
+			if(url_exists($path . $old_stream->name . '.HQ.ogg')){
+				$set['mv_ogg_high_quality']=$path . $old_stream->name . '.HQ.ogg';
+				//force cap1 path @@todo remove!: 
+				$set['mv_ogg_high_quality']='http://128.114.20.64/media/' . $old_stream->name . '.HQ.ogg';
+			}
+		}		
+		if(count($set)==0){
+			//no files present (remove stream) 
+			print 'no files present remove from wiki)'."\n";
+			//make a valid mv title (with requted time: )
+			$mvTitle = new MV_Title( $old_stream->name); 
+			
+			$streamTitle = Title::newFromText( $old_stream->name, MV_NS_STREAM);
+			//print " new title: " . $streamTitle . "\n";		
+			$article = new MV_StreamPage($streamTitle, $mvTitle);
+			$article->doDelete('no files present for stream');		
 		}
-		if(url_exists($path . $old_stream->name . '.HQ.ogg')){
-			$set['mv_ogg_high_quality']=$path . $old_stream->name . '.HQ.ogg';
-			//force cap1 path @@todo remove!: 
-			//$set['mv_ogg_high_quality']='http://128.114.20.64/media/' . $old_stream->name . '.HQ.ogg';
+		//print "set: " . print_r($set);
+		//remove old file pointers: 
+		$dbw = wfGetDB(DB_WRITE);
+		$sql = "DELETE FROM `mv_stream_files` WHERE `stream_id`=".$mvStream->id . " AND " .
+				"(`file_desc_msg`='mv_ogg_high_quality' OR `file_desc_msg`='mv_ogg_low_quality')";
+		$dbw->query($sql);
+		//update files:
+		foreach ($set as $qf=>$path_url) {
+			do_insert_stream_file($mvStream, $path_url, $qf);
 		}
-	}		
-	if(count($set)==0){
-		//no files present (remove stream) 
-		print 'no files present should remove: '.$old_stream->name."\n";
-		//make a valid mv title (with requted time: )
-		/*$mvTitle = new MV_Title( $old_stream->name); 
-		
-		$streamTitle = Title::newFromText( $old_stream->name, MV_NS_STREAM);
-		//print " new title: " . $streamTitle . "\n";		
-		$article = new MV_StreamPage($streamTitle, $mvTitle);
-		$article->doDelete('no files present for stream');*/		
 	}
-	//print "set: " . print_r($set);
-	//remove old file pointers: 
-	$dbw = wfGetDB(DB_WRITE);
-	$sql = "DELETE FROM `mv_stream_files` WHERE `stream_id`=".$mvStream->id . " AND " .
-			"(`file_desc_msg`='mv_ogg_high_quality' OR `file_desc_msg`='mv_ogg_low_quality')";
-	$dbw->query($sql);
-	//update files:
-	foreach ($set as $qf=>$path_url) {
-		do_insert_stream_file($mvStream, $path_url, $qf);
-	}
-	//}
 	//check for archive.org stuff too..
 	/*if($old_stream->archive_org!=''){
 		$found=false;
@@ -111,7 +111,7 @@ function do_insert_stream_file($mvStream, $path, $quality_msg) {
 
 	//get file duration from nfo file (if avaliable ): 
 	$nfo_url = $path . '.nfo';
-	$nfo_txt = @file($nfo_url);	
+	$nfo_txt = file($nfo_url);	
 	if($nfo_txt){
 		if( isset($nfo_txt[0])){
 			list($na, $len) = explode('n:', $nfo_txt[0]);					
@@ -145,19 +145,12 @@ function do_add_stream(& $mvTitle, & $stream) {
 	$MV_SpecialAddStream->add_stream();
 }
 function do_stream_insert($mode, $stream_name = '') {
-	global $mvgIP, $MVStreams, $options, $args,$wgDBname;
+	global $mvgIP, $MVStreams, $options;
 	$dbr = wfGetDB(DB_SLAVE);
 	if ($mode == 'all'){
 		$sql = "SELECT * FROM `metavid`.`streams` WHERE `sync_status`='in_sync'";
 	}else if($mode=='files') {
 		$sql = "SELECT * FROM `metavid`.`streams` WHERE `trascoded` != 'none'";
-	}else if($mode=='all_in_wiki'){
-		$sql = "SELECT `metavid`.`streams`.* FROM `$wgDBname`.`mv_streams` LEFT JOIN `metavid`.`streams` ON (`$wgDBname`.`mv_streams`.`name` = `metavid`.`streams`.`name`) ";
-	}else if($mode=='all_sync_past_date'){	
-		print "doing all after: ".$args[$options['date']]. "\n";
-		list($month, $day, $year) = explode('/',$args[$options['date']]);		
-		$date_time = mktime(0,0,0,$month, $day, $year);		
-		$sql = "SELECT * FROM `metavid`.`streams` WHERE `sync_status`= 'in_sync' AND `adj_start_time` > $date_time";
 	}else{
 		$sql = "SELECT * FROM `metavid`.`streams` WHERE `name` LIKE '{$stream_name}'";
 	}	
@@ -171,7 +164,6 @@ function do_stream_insert($mode, $stream_name = '') {
 	print "working on " . count($streams) . ' streams'."\n";
 	foreach ($streams as $stream) {
 		print "on stream $stream->name \n";
-		$force = (isset($options['force']))?true:false;
 		//init the stream
 		$MVStreams[$stream->name] = new MV_Stream($stream);
 		//check if the stream has already been added to the wiki (if not add it)	
@@ -180,124 +172,31 @@ function do_stream_insert($mode, $stream_name = '') {
 			//print 'do stream desc'."\n";
 			do_add_stream($mvTitle, $stream);
 			echo "stream " . $mvTitle->getStreamName() . " added \n";
-		} else {							
+		} else {			
+				$force = (isset($options['force']))?true:false;
 				do_update_wiki_page($stream->name, mv_semantic_stream_desc($mvTitle, $stream), MV_NS_STREAM,$force);
 			//$updated = ' updated' echo "stream " . $mvTitle->getStreamName() . " already present $updated\n";
 		}
-		if($mode!='all_in_wiki'){
-			//add duration and start_time attr		
-			do_stream_attr_check($stream);
-		}
+		//add duration and start_time attr		
+		do_stream_attr_check($stream);
+
 		//do insert/copy all media images 
-		if(!isset($options['skipimage'])){
-			do_proccess_images($stream, $force);
-			print "done with images\n";
+		if(!isset($options['noimage'])){
+			do_proccess_images($stream);
+			print "done with images";
 		}
-		if(!isset($options['skipfiles'])){
-			//check for files (make sure they match with metavid db values
-			do_stream_file_check($stream);
-		}
+
+		//check for files (make sure they match with metavid db values
+		do_stream_file_check($stream);
+		
 		if(!isset($options['skiptext'])){
 			//proccess all stream text: 
-			do_proccess_text($stream, $force);
-		}
-		if(!isset($options['skipSpeechMeta'])){									
-			//do annoative track for continus speches 
-			do_annotate_speeches($stream, $force); 
+			do_proccess_text($stream);
 		}
 	}
 }
-function do_annotate_speeches($stream, $force){
-	print "do annotations for $stream->name \n";
-	$dbr =& wfGetDB(DB_SLAVE);
-	if($force){
-		global $botUserName;
-		//get wiki stream id:
-		$wikiStream = new MV_Stream(array('name'=>$stream->name)); 
-		//first remove all bot edited pages: 
-		$mvd_res = MV_Index::getMVDInRange($wikiStream->getStreamId(),null,null,'Anno_en');
-		while($row = $dbr->fetchObject($mvd_res)){
-			$title = Title::newFromText($row->wiki_title, MV_NS_MVD);
-			$current = Revision::newFromTitle( $title );
-			if($current->getUserText()==$botUserName){
-				$article = new Article($title);
-				$article->doDelete('mvbot removal');
-				print "removed $row->wiki_title \n";
-			}else{
-				print "skiped $roe->wiki_title (last edit by: ". $current->getUserText().")\n";
-			}
-		}
-	}	
-	//get all mvd's 	
-	$mvStream =MV_Stream::newStreamByName($stream->name);
-	if($mvStream->doesStreamExist()){
-		$dbr =& wfGetDB(DB_SLAVE);
-		//get all meta in range (up 10k) 
-		$mvd_res = MV_Index::getMVDInRange($mvStream->getStreamId(), null, null, 'Ht_en',false, 'Spoken_by', 'LIMIT 0, 10000');		
-		if(count($dbr->numRows($mvd_res))!=0){
-			$prev_person =''; 			
-			$prev_st=$prev_et=0;
-			while($mvd = $dbr->fetchObject($mvd_res)){				
-				if($mvd->Spoken_by){
-					if($prev_person==''){
-						$prev_person=$mvd->Spoken_by; //init case:
-						$prev_st = $mvd->start_time;
-						$prev_et = $mvd->end_time;						
-					}else{						
-						if($prev_person==$mvd->Spoken_by){
-							//continue
-							//print "acumulating for $mvd->Spoken_by \n";
-							$prev_et = $mvd->end_time;
-						}else{
-							//diffrent person: if more than 1 min long
-							if( $prev_et - $prev_st > 60){ 
-								$doSpeechUpdate=true;
-								print "insert annotation $prev_person: ".seconds2ntp($prev_st)." to ".seconds2ntp($prev_et)." \n";
-								//check for existing speech by in range if so skip (add subtract 1 to start/end (to not get matches that land on edges) (up to 10,000 meta per stream) 
-								$mvd_anno_res = MV_Index::getMVDInRange($mvStream->getStreamId(), $prev_st+1, $prev_et-1, 'Anno_en',false, 'Speech_by'); 
-								while($row = $dbr->fetchObject($mvd_anno_res)){
-									if($row->Speech_by){
-										print ".. range already has: $row->Speech_by skip\n";
-										$doSpeechUpdate=false;
-										break;
-									}
-								}
-								if($doSpeechUpdate){
-									$page_txt = 'Speech By: [[Speech by:='.str_replace('_', ' ', $prev_person).']]';
-									$annoTitle = Title::makeTitle(MV_NS_MVD, 'Anno_en:'.$mvStream->getStreamName().'/'.seconds2ntp($prev_st).'/'.seconds2ntp($prev_et)); 
-									do_update_wiki_page( $annoTitle, $page_txt);
-								}													 
-							}
-							$prev_person=$mvd->Spoken_by; //init case:
-							$prev_st = $mvd->start_time;
-						}
-					}
-				}
-			}
-			print "\n\ndone with annotation inserts got to ".seconds2ntp($prev_et). ' of ' .seconds2ntp($mvStream->getDuration()) . "\n";
-		}
-	}
-}
-function do_proccess_text($stream, $force){
+function do_proccess_text($stream){
 		$dbr = wfGetDB(DB_SLAVE);
-		if($force){
-			global $botUserName;
-			//get wiki stream id:
-			$wikiStream = new MV_Stream(array('name'=>$stream->name)); 
-			//first remove all bot edited pages: 
-			$mvd_res = MV_Index::getMVDInRange($wikiStream->getStreamId(),null,null,'Ht_en');
-			while($row = $dbr->fetchObject($mvd_res)){
-				$title = Title::newFromText($row->wiki_title, MV_NS_MVD);
-				$current = Revision::newFromTitle( $title );
-				if($current->getUserText()==$botUserName){
-					$article = new Article($title);
-					$article->doDelete('mvbot removal');
-					print "removed $row->wiki_title \n";
-				}else{
-					print "skiped $roe->wiki_title (last edit by: ". $current->getUserText().")\n";
-				}			
-			}
-		}				
 		/* for now use the stream search table (in the future should put in our orphaned person data)
 		 * should be able to do quick checks against the index. */
 		$sql = "SELECT (`time`+" . CC_OFFSET . ") as time, `value` " .
@@ -370,7 +269,7 @@ function do_proccess_text($stream, $force){
 /* 
  * for each image add it to the image directory
  */
-function do_proccess_images($stream, $force=false) {
+function do_proccess_images($stream) {
 	global $mvLocalImgLoc, $MVStreams, $wgDBname;
 	$dbr =& wfGetDB(DB_SLAVE);
 	$dbw =& wfGetDB(DB_MASTER);
@@ -383,33 +282,19 @@ function do_proccess_images($stream, $force=false) {
 	print "Found " . $img_count . " images for stream " . $stream->name . "\n";
 	//grab from metavid and copy to local directory structure: 
 	$i=$j= 0;	
-	$mv_stream_id = $MVStreams[$stream->name]->getStreamId();
-	//if force we can clear out existing images:
-	if($force){
-		print "force update flag (remove all existing images)\n";
-		$local_img_dir = MV_StreamImage::getLocalImageDir($mv_stream_id);
-		$res = $dbr->query("SELECT * FROM `$wgDBname`.`mv_stream_images` WHERE  `stream_id`={$mv_stream_id}");
-		while ($row = $dbr->fetchObject($res)) {
-			$local_img_file = $local_img_dir . '/' . $row->time . '*.jpg';
-			shell_exec('rm -f '. $local_img_file);
-		}
-		//remove db entries: 	
-		$dbw->query("DELETE FROM `$wgDBname`.`mv_stream_images` WHERE  `stream_id`={$mv_stream_id}");		
-	}
-	while ($row = $dbr->fetchObject($image_res)) {	
-		//if(isset($row->	
+	while ($row = $dbr->fetchObject($image_res)) {		
 		$relative_time = $row->time - $stream->adj_start_time;
 		//status updates: 
 		if ($i == 10) {			
-			print "On image $j of $img_count time: " . seconds2ntp($relative_time) . " $metavid_img_url\n";
+			print "On image $j of $img_count time: " . seconds2ntp($relative_time) . "\n";
 			$i = 0;
 		}
 		$j++;
 		$i++;
 		//get streamImage obj:
-	
-		$local_img_dir = MV_StreamImage::getLocalImageDir($mv_stream_id);
-		$metavid_img_url = 'http://metavid.ucsc.edu/image_media/' . $row->id . '.jpg';
+		$mv_stream_id = $MVStreams[$stream->name]->getStreamId();
+		$local_img_dir = MV_StreamImage :: getLocalImageDir($mv_stream_id);
+		$metavid_img_url = 'http://mvbox2.cse.ucsc.edu/image_media/' . $row->id . '.jpg';
 		
 		$local_img_file = $local_img_dir . '/' . $relative_time . '.jpg';
 		//check if the image already exist in the new table
@@ -419,10 +304,9 @@ function do_proccess_images($stream, $force=false) {
 		$img_check = $dbr->query($sql);
 		$doInsert = true;
 		if ($dbr->numRows($img_check) != 0) {
-			//make sure its there and matches what it should be: 
+			//make sure its there: 
 			if (is_file($local_img_file)) {
-				$row = $dbr->fetchObject($img_check);
-				//print "file $local_img_file skiped, stream_id:" . $mv_stream_id . " time: " . seconds2ntp($relative_time) . "\n";							
+				print "skiped stream_id:" . $mv_stream_id . " time: " . $relative_time . "\n";
 				continue;
 			} else {
 				//grab but don't insert: 
@@ -490,13 +374,14 @@ function mv_semantic_stream_desc(& $mvTitle, & $stream) {
 		require_once('scrape_and_insert.inc.php');
 		$aos = new MV_ArchiveOrgScrape();
 		$file_list = $aos->getFileList($stream->name);
-		$out .= '==More Media Sources=='."\n";	
-		//all streams have congretional cronical: 
-		$out .= '*[[CSPAN]]\'s Congressional Chronicle ' .
-		'[http://www.c-spanarchives.org/congress/?q=node/69850&date=' . $cspan_date . '&hors=' . $ch_type . ']'."\n";	
-		if($file_list){			
+		if($file_list){
+			$out .= '==More Media Sources=='."\n";	
 			$out .= '*[[Archive.org]] hosted original copy ' .
-			'[http://www.archive.org/details/mv_' . $stream->name . ']' . "\n";						
+			'[http://www.archive.org/details/mv_' . $stream->name . ']' . "\n";
+			
+			//all streams have congretional cronical: 
+			$out .= '*[[CSPAN]]\'s Congressional Chronicle ' .
+			'[http://www.c-spanarchives.org/congress/?q=node/69850&date=' . $cspan_date . '&hors=' . $ch_type . ']';		
 			//also output 'direct' semantic links to alternate file qualities:
 			$out.="\n===Full File Links===\n";	
 			$dbw = wfGetDB(DB_WRITE);		
@@ -551,10 +436,7 @@ function mv_semantic_stream_desc(& $mvTitle, & $stream) {
 	
 	return $out;
 }
-function do_bill_insert($bill_key){
-		print "not yet implemented\n";
-}
-function do_people_insert($doInterestLookup=false, $forcePerson='', $force=false) {
+function do_people_insert() {
 	global $valid_attributes, $states_ary;
 	$dbr = wfGetDB(DB_SLAVE);
 
@@ -562,11 +444,7 @@ function do_people_insert($doInterestLookup=false, $forcePerson='', $force=false
 	$mvScrape = new MV_BaseScraper();
 	
 	//do people query:
-	if($forcePerson!=''){
-		$res = $dbr->query("SELECT * FROM `metavid`.`people` WHERE `name_clean` LIKE '$forcePerson'");
-	}else{
-		$res = $dbr->query("SELECT * FROM `metavid`.`people`");
-	}
+	$res = $dbr->query("SELECT * FROM `metavid`.`people`");
 	if ($dbr->numRows($res) == 0)
 		die('could not find people: ' . "\n");
 	$person_ary = array ();
@@ -576,7 +454,6 @@ function do_people_insert($doInterestLookup=false, $forcePerson='', $force=false
 	foreach ($person_ary as $person) {		
 		$person_title = Title :: newFromUrl($person->name_clean);
 		//semantic data via template:
-		$mapk=null;
 		$page_body = '{{Congress Person|' . "\n";
 		foreach ($valid_attributes as $dbKey => $attr) {			
 			list ($name, $desc) = $attr;							
@@ -587,63 +464,44 @@ function do_people_insert($doInterestLookup=false, $forcePerson='', $force=false
 						$page_body .= "{$name}=".text_number($person->district).' District'."|\n";
 					}
 				}
-			}else if($dbKey=='total_received'){
-				if(!$mapk){
-					print 'no mapkey for total_received'."\n";
-				}else{
-					$raw_results = $mvScrape->doRequest('http://www.maplight.org/map/us/legislator/'.$mapk);
-					preg_match('/Contributions\sReceived\:\s\$([^<]*)/',$raw_results, $matches);
-					if(isset($matches[1])){
-						$page_body .="{$name}=\$".$matches[1]."|\n";		
+			}else if($dbKey=='maplight_id'){
+				//print 'do_maplight_id'."\n";
+				//try to grab the maplight id
+				$raw_results = $mvScrape->doRequest('http://maplight.org/map/us/legislator/search/'.$person->last.'+'.$person->first);
+				preg_match_all('/map\/us\/legislator\/([^"]*)">(.*)<\/a>.*<td>([^<]*)<.*<td>([^<]*)<.*<td>([^<]*)<.*<td>([^<]*)</U',$raw_results, $matches);
+				
+				//do point system for match
+				$point=array();
+				$title_lookup=array('Rep.'=>'House','Sen.'=>'Senate');	
+				if(isset($matches['2'])){			
+					foreach($matches['2'] as $k=>$name_html){
+						if(!isset($point[$k]))$point[$k]=0;
+						list($lname,$fname) = explode(',',trim(strip_tags($name_html)));
+						if(strtolower($person->first)==strtolower($fname))$point[$k]+=2;
+						if(strtolower($person->last)==strtolower($lname))$point[$k]+=2;
+						if($person->state==$matches['3'][$k])$point[$k]++;
+						if($person->district==$matches['4'][$k])$point[$k]++;
+						if($person->party==$matches['5'][$k])$point[$k]++;				
+						if($title_lookup[$person->title]==$matches['6'])$point[$k]++;						
 					}
-				}
-			}else if($dbKey=='contribution_date_range'){
-				if(!$mapk){
-					print 'out of order attr proccess missing mapk'."\n";
-				}else{
-					$raw_results = $mvScrape->doRequest('http://www.maplight.org/map/us/legislator/'.$mapk);
-					preg_match('/Showing\scontributions<\/dt><dd>([^<]*)</',$raw_results, $matches);
-					if(isset($matches[1])){
-						$page_body .="{$name}=".$matches[1]."|\n";		
-					}
-				}
-			}else if($dbKey=='maplight_id'){							
-				if(!$person->$dbKey){
-					//print 'do_maplight_id'."\n";
-					//try to grab the maplight id
-					$raw_results = $mvScrape->doRequest('http://maplight.org/map/us/legislator/search/'.$person->last.'+'.$person->first);
-					preg_match_all('/map\/us\/legislator\/([^"]*)">(.*)<\/a>.*<td>([^<]*)<.*<td>([^<]*)<.*<td>([^<]*)<.*<td>([^<]*)</U',$raw_results, $matches);
-					
-					//do point system for match
-					$point=array();
-					$title_lookup=array('Rep.'=>'House','Sen.'=>'Senate');	
-					if(isset($matches['2'][0])){			
-						foreach($matches['2'] as $k=>$name_html){
-							if(!isset($point[$k]))$point[$k]=0;						
-							list($lname,$fname) = explode(',',trim(strip_tags($name_html)));
-							if(strtolower($person->first)==strtolower($fname))$point[$k]+=2;
-							if(strtolower($person->last)==strtolower($lname))$point[$k]+=2;
-							if($person->state==$matches['3'][$k])$point[$k]++;
-							if($person->district==$matches['4'][$k])$point[$k]++;
-							if($person->party==$matches['5'][$k])$point[$k]++;		
-							if(isset($title_lookup[$person->title])){	
-								if($title_lookup[$person->title]==$matches['6'])$point[$k]++;
-							}						
-						}
-						$max=0;					
-						$mapk=null;				
-						//print_r($point);
-						foreach($point as $k=>$v){
-							if($v>$max){
-								$mapk=$matches[1][$k];
-								$max=$v;
-							}						
-						}											
-					}								
-				}else{					
-					$mapk = $person->$dbKey; 
-				}
-				$page_body .="{$name}=".$mapk."|\n";				
+					$max=0;					
+					$mapk=null;				
+					//print_r($point);
+					foreach($point as $k=>$v){
+						if($v>$max){
+							$mapk=$matches[1][$k];
+							$max=$v;
+						}						
+					}							
+					print "MapLightKey $mapk best match:".strtolower(trim(strip_tags($matches['2'][$mapk]))). " for $person->last  $person->first\n";
+					/*if(strtolower($person->last)=='yarmuth'){					
+						print_r($person);
+						for($i=0;$i<7;$i++){
+							print $matches[$i][$mapk]."\n";
+						}						
+					}*/
+					$page_body .="{$name}=".$mapk."|\n";					
+				}			
 			}else{			
 				if (trim($person->$dbKey) != '') {		
 					if ($dbKey == 'state')	$person->state = $states_ary[$person->state];				
@@ -651,25 +509,7 @@ function do_people_insert($doInterestLookup=false, $forcePerson='', $force=false
 				}
 			}
 		}
-		//if we have the maplight key add in all contributions and procces contributers 
-		if(!$mapk){
-			print 'missing mapkey'."\n";
-		}else{
-			$raw_results = $mvScrape->doRequest('http://www.maplight.org/map/us/legislator/'.$mapk);
-			preg_match_all('/\/map\/us\/interest\/([^"]*)">([^<]*)<.*\$([^\<]*)</U',$raw_results, $matches);		
-			if(isset($matches[1])){
-				foreach($matches[1] as $k=>$val){
-					$hr_inx = $k+1;
-					$page_body .="Funding Interest $hr_inx=".html_entity_decode($matches[2][$k])."|\n";	
-					$page_body .="Funding Amount $hr_inx=\$".$matches[3][$k]."|\n"; 			
-					if($doInterestLookup){			
-						//make sure the intrest has been proccessed:
-						do_proc_interest($matches[1][$k], html_entity_decode($matches[2][$k]));
-					}	
-					//do_proc_interest('G1100','Chambers of commerce');
-				}				
-			}
-		}
+			
 		//add in the full name attribute: 
 		$page_body .= "Full Name=" . $person->title . ' ' . $person->first .
 			' ' . $person->middle . ' ' . $person->last . "|  \n";			
@@ -683,11 +523,10 @@ function do_people_insert($doInterestLookup=false, $forcePerson='', $force=false
 		if (trim($full_name) == '')
 			$full_name = $person->name_clean;			
 		 
-		$page_body .= "\n" .'Person page For <b>' . $full_name . "</b><br />\n";
-			//	 			"Text Spoken By [[Special:MediaSearch/person/{$person->name_clean}|$full_name]] "; 
+		$page_body .= "\n" .'Basic Person page For <b>' . $full_name . "</b><br>\n".
+				 			"Text Spoken By [[Special:MediaSearch/person/{$person->name_clean}|$full_name]] "; 
 				;
-		do_update_wiki_page($person_title, $page_body, '',$force);		
-		//die('only run on first person'."\n");
+		do_update_wiki_page($person_title, $page_body);		
 	}
 	foreach ($person_ary as $person) {
 		//download/upload all the photos:
@@ -738,57 +577,6 @@ function do_people_insert($doInterestLookup=false, $forcePerson='', $force=false
 		}
 		//}
 	}
-}
-function do_proc_interest($intrestKey, $intrestName){
-	global $mvMaxContribPerInterest,$mvMaxForAgainstBills;
-	include_once('scrape_and_insert.inc.php');		
-	$mvScrape = new MV_BillScraper();
-	
-	
-	$raw_results = $mvScrape->doRequest('http://www.maplight.org/map/us/interest/'.$intrestKey.'/view/all');
-	$page_body ='{{Interest Group|'."\n";
-	$page_body.='MAPLight Interest ID='.$intrestKey."|\n";
-	//get all people contributions: 
-	preg_match_all('/\/map\/us\/legislator\/([^"]*)">.*\$([^<]*)</U',$raw_results, $matches);
-	if(isset($matches[2])){
-		$i=0;
-		foreach($matches[1] as $i=>$person_id){
-			$hr_inx = $i+1;
-			//we have to lookup the name: 
-			$personName = $mvScrape->get_wiki_name_from_maplightid($person_id);
-			if($personName){
-				$page_body.="Funded Name $hr_inx=".$personName."|\n";
-				$page_body.="Funded Amount $hr_inx=".str_replace(',','',$matches[2][$i])."|\n";
-			}
-			if($hr_inx==$mvMaxContribPerInterest)break;
-			$i++;
-		}
-	}	
-	$raw_results =  $mvScrape->doRequest('http://maplight.org/map/us/interest/'.$intrestKey.'/bills'); 
-	//get all bills supported or opposed 
-	preg_match_all('/\/map\/us\/bill\/([^"]*)".*\/map\/us\/legislator.*<td>([^<]*)</U',$raw_results, $matches);	
-	$sinx =$oinx = 1;
-	if(isset($matches[1][0])){
-		$support_count=$oppse_count=0;
-		foreach($matches[1] as $i=>$bill_id){			
-			//skip if we are maxed out
-			if($support_count==$mvMaxForAgainstBills)continue;
-			if($oppse_count==$mvMaxForAgainstBills)continue;	
-			$hr_inx = $i+1;		
-			$bill_name = $mvScrape->get_bill_name_from_mapLight_id($bill_id);
-			if($matches[2][$i]=='Support'){
-				$page_body.="Supported Bill $sinx=".str_replace('_',' ',$bill_name)."|\n";
-				$sinx++;
-			}else if($matches[2][$i]=='Oppose'){
-				$page_body.="Opposed Bill $oinx=".str_replace('_',' ',$bill_name)."|\n";
-				$oinx++;
-			}												
-		}
-	}
-	$page_body.='}}';	
-	print "Interest Page: $intrestName\n";	
-	$wTitle =Title::makeTitle(NS_MAIN,$intrestName);
-	do_update_wiki_page( $wTitle, $page_body);			
 }
 function do_rm_congress_persons(){
 	$dbr =& wfGetDB(DB_SLAVE);		
@@ -920,22 +708,7 @@ $valid_attributes = array (
 		'District',
 		'The district # page ie: 3rd District',
 		'page'
-	),	
-	'url'=>array(
-		'Home Page',
-		'The representatives home page',
-		'URL'
-	),
-	'total_received'=>array(
-		'Total Received',
-		'The Total Contributions Received',
-		'number'
-	),
-	'contribution_date_range'=>array(
-		'Contributions Date Range',
-		'The date range of contributions',
-		'string'
-	)
+	)	
 );
 //state look up:
 $states_ary = array (

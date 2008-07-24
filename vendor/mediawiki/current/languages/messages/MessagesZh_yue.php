@@ -1,10 +1,10 @@
 <?php
-/**
- * Cantonese (粵語/廣東話)
+/** Yue (粵語)
  *
- * @ingroup Language
- * @file
+ * @addtogroup Language
+ *
  */
 
 # Inherit everything for now
 $fallback = 'yue';
+

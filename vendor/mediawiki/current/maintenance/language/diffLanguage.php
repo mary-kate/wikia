@@ -35,8 +35,7 @@
  * percentage of messages correctly localised and the number of messages to be
  * translated.
  *
- * @file
- * @ingroup MaintenanceLanguage
+ * @addtogroup Maintenance
  */
 
 /** This script run from the commandline */

@@ -1,11 +1,7 @@
 <?php
-/**
- * Quickie hack; patch-ss_images.sql uses variables which don't
- * replicate properly.
- *
- * @file
- * @ingroup Maintenance
- */
+
+// Quickie hack; patch-ss_images.sql uses variables which don't
+// replicate properly.
 
 require_once( "commandLine.inc" );
 

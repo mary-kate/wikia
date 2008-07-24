@@ -12,9 +12,9 @@ $messages = array();
  * @author Travis Derouin
  */
 $messages['en'] = array(
-	'block_title_error_page_title' => 'Blocked title',
-	'block_title_error-desc'       => 'Provides a basic way of preventing pages with certain titles from being saved or created',
-	'block_title_error'            => 'Sorry, the title of this page is not allowed to be saved.',
+	'block_title_error_page_title' => 'Blocked Title',
+	'block_title_error-desc' => 'Provides a basic way of preventing pages with certain titles from being saved or created',
+	'block_title_error' => 'Sorry, the title of this page is not allowed to be saved.',
 );
 
 /** Arabic (العربية)
@@ -111,7 +111,6 @@ $messages['de'] = array(
  */
 $messages['dsb'] = array(
 	'block_title_error_page_title' => 'Titel blokěrowany',
-	'block_title_error-desc'       => 'Stajijo jadnoru móžnosć k dispoziciji, kótaraž składowanjeju abo napóranjeju wěstych titelow zajźujo',
 	'block_title_error'            => 'Wódaj, titel toś teje strony njesmějo se składowaś.',
 );
 
@@ -128,8 +127,6 @@ $messages['el'] = array(
  */
 $messages['eo'] = array(
 	'block_title_error_page_title' => 'Forbarita titolo',
-	'block_title_error-desc'       => 'Provizas bazan ilon por malebligi paĝojn kun certaj titoloj esti konservita aŭ kreita.',
-	'block_title_error'            => 'Bedaŭrinde, la titolo de ĉi tiu paĝo ne estas permesita esti konservata.',
 );
 
 /** Finnish (Suomi)
@@ -144,11 +141,10 @@ $messages['fi'] = array(
 
 /** French (Français)
  * @author Grondin
- * @author Louperivois
  */
 $messages['fr'] = array(
 	'block_title_error_page_title' => 'Titre invalide',
-	'block_title_error-desc'       => 'Fournit une méthode simple pour éviter que des pages avec un certain titre puissent être sauvegardées ou créées',
+	'block_title_error-desc'       => 'Fournit une méthode simple pour éviter que des pages avec un certain titre puissent être sauvegardées ou créées.',
 	'block_title_error'            => 'Désolé, le titre de cet article n’est pas autorisé à être sauvegardé.',
 );
 
@@ -162,39 +158,11 @@ $messages['frp'] = array(
 
 /** Galician (Galego)
  * @author Alma
- * @author Toliño
  * @author Xosé
  */
 $messages['gl'] = array(
 	'block_title_error_page_title' => 'Título Bloqueado',
-	'block_title_error-desc'       => 'Proporciona un camiño básico para previr que páxinas con certos títulos sexan gardadas ou creadas',
 	'block_title_error'            => 'Sentímolo, non se permite gardar o título desta páxina.',
-);
-
-/** Manx (Gaelg)
- * @author MacTire02
- */
-$messages['gv'] = array(
-	'block_title_error_page_title' => 'Ennym fo ghlass',
-);
-
-/** Hebrew (עברית)
- * @author StuB
- * @author Rotemliss
- */
-$messages['he'] = array(
-	'block_title_error_page_title' => 'כותרת חסומה',
-	'block_title_error-desc'       => 'אפשרות בסיסית למניעת שמירה או יצירה של דפים עם כותרות מסוימות',
-	'block_title_error'            => 'מצטערים, הכותרת של דף זה אינה חוקית.',
-);
-
-/** Hindi (हिन्दी)
- * @author Kaustubh
- */
-$messages['hi'] = array(
-	'block_title_error_page_title' => 'ब्लॉक किया हुआ शीर्षक',
-	'block_title_error-desc'       => 'विशिष्ट शीर्षकके पन्ने बनानेसे रोकनेका आसान तरीका',
-	'block_title_error'            => 'माफ किजीये, इस शीर्षक का पन्ना संजोनेसे मनाई हैं',
 );
 
 /** Croatian (Hrvatski)
@@ -216,11 +184,10 @@ $messages['hsb'] = array(
 );
 
 /** Hungarian (Magyar)
- * @author Dani
+ * @author Bdanee
  */
 $messages['hu'] = array(
 	'block_title_error_page_title' => 'Blokkolt cím',
-	'block_title_error-desc'       => 'Lehetővé teszi, hogy adott címmel rendelkező lapokat ne lehessen elmenteni vagy létrehozni',
 	'block_title_error'            => 'Sajnáljuk, a megadott címmel nem lehet elmenteni az oldalt.',
 );
 
@@ -237,18 +204,15 @@ $messages['hy'] = array(
  */
 $messages['is'] = array(
 	'block_title_error_page_title' => 'Bannaður Titill',
-	'block_title_error-desc'       => 'Gerir það kleift á einfaldan hátt að banna að síður með ákveðna titila séu vistaðar eða búnar til',
 	'block_title_error'            => 'Því miður, ekki er heimilt að vista titil þessara síðu.',
 );
 
 /** Italian (Italiano)
  * @author BrokenArrow
- * @author Melos
  * @author Gianfranco
  */
 $messages['it'] = array(
 	'block_title_error_page_title' => 'Titolo bloccato',
-	'block_title_error-desc'       => 'Fornisce un semplice modo per impedire che pagine che contengono determinati titoli vengano salvate o create',
 	'block_title_error'            => 'Siamo spiacenti, non è consentito salvare una pagina con questo titolo.',
 );
 
@@ -261,22 +225,43 @@ $messages['ja'] = array(
 	'block_title_error'            => '申し訳ありませんが、この項目名でページを保存することは許可できません。',
 );
 
-/** Javanese (Basa Jawa)
- * @author Meursault2004
+/**
+ * @author AlefZet
  */
-$messages['jv'] = array(
-	'block_title_error_page_title' => 'Irah-irahan (judhul) Diblokir',
-	'block_title_error-desc'       => 'Mènèhi cara prasaja kanggo menggak kaca-kaca mawa irah-irahan (judhul) tartamtu supaya aja disimpen utawa digawé',
-	'block_title_error'            => 'Nuwun sèwu, irah-irahan (judhul) kaca iki ora pareng disimpen.',
+$messages['kk-arab'] = array(
+	'titleblacklist'                  => '# بۇل اتاۋلاردىڭ قارا ٴتىزىمى. جۇيەلى ايتىلىمدارعا (regex) سايكەس مىنداعى اتاۋلار جاراتىلمايدى.
+ماندەمەلەر ٴۇشىن «#» نىشانىن قولدانىڭىز.',
+	'titlewhitelist'                  => '# بۇل اتاۋلاردىڭ اق ٴتىزىمى. ماندەمەلەر ٴۇشىن «#» نىشانىن قولدانىڭىز',
+	'titleblacklist-forbidden-edit'   => '«$2» دەگەن اتاۋ جاراتۋى قۇلىپتالعان.  بۇل قارا ٴتىزىمنىڭ جازباسىنا سايكەس: <code>$1</code>',
+	'titleblacklist-forbidden-move'   => '«$2» دەگەن «$3» دەگەنگە جىلجىتىلمايدى, سەبەبى «$3» دەگەن اتاۋ جاراتۋى قۇلىپتالعان. بۇل قارا ٴتىزىمنىڭ جازباسىنا سايكەس: <code>$1</code>',
+	'titleblacklist-forbidden-upload' => '«$2» دەگەن فايل اتى جاراتۋى قۇلىپتالعان.  بۇل قارا ٴتىزىمنىڭ جازباسىنا سايكەس: <code>$1</code>',
+	'titleblacklist-invalid'          => 'اتاۋلاردىڭ قارا تىزىمىندەگى كەلەسى {{PLURAL:$1|جول|جولدار}} {{PLURAL:$1||}} جارامسىز; ساقتاۋ الدىندا {{PLURAL:$1|بۇنى|بۇلاردى}} دۇرىستاپ شىعىڭىز:',
 );
 
-/** Khmer (ភាសាខ្មែរ)
- * @author Chhorran
- * @author គីមស៊្រុន
+/** Kazakh (Қазақша)
+ * @author AlefZet
  */
-$messages['km'] = array(
-	'block_title_error_page_title' => 'ចំណងជើង​ត្រូវបាន​រាំងខ្ទប់',
-	'block_title_error'            => 'សូមអភ័យទោស! ចំនងជើង​ទំព័រនេះ​មិនត្រូវ​បាន​អនុញ្ញាតអោយរក្សាទុកទេ។',
+$messages['kk-cyrl'] = array(
+	'titleblacklist'                  => '# Бұл атаулардың қара тізімі. Жүйелі айтылымдарға (regex) сәйкес мындағы атаулар жаратылмайды.
+Мәндемелер үшін «#» нышанын қолданыңыз.',
+	'titlewhitelist'                  => '# Бұл атаулардың ақ тізімі. Мәндемелер үшін «#» нышанын қолданыңыз',
+	'titleblacklist-forbidden-edit'   => '«$2» деген атау жаратуы құлыпталған.  Бұл қара тізімнің жазбасына сәйкес: <code>$1</code>',
+	'titleblacklist-forbidden-move'   => '«$2» деген «$3» дегенге жылжытылмайды, себебі «$3» деген атау жаратуы құлыпталған. Бұл қара тізімнің жазбасына сәйкес: <code>$1</code>',
+	'titleblacklist-forbidden-upload' => '«$2» деген файл аты жаратуы құлыпталған.  Бұл қара тізімнің жазбасына сәйкес: <code>$1</code>',
+	'titleblacklist-invalid'          => 'Атаулардың қара тізіміндегі келесі {{PLURAL:$1|жол|жолдар}} {{PLURAL:$1||}} жарамсыз; сақтау алдында {{PLURAL:$1|бұны|бұларды}} дұрыстап шығыңыз:',
+);
+
+/**
+ * @author AlefZet
+ */
+$messages['kk-latn'] = array(
+	'titleblacklist'                  => '# Bul atawlardıñ qara tizimi. Jüýeli aýtılımdarğa (regex) säýkes mındağı atawlar jaratılmaýdı.
+Mändemeler üşin «#» nışanın qoldanıñız.',
+	'titlewhitelist'                  => '# Bul atawlardıñ aq tizimi. Mändemeler üşin «#» nışanın qoldanıñız',
+	'titleblacklist-forbidden-edit'   => '«$2» degen ataw jaratwı qulıptalğan.  Bul qara tizimniñ jazbasına säýkes: <code>$1</code>',
+	'titleblacklist-forbidden-move'   => '«$2» degen «$3» degenge jıljıtılmaýdı, sebebi «$3» degen ataw jaratwı qulıptalğan. Bul qara tizimniñ jazbasına säýkes: <code>$1</code>',
+	'titleblacklist-forbidden-upload' => '«$2» degen faýl atı jaratwı qulıptalğan.  Bul qara tizimniñ jazbasına säýkes: <code>$1</code>',
+	'titleblacklist-invalid'          => 'Atawlardıñ qara tizimindegi kelesi {{PLURAL:$1|jol|joldar}} {{PLURAL:$1||}} jaramsız; saqtaw aldında {{PLURAL:$1|bunı|bulardı}} durıstap şığıñız:',
 );
 
 /** Latin (Latina)
@@ -292,35 +277,7 @@ $messages['la'] = array(
  */
 $messages['lb'] = array(
 	'block_title_error_page_title' => 'Gespaarte Säitenumm',
-	'block_title_error-desc'       => 'Eng einfach Method fir ze verhenneren, datt Säite matt verschidenen Titele gemaach kënne ginn',
 	'block_title_error'            => 'Pardon, eng Säit mat dësem Numm däerf net gespäichert ginn.',
-);
-
-/** Malayalam (മലയാളം)
- * @author Shijualex
- */
-$messages['ml'] = array(
-	'block_title_error_page_title' => 'നിരോധിക്കപ്പെട്ട തലക്കെട്ട്',
-	'block_title_error-desc'       => 'ചില പ്രത്യേക തലക്കെട്ടുള്ള ലേഖനങ്ങള്‍ സൃഷ്ടിക്കുന്നതോ സേവ് ചെയ്യുന്നതോ തടയാന്‍ സഹായിക്കുന്നു',
-	'block_title_error'            => 'ഈ താളിന്റെ തലക്കെട്ടു അനുവദനീയമല്ല',
-);
-
-/** Marathi (मराठी)
- * @author Kaustubh
- */
-$messages['mr'] = array(
-	'block_title_error_page_title' => 'अडविलेले शीर्षक',
-	'block_title_error-desc'       => 'विशिष्ट शीर्षकांची पाने तयार करण्यापासून रोखण्यासाठी सोपा मार्ग देते',
-	'block_title_error'            => 'माफ करा, या पानाचे शीर्षक जतन करायला परवानगी नाही.',
-);
-
-/** Low German (Plattdüütsch)
- * @author Slomox
- */
-$messages['nds'] = array(
-	'block_title_error_page_title' => 'Sperrt Siedennaam',
-	'block_title_error-desc'       => 'Gifft en eenfache Mööglichkeit, dat Spiekern un nee Opstellen vun Sieden mit bestimmte Naams to verhinnern.',
-	'block_title_error'            => 'Deit uns leed, en Sied mit dissen Naam dröff nich spiekert warrn.',
 );
 
 /** Dutch (Nederlands)
@@ -332,12 +289,12 @@ $messages['nl'] = array(
 	'block_title_error'            => 'Sorry, het is niet toegestaan een pagina met deze naam op te slaan.',
 );
 
-/** Norwegian (bokmål)‬ (‪Norsk (bokmål)‬)
+/** Norwegian (‪Norsk (bokmål)‬)
  * @author Jon Harald Søby
  */
 $messages['no'] = array(
 	'block_title_error_page_title' => 'Blokkert tittel',
-	'block_title_error-desc'       => 'Gir en enkel måte å forhindre lagring eller oppretting av sider med visse titler',
+	'block_title_error-desc'       => 'Tilbyr en enkel måte å forhindre sider med visse titler å lagres eller opprettes',
 	'block_title_error'            => 'Beklager, det er ikke lov å lagre en side med denne tittelen.',
 );
 
@@ -346,18 +303,16 @@ $messages['no'] = array(
  */
 $messages['oc'] = array(
 	'block_title_error_page_title' => 'Títol invalid',
-	'block_title_error-desc'       => 'Provesís un metòde simple per evitar que de paginas amb un cèrt títol pòscan èsser salvadas o creadas.',
-	'block_title_error'            => "O planhèm, lo títol d'aqueste article es pas autorizat a èsser salvat.",
+	'block_title_error-desc'       => 'Provesís un metòde simple per evitar que de paginas amb un cèrt títol pòscan èsser salvagardadas o creadas.',
+	'block_title_error'            => "O planhèm, lo títol d'aqueste article es pas autorizat a èsser salvagardat.",
 );
 
 /** Polish (Polski)
  * @author Sp5uhe
- * @author Dodek
  * @author Derbeth
  */
 $messages['pl'] = array(
 	'block_title_error_page_title' => 'Zablokowany tytuł',
-	'block_title_error-desc'       => 'Zapewnia podstawowy sposób zapobiegania przed tworzeniem lub zapisywaniem stron o określonych tytułach',
 	'block_title_error'            => 'Przepraszamy, zapisanie artykułu o tym tytule jest niedozwolone.',
 );
 
@@ -386,25 +341,16 @@ $messages['pt'] = array(
 	'block_title_error'            => 'Desculpe-nos, não é permitido salvar dados neste título de página.',
 );
 
-/** Quechua (Runa Simi)
- * @author AlimanRuna
- */
-$messages['qu'] = array(
-	'block_title_error_page_title' => "Hark'asqa p'anqa suti",
-	'block_title_error-desc'       => "Kaypiqa rikunki ima hinam huk p'anqa sutikuna ama waqaychasqachu ama kamarisqachu kanqa",
-	'block_title_error'            => "Achachaw, manam saqillasunkichu kay p'anqa sutita waqaychayta.",
-);
-
 /** Romanian (Română)
  * @author KlaudiuMihaila
  */
 $messages['ro'] = array(
 	'block_title_error_page_title' => 'Titlu blocat',
-	'block_title_error'            => 'Ne pare rău, nu este permisă salvarea titlului acestui articol.',
+	'block_title_error'            => 'Ne pare rău, titlul acestui articol nu poate fi salvat.',
 );
 
 /** Russian (Русский)
- * @author Александр Сигачёв
+ * @author .:Ajvol:.
  */
 $messages['ru'] = array(
 	'block_title_error_page_title' => 'Запрещённое название',
@@ -429,7 +375,7 @@ $messages['sk'] = array(
 	'block_title_error'            => 'Prepáčte, stránky s týmto názvom nie je povolené ukladať.',
 );
 
-/** Serbian Cyrillic ekavian (ћирилица)
+/** ћирилица (ћирилица)
  * @author Sasa Stefanovic
  */
 $messages['sr-ec'] = array(
@@ -446,15 +392,6 @@ $messages['stq'] = array(
 	'block_title_error'            => 'Äntscheeldigenge, man ne Siede mäd dissen Tittel duur nit spiekerd wäide.',
 );
 
-/** Sundanese (Basa Sunda)
- * @author Kandar
- */
-$messages['su'] = array(
-	'block_title_error_page_title' => 'Judul nu dipeungpeuk',
-	'block_title_error-desc'       => 'Nyadiakeun cara dasar pikeun nyegah dijieunna kaca dina judul-judul anu dicaram',
-	'block_title_error'            => 'Punten, judul ieu kaca teu bisa dipaké.',
-);
-
 /** Swedish (Svenska)
  * @author Lejonel
  * @author Sannab
@@ -467,40 +404,18 @@ $messages['sv'] = array(
 
 /** Telugu (తెలుగు)
  * @author Veeven
- * @author వైజాసత్య
  */
 $messages['te'] = array(
 	'block_title_error_page_title' => 'నిషేధించిన శీర్షిక',
-	'block_title_error-desc'       => 'కొన్ని నిర్ధిష్టమైన పేర్లతో వ్యాసాలను సృష్టించకుండా లేదా భద్రపరచకుండా నిరోధించే ప్రాథమిక సామర్ధ్యాన్ని సమకూరుస్తుంది',
 	'block_title_error'            => 'క్షమించండి, ఈ పేజీ శీర్షికని భద్రపరచడానికి అనుమతించము.',
 );
 
-/** Tajik (Cyrillic) (Тоҷикӣ/tojikī (Cyrillic))
+/** Tajik (Тоҷикӣ)
  * @author Farrukh
- * @author Ibrahim
  */
-$messages['tg-cyrl'] = array(
+$messages['tg'] = array(
 	'block_title_error_page_title' => 'Сарлавҳаҳои басташуда',
-	'block_title_error-desc'       => 'Рохҳои асосиро барои ҷилавгирӣ аз захира ё эчод кардани саҳифаҳое бо баъзе унвонҳоро пешниҳод мекунад',
 	'block_title_error'            => 'Бубахшед, захира намудани саҳифае, ки чунин сарлавҳа дорад манъ аст.',
-);
-
-/** Ukrainian (Українська)
- * @author Ahonc
- */
-$messages['uk'] = array(
-	'block_title_error_page_title' => 'Заборонена назва',
-	'block_title_error-desc'       => 'Надає бузову можливість заборони зберігання або створення сторінок із зазначеними заголовками',
-	'block_title_error'            => 'Вибачте, сторінка з подібною назвою не може бути збережена.',
-);
-
-/** Vèneto (Vèneto)
- * @author Candalua
- */
-$messages['vec'] = array(
-	'block_title_error_page_title' => 'Titolo blocà',
-	'block_title_error-desc'       => 'Fornisse na maniera senpliçe par inpedir el salvatagio o la creassion de pagine con çerti titoli',
-	'block_title_error'            => 'Ne despiase, ma no xe permesso de salvar na pagina co sto titolo.',
 );
 
 /** Vietnamese (Tiếng Việt)
@@ -508,7 +423,6 @@ $messages['vec'] = array(
  */
 $messages['vi'] = array(
 	'block_title_error_page_title' => 'Tên trang bị khóa',
-	'block_title_error-desc'       => 'Cung cấp cách cơ bản để ngăn chặn không cho lưu hoặc tạo ra những trang với tựa đề nhất định',
 	'block_title_error'            => 'Xin lỗi, không được phép lưu tên trang này.',
 );
 
@@ -517,7 +431,6 @@ $messages['vi'] = array(
  */
 $messages['yue'] = array(
 	'block_title_error_page_title' => '已經封鎖嘅標題',
-	'block_title_error-desc'       => '提供一個基本嘅方式去防止一啲標題儲存或建立',
 	'block_title_error'            => '對唔住，呢篇文章嘅標題唔容許保存。',
 );
 
@@ -526,7 +439,6 @@ $messages['yue'] = array(
  */
 $messages['zh-hans'] = array(
 	'block_title_error_page_title' => '已封锁的标题',
-	'block_title_error-desc'       => '对重要的标题提供无法随意建立或保存的方法',
 	'block_title_error'            => '抱歉，这篇文章的标题不允许保存。',
 );
 
@@ -535,7 +447,6 @@ $messages['zh-hans'] = array(
  */
 $messages['zh-hant'] = array(
 	'block_title_error_page_title' => '已封鎖的標題',
-	'block_title_error-desc'       => '針對重要的標題提供無法隨意建立或諸存的方法',
 	'block_title_error'            => '抱歉，這篇文章的標題不允許保存。',
 );
 

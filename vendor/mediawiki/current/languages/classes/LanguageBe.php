@@ -4,7 +4,7 @@
   * This is still the version from Be-x-old, only duplicated for consistency of
   * plural and grammar functions. If there are errors please send a patch.
   *
-  * @ingroup Language
+  * @addtogroup Language
   *
   * @author Ævar Arnfjörð Bjarmason <avarab@gmail.com>
   * @bug 1638, 2135
@@ -88,4 +88,7 @@ class LanguageBe extends Language {
 
 		return $word; # this will return the original value for 'назоўны' (nominative) and all undefined case values
 	}
+
 }
+
+

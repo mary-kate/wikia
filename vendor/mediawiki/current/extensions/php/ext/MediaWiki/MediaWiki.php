@@ -1,20 +1,14 @@
 <?
-
-if ( php_sapi_name() != 'cli' ) {
-	echo "This script must be run from the command line\n";
-	exit( 1 );
-}
-
 if(!extension_loaded('MediaWiki')) {
 	dl('MediaWiki.' . PHP_SHLIB_SUFFIX);
 }
 $module = 'MediaWiki';
 $functions = get_extension_funcs($module);
-echo "Functions available in the test extension:<br />\n";
+echo "Functions available in the test extension:<br>\n";
 foreach($functions as $func) {
-    echo $func."<br />\n";
+    echo $func."<br>\n";
 }
-echo "<br />\n";
+echo "<br>\n";
 $function = 'confirm_MediaWiki_compiled';
 #if (extension_loaded($module)) {
 #	$str = $function($module);

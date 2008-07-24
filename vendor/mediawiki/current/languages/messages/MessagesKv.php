@@ -1,8 +1,8 @@
 <?php
 /** Komi (Коми)
  *
- * @ingroup Language
- * @file
+ * @addtogroup Language
+ *
  */
 
 $fallback = 'ru';

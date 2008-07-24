@@ -2,9 +2,7 @@
 /**
  * This script is used to clear the interwiki links for ALL languages in
  * memcached.
- *
- * @file
- * @ingroup Maintenance
+ * @addtogroup Maintenance
  */
 
 /** */

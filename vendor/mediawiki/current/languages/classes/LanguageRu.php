@@ -1,11 +1,12 @@
 <?php
-
 /** Russian (русский язык)
   *
   * You can contact Alexander Sigachov (alexander.sigachov at Googgle Mail)
   *
-  * @ingroup Language
+  * @addtogroup Language
   */
+
+/* Please, see Language.php for general function comments */
 class LanguageRu extends Language {
 	# Convert from the nominative form of a noun to some other case
 	# Invoked with {{grammar:case|word}}
@@ -103,3 +104,5 @@ class LanguageRu extends Language {
 		}
 	}
 }
+
+

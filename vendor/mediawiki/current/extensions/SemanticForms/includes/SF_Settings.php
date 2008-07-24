@@ -1,9 +1,4 @@
 <?php
-/**
- * Protect against register_globals vulnerabilities.
- * This line must be present before any global variable is referenced.
- */
-if (!defined('MEDIAWIKI')) die();
 
 ###
 # This is the path to your installation of Semantic Forms as
@@ -49,29 +44,22 @@ if (!isset($sfgNamespaceIndex)) {
 $sfgMaxAutocompleteValues = 1000;
 
 ###
-# Global variables for handling the two edit tabs (for traditional editing
-# and for editing with a form):
-# $sfgRenameEditTabs renames the edit-with-form tab to just "Edit", and
-#   the traditional-editing tab, if it is visible, to "Edit source", in
-#   whatever language is being used.
-# The wgGroupPermissions 'viewedittab' setting dictates which types of
-# visitors will see the "Edit" tab, for pages that are editable by form -
-# by default all will see it.
+## Global variables for handling the two edit tabs (for traditional editing
+## and for editing with a form):
+## $sfgRenameEditTabs renames the edit-with-form tab to just "Edit", and
+##   the traditional-editing tab, if it is visible, to "Edit source", in
+##   whatever language is being used.
+## The wgGroupPermissions 'viewedittab' setting dictates which types of
+## visitors will see the "Edit" tab, for pages that are editable by form -
+## by default all will see it.
+##
 ###
 $sfgRenameEditTabs = false;
 $wgGroupPermissions['*'    ]['viewedittab']   = true;
-$wgAvailableRights[] = 'viewedittab';
 
 ###
-# List separator character
+## List separator character
 ###
 $sfgListSeparator = ",";
-
-###
-# The base URL for all YUI Javascript files - to store the YUI library
-# locally, download it and change this to the URL of the local
-# installation's 'build' directory.
-###
-$sfgYUIBase = "http://yui.yahooapis.com/2.5.1/build/";
 
 ?>

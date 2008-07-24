@@ -1,8 +1,7 @@
 <?php
 /** Southern Sotho (Sesotho)
  *
- * @ingroup Language
- * @file
+ * @addtogroup Language
  *
  * @author Cbrown1023
  * @author SPQRobin
@@ -43,7 +42,8 @@ $messages = array(
 'nov'       => 'Pudu',
 'dec'       => 'Tshitwe',
 
-# Categories related messages
+# Bits of text used by many pages
+'categories'      => 'Mekga',
 'category_header' => 'Dingolwa tse mokgeng wa "$1"',
 
 'mypage'     => 'Leqephe la ka',
@@ -64,11 +64,11 @@ $messages = array(
 'jumptosearch'   => 'phuputso',
 
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
-'faq'                  => 'Dipotso-mehla',
-'mainpage'             => 'Leqephe la pele',
-'mainpage-description' => 'Leqephe la pele',
-'portal'               => 'Potjho e kopano',
-'portal-url'           => 'Project:Potjho e kopano',
+'faq'         => 'Dipotso-mehla',
+'mainpage'    => 'Leqephe la pele',
+'portal'      => 'Potjho e kopano',
+'portal-url'  => 'Project:Potjho e kopano',
+'sitesupport' => 'Dimpho',
 
 'retrievedfrom'   => 'E tswa ho "$1"',
 'newmessageslink' => 'melaetsa e metjha',
@@ -119,15 +119,11 @@ $messages = array(
 
 # Miscellaneous special pages
 'mostcategories' => 'Dingolwa tse mekga e mengata',
+'allpages'       => 'Maqephe ohle',
 'shortpages'     => 'Maqephe a makgutshwane',
 'longpages'      => 'Maqephe a matelele',
 'newpages'       => 'Maqephe a matjha',
 
-# Special:Allpages
-'allpages' => 'Maqephe ohle',
-
-# Special:Categories
-'categories'         => 'Mekga',
 'categoriespagetext' => 'Wiki e na le mekga ena',
 
 # E-mail user

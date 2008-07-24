@@ -3,8 +3,7 @@
 /**
  * Delete archived (non-current) files from the database
  *
- * @file
- * @ingroup Maintenance
+ * @addtogroup Maintenance
  * @author Aaron Schulz
  * Based on deleteOldRevisions.php by Rob Church
  */

@@ -1,9 +1,10 @@
 <?php
-
 /** French (Français)
  *
- * @ingroup Language
+ * @addtogroup Language
+ *
  */
+
 class LanguageFr extends Language {
 	/**
 	 * Use singular form for zero (see bug 7309)
@@ -14,4 +15,6 @@ class LanguageFr extends Language {
 
 		return ($count <= 1) ? $forms[0] : $forms[1];
 	}
+
 }
+

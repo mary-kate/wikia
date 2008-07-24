@@ -1,10 +1,4 @@
 <?php
-/**
- * Protect against register_globals vulnerabilities.
- * This line must be present before any global variable is referenced.
- */
-if (!defined('MEDIAWIKI')) die();
-
 
 ###
 # This is the path to your installation of Semantic Calendar as
@@ -27,4 +21,4 @@ $scgIP = $IP . '/extensions/SemanticCalendar';
 //$pathfix = $IP . $scgScriptPath;
 
 // load global functions
-require_once($scgIP . '/includes/SC_GlobalFunctions.php');
+require_once('SC_GlobalFunctions.php');

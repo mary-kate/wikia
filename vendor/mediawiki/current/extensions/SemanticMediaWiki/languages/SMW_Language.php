@@ -8,14 +8,16 @@
  */
 abstract class SMW_Language {
 
-	// the special message arrays ...
+	// the message arrays ...
+	protected $m_ContentMessages;
+	protected $m_UserMessages;
 	protected $m_DatatypeLabels;
 	protected $m_DatatypeAliases = array();
 	protected $m_SpecialProperties;
 	protected $m_SpecialPropertyAliases = array();
 	protected $m_Namespaces;
 	protected $m_NamespaceAliases = array();
-
+	
 
 	/**
 	 * Function that returns an array of namespace identifiers.
@@ -109,6 +111,21 @@ abstract class SMW_Language {
 		}
 	}
 
+	/**
+	 * Function that returns all content messages (those that are stored
+	 * in some article, and can thus not be translated to individual users).
+	 */
+	function getContentMsgArray() {
+		return $this->m_ContentMessages;
+	}
+
+	/**
+	 * Function that returns all user messages (those that are given only to
+	 * the current user, and can thus be given in the individual user language).
+	 */
+	function getUserMsgArray() {
+		return $this->m_UserMessages;
+	}
 }
 
 

@@ -1,9 +1,4 @@
 <?php
-/**
- * @file
- * @ingroup Templates
- */
-
 # Prevent XSS
 if ( isset( $wgVersion ) ) {
 	$wgVersion = htmlspecialchars( $wgVersion );

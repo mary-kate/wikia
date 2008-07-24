@@ -1,10 +1,8 @@
 <?php
 /** Bihari (भोजपुरी)
  *
- * @ingroup Language
- * @file
+ * @addtogroup Language
  *
- * @author Jon Harald Søby
  */
 
 $digitTransformTable = array(
@@ -20,9 +18,3 @@ $digitTransformTable = array(
 	'9' => '९', # &#x096f;
 );
 
-$messages = array(
-# All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
-'mainpage'             => 'पहिलका पन्ना',
-'mainpage-description' => 'पहिलका पन्ना',
-
-);

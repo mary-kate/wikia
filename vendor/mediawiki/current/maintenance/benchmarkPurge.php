@@ -1,9 +1,7 @@
 <?php
 /**
  * Squid purge benchmark script
- *
- * @file
- * @ingroup Maintenance
+ * @addtogroup Maintenance
  */
 
 /** */

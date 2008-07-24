@@ -15,57 +15,48 @@ class BoardVotePage extends UnlistedSpecialPage {
 		parent::__construct( "Boardvote" );
 	}
 
-	function getUserFromRemote( $sid, $casid, $db, $site, $lang ) {
-		$regex0 = '/^[\w.-]*$/';
-		$regex1 = '/^[\w.-]+$/';
-		foreach ( array( 'sid', 'db', 'site', 'lang' ) as $var ) {
-			if ( !preg_match( $regex1, $$var ) ) {
-				wfDebug( __METHOD__." Invalid parameter: $var\n" );
-				return array( false, false, false, false );
-			}
-		}
-		if ( !preg_match( $regex0, $casid ) ) {
-			wfDebug( __METHOD__.": Invalid parameter: casid\n" );
-			return array( false, false, false, false );
+	function getUserFromRemote( $sid, $db, $site, $lang ) {
+		$regex = '/^[\w.-]+$/';
+		if ( !preg_match( $regex, $sid ) ||
+			!preg_match( $regex, $db ) ||
+			!preg_match( $regex, $site ) ||
+			!preg_match( $regex, $lang )
+		) {
+			wfDebug( __METHOD__.": Invalid parameter\n" );
+			return array( false, false, false );
 		}
 
-		$url = "https://secure.wikimedia.org/$site/$lang/w/query.php?what=userinfo&uiisblocked&format=php";
-		#$url = "http://$lang.$site.org/w/query.php?what=userinfo&uiisblocked&format=php";
-		#$url = "http://shimmer/farm/testwiki/extensions/BotQuery/query.php?what=userinfo&uiisblocked&format=php";
+		$url = "https://secure.wikimedia.org/$site/$lang/w/query.php?what=userinfo&format=php";
+		#$url = "http://$lang.$site.org/w/query.php?what=userinfo&format=php";
+		#$url = "http://eva/w2/extensions/BotQuery/query.php?what=userinfo&format=php";
 		wfDebug( "Fetching URL $url\n" );
 		$c = curl_init( $url );
-		// Use the default SSL certificate file
-		// Necessary on some versions of cURL, others do this by default
-		curl_setopt( $c, CURLOPT_CAINFO, '/etc/ssl/certs/ca-certificates.crt' );
+		#curl_setopt( $c, CURLOPT_CAINFO, dirname( __FILE__ ) . '/cacert-both.crt' );
 		curl_setopt( $c, CURLOPT_RETURNTRANSFER, true );
-		curl_setopt( $c, CURLOPT_COOKIE, 
-			"{$db}_session=" . urlencode( $sid ) . ';' . 
-			"centralauth_Session=" . urlencode( $casid )
-		);
+		curl_setopt( $c, CURLOPT_COOKIE, "{$db}_session=" . urlencode( $sid ) );
 		curl_setopt( $c, CURLOPT_FOLLOWLOCATION, true );
 		curl_setopt( $c, CURLOPT_FAILONERROR, true );
 		$value = curl_exec( $c );
 		if ( !$value ) {
 			wfDebug( __METHOD__.": No response from server\n" );
 			$_SESSION['bvCurlError'] = curl_error( $c );
-			return array( false, false, false, false );
+			return array( false, false, false );
 		}
 
 		$decoded = unserialize( $value );
 		if ( isset( $decoded['meta']['user']['anonymous'] ) ) {
 			wfDebug( __METHOD__.": User is not logged in\n" );
-			return array( false, false, false, false );
+			return array( false, false, false );
 		}
 		if ( !isset( $decoded['meta']['user']['name'] ) ) {
 			wfDebug( __METHOD__.": No username in response\n" );
-			return array( false, false, false, false );
+			return array( false, false, false );
 		}
 		wfDebug( __METHOD__." got response for user {$decoded['meta']['user']['name']}@$db\n" );
 		return array(
 			$decoded['meta']['user']['name'] . '@' . $db,
 			$db,
 			isset( $decoded['meta']['user']['blocked'] ),
-			isset( $decoded['meta']['user']['bot'] )
 		);
 	}
 
@@ -76,7 +67,6 @@ class BoardVotePage extends UnlistedSpecialPage {
 		}
 
 		$this->mRemoteSession = $wgRequest->getVal( 'sid' );
-		$this->mCentralSession = $wgRequest->getVal( 'casid' );
 		$this->mRemoteDB = $wgRequest->getVal( 'db' );
 		$this->mRemoteSite = $wgRequest->getVal( 'site' );
 		$this->mRemoteLanguage = $wgRequest->getVal( 'lang' );
@@ -84,13 +74,12 @@ class BoardVotePage extends UnlistedSpecialPage {
 		if ( $this->mRemoteSession ) {
 			$info = $this->getUserFromRemote(
 				$this->mRemoteSession,
-				$this->mCentralSession,
 				$this->mRemoteDB,
 				$this->mRemoteSite,
 				$this->mRemoteLanguage
 			);
-			list( $this->mUserKey, $this->mDBname, $this->mBlocked, $this->mBot ) = $info;
-			list( $_SESSION['bvUserKey'], $_SESSION['bvDBname'], $_SESSION['bvBlocked'], $_SESSION['bvBot'] ) = $info;
+			list( $this->mUserKey, $this->mDBname, $this->mBlocked ) = $info;
+			list( $_SESSION['bvUserKey'], $_SESSION['bvDBname'], $_SESSION['bvBlocked'] ) = $info;
 			if ( !is_null( $wgRequest->getVal( 'uselang' ) ) ) {
 				$_SESSION['bvLang'] = $wgRequest->getVal( 'uselang' );
 			} else {
@@ -100,28 +89,24 @@ class BoardVotePage extends UnlistedSpecialPage {
 			$this->mUserKey = $_SESSION['bvUserKey'];
 			$this->mDBname = $_SESSION['bvDBname'];
 			$this->mBlocked = $_SESSION['bvBlocked'];
-			$this->mBot = $_SESSION['bvBot'];
 		} elseif ( defined( 'BOARDVOTE_ALLOW_LOCAL' ) ) {
 			global $wgUser, $wgDBname;
 			$this->mUserKey = $wgUser->getName() . "@" . $wgDBname;
 			$this->mDBname = $wgDBname;
 			$this->mBlocked = $wgUser->isBlocked();
-			$this->mBot = $wgUser->isBot();
 		} else {
 			$this->mUserKey = false;
 			$this->mDBname = false;
 			$this->mBlocked = false;
-			$this->mBot = false;
 		}
 
 		$this->mPosted = $wgRequest->wasPosted();
 		if ( method_exists( $wgRequest, 'getArray' ) ) {
-			$this->mVotedFor = $wgRequest->getArray( "candidate", array() );
+			$this->mVotedFor = $wgRequest->getArray( "votedfor", array() );
 		} else {
-			$this->mVotedFor = $wgRequest->getVal( "candidate", array() );
+			$this->mVotedFor = $wgRequest->getVal( "votedfor", array() );
 		}
 		$this->mId = $wgRequest->getInt( "id", 0 );
-		$this->mValidVote = $this->mPosted ? $this->validVote() : false;
 
 		$this->mHasVoted = $this->hasVoted();
 
@@ -134,7 +119,8 @@ class BoardVotePage extends UnlistedSpecialPage {
 
 
 	function execute( $par ) {
-		global $wgOut, $wgBoardVoteStartDate, $wgBoardVoteEndDate;
+		global $wgBoardVoteEditCount, $wgBoardVoteEndDate, $wgBoardVoteStartDate,
+			$wgBoardVoteFirstEdit, $wgOut;
 
 		$this->init( $par );
 		$this->setHeaders();
@@ -157,18 +143,16 @@ class BoardVotePage extends UnlistedSpecialPage {
 			$wgOut->addWikiText( wfMsg( 'boardvote_blocked' ) );
 			return;
 		}
-		
-		if ( $this->mBot ) {
-			$wgOut->addWikiText( wfMsg( 'boardvote_bot' ) );
-			return;
-		}
 
 		if ( wfTimestampNow() > $wgBoardVoteEndDate ) {
 			$this->mFinished = true;
-			
-			$wgOut->addWikiText( wfMsg( 'boardvote_closed' ) );
 		} else {
 			$this->mFinished = false;
+		}
+
+
+		if ( $this->mFinished ) {
+				$wgOut->addWikiText( wfMsg( 'boardvote_closed' ) );
 		}
 
 		if ( $this->mAction == "list" ) {
@@ -186,12 +170,7 @@ class BoardVotePage extends UnlistedSpecialPage {
 				if ( !$this->isQualified( $this->mUserKey ) ) {
 					$this->notQualified();
 				} elseif ( $this->mPosted ) {
-					if ( $this->mValidVote ) {
-						$this->logVote();
-					} else {
-						$this->displayInvalidVoteError();
-						$this->displayVote();
-					}
+					$this->logVote();
 				} else {
 					$this->displayVote();
 				}
@@ -303,10 +282,10 @@ class BoardVotePage extends UnlistedSpecialPage {
 
 		global $wgUser;
 		$token = htmlspecialchars( $wgUser->editToken() );
-		$text .= "<tr><td>&nbsp;</td>
-		  <td><input name=\"submit\" type=\"submit\" value=\"$ok\">
-		  <input type='hidden' name='edit_token' value=\"{$token}\" /></td>
-		  </tr></table></form>";
+		$text .= "<tr><td>&nbsp;</td><td>
+		  <input name=\"submit\" type=\"submit\" value=\"$ok\">
+		  <input type='hidden' name='edit_token' value=\"{$token}\" />
+		  </td></tr></table></form>";
 		$text .= wfMsg( "boardvote_footer" );
 		$wgOut->addHTML( $text );
 	}
@@ -314,59 +293,38 @@ class BoardVotePage extends UnlistedSpecialPage {
 	function voteEntry( $index, $candidate ) {
 		return "
 		<tr><td align=\"right\">
-		  <input type=\"text\" maxlength=\"2\" size=\"2\" name=\"candidate[{$index}]\" />
+		  <input type=\"checkbox\" name=\"votedfor[{$index}]\" value=\"1\">
 		</td><td align=\"left\">
 		  $candidate
 		</td></tr>";
 	}
 
 	function notLoggedIn() {
-		global $wgOut, $wgLang;
-		global $wgBoardVoteEditCount, $wgBoardVoteRecentEditCount, $wgBoardVoteCountDate;
-		global $wgBoardVoteRecentFirstCountDate, $wgBoardVoteRecentCountDate;
+		global $wgOut, $wgBoardVoteEditCount, $wgBoardVoteCountDate, $wgLang, $wgBoardVoteFirstEdit;
 		$wgOut->addWikiText( wfMsg( "boardvote_nosession", $wgBoardVoteEditCount,
-			$wgLang->timeanddate( $wgBoardVoteCountDate ), $wgBoardVoteRecentEditCount,
-			$wgLang->timeanddate( $wgBoardVoteRecentFirstCountDate ),
-			$wgLang->timeanddate( $wgBoardVoteRecentCountDate )
+			$wgLang->timeanddate( $wgBoardVoteCountDate ),
+			$wgLang->timeanddate( $wgBoardVoteFirstEdit )
 	   	) );
 	}
 
 	function notQualified() {
-		global $wgOut, $wgLang;
-		global $wgBoardVoteEditCount, $wgBoardVoteRecentEditCount, $wgBoardVoteCountDate;
-		global $wgBoardVoteRecentFirstCountDate, $wgBoardVoteRecentCountDate;
-		$wgOut->addWikiText( wfMsg( "boardvote_notqualified", $wgBoardVoteEditCount,
-			$wgLang->timeanddate( $wgBoardVoteCountDate ), $wgBoardVoteRecentEditCount,
-			$wgLang->timeanddate( $wgBoardVoteRecentFirstCountDate ),
-			$wgLang->timeanddate( $wgBoardVoteRecentCountDate )
+		global $wgOut, $wgBoardVoteEditCount, $wgBoardVoteCountDate, $wgLang, $wgBoardVoteFirstEdit;
+		$wgOut->addWikiText( wfMsg( "boardvote_notqualified", '[unknown]',
+			$wgLang->timeanddate( $wgBoardVoteCountDate ), $wgBoardVoteEditCount, '[unknown]',
+			$wgLang->timeanddate( $wgBoardVoteFirstEdit )
 		) );
-	}
-	
-	function displayInvalidVoteError() {
-		global $wgOut;
-		$wgOut->addWikiText( wfMsg( "boardvote_invalidentered" ) );
 	}
 
 	function getRecord() {
 		global $wgBoardCandidates;
 
-		$record = "I prefer: ";
-	  	$num_candidates = count( $wgBoardCandidates );
-		$cnt = 0;
-		foreach ( $this->mVotedFor as $i => $rank ) {
-			$cnt++;
-			
-			$record .= $wgBoardCandidates[ $i ] . "[";
-			$record .= ( $rank == '' ) ? 100 : $rank;
-			$record .= "]";
-			$record .= ( $cnt != $num_candidates ) ? ", " : "";
-		}
-		$record .= "\n";
+		$record =
+		  "I voted for: " . implode( ", ", wfArrayLookup( $wgBoardCandidates, $this->mVotedFor ) ). "\n";
 
 		// Pad it out with spaces to a constant length, so that the encrypted record is secure
-		$padLength = array_sum( array_map( 'strlen', $wgBoardCandidates ) ) +     $num_candidates * 8    + 20;
-		//           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^
-		//               length of the candidate names added together         room for rank & separators   extra
+		$padLength = array_sum( array_map( 'strlen', $wgBoardCandidates ) ) + count( $wgBoardCandidates ) * 2 + 20;
+		//           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^
+		//               length of the candidate names added together            room for separators           extra
 
 		$record = str_pad( $record, $padLength );
 		return $record;
@@ -545,17 +503,5 @@ class BoardVotePage extends UnlistedSpecialPage {
 
 		$title = Title::makeTitle( NS_SPECIAL, "Boardvote" );
 		$wgOut->redirect( $title->getFullURL( "action=list" ) );
-	}
-	
-	function validVote() {
-		foreach ( $this->mVotedFor as $rank ) {
-			if ( $rank != '' ) {
-				if ( !preg_match( '/^[1-9]\d?$/', $rank ) ) {
-					return false;
-				}
-			}
-		}
-		
-		return true;
 	}
 }

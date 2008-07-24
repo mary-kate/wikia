@@ -29,21 +29,21 @@ if (!defined('MEDIAWIKI')) {
 
 
 /**
- * @ingroup API
+ * @addtogroup API
  */
 class ApiMove extends ApiBase {
 
 	public function __construct($main, $action) {
 		parent :: __construct($main, $action);
 	}
-
+	
 	public function execute() {
 		global $wgUser;
 		$this->getMain()->requestWriteMode();
 		$params = $this->extractRequestParams();
 		if(is_null($params['reason']))
 			$params['reason'] = '';
-
+	
 		$titleObj = NULL;
 		if(!isset($params['from']))
 			$this->dieUsageMsg(array('missingparam', 'from'));
@@ -69,7 +69,7 @@ class ApiMove extends ApiBase {
 		// Run getUserPermissionsErrors() here so we get message arguments too,
 		// rather than just a message key. The latter is troublesome for messages
 		// that use arguments.
-		// FIXME: moveTo() should really return an array, requires some
+		// FIXME: moveTo() should really return an array, requires some 
 		//	  refactoring of other code, though (mainly SpecialMovepage.php)
 		$errors = array_merge($fromTitle->getUserPermissionsErrors('move', $wgUser),
 					$fromTitle->getUserPermissionsErrors('edit', $wgUser),
@@ -79,19 +79,16 @@ class ApiMove extends ApiBase {
 			// We don't care about multiple errors, just report one of them
 			$this->dieUsageMsg(current($errors));
 
-		$hookErr = null;
-
+		$dbw = wfGetDB(DB_MASTER);
+		$dbw->begin();		
 		$retval = $fromTitle->moveTo($toTitle, true, $params['reason'], !$params['noredirect']);
 		if($retval !== true)
-		{
-			# FIXME: Title::moveTo() sometimes returns a string
-			$this->dieUsageMsg(reset($retval));
-		}
+			$this->dieUsageMsg(array($retval));
 
 		$r = array('from' => $fromTitle->getPrefixedText(), 'to' => $toTitle->getPrefixedText(), 'reason' => $params['reason']);
-		if(!$params['noredirect'] || !$wgUser->isAllowed('suppressredirect'))
+		if(!$params['noredirect'])
 			$r['redirectcreated'] = '';
-
+	
 		if($params['movetalk'] && $fromTalk->exists() && !$fromTitle->isTalkPage())
 		{
 			// We need to move the talk page as well
@@ -107,25 +104,14 @@ class ApiMove extends ApiBase {
 			{
 				$r['talkmove-error-code'] = ApiBase::$messageMap[$retval]['code'];
 				$r['talkmove-error-info'] = ApiBase::$messageMap[$retval]['info'];
-			}
+			}	
 		}
-
-		# Watch pages
-		if($params['watch'] || $wgUser->getOption('watchmoves'))
-		{
-			$wgUser->addWatch($fromTitle);
-			$wgUser->addWatch($toTitle);
-		}
-		else if($params['unwatch'])
-		{
-			$wgUser->removeWatch($fromTitle);
-			$wgUser->removeWatch($toTitle);
-		}
+		$dbw->commit(); // Make sure all changes are really written to the DB
 		$this->getResult()->addValue(null, $this->getModuleName(), $r);
 	}
-
+	
 	public function mustBePosted() { return true; }
-
+	
 	public function getAllowedParams() {
 		return array (
 			'from' => null,
@@ -133,9 +119,7 @@ class ApiMove extends ApiBase {
 			'token' => null,
 			'reason' => null,
 			'movetalk' => false,
-			'noredirect' => false,
-			'watch' => false,
-			'unwatch' => false
+			'noredirect' => false
 		);
 	}
 
@@ -146,9 +130,7 @@ class ApiMove extends ApiBase {
 			'token' => 'A move token previously retrieved through prop=info',
 			'reason' => 'Reason for the move (optional).',
 			'movetalk' => 'Move the talk page, if it exists.',
-			'noredirect' => 'Don\'t create a redirect',
-			'watch' => 'Add the page and the redirect to your watchlist',
-			'unwatch' => 'Remove the page and the redirect from your watchlist'
+			'noredirect' => 'Don\'t create a redirect'
 		);
 	}
 
@@ -165,6 +147,6 @@ class ApiMove extends ApiBase {
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiMove.php 35619 2008-05-30 19:59:47Z btongminh $';
+		return __CLASS__ . ': $Id: ApiMove.php 30222 2008-01-28 19:05:26Z catrope $';
 	}
 }

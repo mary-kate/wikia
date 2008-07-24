@@ -4,8 +4,7 @@
  * Erase a page record from the database
  * Irreversible (can't use standard undelete) and does not update link tables
  *
- * @file
- * @ingroup Maintenance
+ * @addtogroup Maintenance
  * @author Rob Church <robchur@gmail.com>
  */
 

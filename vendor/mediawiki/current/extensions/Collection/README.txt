@@ -10,40 +10,57 @@ About the *Collection* Extension
 The *Collection* extension for MediaWiki_ allows users to collect articles and
 generate PDFs for article collections and single articles.
 
-The extension has been developed for and tested with MediaWiki_ version 1.11
-and later.
-
 The extension is being developed under the GNU General Public License by
 `PediaPress GmbH`_ in close collaboration with `Wikimedia Foundation`_
 and the `Commonwealth of Learning`_.
 
 Copyright (C) 2008, PediaPress GmbH
 
+
 Prerequisites
 =============
 
-Install PHP with cURL support
------------------------------
+PDF generation is done with Python_ scripts from the *mwlib* and *mwlib.rl*
+distributions which require at least Python 2.5 and two other Python packages:
+*PIL* and *ReportLab*.
 
-Currently Collection extension needs PHP with cURL support,
-see http://de2.php.net/manual/en/book.curl.php
+*PIL*
+ Install *PIL* (Pyhon Imaging Library) from
+ http://www.pythonware.com/products/pil/.
 
-Install and Setup a Render Server
----------------------------------
+*ReportLab*
+ Download and install ReportLab_ from the Subversion repository::
 
-PDF and ZIP file generation is done by a server, which can run separately
-from the MediaWiki installation and can be shared by different MediaWikis.
-See the ``mw-serve`` command or the ``mwlib.cgi`` script in the mwlib_
-distribution.
+    svn co http://www.reportlab.co.uk/svn/public/reportlab/trunk reportlab
+    cd reportlab
+    python setup.py install
 
-If you have a low-traffic MediaWiki you can use the public render server running
-at http://tools.pediapress.com/mw-serve/. In this case, just keep
-the configuration variable $wgCollectionMWServe (see below) at its default
-value.
+*mwlib*
+ You need to have setuptools/easy_install installed.
+ Installation should be as easy as typing::
+
+    easy_install mwlib
+
+ If you don't have setuptools installed, download the source package from
+ http://code.pediapress.com/, unpack it and run::
+
+    python setup.py install
+
+*mwlib.rl*
+ Install *mwlib.rl* with ``easy_install``::
+
+    easy_install mwlib.rl
+
+ or get the code from http://code.pediapress.com/ and install it with::
+
+    python setup.py install
+
+ Edit ``example-mwlib.config`` and copy it to some place where you store
+ system-wide configuration files (e.g. ``/etc/mwlib.config``).
 
 
-Installation and Configuration of the Collection Extension
-==========================================================
+Installation and Configuration
+==============================
 
 * Checkout the *Collection* extension from the Subversion repository into the
   ``extensions`` directory of your *MediaWiki* installation::
@@ -57,35 +74,17 @@ Installation and Configuration of the Collection Extension
 
   and set the following global variables accordingly:
 
-  *$wgCollectionMWServeURL (string)*
-   Set this to the URL of a render server (see above).
+  *$wgMWPDFCommand (string)*
+   Set this to the path of the ``mw-pdf`` script installed by with *mwlib.rl*.
    
-   The default is ``"http://tools.pediapress.com/mw-serve/"``,
-   a public render server for low-traffic MediaWikis hosted by PediaPress.
+   The default is just ``"mw-pdf"``, assuming that the script is in the system
+   ``PATH`` for executables.
+
+  *$wgMWLibConfig (string)*
+   The configuration file used by ``mw-pdf`` and ``mw-zip``.
    
-   Note that the MediaWiki must be accessible from the render server, i.e. if
-   your MediaWiki is behind a firewall you cannot use the public render server.
-  
-  *$wgCollectionMWServeCredentials (string)*
-   Set this to a string of the form "USERNAME:PASSWORD", if the MediaWiki
-   requires to be logged in to view articles.
-   The render server will then login with these credentials using MediaWiki API
-   before doing other requests.
-   
-   SECURITY NOTICE: If the MediaWiki and the render server communicate over an
-   insecure channel (e.g. on an unencrypted channel over the internet), please
-   DO NOT USE THIS SETTING, as the credentials will be exposed to eavesdropping!
-  
-  *$wgCollectionFormats*
-   An array mapping names of mwlib_ writers to the name of the produces format.
-   The default value is:
-   
-       array(
-           'rl' => 'PDF',
-       )
-    
-   i.e. only PDF enabled. See mwlib_ for possible other writers.
-   
+   The default is "``/etc/mwlib.config"``.
+
   *$wgCommunityCollectionNamespace (integer)*
    Namespace for "community collections", i.e. the namespace where non-personal
    article collection pages are saved.
@@ -100,46 +99,16 @@ Installation and Configuration of the Collection Extension
    Maximum number of articles allowed in a collection.
    
    Default is 500.
-  
-  *$wgLicenseName (string or null)*
-   License name for articles in this MediaWiki.
-   If set to ``null`` the localized version of the word "License" is used.
-   
-   Default is null.
-  
-  *$wgLicenseURL (string or null)*
-   HTTP URL of an article containing the full license text in wikitext format
-   for articles in this MediaWiki. E.g.
-   
-       $wgLicenseURL = 'http://en.wikipedia.org/w/index.php?title=Wikipedia:Text_of_the_GNU_Free_Documentation_License&action=raw';
 
-   for the GFDL.
-   If set to null, the standard MediaWiki variables $wgRightsPage,
-   $wgRightsUrl and $wgRightsText are used for license information.
-   
-   If your MediaWiki contains articles with different licenses, make sure
-   that each article contains the name of the license and set $wgLicenseURL
-   to an article that contains all needed licenses.
-   
-  *$wgPDFTemplateBlackList (string)*
-   Title of an article containing blacklisted templates, i.e. templates that
-   should be excluded for PDF generation.
+* Copy or symlink the directory ``collection/`` contained in the directory of
+  the *Collection* extension into the ``skins/common`` directory of your
+  *MediaWiki* installation.
 
-   Default value is ``"MediaWiki:PDF Template Blacklist"``
-
-   The template blacklist page should contain a list of links to the
-   blacklisted templates in the following form::
-   
-	 * [[Template:Templatename]]
-	 * [[Template:SomeOtherTemplatename]]
-	 
-   
-   
-* Add a portlet to the skin of your *MediaWiki* installation: Just before the line::
+* Just before the line::
 
     <div class="portlet" id="p-tb">
 
-  in the file ``skins/MonoBook.php`` or ``skins/Modern.php`` insert
+  in the file ``skins/MonoBook.php`` of your *MediaWiki* installation insert
   the following code::
 
     <?php
@@ -148,17 +117,23 @@ Installation and Configuration of the Collection Extension
       }
     ?>
 
-* As the current collection of articles is stored in the session, the session
-  timeout should be set to some sensible value (at least a few hours, maybe
-  one day). Adjust session.cookie_lifetime and session.gc_maxlifetime in your
-  ``php.ini`` accordingly.
+* If your MediaWiki installation is configured to limit the resources of
+  externally executed script (which is the default!), you may want to increase
+  the parameter ``max_execution_time`` in your ``php.ini`` to several minutes,
+  e.g. to a value of 300 (seconds) yielding a maximal execution time of
+  5 minutes, because the generation of PDF files containing many articles can
+  sometimes take a while.
+  
+  Also, the global MediaWiki variables $wgMaxShellMemory and $wgMaxShellFileSize
+  (limiting the memory and disk usage of external scripts) might need to be
+  adjusted, to higher values.
 
 * Add a page ``Help:Collections`` with the wikitext from the supplied file
-  ``Help_Collections.txt``. Adjust the name of the template blacklist according
-  to your setting of $wgPDFTemplateBlackList (see above).
+  ``Help_Collections.txt``.
 
-.. _mwlib: http://code.pediapress.com/wiki/wiki/mwlib
 .. _MediaWiki: http://www.mediawiki.org/
 .. _`PediaPress GmbH`: http://pediapress.com/
+.. _Python: http://www.python.org/
+.. _ReportLab: http://www.reportlab.co.uk/
 .. _`Wikimedia Foundation`: http://wikimediafoundation.org/
 .. _`Commonwealth of Learning`: http://www.col.org/

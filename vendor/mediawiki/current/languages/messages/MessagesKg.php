@@ -1,8 +1,8 @@
 <?php
-/** Kongo (Kikongo)
+/** Kongo (Kongo)
  *
- * @ingroup Language
- * @file
+ * @addtogroup Language
+ *
  */
 
 $messages = array(
@@ -27,7 +27,8 @@ $messages = array(
 'november'  => 'ngonda ya kumi na mosi',
 'december'  => 'ngonda ya kumi na zole',
 
-# Categories related messages
+# Bits of text used by many pages
+'categories'      => 'Bakalasi',
 'pagecategories'  => '{{PLURAL:$1|Kalasi|Bakalasi}}',
 'category_header' => 'Mikanda na kalasi "$1"',
 
@@ -47,10 +48,9 @@ $messages = array(
 'redirectedfrom' => '(Balulama tuka $1)',
 
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
-'currentevents'        => 'Mambu ya mpa',
-'currentevents-url'    => 'Project:Mambu ya mpa',
-'mainpage'             => 'Lukaya ya mfumu',
-'mainpage-description' => 'Lukaya ya mfumu',
+'currentevents'     => 'Mambu ya mpa',
+'currentevents-url' => 'Project:Mambu ya mpa',
+'mainpage'          => 'Lukaya ya mfumu',
 
 'retrievedfrom' => 'Receptum de "$1"',
 
@@ -86,14 +86,14 @@ $messages = array(
 # Miscellaneous special pages
 'ncategories' => '{{PLURAL:$1|kalasi|bakalasi}} $1',
 
-# Special:Categories
-'categories' => 'Bakalasi',
-
 # Contributions
 'mycontris' => 'Makabu ya munu',
 
 # What links here
 'whatlinkshere' => 'Balukaya ke songa awa',
+
+# Spam protection
+'categoryarticlecount' => '{{PLURAL:$1|Mukanda mosi|Mikanda $1 }} ni na kalasi yayi.',
 
 # Table pager
 'table_pager_next'  => 'Lukaya ya kulanda',

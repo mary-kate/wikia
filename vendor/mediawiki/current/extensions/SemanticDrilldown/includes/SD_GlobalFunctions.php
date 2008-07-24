@@ -7,7 +7,7 @@
 
 if (!defined('MEDIAWIKI')) die();
 
-define('SD_VERSION','0.4.5');
+define('SD_VERSION','0.3.6');
 
 // constants for special properties
 define('SD_SP_HAS_FILTER', 1);
@@ -17,34 +17,53 @@ define('SD_SP_GETS_VALUES_FROM_CATEGORY', 4);
 define('SD_SP_USES_TIME_PERIOD', 5);
 define('SD_SP_REQUIRES_FILTER', 6);
 define('SD_SP_HAS_LABEL', 7);
-define('SD_SP_HAS_DRILLDOWN_TITLE', 8);
 
-$wgExtensionCredits['specialpage'][]= array(
-	'name'	=> 'Semantic Drilldown',
-	'version'     => SD_VERSION,
-	'author'      => 'Yaron Koren',
-	'url'         => 'http://www.mediawiki.org/wiki/Extension:Semantic_Drilldown',
-	'description' =>  'A drilldown interface for navigating through semantic data',
-);
+$wgExtensionFunctions[] = 'sdgSetupExtension';
+$wgExtensionMessagesFiles['SemanticDrilldown'] = $sdgIP . '/languages/SD_Messages.php';
 
 require_once($sdgIP . '/languages/SD_Language.php');
 
-$wgExtensionMessagesFiles['SemanticDrilldown'] = $sdgIP . '/languages/SD_Messages.php';
+/**
+ *  Do the actual intialization of the extension. This is just a delayed init that makes sure
+ *  MediaWiki is set up properly before we add our stuff.
+ */
+function sdgSetupExtension() {
+	global $sdgNamespace, $sdgIP, $wgExtensionCredits, $wgArticlePath, $wgScriptPath, $wgServer;
 
-// register all special pages and other classes
-$wgSpecialPages['Filters'] = 'SDFilters';
-$wgSpecialPageGroups['Filters'] = 'users';
-$wgAutoloadClasses['SDFilters'] = $sdgIP . '/specials/SD_Filters.php';
-$wgSpecialPages['CreateFilter'] = 'SDCreateFilter';
-$wgSpecialPageGroups['CreateFilter'] = 'users';
-$wgAutoloadClasses['SDCreateFilter'] = $sdgIP . '/specials/SD_CreateFilter.php';
-$wgSpecialPages['BrowseData'] = 'SDBrowseData';
-$wgSpecialPageGroups['BrowseData'] = 'users';
-$wgAutoloadClasses['SDBrowseData'] = $sdgIP . '/specials/SD_BrowseData.php';
+	sdfInitMessages();
 
-$wgAutoloadClasses['SDFilter'] = $sdgIP . '/includes/SD_Filter.php';
-$wgAutoloadClasses['SDFilterValue'] = $sdgIP . '/includes/SD_FilterValue.php';
-$wgAutoloadClasses['SDAppliedFilter'] = $sdgIP . '/includes/SD_AppliedFilter.php';
+	require_once($sdgIP . '/includes/SD_Filter.php');
+	require_once($sdgIP . '/includes/SD_AppliedFilter.php');
+
+	/**********************************************/
+	/***** register specials                  *****/
+	/**********************************************/
+
+	require_once($sdgIP . '/specials/SD_BrowseData.php');
+	require_once($sdgIP . '/specials/SD_Filters.php');
+	require_once($sdgIP . '/specials/SD_CreateFilter.php');
+
+	/**********************************************/
+	/***** register hooks                     *****/
+	/**********************************************/
+
+	/**********************************************/
+	/***** create globals for outside hooks   *****/
+	/**********************************************/
+
+	/**********************************************/
+	/***** credits (see "Special:Version")    *****/
+	/**********************************************/
+	$wgExtensionCredits['specialpage'][]= array(
+		'name'        => 'Semantic Drilldown',
+		'version'     => SD_VERSION,
+		'author'      => 'Yaron Koren',
+		'url'         => 'http://www.mediawiki.org/wiki/Extension:Semantic_Drilldown',
+		'description' =>  'A drilldown interface for navigating through semantic data',
+	);
+
+	return true;
+}
 
 /**********************************************/
 /***** namespace settings                 *****/
@@ -69,7 +88,8 @@ function sdfInitNamespaces() {
 	// Register namespace identifiers
 	if (!is_array($wgExtraNamespaces)) { $wgExtraNamespaces=array(); }
 	$wgExtraNamespaces = $wgExtraNamespaces + $sdgContLang->getNamespaces();
-	$wgNamespaceAliases = $wgNamespaceAliases + $sdgContLang->getNamespaceAliases();
+	// this code doesn't work, for some reason - leave it out for now
+	//$wgNamespaceAliases = $wgNamespaceAliases + $sdgContLang->getNamespaceAliases();
 
 	// Support subpages only for talk pages by default
 	$wgNamespacesWithSubpages = $wgNamespacesWithSubpages + array(
@@ -138,18 +158,33 @@ function sdfInitUserLanguage($langcode) {
 }
 
 /**
+ * Initialize messages - these settings must be applied later on, since
+ * the MessageCache does not exist yet when the settings are loaded in
+ * LocalSettings.php.
+ * Function based on version in ContributionScores extension
+ */
+function sdfInitMessages() {
+        global $wgVersion, $wgExtensionFunctions;
+        if (version_compare($wgVersion, '1.11', '>=' )) {
+                wfLoadExtensionMessages( 'SemanticDrilldown' );
+        } else {
+                $wgExtensionFunctions[] = 'sdfLoadMessagesManually';
+        }
+}
+
+/**
  * Setting of message cache for versions of MediaWiki that do not support
- * wgExtensionMessagesFiles - based on ceContributionScores() in
+ * wgExtensionFunctions - based on ceContributionScores() in
  * ContributionScores extension
  */
 function sdfLoadMessagesManually() {
-	global $sdgIP, $wgMessageCache;
+        global $sdgIP, $wgMessageCache;
 
-	# add messages
-	require($sdgIP . '/languages/SD_Messages.php');
-	foreach($messages as $key => $value) {
-		$wgMessageCache->addMessages($messages[$key], $key);
-	}
+        # add messages
+        require($sdgIP . '/languages/SD_Messages.php');
+        foreach($messages as $key => $value) {
+                $wgMessageCache->addMessages($messages[$key], $key);
+        }
 }
 
 /**********************************************/
@@ -162,19 +197,20 @@ function sdfLoadMessagesManually() {
  * children of some other category
  */
 function sdfGetTopLevelCategories() {
-	$categories = array();
-	$dbr = wfGetDB( DB_SLAVE );
-	extract($dbr->tableNames('page', 'categorylinks'));
+        $categories = array();
+        $dbr = wfGetDB( DB_SLAVE );
+	$page = $dbr->tableName('page');
+	$categorylinks = $dbr->tableName('categorylinks');
 	$cat_ns = NS_CATEGORY;
 	$sql = "SELECT page_title FROM $page p LEFT OUTER JOIN $categorylinks cl ON p.page_id = cl.cl_from WHERE p.page_namespace = $cat_ns AND cl.cl_to IS NULL";
 	$res = $dbr->query($sql);
-	if ($dbr->numRows( $res ) > 0) {
-		while ($row = $dbr->fetchRow($res)) {
-			$categories[] = str_replace('_', ' ', $row[0]);
-		}
-	}
-	$dbr->freeResult($res);
-	return $categories;
+        if ($dbr->numRows( $res ) > 0) {
+                while ($row = $dbr->fetchRow($res)) {
+                        $categories[] = str_replace('_', ' ', $row[0]);
+                }
+        }
+        $dbr->freeResult($res);
+        return $categories;
 }
 
 function sdfGetSemanticProperties_0_7() {
@@ -340,8 +376,7 @@ function sdfGetValuesForProperty($subject, $subject_namespace, $prop, $is_relati
 				// make sure it's in the right namespace, if
 				// it's a page
 				if (! $is_relation) {
-					// html_entity_decode() is needed to get around temporary bug in SMWSQLStore2
-					$values[] = html_entity_decode($prop_val->getXSDValue());
+					$values[] = $prop_val->getXSDValue();
 				} elseif ($prop_val->getNamespace() == $object_namespace) {
 					$values[] = $prop_val->getTitle()->getText();
 				}
@@ -389,7 +424,8 @@ function sdfGetCategoryChildren($category_name, $get_categories, $levels) {
 	$pages = array();
 	$subcategories = array();
 	$dbr = wfGetDB( DB_SLAVE );
-	extract($dbr->tableNames('page', 'categorylinks'));
+	$categorylinks = $dbr->tableName( 'categorylinks' );
+	$page = $dbr->tableName( 'page' );
 	$cat_ns = NS_CATEGORY;
 	$query_category = str_replace(' ', '_', $category_name);
 	$query_category = str_replace("'", "\'", $query_category);
@@ -472,27 +508,6 @@ function sdfStringToMonth($str) {
 	} else { //if ($strmonth == wfMsg('december')) {
 		return 12;
 	}
-}
-
-function sdfBooleanToString($bool_value) {
-	$words_field_name = ($bool_value == true) ? 'smw_true_words' : 'smw_false_words';
-	$words_array = explode(',', wfMsgForContent($words_field_name));
-	// go with the value in the array that tends to be "yes" or "no" -
-	// for SMW 0.7 it's the 2nd word, and for SMW 1.0 it's the 3rd
-	$smw_version = SMW_VERSION;
-	if ($smw_version{0} == '0')
-		$index_of_word = 1;
-	else
-		$index_of_word = 2;
-	// capitalize first letter of word
-	if (count($words_array) > $index_of_word) {
-		$string_value = ucwords($words_array[$index_of_word]);
-	} elseif (count($words_array) == 0) {
-		$string_value = $bool_value; // a safe value if no words are found
-	} else {
-		$string_value = ucwords($words_array[0]);
-	}
-	return $string_value;
 }
 
 /**

@@ -19,21 +19,6 @@ $messages['en'] = array(
 	'editcount_total'    => 'Total',
 );
 
-/** Afrikaans (Afrikaans)
- * @author Arnobarnard
- */
-$messages['af'] = array(
-	'editcount_username' => 'Gebruiker:',
-	'editcount_total'    => 'Totaal',
-);
-
-/** Aragonese (Aragonés)
- * @author Juanpabl
- */
-$messages['an'] = array(
-	'editcount_submit' => 'Nimbiar',
-);
-
 /** Arabic (العربية)
  * @author Meno25
  * @author Mimouni
@@ -46,24 +31,10 @@ $messages['ar'] = array(
 	'editcount_total'    => 'الإجمالي',
 );
 
-/** Kotava (Kotava)
- * @author Wikimistusik
- */
-$messages['avk'] = array(
-	'editcount'          => 'Betaksota',
-	'editcount-desc'     => 'Va favesikafa [[Special:Editcount|betaksota]] nedir',
-	'editcount_username' => 'Favesik :',
-	'editcount_submit'   => 'Staksera',
-	'editcount_total'    => 'Itaya',
-);
-
-/** Bikol Central (Bikol Central)
- * @author Filipinayzd
- */
 $messages['bcl'] = array(
-	'editcount'          => 'Hirahón an bilang',
+	'editcount' => 'Hirahón an bilang',
 	'editcount_username' => 'Parágamit:',
-	'editcount_submit'   => 'Isumitir',
+	'editcount_submit' => 'Isumitir',
 );
 
 /** Bulgarian (Български)
@@ -78,51 +49,28 @@ $messages['bg'] = array(
 	'editcount_total'    => 'Общо',
 );
 
-/** Bengali (বাংলা)
- * @author Bellayet
- */
 $messages['bn'] = array(
-	'editcount'          => 'সম্পাদনা সংখ্যা',
+	'editcount' => 'সম্পাদনা সংখ্যা',
 	'editcount_username' => 'ব্যবহারকারী:',
-	'editcount_submit'   => 'পেশ করো',
-	'editcount_total'    => 'সর্বমোট',
+	'editcount_submit' => 'পেশ করো',
+	'editcount_total' => 'সর্বমোট',
 );
 
-/** Breton (Brezhoneg)
- * @author Fulup
- */
 $messages['br'] = array(
-	'editcount'          => 'Sammad degasadennoù',
+	'editcount' => 'Sammad degasadennoù',
 	'editcount_username' => 'Implijer :',
-	'editcount_submit'   => 'Kas',
-	'editcount_total'    => 'Hollad',
+	'editcount_submit' => 'Kas',
+	'editcount_total' => 'Hollad',
 );
 
-/** Catalan (Català)
- * @author SMP
- */
 $messages['ca'] = array(
-	'editcount'          => "Comptador d'edicions",
+	'editcount' => 'Comptador d\'edicions',
 	'editcount_username' => 'Usuari:',
 );
 
-/** Church Slavic (Словѣ́ньскъ / ⰔⰎⰑⰂⰡⰐⰠⰔⰍⰟ)
- * @author ОйЛ
- */
-$messages['cu'] = array(
-	'editcount_username' => 'по́льꙃєватєл҄ь :',
-);
-
-/** Danish (Dansk)
- * @author Jon Harald Søby
- */
-$messages['da'] = array(
-	'editcount_username' => 'Bruger:',
-);
-
 /** German (Deutsch)
- * @author Leon Weber
- * @author Raimond Spekking
+  * @author Leon Weber
+  * @author Raimond Spekking
  */
 $messages['de'] = array(
 	'editcount'          => 'Anzahl der Seitenbearbeitungen',
@@ -132,17 +80,6 @@ $messages['de'] = array(
 	'editcount_total'    => 'Gesamt',
 );
 
-/** Lower Sorbian (Dolnoserbski)
- * @author Michawiki
- */
-$messages['dsb'] = array(
-	'editcount'          => 'Licba změnow',
-	'editcount-desc'     => 'Pokazujo [[Special:Editcount|licbu změnow]] wužywarja',
-	'editcount_username' => 'Wužywaŕ:',
-	'editcount_submit'   => 'Wótpósłaś',
-	'editcount_total'    => 'Dogromady',
-);
-
 /** Ewe (Eʋegbe)
  * @author M.M.S.
  */
@@ -150,28 +87,17 @@ $messages['ee'] = array(
 	'editcount_username' => 'Ezãla:',
 );
 
-/** Greek (Ελληνικά)
- * @author Consta
- */
 $messages['el'] = array(
 	'editcount_username' => 'Χρήστης:',
 );
 
-/** Esperanto (Esperanto)
- * @author Tlustulimu
- * @author Yekrats
- */
 $messages['eo'] = array(
-	'editcount'          => 'Redakta nombro',
-	'editcount-desc'     => 'Montras [[Special:Editcount|nombron de redaktoj]] de uzanto',
+	'editcount' => 'Redakta nombro',
 	'editcount_username' => 'Uzanto:',
-	'editcount_submit'   => 'Ek',
-	'editcount_total'    => 'Tute',
+	'editcount_submit' => 'Ek',
+	'editcount_total' => 'Tute',
 );
 
-/** Extremaduran (Estremeñu)
- * @author Better
- */
 $messages['ext'] = array(
 	'editcount_username' => 'Usuáriu:',
 );
@@ -186,14 +112,10 @@ $messages['fi'] = array(
 	'editcount_total'    => 'Yhteensä',
 );
 
-/** French (Français)
- * @author Louperivois
- * @author Bertrand Grondin
- * @author Grondin
- */
+// French Version by Bertrand Grondin
 $messages['fr'] = array(
 	'editcount'          => 'Compteur d’éditions individuel',
-	'editcount-desc'     => 'Affiche le [[Special:Editcount|compteur d’édition]] d’un utilisateur',
+	'editcount-desc'     => 'Affiche le [[Special:Editcount|compteur d’édition]] d’un utilisateur.',
 	'editcount_username' => 'Utilisateur :',
 	'editcount_submit'   => 'Soumettre',
 	'editcount_total'    => 'Total',
@@ -209,26 +131,6 @@ $messages['gl'] = array(
 	'editcount_username' => 'Usuario:',
 	'editcount_submit'   => 'Enviar',
 	'editcount_total'    => 'Total',
-);
-
-/** Manx (Gaelg)
- * @author MacTire02
- */
-$messages['gv'] = array(
-	'editcount_username' => 'Ymmydeyr:',
-	'editcount_submit'   => 'Cur roish',
-	'editcount_total'    => 'Yn clane',
-);
-
-/** Hindi (हिन्दी)
- * @author Kaustubh
- */
-$messages['hi'] = array(
-	'editcount'          => 'संपादन संख्या',
-	'editcount-desc'     => 'सदस्यकी [[Special:Editcount|संपादन संख्या]] दर्शाता हैं',
-	'editcount_username' => 'सदस्य:',
-	'editcount_submit'   => 'भेजें',
-	'editcount_total'    => 'कुल',
 );
 
 /** Croatian (Hrvatski)
@@ -253,7 +155,7 @@ $messages['hsb'] = array(
 );
 
 /** Hungarian (Magyar)
- * @author Dani
+ * @author Bdanee
  */
 $messages['hu'] = array(
 	'editcount'          => 'Szerkesztések száma',
@@ -262,23 +164,19 @@ $messages['hu'] = array(
 	'editcount_total'    => 'Összesen',
 );
 
-/** Armenian (Հայերեն)
- * @author Teak
- */
 $messages['hy'] = array(
-	'editcount'          => 'Խմբագրումների հաշվում',
+	'editcount' => 'Խմբագրումների հաշվում',
 	'editcount_username' => 'Մասնակից.',
-	'editcount_submit'   => 'Հաշվել',
-	'editcount_total'    => 'Ընդհանուր',
+	'editcount_submit' => 'Հաշվել',
+	'editcount_total' => 'Ընդհանուր',
 );
 
-/** Indonesian (Bahasa Indonesia)
- * @author Ivan Lanin
- */
+// Indonesian Version by Ivan Lanin
 $messages['id'] = array(
-	'editcount'          => 'Jumlah suntingan',
+	'editcount' => 'Jumlah suntingan',
 	'editcount_username' => 'Pengguna:',
-	'editcount_submit'   => 'Kirim',
+	'editcount_submit' => 'Kirim',
+	'editcount_total' => 'Total',
 );
 
 /** Icelandic (Íslenska)
@@ -288,71 +186,25 @@ $messages['is'] = array(
 	'editcount_username' => 'Notandi:',
 );
 
-/** Italian (Italiano)
- * @author BrokenArrow
- * @author Darth Kule
- */
+// Italian Version by BrokenArrow
 $messages['it'] = array(
-	'editcount'          => 'Conteggio delle modifiche',
-	'editcount-desc'     => 'Mostra il [[Special:Editcount|conteggio dei contributi]] di un utente',
+	'editcount' => 'Conteggio delle modifiche',
 	'editcount_username' => 'Utente:',
-	'editcount_submit'   => 'Invia',
-	'editcount_total'    => 'Totale',
-);
-
-/** Japanese (日本語)
- * @author JtFuruhata
- */
-$messages['ja'] = array(
-	'editcount'          => '編集回数',
-	'editcount-desc'     => 'ある利用者の[[Special:Editcount|編集回数]]を表示する',
-	'editcount_username' => '利用者:',
-	'editcount_submit'   => '表示',
-	'editcount_total'    => '合計',
-);
-
-/** Javanese (Basa Jawa)
- * @author Meursault2004
- */
-$messages['jv'] = array(
-	'editcount'          => 'Cacahé suntingan',
-	'editcount-desc'     => 'Nuduhaké [[Special:Editcount|cacah suntingan]] sawijining panganggo',
-	'editcount_username' => 'Panganggo:',
-	'editcount_submit'   => 'Kirim',
-	'editcount_total'    => 'Gunggung',
-);
-
-/** Georgian (ქართული)
- * @author Malafaya
- */
-$messages['ka'] = array(
-	'editcount_username' => 'მომხმარებელი:',
+	'editcount_submit' => 'Invia',
+	'editcount_total' => 'Totale',
 );
 
 /** Khmer (ភាសាខ្មែរ)
  * @author Chhorran
- * @author Lovekhmer
  */
 $messages['km'] = array(
-	'editcount'          => 'ចំនួនកំនែប្រែ',
+	'editcount'          => 'របាប់កំណែប្រែ',
 	'editcount-desc'     => 'បង្ហាញ [[Special:Editcount|របាប់កំណែប្រែ]] នៃអ្នកប្រើប្រាស់ ម្នាក់',
 	'editcount_username' => 'អ្នកប្រើប្រាស់ ៖',
 	'editcount_submit'   => 'ដាក់ស្នើ',
 	'editcount_total'    => 'សរុប',
 );
 
-/** Ripoarisch (Ripoarisch)
- * @author Purodha
- */
-$messages['ksh'] = array(
-	'editcount_username' => 'Metmaacher Name:',
-	'editcount_submit'   => 'Loß Jonn!',
-	'editcount_total'    => 'Zosamme',
-);
-
-/** Latin (Latina)
- * @author SPQRobin
- */
 $messages['la'] = array(
 	'editcount_username' => 'Usor:',
 );
@@ -362,9 +214,8 @@ $messages['la'] = array(
  */
 $messages['lb'] = array(
 	'editcount'          => 'Zuel vun de Säitenännerungen',
-	'editcount-desc'     => "Weist d'[[Special:Editcount|Zuel vun den Ännerunge]] vun engem Benotzer",
 	'editcount_username' => 'Benotzer:',
-	'editcount_submit'   => 'Späicheren',
+	'editcount_submit'   => 'Ofschécken',
 	'editcount_total'    => 'Total',
 );
 
@@ -380,70 +231,12 @@ $messages['lt'] = array(
 	'editcount_total'    => 'Viso',
 );
 
-/** Malayalam (മലയാളം)
- * @author Shijualex
- */
-$messages['ml'] = array(
-	'editcount'          => 'തിരുത്തലുകളുടെ എണ്ണം',
-	'editcount-desc'     => 'ഒരു ഉപയോക്താവിന്റെ [[Special:Editcount|തിരുത്തലുകളുടെ എണ്ണം]] പ്രദര്‍ശിപ്പിക്കുന്നു',
-	'editcount_username' => 'ഉപയോക്താവ്:',
-	'editcount_submit'   => 'സമര്‍പ്പിക്കുക',
-	'editcount_total'    => 'മൊത്തം',
-);
-
-/** Marathi (मराठी)
- * @author Kaustubh
- */
-$messages['mr'] = array(
-	'editcount'          => 'संपादन संख्या',
-	'editcount-desc'     => 'एखाद्या सदस्याची [[Special:Editcount|संपादन संख्या]] दर्शविते',
-	'editcount_username' => 'सदस्य:',
-	'editcount_submit'   => 'पाठवा',
-	'editcount_total'    => 'एकूण',
-);
-
-/** Malay (Bahasa Melayu)
- * @author Aurora
- */
-$messages['ms'] = array(
-	'editcount_username' => 'Pengguna:',
-);
-
-/** Maltese (Malti)
- * @author Chrisportelli
- */
-$messages['mt'] = array(
-	'editcount'          => 'Kont tal-modifiki',
-	'editcount-desc'     => "Juri l-[[Special:Editcount|kont tal-modifiki]] ta' utent",
-	'editcount_username' => 'Utent:',
-	'editcount_submit'   => 'Ibgħat',
-	'editcount_total'    => 'Total',
-);
-
-/** Nahuatl (Nahuatl)
- * @author Fluence
- */
-$messages['nah'] = array(
-	'editcount'          => 'Tlapatlaliztli tlapōhualli',
-	'editcount-desc'     => 'Quinēxtīz cē tlatēquitiltilīlli [[Special:Editcount|ītlapatlaliz tlapōhualli]]',
-	'editcount_username' => 'Tlatēquitiltilīlli:',
-	'editcount_submit'   => 'Tiquihuāz',
-	'editcount_total'    => 'Mochīntīn',
-);
-
-/** Low German (Plattdüütsch)
- * @author Slomox
- */
-$messages['nds'] = array(
-	'editcount_username' => 'Bruker:',
-);
-
 /** Dutch (Nederlands)
  * @author Siebrand
  */
 $messages['nl'] = array(
 	'editcount'          => 'Bewerkingsteller',
-	'editcount-desc'     => 'Geeft een [[Special:Editcount|bewerkingsteller]] weer voor een gebruiker',
+	'editcount-desc'     => 'Toont een [[Special:Editcount|bewerkingsteller]] voor een gebruiker',
 	'editcount_username' => 'Gebruiker:',
 	'editcount_submit'   => 'OK',
 	'editcount_total'    => 'Totaal',
@@ -459,7 +252,7 @@ $messages['nn'] = array(
 	'editcount_total'    => 'Totalt',
 );
 
-/** Norwegian (bokmål)‬ (‪Norsk (bokmål)‬)
+/** Norwegian (‪Norsk (bokmål)‬)
  * @author Jon Harald Søby
  */
 $messages['no'] = array(
@@ -482,33 +275,26 @@ $messages['nso'] = array(
  * @author Cedric31
  */
 $messages['oc'] = array(
-	'editcount'          => "Comptador d'edicions individual",
-	'editcount-desc'     => 'Aficha lo [[Special:Editcount|comptador d’edicion]] d’un utilizaire.',
-	'editcount_username' => 'Utilizaire :',
+	'editcount'          => "Comptaire d'edicions individual",
+	'editcount-desc'     => 'Aficha lo [[Special:Editcount|comptaire d’edicion]] d’un utilizaire.',
+	'editcount_username' => 'Utilizaire:',
 	'editcount_submit'   => 'Sometre',
 	'editcount_total'    => 'Soma',
 );
 
-/** Polish (Polski)
- * @author Derbeth
- * @author McMonster
- */
 $messages['pl'] = array(
-	'editcount'          => 'Licznik edycji',
-	'editcount-desc'     => 'Wyświetla [[Special:Editcount|liczbę edycji]] użytkownika',
+	'editcount' => 'Licznik edycji',
 	'editcount_username' => 'Użytkownik',
-	'editcount_submit'   => 'Wyślij',
-	'editcount_total'    => 'Razem',
+	'editcount_submit' => 'Wyślij',
+	'editcount_total' => 'Razem',
 );
 
-/** Piedmontese (Piemontèis)
- * @author Bèrto 'd Sèra
- */
+/* Piedmontese (Bèrto 'd Sèra) */
 $messages['pms'] = array(
-	'editcount'          => 'Total dle modìfiche',
+	'editcount' => 'Total dle modìfiche',
 	'editcount_username' => 'Stranòm:',
-	'editcount_submit'   => 'Manda',
-	'editcount_total'    => 'Total',
+	'editcount_submit' => 'Manda',
+	'editcount_total' => 'Total',
 );
 
 /** Pashto (پښتو)
@@ -524,30 +310,19 @@ $messages['ps'] = array(
  */
 $messages['pt'] = array(
 	'editcount'          => 'Contador de edições',
-	'editcount-desc'     => 'Apresenta [[Special:Editcount|a contagem de edições]] de um utilizador',
-	'editcount_username' => 'Utilizador:',
+	'editcount-desc'     => 'Apresenta [[{{ns:special}}:Editcount|a contagem de edições]] de um utilizador',
+	'editcount_username' => 'Usuário:',
 	'editcount_submit'   => 'Enviar',
 	'editcount_total'    => 'Total',
 );
 
-/** Rhaeto-Romance (Rumantsch)
- * @author SPQRobin
- */
 $messages['rm'] = array(
 	'editcount_username' => 'Utilisader:',
 );
 
-/** Romanian (Română)
- * @author KlaudiuMihaila
- */
-$messages['ro'] = array(
-	'editcount_username' => 'Utilizator:',
-	'editcount_total'    => 'Total',
-);
-
 /** Russian (Русский)
  * @author VasilievVV
- * @author Александр Сигачёв
+ * @author .:Ajvol:.
  */
 $messages['ru'] = array(
 	'editcount'          => 'Счётчик правок',
@@ -557,7 +332,7 @@ $messages['ru'] = array(
 	'editcount_total'    => 'Всего',
 );
 
-/** Sassaresu (Sassaresu)
+/** Sassarese (Sassarese)
  * @author Felis
  */
 $messages['sdc'] = array(
@@ -578,39 +353,30 @@ $messages['sk'] = array(
 	'editcount_total'    => 'Celkom',
 );
 
-/** Serbian (Српски / Srpski)
- * @author Sasa Stefanovic
- */
+// Serbian default version by Sasa Stefanovic
 $messages['sr'] = array(
-	'editcount'          => 'Бројач измена',
+	'editcount' => 'Бројач измена',
 	'editcount_username' => 'Корисник:',
-	'editcount_submit'   => 'Унеси',
-	'editcount_total'    => 'Укупно',
+	'editcount_submit' => 'Унеси',
+	'editcount_total' => 'Укупно',
 );
 
-/** Serbian Cyrillic ekavian (ћирилица)
- * @author Sasa Stefanovic
- */
+// Serbian cyrillic version by Sasa Stefanovic
 $messages['sr-ec'] = array(
-	'editcount'          => 'Бројач измена',
+	'editcount' => 'Бројач измена',
 	'editcount_username' => 'Корисник:',
-	'editcount_submit'   => 'Унеси',
-	'editcount_total'    => 'Укупно',
+	'editcount_submit' => 'Унеси',
+	'editcount_total' => 'Укупно',
 );
 
-/** latinica (latinica)
- * @author Sasa Stefanovic
- */
+// Serbian latin version by Sasa Stefanovic
 $messages['sr-el'] = array(
-	'editcount'          => 'Brojač izmena',
+	'editcount' => 'Brojač izmena',
 	'editcount_username' => 'Korisnik:',
-	'editcount_submit'   => 'Unesi',
-	'editcount_total'    => 'Ukupno',
+	'editcount_submit' => 'Unesi',
+	'editcount_total' => 'Ukupno',
 );
 
-/** Swati (SiSwati)
- * @author Jatrobat
- */
 $messages['ss'] = array(
 	'editcount_username' => 'Umuntfu:',
 );
@@ -625,53 +391,24 @@ $messages['stq'] = array(
 	'editcount_total'    => 'Mädnunner',
 );
 
-/** Sundanese (Basa Sunda)
- * @author Irwangatot
- */
-$messages['su'] = array(
-	'editcount'          => 'Jumlah Éditan',
-	'editcount-desc'     => 'Tembongkeun [[Special:Editcount|jumlah éditan]] pamaké',
-	'editcount_username' => 'Pamaké:',
-	'editcount_submit'   => 'Kintun',
-	'editcount_total'    => 'Total',
-);
-
 /** Swedish (Svenska)
+ * @author Max sonnelid
  * @author M.M.S.
- * @author Lejonel
  */
 $messages['sv'] = array(
-	'editcount'          => 'Redigeringsräknare',
-	'editcount-desc'     => 'Visar [[Special:Editcount|antalet redigeringar]] som en användare gjort',
+	'editcount'          => 'Redigerings räkning',
+	'editcount-desc'     => 'Visar [[Special:Editcount|redigerings räkning]] för en användare',
 	'editcount_username' => 'Användare:',
 	'editcount_submit'   => 'Räkna',
 	'editcount_total'    => 'Total',
-);
-
-/** Silesian (Ślůnski)
- * @author Herr Kriss
- */
-$messages['szl'] = array(
-	'editcount_total' => 'Do kupy',
 );
 
 /** Telugu (తెలుగు)
  * @author Veeven
  */
 $messages['te'] = array(
-	'editcount'          => 'మార్పుల సంఖ్య',
-	'editcount-desc'     => 'వాడుకరి యొక్క [[Special:Editcount|మార్పుల సంఖ్య]]ని చూపిస్తుంది',
 	'editcount_username' => 'వాడుకరి:',
-	'editcount_submit'   => 'దాఖలుచెయ్యి',
 	'editcount_total'    => 'మొత్తం',
-);
-
-/** Tajik (Cyrillic) (Тоҷикӣ/tojikī (Cyrillic))
- * @author Ibrahim
- */
-$messages['tg-cyrl'] = array(
-	'editcount_username' => 'Корбар:',
-	'editcount_submit'   => 'Ирсол',
 );
 
 /** Turkish (Türkçe)
@@ -680,28 +417,6 @@ $messages['tg-cyrl'] = array(
 $messages['tr'] = array(
 	'editcount_username' => 'Kullanıcı:',
 	'editcount_total'    => 'Toplam',
-);
-
-/** Ukrainian (Українська)
- * @author Ahonc
- */
-$messages['uk'] = array(
-	'editcount'          => 'Лічильник редагувань',
-	'editcount-desc'     => 'Показує [[Special:Editcount|кількість редагувань]] користувача',
-	'editcount_username' => 'Користувач:',
-	'editcount_submit'   => 'Порахувати',
-	'editcount_total'    => 'Усього',
-);
-
-/** Vèneto (Vèneto)
- * @author Candalua
- */
-$messages['vec'] = array(
-	'editcount'          => 'Contegio dei contributi',
-	'editcount-desc'     => 'Mostra [[Special:Editcount|el contegio dei contributi]] de un utente',
-	'editcount_username' => 'Utente:',
-	'editcount_submit'   => 'Invia',
-	'editcount_total'    => 'Totale',
 );
 
 /** Vietnamese (Tiếng Việt)
@@ -723,36 +438,27 @@ $messages['vo'] = array(
 	'editcount_total'    => 'Valod',
 );
 
-/** Yue (粵語)
- * @author Shinjiman
- */
+// Cantonese Version by Shinjiman
 $messages['yue'] = array(
-	'editcount'          => '編輯次數',
-	'editcount-desc'     => '顯示一位用戶嘅[[Special:Editcount|編輯次數]]',
+	'editcount' => '編輯次數',
 	'editcount_username' => '用戶:',
-	'editcount_submit'   => '遞交',
-	'editcount_total'    => '總數',
+	'editcount_submit' => '遞交',
+	'editcount_total' => '總數',
 );
 
-/** Simplified Chinese (‪中文(简体)‬)
- * @author Shinjiman
- */
+// Chinese (Simplified) Version by Shinjiman
 $messages['zh-hans'] = array(
-	'editcount'          => '编辑次数',
-	'editcount-desc'     => '显示一個用户的[[Special:Editcount|编辑次数]]',
+	'editcount' => '编辑次数',
 	'editcount_username' => '用户:',
-	'editcount_submit'   => '提交',
-	'editcount_total'    => '总数',
+	'editcount_submit' => '提交',
+	'editcount_total' => '总数',
 );
 
-/** Traditional Chinese (‪中文(繁體)‬)
- * @author Shinjiman
- */
+// Chinese (Traditional) Version by Shinjiman
 $messages['zh-hant'] = array(
-	'editcount'          => '編輯次數',
-	'editcount-desc'     => '顯示一個使用者的[[Special:Editcount|編輯次數]]',
+	'editcount' => '編輯次數',
 	'editcount_username' => '用戶:',
-	'editcount_submit'   => '遞交',
-	'editcount_total'    => '總數',
+	'editcount_submit' => '遞交',
+	'editcount_total' => '總數',
 );
 

@@ -1,8 +1,7 @@
 <?php
 /** Aymara (Aymar)
  *
- * @ingroup Language
- * @file
+ * @addtogroup Language
  *
  * @author Kanon6917
  * @author Siebrand
@@ -34,12 +33,12 @@ $messages = array(
 'jumptosearch'     => 'thaqaña',
 
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
-'currentevents'        => 'Jichha pacha',
-'currentevents-url'    => 'Project:Jichha pacha',
-'mainpage'             => 'Nayriri Uñstawi',
-'mainpage-description' => 'Nayriri Uñstawi',
-'portal'               => 'Jayma punku',
-'portal-url'           => 'Project:Jayma punku',
+'currentevents'     => 'Jichha pacha',
+'currentevents-url' => 'Project:Jichha pacha',
+'mainpage'          => 'Nayriri Uñstawi',
+'portal'            => 'Jayma punku',
+'portal-url'        => 'Project:Jayma punku',
+'sitesupport'       => 'Ramañanaka',
 
 'editsection' => 'trukaña',
 'editold'     => 'trukaña',
@@ -80,15 +79,13 @@ $messages = array(
 # Upload
 'fileuploadsummary' => 'Uñt’ayawi:',
 
-'license' => 'Iyawsawi:',
+'license' => 'Iyawsawi',
 
-# Special:Imagelist
+# Image list
+'filehist-user'         => 'Apnaqiri',
 'imagelist_date'        => 'Uru jakhu',
 'imagelist_user'        => 'Apnaqiri',
 'imagelist_description' => 'Uñt’ayawi',
-
-# Image description page
-'filehist-user' => 'Apnaqiri',
 
 # Miscellaneous special pages
 'move' => 'Qillqaraña',

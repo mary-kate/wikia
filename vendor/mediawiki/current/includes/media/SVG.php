@@ -1,11 +1,7 @@
 <?php
-/**
- * @file
- * @ingroup Media
- */
 
 /**
- * @ingroup Media
+ * @addtogroup Media
  */
 class SvgHandler extends ImageHandler {
 	function isEnabled() {
@@ -39,10 +35,10 @@ class SvgHandler extends ImageHandler {
 		}
 		return true;
 	}
-
+	
 	function doTransform( $image, $dstPath, $dstUrl, $params, $flags = 0 ) {
 		global $wgSVGConverters, $wgSVGConverter, $wgSVGConverterPath;
-
+		
 		if ( !$this->normaliseParams( $image, $params ) ) {
 			return new TransformParameterError( $params );
 		}
@@ -57,7 +53,7 @@ class SvgHandler extends ImageHandler {
 		}
 
 		if ( !wfMkdirParents( dirname( $dstPath ) ) ) {
-			return new MediaTransformError( 'thumbnail_error', $clientWidth, $clientHeight,
+			return new MediaTransformError( 'thumbnail_error', $clientWidth, $clientHeight, 
 				wfMsg( 'thumbnail_dest_directory' ) );
 		}
 
@@ -98,9 +94,9 @@ class SvgHandler extends ImageHandler {
 
 	function getLongDesc( $file ) {
 		global $wgLang;
-		return wfMsgExt( 'svg-long-desc', 'parseinline',
-			$wgLang->formatNum( $file->getWidth() ),
-			$wgLang->formatNum( $file->getHeight() ),
+		return wfMsg( 'svg-long-desc', $file->getWidth(), $file->getHeight(), 
 			$wgLang->formatSize( $file->getSize() ) );
 	}
 }
+
+

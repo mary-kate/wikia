@@ -2,8 +2,7 @@
 /**
  * Statistics about the localisation.
  *
- * @file
- * @ingroup MaintenanceLanguage
+ * @addtogroup Maintenance
  *
  * @author Ævar Arnfjörð Bjarmason <avarab@gmail.com>
  * @author Ashar Voultoiz <thoane@altern.org>

@@ -1,10 +1,10 @@
 <?php
+
 /**
  * Send SQL queries from the specified file to the database, performing
  * variable replacement along the way.
- *
- * @file
- * @ingroup Database Maintenance
+ * 
+ * @addtogroup Database
  */
 
 require_once( dirname(__FILE__) . '/' . 'commandLine.inc' );

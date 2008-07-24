@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * @ingroup Maintenance
- */
 
 $optionsWithArgs = array( 'u', 's' );
 

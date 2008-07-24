@@ -43,7 +43,7 @@ class SMWNAryValue extends SMWDataValue {
 		}
 
 		$types = $this->m_type->getTypeValues();
-		$values = preg_split('/[\s]*;[\s]*/u', trim($value), $this->m_count);
+		$values = preg_split('/[\s]*;[\s]*/', trim($value), $this->m_count);
 		$vi = 0; // index in value array
 		$empty = true;
 		for ($i = 0; $i < $this->m_count; $i++) { // iterate over slots
@@ -51,7 +51,7 @@ class SMWNAryValue extends SMWDataValue {
 			if ($this->m_querysyntax) {
 				$comparator = SMW_CMP_EQ;
 				$printmodifier = '';
-				SMWQueryParser::prepareValue($values[$vi], $comparator, $printmodifier);
+				$this->prepareValue($values[$vi], $comparator, $printmodifier);
 				if ($values[$vi] == '*') { // print statement, treat as omission
 					$this->m_printstatement = true;
 					$values[$vi] = '';
@@ -203,7 +203,6 @@ class SMWNAryValue extends SMWDataValue {
 	public function getUnit() {
 		$first = true;
 		$result = '';
-		$hasunit = false;
 		foreach ($this->m_values as $value) {
 			if ($first) {
 				$first = false;
@@ -212,13 +211,7 @@ class SMWNAryValue extends SMWDataValue {
 			}
 			if ($value !== NULL) {
 				$result .= $value->getUnit();
-				if ( (!$hasunit) && ($value->getUnit() != '') ) {
-					$hasunit = true;
-				}
 			}
-		}
-		if (!$hasunit) {
-			$result = '';
 		}
 		return $result;
 	}
@@ -322,6 +315,39 @@ class SMWNAryValue extends SMWDataValue {
 		return implode(';', $this->m_outputmodifiers);
 	}
 
+	private function prepareValue(&$value, &$comparator, &$printmodifier) {
+		// get print modifier behind *
+		$list = preg_split('/^\*/',$value,2);
+		if (count($list) == 2) { //hit
+			$value = '*';
+			$printmodifier = $list[1];
+		} else {
+			$printmodifier = '';
+		}
+		if ($value == '*') { // printout statement
+			return;
+		}
+		$list = preg_split('/^(<|>|!)/',$value, 2, PREG_SPLIT_DELIM_CAPTURE);
+		$comparator = SMW_CMP_EQ;
+		if (count($list) == 3) { // initial comparator found ($list[1] should be empty)
+			switch ($list[1]) {
+				case '<':
+					$comparator = SMW_CMP_LEQ;
+					$value = $list[2];
+				break;
+				case '>':
+					$comparator = SMW_CMP_GEQ;
+					$value = $list[2];
+				break;
+				case '!':
+					$comparator = SMW_CMP_NEQ;
+					$value = $list[2];
+				break;
+				//default: not possible
+			}
+		}
+	}
+
 	/**
 	 * Exports this n-ary relation to an appropriate RDF-structure.
 	 * The lines within the subject element.
@@ -330,54 +356,29 @@ class SMWNAryValue extends SMWDataValue {
 	 * @param ExportRDF $exporter the exporter calling this function
 	 * @return string the lines to be exported
 	 */
-// 	public function exportToRDF( $QName, ExportRDF $exporter ) {
-// 		$rdf = "\t\t<$QName>\n";
-// 		$rdf.= "\t\t\t<swivt:Container>\n";
-// 		$count = 0;
-// 		foreach ($this->m_values as $value) {
-// 			$count++;
-// 			if ($value === NULL) {
-// 				continue;
-// 			}
-// 			if (($value->getTypeID() == '_wpg') || ($value->getTypeID() == '_uri') || ($value->getTypeID() == '_ema')) {
-// 				$element = "object" . $count; 
-// 				$rdf .= "\t\t" . $value->exportToRDF( "swivt:$element", $exporter );
-// 				$exporter->addSchemaRef( $element, "owl:ObjectProperty" );
-// 			} else {
-// 				$element = "value" . $count; 
-// 				$rdf .= "\t\t" . $value->exportToRDF( "swivt:$element", $exporter );
-// 				$exporter->addSchemaRef( $element, "owl:DatatypeProperty" );
-// 			}
-// 		}
-// 		$rdf .= "\t\t\t</swivt:Container>\n";
-// 		$exporter->addSchemaRef( "Container", "owl:Class" );
-// 		$rdf .= "\t\t</$QName>\n";
-// 		return $rdf;
-// 	}
-
-	public function getExportData() {
-		if (!$this->isValid()) return NULL;
-
-		$result = new SMWExpData(new SMWExpElement('', $this)); // bnode
-		$ed = new SMWExpData(SMWExporter::getSpecialElement('swivt','Container'));
-		$result->addPropertyObjectValue(SMWExporter::getSpecialElement('rdf','type'), $ed);
+	public function exportToRDF( $QName, ExportRDF $exporter ) {
+		$rdf = "\t\t<$QName>\n";
+		$rdf.= "\t\t\t<swivt:Container>\n";
 		$count = 0;
 		foreach ($this->m_values as $value) {
 			$count++;
-			if ( ($value === NULL) || (!$value->isValid()) ) {
+			if ($value === NULL) {
 				continue;
 			}
 			if (($value->getTypeID() == '_wpg') || ($value->getTypeID() == '_uri') || ($value->getTypeID() == '_ema')) {
-				$result->addPropertyObjectValue(
-				      SMWExporter::getSpecialElement('swivt','object' . $count),
-				      $value->getExportData());
+				$element = "object" . $count; 
+				$rdf .= "\t\t" . $value->exportToRDF( "swivt:$element", $exporter );
+				$exporter->addSchemaRef( $element, "owl:ObjectProperty" );
 			} else {
-				$result->addPropertyObjectValue(
-				      SMWExporter::getSpecialElement('swivt','value' . $count),
-				      $value->getExportData());
+				$element = "value" . $count; 
+				$rdf .= "\t\t" . $value->exportToRDF( "swivt:$element", $exporter );
+				$exporter->addSchemaRef( $element, "owl:DatatypeProperty" );
 			}
 		}
-		return $result;
+		$rdf .= "\t\t\t</swivt:Container>\n";
+		$exporter->addSchemaRef( "Container", "owl:Class" );
+		$rdf .= "\t\t</$QName>\n";
+		return $rdf;
 	}
 
 	protected function checkAllowedValues() {

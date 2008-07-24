@@ -1,5 +1,10 @@
 <?php
 
+if (!defined('MEDIAWIKI')) die();
+
+global $IP;
+include_once($IP . '/includes/SpecialPage.php');
+
 /**
  * @author Denny Vrandecic
  *
@@ -15,6 +20,7 @@ class SMWURIResolver extends SpecialPage {
 	 * Constructor
 	 */
 	public function __construct() {
+		smwfInitUserMessages();
 		parent::__construct('URIResolver', '', false);
 	}
 
@@ -22,17 +28,13 @@ class SMWURIResolver extends SpecialPage {
 		global $wgOut, $smwgIP;
 		wfProfileIn('SpecialURIResolver::execute (SMW)');
 		if ('' == $query) {
-			if (stristr($_SERVER['HTTP_ACCEPT'], 'RDF')) {
-				$wgOut->disable();
-				header('HTTP/1.1 303 See Other');
-				$s = Skin::makeSpecialUrl('ExportRDF', 'stats=1');
-				header('Location: ' . $s);
-			} else {
-				$wgOut->addHTML(wfMsg('smw_uri_doc'));
-			}
+			$wgOut->addHTML(wfMsg('smw_uri_doc'));
 		} else {
+			/// TODO: the next (large) include is used for just a single function, I think -- mak
+			require_once( $smwgIP . '/specials/ExportRDF/SMW_SpecialExportRDF.php' );
 			$wgOut->disable();
-			$query = SMWExporter::decodeURI($query);
+
+			$query = ExportRDF::makeURIfromXMLExportId($query);
 			$query = str_replace( "_", "%20", $query );
 			$query = urldecode($query);
 			$title = Title::newFromText($query);

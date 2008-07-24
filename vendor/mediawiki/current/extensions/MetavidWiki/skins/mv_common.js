@@ -2,34 +2,36 @@
 var global_loading_txt = 'loading<blink>...</blink>';
 
 
-function add_adjust_hooks(mvd_id, track_dur){
+function add_adjust_hooks(mvd_id, track_dur, o){
 	if(track_dur)track_dur=parseInt(track_dur);
 	js_log('add_adjust_hooks: ' + mvd_id + ' td: '+ track_dur);
 	//if options are unset populate functions: 
+	//if(!o){
+		
+	//}
 	//add mouse over end time frame highlight
 	$j('#mv_end_hr_'+mvd_id).hoverIntent({interval:200,over:function(){
 		//js_log('pre style: ' + $j(this).css('border'));
 		$j(this).css('border','solid red');
  		do_video_time_update( $j('#mv_end_hr_'+mvd_id).val(), $j('#mv_end_hr_'+mvd_id).val() );
 	},out:function(){
-		$j(this).css('border','solid black thin');
+		//@@todo restore "undefined 
+		$j(this).get(0).style.border=null;
 		do_video_time_update($j('#mv_start_hr_'+mvd_id).val(), $j('#mv_end_hr_'+mvd_id).val() );
-	}});		
+	}});	
+	
 	//add onchange js hooks: 
 	$j('.mv_adj_hr').change(function(){
-		//preserve track duration for nav and seq:		
-		//ie seems to crash so no interface updates for IE for the time being
-		if(!$j.browser.msie){
-			if(mvd_id=='nav'||mvd_id=='seq'){
-				add_adjust_hooks(mvd_id, track_dur);
-			}else{
-				add_adjust_hooks(mvd_id)
-			}
+		//preserve track duration for nav and seq:
+		if(mvd_id=='nav'||mvd_id=='seq'){
+			add_adjust_hooks(mvd_id, track_dur);
+		}else{
+			add_adjust_hooks(mvd_id)
 		}
 		//update the video time for onChange
 		do_video_time_update($j('#mv_start_hr_'+mvd_id).val(), $j('#mv_end_hr_'+mvd_id).val() );
 	});				
-	//read the ntp time from the fields 
+	//read the ntp time rom the fields 
 	var start_sec = ntp2seconds( $j('#mv_start_hr_'+mvd_id).val() );
 	var end_sec = ntp2seconds( $j('#mv_end_hr_'+mvd_id).val() );
 	js_log('start_sec:'+start_sec + ' end: ' + end_sec);
@@ -79,6 +81,7 @@ function add_adjust_hooks(mvd_id, track_dur){
 	//if re-size width less than width of image bump it up: 
 	var resize_width = Math.round((slider_end*track_width)-(slider_start*track_width));
 	if(resize_width<17)resize_width=17;
+
 	
 	$j('#resize_'+mvd_id).css({
 		left:Math.round(slider_start*track_width)+'px',
@@ -135,8 +138,9 @@ function add_adjust_hooks(mvd_id, track_dur){
 			}else{
 				$j('#mv_start_hr_'+mvd_id).val(org_start);
 			}
-			//update the clip 
-			do_video_time_update($j('#mv_start_hr_'+mvd_id).val(), $j('#mv_end_hr_'+mvd_id).val() );			
+			//if in seq mode:update the clip 
+			if(mvd_id=='seq')do_video_time_update($j('#mv_start_hr_'+mvd_id).val(), $j('#mv_end_hr_'+mvd_id).val() );
+			
 		},
 		resize: function(e,ui) {	
 			mv_slider_update_stats(mvd_id);

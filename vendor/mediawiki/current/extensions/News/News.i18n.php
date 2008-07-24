@@ -51,46 +51,22 @@ $messages['dsb'] = array(
 	'newsextension-desc' => 'Pokazujo pśiměrjone aktualne změny na wikijowych bokach abo ako RSS abo kanal Atom',
 );
 
-/** Esperanto (Esperanto)
- * @author Yekrats
- */
-$messages['eo'] = array(
-	'newsextension-desc' => 'Montras proprajn lastatempajn ŝanĝojn en vikiaj paĝoj aŭ kiel RSS aŭ Atom-fonto',
-);
-
-/** French (Français)
- * @author Verdy p
- */
 $messages['fr'] = array(
 	'newsextension-desc'          => 'Visionne les modifications récentes spécifiques sur une page wiki ou comme un flux RSS ou Atom.',
 	'newsextension-unknownformat' => '$1 : format de flux inconnu : $2<br />',
 	'newsextension-feednotfound'  => '$1 : page de flux introuvable : $2<br />',
-	'newsextension-feedrequest'   => '$1 : prise en charge de la requête pour $2<br />',
-	'newsextension-checkok'       => '$1 : cache HTTP correct, en-tête 304 envoyé<br />',
-	'newsextension-checkok1'      => '$1 : vérification du cache correcte : IMS $2 c/ $3 modifié<br />',
-	'newsextension-gotcached'     => '$1 : ($2? "obtenu caché" : "non caché")<br />',
+	'newsextension-feedrequest'   => '$1 : Prise ne charge de la requête pour $2<br />',
+	'newsextension-checkok'       => '$1 : cache HTTP correct, en-tête 304 header envoyé</br >',
+	'newsextension-checkok1'      => '$1 : vérification du cache correcte :  IMS $2 c/ $3 modifié<br />',
+	'newsextension-gotcached'     => '$1 : ($2 ? « obtenu caché » : « non caché »)<br />',
 	'newsextension-purge'         => '$1 : purge, cache ignoré<br />',
 	'newsextension-loggin'        => '$1 : en session, cache ignoré<br />',
-	'newsextension-outputting'    => '$1 : sortie de la copie en cache ($2) : $3 &lt; {$4}<br />',
-	'newsextension-stale'         => '$1 : copie périmée trouvée en cache ($2) : $3 &gt;= {$4}<br />',
-	'newsextension-nofoundonpage' => '$1 : aucune alimentation trouvée sur la page : $2<br / >',
+	'newsextension-outputting'    => '$1 : sortie de la copie en cache ($2): $3 < {$4}',
+	'newsextension-stale'         => '$1 : trouvé une ancienne copie en cache ($2): $3 >= {$4}<br />',
+	'newsextension-nofoundonpage' => '$1 : aucune alimentation de trouvée sur la page : $2<br / >',
 	'newsextension-renderedfeed'  => '$1 : alimentation rendue<br />',
 	'newsextension-cachingfeed'   => '$1 : cache l’alimentation ($2)<br / >',
-	'newsextension-freshfeed'     => '$1 : sortie de l’alimentation récente<br />',
-);
-
-/** Galician (Galego)
- * @author Toliño
- */
-$messages['gl'] = array(
-	'newsextension-desc' => 'Amosa uns cambios recentes personalizados nas páxinas dun wiki ou como unha fonte de noticias RSS ou Atom',
-);
-
-/** Hindi (हिन्दी)
- * @author Kaustubh
- */
-$messages['hi'] = array(
-	'newsextension-desc' => 'विकिके पन्नोंमें हुए बदलाव आरएसएस फीड या ऍटम फीड के रूपमें दर्शाता हैं',
+	'newsextension-freshfeed'     => '$1 : sortie alimentation récente<br />',
 );
 
 /** Upper Sorbian (Hornjoserbsce)
@@ -100,87 +76,22 @@ $messages['hsb'] = array(
 	'newsextension-desc' => 'Pokazuje přiměrjene aktualne změny na wikijowych stronach abo jako RSS abo kanal Atom',
 );
 
-/** Khmer (ភាសាខ្មែរ)
- * @author Chhorran
- * @author Lovekhmer
- */
-$messages['km'] = array(
-	'newsextension-desc' => 'បង្ហាញបំលាស់ប្តូរបានសំដៅថ្មីៗលើទំព័រវិគីឬបំរែបំរួល RSS ឬ Atom ។',
-);
-
-/** Luxembourgish (Lëtzebuergesch)
- * @author Robby
- */
-$messages['lb'] = array(
-	'newsextension-desc'          => 'Weist déi spezifesch rezent Ännerungen op enger wiki-Säit oder als RSS oder Atom Lëscht',
-	'newsextension-unknownformat' => '$1: onbekannte Feed Format: $2<br />',
-);
-
-/** Marathi (मराठी)
- * @author Kaustubh
- */
-$messages['mr'] = array(
-	'newsextension-desc'          => 'एखाद्या विकिवरील पानांमध्ये झालेले अलीकडील बदल आरएसएस फीड किंवा ऍटम फीड च्या स्वरुपात दर्शविते',
-	'newsextension-unknownformat' => '$1: चुकीची फीड रुपरेषा : $2<br />',
-	'newsextension-feednotfound'  => '$1: फीड पृष्ठ सापडले नाही : $2<br />',
-	'newsextension-feedrequest'   => '$1: $2 साठीची फीड मागणी पूर्ण करीत आहे<br />',
-	'newsextension-checkok'       => '$1: HTTP सय ठीक, ३०४ हेडर पाठविले </br >',
-	'newsextension-checkok1'      => '$1: सय तपासणी-ठीक:  IMS $2 वि. $3 बदलले <br />',
-	'newsextension-purge'         => '$1: पर्ज, सयीकडे दुर्लक्ष करीत आहे<br />',
-	'newsextension-loggin'        => '$1: प्रवेश पूर्ण, सयीकडे दुर्लक्ष करीत आहे<br />',
-	'newsextension-outputting'    => '$1: सयीतील प्रत काढट आहे ($2): $3 < {$4}<br />',
-	'newsextension-stale'         => '$1: सय प्रत सापडली ($2): $3 >= {$4}<br />',
-	'newsextension-nofoundonpage' => '$1: पानावर फीड सापडला नाही: $2<br / >',
-	'newsextension-renderedfeed'  => '$1: रेंडर्ड फीड <br />',
-	'newsextension-cachingfeed'   => '$1: फीड सयीत टाकत आहे ($2)<br / >',
-	'newsextension-freshfeed'     => '$1: नवीन फीड बाहेर काढत आहे<br />',
-);
-
 /** Dutch (Nederlands)
  * @author SPQRobin
- * @author Siebrand
  */
 $messages['nl'] = array(
-	'newsextension-desc'          => 'Aangepaste recente wijzigingen weergeven op een wikipagina, of als RSS-feed of Atom-feed',
-	'newsextension-unknownformat' => '$1: onbekend feedformaat: $2<br />',
+	'newsextension-desc'          => 'Aangepaste recente wijzigingen tonen op een wikipagina, of als RSS-feed of Atom-feed',
+	'newsextension-unknownformat' => '$1: onbekend feed-formaat: $2<br />',
 	'newsextension-feednotfound'  => '$1: feed-pagina niet gevonden: $2<br />',
 	'newsextension-feedrequest'   => '$1: bezig met afhandelen van feed-aanvraag voor $2<br />',
 	'newsextension-nofoundonpage' => '$1: geen feed gevonden op pagina: $2<br />',
 );
 
-/** Norwegian (bokmål)‬ (‪Norsk (bokmål)‬)
+/** Norwegian (‪Norsk (bokmål)‬)
  * @author Jon Harald Søby
  */
 $messages['no'] = array(
 	'newsextension-desc' => 'Viser egendefinerte siste endringer på en wikiside, eller en RSS- eller Atom-føde',
-);
-
-/** Occitan (Occitan)
- * @author Cedric31
- */
-$messages['oc'] = array(
-	'newsextension-desc'          => 'Mòstra los darrièrs cambiaments especifics sus una pagina wiki o coma un flus RSS o Atom.',
-	'newsextension-unknownformat' => '$1 : format de flus desconegut : $2<br />',
-	'newsextension-feednotfound'  => '$1 : pagina de fluses introbabla : $2<br />',
-	'newsextension-feedrequest'   => '$1 : Presa en carga de la requèsta per $2<br />',
-	'newsextension-checkok'       => '$1 : amagatal HTTP corrècte, entèsta 304 header mandat</br >',
-	'newsextension-checkok1'      => "$1 : verificacion de l'amagatal corrècta :  IMS $2 c/ $3 modificat<br />",
-	'newsextension-gotcached'     => '$1 : ($2 ? « obtengut amagat » : « pas amagat »)<br />',
-	'newsextension-purge'         => '$1 : purga, amagatal ignorat<br />',
-	'newsextension-loggin'        => '$1 : en sesilha, amagatal ignorat<br />',
-	'newsextension-outputting'    => '$1 : sortida de la còpia en amagatal ($2): $3 < {$4}',
-	'newsextension-stale'         => '$1 : trobat una còpia en amagatal anciana ($2): $3 >= {$4}<br />',
-	'newsextension-nofoundonpage' => "$1 : cap d'alimentacion pas trobada sus la pagina : $2<br / >",
-	'newsextension-renderedfeed'  => '$1 : alimentacion renduda<br />',
-	'newsextension-cachingfeed'   => '$1 : amaga l’alimentacion ($2)<br / >',
-	'newsextension-freshfeed'     => '$1 : sortida alimentacion recenta<br />',
-);
-
-/** Russian (Русский)
- * @author Александр Сигачёв
- */
-$messages['ru'] = array(
-	'newsextension-desc' => 'Показывает настроенный список свежих правок на вики-страницах или ленте RSS или Atom',
 );
 
 /** Slovak (Slovenčina)
@@ -188,33 +99,5 @@ $messages['ru'] = array(
  */
 $messages['sk'] = array(
 	'newsextension-desc' => 'Zobrazuje prispôsobené Posledné úpravy na wiki stránkach alebo ako kanál RSS alebo Atom',
-);
-
-/** Sundanese (Basa Sunda)
- * @author Kandar
- */
-$messages['su'] = array(
-	'newsextension-desc' => 'Témbongkeun parobahan anyar saragam dina kaca wiki atawa dina rupa eupan RSS atawa Atom',
-);
-
-/** Swedish (Svenska)
- * @author M.M.S.
- */
-$messages['sv'] = array(
-	'newsextension-desc' => 'Visar skräddarsydda senaste ändringar på en wikisida, eller en RSS- eller Atom-matning',
-);
-
-/** Vèneto (Vèneto)
- * @author Candalua
- */
-$messages['vec'] = array(
-	'newsextension-desc' => 'Mostra i canbiamenti reçenti personalizà su le pagine wiki o come feed RSS o Atom',
-);
-
-/** Vietnamese (Tiếng Việt)
- * @author Vinhtantran
- */
-$messages['vi'] = array(
-	'newsextension-desc' => 'Hiển thị các thay đổi gần đây đã tinh chỉnh trên các trang của một wiki hoặc bằng feed RSS hoặc Atom',
 );
 

@@ -3,19 +3,20 @@
  * Rebuild interwiki table using the file on meta and the language list
  * Wikimedia specific!
  *
- * @file
  * @todo document
- * @ingroup Maintenance
+ * @addtogroup Maintenance
  */
+
+/** */
 
 /**
  * @todo document
- * @ingroup Maintenance
+ * @addtogroup Maintenance
  */
 class Site {
 	var $suffix, $lateral, $url;
 
-	function __construct( $s, $l, $u ) {
+	function Site( $s, $l, $u ) {
 		$this->suffix = $s;
 		$this->lateral = $l;
 		$this->url = $u;
@@ -97,7 +98,7 @@ function makeInterwikiSQL( $destDir ) {
 	}
 
 	# Extract the intermap from meta
-	$intermap = Http::get( 'http://meta.wikimedia.org/w/index.php?title=Interwiki_map&action=raw', 30 );
+	$intermap = wfGetHTTP( 'http://meta.wikimedia.org/w/index.php?title=Interwiki_map&action=raw', 30 );
 	$lines = array_map( 'trim', explode( "\n", trim( $intermap ) ) );
 
 	if ( !$lines || count( $lines ) < 2 ) {
@@ -256,3 +257,5 @@ function makeLink( $entry, &$first, $source ) {
 	$sql .= "(" . $dbr->makeList( $entry ) . ")";
 	return $sql;
 }
+
+?>

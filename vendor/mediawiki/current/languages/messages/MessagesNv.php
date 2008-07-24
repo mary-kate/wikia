@@ -1,8 +1,8 @@
 <?php
 /** Navajo (Diné bizaad)
  *
- * @ingroup Language
- * @file
+ * @addtogroup Language
+ *
  */
 
 $skinNames = array(
@@ -65,5 +65,7 @@ $messages = array(
 'oct'       => 'Ghąj',
 'nov'       => 'Ntss',
 'dec'       => 'Ntsx',
+
+'edit' => 'Łahgo áshłééh',
 
 );

@@ -1,9 +1,9 @@
 <?php
-
 /** Bosnian (bosanski)
- *
- * @ingroup Language
- */
+  *
+  * @addtogroup Language
+  */
+
 class LanguageBs extends Language {
 
 	function convertPlural( $count, $forms ) {
@@ -132,4 +132,7 @@ class LanguageBs extends Language {
 
 		return $word; # this will return the original value for 'nominativ' (nominative) and all undefined case values
 	}
+
 }
+
+

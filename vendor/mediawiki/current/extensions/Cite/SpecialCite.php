@@ -6,7 +6,7 @@ if (!defined('MEDIAWIKI')) die();
  *
  * @addtogroup Extensions
  *
- * @link http://www.mediawiki.org/wiki/Extension:Cite/Special:Cite.php Documentation
+ * @link http://meta.wikimedia.org/wiki/Cite/SpecialCite.php Documentation
  *
  * @author Ævar Arnfjörð Bjarmason <avarab@gmail.com>
  * @copyright Copyright © 2005, Ævar Arnfjörð Bjarmason
@@ -15,24 +15,23 @@ if (!defined('MEDIAWIKI')) die();
 
 $wgExtensionCredits['specialpage'][] = array(
 	'name' => 'Cite',
-	'svn-date' => '$LastChangedDate: 2008-07-09 15:09:55 +0000 (Wed, 09 Jul 2008) $',
-	'svn-revision' => '$LastChangedRevision: 37394 $',
+	'version' => '2008-01-31',
 	'author' => 'Ævar Arnfjörð Bjarmason',
 	'description' => 'adds a [[Special:Cite|citation]] special page & toolbox link', // kept for b/c
 	'descriptionmsg' => 'cite_article_desc',
 	'url' => 'http://www.mediawiki.org/wiki/Extension:Cite/Special:Cite.php'
 );
 
-$dir = dirname(__FILE__) . '/';
 # Internationalisation file
-$wgExtensionMessagesFiles['SpecialCite'] = $dir . 'SpecialCite.i18n.php';
-$wgExtensionAliasesFiles['SpecialCite'] = $dir . 'SpecialCite.i18n.alias.php';
+$wgExtensionMessagesFiles['SpecialCite'] = dirname( __FILE__ ) . "/SpecialCite.i18n.php";
 
 $wgHooks['SkinTemplateBuildNavUrlsNav_urlsAfterPermalink'][] = 'wfSpecialCiteNav';
 $wgHooks['MonoBookTemplateToolboxEnd'][] = 'wfSpecialCiteToolbox';
 
-$wgSpecialPages['Cite'] = 'SpecialCite';
-$wgAutoloadClasses['SpecialCite'] = $dir . 'SpecialCite_body.php';
+if ( !function_exists( 'extAddSpecialPage' ) ) {
+	require( dirname(__FILE__) . '/../ExtensionFunctions.php' );
+}
+extAddSpecialPage( dirname(__FILE__) . '/SpecialCite_body.php', 'Cite', 'SpecialCite' );
 
 function wfSpecialCiteNav( &$skintemplate, &$nav_urls, &$oldid, &$revid ) {
 	wfLoadExtensionMessages( 'SpecialCite' );

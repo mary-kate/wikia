@@ -2,17 +2,14 @@
 /**
  * Write a messages array as a PHP text.
  *
- * @file
- * @ingroup MaintenanceLanguage
+ * @addtogroup Maintenance
  */
 
-/**
- * @ingroup MaintenanceLanguage
- */
 class MessageWriter {
 	static $optionalComment = 'only translate this message to other languages if you have to change it';
-	static $ignoredComment = "do not translate or duplicate this message to other languages";
+	static $ignoredComment = "don't translate or duplicate this message to other languages";
 
+	static $loaded = false;
 	static $messageStructure;
 	static $blockComments;
 	static $messageComments;
@@ -27,9 +24,9 @@ class MessageWriter {
 	 * @param $write Write to the messages file?
 	 * @param $listUnknown List the unknown messages?
 	 */
-	public static function writeMessagesToFile( $messages, $code, $write, $listUnknown, $removeUnknown ) {
+	public static function writeMessagesToFile( $messages, $code, $write, $listUnknown ) {
 		# Rewrite the messages array
-		$messages = self::writeMessagesArray( $messages, $code == 'en', false, $removeUnknown );
+		$messages = self::writeMessagesArray( $messages, $code == 'en' );
 		$messagesText = $messages[0];
 		$sortedMessages = $messages[1];
 
@@ -51,16 +48,13 @@ class MessageWriter {
 				}
 			}
 			if( $listUnknown && isset( $sortedMessages['unknown'] ) && !empty( $sortedMessages['unknown'] ) ) {
-				if ( $removeUnknown )
-					echo "\nThe following " . count( $sortedMessages['unknown'] ) . " unknown messages have been removed:\n";
-				else
-					echo "\nThere are " . count( $sortedMessages['unknown'] ) . " unknown messages, please check them:\n";
+				echo "\nThere are " . count( $sortedMessages['unknown'] ) . " unknown messages, please check them:\n";
 				foreach( $sortedMessages['unknown'] as $key => $value ) {
 					echo "* " . $key . "\n";
 				}
 			}
 		} else {
-			echo "Generated messages for language $code. There seem to be no messages array in the file.\n";
+			echo "Generated messages for language $code. There seems to be no messages array in the file.\n";
 		}
 	}
 
@@ -72,19 +66,20 @@ class MessageWriter {
 	 *
 	 * @return Array of the PHP text and the sorted messages array.
 	 */
-	public static function writeMessagesArray( $messages, $ignoredComments = false, $prefix = false, $removeUnknown = false ) {
+	public static function writeMessagesArray( $messages, $ignoredComments = false ) {
 		# Load messages
-		$dir = $prefix ? $prefix : dirname( __FILE__ );
+		if( !self::$loaded ) {
+			require( dirname( __FILE__ ) . '/messages.inc' );
+			self::$messageStructure = $wgMessageStructure;
+			self::$blockComments = $wgBlockComments;
+			self::$messageComments = $wgMessageComments;
 
-		require( $dir . '/messages.inc' );
-		self::$messageStructure = $wgMessageStructure;
-		self::$blockComments = $wgBlockComments;
-		self::$messageComments = $wgMessageComments;
+			require( dirname( __FILE__ ) . '/messageTypes.inc' );
+			self::$ignoredMessages = $wgIgnoredMessages;
+			self::$optionalMessages = $wgOptionalMessages;
 
-		require( $dir . '/messageTypes.inc' );
-		self::$ignoredMessages = $wgIgnoredMessages;
-		self::$optionalMessages = $wgOptionalMessages;
-
+			self::$loaded = true;
+		}
 
 		# Sort messages to blocks
 		$sortedMessages['unknown'] = $messages;
@@ -120,13 +115,12 @@ class MessageWriter {
 		}
 
 		# Write the unknown messages, alphabetically sorted.
-		# Of course, we don't have any comments for them, because they are unknown.
-		if ( !$removeUnknown ) {
-			ksort( $sortedMessages['unknown'] );
-			$messagesText .= self::writeMessagesBlock( 'Unknown messages', $sortedMessages['unknown'] );
-		}
+		# Of course, we don't have any comments for them, because the are unknown.
+		ksort( $sortedMessages['unknown'] );
+		$messagesText .= self::writeMessagesBlock( 'Unknown messages', $sortedMessages['unknown'] );
 		$messagesText .= ");
 ";
+
 		return array( $messagesText, $sortedMessages );
 	}
 

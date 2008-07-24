@@ -1,8 +1,7 @@
 <?php
 /**
  * Contain the HTMLFileCache class
- * @file
- * @ingroup Cache
+ * @addtogroup Cache
  */
 
 /**
@@ -11,13 +10,11 @@
  * emergency abort/fallback to cache.
  *
  * Global options that affect this module:
- * - $wgCachePages
- * - $wgCacheEpoch
- * - $wgUseFileCache
- * - $wgFileCacheDirectory
- * - $wgUseGzip
- *
- * @ingroup Cache
+ * $wgCachePages
+ * $wgCacheEpoch
+ * $wgUseFileCache
+ * $wgFileCacheDirectory
+ * $wgUseGzip
  */
 class HTMLFileCache {
 	var $mTitle, $mFileCache;
@@ -156,3 +153,5 @@ class HTMLFileCache {
 	}
 
 }
+
+

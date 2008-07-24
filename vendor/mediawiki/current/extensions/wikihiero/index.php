@@ -24,14 +24,9 @@
 //
 //////////////////////////////////////////////////////////////////////////
 
-$IP = getenv( 'MW_INSTALL_PATH' );
-if ( $IP === false ) { 
-	$IP = dirname( __FILE__ ) .'/../..';
-}
-require( "$IP/includes/WebStart.php" );
-
 require('wh_language.php');
 require('wikihiero.php');
+
 #
 # Initialization from request
 #
@@ -96,9 +91,7 @@ function WH_Packet( $ext ) {
 
 function WH_Table( $table ) {
 	global $lang;
-	$url = "wh_table.php?table=" . urlencode( $table ) . '&lang=' . urlencode( $lang );
-	$encUrl = htmlspecialchars( Xml::encodeJsVar( $url ) );
-	echo "<a href=\"#\" onClick=\"MyWindow=window.open($encUrl,'$table','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=400,height=300,left=20,top=20'); return false;\" title =\"".WH_Text($table)."\">$table</a>";
+	echo "<a href=\"#\" onClick=\"MyWindow=window.open('wh_table.php?table=$table&lang=$lang','$table','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=400,height=300,left=20,top=20'); return false;\" title =\"".WH_Text($table)."\">$table</a>";
 }
 
 #
@@ -140,7 +133,7 @@ $process_time = sprintf("%0.3f sec", $b_sec - $a_sec + $b_dec - $a_dec);
   <TABLE border="0">
   <TR valign="top"><TD>
  
-    <BIG><?php echo "WikiHiero v".WH_VER_MAJ.".".WH_VER_MED.".".WH_VER_MIN; ?></BIG><br />
+    <BIG><?php echo "WikiHiero v".WH_VER_MAJ.".".WH_VER_MED.".".WH_VER_MIN; ?></BIG><BR>
     <SMALL>[<?php 
 
       reset($wh_language['Lang']);
@@ -155,11 +148,11 @@ $process_time = sprintf("%0.3f sec", $b_sec - $a_sec + $b_dec - $a_dec);
           echo " | ";
       }
     ?>]</SMALL>
-    <br /><br />
+    <BR><BR>
 
     <form name="wh_form" action="index.php?lang=<?php echo $lang; ?>" method="post">
       <textarea name="text" cols="60" rows="10" title="<?php echo WH_Text("Text"); ?>"><?php echo $text; ?></textarea>
-      <br /><br />
+      <br><br>
       <input type="submit" title="<?php echo WH_Text("Convert"); ?>" value="<?php echo WH_Text("Convert"); ?>">
       <select title="<?php echo WH_Text("Mode"); ?>" name="mode">
         <option value="0" <?php if($mode==0) echo "selected"; ?> title="<?php echo WH_Text("TEXT");  ?>" onclick="javascript:DisableScale(true);">Text only
@@ -167,21 +160,21 @@ $process_time = sprintf("%0.3f sec", $b_sec - $a_sec + $b_dec - $a_dec);
         <option disabled value="2" <?php if($mode==2) echo "selected"; ?> title="<?php echo WH_Text("CSS");   ?>">HTML & CSS
         <option disabled value="3" <?php if($mode==3) echo "selected"; ?> title="<?php echo WH_Text("Image"); ?>">Image
       </select> 
-      <?php echo WH_Text("Scale"); ?><input type="range" name="scale" <?php if($mode==0) echo "disabled"; ?> title="<?php echo WH_Text("Size"); ?>" min="1" max="999" size="3" maxlength="3" value="<?php echo htmlspecialchars( $scale ); ?>">%
+      <?php echo WH_Text("Scale"); ?><input type="range" name="scale" <?php if($mode==0) echo "disabled"; ?> title="<?php echo WH_Text("Size"); ?>" min="1" max="999" size="3" maxlength="3" value="<?php echo $scale; ?>">%
       <?php echo WH_Text("Line"); ?><input type="checkbox" name="line" <?php if($line) echo "checked"; ?>>
-      <input type="hidden" name="lang" value="<?php echo htmlspecialchars( $lang ); ?>">
+      <input type="hidden" name="lang" value="<?php echo $lang; ?>">
     </form>
 
   </td><td valign="top">
 
-  <b><?php echo WH_Text("Syntax"); ?></b><br />
-    <tt>-</tt> <?php echo WH_Text("-"); ?><br />
-    <tt>:</tt> <?php echo WH_Text(":"); ?><br />
-    <tt>*</tt> <?php echo WH_Text("*"); ?><br />
-    <tt>!</tt> <?php echo WH_Text("!"); ?><br />
+  <b><?php echo WH_Text("Syntax"); ?></b><br>
+    <tt>-</tt> <?php echo WH_Text("-"); ?><br>
+    <tt>:</tt> <?php echo WH_Text(":"); ?><br>
+    <tt>*</tt> <?php echo WH_Text("*"); ?><br>
+    <tt>!</tt> <?php echo WH_Text("!"); ?><br>
 
-    <br />
-    <b><?php echo WH_Text("Tables"); ?></b><br />
+    <br>
+    <b><?php echo WH_Text("Tables"); ?></b><br>
     <?php WH_Table("Phoneme"); ?>
     | <?php WH_Table("A"); ?>
     | <?php WH_Table("B"); ?>
@@ -211,9 +204,9 @@ $process_time = sprintf("%0.3f sec", $b_sec - $a_sec + $b_dec - $a_dec);
     | <?php WH_Table("Z"); ?>
     | <?php WH_Table("Aa"); ?>
     | <?php WH_Table("All"); ?>
-    <br /><br />
+    <br><br>
 
-    <b><?php echo WH_Text("Download"); ?></b><br />
+    <b><?php echo WH_Text("Download"); ?></b><br>
     [<?php echo WH_Packet("rar"); ?>] - 
     [<?php echo WH_Packet("zip"); ?>] -
     <a href="README">ReadMe</a>
@@ -221,8 +214,8 @@ $process_time = sprintf("%0.3f sec", $b_sec - $a_sec + $b_dec - $a_dec);
   </td></tr>
   </table>
 
-  <br />
-  <b>Images</b><br />
+  <br>
+  <b>Images</b><br>
   <table width="100%" border="0" cellpadding="0" cellspacing="0" style="border-style:solid; border-width:1px; padding:1em; border-color:gray; background:#ffffff;">
   <tr valign="middle"><td>
 
@@ -231,8 +224,8 @@ $process_time = sprintf("%0.3f sec", $b_sec - $a_sec + $b_dec - $a_dec);
   </td></tr>
   </table>
 
-  <br />
-  <b>Source</b><br />
+  <br>
+  <b>Source</b><br>
   <table width="100%" border="0" cellpadding="0" cellspacing="0" style="border-style:solid; border-width:1px; padding:1em; border-color:gray; background:#ffffff;">
   <tr valign="middle"><td>
 
@@ -241,7 +234,7 @@ $process_time = sprintf("%0.3f sec", $b_sec - $a_sec + $b_dec - $a_dec);
   </td></tr>
   </table>
 
-  <br />
+  <br>
   <table align="right"><tr><td>
   <a href="http://www.mozilla.org/products/firefox/" title="Get Firefox - The free browser">
   <img src="http://www.mozilla.org/products/firefox/buttons/getfirefox_88x31.png"
@@ -249,7 +242,7 @@ $process_time = sprintf("%0.3f sec", $b_sec - $a_sec + $b_dec - $a_dec);
   </td></tr></table>
   <small><?php echo "Parsing duration: $process_time"; ?></small>
 
-  <br /><br />
+  <br><br>
   <small><?php echo WH_Credit(); ?></small>
 </body>
 </html>

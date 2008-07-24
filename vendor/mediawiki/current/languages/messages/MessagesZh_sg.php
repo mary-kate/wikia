@@ -1,10 +1,11 @@
 <?php
-/**
- * Chinese (Singapore) (中文 (新加坡))
+/** ‪Singaporese Chinese (‪中文(新加坡)‬)
  *
- * @ingroup Language
- * @file
+ * @addtogroup Language
+ *
+
  */
 
 # Inherit everything for now
 $fallback = 'zh-hans';
+

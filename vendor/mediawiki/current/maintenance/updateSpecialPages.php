@@ -1,11 +1,6 @@
 <?php
-/**
- * Run this script periodically if you have miser mode enabled, to refresh the
- * caches
- *
- * @file
- * @ingroup Maintenance
- */
+
+# Run this script periodically if you have miser mode enabled, to refresh the caches
 $options = array('only','help');
 
 require_once( 'commandLine.inc' );
@@ -78,12 +73,12 @@ foreach ( $wgQueryPages as $page ) {
 		}
 
 		# Reopen any connections that have closed
-		if ( !wfGetLB()->pingAll())  {
+		if ( !$wgLoadBalancer->pingAll())  {
 			print "\n";
 			do {
 				print "Connection failed, reconnecting in 10 seconds...\n";
 				sleep(10);
-			} while ( !wfGetLB()->pingAll() );
+			} while ( !$wgLoadBalancer->pingAll() );
 			print "Reconnected\n\n";
 		} else {
 			# Commit the results

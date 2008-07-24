@@ -200,20 +200,13 @@ class TitleBlacklistEntry {
 			return true;
 		}
 		wfSuppressWarnings();
-		$match = preg_match( "/^(?:{$this->mRegex})$/us" . ( isset( $this->mParams['casesensitive'] ) ? '' : 'i' ), $title->getFullText() );
+		$match = preg_match( "/^{$this->mRegex}$/us" . ( isset( $this->mParams['casesensitive'] ) ? '' : 'i' ), $title->getFullText() );
 		wfRestoreWarnings();
 		if( $match ) {
 			if( isset( $this->mParams['autoconfirmed'] ) && $user->isAllowed( 'autoconfirmed' ) ) {
 				return true;
 			}
-			if( isset( $this->mParams['moveonly'] ) && $action != 'move' ) {
-				return true;
-			}
 			if( !isset( $this->mParams['noedit'] ) && $action == 'edit' ) {
-				return true;
-			}
-			if ( isset( $this->mParams['reupload'] ) && $action == 'upload' ) {
-				// Special:Upload also checks 'create' permissions when not reuploading
 				return true;
 			}
 			return false;
@@ -229,7 +222,7 @@ class TitleBlacklistEntry {
 		$line = preg_replace( "/^\\s*([^#]*)\\s*((.*)?)$/", "\\1", $line );
 		$line = trim( $line );
 		// Parse the rest of message
-		preg_match( '/^(.*?)(\s*<([^<>]*)>)?$/', $line, $pockets );
+		preg_match( '/^(.*?)(\s*<(.*)>)?$/', $line, $pockets );
 		@list( $full, $regex, $null, $opts_str ) = $pockets;
 		$regex = trim( $regex );
 		$regex = str_replace( '_', ' ', $regex ); // We'll be matching against text form
@@ -241,17 +234,11 @@ class TitleBlacklistEntry {
 			if( $opt2 == 'autoconfirmed' ) {
 				$options['autoconfirmed'] = true;
 			}
-			if( $opt2 == 'moveonly' ) {
-				$options['moveonly'] = true;
-			}
 			if( $opt2 == 'noedit' ) {
 				$options['noedit'] = true;
 			}
 			if( $opt2 == 'casesensitive' ) {
 				$options['casesensitive'] = true;
-			}
-			if( $opt2 == 'reupload' ) {
-				$options['reupload'] = true;
 			}
 			if( preg_match( '/errmsg\s*=\s*(.+)/i', $opt, $matches ) ) {
 				$options['errmsg'] = $matches[1];

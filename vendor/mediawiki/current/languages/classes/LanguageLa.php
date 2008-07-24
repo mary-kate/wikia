@@ -1,9 +1,9 @@
 <?php
-
 /** Latin (lingua Latina)
- *
- * @ingroup Language
- */
+  *
+  * @addtogroup Language
+  */
+
 class LanguageLa extends Language {
 	/**
 	 * Convert from the nominative form of a noun to some other case
@@ -75,4 +75,8 @@ class LanguageLa extends Language {
 			return $word;
 		}
 	}
+
 }
+
+
+

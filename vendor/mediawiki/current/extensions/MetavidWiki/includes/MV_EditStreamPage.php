@@ -39,13 +39,13 @@
  	/*put thrown together quickly... could clean up/simplify*/ 
  	function displayEditStreamFiles(){
  		global $wgOut, $wgTitle,$wgScriptPath,$wgRequest;
- 		$html='';
- 	
-		$streamFiles = $this->mArticle->mvTitle->mvStream->getFileList();				
+ 		$html='';  		
+		$streamFiles = $this->mArticle->mvTitle->mvStream->getFileList();
+		
 		//proccess the requested changes
  		$this->proccessReq($streamFiles);  	
-		if($this->status_error!='')$html.='<span class="error">'.$this->status_error.'</span><br />';
-		if($this->status_ok!='')$html.=$this->status_ok . '<br />';		 		
+		if($this->status_error!='')$html.='<span class="error">'.$this->status_error.'</span><br>';
+		if($this->status_ok!='')$html.=$this->status_ok . '<br>';		 		
 		
 		if(count($streamFiles)==0){
 			$html.='<b>'.wfMsg('mv_no_stream_files').'</b>';
@@ -82,10 +82,7 @@
 		return true;
  	}
  	function proccessReq(& $streamFiles){
- 		global $wgRequest, $wgUser;
- 		//make sure the user can edit streams:
- 		if(!$wgUser->isAllowed('mv_edit_stream'))return ;
- 		 
+ 		global $wgRequest;
  		$this->mv_action = $wgRequest->getVal('mv_action'); 	
  		if($this->mv_action=='new_stream_file'){
  			//@@todo a bit more input scrubbing: 
@@ -134,7 +131,7 @@
 				$html.='<td>'.wfMsg('mv_media_path').'</td>';
 			$html.='</tr>';
  		}
- 		//make it an array and assign default values: (maybe not so optimal)
+ 		//make it an array and assin default values: (maybe not so optimal)
  		if(is_object($sf))$sf=get_object_vars($sf);
  		if(!isset($sf['id']))$sf['id']='new';
  		if(!isset($sf['stream_id']))$sf['stream_id']=$this->mArticle->mvTitle->mvStream->getStreamId();

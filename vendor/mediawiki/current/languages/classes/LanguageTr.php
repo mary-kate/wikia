@@ -1,9 +1,8 @@
 <?php
-
 /**
  * Turkish (Türkçe)
  *
- * @ingroup Language
+ * @addtogroup Language
  */
 class LanguageTr extends Language {
 	function ucfirst ( $string ) {
@@ -13,4 +12,6 @@ class LanguageTr extends Language {
 			return parent::ucfirst( $string );
 		}
 	}
+
 }
+

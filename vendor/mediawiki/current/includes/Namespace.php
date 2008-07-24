@@ -1,7 +1,6 @@
 <?php
 /**
  * Provide things related to namespaces
- * @file
  */
 
 /**
@@ -43,23 +42,26 @@ if( is_array( $wgExtraNamespaces ) ) {
  *
  */
 
-class MWNamespace {
+/*
+WARNING: The statement below may fail on some versions of PHP: see bug 12294
+*/
+
+class Namespace {
 
 	/**
 	 * Can pages in the given namespace be moved?
 	 *
-	 * @param $index Int: namespace index
+	 * @param int $index Namespace index
 	 * @return bool
 	 */
 	public static function isMovable( $index ) {
-		global $wgAllowImageMoving;
-		return !( $index < NS_MAIN || ($index == NS_IMAGE && !$wgAllowImageMoving)  || $index == NS_CATEGORY );
+		return !( $index < NS_MAIN || $index == NS_IMAGE  || $index == NS_CATEGORY );
 	}
 
 	/**
 	 * Is the given namespace is a subject (non-talk) namespace?
 	 *
-	 * @param $index Int: namespace index
+	 * @param int $index Namespace index
 	 * @return bool
 	 */
 	public static function isMain( $index ) {
@@ -69,7 +71,7 @@ class MWNamespace {
 	/**
 	 * Is the given namespace a talk namespace?
 	 *
-	 * @param $index Int: namespace index
+	 * @param int $index Namespace index
 	 * @return bool
 	 */
 	public static function isTalk( $index ) {
@@ -80,7 +82,7 @@ class MWNamespace {
 	/**
 	 * Get the talk namespace index for a given namespace
 	 *
-	 * @param $index Int: namespace index
+	 * @param int $index Namespace index
 	 * @return int
 	 */
 	public static function getTalk( $index ) {
@@ -92,7 +94,7 @@ class MWNamespace {
 	/**
 	 * Get the subject namespace index for a given namespace
 	 *
-	 * @param $index Int: Namespace index
+	 * @param int $index Namespace index
 	 * @return int
 	 */
 	public static function getSubject( $index ) {
@@ -104,7 +106,7 @@ class MWNamespace {
 	/**
 	 * Returns the canonical (English Wikipedia) name for a given index
 	 *
-	 * @param $index Int: namespace index
+	 * @param int $index Namespace index
 	 * @return string
 	 */
 	public static function getCanonicalName( $index ) {
@@ -116,7 +118,7 @@ class MWNamespace {
 	 * Returns the index for a given canonical name, or NULL
 	 * The input *must* be converted to lower case first
 	 *
-	 * @param $name String: namespace name
+	 * @param string $name Namespace name
 	 * @return int
 	 */
 	public static function getCanonicalIndex( $name ) {
@@ -134,48 +136,37 @@ class MWNamespace {
 			return NULL;
 		}
 	}
-
+	
 	/**
 	 * Can this namespace ever have a talk namespace?
 	 *
-	 * @param $index Int: namespace index
+	 * @param $index Namespace index
 	 * @return bool
 	 */
 	 public static function canTalk( $index ) {
 	 	return $index >= NS_MAIN;
 	 }
-
+	 
 	/**
-	 * Does this namespace contain content, for the purposes of calculating
-	 * statistics, etc?
+	 * Does this namespace contain content, for the purposes
+	 * of calculating statistics, etc?
 	 *
-	 * @param $index Int: index to check
+	 * @param $index Index to check
 	 * @return bool
 	 */
 	public static function isContent( $index ) {
 		global $wgContentNamespaces;
 		return $index == NS_MAIN || in_array( $index, $wgContentNamespaces );
 	}
-
+	
 	/**
 	 * Can pages in a namespace be watched?
 	 *
-	 * @param $index Int
+	 * @param int $index
 	 * @return bool
 	 */
 	public static function isWatchable( $index ) {
 		return $index >= NS_MAIN;
 	}
-
-	/**
-	 * Does the namespace allow subpages?
-	 *
-	 * @param $index int Index to check
-	 * @return bool
-	 */
-	public static function hasSubpages( $index ) {
-		global $wgNamespacesWithSubpages;
-		return !empty( $wgNamespacesWithSubpages[$index] );
-	}
-
+	 
 }

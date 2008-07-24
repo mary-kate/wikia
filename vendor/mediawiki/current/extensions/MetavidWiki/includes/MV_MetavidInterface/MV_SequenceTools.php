@@ -36,6 +36,7 @@
 				$sk =& $wgUser->getSkin();						
 				
 				//get the ajax edit		
+				include_once($mvgIP . '/includes/MV_MetavidInterface/MV_EditPageAjax.php');
 				$editPageAjax = new MV_EditPageAjax( $article);				
 				$editPageAjax->mvd_id = 'seq';		
 				
@@ -46,20 +47,10 @@
 				$this->add_clips_manual();	 						
 			break;
 			case 'add_clips_search':
-				$this->add_embed_search();
+				return "search goes here";
 			break;
 		}
 		return $wgOut->getHTML();
-	}
-	function add_embed_search(){
-		global $wgOut;
-		//grab a de-encapsulated search
-		$mvSearch = new MV_SpecialMediaSearch();		
-		$mvSearch->setUpFilters();
-		//do the search
-		$mvSearch->doSearch();
-		$wgOut->addHTML($mvSearch->dynamicSearchControl());		
-		$wgOut->addHTML($mvSearch->getResultsHTML());
 	}
 	function auto_complete_stream_name($val){
 		global $mvStreamTable, $mvDefaultSearchVideoPlaybackRes;
@@ -77,11 +68,11 @@
 			//make sure the person page exists: 									
 			$streamTitle =  new MV_Title('Stream:'.$row->name.'/0:00:00/0:00:30');
 			//print "stream name:" . $streamTitle->getStreamName();
-			//@@TODO fix this up.. this is getting ugly new line in embed video for example breaks things	
+			//@@TODO fix this up.. this is getting uggly new line in embed video for example breaks things	
 			$out.=  $row->name.'|'.$streamTitle->getStreamNameText().				
 				'|'.$streamTitle->getStreamImageURL('icon') .
 				'|'.$row->duration . 
-				'|'.$streamTitle->getEmbedVideoHtml('vid_seq', $mvDefaultSearchVideoPlaybackRes, 'http://metavid.ucsc.edu/image_media/'). "\n";								
+				'|'.$streamTitle->getEmbedVideoHtml('vid_seq', $mvDefaultSearchVideoPlaybackRes, 'video', 'http://metavid.ucsc.edu/image_media/'). "\n";								
 		}
 		//$out.='</ul>';
 		//return people people in the Person Category
@@ -89,12 +80,13 @@
 	}
 	function add_clips_manual(){	
 		global $wgOut, $mvgIP, $mvDefaultSearchVideoPlaybackRes;
+		include_once($mvgIP . '/includes/MV_MetavidInterface/MV_Overlay.php');
 		$MV_Overlay = new MV_Overlay();
 		//add preview clips space and manual add title
 		list($iw, $ih) = 	explode('x',$mvDefaultSearchVideoPlaybackRes);	
 		$wgOut->addHTML('<h3>'.wfMsg('mv_add_clip_by_name').':</h3>' .			
 			'<form id="mv_add_to_seq_form" action="">' .
-			'<div id="mv_seq_manual_embed" style="display:none;position:relative;border:solid thin black;width:'.$iw.'px;height:'.$ih.'px;"> </div><br />'.			 
+			'<div id="mv_seq_manual_embed" style="display:none;position:relative;border:solid thin black;width:'.$iw.'px;height:'.$ih.'px;"> </div><br>'.			 
 			wfMsg('mv_label_stream_name') . ': <input id="mv_add_stream_name" name="mv_add_stream_name" ' .
 			' size="25" maxlength="65" ' .
 			'value="">');
@@ -109,15 +101,18 @@
 	}
 	function do_edit_submit(){
 		global $mvgIP, $wgOut,$wgUser,$wgParser;		
+		include_once($mvgIP . '/includes/articlepages/MV_SequencePage.php');
 		$titleKey = $_POST['title'];
 		//set up the title /article
 		$title = Title::newFromText($titleKey, MV_NS_SEQUENCE);
 		$article = new MV_SequencePage($title);
-				
-		//print "inline_seq:" .  $_POST['inline_seq'] . " wpbox: " . $_REQUEST['wpTextbox1'] . "\n";
+		
+		$_REQUEST['wpTextbox1'] ='<'.SEQUENCE_TAG.'>'.
+					 $_POST['inline_seq'] . '</'.SEQUENCE_TAG.'>' . "\n".$_REQUEST['wpTextbox1']; 
+					 		
 		$editPageAjax = new MV_EditPageAjax( $article);
 		$editPageAjax->mvd_id ='seq';
-		$textbox1='<'.SEQUENCE_TAG.'>'.$_POST['inline_seq'] . '</'.SEQUENCE_TAG.'>' . "\n".$_REQUEST['wpTextbox1'];
+		
 		//if($wgTitle->exists()){
 		//print "article existing content: " . $Article->getContent();
 		//}
@@ -140,8 +135,10 @@
 			$wgOut->addHTML('<hr></hr>');
 			//$wgOut->addWikiTextWithTitle( $curRevision->getText(), $wgTitle) ;
 			return $wgOut->getHTML();
-		}						
-		if($editPageAjax->edit($textbox1)==false){
+		}				
+		//@@TODO use $editPageAjax->edit!
+		//$Article->doEdit($_REQUEST['wpTextbox1'], $_REQUEST['wpSummary']);		
+		if($editPageAjax->edit()==false){
 			return php2jsObj(array('status'=>'ok'));	
 		}else{
 			//error: retrun error msg and form: 

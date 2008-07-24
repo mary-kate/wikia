@@ -13,7 +13,7 @@ if ( !defined( 'MEDIAWIKI' ) )  die( 1 );
  * Switch on Metavid MediaWiki. This function must be called in LocalSettings.php
  *  its separated out to allow for overwriting semantic wiki hooks and functions
  * if semantic wiki is enabled for this wiki. 
- */ 
+ */
  
 //pre setup setup
 if ( !function_exists( 'extAddSpecialPage' ) ) {
@@ -51,7 +51,6 @@ $wgAutoloadClasses['MV_Image'] = dirname(__FILE__)  . '/MV_Image.php';
 $wgAutoloadClasses['MV_Stream'] =  dirname(__FILE__)  .'/MV_Stream.php';
 $wgAutoloadClasses['MV_StreamFile']=dirname(__FILE__)  . '/MV_StreamFile.php';
 $wgAutoloadClasses['MV_StreamImage'] = dirname(__FILE__)  . '/MV_StreamImage.php';
-$wgAutoloadClasses['MV_ParserCache'] = dirname(__FILE__) . '/MV_ParserCache.php';
 		
 $markerList = array(); 
 
@@ -67,30 +66,23 @@ function enableMetavid() {
 	$smwgNamespacesWithSemanticLinks[MV_NS_SEQUENCE] = true;
 	$smwgNamespacesWithSemanticLinks[MV_NS_SEQUENCE_TALK] = false;  
 	$smwgNamespacesWithSemanticLinks[MV_NS_MVD] = true;
-	$smwgNamespacesWithSemanticLinks[MV_NS_MVD_TALK] = false;	
+	$smwgNamespacesWithSemanticLinks[MV_NS_MVD_TALK] = false;
 	return true;
 }
 function mvSetupExtension(){
 	global $mvVersion, $mvNamespace, $mvgIP, $wgHooks, $wgExtensionCredits, $mvMasterStore, 
-	$wgParser, $mvArticlePath, $mvgScriptPath, $wgServer, $wgExtensionFunctions,$markerList,
-	$mvEnableAutoComplete, $mvEnableJSLinkBack, $mvEnableJSMVDrewrite;
-	
+	$wgParser, $mvArticlePath, $mvgScriptPath, $wgServer, $wgExtensionFunctions,$markerList;
 
 	mvfInitMessages();
-	//add header for autoComplete if enabled: 
-	if($mvEnableAutoComplete || $mvEnableJSLinkBack || $mvEnableJSMVDrewrite ){
-		mvfAutoAllPageHeader();
-	}
-	
+
 	/**********************************************/
 	/***** register special pages hooks       *****/
 	/**********************************************/		
-	//@@todo shift over to extAddSpecial page (to avoid loading every time)
+	//@@todo shift over to extAddSpecial page (to avoid loading everytime)
 	require_once( dirname(__FILE__) . '/specials/MV_SpecialCRUDStream.php');
 	require_once( dirname(__FILE__) . '/specials/MV_SpecialListStreams.php');
 	require_once( dirname(__FILE__) . '/specials/MV_SpecialExport.php');
 	require_once( dirname(__FILE__) . '/specials/MV_SpecialMediaSearch.php');
-	require_once( dirname(__FILE__) . '/specials/MV_SpecialMVAdmin.php');
 
 
 	/**********************************************/
@@ -121,35 +113,14 @@ function mvSetupExtension(){
 	    'author' => 'Michael Dale',
 	    'version' => 'alpha 0.1',
 		'url' => 'http://metavid.org',
-		'description' => 'Video Metadata Editor, Clip Sequencer and Media Search<br />' .
-			'[http://metavid.ucsc.edu/wiki/index.php/MetaVidWiki_Software More about MetaVidWiki Software]'
+		'description' => 'Video Metadata Editor, Clip Sequencer and Media Search<br>' .
+				'[http://metavid.ucsc.edu/wiki/index.php/MetaVidWiki_Software More about MetaVidWiki Software]'
 	);
 }	
 /**********************************************/
 /***** Header modifications               *****/
 /**********************************************/
-	/**
-	 * header script to be added to all pages: 
-	 * enables linkback and autocomplete for search
-	 */
-	function mvfAutoAllPageHeader(){
-		global $mvgScriptPath, $wgJsMimeType, $wgOut;			
-		/* (moved to on_dom ready)  but here as well*/ 
-		$wgOut->addScript("<script type=\"{$wgJsMimeType}\" src=\"{$mvgScriptPath}/skins/mv_embed/jquery/jquery-1.2.1.js\"></script>");
-		$wgOut->addScript("<script type=\"{$wgJsMimeType}\" src=\"{$mvgScriptPath}/skins/mv_embed/jquery/plugins/jquery.autocomplete.js\"></script>");
-		$wgOut->addScript("<script type=\"{$wgJsMimeType}\" src=\"{$mvgScriptPath}/skins/mv_embed/jquery/plugins/jquery.hoverIntent.js\"></script>");
-		
-		$wgOut->addScript("<script type=\"{$wgJsMimeType}\" src=\"{$mvgScriptPath}/skins/mv_embed/mv_embed.js\"></script>");
-		$wgOut->addScript("<script type=\"{$wgJsMimeType}\" src=\"{$mvgScriptPath}/skins/mv_allpages.js\"></script>");
-		
-		$mvCssUrl = $mvgScriptPath . '/skins/mv_custom.css';
-		$wgOut->addLink(array(
-				'rel'   => 'stylesheet',
-				'type'  => 'text/css',
-				'media' => 'all',
-				'href'  => $mvCssUrl
-		));								
-	}
+
 	/**
 	*  This method is in charge of inserting additional CSS, JScript, and meta tags
 	*  into the html header of each page.  It is called by pages 
@@ -158,49 +129,42 @@ function mvSetupExtension(){
 	* @@todo split up embed js & interface js include calls
 	*
 	*  $out is the modified OutputPage.
-	*/		
+	*/
 	function mvfAddHTMLHeader($head_set='') {
-		global $mvgHeadersInPlace; // record whether headers were created already (don't call mvfAddHTMLHeader twice)
+		global $mvgHeadersInPlace; // record whether headers were created already (hopefully you don't call addHeader twice)
 		global $mvgArticleHeadersInPlace; // record whether article name specific headers are already there
-		global $mvgScriptPath, $wgJsMimeType, $wgOut , $mvEnableAutoComplete, $mvEnableJSLinkBack, $mvEnableJSMVDrewrite;		
+		global $mvgScriptPath, $wgJsMimeType, $wgOut;		
 			
 		if (!$mvgHeadersInPlace) {			
 			//all sets use mv_common script: *not used much yet*  
 			$wgOut->addScript("<script type=\"{$wgJsMimeType}\" src=\"{$mvgScriptPath}/skins/mv_common.js\"></script>");
 					
-			if($head_set=='smw_ext'|| $head_set=='search' || $head_set=='sequence' || $head_set=='stream_interface'||$head_set=='embed'){
-				if(!($mvEnableAutoComplete || $mvEnableJSLinkBack ||$mvEnableJSMVDrewrite) ){
-					$wgOut->addScript("<script type=\"{$wgJsMimeType}\" src=\"{$mvgScriptPath}/skins/mv_embed/mv_embed.js\"></script>");
-				}
-			}
+			if($head_set=='smw_ext'|| $head_set=='search' || $head_set=='sequence' || $head_set=='stream_interface'||$head_set=='embed')
+				$wgOut->addScript("<script type=\"{$wgJsMimeType}\" src=\"{$mvgScriptPath}/skins/mv_embed/mv_embed.js\"></script>");
+			
 			if($head_set=='search' || $head_set=='sequence'){	
-				//get jquery and autocomplete for seq/search	
-				//already included for all pages to support autoComplete 
-				if(!($mvEnableAutoComplete || $mvEnableJSLinkBack ||$mvEnableJSMVDrewrite) ){
-					$wgOut->addScript("<script type=\"{$wgJsMimeType}\" src=\"{$mvgScriptPath}/skins/mv_embed/jquery/jquery-1.2.1.js\"></script>");
-					$wgOut->addScript("<script type=\"{$wgJsMimeType}\" src=\"{$mvgScriptPath}/skins/mv_embed/jquery/plugins/jquery.autocomplete.js\"></script>");								 
-					$wgOut->addScript("<script type=\"{$wgJsMimeType}\" src=\"{$mvgScriptPath}/skins/mv_embed/jquery/plugins/jquery.hoverIntent.js\"></script>");
-				}							
+				//get jquery and autocomplete for seq/search			
+				$wgOut->addScript("<script type=\"{$wgJsMimeType}\" src=\"{$mvgScriptPath}/skins/mv_embed/jquery/jquery-1.2.1.js\"></script>");
+				$wgOut->addScript("<script type=\"{$wgJsMimeType}\" src=\"{$mvgScriptPath}/skins/mv_embed/jquery/plugins/jquery.autocomplete.js\"></script>");			
+				$wgOut->addScript("<script type=\"{$wgJsMimeType}\" src=\"{$mvgScriptPath}/skins/mv_embed/jquery/plugins/jquery.hoverIntent.js\"></script>");		
 			}
 			
 			if($head_set=='search')
 				$wgOut->addScript("<script type=\"{$wgJsMimeType}\" src=\"{$mvgScriptPath}/skins/mv_search.js\"></script>");	
 			if($head_set=='sequence')
-				$wgOut->addScript("<script type=\"{$wgJsMimeType}\" src=\"{$mvgScriptPath}/skins/mv_sequence.js\"></script>");
+				$wgOut->addScript("<script type=\"{$wgJsMimeType}\" src=\"{$mvgScriptPath}/skins/mv_sequence.js\"></script>");																				
 			if($head_set=='stream_interface')
 				$wgOut->addScript("<script type=\"{$wgJsMimeType}\" src=\"{$mvgScriptPath}/skins/mv_stream.js\" ></script>");	
-			//if($head_set=='smw_ext')
-			//	$wgOut->addScript("<script type=\"{$wgJsMimeType}\" src=\"{$mvgScriptPath}/skins/mv_smw_ext.js\" ></script>");
-			
-			if(!($mvEnableAutoComplete || $mvEnableJSLinkBack) ){
-				$mvCssUrl = $mvgScriptPath . '/skins/mv_custom.css';
-				$wgOut->addLink(array(
-					'rel'   => 'stylesheet',
-					'type'  => 'text/css',
-					'media' => 'all',
-					'href'  => $mvCssUrl
-				));				
-			}
+			if($head_set=='smw_ext')
+				$wgOut->addScript("<script type=\"{$wgJsMimeType}\" src=\"{$mvgScriptPath}/skins/mv_smw_ext.js\" ></script>");
+			 
+			$mvCssUrl = $mvgScriptPath . '/skins/mv_custom.css';
+			$wgOut->addLink(array(
+				'rel'   => 'stylesheet',
+				'type'  => 'text/css',
+				'media' => 'all',
+				'href'  => $mvCssUrl
+			));				
 			//add extra IE styles fixes 
 			$wgOut->addScript('<!--[if IE 7]>' .
 								'<style type="text/css">@import "'.$mvgScriptPath . '/skins/mv_customIE6.css";</style>'.
@@ -208,13 +172,7 @@ function mvSetupExtension(){
 							  '<!--[if IE 6]>'.
 							  	'<style type="text/css">@import "'.$mvgScriptPath . '/skins/mv_customIE6.css";</style>'.
 							  '<![endif]-->'
-				);
-			//add extra safari sheet
-			$wgOut->addScript("<script type=\"{$wgJsMimeType}\">
-if(navigator.userAgent.toLowerCase().indexOf('safari')!=-1){
-	document.write('<style type=\"text/css\">@import \"{$mvgScriptPath}/skins/mv_customSafari.css\";</style>');	
-}
-</script>");
+					);
 			//add in the semantic wiki css if in stream interface
 			if($head_set=='stream_interface')
 				$wgOut->addScript('<link rel="stylesheet" type="text/css" media="screen, projection" href="/mvWiki/extensions/SemanticMediaWiki/skins/SMW_custom.css" />');
@@ -333,7 +291,6 @@ function sffLoadMessagesManually() {
 
 	# add messages
 	require($mvgIP . '/languages/MV_Messages.php');
-	global $messages;
 	foreach($messages as $key => $value) {
 		$wgMessageCache->addMessages($messages[$key], $key);
 	}
@@ -341,7 +298,6 @@ function sffLoadMessagesManually() {
 /*
  * Ajax Hooks 
  */
-$wgAjaxExportList[] = 'mv_auto_complete_all';
 $wgAjaxExportList[] = 'mv_auto_complete_person';
 $wgAjaxExportList[] = 'mv_auto_complete_stream_name';
 $wgAjaxExportList[] = 'mv_disp_mvd';
@@ -536,7 +492,7 @@ function mvDoMetavidStreamPage(&$title, &$article){
 }
 /*
  * global MV_Stream server
- * @@todo cache this function
+ * @@todo memcache this function
  */  
 function mvGetMVStream($stream_init){
 	global $MVStreams;	
@@ -552,7 +508,7 @@ function mvGetMVStream($stream_init){
 	}else if(isset($stream_init['id'])){
 		$stream_name = MV_Stream::getStreamNameFromId($stream_init['id']);
 	}else{
-		die('error no id or name in init');
+		throw('error no id or name in init');
 	}
 	
 	//@@todo cache in memcache)	
@@ -565,42 +521,5 @@ function mvGetMVStream($stream_init){
 
 function mvGetMVTitle(){
 	
-}
-function mvViewPrevNext( $offset, $limit, $link, $query = '', $atend = false ) {
-	global $wgLang;
-	$fmtLimit = $wgLang->formatNum( $limit );
-	$prev = wfMsg( 'prevn', $fmtLimit );
-	$next = wfMsg( 'nextn', $fmtLimit );
-
-	if( is_object( $link ) ) {
-		$title =& $link;
-	} else {
-		$title = Title::newFromText( $link );
-		if( is_null( $title ) ) {
-			return false;
-		}
-	}
-
-	if ( 0 != $offset ) {
-		$po = $offset - $limit;
-		if ( $po < 0 ) { $po = 0; }
-		$q = "limit={$limit}&offset={$po}";
-		if ( '' != $query ) { $q .= '&'.$query; }
-		$plink = '<a href="' . $title->escapeLocalUrl( $q ) . "\" class=\"mw-prevlink\">{$prev}</a>";
-	} else { $plink = $prev; }
-
-	$no = $offset + $limit;
-	$q = 'limit='.$limit.'&offset='.$no;
-	if ( '' != $query ) { $q .= '&'.$query; }
-
-	if ( $atend ) {
-		$nlink = $next;
-	} else {
-		$nlink = '<a href="' . $title->escapeLocalUrl( $q ) . "\" class=\"mw-nextlink\">{$next}</a>";
-	}
-	$nums = wfNumLink( $offset, 20, $title, $query ) . ' | ' .
-	  wfNumLink( $offset, 50, $title, $query ) . ' | ' .
-	  wfNumLink( $offset, 100, $title, $query ) ;	  
-	return wfMsg( 'viewprevnext', $plink, $nlink, $nums );
 }
 ?>

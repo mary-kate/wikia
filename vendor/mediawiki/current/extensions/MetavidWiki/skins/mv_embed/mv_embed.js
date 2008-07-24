@@ -1,6 +1,7 @@
 /*
- * ~mv_embed~
+ * mv_embed version .6
  * for details see: http://metavid.ucsc.edu/wiki/index.php/Mv_embed
+ * and or the README
  *
  * All Metavid Wiki code is Released under the GPL2
  * for more info visit http:/metavid.ucsc.edu/code
@@ -14,7 +15,7 @@
  * http://stevenlevithan.com/demo/parseuri/js/
  *
  * config values you can manually set the location of the mv_embed folder here
- * (in cases where media will be hosted in a different place than the embbeding page)
+ * (in cases where media will be in a different place than the javascript)
  *
  */
 var mv_embed_path = null;
@@ -25,25 +26,16 @@ var mv_java_iframe = true;
 var mv_media_iframe_path = '/mv_embed/';
 
 var global_ogg_list = new Array();
-var global_req_cb = new Array();//the global request callback array
 var _global = this;
 var mv_init_done=false;
 
-
 if(!gMsg){var gMsg={};}
-//all default msg in [english] should be overwritten by the CMS language msg system.
+//all default msg in [english] should be overwitten by the CMS languge msg system.
 gMsg['loading_txt'] ='loading<blink>...</blink>';
-gMsg['select_playback']='Set Playback Preference';
+gMsg['select_playback']='Set Playback Prefrence';
 gMsg['link_back']='Link Back';
 gMsg['error_load_lib']='mv_embed: unable to load required javascript libraries\n'+
 			 	'insert script via DOM has failed, try reloading?  ';
-			 	
-gMsg['download_from']='Download Selection:';
-gMsg['download_full']='Download Full Video File:'
-gMsg['download_clip']='Download the Clip';
-gMsg['download_text']='Download Text (<a style="color:white" title="cmml" href="http://wiki.xiph.org/index.php/CMML">cmml</a> xml):';
-
-gMsg['clip_linkback']='Clip Source Page';
 //plugin names:
 gMsg['ogg-player-vlc-mozilla']='VLC Plugin';
 gMsg['ogg-player-videoElement']='Native Ogg Video Support';
@@ -53,17 +45,10 @@ gMsg['ogg-player-oggPlugin']='Generic Ogg Plugin';
 gMsg['ogg-player-quicktime-mozilla']='Quicktime Plugin';
 gMsg['ogg-player-quicktime-activex']='Quicktime ActiveX';
 gMsg['ogg-player-cortado']='Java Cortado';
-gMsg['ogg-player-flowplayer']='Flowplayer';
 gMsg['ogg-player-selected']=' (selected)';
+gMsg['download_clip']='Download the Clip';
 gMsg['generic_missing_plugin']='You don\'t appear to have a supported in browser playback method<br>' +
 		'visit the <a href="http://metavid.ucsc.edu/wiki/index.php/Client_Download">Playback Methods</a> page to download a player<br>';
-gMsg['add_to_end_of_sequence']='Add to End of Sequence';
-gMsg['missing_video_stream']='The video file for this stream is missing';
-
-gMsg['select_transcript_set']='Select Transcripts';
-gMsg['auto_scroll']='auto scroll';
-gMsg['close']='close';
-gMsg['improve_transcript']='Improve Transcript';
 
 //grabs from the globalMsg obj 
 //@@todo integrate msg serving into CMS
@@ -87,31 +72,18 @@ var video_attributes = {
     "innerHTML":null,
     "width":"320",
     "height":"240",
-
-    //video attributes:
+    
     "src":null,      
     "autoplay":false,   
     "start":0,
     "end":null,
     "controls":true,            
     
-    //roe url (for xml based metadata)
-    "roe":null,
-    //if roe includes metadata tracks we can expose a link to metadata
-    "show_meta_link":true,
-
-	//default state attributes per html5 spec: 
-	//http://www.whatwg.org/specs/web-apps/current-work/#video)
-	"paused":true,
-	"readyState":0,  //http://www.whatwg.org/specs/web-apps/current-work/#readystate
-	"currentTime":0, //current playback position (should be updated by plugin) 
-	"duration":NaN,   //media duration (read from file or anx temporal url)
-            
     //custom attributes for mv_embed: 
     "play_button":true,
     "thumbnail":null, 
     "linkback":null, 
-    "embed_link":true,
+    "embed_link":false,
     "download_link":true
 };
 
@@ -123,9 +95,8 @@ var mvEmbed = {
   flist:Array(),
   load_callback:false,
   loading:false, 
-  libs_loaded:false,
   //plugin libs var names and paths:
-  lib_jquery:{'window.jQuery':'jquery/jquery-1.2.6.min.js'},
+  lib_jquery:{'window.jQuery':'jquery/jquery-1.2.1.js'},
   lib_plugins:{		
 	'$j.fn.offsetParent':'jquery/plugins/jquery.dimensions.js',
 	'$j.ui.mouseInteraction':'jquery/plugins/ui.mouse.js',
@@ -133,20 +104,13 @@ var mvEmbed = {
   },
   pc:null, //used to store pointer to parent clip (when in playlist mode) 
   load_libs:function(callback){
-  	//load css:
-  	if(!styleSheetPresent(mv_embed_path+'mv_embed.css'))
-		loadExternalCss(mv_embed_path+'mv_embed.css');
-		
   	if(callback)this.load_callback = callback;
  	//two loading stages, first get jQuery
 	var _this = this;
   	mvJsLoader.doLoad(this.lib_jquery,function(){
   		//once jQuery is loaded set up no conflict & load plugins: 
  		_global['$j'] = jQuery.noConflict();
- 		js_log('jquery loaded');
 		mvJsLoader.doLoad(_this.lib_plugins, function(){			
-			js_log('plugins loaded');
-			mvEmbed.libs_loaded=true;
 			mvEmbed.init();
 		});	
   	});	    		
@@ -159,6 +123,7 @@ var mvEmbed = {
   			$j(this).remove();
   	});  	
   	//@@todo temporarily disable playback or set all to loading...
+
 	//request the new player library: 
 	var plugins={};
 	plugins[embedTypes.getPlayerLib()+'Embed']='mv_'+embedTypes.getPlayerLib()+'Embed.js';
@@ -178,11 +143,6 @@ var mvEmbed = {
   	//call the callback:
   	if(this.load_callback)this.load_callback();
 	mv_embed();	
-		//affter init run any queued functions:		
-		//js_log('run queue functions:' + mvEmbed.flist);
-		while (mvEmbed.flist.length){
-			mvEmbed.flist.shift()();
-		}
   }
 }
 
@@ -205,7 +165,7 @@ var embedTypes = {
 	 // List of players in order of preference
 	 playerType:false,
 	 // List of players in order of preference (vlc is pretty good on linux (but should not be installed in OSX) 
-	 players: ['videoElement','vlc-mozilla', 'vlc-activex', 'oggPlay', 'cortado', 'oggPlugin', 'quicktime-mozilla', 'quicktime-activex', 'flowplayer'],
+	 players: ['videoElement','vlc-mozilla', 'vlc-activex', 'oggPlay', 'oggPlugin', 'quicktime-mozilla', 'quicktime-activex', 'cortado'],
 	 init: function(){
 		//detect supported types
 		this.detect();
@@ -255,10 +215,9 @@ var embedTypes = {
 	 			return 'oggplay'; break;
 	 		case 'cortado':
 	 			return 'java';break;
-            case 'flowplayer':
-                return 'flash';
 	 		case 'oggPlugin':
-	 			return 'generic'; break;
+	 			return 'generic';
+	 		break;
 	 		default:
 	 			return null;
 	 	}
@@ -318,20 +277,18 @@ var embedTypes = {
 		 	this.clientSupports['cortado'] = true;
 		 }
 		 // ActiveX plugins
-		 if(this.msie){
-			 // VLC
-			 if ( this.testActiveX( 'VideoLAN.VLCPlugin.2' ) ) {
-			 	this.clientSupports['vlc-activex'] = true;
-			 }
-			 // Java
-			 if ( javaEnabled && this.testActiveX( 'JavaWebStart.isInstalled' ) ) {
-			 	this.clientSupports['cortado'] = true;
-			 }
-			 //temporary disable QuickTime check
-			 if ( this.testActiveX( 'QuickTimeCheckObject.QuickTimeCheck.1' ) ) {
-			 	this.clientSupports['quicktime-activex'] = true;
-			 }	
+		 // VLC
+		 if ( this.testActiveX( 'VideoLAN.VLCPlugin.2' ) ) {
+		 	this.clientSupports['vlc-activex'] = true;
 		 }
+		 // Java
+		 if ( javaEnabled && this.testActiveX( 'JavaWebStart.isInstalled' ) ) {
+		 	this.clientSupports['cortado'] = true;
+		 }
+		 // QuickTime
+		 if ( this.testActiveX( 'QuickTimeCheckObject.QuickTimeCheck.1' ) ) {
+		 	this.clientSupports['quicktime-activex'] = true;
+		 }		
 		 // <video> element (should not need to be attached to the dom to test)(
 		 var v = document.createElement("video");
 		 if(v.play){
@@ -343,7 +300,7 @@ var embedTypes = {
 		 this.clientSupports['videoElement'] = true;
 		 }*/
 		 // Mozilla plugins
-		if(navigator.mimeTypes && navigator.mimeTypes.length > 0) {
+				if(navigator.mimeTypes && navigator.mimeTypes.length > 0) {
 			for ( var i = 0; i < navigator.mimeTypes.length; i++) {
 				var type = navigator.mimeTypes[i].type;
 				var semicolonPos = type.indexOf( ';' );
@@ -388,11 +345,6 @@ var embedTypes = {
 					this.clientSupports['quicktime-mozilla'] = true;
 					continue;
 				}
-   				if(type=='application/x-shockwave-flash'){
-   					//@@temporary disabled flash player (not fully functional yet)    		
-					//this.clientSupports['flowplayer']= true;
-					continue;
-				}
 			}
 		}
 		//@@The xiph quicktime component does not work well with annodex streams (temporarly disable)
@@ -435,11 +387,9 @@ var mvJsLoader = {
 	 libreq:{},
 	 load_time:0,
 	 doLoad:function(libs,callback){
-		 if(libs){this.libs=libs;}else{libs=this.libs;}		 
+		 if(libs){this.libs=libs;}else{libs=this.libs;}
 		 this.callback=(callback)?callback:this.callback;
 		 var loading=0;
-		 var i=null;
-		 //js_log("doLoad_ load set to 0 on libs:"+ libs);
 		 for(i in libs){
 			 //itor the objPath (to avoid 'has no properties' errors)
 			 var objPath = i.split('.');
@@ -458,7 +408,7 @@ var mvJsLoader = {
 				 	break;
 				 }
 		 	 }
-			 if(cur_load==1){
+			 if(cur_load){
 				 //js_log('missing lib:'+i + ' do load:'+mv_embed_path+libs[i]);
 				 if(!this.libreq[i])loadExternalJs(mv_embed_path + libs[i]);
 				 this.libreq[i]=1;
@@ -470,7 +420,7 @@ var mvJsLoader = {
 			 }else{
 				setTimeout('mvJsLoader.doLoad()',25);
 			 }
-		 }else{		 	
+		 }else{
 		 	this.callback();
 		 }
 	 }
@@ -482,11 +432,8 @@ var mvJsLoader = {
  * $j(document).ready( function(){ */
 function init_mv_embed(force){
 	js_log('mv_init');
-	if(!force){		
-		if(mv_init_done){
-			js_log("caught second call not doing anything");
-			return ;
-		}
+	if(!force){
+		if(mv_init_done)return ;
 		mv_init_done=true;
 	}
 	//check if this page does have video or playlist
@@ -502,42 +449,35 @@ function init_mv_embed(force){
 		}
 	}else{
 		js_log('no video or playlist on the page... (done)');
-		//run any queued functions:		
-		while (mvEmbed.flist.length){
-			mvEmbed.flist.shift()();
-		}
 	}	
+	//affter mv run any queued functions:		
+	//js_log('run queue functions:' + mvEmbed.flist);
+	while (mvEmbed.flist.length){
+		mvEmbed.flist.shift()();
+	}
 }
 
 /*
  * this function allows for targeted rewriting (the host element does not have to be <video> tag)
  */
 function rewrite_by_id(vid_id){
-	//confirm the nessesary libs are loaded. 
-	if(!mvEmbed.libs_loaded){
-		mvEmbed.load_libs(function(){
-			rewrite_by_id(vid_id);
-		});
+	var vidElm = document.getElementById(vid_id);
+	if(vidElm){
+		var videoInterface = new embedVideo(vidElm);
+		swapEmbedVideoElement(vidElm, videoInterface);
+		return videoInterface;
 	}else{
-		var vidElm = document.getElementById(vid_id);
-		if(vidElm){
-			var videoInterface = new embedVideo(vidElm);
-			swapEmbedVideoElement(vidElm, videoInterface);
-			return videoInterface;
-		}else{
-			js_log('video element not found: '+vid_id);
-		}
+		js_log('VID ELM NOT FOUND: '+vid_id);
 	}
 }
+
+
 //SET DOM Ready state:
 // for Mozilla browsers
 if (document.addEventListener) {
     document.addEventListener("DOMContentLoaded", function(){init_mv_embed()}, false);
-}else{
-	//backup "onload" method in case on DOMContentLoaded does not exist
-	window.onload = init_mv_embed;
 }
-//for IE (temporarily disabled causing empty document rewrites:
+//for IE (temporarally disabled causing empty document rewrites:
 /*if (document.all && !window.opera){ //Crude test for IE
 	js_log('doing IE on ready');
 //Define a "blank" external JavaScript tag
@@ -567,10 +507,13 @@ if(embedTypes.safari){
 		//once jQuery is loaded set up no conflict: 
 		_global['$j'] = jQuery.noConflict();
 		init_mv_embed();
-	}
+	}				
 }
+//backup "onload" in case on DOM ready does not fire
+window.onload = init_mv_embed;
 /*
 * Coverts all occurrences of <video> tag into video object
+* (if a native support is not found) 
 */
 function mv_embed(){  	  
 	//get mv_embed location if it has not been set
@@ -583,17 +526,28 @@ function mv_embed(){
         for(i = 0; i < video_elements.length; i++) {           	         	        
             //grab id:
             vid_id = video_elements[i].getAttribute("id");       
-            //set id if empty:
+            //if vid_id is empty
             if(!vid_id || vid_id==''){
   				video_elements[i].id= 'v'+ global_ogg_list.length;    	
             }
-            //create and swap in the video interface:
-	   		var videoInterface = new embedVideo(video_elements[i]);
-   			//swap:
-	   		if(swapEmbedVideoElement(video_elements[i], videoInterface)){
-	   			i--;
-	   		}
+            //create the video interface:
+	    var videoInterface = new embedVideo(video_elements[i]);	
+            //swap the video element for our own embed video element           
+            js_log('made videoInterface: ' + videoInterface.id)
+            if( swapEmbedVideoElement(video_elements[i], videoInterface) ){
+             	//decrement i cuz we have swaped out the current video element
+                i--;
+            }                                                   
         }
+        //set onBeforeUnload action to stop all videos
+        /*document.body.onBeforeUnload= function(){
+        	js_log('called before unload');
+        	for(i in global_ogg_list){
+        		$j('#'+i).stop();
+        	}
+        	alert('wtf');
+        	return false;
+        }*/
     }else{
     	js_log('no <video> elements found');
     }
@@ -606,7 +560,6 @@ function mv_embed(){
 
 var sq_load_time=0;
 function mv_do_sequence(initObj){
-	js_log('mv_do_sequence');
 	//issue a request to get the css file (if not already included): 
 	if(!styleSheetPresent(mv_embed_path+'mv_sequence.css'))
 		loadExternalCss(mv_embed_path+'mv_sequence.css');
@@ -661,10 +614,7 @@ function swapEmbedVideoElement(video_element, videoInterface){
 	js_log('do swap');
 	embed_video = document.createElement('div');	
 	//inherit the video interface  
-	for(method in videoInterface){
-		//string -> boolean:
-		if(videoInterface[method]=='false')videoInterface[method]=false;
-		if(videoInterface[method]=='true')videoInterface[method]=true;
+	for(method in  videoInterface){
 		if(method!='readyState'){ //readyState crashes IE
 			if(method=='style'){
 					embed_video.setAttribute('style', videoInterface[method]);			
@@ -680,325 +630,41 @@ function swapEmbedVideoElement(video_element, videoInterface){
 		}
 	}
 	///js_log('did vI style');
-  	//now swap out the video element for the embed_video obj:  	  	
-  	$j(video_element).after(embed_video).remove();
-  	//update HTML 
-  	$j('#'+embed_video.id).get(0).getHTML();
-  	
-    /*var parent_elm = video_element.parentNode;
+  	//now swap out the video element for the embed_video obj:
+    var parent_elm = video_element.parentNode;
     parent_elm.removeChild(video_element);
     
     //append the object into the dom: 
     parent_elm.appendChild(embed_video);  
-       
+   
+    
     //now run the getHTML on the new embedVideo Obj:
-    embed_video.getHTML();    	
-    */
+    embed_video.getHTML(); 
     js_log('html set:' + document.getElementById(embed_video.id).innerHTML);
+    
     //store a reference to the id 
     //(for single instance plugins that need to keep track of other instances on the page)
     global_ogg_list.push(embed_video.id);
         
-    js_log('done with child: ' + embed_video.id + ' len:'+global_ogg_list.length);
+    js_log('append child: ' + embed_video.id + ' len:'+global_ogg_list.length);
  	return true;
 }
 /* 
 *  The base embedVideo object constructor 
 */
-/*var textTrack = function(track){
-	return this.init(track);
-}
-textTrack.prototype ={
-	init:function(track){
-		for(i in track){
-			this[i]=track[i];
-		}
-	},
-	loadTrack:function(){
-		
-	}
-}*/
-var textInterface = function(parentEmbed){
-	return this.init(parentEmbed);	
-}
-textInterface.prototype = {	
-	text_lookahead_time:0,
-	body_ready:false,
-	request_length:5*60, //5 min
-	transcript_set:null,
-	autoscroll:true,
-	scrollTimerId:0,
-	availableTracks:{},
-	init:function(parentEmbed){
-		this.pe=parentEmbed;
-		//parse roe if not already done: 
-		
-		//if not "live" or under 5 min load all transcript in one request	
-		if(!this.pe.roe_xml){
-			js_log("MISSING ROE DATA for text interface");
-			var _this = this;
-			this.pe.getParseROE( function(){				
-				_this.textInterface.getParseCMML();
-			});
-		}else{
-			this.getParseCMML();
-		}
-		//start the autoscroll timer: 
-		this.setAutoScroll(true);		
-	},
-	//@@todo seperate out data loader & data display 
-	getParseCMML:function(){		
-		js_log("load cmml");
-		//read the current play head time (if embed object is playing)
-		
-		//look at avaliable layers and default layer set 
-		
-		//@@todo use user-language as key to select transcript layer.
-		_this = this;
-		$j.each(this.pe.roe_xml.getElementsByTagName('mediaSource'), function(inx, n){
-			if(n.getAttribute('content-type')=='text/cmml'){
-				_this.availableTracks[n.getAttribute('id')] = {
-					src:n.getAttribute('src'),
-					title:n.getAttribute('title'),
-					loaded:false,
-					display:false
-				}
-				//load or skip the track based on "default" attribute
-				if(n.getAttribute('default')!='true'){
-					return;
-				}else{
-					//load the track if its default track
-					_this.load_track(n.getAttribute('id'));
-				}			
-			}
-		});
-	},
-	load_track:function(track_id){
-		var track = this.availableTracks[track_id];
-		js_log('cmml available');
-		//add transcript to bodyHTML
-		var pcurl =  parseUri(track.src);
-		var req_time =pcurl.queryKey['t'].split('/');
-		req_time[0]=ntp2seconds(req_time[0]);
-		req_time[1]=ntp2seconds(req_time[1]);
-		if(req_time[1]-req_time[0]> _this.request_length){
-			//longer than 5 min will only issue a (request 5 min)
-			req_time[1] = req_time[0]+_this.request_length;
-		}
-		//set up request url: 
-		url = pcurl.protocol+'://'+pcurl.authority+pcurl.path+'?';
-		for( i in pcurl.queryKey){
-			if(i!='t'){
-				url+=i+'='+pcurl.queryKey[i]+'&';
-			}else{
-				url+='t='+seconds2ntp(req_time[0])+'/'+seconds2ntp(req_time[1])+'&';
-			}
-		}
-		//js_log('do request on url:' + url);				
-		//$j('#mv_loading_icon').css('display','inline');			
-		do_request(url, function(data){
-			//js_log('wtf' + data.xml);
-			//js_log("load track data: "+ data.toString() );
-			//hide loading icon:
-			$j('#mv_loading_icon').css('display','none');				
-			$j.each(data.getElementsByTagName('clip'), function(inx, n){
-				var text_clip = {
-					start:n.getAttribute('start').replace('ntp:', ''),
-					end:n.getAttribute('end').replace('ntp:', ''),
-					type_id:track_id,
-					id:n.getAttribute('id')
-				}
-				$j.each(n.getElementsByTagName('body'), function(binx, bn){
-					if(bn.textContent){
-						text_clip.body = bn.textContent;
-					}else if(bn.text){
-						text_clip.body = bn.text;
-					}
-				});				
-				_this.add_merge_text_clip(text_clip);
-			});			
-			//done loading update availableTracks
-			_this.availableTracks[track_id].loaded=true;
-			_this.availableTracks[track_id].display=true;
-		});
-	},
-	add_merge_text_clip:function(text_clip){
-		//make sure the clip does not alreay exist: 
-		if($j('#tc_'+text_clip.id).length==0){		
-			var inserted = false;	
-			var text_clip_start_time = ntp2seconds(text_clip.start);
-			var insertHTML = '<div style="border:solid thin black;" id="tc_'+text_clip.id+'" ' +
-				'start="'+text_clip.start+'" end="'+text_clip.end+'" class="mvtt '+text_clip.type_id+'">' +
-					'<div style="top:0px;left:0px;right:0px;height:20px;font-size:small">'+
-						'<img style="display:inline;" src="'+mv_embed_path+'/images/control_play_blue.png">'+
-						text_clip.start + ' to ' +text_clip.end+
-					'</div>'+
-					text_clip.body + 
-			'</div>';						
-			if($j('#mmbody_'+this.pe.id).length==0)this.show();			
-			$j('#mmbody_'+this.pe.id +' .mvtt').each(function(){
-				if(!inserted){
-					js_log( ntp2seconds($j(this).attr('start')) + ' > ' + text_clip_start_time);
-					if( ntp2seconds($j(this).attr('start')) > text_clip_start_time){
-						inserted=true;						
-						$j(this).before(insertHTML);
-					}
-				}
-			});
-			//js_log('should just append: '+insertHTML);
-			if(!inserted){
-				$j('#mmbody_'+this.pe.id ).append(insertHTML);
-			}			
-		}		
-	},
-	show:function(){
-		//js_log("show text interface");
-		/*fade out cc button*/
-		$j('#metaButton_'+this.pe.id).fadeOut('fast');		
-		/*slide in intefrace container*/
-		if($j('#metaBox_'+this.pe.id).length==0){
-			
-			//append it to body relative to offset of this.pe
-			var loc = $j(this.pe).position();
-			//js_log('top ' +loc.top + ' left:'+loc.left );
-			$j(this.pe).after('<div style="position:absolute;z-index:'+($j(this.pe).css("zindex")+1) + ';'+
-						'top:'+(loc.top)+'px;' +
-						'left:'+(parseInt(loc.left)+parseInt(this.pe.width)+10)+'px;' +
-						'height:'+this.pe.height+'px;width:400px;' +
-						'background:white;border:solid black;" ' +
-						'id="metaBox_'+this.pe.id+'">' +
-					this.getMenu() +
-					this.getBody() + 
-						'</div>');			
-			//$j('body').append();
-		}else{
-			//if($j('#metaBox_'+this.pe.id).css('display')!='none'){
-			$j('#metaBox_'+this.pe.id).fadeIn("fast");
-			//}
-		}	
-	},	
-	close:function(){
-		//the meta box: 
-		$j('#metaBox_'+this.pe.id).fadeOut('fast');
-		//the icon link: 
-		$j('#metaButton_'+this.pe.id).fadeIn('fast');	
-	},
-	getBody:function(){		
-		return '<div id="mmbody_'+this.pe.id+'" style="position:absolute;top:20px;left:0px;right:0px;bottom:0px;height:'+(this.pe.height-20)+'px;overflow:auto;"/>';
-	},
-	getTsSelect:function(){
-		js_log('getTsSelect');
-		//check if menu already present
-		if($j('mvtsel_'+this.pe.id).length!=0){
-			$j('mvtsel_'+this.pe.id).fadeIn('fast');
-		}else{
-			var selHTML = '<div id="mvtsel_'+this.pe.id+'" style="position:absolute;background:#FFF;top:20px;left:0px;right:0px;bottom:0px;overflow:auto;">';
-			selHTML+='<b>'+getMsg('select_transcript_set')+'</b><ul>';	
-			for(i in this.availableTracks){
-				var checked = (this.availableTracks[i].display)?'checked':'';
-				selHTML+='<li><input name="'+i+'" class="mvTsSelect" type="checkbox" '+checked+'>'+
-					this.availableTracks[i].title + '</li>';
-			}
-			selHTML+='</ul>' +
-						'<a href="#" onClick="document.getElementById(\''+this.pe.id+'\').textInterface.applyTsSelect();return false;">'+getMsg('close')+'</a>'+
-					'</div>';
-			$j('#metaBox_'+this.pe.id).append(selHTML);
-			js_log('appended: '+ selHTML);
-		}
-	},
-	applyTsSelect:function(){
-		//update availableTracks
-		var _this = this;
-		$j('#mvtsel_'+this.pe.id+' .mvTsSelect').each(function(){
-			if(this.checked){
-				//if not yet loaded now would be a good time
-				if(!_this.availableTracks[this.name].loaded){
-					_this.load_track( this.name);	//will load and dispaly
-				}else{
-					_this.availableTracks[this.name].display=true;
-					$j('#mmbody_'+_this.pe.id +' .'+this.name ).fadeIn("fast");
-				}
-			}else{
-				if(_this.availableTracks[this.name].display){
-					_this.availableTracks[this.name].display=false;
-					$j('#mmbody_'+_this.pe.id +' .'+this.name ).fadeOut("fast");
-				}
-			}			
-		});
-		$j('#mvtsel_'+this.pe.id).fadeOut('fast');
-	},
-	monitor:function(){
-		//grab the time from the video object 
-		var cur_time = parseInt( this.pe.currentTime );			
-		if(cur_time!=0 && this.prevTimeScroll!=cur_time){
-			//search for current time:  flash red border trascript 
-			_this = this;
-			$j('#mmbody_'+this.pe.id +' .mvtt').each(function(){
-				if(ntp2seconds($j(this).attr('start')) == cur_time){		
-					_this.prevTimeScroll=cur_time;	
-					$j('#mmbody_'+_this.pe.id).animate({scrollTop: $j(this).position().top}, 'slow');					
-				}
-			});	
-		}		
-	},
-	setAutoScroll:function(timer){
-		this.autoscroll = timer;
-		if(this.autoscroll){
-			//start the timmer if its not alreay running
-			if(!this.scrollTimerId){
-				this.scrollTimerId = setInterval('document.getElementById(\''+this.pe.id+'\').textInterface.monitor()', 500);
-			}
-			//jump to the current position: 
-			var cur_time = parseInt (this.pe.currentTime );
-			js_log('cur time: '+ cur_time);
-						
-			_this = this;
-			$j('#mmbody_'+this.pe.id +' .mvtt').each(function(){
-				if(cur_time > ntp2seconds($j(this).attr('start'))  ){	
-					_this.prevTimeScroll=cur_time;	
-					$j('#mmbody_'+_this.pe.id).animate({scrollTop: $j(this).position().top}, 'slow');
-				}
-			});
-		}else{
-			//stop the timmer
-			clearInterval(this.scrollTimerId);
-			this.scrollTimerId=0;
-		}
-	},
-	getMenu:function(){
-		var out='';
-		//add in loading icon: 
-		/*
-		out+= '<div class="mv_loading_icon" style="background:url(\''+mv_embed_path+'images/indicator.gif\');display:';
-		out+= (this.roe_xml)? 'none':'inline';
-		out+='"/>';		
-		*/
-		var as_checked = (this.autoscroll)?'checked':'';
-		out+= '<div id="mmenu_'+this.pe.id+'" style="background:#AAF;font-size:small;position:absolute;top:0;height:20px;left:0px;right:0px;">' +
-				'<a style="font-color:#000;" title="'+getMsg('close')+'" href="#" onClick="document.getElementById(\''+this.pe.id+'\').closeTextInterface();return false;">'+
-					'<img border="0" width="16" height="16" src="'+mv_embed_path + 'images/cancel.png"></a> ' + 
-				'<a style="font-color:#000;" title="'+getMsg('select_transcript_set')+'" href="#"  onClick="document.getElementById(\''+this.pe.id+'\').textInterface.getTsSelect();return false;">'+
-					getMsg('select_transcript_set')+'</a> | ' + 
-				'<input onClick="document.getElementById(\''+this.pe.id+'\').textInterface.setAutoScroll(this.checked);return false;" ' +
-				'type="checkbox" '+as_checked +'>'+getMsg('auto_scroll');
-		if(this.pe.linkback){
-			out+=' | <a style="font-color:#000;" title="'+getMsg('improve_transcript')+'" href="'+this.pe.linkback+'">'+
-				getMsg('improve_transcript')+'</a> ';
-		}	
-		out+='</div>';
-		return out;			
-	}
-}
-
-
 var embedVideo = function(element) {	
 	return this.init(element);
 };
 //base embedVideo object
 embedVideo.prototype = {
 	slider:null,
-	roe_xml:null,
-	load_external_data:false,	
+	//state attributes (per html5 spec http://www.whatwg.org/specs/web-apps/current-work/#video)
+	video_states:{
+	    "paused":true,
+	    "readyState":0,  //http://www.whatwg.org/specs/web-apps/current-work/#readystate
+	    "currentTime":0, //current playback position (should be overwritten by local functions) 
+	    "duration":NaN   //media duration (read from file)
+	},
 	//utility functions for property values: 
 	hx : function ( s ) {
 		if ( typeof s != 'String' ) {
@@ -1011,9 +677,8 @@ embedVideo.prototype = {
 	hq : function ( s ) {
 		return '"' + this.hx( s ) + '"';
 	},
-	init: function(element){	
-		this.element_pointer = element;
-		//inherit all the default video_attributes
+	init: function(element){		   
+	   //inherit all the default video_attributes 
 	    for(var attr in video_attributes){       
 	        if(element.getAttribute(attr)){
 	            this[attr]=element.getAttribute(attr);
@@ -1022,16 +687,11 @@ embedVideo.prototype = {
 	            this[attr]=video_attributes[attr];
 	            //js_log('attr:' + attr + ' val: ' + video_attributes[attr] +" "+ 'elm_val:' + element.getAttribute(attr) + "\n (set by attr)");  
 	        }
-	    }	   	    
-		//if roe set & (src is not) ... load settings from xml (where not already set) 
-		if(this.roe!=null && this.src==null){
-			this.loading_external_data=true;
-		}
-		if(this.roe==null){
-			this['show_meta_link']=false;				
-		}
-	    js_log('continue_thumb:'+ this['thumbnail']);
-   	    js_log('continue_src:'+ this['src']);
+	    }
+	    //init the default states: 
+	    for(var state in this.video_states){
+	    	 this[state]=this.video_states[state];
+	    }
 	    //if the thumbnail is null replace with default thumb:
 	    if(!this['thumbnail']){
 			this['thumbnail'] = mv_default_thumb_url;
@@ -1054,12 +714,14 @@ embedVideo.prototype = {
 	    if(embedTypes.getPlayerType()){    
 	       this.inheritEmbedObj();
 	    }  
+	   //do a local call to getDuration (as the plugin may not be loaded yet) 
+	   this.getDuration();
+	   //test: 
 	   //js_log('HTML FROM IN OBJECT' + this.getHTML());
 	   //return this object:	   
 	   return this;
-	},	  	
+	},
 	inheritEmbedObj:function(){
-		js_log("inheritEmbedObj");
 		//@@note: tricky cuz direct overwrite is not so ideal.. since the extended object is already tied to the dom
 		//clear out any non-base embedObj stuff: 
 		if(this.instanceOf){
@@ -1078,77 +740,14 @@ embedVideo.prototype = {
         	//parent method preservation for local overwritten methods
         	if(this[method])this['parent_' + method] = this[method];
             this[method]=embedObj[method];
-           
         }
         if(this.inheritEmbedOverride){
         	this.inheritEmbedOverride();
         }
 	},
-	//parse roe file and store data in this object
-	getParseROE: function(callback){
-		var _this = this;
-		do_request(this.roe, function(data){	
-			js_log('got DATA!!!!!!!' + typeof data);	
-			//	alert('found mediaSource');
-			//});
-			//elm = xml.getElementById('html_linkback');			
-			//js_log("on: "+_this.id + " got xml "+ xml.length + ' test elm:' + elm.getAttribute('rel'));
-			if(typeof data == 'object' ){				
-				_this.roe_xml = data;
-				var cmml_available=false;
-				$j.each(_this.roe_xml.getElementsByTagName('mediaSource'), function(inx, n){
-					js_log(' on element: ' + n.getAttribute('content-type'));
-					if(n.getAttribute('content-type')=='video/ogg' && n.getAttribute("default")=="true"){
-						js_log('set src to '+n.getAttribute("src"));						
-						_this['src'] = n.getAttribute("src");
-					}
-					if(n.getAttribute('content-type')=='text/cmml'){
-						js_log('cmml available');						
-						cmml_available=true;
-					}
-				});				
-				//overide show_meta_link if cmml is not available 
-				if(!cmml_available){
-					_this['show_meta_link']=false;				
-				}
-				/*
-				//set the src to video tag with "default" attribute:
-				//var rVids = _this.roe_xml.getElementsByTagName('video');
-				js_log('found '+ rVids.length + ' video tags');
-				$j.each(_this.roe_xml.getElementsByTagName('video'), function(inx,n){	
-					if(n.getAttribute("default")=="true"){
-						js_log('set src to '+n.getAttribute("src"));						
-						_this['src'] = n.getAttribute("src");
-					}
-				});
-				*/												
-				//set the thumbnail: 
-				$j.each(_this.roe_xml.getElementsByTagName('img'), function(inx, n){
-					if(n.getAttribute("id")=="stream_thumb"){
-						js_log('set thumb to '+n.getAttribute("src"));
-						_this['thumbnail'] = n.getAttribute("src");	
-					}
-				}); 
-				//set the linkback:
-				$j.each(_this.roe_xml.getElementsByTagName('link'), function(inx, n){
-					if(n.getAttribute('id')=='html_linkback'){
-						js_log('set linkback to '+n.getAttribute("href"));
-						_this['linkback'] = n.getAttribute('href');
-					}
-				});
-			}			
-			if(!_this['src']){
-				//could not find default video src for playback
-				$j(_this).html(getMsg('missing_video_stream'));				
-			}else{
-				//js_log("do callback roe data:"+_this['roe_xml']+' '+ _this['src'] +' '+ _this['thumbnail'] + 'cb: '+ callback);
-				callback(_this.id);
-			}
-		});
-	},		
 	 /*
 	  * function getDuration in milliseconds 
-	  * special case derive duration from request url (in float seconds) @@todo should be float seconds
+	  * special case derive duration from request url (in float seconds) @@todo should be milliseconds
 	  * (for media_url?t=ntp_start/ntp_end url request format
 	  */  
 	 getDuration : function(){	 	
@@ -1183,35 +782,17 @@ embedVideo.prototype = {
 		return seconds2ntp(this.getDuration()/1000);
 	},
 	getHTML : function (){
-		if(this.loading_external_data){	
-			this.innerHTML = getMsg('loading_txt');
-			/*this.getThumbnailHTML();	
-			$j('#big_play_link_'+this.id).replaceWith('<span style="background:#fff;color:#000;' +
-				'filter:alpha(opacity=65);-moz-opacity:.65;opacity:.65;">'+getMsg('loading_txt')+'</span>');*/
-			var _this= this;
-			//js_log('before req id: '+ _this.id)
-			this.getParseROE( function(_this_id){	
-				//set cur obj by callback id if present:
-				if(_this_id)
-					_this = $j('#'+_this_id).get(0);
-				_this.loading_external_data=false;
-				_this.getHTML();
-			});
-		}else{
-			//make sure we have duration info: 
-			this.getDuration();
-			//js_log('get html: ' + $j('#'+this.id).html() );
-		    //returns the innerHTML based on auto play option and global_embed_type
-		    //if auto play==true directly embed the plugin
-		    if(this.autoplay){ 	   
-				this.thumbnail_disp = false;			
-				this.innerHTML = this.getEmbedHTML();
-		    }else{
-		        //if autoplay=false or render out a thumbnail with link to embed html      
-		       this.thumbnail_disp = true;
-		       this.innerHTML = this.getThumbnailHTML();	    
-		    }	
-		}
+		//js_log('get html: ' + $j('#'+this.id).html() );
+	    //returns the innerHTML based on auto play option and global_embed_type
+	    //if auto play==true directly embed the plugin
+	    if(this.autoplay){ 	   
+			this.thumbnail_disp = false;			
+			this.innerHTML = this.getEmbedHTML();
+	    }else{
+	        //if autoplay=false or render out a thumbnail with link to embed html      
+	       this.thumbnail_disp = true;
+	       this.innerHTML = this.getThumbnailHTML();	    
+	    }
 	},
 	/*
 	* get missing plugin html (check for user included code)
@@ -1303,36 +884,25 @@ embedVideo.prototype = {
 	  	
 	  	 //add plugin config button (don't add for playlists) 
 	  	 if(!this.pc){
-			 thumb_html+='<div style="border:none;position:absolute;top:2px;left:2px;z-index:99;width:28px;height:28px;">' +
+			 thumb_html+='<div style="position:absolute;top:2px;left:2px;z-index:99;width:28px;height:28px;">' +
 				 '<a title="'+getMsg('select_playback')+'" href="#" onClick="document.getElementById(\''+this.id+'\').selectPlaybackMethod();return false;">'+
 				 	getTransparentPng({id:'plug_'+this.id,width:'27',height:'27',src:mv_embed_path + 'images/vid_plugin_edit_sm.png'})+
 				 '</a>'+
 			 '</div>';
 	  	 }
-	  	//add in cmml inline dispaly if roe descption avaliable
-	  	//not to be displayed in stream interface. 
-	  	if(this.show_meta_link){
-	  		thumb_html+='<div style="border:none;position:absolute;top:2px;right:2px;z-index:1">'+
-		     '<a title="'+getMsg('select_transcript_set')+'" href="javascript:document.getElementById(\''+this.id+'\').showTextInterface();">';
-		    thumb_html+=getTransparentPng({id:'metaButton_'+this.id, width:"40", height:"27", border:"0", 
-						src:mv_embed_path + 'images/cc_meta_sm.png' });
-			thumb_html+='</div>';    	
-	  	}
 	  	
 	    //add link back if requested
 	    if(this.linkback){
-	    	thumb_html+='<div style="border:none;position:absolute;bottom:2px;right:2px;z-index:1">'+
-		     '<a title="'+getMsg('clip_linkback')+'" target="_new" href="'+this.linkback+'">';
+	    	thumb_html+='<div style="position:absolute;bottom:2px;right:2px;z-index:1">'+
+		     '<a title="clip linkback" target="_new" href="'+this.linkback+'">';
 		    thumb_html+=getTransparentPng({id:'lb_'+this.id, width:"27", height:"27", border:"0", 
 						src:mv_embed_path + 'images/vid_info_sm.png' });
 			thumb_html+='</div>';    	
 	    }
-	    //add direct download link if option:
+	    //add direct download link if requested:
 	    if(this.download_link){
-	    	//check for roe attribute (extened download options)
-	    	var dlLink = (this.roe)?'javascript:document.getElementById(\''+this.id+'\').showVideoDownload();':this.src;	    	
-	    	thumb_html+='<div style="border:none;position:absolute;bottom:2px;left:2px;z-index:1">'+
-		     '<a title="'+getMsg('download_clip')+'" href="'+dlLink+'">';		     
+	    	thumb_html+='<div style="position:absolute;bottom:2px;left:2px;z-index:1">'+
+		     '<a title="'+getMsg('download_clip')+'" href="'+this.src+'">';
 		    thumb_html+=getTransparentPng({id:'lb_'+this.id, width:"27", height:"27", border:"0", 
 						src:mv_embed_path + 'images/vid_download_sm.png' });
 			thumb_html+='</div>';   
@@ -1340,7 +910,7 @@ embedVideo.prototype = {
 	    //add in embed link (if requested) 
 	    if(this.embed_link){	
 	    	var right_offset = (this.linkback)?32:0;
-			thumb_html+='<div style="border:none;position:absolute;bottom:2px;right:'+right_offset+'px;z-index:1">'+
+			thumb_html+='<div style="position:absolute;bottom:2px;right:'+right_offset+'px;z-index:1">'+
 		     '<a title="Embed Clip Code" href="javascript:document.getElementById(\''+this.id+'\').hideShowEmbedCode();">';
 	
 			thumb_html+=getTransparentPng(new Object ({id:'le_'+this.id, width:"27", height:"27", border:"0", 
@@ -1357,15 +927,10 @@ embedVideo.prototype = {
 			}
 			var embed_code_html = '&lt;script type=&quot;text/javascript&quot; ' +
 						'src=&quot;'+mv_embed_path+'mv_embed.js&quot;&gt;&lt;/script&gt' +
-						'&lt;video ';
-			if(this.roe){
-				embed_code_html+='roe=&quot;'+this.roe+'&quot; &gt;';				
-			}else{
-				embed_code_html+='src=&quot;'+this.src+'&quot; ' + 
-					'thumbnail=&quot;'+embed_thumb_html+'&quot;&gt;';
-			}
-			//close the video tag
-			embed_code_html+='&lt;/video&gt;';
+						'&lt;video id=&quot;'+this.id+'&quot; ' + 
+						'src=&quot;'+this.src+'&quot; ' + 
+						'thumbnail=&quot;'+embed_thumb_html+'&quot;/&gt;';
+	
 			//add the hidden embed code:
 			thumb_html+='<div id="embed_code_'+this.id+'" style="border:solid;border-color:black;overflow:hidden;display:none;position:absolute;bottom:2px;right:'+(right_offset+30)+'px;width:'+(this.width-100)+'px;z-index:1">'+
 				'<input onClick="this.select();" type="text" size="40" length="1024" value="'+embed_code_html+'">'
@@ -1386,7 +951,7 @@ embedVideo.prototype = {
 	    var left = Math.round(this.width/2)- (play_btn_width/2);
 	    
 	    out='';
-	    out+='<div style="border:none;position:absolute;top:'+top+'px;left:'+left+'px;z-index:1">'+
+	    out+='<div style="position:absolute;top:'+top+'px;left:'+left+'px;z-index:1">'+
 				     '<a id="big_play_link_'+id+'" title="Play Media" href="javascript:document.getElementById(\''+id+'\').play();">';	
 				     
 	        //fix for IE<7 and its lack of PNG support:
@@ -1396,6 +961,7 @@ embedVideo.prototype = {
 		return out;
 	},
 	//display the code to remotely embed this video:
+	//if scriptaculus is available animate its appearance. 
 	hideShowEmbedCode : function(){
 		if($j('#embed_code_'+this.id).css('display')=='none'){
 			$j('#embed_code_'+this.id).fadeIn("slow");
@@ -1412,81 +978,7 @@ embedVideo.prototype = {
 		} );
 		* 
 		*/		
-	},		
-	showTextInterface:function(){
-		//check if textObj present:
-		if(typeof this.textInterface == 'undefined' ){
-			this.textInterface = new textInterface(this);
-		}
-		//show interface
-		this.textInterface.show();
-	},
-	closeTextInterface:function(){
-		js_log('closeTextInterface '+ typeof this.textInterface);
-		if(typeof this.textInterface !== 'undefined' ){
-			this.textInterface.close();			
-		}
-	},
-	//@@todo we should group/abstract hide show video and set playback preference	
-	showVideoDownload:function(){		
-		 $j('#'+this.id).css('position', 'relative');
-		 //set height width (check for playlist container) 
-	 	 var width = (this.pc)?this.pc.pp.width:this.width;
-	 	 var height = (this.pc)?this.pc.pp.height:this.height;
-	 	 if(width<320)width=320;
-	 	 if(height<240)height=240;
-	 	 var sel_id = (this.pc!=null)?this.pc.pp.id:this.id;
-	 	 var close_link ='<a href="#" style="color:white" onClick="document.getElementById(\''+this.id+'\').closeSelectPlayback();return false;">close</a>';
-		 //fade in a black bg div ontop of everything
-		 var select_code = '<div id="blackbg_'+sel_id+'" ' +
-			 'style="overflow:auto;position:absolute;display:none;z-index:2;background:black;top:0px;left:0px;' +
-				 'height:'+parseInt(height)+'px;width:'+parseInt(width)+'px;">'+	
-			 '<span id="close_vl'+this.id+'" style="position:absolute:top:2px;left:2px;color:white;">'+close_link+'</span>'+
-			 '<span id="con_vl_'+this.id+'" style="position:absolute;top:20px;left:20px;color:white;">';			 	
-		var dl_list='';		
-		//set to loading if we don't have the roe data yet: 
-		if(!this.roe_xml && this.roe){		
-			select_code+=getMsg('loading_txt');			
-			var _this = this;
-			this.getParseROE(function(){
-				$j('#con_vl_'+_this.id).html(_this.getDLlist());				
-			});
-		}else{
-			js_log('get dl list');			
-			select_code+=this.getDLlist();
-		}		
-		select_code+=close_link+'</span>'+			
-		 '</div>';
-		 //js_log('appending to: ' + sel_id +' sc: '+ select_code );
-		 $j('#'+sel_id).append(select_code);
-		 $j('#blackbg_'+sel_id).fadeIn("slow");
-	},
-	getDLlist:function(){		
-		var out='<b style="color:white;">'+getMsg('download_from')+' '+parseUri(this.src).queryKey['t']+'</b><br>';
-		out+='<span style="color:white"><blockquote>';
-		var dl_list=dl_txt_list='';
-		$j.each(this.roe_xml.getElementsByTagName('mediaSource'), function(inx,n){	
-			var dl_line = '<li><a style="color:white" href="' + n.getAttribute("src") +'"> '+
-						n.getAttribute("title")+'</a></li>'+"\n";						
-			if(n.getAttribute("content-type")=="video/ogg"){
-				out+=dl_line;
-			}if(n.getAttribute("content-type")=="text/cmml"){
-				dl_txt_list+=dl_line;
-			}else{
-				dl_list+=dl_line;
-			}
-		});		
-		out+='</blockquote>'+getMsg('download_full')+"<blockquote>"+dl_list+'</blockquote>';
-		out+='</blockquote>'+getMsg('download_text')+"<blockquote>"+dl_txt_list+'</blockquote></span>';		
-		return out;
-	},
-	closeVideoDownload:function(){
-	 	 var sel_id = (this.pc!=null)?this.pc.pp.id:this.id;
-		 $j('#blackbg_'+sel_id).fadeOut("slow", function(){
-			 $j('#blackbg_'+sel_id).remove();
-		 });
- 		return false;//onclick action return false
-	},
+	},			
 	/*
 	*  base embed controls 
 	*	the play button calls 
@@ -1577,7 +1069,7 @@ embedVideo.prototype = {
 		}else{
 			return true;
 		}
-	},	
+	},
 	//loads in the css and js for the extended interface (controls = true) 
 	get_interface_lib : function(doLoad){				
 		//var doLoad = (doLoad==null)? true:doLoad;
@@ -1735,7 +1227,16 @@ embedVideo.prototype = {
 							'z-index:5;height:4px; background: url('+mv_embed_path+'images/bd-gray.gif) repeat scroll 5px 0px;">'+
 								' <div id="playhead_'+id+'" class="mv_playhead" ' +
 									'style="z-index:5;background-image: url('+mv_embed_path+'images/slider_handle.gif);"></div>' + 						
-						'</div>';				
+						'</div>';
+				//use style for bg (to use paths
+				//position: absolute;'+
+				//					'height: 21px; left: 0px; top: 10px; width: 17px;'+
+				/*return '<div id="track_'+id+'" class="mv_track" ' +
+						'style="background: url('+mv_embed_path+'images/bd-gray.gif);' +
+						'width:'+(this.width)+'px; height:4px;">'+
+				'<div id="playhead_'+id+'" style="background:url(\''+mv_embed_path+'images/slider_handle.gif\');"' +
+					' class="mv_playhead"></div>'+
+				'</div>';*/					
 			break;
 			case 'info_span':
 				return '<span id="info_cnt_'+id+'" style="float:left">' +
@@ -1757,6 +1258,22 @@ function getTransparentPng(image){
 			image.src + '">';
 	}
 }
+//returns the original name to the faded img (	//take off the new_)
+/*function thumbnail_restore_id(obj){
+	if(obj.element){
+		var default_id=obj.element.id.substr(4);
+		var this_id = obj.element.id.substr(14);
+		//remove original 
+		img_container = document.getElementById('dc_'+this_id);
+		if(img_container){
+			org_img = document.getElementById(default_id);
+			img_container.removeChild(org_img);
+			//set the new obj id to the default:
+			obj.element.id=default_id;
+		}
+		//console.log('restore ' + obj.element.id);
+	}
+}*/
 
 /*
 * EMBED OBJECTS:
@@ -1793,80 +1310,7 @@ function ntp2seconds(ntp){
 function mv_addLoadEvent(func) {
 	mvEmbed.addLoadEvent(func);
 }
- function do_request(req_url, callback, mv_json_response){
- 	js_log('do request: ' + req_url);
-		if( parseUri(document.URL).host == parseUri(req_url).host){
-			//no proxy at all do a direct request: 
-			$j.ajax({
-				type: "GET",
-				url:req_url,
-				success:function(data){
-					callback(data);
-				}
-			});
-		}else{
-			//check if MV_embed path matches document.URL then we can use the local proxy: 
-			if(parseUri(document.URL).host == parseUri(mv_embed_path).host ){
-				js_log('use mv_embed_proxy : ' + parseUri(document.URL).host + ' == '+ parseUri(mv_embed_path).host);	
-				//alert("do ajax req:" +req_url);
-				$j.ajax({
-					type: "POST",
-					url:mv_embed_path + 'mv_data_proxy.php',									
-					data:{url:req_url},
-					success:function(data){																	
-						callback(data);
-					}
-				});
-			}else{
-				//get data via DOM injection of proxy request with callback
-				global_req_cb.push(callback);
-				if(!mv_json_response){
-					//@@todo should remove this functionality from mv_data_proxy 
-					//and require sites serve up data as javascript with a callback 									
-					req_url  =req_url.replace(/&/g,'__amp__');
-					loadExternalJs(mv_embed_path+'mv_data_proxy.php?url='+req_url+
-						'&cb=mv_jsdata_cb&cb_inx='+(global_req_cb.length-1) );
-				}else{
-					//response type is mv_json_response don't hit mv_data_proxy
-					loadExternalJs(req_url+'&cb=mv_jsdata_cb&cb_inx='+(global_req_cb.length-1));
-				}
-			}
-		}
-}
-function mv_jsdata_cb(response){	
-	js_log('mv_jsdata_cb');
-	//run the callback from the global req cb object:
-	if(!global_req_cb[response['cb_inx']]){
-		js_log('missing req cb index');
-		return false;
-	}
-	if(!response['pay_load']){
-		js_log("missing pay load");
-		return false;
-	}
-	//switch on content type: 
-	switch(response['content-type']){
-		case 'text/plain':
-		break;
-		case 'text/xml':
-			if(typeof response['pay_load'] == 'string'){
-				js_log('load string:'+ response['pay_load']);				
-				//attempt to parse as xml for IE 
-				if(embedTypes.msie){
-					var xmldata=new ActiveXObject("Microsoft.XMLDOM");
-					xmldata.async="false";
-					xmldata.loadXML(response['pay_load']);					
-				}else{ //for others (firefox, safari etc) 
-					var xmldata = (new DOMParser()).parseFromString(response['pay_load'], "text/xml");				
-				}
-				//@@todo hanndle xml parser errors
-				if(xmldata)response['pay_load']=xmldata;
-			}
-		break
-	}			
-	global_req_cb[response['cb_inx']](response['pay_load']);
-}
-//load external js via dom injection
+//load external via dom injection
 function loadExternalJs(url){  
    	js_log('load js: '+ url);
 	var e = document.createElement("script");
@@ -1875,6 +1319,7 @@ function loadExternalJs(url){
 	//e.setAttribute('defer', true);
 	document.getElementsByTagName("head")[0].appendChild(e);     
 }
+
 function styleSheetPresent(url){
     style_elements = document.getElementsByTagName('link');  
     if( style_elements.length > 0) {
@@ -1921,68 +1366,30 @@ function getMvEmbedPath(){
 		js_log('already absolute');
 	}
 }
-if (typeof DOMParser == "undefined") {
-   DOMParser = function () {}
-   DOMParser.prototype.parseFromString = function (str, contentType) {
-      if (typeof ActiveXObject != "undefined") {
-         var d = new ActiveXObject("MSXML.DomDocument");
-         d.loadXML(str);
-         return d;
-      } else if (typeof XMLHttpRequest != "undefined") {
-         var req = new XMLHttpRequest;
-         req.open("GET", "data:" + (contentType || "application/xml") +
-                         ";charset=utf-8," + encodeURIComponent(str), false);
-         if (req.overrideMimeType) {
-            req.overrideMimeType(contentType);
-         }
-         req.send(null);
-         return req.responseXML;
-      }
-   }
-}
+
 /*
 * utility functions:
 */
-function js_log(string){
-  if( window.console ){
-        console.log(string); 
-  }else{   	 
-     /*
-      * IE and non-firebug debug:
-      */	     
-     /*var log_elm = document.getElementById('mv_js_log');
-     if(!log_elm){     	
-     	document.write('<div style="position:absolute;z-index:500;top:0px;left:0px;right:0px;height:150px;"><textarea id="mv_js_log" cols="80" rows="6"></textarea></div>');
-     	var log_elm = document.getElementById('mv_js_log');
-     }
-     if(log_elm){
-     	log_elm.value+=string+"\n";
-     }*/
-   }
-}
-function getNextHighestZindex(obj){  
-	var highestIndex = 0;  
-	var currentIndex = 0;  
-	var elArray = Array();  
-	if(obj){ elArray = obj.getElementsByTagName('*'); }else{ elArray = document.getElementsByTagName('*'); }  
-	for(var i=0; i < elArray.length; i++){  
-		if (elArray[i].currentStyle){  
-			currentIndex = parseFloat(elArray[i].currentStyle['zIndex']);  
-		}else if(window.getComputedStyle){  
-			currentIndex = parseFloat(document.defaultView.getComputedStyle(elArray[i],null).getPropertyValue('z-index'));  
-		}  
-       	if(!isNaN(currentIndex) && currentIndex > highestIndex){ highestIndex = currentIndex; }  
-    }  
-    return(highestIndex+1);  
-} 
-function var_dump(obj) {
-   if(typeof obj == "object") {
-      return "Type: "+typeof(obj)+((obj.constructor) ? "\nConstructor: "+obj.constructor : "")+"\nValue: " + obj;
-   } else {
-      return "Type: "+typeof(obj)+"\nValue: "+obj;
-   }
-}
-
+//if(typeof js_log == 'undefined'){
+	function js_log(string){
+	  if( window.console ){
+	        console.log(string); 
+	   }else{   	 
+	     /*
+	      * IE and non-firebug debug:
+	      */	     
+	     /*var log_elm = document.getElementById('mv_js_log');
+	     if(!log_elm){
+	     	document.write('<div style="position:absolute;z-index:50;top:0px;left:0px;right:0px;height:150px;"><textarea id="mv_js_log" cols="80" rows="6"></textarea></div>');
+	     	var log_elm = document.getElementById('mv_js_log');
+	     }
+	     if(log_elm){
+	     	log_elm.value+=string+"\n";
+	     }*/
+	   }
+	}
+//}
+//report errors as alerts: 
 function js_error(string){
 	alert(string);
 }

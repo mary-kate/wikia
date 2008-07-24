@@ -3,8 +3,7 @@
 /**
  * Support functions for cleaning up redundant text records
  *
- * @file
- * @ingroup Maintenance
+ * @addtogroup Maintenance
  * @author Rob Church <robchur@gmail.com>
  */
 
@@ -60,3 +59,5 @@ function PurgeRedundantText( $delete = false ) {
 	$dbw->commit();
 	
 }
+
+?>

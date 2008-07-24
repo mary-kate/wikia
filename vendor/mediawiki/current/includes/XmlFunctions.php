@@ -60,7 +60,3 @@ function wfIsWellFormedXml( $text ) {
 function wfIsWellFormedXmlFragment( $text ) {
 	return Xml::isWellFormedXmlFragment( $text );
 }
-
-function wfBuildForm( $fields, $submitLabel ) {
-	return Xml::buildForm( $fields, $submitLabel );
-}

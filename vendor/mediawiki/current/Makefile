@@ -15,14 +15,11 @@ MAINTENANCE_TESTS=$(wildcard t/maint/*t)
 FAST_TESTS=$(BASE_TEST) $(INCLUDES_TESTS)
 ALL_TESTS=$(BASE_TEST) $(INCLUDES_TESTS) $(MAINTENANCE_TESTS)
 
-test: t/Test.php
+test: Test.php
 	$(PROVE_BIN) $(ALL_TESTS)
 
-fast: t/Test.php
+fast: Test.php
 	$(PROVE_BIN) $(FAST_TESTS)
 
-maint:
-	$(PROVE_BIN) $(MAINTENANCE_TESTS)
-
-verbose: t/Test.php
+verbose: Test.php
 	$(PROVE_BIN) -v $(ALL_TESTS) | egrep -v '^ok'

@@ -1,7 +1,7 @@
 <?php
 /** Arabic (العربية)
  *
- * @ingroup Language
+ * @addtogroup Language
  *
  * @author Niklas Laxström
  */
@@ -24,4 +24,6 @@ class LanguageAr extends Language {
 		}
 		return $forms[$index];
 	}
+
 }
+

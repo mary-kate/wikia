@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-require 't/Test.php';
+require 'Test.php';
 
 plan( 13 );
 
@@ -62,3 +62,4 @@ cmp_ok(
 );
 
 /* vim: set filetype=php: */
+?>

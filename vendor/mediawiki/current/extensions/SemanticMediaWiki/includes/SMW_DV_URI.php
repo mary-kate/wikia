@@ -49,7 +49,7 @@ class SMWURIValue extends SMWDataValue {
 						$value = 'http://' . $value;
 						$parts[1] = $parts[0];
 						$parts[0] = 'http';
-					} elseif ( (count($parts) < 1) || ($parts[0] == '') || ($parts[1] == '') || (preg_match('/[^a-zA-Z]/u',$parts[0]) )) { 
+					} elseif ( (count($parts) < 1) || ($parts[0] == '') || ($parts[1] == '') || (preg_match('/[^a-zA-Z]/',$parts[0]) )) { 
 						$this->addError(wfMsgForContent('smw_baduri', $value));
 						return true;
 					}
@@ -57,14 +57,13 @@ class SMWURIValue extends SMWDataValue {
 					// check against blacklist
 					$uri_blacklist = explode("\n",wfMsgForContent('smw_uri_blacklist'));
 					foreach ($uri_blacklist as $uri) {
-						$uri = trim($uri);
 						if ($uri == mb_substr($value,0,mb_strlen($uri))) { //disallowed URI!
 							$this->addError(wfMsgForContent('smw_baduri', $uri));
 							return true;
 						}
 					}
 					// simple check for invalid characters: ' ', '{', '}'
-// 					$check1 = "@(\}|\{| )+@u";
+// 					$check1 = "@(\}|\{| )+@";
 // 					if (preg_match($check1, $value, $matches)) {
 // 						$this->addError(wfMsgForContent('smw_baduri', $value));
 // 						break;
@@ -72,7 +71,7 @@ class SMWURIValue extends SMWDataValue {
 /// TODO: the remaining checks need improvement
 // 					// validate last part of URI (after #) if provided 
 // 					$uri_ex = explode('#',$value);
-// 					$check2 = "@^[a-zA-Z0-9-_\%]+$@u"; ///FIXME: why only ascii symbols?
+// 					$check2 = "@^[a-zA-Z0-9-_\%]+$@"; ///FIXME: why only ascii symbols?
 // 					if(sizeof($uri_ex)>2 ){ // URI should only contain at most one '#'
 // 						$this->addError(wfMsgForContent('smw_baduri', $value) . 'Debug3');
 // 						break;
@@ -104,7 +103,7 @@ class SMWURIValue extends SMWDataValue {
 					}
 					break;
 				case SMW_URI_MODE_EMAIL:
-					$check = "#^([_a-zA-Z0-9-]+)((\.[_a-zA-Z0-9-]+)*)@([_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*)\.([a-zA-Z]{2,6})$#u";
+					$check = "#^([_a-zA-Z0-9-]+)((\.[_a-zA-Z0-9-]+)*)@([_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*)\.([a-zA-Z]{2,3})$#";
 					if (!preg_match($check, $value)) {
 						///TODO: introduce error-message for "bad" email
 						$this->addError(wfMsgForContent('smw_baduri', $value));
@@ -187,13 +186,9 @@ class SMWURIValue extends SMWDataValue {
 		return array(rawurlencode($this->m_uri));
 	}
 
-	public function getExportData() {
-		if ($this->isValid()) {
-			$res = new SMWExpResource(str_replace('&','&amp;', $this->m_uri), $this);
-			return new SMWExpData($res);
-		} else {
-			return NULL;
-		}
+	public function exportToRDF($QName, ExportRDF $exporter) {
+		// also do some minimal XML escaping (< and > have been rawurlencoded earlier)
+		return "\t\t<$QName rdf:resource=\"" . str_replace('&','&amp;', $this->m_uri) . "\" />\n";
 	}
 
 }

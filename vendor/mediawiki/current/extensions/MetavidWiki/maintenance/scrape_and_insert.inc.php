@@ -19,27 +19,21 @@ class MV_BillScraper extends MV_BaseScraper{
 	
 	var $mapLightInterestG 		= 'http://maplight.org/map/us/interest/$1/view/all';
 	var $mapLightInterestGBills = 'http://maplight.org/map/us/interest/$1/bills';
-	//flag to control maplight lookup
-	var $bill_name_maplight_lookup=true;
+	
 	//swich on letter types:
 	var $bill_types = array('H.J.RES.'=>'hj', 'H.R.'=>'h', 'H.RES.'=>'hr', 
 							'S.CON.RES.'=>'sc', 'S.J.RES'=>'sj', 'S.RES.1'=>'sr', 'S.'=>'s');
 	var $bill_titles=array();							
 	
 	function procArguments(){
-		global $options, $args;				
+		global $options, $args;		
 		if( !isset($options['stream_name']) && !isset($options['s'])){				
 			die("error missing stream name\n");
 		}else{			
 			$stream_inx = (isset($options['stream_name']))?$options['stream_name']:$options['s'];
 			if($args[$stream_inx]=='all'){
-				$dbr =& wfGetDB(DB_SLAVE);
-				//put all in wiki into stream list
+				//put all in sync into stream list
 				print "do all streams\n";
-				$result = $dbr->query('SELECT * FROM `mv_streams`');
-				while($row = $dbr->fetchObject($result)){
-					$this->streams[$row->name]= new MV_Stream($row);					
-				}	
 			}else{
 				$stream_name = $args[$stream_inx];
 				$this->streams[$stream_name]= new MV_Stream(array('name'=>$stream_name));		
@@ -49,13 +43,12 @@ class MV_BillScraper extends MV_BaseScraper{
 				print "Proccessing Stream: $stream_name \n";
 			}
 		}				
-	}	
+	}
 	function doScrapeInsert(){
 		foreach($this->streams as & $stream){
 			if(!isset($stream->date_start_time))$stream->date_start_time=0;
 			if($stream->date_start_time==0){
-				print 'error stream '. $stream->name . ' missing time info'."\n";
-				continue;
+				die('error stream '. $stream->name . ' missing time info'."\n");
 			}
 			$hors =  (strpos($stream->name, 'house')!==false)?'h':'s';
 			$date_req = date('Y-m-d', $stream->date_start_time);
@@ -89,21 +82,17 @@ class MV_BillScraper extends MV_BaseScraper{
 				if(count($href_match)!=0)$href=$href_match[1];
 				
 				$porg = str_replace('<br>',' ',$matches[4][$k]);
-				$porg = preg_replace('/[D|R|I]+\-\[.*\]/', '', $porg);
+				$porg = preg_replace('/[D|R]+\-\[.*\]/', '', $porg);
 				$pparts = explode(',',$porg);
-				if(isset($pparts[1]) && isset($pparts[0])){
-					$pname = trim($pparts[1]) . '_' . trim($pparts[0]);					
-					if(mv_is_valid_person($pname)){		
-						$cspan_person_ary[]= array(
-							'start_time'=>strip_tags($matches[1][$k]),
-							'length'=>$matches[3][$k],
-							'person_title'=>str_replace('<br>',' ',$matches[4][$k]),
-							'Spoken_by'=>$pname,
-							'href'=>$href
-						);
-					}
-				}
-			}							
+				$pname = trim($pparts[1]) . '_' . trim($pparts[0]);			
+				$cspan_person_ary[]= array(
+					'start_time'=>strip_tags($matches[1][$k]),
+					'length'=>$matches[3][$k],
+					'person_title'=>str_replace('<br>',' ',$matches[4][$k]),
+					'Spoken_by'=>$pname,
+					'href'=>$href
+				);
+			}								
 		    //group people in page matches
 		    //$g_cspan_matches=array();
 		    //$prev_person=null;		    
@@ -113,7 +102,6 @@ class MV_BillScraper extends MV_BaseScraper{
 		   
 		    //retrive db rows to find match: 
 		   	$dbr =& wfGetDB(DB_SLAVE);
-		   	
 		    //$mvd_res = MV_Index::getMVDInRange($stream->id, null, null, $mvd_type='ht_en',false,$smw_properties=array('Spoken_by'), '');		    
 		    /*while ($row = $dbr->fetchObject($mvd_res)) {	   	   
 		    $db_person_ary=$g_row_matches=array();
@@ -146,7 +134,7 @@ class MV_BillScraper extends MV_BaseScraper{
 		    	   LEFT JOIN `metavid`.`people` as `person_lookup` ON  `person_lookup`.`id` = `people_time`.`people_fk` 
 		    	   WHERE `streams`.`name`=\''.$stream->name.'\' 		    	   		
 		    	   ORDER BY `people_time`.`time` ';		    
-			$people_res = $dbr->query($sql);	
+			$people_res = $dbr->query($sql);			
 			$cur_person = '';
 			$curKey=0;
 			while ($row = $dbr->fetchObject($people_res)) {
@@ -157,8 +145,6 @@ class MV_BillScraper extends MV_BaseScraper{
 					$curKey=count($db_person_ary)-1;
 					$db_person_ary[$curKey]['Spoken_by']= $row->first . '_' . $row->last;
 					$db_person_ary[$curKey]['start_time']=$row->time;
-					//not on screen a long time if only one hit:
-					$db_person_ary[$curKey]['end_time']=$row->time+10;
 					$cur_person=$cur_row_person;
 				}else{
 					//update the end time: 
@@ -168,7 +154,7 @@ class MV_BillScraper extends MV_BaseScraper{
 		  	//list on screen times for everyone: 
 		   	foreach($db_person_ary as $row){
 		   		print $row['Spoken_by'] . ' on screen for '. ($row['end_time']-$row['start_time']) . "\n";
-		   		//$db_person_ary[]=$row;
+		   		$db_person_ary[]=$row;
 		   	}
 		   	
 			//print_r($db_person_ary);
@@ -241,25 +227,19 @@ class MV_BillScraper extends MV_BaseScraper{
 								$prevMatch=true;								
 		   					}
 	   					}
-	   					if(isset($db_person_ary[$j])){
-	   						if(isset($cspan_person_ary[$i])){
-			   					if($db_person_ary[$j]['Spoken_by']==$cspan_person_ary[$i]['Spoken_by']){
-								//	print "found cur match:". $cspan_person_ary[$i]['Spoken_by']."\n";
-									$curMatch=true;
-			   					}
-	   						}	   	
-	   					}
+	   					if($db_person_ary[$j]['Spoken_by']==$cspan_person_ary[$i]['Spoken_by']){
+						//	print "found cur match:". $cspan_person_ary[$i]['Spoken_by']."\n";
+							$curMatch=true;
+	   					}	   	
 	   					if($next_person==null){
 	   						//no need to check next in db_inx
 	   						$nextMatch=true;
 	   					//	print "(no next check)";
 	   					}else{				
-	   						if(isset($db_person_ary[$j+1])){
-								if($db_person_ary[$j+1]['Spoken_by']==$next_person){
-									//print "found next match:".$next_person."\n";
-									$nextMatch=true;
-								}								
-	   						}
+							if($db_person_ary[$j+1]['Spoken_by']==$next_person){
+							//	print "found next match:".$next_person."\n";
+								$nextMatch=true;
+							}								
 	   					}
 	   					//if we have a match set do insert proc:
 	   					if($prevMatch && $curMatch && $nextMatch){
@@ -332,7 +312,7 @@ class MV_BillScraper extends MV_BaseScraper{
 		   			$rawpage = $this->doRequest($this->base_url . $pData['href']);
 		   			//$rawpage = $this->doRequest('http://www.c-spanarchives.org/congress/?q=node/77531&id=8330447');
 		   			
-		   			preg_match('/<\/td><th><center>([^<]*)<\/center><\/th><td>/U', $rawpage, $title_matches);
+		   			preg_match('/<\/a><\/center><\/td><th><center>([^<]*)/', $rawpage, $title_matches);
 		   			preg_match('/<table width="400">\n<tr><td>\n(.*)<\/tr><\/td>/',$rawpage, $page_matches);
 		   			
 		   			if(isset($title_matches[1]) && isset($page_matches[1])){
@@ -340,12 +320,10 @@ class MV_BillScraper extends MV_BaseScraper{
 		   				$body = $page_matches[1];
 		   				//print_r($page_matches);
 		   			}else{
-		   				print "error can't find title or body\n";
-		   				print "skip...";
-		   				continue;
-		   			}			   	
+		   				die("error can't find title or body\n");
+		   			}		   			
 		   			//do debate tag search:		   			
-		   			preg_match('/<td colspan="2">Debate:\s*<[^>]*>([^<]*)/U', $rawpage, $debate_matches);		   			
+		   			preg_match('/<td colspan="2">Debate:\s<[^>]*>([^<]*)/', $rawpage, $debate_matches);		   			
 		   			if(isset($debate_matches[1])){
 		   				$bill_key = trim($debate_matches[1]);
 		   				print "found debate: tag " .$bill_key."\n";		   				
@@ -399,8 +377,7 @@ class MV_BillScraper extends MV_BaseScraper{
 		   							continue;
 		   						}	
 		   						//if the first letter is lower case not likely a bill 
-		   						if(trim($bill_name)=='')continue;
-		   						if(islower(substr($bill_name,0,1)))continue;
+		   						if(islower($bill_name[0]))continue;
 		   						//conform white space and case:
 		   						$bill_name=str_replace(array('S. ','Con. ', 'Res. '),array('S.', 'CON.', 'RES. '),$bill_name);
 		   						//make sure its not a false possitave and load bill data from govTrack: 
@@ -422,13 +399,10 @@ class MV_BillScraper extends MV_BaseScraper{
 		   				   					   			
 		   			$body.="\n";
 		   			//add the title to the top of the page: 
-		   			$body="===$title===\n". $body;	
-		   			$cspan_title_str = 	$this->get_aligned_time_title($pData,'Thomas_en', $stream);
-		   			if(!$cspan_title_str){	   			
-		   				$cspan_title_str = 'Thomas_en:'.$stream->name.'/'.
-			   				seconds2ntp($pData['wiki_start_time']).'/'.
-			   				seconds2ntp($pData['wiki_end_time']);
-		   			}		   				
+		   			$body="===$title===\n". $body;		   			
+		   			$cspan_title_str = 'Thomas_en:'.$stream->name.'/'.
+		   				seconds2ntp($pData['wiki_start_time']).'/'.
+		   				seconds2ntp($pData['wiki_end_time']);		   				
 		   			$cspanTitle=Title::makeTitle(MV_NS_MVD, ucfirst($cspan_title_str));
 		   			//print "do edit ".$cspanTitle->getText()."\n";
 		   			do_update_wiki_page($cspanTitle, $body);				   			
@@ -469,17 +443,14 @@ class MV_BillScraper extends MV_BaseScraper{
 		   			if(trim($title)!=''){
 		   				$annotate_body.="[[Category:$title]]\n";
 		   			}
-		   			
-		   			
-		   			//see if we can align with an existing speech page: 		   			
-		   			$anno_title_str = $this->get_aligned_time_title($pData,'Anno_en', $stream);		   			
-					if(!$anno_title_str){		
-						$anno_title_str =  'Anno_en:'.$stream->name.'/'.
-			   				seconds2ntp($pData['wiki_start_time']).'/'.
-			   				seconds2ntp($pData['wiki_end_time']);		
-					}	 						   						   			
+		   					   			
+		   			$anno_title_str =  'Anno_en:'.$stream->name.'/'.
+		   				seconds2ntp($pData['wiki_start_time']).'/'.
+		   				seconds2ntp($pData['wiki_end_time']);
+		   						   			
 		   			$annoTitle =Title::makeTitle(MV_NS_MVD, ucfirst($anno_title_str));
-		   			do_update_wiki_page($annoTitle, $annotate_body);		  			
+		   			//print "do edit ".$annoTitle->getText()."\n";
+		   			do_update_wiki_page($annoTitle, $annotate_body);
 		   			//[Page: S14580] replaced with:  [[Category:BillName]]
 		   			//would be good to link into the official record for "pages"
 		   			
@@ -494,8 +465,9 @@ class MV_BillScraper extends MV_BaseScraper{
 		   			
 		   			
 		   			//do new page mvd:or_
+		   			//die;
 		   		}
-		   	}	   		   		   
+		   	}	   		   	
 		   	//$inx_cspan_person_ary = array_keys($g_row_matches);
 		   	//$inx_row_person_ary = array_keys($g_person_time_ary);
 		   	//for($i=0;$i<5;$i++){
@@ -507,28 +479,6 @@ class MV_BillScraper extends MV_BaseScraper{
             //average switch time to get offset of stream
             //use offset to insert all $person_time_array data 
 		}
-	}	
-	function get_aligned_time_title(&$pData, $preFix='Anno_en', $stream){
-		$dbr =& wfGetDB(DB_SLAVE);
-		$mvd_anno_res = MV_Index::getMVDInRange($stream->getStreamId(), 
-			$pData['wiki_start_time']-120,$pData['wiki_end_time']+120,
-		$mvd_type='Anno_en',$getText=false,$smw_properties='Speech_by');
-		   					
-		$doSpeechInsert=true;									
-		while($row = $dbr->fetchObject($mvd_anno_res)){
-			if($row->Speech_by){
-				if($row->Speech_by == $pData['Spoken_by']){
-					print "match update existing: $row->Speech_by  == ". $pData['Spoken_by']. "\n";
-					$anno_title_str =  $preFix.':'.$stream->name.'/'.
-		   				seconds2ntp($row->start_time).'/'.
-		   				seconds2ntp($row->end_time);			   						   					   					   			
-		   			return $anno_title_str;
-				}else{
-					print "\nno existing speech match:$row->Speech_by != " .$pData['Spoken_by']. "\n\n"; 
-				}														
-			}
-		}
-		return false;
 	}
 	function bill_pattern_cp($matches){	
 		if(isset($this->bill_titles[$matches[0]])){
@@ -538,27 +488,18 @@ class MV_BillScraper extends MV_BaseScraper{
 		 }
 	}
 	/* converts c-span bill_id to gov_track bill id */
-	function get_and_proccess_billid($bill_key, $stream_date='',$session=''){
+	function get_and_proccess_billid($bill_key, $stream_date){
 		global $MvBillTypes;
-		//add a space to bill key after $bill_type key
-		foreach($this->bill_types as $bk=>$na){
-			if(strpos($bill_key, $bk)!==false){
-				if(strpos($bill_key, $bk.' ')===false){
-					$bill_key = str_replace($bk, $bk.' ',$bill_key);
-				}
-			}			
-		}
-		//first get the year to detrim the house session:				
-		if($session==''){	
-			$year =date('y', $stream_date);
-			if($year=='01'||$year=='02'){$session='107';
-			}else if($year=='03'||$year=='04'){$session='108';
-			}else if($year=='06'||$year=='05'){$session='109';
-			}else if($year=='07'||$year=='08'){$session='110';
-			}else if($year=='09'||$year=='10'){$session='111';
-			}else if($year=='11'||$year=='12'){$session='112';}
-			$this->cur_session=$session;
-		}	
+		//first get the year to detrim the house session: 
+		$year =date('y', $stream_date);
+		$session='';
+		if($year=='01'||$year=='02'){$session='107';
+		}else if($year=='03'||$year=='04'){$session='108';
+		}else if($year=='06'||$year=='05'){$session='109';
+		}else if($year=='07'||$year=='08'){$session='110';
+		}else if($year=='09'||$year=='10'){$session='111';
+		}else if($year=='11'||$year=='12'){$session='112';}
+		$this->cur_session=$session;	
 		foreach($this->bill_types as $cspanT=>$govtrakT){
 			$bill_key = trim($bill_key);
 			if(substr($bill_key, 0,strlen($cspanT))==$cspanT){
@@ -567,7 +508,6 @@ class MV_BillScraper extends MV_BaseScraper{
 				break;
 			}
 		}
-		if(trim($bill_key)=='')return false;
 		//attempt to asertain maplight bill id:
 		$mapLightBillId= $this->getMAPLightBillId($bill_key, $session);
 		
@@ -584,53 +524,42 @@ class MV_BillScraper extends MV_BaseScraper{
 			return null;
 		}	
 	}
-	function getMAPLightBillId($bill_key, $session){		
-		if(trim($bill_key)=='')return false;
+	function getMAPLightBillId($bill_key, $session){
 		$raw_map_light = $this->doRequest($this->mapLightBillSearch. str_replace(' ','+',$bill_key));
-		//check if we got redirected: 
-		$patern = '/<a href=\"\/map\/us\/bill\/([^\/]*)\/default" class="active">Supporter/';
-		preg_match($patern, $raw_map_light,$matches );
-		if(isset($matches[1])){
-			print "got redirected from search: " . $matches[1]. "\n";
-			return $matches[1];
-		}
-			
 		$patern = '/<a href=\"\/map\/us\/bill\/([^"]*)">'.str_replace(' ', '\s?',$bill_key).'\s\('.$session.'/i';
 		preg_match($patern, $raw_map_light,$matches );
-		//print $patern; 
+		print $patern; 
 		//print_r($matches);
 		if(isset($matches[1])){
 			return $matches[1];			
-		}else{			
+		}else{
 			print "could not find bill id: $bill_key $session \n";
-			print "at : " . $this->mapLightBillSearch. str_replace(' ','+',$bill_key)."\n";					
+			print $raw_map_light;
+			die;
 			return false;
 		}
 	}
-	function proccessBill($govTrackBillId, $bill_key, $openCongBillId=false, $mapLightBillId=false, $forceUpdate=false){
+	function proccessBill($govTrackBillId, $bill_key, $openCongBillId=false, $mapLightBillId=false){
 		//get the bill title & its sponser / cosponsers: 
-		$rawGovTrackPage = $this->doRequest($this->govTrack_bill_url . $govTrackBillId);		
+		$rawGovTrackPage = $this->doRequest($this->govTrack_bill_url . $govTrackBillId);
+		//$rawGovTrackPage = $this->doRequest('http://www.govtrack.us/congress/bill.xpd?bill=h110-400');
+
 
 		/*****************************
 		 * Proccess Bill GovTrack info
-		 *****************************/								
+		 *****************************/
+									
 		print "gov_track id: ". $govTrackBillId . " from: " . $this->govTrack_bill_url . $govTrackBillId. "\n";
 		
 		//get title: 
-		$patern = '/property="dc:title" datatype="xsd:string" style="margin-bottom: 1em">([^<]*)<\/div>(<p style="margin-top: 1.75em; margin-bottom: 1.75em">([^<]*))?/';		
-		preg_match($patern,$rawGovTrackPage, $title_match);		
+		
+		preg_match('/property="dc:title" datatype="xsd:string" style="margin-bottom: 1em">([^<]*)<\/div><p style="margin-top: 1.75em; margin-bottom: 1.75em">([^<]*)/',$rawGovTrackPage, $title_match);
 		if(isset($title_match[1])){
-			if(trim($title_match[1])==''){
-				print "empty title\n";
-				return false;
-			}
-			$title_short  = str_replace(array('_','...',' [110th]',' [109th]',' [108th]',' [107th]'),array(' ','','','','',''),$title_match[1]);
+			$title_short  = str_replace(array('_','...'),array(' ',''),$title_match[1]);
 			$this->cur_bill_short_title=$title_short;
-			//set the desc if present:
-			$title_desc = (isset($title_match[3]))?$title_match[3]:'';
+			$title_desc = $title_match[2];
 			$this->bill_titles[$bill_key]=$title_short;
 		}else{
-			print $this->govTrack_bill_url . $govTrackBillId . "\n" .$patern ."\n". $rawGovTrackPage;
 			die('could not get title for bill: ' . $govTrackBillId);
 		}
 		
@@ -658,7 +587,7 @@ class MV_BillScraper extends MV_BaseScraper{
 			'GovTrackID='.$govTrackBillId."|\n";
 		if(isset($thomas_match[1]))$bp.='ThomasID='.$thomas_match[1]."|\n";
 		if($openCongBillId)$bp.='OpenCongressBillID='.$openCongBillId."|\n";
-		if($mapLightBillId)$bp.='MapLightBillID='.$mapLightBillId."|\n";
+		if($mapLightBillId)$bp.='MAPLightBillID='.$mapLightBillId."|\n";
 		if(isset($this->cur_session))$bp.='Session='.$this->cur_session."th session|\n";
 		$bp.='Bill Key='.$bill_key."|\n";							
 		if(isset($date_intro_match[1]))$bp.='Date Introduced='.$date_intro_match[1]."|\n";
@@ -674,7 +603,7 @@ class MV_BillScraper extends MV_BaseScraper{
 					$bp.='Cosponsor '.($k+1).'='.$cosponsor_name."|\n";	
 				}
 			}	
-		}
+		}	
 		/*****************************
 		 * Proccess MapLight Info 
 		 *****************************/
@@ -691,34 +620,58 @@ class MV_BillScraper extends MV_BaseScraper{
 				$bp.='Opposing Interest '.$i.'='.$interest['name']."|\n";
 				$i++;
 			}
-		}										
-		$bp.="}}\n";	
-		//print 'page : '.$title_short.' ' . $bp . "\n";	
+		}
+		
+								
+		$bp.="}}\n";		
 		//incorporated into the template: 
 		//$body.="\n\n".'Source: [[Data Source Name:=GovTrack]] [[Data Source URL:='.$this->govTrack_bill_url . $govTrackBillId.']]';
-		//set up the base bill page:		
+		//set up the base bill page:
 		$wgBillTitle = Title::newFromText($title_short);
-		do_update_wiki_page($wgBillTitle, $bp);		
-		
-		//set up a redirect for the bill key, and a link for the category page:
-		print "\ndo redirect for: $title_short \n";
-		global $mvForceUpdate;
-		$wgBillKeyTitle =Title::newFromText($bill_key);		
-		do_update_wiki_page($wgBillKeyTitle, '#REDIRECT [['.$title_short.']]',null, $mvForceUpdate);							
+		do_update_wiki_page($wgBillTitle, $bp);
+		//set up a redirect for the bill key, and a link for the category page: 
+		$wgBillKeyTitle =Title::newFromText($bill_key);
+		do_update_wiki_page($wgBillKeyTitle, '#REDIRECT [['.$title_short.']]');							
 		//set up link on the category page:
 		$wgCatPageTitle =Title::newFromText($bill_key, NS_CATEGORY);		
-		do_update_wiki_page($wgCatPageTitle, 'See Bill Page For More Info: [[:'.$wgBillTitle->getText().']]', null, $mvForceUpdate);		
+		do_update_wiki_page($wgCatPageTitle, 'See Bill Page For More Info: [[:'.$wgBillTitle->getText().']]');		
 	}
-	function procMapLightInterest($interest){
+	function procMapLightInterest($intrest){
 		 global $mvMaxContribPerInterest, $mvMaxForAgainstBills;
-		 if($this->bill_name_maplight_lookup){
-		 	include_once('metavid2mvWiki.inc.php');
-		 	do_proc_interest($interest['key'], $interest['name']);
-		 }	
+		//grab the interest page: 
+		$page_contributions = $this->doRequest(str_replace('$1', $intrest['key'], $this->mapLightInterestG));
+		$page_contributions = $this->doRequest('http://maplight.org/map/us/interest/E1600/view/all');
+		
+		$page_bill_pos =  $this->doRequest(str_replace('$1', $intrest['key'], $this->mapLightInterestGBills)); 
+		
+		$wp = '{{Interest Group|
+MapLightInterestID='.$intrest['key']."|\n";			
+		//get all contributions: 
+		preg_match_all('/map\/us\/legislator\/([^"]*)">([^<]*).*>\$([^<]*)/',$page_contributions, $matches);		
+		if(isset($matches[1])){
+			foreach($matches[1] as $inx =>$mapPersonKey){
+				$i = $inx+1;
+				$wp.="Funded Name $i=".$matches[2][$inx]."|\n";
+				$wp.="Funded Amount $i=".$matches[3][$inx]."\n";
+				
+				if($i>$mvMaxContribPerInterest)break;						
+			}
+		}			
+		die;
+		//build the wikipage for interst  
+		
+		$wp.='Funded Name #=funded name where 1 is 1-100 for top 100 contributions|
+Funded Amount #=funded amount to name 1 (required pair to funded name #)|	
+Supported Bill #=Bills the Interest group supported (long name) 1-100|
+Opposed Bill #=Bills Interest group Opposed (long name) 1-100|
+}}';
+		//build wiki page
+		
+		//confim wiki-page is up-to-date
 	}
 	//returns an array of interest in ['support'] & ['opposition'] .. also procces interest links
 	function proccMapLightBillIntrests($mapLightBillId){
-		//print "map info: $this->mapLightBillInfo \n";
+		print "map info: $this->mapLightBillInfo \n";
 		print str_replace('$1', $mapLightBillId, $this->mapLightBillInfo). "\n\n";
 		$ret_ary = array('support'=>array(),'oppose'=>array() );	
 		$bill_page = $this->doRequest(str_replace('$1', $mapLightBillId, $this->mapLightBillInfo));
@@ -731,7 +684,6 @@ class MV_BillScraper extends MV_BaseScraper{
 		//class="organizations"\sid="for
 		//preg_match_all('/class="organizations"\sid="for.*<ul class="industries list-clear">()*/',$bill_page, $matches);
 		preg_match_all($pat_interest, $bill_page, $matches, PREG_OFFSET_CAPTURE);	
-		//print_r($matches);
 		$aginst_pos = strpos($bill_page,'class="organizations" id="against"');
 		//return empty arrays if we don't have info to give back:'
 		if($aginst_pos===false)return $ret_ary;
@@ -745,40 +697,6 @@ class MV_BillScraper extends MV_BaseScraper{
 			}
 		}
 		return $ret_ary;
-	}
-	function get_bill_name_from_mapLight_id($mapBillId, $doLookup=true){
-		global $mvForceUpdate;
-		if(!$mvForceUpdate){
-			if(!isset($this->mapLight_bill_cache)){
-				$sql = 'SELECT * FROM `smw_attributes` WHERE `attribute_title` = \'MAPLight_Bill_ID\'';
-				$dbr = wfGetDB( DB_SLAVE );	
-				$res = $dbr->query($sql);
-				while ($row = $dbr->fetchObject($res)) {
-					$this->mapLight_bill_cache[$row->value_xsd]=$row->subject_title;
-				}
-			}
-		}
-		if(!isset($this->mapLight_bill_cache[$mapBillId])){
-			if($doLookup){
-				print "missing bill by mapId: $mapBillId retrive it: \n";
-				$raw_bill_page = $this->doRequest('http://www.maplight.org/map/us/bill/'.$mapBillId.'/default');
-				preg_match('/title">([^-]*)-/', $raw_bill_page, $matches);				
-				if(isset($matches[1]))$bill_key = trim($matches[1]);			
-				preg_match('/map-bill-title">([^t]*)t/',$raw_bill_page, $matches);
-				if(isset($matches[1]))$session_num = trim($matches[1]);			
-				print " found bill key:$session_num $bill_key \n";
-				//set a flag as to not get caught in infintate loop: 
-				$this->bill_name_maplight_lookup=false;
-				$this->get_and_proccess_billid($bill_key, '', $session_num);
-				print " found bill title: ". $this->cur_bill_short_title . "\n";
-				//should now have the bill name update the cache and return
-				$this->mapLight_bill_cache[$mapBillId]= $this->cur_bill_short_title;				
-			}else{
-				print "unable to find bill 	mapId: $mapBillId \n";
-				return false;
-			}
-		}
-		return $this->mapLight_bill_cache[$mapBillId];
 	}
 	function get_wiki_name_from_govid($govID){
 		if(!isset($this->govTrack_cache)){
@@ -797,7 +715,7 @@ class MV_BillScraper extends MV_BaseScraper{
 		}
 		return str_replace('_',' ',$this->govTrack_cache[$govID]);
 	}
-	function get_wiki_name_from_maplightid($mapID){		
+	function get_wiki_name_from_maplightid($mapID){
 		if(!isset($this->mapLight_cache)){
 			$sql = 'SELECT * FROM `smw_attributes` WHERE `attribute_title` = \'MAPLight_Person_ID\'';
 			$dbr = wfGetDB( DB_SLAVE );	
@@ -808,8 +726,7 @@ class MV_BillScraper extends MV_BaseScraper{
 		}
 		if(!isset($this->mapLight_cache[$mapID])){
 			$wgTitle = Title::newFromText('CongressVid:Missing_People');
-			print "Missing MAPLight key for $mapID (have you insertd maplight ID for everyone yet?)\n";			
-			//append_to_wiki_page($wgTitle, "Missing MapLight person: [http://maplight.org/map/us/legislator/$mapID $mapID]");
+			append_to_wiki_page($wgTitle, "Missing MapLight person: [http://maplight.org/map/us/legislator/$mapID $mapID]");
 			return false;	
 		}
 		return str_replace('_',' ',$this->mapLight_cache[$mapID]);
@@ -828,13 +745,13 @@ class MV_ArchiveOrgScrape extends MV_BaseScraper{
 					$files[$k][$inx]=trim($v);
 				}
 			}
-			//add the flv:
-			$files[]=array('',
-					 'http://www.archive.org/download/mv_'.$stream_name.'/'.$stream_name.'.flv',
-					 'flash flv', '');
 		}else{
 			return false;
-		}		
+		}
+		//add the flv:
+		$files[]=array('',
+				 'http://www.archive.org/download/mv_'.$stream_name.'/'.$stream_name.'.flv',
+				 'flash flv', '');
 		return $files;
 	}
 }

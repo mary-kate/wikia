@@ -1,10 +1,10 @@
 <?php
-/**
- * Min Nan (Bân-lâm-gú/閩南話)
+/** Min Nan Chinese (Bân-lâm-gú)
  *
- * @ingroup Language
- * @file
+ * @addtogroup Language
+ *
  */
 
 # Inherit everything for now
 $fallback = 'nan';
+

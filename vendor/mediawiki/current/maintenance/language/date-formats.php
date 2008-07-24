@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * @ingroup MaintenanceLanguage
- */
 
 $ts = '20010115123456';
 

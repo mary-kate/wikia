@@ -1,8 +1,8 @@
 <?php
 /** Udmurt (Удмурт)
  *
- * @ingroup Language
- * @file
+ * @addtogroup Language
+ *
  */
 
 $fallback = 'ru';

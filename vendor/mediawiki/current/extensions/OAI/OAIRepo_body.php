@@ -279,9 +279,11 @@ class OAIRepo {
 	 */
 	private function getAuditDatabase() {
 		if( !isset( $this->mAuditDb ) ) {
-			global $oaiAuditDatabase;
-			$lb = wfGetLB( $oaiAuditDatabase );
-			$this->mAuditDb = $lb->getConnection( DB_MASTER, 'oaiAudit', $oaiAuditDatabase );
+			global $wgLoadBalancer, $oaiAuditDatabase;
+			$i = $wgLoadBalancer->getGroupIndex( 'oaiAudit' );
+			$dbinfo = $wgLoadBalancer->mServers[$i];
+			$this->mAuditDb = new Database( $dbinfo['host'], $dbinfo['user'], 
+				$dbinfo['password'], $oaiAuditDatabase );
 		}
 		return $this->mAuditDb;
 	}

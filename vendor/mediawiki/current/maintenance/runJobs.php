@@ -1,14 +1,4 @@
 <?php
-/**
- * This script starts pending jobs.
- *
- * Usage:
- *  --maxjobs <num> (default 10000)
- *  --type <job_cmd>
- *
- * @file
- * @ingroup Maintenance
- */
 
 $optionsWithArgs = array( 'maxjobs', 'type' );
 $wgUseNormalUser = true;
@@ -45,10 +35,10 @@ while ( $dbw->selectField( 'job', 'count(*)', $conds, 'runJobs.php' ) ) {
 			break;
 
 		wfWaitForSlaves( 5 );
-		print wfTimestamp( TS_DB ) . "  " . $job->id . "  " . $job->toString() . "\n";
+		print $job->id . "  " . $job->toString() . "\n";
 		$offset=$job->id;
 		if ( !$job->run() ) {
-			print wfTimestamp( TS_DB ) . "  Error: {$job->error}\n";
+			print "Error: {$job->error}\n";
 		}
 		if ( $maxJobs && ++$n > $maxJobs ) {
 			break 2;

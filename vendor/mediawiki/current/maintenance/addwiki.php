@@ -1,11 +1,4 @@
 <?php
-/**
- * Add a new wiki
- * Wikimedia specific!
- *
- * @file
- * @ingroup Maintenance
- */
 
 $wgNoDBParam = true;
 
@@ -13,7 +6,7 @@ require_once( "commandLine.inc" );
 require_once( "rebuildInterwiki.inc" );
 require_once( "languages/Names.php" );
 if ( count( $args ) != 3 ) {
-	wfDie( "Usage: php addwiki.php <language> <site> <dbname>\nThe site for Wikipedia is 'wikipedia'.\n" );
+	wfDie( "Usage: php addwiki.php <language> <site> <dbname>\n" );
 }
 
 addWiki( $args[0], $args[1], $args[2] );
@@ -24,17 +17,13 @@ function addWiki( $lang, $site, $dbName )
 {
 	global $IP, $wgLanguageNames, $wgDefaultExternalStore;
 
-	if ( !isset( $wgLanguageNames[$lang] ) ) {
-		print "Language $lang not found in \$wgLanguageNames\n";
-		return;
-	}
 	$name = $wgLanguageNames[$lang];
 
-	$dbw = wfGetDB( DB_MASTER );
+	$dbw = wfGetDB( DB_WRITE );
 	$common = "/home/wikipedia/common";
 	$maintenance = "$IP/maintenance";
 
-	print "Creating database $dbName for $lang.$site ($name)\n";
+	print "Creating database $dbName for $lang.$site\n";
 	
 	# Set up the database
 	$dbw->query( "SET table_type=Innodb" );
@@ -44,12 +33,8 @@ function addWiki( $lang, $site, $dbName )
 	print "Initialising tables\n";
 	dbsource( "$maintenance/tables.sql", $dbw );
 	dbsource( "$IP/extensions/OAI/update_table.sql", $dbw );
-	dbsource( "$IP/extensions/AntiSpoof/sql/patch-antispoof.mysql.sql", $dbw );
+	dbsource( "$IP/extensions/AntiSpoof/mysql/patch-antispoof.sql", $dbw );
 	dbsource( "$IP/extensions/CheckUser/cu_changes.sql", $dbw );
-	dbsource( "$IP/extensions/CheckUser/cu_log.sql", $dbw );
-	dbsource( "$IP/extensions/TitleKey/titlekey.sql", $dbw );
-	dbsource( "$IP/extensions/Oversight/hidden.sql", $dbw );
-
 	$dbw->query( "INSERT INTO site_stats(ss_row_id) VALUES (1)" );
 
 	# Initialise external storage
@@ -87,8 +72,7 @@ function addWiki( $lang, $site, $dbName )
 	}
 
 	global $wgTitle, $wgArticle;
-	$wgTitle = Title::newFromText( wfMsgWeirdKey( "mainpage/$lang" ) );
-	print "Writing main page to " . $wgTitle->getPrefixedDBkey() . "\n";
+	$wgTitle = Title::newMainPage();
 	$wgArticle = new Article( $wgTitle );
 	$ucsite = ucfirst( $site );
 
@@ -234,16 +218,32 @@ EOT
 	fclose( $file );
 
 	# Update the sublists
-	shell_exec("cd $common && ./refresh-dblist");
+	system("cd $common && ./refresh-dblist");
 
-	#print "Constructing interwiki SQL\n";
+	print "Constructing interwiki SQL\n";
 	# Rebuild interwiki tables
-	#passthru( '/home/wikipedia/conf/interwiki/update' );
+	$sql = getRebuildInterwikiSQL();
+	$tempname = tempnam( '/tmp', 'addwiki' );
+	$file = fopen( $tempname, 'w' );
+	if ( !$file ) {
+		wfDie( "Error, unable to open temporary file $tempname\n" );
+	}
+	fwrite( $file, $sql );
+	fclose( $file );
+	print "Sourcing interwiki SQL\n";
+	dbsource( $tempname, $dbw );
+	#unlink( $tempname );
+	
+	# Create the upload dir
+	global $wgUploadDirectory;
+	if( file_exists( $wgUploadDirectory ) ) {
+		echo "$wgUploadDirectory already exists.\n";
+	} else {
+		echo "Creating $wgUploadDirectory...\n";
+		mkdir( $wgUploadDirectory, 0777 );
+		chmod( $wgUploadDirectory, 0777 );
+	}
 
-	print "Script ended. You still have to:
-* Add any required settings in InitialiseSettings.php
-* Run sync-common-all
-* Run /home/wikipedia/conf/interwiki/update
-";
+	print "Script ended. You now want to run sync-common-all to publish *dblist files (check them for duplicates first)\n";
 }
 

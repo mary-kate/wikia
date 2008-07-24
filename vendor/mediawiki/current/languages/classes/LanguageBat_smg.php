@@ -1,7 +1,7 @@
 <?php
 /** Samogitian (Žemaitėška)
  *
- * @ingroup Language
+ * @addtogroup Language
  *
  * @author Niklas Laxström
  */
@@ -22,4 +22,5 @@ class LanguageBat_smg extends Language {
 			return $forms[3];
 		}
 	}
+
 }

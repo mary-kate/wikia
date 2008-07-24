@@ -33,7 +33,7 @@ if (!defined('MEDIAWIKI')) {
  * any templates in a provided string, and returns the result of this expansion
  * to the caller.
  *
- * @ingroup API
+ * @addtogroup API
  */
 class ApiExpandTemplates extends ApiBase {
 
@@ -43,35 +43,22 @@ class ApiExpandTemplates extends ApiBase {
 
 	public function execute() {
 		// Get parameters
-		extract( $this->extractRequestParams() );
+		$params = $this->extractRequestParams();
+		$text = $params['text'];
+		$title = $params['title'];
 		$retval = '';
 
 		//Create title for parser
-		$title_obj = Title :: newFromText( $title );
+		$title_obj = Title :: newFromText($params['title']);
 		if(!$title_obj)
-			$title_obj = Title :: newFromText( "API" );	//  Default title is "API". For example, ExpandTemplates uses "ExpendTemplates" for it
-
-		$result = $this->getResult();
+			$title_obj = Title :: newFromText("API");	//  Default title is "API". For example, ExpandTemplates uses "ExpendTemplates" for it
 
 		// Parse text
 		global $wgParser;
-		$options = new ParserOptions();
-		if ( $generatexml )
-		{
-			$wgParser->startExternalParse( $title_obj, $options, OT_PREPROCESS );
-			$dom = $wgParser->preprocessToDom( $text );
-			if ( is_callable( array( $dom, 'saveXML' ) ) ) {
-				$xml = $dom->saveXML();
-			} else {
-				$xml = $dom->__toString();
-			}
-			$xml_result = array();
-			$result->setContent( $xml_result, $xml );
-            $result->addValue( null, 'parsetree', $xml_result);
-		}
-		$retval = $wgParser->preprocess( $text, $title_obj, $options );
+		$retval = $wgParser->preprocess( $text, $title_obj, new ParserOptions() );
 
 		// Return result
+		$result = $this->getResult();
 		$retval_array = array();
 		$result->setContent( $retval_array, $retval );
 		$result->addValue( null, $this->getModuleName(), $retval_array );
@@ -79,11 +66,10 @@ class ApiExpandTemplates extends ApiBase {
 
 	public function getAllowedParams() {
 		return array (
-			'title' => array(
+			'title' => array( 
 				ApiBase :: PARAM_DFLT => 'API',
 			),
-			'text' => null,
-			'generatexml' => false,
+			'text' => null
 		);
 	}
 
@@ -91,7 +77,6 @@ class ApiExpandTemplates extends ApiBase {
 		return array (
 			'text' => 'Wikitext to convert',
 			'title' => 'Title of page',
-			'generatexml' => 'Generate XML parse tree',
 		);
 	}
 
@@ -106,6 +91,7 @@ class ApiExpandTemplates extends ApiBase {
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiExpandTemplates.php 35098 2008-05-20 17:13:28Z ialex $';
+		return __CLASS__ . ': $Id: ApiExpandTemplates.php 30222 2008-01-28 19:05:26Z catrope $';
 	}
 }
+

@@ -1,11 +1,12 @@
 <?php
-/** Zhuang (壮语)
+/** Zhuang ((Cuengh))
  *
- * @ingroup Language
- * @file
+ * @addtogroup Language
+ *
+ * @author Hakka
  */
 
-$fallback = 'zh-hans';
+$fallback = 'zh-cn';
 
 $messages = array(
 # Dates
@@ -50,9 +51,8 @@ $messages = array(
 'jumptosearch'     => 'Cwmh',
 
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
-'edithelp'             => 'Caeuq mungz san-zonz',
-'mainpage'             => 'Mae meh',
-'mainpage-description' => 'Mae meh',
+'edithelp' => 'Caeuq mungz san-zonz',
+'mainpage' => 'Mae meh',
 
 'youhavenewmessages' => 'Mungz meiz $1（$2）。',
 
@@ -94,10 +94,14 @@ $messages = array(
 'fileuploadsummary' => 'Saegmangj:',
 'watchthisupload'   => 'Demq mae-nej',
 
+# Image list
+'ilsubmit' => 'Cwmh',
+
 # Random page
 'randompage' => 'Mae zaihzex',
 
 # Miscellaneous special pages
+'specialpages'      => 'Doenghmae daegxsei',
 'newpages-username' => 'Ciu bouxdeiz:',
 'move'              => 'Caen',
 'movethispage'      => 'Caen mae nej',
@@ -128,29 +132,23 @@ $messages = array(
 'ipblocklist-submit' => 'Cwmh',
 
 # Move page
-'move-page-legend' => 'Caen doengh mae',
-'movearticle'      => 'Caen doengh mae:',
-'movenologin'      => 'Maengx laezhaej',
-'move-watch'       => 'Demq mae-nej',
-'movepagebtn'      => 'Caen doengh mae',
-'movedto'          => 'Caen bei',
-'1movedto2'        => '[[$1]] caen bei [[$2]]',
-'movereason'       => 'Haujgaemj',
+'movepage'    => 'Caen doengh mae',
+'movearticle' => 'Caen doengh mae:',
+'movenologin' => 'Maengx laezhaej',
+'move-watch'  => 'Demq mae-nej',
+'movepagebtn' => 'Caen doengh mae',
+'movedto'     => 'Caen bei',
+'1movedto2'   => '[[$1]] caen bei [[$2]]',
+'movereason'  => 'Haujgaemj',
 
 # Tooltip help for the actions
 'tooltip-pt-preferences' => 'Doenghgaeq gou hae',
 'tooltip-p-logo'         => 'Mae meh',
-
-# Special:Newimages
-'ilsubmit' => 'Cwmh',
 
 # Multipage image navigation
 'imgmultigo' => 'Bei！',
 
 # Table pager
 'table_pager_limit_submit' => 'Bei',
-
-# Special:SpecialPages
-'specialpages' => 'Doenghmae daegxsei',
 
 );

@@ -24,7 +24,7 @@ class Http {
 		# Use curl if available
 		if ( function_exists( 'curl_init' ) ) {
 			$c = curl_init( $url );
-			if ( self::isLocalURL( $url ) ) {
+			if ( wfIsLocalURL( $url ) ) {
 				curl_setopt( $c, CURLOPT_PROXY, 'localhost:80' );
 			} else if ($wgHTTPProxy) {
 				curl_setopt($c, CURLOPT_PROXY, $wgHTTPProxy);
@@ -118,3 +118,4 @@ class Http {
 		return false;
 	}
 }
+

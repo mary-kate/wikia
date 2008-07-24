@@ -48,14 +48,6 @@ class MV_Stream {
 		}
 		//normalize stream title: 		
 	}
-	function newStreamByName($name){
-		$s = new MV_Stream(array('name'=>$name));
-		return $s;
-	}
-	function newStreamByID($id){
-		$s = new MV_Stream(array('id'=>$id));
-		return $s;
-	}
 	function setMvTitle(&$mvTitle){
 		$this->mvTitle=$mvTitle;
 	}
@@ -93,14 +85,6 @@ class MV_Stream {
 			return $this->id;
 		}else{
 			return $this->id;
-		}
-	}
-	function getStreamName(){
-		if($this->name==''){
-			$this->db_load_stream();
-			return $this->name;
-		}else{
-			return $this->name;
 		}
 	}
 	/*
@@ -213,8 +197,7 @@ class MV_Stream {
 	//removes the stream and assoc meta data. 
 	function removeStream($removeMVDs=true){
  		global $mvIndexTableName;
- 		$dbw =& wfGetDB(DB_WRITE); 		
- 		$dbr =& wfGetDB(DB_SLAVE);
+ 		$dbw =& wfGetDB(DB_WRITE);
  		if($removeMVDs){ 
  			//delete metadata pages: 
  			//@@todo figure out a way to do this quickly/group sql queries.  

@@ -1,185 +1,219 @@
 <?php
 
 class GlobalUsage extends SpecialPage {
-	private static $database = array();
-	private static $interwiki = null;
 
-	function __construct() {
-		parent::__construct('GlobalUsage');
-		wfLoadExtensionMessages( 'GlobalUsage' );
-	}
-	
-	static function getDatabase( $dbFlags = DB_MASTER ) {
-		global $wgguIsMaster, $wgguMasterDatabase;
-		if ( !isset( self::$database[$dbFlags] ) )
-			self::$database[$dbFlags] = wfGetDB( $dbFlags, array(), $wgguMasterDatabase );
-		return self::$database[$dbFlags];
-	}
-	static function getLocalInterwiki() {
-		global $wgguInterwikiStyle, $wgLocalInterwiki, $wgServerName;
-		if (!self::$interwiki) {
-			switch ($wgguInterwikiStyle) {
-				case GUIW_LOCAL:
-					self::$interwiki = $wgLocalInterwiki;
-					break;
-				case GUIW_SERVER_NAME:
-					self::$interwiki = $wgServerName;
-					break;
-				default:
-					self::$interwiki = $wgLocalInterwiki;
-			}
-		}
-		return self::$interwiki;
+	function GlobalUsage() {
+		SpecialPage::SpecialPage('GlobalUsage');
+		//wfLoadExtensionMessages('GlobalUsage');
 	}
 	
 	static function updateLinks( $linksUpdater ) {
-		$title = $linksUpdater->getTitle();
-		$dbr = wfGetDB(DB_SLAVE);
-		$dbw = self::getDatabase();
-		$dbw->immediateBegin();
-		self::doUpdate($title->getArticleID(), self::getLocalInterwiki(),
-			$title->getNsText(), $title->getDBkey(), $dbr, $dbw );
-		$dbw->immediateCommit();
-		
+		global $wgUseDumbLinkUpdate;
+
+		if ( $wgUseDumbLinkUpdate ) {
+			GlobalUsage::doDumbUpdate( $linksUpdater );
+		} else {
+			GlobalUsage::doIncrementalUpdate( $linksUpdater );
+		}	
 		return true;
 	}
 	
-	/*
-	 * Perform the update for a certain page on a certain database. The caller is
-	 * responsible for creating a master datbase object and performing 
-	 * immediateBegin() and immediateCommit().
-	 */
-	static function doUpdate( $pageId, $wiki, $pageNamespace, $pageTitle, 
-			&$dbr, &$dbw ) {
-		$query = 'SELECT il_to, img_name IS NOT NULL AS is_local '.
-			'FROM '.$dbr->tableName('imagelinks').' '.
-			'LEFT JOIN '.$dbr->tableName('image').' ON '. 
-			'il_to = img_name WHERE il_from = '.$pageId;
-		$res = $dbr->query($query, __METHOD__);
+	static function foreignFiles( $pageId, $pageName, $images, $isInsertion ) {
+		// Return all foreign files properly formatted
+		global $wgLocalInterwiki;
+		$result = array( );
 		
-		$rows = array();
-		while ($row = $res->fetchRow()) {
-			$rows[] = array(
-				"gil_wiki" => $wiki, 
-				"gil_page" => $pageId,
-				"gil_page_namespace" => $pageNamespace,
-				"gil_page_title" => $pageTitle,
-				"gil_to" => $row['il_to'],
-				"gil_is_local" => $row['is_local']);
+		foreach ($images as $item) {
+			// Is this an insertion or deletion?
+			$imageName = is_array($item) ? $item['il_to'] : $item;
+			$image = wfFindFile($imageName);
+			if (!$image) continue;
+			$repo = $image->getRepoName();
+			
+			if ( $repo != 'local' ) {
+				if ( !isset($result[$repo]) )
+					$result[$repo] = array( );
+				
+				$result[$repo][] = $isInsertion ? array(
+					"gil_wiki" => $wgLocalInterwiki, 
+					"gil_page" => $pageId,
+					"gil_pagename" => $pageName,
+					"gil_to" => $imageName)
+					: $imageName;
+			}
 		}
-		$res->free();
-		
-		$dbw->delete('globalimagelinks', array(
-			'gil_wiki' => $wiki, 'gil_page' => $pageId),
-			__METHOD__);
-		$dbw->insert( 'globalimagelinks', $rows, __METHOD__, 'IGNORE' );
+		return $result;
 	}
 	
+	static function doIncrementalUpdate( $linksUpdater ) {
+		$title = $linksUpdater->getTitle();
+		$pageId = $title->getArticleID();
+		$existing = $linksUpdater->getExistingImages();
+		$deletions = GlobalUsage::foreignFiles( $pageId, $title->getPrefixedText(), 
+			$linksUpdater->getImageDeletions( array_keys($existing)), false );
+		$insertions = GlobalUsage::foreignFiles( $pageId, $title->getPrefixedText(), 
+			$linksUpdater->getImageInsertions($existing), true );
+		
+		// Don't open repo you don't need and don't open them twice
+		$repositories = array_keys($deletions) + array_keys($insertions);
+		$updatedRepositories = array ( );
+		foreach ($repositories as $repo) {
+			if ( in_array( $repo, $updatedRepositories) ) continue;
+			
+			GlobalUsage::incrementalUpdateForeignRepository( $pageId, $repo,
+				isset($deletions[$repo]) ? $deletions[$repo] : array(),
+				isset($insertions[$repo]) ? $insertions[$repo] : array()
+			);
+			
+			$updatedRepositories[] =  $repo;
+		}
+	}
 	
-	// Set gil_is_local for an image
-	static function setLocalFlag( $imageName, $isLocal ) {
-		$dbw = self::getDatabase();
+	static function incrementalUpdateForeignRepository( $pageId, $repoName, $deletions, $insertions ) {
+		global $wgLocalInterwiki;
+		
+		$repo = RepoGroup::singleton()->getRepoByName($repoName);
+		$dbw = $repo->getMasterDB();
+		
+		$where = array( "gil_wiki" => $wgLocalInterwiki, "gil_page" => $pageId );
+		if ( count( $deletions ) ) {
+			$where[] = "gil_to IN (" . $dbw->makeList( array_keys( $deletions ) ) . ')';
+		} else {
+			$where = false;
+		}
+		
 		$dbw->immediateBegin();
-		$dbw->update( 'globalimagelinks', array( 'gil_is_local' => $isLocal ), array(
-				'gil_wiki' => self::getLocalInterwiki(),
-				'gil_to' => $imageName),
-			__METHOD__ );
+		if ( $where ) 
+			$dbw->delete( 'globalimagelinks', $where, __METHOD__ );
+		if ( count( $insertions ) ) 
+			$dbw->insert( 'globalimagelinks', $insertions, __METHOD__, 'IGNORE' );
 		$dbw->immediateCommit();
 	}
 	
-	// Set gil_is_local to false
-	static function fileDeleted( &$file, &$oldimage, &$article, &$user, $reason ) {
-		if ( !$oldimage ) 
-			self::setLocalFlag( $article->getTitle()->getDBkey(), 0 );
-		return true;
+	static function doDumbUpdate( $linksUpdater ) {
+		$title = $linksUpdater->getTitle(); # TODO: Implement
+		$pageId = $title->getArticleID();
+		$insertions = GlobalUsage::foreignFiles( $pageId, $title->getPrefixedText(), 
+			$linksUpdater->getImageInsertions(), true );
+		
+		foreach ($insertions as $repo => $insertion)
+			GlobalUsage::dumbUpdateForeignRepository( $pageId, $repo, $insertion );
+
 	}
-	// Set gil_is_local to true
-	static function fileUndeleted( &$title, $versions, &$user, $reason ) {
-		self::setLocalFlag( $title->getDBkey(), 1 );
-		return true;
+	static function dumbUpdateForeignRepository( $pageId, $repoName, $insertions ) {
+		global $wgLocalInterwiki;
+		
+		$repo = RepoGroup::singleton()->getRepoByName($repoName);
+		$dbw = $repo->getMasterDB();
+		
+		$dbw->immediateBegin();
+		$dbw->delete( 'globalimagelinks', array( 
+				'gil_wiki' => $wgLocalInterwiki, 
+				'gil_page' => $pageId
+			), __METHOD__ );
+		$dbw->insert( 'globalimagelinks', $insertions, __METHOD__, 'IGNORE' );
+		$dbw->immediateCommit();
+	}
+	
+	static function fileDelete( $file, $oldimage, $article, $user, $reason ) {
+		global $wgLocalInterwiki, $wgGuHasTable;
+		
+		if ($oldimage) return true;
+	
+		$title = $article->getTitle();
+		$image = wfFindFile($title->getDBkey());
+		if (!$image) return true;
+		
+		// If the article is an image, check whether the imagelinks will poing to the foreign repository
+		$dbr = wfGetDB( DB_SLAVE );
+		$res = $dbr->select( array( 'imagelinks', 'page' ),
+			array( 'page_id', 'page_namespace', 'page_title' ),
+			array( 'il_to' => $title()->getDBkey(), 'page_id = il_from' ),
+			__METHOD__);
+					
+		$imageLinks = array();
+		while ( $row = $dbr->fetchObject ) {
+			$imageLinks[] = array(
+				"gil_wiki" => $wgLocalInterwiki, 
+				"gil_page" => $row['page_id'],
+				"gil_pagename" => Title::makeTitle($row['page_namespace'], $row['page_title'])
+					->getPrefixedText(),
+				"gil_to" => $title->getDBkey());
+		}
+		$dbr->freeResult($res);
+			
+		$dbw = $image->repo->getMasterDB();
+		$dbw->immediateBegin();
+		$dbw->insert( 'globalimagelinks', $imageLinks, __METHOD__, 'IGNORE' );
+		$dbw->immediateCommit();
+		
+		// If this is the shared repository and this is an image, should all links in globalimagelinks be deleted?
+		if ($wgGuHasTable)
+		{
+			$dbw = wfGetDb( DB_MASTER );
+			$dbw->delete( 'globalimagelinks', array('gil_to' => $title->getDBkey()), __METHOD__ );
+		}
+	}
+		
+	static function articleDelete( &$article, &$user, $reason ) {
+		global $wgLocalInterwiki;
+
+		// Remove all links that pointed to this article
+		// Probably hits performance quite drastically...
+		foreach ( RepoGroup::singleton()->foreignRepos as $repo ) {
+			$dbw = $repo->getMasterDB();
+			$dbw->immediateBegin();
+			$dbw->delete( 'globalimagelinks', array( 
+					'gil_wiki' => $wgLocalInterwiki, 
+					'gil_page' => $article->getId()
+				), __METHOD__ );
+			$dbw->immediateCommit();
+		}
+		
 	}
 	static function imageUploaded( $uploadForm ) {
-		$imageName = $uploadForm->mLocalFile->getTitle()->getDBkey();		
-		self::setLocalFlag( $imageName, 1 );
+		// Delete the links in the globalimagelinks table
+		global $wgLocalInterwiki;
+		
+		$imageName = $uploadForm->mLocalFile->getTitle()->getDBkey();
+		
+		// In order to not load the shared repository too much, first check whether there are image links to this image
+		// Hmmm... Race conditions?
+		$dbr = wfGetDb( DB_SLAVE );
+		$res = $dbr->select( 'imagelinks', array('1'), array( 'il_to' => $imageName), array('limit' => 1) );
+		if ( $dbr->fetchObject($res) ) {
+			foreach ( RepoGroup::singleton()->foreignRepos as $repo ) {
+				$dbw = $repo->getMasterDB();
+				$dbw->immediateBegin();
+				$dbw->delete( 'globalimagelinks', array( 
+						'gil_wiki' => $wgLocalInterwiki, 
+						'gil_to' => $imageName
+					), __METHOD__ );
+				$dbw->immediateCommit();
+			}
+		}
+		$dbr->freeResult($res);
 		return true;		
-	}	
-	
-		
-	static function articleDeleted( &$article, &$user, $reason ) {
-		$dbw = self::getDatabase();
-		$dbw->immediateBegin();
-		$dbw->delete( 'globalimagelinks', array(
-				'gil_wiki' => self::getLocalInterwiki(),
-				// Use GAID_FOR_UPDATE to make sure the old id is fetched from 
-				// the link cache
-				'gil_page' => $article->getTitle()->getArticleId(GAID_FOR_UPDATE)),
-			__METHOD__ );
-		$dbw->immediateCommit();
-		
-		return true;
 	}
 	
-	static function articleMoved( &$movePageForm, &$from, &$to ) {
-		$dbw = self::getDatabase();
-		$dbw->immediateBegin();
-		$dbw->update( 'globalimagelinks', array(
-				'gil_page_namespace' => $to->getNsText(),
-				'gil_page_title' => $to->getDBkey()
-			), array(
-				'gil_wiki' => self::getLocalInterwiki(),
-				'gil_page' => $to->getArticleId()
-			), __METHOD__ );
-		$dbw->immediateCommit();
+	function execute() {	
+		global $wgOut, $wgRequest;
 		
-		return true;
-	}
-
-	public function execute( $par ) {	
-		global $wgOut, $wgScript, $wgRequest;
-		
-		$this->setHeaders();
-		
-		$self = Title::makeTitle( NS_SPECIAL, 'GlobalUsage' );
-		$target= Title::makeTitleSafe( NS_IMAGE, $wgRequest->getText( 'target', $par ) );
-		
-		$wgOut->addWikiText( wfMsg( 'globalusage-text' ) );
-		
-		$form = Xml::openElement( 'form', array( 
-			'id' => 'mw-globalusage-form',
-			'method' => 'get', 
-			'action' => $wgScript ));
-		$form .= Xml::hidden( 'title', $self->getPrefixedDbKey() );
-		$form .= Xml::openElement( 'fieldset' );
-		$form .= Xml::element( 'legend', array(), wfMsg( 'globalusage' ));
-		$form .= Xml::inputLabel( wfMsg( 'filename' ), 'target', 
-			'target', 50, $target->getDBkey() );
-		$form .= Xml::submitButton( wfMsg( 'globalusage-ok' ) );
-		$form .= Xml::closeElement( 'fieldset' );
-		$form .= Xml::closeElement( 'form' );
-		
-		$wgOut->addHtml( $form );
-		
-		if ( !$target->getDBkey() ) return;
-		
-		$dbr = self::getDatabase( DB_SLAVE );
+		$dbr = wfGetDB( DB_SLAVE );
 		$res = $dbr->select( 'globalimagelinks',
-			array( 'gil_wiki', 'gil_page_namespace', 'gil_page_title' ),
-			array( 'gil_to' => $target->getDBkey(), 'gil_is_local' => 0 ),
+			array( 'gil_wiki', 'gil_pagename' ),
+			// Needs normalizing
+			array( 'gil_to' => $wgRequest->getText('image') ),
 			__METHOD__ );
 			
 		// Quick dirty list output
 		while ( $row = $dbr->fetchObject($res) )
-			$wgOut->addWikiText(self::formatItem( $row ) );
+			$wgOut->addWikiText("* [[:".$row->gil_wiki.":".$row->gil_pagename."]] \n");
 		$dbr->freeResult($res);
 	}
-	
-	public static function formatItem( $row ) {
-		$out = '* [[';
-		if ( self::getLocalInterwiki() != $row->gil_wiki )
-			$out .= ':'.$row->gil_wiki;
-		if ( $row->gil_page_namespace )
-			$out .= ':'.str_replace('_', ' ', $row->gil_page_namespace);
-		$out .= ':'.str_replace('_', ' ', $row->gil_page_title)."]]\n";
-		return $out;
-	}
 }
+
+/* TODO: 
+* Have idea reviewed by the filerepo guy (Tim Starling?)
+* How does the interwiki stuff work?
+*/

@@ -1,4 +1,6 @@
 <?php
+/**
+ */
 
 /**
  * Client for querying zhdaemon
@@ -20,6 +22,8 @@ class ZhClient {
 
 	/**
 	 * Check if connection to zhdaemon is successful
+	 *
+	 * @access public
 	 */
 	function isconnected() {
 		return $this->mConnected;
@@ -76,9 +80,10 @@ class ZhClient {
 	/**
 	 * Convert the input to a different language variant
 	 *
-	 * @param $text string: input text
-	 * @param $tolang string: language variant
+	 * @param string $text input text
+	 * @param string $tolang language variant
 	 * @return string the converted text
+	 * @access public
 	 */
 	function convert($text, $tolang) {
 		$len = strlen($text);
@@ -92,8 +97,9 @@ class ZhClient {
 	/**
 	 * Convert the input to all possible variants
 	 *
-	 * @param $text string: input text
+	 * @param string $text input text
 	 * @return array langcode => converted_string
+	 * @access public
 	 */
 	function convertToAllVariants($text) {
 		$len = strlen($text);
@@ -115,8 +121,9 @@ class ZhClient {
 	/**
 	 * Perform word segmentation
 	 *
-	 * @param $text string: input text
+	 * @param string $text input text
 	 * @return string segmented text
+	 * @access public
 	 */
 	function segment($text) {
 		$len = strlen($text);
@@ -130,6 +137,8 @@ class ZhClient {
 
 	/**
 	 * Close the connection
+	 *
+	 * @access public
 	 */
 	function close() {
 		fclose($this->mFP);

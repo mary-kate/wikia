@@ -39,7 +39,7 @@ require_once 'UtfNormal.php';
  * regression checks for known problems.
  * Requires PHPUnit.
  *
- * @ingroup UtfNormal
+ * @addtogroup UtfNormal
  * @private
  */
 class CleanUpTest extends PHPUnit_Framework_TestCase {
@@ -410,3 +410,4 @@ if( !$result->wasSuccessful() ) {
 	exit( -1 );
 }
 exit( 0 );
+

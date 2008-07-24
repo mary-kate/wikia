@@ -387,7 +387,7 @@ $messages['rm'] = array(
 );
 
 /** Russian (Русский)
- * @author Александр Сигачёв
+ * @author .:Ajvol:.
  */
 $messages['ru'] = array(
 	'giverollback'                => 'Присвоение и отзыв прав на откаты',

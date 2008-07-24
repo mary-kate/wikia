@@ -1,16 +1,11 @@
 <?php
-/**
- * @file
- * @ingroup Ajax
- */
-
 if( !defined( 'MEDIAWIKI' ) ) {
 	die( 1 );
 }
 
 /**
  * @todo document
- * @ingroup Ajax
+ * @addtogroup Ajax
  */
 class AjaxResponse {
 
@@ -104,7 +99,7 @@ class AjaxResponse {
 
 		if ( $this->mCacheDuration ) {
 
-			# If squid caches are configured, tell them to cache the response,
+			# If squid caches are configured, tell them to cache the response, 
 			# and tell the client to always check with the squid. Otherwise,
 			# tell the client to use a cached copy, without a way to purge it.
 
@@ -225,3 +220,4 @@ class AjaxResponse {
 		return true;
 	}
 }
+

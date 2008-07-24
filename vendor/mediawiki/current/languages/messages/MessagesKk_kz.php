@@ -1,10 +1,10 @@
 <?php
-/**
- * Kazakh (Kazakhstan) (Қазақша (Қазақстан))
+/** Kazakh (Kazakhstan) (Қазақша (Қазақстан))
  *
- * @ingroup Language
- * @file
+ * @addtogroup Language
+ *
  */
 
 # Inherit everything for now
 $fallback = 'kk-cyrl';
+

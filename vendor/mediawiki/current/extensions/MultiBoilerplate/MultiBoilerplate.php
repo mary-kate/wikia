@@ -1,11 +1,8 @@
 <?php
 
 /**
- * Allows a boilerplate to be selected from a drop down box located above the
- * edit form when editing non-exstant pages or, optionally (based upon
- * configuration variable $wgMultiBoilerplateOverwrite), load the template
- * over the current contents. 
- * 
+ * Extension for allowing a boilerplate to be selected from a drop down box at
+ * the top of the article edit page.
  *
  * @addtogroup Extensions
  *
@@ -22,15 +19,15 @@ if( !defined( 'MEDIAWIKI' ) ) die( 'Invalid entry point.' );
 // Extension credits.
 $wgExtensionCredits[ 'other' ][] = array(
 	'name'           => 'MultiBoilerplate',
-	'description'    => 'Allows a boilerplate to be selected from a drop down box located above the edit form when editing pages.',
+	'description'    => 'Displays a box at the top of the edit page to select and load a boilerplate.',
 	'descriptionmsg' => 'multiboilerplate-desc',
 	'author'         => 'MinuteElectron',
 	'url'            => 'http://www.mediawiki.org/wiki/Extension:MultiBoilerplate',
-	'version'        => '1.6',
+	'version'        => '1.5',
 );
 
 // Hook into EditPage::showEditForm:initial to modify the edit page header.
-$wgHooks[ 'EditPage::showEditForm:initial' ][] = 'efMultiBoilerplate';
+$wgHooks[ 'EditPage::showEditForm:initial' ][] = 'wfMultiBoilerplate';
 
 // Set extension messages file.
 $wgExtensionMessagesFiles[ 'MultiBoilerplate' ] = dirname( __FILE__ ) . '/MultiBoilerplate.i18n.php';
@@ -47,11 +44,11 @@ $wgMultiBoilerplateOptions = array();
 $wgMultiBoilerplateOverwrite = false;
 
 /**
- * Generate the form to be displayed at the top of the edit page and insert it.
+ * Generate the form to be displayed at the top of the edit page and insert it into the page.
  * @param $form EditPage object.
  * @return true
  */
-function efMultiBoilerplate( $form ) {
+function wfMultiBoilerplate( $form ) {
 
 	// Get various variables needed for this extension.
 	global $wgMultiBoilerplateOptions, $wgMultiBoilerplateOverwrite, $wgArticle, $wgTitle, $wgRequest;
@@ -79,7 +76,7 @@ function efMultiBoilerplate( $form ) {
 		$options = '';
 		$things = explode( "\n", str_replace( "\r", "\n", str_replace( "\r\n", "\n", $things ) ) ); // Ensure line-endings are \n
 		foreach( $things as $row ) {
-			$row = ltrim( $row, '* ' ); // Remove the asterix (and a space if found) from the start of the line.
+			$row = preg_replace( '#^\*( *)#', '', $row ); // Remove the asterix (and a space if found) from the start of the line.
 			$row = explode( '|', $row );
 			if( !isset( $row[ 1 ] ) ) return true; // Invalid syntax, abort.
 			$selected = false;
@@ -87,9 +84,8 @@ function efMultiBoilerplate( $form ) {
 			$options .= Xml::option( $row[ 0 ], $row[ 1 ], $selected );
 		}
 	}
-
-	// No options found in either configuration file, abort.
-	if( $options == '' ) return true;
+	
+	if( $options == '' ) return true; // No options found in either configuration file, abort.
 
 	// Append the selection form to the top of the edit page.
 	$form->editFormPageTop .=

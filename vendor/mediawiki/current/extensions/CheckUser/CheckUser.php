@@ -9,14 +9,12 @@ if (!defined('MEDIAWIKI')) {
 # Internationalisation file
 $dir = dirname(__FILE__) . '/';
 $wgExtensionMessagesFiles['CheckUser'] = $dir . 'CheckUser.i18n.php';
-$wgExtensionAliasesFiles['CheckUser'] = $dir . 'CheckUser.alias.php';
 
 $wgExtensionCredits['specialpage'][] = array(
-	'author' => array( 'Tim Starling', 'Aaron Schulz' ),
+	'author' => 'Tim Starling, Aaron Schulz',
 	'name' => 'CheckUser',
-	'svn-date' => '$LastChangedDate: 2008-07-15 21:24:01 +0000 (Tue, 15 Jul 2008) $',
-	'svn-revision' => '$LastChangedRevision: 37716 $',
 	'url' => 'http://www.mediawiki.org/wiki/Extension:CheckUser',
+	'author' => 'Tim Starling, Aaron Schulz',
 	'description' => 'Grants users with the appropriate permission the ability to check user\'s IP addresses and other information',
 	'descriptionmsg'=> 'checkuser-desc',	
 );
@@ -34,7 +32,6 @@ global $wgHooks;
 $wgHooks['RecentChange_save'][] = 'efUpdateCheckUserData';
 $wgHooks['ParserTestTables'][] = 'efCheckUserParserTestTables';
 $wgHooks['LoadExtensionSchemaUpdates'][] = 'efCheckUserSchemaUpdates';
-$wgHooks['ContributionsToolLinks'][] = 'efLoadCheckUserLink';
 
 /**
  * Hook function for RecentChange_save
@@ -64,11 +61,7 @@ function efUpdateCheckUserData( $rc ) {
 		$actionText = '';
 	}
 	
-	$dbw = wfGetDB( DB_MASTER );
-	
-	$cuc_id = $dbw->nextSequenceValue( 'cu_changes_cu_id_seq' );
 	$rcRow = array(
-		'cuc_id' => $cuc_id,
 		'cuc_namespace' => $rc_namespace,
 		'cuc_title' => $rc_title,
 		'cuc_minor' => $rc_minor,
@@ -76,6 +69,7 @@ function efUpdateCheckUserData( $rc ) {
 		'cuc_user_text' => $rc_user_text,
 		'cuc_actiontext' => $actionText,
 		'cuc_comment' => $rc_comment,
+		'cuc_page_id' => $rc_cur_id,
 		'cuc_this_oldid' => $rc_this_oldid,
 		'cuc_last_oldid' => $rc_last_oldid,
 		'cuc_type' => $rc_type,
@@ -86,12 +80,8 @@ function efUpdateCheckUserData( $rc ) {
 		'cuc_xff_hex' => ($xff_ip && !$isSquidOnly) ? IP::toHex( $xff_ip ) : null,
 		'cuc_agent' => $agent
 	);
-	
-	## On PG, MW unsets cur_id due to schema incompatibilites. So it may not be set!
-	if( isset($rc_cur_id) ) {
-		$rcRow['cuc_page_id'] = $rc_cur_id;
-	}
-	
+
+	$dbw = wfGetDB( DB_MASTER );
 	$dbw->insert( 'cu_changes', $rcRow, __METHOD__ );
 
 	# Every 100th edit, prune the checkuser changes table.
@@ -100,6 +90,7 @@ function efUpdateCheckUserData( $rc ) {
 		# Periodically flush old entries from the recentchanges table.
 		global $wgCUDMaxAge;
 
+		$dbw = wfGetDB( DB_MASTER );
 		$cutoff = $dbw->timestamp( time() - $wgCUDMaxAge );
 		$recentchanges = $dbw->tableName( 'cu_changes' );
 		$sql = "DELETE FROM $recentchanges WHERE cuc_timestamp < '{$cutoff}'";
@@ -214,18 +205,4 @@ function efCheckUserParserTestTables( &$tables ) {
 }
 
 $wgSpecialPages['CheckUser'] = 'CheckUser';
-$wgSpecialPageGroups['CheckUser'] = 'users';
 $wgAutoloadClasses['CheckUser'] = dirname(__FILE__) . '/CheckUser_body.php';
-
-
-function efLoadCheckUserLink( $id, $nt, &$links ) {
-    global $wgUser;
-        if( $wgUser->isAllowed( 'checkuser' ) ) {
-	        wfLoadExtensionMessages( 'CheckUser' );
-		$links[] = $wgUser->getSkin()->makeKnownLinkObj(
-			            SpecialPage::getTitleFor( 'CheckUser' ),
-				                wfMsgHtml( 'checkuser' ),
-				                'user=' . urlencode( $nt->getText() ) );
-	}
-	return true;
-}

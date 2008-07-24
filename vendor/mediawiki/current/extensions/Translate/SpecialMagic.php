@@ -1,5 +1,4 @@
 <?php
-if (!defined('MEDIAWIKI')) die();
 
 /**
  * This special page helps with the translations of MediaWiki features that are
@@ -13,6 +12,9 @@ class SpecialMagic extends SpecialPage {
 	const MODULE_MAGIC     = 'words';
 	const MODULE_SPECIAL   = 'special';
 	const MODULE_NAMESPACE = 'namespace';
+
+	const INDEX_OF_MODULE = 0;
+	const INDEX_OF_LANGUAGE = 1;
 
 	/** List of supported modules */
 	private $aModules = array(
@@ -44,27 +46,19 @@ class SpecialMagic extends SpecialPage {
 	 */
 	protected function getForm() {
 		global $wgLang, $wgTitle, $wgScript;
+		$line = wfMsgExt( self::MSG.'form', array( 'parse', 'replaceafter' ),
+			TranslateUtils::languageSelector( $wgLang->getCode(), $this->options['language'] ),
+			$this->moduleSelector( $this->options['module'] ),
+			Xml::submitButton( wfMsg( self::MSG.'submit' ) )
+		);
 
 		$form = Xml::tags( 'form',
 			array(
 				'action' => $wgScript,
 				'method' => 'get'
 			),
-
-			'<table><tr><td>' .
-				wfMsgHtml( 'translate-page-language' ) .
-			'</td><td>' .
-				TranslateUtils::languageSelector( $wgLang->getCode(), $this->options['language'] ) .
-			'</td></tr><tr><td>' .
-				wfMsgHtml( 'translate-magic-module' ) .
-			'</td><td>' .
-				$this->moduleSelector( $this->options['module'] ) .
-			'</td></tr><tr><td colspan="2">' .
-				Xml::submitButton( wfMsg( self::MSG.'submit' ) ) . ' ' .
-				Xml::submitButton( wfMsg('translate-magic-cm-export'), array( 'name' => 'export') ) .
-			'</td></tr></table>' .
-			Xml::hidden( 'title', $wgTitle->getPrefixedText() )
-			
+			Xml::hidden( 'title', $wgTitle->getPrefixedText() ) .
+			$line
 		);
 		return $form;
 	}
@@ -83,6 +77,21 @@ class SpecialMagic extends SpecialPage {
 		return $selector->getHTML();
 	}
 
+	/**
+	 * Parser special page parameters from /-style input
+	 * @param $params String of /-delimited params. First is module, second is language.
+	 */
+	protected function parseParams( $params, $options ) {
+		$aParam = explode( '/', $params );
+		if ( isset($aParam[self::INDEX_OF_MODULE]) ) {
+			$options['module'] = $aParam[self::INDEX_OF_MODULE];
+		}
+		if ( isset($aParam[self::INDEX_OF_LANGUAGE]) ) {
+			$options['language'] = $aParam[self::INDEX_OF_LANGUAGE];
+		}
+		return $options;
+	}
+
 	protected function setup( $parameters ) {
 		global $wgUser, $wgRequest;
 
@@ -98,6 +107,7 @@ class SpecialMagic extends SpecialPage {
 
 		// Temporary store possible values parsed from parameters
 		$options = $defaults;
+		$options = $this->parseParams( $parameters, $options );
 		foreach ( $options as $v => $t ) {
 			if ( is_bool($t) ) {
 				$r = $wgRequest->getBool( $v, $options[$v] );
@@ -171,21 +181,23 @@ class SpecialMagic extends SpecialPage {
 
 }
 
+
 abstract class ComplexMessages {
 	const MSG = 'translate-magic-cm-';
 
-	const LANG_MASTER   = 0;
-	const LANG_CHAIN    = 1;
-	const LANG_CURRENT  = 2;
+	const LANG_MASTER   = 'en';
+	const LANG_TARGET   = 'xx';
+	const LANG_FALLBACK = 'fb';
+	const LANG_CURRENT  = 'tb';
 
 	protected $language = null;
 	protected $id       = '__BUG__';
 	protected $variable = '__BUG__';
-	protected $data     = null;
+	protected $aContent = null;
 	protected $elementsInArray = true;
 	protected $exportPad = 10;
 	protected $databaseMsg = '__BUG__';
-	protected $chainable = false;
+	protected $stripUnderscores = false;
 
 	protected $tableAttributes = array(
 		'class' => 'wikitable',
@@ -200,38 +212,41 @@ abstract class ComplexMessages {
 	}
 
 	public function getTitle() {
-		return wfMsg( 'translate-magic-' . $this->id );
+		wfMsg( self::MSG . $this->id );
 	}
 
 	#
 	# Data retrieval
 	#
 
-	protected $init = false;
-	public function getGroups() {
-		if ( !$this->init ) {
-			foreach ( $this->data as &$group) {
-				$this->getData( $group );
-			}
-			$this->init = true;
-		}
+	public function getArray() {
+		if ( $this->aContent !== null ) return $this->aContent;
 
-		return $this->data;
-		
+		$fallback = Language::getFallbackFor( $this->language );
+		if ( $fallback === 'en' ) $fallback = false;
+
+		$array = array();
+		$array[self::LANG_MASTER] = self::readVariable( 'en', $this->variable );
+		$array[self::LANG_TARGET] = self::readVariable( $this->language, $this->variable );
+		$array[self::LANG_CURRENT] = $this->array_merge( $array[self::LANG_TARGET], $this->getSavedData() );
+		if ( $fallback )
+			$array[self::LANG_FALLBACK] = self::readVariable( $fallback, $this->variable );
+
+		$this->aContent = $array;
+		return $this->aContent;
 	}
 
-	public function getData( &$group ) {
-		$defs = self::readVariable( $group, 'en' );
-		$code = $this->language;
-
-		$current = wfArrayMerge( self::readVariable( $group, $code ), $this->getSavedData() );
-
-		$chain = $current;
-		while ( $this->chainable && $code = Language::getFallbackFor( $code ) ) {
-			$chain = array_merge_recursive( $chain, self::readVariable( $group, $code ) );
+	protected function array_merge( $a1, $a2 ) {
+		if ( $this->elementsInArray ) {
+			return array_merge( $a1, $a2 );
+		} else {
+			foreach ( $a1 as $index => $value ) {
+				if ( !isset($a2[$index]) || !$a2[$index] ) {
+					$a2[$index] = $a1[$index];
+				}
+			}
+			return $a2;
 		}
-
-		return $group['data'] = array( $defs, $chain, $current );
 	}
 
 	/**
@@ -245,62 +260,55 @@ abstract class ComplexMessages {
 			return array();
 		}
 
-		$lines = array_map( 'trim', explode( "\n", $data ) );
+		$lines = explode( "\n", $data );
 		$array = array();
 		foreach ( $lines as $line ) {
-			if ( $line === '' || $line[0] === '#' || $line[0] === '<' ) continue;
-			if ( strpos( $line, '='  ) === false ) continue;
+			if ( ltrim( $line[0] ) === '#' || ltrim( $line[0] ) === '<') { continue; }
 
-			list( $name, $values ) = array_map( 'trim', explode( '=', $line, 2 ) );
-			if ( $name === '' || $values === '' ) continue;
-
-			$data = array_map( 'trim', explode( ',', $values ) );
-			$array[$name] = $data;
-
+			$elements = explode( '=', $line, 2 );
+			if ( count( $elements ) !== 2 ) { continue; }
+			if ( trim( $elements[1] ) === '' ) { continue; }
+			if ( $this->elementsInArray ) {
+				$array[(string)$elements[0]] = explode( ",", $elements[1] );
+			} else {
+				$array[(string)$elements[0]] = $elements[1];
+			}
 		}
-
 
 		return $array;
 	}
 
 	/**
 	 * Return an array of keys that can be used to iterate over all keys
-	 * @return Array of keys for data
+	 * @return Array of keys for aContent
 	 */
-	protected function getIterator( $group ) {
-		$groups = $this->getGroups();
-		return array_keys($groups[$group]['data'][self::LANG_MASTER]);
+	protected function getIterator() {
+		$array = $this->getArray();
+		return array_keys($array[self::LANG_MASTER]);
 	}
 
-	protected function val( $group, $type, $key ) {
-		$array = $this->getGroups();
-		$subarray = @$array[$group]['data'][$type][$key];
+	protected function val( $type, $key ) {
+		$array = $this->getArray();
+		$subarray = @$array[$type][$key];
 		if ( $this->elementsInArray ) {
-			if ( !$subarray || !count( $subarray ) ) return array();
+			if ( !$subarray || count( $subarray ) < 1 ) return array();
 		} else {
-			if ( !$subarray ) return array();
+			if ( !$subarray ) return '';
 		}
-
-		if ( !is_array( $subarray ) ) $subarray = array( $subarray );
 		return $subarray;
 	}
 
 	/**
+	 * Reads variable from given language file
+	 * @param $__code Language code
+	 * @param $__variable Name of the variable that is read
+	 * @return null or contents of the variable
 	 */
-	protected static function readVariable( $group, $code ) {
-		$file = $group['file'];
-		if ( !$group['code'] ) {
-			$file = str_replace( '%CODE%', str_replace( '-', '_', ucfirst( $code ) ), $file );
-		}
-
-		${$group['var']} = array(); # Initialize
-		if ( file_exists($file) ) require( $file ); # Include
-
-		if ( $group['code'] ) {
-			return (array) @${$group['var']}[$code];
-		} else {
-			return ${$group['var']};
-		}
+	protected static function readVariable( $__code, $__variable ) {
+		$$__variable = array(); # Initialize
+		$__file = Language::getMessagesFileName($__code);
+		if ( file_exists($__file) ) require( $__file ); # Include
+		return $$__variable;
 	}
 
 	#
@@ -311,74 +319,75 @@ abstract class ComplexMessages {
 	# Output
 	#
 
-	public function header( $title ) {
-		$colspan = array( 'colspan' => 3 );
-		$header = Xml::element( 'th', $colspan, $this->getTitle() . ' - ' . $title );
-		$subheading[] = Xml::element( 'th', null, wfMsg(self::MSG.'original') );
-		$subheading[] = Xml::element( 'th', null, wfMsg(self::MSG.'current') );
-		$subheading[] = Xml::element( 'th', null, wfMsg(self::MSG.'to-be') );
-		return '<tr>' . $header . '</tr>' .
-			'<tr>' . implode( "\n", $subheading )  . '</tr>';
-	}
-
 	/**
 	 * GLOBALS: $wgRequest
 	 */
 	public function output() {
 		global $wgRequest;
 
-		$colspan = array( 'colspan' => 3 );
+		$array = $this->getArray();
+		$fb = isset($array[self::LANG_FALLBACK]);
 
-		$s = Xml::openElement( 'table', $this->tableAttributes );
+		$table['start'] = Xml::openElement( 'table', $this->tableAttributes );
+		$table['heading'] = Xml::element( 'th', array('colspan' => '4' ), $this->getTitle() );
+		$table['subheading'][] = Xml::element( 'th', null, wfMsg(self::MSG.'original') );
+		if ( $fb ) $table['subheading'][] = Xml::element( 'th', null, wfMsg(self::MSG.'fallback') );
+		$table['subheading'][] = Xml::element( 'th', null, wfMsg(self::MSG.'current') );
+		$table['subheading'][] = Xml::element( 'th', null, wfMsg(self::MSG.'to-be') );
+		$table['headings'] =
+			Xml::openElement( 'tr' ) .
+			$table['heading'] .
+			Xml::closeElement( 'tr' ) .
+			Xml::openElement( 'tr' ) .
+			implode( "\n", $table['subheading'] ) .
+			Xml::closeElement( 'tr' );
 
-		foreach ( array_keys($this->data) as $group ) {
-			$s .= $this->header( $group );
-			
-			foreach ( $this->getIterator($group) as $key ) {
-				$rowContents = '';
+		$aColumns = array();
+		$aColumns[] = self::LANG_MASTER;
+		if ( $fb ) $aColumns[] = self::LANG_FALLBACK;
+		$aColumns[] = self::LANG_TARGET;
 
-				$value = $this->val($group, self::LANG_MASTER, $key);
-				$value = array_map( 'htmlspecialchars', $value );
-				$rowContents .= '<td>' . $this->formatElement( $value ) . '</td>';
-
-				$value = $this->val($group, self::LANG_CHAIN, $key);
-				$value = array_map( 'htmlspecialchars', $value );
-				if ( $this->chainable  ) $value[0] = "<b>{$value[0]}</b>";
-				$rowContents .= '<td>' . $this->formatElement( $value ) . '</td>';
-
-				$value = $this->val($group, self::LANG_CURRENT, $key);
-				$rowContents .= '<td>' . $this->editElement( $key, $this->formatElement( $value ) ) . '</td>';
-
-				$s .= '<tr>' . $rowContents . '</tr>';
+		foreach ( $this->getIterator() as $key ) {
+			$rowContents = '';
+			foreach ( $aColumns as $column ) {
+				$rowContents .= Xml::element( 'td', null,
+					$this->formatElement( $this->val($column, $key) ) );
 			}
 
+			$rowContents .= Xml::tags( 'td', null, $this->editElement( $key,
+					$this->formatElement( $this->val(self::LANG_CURRENT, $key) ) ) );
+
+			$table['row'][] = Xml::tags( 'tr', null, $rowContents );
 		}
 
-		global $wgUser;
-		if ( $wgUser->isAllowed( 'translate' ) ) {
-			$s .= '<tr>' . Xml::tags( 'td', $colspan, $this->getButtons() ) . '<tr>';
-		}
+		$table['row'][] =
+			Xml::tags( 'tr', null,
+				Xml::tags( 'td', array( 'colspan' => $fb ? 4 : 3 ), $this->getButtons() )
+			);
 
-		$s .= Xml::closeElement( 'table' );
+		$table['rows'] = implode( "\n", $table['row'] );
+		$table['end'] = Xml::closeElement( 'table' );
 
+		$finalTable = $table['start'] . $table['headings'] . $table['rows'] . $table['end'];
 		return Xml::tags( 'form',
 			array( 'method' => 'post', 'action' => $wgRequest->getRequestURL() ),
-			$s );
+			$finalTable );
 	}
 
 	public function getButtons() {
 		return
 			Xml::inputLabel( wfMsg(self::MSG.'comment'), 'comment', 'sp-translate-magic-comment' ) .
-			Xml::submitButton( wfMsg(self::MSG.'save'), array( 'name' => 'savetodb' ) );
+			Xml::submitButton( wfMsg(self::MSG.'save'), array( 'name' => 'savetodb' ) ) .
+			Xml::submitButton( wfMsg(self::MSG.'export'), array( 'name' => 'export') );
 	}
 
 	public function formatElement( $element ) {
 		if (!count( $element ) ) return '';
-		if ( is_array($element) ) {
-			$element = array_map( 'trim', $element );
-			$element = implode( ', ', $element );
+		if ( is_array($element) ) $element = implode( ', ', $element );
+		if ( $this->stripUnderscores ) {
+			$element = str_replace('_', ' ', $element);
 		}
-		return trim($element);
+		return $element;
 	}
 
 	function getKeyForEdit( $key ) {
@@ -386,7 +395,7 @@ abstract class ComplexMessages {
 	}
 
 	public function editElement( $key, $contents ) {
-		return Xml::input( $this->getKeyForEdit( $key ), 40, $contents );
+		return Xml::input( $this->getKeyForEdit( $key ) , 40, $contents );
 	}
 
 	#
@@ -402,16 +411,14 @@ abstract class ComplexMessages {
 	}
 
 	function formatForSave( $request ) {
+		$array = $this->getArray();
+
 		$text = '';
-		foreach ( array_keys( $this->data ) as $group ) {
-			foreach ( $this->getIterator($group) as $key ) {
-				$data = $request->getText( $this->getKeyForEdit( $key ) );
-				$data = implode(', ', array_map( 'trim', explode( ',', $data ) ) );
-				if ( $data !== '' )
-					$text .= "$key = $data\n" ;
-			}
+		foreach ( $this->getIterator() as $key ) {
+			$text .= $key . '=' . $request->getText( $this->getKeyForEdit( $key ) ) . "\n" ;
 		}
-		return $text;
+
+		return trim($text);
 	}
 
 	public function save( $request ) {
@@ -428,7 +435,7 @@ abstract class ComplexMessages {
 		}
 
 		/* Reset outdated array */
-		$this->init = false;
+		$this->aContent = null;
 
 	}
 
@@ -441,45 +448,26 @@ abstract class ComplexMessages {
 	#
 
 	public function export() {
-		$groups = $this->getGroups();
-		$text = '';
-
-		foreach ( $groups as $group => $data ) {
-
-			$var = $data['var'];
-			$items = $data['data'];
-
-			$extra = '';
-			if ( $data['code'] ) {
-				$extra = "['{$this->language}']";
-			}
-
-			$out = '';
-			$padTo = max(array_map( 'strlen', array_keys($items[self::LANG_MASTER]) )) +3;
-
-			foreach ( $this->getIterator($group) as $key ) {
-				$temp = "\t'$key'";
-				while ( strlen( $temp ) <= $padTo ) { $temp .= ' '; }
-				$val = $this->val($group, self::LANG_CURRENT, $key );
-				if ( !$val || !count( $val ) ) continue;
-
+		$array = $this->getArray();
+		$text[] = "\${$this->variable} = array(";
+		foreach ( $this->getIterator() as $key ) {
+			$temp = "\t'$key'";
+			while ( strlen( $temp ) <= $this->exportPad ) { $temp .= ' '; }
+			$val = $this->val(self::LANG_CURRENT, $key );
+			if ( !$val || !count( $val ) ) continue;
+			if ( $this->elementsInArray ) {
 				$normalized = array_map( array( $this, 'normalize' ), $val );
-				if ( $this->elementsInArray ) {
-					$temp .= "=> array( ". implode( ', ', $normalized )." ),";
-				} else {
-					$temp .= "=> " . implode( ', ', $normalized ) . ",";
-				}
-				$out .= $temp . "\n";
+				$temp .= "=> array( ". implode( ', ', $normalized )." ),";
+			} else {
+				$normalized = $this->normalize(  $val );
+				$temp .= "=> $normalized,";
 			}
-
-			if ( $out !== '' ) {
-				$text .= "# $group \n";
-				$text .= "\$$var$extra = array(\n" . $out . ");\n\n";
-			}
-
+			$text[] = $temp;
 		}
 
-		return $text;
+		$text[] = ');';
+
+		return implode("\n", $text);
 	}
 
 	/**
@@ -488,6 +476,9 @@ abstract class ComplexMessages {
 	protected function normalize( $data ) {
 		# Escape quotes
 		$data = preg_replace( "/(?<!\\\\)'/", "\'", trim($data));
+		if ( $this->stripUnderscores ) {
+			$data = str_replace(' ', '_', $data);
+		}
 		return "'$data'";
 	}
 
@@ -499,97 +490,33 @@ abstract class ComplexMessages {
 
 class SpecialPageAliasesCM extends ComplexMessages {
 	protected $id = SpecialMagic::MODULE_SPECIAL;
+	protected $variable = 'specialPageAliases';
+	protected $exportPad = 28;
 	protected $databaseMsg = 'sp-translate-data-SpecialPageAliases';
-	protected $chainable = true;
-
-	public function __construct( $code ) {
-		parent::__construct( $code );
-		$this->data['Mediawiki Core'] = array(
-			'var' => 'specialPageAliases',
-			'file' => Language::getMessagesFileName('%CODE%'),
-			'code' => false,
-		);
-
-		global $wgTranslateExtensionDirectory;
-
-		if ( !file_exists(TRANSLATE_ALIASFILE) || !is_readable(TRANSLATE_ALIASFILE) )
-			return;
-
-		$defines = file_get_contents( TRANSLATE_ALIASFILE );
-		$sections = preg_split( "/\n\n/", $defines, -1, PREG_SPLIT_NO_EMPTY );
-
-		foreach ( $sections as $section ) {
-			$lines = array_map( 'trim', preg_split( "/\n/", $section ) );
-			$name = '';
-			foreach ( $lines as $line ) {
-				if ( $line === '' ) continue;
-				if ( strpos( $line, '=' ) === false ) {
-					if ( $name === '' ) {
-						$name = $line;
-					} else {
-						throw new MWException( "Trying to define name twice: " . $line );
-					}
-				} else {
-					list( $key, $value ) = array_map( 'trim', explode( '=', $line, 2 ) );
-					if ( $key === 'file' ) $file = $value;
-				}
-			}
-
-			if ( $name !== '' ) {
-				$this->data[$name] = array(
-					'var' => 'aliases',
-					'file' => $wgTranslateExtensionDirectory . '/' . $file,
-					'code' => true,
-				);
-			}
-		}
-	}
-
+	protected $stripUnderscores = true;
 }
 
 class SkinNamesCM extends ComplexMessages {
 	protected $id = SpecialMagic::MODULE_SKIN;
+	protected $variable = 'skinNames';
 	protected $elementsInArray = false;
+	protected $exportPad = 14;
 	protected $databaseMsg = 'sp-translate-data-SkinNames';
-
-	public function __construct( $code ) {
-		parent::__construct( $code );
-		$this->data['Mediawiki Core'] = array(
-			'var' => 'skinNames',
-			'file' => Language::getMessagesFileName('%CODE%'),
-			'code' => false,
-		);
-	}
 }
 
 class MagicWordsCM extends ComplexMessages {
 	protected $id = SpecialMagic::MODULE_MAGIC;
+	protected $variable = 'magicWords';
+	protected $exportPad = 22;
 	protected $databaseMsg = 'sp-translate-data-MagicWords';
-
-	public function __construct( $code ) {
-		parent::__construct( $code );
-		$this->data['Mediawiki Core'] = array(
-			'var' => 'magicWords',
-			'file' => Language::getMessagesFileName('%CODE%'),
-			'code' => false,
-		);
-	}
-
 }
 
 class NamespaceCM extends ComplexMessages {
 	protected $id = SpecialMagic::MODULE_NAMESPACE;
+	protected $variable = 'namespaceNames';
 	protected $elementsInArray = false;
 	protected $databaseMsg = 'sp-translate-data-Namespaces';
-
-	public function __construct( $code ) {
-		parent::__construct( $code );
-		$this->data['Mediawiki Core'] = array(
-			'var' => 'namespaceNames',
-			'file' => Language::getMessagesFileName('%CODE%'),
-			'code' => false,
-		);
-	}
+	protected $stripUnderscores = true;
 
 	private static $constans = array(
 		-2 => 'NS_MEDIA',
@@ -618,32 +545,31 @@ class NamespaceCM extends ComplexMessages {
 	 * Re-implemented
 	 */
 	public function export() {
-		$groups = $this->getGroups();
-
-		foreach ( $groups as $group => $data ) {
-			$array = $data['data'];
-			$output = array();
-			foreach (self::$constans as $index => $constant) {
-				if ( $index === NS_PROJECT ) {
-					$output[] = "\t# NS_PROJECT set by \\\$wgMetaNamespace";
-					continue;
-				}
-
-				$value = false;
-				// Export main always (because it cannot be translated)
-				#if ( $index === NS_MAIN ) $value = '';
-
-				if ( isset($array[self::LANG_CURRENT][$index]) ) {
-					$value = $array[self::LANG_CURRENT][$index];
-				}
-
-				if ( $value === false ) continue;
-
-				$nValue = $this->normalize( $value );
-				$output[] = "\t" . str_pad( $constant, self::$pad ) . "=> $nValue,";
+		$array = $this->getArray();
+		$output = array();
+		foreach (self::$constans as $index => $constant) {
+			if ( $index === NS_PROJECT ) {
+				$output[] = "\t# NS_PROJECT set by \\\$wgMetaNamespace";
+				continue;
 			}
 
-			return "\$namespaceNames = array(\n" . implode( "\n" , $output ) . "\n);\n";
+			$value = false;
+			// Export main always (because it cannot be translated)
+			#if ( $index === NS_MAIN ) $value = '';
+
+			if ( isset($array[self::LANG_CURRENT][$index]) ) {
+				$value = $array[self::LANG_CURRENT][$index];
+			}
+
+			if ( $value === false ) continue;
+
+			$nValue = $this->normalize( $value );
+			$output[] = "\t" . str_pad( $constant, self::$pad ) . "=> $nValue,";
 		}
+
+		return "\$namespaceNames = array(\n" . implode( "\n" , $output ) . "\n);\n";
 	}
+
 }
+
+?>

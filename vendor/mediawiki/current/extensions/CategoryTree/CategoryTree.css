@@ -7,22 +7,17 @@
  * @author Daniel Kinzler, brightbyte.de
  * @copyright © 2006 Daniel Kinzler
  * @licence GNU General Public Licence 2.0 or later
- *
- * NOTE: if you change this, increment $wgCategoryTreeVersion 
- *       in CategoryTree.php to avoid users getting stale copies from cache.
 */
 
 .CategoryTreeChildren {
 	margin-left: 1.5ex;
 }
 
-.CategoryTreeBullet a,
-.CategoryTreeBullet a:link,
-.CategoryTreeBullet a:active,
-.CategoryTreeBullet a:visited {
+.CategoryTreeBullet a:link {
 	text-decoration: none;
 	color: inherit;
-	speak: none;
+	font-weight: bold;
+    speak: none;
 }
 
 .CategoryTreeLabelPage {
@@ -45,18 +40,4 @@
 
 .CategoryTreeNotice {
 	font-style: italic;
-}
-
-/*
-div.CategoryTreeInlineNode,
-div.CategoryTreeInlineNode div {
-	display: table-cell;
-}
-*/
-
-.CategoryTreeCategoryBarItem {
-	display:-moz-inline-box; display:inline-block; /* yes, specify display twice! quirk for FF2 */
-	margin:-0.5ex 0 0 1ex; /* why is the -0.5ex needed? */
-	padding:0;
-	vertical-align: top;
 }

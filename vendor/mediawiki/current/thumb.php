@@ -3,8 +3,7 @@
 /**
  * PHP script to stream out an image thumbnail.
  *
- * @file
- * @ingroup Media
+ * @addtogroup Media
  */
 define( 'MW_NO_OUTPUT_COMPRESSION', 1 );
 require_once( './includes/WebStart.php' );
@@ -117,20 +116,12 @@ function wfThumbMain() {
 }
 
 function wfThumbError( $status, $msg ) {
-	global $wgShowHostnames;
 	header( 'Cache-Control: no-cache' );
 	header( 'Content-Type: text/html; charset=utf-8' );
 	if ( $status == 404 ) {
 		header( 'HTTP/1.1 404 Not found' );
 	} else {
 		header( 'HTTP/1.1 500 Internal server error' );
-	}
-	if( $wgShowHostnames ) {
-		$url = htmlspecialchars( @$_SERVER['REQUEST_URI'] );
-		$hostname = htmlspecialchars( wfHostname() );
-		$debug = "<!-- $url -->\n<!-- $hostname -->\n";
-	} else {
-		$debug = "";
 	}
 	echo <<<EOT
 <html><head><title>Error generating thumbnail</title></head>
@@ -139,7 +130,6 @@ function wfThumbError( $status, $msg ) {
 <p>
 $msg
 </p>
-$debug
 </body>
 </html>
 

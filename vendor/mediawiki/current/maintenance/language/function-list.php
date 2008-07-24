@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * @ingroup MaintenanceLanguage
- */
 
 define( 'MEDIAWIKI', 1 );
 define( 'NOT_REALLY_MEDIAWIKI', 1 );

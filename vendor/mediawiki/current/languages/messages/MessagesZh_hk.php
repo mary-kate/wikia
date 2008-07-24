@@ -1,9 +1,8 @@
 <?php
-/**
- * Chinese (Hong Kong) (中文 (香港))
+/** Hong Kong Chinese‬ (‪中文(香港)‬)
  *
- * @ingroup Language
- * @file
+ * @addtogroup Language
+ *
  */
 
 $fallback = 'zh-hant';

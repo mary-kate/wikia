@@ -1,9 +1,10 @@
 <?php
-
 /** Karakalpak (Qaraqalpaqsha)
  *
- * @ingroup Language
+ *
+ * @addtogroup Language
  */
+
 class LanguageKaa extends Language {
 
 	# Convert from the nominative form of a noun to some other case
@@ -19,31 +20,13 @@ class LanguageKaa extends Language {
 		/* Full code of function convertGrammar() is in development. Updates coming soon. */
 		return $word;
 	}
-	/*
-	 * It fixes issue with ucfirst for transforming 'i' to 'İ'
-	 *
-	 */
+
 	function ucfirst ( $string ) {
 		if ( $string[0] == 'i' ) {
-			$string = 'İ' . substr( $string, 1 );
+			return 'İ' . substr( $string, 1 );
 		} else {
-			$string = parent::ucfirst( $string );
+			return parent::ucfirst( $string );
 		}
-		return $string;
-
-	}
-
-	/*
-	 * It fixes issue with  lcfirst for transforming 'I' to 'ı'
-	 *
-	 */
-	function lcfirst ( $string ) {
-		if ( $string[0] == 'I' ) {
-			$string = 'ı' . substr( $string, 1 );
-		} else {
-			$string = parent::lcfirst( $string );
-		}
-		return $string;
 	}
 
 	/**

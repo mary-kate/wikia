@@ -6,11 +6,15 @@
  * @author: Markus Krötzsch
  */
 
+if( !defined( 'MEDIAWIKI' ) )   die( 1 );
+
+global $smwgIP;
+require_once( "$smwgIP/includes/articlepages/SMW_OrderedListPage.php");
+
 /**
  * Implementation of MediaWiki's Article that shows additional information on
  * property pages. Very simliar to CategoryPage, but with different printout 
  * that also displays values for each subject with the given property.
- * @note AUTOLOADED
  */
 class SMWPropertyPage extends SMWOrderedListPage {
 
@@ -60,8 +64,8 @@ class SMWPropertyPage extends SMWOrderedListPage {
 			$this->articles = array_reverse($this->articles);
 		}
 
-		foreach ($this->articles as $dv) {
-			$this->articles_start_char[] = $wgContLang->convert( $wgContLang->firstChar( $dv->getSortkey() ) );
+		foreach ($this->articles as $title) {
+			$this->articles_start_char[] = $wgContLang->convert( $wgContLang->firstChar( $title->getText() ) );
 		}
 	}
 
@@ -109,16 +113,17 @@ class SMWPropertyPage extends SMWOrderedListPage {
 		$r = '<table style="width: 100%; ">';
 		$prevchar = 'None';
 		for ($index = $start; $index < $ac; $index++ ) {
+			global $smwgIP;
+			include_once($smwgIP . '/includes/SMW_Infolink.php');
 			// Header for index letters
 			if ($this->articles_start_char[$index] != $prevchar) {
 				$r .= '<tr><th class="smwpropname"><h3>' . htmlspecialchars( $this->articles_start_char[$index] ) . "</h3></th><th></th></tr>\n";
 				$prevchar = $this->articles_start_char[$index];
 			}
 			// Property name
-			$searchlink = SMWInfolink::newBrowsingLink('+',$this->articles[$index]->getShortHTMLText());
-			$r .= '<tr><td class="smwpropname">' . $this->articles[$index]->getLongHTMLText($this->getSkin()) .
-			/*$this->getSkin()->makeKnownLinkObj( $this->articles[$index]->getTitle, 
-			  $wgContLang->convert( $this->articles[$index]->getLongHTMLText() ) ) .*/ 
+			$searchlink = SMWInfolink::newBrowsingLink('+',$this->articles[$index]->getPrefixedText());
+			$r .= '<tr><td class="smwpropname">' . $this->getSkin()->makeKnownLinkObj( $this->articles[$index], 
+			  $wgContLang->convert( $this->articles[$index]->getPrefixedText() ) ) . 
 			  '&nbsp;' . $searchlink->getHTML($this->getSkin()) .
 			  '</td><td class="smwprops">';
 			// Property values
@@ -134,7 +139,7 @@ class SMWPropertyPage extends SMWOrderedListPage {
 				if ($i < 4) {
 					$r .= $value->getLongHTMLText($this->getSkin()) . $value->getInfolinkText(SMW_OUTPUT_HTML, $this->getSkin());
 				} else {
-					$searchlink = SMWInfolink::newInversePropertySearchLink('&hellip;', $this->articles[$index]->getWikiValue(), $this->mTitle->getText());
+					$searchlink = SMWInfolink::newInversePropertySearchLink('&hellip;', $this->articles[$index]->getPrefixedText(), $this->mTitle->getText());
 					$r .= $searchlink->getHTML($this->getSkin());
 				}
 			}

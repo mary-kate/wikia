@@ -2,9 +2,6 @@
 /**
  * Dumb program that tries to get the memory usage
  * for each language file.
- *
- * @file
- * @ingroup MaintenanceLanguage
  */
 
 /** This is a command line script */

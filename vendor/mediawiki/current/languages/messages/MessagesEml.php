@@ -1,8 +1,7 @@
 <?php
 /** Emiliano-Romagnolo (Emiliàn e rumagnòl)
  *
- * @ingroup Language
- * @file
+ * @addtogroup Language
  *
  * @author Timichal
  * @author Ottaviano II
@@ -55,6 +54,7 @@ $messages = array(
 'helppage'          => 'Help:Introduzione',
 'portal'            => 'Discóter e quistiunêr',
 'portal-url'        => 'Project:Bar',
+'sitesupport'       => 'Donaziòun',
 
 # Short words for each namespace, by default used in the namespace tab in monobook
 'nstab-main'     => 'Artéccol',
@@ -103,20 +103,20 @@ Putiv cuntinuèr ad usèr {{SITENAME}} anonimamèint, o putiv cunnètterv dòp c
 'filedesc'          => "Ugêt d'al cambiamèint",
 'fileuploadsummary' => "Ugêt d'al cambiamèint:",
 
-# Special:Imagelist
+# Image list
+'ilsubmit'       => 'Zerca',
 'imagelist_size' => 'Dimensiòun (bytes)',
 
 # Random page
 'randompage' => 'Una pàgina a chès',
 
 # Miscellaneous special pages
-'move' => 'Môv',
+'allpages'     => 'Tôt al pàgin',
+'specialpages' => 'Pàgin specièli',
+'move'         => 'Môv',
 
 # Special:Log
 'specialloguserlabel' => 'Utèint:',
-
-# Special:Allpages
-'allpages' => 'Tôt al pàgin',
 
 # Watchlist
 'watchlist'     => 'Al còsi ca guèrd',
@@ -147,11 +147,5 @@ Guèrda $2 par vèdder la lésta d\'al pàgin ch\'i sun stèdi scanzlèdi di rec
 # Move page
 '1movedto2'   => "[[$1]] l'è stê mòs a [[$2]]",
 'movelogpage' => 'Regestér di muvimèint',
-
-# Special:Newimages
-'ilsubmit' => 'Zerca',
-
-# Special:SpecialPages
-'specialpages' => 'Pàgin specièli',
 
 );

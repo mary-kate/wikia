@@ -1,10 +1,9 @@
 <?php
 
 /**
- * Delete archived (deleted from public) revisions from the database
+ * Delete arcived (deleted from public) revisions from the database
  *
- * @file
- * @ingroup Maintenance
+ * @addtogroup Maintenance
  * @author Aaron Schulz
  * Shamelessly stolen from deleteOldRevisions.php by Rob Church :)
  */

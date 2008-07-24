@@ -1,10 +1,8 @@
 <?php
 /**
  * Script for re-attributing edits
- * Use reassingEdits.php
  *
- * @file
- * @ingroup Maintenance
+ * @addtogroup Maintenance
  */
 
 /** */

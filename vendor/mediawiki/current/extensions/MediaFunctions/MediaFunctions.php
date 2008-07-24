@@ -15,7 +15,6 @@ $wgExtensionCredits['parserhook'][] = array(
 	'author' => 'Rob Church',
 	'url' => 'http://www.mediawiki.org/wiki/Extension:MediaFunctions',
 	'description' => 'Parser functions for obtaining information about media files',
-	'descriptionmsg' => 'mediafunctions-desc',
 );
 
 $dir = dirname(__FILE__) . '/';

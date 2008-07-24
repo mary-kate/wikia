@@ -8,6 +8,7 @@ a:active { color:#990000; text-decoration:none; }
 p {
  margin-top: 0em;
  margin-bottom: 0.5em;
+ text-align: left;
 }
 
 ul {
@@ -135,6 +136,7 @@ ul {
 }
 
 .corner-1 {
+	background: url(images/corner-1.png) top left no-repeat;
 	width: 8px;
 	height: 8px;
 	float: left;
@@ -142,6 +144,7 @@ ul {
 	top: 0px;
 }
 .corner-2 {
+	background: url(images/corner-2.png) top left no-repeat;
 	width: 8px;
 	height: 8px;
 	float: right;
@@ -149,6 +152,7 @@ ul {
 	top: 0px;
 }
 .corner-3 {
+	background: url(images/corner-3.png) top left no-repeat;
 	width: 8px;
 	height: 8px;
 	float: right;
@@ -157,6 +161,7 @@ ul {
 	bottom: 8px;
 }
 .corner-4 {
+	background: url(images/corner-4.png) top left no-repeat;
 	width: 8px;
 	height: 8px;
 	float: left;

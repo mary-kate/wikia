@@ -1,8 +1,7 @@
 <?php
 /**
- * @file
  * @todo document
- * @ingroup Maintenance
+ * @addtogroup Maintenance
  */
 
 /** */
@@ -214,3 +213,7 @@ function getMicroTime() { # return time in seconds, with microsecond accuracy
 	list($usec, $sec) = explode(" ", microtime());
 	return ((float)$usec + (float)$sec);
 }
+
+
+
+?>

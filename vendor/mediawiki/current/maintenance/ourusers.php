@@ -1,14 +1,7 @@
 <?php
 /**
- * Wikimedia specific
- *
- * This script generates SQL used to update MySQL users on a hardcoded
- * list of hosts. It takes care of setting the wikiuser for every
- * database as well as setting up wikiadmin.
- *
  * @todo document
- * @file
- * @ingroup Maintenance
+ * @addtogroup Maintenance
  */
 
 /** */
@@ -47,17 +40,15 @@ if ( @$argv[1] == 'yaseo' ) {
 		'localhost',
 		'10.0.%',
 		'66.230.200.%',
-		'208.80.152.%',
 	);
 }
 
 $databases = array(
 	'%wik%',
-	'centralauth',
 );
 
-print "/*!40100 set old_passwords=1 */;\n";
-print "/*!40100 set global old_passwords=1 */;\n";
+print "/*!40100 set old_passwords=1 */;";
+print "/*!40100 set global old_passwords=1 */;";
 
 foreach( $hosts as $host ) {
 	print "--\n-- $host\n--\n\n-- wikiuser\n\n";
