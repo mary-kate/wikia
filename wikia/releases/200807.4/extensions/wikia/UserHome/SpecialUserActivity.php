@@ -28,8 +28,6 @@ function wfSpecialUserHome(){
 			$wgOut->setPagetitle( wfMsg("useractivity_title") );
 			
 			require_once("$IP/extensions/wikia/UserActivity/UserActivityClass.php");
-			require_once("$IP/extensions/wikia/UserGifts/GiftsClass.php");
-			require_once("$IP/extensions/wikia/SystemGifts/SystemGiftsClass.php");
 		 
 			$this_title = Title::makeTitle( NS_SPECIAL, "UserActivity");
 			
