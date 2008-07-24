@@ -124,15 +124,15 @@ $messages = array(
 'aboutpage'         => 'Project:Okutangaaza ku',
 'copyright'         => 'Ebiri kuno bifugibwa $1.',
 'copyrightpagename' => "bino biriko ekikuguzo eky'obwananyi ekya {{SITENAME}}",
-'copyrightpage'     => "{{ns:project}}:Ebikugizo eby'obwa nannyini",
+'copyrightpage'     => "Ebikugizo eby'obwa nannyini ku {{ns:project}}",
 'currentevents'     => 'Ebibindabinda',
 'currentevents-url' => 'Project:Ebibindabinda',
 'disclaimers'       => "Okutangaaza ku kkomo ery'obuvunaaniro bwaffe obw'omu mateeka",
-'disclaimerpage'    => "Project:Okutangaaza ku kkomo ery'obuvunaaniro bwaffe obw'omu mateeka",
+'disclaimerpage'    => "Okutangaaza ku kkomo ery'obuvunaaniro bwaffe obw'omu mateeka Project:",
 'edithelp'          => 'Funa obuyambi',
-'edithelppage'      => "Help:Obuyambi ku by'okukyusakyusa",
+'edithelppage'      => "Obuyambi ku by'okukyusakyusa",
 'faq'               => 'Ebitera okubuuzibwa',
-'faqpage'           => 'Project:Ebitera okubuuzibwa ku',
+'faqpage'           => 'Ebitera okubuuzibwa ku:Project',
 'helppage'          => 'Help:Endagiriro',
 'mainpage'          => 'Olupapula Olusooka',
 'portal'            => 'Embuga',
@@ -332,7 +332,7 @@ oba ku gano agali ku lupapula luno.<br />
 
 # Recent changes linked
 'recentchangeslinked'          => 'Ebikyusiddwa ebyekuusa ku lupapula luno',
-'recentchangeslinked-title'    => 'Enkyukakyuka ezikwatagana ne "$1"',
+'recentchangeslinked-title'    => 'Enkyukakyuka ezikwatagana ne $1',
 'recentchangeslinked-noresult' => 'Empapula eziriko enyunzi tewali lukyuse mu kiseera kino.',
 'recentchangeslinked-summary'  => "Olulpapula olw'enjawulo luno luliko olukalala lw'ebikyuse ku mpapula eziriko enyunzi ezigguka ku lw'obadde otunuulira. Ebiwandikidwa mu '''nukuta enziggumivu''' biri ku mpapula z'ogoberera.",
 

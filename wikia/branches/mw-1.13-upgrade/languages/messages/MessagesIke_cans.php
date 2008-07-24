@@ -22,11 +22,7 @@ $messages = array(
 'friday'        => 'ᐸᒐᐃᑖᒃ',
 'sun'           => 'ᓴᓇ',
 'mon'           => 'ᓇᒡ',
-'tue'           => 'ᐱᖃ',
 'wed'           => 'ᐱᖓ',
-'thu'           => 'ᕿᑎ',
-'fri'           => 'ᐅᓪᓗ',
-'sat'           => 'ᓯᕙᑕ',
 'january'       => 'ᔭᓐᓄᐊᓕ',
 'february'      => 'ᕕᐳᐊᕆ',
 'march'         => 'ᒫᕐᓯ',
@@ -126,10 +122,6 @@ $messages = array(
 'editsectionhint'     => 'ᓱᖁᓯᖅᐹ ᐃᓚᖏᐅᑎᑎᑦᓯᒍᑎ: $1',
 'showtoc'             => 'ᐊᓚᒃᑲᑎᖅᐹ',
 'hidetoc'             => 'ᐃᔨᖅᐳᖅ',
-'site-rss-feed'       => '$1 ᕐᔅᔅ ᒥᐊᓂᕆᕚ',
-'site-atom-feed'      => '$1 ᐊᑐᒻ ᒥᐊᓂᕆᕚ',
-'page-rss-feed'       => '"$1" ᕐᔅᔅ ᒥᐊᓂᕆᕚ',
-'page-atom-feed'      => '"$1" ᐊᑐᒻ ᒥᐊᓂᕆᕚ',
 
 # Short words for each namespace, by default used in the namespace tab in monobook
 'nstab-main'      => 'ᒪᑉᐱᑕᖅ',
@@ -210,7 +202,7 @@ $messages = array(
 
 # Search results
 'nextn'       => 'ᑕᒡᒐ $1',
-'powersearch' => 'ᕿᓐᓇᕆᒃᓴᕐᓂᖅ',
+'powersearch' => 'ᐃᕚᖅᐳᖅ',
 
 # Preferences page
 'mypreferences'         => 'ᐊᒥ ᐱᒃᑯᒪᓂᖅᐹᖅ',
@@ -225,7 +217,6 @@ $messages = array(
 'show'            => 'ᐊᓚᒃᑲᑎᖅᐹ',
 'minoreditletter' => 'ᐅ',
 'newpageletter'   => 'ᐱ',
-'boteditletter'   => 'ᑉ',
 
 # Recent changes linked
 'recentchangeslinked'          => 'ᐊᓯᐊᙳᑐᖅ ᒥᑦᓵᓯᔪᖅ',

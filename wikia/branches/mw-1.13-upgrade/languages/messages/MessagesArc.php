@@ -146,7 +146,7 @@ $messages = array(
 # Preferences page
 'mypreferences' => 'ܦܪ̈ܝܫܘܬܝ',
 'math'          => 'ܡܬܡܐܛܝܩܘܬܐ',
-'prefs-rc'      => 'ܫܘܚ̈ܠܦܐ ܚܕ̈ܬܐ',
+'prefs-rc'      => 'ܫܘ̈ܚ̈ܠܦܐ ܚܕ̈ܬܐ',
 'saveprefs'     => 'ܚܡܝ',
 
 # Recent changes

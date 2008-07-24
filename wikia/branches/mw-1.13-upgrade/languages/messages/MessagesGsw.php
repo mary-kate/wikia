@@ -7,8 +7,6 @@
  * @author Helix84
  * @author Siebrand
  * @author לערי ריינהארט
- * @author Jon Harald Søby
- * @author SPQRobin
  */
 
 $fallback = 'de';
@@ -132,7 +130,6 @@ $messages = array(
 'unprotect'         => 'nümm schütze',
 'unprotectthispage' => 'Schutz ufhebe',
 'newpage'           => 'Nöji Syte',
-'talkpagelinktext'  => 'Diskussion',
 'specialpage'       => 'Spezialsyte',
 'personaltools'     => 'Persönlichi Wärkzüg',
 'postcomment'       => 'Kommentar abgeh',
@@ -397,7 +394,6 @@ Si verspräche uns usserdäm, dass Si des alles selber gschriebe oder vo nere Qu
 'protectedpagewarning'     => '<strong>WARNIG: Die Syten isch gsperrt worde, so das se nume Benutzer mit Sysop-Rechten chöi verändere.</strong>',
 'semiprotectedpagewarning' => "'''''Halbsperrung''': Diese Seite kann von angemeldeten Benutzern bearbeitet werden. Für nicht angemeldete oder gerade eben erst angemeldete Benutzer ist der Schreibzugang gesperrt.''",
 'templatesused'            => 'Selli Vorlage wärde in sellem Artikel bruucht:',
-'template-semiprotected'   => '(schrybgschützt für unaagmoldeni un neui Benutzer)',
 'edittools'                => '<!-- Selle Text wird untr em "ändere"-Formular un bim "Uffelade"-Formular aagzeigt. -->',
 
 # History pages
@@ -751,8 +747,7 @@ I söttigne Fäll müessti d Diskussionssyten allefalls vo Hand kopiert wärde."
 'allmessagesname'           => 'Name',
 'allmessagesdefault'        => 'Standard-Tekscht',
 'allmessagescurrent'        => 'jetzige Tekscht',
-'allmessagestext'           => 'Sell isch e Lischte vo alle mögliche Systemnochrichte ussem MediaWiki Namensruum.
-Please visit [http://www.mediawiki.org/wiki/Localisation MediaWiki Localisation] and [http://translatewiki.net Betawiki] if you wish to contribute to the generic MediaWiki localisation.',
+'allmessagestext'           => 'Sell isch e Lischte vo alle mögliche Systemnochrichte ussem MediaWiki Namensruum.',
 'allmessagesnotsupportedDB' => "'''{{ns:special}}:Allmessages''' cha nit bruucht wärde will '''\$wgUseDatabaseMessages''' abgschalte isch.",
 'allmessagesfilter'         => 'Nochrichte nochem Name filtere:',
 'allmessagesmodified'       => 'numme gänderti aazeige',

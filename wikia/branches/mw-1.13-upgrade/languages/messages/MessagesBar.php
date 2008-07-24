@@ -102,8 +102,7 @@ $messages = array(
 # Namespace 8 related
 'allmessagesname'     => 'Nam',
 'allmessagescurrent'  => 'Aktuella Text',
-'allmessagestext'     => 'Des is a Listn vo de MediaWiki-Systemtexte.
-Please visit [http://www.mediawiki.org/wiki/Localisation MediaWiki Localisation] and [http://translatewiki.net Betawiki] if you wish to contribute to the generic MediaWiki localisation.',
+'allmessagestext'     => 'Des is a Listn vo de MediaWiki-Systemtexte.',
 'allmessagesmodified' => 'Nur geänderte zoagn',
 
 # Special:Newimages
