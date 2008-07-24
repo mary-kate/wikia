@@ -3,7 +3,6 @@
  *
  * @addtogroup Language
  *
- * @author Kaustubh
  */
 
 $digitTransformTable = array(
@@ -79,8 +78,5 @@ $messages = array(
 'october'   => 'अश्विनकार्तिके',
 'november'  => 'कार्तिकमार्गशीर्षे',
 'december'  => 'मार्गशीर्षपौषे',
-
-# Namespace 8 related
-'allmessages' => 'व्यवस्था सन्देशानि',
 
 );

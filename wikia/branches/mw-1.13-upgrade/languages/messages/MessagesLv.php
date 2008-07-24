@@ -10,8 +10,6 @@
  * @author Nike
  * @author Siebrand
  * @author SPQRobin
- * @author Jon Harald Søby
- * @author M.M.S.
  */
 
 /*
@@ -65,7 +63,7 @@ $messages = array(
 'tog-previewontop'            => 'Parādīt priekšskatījumu virs rediģēšanas loga, nevis zem.',
 'tog-previewonfirst'          => 'Parādīt priekšskatījumu jau sākotnējā labošanā.',
 'tog-nocache'                 => 'Neļaut pārlūkam saglabāt lapas kešatmiņā',
-'tog-enotifwatchlistpages'    => 'Paziņot pa e-pastu par uzraugāmo rakstu sarakstā esošo rakstu izmaiņām',
+'tog-enotifwatchlistpages'    => 'Paziņot pa e-pastu par rakstu izmaiņām',
 'tog-enotifusertalkpages'     => 'Paziņot pa e-pastu par izmaiņām manā diskusiju lapā',
 'tog-enotifminoredits'        => 'Paziņot pa e-pastu arī par maznozīmīgiem rakstu labojumiem',
 'tog-enotifrevealaddr'        => 'Atklāt manu e-pasta adresi paziņojumu vēstulēs',
@@ -165,14 +163,13 @@ $messages = array(
 'editthispage'      => 'Izmainīt šo lapu',
 'delete'            => 'Dzēst',
 'deletethispage'    => 'Dzēst šo lapu',
-'undelete_short'    => 'Atjaunot $1 {{PLURAL:$1|versiju|versijas}}',
+'undelete_short'    => 'Atjaunot $1 versijas',
 'protect'           => 'Aizsargāt',
 'protectthispage'   => 'Aizsargāt šo lapu',
 'unprotect'         => 'Neaizsargāt',
 'unprotectthispage' => 'Neaizsargāt šo lapu',
 'newpage'           => 'Jauna lapa',
 'talkpage'          => 'Diskusija par šo lapu',
-'talkpagelinktext'  => 'Diskusija',
 'specialpage'       => 'Īpašā Lapa',
 'personaltools'     => 'Lietotāja rīki',
 'postcomment'       => 'Pievienot komentāru',
@@ -188,7 +185,7 @@ $messages = array(
 'redirectedfrom'    => '(Pāradresēts no $1)',
 'redirectpagesub'   => 'Pāradresācijas lapa',
 'lastmodifiedat'    => 'Šajā lapā pēdējās izmaiņas izdarītas $2, $1.', # $1 date, $2 time
-'viewcount'         => 'Šī lapa ir tikusi apskatīta $1 {{PLURAL:$1|reizi|reizes}}.',
+'viewcount'         => 'Šī lapa ir tikusi apskatīta $1 reizes.',
 'protectedpage'     => 'Aizsargāta lapa',
 'jumpto'            => 'Pārlēkt uz:',
 'jumptonavigation'  => 'navigācija',
@@ -216,7 +213,7 @@ $messages = array(
 'badaccess' => 'Atļaujas kļūda',
 
 'versionrequired'     => "Nepieciešamā ''MediaWiki'' versija: $1.",
-'versionrequiredtext' => "Lai lietotu šo lapu, nepieciešama ''MediaWiki'' versija $1. Sk. [[Special:Version|versija]].",
+'versionrequiredtext' => "Lai lietotu šo lapu, nepieciešama ''MediaWiki'' versija $1. Sk. [[Special:versija]].",
 
 'ok'                  => 'Labi',
 'retrievedfrom'       => 'Saturs iegūts no "$1"',
@@ -231,7 +228,7 @@ $messages = array(
 'hidetoc'             => 'paslēpt',
 'thisisdeleted'       => 'Apskatīt vai atjaunot $1?',
 'viewdeleted'         => 'Skatīt $1?',
-'restorelink'         => '$1 {{PLURAL:$1|dzēsto versiju|dzēstās versijas}}',
+'restorelink'         => '$1 dzēstās versijas',
 'feedlinks'           => 'Barotne:',
 'red-link-title'      => '$1 (vēl nav uzrakstīts)',
 
@@ -275,14 +272,13 @@ $1',
 'viewsource'         => 'Aplūkot kodu',
 'viewsourcefor'      => 'Lapa: $1',
 'protectedinterface' => 'Šī lapa satur programmatūras interfeisā lietotu tekstu un ir bloķēta pret izmaiņām, lai pasargātu no bojājumiem.',
-'editinginterface'   => "'''Brīdinājums:''' Tu izmaini lapu, kuras saturu izmanto wiki programmatūras lietotāja saskarnē (''interfeisā''). Šīs lapas izmaiņas ietekmēs lietotāja saskarni citiem lietotājiem. Pēc modificēšanas, šīs izmaiņas būtu lietderīgi pievienot arī [http://translatewiki.net/wiki/Main_Page?setlang=en Betawiki], kas ir MediaWiki lokalizēšanas projekts.",
+'editinginterface'   => "'''Brīdinājums:''' Tu izmaini lapu, kuras saturu izmanto wiki programmatūras lietotāja saskarnē (''interfeisā''). Šīs lapas izmaiņas ietekmēs lietotāja saskarni citiem lietotājiem.",
 
 # Login and logout pages
 'logouttitle'                => 'Lietotāja iziešana',
-'logouttext'                 => "'''Tu esi izgājis no {{grammar:ģenitīvs|{{SITENAME}}}}.'''
-
-Vari turpināt to izmantot anonīmi, vari atgriezties kā cits lietotājs vai varbūt tas pats.
-Ņem vērā, ka arī pēc iziešanas no {{grammar:ģenitīvs|{{SITENAME}}}} dažas lapas var tikt parādītas tā, it kā tu vēl būtu iekšā, līdz tiks iztīrīta pārlūka kešatmiņa.",
+'logouttext'                 => 'Tu esi izgājis no {{grammar:ģenitīvs|{{SITENAME}}}}.
+Vari turpināt to izmantot anonīmi, vari atgriezties kā cits lietotājs vai varbūt tas pats. 
+Ņem vērā, ka arī pēc iziešanas no {{grammar:ģenitīvs|{{SITENAME}}}} dažas lapas var tikt parādītas tā, it kā tu vēl būtu iekšā, līdz tiks iztīrīta pārlūka kešatmiņa.',
 'welcomecreation'            => "== Laipni lūdzam, $1! ==
 
 Tavs lietotāja konts ir izveidots. Neaizmirsti, ka ir iespējams mainīt ''{{grammar:ģenitīvs|{{SITENAME}}}}'' izmantošanas izvēles.",
@@ -385,19 +381,11 @@ Ludzu, nomaini paroli, kad esi veiksmigi iekluvis ieksa.',
 'missingsummary'           => "'''Atgādinājums''': Tu neesi norādījis izmaiņu kopsavilkumu. Vēlreiz klikšķinot uz \"Saglabāt lapu\", Tavas izmaiņas tiks saglabātas bez kopsavilkuma.",
 'missingcommenttext'       => 'Lūdzu, ievadi tekstu zemāk redzamajā logā!',
 'blockedtitle'             => 'Lietotājs ir bloķēts.',
-'blockedtext'              => "<big>'''Tavs lietotāja vārds vai IP adrese ir nobloķēta.'''</big>
+'blockedtext'              => '$1 ir nobloķējis tavu lietotāja vārdu vai IP adresi. Iemesls tam ir:<br />\'\'$2\'\'<br />. Tu vari sazināties ar $1 vai kādu citu [[{{MediaWiki:Grouppage-sysop}}|administratoru]] lai apspriestu šo bloku.
 
-\$1 ir nobloķējis tavu lietotāja vārdu vai IP adresi. Iemesls tam ir:<br />''\$2''<br />.
+Pievērs uzmanību, tam, ka ja tu neesi norādījis derīgu e-pasta adresi [[Special:Preferences|user preferences]], tev nedarbosies "sūtīt e-pastu" iespēja.
 
-*Bloka sākums: \$8
-*Bloka beigas: \$6
-*Ar šo mēģināja nobloķēt: \$7
-
-Tu vari sazināties ar \$1 vai kādu citu [[{{MediaWiki:Grouppage-sysop}}|administratoru]] lai apspriestu šo bloku.
-
-Pievērs uzmanību, tam, ka ja tu neesi norādījis derīgu e-pasta adresi ''[[Special:Preferences|manās izvēlēs]]'', tev nedarbosies \"sūtīt e-pastu\" iespēja.
-
-Tava IP adrese ir \$3 un bloka identifikators ir \$5. Lūdzu iekļauj vienu no tiem, vai abus, visos turpmākajos pieprasījumos.",
+Tava IP adrese ir $3. Lūdzu iekļauj to visos turpmākajos pieprasījumos.',
 'whitelistedittitle'       => 'Lai varētu rediģēt, šeit jāielogojas.',
 'whitelistedittext'        => 'Tev $1 lai varētu rediģēt lapas.',
 'whitelistreadtitle'       => 'Jāielogojas, lai varētu lasīt',
@@ -408,15 +396,16 @@ Tava IP adrese ir \$3 un bloka identifikators ir \$5. Lūdzu iekļauj vienu no t
 'accmailtitle'             => 'Parole izsūtīta.',
 'accmailtext'              => '$1 parole tika nosūtīta uz $2.',
 'newarticle'               => '(Jauns raksts)',
-'newarticletext'           => "'''{{grammar:lokatīvs|{{SITENAME}}}} vēl nav tāda {{NAMESPACE}} raksta ar virsrakstu \"{{PAGENAME}}\".'''
-* Lai izveidotu šo lapu, raksti tekstu zemāk redzamajā logā. Kad esi pabeidzis, spied pogu \"Saglabāt lapu\". Ja viss būs kārtībā, izmaiņām vajadzētu būt tūlīt redzamām (Kā to darīt, sīkāk skatīt [[{{MediaWiki:Helppage}}|palīdzības lapās]]).
+'newarticletext'           => "<div style=\"border: 1px solid #ccc; padding: 7px;\">'''{{grammar:lokatīvs|{{SITENAME}}}} vēl nav tāda {{NAMESPACE}} raksta ar virsrakstu \"{{PAGENAME}}\".'''
+* Lai izveidotu šo lapu, raksti tekstu zemāk redzamajā logā. Kad esi pabeidzis, spied pogu \"Saglabāt lapu\". Ja viss būs kārtībā, izmaiņām vajadzētu būt tūlīt redzamām.
 * '''Ja esi izveidojis šo lapu dažu pēdējo minūšu laikā un nekas nav parādījies, iespējams, ir aizkavējusies informācijas saglabāšana datubāzē.''' Lūdzam mazliet pagaidīt un tad vēlreiz pārbaudīt - visdrīzāk, pēc kāda brīža lapa būs redzama un nebūs jāraksta viss vēlreiz.
 * Ja šis ir raksts (nevis, piemēram, diskusiju lapa), tad
-** lūdzam neveidot rakstu, kurā būtu reklamēts vai slavināts tu pats, kāda weblapa, produkts vai uzņēmums (skat. \"Kas {{SITENAME}} nav\").
-** ja tie ir tavi pirmie soļi {{grammar:lokatīvs|{{SITENAME}}}}, lūdzam vispirms izlasīt pamācību un eksperimentiem izmantot tikai smilšu kasti. Paldies!
-** [[Special:Search/{{PAGENAME}}|spied šeit]], lai meklētu {{grammar:lokatīvs|{{SITENAME}}}} informāciju par jēdzienu \"{{PAGENAME}}\".",
+** lūdzam neveidot rakstu, kurā būtu reklamēts vai slavināts tu pats, kāda weblapa, produkts vai uzņēmums (skat. \"[[Project:Kas {{SITENAME}} nav|Kas {{SITENAME}} nav]]\").
+** ja tie ir tavi pirmie soļi {{grammar:lokatīvs|{{SITENAME}}}}, lūdzam vispirms izlasīt [[Project:Pamācība|pamācību]] un eksperimentiem izmantot tikai [[Project:Smilšu kaste|smilšu kasti]]. Paldies!
+** [[Special:Search/{{PAGENAME}}|spied šeit]], lai meklētu {{grammar:lokatīvs|{{SITENAME}}}} informāciju par jēdzienu \"{{PAGENAME}}\".
+</div>",
 'anontalkpagetext'         => "----''Šī ir diskusiju lapa anonīmam lietotājam, kurš vēl nav kļuvis par reģistrētu lietotāju vai arī neizmanto savu lietotājvārdu. Tādēļ mums ir jāizmanto skaitliskā [[IP adrese]], lai viņu identificētu. Šāda IP adrese var būt vairākiem lietotājiem. Ja tu esi anonīms lietotājs un uzskati, ka tev ir adresēti neatbilstoši komentāri, lūdzu, [[Special:Userlogin|kļūsti par lietotāju vai arī izmanto jau izveidotu lietotājvārdu]], lai izvairītos no turpmākām neskaidrībām un tu netiktu sajaukts ar citiem anonīmiem lietotājiem.''",
-'noarticletext'            => 'Šajā lapā šobrīd nav nekāda teksta, tu vari [[Special:Search/{{PAGENAME}}|meklēt citās lapās pēc šīs lapas nosaukuma]], vai arī [{{fullurl:{{FULLPAGENAME}}|action=edit}} sākt rediģēt šo lapu].',
+'noarticletext'            => 'Šajā lapā šobrīd nav nekāda teksta',
 'clearyourcache'           => "'''Piezīme:''' Pēc saglabāšanas iztīri pārlūka kešatmiņu, lai pārmaiņas būtu redzamas: Mozilla/Safari/Konqueror: turi nospiestu '''Shift''' un klikšķini '''Reload''' (vai spied '''Ctrl-Shift-r'''), IE: spied '''Ctrl-F5''', Opera: spied '''F5'''.",
 'usercssjsyoucanpreview'   => '<strong>Ieteikums:</strong> Lieto pirmsskata pogu, lai pārbaudītu savu jauno CSS/JS pirms saglabāšanas.',
 'usercsspreview'           => "'''Atceries, ka šis ir tikai tava lietotāja CSS pirmskats, lapa vēl nav saglabāta!'''",
@@ -424,23 +413,20 @@ Tava IP adrese ir \$3 un bloka identifikators ir \$5. Lūdzu iekļauj vienu no t
 'note'                     => '<strong>Piezīme: </strong>',
 'previewnote'              => "'''Atceries, ka šis ir tikai pirmskats un vēl nav saglabāts!'''",
 'editing'                  => 'Izmainīt $1',
-'editinguser'              => "Izmainīt lietotāja '''[[User:$1|$1]]''' ([[User talk:$1|{{int:talkpagelinktext}}]] | [[Special:Contributions/$1|{{int:contribslink}}]]) statusu",
+'editinguser'              => 'Izmainīt $1',
 'editingsection'           => 'Izmainīt $1 (sadaļa)',
 'editingcomment'           => 'Izmainīt $1 (komentārs)',
 'editconflict'             => 'Izmaiņu konflikts: $1',
-'explainconflict'          => "Kāds cits ir izmainījis šo lapu pēc tam, kad tu sāki to mainīt.
-Augšējā teksta logā ir lapas teksts tā pašreizējā versijā.
-Tevis veiktās izmaiņas ir redzamas apakšējā teksta logā.
-Lai saglabātu savas izmaiņas, tev ir jāapvieno savs teksts ar saglabāto pašreizējo variantu.
-Kad spiedīsi pogu \"Saglabāt lapu\", tiks saglabāts '''tikai''' teksts, kas ir augšējā teksta logā.",
+'explainconflict'          => 'Kāds cits ir izmainījis šo lapu pēc tam, kad tu sāki to mainīt. Augšējā teksta logā ir lapas teksts tā pašreizējā versijā. Tevis veiktās izmaiņas ir redzamas apakšējā teksta logā. Lai saglabātu savas izmaiņas, tev ir jāapvieno savs teksts ar saglabāto pašreizējo variantu. Kad spiedīsi pogu "Saglabāt lapu", tiks saglabāts <b>tikai</b> teksts, kas ir augšējā teksta logā.',
 'yourtext'                 => 'Tavs teksts',
 'storedversion'            => 'Saglabātā versija',
 'editingold'               => '<strong>BRĪDINĀJUMS: Saglabājot šo lapu, tu izmainīsi šīs lapas novecojušu versiju, un ar to tiks dzēstas visas izmaiņas, kas izdarītas pēc šīs versijas.</strong>',
 'yourdiff'                 => 'Atšķirības',
-'copyrightwarning'         => 'Lūdzu, ņem vērā, ka viss ieguldījums, kas veikts {{grammar:lokatīvs|{{SITENAME}}}}, ir uzskatāms par publiskotu saskaņā ar $2 (vairāk info skat. $1).
+'copyrightwarning'         => 'Lūdzu, ņem vērā, ka viss ieguldījums, kas veikts {{grammar:lokatīvs|{{SITENAME}}}}, ir uzskatāms par publiskotu saskaņā ar $2 (vairāk info skat. $1). 
 Ja nevēlies, lai Tevis rakstīto kāds rediģē un izplata tālāk, tad, lūdzu, nepievieno to šeit!<br />
 
-Izvēloties "Saglabāt lapu", Tu apliecini, ka šo rakstu esi rakstījis vai papildinājis pats vai izmantojis informāciju no darba, ko neaizsargā autortiesības, vai tamlīdzīga brīvi pieejama resursa.
+Izvēloties "Saglabāt lapu", Tu apliecini, ka šo rakstu esi rakstījis vai papildinājis pats vai izmantojis informāciju no darba, ko neaizsargā autortiesības, vai tamlīdzīga brīvi pieejama resursa.<br />
+
 <strong>BEZ ATĻAUJAS NEPIEVIENO DARBU, KO AIZSARGĀ AUTORTIESĪBAS!</strong>',
 'copyrightwarning2'        => "Lūdz ņem vērā, ka visu ieguldījumu {{grammar:lokatīvs|{{SITENAME}}}} var rediģēt, mainīt vai izdzēst citi lietotāji. Ja negribi lai ar tavu rakstīto tā izrīkojas, nepievieno to šeit.
 
@@ -466,9 +452,9 @@ Tu apliecini, ka šo rakstu esi rakstījis vai papildinājis pats vai izmantojis
 'next'                => 'nākamais',
 'last'                => 'ar iepriekšējo',
 'histlegend'          => 'Atšķirību izvēle: atzīmē vajadzīgo versiju apaļās pogas un spied "Salīdzināt izvēlētās versijas".<br />
-Apzīmējumi:
+Apzīmējumi: 
 "ar pašreizējo" = salīdzināt ar pašreizējo versiju,
-"ar iepriekšējo" = salīdzināt ar iepriekšējo versiju,
+"ar iepriekšējo" = salīdzināt ar iepriekšējo versiju, 
 m = maznozīmīgs labojums.',
 'deletedrev'          => '[izdzēsta]',
 'histfirst'           => 'Senākās',
@@ -501,8 +487,8 @@ m = maznozīmīgs labojums.',
 'prevn'                 => 'iepriekšējās $1',
 'nextn'                 => 'nākamās $1',
 'viewprevnext'          => 'Skatīt ($1) ($2) ($3 vienā lapā).',
-'showingresults'        => 'Šobrīd ir redzamas <b>$1</b> {{PLURAL:$1|lapa|lapas}}, sākot ar #<b>$2</b>.',
-'showingresultsnum'     => 'Šobrīd ir redzamas <b>$3</b> {{PLURAL:$1|lapa|lapas}}, sākot ar #<b>$2</b>.',
+'showingresults'        => 'Šobrīd ir redzamas <b>$1</b> lapas, sākot ar #<b>$2</b>.',
+'showingresultsnum'     => 'Šobrīd ir redzamas <b>$3</b> lapas, sākot ar #<b>$2</b>.',
 'nonefound'             => '<strong>Piezīme:</strong> bieži vien meklēšana ir neveiksmīga, meklējot plaši izplatītus vārdus, piemēram, "un" vai "ir", jo tie netiek iekļauti meklēšanas datubāzē, vai arī meklējot vairāk par vienu vārdu (jo rezultātos parādīsies tikai lapas, kurās ir visi meklētie vārdi).',
 'powersearch'           => 'Meklēt',
 'powersearchtext'       => 'Meklēt šādās palīglapās :<br />
@@ -565,7 +551,7 @@ $2 Parādīt pāradresācijas lapas   Meklēt $3 $9',
 'recentchanges'                     => 'Pēdējās izmaiņas',
 'recentchangestext'                 => '{{Pēdējās izmaiņas}}',
 'rcnote'                            => 'Šobrīd ir redzamas pēdējās <strong>$1</strong> izmaiņas, kas izdarītas {{PLURAL:$2|pēdējā|pēdējās}} <strong>$2</strong> {{PLURAL:$2|dienā|dienās}} (līdz $3).',
-'rcnotefrom'                        => "Šobrīd redzamas izmaiņas kopš '''$2''' (parādītas ne vairāk par '''$1''').",
+'rcnotefrom'                        => 'Šobrīd redzamas izmaiņas kopš <b>$2</b> (parādītas ne vairāk par <b>$1</b>).',
 'rclistfrom'                        => 'Parādīt jaunas izmaiņas kopš $1',
 'rcshowhideminor'                   => '$1 maznozīmīgus',
 'rcshowhidebots'                    => '$1 botus',
@@ -622,10 +608,10 @@ Lūdzu, ņem vērā, ka tāpat kā citas wiki lapas arī tevis augšuplādētos 
 'filename'             => 'Faila nosaukums',
 'filedesc'             => 'Kopsavilkums',
 'fileuploadsummary'    => 'Informācija par failu:',
-'filestatus'           => 'Autortiesību statuss:',
+'filestatus'           => 'Autortiesību statuss',
 'filesource'           => 'Izejas kods',
 'uploadedfiles'        => 'Augšupielādēja failus',
-'ignorewarning'        => 'Ignorēt brīdinājumu un saglabāt failu',
+'ignorewarning'        => 'Ignorēt brīdinājumu un saglabāt failu.',
 'ignorewarnings'       => 'Ignorēt visus brīdinājumus',
 'illegalfilename'      => 'Faila nosaukumā "$1" ir simboli, kas nav atļauti virsrakstos. Lūdzu, pārdēvē failu un mēģini to vēlreiz augšuplādēt.',
 'badfilename'          => 'Attēla nosaukums ir nomainīts, tagad tas ir "$1".',
@@ -649,7 +635,7 @@ Lūdzu, ņem vērā, ka tāpat kā citas wiki lapas arī tevis augšuplādētos 
 
 # Image list
 'imagelist'                 => 'Attēlu uzskaitījums',
-'imagelisttext'             => 'Šobrīd redzams $1 {{PLURAL:$1|attēla|attēlu}} uzskaitījums, kas sakārtots $2.',
+'imagelisttext'             => 'Šobrīd redzams $1 attēlu uzskaitījums, kas sakārtots $2.',
 'ilsubmit'                  => 'Meklēt',
 'showlast'                  => 'Parādīt pēdējos $1 attēlus, kas sakārtoti $2.',
 'byname'                    => '<b>pēc nosaukuma</b>',
@@ -688,7 +674,7 @@ Kopš {{grammar:ģenitīvs|{{SITENAME}}}} izveidošanas lapas ir tikušas apskat
 Vidēji tas ir '''\$5''' labojumi uz lapu un apskatīšanas/labojumu attiecība ir '''\$6'''.
 
 The [http://meta.wikimedia.org/wiki/Help:Job_queue job queue] length is '''\$7'''.",
-'userstatstext' => "Reģistrēto [[Special:Listusers|lietotāju]] skaits ir '''$1'''. No tiem '''$2''' (jeb '''$4%''') ir {{PLURAL:$2|administrators|administratori}} (skat. $5).",
+'userstatstext' => "Reģistrēto lietotāju skaits ir '''$1'''. No tiem '''$2''' (jeb '''$4%''') ir administratori (skat. $3).",
 
 'disambiguations'     => 'Nozīmju atdalīšanas lapas',
 'disambiguationspage' => 'Template:Disambig',
@@ -700,8 +686,8 @@ The [http://meta.wikimedia.org/wiki/Help:Job_queue job queue] length is '''\$7''
 'brokenredirectstext' => 'Šīs ir pāradresācijas lapas uz neesošām lapām.',
 
 # Miscellaneous special pages
-'nbytes'                  => '$1 {{PLURAL:$1|baits|baitu}}',
-'ncategories'             => '$1 {{PLURAL:$1|kategorija|kategorijas}}',
+'nbytes'                  => '$1 baitu',
+'ncategories'             => '$1 categories',
 'nlinks'                  => '$1 {{PLURAL:$1|saite|saites}}',
 'nrevisions'              => '$1 {{PLURAL:$1|versija|versijas}}',
 'nviews'                  => '$1 views',
@@ -786,7 +772,7 @@ Ja vēlāk pārdomāsi un nevēlēsies vairs uzraudzīt šo lapu, klikšķini uz
 'unwatch'              => 'Neuzraudzīt',
 'unwatchthispage'      => 'Pārtraukt uzraudzīšanu',
 'watchnochange'        => 'Neviena no tevis uzraudzītajām lapām nav mainīta parādītajā laika posmā.',
-'watchlist-details'    => '(Tu uzraugi $1 {{PLURAL:$1|lapu|lapas}}, neieskaitot diskusiju lapas.)',
+'watchlist-details'    => '(Tu uzraugi $1 lapas, neieskaitot diskusiju lapas.',
 'watchlistcontains'    => 'Tavā uzraugāmo lapu sarakstā ir $1 {{PLURAL:$1|lapa|lapas}}.',
 'wlshowlast'           => 'Parādīt izmaiņas pēdējo $1 stundu laikā vai $2 dienu laikā, vai arī $3.',
 'watchlist-show-bots'  => 'Parādīt botu izmaiņas',
@@ -862,13 +848,13 @@ Ja pēc dzēšanas ir izveidota jauna lapa ar tādu pašu nosaukumu, atjaunotās
 
 'sp-contributions-username' => 'IP adrese vai lietotāja vārds:',
 
-'sp-newimages-showfrom' => 'Rādīt jaunos attēlus sākot no $1, $2',
+'sp-newimages-showfrom' => 'Rādīt jaunos attēlus sākot no $1',
 
 # What links here
 'whatlinkshere'       => 'Norādes uz šo rakstu',
 'linklistsub'         => '(Saišu uzskaitījums)',
-'linkshere'           => "Šajās lapās ir norādes uz lapu '''[[:$1]]''':",
-'nolinkshere'         => "Nevienā lapā nav norāžu uz lapu '''[[:$1]]'''.",
+'linkshere'           => 'Šajās lapās ir norādes uz šo lapu:',
+'nolinkshere'         => 'Nevienā lapā nav norāžu uz šo lapu.',
 'isredirect'          => 'pāradresācijas lapa',
 'istemplate'          => 'izsaukts',
 'whatlinkshere-prev'  => '{{PLURAL:$1|iepriekšējo|iepriekšējos $1}}',
@@ -914,12 +900,10 @@ Iepriekšējā lapa kļūs par lapu, kas pāradresēs uz jauno lapu.
 Saites uz iepriekšējo lapu netiks mainītas, bet noteikti pārbaudi un izlabo, izskaužot dubultu pāradresāciju vai pāradresāciju uz neesošu lapu.
 Tev ir jāpārliecinās, vai saites vēl aizvien ved tur, kur tās ir paredzētas.
 
-Ņem vērā, ka lapa '''netiks''' pārvietota, ja jau eksistē kāda cita lapa ar vēlamo nosaukumu (izņemot gadījumus, kad tā ir tukša vai kad tā ir pāradresācijas lapa, kā arī tad, ja tai nav izmaiņu hronoloģijas).
-Tas nozīmē, ka tu vari pārvietot lapu atpakaļ, no kurienes tu jau reiz to esi pārvietojis, ja būsi kļūdījies, bet tu nevari pārrakstīt jau esošu lapu.
+Ņem vērā, ka lapa '''netiks''' pārvietota, ja jau eksistē kāda cita lapa ar vēlamo nosaukumu (izņemot gadījumus, kad tā ir tukša vai kad tā ir pāradresācijas lapa, kā arī tad, ja tai nav izmaiņu hronoloģijas). Tas nozīmē, ka tu vari pārvietot lapu atpakaļ, no kurienes tu jau reiz to esi pārvietojis, ja būsi kļūdījies, bet tu nevari pārrakstīt jau esošu lapu.
 
-'''BRĪDINĀJUMS!'''
-Populārām lapām tā var būt krasa un negaidīta pārmaiņa;
-pirms turpināšanas vēlreiz pārdomā, vai tu izproti visas iespējamās sekas.",
+<b>BRĪDINĀJUMS!</b>
+Populārām lapām tā var būt krasa un negaidīta pārmaiņa; pirms turpināšanas vēlreiz pārdomā, vai tu izproti visas iespējamās sekas.",
 'movepagetalktext' => "Saistītā diskusiju lapa, ja tāda eksistē, tiks automātiski pārvietota, '''izņemot gadījumus, kad''':
 *tu pārvieto lapu uz citu palīglapu,
 *ar jauno nosaukumu jau eksistē diskusiju lapa, vai arī
@@ -954,8 +938,7 @@ Ja tomēr vēlēsies, tad tev šī diskusiju lapa būs jāpārvieto vai jāapvie
 'allmessagesname'           => 'Nosaukums',
 'allmessagesdefault'        => 'Sākotnējais teksts',
 'allmessagescurrent'        => 'Pašreizējais teksts',
-'allmessagestext'           => "Šajā lapā ir visu \"'''Mediawiki:'''\" lapās atrodamo sistēmas paziņojumu uzskaitījums.
-Šos paziņojumus var izmainīt tikai admini. Izmainot tos šeit, tie tiks izmainīti tikai šajā mediawiki instalācijā. Lai tos izmainītu visām pārējām, apskatieties [http://www.mediawiki.org/wiki/Localisation MediaWiki Localisation] un [http://translatewiki.net Betawiki].",
+'allmessagestext'           => "Šajā lapā ir visu \"'''Mediawiki:'''\" lapās atrodamo sistēmas paziņojumu uzskaitījums.",
 'allmessagesnotsupportedDB' => '{{ns:special}}:Allmessages not supported because wgUseDatabaseMessages is off.',
 
 # Thumbnails
@@ -1085,9 +1068,7 @@ Ja tomēr vēlēsies, tad tev šī diskusiju lapa būs jāpārvieto vai jāapvie
 'confirmemail_text'       => 'Šajā wiki ir nepieciešams apstiprināt savu e-pasta adresi, lai izmantotu e-pasta funkcijas. Spied uz zemāk esošās pogas, lai uz tavu e-pasta adresi nosūtītu apstiprināšanas e-pastu. Tajā būs saite ar kodu; spied uz tās saites vai atver to savā interneta pārlūkā, lai apstiprinātu tavas e-pasta adreses derīgumu.',
 'confirmemail_send'       => 'Nosūtīt apstiprināšanas kodu',
 'confirmemail_sent'       => 'Apstiprināšanas e-pasts nosūtīts.',
-'confirmemail_sendfailed' => 'Nevarējām nosūtīt apstiprināšanas e-pastu. Pārbaudi, vai adresē nav kāds nepareizs simbols.
-
-Nosūtīšanas programma atmeta atpakaļ: $1',
+'confirmemail_sendfailed' => 'Nevarējām nosūtīt apstiprināšanas e-pastu. Pārbaudi, vai adresē nav kāds nepareizs simbols.',
 'confirmemail_invalid'    => 'Nederīgs apstiprināšanas kods. Iespējams, beidzies tā termiņš.',
 'confirmemail_success'    => 'Tava e-pasta adrese ir apstiprināta. Tagad vari doties iekšā ar savu lietotājvārdu un pilnvērtīgi izmantot wiki iespējas.',
 'confirmemail_loggedin'   => 'Tava e-pasta adrese tagad ir apstiprināta.',

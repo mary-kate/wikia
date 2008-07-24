@@ -5,12 +5,7 @@
  *
  * @author Wantok
  * @author Niklas Laxström
- * @author לערי ריינהארט
- * @author Siebrand
- * @author Wytukaze
  */
-
-
 
 $messages = array(
 # User preference toggles

@@ -9,8 +9,6 @@
  * @author Võrok
  * @author Siebrand
  * @author לערי ריינהארט
- * @author M.M.S.
- * @author Jon Harald Søby
  */
 
 $namespaceNames = array(
@@ -257,8 +255,6 @@ ning [http://meta.wikimedia.org/wiki/MediaWiki_User%27s_Guide kasutusjuhendit].'
 'lastmodifiedat'    => 'Viimane muutmine: $2, $1', # $1 date, $2 time
 'viewcount'         => 'Seda lehekülge on külastatud {{plural:$1|üks kord|$1 korda}}.',
 'protectedpage'     => 'Kaitstud lehekülg',
-'jumptonavigation'  => 'navigeerimiskast',
-'jumptosearch'      => 'otsi',
 
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
 'aboutsite'         => '{{SITENAME}} tiitelandmed',
@@ -301,7 +297,6 @@ ning [http://meta.wikimedia.org/wiki/MediaWiki_User%27s_Guide kasutusjuhendit].'
 'viewdeleted'         => 'Vaata lehekülge $1?',
 'restorelink'         => '{{PLURAL:$1|üks kustutatud versioon|$1 kustutatud versiooni}}',
 'feedlinks'           => 'Sööde:',
-'red-link-title'      => '$1 (pole veel kirjutatud)',
 
 # Short words for each namespace, by default used in the namespace tab in monobook
 'nstab-main'      => 'Artikkel',
@@ -343,12 +338,11 @@ MySQL andis vea "$3: $4".',
 'readonlytext'         => 'Andmebaas on praegu kirjutuskaitse all, tõenäoliselt andmebaasi rutiinseks hoolduseks, mille lõppedes normaalne olukord taastub.
 Administraator, kes selle kaitse alla võttis, andis järgmise selgituse:
 <p>$1',
-'missingarticle'       => 'Andmebaas ei leidnud lehekülje "$1" teksti, kuigi see oleks pidanud olema leitav.
+'missingarticle'       => 'Andmebaas ei leidnud lehekülje "$1" teksti, kuigi see oleks pidanud olema leitav. 
 
-Tavaliselt on selle põhjuseks vananenud erinevuste- või ajaloolink leheküljele, mis on kustutatud.
+<p>Tavaliselt on selle põhjuseks vananenud erinevuste- või ajaloolink leheküljele, mis on kustutatud. 
 
-Kui ei ole tegemist sellise juhtumiga, siis võib olla tegemist tarkvaraveaga.
-Palun teatage sellest administraatorile, märkides ära aadressi.',
+<p>Kui ei ole tegemist sellise juhtumiga, siis võib olla tegemist tarkvaraveaga. Palun teatage sellest administraatorile, märkides ära aadressi.',
 'internalerror'        => 'Sisemine viga',
 'filecopyerror'        => 'Ei saanud faili "$1" kopeerida nimega "$2".',
 'filerenameerror'      => 'Ei saanud faili "$1" failiks "$2" ümber nimetada.',
@@ -541,10 +535,6 @@ Te kinnitate ka, et kirjutasite selle ise või võtsite selle kopeerimiskitsendu
 Kaaluge, kas lehe uuesti loomine on kohane.
 Lehe eelnevad kustutamised:",
 
-# "Undo" feature
-'undo-success' => 'Selle redaktsiooni käigus tehtud muudatusi saab eemaldada. Palun kontrolli allolevat võrdlust veendumaks, et tahad need muudatused tõepoolest eemaldada. Seejärel saad lehekülje salvestada.',
-'undo-summary' => 'Tühistati muudatus $1, mille tegi [[Special:Contributions/$2|$2]] ([[Kasutaja arutelu:$2|Arutelu]])',
-
 # History pages
 'viewpagelogs'        => 'Vaata selle lehe logisid',
 'nohistory'           => 'Sellel leheküljel ei ole eelmisi redaktsioone.',
@@ -575,7 +565,6 @@ Legend: (viim) = erinevused võrreldes viimase redaktsiooniga,
 'difference'              => '(Erinevused redaktsioonide vahel)',
 'lineno'                  => 'Rida $1:',
 'compareselectedversions' => 'Võrdle valitud redaktsioone',
-'editundo'                => 'eemalda',
 
 # Search results
 'searchresults'         => 'Otsingu tulemused',
@@ -701,7 +690,6 @@ Valimata jäetud gruppe ei muudeta. Grupi valikut saab tühistada CTRL + parem k
 'minoreditletter'                   => 'P',
 'newpageletter'                     => 'U',
 'number_of_watching_users_pageview' => '[$1 {{PLURAL:$1|jälgiv kasutaja|jälgivat kasutajat}}]',
-'newsectionsummary'                 => '/* $1 */ uus alajaotus',
 
 # Recent changes linked
 'recentchangeslinked' => 'Seotud muudatused',
@@ -743,7 +731,6 @@ Pane tähele, et nagu ka ülejäänud siinsete lehekülgede puhul,
 võivad teised sinu poolt laetud faile saidi huvides
 muuta või kustutada ning juhul kui sa süsteemi kuritarvitad
 võidakse sinu ligipääs sulgeda.',
-'upload-permitted'     => 'Lubatud failitüübid: $1.',
 'uploadlog'            => 'üleslaadimise logi',
 'uploadlogpage'        => 'Üleslaadimise logi',
 'uploadlogpagetext'    => 'Allpool on loend viimastest failide üleslaadimistest. Kõik ajad näidatakse serveri aja järgi.',
@@ -751,11 +738,10 @@ võidakse sinu ligipääs sulgeda.',
 'filedesc'             => 'Lühikirjeldus',
 'fileuploadsummary'    => 'Info faili kohta:',
 'uploadedfiles'        => 'Üleslaaditud failid',
-'ignorewarning'        => 'Ignoreeri hoiatust ja salvesta fail hoiatusest hoolimata',
+'ignorewarning'        => 'Ignoreeri hoiatust ja salvesta fail hoiatusest hoolimata.',
 'ignorewarnings'       => 'Ignoreeri hoiatusi',
 'illegalfilename'      => 'Faili "$1" nimi sisaldab sümboleid, mis pole pealkirjades lubatud. Palun nimetage fail ümber ja proovige uuesti.',
 'badfilename'          => 'Pildi nimi on muudetud. Uus nimi on "$1".',
-'filetype-banned-type' => "'''\".\$1\"''' ei ole lubatud failitüüp.  Lubatud failitüübid on \$2.",
 'large-file'           => 'On soovitatav, et üleslaetavad failid ei oleks suuremad kui $1; selle faili suurus on $2.',
 'largefileserver'      => 'Antud fail on suurem serverikonfiguratsiooni poolt lubatavast failisuurusest.',
 'fileexists'           => 'Sellise nimega fail on juba olemas. Palun kontrollige $1, kui te ei ole kindel, kas tahate seda muuta.',
@@ -764,51 +750,33 @@ võidakse sinu ligipääs sulgeda.',
 'uploadwarning'        => 'Üleslaadimise hoiatus',
 'savefile'             => 'Salvesta fail',
 'uploadedimage'        => 'Fail "[[$1]]" on üles laaditud',
-'overwroteimage'       => 'üles laaditud uus variant "[[$1]]"',
 'uploaddisabled'       => 'Üleslaadimine hetkel keelatud',
 'uploaddisabledtext'   => 'Vabandage, faili laadimine pole hetkel võimalik.',
 'uploadcorrupt'        => 'Fail on vigane või vale laiendiga. Palun kontrolli faili ja proovi seda uuesti üles laadida.',
 'uploadvirus'          => 'Fail sisaldab viirust! Täpsemalt: $1',
-'sourcefilename'       => 'Lähtefail:',
-'destfilename'         => 'Failinimi vikis:',
-'watchthisupload'      => 'Jälgi seda lehekülge',
+'sourcefilename'       => 'Lähtefail',
+'destfilename'         => 'Failinimi vikis',
 
-'upload-misc-error' => 'Tundmatu viga üleslaadimisel',
-
-'license'   => 'Litsents:',
+'license'   => 'Litsents',
 'nolicense' => 'pole valitud',
 
 # Image list
-'imagelist'          => 'Piltide loend',
-'imagelisttext'      => 'Piltide arv järgnevas loendis: $1. Sorteeritud $2.',
-'getimagelist'       => 'hangin piltide nimekirja',
-'ilsubmit'           => 'Otsi',
-'showlast'           => 'Näita viimast $1 pilti sorteerituna $2.',
-'byname'             => 'nime järgi',
-'bydate'             => 'kuupäeva järgi',
-'bysize'             => 'suuruse järgi',
-'imgdelete'          => 'kust',
-'imgdesc'            => 'kirj',
-'filehist-deleteall' => 'kustuta kõik',
-'filehist-deleteone' => 'kustuta see',
-'filehist-user'      => 'Kasutaja',
-'filehist-comment'   => 'Kommentaar',
-'imagelinks'         => 'Viited pildile',
-'linkstoimage'       => 'Sellele pildile viitavad järgmised leheküljed:',
-'nolinkstoimage'     => 'Sellele pildile ei viita ükski lehekülg.',
-'noimage'            => 'Sellise nimega faili pole, võite selle $1.',
-'noimage-linktext'   => 'üles laadida',
-
-# File deletion
-'filedelete'                  => 'Kustuta $1',
-'filedelete-legend'           => 'Kustuta fail',
-'filedelete-comment'          => 'Kustutamise põhjus:',
-'filedelete-submit'           => 'Kustuta',
-'filedelete-otherreason'      => 'Muu/täiendav põhjus',
-'filedelete-reason-otherlist' => 'Muu põhjus',
-'filedelete-reason-dropdown'  => '*Harilikud kustutamise põhjused
-** Autoriõiguste rikkumine
-** Duplikaat',
+'imagelist'        => 'Piltide loend',
+'imagelisttext'    => 'Piltide arv järgnevas loendis: $1. Sorteeritud $2.',
+'getimagelist'     => 'hangin piltide nimekirja',
+'ilsubmit'         => 'Otsi',
+'showlast'         => 'Näita viimast $1 pilti sorteerituna $2.',
+'byname'           => 'nime järgi',
+'bydate'           => 'kuupäeva järgi',
+'bysize'           => 'suuruse järgi',
+'imgdelete'        => 'kust',
+'imgdesc'          => 'kirj',
+'filehist-user'    => 'Kasutaja',
+'imagelinks'       => 'Viited pildile',
+'linkstoimage'     => 'Sellele pildile viitavad järgmised leheküljed:',
+'nolinkstoimage'   => 'Selle pildile ei viita ükski lehekülg.',
+'noimage'          => 'Sellise nimega faili pole, võite selle $1.',
+'noimage-linktext' => 'üles laadida',
 
 # MIME search
 'mimesearch' => 'MIME otsing',
@@ -853,7 +821,6 @@ Administraatori staatuses kasutajaid: <b>$2</b> (vt $3).',
 
 'brokenredirects'        => 'Vigased ümbersuunamised',
 'brokenredirectstext'    => 'Järgmised leheküljed on ümber suunatud olematutele lehekülgedele.',
-'brokenredirects-edit'   => '(redigeeri)',
 'brokenredirects-delete' => '(kustuta)',
 
 # Miscellaneous special pages
@@ -864,11 +831,9 @@ Administraatori staatuses kasutajaid: <b>$2</b> (vt $3).',
 'nrevisions'              => '$1 {{PLURAL:$1|redaktsioon|redaktsiooni}}',
 'nviews'                  => 'Külastuste arv: $1',
 'lonelypages'             => 'Viitamata artiklid',
-'lonelypagestext'         => 'Järgmistele lehekülgedele ei ole linki ühelgi Viki leheküljel.',
 'uncategorizedpages'      => 'Kategoriseerimata leheküljed',
 'uncategorizedcategories' => 'Kategoriseerimata kategooriad',
 'uncategorizedimages'     => 'Kategoriseerimata pildid',
-'uncategorizedtemplates'  => 'Kategoriseerimata mallid',
 'unusedcategories'        => 'Kasutamata kategooriad',
 'unusedimages'            => 'Kasutamata pildid',
 'popularpages'            => 'Loetumad artiklid',
@@ -883,7 +848,6 @@ Administraatori staatuses kasutajaid: <b>$2</b> (vt $3).',
 'shortpages'              => 'Lühikesed artiklid',
 'longpages'               => 'Pikad artiklid',
 'deadendpages'            => 'Edasipääsuta artiklid',
-'deadendpagestext'        => 'Järgmised leheküljed ei viita ühelegi teisele Viki leheküljele.',
 'protectedpages'          => 'Kaitstud leheküljed',
 'listusers'               => 'Kasutajad',
 'specialpages'            => 'Erileheküljed',
@@ -894,12 +858,12 @@ Administraatori staatuses kasutajaid: <b>$2</b> (vt $3).',
 'intl'                    => 'Keeltevahelised lingid',
 'move'                    => 'Teisalda',
 'movethispage'            => 'Muuda pealkirja',
-'unusedimagestext'        => 'Pange palun tähele, et teised veebisaidid võivad linkida pildile otselingiga ja seega võivad siin toodud pildid olla ikkagi aktiivses kasutuses.',
+'unusedimagestext'        => '<p>Pange palun tähele, et teised
+veebisaidid võivad linkida pildile otselingiga ja seega võivad
+siin toodud pildid olla ikkagi aktiivses kasutuses.',
 'unusedcategoriestext'    => 'Need kategooriad pole ühesgi artiklis või teises kategoorias kasutuses.',
 'notargettitle'           => 'Puudub sihtlehekülg',
 'notargettext'            => 'Sa ei ole esitanud sihtlehekülge ega kasutajat, kelle kallal seda operatsiooni toime panna.',
-'pager-newer-n'           => '{{PLURAL:$1|uuem 1|uuemad $1}}',
-'pager-older-n'           => '{{PLURAL:$1|vanem 1|vanemad $1}}',
 
 # Book sources
 'booksources' => 'Otsi raamatut',
@@ -928,17 +892,16 @@ Administraatori staatuses kasutajaid: <b>$2</b> (vt $3).',
 'allpagessubmit'    => 'Näita',
 
 # E-mail user
-'mailnologintext' => 'Te peate olema [[Special:Userlogin|sisse logitud]] ja teil peab [[Special:Preferences|eelistustes]] olema kehtiv e-posti aadress, et saata teistele kasutajatele e-kirju.',
-'emailuser'       => 'Saada sellele kasutajale e-kiri',
-'emailpage'       => 'Saada kasutajale e-kiri',
-'emailpagetext'   => 'Kui see kasutaja on oma eelistuste lehel sisestanud e-posti aadressi, siis saate alloleva vormi kaudu talle kirja saata. Et kasutaja saaks vastata, täidetakse kirja saatja väli "kellelt" e-posti aadressiga, mille olete sisestanud oma eelistuste lehel.',
-'emailfrom'       => 'Kellelt',
-'emailto'         => 'Kellele',
-'emailsubject'    => 'Pealkiri',
-'emailmessage'    => 'Sõnum',
-'emailsend'       => 'Saada',
-'emailsent'       => 'E-post saadetud',
-'emailsenttext'   => 'Teie sõnum on saadetud.',
+'emailuser'     => 'Saada sellele kasutajale e-kiri',
+'emailpage'     => 'Saada kasutajale e-kiri',
+'emailpagetext' => 'Kui see kasutaja on oma eelistuste lehel sisestanud e-posti aadressi, siis saate alloleva vormi kaudu talle kirja saata. Et kasutaja saaks vastata, täidetakse kirja saatja väli "kellelt" e-posti aadressiga, mille olete sisestanud oma eelistuste lehel.',
+'emailfrom'     => 'Kellelt',
+'emailto'       => 'Kellele',
+'emailsubject'  => 'Pealkiri',
+'emailmessage'  => 'Sõnum',
+'emailsend'     => 'Saada',
+'emailsent'     => 'E-post saadetud',
+'emailsenttext' => 'Teie sõnum on saadetud.',
 
 # Watchlist
 'watchlist'            => 'Minu jälgimisloend',
@@ -996,11 +959,6 @@ Kõik toodud kellaajad järgivad serveriaega (UTC).',
 'reverted'                    => 'Pöörduti tagasi varasemale versioonile',
 'deletecomment'               => 'Kustutamise põhjus',
 'deleteotherreason'           => 'Muu/täiendav põhjus:',
-'deletereasonotherlist'       => 'Muu põhjus',
-'deletereason-dropdown'       => '*Harilikud kustutamise põhjused
-** Autori palve
-** Autoriõiguste rikkumine
-** Vandalism',
 'rollback'                    => 'Tühista muudatused',
 'rollback_short'              => 'Tühista',
 'rollbacklink'                => 'tühista',
@@ -1020,11 +978,10 @@ Kõik toodud kellaajad järgivad serveriaega (UTC).',
 'protect-default'             => '(tavaline)',
 'protect-level-autoconfirmed' => 'Ainult registreeritud kasutajad',
 'protect-level-sysop'         => 'Ainult administraatorid',
-'protect-expiring'            => 'aegub $1 (UTC)',
 'restriction-type'            => 'Lubatud:',
 'restriction-level'           => 'Kaitsmise tase:',
 'minimum-size'                => 'Min suurus',
-'maximum-size'                => 'Max suurus:',
+'maximum-size'                => 'Max suurus',
 'pagesize'                    => '(baiti)',
 
 # Restrictions (nouns)
@@ -1071,19 +1028,15 @@ versioonid varasema ajaloona. Kehtivat versiooni automaatselt välja ei vahetata
 'uclinks'       => 'Näita viimast $1 muudatust; viimase $2 päeva jooksul.',
 'uctop'         => ' (üles)',
 
-'sp-contributions-username' => 'IP aadress või kasutajanimi:',
-
 'sp-newimages-showfrom' => 'Näita uusi pilte alates $1',
 
 # What links here
-'whatlinkshere'      => 'Lingid siia',
-'linklistsub'        => '(Linkide loend)',
-'linkshere'          => 'Siia viitavad järgmised leheküljed:',
-'nolinkshere'        => 'Siia ei viita ükski lehekülg.',
-'isredirect'         => 'ümbersuunamislehekülg',
-'istemplate'         => 'kasutamine',
-'whatlinkshere-prev' => '{{PLURAL:$1|eelmised|eelmised $1}}',
-'whatlinkshere-next' => '{{PLURAL:$1|järgmised|järgmised $1}}',
+'whatlinkshere' => 'Viidad siia',
+'linklistsub'   => '(Linkide loend)',
+'linkshere'     => 'Siia viitavad järgmised leheküljed:',
+'nolinkshere'   => 'Siia ei viita ükski lehekülg.',
+'isredirect'    => 'ümbersuunamislehekülg',
+'istemplate'    => 'kasutamine',
 
 # Block/unblock
 'blockip'            => 'Blokeeri IP-aadress',
@@ -1135,18 +1088,11 @@ Kindlasti tuleb täita ka väli \"põhjus\", paigutades sinna näiteks viited ko
 
 # Move page
 'movepage'         => 'Teisalda artikkel',
-'movepagetext'     => "Allolevat vormi kasutades saate lehekülje ümber nimetada.
-Lehekülje ajalugu tõstetakse uue pealkirja alla automaatselt.
-Praeguse pealkirjaga leheküljest saab ümbersuunamisleht uuele leheküljele.
-Teistes artiklites olevaid linke praeguse nimega leheküljele automaatselt ei muudeta.
-Teie kohuseks on hoolitseda, et ei tekiks topeltümbersuunamisi ning et kõik jääks toimima nagu enne ümbernimetamist.
+'movepagetext'     => "Allolevat vormi kasutades saate lehekülje ümber nimetada. Lehekülje ajalugu tõstetakse uue pealkirja alla automaatselt. Praeguse pealkirjaga leheküljest saab ümbersuunamisleht uuele leheküljele. Teistes artiklites olevaid linke praeguse nimega leheküljele automaatselt ei muudeta. Teie kohuseks on hoolitseda, et ei tekiks topeltümbersuunamisi ning et kõik jääks toimima nagu enne ümbernimetamist.
 
-Lehekülge '''ei nimetata ümber''' juhul, kui uue nimega lehekülg on juba olemas. Erandiks on juhud, kui olemasolev lehekülg on tühi või ümbersuunamislehekülg ja sellel pole redigeerimisajalugu.
-See tähendab, et te ei saa kogemata üle kirjutada juba olemasolevat lehekülge, kuid saate ebaõnnestunud ümbernimetamise tagasi pöörata.
+Lehekülge '''ei nimetata ümber''' juhul, kui uue nimega lehekülg on juba olemas. Erandiks on juhud, kui olemasolev lehekülg on tühi või ümbersuunamislehekülg ja sellel pole redigeerimisajalugu. See tähendab, et te ei saa kogemata üle kirjutada juba olemasolevat lehekülge, kuid saate ebaõnnestunud ümbernimetamise tagasi pöörata.
 
-'''ETTEVAATUST!'''
-Võimalik, et kavatsete teha ootamatut ning drastilist muudatust väga loetavasse artiklisse;
-enne muudatuse tegemist mõelge palun järele, mis võib olla selle tagajärjeks.",
+<strong>ETTEVAATUST!</strong> Võimalik, et kavatsete  teha ootamatut ning drastilist muudatust väga loetavasse artiklisse; enne muudatuse tegemist mõelge palun järele, mis võib olla selle tagajärjeks.",
 'movepagetalktext' => "Koos artiklileheküljega teisaldatakse automaatselt ka arutelulehekülg, '''välja arvatud juhtudel, kui:'''
 *liigutate lehekülge ühest nimeruumist teise,
 *uue nime all on juba olemas mittetühi arutelulehekülg või
@@ -1158,7 +1104,6 @@ Neil juhtudel teisaldage arutelulehekülg soovi korral eraldi või ühendage ta 
 'movenologintext'  => 'Et lehekülge teisaldada, peate registreeruma
 kasutajaks ja [[Special:Userlogin|sisse logima]]',
 'newtitle'         => 'Uue pealkirja alla',
-'move-watch'       => 'Jälgi seda lehekülge',
 'movepagebtn'      => 'Teisalda artikkel',
 'pagemovedsub'     => 'Artikkel on teisaldatud',
 'articleexists'    => 'Selle nimega artikkel on juba olemas või pole valitud nimi lubatav. Palun valige uus nimi.',
@@ -1183,8 +1128,7 @@ kasutajaks ja [[Special:Userlogin|sisse logima]]',
 'allmessagesname'    => 'Nimi',
 'allmessagesdefault' => 'Vaikimisi tekst',
 'allmessagescurrent' => 'Praegune tekst',
-'allmessagestext'    => 'See on loend kõikidest kättesaadavatest süsteemi sõnumitest MediaWiki: nimeruumis.
-Please visit [http://www.mediawiki.org/wiki/Localisation MediaWiki Localisation] and [http://translatewiki.net Betawiki] if you wish to contribute to the generic MediaWiki localisation.',
+'allmessagestext'    => 'See on loend kõikidest kättesaadavatest süsteemi sõnumitest MediaWiki: nimeruumis.',
 
 # Thumbnails
 'thumbnail-more' => 'Suurenda',
@@ -1336,8 +1280,6 @@ Kui see *ei* ole sinu loodud konto, siis ära kliki lingil. Kinnituskood aegub $
 'redirectingto' => 'Ümbersuunamine lehele [[$1]]...',
 
 # Auto-summaries
-'autosumm-blank'   => 'Kustutatud kogu lehekülje sisu',
-'autosumm-replace' => "Lehekülg asendatud tekstiga '$1'",
 'autoredircomment' => 'Ümbersuunamine lehele [[$1]]',
 'autosumm-new'     => 'Uus lehekülg: $1',
 
@@ -1348,7 +1290,6 @@ Kui see *ei* ole sinu loodud konto, siis ära kliki lingil. Kinnituskood aegub $
 'watchlistedit-normal-explain' => "Siin on lehed, mis on teie jälgimisloendis.Et lehti eemaldada, tehke vastavatesse kastidesse linnukesed ja vajutage nuppu '''Eemalda valitud lehed'''. Te võite ka [[Special:Watchlist/raw|redigeerida lähtefaili]].",
 'watchlistedit-normal-submit'  => 'Eemalda valitud lehed',
 'watchlistedit-normal-done'    => '{{PLURAL:$1|1 leht|Järgmised $1 lehte}} on Teie jälgimisloendist eemaldatud:',
-'watchlistedit-raw-submit'     => 'Uuenda jälgimisloendit',
 'watchlistedit-raw-done'       => 'Teie jälgimisloend on uuendatud.',
 
 # Watchlist editing tools

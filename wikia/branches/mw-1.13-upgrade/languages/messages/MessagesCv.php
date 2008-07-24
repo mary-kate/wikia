@@ -3,9 +3,6 @@
  *
  * @addtogroup Language
  *
- * @author Siebrand
- * @author PCode
- * @author Chavash
  */
 
 $fallback = 'ru';
@@ -35,9 +32,6 @@ $namespaceNames = array(
 $linkTrail = '/^([a-zа-яĕçăӳ"»]+)(.*)$/sDu';
 
 $messages = array(
-# User preference toggles
-'tog-showtoolbar' => 'Тӳрлетнĕ чухне çӳлти хатĕрсен хăмине кăтартмалла (JavaScript)',
-
 'underline-always' => 'Яланах',
 
 # Dates
@@ -73,7 +67,6 @@ $messages = array(
 'pagecategories' => 'Категорисем',
 
 'qbspecialpages' => 'Ятарлӑ страницӑсем',
-'mytalk'         => 'Ман канашлу страници',
 'and'            => 'тата',
 
 'help'             => 'Пулăшу',
