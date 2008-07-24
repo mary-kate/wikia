@@ -70,6 +70,10 @@ class SMWBoolValue extends SMWDataValue {
 				$this->m_falsecaption = htmlspecialchars(trim($captions[1]));
 			} // else ignore
 		}
+		if ( ($formatstring != $this->m_outformat) && $this->isValid() && ($this->m_truecaption !== NULL) ) { // also adjust display
+			$this->m_caption = $this->m_stdcaption = ($this->m_value?$this->m_truecaption:$this->m_falsecaption);
+		}
+		$this->m_outformat = $formatstring;
 	}
 
 	public function getShortWikiText($linked = NULL) {
@@ -112,16 +116,14 @@ class SMWBoolValue extends SMWDataValue {
 		return true;
 	}
 
-	/**
-	 * Creates the export line for the RDF export
-	 *
-	 * @param string $QName The element name of this datavalue
-	 * @param ExportRDF $exporter the exporter calling this function
-	 * @return the line to be exported
-	 */
-	public function exportToRDF($QName, ExportRDF $exporter) {
-		$xsdvalue =  $this->m_value?'true':'false';
-		return "\t\t<$QName rdf:datatype=\"http://www.w3.org/2001/XMLSchema#boolean\">$xsdvalue</$QName>\n";
+	public function getExportData() {
+		if ($this->isValid()) {
+			$xsdvalue =  $this->m_value?'true':'false';
+			$lit = new SMWExpLiteral($xsdvalue, $this, 'http://www.w3.org/2001/XMLSchema#boolean');
+			return new SMWExpData($lit);
+		} else {
+			return NULL;
+		}
 	}
 
 }

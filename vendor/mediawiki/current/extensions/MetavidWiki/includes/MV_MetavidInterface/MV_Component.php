@@ -23,9 +23,9 @@ if ( !defined( 'MEDIAWIKI' ) )  die( 1 );
  			$this->$k=$v;
  		}
  	} 	
- 	//proccess the request set (load from settings if not set in url 
-	//@@todo would be good to allow user-set prefrence in the future)
-	function procMVDReqSet(){
+ 	//process the request set (load from settings if not set in url 
+	//@@todo would be good to allow user-set preference in the future)
+	function procMVDReqSet($only_requested=false){
 		global $wgRequest;
 		global $mvMVDTypeDefaultDisp, $mvMVDTypeAllAvailable;
 		//if already computed return: 
@@ -39,16 +39,18 @@ if ( !defined( 'MEDIAWIKI' ) )  die( 1 );
 					$this->mvd_tracks[]= $tk;	
 				}	
 			}
-		}else{			
-			//do reality check on settings: 
-			foreach($mvMVDTypeDefaultDisp as $tk){
-				if(!in_array($tk, $mvMVDTypeAllAvailable)){
-					global $wgOut;
-					$wgOut->errorPage('mvd_default_mismatch','mvd_default_mismatch_text');
-				}	
+		}else{		
+			if(!$only_requested){	
+				//set the default tracks (if not restricted to requested tracks)  
+				foreach($mvMVDTypeDefaultDisp as $tk){
+					if(!in_array($tk, $mvMVDTypeAllAvailable)){
+						global $wgOut;
+						$wgOut->errorPage('mvd_default_mismatch','mvd_default_mismatch_text');
+					}	
+				}
+				//just set to global default: 
+				$this->mvd_tracks = $mvMVDTypeDefaultDisp;		
 			}
-			//just set to global default: 
-			$this->mvd_tracks = $mvMVDTypeDefaultDisp;		
 		}
 	}
 	function getStateReq(){
@@ -84,7 +86,7 @@ if ( !defined( 'MEDIAWIKI' ) )  die( 1 );
  			$this->q=$q;
  		}
  	}
- 	/* to be overwitten by class */
+ 	/* to be overwritten by class */
 	function getHTML(){
 		global $wgOut;
 		$wgOut->addHTML( get_class($this) . ' component html');
@@ -92,10 +94,13 @@ if ( !defined( 'MEDIAWIKI' ) )  die( 1 );
 	function render_menu(){
 		return get_class($this) . ' component menu';
 	}
+	function getStyleOverride(){
+		return '';
+	} 
  	function render_full(){
  		global $wgOut;
- 		//"<div >" .
- 		$wgOut->addHTML("<fieldset id=\"".get_class($this)."\" >\n" .
+ 		//"<div >" . 		 		
+ 		$wgOut->addHTML("<fieldset ".$this->getStyleOverride()." id=\"".get_class($this)."\" >\n" .
  					"<legend id=\"mv_leg_".get_class($this)."\">".$this->render_menu()."</legend>\n"); 				
  		//do the implemented html 
  		$this->getHTML(); 

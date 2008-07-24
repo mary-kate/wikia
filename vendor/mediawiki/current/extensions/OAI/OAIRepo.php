@@ -56,9 +56,13 @@ $oaiAudit = false;
 $oaiAuditDatabase = false;
 
 $wgExtensionCredits['specialpage'][] = array(
-	'name' => 'OAIRepository',
-	'author' => 'Brion Vibber',
-	'description' => 'Provides [http://www.openarchives.org/OAI/openarchivesprotocol.html OAI-PMH] repository interface',
+	'name'           => 'OAIRepository',
+	'author'         => 'Brion Vibber',
+	'url'            => 'http://www.mediawiki.org/wiki/Extension:OAIRepository',
+	'svn-date'       => '$LastChangedDate: 2008-05-28 06:03:21 +0000 (Wed, 28 May 2008) $',
+	'svn-revision'   => '$LastChangedRevision: 35465 $',
+	'description'    => 'Provides [http://www.openarchives.org/OAI/openarchivesprotocol.html OAI-PMH] repository interface',
+	'descriptionmsg' => 'oai-desc',
 );
 
 /* Set up the repository entry point */
@@ -66,6 +70,7 @@ if ( !function_exists( 'extAddSpecialPage' ) ) {
 	require( dirname(__FILE__) . '/../ExtensionFunctions.php' );
 }
 extAddSpecialPage( dirname(__FILE__) . '/OAIRepo_body.php', 'OAIRepository', 'OAIRepository' );
+$wgExtensionMessagesFiles['OAIRepository'] =  dirname(__FILE__) . '/OAIRepo.i18n.php';
 
 /* Add update hooks */
 $wgHooks['ArticleSaveComplete'  ][] = 'oaiUpdateSave';
@@ -133,5 +138,3 @@ function oaiUpdateUndelete( $title, $isnewid ) {
 	oaiUpdatePage( $id, 'modify' );
 	return true;
 }
-
-

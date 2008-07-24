@@ -19,10 +19,16 @@
 /**
  * Register the Inputbox extension with MediaWiki
  */ 
-$wgExtensionFunctions[] = 'efInputBoxSetup';
+if ( defined( 'MW_SUPPORTS_PARSERFIRSTCALLINIT' ) ) {
+	$wgHooks['ParserFirstCallInit'][] = 'efInputBoxSetup';
+} else {
+	$wgExtensionFunctions[] = 'efInputBoxSetup';
+}
 $wgExtensionCredits['parserhook'][] = array(
 	'name'           => 'Inputbox',
 	'author'         => array( 'Erik Moeller', 'Leonardo Pimenta', 'Rob Church' ),
+	'svn-date'       => '$LastChangedDate: 2008-07-09 05:37:55 +0000 (Wed, 09 Jul 2008) $',
+	'svn-revision'   => '$LastChangedRevision: 37366 $',
 	'url'            => 'http://www.mediawiki.org/wiki/Extension:Inputbox',
 	'description'    => 'Allow inclusion of predefined HTML forms.',
 	'descriptionmsg' => 'inputbox-desc',
@@ -37,6 +43,7 @@ $wgExtensionMessagesFiles['Inputbox'] = $dir . 'InputBox.i18n.php';
 function efInputBoxSetup() {
 	global $wgParser;
 	$wgParser->setHook( 'inputbox', 'efInputBoxRender' );
+	return true;
 }
 
 function efInputBoxRender( $input, $params, $parser ) {
@@ -47,7 +54,7 @@ function efInputBoxRender( $input, $params, $parser ) {
 
 class Inputbox {
 	var $type, $width, $preload, $editintro, $br;
-	var $defaulttext,$bgcolor,$buttonlabel,$searchbuttonlabel;
+	var $defaulttext,$bgcolor,$buttonlabel,$searchbuttonlabel,$labeltext;
 	var $hidden, $namespaces;
 
 	function InputBox( &$parser ) {
@@ -152,19 +159,37 @@ ENDFORM2;
 			$this->buttonlabel = wfMsgHtml( 'tryexact' );
 		}
 
-		$output = $this->parser->parse( $this->labeltext,
-			$this->parser->getTitle(), $this->parser->getOptions(), false, false );
-		$this->labeltext = $output->getText();
-		$this->labeltext = str_replace('<p>', '', $this->labeltext);
-		$this->labeltext = str_replace('</p>', '', $this->labeltext);
+		$buttonlabel = htmlspecialchars( $this->buttonlabel );
+		$searchbuttonlabel = htmlspecialchars( $this->searchbuttonlabel );
+		$id = Sanitizer::escapeId( $this->id );
+
+		$label = '';
+		$styles = '';
 
 		$buttonlabel = htmlspecialchars( $this->buttonlabel );
 		$searchbuttonlabel = htmlspecialchars( $this->searchbuttonlabel );
 		$id = Sanitizer::escapeId( $this->id );
 
+		if ( isset($this->labeltext) && strlen(trim($this->labeltext)) ) {
+			$output = $this->parser->parse( $this->labeltext,
+				$this->parser->getTitle(), $this->parser->getOptions(), false, false );
+			$this->labeltext = $output->getText();
+			$this->labeltext = str_replace('<p>', '', $this->labeltext);
+			$this->labeltext = str_replace('</p>', '', $this->labeltext);
+			$label = "<label for=\"bodySearchIput{$id}\">{$this->labeltext}</label>";
+		}
+
+		if ($this->inline) {
+			$styles .= 'display: inline;';
+		}
+
+		if ($styles) {
+			$styles = 'style="'.htmlspecialchars($styles).'"';
+		}
+
 		$type = $this->hidden ? 'hidden' : 'text';
 		$searchform=<<<ENDFORM
-<form action="$search" class="bodySearch" id="bodySearch{$id}"><div class="bodySearchWrap"><label for="bodySearchIput{$id}">{$this->labeltext}</label><input type="{$type}" name="search" size="{$this->width}" class="bodySearchIput" id="bodySearchIput{$id}" /><input type="submit" name="go" value="{$buttonlabel}" class="bodySearchBtnGo" />
+<form action="$search" class="bodySearch" {$styles} id="bodySearch{$id}"><div class="bodySearchWrap" {$styles}>{$label}<input type="{$type}" name="search" size="{$this->width}" class="bodySearchIput" id="bodySearchIput{$id}" /><input type="submit" name="go" value="{$buttonlabel}" class="bodySearchBtnGo" />
 ENDFORM;
 
 		if ( !empty( $this->fulltextbtn ) ) // this is wrong...
@@ -181,7 +206,7 @@ ENDFORM;
 
 		$action = htmlspecialchars( $wgScript );
 		if($this->type=="comment") {
-			$comment='<input type="hidden" name="section" value="new" />';
+			$comment="<input type=\"hidden\" name=\"section\" value=\"new\" />\n\t";
 			if(!$this->buttonlabel) {
 				$this->buttonlabel = wfMsgHtml( "postcomment" );
 			}
@@ -207,8 +232,7 @@ ENDFORM;
 	<input type='hidden' name="action" value="edit" />
 	<input type="hidden" name="preload" value="{$preload}" />
 	<input type="hidden" name="editintro" value="{$editintro}" />
-	{$comment}
-	<input class="createboxInput" name="title" type="{$type}"
+	{$comment}<input class="createboxInput" name="title" type="{$type}"
 	value="{$defaulttext}" size="{$this->width}" />{$this->br}
 	<input type='submit' name="create" class="createboxButton"
 	value="{$buttonlabel}" />
@@ -267,6 +291,7 @@ ENDFORM;
 			'labeltext' => 'labeltext',
 			'break' => 'br',
 			'hidden' => 'hidden',
+			'inline' => 'inline',
 		);
 		foreach( $options as $name => $var ) {
 			if( isset( $values[$name] ) )

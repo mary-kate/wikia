@@ -13,7 +13,7 @@
 if(!defined('MEDIAWIKI')){
 	echo <<<EOT
 To install my extension, put the following line in LocalSettings.php:
-require_once( "$IP/extensions/TemplateLink/TemplateLink.setup.php" );
+require_once( "\$IP/extensions/TemplateLink/TemplateLink.setup.php" );
 EOT;
 	exit( 1 );
 }
@@ -23,7 +23,8 @@ $wgExtensionCredits['specialpage'][] = array(
 	'version' => '1.1',
 	'author' =>'Magnus Manske',
 	'url' => 'http://www.mediawiki.org/wiki/Extension:TemplateLink',
-	'description' => 'This extension can show a template as a new page'
+	'description' => 'This extension can show a template as a new page',
+	'descriptionmsg' => 'templatelink_desc',
 );
 
 $wgExtensionCredits['parserhook'][] = array(

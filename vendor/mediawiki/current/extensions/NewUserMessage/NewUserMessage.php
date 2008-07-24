@@ -12,12 +12,29 @@
 if (!defined('MEDIAWIKI'))
 	die('Not an entry point.');
 
-define('NEWUSERMESSAGE_VERSION','1.0.1, 2008-02-10');
+define('NEWUSERMESSAGE_VERSION','1.2.1, 2008-06-04');
 
+// Specify a template to wrap the new user message within
 $wgNewUserMessageTemplate = 'MediaWiki:NewUserMessage';
 
-$wgExtensionMessagesFiles['NewUserMessage'] = dirname(__FILE__) . '/NewUserMessage.i18n.php';
-$wgHooks['AddNewAccount'][] = 'wfCreateNewUserMessage';
+// Set the username of the user that makes the edit on user talk pages. If
+// this user does not exist, the new user will show up as editing user.
+$wgNewUserMessageEditor = 'Admin';
+
+// Edit summary for the recent changes entry of a new users message
+$wgNewUserEditSummary = "Adding [[$wgNewUserMessageTemplate|welcome message]] to new user's talk page";
+
+// Specify whether or not the new user message creation should show up in recent changes
+$wgNewUserSupressRC = false;
+
+// Should the new user message creation be a minor edit?
+$wgNewUserMinorEdit = true;
+
+$dir = dirname(__FILE__) . '/';
+$wgExtensionMessagesFiles['NewUserMessage'] = $dir . 'NewUserMessage.i18n.php';
+$wgAutoloadClasses['NewUserMessage'] = $dir . 'NewUserMessage.class.php';
+
+$wgHooks['AddNewAccount'][] = 'NewUserMessage::createNewUserMessage';
 
 $wgExtensionCredits['other'][] = array(
 	'name'           => 'NewUserMessage',
@@ -27,20 +44,3 @@ $wgExtensionCredits['other'][] = array(
 	'descriptionmsg' => 'newusermessage-desc',
 	'url'            => 'http://www.mediawiki.org/wiki/Extension:NewUserMessage',
 );
-
-/*
- * Add the template message if the users talk page doesn't already exist
- */
-function wfCreateNewUserMessage($user) {
-	global $wgNewUserMessageTemplate;
-
-	$name = $user->getName();
-	$talk = $user->getTalkPage();
-
-	if (!$talk->exists()) {
-		$article = new Article($talk);
-		$article->insertNewArticle('{'.'{'."$wgNewUserMessageTemplate|$name}}",false,false,true,false);
-	}
-
-	return true;
-}

@@ -1,10 +1,5 @@
 <?php
 
-if (!defined('MEDIAWIKI')) die();
-
-global $IP;
-include_once($IP . '/includes/SpecialPage.php');
-
 /**
  * @author Denny Vrandecic
  *
@@ -13,7 +8,7 @@ include_once($IP . '/includes/SpecialPage.php');
  * For example, it shows me all persons born in Croatia,
  * or all winners of the Academy Award for best actress.
  *
- * @note AUTOLOAD
+ * @note AUTOLOADED
  */
 class SMWSearchByProperty extends SpecialPage {
 
@@ -21,27 +16,26 @@ class SMWSearchByProperty extends SpecialPage {
 	 * Constructor
 	 */
 	public function __construct() {
-		smwfInitUserMessages();
 		parent::__construct('SearchByProperty');
+		//the key defining the group name in the language files is specialpages-group-smw_group
+		if (method_exists('SpecialPage', 'setGroup')) { 
+			parent::setGroup('SearchByProperty', 'smw_group');	
+		}
 	}
 
 	public function execute($query = '') {
-		global $wgRequest, $wgOut, $wgUser, $smwgQMaxInlineLimit, $smwgIP;
-		require_once( "$smwgIP/includes/storage/SMW_Store.php" );
+		global $wgRequest, $wgOut, $wgUser, $smwgQMaxInlineLimit;
 		$skin = $wgUser->getSkin();
 
 		// get the GET parameters
 		$attributestring = $wgRequest->getVal( 'property' );
 		$valuestring = $wgRequest->getVal( 'value' );
+		$params = SMWInfolink::decodeParameters($query, false);
+		reset($params);
 		// no GET parameters? Then try the URL
-		if (('' == $attributestring) && ('' == $valuestring)) {
-			$queryparts = explode('::', $query);
-			$attributestring = $query;
-			if (count($queryparts) == 2) {
-				$attributestring = $queryparts[0];
-				$valuestring = str_replace("_", " ", $queryparts[1]);
-			}
-		}
+		if ($attributestring == '') $attributestring = current($params);
+		if ($valuestring == '') $valuestring = next($params);
+
 		$attribute = Title::newFromText( $attributestring, SMW_NS_PROPERTY );
 		if (NULL === $attribute) { $attributestring = ''; } else { $attributestring = $attribute->getText(); }
 
@@ -55,8 +49,6 @@ class SMWSearchByProperty extends SpecialPage {
 		if ('' == $attributestring) { // empty page. If no attribute given the value does not matter
 			$html .= wfMsg('smw_sbv_docu') . "\n";
 		} else {
-			global $smwgIP;
-			include_once($smwgIP . '/includes/SMW_DataValueFactory.php');
 			// Now that we have an attribute, let's figure out the datavalue
 			$value = SMWDataValueFactory::newPropertyObjectValue( $attribute, $valuestring );
 			if ( $value->isValid() == FALSE ) { // no value understood
@@ -135,13 +127,12 @@ class SMWSearchByProperty extends SpecialPage {
 					$html .= wfMsg( 'smw_result_noresults' );
 				} else { // if there are plenty of results anyway
 					global $smwgIP;
-					include_once($smwgIP . '/includes/SMW_Infolink.php');
 					// no need to show the navigation bars when there is not enough to navigate
 					if (($offset>0) || ($count>$limit)) $html .= '<br />' . $navigation;
 					$html .= "<ul>\n";
-					foreach ($res as $t) {
-						$browselink = SMWInfolink::newBrowsingLink('+',$t->getPrefixedText());
-						$html .= '<li>' . $skin->makeKnownLinkObj($t) . '&nbsp;&nbsp;' . $browselink->getHTML($skin) . "</li> \n";
+					foreach ($res as $dv) {
+						$browselink = SMWInfolink::newBrowsingLink('+',$dv->getShortHTMLText());
+						$html .= '<li>' . $dv->getShortHTMLText($skin) . '&nbsp;&nbsp;' . $browselink->getHTML($skin) . "</li> \n";
 					}
 					$html .= "</ul>\n";
 					if (($offset>0) || ($count>$limit)) $html .= $navigation;

@@ -1,12 +1,14 @@
 <?php
 /** Swiss German (Alemannisch)
  *
- * @addtogroup Language
+ * @ingroup Language
+ * @file
  *
  * @author 80686
- * @author Helix84
  * @author Siebrand
  * @author לערי ריינהארט
+ * @author Spacebirdy
+ * @author Jon Harald Søby
  */
 
 $fallback = 'de';
@@ -84,11 +86,11 @@ $messages = array(
 'december'  => 'Dezämber',
 'may'       => 'Mei',
 
-# Bits of text used by many pages
-'categories'      => 'Kategorie',
-'pagecategories'  => '{{PLURAL:$1|Kategori|Kategorie}}',
-'category_header' => 'Artikel in de Kategori "$1"',
-'subcategories'   => 'Unterkategorie',
+# Categories related messages
+'pagecategories'         => '{{PLURAL:$1|Kategori|Kategorie}}',
+'category_header'        => 'Artikel in de Kategori "$1"',
+'subcategories'          => 'Unterkategorie',
+'listingcontinuesabbrev' => '(Forts.)',
 
 'mainpagetext'      => 'MediaWiki isch erfolgrich inschtalliert worre.',
 'mainpagedocfooter' => 'Luege uf d [http://meta.wikimedia.org/wiki/MediaWiki_localisation Dokumentation fier d Onpassung vun de Bnutzeroberflächi] un s [http://meta.wikimedia.org/wiki/Help:Contents Bnutzerhondbuech] fier d Hilf yber d Bnutzung un s Ystelle.',
@@ -130,6 +132,7 @@ $messages = array(
 'unprotect'         => 'nümm schütze',
 'unprotectthispage' => 'Schutz ufhebe',
 'newpage'           => 'Nöji Syte',
+'talkpagelinktext'  => 'Diskussion',
 'specialpage'       => 'Spezialsyte',
 'personaltools'     => 'Persönlichi Wärkzüg',
 'postcomment'       => 'Kommentar abgeh',
@@ -147,26 +150,25 @@ $messages = array(
 'jumptosearch'      => 'Suech',
 
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
-'aboutsite'         => 'Übr {{GRAMMAR:akkusativ|{{SITENAME}}}}',
-'aboutpage'         => 'Project:Übr {{UCFIRST:{{GRAMMAR:akkusativ|{{SITENAME}}}}}}',
-'bugreportspage'    => 'Project:Kontakt',
-'copyright'         => 'Der Inhalt vo dere Syte steht unter der $1.',
-'copyrightpage'     => '{{ns:project}}:Copyright',
-'currentevents'     => 'Aktuelli Mäldige',
-'currentevents-url' => 'Project:Aktuelli Termin',
-'disclaimers'       => 'Impressum',
-'disclaimerpage'    => 'Project:Impressum',
-'edithelp'          => 'Ratschläg fiers Bearbeite',
-'edithelppage'      => 'Help:Ändere',
-'helppage'          => 'Help:Hilf',
-'mainpage'          => 'Houptsyte',
-'policy-url'        => 'Project:Leitlinien',
-'portal'            => 'Gmeinschaftsportal',
-'portal-url'        => 'Project:Gemeinschafts-Portal',
-'privacy'           => 'Daateschutz',
-'privacypage'       => 'Project:Daateschutz',
-'sitesupport'       => 'Finanzielli Hilf',
-'sitesupport-url'   => 'Project:Spenden',
+'aboutsite'            => 'Übr {{GRAMMAR:akkusativ|{{SITENAME}}}}',
+'aboutpage'            => 'Project:Übr {{UCFIRST:{{GRAMMAR:akkusativ|{{SITENAME}}}}}}',
+'bugreportspage'       => 'Project:Kontakt',
+'copyright'            => 'Der Inhalt vo dere Syte steht unter der $1.',
+'copyrightpage'        => '{{ns:project}}:Copyright',
+'currentevents'        => 'Aktuelli Mäldige',
+'currentevents-url'    => 'Project:Aktuelli Termin',
+'disclaimers'          => 'Impressum',
+'disclaimerpage'       => 'Project:Impressum',
+'edithelp'             => 'Ratschläg fiers Bearbeite',
+'edithelppage'         => 'Help:Ändere',
+'helppage'             => 'Help:Hilf',
+'mainpage'             => 'Houptsyte',
+'mainpage-description' => 'Houptsyte',
+'policy-url'           => 'Project:Leitlinien',
+'portal'               => 'Gmeinschaftsportal',
+'portal-url'           => 'Project:Gemeinschafts-Portal',
+'privacy'              => 'Daateschutz',
+'privacypage'          => 'Project:Daateschutz',
 
 'badaccess' => 'Kei usreichendi Rechte.',
 
@@ -217,7 +219,6 @@ MySQL het den Fähler gmeldet: "<tt>$3: $4</tt>".',
 'readonlytext'         => 'Diä {{SITENAME}}-Datebonk isch vorybergehend fier Neijyträg un Änderige gsperrt. Bitte vosuechs s später no mol.
 
 Grund vun de Sperrung: $1',
-'missingarticle'       => 'De Tekscht vum Artikel "$1" isch in de Datebonk nit gfunde. Des isch wahrschinlich ä Fähler in de Software. Sin so guet, un melde des m Adminischtrator, un gib de Artikelnome on.',
 'readonly_lag'         => 'Datebonk isch automatisch gschperrt worre, wil d Sklavedatebonkserver ihr Meischter yhole miesse',
 'internalerror'        => 'Interner Fähler',
 'filecopyerror'        => 'Datei "$1" het nit noch "$2" kopiert werre kinne.',
@@ -248,11 +249,9 @@ Abfrog: $2',
 <b>Du bisch jitz abgmäldet!</b>
 </div><br />
 We du jitz öppis uf der {{SITENAME}} änderisch, de wird dyni IP-Adrässen als Urhäber regischtriert u nid dy Benutzername. Du chasch di mit em glychen oder emnen andere Benutzername nöi aamälde.',
-'welcomecreation'            => '<h2>Willkomme, $1!</h2>
-
-Dys Benutzerkonto isch aagleit worde
-
-Vergis nid, dyni [[Special:Preferences|Ystelligen]] aazpasse.',
+'welcomecreation'            => '==Willkomme, $1!==
+Dys Benutzerkonto isch aagleit worde.
+Vergis nid, dyni Ystelligen aazpasse.',
 'loginpagetitle'             => 'Benutzer-Aamelde',
 'yourname'                   => 'Dii Benutzername',
 'yourpassword'               => 'Basswort',
@@ -330,7 +329,7 @@ Für d Bestätigung muesch du em Link folge, wo dir isch gmailet worde. Du chasc
 'italic_sample'   => 'kursiv gschribe',
 'italic_tip'      => 'Kursiv gschribe',
 'link_sample'     => 'Stichwort',
-'extlink_sample'  => 'http://www.zumbyschpil.ch Linktekscht',
+'extlink_sample'  => 'http://www.example.com Linktekscht',
 'extlink_tip'     => 'Externer Link (http:// beachte)',
 'headline_sample' => 'Abschnitts-Überschrift',
 'math_sample'     => 'Formel do yfüge',
@@ -372,9 +371,8 @@ Für d Bestätigung muesch du em Link folge, wo dir isch gmailet worde. Du chasc
 'userjspreview'            => "== Vorschau Ihres Benutzer-Javascript. ==
 '''Beachten Sie:''' Nach dem Speichern müssen Sie ihrem Browser sagen, die neue Version zu laden: '''Mozilla:''' ''Strg-Shift-R'', '''IE:''' ''Strg-F5'', '''Safari:''' ''Cmd-Shift-R'', '''Konqueror:''' ''F5''.",
 'note'                     => '<strong>Achtung: </strong>',
-'previewnote'              => 'Das isch numen e Vorschau und nonig gspycheret!',
+'previewnote'              => '<strong>Das isch numen e Vorschau und nonig gspycheret!</strong>',
 'editing'                  => 'Bearbeite vo «$1»',
-'editinguser'              => 'Bearbeite vo «$1»',
 'editingsection'           => 'Bearbeite vo «$1» (Absatz)',
 'editconflict'             => 'Bearbeitigs-Konflikt: «$1»',
 'explainconflict'          => "Öpper anders het dä Artikel gänderet, wo du ne sälber am Ändere bisch gsy.
@@ -394,6 +392,7 @@ Si verspräche uns usserdäm, dass Si des alles selber gschriebe oder vo nere Qu
 'protectedpagewarning'     => '<strong>WARNIG: Die Syten isch gsperrt worde, so das se nume Benutzer mit Sysop-Rechten chöi verändere.</strong>',
 'semiprotectedpagewarning' => "'''''Halbsperrung''': Diese Seite kann von angemeldeten Benutzern bearbeitet werden. Für nicht angemeldete oder gerade eben erst angemeldete Benutzer ist der Schreibzugang gesperrt.''",
 'templatesused'            => 'Selli Vorlage wärde in sellem Artikel bruucht:',
+'template-semiprotected'   => '(schrybgschützt für unaagmoldeni un neui Benutzer)',
 'edittools'                => '<!-- Selle Text wird untr em "ändere"-Formular un bim "Uffelade"-Formular aagzeigt. -->',
 
 # History pages
@@ -424,10 +423,6 @@ Erklärig: (aktuell) = Underschid zu jetz,
 'nextn'                 => 'nächschti $1',
 'viewprevnext'          => '($1) ($2) aazeige; ($3) uf ds Mal',
 'powersearch'           => 'Suechi',
-'powersearchtext'       => '
-Suche in Namensräumen :<br />
-$1<br />
-$2 Zeige auch REDIRECTs   Suche nach $3 $9',
 'searchdisabled'        => '<p>Die Volltextsuche wurde wegen Überlastung temporär deaktiviert. Derweil können Sie entweder folgende Google- oder Yahoo-Suche verwenden, die allerdings nicht den aktuellen Stand widerspiegeln.</p>',
 
 # Preferences page
@@ -467,12 +462,12 @@ $2 Zeige auch REDIRECTs   Suche nach $3 $9',
 'files'              => 'Bilder',
 
 # User rights
+'userrights'               => 'Benutzerrechtsverwaltung', # Not used as normal message but as header for the special page itself
 'userrights-lookup-user'   => 'Verwalte Gruppenzugehörigkeit',
 'editusergroup'            => 'Ändere vo Benutzerrächt',
+'editinguser'              => "Bearbeite vo '''[[User:$1|$1]]''' ([[User talk:$1|{{int:talkpagelinktext}}]] | [[Special:Contributions/$1|{{int:contribslink}}]])",
 'userrights-editusergroup' => 'Bearbeite Gruppenzugehörigkeit des Benutzers',
 'saveusergroups'           => 'Speichere Gruppenzugehörigkeit',
-'userrights-groupshelp'    => 'Wähle die Gruppen, aus denen der Benutzer entfernt oder zu denen er hinzugefügt werden soll.
-Nicht selektierte Gruppen werden nicht geändert. Eine Selektion kann mit Strg + Linksklick (bzw. Ctrl + Linksklick) entfernt werden.',
 
 # User rights log
 'rightslogtext' => 'Des ischs Logbuech vun de Änderunge on Bnutzerrechte.',
@@ -510,12 +505,10 @@ or
 * '''<nowiki>[[</nowiki>{{ns:media}}<nowiki>:file.ogg]]</nowiki>'''
 go direkt e Gleich uff d Datei z'mache.",
 
-# Image list
-'imagelist'        => 'Lischte vo Bilder',
-'imagelisttext'    => 'Hier ist eine Liste von $1 Bildern, sortiert $2.',
-'getimagelist'     => 'Lade Bilderliste',
-'ilsubmit'         => 'Suech',
-'showlast'         => 'Zeige die letzten $1 Bilder, sortiert nach $2.',
+# Special:Imagelist
+'imagelist' => 'Lischte vo Bilder',
+
+# Image description page
 'imagelinks'       => 'Bildverweise',
 'linkstoimage'     => 'Di folgende Sytene händ en Link zu dem Bildli:',
 'nolinkstoimage'   => 'Kein Artikel benutzt dieses Bild.',
@@ -568,14 +561,11 @@ Zuer Ziit stöhn '''$7''' Arbete zuem mache aa.",
 'popularpages'            => 'Beliebti Artikel',
 'wantedpages'             => 'Artikel wo fähle',
 'mostlinked'              => 'Meistverlinke Seiten',
-'allpages'                => 'alli Sytene',
 'prefixindex'             => 'Alli Artikle (mit Präfix)',
 'shortpages'              => 'Churzi Artikel',
 'longpages'               => 'Langi Artikel',
 'deadendpages'            => 'Artikel ohni Links («Sackgasse»)',
 'listusers'               => 'Lischte vo Benutzer',
-'specialpages'            => 'Spezialsytene',
-'spheading'               => 'Spezial-Sytene für alli Benützer',
 'newpages'                => 'Nöji Artikel',
 'ancientpages'            => 'alti Sytene',
 'move'                    => 'verschiebe',
@@ -584,16 +574,14 @@ Zuer Ziit stöhn '''$7''' Arbete zuem mache aa.",
 # Book sources
 'booksources' => 'ISBN-Suech',
 
-'categoriespagetext' => 'Selli Kategorie gits in dem Wiki:',
-'userrights'         => 'Benutzerrechtsverwaltung',
-'alphaindexline'     => 'vo $1 bis $2',
-
 # Special:Log
 'alllogstext' => 'Kombinierti Aasicht vo de Protokoll vom Ufelade, Lösche, Schütze, Spärre un de Adminischtratore.
 Si chönnet d Aazeig iischränke wenn Si e Protokoll, e Benutzername odr e Sytename iigän.',
 'logempty'    => 'Kei passendi Yträg gfunde.',
 
 # Special:Allpages
+'allpages'          => 'alli Sytene',
+'alphaindexline'    => 'vo $1 bis $2',
 'nextpage'          => 'Nächscht Syte ($1)',
 'allpagesfrom'      => 'Syte aazeige vo:',
 'allarticles'       => 'alli Artikel',
@@ -603,6 +591,10 @@ Si chönnet d Aazeig iischränke wenn Si e Protokoll, e Benutzername odr e Syten
 'allpagesnext'      => 'nächschts',
 'allpagessubmit'    => 'gang',
 'allpagesprefix'    => 'Alli Sytene mit em Präfix:',
+
+# Special:Categories
+'categories'         => 'Kategorie',
+'categoriespagetext' => 'Selli Kategorie gits in dem Wiki:',
 
 # E-mail user
 'mailnologin'     => 'Du bisch nid aagmäldet oder hesch keis Mail aaggä',
@@ -710,12 +702,12 @@ Der aktuelle Text des gelöschten Artikels ist nur Administratoren zugänglich.'
 'blocklink'       => 'spärre',
 'contribslink'    => 'Byträg',
 'blocklogpage'    => 'Sperrigs-Protokoll',
-'blocklogentry'   => 'sperrt [[User:$1]] - ([[Special:Contributions/$1|Biiträg]]) für d Ziit vo: $2',
+'blocklogentry'   => 'sperrt [[$1]] für d Ziit vo: $2 $3',
 'blocklogtext'    => 'Des ischs Logbuech yber Sperrunge un Entsperrunge vun Bnutzer. Automatisch blockti IP-Adresse werre nit erfasst. Lueg au [[Special:Ipblocklist|IP-Block Lischt]] fyr ä Lischt vun gsperrti Bnutzer.',
-'unblocklogentry' => 'Blockade von [[User:$1]] aufgehoben',
+'unblocklogentry' => 'Blockade von $1 aufgehoben',
 
 # Move page
-'movepage'         => 'Artikel verschiebe',
+'move-page-legend' => 'Artikel verschiebe',
 'movepagetext'     => 'Mit däm Forumlar chasch du en Artikel verschiebe, u zwar mit syre komplette Versionsgschicht. Der alt Titel leitet zum nöie wyter, aber Links ufen alt Titel blyben unveränderet.',
 'movepagetalktext' => "D Diskussionssyte wird mitverschobe, '''ussert:'''
 *Du verschiebsch d Syten i nen andere Namensruum, oder
@@ -732,7 +724,6 @@ I söttigne Fäll müessti d Diskussionssyten allefalls vo Hand kopiert wärde."
 'articleexists'    => 'A Syte mit sellem Name gits scho odr de Name isch ungültigt. Bitte nimm en andere.',
 'movedto'          => 'verschoben uf',
 'movetalk'         => 'Diskussionssyte nach Müglechkeit mitverschiebe',
-'talkpagemoved'    => 'D Diskussionssyten isch mitverschobe worde.',
 '1movedto2'        => '[[$1]] isch uf [[$2]] verschobe worde.',
 '1movedto2_redir'  => '[[$1]] isch uf [[$2]] verschobe worre un het drbii e Wiiterleitig übrschriebe.',
 'movereason'       => 'Grund',
@@ -747,7 +738,8 @@ I söttigne Fäll müessti d Diskussionssyten allefalls vo Hand kopiert wärde."
 'allmessagesname'           => 'Name',
 'allmessagesdefault'        => 'Standard-Tekscht',
 'allmessagescurrent'        => 'jetzige Tekscht',
-'allmessagestext'           => 'Sell isch e Lischte vo alle mögliche Systemnochrichte ussem MediaWiki Namensruum.',
+'allmessagestext'           => 'Sell isch e Lischte vo alle mögliche Systemnochrichte ussem MediaWiki Namensruum.
+Please visit [http://www.mediawiki.org/wiki/Localisation MediaWiki Localisation] and [http://translatewiki.net Betawiki] if you wish to contribute to the generic MediaWiki localisation.',
 'allmessagesnotsupportedDB' => "'''{{ns:special}}:Allmessages''' cha nit bruucht wärde will '''\$wgUseDatabaseMessages''' abgschalte isch.",
 'allmessagesfilter'         => 'Nochrichte nochem Name filtere:',
 'allmessagesmodified'       => 'numme gänderti aazeige',
@@ -781,7 +773,6 @@ I söttigne Fäll müessti d Diskussionssyten allefalls vo Hand kopiert wärde."
 'tooltip-n-recentchanges'       => 'Lischte vo de letschten Änderige i däm Wiki.',
 'tooltip-n-randompage'          => 'E zuefälligi Syte',
 'tooltip-n-help'                => 'Ds Ort zum Usefinde.',
-'tooltip-n-sitesupport'         => 'Unterstütz üs',
 'tooltip-t-whatlinkshere'       => 'Lischte vo allne Sytene, wo do ane linke',
 'tooltip-t-recentchangeslinked' => 'Letschti Änderige vo de Syte, wo vo do verlinkt sin',
 'tooltip-feed-rss'              => 'RSS-Feed für selli Syte',
@@ -806,10 +797,7 @@ I söttigne Fäll müessti d Diskussionssyten allefalls vo Hand kopiert wärde."
 'othercontribs'    => 'Basiert auf der Arbeit von $1.',
 
 # Spam protection
-'spamprotectiontitle'    => 'Spamschutz-Filter',
-'subcategorycount'       => 'In sellere Kategori {{PLURAL:$1|isch no ei Unterkategori|sin no $1 Unterkategorie}}.',
-'categoryarticlecount'   => 'In sellere Kategorie {{PLURAL:$1|isch ei Artikel|sin $1 Artikel}}.',
-'listingcontinuesabbrev' => '(Forts.)',
+'spamprotectiontitle' => 'Spamschutz-Filter',
 
 # Math options
 'mw_math_png'    => 'Immer als PNG aazeige',
@@ -842,16 +830,15 @@ sollte umgehend ein Administrator informiert werden!',
 'thumbsize'    => 'Bildvorschou-Gröössi:',
 
 # Special:Newimages
-'newimages' => 'Gallery vo noie Bilder',
+'newimages'     => 'Gallery vo noie Bilder',
+'imagelisttext' => 'Hier ist eine Liste von $1 Bildern, sortiert $2.',
+'ilsubmit'      => 'Suech',
 
 # EXIF tags
-'exif-orientation'       => 'Orientierung',
-'exif-copyright'         => 'Copyright',
-'exif-pixelxdimension'   => 'Valind image height',
-'exif-fnumber'           => 'F-Wert',
-'exif-isospeedratings'   => 'Filmempfindlichkeit (ISO)',
-'exif-shutterspeedvalue' => 'Shutter Speed Value',
-'exif-brightnessvalue'   => 'Brightness Value',
+'exif-orientation'     => 'Orientierung',
+'exif-pixelxdimension' => 'Valind image height',
+'exif-fnumber'         => 'F-Wert',
+'exif-isospeedratings' => 'Filmempfindlichkeit (ISO)',
 
 # External editor support
 'edit-externally-help' => 'Siehe [http://meta.wikimedia.org/wiki/Hilfe:Externe_Editoren Installations-Anweisungen] für weitere Informationen',
@@ -860,15 +847,14 @@ sollte umgehend ein Administrator informiert werden!',
 'watchlistall2' => 'alli',
 
 # E-mail address confirmation
-'confirmemail'            => 'Bschtätigung vo Ihre E-Bost-Adräss',
-'confirmemail_text'       => 'Dermit du di erwyterete Mailfunktione chasch bruuche, muesch du die e-Mail-Adrässe, wo du hesch aaggä, la bestätige. Klick ufe Chnopf unte; das schickt dir es Mail. I däm Mail isch e Link; we du däm Link folgsch, de tuesch dadermit bestätige, das die e-Mail-Adrässe dyni isch.',
-'confirmemail_send'       => 'Bestätigungs-Mail verschicke',
-'confirmemail_sent'       => 'Es isch dir es Mail zur Adrässbestätigung gschickt worde.',
-'confirmemail_sendfailed' => 'Could not send confirmation mail due to misconfigured server or invalid characters in e-mail address.',
-'confirmemail_success'    => 'Dyni e-Mail-Adrässen isch bestätiget worde. Du chasch di jitz ylogge.',
-'confirmemail_loggedin'   => 'Dyni e-Mail-Adrässen isch jitz bestätiget.',
-'confirmemail_subject'    => '{{SITENAME}} e-Mail-Adrässbestätigung',
-'confirmemail_body'       => 'Hallo
+'confirmemail'          => 'Bschtätigung vo Ihre E-Bost-Adräss',
+'confirmemail_text'     => 'Dermit du di erwyterete Mailfunktione chasch bruuche, muesch du die e-Mail-Adrässe, wo du hesch aaggä, la bestätige. Klick ufe Chnopf unte; das schickt dir es Mail. I däm Mail isch e Link; we du däm Link folgsch, de tuesch dadermit bestätige, das die e-Mail-Adrässe dyni isch.',
+'confirmemail_send'     => 'Bestätigungs-Mail verschicke',
+'confirmemail_sent'     => 'Es isch dir es Mail zur Adrässbestätigung gschickt worde.',
+'confirmemail_success'  => 'Dyni e-Mail-Adrässen isch bestätiget worde. Du chasch di jitz ylogge.',
+'confirmemail_loggedin' => 'Dyni e-Mail-Adrässen isch jitz bestätiget.',
+'confirmemail_subject'  => '{{SITENAME}} e-Mail-Adrässbestätigung',
+'confirmemail_body'     => 'Hallo
 
 {{SITENAME}}-BenutzerIn «$2» — das bisch allwäg du — het sech vor IP-Adrässen $1 uus mit deren e-Mail-Adrässe bi {{SITENAME}} aagmäldet.
 
@@ -896,5 +882,8 @@ Fründtlechi Grüess',
 
 ''Ds Lösche vor Zwüschespycherig zwingt der Server, dir di aktuellschti Version vor Syte z gä!''
 </div>",
+
+# Special:SpecialPages
+'specialpages' => 'Spezialsytene',
 
 );

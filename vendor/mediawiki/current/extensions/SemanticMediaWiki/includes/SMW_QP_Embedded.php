@@ -89,12 +89,12 @@ class SMWEmbeddedResultPrinter extends SMWResultPrinter {
 							} else {
 								$articlename = $object->getLongWikiText();
 							}
-							if ($outputmode == SMW_OUTPUT_HTML) {
-								$parserOutput = $parser->parse('[[SMW::off]]{{' . $articlename . '}}[[SMW::on]]', $wgTitle, $parser_options);
-								$result .= $parserOutput->getText();
-							} else {
+							if ($outputmode == SMW_OUTPUT_WIKI) {
 // 								$result .= '{{' . $articlename . '}}'; // fails in MW1.12 and later
 								$result .= '[[SMW::off]]' . $parser->preprocess('{{' . $articlename . '}}', $wgTitle, $parser_options) . '[[SMW::on]]';
+							} else { // SMW_OUTPUT_HTML, SMW_OUTPUT_FILE
+								$parserOutput = $parser->parse('[[SMW::off]]{{' . $articlename . '}}[[SMW::on]]', $wgTitle, $parser_options);
+								$result .= $parserOutput->getText();
 							}
 						} else {
 							$result .= '<b>' . $object->getLongWikiText() . '</b>';
@@ -107,14 +107,19 @@ class SMWEmbeddedResultPrinter extends SMWResultPrinter {
 		}
 
 		// show link to more results
-		if ( $this->mInline && $res->hasFurtherResults() ) {
-			$label = $this->mSearchlabel;
-			if ($label === NULL) { //apply defaults
-				$label = wfMsgForContent('smw_iq_moreresults');
+		if ( $this->mInline && $res->hasFurtherResults() && ($this->mSearchlabel !== '') ) {
+			$link = $res->getQueryLink();
+			if ($this->mSearchlabel) {
+				$link->setCaption($this->mSearchlabel);
 			}
-			if ($label != '') {
-				$result .= $embstart . $this->getFurtherResultsLink($outputmode,$res,$label) . $embend ;
+			$link->setParameter('embedded','format');
+			$format = $this->m_embedformat;
+			if ($format=='ol') $format = 'ul'; // ordered lists confusing in paged output
+			$link->setParameter($format,'embedformat');
+			if (!$this->m_showhead) {
+				$link->setParameter('1','embedonly');
 			}
+			$result .= $embstart . $link->getText($outputmode,$this->mLinker) . $embend;
 		}
 		$result .= $footer;
 

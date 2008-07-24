@@ -1,7 +1,8 @@
 <?php
 /** Bishnupriya (ইমার ঠার/বিষ্ণুপ্রিয়া মণিপুরী)
  *
- * @addtogroup Language
+ * @ingroup Language
+ * @file
  *
  * @author Uttam Singha, Dec 2006
  * @author Usingha
@@ -142,8 +143,7 @@ $messages = array(
 'nov'           => 'নভে',
 'dec'           => 'ডিসে',
 
-# Bits of text used by many pages
-'categories'            => 'বিষয়রথাকহানি',
+# Categories related messages
 'pagecategories'        => '{{PLURAL:$1|থাক|থাকহানি}}',
 'category_header'       => '"$1" বিষয়রথাকে আসে নিবন্ধহানি',
 'subcategories'         => 'উপথাক',
@@ -234,30 +234,29 @@ $messages = array(
 'jumptosearch'      => 'বিসারা',
 
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
-'aboutsite'         => '{{SITENAME}}র বারে',
-'aboutpage'         => 'Project:বারে',
-'bugreports'        => 'লাল বিবরণী',
-'bugreportspage'    => 'Project:লাল_বিবরণী',
-'copyright'         => '$1-র মাতুঙে এহানর মেথেলহানি পানা একরের।',
-'copyrightpagename' => '{{SITENAME}} স্বত্তাধিকারহান',
-'copyrightpage'     => '{{ns:project}}:স্বত্তাধিকারহানি',
-'currentevents'     => 'হাদি এহানর ঘটনা',
-'currentevents-url' => 'Project:হাদি এহানর ঘটনাহানি',
-'disclaimers'       => 'দাবি বেলানি',
-'disclaimerpage'    => 'Project:ইজ্জু দাবি বেলানি',
-'edithelp'          => 'পতানি পাংলাক',
-'edithelppage'      => 'Help:কিসাদে_পাতা_আহান_পতানি',
-'faq'               => 'আঙলাক',
-'faqpage'           => 'Project:আঙলাক',
-'helppage'          => 'Help:পাংলাক',
-'mainpage'          => 'পয়লা পাতা',
-'policy-url'        => 'Project:নীতিহান',
-'portal'            => 'শিংলুপ',
-'portal-url'        => 'Project:শিংলুপ',
-'privacy'           => 'লুকরানির নীতিহান',
-'privacypage'       => 'Project:লুকরানির নীতিহান',
-'sitesupport'       => 'দান দেনা',
-'sitesupport-url'   => 'Project:দান দেনা',
+'aboutsite'            => '{{SITENAME}}র বারে',
+'aboutpage'            => 'Project:বারে',
+'bugreports'           => 'লাল বিবরণী',
+'bugreportspage'       => 'Project:লাল_বিবরণী',
+'copyright'            => '$1-র মাতুঙে এহানর মেথেলহানি পানা একরের।',
+'copyrightpagename'    => '{{SITENAME}} স্বত্তাধিকারহান',
+'copyrightpage'        => '{{ns:project}}:স্বত্তাধিকারহানি',
+'currentevents'        => 'হাদি এহানর ঘটনা',
+'currentevents-url'    => 'Project:হাদি এহানর ঘটনাহানি',
+'disclaimers'          => 'দাবি বেলানি',
+'disclaimerpage'       => 'Project:ইজ্জু দাবি বেলানি',
+'edithelp'             => 'পতানি পাংলাক',
+'edithelppage'         => 'Help:কিসাদে_পাতা_আহান_পতানি',
+'faq'                  => 'আঙলাক',
+'faqpage'              => 'Project:আঙলাক',
+'helppage'             => 'Help:পাংলাক',
+'mainpage'             => 'পয়লা পাতা',
+'mainpage-description' => 'পয়লা পাতা',
+'policy-url'           => 'Project:নীতিহান',
+'portal'               => 'শিংলুপ',
+'portal-url'           => 'Project:শিংলুপ',
+'privacy'              => 'লুকরানির নীতিহান',
+'privacypage'          => 'Project:লুকরানির নীতিহান',
 
 'badaccess'        => 'য়্যাথাঙে লালসে',
 'badaccess-group0' => 'তি যে কামহানর হেইচা করিসত, তরতা অহান করানির য়্যাথাং নেই।',
@@ -374,12 +373,10 @@ $messages = array(
 'savefile'        => 'ফাইল ইতু',
 'watchthisupload' => 'পাতাএহান খিয়ালে থ',
 
-# Image list
-'imagelist'  => 'ছবির তালিকা',
-'ilsubmit'   => 'বিসারা',
-'byname'     => 'নাঙর সিজিলন',
-'bydate'     => 'তারিখর সিজিলন',
-'bysize'     => 'আকারহানর সিজিলন',
+# Special:Imagelist
+'imagelist' => 'ছবির তালিকা',
+
+# Image description page
 'imagelinks' => 'জুরিসিতা',
 
 # Random page
@@ -390,21 +387,18 @@ $messages = array(
 # Miscellaneous special pages
 'nbytes'       => '$1 বাইট',
 'ncategories'  => '$1 {{PLURAL:$1|থাক|থাকহানি}}',
-'allpages'     => 'হাবি পাতাহানি',
-'specialpages' => 'বিশেষ পাতাহানি',
 'ancientpages' => 'পুরানা পাতাহানি',
 'move'         => 'থেইকরানি',
 
 # Book sources
 'booksources' => 'লেরিকর উৎসহান',
 
-'categoriespagetext' => 'ইমারঠারর উইকিপিডিয়াত এবাকার বিষয়রথাক:',
-'alphaindexline'     => '$1 ত $2',
-
 # Special:Log
 'specialloguserlabel' => 'আতাকুরাগ:',
 
 # Special:Allpages
+'allpages'       => 'হাবি পাতাহানি',
+'alphaindexline' => '$1 ত $2',
 'allpagesfrom'   => 'যেহাত্ত অকরিসি অহাত্ত পাতাহানি দেহাদেঃ',
 'allarticles'    => 'নিবন্ধহাবি',
 'allinnamespace' => 'পাতাহানি হাবি ($1 নাঙরজাগা)',
@@ -412,6 +406,10 @@ $messages = array(
 'allpagesnext'   => 'থাঙনাত',
 'allpagessubmit' => 'হাত',
 'allpagesprefix' => 'মেয়েক এগন অকরিসি ৱাহির পাতাহানি দেহাদেঃ',
+
+# Special:Categories
+'categories'         => 'বিষয়রথাকহানি',
+'categoriespagetext' => 'ইমারঠারর উইকিপিডিয়াত এবাকার বিষয়রথাক:',
 
 # Watchlist
 'watchlist'       => 'মর তালাবি',
@@ -475,8 +473,9 @@ $messages = array(
 # Attribution
 'anonymous' => '{{SITENAME}}র বেনাঙর আতাকুরা(গি)',
 
-# Spam protection
-'categoryarticlecount' => 'এরে বিষয়রথাকে $1হান নিবন্ধ আসে।',
+# Special:Newimages
+'ilsubmit' => 'বিসারা',
+'bydate'   => 'তারিখর সিজিলন',
 
 # E-mail address confirmation
 'confirmemail'            => 'ই-মেইল ঠিকানাহান লেপকর',
@@ -498,5 +497,8 @@ $1',
 
 # Auto-summaries
 'autoredircomment' => '[[$1]]-ত যানার বারো-র্নিদেশ করানি ইল',
+
+# Special:SpecialPages
+'specialpages' => 'বিশেষ পাতাহানি',
 
 );

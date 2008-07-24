@@ -4,6 +4,12 @@
 # CONFIGURATION VARIABLES TO LocalApp.php AND EDIT THEM
 # THERE.
 
+/**
+ * Protect against register_globals vulnerabilities.
+ * This line must be present before any global variable is referenced.
+ */
+if (!defined('MEDIAWIKI')) die();
+
 $wgDefaultGoPrefix='Expression:';
 $wgHooks['BeforePageDisplay'][]='addWikidataHeader';
 $wgHooks['GetEditLinkTrail'][]='addWikidataEditLinkTrail'; #TODO merge with modifyTabs
@@ -15,9 +21,9 @@ $wgCustomHandlerPath = array('*'=>"{$IP}/extensions/Wikidata/OmegaWiki/");
 $wgDefaultClassMids = array(402295);
 
 # Register the classes needed for the wikidata api with the autoloader.
-$wgAutoloadClasses['ApiWikiData'] = "extensions/Wikidata/includes/api/ApiWikiData.php";
-$wgAutoloadClasses['ApiWikiDataFormatBase'] = "extensions/Wikidata/includes/api/ApiWikiDataFormatBase.php";
-$wgAutoloadClasses['ApiWikiDataFormatXml'] = "extensions/Wikidata/includes/api/ApiWikiDataFormatXml.php";
+$wgAutoloadClasses['ApiWikiData'] = "{$IP}/extensions/Wikidata/includes/api/ApiWikiData.php";
+$wgAutoloadClasses['ApiWikiDataFormatBase'] = "{$IP}/extensions/Wikidata/includes/api/ApiWikiDataFormatBase.php";
+$wgAutoloadClasses['ApiWikiDataFormatXml'] = "{$IP}/extensions/Wikidata/includes/api/ApiWikiDataFormatXml.php";
 
 # Add the API module
 $wgAPIModules['wikidata'] = 'ApiWikiData';
@@ -51,6 +57,8 @@ $wgGroupPermissions['wikidata-omega']['editwikidata-uw']=true;
 #$wgGroupPermissions['wikidata-test']['editwikidata-tt']=true;
 $wgGroupPermissions['wikidata-copy']['wikidata-copy']=true;
 $wgGroupPermissions['wikidata-omega']['wikidata-copy']=true;
+$wgAvailableRights[] = 'editwikidata-uw';
+$wgAvailableRights[] = 'wikidata-copy';
 
 # The permission needed to do ...
 $wgCommunity_dc="uw";
