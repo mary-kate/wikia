@@ -6,78 +6,26 @@
  * @author Yaron Koren
  */
 
-include_once $sfgIP . "/includes/SF_TemplateField.inc";
-
+/**
+ * Protect against register_globals vulnerabilities.
+ * This line must be present before any global variable is referenced.
+ */
 if (!defined('MEDIAWIKI')) die();
 
-global $IP;
-require_once( "$IP/includes/SpecialPage.php" );
+class SFCreateTemplate extends SpecialPage {
 
-SpecialPage::addPage( new SpecialPage('CreateTemplate','',true,'doSpecialCreateTemplate',false) );
-
-// Custom sort function, used in both getSemanticProperties() functions
-function cmp($a, $b) {
-	if ($a == $b) {
-		return 0;
-	} elseif ($a < $b) {
-		return -1;
-	} else {
-		return 1;
-	}
-}
-
-function getSemanticProperties_0_7() {
-	$dbr = wfGetDB( DB_SLAVE );
-	$all_properties = array();
-
-	$res = $dbr->query("SELECT page_title FROM " . $dbr->tableName('page') .
-		" WHERE page_namespace = " . SMW_NS_ATTRIBUTE .
-		" AND page_is_redirect = 0");
-	while ($row = $dbr->fetchRow($res)) {
-		$attribute_name = str_replace('_', ' ', $row[0]);
-		$all_properties[$attribute_name . ":="] = $attribute_name;
-	}
-	$dbr->freeResult($res);
-
-	$res = $dbr->query("SELECT page_title FROM " . $dbr->tableName('page') .
-		" WHERE page_namespace = " . SMW_NS_RELATION .
-		" AND page_is_redirect = 0");
-	while ($row = $dbr->fetchRow($res)) {
-		$relation_name = str_replace('_', ' ', $row[0]);
-		$all_properties[$relation_name . "::"] = $relation_name;
-	}
-	$dbr->freeResult($res);
-
-	// sort properties list alphabetically - custom sort function is needed
-	// because the regular sort function destroys the "keys" of the array
-	uasort($all_properties, "cmp");
-	return $all_properties;
-}
-
-function getSemanticProperties_1_0() {
-	$all_properties = array();
-
-	// set limit on results - a temporary fix until SMW's getProperties()
-	// functions stop requiring a limit
-	global $smwgIP;
-	include_once($smwgIP . '/includes/storage/SMW_Store.php');
-	$options = new SMWRequestOptions();
-	$options->limit = 10000;
-	$used_properties = smwfGetStore()->getPropertiesSpecial($options);
-	foreach ($used_properties as $property) {
-	$property_name = $property[0]->getText();
-		$all_properties[$property_name . "::"] = $property_name;
-	}
-	$unused_properties = smwfGetStore()->getUnusedPropertiesSpecial($options);
-	foreach ($unused_properties as $property) {
-		$property_name = $property->getText();
-		$all_properties[$property_name . "::"] = $property_name;
+	/**
+	 * Constructor
+	 */
+	function SFCreateTemplate() {
+		SpecialPage::SpecialPage('CreateTemplate');
+		wfLoadExtensionMessages('SemanticForms');
 	}
 
-	// sort properties list alphabetically - custom sort function is needed
-	// because the regular sort function destroys the "keys" of the array
-	uasort($all_properties, "cmp");
-	return $all_properties;
+	function execute() {
+		$this->setHeaders();
+		doSpecialCreateTemplate();
+	}
 }
 
 function printPropertiesDropdown($all_properties, $id, $property) {
@@ -93,7 +41,7 @@ function printPropertiesDropdown($all_properties, $id, $property) {
 
 function printFieldEntryBox($id, $f, $all_properties) {
 	$dropdown_html = printPropertiesDropdown($all_properties, $id, $f->semantic_field_call);
-	$text = '	<div class="field_box">' . "\n";
+	$text = '	<div class="fieldBox">' . "\n";
 	$text .= '	<p>' . wfMsg('sf_createtemplate_fieldname') . ' <input size="15" name="name_' . $id . '" value="' . $f->field_name . '">' . "\n";
 	$text .= '	' . wfMsg('sf_createtemplate_displaylabel') . ' <input size="15" name="label_' . $id . '" value="' . $f->label . '">' . "\n";
 	$text .= '	' . wfMsg('sf_createtemplate_semanticproperty') . ' ' . $dropdown_html . "</p>\n";
@@ -114,12 +62,7 @@ END;
 function doSpecialCreateTemplate() {
   global $wgOut, $wgRequest, $wgUser, $sfgScriptPath, $wgContLang;
 
-  $smw_version = SMW_VERSION;
-  if ($smw_version{0} == '0') {
-    $all_properties = getSemanticProperties_0_7();
-  } else {
-    $all_properties = getSemanticProperties_1_0();
-  }
+  $all_properties = sffGetAllProperties();
 
   $template_name = $wgRequest->getVal('template_name');
   $template_name_error_str = "";
@@ -165,7 +108,7 @@ function doSpecialCreateTemplate() {
       $full_text = createTemplateText($template_name, $fields, $category, $aggregating_property, $aggregation_label, $template_format);
       // HTML-encode
       $full_text = str_replace('"', '&quot;', $full_text);
-      $text .= sffPrintRedirectForm($title, $full_text, "", $save_page, $preview_page, false, false, false);
+      $text .= sffPrintRedirectForm($title, $full_text, "", $save_page, $preview_page, false, false, false, null, null);
     }
   }
 

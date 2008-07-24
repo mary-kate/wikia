@@ -44,8 +44,8 @@ class SpecialRenameuser extends SpecialPage {
 
 		$showBlockLog = $wgRequest->getBool( 'submit-showBlockLog' );
 		$oldusername = Title::newFromText( $wgRequest->getText( 'oldusername' ), NS_USER );
-		$newusername = Title::newFromText( $wgContLang->ucfirst( $wgRequest->getText( 'newusername' ) ), NS_USER ); // Force uppercase of newusername otherweise wikis with wgCapitalLinks=false can create lc usernames
-		$action = $wgTitle->escapeLocalUrl();
+		// Force uppercase of newusername otherweise wikis with wgCapitalLinks=false can create lc usernames
+		$newusername = Title::newFromText( $wgContLang->ucfirst( $wgRequest->getText( 'newusername' ) ), NS_USER );
 		$oun = is_object( $oldusername ) ? $oldusername->getText() : '';
 		$nun = is_object( $newusername ) ? $newusername->getText() : '';
 		$token = $wgUser->editToken();
@@ -54,35 +54,39 @@ class SpecialRenameuser extends SpecialPage {
 		if ( $wgRequest->wasPosted() && ! $wgRequest->getCheck( 'movepages' ) ) {
 			$is_checked = false;
 		}
-		$align = $wgContLang->isRtl() ? 'left' : 'right';
+		$warnings = array();
+		if( $oun && $nun && !$wgRequest->getCheck( 'confirmaction' )  ) {
+			wfRunHooks( 'RenameUserWarning', array( $oun, $nun, &$warnings ) );
+		}
 
 		$wgOut->addHTML( "
 			<!-- Current contributions limit is " . RENAMEUSER_CONTRIBLIMIT . " -->" .
-			Xml::openElement( 'form', array( 'method' => 'post', 'action' => $action, 'id' => 'renameuser' ) ) .
-			Xml::openElement( 'table' ) .
+			Xml::openElement( 'form', array( 'method' => 'post', 'action' => $wgTitle->getLocalUrl(), 'id' => 'renameuser' ) ) .
+			Xml::openElement( 'fieldset' ) .
+			Xml::element( 'legend', null, wfMsg( 'renameuser' ) ) .
+			Xml::openElement( 'table', array( 'id' => 'mw-renameuser-table' ) ) .
 			"<tr>
-				<td align='$align'>" .
+				<td class='mw-label'>" .
 					Xml::label( wfMsg( 'renameuserold' ), 'oldusername' ) .
 				"</td>
-				<td>" .
+				<td class='mw-input'>" .
 					Xml::input( 'oldusername', 20, $oun, array( 'type' => 'text', 'tabindex' => '1' ) ) . ' ' .
-					Xml::submitButton( wfMsg( 'blocklogpage' ), array ( 'name' => 'submit-showBlockLog', 'id' => 'submit-showBlockLog', 'tabindex' => '2' ) ) . ' ' .
 				"</td>
 			</tr>
 			<tr>
-				<td align='$align'>" .
+				<td class='mw-label'>" .
 					Xml::label( wfMsg( 'renameusernew' ), 'newusername' ) .
 				"</td>
-				<td>" .
-					Xml::input( 'newusername', 20, $nun, array( 'type' => 'text', 'tabindex' => '3' ) ) .
+				<td class='mw-input'>" .
+					Xml::input( 'newusername', 20, $nun, array( 'type' => 'text', 'tabindex' => '2' ) ) .
 				"</td>
 			</tr>
 			<tr>
-				<td align='$align'>" .
+				<td class='mw-label'>" .
 					Xml::label( wfMsg( 'renameuserreason' ), 'reason' ) .
 				"</td>
-				<td>" .
-					Xml::input( 'reason', 40, $reason, array( 'type' => 'text', 'tabindex' => '4', 'maxlength' => 255 ) ) .
+				<td class='mw-input'>" .
+					Xml::input( 'reason', 40, $reason, array( 'type' => 'text', 'tabindex' => '3', 'maxlength' => 255 ) ) .
 				"</td>
 			</tr>"
 		);
@@ -91,8 +95,33 @@ class SpecialRenameuser extends SpecialPage {
 				<tr>
 					<td>&nbsp;
 					</td>
-					<td>" .
-						Xml::checkLabel( wfMsg( 'renameusermove' ), 'movepages', 'movepages', $is_checked, array( 'tabindex' => '5' ) ) .
+					<td class='mw-input'>" .
+						Xml::checkLabel( wfMsg( 'renameusermove' ), 'movepages', 'movepages', $is_checked, array( 'tabindex' => '4' ) ) .
+					"</td>
+				</tr>"
+			);
+		}
+		if( $warnings ) {
+			$warningsHtml = array();
+			foreach( $warnings as $warning )
+				$warningsHtml[] = is_array( $warning ) ?
+					call_user_func_array( 'wfMsgWikiHtml', $warning ) :
+					wfMsgHtml( $warning );
+			$wgOut->addHTML( "
+				<tr>
+					<td>".wfMsgWikiHtml( 'renameuserwarnings' ) ."
+					</td>
+					<td class='mw-input'>" .
+						'<ul style="color: red; font-weight: bold"><li>'.implode( '</li><li>', $warningsHtml ).'</li></ul>'.
+					"</td>
+				</tr>"
+			);
+			$wgOut->addHTML( "
+				<tr>
+					<td>&nbsp;
+					</td>
+					<td class='mw-input'>" .
+						Xml::checkLabel( wfMsg( 'renameuserconfirm' ), 'confirmaction', 'confirmaction', false, array( 'tabindex' => '5' ) ) .
 					"</td>
 				</tr>"
 			);
@@ -102,11 +131,15 @@ class SpecialRenameuser extends SpecialPage {
 			<tr>
 				<td>&nbsp;
 				</td>
-				<td>" .
+				<td class='mw-submit'>" .
 					Xml::submitButton( wfMsg( 'renameusersubmit' ), array( 'name' => 'submit', 'tabindex' => '6', 'id' => 'submit' ) ) .
+					' ' .
+					Xml::submitButton( wfMsg( 'blocklogpage' ), array ( 'name' => 'submit-showBlockLog', 
+						'id' => 'submit-showBlockLog', 'tabindex' => '7' ) ) .
 				"</td>
 			</tr>" .
 			Xml::closeElement( 'table' ) .
+			Xml::closeElement( 'fieldset' ) .
 			Xml::hidden( 'token', $token ) .
 			Xml::closeElement( 'form' ) . "\n"
 		);
@@ -119,6 +152,9 @@ class SpecialRenameuser extends SpecialPage {
 
 		if( $wgRequest->getText( 'token' ) === '' ) {
 			# They probably haven't even submitted the form, so don't go further.
+			return;
+		} elseif( $warnings ) {
+			# Let user read warnings
 			return;
 		} elseif( !$wgRequest->wasPosted() || !$wgUser->matchEditToken( $wgRequest->getVal( 'token' ) ) ) {
 			$wgOut->addWikiText( "<div class=\"errorbox\">" . wfMsg( 'renameuser-error-request' ) . "</div>" );
@@ -142,8 +178,6 @@ class SpecialRenameuser extends SpecialPage {
 			$wgOut->addWikiText( "<div class=\"errorbox\">" . wfMsg( 'renameuser-error-same-user' ) . "</div>" );
 			return;
 		}
-
-		$wgOut->addHTML( '<hr />' );
 
 		// Suppress username validation of old username
 		$olduser = User::newFromName( $oldusername->getText(), false );
@@ -196,9 +230,11 @@ class SpecialRenameuser extends SpecialPage {
 			return;
 		}
 
+		// Always get the edits count, it will be used for the log message
+		$contribs = User::edits( $uid );
+
 		// Check edit count
 		if ( !$wgUser->isAllowed( 'siteadmin' ) ) {
-			$contribs = User::edits( $uid );
 			if ( RENAMEUSER_CONTRIBLIMIT != 0 && $contribs > RENAMEUSER_CONTRIBLIMIT ) {
 				$wgOut->addWikiText( "<div class=\"errorbox\">" . 
 					wfMsg( 'renameusererrortoomany',
@@ -218,14 +254,23 @@ class SpecialRenameuser extends SpecialPage {
 
 		$rename = new RenameuserSQL( $oldusername->getText(), $newusername->getText(), $uid );
 		$rename->rename();
+		
+		// If this user is renaming his/herself, make sure that Title::moveTo()
+		// doesn't make a bunch of null move edits under the old name!
+		global $wgUser;
+		if( $wgUser->getId() == $uid ) {
+			$wgUser->setName( $newusername->getText() );
+		}
 
 		$log = new LogPage( 'renameuser' );
-		$log->addEntry( 'renameuser', $oldusername, wfMsgExt( 'renameuser-log', array( 'parsemag', 'content' ), $wgContLang->formatNum( $contribs ), $reason ), $newusername->getText() );
+		$log->addEntry( 'renameuser', $oldusername, wfMsgExt( 'renameuser-log', array( 'parsemag', 'content' ), 
+			$wgContLang->formatNum( $contribs ), $reason ), $newusername->getText() );
 
-		$wgOut->addWikiText( "<div class=\"successbox\">" . wfMsg( 'renameusersuccess', $oldusername->getText(), $newusername->getText() ) . "</div><br style=\"clear:both\" />" );
+		$wgOut->addWikiText( "<div class=\"successbox\">" . wfMsg( 'renameusersuccess', $oldusername->getText(), 
+			$newusername->getText() ) . "</div><br style=\"clear:both\" />" );
 
 		if ( $wgRequest->getCheck( 'movepages' ) && $wgUser->isAllowed( 'move' ) && version_compare( $wgVersion, '1.9alpha', '>=' ) ) {
-			$dbr =& wfGetDB( DB_SLAVE );
+			$dbr = wfGetDB( DB_SLAVE );
 			$oldkey = $oldusername->getDBkey();
 			$pages = $dbr->select(
 				'page',
@@ -243,14 +288,17 @@ class SpecialRenameuser extends SpecialPage {
 			$skin =& $wgUser->getSkin();
 			while ( $row = $dbr->fetchObject( $pages ) ) {
 				$oldPage = Title::makeTitleSafe( $row->page_namespace, $row->page_title );
-				$newPage = Title::makeTitleSafe( $row->page_namespace, preg_replace( '!^[^/]+!', $newusername->getDBkey(), $row->page_title ) );
+				$newPage = Title::makeTitleSafe( $row->page_namespace, 
+					preg_replace( '!^[^/]+!', $newusername->getDBkey(), $row->page_title ) );
+				# Do not autodelete or anything, title must not exist
 				if ( $newPage->exists() && !$oldPage->isValidMoveTarget( $newPage ) ) {
 					$link = $skin->makeKnownLinkObj( $newPage );
 					$output .= '<li class="mw-renameuser-pe">' . wfMsgHtml( 'renameuser-page-exists', $link ) . '</li>';
 				} else {
-					$success = $oldPage->moveTo( $newPage, false, wfMsgForContent( 'renameuser-move-log', $oldusername->getText(), $newusername->getText() ) );
+					$success = $oldPage->moveTo( $newPage, false, wfMsgForContent( 'renameuser-move-log', 
+						$oldusername->getText(), $newusername->getText() ) );
 					if( $success === true ) {
-						$oldLink = $skin->makeKnownLinkObj( $oldPage );
+						$oldLink = $skin->makeKnownLinkObj( $oldPage, '', 'redirect=no' );
 						$newLink = $skin->makeKnownLinkObj( $newPage );
 						$output .= '<li class="mw-renameuser-pm">' . wfMsgHtml( 'renameuser-page-moved', $oldLink, $newLink ) . '</li>';
 					} else {
@@ -265,10 +313,12 @@ class SpecialRenameuser extends SpecialPage {
 		}
 	}
 
+	// FIXME: this code is total crap. Should this just use LogEventsList or
+	// since extensions are branched, or are we keeping the half-ass b/c thing?
 	function showLogExtract( $username, $type, &$out ) {
 		global $wgOut;
 		# Show relevant lines from the logs:
-		$wgOut->addHtml( "<h2>" . htmlspecialchars( LogPage::logName( $type ) ) . "</h2>\n" );
+		$wgOut->addHtml( Xml::element( 'h2', null, LogPage::logName( $type ) ) . "\n" );
 
 		$logViewer = new LogViewer(
 			new LogReader(
@@ -324,24 +374,26 @@ class RenameuserSQL {
 		$this->old = $old;
 		$this->new = $new;
 		$this->uid = $uid;
-
-		// 1.5 schema
-		$this->tables = array(
-			'image' => 'img_user_text',
-			'oldimage' => 'oi_user_text',
-			'archive' => 'ar_user_text',
-			'revision' => 'rev_user_text'
-		);
-		$this->tablesJob = array();
-		// See if this is for large tables on large, busy, wikis
-		if( function_exists('wfQueriesMustScale') && wfQueriesMustScale() ) {
-			#$this->tablesJob['revision'] = array('rev_user_text','rev_id');
-			$this->tablesJob['recentchanges'] = array('rc_user_text','rc_id');
+		
+		$this->tables = array(); // Immediate updates
+		$this->tables['image'] = 'img_user_text';
+		$this->tables['oldimage'] = 'oi_user_text';
+		# FIXME: $this->tables['filearchive'] = 'fa_user_text'; (not indexed yet)
+		$this->tablesJob = array(); // Slow updates
+		// If this user has a large number of edits, use the jobqueue
+		if( User::edits($this->uid) > RENAMEUSER_CONTRIBJOB ) {
+			$this->tablesJob['revision'] = array('rev_user_text','rev_user','rev_timestamp');
+			$this->tablesJob['archive'] = array('ar_user_text','ar_user','ar_timestamp');
 		} else {
-			#$this->tables['revision'] = 'rev_user_text';
+			$this->tables['revision'] = 'rev_user_text';
+			$this->tables['archive'] = 'ar_user_text';
+		}
+		// Recent changes is pretty hot, deadlocks occur if done all at once
+		if( wfQueriesMustScale() ) {
+			$this->tablesJob['recentchanges'] = array('rc_user_text','rc_user','rc_timestamp');
+		} else {
 			$this->tables['recentchanges'] = 'rc_user_text';
 		}
-
 	}
 
 	/**
@@ -352,7 +404,9 @@ class RenameuserSQL {
 
 		wfProfileIn( __METHOD__ );
 
-		$dbw =& wfGetDB( DB_MASTER );
+		wfRunHooks( 'RenameUserPreRename', array( $this->uid, $this->old, $this->new ) );
+
+		$dbw = wfGetDB( DB_MASTER );
 		// Rename and touch the user before re-attributing edits,
 		// this avoids users still being logged in and making new edits while
 		// being renamed, which leaves edits at the old name.
@@ -361,36 +415,62 @@ class RenameuserSQL {
 			array( 'user_name' => $this->old ),
 			__METHOD__
 		);
-
+		// Update ipblock list if this user has a block in there.
+		$dbw->update( 'ipblocks',
+			array( 'ipb_address' => $this->new ),
+			array( 'ipb_user' => $this->uid, 'ipb_address' => $this->old ),
+			__METHOD__ );
+		// Update this users block/rights log. Ideally, the logs would be historical,
+		// but it is really annoying when users have "clean" block logs by virtue of
+		// being renamed, which makes admin tasks more of a pain...
+		$oldTitle = Title::makeTitle( NS_USER, $this->old );
+		$newTitle = Title::makeTitle( NS_USER, $this->new );
+		$dbw->update( 'logging',
+			array( 'log_title' => $newTitle->getDBKey() ),
+			array( 'log_type' => array( 'block', 'rights' ),
+				'log_namespace' => NS_USER,
+				'log_title' => $oldTitle->getDBKey() ),
+			__METHOD__ );
+		// Do immediate updates!
 		foreach( $this->tables as $table => $field ) {
 			$dbw->update( $table,
 				array( $field => $this->new ),
 				array( $field => $this->old ),
 				__METHOD__
-				#,array( $dbw->lowPriorityOption() )
 			);
 		}
-
+		// Construct jobqueue updates...
 		foreach( $this->tablesJob as $table => $params ) {
+			$userTextC = $params[0]; // some *_user_text column
+			$userIDC = $params[1]; // some *_user column
+			$timestampC = $params[2]; // some *_timestamp column
+
 			$res = $dbw->select( $table,
-					array( $params[0], $params[1] ),
-					array( $params[0] => $this->old )
-				);
+				array( $userTextC, $timestampC ),
+				array( $userTextC => $this->old, $userIDC => $this->uid ),
+				__METHOD__,
+				array( 'ORDER BY' => "$timestampC ASC" )
+			);
 
 			global $wgUpdateRowsPerJob;
 
 			$batchSize = 500; // Lets not flood the job table!
 			$jobSize = $wgUpdateRowsPerJob; // How many rows per job?
 
-			$key = $params[1];
 			$jobParams = array();
 			$jobParams['table'] = $table;
-			$jobParams['column'] = $params[0];
-			$jobParams['uniqueKey'] = $key;
+			$jobParams['column'] = $userTextC;
+			$jobParams['uidColumn'] = $userIDC;
+			$jobParams['timestampColumn'] = $timestampC;
 			$jobParams['oldname'] = $this->old;
 			$jobParams['newname'] = $this->new;
-
-			$jobParams['keyId'] = array();
+			$jobParams['userID'] = $this->uid;
+			// Timestamp column data for index optimizations
+			$jobParams['minTimestamp'] = '0';
+			$jobParams['maxTimestamp'] = '0';
+			$jobParams['count'] = 0;
+			
+			// Insert into queue!
 			$jobRows = 0;
 			$done = false;
 			while ( !$done ) {
@@ -398,22 +478,35 @@ class RenameuserSQL {
 				for ( $i = 0; $i < $batchSize; $i++ ) {
 					$row = $dbw->fetchObject( $res );
 					if ( !$row ) {
-						# If there are any job rows left, add it to the queue as a job
+						# If there are any job rows left, add it to the queue as one job
 						if( $jobRows > 0 ) {
-							$jobs[] = Job::factory( 'renameUser', Title::newMainPage(), $jobParams );
+							$jobParams['count'] = $jobRows;
+							$jobs[] = Job::factory( 'renameUser', $oldTitle, $jobParams );
+							$jobParams['minTimestamp'] = '0';
+							$jobParams['maxTimestamp'] = '0';
+							$jobParams['count'] = 0;
 							$jobRows = 0;
-							$jobParams['keyId'] = array();
 						}
 						$done = true;
 						break;
 					}
-					$jobParams['keyId'][] = $row->$key;
+					# If we are adding the first item, since the ORDER BY is ASC, set
+					# the min timestamp
+					if( $jobRows == 0 ) {
+						$jobParams['minTimestamp'] = $row->$timestampC;
+					}
+					# Keep updating the last timestamp, so it should be correct when the last item is added.
+					$jobParams['maxTimestamp'] = $row->$timestampC;
+					# Update nice counter
 					$jobRows++;
 					# Once a job has $jobSize rows, add it to the queue
 					if( $jobRows >= $jobSize ) {
-						$jobs[] = Job::factory( 'renameUser', Title::newMainPage(), $jobParams );
+						$jobParams['count'] = $jobRows;
+						$jobs[] = Job::factory( 'renameUser', $oldTitle, $jobParams );
+						$jobParams['minTimestamp'] = '0';
+						$jobParams['maxTimestamp'] = '0';
+						$jobParams['count'] = 0;
 						$jobRows = 0;
-						$jobParams['keyId'] = array();
 					}
 				}
 				Job::batchInsert( $jobs );

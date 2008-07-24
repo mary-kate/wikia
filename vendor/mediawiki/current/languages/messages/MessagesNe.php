@@ -1,11 +1,12 @@
 <?php
 /** Nepali (नेपाली)
  *
- * @addtogroup Language
+ * @ingroup Language
+ * @file
  *
- * @author ne.wikipedia.org sysops
  * @author SPQRobin
- * @author Nike
+ * @author Siebrand
+ * @author ne.wikipedia.org sysops
  */
 
 $digitTransformTable = array(
@@ -60,8 +61,7 @@ $messages = array(
 'may'           => 'मे',
 'nov'           => 'नोभ',
 
-# Bits of text used by many pages
-'categories'      => 'श्रेणीहरू',
+# Categories related messages
 'category_header' => '"$1" श्रेणीमा भएका लेखहरू',
 'subcategories'   => 'उपश्रेणीहरु',
 
@@ -111,17 +111,17 @@ $messages = array(
 'jumptonavigation' => 'अन्वेषण',
 
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
-'aboutpage'         => 'Project:बारेमा',
-'bugreports'        => 'त्रुटी बिवरण',
-'copyright'         => 'लेखका सामाग्री $1 अनुसार उपलब्ध छ।',
-'currentevents'     => 'हालैका घटनाहरु',
-'currentevents-url' => 'Project:हालैका घटनाहरु',
-'edithelp'          => 'सम्पादन सहायता',
-'mainpage'          => 'मुख्य पृष्ठ',
-'portal'            => 'सामाजिक पोर्टल',
-'portal-url'        => 'Project:सामाजिक पोर्टल',
-'privacy'           => 'गोपनियता नीति',
-'sitesupport'       => 'चन्दा',
+'aboutpage'            => 'Project:बारेमा',
+'bugreports'           => 'त्रुटी बिवरण',
+'copyright'            => 'लेखका सामाग्री $1 अनुसार उपलब्ध छ।',
+'currentevents'        => 'हालैका घटनाहरु',
+'currentevents-url'    => 'Project:हालैका घटनाहरु',
+'edithelp'             => 'सम्पादन सहायता',
+'mainpage'             => 'मुख्य पृष्ठ',
+'mainpage-description' => 'मुख्य पृष्ठ',
+'portal'               => 'सामाजिक पोर्टल',
+'portal-url'           => 'Project:सामाजिक पोर्टल',
+'privacy'              => 'गोपनियता नीति',
 
 'badaccess'        => 'आज्ञा त्रुटी',
 'badaccess-group0' => 'तपाईले अनुरोध गर्नुभएको कार्य गर्न तपाईलाई अनुमति दिइएको छैन।',
@@ -247,7 +247,6 @@ $messages = array(
 'previousrevision' => '← पुरानो संशोधन',
 'nextrevision'     => 'नयाँ संशोधन →',
 'next'             => 'अर्को',
-'orig'             => 'असलि',
 'histfirst'        => 'पहिलो',
 'histlast'         => 'अन्तिम',
 
@@ -303,22 +302,21 @@ $messages = array(
 'filename'          => 'फाइलनाम',
 'filedesc'          => 'सारांश',
 'fileuploadsummary' => 'सारांश:',
-'filestatus'        => 'लेखाधिकार स्थिति',
-'filesource'        => 'स्रोत',
+'filestatus'        => 'लेखाधिकार स्थिति:',
+'filesource'        => 'स्रोत:',
 'watchthisupload'   => 'यो पृष्ठ अवलोकन गर्नुहोस्',
 
 'nolicense' => 'केहिपनि छानिएन',
 
-# Image list
-'ilsubmit'              => 'खोज्नुहोस्',
-'byname'                => 'नाम अनुसार',
-'bydate'                => 'मिति अनुसार',
-'nolinkstoimage'        => 'यो फाईलसंग लिंकभएको कुनै पृष्ठ छैन.',
-'noimage-linktext'      => 'अपलोड गर्नुहोस्',
+# Special:Imagelist
 'imagelist_date'        => 'मिति',
 'imagelist_name'        => 'नाम',
 'imagelist_user'        => 'प्रयोगकर्ता',
 'imagelist_description' => 'वर्णन',
+
+# Image description page
+'nolinkstoimage'   => 'यो फाईलसंग लिंकभएको कुनै पृष्ठ छैन.',
+'noimage-linktext' => 'अपलोड गर्नुहोस्',
 
 # MIME search
 'download' => 'डाउनलोड',
@@ -332,7 +330,7 @@ $messages = array(
 'brokenredirects'     => 'टुटेका रिडाइरेक्टहरू',
 'brokenredirectstext' => 'तलका लिङ्कहरु ले हुदै नभएका पृष्ठहरुलाइ जोड्न खोज्छन्:',
 
-'withoutinterwiki-header' => 'यी पानाहरूले अन्य भाषाका संस्करणहरूमा संबन्ध राखेका छैनन्:',
+'withoutinterwiki-summary' => 'यी पानाहरूले अन्य भाषाका संस्करणहरूमा संबन्ध राखेका छैनन्:',
 
 # Miscellaneous special pages
 'specialpage-empty' => 'यो पृष्ठ खाली छ।',
@@ -343,11 +341,9 @@ $messages = array(
 'mostcategories'    => 'सबैभन्दा धेरै श्रेणीहरू भएका लेखहरू',
 'mostimages'        => 'सबैभन्दा बढि लिंक भएको चित्र',
 'mostrevisions'     => 'सबैभन्दा बढी संशोधित लेखहरू',
-'allpages'          => 'सबै पृष्ठहरु',
 'shortpages'        => 'छोटा पृष्ठहरु',
 'protectedpages'    => 'संरक्षित पृष्ठहरु',
 'listusers'         => 'प्रयोगकर्ता सूची',
-'specialpages'      => 'विशेष पृष्ठ',
 'newpages'          => 'नयाँ पृष्ठहरू',
 'newpages-username' => 'युजरनेम:',
 'ancientpages'      => 'सबैभन्दा पुराना पृष्ठहरु',
@@ -360,13 +356,13 @@ $messages = array(
 'booksources-search-legend' => 'किताबका श्रोतहरु खोज्ने',
 'booksources-go'            => 'जाउ',
 
-'alphaindexline' => '$1 लाई $2 मा',
-
 # Special:Log
 'specialloguserlabel'  => 'प्रयोगकर्ता:',
 'speciallogtitlelabel' => 'शिर्षक:',
 
 # Special:Allpages
+'allpages'       => 'सबै पृष्ठहरु',
+'alphaindexline' => '$1 लाई $2 मा',
 'nextpage'       => 'अर्को पृष्ठ ($1)',
 'allpagesfrom'   => 'यहाँदेखि शुरु हुने पृष्ठहरु देखाउनुहोस्:',
 'allarticles'    => 'सबै लेखहरु',
@@ -374,12 +370,14 @@ $messages = array(
 'allpagesnext'   => 'अर्को',
 'allpagessubmit' => 'जानुहोस्',
 
+# Special:Categories
+'categories' => 'श्रेणीहरू',
+
 # Special:Listusers
 'listusers-submit' => 'देखाउनुहोस्',
 
 # E-mail user
-'mailnologin'     => 'ईमेल पठाउने ठेगाना नै भएन । 
-<br>No send address',
+'mailnologin'     => 'ईमेल पठाउने ठेगाना नै भएन ।',
 'mailnologintext' => 'तपाईले अरु प्रयोगकर्ताहरुलाई ईमेल पठाउनको लागी आफु पहिले [[Special:Userlogin|प्रवेश(लगइन)गरेको]] हुनुपर्छ र [[Special:Preferences|आफ्नो रोजाइहरुमा]] यौटा वैध ईमेल ठेगाना भएको हुनुपर्छ।',
 'emailuser'       => 'यो प्रयोगकर्तालाई ई-मेल पठाउनुहोस्',
 'emailpage'       => 'प्रयोगकर्तालाई इमेल गर्नुहोस्',
@@ -460,7 +458,7 @@ $messages = array(
 'unlockbtn'   => 'डाटाबेस अनलक गर्नुहोस्',
 
 # Move page
-'movepage'                => 'पृष्ठ सार्नुहोस्',
+'move-page-legend'        => 'पृष्ठ सार्नुहोस्',
 'movearticle'             => 'पृष्ठ सार्नुहोस्',
 'movenologin'             => 'प्रवेश (लग ईन) नगरिएको',
 'movepagebtn'             => 'पृष्ठ सार्नुहोस्',
@@ -525,6 +523,8 @@ $messages = array(
 
 # Special:Newimages
 'noimages' => 'हेर्नको लागि केही छैन.',
+'ilsubmit' => 'खोज्नुहोस्',
+'bydate'   => 'मिति अनुसार',
 
 # Metadata
 'metadata'          => 'मेटाडेटा',
@@ -620,5 +620,8 @@ $messages = array(
 
 # Special:Filepath
 'filepath-page' => 'फाइल',
+
+# Special:SpecialPages
+'specialpages' => 'विशेष पृष्ठ',
 
 );

@@ -1,7 +1,8 @@
 <?php
 /** Samoan (Gagana Samoa)
  *
- * @addtogroup Language
+ * @ingroup Language
+ * @file
  *
  * @author sm.wikipedia.org sysops
  * @author SPQRobin
@@ -11,11 +12,11 @@ $messages = array(
 # Dates
 'sunday'        => 'Aso sa',
 'monday'        => 'Aso-gafua',
-'tuesday'       => 'O le aso lua',
+'tuesday'       => '‘O le aso lua',
 'wednesday'     => 'Aso lulu',
 'thursday'      => 'Aso totofi',
 'friday'        => 'Aso falaile',
-'saturday'      => 'Aso toonai',
+'saturday'      => 'Aso to‘ona‘i',
 'sun'           => 'Aso sa',
 'mon'           => 'Aso gafua',
 'wed'           => 'Aso lulu',
@@ -82,13 +83,13 @@ $messages = array(
 'jumptosearch'     => "Su'e",
 
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
-'currentevents'     => 'Tala Fou',
-'currentevents-url' => 'Project:Tala Fou',
-'edithelp'          => 'Fesoasoani e teuteu',
-'mainpage'          => 'Itulau Muamua',
-'portal'            => 'Vaega mo Tagata Lautele',
-'portal-url'        => 'Project:Vaega mo Tagata Lautele',
-'sitesupport'       => 'Meaalofa tupe',
+'currentevents'        => 'Tala Fou',
+'currentevents-url'    => 'Project:Tala Fou',
+'edithelp'             => 'Fesoasoani e teuteu',
+'mainpage'             => 'Itulau Muamua',
+'mainpage-description' => 'Itulau Muamua',
+'portal'               => 'Vaega mo Tagata Lautele',
+'portal-url'           => 'Project:Vaega mo Tagata Lautele',
 
 'youhavenewmessages'      => "'Ua iai lau $1 ($2).",
 'newmessageslink'         => "Poloa'i fou",
@@ -152,14 +153,10 @@ $messages = array(
 'fileuploadsummary' => "'Oto'otoga:",
 'watchthisupload'   => 'Matau lenei itulau',
 
-# Image list
-'ilsubmit' => "Su'e",
-
 # Random page
 'randompage' => "Itulau le fa'ailogaina",
 
 # Miscellaneous special pages
-'specialpages'      => "Itulau fa'apitoa",
 'newpages-username' => "Igoa o le tagata fa'aaoga:",
 'move'              => "Si'itia",
 
@@ -196,17 +193,20 @@ $messages = array(
 'proxyblocksuccess' => "Mae'a.",
 
 # Move page
-'movepage'    => "Si'i le itulau",
-'movearticle' => "Si'i le itulau",
-'movenologin' => "Le'i fa'aolaina",
-'newtitle'    => "'I le ulutala fou",
-'move-watch'  => 'Matau lenei itulau',
-'movepagebtn' => "Si'i le itulau",
-'movetalk'    => 'Sui le itulau e tau i ai',
-'movereason'  => "Mafua'aga",
+'move-page-legend' => "Si'i le itulau",
+'movearticle'      => "Si'i le itulau",
+'movenologin'      => "Le'i fa'aolaina",
+'newtitle'         => "'I le ulutala fou",
+'move-watch'       => 'Matau lenei itulau',
+'movepagebtn'      => "Si'i le itulau",
+'movetalk'         => 'Sui le itulau e tau i ai',
+'movereason'       => "Mafua'aga",
 
 # Namespace 8 related
 'allmessagesname' => 'Igoa',
+
+# Special:Newimages
+'ilsubmit' => "Su'e",
 
 # 'all' in various places, this might be different for inflected languages
 'recentchangesall' => "mea 'uma",
@@ -219,5 +219,8 @@ $messages = array(
 
 # Table pager
 'table_pager_limit_submit' => 'Alu',
+
+# Special:SpecialPages
+'specialpages' => "Itulau fa'apitoa",
 
 );

@@ -1,59 +1,70 @@
-/* Standard UI */
-.flaggedrevs_tag1,
-.flaggedrevs_tag2,
-.flaggedrevs_tag3,
+/* Every time you change this CSS please bump $wgFlaggedRevStyleVersion in FlaggedRevs.php */
+
+/* Standard User Interface */
+.flaggedrevs_basic,
+.flaggedrevs_quality,
+.flaggedrevs_pristine,
 .flaggedrevs_notice,
-.flaggedrevs_warning {
+.flaggedrevs_editnotice,
+.flaggedrevs_diffnotice,
+.flaggedrevs_warning,
+.flaggedrevs_preview {
 	border: 1px solid #aaa;
-	padding: 3px;
-	font-size: 80%;
+	padding: 5px;
 	font-weight: normal;
-	margin-top: 6px;
-	margin-left: 0px;
-	margin-right: 0px;
-	margin-bottom: 5px;
+	line-height: 1.5em;
+	margin: .5em 1em 0em 0em;
 	text-align: center;
+	clear: both;
 }
 
-.flaggedrevs_toggle {
-	color: blue;
-}
-
-.flaggedrevs_tag1 {
+.flaggedrevs_basic {
 	background-color: #f0f8ff;
 }
-.flaggedrevs_tag2 {
+.flaggedrevs_quality {
 	background-color: #f0fff0;
 }
-.flaggedrevs_tag3 {
+.flaggedrevs_pristine {
 	background-color: #fffff0;
 }
 .flaggedrevs_notice {
 	background-color: #f9f9f9;
 }
+.flaggedrevs_preview {
+	background-color: #f9f9f9;
+	color: #8b0000;
+}
+
 .flaggedrevs_warning {
+	font-size: 85%;
 	background-color: #fffff0;
-	margin-top: 0px;
+	margin: 0em 1em 0em 0em;
+}
+.flaggedrevs_editnotice {
+	font-size: 85%;
+	background-color: #f9f9f9;
+}
+.flaggedrevs_diffnotice {
+	font-size: 85%;
+	background-color: #f9f9f9;
 }
 
 .flaggedrevs_notes {
 	border: 1px solid #aaa;
 	background-color: #f9f9f9;
 	padding: 5px;
-	font-size: 80%;
+	font-size: 85%;
 	margin-left: 50px;
 	margin-right: 50px;
 	text-align: center;
 }
 
 .fr-text-value {
-    min-width:100px;
-    width: 100px;
+	width: 100px;
 }
 
 .fr-checkbox {
 	padding: 0px;
-	margin: .25em;
 	width: 16px;
 	height: 16px;
 	position: relative;
@@ -62,81 +73,48 @@
 	right: 0px;
 	background-repeat: no-repeat;
 	background-position: 0px 0px;
-    background-image: url(../FlaggedRevs/img/boxC.png);
+	background-image: url(../FlaggedRevs/img/boxC.png);
+}
+
+.fr-marker-20,
+.fr-marker-40,
+.fr-marker-60,
+.fr-marker-80,
+.fr-marker-100 {
+	background-position: bottom left;
+	background-repeat: no-repeat;    
+	padding-bottom: 3px;
 }
 
 .fr-marker-20 {
-    background-image: url(../FlaggedRevs/img/bar_20.png);
-    background-position: bottom left;
-    background-repeat: no-repeat;    
-    padding-bottom: 3px;
+	background-image: url(../FlaggedRevs/img/bar_20.png);
 }
 .fr-marker-40 {
-    background-image: url(../FlaggedRevs/img/bar_40.png);
-    background-position: bottom left;
-    background-repeat: no-repeat;    
-    padding-bottom: 3px;
+	background-image: url(../FlaggedRevs/img/bar_40.png);
 }
 .fr-marker-60 {
-    background-image: url(../FlaggedRevs/img/bar_60.png);
-    background-position: bottom left;
-    background-repeat: no-repeat;    
-    padding-bottom: 3px;
-
+	background-image: url(../FlaggedRevs/img/bar_60.png);
 }
 .fr-marker-80 {
-    background-image: url(../FlaggedRevs/img/bar_80.png);
-    background-position: bottom left;
-    background-repeat: no-repeat;    
-    padding-bottom: 3px;
+	background-image: url(../FlaggedRevs/img/bar_80.png);
 }
 .fr-marker-100 {
-    background-image: url(../FlaggedRevs/img/bar_100.png);
-    background-position: bottom left;
-    background-repeat: no-repeat;    
-    padding-bottom: 3px;
+	background-image: url(../FlaggedRevs/img/bar_100.png);
 }
 
-/* Short UI */
+/* Short User Interface */
 .flaggedrevs_short {
 	border: 1px solid #aaa;
 	background-color: #f9f9f9;
-	padding: 3px;
-	font-size: 80%;
+	padding: 5px;
+	font-size: 95%;
 	font-weight: normal;
-	margin-left: 3px;
-	margin-right: 0px;
-	margin-top: 5px;
-	margin-bottom: 0px;
-	text-align: left;
-	float: right;
-	width: 330px;
-	clear: both;
-}
-
-.fr-tab_current,
-.fr-tab_stable,
-.fr-tab_quality {
-	padding: 0px;
-	margin: 0px;
-	width: 27px;
-	height: 27px;
+	margin: 0em 0em 1em 1em;
 	position: relative;
-	float: left;
-	top: -2px;
-	right: 0px;
-	background-repeat: no-repeat;
-	background-position: 0px 0px;
-} 
-
-.fr-tab_current {
-	background-image: url(../FlaggedRevs/img/1.png);
-}
-.fr-tab_stable {
-	background-image: url(../FlaggedRevs/img/2.png);
-}    
-.fr-tab_quality {
-	background-image: url(../FlaggedRevs/img/3.png);
+	float: right;
+	text-align: left;
+	max-width: 450px;
+	line-height: 16px;
 }
 
 .fr-text {
@@ -178,38 +156,143 @@
 	background-image: url(../FlaggedRevs/img/fr-marker-100.png);
 }
 
-.flaggedrevs_box0,
-.flaggedrevs_box1,
-.flaggedrevs_box2,
-.flaggedrevs_box3 {
+.flaggedrevs-box0,
+.flaggedrevs-box1,
+.flaggedrevs-box2,
+.flaggedrevs-box3 {
 	border: 1px solid #aaa;
 	text-align: center;
 	font-size: 85%;
+	clear: both;
 }
 
-.flaggedrevs_box0 {
+.flaggedrevs-box0 {
 	background-color: #f9f9f9;
 }
-.flaggedrevs_box1 {
+.flaggedrevs-box1 {
 	background-color: #f0f8ff;
 }
-.flaggedrevs_box2 {
+.flaggedrevs-box2 {
 	background-color: #f0fff0;
 }
-.flaggedrevs_box3 {
+.flaggedrevs-box3 {
 	background-color: #fffff0;
 }
 
-/* Hack to avoid extra borders */
-.flaggedrevs_box0a {
+.flaggedrevs-color-0 {
 	background-color: #f9f9f9;
 }
-.flaggedrevs_box1a {
+.flaggedrevs-color-1 {
 	background-color: #f0f8ff;
 }
-.flaggedrevs_box2a {
+.flaggedrevs-color-2 {
 	background-color: #f0fff0;
 }
-.flaggedrevs_box3a {
+.flaggedrevs-color-3 {
 	background-color: #fffff0;
+}
+
+/* Both User Interfaces */
+.flaggedrevs_toggle {
+	color: blue;
+	white-space: nowrap;
+	cursor:pointer;
+}
+
+.fr-icon-current,
+.fr-icon-stable,
+.fr-icon-quality {
+	padding: 0px;
+	margin: 0px;
+	width: 18px;
+	height: 18px;
+	float: left;
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+.fr-icon-current {
+	background-image: url(../FlaggedRevs/img/1.png);
+}
+.fr-icon-stable {
+	background-image: url(../FlaggedRevs/img/2.png);
+}
+.fr-icon-quality {
+	background-image: url(../FlaggedRevs/img/3.png);
+}
+
+.fr-diff-ratings {
+	font-size: 90%;
+	line-height: 1em;
+}
+
+.fr-diff-to-stable {
+	line-height: 1em;
+}
+
+/* Site notices */
+.fr-backlognotice {
+	padding: 3px;
+	margin: 5px;
+	border: 1px solid #990000;
+	background-color: #f5ecec;
+}
+
+/* Special pages */
+.fr-pending-long {
+	background-color: #f5ecec;
+}
+.fr-pending-long2 {
+	background-color: #f5dddd;
+}
+.fr-pending-long3 {
+	background-color: #e2caca;
+}
+
+.fr-unreviewed-unwatched {
+	background-color: #faebd7;
+}
+
+/* Review form */
+.flaggedrevs_reviewform {
+	background-color: #f9f9f9;
+	font-size: 90%;
+	clear: both;
+}
+
+.flaggedrevs_reviewform * {
+	vertical-align: middle;
+	line-height: 1em;
+}
+
+.fr-rating-controls-disabled {
+	color: GrayText;
+}
+
+.fr-rating-options {
+	margin-right: 1.5em;
+}
+
+.fr-rating-option-0 {
+	background-color: #f5ecec;
+}
+.fr-rating-option-1 {
+	background-color: #f0f8ff;
+}
+.fr-rating-option-2 {
+	background-color: #f0fff0;
+}
+.fr-rating-option-3 {
+	background-color: #fef0db;
+}
+.fr-rating-option-4 {
+	background-color: #fffff0;
+}
+
+.fr-notes-box {
+	width: 95%;
+	margin: 0em 1em 0em .5em;
+}
+
+.fr-comment-box {
+	margin-top: .25em;
 }

@@ -9,7 +9,7 @@
  * @subpackage Extensions
  * @author Daniel Kinzler, brightbyte.de
  * @copyright © 2007 Daniel Kinzler
- * @licence GNU General Public Licence 2.0 or later
+ * @license GNU General Public Licence 2.0 or later
  */
 
 if( !defined( 'MEDIAWIKI' ) ) {
@@ -19,7 +19,8 @@ if( !defined( 'MEDIAWIKI' ) ) {
 
 $wgExtensionCredits['other'][] = array(
 	'name' => 'Gadgets',
-	'version' => '2008-02-04',
+	'svn-date' => '$LastChangedDate: 2008-07-09 14:57:19 +0000 (Wed, 09 Jul 2008) $',
+	'svn-revision' => '$LastChangedRevision: 37390 $',
 	'author' => 'Daniel Kinzler',
 	'url' => 'http://mediawiki.org/wiki/Extension:Gadgets',
 	'description' => 'lets users select custom javascript gadgets',
@@ -34,8 +35,10 @@ $wgHooks['ArticleSaveComplete'][] = 'wfGadgetsArticleSaveComplete';
 
 $dir = dirname(__FILE__) . '/';
 $wgExtensionMessagesFiles['Gadgets'] = $dir . 'Gadgets.i18n.php';
+$wgExtensionAliasesFiles['Gadgets'] = $dir . 'Gadgets.i18n.alias.php';
 $wgAutoloadClasses['SpecialGadgets'] = $dir . 'SpecialGadgets.php';
 $wgSpecialPages['Gadgets'] = 'SpecialGadgets';
+$wgSpecialPageGroups['Gadgets'] = 'wiki';
 
 function wfGadgetsArticleSaveComplete( &$article, &$wgUser, &$text ) {
 	//update cache if MediaWiki:Gadgets-definition was edited
@@ -66,26 +69,24 @@ function wfLoadGadgets() {
 }
 
 function wfLoadGadgetsStructured( $forceNewText = NULL ) {
-	global $wgContLang;
-	global $wgMemc, $wgDBname;
+	global $wgMemc;
 
 	static $gadgets = NULL;
 	if ( $gadgets !== NULL && $forceNewText !== NULL ) return $gadgets;
 
-	$key = "$wgDBname:gadgets-definition";
+	$key = wfMemcKey( 'gadgets-definition' );
 
-	if ( $forceNewText == NULL ) {
+	if ( $forceNewText === NULL ) {
 		//cached?
 		$gadgets = $wgMemc->get( $key );
-		if ( $gadgets !== NULL ) return $gadgets;
+		if ( is_array($gadgets) ) return $gadgets;
 
 		$g = wfMsgForContentNoTrans( "gadgets-definition" );
 		if ( wfEmptyMsg( "gadgets-definition", $g ) ) {
 			$gadgets = false;
 			return $gadgets;
 		}
-	}
-	else {
+	} else {
 		$g = $forceNewText;
 	}
 
@@ -114,8 +115,9 @@ function wfLoadGadgetsStructured( $forceNewText = NULL ) {
 	}
 
 	//cache for a while. gets purged automatically when MediaWiki:Gadgets-definition is edited
-	$wgMemc->set( $key, $gadgets, 900 );
-	wfDebug("wfLoadGadgetsStructured: MediaWiki:Gadgets-definition parsed, cache entry $key updated\n");
+	$wgMemc->set( $key, $gadgets, 60*60*24 );
+	$source = $forceNewText !== NULL ? 'input text' : 'MediaWiki:Gadgets-definition';
+	wfDebug( __METHOD__ . ": $source parsed, cache entry $key updated\n");
 
 	return $gadgets;
 }
@@ -152,14 +154,14 @@ function wfGadgetsRenderPreferencesForm( &$prefs, &$out ) {
 
 	$out->addHtml( "\n<fieldset>\n<legend>" . wfMsgHtml( 'gadgets-prefs' ) . "</legend>\n" );
 
-	$out->addHtml( "<p>" . wfMsgWikiHtml( 'gadgets-prefstext' ) . "</p>\n" );
+	$out->addWikiMsg( 'gadgets-prefstext' );
 
-	$msgOpt = array( 'parseinline', 'parsemag' );
+	$msgOpt = array( 'parseinline' );
 
 	foreach ( $gadgets as $section => $entries ) {
 		if ( $section !== false && $section !== '' ) {
 			$ttext = wfMsgExt( "gadget-section-$section", $msgOpt );
-			$out->addHtml( "\n<h2>" . $ttext . "</h2>\n" );
+			$out->addHtml( "\n<h2 id=\"".htmlspecialchars("gadget-section-$section")."\">" . $ttext . "</h2>\n" );
 		}
 
 		foreach ( $entries as $gname => $code ) {

@@ -9,11 +9,12 @@
 
 $wgExtensionFunctions[] = 'wfTidy';
 $wgExtensionCredits['other'][] = array(
-	'name'        => 'TidyTab',
-	'version'     => '1.1',
-	'url'         => 'http://www.mediawiki.org/wiki/Extension:TidyTab',
-	'author'      => 'Ævar Arnfjörð Bjarmason',
-	'description' => 'Adds a tidy or untidy tab (depending on $wgUseTidy) on normal pages allowing for overriding the global HTML tidy setting for a single view',
+	'name'           => 'TidyTab',
+	'version'        => '1.1',
+	'url'            => 'http://www.mediawiki.org/wiki/Extension:TidyTab',
+	'author'         => 'Ævar Arnfjörð Bjarmason',
+	'description'    => 'Adds a tidy or untidy tab (depending on $wgUseTidy) on normal pages allowing for overriding the global HTML tidy setting for a single view',
+	'descriptionmsg' => 'tidy-desc',
 );
 
 $dir = dirname(__FILE__) . '/';
@@ -29,7 +30,7 @@ function wfTidy() {
 			wfLoadExtensionMessages( 'tidy' );
 
 			$wgHooks['SkinTemplateContentActions'][] = array( &$this, 'tidyHook' );
-			$wgHooks['UnknownAction'][] = array( &$this, 'tidyAction' );
+			$wgHooks['UnknownAction'][] = array( &$this, 'action' );
 		}
 
 		public function tidyHook( array &$content_actions ) {
@@ -65,7 +66,7 @@ function wfTidy() {
 				);
 		}
 
-		public static function tidyAction( $action, Article &$article ) {
+		public static function action( $action, Article &$article ) {
 			global $wgUseTidy;
 
 			if ( $action === 'tidy' || $action === 'untidy' )

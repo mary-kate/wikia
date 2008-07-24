@@ -2,11 +2,13 @@
 
 if (!defined('MEDIAWIKI')) die();
 
-$wgExtensionCredits['specialpage'][] = array(
-	'name' => 'Mini donation',
+$wgExtensionCredits['parserhook'][] = array(
+	'name' => 'MiniDonation',
 	'url' => 'http://mediawiki.org/wiki/Extension:MiniDonation',
-	'description' => 'Adds a tag <nowiki><donateform></nowiki> to support donations via PayPal',
-	'version' => '2008-01-11',
+	'description' => 'Adds a tag <tt>&lt;donateform&gt;</tt> to support donations via PayPal',
+	'descriptionmsg' => 'donationform-desc',
+	'svn-date' => '$LastChangedDate: 2008-07-04 15:36:45 +0000 (Fri, 04 Jul 2008) $',
+	'svn-revision' => '$LastChangedRevision: 37061 $',
 );
 
 $wgExtensionFunctions[] = 'wfSetupMiniDonation';

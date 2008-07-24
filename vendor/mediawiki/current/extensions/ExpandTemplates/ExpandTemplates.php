@@ -13,7 +13,8 @@ ExtensionFunctions.php</a></tt>.</p>
 
 $wgExtensionCredits['specialpage'][] = array(
 	'name'           => 'ExpandTemplates',
-	'version'        => '2008-01-09',
+	'svn-date' => '$LastChangedDate: 2008-07-09 17:06:58 +0000 (Wed, 09 Jul 2008) $',
+	'svn-revision' => '$LastChangedRevision: 37411 $',
 	'author'         => 'Tim Starling',
 	'url'            => 'http://www.mediawiki.org/wiki/Extension:ExpandTemplates',
 	'description'    => 'Expands templates, parser functions and variables to show expanded wikitext and preview rendered page',
@@ -21,6 +22,8 @@ $wgExtensionCredits['specialpage'][] = array(
 );
 
 $wgExtensionMessagesFiles['ExpandTemplates'] = dirname(__FILE__) . '/ExpandTemplates.i18n.php';
+$wgExtensionAliasesFiles['ExpandTemplates'] = dirname(__FILE__) . '/ExpandTemplates.alias.php';
+$wgSpecialPageGroups['ExpandTemplates'] = 'wiki';
 
 if ( !function_exists( 'extAddSpecialPage' ) ) {
 	require( dirname(__FILE__) . '/../ExtensionFunctions.php' );
