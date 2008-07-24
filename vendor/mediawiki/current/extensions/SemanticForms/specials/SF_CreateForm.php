@@ -8,11 +8,21 @@
 
 if (!defined('MEDIAWIKI')) die();
 
-global $IP, $sfgIP;
-require_once( "$IP/includes/SpecialPage.php" );
-require_once( "$sfgIP/includes/SF_FormClasses.inc" );
+class SFCreateForm extends SpecialPage {
 
-SpecialPage::addPage( new SpecialPage('CreateForm','',true,'doSpecialCreateForm',false) );
+	/**
+	 * Constructor
+	 */
+	function SFCreateForm() {
+		SpecialPage::SpecialPage('CreateForm');
+		wfLoadExtensionMessages('SemanticForms');
+	}
+
+	function execute() {
+		$this->setHeaders();
+		doSpecialCreateForm();
+	}
+}
 
 function doSpecialCreateForm() {
   global $wgOut, $wgRequest, $wgUser, $sfgScriptPath, $wgContLang;
@@ -114,7 +124,7 @@ function doSpecialCreateForm() {
       $title = Title::newFromText($form->form_name, SF_NS_FORM);
       $full_text = str_replace('"', '&quot;', $form->createMarkup());
       # redirect to wiki interface
-      $text = sffPrintRedirectForm($title, $full_text, "", $save_page, $preview_page, false, false, false);
+      $text = sffPrintRedirectForm($title, $full_text, "", $save_page, $preview_page, false, false, false, null, null);
       $wgOut->addHTML($text);
       return;
     }

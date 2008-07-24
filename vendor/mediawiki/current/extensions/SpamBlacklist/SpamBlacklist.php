@@ -10,7 +10,8 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 $wgExtensionCredits['other'][] = array(
 	'name'           => 'SpamBlacklist',
 	'author'         => 'Tim Starling',
-	'version'        => '2008-02-13',
+	'svn-date' => '$LastChangedDate: 2008-06-19 05:14:34 +0200 (czw, 19 cze 2008) $',
+	'svn-revision' => '$LastChangedRevision: 36439 $',
 	'url'            => 'http://www.mediawiki.org/wiki/Extension:SpamBlacklist',
 	'description'    => 'Regex-based anti-spam tool',
 	'descriptionmsg' => 'spam-blacklist-desc',
@@ -71,17 +72,18 @@ function wfSpamBlacklistObject() {
 /**
  * Hook function for $wgFilterCallback
  */
-function wfSpamBlacklistFilter( &$title, $text, $section ) {
+function wfSpamBlacklistFilter( &$title, $text, $section, &$hookErr, $editSummary ) {
 	$spamObj = wfSpamBlacklistObject();
-	return $spamObj->filter( $title, $text, $section );
+	return $spamObj->filter( $title, $text, $section, $editSummary );
 }
 
 /**
  * Hook function for EditFilterMerged, replaces wfSpamBlacklistFilter
  */
-function wfSpamBlacklistFilterMerged( $editPage, $text ) {
+function wfSpamBlacklistFilterMerged( $editPage, $text, &$hookErr, $editSummary ) {
 	$spamObj = wfSpamBlacklistObject();
-	$ret = $spamObj->filter( $editPage->mArticle->getTitle(), $text, '', $editPage );
+	$title = $editPage->mArticle->getTitle();
+	$ret = $spamObj->filter( $title, $text, '', $editPage, $editSummary );
 	// Return convention for hooks is the inverse of $wgFilterCallback
 	return !$ret;
 }
@@ -93,7 +95,7 @@ function wfSpamBlacklistFilterMerged( $editPage, $text ) {
  */
 function wfSpamBlacklistValidate( $editPage, $text, $section, &$hookError ) {
 	$spamObj = wfSpamBlacklistObject();
-	return $spamObj->validate( $editPage, $text, $section, &$hookError );
+	return $spamObj->validate( $editPage, $text, $section, $hookError );
 }
 
 /**
@@ -102,6 +104,6 @@ function wfSpamBlacklistValidate( $editPage, $text, $section, &$hookError ) {
  */
 function wfSpamBlacklistArticleSave( &$article, &$user, $text, $summary, $isminor, $iswatch, $section ) {
 	$spamObj = wfSpamBlacklistObject();
-	return $spamObj->onArticleSave( &$article, &$user, $text, $summary, $isminor, $iswatch, $section );
+	return $spamObj->onArticleSave( $article, $user, $text, $summary, $isminor, $iswatch, $section );
 }
 

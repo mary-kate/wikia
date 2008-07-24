@@ -6,14 +6,12 @@
  * @author Markus Krötzsch
  */
 
-global $smwgIP;
-include_once($smwgIP . '/includes/SMW_SemanticData.php');
-
 /**
  * Static class for representing semantic data, which accepts user
  * inputs and provides methods for printing and storing its contents.
  * Its main purpose is to provide a persistent storage to keep semantic
  * data between hooks for parsing and storing.
+ * @note AUTOLOADED
  */
 class SMWFactbox {
 
@@ -21,30 +19,57 @@ class SMWFactbox {
 	 * The actual container for the semantic annotations. Public, since
 	 * it is ref-passed to others for further processing.
 	 */
-	static $semdata;
+	static $semdata = NULL;
 	/**
 	 * True if the respective article is newly created. This affects some
 	 * storage operations.
 	 */
 	static protected $m_new = false;
+	/**
+	 * True if Factbox was printed, our best attempt at reliably preventing multiple
+	 * Factboxes to appear on one page.
+	 */
+	static protected $m_printed = false;
+	/**
+	 * True if the next try on printing should be blocked
+	 */
+	static protected $m_blocked = false;
 
 	/**
 	 * Initialisation method. Must be called before anything else happens.
 	 */
 	static function initStorage($title) {
-		SMWFactbox::$semdata = new SMWSemanticData($title); // reset data 
-		///TODO: is this (global) reset safe when cloned subparses happen? May kill unsafed data.
+		// reset only if title exists, is new and is not the notorious
+		// NO TITLE thing the MW parser creates
+		if ( $title === NULL || $title->getText() == 'NO TITLE' ) return;
+		if ( (SMWFactbox::$semdata === NULL) ||
+		     (SMWFactbox::$semdata->getSubject()->getDBkey() != $title->getDBkey()) || 
+		     (SMWFactbox::$semdata->getSubject()->getNamespace() != $title->getNamespace()) ) {
+			$dv = SMWDataValueFactory::newTypeIDValue('_wpg');
+			$dv->setValues($title->getDBkey(), $title->getNamespace());
+			SMWFactbox::$semdata = new SMWSemanticData($dv); // reset data
+			SMWFactbox::$m_printed = false;
+			//print " Title set: " . $title->getPrefixedText() . "\n"; // useful for debug
+		}
 		//SMWFactbox::$m_new   = false; // do not reset, keep (order of hooks can be strange ...)
 	}
 
 	/**
-	 * Clear all stored data
+	 * Clear all stored data.
 	 */
 	static function clearStorage() {
 		global $smwgStoreActive;
 		if ($smwgStoreActive) {
 			SMWFactbox::$semdata->clear();
+			SMWFactbox::$m_printed = false;
 		}
+	}
+	
+	/**
+	 * Blocks the next rendering of the Factbox
+	 */
+	static function blockOnce() {
+		SMWFactbox::$m_blocked = true;
 	}
 
 	/**
@@ -72,8 +97,7 @@ class SMWFactbox {
 	 */
 	static function addProperty($propertyname, $value, $caption, $storeannotation = true) {
 		wfProfileIn("SMWFactbox::addProperty (SMW)");
-		global $smwgContLang, $smwgIP;
-		include_once($smwgIP . '/includes/SMW_DataValueFactory.php');
+		global $smwgContLang;
 		// See if this property is a special one, such as e.g. "has type"
 		$propertyname = smwfNormalTitleText($propertyname); //slightly normalize label
 		$special = $smwgContLang->findSpecialPropertyID($propertyname);
@@ -113,7 +137,7 @@ class SMWFactbox {
 		global $wgContLang;
 
 		list($onto_ns,$onto_section) = explode(':',$value,2);
-		$msglines = preg_split("([\n][\s]?)",wfMsgForContent("smw_import_$onto_ns")); // get the definition for "$namespace:$section"
+		$msglines = preg_split("/[\n][\s]?/u",wfMsgForContent("smw_import_$onto_ns")); // get the definition for "$namespace:$section"
 
 		if ( count($msglines) < 2 ) { //error: no elements for this namespace
 			/// TODO: use new Error DV
@@ -202,39 +226,51 @@ class SMWFactbox {
 	 */
 	static function printFactbox(&$text) {
 		global $wgContLang, $wgServer, $smwgShowFactbox, $smwgShowFactboxEdit, $smwgStoreActive, $smwgIP, $wgRequest;
+		if (SMWFactbox::$m_blocked) { SMWFactbox::$m_blocked = false; return;}		
 		if (!$smwgStoreActive) return;
+		if (SMWFactbox::$m_printed) return;
+		wfProfileIn("SMWFactbox::printFactbox (SMW)");
 
+		// Global settings:
 		if ( $wgRequest->getCheck('wpPreview') ) {
 			$showfactbox = $smwgShowFactboxEdit;
 		} else {
 			$showfactbox = $smwgShowFactbox;
 		}
+		// Page settings via Magic Words:
+		$mw = MagicWord::get('SMW_NOFACTBOX');
+		if ($mw->matchAndRemove($text)) {
+			$showfactbox = SMW_FACTBOX_HIDDEN;
+		}
+		$mw = MagicWord::get('SMW_SHOWFACTBOX');
+		if ($mw->matchAndRemove($text)) {
+			$showfactbox = SMW_FACTBOX_NONEMPTY;
+		}
 
-		wfProfileIn("SMWFactbox::printFactbox (SMW)");
 		switch ($showfactbox) {
 		case SMW_FACTBOX_HIDDEN: // never
 			wfProfileOut("SMWFactbox::printFactbox (SMW)");
 			return;
 		case SMW_FACTBOX_SPECIAL: // only when there are special properties
-			if ( !SMWFactbox::$semdata->hasSpecialProperties() ) {
+			if ( !SMWFactbox::$semdata->hasVisibleSpecialProperties() ) {
 				wfProfileOut("SMWFactbox::printFactbox (SMW)");
 				return;
 			}
 			break;
 		case SMW_FACTBOX_NONEMPTY: // only when non-empty
-			if ( (!SMWFactbox::$semdata->hasProperties()) && (!SMWFactbox::$semdata->hasSpecialProperties()) ) {
+			if ( (!SMWFactbox::$semdata->hasProperties()) && (!SMWFactbox::$semdata->hasVisibleSpecialProperties()) ) {
 				wfProfileOut("SMWFactbox::printFactbox (SMW)");
 				return;
 			}
 			break;
 		// case SMW_FACTBOX_SHOWN: display
 		}
+		SMWFactbox::$m_printed = true;
 
 		smwfRequireHeadItem(SMW_HEADER_STYLE);
-		include_once($smwgIP . '/includes/SMW_Infolink.php');
-		$rdflink = SMWInfolink::newInternalLink(wfMsgForContent('smw_viewasrdf'), $wgContLang->getNsText(NS_SPECIAL) . ':ExportRDF/' . str_replace('%2F', '/', rawurlencode(SMWFactbox::$semdata->getSubject()->getPrefixedText())), 'rdflink');
+		$rdflink = SMWInfolink::newInternalLink(wfMsgForContent('smw_viewasrdf'), $wgContLang->getNsText(NS_SPECIAL) . ':ExportRDF/' . SMWFactbox::$semdata->getSubject()->getWikiValue(), 'rdflink');
 
-		$browselink = SMWInfolink::newBrowsingLink(SMWFactbox::$semdata->getSubject()->getText(), SMWFactbox::$semdata->getSubject()->getPrefixedText(), 'swmfactboxheadbrowse');
+		$browselink = SMWInfolink::newBrowsingLink(SMWFactbox::$semdata->getSubject()->getText(), SMWFactbox::$semdata->getSubject()->getWikiValue(), 'swmfactboxheadbrowse');
 		// The "\n" is to ensure that lists on the end of articles are terminated
 		// before the div starts. It would of course be much cleaner to print the
 		// factbox in another way, similar to the way that categories are printed
@@ -258,9 +294,8 @@ class SMWFactbox {
 		global $wgContLang;
 
 		foreach(SMWFactbox::$semdata->getProperties() as $key => $property) {
-			$text .= '<tr><td class="smwpropname">';
 			if ($property instanceof Title) {
-				$text .= '<tr><td class="smwpropname">[[' . $property->getPrefixedText() . '|' . preg_replace('/[\s]/','&nbsp;',$property->getText(),2) . ']] </td><td class="smwprops">';
+				$text .= '<tr><td class="smwpropname">[[' . $property->getPrefixedText() . '|' . preg_replace('/[ ]/u','&nbsp;',$property->getText(),2) . ']] </td><td class="smwprops">';
 				// TODO: the preg_replace is a kind of hack to ensure that the left column does not get too narrow; maybe we can find something nicer later
 			} else { // special property
 				if ($key{0} == '_') continue; // internal special property without label
@@ -301,7 +336,7 @@ class SMWFactbox {
 		if ($processSemantics) {
 			smwfGetStore()->updateData(SMWFactbox::$semdata, SMWFactbox::$m_new);
 		} else {
-			smwfGetStore()->clearData(SMWFactbox::$semdata->getSubject(), SMWFactbox::$m_new);
+			smwfGetStore()->clearData(SMWFactbox::$semdata->getSubject()->getTitle(), SMWFactbox::$m_new);
 		}
 	}
 

@@ -1,13 +1,16 @@
 <?php
 /** Nauru (Ekakairũ Naoero)
  *
- * @addtogroup Language
+ * @ingroup Language
+ * @file
  *
  * @author CdaMVvWgS
  * @author Belgian man
  * @author Node ue
  * @author SPQRobin
  */
+
+
 
 $messages = array(
 # Dates
@@ -34,13 +37,13 @@ $messages = array(
 'toolbox'        => 'Dabadi n bwait makur',
 
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
-'currentevents'     => 'Imwin',
-'currentevents-url' => 'Project:Imwin',
-'edithelp'          => 'Oomo/edar Ipuok',
-'edithelppage'      => 'Help:Oomo/edar',
-'helppage'          => 'Help:Oangan',
-'mainpage'          => 'Bwiema peij',
-'sitesupport'       => 'Eadu a me',
+'currentevents'        => 'Imwin',
+'currentevents-url'    => 'Project:Imwin',
+'edithelp'             => 'Oomo/edar Ipuok',
+'edithelppage'         => 'Help:Oomo/edar',
+'helppage'             => 'Help:Oangan',
+'mainpage'             => 'Bwiema peij',
+'mainpage-description' => 'Bwiema peij',
 
 'editsection' => 'Kiwiwid',
 'showtoc'     => 'oduwen',
@@ -82,11 +85,6 @@ $messages = array(
 'hide'          => 'witsit imin gogoro',
 'show'          => 'oduwen',
 
-# Image list
-'ilsubmit'  => 'Anani ko',
-'byname'    => 'ean eg',
-'imgdelete' => 'iya',
-
 # Random page
 'randompage' => 'Tamo peij',
 
@@ -112,5 +110,8 @@ $messages = array(
 
 # Contributions
 'contributions' => 'Mana engame totow inne',
+
+# Special:Newimages
+'ilsubmit' => 'Anani ko',
 
 );

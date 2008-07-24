@@ -17,7 +17,8 @@ if( !defined( 'MEDIAWIKI' ) ) {
 
 $wgExtensionCredits['specialpage'][] = array(
 	'name' => 'Player',
-	'version' => '2008-02-02',
+	'svn-date' => '$LastChangedDate: 2008-05-06 13:59:58 +0200 (wto, 06 maj 2008) $',
+	'svn-revision' => '$LastChangedRevision: 34306 $',
 	'author' => 'Daniel Kinzler, brightbyte.de',
 	'url' => 'http://mediawiki.org/wiki/Extension:Player',
 	'description' => 'embedded multimedia playback using common browser plugins',

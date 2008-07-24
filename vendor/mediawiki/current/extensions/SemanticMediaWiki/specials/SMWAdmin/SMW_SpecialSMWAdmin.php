@@ -1,10 +1,5 @@
 <?php
 
-if (!defined('MEDIAWIKI')) die();
-
-global $IP;
-include_once($IP . '/includes/SpecialPage.php');
-
 /**
  * @author Markus Krötzsch
  *
@@ -20,17 +15,12 @@ class SMWAdmin extends SpecialPage {
 	 * Constructor
 	 */
 	public function __construct() {
-		smwfInitUserMessages();
 		global $wgMessageCache; ///TODO: should these be messages?
 		$wgMessageCache->addMessages(array('smwadmin' => 'Admin functions for Semantic MediaWiki'));
 		parent::__construct('SMWAdmin', 'delete');
 	}
 
 	public function execute($par = null) {
-		global $IP;
-		require_once($IP . '/includes/SpecialPage.php' );
-		require_once($IP . '/includes/Title.php' );
-	
 		global $wgOut, $wgRequest;
 		global $wgServer; // "http://www.yourserver.org"
 							// (should be equal to 'http://'.$_SERVER['SERVER_NAME'])
@@ -60,7 +50,8 @@ class SMWAdmin extends SpecialPage {
 				if ($result === true) {
 					print '<p><b>The storage engine was set up successfully.</b></p>';
 				}
-				print '<p> Return to <a href="' . $wgServer . $wgScript . '/Special:SMWAdmin">Special:SMWAdmin</a></p>';
+				$returntitle = Title::newFromText('Special:SMWAdmin');
+				print '<p> Return to <a href="' . htmlspecialchars($returntitle->getFullURL()) . '">Special:SMWAdmin</a></p>';
 				print '</body></html>';
 				ob_flush();
 				flush();
@@ -71,7 +62,7 @@ class SMWAdmin extends SpecialPage {
 		/**** Normal output ****/
 	
 		$html = '<p>This special page helps you during installation and upgrade of 
-					Semantic MediaWiki. Remember to backup valuable data before 
+					<a href="http://semantic-mediawiki.org">Semantic MediaWiki</a>. Remember to backup valuable data before 
 					executing administrative functions.</p>' . "\n";
 		// creating tables and converting contents from older versions
 		$html .= '<form name="buildtables" action="" method="POST">' . "\n" .
@@ -88,17 +79,24 @@ class SMWAdmin extends SpecialPage {
 				permissions. Either grant this user additional persmissions to create and delete 
 				tables, or temporarily enter the login of your database root in LocalSettings.php.<p/>' .
 				"\n" . '<input type="hidden" name="udsure" value="yes"/>' .
-				'<input type="submit" value="Initialise or upgrade tables"/>' . "\n";
+				'<input type="submit" value="Initialise or upgrade tables"/></form>' . "\n";
+
+		$html .= '<h2>Announce your wiki</h2>' . "\n" . 
+				'<p>SMW has a web service for announcing new semantic wiki sites. This is used to maintain a list of public sites that use SMW, mainly to help the <a href="http://semantic-mediawiki.org/wiki/SMW_Project">SMW project</a> to get an overview of typical uses of SMW. See the SMW homepage for <a href="http://semantic-mediawiki.org/wiki/Registry">further information about this service.</a>' .
+				'<p>Press the following button to submit your wiki URL to that service. The service will not register wikis that are not publicly accessible, and it will only store publicly accessible information.</p>
+				 <form name="announcewiki" action="http://semantic-mediawiki.org/wiki/Special:SMWRegistry" method="GET">' .
+				 '<input type="hidden" name="url" value="' . SMWExporter::expandURI('&wikiurl;') . '" />' .
+				 '<input type="hidden" name="return" value="Special:SMWAdmin" />' .
+				 '<input type="submit" value="Announce wiki"/></form>' . "\n";
 	
 		$html .= '<h2>Getting support</h2>' . "\n" . 
 				'<p>Various resources might help you in case of problems:</p>
 				<ul>
 				<li> If you experience problems with your installation, start by checking the guidelines in the <a href="http://svn.wikimedia.org/svnroot/mediawiki/trunk/extensions/SemanticMediaWiki/INSTALL">INSTALL file</a>.</li>
-				<li>The complete user documentation to Semantic MediaWiki is at <a href="http://ontoworld.org/wiki/Help:Semantics">ontoworld.org</a>.</li>
+				<li>The complete user documentation to Semantic MediaWiki is at <b><a href="http://semantic-mediawiki.org">semantic-mediawiki.org</a></b>.</li>
 				<li>Bugs can be reported to <a href="http://bugzilla.wikimedia.org/">MediaZilla</a>.</li>
 				<li>If you have further questions or suggestions, join the discussion on <a href="mailto:semediawiki-user@lists.sourceforge.net">semediawiki-user@lists.sourceforge.net</a>.</li>
 				<ul/>' . "\n";
-		$html .= '</form>';
 		
 		$wgOut->addHTML($html);
 		return true;
@@ -373,7 +371,7 @@ class SMWAdmin extends SpecialPage {
 // 	
 // 	
 // 	// delete obsolete categorisation values; in the future, we will use the MediaWiki table instead
-// 	$sql = "DELETE FROM $smw_specialprops WHERE property = " . $dbr->addQuotes(SMW_SP_HAS_CATEGORY);
+// 	$sql = "DELETE FROM $smw_specialprops WHERE property = " . $dbr->addQuotes(SMW_SP_INSTANCE_OF);
 // 	$res = $dbr->query( $sql, $fname );
 // 	// extend table structure for special properties
 // 	$sql = "ALTER TABLE $smw_specialprops TYPE = innodb";

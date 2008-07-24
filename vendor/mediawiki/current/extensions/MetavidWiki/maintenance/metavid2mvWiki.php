@@ -1,6 +1,4 @@
 <?php
-
-
 /*
  * metavid2mvWiki.php Created on May 8, 2007
  *
@@ -72,7 +70,6 @@ define('CC_OFFSET', -30);
 $optionsWithArgs = array ();
 
 
-
 if (count($args) == 0 || isset ($options['help'])) {
 	print<<<EOT
 Load Streams/data from the metavid database
@@ -80,15 +77,21 @@ Load Streams/data from the metavid database
 Usage php metavid2mvWiki.php [options] action	
 ie: senate_proceeding_04-11-07
 options:
-		--noimage will skip image downloading 
+		--skipimage will skip image downloading 
 		--skiptext skips text sync
-		--force will force updates (normally if edited by a human its skiped)
+		--skipfiles skips files
+		--skipSpeechMeta  skips annotation track with Speech By tags for continues Spoken By attr 
+		--force will force updates (if edited by a human its skiped)
 actions:
 		\$stream_name  will proccess that stream name		
 		'all_in_sync' will insert all streams that are tagged in_sync
+		'all_in_wiki' will run on all streams in the wiki 		
 		'all_with_files' will insert all streams with files (and categorize acording to sync status)
+		'all_sync_past_date' --date [mm/dd/yy] all in_sync streams past date (-d option required)
 		[stream_name] will insert all records for the given stream name
-		'people' will insert all the people articles 	
+		'people' [person_name] will insert all the people articles optional followed by a person name 	
+		'bill' [bill_key]? ...empty bill key will insert all bills based on gov track subject page
+		'interest' will insert interests (uses people as base so run people first) 
 		'update_templates' will update templates & some semantic properties  
 		'file_check' checks inserted streams file urls/pointers
 
@@ -99,16 +102,33 @@ EOT;
 /*
  * set up the article set for the given stream/set
  */
+$mvForceUpdate= (isset($options['force']))?true:false;	
 
 switch ($args[0]) {
 	case 'all_in_sync' :
 		do_stream_insert('all');
 	break;
+	case 'all_in_wiki':	
+		do_stream_insert('all_in_wiki');
+	break;
 	case 'all_with_files':
 		do_stream_insert('files');
 	break;
+	case 'all_sync_past_date':
+		if(!isset($options['date']))die('date missing'."\n");
+		do_stream_insert('all_sync_past_date');
+	break;
 	case 'people' :
-		do_people_insert();
+		$force = (isset($options['force']))?true:false;	
+		$person_name = (isset($args[1]))?$args[1]:'';
+		do_people_insert('',$person_name, $force);
+	break;
+	case 'bill':
+		$bill_key = (isset($args[1]))?$args[1]:'';
+		do_bill_insert($bill_key);
+	break;
+	case 'interest':
+		do_people_insert($lookUpInterest=true);
 	break;
 	case 'update_templates' :
 		$force = (isset($options['force']))?true:false;

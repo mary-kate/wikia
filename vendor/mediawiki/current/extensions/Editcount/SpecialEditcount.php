@@ -15,7 +15,8 @@ if (!defined('MEDIAWIKI')) die();
 
 $wgExtensionCredits['specialpage'][] = array(
 	'name' => 'Editcount',
-	'version' => '2008-01-11',
+	'svn-date' => '$LastChangedDate: 2008-07-09 20:40:42 +0200 (śro, 09 lip 2008) $',
+	'svn-revision' => '$LastChangedRevision: 37426 $',
 	'author' => 'Ævar Arnfjörð Bjarmason',
 	'description' => 'Displays [[Special:Editcount|edit count]] of a user',
 	'descriptionmsg' => 'editcount-desc',
@@ -23,6 +24,7 @@ $wgExtensionCredits['specialpage'][] = array(
 );
 
 $dir = dirname(__FILE__) . '/';
-$wgExtensionMessagesFiles['Editcount'] = $dir .'SpecialEditcount.i18n.php';
+$wgExtensionMessagesFiles['Editcount'] = $dir . 'SpecialEditcount.i18n.php';
+$wgExtensionAliasesFiles['Editcount'] = $dir . 'SpecialEditcount.alias.php';
 $wgAutoloadClasses['Editcount'] = $dir . 'SpecialEditcount_body.php';
 $wgSpecialPages['Editcount'] = 'Editcount';

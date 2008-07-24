@@ -36,13 +36,13 @@ $wgHooks['OutputPageParserOutput'][] = 'smoothGalleryParserOutput';
 $dir = dirname(__FILE__) . '/';
 $wgExtensionMessagesFiles['SmoothGallery'] = $dir . 'SmoothGallery.i18n.php';
 $wgAutoloadClasses['SmoothGallery'] = $dir . 'SmoothGalleryClass.php';
-$wgAutoloadClasses['SpecialSmoothGallery'] = $dir . 'SpecialSmoothGallery.php';
-$wgSpecialPages['SmoothGallery'] = 'SpecialSmoothGallery';
 
 //sane defaults. always initialize to avoid register_globals vulnerabilities
 $wgSmoothGalleryDelimiter = "\n";
 $wgSmoothGalleryExtensionPath = $wgScriptPath . '/extensions/SmoothGallery';
-$wgSmoothGalleryUseDatabase = false;
+$wgSmoothGalleryAllowExternal = false;
+$wgSmoothGalleryThumbHeight = "75px";
+$wgSmoothGalleryThumbWidth = "100px";
 
 function efSmoothGallery() {
 	global $wgParser;
@@ -51,14 +51,13 @@ function efSmoothGallery() {
 	$wgParser->setHook( 'sgalleryset', 'initSmoothGallerySet' );
 }
 
-function initSmoothGallery( $input, $argv, &$parser, $calledFromSpecial=false, $calledAsSet=false ) {
+function initSmoothGallery( $input, $argv, &$parser, $calledAsSet=false ) {
 	require_once( 'SmoothGalleryParser.php' );
 
-	$sgParser = new SmoothGalleryParser( $input, $argv, $parser, $calledFromSpecial, $calledAsSet );
+	$sgParser = new SmoothGalleryParser( $input, $argv, $parser, $calledAsSet );
 	$sgGallery = new SmoothGallery();
 
 	$sgGallery->setParser( $parser );
-	$sgGallery->setSpecial( $calledFromSpecial );
 	$sgGallery->setSet( $calledAsSet );
 	$sgGallery->setArguments( $sgParser->getArguments() );
 	$sgGallery->setGalleries( $sgParser->getGalleries() ); 
@@ -71,8 +70,8 @@ function initSmoothGallery( $input, $argv, &$parser, $calledFromSpecial=false, $
 	}
 }
 
-function initSmoothGallerySet( $input, $args, &$parser, $calledFromSpecial=false ) {
-	$output = initSmoothGallery( $input, $args, $parser, $calledFromSpecial, true );
+function initSmoothGallerySet( $input, $args, &$parser ) {
+	$output = initSmoothGallery( $input, $args, $parser, true );
 
 	return $output;
 }
@@ -96,7 +95,7 @@ function smoothGalleryParserOutput( &$outputPage, &$parserOutput )  {
  */
 $wgExtensionCredits['other'][] = array(
 	'name'        => 'SmoothGallery parser extension',
-	'version'     => '1.1b (alpha)',
+	'version'     => '1.1c (beta)',
 	'author'      => 'Ryan Lane',
 	'description' => 'Allows users to create galleries with images that have been uploaded. Allows most options of SmoothGallery',
 	'descriptionmsg' => 'smoothgallery-desc',

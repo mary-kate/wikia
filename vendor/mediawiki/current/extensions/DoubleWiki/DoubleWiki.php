@@ -25,9 +25,10 @@ $wgHooks['OutputPageBeforeHTML'][] = 'addMatchedText' ;
 
 $wgExtensionCredits['other'][] = array(
 	'name' => 'DoubleWiki',
-	//'author' => '',
-	//'url' => '',
-	'version'        => '2008-02-18',
+	'author' => 'ThomasV',
+	'url' => 'http://wikisource.org/wiki/Wikisource:DoubleWiki_Extension',
+	'svn-date' => '$LastChangedDate: 2008-07-04 04:22:09 +0200 (pią, 04 lip 2008) $',
+	'svn-revision' => '$LastChangedRevision: 37016 $',
 	'description'    => 'Displays a page and its translation from another wiki on two columns of the same page',
 	'descriptionmsg' => 'doublewiki-desc',
 );
@@ -53,7 +54,7 @@ function addMatchedText ( &$parserOutput , &$text ) {
 			$myLanguage = $wgLang->getLanguageName( $wgContLanguageCode );
 
 			$sep = ( in_string( '?', $url ) ) ? '&' : '?'; 
-			$translation = wfGetHttp( $url.$sep.'action=render' );
+			$translation = Http::get( $url.$sep.'action=render' );
 			if ( $translation !== null ) {
 				#first find all links that have no 'class' parameter.
 				#these links are local so we add '?match=xx' to their url, 
@@ -320,7 +321,7 @@ function nesting_delta ( $text ) {
 			$counter--;
 			#if( ($tt != null) && ($tt[1] != $t[1]) ) {
 			#	#input html is buggy...
-			#	echo "Warning: ".$t[1]." encountered, expected ".$tt[1]."<br>\n";
+			#	echo "Warning: ".$t[1]." encountered, expected ".$tt[1]."<br />\n";
 			#}
 		}
 	}

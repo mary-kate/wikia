@@ -1,7 +1,8 @@
 <?php
 /** Zulu (isiZulu)
  *
- * @addtogroup Language
+ * @ingroup Language
+ * @file
  *
  * @author לערי ריינהארט
  * @author SPQRobin
@@ -70,14 +71,14 @@ $messages = array(
 'jumptosearch'     => 'Sesha',
 
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
-'currentevents'     => 'Izehlakalo ezimanje',
-'currentevents-url' => 'Project:Izehlakalo ezimanje',
-'edithelp'          => 'Usizo ngokuhlela',
-'helppage'          => 'Help:Isiqikili',
-'mainpage'          => 'Ikhasi Elikhulu',
-'portal'            => 'Umnyango wamgwamanda',
-'portal-url'        => 'Project:Umnyango wamgwamanda',
-'sitesupport'       => 'Izipho',
+'currentevents'        => 'Izehlakalo ezimanje',
+'currentevents-url'    => 'Project:Izehlakalo ezimanje',
+'edithelp'             => 'Usizo ngokuhlela',
+'helppage'             => 'Help:Isiqikili',
+'mainpage'             => 'Ikhasi Elikhulu',
+'mainpage-description' => 'Ikhasi Elikhulu',
+'portal'               => 'Umnyango wamgwamanda',
+'portal-url'           => 'Project:Umnyango wamgwamanda',
 
 'newmessageslink'         => 'Imilayezo emisha',
 'youhavenewmessagesmulti' => 'Uyanemilayezo emisha e $1',
@@ -184,14 +185,13 @@ ikhawundi lakho liyadalwa. musa ukukhohlwa ukuguqula amakhethelo a-{{SITENAME}} 
 # Upload
 'upload'           => 'Layisha ifayili',
 'uploadbtn'        => 'Layisha ifayili',
-'filesource'       => 'Umthombo',
+'filesource'       => 'Umthombo:',
 'ignorewarnings'   => 'Duba imiyalo',
 'successfulupload' => 'Ukulayisha okuchumile',
 
 'nolicense' => 'Ubekhetha lutho',
 
-# Image list
-'ilsubmit'         => 'Sesha',
+# Image description page
 'nolinkstoimage'   => 'Akukho amakhasi akhomba kuleli fayela.',
 'noimage'          => 'Akukho ifayela elinaleli gama, unga $1.',
 'noimage-linktext' => 'Layisha',
@@ -237,7 +237,6 @@ ikhawundi lakho liyadalwa. musa ukukhohlwa ukuguqula amakhethelo a-{{SITENAME}} 
 'deletepage'     => 'Sula ikhasi',
 'confirm'        => 'Qinisekisa',
 'exblank'        => 'ikhasi elize',
-'confirmprotect' => 'Qinisekisa ukulondoloza',
 'protectcomment' => 'Isizathu ngenxa yalondoloza',
 
 # Restrictions (nouns)
@@ -267,7 +266,7 @@ ikhawundi lakho liyadalwa. musa ukukhohlwa ukuguqula amakhethelo a-{{SITENAME}} 
 'databasenotlocked' => 'Idatabheyisi alikhiyiwi.',
 
 # Move page
-'movepage'                => 'Thuthisa ikhasi',
+'move-page-legend'        => 'Thuthisa ikhasi',
 'movearticle'             => 'Thuthisa ikhasi',
 'movenologin'             => 'Awungenile',
 'movepagebtn'             => 'Thuthisa ikhasi',
@@ -300,6 +299,7 @@ ikhawundi lakho liyadalwa. musa ukukhohlwa ukuguqula amakhethelo a-{{SITENAME}} 
 # Special:Newimages
 'newimages' => 'Uhlelo lwamafayela amasha',
 'noimages'  => 'Awuboni lutho.',
+'ilsubmit'  => 'Sesha',
 
 # Metadata
 'metadata-expand'   => 'Bukisa imininingwane yonke',

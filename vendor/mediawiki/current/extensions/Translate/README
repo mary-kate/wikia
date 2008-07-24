@@ -32,9 +32,63 @@ function customMessageGroups( $id ) {
 }
 </code>
 
-== Chages in version 9 ==
-* Not released
+== Changes in version 10 ==
+
+* 2008-07-17:1
+- simple form to generate graphs
+- scale and count parameters for graphs
+* 2008-07-15:2 new check for unaltered namespaces in pagename messages of MediaWiki
+* 2008-07-15:1
+ - improved message checks
+ - can now work for meta groups too
+ - fixed messages not shown in the list anymore, but script still needed to find
+   the broken ones
+* 2008-07-13:2 group filter for graphs
+* 2008-07-13:1 experimental alias-export for extensions
+* 2008-07-08:1 simple edit stats with phplot
+* 2008-07-05:1 fuzzy.php was ignoring the namespace
+* 2008-07-04:2
+ - use a existing hook for quick links
+ - possible fix for Windows
+* 2008-07-04:1 poimport uses correct namespace
+* 2008-07-01:1
+ - Fix gettext message name snippets: filter / and trim after trailing
+ - Load normal comments from gettext files
+ - Quick links for viewing, using a private hook
+* 2008-06-30:3 Check for unknown vars for mediawiki type
+* 2008-06-30:2 Checks for missing and unknown variables for FreeCol
+* 2008-06-30:1 More contrast in the new default page for Special translate
+* 2008-06-29:2 Branched core messages now load translations from trunk files too
+
+== Changes in version 9 ==
+* Released 2008-06-29
 * (bug 12955) Numbers should be localized in Translate extension
+* Support branches for core messages
+* fuzzy.php got support for --comment and --skiplanguages
+* untranslated is now the default task
+* truncate very long message names in table view
+* show definition closer to edit area
+* show the group of message when editing
+* branched core messages should now export properly
+* $wgTranslateBlacklist added to prevent edits to certain language/group combinations
+* new exporters
+* changed the way of adding MediaWiki extensions
+* support for having messages in namespaces other than NS_MEDIAWIKi
+* try to load qqq from files if not found from the database
+* added $wgTranslateAuthorBlacklist
+* new options to groupStatistics.php: --fuzzy and --skipzero
+* fuzzy respects now $wgTranslateMessageNamespaces
+* freecol not added by default
+* Messages keys can now start with capital letter, but have to be unique after normalising case and spaces
+* poimport will no longer replace translation in database with empty string
+* Support for exporting very basic Xliff files (no import yet)
+* Task for listing problematic messages
+* CreateCheckIndex.php maintenance script for creating a list of problematic messsages
+* Aliases for special pages
+* improvements to Special:Magic and support for translating special page aliases for extensions
+* more generic check framework
+* new front page for Special:Translate
+* desc and descmsg support for mediawiki extension group definitions
 
 == Changes in version 8 ==
 * Released 2008-02-06

@@ -24,7 +24,7 @@ class SpecialTranslationChanges extends SpecialPage {
 
 		$this->setHeaders();
 		$this->hours = min( 168, $wgRequest->getInt( 'hours', 24 ) );
-	
+
 		$rows = TranslateUtils::translationChanges( $this->hours );
 		$wgOut->addHTMl( $this->settingsForm() . $this->output( $rows ) );
 	}
@@ -64,10 +64,11 @@ class SpecialTranslationChanges extends SpecialPage {
 		$index = TranslateUtils::messageIndex();
 		$batch = new LinkBatch;
 		foreach ( $rows as $row ) {
-			$pieces = explode('/', $wgContLang->lcfirst($row->rc_title), 2);
+			list( $pieces, ) = explode('/', $wgContLang->lcfirst($row->rc_title), 2);
 
+			$key = strtolower($row->rc_namespace. ':' . $pieces);
 			$group = 'Unknown';
-			$mg = @$index[strtolower($pieces[0])];
+			$mg = @$index[$key];
 			if ( !is_null($mg) ) $group = $mg;
 
 			$lang = 'site';
@@ -222,6 +223,4 @@ class SpecialTranslationChanges extends SpecialPage {
 	function downArrow() {
 		return $this->arrow( 'd', '-' );
 	}
-
-
 }

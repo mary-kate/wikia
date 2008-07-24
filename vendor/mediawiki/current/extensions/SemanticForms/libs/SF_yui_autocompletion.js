@@ -5,19 +5,41 @@
  * for the specified form input, using the specified values and delimiter
  * (in the case that it's a multiple-values autocompletion)
  */
-function sf_autocomplete(input_name, container_name, values, delimiter) {
-    // Instantiate JS Function DataSource
-    this.oACDS = new YAHOO.widget.DS_JSFunction(autocompleteFunctionGenerator(values));
-    this.oACDS.maxCacheEntries = 0;
+function sf_autocomplete(input_name, container_name, values, api_url, data_type, delimiter, data_source) {
+    // Instantiate JS Function DataSource - the type depends on whether
+    // it gets autocompletion values locallly or remotely (through Ajax);
+    // which in turn is set depending on whether the 'values' or the
+    // 'data_type' and 'api_url' parameters are set
+    if (values != null) {
+        this.oACDS = new YAHOO.widget.DS_JSFunction(autocompleteFunctionGenerator(values));
+        this.oACDS.maxCacheEntries = 0;
+        this.oAutoComp = new YAHOO.widget.AutoComplete(input_name, container_name, this.oACDS);
+    } else {
+        var myServer = api_url;
+        var mySchema = ["sfautocomplete", "title"];
+        this.oACDS = new YAHOO.widget.DS_XHR(myServer, mySchema);
+        this.oACDS.scriptQueryParam = "substr";
+        if (data_type == 'relation')
+            this.oACDS.scriptQueryAppend = "action=sfautocomplete&format=json&relation=" + data_source;
+        else if (data_type == 'attribute')
+            this.oACDS.scriptQueryAppend = "action=sfautocomplete&format=json&attribute=" + data_source;
+        else if (data_type == 'category')
+            this.oACDS.scriptQueryAppend = "action=sfautocomplete&format=json&category=" + data_source;
+        else if (data_type == 'namespace')
+            this.oACDS.scriptQueryAppend = "action=sfautocomplete&format=json&namespace=" + data_source;
+        this.oACDS.responseType = YAHOO.widget.DS_XHR.TYPE_JSON;
+        this.oAutoComp = new YAHOO.widget.AutoComplete(input_name, container_name, this.oACDS);
+    }
 
     // Instantiate AutoComplete
-    this.oAutoComp = new YAHOO.widget.AutoComplete(input_name, container_name, this.oACDS);
     this.oAutoComp.alwaysShowContainer = false;
     this.oAutoComp.minQueryLength = 1;
     this.oAutoComp.maxResultsDisplayed = 20;
     this.oAutoComp.animHoriz = false;
     this.oAutoComp.animVert = false;
-    this.oAutoComp.delimChar = delimiter;
+    if (delimiter != '') {
+        this.oAutoComp.delimChar = delimiter;
+    }
     // don't set IFrame, which is meant to improve formatting on Internet
     // Explorer - currently, it only messes up the formatting
     //this.oAutoComp.useIFrame = true;
@@ -73,7 +95,9 @@ function autocompleteFunctionGenerator(values_list) {
         var primaryResults = [];
         var secondaryResults = [];
         if (sQuery && sQuery.length > 0) {
-            query_str = decodeURI(sQuery.toLowerCase());
+            // in some cases, decodeURI() doesn't handle colons correctly -
+            // replace them manually
+            query_str = decodeURI(sQuery).replace(/(%3A)/g, ":").toLowerCase();
             for (var i = 0; i < values_list.length; i++) {
                 subarray = values_list[i];
                 // workaround for strange IE bug

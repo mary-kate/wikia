@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -6,7 +7,7 @@
  * (at your option) any later version.
  *
  * @author Roan Kattouw <roan.kattouw@home.nl>
- * @copyright Copyright (C) 2007 Roan Kattouw 
+ * @copyright Copyright © 2007 Roan Kattouw 
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  *
  * An extension that allows for abbreviated inline citations.
@@ -16,7 +17,6 @@
  *
  */
  
-$wgExtensionFunctions[] = 'redircite_setup';
 $wgExtensionCredits['other'][] = array(
 	'name' => 'redircite',
 	'author' => 'Roan Kattouw',
@@ -25,26 +25,38 @@ $wgExtensionCredits['other'][] = array(
 	'url' => 'http://www.mediawiki.org/wiki/Extension:Redircite'
 );
 
-function redircite_setup()
-{
-	global $wgParser, $wgHooks;
-	$wgParser->setHook('redircite', 'redircite_render');
-	$wgHooks['ParserAfterTidy'][] = 'redircite_afterTidy';
+$wgExtensionFunctions[] = 'efRedircite';
+$wgHooks['ParserAfterTidy'][] = 'redircite_afterTidy';
+function efRedircite() {
+	if(defined('MW_SUPPORTS_PARSERFIRSTCALLINIT')) {
+		global $wgHooks;
+		$wgHooks['ParserFirstCallInit'][] = 'redircite_setup';
+	} else {
+		global $wgParser;
+		redircite_setup($wgParser);
+	}
+}
+function redircite_setup($parser) {
+	$parser->setHook('redircite', 'redircite_render');
+	return true;
 }
 
-$markerList = array();
-function redircite_render($input, $args, $parser)
-{
-	// Generate HTML code and add it to the $markerList array
+$redirciteMarkerList = array();
+function redircite_render($input, $args, $parser) {
+	// Generate HTML code and add it to the $redirciteMarkerList array
 	// Add "xx-redircite-marker-NUMBER-redircite-xx" to the output,
-	// which will be translated to the HTML stored in $markerList by
+	// which will be translated to the HTML stored in $redirciteMarkerList by
 	// redircite_afterTidy()
-	global $markerList;
+	global $redirciteMarkerList;
+	# Verify that $input is a valid title
+	$inputTitle = Title::newFromText($input);
+	if(!$inputTitle)
+		return $input; 
 	$lparse = clone $parser;
 	$link1 = $lparse->parse("[[$input]]", $parser->mTitle, $parser->mOptions, false, false);
 	$link1text = $link1->getText();
 	$title1 = Title::newFromText($input);
-	if(!$title1) // Page doesn't exist
+	if(!$title1->exists()) // Page doesn't exist
 		// Just output a normal (red) link
 		return $link1text;
 	$articleObj = new Article($title1);
@@ -56,18 +68,21 @@ function redircite_render($input, $args, $parser)
 	$link2 = $lparse->parse("[[{$title2->getPrefixedText()}|$input]]", $parser->mTitle, $parser->mOptions, false, false);
 	$link2text = $link2->getText();
 	
-	$marker = "xx-redircite-marker-" . count($markerList) . "-redircite-xx";
-	$markerList[] = "<span onmouseout='this.firstChild.innerHTML = \"$input\";' onmouseover='this.firstChild.innerHTML = \"{$title2->getPrefixedText()}\";'>$link2text</span>";
+	$marker = "xx-redircite-marker-" . count($redirciteMarkerList) . "-redircite-xx";
+	$onmouseout = 'this.firstChild.innerHTML = "'. Xml::escapeJsString($input) . '";';
+	$onmouseover = 'this.firstChild.innerHTML = "' . Xml::escapeJsString($title2->getPrefixedText()) . '";';
+	$redirciteMarkerList[] = Xml::tags('span', array(
+					'onmouseout' => $onmouseout,
+					'onmouseover' => $onmouseover),
+					$link2text);
 	return $marker;
 }
 
-function redircite_afterTidy(&$parser, &$text)
-{
+function redircite_afterTidy(&$parser, &$text) {
 	// Translate the markers added by redircite_render() to the HTML
-	// associated with them through $markerList
-	global $markerList;
-	foreach($markerList as $i => $output)
+	// associated with them through $redirciteMarkerList
+	global $redirciteMarkerList;
+	foreach($redirciteMarkerList as $i => $output)
 		$text = preg_replace("/xx-redircite-marker-$i-redircite-xx/", $output, $text);
 	return true;
 }
-?>

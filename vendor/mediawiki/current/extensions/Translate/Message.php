@@ -17,16 +17,15 @@ if (!defined('MEDIAWIKI')) die();
  * translation target language.
  */
 class MessageCollection implements Iterator, ArrayAccess, Countable {
+	/**
+	 * Information of what type of MessageCollection this is.
+	 */
+	public $code = null;
 
 	/**
 	 * Messages are stored in an array.
 	 */
 	private $messages = array();
-
-	/**
-	 * Information of what type of MessageCollection this is.
-	 */
-	public $code = null;
 
 	/**
 	 * Creates new empty messages collection.
@@ -35,6 +34,12 @@ class MessageCollection implements Iterator, ArrayAccess, Countable {
 	 */
 	public function __construct( $code ) {
 		$this->code = $code;
+	}
+
+	public function __clone() {
+		foreach ( $this->messages as $key => $obj ) {
+			$this->messages[$key] = clone $obj;
+		}
 	}
 
 	/* Iterator methods */
@@ -147,20 +152,6 @@ class MessageCollection implements Iterator, ArrayAccess, Countable {
 		return $collection;
 	}
 
-	/**
-	 * Shortcut for TranslateUtils::fillExistence.
-	 */
-	public function populatePageExistence() {
-		TranslateUtils::fillExistence( $this );
-	}
-
-	/**
-	 * Shortcut for TranslateUtils::fillContents.
-	 */
-	public function populateTranslationsFromDatabase() {
-		TranslateUtils::fillContents( $this );
-	}
-
 	/* Fail fast */
 	public function __get( $name ) {
 		throw new MWException( __METHOD__ . ": Trying to access unknown property $name" );
@@ -171,32 +162,95 @@ class MessageCollection implements Iterator, ArrayAccess, Countable {
 		throw new MWException( __METHOD__ . ": Trying to modify unknown property $name" );
 	}
 
+	public function getAuthors() {
+		global $wgTranslateFuzzyBotName;
+
+		$authors = array();
+		foreach ( $this->keys() as $key ) {
+			// Check if there is authors
+			$_authors = $this->messages[$key]->authors;
+			if ( !count($_authors) ) continue;
+
+			foreach ( $_authors as $author ) {
+				if ( !isset($authors[$author]) ) {
+					$authors[$author] = 1;
+				} else {
+					$authors[$author]++;
+				}
+			}
+		}
+
+		arsort( $authors, SORT_NUMERIC );
+		foreach ( $authors as $author => $edits ) {
+			if ( $author !== $wgTranslateFuzzyBotName ) {
+				$filteredAuthors[] = $author;
+			}
+		}
+		return isset($filteredAuthors) ? $filteredAuthors : array();
+	}
+
+	/**
+	 * Filters messages based on some condition.
+	 *
+	 * @param $type Any accessible value of TMessage.
+	 * @param $condition What the value is compared to.
+	 */
+	public function filter( $type, $condition = true ) {
+		foreach ( $this->keys() as $key ) {
+			if ( $this->messages[$key]->$type == $condition ) {
+				unset( $this->messages[$key] );
+			}
+		}
+	}
+
 }
 
 class TMessage {
 	/**
 	 * String that uniquely identifies this message.
 	 */
-	private $key = null;
+	public $key = null;
 
 	/**
 	 * The definition of this message - usually in English.
 	 */
-	private $definition = null;
+	public $definition = null;
+
+	// Following properties are lazy declared to save memory
 
 	/**
 	 * Authors who have taken part in translating this message.
 	 */
-	private $authors = array();
+	//protected $authors;
 
-	private $infile   = null;
-	private $fallback = null;
-	private $database = null;
+	/**
+	 * External translation.
+	 */
+	//protected $infile   = null;
 
-	private $optional   = false;
-	private $ignored    = false;
-	private $pageExists = false;
-	private $talkExists = false;
+	/**
+	 * Translation in local database, may differ from above.
+	 */
+	//private $database = null;
+
+	/**
+	 * Metadata about the message.
+	 */
+	//protected $optional, $pageExists, $talkExists;
+
+	// Values that can be accessed with $message->value syntax
+	protected static $callable = array(
+		// Basic values
+		'infile', 'database', 'optional', 'pageExists', 'talkExists',
+		// Derived values
+		'authors', 'changed', 'translated', 'translation', 'fuzzy',
+	);
+
+	protected static $writable = array(
+		'infile', 'database', 'optional', 'pageExists', 'talkExists',
+		// Ugly.. maybe I'm trying to be to clever here
+		'authors',
+	);
 
 	/**
 	 * Creates new message object.
@@ -209,29 +263,33 @@ class TMessage {
 		$this->definition = $definition;
 	}
 
-	public function addAuthor( $author ) {
-		$this->authors[] = $author;
-	}
+	// Getters for basic values
+	public function key() { return $this->key; }
+	public function definition() { return $this->definition; }
 
+	public function infile() { return @$this->infile; }
+	public function database() { return @$this->database; }
+
+	public function optional() { return !!@$this->optional; }
+	public function pageExists() { return !!@$this->pageExists; }
+	public function talkExists() { return !!@$this->talkExists; }
+
+	// Getters for derived values
+	/** Returns authors added for this message. */
 	public function authors() {
-		return $this->authors;
+		return @$this->authors ? $this->authors : array();
 	}
 
-	/**
-	 * Determines if this message has uncommitted changes.
-	 *
-	 * @return true or false
-	 */
+	/** Determines if this message has uncommitted changes. */
 	public function changed() {
-		return $this->pageExists && ( $this->infile !== $this->database );
+		return !!@$this->pageExists && ( @$this->infile !== @$this->database );
 	}
 
+	/** Determies if this message has a proper translation. */
 	public function translated() {
-		if ( $this->pageExists ) {
-			return true;
-		} else {
-			return $this->translation !== null && $this->translation !== $this->definition;
-		}
+		if ( @$this->translation === null || $this->fuzzy() ) return false;
+		$optionalSame = !!@$this->optional && (@$this->translation === @$this->definition);
+		return !$optionalSame;
 	}
 
 	/**
@@ -241,7 +299,7 @@ class TMessage {
 	 * @return Translated string or null if there isn't translation.
 	 */
 	public function translation() {
-		return $this->database ? $this->database : $this->infile;
+		return (@$this->database !== null) ? @$this->database : @$this->infile;
 	}
 
 	/**
@@ -251,23 +309,24 @@ class TMessage {
 	 * @return true or false
 	 */
 	public function fuzzy() {
-		if ( $this->database !== null ) {
-			return strpos($this->database, TRANSLATE_FUZZY) !== false;
+		if ( @$this->translation !== null ) {
+			return strpos($this->translation, TRANSLATE_FUZZY) !== false;
 		} else {
 			return false;
 		}
 	}
 
-	private static $callable = array( 'authors', 'changed', 'translated', 'translation', 'fuzzy' );
-	private static $writable = array( 'infile', 'fallback', 'database', 'pageExists', 'talkExists', 'optional', 'ignored' );
+	// Complex setters
+	public function addAuthor( $author ) {
+		$authors = $this->authors();
+		$authors[] = $author;
+		$this->authors = $authors;
+	}
 
+	// Code for PHP syntax magic to hide the difference between functions and values
 	public function __get( $name ) {
-		if ( property_exists( $this, $name ) ) {
-			return $this->$name;
-		} else {
-			if ( in_array( $name, self::$callable ) ) {
-				return $this->$name();
-			}
+		if ( in_array( $name, self::$callable ) ) {
+			return $this->$name();
 		}
 		throw new MWException( __METHOD__ . ": Trying to access unknown property $name" );
 	}
@@ -286,11 +345,7 @@ class TMessage {
 	}
 
 	public function __isset( $name ) {
-		if ( property_exists( $this, $name ) ) {
-			return $this->$name !== null;
-		} else {
-			return false;
-		}
+		return @$this->$name !== null;
 	}
 
 }

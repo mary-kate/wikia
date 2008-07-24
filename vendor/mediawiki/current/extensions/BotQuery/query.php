@@ -22,7 +22,10 @@
 */
 
 $startTime = microtime(true);
-$IP = dirname( realpath( __FILE__ ) ) . '/../..';
+$IP = getenv( 'MW_INSTALL_PATH' );
+if ( $IP === false ) {
+	$IP = dirname( realpath( __FILE__ ) ) . '/../..';
+}
 chdir( $IP );
 
 // Allow requests to go to an alternative site (proxying)
@@ -98,6 +101,20 @@ define( 'GN_ENUM_CHOICES',  2 );
 // Use this constant to avoid filtering by namespace
 define( 'NS_ALL_NAMESPACES', -10123 );
 
+// Forward-compat safety checks
+if( !@$wgEnableAPI ) {
+	wfHttpError( 403, 'Forbidden',
+		"MediaWiki API is not enabled for this site. " .
+		"Add the following line to your LocalSettings.php\n\n" .
+		"\$wgEnableAPI=true;" );
+	return;
+}
+
+if( !@$wgGroupPermissions['*']['read'] ) {
+	wfHttpError( 403, 'Forbidden',
+		"MediaWiki API is unavailable for this site due to restricted permissions." );
+	return;
+}
 
 $bqp = new BotQueryProcessor( $startTime );
 $bqp->execute();
@@ -1557,7 +1574,7 @@ class BotQueryProcessor {
 	*/
 	function genPageBackLinksHelper(&$prop, &$genInfo)
 	{
-		global $wgContLang;
+		global $wgContLang, $wgMiserMode;
 		$this->startProfiling();
 		$prefix = $linktbl = $code = null;
 		extract( $this->genPageBackLinksSettings[$prop] );
@@ -1576,8 +1593,9 @@ class BotQueryProcessor {
 		//
 		// Parse contFrom - will be in the format    ns|db_key|page_id - determine how to continue
 		//
+		// Builds a table scan query -- domas
 		$contFrom = $parameters["{$code}contfrom"];
-		if( $contFrom ) {
+		if( $contFrom && !$wgMiserMode ) {
 			$contFromList = explode( '|', $contFrom );
 			$contFromValid = count($contFromList) === 3;
 			if( $contFromValid ) {
@@ -2366,7 +2384,7 @@ class BotQueryProcessor {
 				"  You are " . ($wgUser->isAnon() ? "an anonymous" : "a logged-in") . " " . ($this->isBot ? "bot" : "user") . " " . $wgUser->getName(),
 				"",
 				"*Version*",
-				'  $Id: query.php 30090 2008-01-24 00:16:33Z brion $',
+				'  $Id: query.php 36495 2008-06-20 00:13:49Z brion $',
 				"",
 				);
 
@@ -2506,13 +2524,13 @@ class BotQueryProcessor {
 		<title>MediaWiki Query Interface</title>
 	</head>
 	<body>
-		<br/>
+		<br />
 	<?php
 		if( !array_key_exists('usage', $data) ) {
 	?>
 		<small>
-		This page is being rendered in <?=$format?> format, which might not be suitable for your application.<br/>
-		See <a href="query.php">query.php</a> for more information.<br/>
+		This page is being rendered in <?=$format?> format, which might not be suitable for your application.<br />
+		See <a href="query.php">query.php</a> for more information.<br />
 		</small>
 	<?php
 		}

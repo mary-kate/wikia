@@ -27,7 +27,8 @@ $wgExtensionCredits['parserhook'][] = array(
 	'name'           => 'LabeledSectionTransclusion',
 	'author'         => 'Steve Sanbeg',
 	'url'            => 'http://www.mediawiki.org/wiki/Extension:Labeled_Section_Transclusion',
-	'version'        => '2008-02-19',
+	'svn-date' => '$LastChangedDate: 2008-05-06 13:59:58 +0200 (wto, 06 maj 2008) $',
+	'svn-revision' => '$LastChangedRevision: 34306 $',
 	'description'    => 'Adds #lst and #lstx functions and &lt;section&gt; tag, enables marked sections of text to be transcluded',
 	'descriptionmsg' => 'lst-desc',
 );
@@ -385,7 +386,7 @@ class LabeledSectionTransclusion {
     global $wgLstLocal;
     $name = strtolower( $name );
     return $name == 'section' 
-      || ( isset( $wgLstLocal['section'] ) && $wgLstLocal['section'] == $name );
+      || ( isset( $wgLstLocal['section'] ) && strtolower( $wgLstLocal['section'] ) == $name );
   }
 
   /**

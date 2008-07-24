@@ -2,7 +2,8 @@
 
 $wgExtensionCredits['other'][] = array(
 	'name' => 'AntiSpoof',
-	'version' => '2008-02-01',
+	'svn-date' => '$LastChangedDate: 2008-07-23 10:15:47 +0200 (śro, 23 lip 2008) $',
+	'svn-revision' => '$LastChangedRevision: 37938 $',
 	'url' => 'http://www.mediawiki.org/wiki/Extension:AntiSpoof',
 	'author' => 'Brion Vibber',
 	'description' => 'Blocks the creation of accounts with mixed-script, confusing and similar usernames',
@@ -27,6 +28,7 @@ $wgAntiSpoofAccounts = true;
  */
 $wgGroupPermissions['sysop']['override-antispoof'] = true;
 $wgGroupPermissions['bureaucrat']['override-antispoof'] = true;
+$wgAvailableRights[] = 'override-antispoof';
 
 $wgExtensionFunctions[] = 'asSetup';
 
@@ -41,14 +43,15 @@ function asSetup() {
 
 	global $wgHooks;
 	$wgHooks['AbortNewAccount'][] = 'asAbortNewAccountHook';
+	$wgHooks['UserCreateForm'][] = 'asUserCreateFormHook';
 	$wgHooks['AddNewAccount'][] = 'asAddNewAccountHook';
 }
 
 function asUpdateSchema() {
-	global $wgExtNewTables;
+	global $wgExtNewTables, $wgDBtype;
 	$wgExtNewTables[] = array(
 		'spoofuser',
-		dirname( __FILE__ ) . '/mysql/patch-antispoof.sql' );
+		dirname( __FILE__ ) . '/sql/patch-antispoof.' . $wgDBtype . '.sql' );
 	return true;
 }
 
@@ -59,13 +62,14 @@ function asUpdateSchema() {
  * @return bool true to continue, false to abort user creation
  */
 function asAbortNewAccountHook( $user, &$message ) {
-	global $wgAntiSpoofAccounts, $wgUser;
+	global $wgAntiSpoofAccounts, $wgUser, $wgRequest;
 	wfLoadExtensionMessages( 'AntiSpoof' );
 
 	if( !$wgAntiSpoofAccounts ) {
 		$mode = 'LOGGING ';
 		$active = false;
-	} elseif( $wgUser->isAllowed( 'override-antispoof' ) ) {
+	} elseif( $wgRequest->getCheck('wpIgnoreAntiSpoof') && 
+			$wgUser->isAllowed( 'override-antispoof' ) ) {
 		$mode = 'OVERRIDE ';
 		$active = false;
 	} else {
@@ -95,6 +99,21 @@ function asAbortNewAccountHook( $user, &$message ) {
 			return false;
 		}
 	}
+	return true;
+}
+
+/**
+ * Set the ignore spoof thingie
+ */
+function asUserCreateFormHook( &$template ) {
+	global $wgRequest, $wgAntiSpoofAccounts, $wgUser;
+	
+	wfLoadExtensionMessages( 'AntiSpoof' );
+	
+	if( $wgAntiSpoofAccounts && $wgUser->isAllowed( 'override-antispoof' ) )
+		$template->addInputItem( 'wpIgnoreAntiSpoof', 
+			$wgRequest->getCheck('wpIgnoreAntiSpoof'), 
+			'checkbox', 'antispoof-ignore' );
 	return true;
 }
 

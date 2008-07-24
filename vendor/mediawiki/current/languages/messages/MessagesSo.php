@@ -1,12 +1,13 @@
 <?php
 /** Somali (Soomaaliga)
  *
- * @addtogroup Language
+ * @ingroup Language
+ * @file
  *
  * @author Mimursal
- * @author Nike
- * @author Siebrand
  * @author Yariiska
+ * @author Siebrand
+ * @author Jon Harald Søby
  */
 
 $messages = array(
@@ -99,8 +100,7 @@ $messages = array(
 'nov'           => 'Nof',
 'dec'           => 'Dis',
 
-# Bits of text used by many pages
-'categories'      => 'Qeybaha',
+# Categories related messages
 'pagecategories'  => '{{PLURAL:$1|Qaybta|Qaybaha}}',
 'category_header' => 'Maqaalada ku jirta qaybta "$1"',
 'subcategories'   => 'Qaybaha hoose',
@@ -162,26 +162,26 @@ $messages = array(
 'viewtalkpage'      => 'Fiiri bogga wadahadalka',
 'otherlanguages'    => 'Luqadaha kale',
 'lastmodifiedat'    => 'Boggan waxaa markii ugu dambeysay wax laga bedelay $2, $1.', # $1 date, $2 time
-'viewcount'         => 'This page has been accessed {{plural:$1|one time|$1 times}}.',
+'viewcount'         => 'This page has been accessed {{PLURAL:$1|one time|$1 times}}.',
 'protectedpage'     => "Bog la'difaacay",
 'jumpto'            => 'U bood:',
 'jumptosearch'      => 'raadi',
 
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
-'aboutsite'         => 'Warbixinta {{SITENAME}}',
-'aboutpage'         => 'Project:Warbixin',
-'copyright'         => 'Qoraalka wuxuu ku salaysanyahay $1.',
-'currentevents'     => 'Dhacdooyinka cusub',
-'currentevents-url' => 'Project:Maxaa cusub',
-'edithelp'          => 'Caawinaada wax ka bedelka',
-'edithelppage'      => 'Help:Wax ka bedelka',
-'faq'               => 'SIL',
-'faqpage'           => 'Project:SIL',
-'helppage'          => 'Help:Caawinaad',
-'mainpage'          => 'Bogga Hore',
-'portal'            => 'Bortaalka jaaliyada',
-'portal-url'        => 'Project:Bortaalka jaaliyada',
-'sitesupport'       => 'Tabarucid',
+'aboutsite'            => 'Warbixinta {{SITENAME}}',
+'aboutpage'            => 'Project:Warbixin',
+'copyright'            => 'Qoraalka wuxuu ku salaysanyahay $1.',
+'currentevents'        => 'Dhacdooyinka cusub',
+'currentevents-url'    => 'Project:Maxaa cusub',
+'edithelp'             => 'Caawinaada wax ka bedelka',
+'edithelppage'         => 'Help:Wax ka bedelka',
+'faq'                  => 'SIL',
+'faqpage'              => 'Project:SIL',
+'helppage'             => 'Help:Caawinaad',
+'mainpage'             => 'Bogga Hore',
+'mainpage-description' => 'Bogga Hore',
+'portal'               => 'Bortaalka jaaliyada',
+'portal-url'           => 'Project:Bortaalka jaaliyada',
 
 'badaccess'        => 'Qalad dhinaca idanka',
 'badaccess-group0' => 'Laguuma ogala in aad sameyso waxaad dooneysid.',
@@ -276,8 +276,8 @@ Gudagalahaaga waa la sameeyey. Ha' hilmaamin in aad wax ka bedesho {{SITENAME}} 
 'mailerror'                  => 'Waxaa dhacay qalad markii loo diraayey E-boosto: $1',
 'acct_creation_throttle_hit' => 'Waan ka xunahay, waxaad horey u sameysay $1 akoon. Ma sameynkartid midkale.',
 'emailauthenticated'         => 'Cinwaankaaga e-boostada waxaa loo xaqiijiyey $1.',
-'emailnotauthenticated'      => 'Cinwaankaaga e-boostada weli lama xaqiijinin. Wax e-boosto ah 
-oo ku saabsan arrimaha soo socdo looma soo diridoono',
+'emailnotauthenticated'      => 'Cinwaankaaga e-boostada weli lama xaqiijinin.
+Wax e-boosto ah oo ku saabsan arrimaha soo socdo looma soo diridoono.',
 'accountcreated'             => "Akoonka waa la'sameeyay",
 'accountcreatedtext'         => "Akoonka isticmaalaha $1 waa la'sameeyay.",
 'loginlanguagelabel'         => 'Luqada: $1',
@@ -325,7 +325,6 @@ Hadii aad keydisid, waxaa dhumidoona caddadyadii kan ka dambeeyey.</strong>',
 'currentrevisionlink' => 'Caddadka hada muuqda',
 'next'                => 'Ku xiga',
 'last'                => 'Ugu dambeeyo',
-'orig'                => 'Asal',
 'page_first'          => 'Ugu horeeyo',
 'page_last'           => 'ugu dambeeyo',
 'deletedrev'          => "[la'tirtiray]",
@@ -337,12 +336,7 @@ Waxaa lagayaabaa in laga tir tiray wikigan, ama magacii laga badalay.
 Iskuday in aad [[Special:Search|karaadiso wikigan]] beyjaj laxiira oo cusub.',
 
 # Revision deletion
-'rev-delundel'        => "i'tus/qari",
-'revdelete-logaction' => '$1 {{plural:$1|revision|revisions}} set to mode $2',
-'logdelete-logaction' => '$1 {{plural:$1|event|events}} to [[$3]] set to mode $2',
-
-# Diffs
-'diff-multi' => '({{plural:$1|One intermediate revision|$1 intermediate revisions}} not shown.)',
+'rev-delundel' => "i'tus/qari",
 
 # Search results
 'searchresults'         => 'Natiijooyinkii ka soo baxay raadinta',
@@ -394,18 +388,14 @@ Iskuday in aad [[Special:Search|karaadiso wikigan]] beyjaj laxiira oo cusub.',
 
 # Upload
 'uploadnologin'   => 'Gudaha kuma jirtid',
-'ignorewarning'   => 'Iska dhagooley digniinta ee faylka keedi.',
+'ignorewarning'   => 'Iska dhagooley digniinta ee faylka keedi',
 'ignorewarnings'  => 'Iska dhagooley digkiinwalba',
 'minlength1'      => 'Faylka magaciisa waa in uu ugu yaraan noqdaa hal xaraf.',
 'badfilename'     => 'Faylka magaciisa waxaa lagu badalay "$1".',
 'savefile'        => 'Faylka kaydi',
 'watchthisupload' => 'Boggaan waardiyey',
 
-# Image list
-'imagelisttext'    => "Hoos waxaa yaala liiska '''$1''' {{plural:$1|file|faylalka}} oo u kala soocan $2.",
-'byname'           => 'hab magaceed',
-'bydate'           => 'hab taariikheed',
-'bysize'           => 'hab kala weynaan',
+# Image description page
 'nolinkstoimage'   => "Ma'ay jiraan beyjaj ku xiran faylkaan.",
 'shareduploadwiki' => 'Fadlan meeshaa $1 ka fiiri warbixin dheeraad ah.',
 
@@ -426,7 +416,6 @@ Iskuday in aad [[Special:Search|karaadiso wikigan]] beyjaj laxiira oo cusub.',
 # Miscellaneous special pages
 'lonelypages'       => 'Boggaga agoonta ah',
 'popularpages'      => 'Boggaga caanka ah',
-'allpages'          => 'Dhamaan boggaga',
 'shortpages'        => 'Boggaga gaagaaban',
 'longpages'         => 'Boggaga dhaadheer',
 'deadendpages'      => 'Boggaga aanan la daba joogin',
@@ -439,12 +428,12 @@ Iskuday in aad [[Special:Search|karaadiso wikigan]] beyjaj laxiira oo cusub.',
 # Book sources
 'booksources-go' => 'Soco',
 
-'alphaindexline' => '$1 ilaa $2',
-
 # Special:Log
 'log-search-submit' => 'Soco',
 
 # Special:Allpages
+'allpages'          => 'Dhamaan boggaga',
+'alphaindexline'    => '$1 ilaa $2',
 'nextpage'          => 'Bogga ku xiga ($1)',
 'prevpage'          => 'Bogga ka horeeyo ($1)',
 'allpagesfrom'      => 'Soosaar boggaga ka bilaawda:',
@@ -456,6 +445,9 @@ Iskuday in aad [[Special:Search|karaadiso wikigan]] beyjaj laxiira oo cusub.',
 'allpagessubmit'    => 'Soco',
 'allpagesprefix'    => 'Soo saar boggaga leh horgalaha:',
 'allpagesbadtitle'  => "Cinwaanka bogga xaq ma'aha ama waa ereyo u gaar ah isdhaafka-luqadaha ama isdhaafka-wiki. Waxaa ku jirikara xuruufo aanan loo isticmaalikarin cinwaan ahaan.",
+
+# Special:Categories
+'categories' => 'Qeybaha',
 
 # Special:Listusers
 'listusersfrom'      => "I'tus isticmaalayaasha laga bilaabo:",
@@ -489,7 +481,7 @@ si aad ugu dirto E-boosto isticmaalayaasha kale.',
 'addedwatch'        => 'Kudar liiska-waardiyaha',
 'addedwatchtext'    => "Bogga \"[[:\$1]]\" waxaa lagudaray [[Special:Watchlist|liiska-waardiyahaaga]].
 Isbedelka mustaqbalka ku dhaca boggan iyo bogga wadahadalka la'xiriira waxaa lagu soo qoridoonaa inta,
-boggana wuxuu noqonaayaa mid la' '''nuuriyey''' dhinaca [[Special:Recentchanges|Liiska isbedelada show]] si 
+boggana wuxuu noqonaayaa mid la' '''nuuriyey''' dhinaca [[Special:Recentchanges|Liiska isbedelada show]] si
 ay u fududdayso sidii loo dalbanlahaa.
 
 Hadii aad rabootid in aad boggan ka saartid wardiyeynta, dhagsii \"Ha' wardiyeynin\" oo ku yaala dhinaca.",
@@ -509,8 +501,8 @@ Hadii aad rabootid in aad boggan ka saartid wardiyeynta, dhagsii \"Ha' wardiyeyn
 'historywarning'         => '<strong>Digniin:</strong> Bogga aad tirtirirabtid wuxuu leeyahay taariikkh hore:',
 'actioncomplete'         => "Amarka waa la'dhamaystiray",
 'protectedarticle'       => 'la\'difaacay "[[$1]]"',
-'protectsub'             => '(la\'difaacaa "$1")',
-'confirmprotect'         => 'Xaqiiji difaacida',
+'protect-title'          => 'la\'difaacaa "$1"',
+'protect-legend'         => 'Xaqiiji difaacida',
 'protectcomment'         => 'Sababta loo difaacaayo',
 'protect_expiry_invalid' => "Wakhtiga dhicitaanka sax ma'aha.",
 'protect_expiry_old'     => 'Wakhtiga dhictaanka waa mid laga soo dhaafay.',
@@ -530,9 +522,9 @@ Hadii aad rabootid in aad boggan ka saartid wardiyeynta, dhagsii \"Ha' wardiyeyn
 'viewdeletedpage'          => "Fiiri boggaga la'tirtiray",
 'undeletebtn'              => 'Sooceli',
 'undeletedarticle'         => 'La\' sooceliyey "[[$1]]"',
-'undeletedrevisions'       => '$1 {{plural:$1|revision|revisions}} restored',
-'undeletedrevisions-files' => '$1 {{plural:$1|revision|revisions}} and $2 {{plural:$2|file|files}} restored',
-'undeletedfiles'           => '$1 {{plural:$1|file|files}} restored',
+'undeletedrevisions'       => '$1 {{PLURAL:$1|revision|revisions}} restored',
+'undeletedrevisions-files' => '$1 {{PLURAL:$1|revision|revisions}} and $2 {{PLURAL:$2|file|files}} restored',
+'undeletedfiles'           => '$1 {{PLURAL:$1|file|files}} restored',
 'cannotundelete'           => "Soo celinta ma' suurto galin; waxaa laga yaabaa in qofkale uu horay u soo celyey bogga.",
 'undelete-search-box'      => 'Raadi bogagga la tirtiray',
 'undelete-search-prefix'   => "I'tus boggaga ku bilaawda:",
@@ -562,8 +554,9 @@ Hadii aad rabootid in aad boggan ka saartid wardiyeynta, dhagsii \"Ha' wardiyeyn
 'allmessagesname'           => 'Magac',
 'allmessagesdefault'        => "Qoraalka la'isku ogyahay",
 'allmessagescurrent'        => 'Qoraalka hada qoran',
-'allmessagestext'           => 'Liiskan waxaa ku qoran dhamaan fariimaha lagahelikaro xarun magaceedka MediaWiki.',
-'allmessagesnotsupportedDB' => "'''{{ns:special}}:Fariimaha oo dhan''' la'ma isticmaalikaro, '''\$wgUseDatabaseMessages''' oo dansan daraadeed.",
+'allmessagestext'           => 'Liiskan waxaa ku qoran dhamaan fariimaha lagahelikaro xarun magaceedka MediaWiki.
+Please visit [http://www.mediawiki.org/wiki/Localisation MediaWiki Localisation] and [http://translatewiki.net Betawiki] if you wish to contribute to the generic MediaWiki localisation.',
+'allmessagesnotsupportedDB' => "'''{{ns:special}}:Allmessages''' la'ma isticmaalikaro, '''\$wgUseDatabaseMessages''' oo dansan daraadeed.",
 'allmessagesfilter'         => 'Kalasoocaha fariimaha:',
 'allmessagesmodified'       => 'Itus kuwa wax laga bedelay',
 
@@ -581,7 +574,6 @@ Hadii aad rabootid in aad boggan ka saartid wardiyeynta, dhagsii \"Ha' wardiyeyn
 'tooltip-n-mainpage'         => 'Soo booqo bogga hore',
 'tooltip-n-portal'           => 'Faahfaahinta mashruuca, waxaad ku caawinkartid, xageed ka helikartaa waxaad u baahantahay',
 'tooltip-n-randompage'       => 'Ku nasiibso bog',
-'tooltip-n-sitesupport'      => 'Nacaawi',
 'tooltip-t-emailuser'        => 'U dir E-boosto isticmaalahaan',
 'tooltip-t-specialpages'     => 'Liiska boggaga qaaska ah oo dhan',
 'tooltip-ca-nstab-main'      => 'Fiiri bogga qoraalka',
@@ -598,11 +590,12 @@ Hadii aad rabootid in aad boggan ka saartid wardiyeynta, dhagsii \"Ha' wardiyeyn
 # Attribution
 'anonymous' => "Isticmaalaha aanan la'aqoonsanin ee {{SITENAME}}",
 
-# Spam protection
-'categoryarticlecount' => 'Waxaa {{PLURAL:$1|ku jira hal maqaal|ku jira $1 maqaal}} qeybtan.',
-
 # Info page
 'numwatchers' => 'Tirada waardiyeyaasha: $1',
+
+# Special:Newimages
+'imagelisttext' => "Hoos waxaa yaala liiska '''$1''' {{PLURAL:$1|file|faylalka}} oo u kala soocan $2.",
+'bydate'        => 'hab taariikheed',
 
 # 'all' in various places, this might be different for inflected languages
 'recentchangesall' => 'dhamaan',
@@ -618,8 +611,7 @@ Hadii aad rabootid in aad boggan ka saartid wardiyeynta, dhagsii \"Ha' wardiyeyn
 'articletitles'    => "Maqaalada ka bilaawdo ''$1''",
 
 # Multipage image navigation
-'imgmultigo'      => 'Soco!',
-'imgmultigotopre' => 'Aad boga',
+'imgmultigo' => 'Soco!',
 
 # Auto-summaries
 'autosumm-new' => 'Bog cusub: $1',
