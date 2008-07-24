@@ -43,7 +43,7 @@ tbButton.IconPath = FCKConfig.PluginsPath + 'mediawiki/images/tb_icon_special.gi
 FCKToolbarItems.RegisterItem( 'MW_Special', tbButton ) ;
 
 // Override some dialogs.
-FCKCommands.RegisterCommand( 'MW_Template', new FCKDialogCommand( 'MW_Template', 'Template Properties', FCKConfig.PluginsPath + 'mediawiki/dialogs/template.html?'  + window.parent.wgStyleVersion, 400, 330 ) ) ;
+FCKCommands.RegisterCommand( 'MW_Template', new FCKDialogCommand( 'MW_Template', 'Template Properties', FCKConfig.PluginsPath + 'mediawiki/dialogs/template.html?'  + window.parent.wgStyleVersion, 600, 530 ) ) ;
 FCKCommands.RegisterCommand( 'MW_Special', new FCKDialogCommand( 'MW_Special', 'Special Tag Properties', FCKConfig.PluginsPath + 'mediawiki/dialogs/special.html?' + window.parent.wgStyleVersion, 400, 330 ) ) ; //YC
 FCKCommands.RegisterCommand( 'Link', new FCKDialogCommand( 'Link', FCKLang.DlgLnkWindowTitle, FCKConfig.PluginsPath + 'mediawiki/dialogs/link.html?' + window.parent.wgStyleVersion, 400, 250 ) ) ;
 FCKCommands.RegisterCommand( 'Image', new FCKDialogCommand( 'Image', FCKLang.DlgImgTitle, FCKConfig.PluginsPath + 'mediawiki/dialogs/image.html?' + window.parent.wgStyleVersion, 450, 300 ) ) ;
