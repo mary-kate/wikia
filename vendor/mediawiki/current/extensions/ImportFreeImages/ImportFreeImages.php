@@ -32,7 +32,7 @@ $wgIFI_ThumbType = "t"; // s for square t for thumbnail
 
 $wgExtensionCredits['specialpage'][] = array(
 	'name'           => 'ImportFreeImages',
-	'svn-date' => '$LastChangedDate: 2008-07-02 21:17:43 +0200 (śro, 02 lip 2008) $',
+	'svn-date' => '$LastChangedDate: 2008-07-02 19:17:43 +0000 (Wed, 02 Jul 2008) $',
 	'svn-revision' => '$LastChangedRevision: 36940 $',
 	'author'         => 'Travis Derouin',
 	'description'    => 'Provides a way of importing properly licensed photos from flickr.',

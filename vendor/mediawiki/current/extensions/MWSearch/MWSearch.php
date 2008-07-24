@@ -56,7 +56,7 @@ $wgLuceneSearchCacheExpiry = 0;
 
 $wgExtensionCredits['other'][] = array(
 	'name'           => 'MWSearch',
-	'svn-date' => '$LastChangedDate: 2008-06-19 23:19:20 +0200 (czw, 19 cze 2008) $',
+	'svn-date' => '$LastChangedDate: 2008-06-19 21:19:20 +0000 (Thu, 19 Jun 2008) $',
 	'svn-revision' => '$LastChangedRevision: 36482 $',
 	'author'         => array( 'Kate Turner', 'Brion Vibber' ),
 	'descriptionmsg' => 'mwsearch-desc',

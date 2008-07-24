@@ -9,7 +9,7 @@ if( !defined( 'MEDIAWIKI' ) ) die();
  * @license GPLv2 or higher
  */
 $wgExtensionCredits['other'][] = array(
-	'svn-date'       => '$LastChangedDate: 2008-07-13 00:03:56 +0200 (nie, 13 lip 2008) $',
+	'svn-date'       => '$LastChangedDate: 2008-07-12 22:03:56 +0000 (Sat, 12 Jul 2008) $',
 	'svn-revision'   => '$LastChangedRevision: 37603 $',
 	'name'           => 'ErrorHandler',
 	'author'         => 'Alexandre Emsenhuber',

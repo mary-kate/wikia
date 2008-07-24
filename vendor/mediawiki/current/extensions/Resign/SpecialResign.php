@@ -11,7 +11,7 @@ if (!defined('MEDIAWIKI')) die();
 
 $wgExtensionCredits['specialpage'][] = array(
 	'author' => 'Rotem Liss',
-	'svn-date' => '$LastChangedDate: 2008-05-31 05:03:00 +0200 (sob, 31 maj 2008) $',
+	'svn-date' => '$LastChangedDate: 2008-05-31 03:03:00 +0000 (Sat, 31 May 2008) $',
 	'svn-revision' => '$LastChangedRevision: 35631 $',
 	'name' => 'Resign',
 	'url' => 'http://www.mediawiki.org/wiki/Extension:Resign',

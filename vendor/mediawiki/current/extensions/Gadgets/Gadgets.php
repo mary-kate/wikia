@@ -19,7 +19,7 @@ if( !defined( 'MEDIAWIKI' ) ) {
 
 $wgExtensionCredits['other'][] = array(
 	'name' => 'Gadgets',
-	'svn-date' => '$LastChangedDate: 2008-07-09 16:57:19 +0200 (śro, 09 lip 2008) $',
+	'svn-date' => '$LastChangedDate: 2008-07-09 14:57:19 +0000 (Wed, 09 Jul 2008) $',
 	'svn-revision' => '$LastChangedRevision: 37390 $',
 	'author' => 'Daniel Kinzler',
 	'url' => 'http://mediawiki.org/wiki/Extension:Gadgets',

@@ -15,7 +15,7 @@ $wgSpecialPageGroups['ParserDiffTest'] = 'wiki';
 
 $wgExtensionCredits['specialpage'][] = array(
 	'name' => 'Parser Diff Test',
-	'svn-date' => '$LastChangedDate: 2008-06-26 02:33:11 +0200 (czw, 26 cze 2008) $',
+	'svn-date' => '$LastChangedDate: 2008-06-26 00:33:11 +0000 (Thu, 26 Jun 2008) $',
 	'svn-revision' => '$LastChangedRevision: 36663 $',
 	'author' => 'Tim Starling',
 	'description' => 'Special page for comparing the output of two different parsers.',

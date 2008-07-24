@@ -110,7 +110,7 @@ $wgExtensionAliasesFiles['CategoryTree'] = dirname(__FILE__) . '/CategoryTreePag
 $wgExtensionFunctions[] = 'efCategoryTree';
 $wgExtensionCredits['specialpage'][] = array(
 	'name' => 'CategoryTree',
-	'svn-date' => '$LastChangedDate: 2008-07-12 01:18:41 +0200 (sob, 12 lip 2008) $',
+	'svn-date' => '$LastChangedDate: 2008-07-11 23:18:41 +0000 (Fri, 11 Jul 2008) $',
 	'svn-revision' => '$LastChangedRevision: 37574 $',
 	'author' => 'Daniel Kinzler',
 	'url' => 'http://www.mediawiki.org/wiki/Extension:CategoryTree',
@@ -119,7 +119,7 @@ $wgExtensionCredits['specialpage'][] = array(
 );
 $wgExtensionCredits['parserhook'][] = array(
 	'name' => 'CategoryTree',
-	'svn-date' => '$LastChangedDate: 2008-07-12 01:18:41 +0200 (sob, 12 lip 2008) $',
+	'svn-date' => '$LastChangedDate: 2008-07-11 23:18:41 +0000 (Fri, 11 Jul 2008) $',
 	'svn-revision' => '$LastChangedRevision: 37574 $',
 	'author' => 'Daniel Kinzler',
 	'url' => 'http://www.mediawiki.org/wiki/Extension:CategoryTree',

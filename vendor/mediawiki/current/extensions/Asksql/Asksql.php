@@ -16,7 +16,7 @@ if (!defined('MEDIAWIKI'))
 
 $wgExtensionCredits['specialpage'][] = array(
 	'name' => 'Ask SQL',
-	'svn-date' => '$LastChangedDate: 2008-05-14 02:38:28 +0200 (śro, 14 maj 2008) $',
+	'svn-date' => '$LastChangedDate: 2008-05-14 00:38:28 +0000 (Wed, 14 May 2008) $',
 	'svn-revision' => '$LastChangedRevision: 34773 $',
 	'description' => 'Do SQL queries through a [[Special:Asksql|special page]]',
 	'descriptionmsg' => 'asksql-desc',
