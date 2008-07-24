@@ -16,7 +16,7 @@ if( defined( 'MEDIAWIKI' ) ) {
 		'name'           => 'RandomImage',
 		'author'         => 'Rob Church',
 		'url'            => 'http://www.mediawiki.org/wiki/Extension:RandomImage',
-	'svn-date' => '$LastChangedDate: 2008-07-14 13:54:56 +0200 (pon, 14 lip 2008) $',
+	'svn-date' => '$LastChangedDate: 2008-07-14 11:54:56 +0000 (Mon, 14 Jul 2008) $',
 	'svn-revision' => '$LastChangedRevision: 37641 $',
 		'description'    => 'Provides a random media picker using <tt>&lt;randomimage /&gt;</tt>',
 		'descriptionmsg' => 'randomimage-desc',

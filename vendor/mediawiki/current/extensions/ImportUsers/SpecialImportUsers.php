@@ -14,7 +14,7 @@ require_once "$IP/includes/SpecialPage.php";
 $wgExtensionCredits['specialpage'][] = array(
 	'name' => 'Import Users',
 	'author' => array('Yuriy Ilkiv', 'Rouslan Zenetl'),
-	'svn-date' => '$LastChangedDate: 2008-07-09 20:40:42 +0200 (śro, 09 lip 2008) $',
+	'svn-date' => '$LastChangedDate: 2008-07-09 18:40:42 +0000 (Wed, 09 Jul 2008) $',
 	'svn-revision' => '$LastChangedRevision: 37426 $',
 	'url' => 'http://www.mediawiki.org/wiki/Extension:ImportUsers',
 	'description' => 'Imports users in bulk from CSV-file; encoding: UTF-8',

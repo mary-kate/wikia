@@ -10,7 +10,7 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 $wgExtensionCredits['other'][] = array(
 	'name'           => 'SpamBlacklist',
 	'author'         => 'Tim Starling',
-	'svn-date' => '$LastChangedDate: 2008-06-19 05:14:34 +0200 (czw, 19 cze 2008) $',
+	'svn-date' => '$LastChangedDate: 2008-06-19 03:14:34 +0000 (Thu, 19 Jun 2008) $',
 	'svn-revision' => '$LastChangedRevision: 36439 $',
 	'url'            => 'http://www.mediawiki.org/wiki/Extension:SpamBlacklist',
 	'description'    => 'Regex-based anti-spam tool',

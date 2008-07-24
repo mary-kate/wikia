@@ -13,7 +13,7 @@ if (!defined('MEDIAWIKI')) die();
 
 $wgExtensionCredits['other'][] = array(
 	'name'           => 'Newuserlog',
-	'svn-date' => '$LastChangedDate: 2008-06-25 22:13:58 +0200 (śro, 25 cze 2008) $',
+	'svn-date' => '$LastChangedDate: 2008-06-25 20:13:58 +0000 (Wed, 25 Jun 2008) $',
 	'svn-revision' => '$LastChangedRevision: 36653 $',
 	'description'    => 'Adds a [[Special:Log/newusers|log of account creations]] to [[Special:Log]]',
 	'descriptionmsg' => 'newuserlog-desc',

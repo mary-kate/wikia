@@ -15,7 +15,7 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 $wgExtensionCredits['specialpage'][] = array(
 	'name'           => 'Piwik Integration',
 	'version'        => '0.2.5rev0.7.5 (1.0-RC1)',
-	'svn-date'       => '$LastChangedDate: 2008-07-07 19:06:18 +0200 (pon, 07 lip 2008) $',
+	'svn-date'       => '$LastChangedDate: 2008-07-07 17:06:18 +0000 (Mon, 07 Jul 2008) $',
 	'svn-revision'   => '$LastChangedRevision: 37267 $',
 	'author'         => 'Isb1009',
 	'description'    => 'Inserts Piwik script into MediaWiki pages for tracking and adds [[Special:Piwik|some stats]]. Based on Google Analytics Integration by Tim Laqua.',

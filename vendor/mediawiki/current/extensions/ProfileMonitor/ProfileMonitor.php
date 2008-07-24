@@ -11,7 +11,7 @@ if (!defined('MEDIAWIKI')) die();
 $wgExtensionFunctions[] = 'efProfileMonitor';
 $wgExtensionCredits['specialpage'][] = array(
 	'name' => 'ProfileMonitor',
-	'svn-date' => '$LastChangedDate: 2008-07-04 17:36:45 +0200 (pią, 04 lip 2008) $',
+	'svn-date' => '$LastChangedDate: 2008-07-04 15:36:45 +0000 (Fri, 04 Jul 2008) $',
 	'svn-revision' => '$LastChangedRevision: 37061 $',
 	'author' => 'Rob Church',
 	'description' => 'Special page to search and inspect profiling data',
