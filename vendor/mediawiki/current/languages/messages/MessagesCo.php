@@ -1,10 +1,8 @@
 <?php
 /** Corsican (Corsu)
  *
- * @ingroup Language
- * @file
+ * @addtogroup Language
  *
- * @author Siebrand
  * @author SPQRobin
  */
 
@@ -64,7 +62,8 @@ $messages = array(
 'nov'           => 'nuv',
 'dec'           => 'dic',
 
-# Categories related messages
+# Bits of text used by many pages
+'categories'      => 'Categurie',
 'pagecategories'  => '{{PLURAL:$1|Categuria|Categurie}}',
 'category_header' => 'Articuli in a categuria "$1"',
 'subcategories'   => 'Sottucategurie',
@@ -112,18 +111,18 @@ $messages = array(
 'jumptosearch'     => 'ricerca',
 
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
-'aboutsite'            => 'À prupositu di {{SITENAME}}',
-'aboutpage'            => 'Project:À prupositu',
-'currentevents'        => 'Ultimi evenimenti',
-'currentevents-url'    => 'Project:Ultimi evenimenti',
-'disclaimers'          => 'Avertimenti',
-'disclaimerpage'       => 'Project:Avertimenti generali',
-'mainpage'             => 'Pagina maestra',
-'mainpage-description' => 'Pagina maestra',
-'portal'               => 'Purtone di a cumunità',
-'portal-url'           => 'Project:Purtone di a cumunità',
-'privacy'              => 'Pulitica pè a riservatezza',
-'privacypage'          => 'Project:Pulitica pè a riservatezza',
+'aboutsite'         => 'À prupositu di {{SITENAME}}',
+'aboutpage'         => 'Project:À prupositu',
+'currentevents'     => 'Ultimi evenimenti',
+'currentevents-url' => 'Project:Ultimi evenimenti',
+'disclaimers'       => 'Avertimenti',
+'disclaimerpage'    => 'Project:Avertimenti generali',
+'mainpage'          => 'Pagina maestra',
+'portal'            => 'Purtone di a cumunità',
+'portal-url'        => 'Project:Purtone di a cumunità',
+'privacy'           => 'Pulitica pè a riservatezza',
+'privacypage'       => 'Project:Pulitica pè a riservatezza',
+'sitesupport'       => 'Dunazione',
 
 'versionrequired' => 'A version $1 di MediaWiki hè necessaria',
 
@@ -175,12 +174,12 @@ $messages = array(
 # Edit pages
 'savearticle'            => 'Arrighjistrà a pagina',
 'showdiff'               => 'Mustrà i cambiamenti',
-'anoneditwarning'        => "'''Attenzione''': ùn sè micca un utilizatore registratu, oppuru ùn ai fattu a cunnessione.
-U to indirizzu IP serà registratu indu a cronolugia di ista pagina.",
+'anoneditwarning'        => "'''Attenzione''': ùn sè micca un utilizatore registratu, oppuru ùn ai fattu a [[Special:Userlogin|cunnessione]]. U to indirizzu IP serà registratu indu a cronolugia di ista pagina.",
 'loginreqlink'           => 'cunnessione',
 'accmailtitle'           => 'Parulla secreta inviata.',
 'accmailtext'            => 'A parulla secreta per "$1" hè stata inviata à l\'indirizzu $2.',
 'editing'                => 'Mudifica di $1',
+'editinguser'            => 'Mudifica di $1',
 'editingsection'         => 'Mudifica di $1 (sezzione)',
 'editingcomment'         => 'Mudifica di $1 (cummentu)',
 'editconflict'           => 'Cunflittu di mudificazione: $1',
@@ -224,7 +223,6 @@ U to indirizzu IP serà registratu indu a cronolugia di ista pagina.",
 'files'             => 'Schedarii',
 
 # User rights
-'editinguser'             => "Mudifica di '''[[User:$1|$1]]''' ([[User talk:$1|{{int:talkpagelinktext}}]] | [[Special:Contributions/$1|{{int:contribslink}}]])",
 'userrights-groupsmember' => 'Membru di:',
 
 # Groups
@@ -263,18 +261,20 @@ U to indirizzu IP serà registratu indu a cronolugia di ista pagina.",
 'upload'     => 'Incaricà un schedariu',
 'uploadbtn'  => 'Incaricà un schedariu',
 'filename'   => 'Nome di u schedariu',
-'filestatus' => "Statu di u dirittu d'autore:",
+'filestatus' => "Statu di u dirittu d'autore",
 
 'upload-file-error' => 'Errore internu',
 
-# Special:Imagelist
-'imgfile'        => 'schedariu',
-'imagelist_date' => 'Data',
-'imagelist_name' => 'Nome',
-
-# Image description page
+# Image list
+'ilsubmit'         => 'Ricerca',
+'byname'           => 'per nome',
+'bydate'           => 'per data',
+'bysize'           => 'per taglia',
+'imgfile'          => 'schedariu',
 'imagelinks'       => 'Ligami',
 'noimage-linktext' => 'incaricà lu',
+'imagelist_date'   => 'Data',
+'imagelist_name'   => 'Nome',
 
 # Unused templates
 'unusedtemplateswlh' => 'altri ligami',
@@ -293,20 +293,25 @@ U to indirizzu IP serà registratu indu a cronolugia di ista pagina.",
 'ncategories'       => '$1 {{PLURAL:$1|categuria|categurie}}',
 'specialpage-empty' => 'Issa pagina hè biota.',
 'popularpages'      => 'Pagine populare',
+'allpages'          => 'Tutte e pagine',
 'shortpages'        => 'Pagine corte',
 'longpages'         => 'Pagine longhe',
 'protectedpages'    => 'Pagine prutette',
 'listusers'         => 'Listinu di i cuntributori',
+'specialpages'      => 'Pagine spiciale',
+'spheading'         => 'Pagine spiciale per tutti i cuntributori',
 'newpages'          => 'Pagine nove',
 'ancientpages'      => 'Pagine vechje',
+
+'groups'         => 'Gruppi di utilizatori',
+'alphaindexline' => 'da $1 à $2',
+'version'        => 'Versione',
 
 # Special:Log
 'speciallogtitlelabel' => 'Titulu:',
 'all-logs-page'        => "Tutte l'azzioni",
 
 # Special:Allpages
-'allpages'          => 'Tutte e pagine',
-'alphaindexline'    => 'da $1 à $2',
 'allpagesfrom'      => 'Mustrà e pagine à parte da:',
 'allarticles'       => "Tutti l'articuli",
 'allinnamespace'    => 'Tutte e pagine di u spaziu $1',
@@ -316,9 +321,6 @@ U to indirizzu IP serà registratu indu a cronolugia di ista pagina.",
 'allpagessubmit'    => 'Và',
 'allpagesprefix'    => 'Mustrà e pagine chì cumincianu cù:',
 'allpages-bad-ns'   => 'U spaziu "$1" ùn esiste micca nant\'à {{SITENAME}}',
-
-# Special:Categories
-'categories' => 'Categurie',
 
 # Special:Listusers
 'listusers-submit' => 'Mustrà',
@@ -353,7 +355,7 @@ U to indirizzu IP serà registratu indu a cronolugia di ista pagina.",
 'exblank'                     => 'a pagina era biota',
 'actioncomplete'              => 'Azzione compia',
 'protectedarticle'            => 'prutettu "[[$1]]"',
-'protect-legend'              => 'Cunfirmà a prutezzione',
+'confirmprotect'              => 'Cunfirmà a prutezzione',
 'protect-level-autoconfirmed' => 'Bluccà i cuntributori micca arrighjistrati',
 
 # Restriction levels
@@ -388,7 +390,7 @@ U to indirizzu IP serà registratu indu a cronolugia di ista pagina.",
 'proxyblocksuccess'  => 'Hè fattu.',
 
 # Move page
-'move-page-legend'        => 'Move a pagina',
+'movepage'                => 'Move a pagina',
 'movearticle'             => 'Move a pagina',
 'move-watch'              => 'Fighjulà issa pagina',
 'movepagebtn'             => 'Move a pagina',
@@ -441,14 +443,15 @@ U to indirizzu IP serà registratu indu a cronolugia di ista pagina.",
 'anonymous' => 'Utilizatore(/i) anonimu(/i) di {{SITENAME}}',
 'others'    => 'altri',
 
+# Spam protection
+'categoryarticlecount' => 'Ista categuria cuntene {{PLURAL:$1|un articulu|$1 articuli}}.',
+
 # Media information
 'show-big-image' => 'Imagine in alta resoluzione',
 
 # Special:Newimages
 'showhidebots' => '($1 boti)',
 'noimages'     => 'Nulla da vede.',
-'ilsubmit'     => 'Ricerca',
-'bydate'       => 'per data',
 
 # EXIF tags
 'exif-orientation'      => 'Orientazione',
@@ -492,13 +495,7 @@ U to indirizzu IP serà registratu indu a cronolugia di ista pagina.",
 # Watchlist editor
 'watchlistedit-raw-titles' => 'Pagine:',
 
-# Special:Version
-'version' => 'Versione', # Not used as normal message but as header for the special page itself
-
 # Special:Filepath
 'filepath-page' => 'Schedariu:',
-
-# Special:SpecialPages
-'specialpages' => 'Pagine spiciale',
 
 );

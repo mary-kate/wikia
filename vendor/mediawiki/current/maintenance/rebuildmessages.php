@@ -1,9 +1,4 @@
 <?php
-/**
- * This script purges all language messages from memcached
- * @file
- * @ingroup Maintenance
- */
 
 require_once( 'commandLine.inc' );
 
@@ -15,8 +10,8 @@ if( $wgLocalDatabases ) {
 
 foreach( $databases as $db ) {
 	echo "Deleting message cache for {$db}... ";
-	$messageMemc->delete( "{$db}:messages" );
+	$wgMessageCache->mMemc->delete( "{$db}:messages" );
 	if( $wgEnableSidebarCache )
-		$messageMemc->delete( "{$db}:sidebar" );
+		$wgMessageCache->mMemc->delete( "{$db}:sidebar" );
 	echo "Deleted\n";
 }

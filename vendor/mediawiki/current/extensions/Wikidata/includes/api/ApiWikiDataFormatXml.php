@@ -34,7 +34,6 @@ class ApiWikiDataFormatXml extends ApiWikiDataFormatBase {
 	private $mRootElemName = 'wikidata';
 	private $isError = false;
 	private $format = 'plain';
-	private $suppress_output=false;
 
 	public function __construct($main) {
 		parent :: __construct($main, 'xml');
@@ -43,10 +42,6 @@ class ApiWikiDataFormatXml extends ApiWikiDataFormatBase {
 	public function initPrinter($isError) {
 		$this->isError = $isError;
 		parent :: initPrinter($isError);
-	}
-
-	public function suppress_output($suppress_output=true) {
-		$this->suppress_output=$suppress_output;
 	}
 
 	public function getMimeType() {
@@ -71,15 +66,14 @@ class ApiWikiDataFormatXml extends ApiWikiDataFormatBase {
 	}
 
 	public function execute() {
-		if (!$this->isError && count($this->errorMessages) == 0 && !$this->suppress_output) {
+		if (!$this->isError && count($this->errorMessages) == 0) {
 			$doc =& $this->createDocument();
 			
 			/* transform and output the xml document */
 			$proc = $this->getXsltProcessor();
 			echo $proc->transformToXML($doc);
-		} elseif ($this->suppress_output) {
-			/* do nothing */
-		} else {
+		}
+		else {
 			echo "An error occured.\r\n";
 			foreach ($this->errorMessages as $message) {
 				echo $message . "\r\n";

@@ -20,7 +20,7 @@
 
 /**
  * Contain log classes
- * @file
+ *
  */
 
 /**
@@ -30,12 +30,8 @@
  *
  */
 class LogPage {
-	const DELETED_ACTION = 1;
-	const DELETED_COMMENT = 2;
-	const DELETED_USER = 4;
-    const DELETED_RESTRICTED = 8;
 	/* @access private */
-	var $type, $action, $comment, $params, $target, $doer;
+	var $type, $action, $comment, $params, $target;
 	/* @acess public */
 	var $updateRecentChanges;
 
@@ -51,40 +47,41 @@ class LogPage {
 		$this->updateRecentChanges = $rc;
 	}
 
-	protected function saveContent() {
-		global $wgUser, $wgLogRestrictions;
+	function saveContent() {
+		if( wfReadOnly() ) return false;
+
+		global $wgUser;
 		$fname = 'LogPage::saveContent';
 
 		$dbw = wfGetDB( DB_MASTER );
+		$uid = $wgUser->getID();
 		$log_id = $dbw->nextSequenceValue( 'log_log_id_seq' );
 
 		$this->timestamp = $now = wfTimestampNow();
 		$data = array(
-			'log_id' => $log_id,
 			'log_type' => $this->type,
 			'log_action' => $this->action,
 			'log_timestamp' => $dbw->timestamp( $now ),
-			'log_user' => $this->doer->getId(),
+			'log_user' => $uid,
 			'log_namespace' => $this->target->getNamespace(),
 			'log_title' => $this->target->getDBkey(),
 			'log_comment' => $this->comment,
 			'log_params' => $this->params
 		);
-		$dbw->insert( 'logging', $data, $fname );
-		$newId = !is_null($log_id) ? $log_id : $dbw->insertId();
 
-		if( !($dbw->affectedRows() > 0) ) {
-			wfDebugLog( "logging", "LogPage::saveContent failed to insert row - Error {$dbw->lastErrno()}: {$dbw->lastError()}" );
+		# log_id doesn't exist on Wikimedia servers yet, and it's a tricky 
+		# schema update to do. Hack it for now to ignore the field on MySQL.
+		if ( !is_null( $log_id ) ) {
+			$data['log_id'] = $log_id;
 		}
+		$dbw->insert( 'logging', $data, $fname );
+
 		# And update recentchanges
-		if( $this->updateRecentChanges ) {
-			# Don't add private logs to RC!
-			if( !isset($wgLogRestrictions[$this->type]) || $wgLogRestrictions[$this->type]=='*' ) {
-				$titleObj = SpecialPage::getTitleFor( 'Log', $this->type );
-				$rcComment = $this->getRcComment();
-				RecentChange::notifyLog( $now, $titleObj, $this->doer, $rcComment, '',
-					$this->type, $this->action, $this->target, $this->comment, $this->params, $newId );
-			}
+		if ( $this->updateRecentChanges ) {
+			$titleObj = SpecialPage::getTitleFor( 'Log', $this->type );
+			$rcComment = $this->getRcComment();
+			RecentChange::notifyLog( $now, $titleObj, $wgUser, $rcComment, '',
+				$this->type, $this->action, $this->target, $this->comment, $this->params );
 		}
 		return true;
 	}
@@ -132,26 +129,24 @@ class LogPage {
 
 	/**
 	 * @todo handle missing log types
-	 * @param string $type logtype
-	 * @return string Headertext of this logtype
+	 * @static
 	 */
 	static function logHeader( $type ) {
 		global $wgLogHeaders;
-		return wfMsgExt($wgLogHeaders[$type],array('parseinline'));
+		return wfMsg( $wgLogHeaders[$type] );
 	}
 
 	/**
 	 * @static
-	 * @return HTML string
 	 */
 	static function actionText( $type, $action, $title = NULL, $skin = NULL, $params = array(), $filterWikilinks=false ) {
 		global $wgLang, $wgContLang, $wgLogActions;
 
 		$key = "$type/$action";
-
+		
 		if( $key == 'patrol/patrol' )
 			return PatrolLog::makeActionText( $title, $params, $skin );
-
+		
 		if( isset( $wgLogActions[$key] ) ) {
 			if( is_null( $title ) ) {
 				$rv=wfMsg( $wgLogActions[$key] );
@@ -160,7 +155,7 @@ class LogPage {
 
 					switch( $type ) {
 						case 'move':
-							$titleLink = $skin->makeLinkObj( $title, htmlspecialchars( $title->getPrefixedText() ), 'redirect=no' );
+							$titleLink = $skin->makeLinkObj( $title, $title->getPrefixedText(), 'redirect=no' );
 							$params[0] = $skin->makeLinkObj( Title::newFromText( $params[0] ), htmlspecialchars( $params[0] ) );
 							break;
 						case 'block':
@@ -193,11 +188,6 @@ class LogPage {
 				if( $key == 'rights/rights' ) {
 					if ($skin) {
 						$rightsnone = wfMsg( 'rightsnone' );
-						foreach ( $params as &$param ) {
-							$groupArray = array_map( 'trim', explode( ',', $param ) );
-							$groupArray = array_map( array( 'User', 'getGroupName' ), $groupArray );
-							$param = $wgLang->listToText( $groupArray );
-						}
 					} else {
 						$rightsnone = wfMsgForContent( 'rightsnone' );
 					}
@@ -214,28 +204,22 @@ class LogPage {
 					}
 				} else {
 					array_unshift( $params, $titleLink );
-					if ( $key == 'block/block' || $key == 'suppress/block' ) {
+					if ( $key == 'block/block' ) {
 						if ( $skin ) {
 							$params[1] = '<span title="' . htmlspecialchars( $params[1] ). '">' . $wgLang->translateBlockExpiry( $params[1] ) . '</span>';
 						} else {
 							$params[1] = $wgContLang->translateBlockExpiry( $params[1] );
 						}
 						$params[2] = isset( $params[2] )
-										? self::formatBlockFlags( $params[2], is_null( $skin ) )
+										? self::formatBlockFlags( $params[2] )
 										: '';
 					}
 					$rv = wfMsgReal( $wgLogActions[$key], $params, true, !$skin );
 				}
 			}
 		} else {
-			global $wgLogActionsHandlers;
-			if( isset( $wgLogActionsHandlers[$key] ) ) {
-				$args = func_get_args();
-				$rv = call_user_func_array( $wgLogActionsHandlers[$key], $args );
-			} else {
-				wfDebug( "LogPage::actionText - unknown action $key\n" );
-				$rv = "$action";
-			}
+			wfDebug( "LogPage::actionText - unknown action $key\n" );
+			$rv = "$action";
 		}
 		if( $filterWikilinks ) {
 			$rv = str_replace( "[[", "", $rv );
@@ -250,9 +234,8 @@ class LogPage {
 	 * @param object &$target A title object.
 	 * @param string $comment Description associated
 	 * @param array $params Parameters passed later to wfMsg.* functions
-	 * @param User $doer The user doing the action
 	 */
-	function addEntry( $action, $target, $comment, $params = array(), $doer = null ) {
+	function addEntry( $action, $target, $comment, $params = array() ) {
 		if ( !is_array( $params ) ) {
 			$params = array( $params );
 		}
@@ -261,15 +244,6 @@ class LogPage {
 		$this->target = $target;
 		$this->comment = $comment;
 		$this->params = LogPage::makeParamBlob( $params );
-		
-		if ($doer === null) {
-			global $wgUser;
-			$doer = $wgUser;
-		} elseif (!is_object( $doer ) ) {
-			$doer = User::newFromId( $doer );
-		}
-		
-		$this->doer = $doer;
 
 		$this->actionText = LogPage::actionText( $this->type, $action, $target, NULL, $params );
 
@@ -295,53 +269,41 @@ class LogPage {
 			return explode( "\n", $blob );
 		}
 	}
-
+	
 	/**
 	 * Convert a comma-delimited list of block log flags
 	 * into a more readable (and translated) form
 	 *
 	 * @param $flags Flags to format
-	 * @param $forContent Whether to localize the message depending of the user
-	 *                    language
 	 * @return string
 	 */
-	public static function formatBlockFlags( $flags, $forContent = false ) {
+	public static function formatBlockFlags( $flags ) {
 		$flags = explode( ',', trim( $flags ) );
 		if( count( $flags ) > 0 ) {
 			for( $i = 0; $i < count( $flags ); $i++ )
-				$flags[$i] = self::formatBlockFlag( $flags[$i], $forContent );
+				$flags[$i] = self::formatBlockFlag( $flags[$i] );
 			return '(' . implode( ', ', $flags ) . ')';
 		} else {
 			return '';
 		}
 	}
-
+	
 	/**
 	 * Translate a block log flag if possible
 	 *
 	 * @param $flag Flag to translate
-	 * @param $forContent Whether to localize the message depending of the user
-	 *                    language
 	 * @return string
 	 */
-	public static function formatBlockFlag( $flag, $forContent = false ) {
+	public static function formatBlockFlag( $flag ) {
 		static $messages = array();
 		if( !isset( $messages[$flag] ) ) {
 			$k = 'block-log-flags-' . $flag;
-			if( $forContent )
-				$msg = wfMsgForContent( $k );
-			else
-				$msg = wfMsg( $k );
+			$msg = wfMsg( $k );
 			$messages[$flag] = htmlspecialchars( wfEmptyMsg( $k, $msg ) ? $flag : $msg );
 		}
 		return $messages[$flag];
 	}
+	
 }
 
-/**
- * Aliases for backwards compatibility with 1.6
- */
-define( 'MW_LOG_DELETED_ACTION', LogPage::DELETED_ACTION );
-define( 'MW_LOG_DELETED_USER', LogPage::DELETED_USER );
-define( 'MW_LOG_DELETED_COMMENT', LogPage::DELETED_COMMENT );
-define( 'MW_LOG_DELETED_RESTRICTED', LogPage::DELETED_RESTRICTED );
+

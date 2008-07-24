@@ -1,8 +1,7 @@
 <?php
 /** Gilaki (گیلکی)
  *
- * @ingroup Language
- * @file
+ * @addtogroup Language
  *
  * @author AminSanaei
  */
@@ -10,6 +9,9 @@
 $fallback = 'fa';
 
 $messages = array(
+# Bits of text used by many pages
+'categories' => 'رجؤن',
+
 'qbedit' => 'دچین واچین',
 
 'search'           => 'واموج',
@@ -25,13 +27,10 @@ $messages = array(
 'jumptosearch'     => 'واموج',
 
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
-'currentevents'        => 'تازه چیؤن',
-'mainpage'             => 'گت ولگ',
-'mainpage-description' => 'گت ولگ',
-'portal'               => 'امه جیگا',
-'privacy'              => 'رازبداری',
-
-# Special:Categories
-'categories' => 'رجؤن',
+'currentevents' => 'تازه چیؤن',
+'mainpage'      => 'گت ولگ',
+'portal'        => 'امه جیگا',
+'privacy'       => 'رازبداری',
+'sitesupport'   => 'بال زئن',
 
 );

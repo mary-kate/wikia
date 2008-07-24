@@ -23,7 +23,8 @@ function gid(id) {
     return document.getElementById(id);
 }
 
-function setupImageTagging() {
+function setupImageTagging() 
+{
     var imgDiv = gid('file');
     imgDiv.onclick = function(e) {
 
@@ -36,8 +37,8 @@ function setupImageTagging() {
 
         clickAt(e.clientX - imgDivAbsLoc.x, e.clientY - imgDivAbsLoc.y);
 
-        if(e.preventDefault) { e.preventDefault() } else { e.returnResult = false }
-        if(e.stopPropagation) { e.stopPropagation() } else { e.cancelBubble = true }
+        e.stopPropagation();
+        e.preventDefault();
     };
 }
 
@@ -50,7 +51,8 @@ function tearDownImageTagging() {
     }
 }
 
-function addImageTags() {
+function addImageTags()
+{
     if ( gid('canEditPage') == null ) { /* page isn't editable */
         var result = false;
         var re = /http:\/\/([^\/]*)\//g;
@@ -69,7 +71,8 @@ function addImageTags() {
         else
             alert(gid(kMessageCantEditOther).value);    
 
-        if ( result ) {
+        if ( result ) 
+        {    
             var articleName = gid('imgName').value;
 
             var loginPageURL = "http://" + domain;
@@ -87,7 +90,7 @@ function addImageTags() {
     if ( !tagStatusDiv ) {
         tagStatusDiv = document.getElementById('tagStatusDiv');
 
-        var bodyContent = gid('bodyContent') || gid('content') || document;
+        var bodyContent = gid('bodyContent');
         bodyContent.insertBefore(tagStatusDiv, gid('file'));
     }
 
@@ -95,15 +98,18 @@ function addImageTags() {
     setupImageTagging();
 }
 
-function doneAddingTags() {
+function doneAddingTags()
+{
     tagStatusDiv.style.display = "none";
     hideTagBox();
     tearDownImageTagging();
 }
 
-function typeTag (event) {
+function typeTag (event)
+{
     //suggestKeyDown(event);
-	/*switch (event.keyCode) {
+	/*switch (event.keyCode)
+	{
 		case 13: // return
 		case 3:  // enter
             submitTag();
@@ -115,7 +121,8 @@ function typeTag (event) {
 }
 
 function createRequest() {
-    if ( taggingBusy ) {
+    if ( taggingBusy )
+    {
         alert(gid(kMessageOneActionAtATime).value);
         return null;
     }
@@ -137,16 +144,18 @@ function createRequest() {
 
     if (!request)
         alert("Error initializing XMLHttpRequest!");
-
+        
     return request;
 }
 
-function setTaggingStatus(msg, busy) {
+function setTaggingStatus(msg, busy)
+{
     gid("progress_wheel").style.display = busy ? "block" : "none";
     gid("tagging_message").innerHTML = gid(msg).getAttribute("value");
 }
 
-function submitTag() {
+function submitTag() 
+{
     var tagValue = gid("articleTag").value;
     // if tag already exists
     if ( gid(tagValue + "-tag") != null ) {  
@@ -155,7 +164,8 @@ function submitTag() {
     }
 
     var request = createRequest();
-    if ( request ) {
+    if ( request )
+    {
         taggingBusy = true;
 
         var imgValue = gid("imgName").value;
@@ -178,9 +188,11 @@ function submitTag() {
     }
 }
 
-function removeTag(tagID, elem, tagValue) {
+function removeTag(tagID, elem, tagValue) 
+{
     var request = createRequest();
-    if ( request ) {
+    if ( request )
+    {
         taggingBusy = true;
 
         var url = "?action=removeTag";
@@ -203,7 +215,7 @@ function removeTag(tagID, elem, tagValue) {
 
         if ( elem.parentNode ) {
             var progressElem = document.createElement('img');
-            progressElem.src = gid("imgPath").value + "/progress-wheel.gif";
+            progressElem.src = gid("imgPath").value + "progress-wheel.gif";
             progressElem.setAttribute("style", "vertical-align: bottom;");
             elem.parentNode.insertBefore(progressElem, elem);
         }
@@ -228,12 +240,14 @@ function getStringTagRect() {
     return escape(percentX + "," + percentY); 
 }
 
-function tagBoxPercent(xPercent, yPercent, showEditUI) {   
+function tagBoxPercent(xPercent, yPercent, showEditUI)
+{   
     var imgRect = getImgFrame(findChild(gid('file'), 'img'));    
     tagBoxAt(xPercent * imgRect.width, yPercent * imgRect.height, showEditUI);
 }
 
-function tagBoxAt(boxCenterX, boxCenterY, showEditUI) {
+function tagBoxAt(boxCenterX, boxCenterY, showEditUI)
+{
     var imgDiv = gid('file');
 
     if ( !tagBoxDiv ) {
@@ -268,32 +282,34 @@ function tagBoxAt(boxCenterX, boxCenterY, showEditUI) {
         boxY = imgRect.height - boxDim;
     if ( boxY <= 0 )
         boxY = 0;
-
+    
     boxX += imgDiv.offsetLeft;
     boxY += imgDiv.offsetTop;
-
+    
     boxCenterX = boxX + boxDim/2.0;
     boxCenterY = boxY + boxDim/2.0;
-
+    
     setTagBoxRect(boxX, boxY, boxDim, boxDim); 
     tagBoxDiv.style.display = "block";    
 
     if ( !tagEditFieldDiv )
         tagEditFieldDiv = gid('tagEditField');        
-
-    if ( showEditUI ) {
+    
+    if ( showEditUI )
+    {
         var tagEditFrame = getElemFrame(tagEditFieldDiv);
         setElemPosition(tagEditFieldDiv, boxCenterX - tagEditFrame.width/2.0, boxCenterY + boxDim/2.0 + 10);
-
+        
         if ( tagEditFieldDiv.style.display != "block" )
             gid('articleTag').value = "";
         tagEditFieldDiv.style.display = "block";
-
+        
         gid('articleTag').focus();
     }
 }
 
-function clickAt(xLocation, yLocation) {
+function clickAt(xLocation, yLocation)
+{
     if ( !imageElem ) {
         var imgFileDiv = gid('file');
         imageElem = findChild(imgFileDiv, 'img');
@@ -325,7 +341,8 @@ function getImgFrame(img) {
 function getElemAbsPosition(elem) {
     var curleft = 0, curtop = 0;
     var obj = elem;
-    if (obj.offsetParent) {
+    if (obj.offsetParent)
+	{
 		while (obj.offsetParent)
 		{
             curleft += obj.offsetLeft; 
@@ -379,7 +396,8 @@ function setTagBoxRect(boxX, boxY, boxDim, boxDim) {
     setElemRect(tagBoxInnerDiv, 0, 0, boxDim-kBoxBorderWidth, boxDim-kBoxBorderWidth);
 }
 
-function hideTagBox() {
+function hideTagBox()
+{
     tagBoxDiv.style.display = "none";
     gid('tagEditField').style.display = "none";
 }
@@ -410,18 +428,22 @@ function imageMouseDown(event, image, tagsID) {
     }
 }
 
-function frameMouseDown(event) {
+function frameMouseDown(event)
+{   
     if (tagging) {
         image = ge('myphoto');
         activeImageMouseX = mousePosX(event) - findX(image);
         activeImageMouseY = mousePosY(event) - findY(image);
         updateFrame(image, activeImageMouseX, activeImageMouseY);
     }
-}
+}   
 
-function frameMouseUp() {
+function frameMouseUp()
+{   
     if (tagging) {
         gid('name').focus();
         gid('name').select();
     }
-}
+}   
+
+

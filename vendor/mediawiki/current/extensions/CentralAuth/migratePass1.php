@@ -2,7 +2,7 @@
 
 // pass 1:
 // * generate 'globaluser' entries for each username
-// * go through all usernames in 'globalnames' and for those
+// * go through all usernames in 'migrateuser' and for those
 //   that can be automatically migrated, go ahead and do it.
 
 require dirname(__FILE__) . '/../../maintenance/commandLine.inc';
@@ -12,15 +12,16 @@ function migratePassOne() {
 	$total = 0;
 	$chunkSize = 1000;
 	$start = microtime( true );
-
-	$dbBackground = CentralAuthUser::getCentralSlaveDB();
+	
+	$dbBackground = wfGetDB( DB_SLAVE, 'CentralAuth' ); // fixme for large dbs
 	$result = $dbBackground->select(
-		'globalnames',
-		array( 'gn_name' ),
+		CentralAuthUser::tableName( 'migrateuser' ),
+		array( 'mu_name' ),
 		'',
-		__METHOD__ );
+		__METHOD__,
+		array( 'GROUP BY' => 'mu_name' ) );
 	while( $row = $dbBackground->fetchObject( $result ) ) {
-		$name = $row->gn_name;
+		$name = $row->mu_name;
 		$central = new CentralAuthUser( $name );
 		if( $central->storeAndMigrate() ) {
 			$migrated++;
@@ -42,10 +43,11 @@ function migratePassOneReport( $migrated, $total, $start ) {
 		$total / $delta,
 		$migrated,
 		$migrated / $total * 100.0 );
-
+		
 }
 
 echo "CentralAuth migration pass 1:\n";
 echo "Finding accounts which can be migrated without interaction...\n";
 migratePassOne();
 echo "done.\n";
+

@@ -23,9 +23,8 @@
  * Then, kill the poor widows and orphans.
  * Man this is depressing.
  *
- * @file
  * @author <brion@pobox.com>
- * @ingroup Maintenance
+ * @addtogroup Maintenance
  */
 
 $options = array( 'fix' );

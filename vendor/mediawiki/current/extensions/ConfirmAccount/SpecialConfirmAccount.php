@@ -12,7 +12,7 @@ $wgExtensionCredits['specialpage'][] = array(
 	'descriptionmsg' => 'confirmedit-desc',
 	'author' => 'Aaron Schulz',
 	'url' => 'http://www.mediawiki.org/wiki/Extension:ConfirmAccount',
-	'version' => '1.46',
+	'version' => '1.1',
 );
 
 # This extension needs email enabled!
@@ -30,17 +30,9 @@ $wgAutoUserBioText = '';
 $wgAutoWelcomeNewUsers = true;
 # Make the username of the real name?
 $wgUseRealNamesOnly = true;
-
-# How long to store rejected requests
 $wgRejectedAccountMaxAge = 7 * 24 * 3600; // One week
-# How long after accounts have been requested/held before they count as 'rejected'
-$wgConfirmAccountRejectAge = 30 * 24 * 3600; // 1 month
-
 # How many requests can an IP make at once?
 $wgAccountRequestThrottle = 1;
-# Can blocked users request accounts?
-$wgAccountRequestWhileBlocked = false;
-
 # Minimum biography specs
 $wgAccountRequestMinWords = 50;
 
@@ -56,13 +48,6 @@ $wgAccountRequestTypes = array(
 	0 => array( 'authors', 'user' )
 );
 
-# If set, will add {{DEFAULTSORT:sortkey}} to userpages for auto-categories.
-# The sortkey will be made be replacing the first element of this array
-# (regexp) with the second. Set this variable to false to avoid sortkey use.
-$wgConfirmAccountSortkey = false;
-// For example, the below will do {{DEFAULTSORT:firstname, lastname}}
-#$wgConfirmAccountSortkey = array( '/^(.+) ([^ ]+)$/', '$2, $1' );
-
 # IMPORTANT: do we store the user's notes and credentials
 # for sucessful account request? This will be stored indefinetely
 # and will be accessible to users with crediential lookup permissions
@@ -71,10 +56,6 @@ $wgConfirmAccountSaveInfo = true;
 # Send an email to address when account requests confirm their email.
 # Set to false to skip this.
 $wgConfirmAccountContact = false;
-
-# If ConfirmEdit is installed and set to trigger for createaccount,
-# inject catpchas for requests too?
-$wgConfirmAccountCaptchas = true;
 
 # Location of attached files for pending requests
 $wgAllowAccountRequestFiles = true;
@@ -96,17 +77,12 @@ $wgGroupPermissions['bureaucrat']['requestips'] = true;
 # If credentials are stored, this right lets users look them up
 $wgGroupPermissions['bureaucrat']['lookupcredentials'] = true;
 
-$wgAvailableRights[] = 'confirmaccount';
-$wgAvailableRights[] = 'requestips';
-$wgAvailableRights[] = 'lookupcredentials';
-
 # Show notice for open requests to admins?
 # This is cached, but still can be expensive on sites with thousands of requests.
 $wgConfirmAccountNotice = true;
 
 $dir = dirname(__FILE__) . '/';
 $wgExtensionMessagesFiles['ConfirmAccount'] = $dir . 'ConfirmAccount.i18n.php';
-$wgExtensionAliasesFiles['ConfirmAccount'] = $dir . 'ConfirmAccount.alias.php';
 
 function efAddRequestLoginText( &$template ) {
 	global $wgUser;
@@ -120,6 +96,7 @@ function efAddRequestLoginText( &$template ) {
 }
 
 function efCheckIfAccountNameIsPending( &$user, &$abortError ) {
+	wfLoadExtensionMessages( 'ConfirmAccount' );
 	# If an account is made with name X, and one is pending with name X
 	# we will have problems if the pending one is later confirmed
 	$dbw = wfGetDB( DB_MASTER );
@@ -127,7 +104,6 @@ function efCheckIfAccountNameIsPending( &$user, &$abortError ) {
 		array( 'acr_name' => $user->getName() ),
 		__METHOD__ );
 	if ( $dup ) {
-		wfLoadExtensionMessages( 'ConfirmAccount' );
 		$abortError = wfMsgHtml('requestaccount-inuse');
 		return false;
 	}
@@ -136,7 +112,7 @@ function efCheckIfAccountNameIsPending( &$user, &$abortError ) {
 
 function efConfirmAccountInjectStyle() {
 	global $wgOut, $wgUser;
-	# Don't load unless needed
+	
 	if( !$wgUser->isAllowed('confirmaccount') )
 		return true;
 	# FIXME: find better load place
@@ -151,50 +127,47 @@ function efConfirmAccountInjectStyle() {
 }
 
 function wfConfirmAccountsNotice( $notice ) {
-	global $wgConfirmAccountNotice, $wgUser;
+	global $wgConfirmAccountNotice, $wgUser, $wgMemc, $wgOut;
 
 	if( !$wgConfirmAccountNotice || !$wgUser->isAllowed('confirmaccount') )
 		return true;
-		
-	global $wgMemc, $wgOut;
 	# Check cached results
-	$key = wfMemcKey( 'confirmaccount', 'noticecount' );
-	$count = $wgMemc->get( $key );
-	# Only show message if there are any such requests
-	if( !$count )  {
+	$key = wfMemcKey( 'confirmaccount', 'notice' );
+	$message = $wgMemc->get( $key );
+	
+	if( !$message )  {
 		$dbw = wfGetDB( DB_MASTER );
 		$count = $dbw->selectField( 'account_requests', 'COUNT(*)',
-			array( 'acr_deleted' => 0, 'acr_held IS NULL', 'acr_email_authenticated IS NOT NULL' ),
+			array( 'acr_deleted' => 0, 'acr_held IS NULL' ),
 			__METHOD__ );
-		# Use '-' for zero, to avoid any confusion over key existence
-		if( !$count ) {
-			$count = '-';
+		
+		if( $count ) {
+			wfLoadExtensionMessages( 'ConfirmAccount' );
+			$message = wfMsgExt( 'confirmaccount-newrequests', array('parsemag'), $count );
+		} else {
+			$message = '-';
 		}
 		# Cache results
-		$wgMemc->set( $key, $count, 3600*24*7 );
+		$wgMemc->set( $key, $message, 3600*24*7 );
 	}
-	if( $count !== '-' ) {
-		wfLoadExtensionMessages( 'ConfirmAccount' );
-		$message = wfMsgExt( 'confirmaccount-newrequests', array('parsemag'), $count );
+	if( $message == '-' )
+		return true;
 	
-		$notice .= '<div id="mw-confirmaccount-msg" class="mw-confirmaccount-bar">' . $wgOut->parse($message) . '</div>';
-	}
+	$notice .= '<div id="mw-confirmaccount-msg" class="mw-confirmaccount-bar">' . $wgOut->parse($message) . '</div>';
+
 	return true;
 }
 
-$dir = dirname(__FILE__) . '/';
+# Register special page
+if ( !function_exists( 'extAddSpecialPage' ) ) {
+	require( dirname(__FILE__) . '/../ExtensionFunctions.php' );
+}
 # Request an account
-$wgSpecialPages['RequestAccount'] = 'RequestAccountPage';
-$wgAutoloadClasses['RequestAccountPage'] = $dir . 'RequestAccount_body.php';
-$wgSpecialPageGroups['RequestAccount'] = 'login';
+extAddSpecialPage( dirname(__FILE__) . '/ConfirmAccount_body.php', 'RequestAccount', 'RequestAccountPage' );
 # Confirm accounts
-$wgSpecialPages['ConfirmAccounts'] = 'ConfirmAccountsPage';
-$wgAutoloadClasses['ConfirmAccountsPage'] = $dir . 'ConfirmAccount_body.php';
-$wgSpecialPageGroups['ConfirmAccounts'] = 'users';
+extAddSpecialPage( dirname(__FILE__) . '/ConfirmAccount_body.php', 'ConfirmAccounts', 'ConfirmAccountsPage' );
 # Account credentials
-$wgSpecialPages['UserCredentials'] = 'UserCredentialsPage';
-$wgAutoloadClasses['UserCredentialsPage'] = $dir . 'UserCredentials_body.php';
-$wgSpecialPageGroups['UserCredentials'] = 'users';
+extAddSpecialPage( dirname(__FILE__) . '/ConfirmAccount_body.php', 'UserCredentials', 'UserCredentialsPage' );
 
 $wgExtensionFunctions[] = 'efLoadConfirmAccount';
 # Add notice of where to request an account

@@ -177,7 +177,7 @@ class MediaWikiFarmer
      *
      * I refuse to use the 'global' keyword out of principle
      */
-    public static function &getMWVariable($var)
+    public function &getMWVariable($var)
     {
         $return =  &$GLOBALS[$var];
 

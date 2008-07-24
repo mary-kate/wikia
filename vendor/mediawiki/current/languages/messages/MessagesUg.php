@@ -1,8 +1,7 @@
 <?php
 /** Uighur (Uyghurche‎ / ئۇيغۇرچە)
  *
- * @ingroup Language
- * @file
+ * @addtogroup Language
  *
  * @author SPQRobin
  */
@@ -28,8 +27,8 @@ $messages = array(
 'jumptosearch'     => 'izdash',
 
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
-'mainpage'             => 'Bash Bet',
-'mainpage-description' => 'Bash Bet',
+'mainpage'    => 'Bash Bet',
+'sitesupport' => 'Iana Toplash',
 
 'editsection' => 'uzgartish',
 'editold'     => 'uzgartish',
@@ -57,6 +56,9 @@ $messages = array(
 'uploadbtn'       => 'Yengi Hujjat Kirguzush',
 'watchthisupload' => 'Bu Batka Kharang',
 
+# Image list
+'ilsubmit' => 'Izdash',
+
 # File deletion
 'filedelete-submit' => 'Yukhutush',
 
@@ -64,7 +66,8 @@ $messages = array(
 'brokenredirects-delete' => '(yukhutush)',
 
 # Miscellaneous special pages
-'move' => 'Yotkash',
+'specialpages' => 'Alahida Tor Batleri',
+'move'         => 'Yotkash',
 
 # Book sources
 'booksources-go' => 'Kuchush',
@@ -103,9 +106,6 @@ $messages = array(
 'tooltip-search'  => 'Izdash {{SITENAME}}',
 'tooltip-p-logo'  => 'Bash Bet',
 
-# Special:Newimages
-'ilsubmit' => 'Izdash',
-
 # Trackbacks
 'trackbackremove' => ' ([$1 Yukhutush])',
 
@@ -114,8 +114,5 @@ $messages = array(
 
 # Table pager
 'table_pager_limit_submit' => 'Kuchush',
-
-# Special:SpecialPages
-'specialpages' => 'Alahida Tor Batleri',
 
 );

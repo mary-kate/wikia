@@ -11,6 +11,7 @@
 
 if( defined( 'MEDIAWIKI' ) ) {
 
+	$wgExtensionFunctions[] = 'efUsernameBlacklistSetup';
 	$wgExtensionCredits['other'][] = array(
 		'name'           => 'Username Blacklist',
 		'author'         => 'Rob Church',
@@ -26,9 +27,16 @@ if( defined( 'MEDIAWIKI' ) ) {
 	$wgAvailableRights[] = 'uboverride';
 	$wgGroupPermissions['sysop']['uboverride'] = true;
 
-	$wgHooks['AbortNewAccount'][] = 'efUsernameBlacklist';
-	$wgHooks['ArticleSaveComplete'][] = 'efUsernameBlacklistInvalidate';
-	$wgHooks['EditFilter'][] = 'efUsernameBlacklistValidate';
+	/**
+	 * Register the extension
+	 */
+	function efUsernameBlacklistSetup() {
+		global $wgHooks;
+		require_once( dirname( __FILE__ ) . '/UsernameBlacklist.i18n.php' );
+		$wgHooks['AbortNewAccount'][] = 'efUsernameBlacklist';
+		$wgHooks['ArticleSaveComplete'][] = 'efUsernameBlacklistInvalidate';
+		$wgHooks['EditFilter'][] = 'efUsernameBlacklistValidate';
+	}
 
 	/**
 	 * Perform the check
@@ -37,7 +45,7 @@ if( defined( 'MEDIAWIKI' ) ) {
 	 */
 	function efUsernameBlacklist( &$user ) {
 		global $wgUser;
-		$blackList = UsernameBlacklist::fetch();
+		$blackList =& UsernameBlacklist::fetch();
 		if( $blackList->match( $user->getName() ) && !$wgUser->isAllowed( 'uboverride' ) ) {
 			wfLoadExtensionMessages( 'UsernameBlacklist' );
 			global $wgOut;
@@ -261,7 +269,7 @@ if( defined( 'MEDIAWIKI' ) ) {
 		 * Fetch an instance of the blacklist class
 		 * @return UsernameBlacklist
 		 */
-		static function fetch() {
+		function fetch() {
 			static $blackList = false;
 			if( !$blackList )
 				$blackList = new UsernameBlacklist();

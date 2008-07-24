@@ -3,8 +3,7 @@
 /**
  * Support functions for the reassignEdits script
  *
- * @file
- * @ingroup Maintenance
+ * @addtogroup Maintenance
  * @author Rob Church <robchur@gmail.com>
  * @licence GNU General Public Licence 2.0 or later
  */
@@ -81,7 +80,7 @@ function reassignEdits( &$from, &$to, $rc = false, $report = false ) {
  * @return array
  */
 function userConditions( &$user, $idfield, $utfield ) {
-	return $user->getId() ? array( $idfield => $user->getId() ) : array( $utfield => $user->getName() );
+	return $user->getId() ? array( $idfield => $user->getID() ) : array( $utfield => $user->getName() );
 }
 
 /**

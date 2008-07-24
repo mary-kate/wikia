@@ -16,3 +16,5 @@ class WebResponse {
 		setcookie($name,$value,$expire, $wgCookiePath, $wgCookieDomain, $wgCookieSecure);
 	}
 }
+
+

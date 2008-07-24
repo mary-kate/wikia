@@ -3,7 +3,7 @@
 class SmoothGallery {
 
 	var $parser;
-	var $set;
+	var $special, $set;
 	var $argumentArray, $galleriesArray;
 	var $errors;
 
@@ -61,11 +61,17 @@ class SmoothGallery {
 		$this->parser = $parser;
 	}
 
+	function setSpecial( $calledFromSpecial ) {
+		$this->special = $calledFromSpecial;
+	}
+
 	function setSet( $calledAsSet ) {
 		$this->set = $calledAsSet;
 	}
 
 	function toHTML () {
+		global $wgSmoothGalleryUseDatabase;
+	
 		$output = '';
 		$fallbackOutput = '';
 	
@@ -91,6 +97,29 @@ class SmoothGallery {
 			$output .= $this->renderJavascript( $this->galleriesArray["galleries"][0]["gallery_name"] );
 		}
 	
+		//Save input and (cache) output to database if
+		//the plugin is configured to use the database
+		if ( $wgSmoothGalleryUseDatabase ) {
+			$gId = $this->addSGTextToDB( $input, $output );
+	
+			//Get a local link from the special page
+			$sp = Title::newFromText( "Special:SmoothGallery" );
+			$locallink = $sp->getLocalURL( "gallery=" . $gId );
+			$linktext = htmlspecialchars( $this->argumentArray["special"] );
+			if ( $linktext == '' ) {
+				$linktext = 'link';
+			}
+			$link = '<a href="' . $locallink . '">' . $linktext . '</a>';
+	
+			if ( $this->argumentArray["special"] != '' ) {
+				// We are only sending a special page link
+				$output = $link;
+			} else if ( !$this->argumentArray["nolink"] ) {
+				// We want to send a link with the gallery
+				$output = '<div class="MediaWikiSGalleryLink">' . $link . $output . '</div>';
+			}
+		}
+
 		# flags for use by smoothGalleryParserOutput
 		$this->parser->mOutput->mSmoothGalleryTag = true;
 		if ( $this->set ) {
@@ -103,7 +132,43 @@ class SmoothGallery {
 	
 	function renderGallery ( $galleryArray ) {
 		global $wgSmoothGalleryDelimiter;
-		global $wgSmoothGalleryThumbHeight, $wgSmoothGalleryThumbWidth;
+		global $wgSmoothGalleryUseDatabase;
+	
+		if ( $this->argumentArray["special"] ) {
+			if ( !$wgSmoothGalleryUseDatabase ) {
+				//The user wants a link to a special page instead. Let's provide a link with
+				//the relevant info
+	
+				//sanity check
+				$name = htmlspecialchars( $this->argumentArray["special"] );
+	
+				//This is a dirty, dirty hack that should be replaced. It works, and
+				//it is safe, but there *MUST* be a better way to do this...
+				$img_list = '';
+				foreach ( $galleryArray["images"] as $imageArray ) {
+					if ( $img_list == '' ) {
+						$img_list = $imageArray["title"] . "\n";
+					} else {
+						$img_list .= $img_list . '|' . $imageArray["title"] . "\n";
+					}
+				}
+	
+				//Get a local link from the special page
+				$sp = Title::newFromText( "Special:SmoothGallery" );
+				$output = $sp->getLocalURL( "height=" . $this->argumentArray["height"]
+					. "&width=" . $this->argumentArray["width"]
+					. "&showcarousel=" . $this->argumentArray["carousel"]
+					. "&timed=" . $this->argumentArray["timed"]
+					. "&delay=" . $this->argumentArray["delay"]
+					. "&showarrows=" . $this->argumentArray["showarrows"]
+					. "&showinfopane=" . $this->argumentArray["showinfopane"]
+					. "&fallback=" . $this->argumentArray["fallback"]
+					. "&input=" . htmlspecialchars( $img_list ) );
+	
+				//Provide the link
+				return '<a href="' . $output . '">' . $name . '</a>';
+			}
+		}
 	
 		//Open the outer div of the gallery
 		if ( $this->set ) {
@@ -115,23 +180,16 @@ class SmoothGallery {
 	
 		//TODO iterate over the images and output each
 		foreach ( $galleryArray["images"] as $imageArray ) {
-			if ( isset( $imageArray["external"] ) && $imageArray["external"] ) {
-				$thumbsizes = 'height="' . $wgSmoothGalleryThumbHeight . '" width="' . $wgSmoothGalleryThumbWidth . '" ';
-				$fullsizes = 'height="' . $this->argumentArray["height"] . '" width="' . $this->argumentArray["width"] . '" ';
-			} else {
-				$thumbsizes = '';
-				$fullsizes = '';
-			}
 			//Add the html for the image
 			$output .= '<div class="imageElement">';
 			$output .= '<h3>' . $imageArray["heading"] . '</h3>';
 			$output .= '<p>' . $imageArray["description"] . '</p>';
 			$output .=  '<a href="' . $imageArray["full_url"] . '" title="open image" class="open"></a>';
 			$output .=  '<a href="' . $imageArray["view_url"] . '" title="open image" class="open"></a>';
-			$output .=  '<img src="' . $imageArray["full_thumb_url"] . '"  class="full" alt="' . $imageArray["description"] . '" ' . $fullsizes . '/>';
+			$output .=  '<img src="' . $imageArray["full_thumb_url"] . '"  class="full" alt="' . $imageArray["description"] . '" />';
 	
 			if ( $this->argumentArray["carousel"] ) {
-				$output .=  '<img src="' . $imageArray["icon_thumb_url"] . '"  class="thumbnail" alt="' . $imageArray["description"] . '" ' . $thumbsizes . '/>';
+				$output .=  '<img src="' . $imageArray["icon_thumb_url"] . '"  class="thumbnail" alt="' . $imageArray["description"] . '" />';
 			}
 	
 			$output .= '</div>';
@@ -145,9 +203,15 @@ class SmoothGallery {
 	}
 	
 	function renderFallback ( $galleryArray ) {
+		global $wgSmoothGalleryUseDatabase;
+	
 		$output = '';
 	
 		if ( !isset( $galleryArray["images"] ) ) {
+			return $output;
+		}
+	
+		if ( $this->argumentArray["special"] != "" && !$wgSmoothGalleryUseDatabase ) {
 			return $output;
 		}
 	
@@ -157,7 +221,7 @@ class SmoothGallery {
 			}
 
 			$output .= '<div id="' . $galleryArray['gallery_name'] . '-fallback" class="MediaWikiSGallerySingleImage" style="width: ' . $this->argumentArray["width"] . ';height: ' . $this->argumentArray["height"] . ';" alt="' . $galleryArray["images"][0]["description"] . '">';
-			$output .=  '<img src="' . $galleryArray["images"][0]["full_thumb_url"] . '"  class="full" alt="' . $galleryArray["images"][0]["description"] . '" />';
+			$output .= $galleryArray["images"][0]["full_thumb_url"];
 			$output .= '</div>';
 		} elseif ( $this->argumentArray["fallback"] == "image-warn" ) {
 			if ( !isset( $galleryArray["images"][0] ) ) {
@@ -170,7 +234,7 @@ class SmoothGallery {
 			$output .= wfMsg("smoothgallery-javascript-disabled");
 
 			$output .= '<div class="MediaWikiSGallerySingleImage">';
-			$output .=  '<img src="' . $galleryArray["images"][0]["full_thumb_url"] . '"  class="full" alt="' . $galleryArray["images"][0]["description"] . '" />';
+			$output .= $galleryArray["images"][0]["full_thumb_url"];
 			$output .= '</div></div>';
 		} else {
 			$output .= $this->renderPlainGallery ( $galleryArray );
@@ -190,27 +254,15 @@ class SmoothGallery {
 		$output = '<div id="' . $galleryArray["gallery_name"] . '-fallback">';
 	
 		$plain_gallery = new ImageGallery();
-
-		$i = 0;	
+	
 		foreach ( $galleryArray["images"] as $image ) {
-			if ( isset( $image["external"] ) && $image["external"] ) {
-				continue;
-			}
-
 			if ( version_compare( $wgVersion, "1.11", '<' ) ) {
 				$plain_gallery->add( $image["image_object"], $image["description"] ); //TODO: use text
 			} else {
 				$plain_gallery->add( $image["image_object"]->getTitle(), $image["description"] ); //TODO: use text
 			}
-			$i++;
 		}
-
-		// Return an empty div if there are no usable images in the gallery.
-		// This can happen if all images are external.
-		if ( $i == 0 ) {
-			return $output . '</div>';
-		}
-
+	
 		$output .= $plain_gallery->toHTML();
 	
 		//Close the wrapper div for the plain old gallery
@@ -254,7 +306,7 @@ class SmoothGallery {
 			$output .= ', showInfopane: false';
 		}
 	
-		#$output .= ', useHistoryManager: true';
+		$output .= ', useHistoryManager: true';
 		#$output .= ', preloader: true';
 		#$output .= ', preloaderImage: true';
 		#$output .= ', preloaderErrorImage: true';
@@ -262,7 +314,7 @@ class SmoothGallery {
 		#$output .= ", textPreloadingCarousel: '" . wfMsg("smoothgallery-loading") . "'";
 	
 		$output .= '});';
-		#$output .= 'HistoryManager.start();';
+		$output .= 'HistoryManager.start();';
 		$output .= '}';
 		$output .= "window.addEvent('domready', startGallery_$name);";
 		#$output .= 'addOnloadHook(startGallery_' . $name . ');';
@@ -271,6 +323,21 @@ class SmoothGallery {
 		return $output;
 	}
 	
+	function addSGTextToDB($input, $cache) {
+		global $wgSharedDB, $wgDBname;
+		$dbw =& wfGetDB( DB_MASTER );
+	
+		if (isset($wgSharedDB)) {
+			# It would be nicer to get the existing dbname
+			# and save it, but it's not possible
+			$dbw->selectDB($wgSharedDB);
+		}
+	
+		$dbw->insert('text_sg', array('sg_text' => $dbw->addQuotes( $input ),
+						  'sg_cache' => $cache));
+		return $dbw->insertId();
+	}
+
         static function setGalleryHeaders(  &$outputPage ) {
                 global $wgSmoothGalleryExtensionPath;
 

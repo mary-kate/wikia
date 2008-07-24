@@ -18,23 +18,18 @@
 # http://www.gnu.org/copyleft/gpl.html
 
 /**
- * @file
- * @ingroup Search
- */
-
-/**
  * Search engine hook base class for Postgres
- * @ingroup Search
+ * @addtogroup Search
  */
 class SearchPostgres extends SearchEngine {
 
-	function __construct( $db ) {
+	function SearchPostgres( $db ) {
 		$this->db = $db;
 	}
 
 	/**
 	 * Perform a full text search query via tsearch2 and return a result set.
-	 * Currently searches a page's current title (page.page_title) and
+	 * Currently searches a page's current title (page.page_title) and 
 	 * latest revision article text (pagecontent.old_text)
 	 *
 	 * @param string $term - Raw search term
@@ -179,13 +174,11 @@ class SearchPostgres extends SearchEngine {
 			$query .= ' AND page_is_redirect = 0';
 
 		## Namespaces - defaults to 0
-		if( !is_null($this->namespaces) ){ // null -> search all
-			if ( count($this->namespaces) < 1)
-				$query .= ' AND page_namespace = 0';
-			else {
-				$namespaces = implode( ',', $this->namespaces );
-				$query .= " AND page_namespace IN ($namespaces)";
-			}
+		if ( count($this->namespaces) < 1)
+			$query .= ' AND page_namespace = 0';
+		else {
+			$namespaces = implode( ',', $this->namespaces );
+			$query .= " AND page_namespace IN ($namespaces)";
 		}
 
 		$query .= " ORDER BY score DESC, page_id DESC";
@@ -215,11 +208,11 @@ class SearchPostgres extends SearchEngine {
 } ## end of the SearchPostgres class
 
 /**
- * @ingroup Search
+ * @addtogroup Search
  */
 class PostgresSearchResult extends SearchResult {
-	function __construct( $row ) {
-		parent::__construct($row);
+	function PostgresSearchResult( $row ) {
+		$this->mTitle = Title::makeTitle( $row->page_namespace, $row->page_title );
 		$this->score = $row->score;
 	}
 	function getScore() {
@@ -228,10 +221,10 @@ class PostgresSearchResult extends SearchResult {
 }
 
 /**
- * @ingroup Search
+ * @addtogroup Search
  */
 class PostgresSearchResultSet extends SearchResultSet {
-	function __construct( $resultSet, $terms ) {
+	function PostgresSearchResultSet( $resultSet, $terms ) {
 		$this->mResultSet = $resultSet;
 		$this->mTerms = $terms;
 	}
@@ -253,3 +246,6 @@ class PostgresSearchResultSet extends SearchResultSet {
 		}
 	}
 }
+
+
+

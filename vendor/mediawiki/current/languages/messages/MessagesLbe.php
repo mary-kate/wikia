@@ -1,8 +1,7 @@
 <?php
 /** Лакку (Лакку)
  *
- * @ingroup Language
- * @file
+ * @addtogroup Language
  *
  * @author M.M.S.
  */
@@ -51,10 +50,9 @@ $messages = array(
 'talk'             => 'Ихтилат',
 
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
-'currentevents'        => 'Нанисса ишру',
-'currentevents-url'    => 'Project:Нанисса ишру',
-'mainpage'             => 'Агьаммур лажин',
-'mainpage-description' => 'Агьаммур лажин',
+'currentevents'     => 'Нанисса ишру',
+'currentevents-url' => 'Project:Нанисса ишру',
+'mainpage'          => 'Агьаммур лажин',
 
 'editsection' => 'дакьин дуван',
 'editold'     => 'дакьин дуван',
@@ -70,7 +68,7 @@ $messages = array(
 # Recent changes
 'recentchanges' => 'Махъсса дахханашивурту',
 
-# Image description page
+# Image list
 'filehist-user' => 'Гьурттучув',
 
 # Miscellaneous special pages

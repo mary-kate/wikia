@@ -8,7 +8,7 @@ $aqpCredits = array(
 // We require 1.11alpha or later:
 if( version_compare( $wgVersion, '1.12alpha', '<' ) ) {
 	$wgExtensionCredits['other'][] = $aqpCredits + array(
-		'description' => "Add some AJAX to QueryPages such as [[Special:Shortpages]].<br />'''Disabled''', requires MediaWiki 1.12alpha or later.",
+		'description' => "Add some AJAX to QueryPages such as [[Special:Shortpages]].<br/>'''Disabled''', requires MediaWiki 1.12alpha or later.",
 		);
 } else {
 	$wgExtensionCredits['other'][] = array(
@@ -22,8 +22,8 @@ if( version_compare( $wgVersion, '1.12alpha', '<' ) ) {
 	$wgExtensionMessagesFiles['AjaxQueryPages'] = dirname(__FILE__) . '/AjaxQueryPages.i18n.php';
 
 	// Load hooks
-	require_once(dirname(__FILE__) . '/Hooks.php');
+	require_once('extensions/AjaxQueryPages/Hooks.php');
 
 	// Set up AJAX entry point:
-	require_once(dirname(__FILE__) . '/Response.php');
+	require_once('extensions/AjaxQueryPages/Response.php');
 }

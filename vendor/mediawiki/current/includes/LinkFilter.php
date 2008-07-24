@@ -106,3 +106,4 @@ class LinkFilter {
 		return $like;
 	}
 }
+

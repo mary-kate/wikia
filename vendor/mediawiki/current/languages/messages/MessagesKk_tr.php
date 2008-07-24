@@ -1,10 +1,10 @@
 <?php
-/**
- * Kazakh (Turkey) (Qazaqşa (Türkïya))
+/** ‪Kazakh (Turkey)‬ (‪Qazaqşa (Türkïya)‬)
  *
- * @ingroup Language
- * @file
+ * @addtogroup Language
+ *
  */
 
 # Inherit everything for now
 $fallback = 'kk-latn';
+

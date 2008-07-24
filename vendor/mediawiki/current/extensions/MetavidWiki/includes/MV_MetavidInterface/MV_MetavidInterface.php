@@ -19,8 +19,6 @@
  	var $context=null;
  	var $page_title='';
  	var $page_header=''; 	
- 	//list the properties we are intersted and there default values: 
- 	var $smwProperties = array('playback_resolution'=>null);
  	function __construct($contextType, & $contextArticle=null ){
  		global $mv_default_view;
  		$this->context = $contextType;
@@ -63,13 +61,27 @@
 		//set up additonal pieces
 		$this->page_title=wfMsg('mv_edit_sequence', $wgTitle->getText() );		
  	}
+ 	/*function setupSpecialView(){
+ 		global $mvgIP;
+ 		foreach(array('MV_VideoPlayer', 'MV_Overlay','MV_Tools') as $cp_name){
+			require_once($mvgIP . '/includes/MV_MetavidInterface/'.$cp_name.'.php');
+			$this->components[$cp_name] = new $cp_name( 
+				array('mv_interface'=>&$this)
+			);				
+		}
+		$this->page_title ='<span style="position:relative;top:-12px;font-weight:bold">'.
+ 			$this->article->mvTitle->getStreamNameText(). ' <span id="mv_stream_time">'.
+ 			$this->article->mvTitle->getTimeDesc() . '</span>'.
+		'</span>';
+		//set conditions
+		$this->components['MV_Overlay']->setReq('Recentchanges');
+ 	}*/
  	function setupStreamView(){
- 		global $mvgIP, $mvDefaultStreamViewLength, $wgOut,$mvgScriptPath,$wgUser; 	 		
- 			 	 	
+ 		global $mvgIP, $mvDefaultStreamViewLength, $wgOut,$mvgScriptPath,$wgUser; 		 	 	
  		//set default time range if null time range request
- 		$this->article->mvTitle->setStartEndIfEmpty();
- 		//grab relevent article semantic properties (so far playback_resolution) for user overwriting playback res
- 		$this->grabSemanticProp();
+ 		$this->article->mvTitle->setStartEndIfEmpty(
+ 			seconds2ntp(0), 
+ 			seconds2ntp($mvDefaultStreamViewLength));
  		
 		//set up the interface objects:
 		foreach(array('MV_VideoPlayer', 'MV_Overlay','MV_Tools') as $cp_name){
@@ -77,7 +89,7 @@
 				array('mv_interface'=>&$this)
 			);				
 		}
-		//process track request:
+		//proccess track request:
 		$this->components['MV_Overlay']->procMVDReqSet();				
 		//add in title & tracks var:
  		$wgOut->addScript('<script type="text/javascript">/*<![CDATA[*/'." 		
@@ -85,13 +97,12 @@
  		var mvTracks = '".$this->components['MV_Overlay']->getMVDReqString(). '\';
  		/*]]>*/</script>'."\n");
 		
-		//also add prev next paging	 		
-		$this->page_header ='<span class="mv_stream_title">'.
+		//also add prev next pagging	 		
+		$this->page_header ='<span style="position:relative;top:-12px;font-weight:bold">'.
  			$this->article->mvTitle->getStreamNameText().
  			$this->components['MV_Tools']->stream_paging_links('prev') . 
-				' <span id="mv_stream_time">'.$this->article->mvTitle->getTimeDesc() . '</span>'.
-			$this->components['MV_Tools']->stream_paging_links('next') .
-			wfMsg('mv_of') . seconds2ntp($this->article->mvTitle->getDuration()) .  			
+			' <span id="mv_stream_time">'.$this->article->mvTitle->getTimeDesc() . '</span>'.
+			$this->components['MV_Tools']->stream_paging_links('next') . 			
 		'</span>';	
 		
 		//add export cmml icon
@@ -102,26 +113,11 @@
 				'<img style="width:28px;height:28px;" src="'.$mvgScriptPath . '/skins/images/Feed-icon_cmml_28x28.png">',
 				'feed_format=roe&stream_name='.$this->article->mvTitle->getStreamName().'&t='.$this->article->mvTitle->getTimeRequest(),
 				'','','title="'.wfMsg('mv_export_cmml').'"');
-		$this->page_header.='</span>';		
+		$this->page_header.='</span>';
+
+		
 		$this->page_title = $this->article->mvTitle->getStreamNameText().' '.$this->article->mvTitle->getTimeDesc();
- 	}
- 	//grab semantic properties if availiable:  	
- 	//@@todo we need to think this through a bit
- 	function grabSemanticProp(){ 		
- 		if(SMW_VERSION){
- 			//global $smwgIP;
- 			$smwStore =& smwfGetStore(); 			
- 			foreach($this->smwProperties as $propKey=>$val){
- 				$propTitle = Title::newFromText($propKey, SMW_NS_PROPERTY);
- 				$smwProps = $smwStore->getPropertyValues($this->article->mTitle,$propTitle );
- 				//just a temp hack .. we need to think about this abstraction a bit... 	
- 				if(count($smwProps)!=0){			
- 					$v = current($smwProps); 					
-	 				$this->smwProperties[$propKey]=$v->getXSDValue(); 				
- 				}
- 			} 		 			
- 		}
- 	}
+ 	} 	
  	/*
  	 * renders the full page  to the wgOut object
  	 */
@@ -135,8 +131,23 @@
  		if($this->page_header=='')$this->page_header = '<span style="position:relative;top:-12px;font-weight:bold">' . 
  			$this->page_title . '</span>';
  		$wgOut->addHTML($this->page_header); 		 		
- 		
- 		//@@todo dynamic re-size page_spacer:
+ 		//output the time range
+ 		//output basic steam info in the 
+ 		//$out.='<div id="mv_base_container" style="position:absolute;border:solid;border-color:red;width:100%;height:100%">';
+
+ 		//start swiching interfaces over to table layout 
+ 		//seems easier to get IE & firefox to layout stuff the same way
+ 		//if someone wants to prove me wrong and write cross-browser div/css layout ... by all means :)
+ 		/*if($this->context=='stream'){
+ 			$wgOut->addHTML('<table width="100%" height="600">');
+ 				$wgOut->addHTML('<tr>' .
+ 									'<td width="330" >'
+ 								'</tr>' .
+ 								'<tr>' .
+ 								'</tr>'); 								 								
+ 			$wgOut->addHTML('</table>');
+ 		}else{*/ 	
+ 		//@@todo dynamic resize page_spacer:
  		$wgOut->addHTML('<div id="mv_page_spacer">');	 
  		foreach($this->components as $cpKey => &$component){ 			
  			$component->render_full(); 			
@@ -145,7 +156,7 @@
  		//for now output spacers 
 		//@@todo output a dynamic spacer javascript layout		
 		//$out='';  	
- 		//for($i=0;$i<28;$i++)$out.="<br />";
+ 		//for($i=0;$i<28;$i++)$out.="<br>";
  		//$wgOut->addHTML($out);
  		//} 		 		
  	} 	

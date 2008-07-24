@@ -7,8 +7,7 @@ class SF_LanguageNl extends SF_Language {
 
 /* private */ var $m_SpecialProperties = array(
 	//always start upper-case
-	SF_SP_HAS_DEFAULT_FORM  => 'Heeft standaardformulier',
-	SF_SP_HAS_ALTERNATE_FORM  => 'Heeft formulier',
+	SF_SP_HAS_DEFAULT_FORM  => 'Heeft standaardformulier'
 );
 
 var $m_Namespaces = array(

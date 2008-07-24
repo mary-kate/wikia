@@ -6,12 +6,6 @@ $names = array(
  */
 'aln'         => 'Gheg Albanian',
 
-/* Does not exist in CLDR 1.5. Arabic language
- * http://www.ethnologue.com/show_language.asp?code=arz
- * Added 2008-04-12.
- */
-'arz'         => 'Egyptian Spoken Arabic',
-
 /* Does not exist in CLDR 1.5. Name Bavarian used by Ethnologue:
  * http://www.ethnologue.com/show_language.asp?code=bar
  * Added 2007-11-10.
@@ -22,12 +16,6 @@ $names = array(
  * Added 2007-11-10.
  */
 'bat-smg'     => 'Samogitian',
-
-/* Does not exist in CLDR 1.5. Name Bishnupriya used by Ethnologue:
- * http://www.ethnologue.org/show_language.asp?code=bcc
- * Added 2008-07-02.
- */
-'bcc'         => 'Southern Balochi',
 
 /* Does not exist in CLDR 1.5. Name Bishnupriya used by Ethnologue:
  * http://www.ethnologue.org/show_language.asp?code=bpy
@@ -91,9 +79,9 @@ $names = array(
 /* Not in CLDR 1.5. Aralo-Caspian language.
  * Added 2008-01-18.
  */
-'kk-arab'    => 'Kazakh (Arabic script)',
-'kk-cyrl'    => 'Kazakh (Cyrillic script)',
-'kk-latn'    => 'Kazakh (Latin script)',
+'kk-arab'        => 'Kazakh (Arabic script)',
+'kk-cyrl'        => 'Kazakh (Cyrillic script)',
+'kk-latn'        => 'Kazakh (Latin script)',
 
 /* Not in CLDR 1.5. Artificial language.
  * http://www.ethnologue.org/show_language.asp?code=lfn
@@ -101,35 +89,11 @@ $names = array(
  */
 'lfn'        => 'Lingua Franca Nova',
 
-/* Not in CLDR 1.5. Mari language
- * http://www.ethnologue.org/show_language.asp?code=mhr
- * Added 2008-05-22.
- */
-'mhr'        => 'Eastern Mari',
-
-/* Not in CLDR 1.5. Caspian language
- * http://www.ethnologue.org/show_language.asp?code=mzn
- * Added 2008-03-01.
- */
-'mzn'        => 'Mazanderani',
-
-/* Not in CLDR 1.5. Chinese language
- * http://www.ethnologue.org/show_language.asp?code=nan
- * Added 2008-03-01.
- */
-'nan'        => 'Min Nan Chinese',
-
 /* Not in CLDR 1.5. Tibeto-Burman family language.
  * http://www.ethnologue.org/show_language.asp?code=njo
  * Added 2008-01-14.
  */
 'njo'        => 'Ao Naga',
-
-/* Not in CLDR 1.6.0.
- * http://www.ethnologue.org/show_language.asp?code=pms
- * Added 2008-07-09.
- */
-'pms'        => 'Piedmontese',
 
 /* Not in CLDR 1.5. Attic language.
  * Added 2008-01-18.
@@ -151,12 +115,6 @@ $names = array(
  */
 'shi'        => 'Tachelhit',
 
-/* Not in CLDR 1.5.
- * http://www.sil.org/iso639-3/chg_detail.asp?id=2006-106&lang=szl
- * Added 2008-03-29.
- */
-'szl'        => 'Silesian',
-
 /* Not in CLDR 1.5. Chinese language.
  * http://www.ethnologue.org/show_language.asp?code=wuu
  * Added 2007-12-02.
@@ -168,7 +126,7 @@ $names = array(
  * Added 2008-01-18.
  */
 'yue'        => 'Yue',
-'zh-yue'     => 'Yue', # language redirect
+'zh-yue'        => 'Yue', # language redirect
 
 /* Not in CLDR 1.5. Low Franconian language.
  * http://www.ethnologue.org/show_language.asp?code=zea
@@ -176,25 +134,4 @@ $names = array(
  */
 'zea'        => 'Zeeuws',
 
-/* Not in CLDR. Used for MediaWiki localisation
- */
-'be-tarask'    => 'Belarusian (Taraškievica orthography)',
-'cdo'          => 'Min Dong Chinese',
-'crh-cyrl'     => 'Crimean Turkish (Cyrillic)',
-'crh-latn'     => 'Crimean Turkish (Latin)',
-'de-formal'    => 'German (formal address)',
-'glk'          => 'Gilaki',
-'ike-cans'     => 'Eastern Canadian (Unified Canadian Aboriginal Syllabics)',
-'ike-latn'     => 'Eastern Canadian (Latin)',
-'kk-cn'        => 'Kazakh (China)',
-'kk-kz'        => 'Kazakh (Kazakhstan)',
-'kk-tr'        => 'Kazakh (Turkey)',
-'no'           => 'Norwegian (bokmål)‬',
-'roa-rup'      => 'Aromanian',
-'sr-ec'        => 'Serbian Cyrillic ekavian',
-'xmf'          => 'Mingrelian',
-'ydd'          => 'Eastern Yiddish',
-'zh-classical' => 'Classical Chinese',
-'zh-hk'        => 'Hong Kong Chinese',
-'zh-tw'        => 'Taiwan Chinese',
 );

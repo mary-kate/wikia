@@ -26,7 +26,7 @@ require_once($mvgIP . '/includes/MV_Stream.php');
  * MvStream:stream_name -> pulls up first 20 min of stream_name
  * MvStream:stream_name/ss:ss:ss -> pulls up 5 min starting at ss:ss:ss
  * MvStream:stream_name/ss:ss:ss/ee:ee:ee pulls up requested segment
- * 	@@todo we should limit how much metadata for a given query
+ * 	@@todo we should limit how much metadata for a given queery
  *  
  * future:
  * 
@@ -39,36 +39,28 @@ require_once($mvgIP . '/includes/MV_Stream.php');
 
 class MV_StreamPage extends Article{
  	var $mvTitle;
- 	function __construct($title, $mvTitle=false){
- 		if($mvTitle)$this->mvTitle = $mvTitle;
+ 	function __construct($title, $mvTitle){
+ 		$this->mvTitle = $mvTitle;
+ 		//check request type (if base request set to special)
  		return parent::__construct($title);
- 	} 
- 	function newFromArticle($article){
- 		$mvTitle = new MV_Title($article->mTitle); 		
- 		return new MV_StreamPage($article->mTitle, $mvTitle);
  	}
- 	public function view() {
-		global $wgRequest, $wgUser, $wgOut, $wgTitle, $wgJsMimeType, $mvgScriptPath;
-		//@@TODO fix stream view() for old versions ... will likely have to replicate Article::view() 
-		
-		//include the metavid headers (for embedding video in the page) 
-		mvfAddHTMLHeader('stream_interface');			
-			
-		// copied from CategoryPage ...
-		$diff = $wgRequest->getVal( 'diff' );
-		$diffOnly = $wgRequest->getBool( 'diffonly', $wgUser->getOption( 'diffonly' ) );
-		if ( isset( $diff ) && $diffOnly ) {
-			return Article::view();
-		}		
-		$text = $this->getContent();
-		$this->outputWikiText($text);			
-	}
-	function outputWikiText( $text, $cache = true ) {
-		global $wgOut, $wgUser;		
+ 	/*purge the cache*/
+ 	/*public function purge(){
+ 		return '';
+ 	}
+ 	public function getLatest(){ 		
+ 	}*/
+ 	/**
+	 * Overwrite view() from Article.php to add additional html to the output.
+	 */
+	public function view() {
+		global $mvgIP, $wgRequest, $wgUser, $wgOut, $wgTitle;			
 		wfProfileIn( __METHOD__ );
+		
 		$MV_MetavidInterface = new MV_MetavidInterface('stream', $this);				
 		//will require the mv_embed script for video playback:		
-		mvfAddHTMLHeader('stream_interface');		
+		mvfAddHTMLHeader('stream_interface');
+		
 		$MV_MetavidInterface->render_full();	
 		wfProfileOut( __METHOD__ );	
 	}
@@ -119,6 +111,5 @@ class MV_StreamPage extends Article{
  		//update text button to delete stream rather than delete stream
  		parent::delete();
  	}
- 	
  }
 ?>

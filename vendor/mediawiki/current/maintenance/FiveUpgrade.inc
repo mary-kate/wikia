@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * @ingroup Maintenance
- */
 
 require_once( 'cleanupDupes.inc' );
 require_once( 'userDupes.inc' );
@@ -13,9 +9,6 @@ define( 'MW_UPGRADE_ENCODE',   true  );
 define( 'MW_UPGRADE_NULL',     null  );
 define( 'MW_UPGRADE_CALLBACK', null  ); // for self-documentation only
 
-/**
- * @ingroup Maintenance
- */
 class FiveUpgrade {
 	function FiveUpgrade() {
 		$this->conversionTables = $this->prepareWindows1252();
@@ -68,10 +61,9 @@ class FiveUpgrade {
 	 * @access private
 	 */
 	function &newConnection() {
-		global $wgDBadminuser, $wgDBadminpassword, $wgDBtype;
+		global $wgDBadminuser, $wgDBadminpassword;
 		global $wgDBserver, $wgDBname;
-		$dbclass = 'Database' . ucfirst( $wgDBtype ) ;
-		$db = new $dbclass( $wgDBserver, $wgDBadminuser, $wgDBadminpassword, $wgDBname );
+		$db = new Database( $wgDBserver, $wgDBadminuser, $wgDBadminpassword, $wgDBname );
 		return $db;
 	}
 
@@ -83,15 +75,11 @@ class FiveUpgrade {
 	 * @access private
 	 */
 	function &streamConnection() {
-		global $wgDBtype;
-
 		$timeout = 3600 * 24;
 		$db =& $this->newConnection();
 		$db->bufferResults( false );
-        if ($wgDBtype == 'mysql') {
-			$db->query( "SET net_read_timeout=$timeout" );
-			$db->query( "SET net_write_timeout=$timeout" );
-		}
+		$db->query( "SET net_read_timeout=$timeout" );
+		$db->query( "SET net_write_timeout=$timeout" );
 		return $db;
 	}
 
@@ -714,7 +702,7 @@ END;
 			'major'  => '',
 			'minor'  => '' );
 
-		$magic = MimeMagic::singleton();
+		$magic =& wfGetMimeMagic();
 		$mime = $magic->guessMimeType( $filename, true );
 		list( $info['major'], $info['minor'] ) = explode( '/', $mime );
 
@@ -1177,3 +1165,5 @@ ENDS;
 	}
 
 }
+
+?>

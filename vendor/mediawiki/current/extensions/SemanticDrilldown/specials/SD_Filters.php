@@ -7,22 +7,32 @@
 
 if (!defined('MEDIAWIKI')) die();
 
-class SDFilters extends SpecialPage {
+global $IP;
+require_once( "$IP/includes/SpecialPage.php" );
 
-	/**
-	 * Constructor
-	 */
-	function SDFilters() {
-		SpecialPage::SpecialPage('Filters');
-		wfLoadExtensionMessages('SemanticDrilldown');
-	}
+global $sdgSpecialPagesSpecialInit;
+if ($sdgSpecialPagesSpecialInit) {
+	global $wgSpecialPages;
+	$wgSpecialPages['Filters'] = 'SDFilters';
 
-	function execute() {
-		$this->setHeaders();
-		list( $limit, $offset ) = wfCheckLimits();
-		$rep = new FiltersPage();
-		return $rep->doQuery( $offset, $limit );
+	class SDFilters extends SpecialPage {
+
+		/**
+		 * Constructor
+		 */
+		public function __construct() {
+			smwfInitUserMessages();
+			parent::__construct('Filters', '', true);
+		}
+
+		function execute() {
+			list( $limit, $offset ) = wfCheckLimits();
+			$rep = new FiltersPage();
+			return $rep->doQuery( $offset, $limit );
+		}
 	}
+} else {
+	SpecialPage::addPage( new SpecialPage('Filters','',true,'doSpecialFilters',false) );
 }
 
 class FiltersPage extends QueryPage {
@@ -64,4 +74,10 @@ class FiltersPage extends QueryPage {
 		$text = $skin->makeLinkObj( $title, $title->getText() );
 		return $text;
 	}
+}
+
+function doSpecialFilters() {
+	list( $limit, $offset ) = wfCheckLimits();
+	$rep = new FiltersPage();
+	return $rep->doQuery( $offset, $limit );
 }

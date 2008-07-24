@@ -4,7 +4,8 @@
  * Variant of QueryPage which uses a gallery to output results, thus
  * suited for reports generating images
  *
- * @ingroup SpecialPage
+ * @package MediaWiki
+ * @addtogroup SpecialPage
  * @author Rob Church <robchur@gmail.com>
  */
 class ImageQueryPage extends QueryPage {
@@ -63,3 +64,5 @@ class ImageQueryPage extends QueryPage {
 	}
 
 }
+
+

@@ -1,15 +1,13 @@
 <?php
 /**
  * Contain a class for special pages
- * @file
- * @ingroup SpecialPages
  */
 
 /**
- * List of query page classes and their associated special pages,
+ * List of query page classes and their associated special pages, 
  * for periodic updates.
  *
- * DO NOT CHANGE THIS LIST without testing that
+ * DO NOT CHANGE THIS LIST without testing that 
  * maintenance/updateSpecialPages.php still works.
  */
 global $wgQueryPages; // not redundant
@@ -31,6 +29,7 @@ $wgQueryPages = array(
 	array( 'MostlinkedPage',                'Mostlinked'                    ),
 	array( 'MostrevisionsPage',             'Mostrevisions'                 ),
 	array( 'FewestrevisionsPage',           'Fewestrevisions'               ),
+	array( 'NewPagesPage',                  'Newpages'                      ),
 	array( 'ShortPagesPage',                'Shortpages'                    ),
 	array( 'UncategorizedCategoriesPage',   'Uncategorizedcategories'       ),
 	array( 'UncategorizedPagesPage',        'Uncategorizedpages'            ),
@@ -55,7 +54,7 @@ if ( !$wgDisableCounters )
  * This is a class for doing query pages; since they're almost all the same,
  * we factor out some of the functionality into a superclass, and let
  * subclasses derive from it.
- * @ingroup SpecialPage
+ * @addtogroup SpecialPage
  */
 class QueryPage {
 	/**
@@ -237,7 +236,7 @@ class QueryPage {
 				if ( isset( $row->value ) ) {
 					$value = $row->value;
 				} else {
-					$value = 0;
+					$value = '';
 				}
 
 				$insertSql .= '(' .
@@ -306,7 +305,7 @@ class QueryPage {
 				# Fetch the timestamp of this update
 				$tRes = $dbr->select( 'querycache_info', array( 'qci_timestamp' ), array( 'qci_type' => $type ), $fname );
 				$tRow = $dbr->fetchObject( $tRes );
-
+				
 				if( $tRow ) {
 					$updated = $wgLang->timeAndDate( $tRow->qci_timestamp, true, true );
 					$wgOut->addMeta( 'Data-Cache-Time', $tRow->qci_timestamp );
@@ -315,14 +314,14 @@ class QueryPage {
 				} else {
 					$wgOut->addWikiMsg( 'perfcached' );
 				}
-
+				
 				# If updates on this page have been disabled, let the user know
 				# that the data set won't be refreshed for now
 				global $wgDisableQueryPageUpdate;
 				if( is_array( $wgDisableQueryPageUpdate ) && in_array( $this->getName(), $wgDisableQueryPageUpdate ) ) {
 					$wgOut->addWikiMsg( 'querypage-no-updates' );
 				}
-
+				
 			}
 
 		}
@@ -335,7 +334,7 @@ class QueryPage {
 		$this->preprocessResults( $dbr, $res );
 
 		$wgOut->addHtml( XML::openElement( 'div', array('class' => 'mw-spcontent') ) );
-
+		
 		# Top header and navigation
 		if( $shownavigation ) {
 			$wgOut->addHtml( $this->getPageHeader() );
@@ -353,7 +352,7 @@ class QueryPage {
 				return;
 			}
 		}
-
+		
 		# The actual results; specialist subclasses will want to handle this
 		# with more than a straight list, so we hand them the info, plus
 		# an OutputPage, and let them get on with it
@@ -370,10 +369,10 @@ class QueryPage {
 		}
 
 		$wgOut->addHtml( XML::closeElement( 'div' ) );
-
+		
 		return $num;
 	}
-
+	
 	/**
 	 * Format and output report results using the given information plus
 	 * OutputPage
@@ -387,12 +386,12 @@ class QueryPage {
 	 */
 	protected function outputResults( $out, $skin, $dbr, $res, $num, $offset ) {
 		global $wgContLang;
-
+	
 		if( $num > 0 ) {
 			$html = array();
 			if( !$this->listoutput )
 				$html[] = $this->openList( $offset );
-
+			
 			# $res might contain the whole 1,000 rows, so we read up to
 			# $num [should update this to use a Pager]
 			for( $i = 0; $i < $num && $row = $dbr->fetchObject( $res ); $i++ ) {
@@ -406,7 +405,7 @@ class QueryPage {
 						: "<li{$attr}>{$line}</li>\n";
 				}
 			}
-
+			
 			# Flush the final result
 			if( $this->tryLastResult() ) {
 				$row = null;
@@ -420,22 +419,22 @@ class QueryPage {
 						: "<li{$attr}>{$line}</li>\n";
 				}
 			}
-
+			
 			if( !$this->listoutput )
 				$html[] = $this->closeList();
-
+			
 			$html = $this->listoutput
 				? $wgContLang->listToText( $html )
 				: implode( '', $html );
-
+			
 			$out->addHtml( $html );
 		}
 	}
-
+	
 	function openList( $offset ) {
 		return "\n<ol start='" . ( $offset + 1 ) . "' class='special'>\n";
 	}
-
+	
 	function closeList() {
 		return "</ol>\n";
 	}
@@ -449,18 +448,7 @@ class QueryPage {
 	 * Similar to above, but packaging in a syndicated feed instead of a web page
 	 */
 	function doFeed( $class = '', $limit = 50 ) {
-		global $wgFeed, $wgFeedClasses;
-
-		if ( !$wgFeed ) {
-			global $wgOut;
-			$wgOut->addWikiMsg( 'feed-unavailable' );
-			return;
-		}
-		
-		global $wgFeedLimit;
-		if( $limit > $wgFeedLimit ) {
-			$limit = $wgFeedLimit;
-		}
+		global $wgFeedClasses;
 
 		if( isset($wgFeedClasses[$class]) ) {
 			$feed = new $wgFeedClasses[$class](
@@ -539,3 +527,5 @@ class QueryPage {
 		return $title->getFullURL();
 	}
 }
+
+

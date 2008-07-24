@@ -59,12 +59,14 @@ class SMWTableResultPrinter extends SMWResultPrinter {
 		}
 
 		// print further results footer
-		if ( $this->mInline && $res->hasFurtherResults() && $this->mSearchlabel !== '') {
-			$link = $res->getQueryLink();
-			if ($this->mSearchlabel) {
-				$link->setCaption($this->mSearchlabel);
+		if ( $this->mInline && $res->hasFurtherResults() ) {
+			$label = $this->mSearchlabel;
+			if ($label === NULL) { //apply default
+				$label = wfMsgForContent('smw_iq_moreresults');
 			}
-			$result .= "\t<tr class=\"smwfooter\"><td class=\"sortbottom\" colspan=\"" . $res->getColumnCount() . '"> ' . $link->getText($outputmode,$this->mLinker) . "</td></tr>\n";
+			if ($label != '') {
+				$result .= "\t<tr class=\"smwfooter\"><td class=\"sortbottom\" colspan=\"" . $res->getColumnCount() . '"> ' . $this->getFurtherResultsLink($outputmode,$res,$label) . "</td></tr>\n";
+			}
 		}
 		$result .= "</table>\n"; // print footer
 		return $result;

@@ -4,7 +4,7 @@
  * Provides the UI through which users can perform editing
  * operations on their watchlist
  *
- * @ingroup Watchlist
+ * @addtogroup Watchlist
  * @author Rob Church <robchur@gmail.com>
  */
 class WatchlistEditor {
@@ -19,10 +19,10 @@ class WatchlistEditor {
 	/**
 	 * Main execution point
 	 *
-	 * @param $user User
-	 * @param $output OutputPage
-	 * @param $request WebRequest
-	 * @param $mode int
+	 * @param User $user
+	 * @param OutputPage $output
+	 * @param WebRequest $request
+	 * @param int $mode
 	 */
 	public function execute( $user, $output, $request, $mode ) {
 		global $wgUser;
@@ -77,23 +77,23 @@ class WatchlistEditor {
 				$this->showNormalForm( $output, $user );
 		}
 	}
-
+	
 	/**
 	 * Check the edit token from a form submission
 	 *
-	 * @param $request WebRequest
-	 * @param $user User
+	 * @param WebRequest $request
+	 * @param User $user
 	 * @return bool
 	 */
 	private function checkToken( $request, $user ) {
-		return $user->matchEditToken( $request->getVal( 'token' ), 'watchlistedit' );
+		return $user->matchEditToken( $request->getVal( 'token' ), 'watchlistedit' );	
 	}
-
+	
 	/**
 	 * Extract a list of titles from a blob of text, returning
 	 * (prefixed) strings; unwatchable titles are ignored
 	 *
-	 * @param $list mixed
+	 * @param mixed $list
 	 * @return array
 	 */
 	private function extractTitles( $list ) {
@@ -113,20 +113,20 @@ class WatchlistEditor {
 		}
 		return array_unique( $titles );
 	}
-
+	
 	/**
 	 * Print out a list of linked titles
 	 *
 	 * $titles can be an array of strings or Title objects; the former
 	 * is preferred, since Titles are very memory-heavy
 	 *
-	 * @param $titles An array of strings, or Title objects
-	 * @param $output OutputPage
-	 * @param $skin Skin
+	 * @param array $titles An array of strings, or Title objects
+	 * @param OutputPage $output
+	 * @param Skin $skin
 	 */
 	private function showTitles( $titles, $output, $skin ) {
 		$talk = wfMsgHtml( 'talkpagelinktext' );
-		// Do a batch existence check
+		// Do a batch existence check		
 		$batch = new LinkBatch();
 		foreach( $titles as $title ) {
 			if( !$title instanceof Title )
@@ -149,11 +149,11 @@ class WatchlistEditor {
 		}
 		$output->addHtml( "</ul>\n" );
 	}
-
+	
 	/**
 	 * Count the number of titles on a user's watchlist, excluding talk pages
 	 *
-	 * @param $user User
+	 * @param User $user
 	 * @return int
 	 */
 	private function countWatchlist( $user ) {
@@ -162,16 +162,16 @@ class WatchlistEditor {
 		$row = $dbr->fetchObject( $res );
 		return ceil( $row->count / 2 ); // Paranoia
 	}
-
+	
 	/**
 	 * Prepare a list of titles on a user's watchlist (excluding talk pages)
 	 * and return an array of (prefixed) strings
 	 *
-	 * @param $user User
+	 * @param User $user
 	 * @return array
 	 */
 	private function getWatchlist( $user ) {
-		$list = array();
+		$list = array();	
 		$dbr = wfGetDB( DB_MASTER );
 		$res = $dbr->select(
 			'watchlist',
@@ -187,17 +187,17 @@ class WatchlistEditor {
 				if( $title instanceof Title && !$title->isTalkPage() )
 					$list[] = $title->getPrefixedText();
 			}
-			$res->free();
+			$res->free();		
 		}
 		return $list;
 	}
-
+	
 	/**
 	 * Get a list of titles on a user's watchlist, excluding talk pages,
 	 * and return as a two-dimensional array with namespace, title and
 	 * redirect status
 	 *
-	 * @param $user User
+	 * @param User $user
 	 * @return array
 	 */
 	private function getWatchlistInfo( $user ) {
@@ -205,7 +205,7 @@ class WatchlistEditor {
 		$dbr = wfGetDB( DB_MASTER );
 		$uid = intval( $user->getId() );
 		list( $watchlist, $page ) = $dbr->tableNamesN( 'watchlist', 'page' );
-		$sql = "SELECT wl_namespace, wl_title, page_id, page_len, page_is_redirect
+		$sql = "SELECT wl_namespace, wl_title, page_id, page_is_redirect
 			FROM {$watchlist} LEFT JOIN {$page} ON ( wl_namespace = page_namespace
 			AND wl_title = page_title ) WHERE wl_user = {$uid}";
 		$res = $dbr->query( $sql, __METHOD__ );
@@ -216,7 +216,7 @@ class WatchlistEditor {
 				if( $title instanceof Title ) {
 					// Update the link cache while we're at it
 					if( $row->page_id ) {
-						$cache->addGoodLinkObj( $row->page_id, $title, $row->page_len, $row->page_is_redirect );
+						$cache->addGoodLinkObj( $row->page_id, $title );
 					} else {
 						$cache->addBadLinkObj( $title );
 					}
@@ -228,13 +228,13 @@ class WatchlistEditor {
 		}
 		return $titles;
 	}
-
+	
 	/**
 	 * Show a message indicating the number of items on the user's watchlist,
 	 * and return this count for additional checking
 	 *
-	 * @param $output OutputPage
-	 * @param $user User
+	 * @param OutputPage $output
+	 * @param User $user
 	 * @return int
 	 */
 	private function showItemCount( $output, $user ) {
@@ -246,11 +246,11 @@ class WatchlistEditor {
 		}
 		return $count;
 	}
-
+	
 	/**
 	 * Remove all titles from a user's watchlist
 	 *
-	 * @param $user User
+	 * @param User $user
 	 */
 	private function clearWatchlist( $user ) {
 		$dbw = wfGetDB( DB_MASTER );
@@ -263,8 +263,8 @@ class WatchlistEditor {
 	 * $titles can be an array of strings or Title objects; the former
 	 * is preferred, since Titles are very memory-heavy
 	 *
-	 * @param $titles An array of strings, or Title objects
-	 * @param $user User
+	 * @param array $titles An array of strings, or Title objects
+	 * @param User $user
 	 */
 	private function watchTitles( $titles, $user ) {
 		$dbw = wfGetDB( DB_MASTER );
@@ -296,8 +296,8 @@ class WatchlistEditor {
 	 * $titles can be an array of strings or Title objects; the former
 	 * is preferred, since Titles are very memory-heavy
 	 *
-	 * @param $titles An array of strings, or Title objects
-	 * @param $user User
+	 * @param array $titles An array of strings, or Title objects
+	 * @param User $user
 	 */
 	private function unwatchTitles( $titles, $user ) {
 		$dbw = wfGetDB( DB_MASTER );
@@ -326,12 +326,12 @@ class WatchlistEditor {
 			}
 		}
 	}
-
+	
 	/**
 	 * Show the standard watchlist editing form
 	 *
-	 * @param $output OutputPage
-	 * @param $user User
+	 * @param OutputPage $output
+	 * @param User $user
 	 */
 	private function showNormalForm( $output, $user ) {
 		global $wgUser;
@@ -356,11 +356,11 @@ class WatchlistEditor {
 			$output->addHtml( $form );
 		}
 	}
-
+	
 	/**
 	 * Get the correct "heading" for a namespace
 	 *
-	 * @param $namespace int
+	 * @param int $namespace
 	 * @return string
 	 */
 	private function getNamespaceHeading( $namespace ) {
@@ -368,14 +368,14 @@ class WatchlistEditor {
 			? wfMsgHtml( 'blanknamespace' )
 			: htmlspecialchars( $GLOBALS['wgContLang']->getFormattedNsText( $namespace ) );
 	}
-
+	
 	/**
 	 * Build a single list item containing a check box selecting a title
 	 * and a link to that title, with various additional bits
 	 *
-	 * @param $title Title
-	 * @param $redirect bool
-	 * @param $skin Skin
+	 * @param Title $title
+	 * @param bool $redirect
+	 * @param Skin $skin
 	 * @return string
 	 */
 	private function buildRemoveLine( $title, $redirect, $skin ) {
@@ -393,12 +393,12 @@ class WatchlistEditor {
 			. Xml::check( 'titles[]', false, array( 'value' => $title->getPrefixedText() ) )
 			. $link . ' (' . implode( ' | ', $tools ) . ')' . '</li>';
 		}
-
+	
 	/**
 	 * Show a form for editing the watchlist in "raw" mode
 	 *
-	 * @param $output OutputPage
-	 * @param $user User
+	 * @param OutputPage $output
+	 * @param User $user
 	 */
 	public function showRawForm( $output, $user ) {
 		global $wgUser;
@@ -421,13 +421,13 @@ class WatchlistEditor {
 		$form .= '</fieldset></form>';
 		$output->addHtml( $form );
 	}
-
+	
 	/**
 	 * Determine whether we are editing the watchlist, and if so, what
 	 * kind of editing operation
 	 *
-	 * @param $request WebRequest
-	 * @param $par mixed
+	 * @param WebRequest $request
+	 * @param mixed $par
 	 * @return int
 	 */
 	public static function getMode( $request, $par ) {
@@ -443,12 +443,12 @@ class WatchlistEditor {
 				return false;
 		}
 	}
-
+	
 	/**
 	 * Build a set of links for convenient navigation
 	 * between watchlist viewing and editing modes
 	 *
-	 * @param $skin Skin to use
+	 * @param Skin $skin Skin to use
 	 * @return string
 	 */
 	public static function buildTools( $skin ) {
@@ -459,4 +459,5 @@ class WatchlistEditor {
 		}
 		return implode( ' | ', $tools );
 	}
+
 }

@@ -7,12 +7,11 @@
  */
  
 $wgExtensionCredits['specialpage'][] = array(
-	'name' => 'PreferencesExtension',
-	'svn-date' => '$LastChangedDate: 2008-06-16 20:23:24 +0000 (Mon, 16 Jun 2008) $',
-	'svn-revision' => '$LastChangedRevision: 36354 $',
-	'author' => 'Austin Che',
-	'url' => 'http://openwetware.org/wiki/User:Austin/Extensions/PreferencesExtension',
-	'description' => 'Enables extending user preferences',
+    'name' => 'PreferencesExtension',
+    'version' => '2006/11/16',
+    'author' => 'Austin Che',
+    'url' => 'http://openwetware.org/wiki/User:Austin/Extensions/PreferencesExtension',
+    'description' => 'Enables extending user preferences',
 );
 $wgHooks['SpecialPage_initList'][] = 'wfOverridePreferences';
  
@@ -38,6 +37,8 @@ function wfOverridePreferences(&$list)
  
 function wfSpecialPreferencesExtension()
 {
+    require_once('SpecialPreferences.php');
+ 
     // override the default preferences form
     class SpecialPreferencesExtension extends PreferencesForm
     {

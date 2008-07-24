@@ -8,18 +8,9 @@
 $messages = array();
 
 $messages['en'] = array(
-	'assert_edit_title'   => 'Assert failed',
-	'assert_edit_desc'    => 'Adds edit assertions for use by bots',
+	'assert_edit_title' => 'Assert failed',
+	'assert_edit_desc'  => 'Adds edit assertions for use by bots',
 	'assert_edit_message' => 'The specified assertion ($1) failed.',
-);
-
-/** Afrikaans (Afrikaans)
- * @author Naudefj
- */
-$messages['af'] = array(
-	'assert_edit_title'   => 'Bevestiging gefaal',
-	'assert_edit_desc'    => 'Maak rolbevestiging moontlik vir gebruik deur robotte',
-	'assert_edit_message' => 'Die gevraagde bevestiging ($1) het gefaal.',
 );
 
 /** Aragonese (Aragonés)
@@ -49,33 +40,6 @@ $messages['ast'] = array(
 	'assert_edit_message' => "Falló l'afirmación especificada ($1).",
 );
 
-/** Southern Balochi (بلوچی مکرانی)
- * @author Mostafadaneshvar
- */
-$messages['bcc'] = array(
-	'assert_edit_title'   => 'اعلان پروشت',
-	'assert_edit_desc'    => 'هور کتن اعلانات اصلاح په استفاده په روباتان',
-	'assert_edit_message' => 'مشخص بوتگین اعلان ($1) پروش وارت',
-);
-
-/** Belarusian (Taraškievica orthography) (Беларуская (тарашкевіца))
- * @author EugeneZelenko
- */
-$messages['be-tarask'] = array(
-	'assert_edit_title'   => 'Зацьверджаньне не атрымалася',
-	'assert_edit_desc'    => 'Дадае зацьверджаньні рэдагаваньняў для выкарыстаньня робатамі',
-	'assert_edit_message' => 'Вызначанае зацьверджаньне ($1) не атрымалася.',
-);
-
-/** Bulgarian (Български)
- * @author Borislav
- */
-$messages['bg'] = array(
-	'assert_edit_title'   => 'Твърдението не е изпълнено',
-	'assert_edit_desc'    => 'Добавя редакционни твърдения за използване от ботове',
-	'assert_edit_message' => 'Зададеното твърдение ($1) не е изпълнено.',
-);
-
 /** Bengali (বাংলা)
  * @author Zaheen
  */
@@ -91,7 +55,7 @@ $messages['bn'] = array(
 $messages['br'] = array(
 	'assert_edit_title'   => "C'hwitet eo an enframmañ",
 	'assert_edit_desc'    => 'Ouzhpennañ a ra degasadennoù enframmañ da vezañ implijet gant botoù',
-	'assert_edit_message' => "C'hwitet eo an enframmadenn ($1) goulennet.",
+	'assert_edit_message' => "C'hwitet eo an enframmadenn goulennet.",
 );
 
 /** Czech (Česky)
@@ -101,13 +65,6 @@ $messages['cs'] = array(
 	'assert_edit_title'   => 'Předpoklad selhal',
 	'assert_edit_desc'    => 'Přidává předpoklady pro úpravy, které využijí boti',
 	'assert_edit_message' => 'Uvedený předpoklad ($1) selhal.',
-);
-
-/** Danish (Dansk)
- * @author Jan Friberg
- */
-$messages['da'] = array(
-	'assert_edit_title' => 'Forsikring mislykkedes',
 );
 
 /** German (Deutsch)
@@ -124,36 +81,24 @@ $messages['de'] = array(
  */
 $messages['dsb'] = array(
 	'assert_edit_title'   => 'Wótpšašanje wuměnjenja jo se njeraźiło.',
-	'assert_edit_desc'    => 'Pśidawa wobźěłańske twarźenja za wužywanje pśez boty',
 	'assert_edit_message' => 'Pódane twarźenje ($1) jo se njeraźiło.',
-);
-
-/** Greek (Ελληνικά)
- * @author Badseed
- * @author ZaDiak
- */
-$messages['el'] = array(
-	'assert_edit_title'   => 'Η διεκδίκηση απέτυχε',
-	'assert_edit_desc'    => 'Προσθέτει επιβεβαιώσεις επεξεργασιών για χρήση από τα μποτ',
-	'assert_edit_message' => 'Η συγκεκριμένη επιβεβαίωση ($1) απέτυχε.',
 );
 
 /** Esperanto (Esperanto)
  * @author Yekrats
  */
 $messages['eo'] = array(
-	'assert_edit_title'   => 'Aserto malsukcesis',
-	'assert_edit_desc'    => 'Aldonas redaktajn asertojn por uzo de robotoj',
-	'assert_edit_message' => 'La specifigita aserto ($1) malsukcesis.',
+	'assert_edit_title' => 'Aserto malsukcesis',
 );
 
-/** Persian (فارسی)
+/** فارسی (فارسی)
  * @author Huji
  */
 $messages['fa'] = array(
 	'assert_edit_title'   => 'تایید ناموفق',
 	'assert_edit_desc'    => 'امکان تایید ویرایش‌ها را برای استفاده ربات‌ها اضافه می‌کند',
 	'assert_edit_message' => 'تایید مورد نظر ($1) ناموفق بود.',
+
 );
 
 /** Finnish (Suomi)
@@ -192,24 +137,6 @@ $messages['gl'] = array(
 	'assert_edit_message' => 'A afirmación especificada ($1) fracasou.',
 );
 
-/** Hebrew (עברית)
- * @author Rotem Liss
- */
-$messages['he'] = array(
-	'assert_edit_title'   => 'הבדיקה נכשלה',
-	'assert_edit_desc'    => 'הוספת בדיקות בעת העריכה, לשימוש הבוטים',
-	'assert_edit_message' => 'הבדיקה שצוינה ($1) נכשלה.',
-);
-
-/** Hindi (हिन्दी)
- * @author Kaustubh
- */
-$messages['hi'] = array(
-	'assert_edit_title'   => 'ऍसर्ट जमा नहीं',
-	'assert_edit_desc'    => 'बोटोंके इस्तेमाल के लिये संपादन ऍसर्शन बढ़ायें',
-	'assert_edit_message' => 'बताया हुआ ऍसर्शन ($1) हो नहीं पाया।',
-);
-
 /** Croatian (Hrvatski)
  * @author SpeedyGonsales
  */
@@ -232,35 +159,15 @@ $messages['hsb'] = array(
  */
 $messages['ht'] = array(
 	'assert_edit_title'   => 'Sa ou ta renmen ajoute a pa fèt',
-	'assert_edit_desc'    => 'Ajoute tout edisyon ki te rantre pou wobo yo kapab itilize',
 	'assert_edit_message' => 'Sa ou ta renmen ajoute a ($1) pa fèt.',
 );
 
 /** Hungarian (Magyar)
- * @author Dani
+ * @author Bdanee
  */
 $messages['hu'] = array(
 	'assert_edit_title'   => 'Az előfeltételezés hamis',
-	'assert_edit_desc'    => 'Szerkesztési előfeltételezések botok számára',
 	'assert_edit_message' => 'Az előfeltételezés ($1) hamis értéket adott vissza.',
-);
-
-/** Interlingua (Interlingua)
- * @author McDutchie
- */
-$messages['ia'] = array(
-	'assert_edit_title'   => 'Assertion fallite',
-	'assert_edit_desc'    => 'Adde assertiones de modification pro uso per bots',
-	'assert_edit_message' => 'Le assertion specificate ($1) falleva.',
-);
-
-/** Indonesian (Bahasa Indonesia)
- * @author IvanLanin
- */
-$messages['id'] = array(
-	'assert_edit_title'   => 'Penegasan gagal',
-	'assert_edit_desc'    => 'Menambahkan penegasan suntingan untuk digunakan oleh bot',
-	'assert_edit_message' => 'Penegasan yang dimaksud ($1) gagal.',
 );
 
 /** Italian (Italiano)
@@ -281,24 +188,6 @@ $messages['ja'] = array(
 	'assert_edit_message' => 'アサーション ($1) に失敗しました。',
 );
 
-/** Jutish (Jysk)
- * @author Huslåke
- */
-$messages['jut'] = array(
-	'assert_edit_title'   => 'Assert failed',
-	'assert_edit_desc'    => 'Adds edit assertions for use by bots',
-	'assert_edit_message' => 'Æ spesifisæren assersje ($1) førgeng.',
-);
-
-/** Javanese (Basa Jawa)
- * @author Meursault2004
- */
-$messages['jv'] = array(
-	'assert_edit_title'   => 'Pandhedhesan gagal',
-	'assert_edit_desc'    => 'Nambahaké pandhedhesan suntingan kanggo digunakaké déning bot',
-	'assert_edit_message' => 'Pandhedhesan sing dikarepaké ($1) gagal.',
-);
-
 /** Kazakh (Arabic script) (‫قازاقشا (تٴوتە)‬) */
 $messages['kk-arab'] = array(
 	'assert_edit_title'   => 'ماقۇلداۋ سٵتسٸز',
@@ -315,24 +204,6 @@ $messages['kk-cyrl'] = array(
 $messages['kk-latn'] = array(
 	'assert_edit_title'   => 'Maquldaw sätsiz',
 	'assert_edit_message' => 'Engizilgen maquldaw ($1) sätsiz.',
-);
-
-/** Ripoarisch (Ripoarisch)
- * @author Purodha
- */
-$messages['ksh'] = array(
-	'assert_edit_title'   => 'Secherheits-Aansproch nit bestätesch',
-	'assert_edit_desc'    => 'Deit Secherheits-Aanspröch för Bot-Projramme em Wiki dobei',
-	'assert_edit_message' => 'De jewönschte Secherheits-Aansproch, $1, kunnt nit bestätesch wääde.',
-);
-
-/** Luxembourgish (Lëtzebuergesch)
- * @author Robby
- */
-$messages['lb'] = array(
-	'assert_edit_title'   => 'Feeler beim derbäisetzen',
-	'assert_edit_desc'    => "Setzt Ännerungen derbäi fir d'Benotzung vu Botten",
-	'assert_edit_message' => 'Déi uginn Derbäisetzung ($1) huet net fonctionnéiert.',
 );
 
 /** Limburgish (Limburgs)
@@ -353,24 +224,6 @@ $messages['ml'] = array(
 	'assert_edit_message' => 'പ്രതിപാദ്യ ഉറപ്പുവരുത്തല്‍ ശ്രമം ($1) പരാജയപ്പെട്ടു.',
 );
 
-/** Marathi (मराठी)
- * @author Kaustubh
- */
-$messages['mr'] = array(
-	'assert_edit_title'   => 'ऍसर्ट जमले नाही',
-	'assert_edit_desc'    => 'सांगकाम्यांच्या वापरासाठी संपादन ऍसर्शन वाढवा',
-	'assert_edit_message' => 'सांगितलेले ऍसर्शन ($1) झालेले नाही.',
-);
-
-/** Malay (Bahasa Melayu)
- * @author Aviator
- */
-$messages['ms'] = array(
-	'assert_edit_title'   => 'Penegasan gagal',
-	'assert_edit_desc'    => 'Menambahkan penegasan suntingan untuk digunakan oleh bot',
-	'assert_edit_message' => 'Penegasan yang dinyatakan ($1) gagal.',
-);
-
 /** Dutch (Nederlands)
  * @author Siebrand
  */
@@ -380,7 +233,7 @@ $messages['nl'] = array(
 	'assert_edit_message' => 'De gevraagde bevestiging ($1) faalde.',
 );
 
-/** Norwegian (bokmål)‬ (‪Norsk (bokmål)‬)
+/** Norwegian (‪Norsk (bokmål)‬)
  * @author Jon Harald Søby
  */
 $messages['no'] = array(
@@ -394,7 +247,7 @@ $messages['no'] = array(
  */
 $messages['oc'] = array(
 	'assert_edit_title'   => "L'insercion a pas capitat",
-	'assert_edit_desc'    => "Apondís d'edicions d’insercion per l’utilizacion per de bòts",
+	'assert_edit_desc'    => "Ajusta d'edicions d’insercion per l’utilizacion per de bòts",
 	'assert_edit_message' => "L'insercion indicada ($1) a pas capitat.",
 );
 
@@ -425,7 +278,7 @@ $messages['qu'] = array(
 );
 
 /** Russian (Русский)
- * @author Александр Сигачёв
+ * @author .:Ajvol:.
  */
 $messages['ru'] = array(
 	'assert_edit_title'   => 'Утверждение не выполняется',
@@ -478,32 +331,13 @@ $messages['te'] = array(
 	'assert_edit_message' => 'ఉటంకింపు ($1) విఫలమైంది.',
 );
 
-/** Tajik (Cyrillic) (Тоҷикӣ/tojikī (Cyrillic))
+/** Tajik (Тоҷикӣ)
  * @author Ibrahim
  */
-$messages['tg-cyrl'] = array(
+$messages['tg'] = array(
 	'assert_edit_title'   => 'Таъйид номуваффақ шуд',
 	'assert_edit_desc'    => 'Имкони таъйиди вироишҳоро барои истифодаи роботҳо илова мекунад',
 	'assert_edit_message' => 'Таъйиди мавриди назар ($1) номувофиқ буд.',
-);
-
-/** Ukrainian (Українська)
- * @author Ahonc
- * @author AS
- */
-$messages['uk'] = array(
-	'assert_edit_title'   => 'Твердження не виконується',
-	'assert_edit_desc'    => 'Додає підтвердження для використання ботами',
-	'assert_edit_message' => 'Зазначене твердження ($1) не виконується.',
-);
-
-/** Vèneto (Vèneto)
- * @author Candalua
- */
-$messages['vec'] = array(
-	'assert_edit_title'   => 'Asserzion mìa riussìa',
-	'assert_edit_desc'    => 'Zonta asserzion de modifica ad uso dei bot',
-	'assert_edit_message' => "L'asserzion indicà ($1) no la xe riussìa.",
 );
 
 /** Vietnamese (Tiếng Việt)
@@ -511,7 +345,6 @@ $messages['vec'] = array(
  */
 $messages['vi'] = array(
 	'assert_edit_title'   => 'Xác nhận thất bại',
-	'assert_edit_desc'    => 'Thêm xác nhận sửa đổi để bot sử dụng',
 	'assert_edit_message' => 'Xác nhận được chỉ định ($1) đã thất bại.',
 );
 
@@ -528,17 +361,7 @@ $messages['vo'] = array(
  */
 $messages['yue'] = array(
 	'assert_edit_title'   => '維護失敗',
-	'assert_edit_desc'    => '為機械人嘅編輯加入斷言',
 	'assert_edit_message' => '所指定嘅斷言 ($1) 失敗。',
-);
-
-/** Zeeuws (Zeêuws)
- * @author NJ
- */
-$messages['zea'] = array(
-	'assert_edit_title'   => 'Bevestigieng mislukt',
-	'assert_edit_desc'    => 'Mik rolbevestigiengen meuhlijk voe gebruuk deur bots',
-	'assert_edit_message' => 'De gevraegde bevestigieng ($1) is mislukt.',
 );
 
 /** Simplified Chinese (‪中文(简体)‬)
@@ -546,7 +369,6 @@ $messages['zea'] = array(
  */
 $messages['zh-hans'] = array(
 	'assert_edit_title'   => '维护失败',
-	'assert_edit_desc'    => '为机器人的编辑添加声明',
 	'assert_edit_message' => '所指定的断言 ($1) 失败。',
 );
 
@@ -555,7 +377,6 @@ $messages['zh-hans'] = array(
  */
 $messages['zh-hant'] = array(
 	'assert_edit_title'   => '維護失敗',
-	'assert_edit_desc'    => '為機器人的編輯增加聲明',
 	'assert_edit_message' => '所指定的斷言 ($1) 失敗。',
 );
 

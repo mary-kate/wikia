@@ -22,7 +22,6 @@ $wgExtensionCredits['specialpage'][] = array(
 
 $dir = dirname(__FILE__) . '/';
 $wgExtensionMessagesFiles['Eval'] = $dir . 'SpecialEval.i18n.php';
-$wgExtensionAliasesFiles['Eval'] = $dir . 'SpecialEval.alias.php';
 
 function wfSpecialEval() {
 	wfUsePHP( 5.0 );
@@ -74,27 +73,25 @@ function wfSpecialEval() {
 			global $wgOut, $wgTitle;
 
 			$wgOut->addHTML(
-				Xml::openElement( 'form',
+				wfElement( 'form',
 					array(
 						'id' => 'specialeval',
 						'method' => 'get',
 						'action' => $wgTitle->escapeLocalUrl()
-					)
+					),
+					null
 				) .
-					# Gotta use open and close here to
-					# avoid <textarea /> which breaks
-					Xml::openElement( 'textarea',
+					wfElement( 'textarea',
 						array(
 							'cols' => 40,
 							'rows' => 10,
 							'name' => 'code',
-						)
+						),
+						$this->mCode
 					) .
-					$this->mCode . 
-					Xml::closeElement( 'textarea' ) .
 					' ' .
-					Xml::element( 'br', null, '' ) .
-					Xml::element( 'input',
+					wfElement( 'br', null, '' ) .
+					wfElement( 'input',
 						array(
 							'type' => 'checkbox',
 							'name' => 'escape',
@@ -102,21 +99,21 @@ function wfSpecialEval() {
 						) + ( $this->mEscape ? array( 'checked' => 'checked' ) : array() ),
 						''
 					) .
-					Xml::element( 'label',
+					wfElement( 'label',
 						array(
 							'for' => 'escape'
 						),
 						wfMsg( 'eval_escape' )
 					) .
-					Xml::element( 'br', null, '' ) .
-					Xml::element( 'input',
+					wfElement( 'br', null, '' ) .
+					wfElement( 'input',
 						array(
 							'type' => 'submit',
 							'value' => wfMsg( 'eval_submit' )
 						),
 						''
 					) .
-					Xml::element('input',
+					wfElement('input',
 						array(
 							'type' => 'hidden',
 							'name' => 'title',
@@ -124,7 +121,7 @@ function wfSpecialEval() {
 						),
 						''
 					) .
-				Xml::closeElement( 'form' )
+				wfCloseElement( 'form' )
 			);
 		}
 
@@ -155,7 +152,7 @@ function wfSpecialEval() {
 
 			if ( $this->mErr !== '' ) {
 				$this->mErr =  preg_replace( '/^<br \/>/', '', $this->mErr );
-				$wgOut->addHTML( Xml::element( 'h2', null, wfMsg( 'eval_out' ) ) );
+				$wgOut->addHTML( wfElement( 'h2', null, wfMsg( 'eval_out' ) ) );
 				if ( $this->mEscape )
 					$this->mErr =
 						wfOpenElement( 'pre' ) .
@@ -176,7 +173,7 @@ function wfSpecialEval() {
 			$geshi->set_header_type( GESHI_HEADER_DIV );
 
 			$wgOut->addHTML(
-				Xml::element( 'h2', null, wfMsg( 'eval_code' ) ) .
+				wfElement( 'h2', null, wfMsg( 'eval_code' ) ) .
 				$geshi->parse_code()
 			);
 		}

@@ -1,8 +1,7 @@
 <?php
-/**
- *
- * @ingroup Language
- * @file
- */
+/** 
+  *
+  * @addtogroup Language
+  */
 
 $rtl = true;

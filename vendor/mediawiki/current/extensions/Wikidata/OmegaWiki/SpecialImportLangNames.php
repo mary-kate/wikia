@@ -2,8 +2,8 @@
 	if (!defined('MEDIAWIKI')) die();
 
 	require_once("Wikidata.php");
-	$wgGroupPermissions['bureaucrat']['languagenames'] = true;
 	$wgAvailableRights[] = 'languagenames';
+	$wgGroupPermissions['bureaucrat']['languagenames'] = true;
 
 	$wgExtensionFunctions[] = 'wfSpecialImportLangNames';
 	function wfSpecialImportLangNames() {

@@ -1,28 +1,27 @@
 <?php
 
 class SpecialCentralAuth extends SpecialPage {
-
+	
 	function __construct() {
-		wfLoadExtensionMessages('SpecialCentralAuth');
-		parent::__construct( 'CentralAuth', 'centralauth-admin' );
+		parent::__construct( 'CentralAuth', 'CentralAuth' );
 	}
 
 	function execute( $subpage ) {
 		global $wgOut, $wgRequest, $wgUser;
 		$this->setHeaders();
-
+		
 		if( !$wgUser->isLoggedIn() ) {
 			$wgOut->addWikiText(
 				wfMsg( 'centralauth-merge-notlogged' ) .
 				"\n\n" .
 				wfMsg( 'centralauth-readmore-text' ) );
-
+			
 			return;
 		}
-
+		
 		global $wgUser, $wgRequest;
 		$this->mUserName = $wgUser->getName();
-
+		
 		if( !$wgUser->isAllowed( 'centralauth-admin' ) ) {
 			$wgOut->addWikiText(
 				wfMsg( 'centralauth-admin-permission' ) .
@@ -31,166 +30,59 @@ class SpecialCentralAuth extends SpecialPage {
 			return;
 		}
 
-		$this->mUserName =
-			trim(
-				str_replace( '_', ' ',
-					$wgRequest->getText( 'target', $subpage ) ) );
-
-		$this->mPosted = $wgRequest->wasPosted();
+		$this->mUserName = $wgRequest->getText( 'target', $subpage );
+		
+		$this->mAttemptMerge = $wgRequest->wasPosted();
 		$this->mMethod = $wgRequest->getVal( 'wpMethod' );
 		$this->mPassword = $wgRequest->getVal( 'wpPassword' );
-		$this->mWikis = (array)$wgRequest->getArray( 'wpWikis' );
-
+		$this->mDatabases = (array)$wgRequest->getArray( 'wpWikis' );
+		
 		// Possible demo states
-
+		
 		// success, all accounts merged
 		// successful login, some accounts merged, others left
 		// successful login, others left
 		// not account owner, others left
-
+		
 		// is owner / is not owner
 		// did / did not merge some accounts
 		// do / don't have more accounts to merge
-
-		if ( $this->mUserName === '' ) {
-			# First time through
-			$this->showUsernameForm();
-			return;
-		}
-
+		
 		$globalUser = new CentralAuthUser( $this->mUserName );
-
-		if ( !$globalUser->exists() ) {
-			$this->showError( 'centralauth-admin-nonexistent', $this->mUserName );
-			$this->showUsernameForm();
-			return;
-		}
-
-		$deleted = $locked = $unlocked = $hidden = $unhidden = false;
-
-		if( $this->mPosted ) {
-			if ( !$wgUser->matchEditToken( $wgRequest->getVal( 'wpEditToken' ) ) ) {
-				$this->showError( 'centralauth-token-mismatch' );
-			} elseif( $this->mMethod == 'unmerge' ) {
-				$status = $globalUser->adminUnattach( $this->mWikis );
-				if ( !$status->isGood() ) {
-					$this->showStatusError( $status->getWikiText() );
-				} else {
-					global $wgLang;
-					$this->showSuccess( 'centralauth-admin-unmerge-success',
-						$wgLang->formatNum( $status->successCount ),
-						/* deprecated */ $status->successCount );
-				}
-			} elseif ( $this->mMethod == 'delete' ) {
-				$status = $globalUser->adminDelete();
-				if ( !$status->isGood() ) {
-					$this->showStatusError( $status->getWikiText() );
-				} else {
-					global $wgLang;
-					$this->showSuccess( 'centralauth-admin-delete-success', $this->mUserName );
-					$deleted = true;
-					$this->logAction( 'delete', $this->mUserName, $wgRequest->getVal( 'reason' ) );
-				}
-			} elseif( $this->mMethod == 'lock' ) {
-				$status = $globalUser->adminLock();
-				if ( !$status->isGood() ) {
-					$this->showStatusError( $status->getWikiText() );
-				} else {
-					global $wgLang;
-					$this->showSuccess( 'centralauth-admin-lock-success', $this->mUserName );
-					$locked = true;
-					$this->logAction( 'lock', $this->mUserName, $wgRequest->getVal( 'reason' ) );
-				}
-			} elseif( $this->mMethod == 'unlock' ) {
-				$status = $globalUser->adminUnlock();
-				if ( !$status->isGood() ) {
-					$this->showStatusError( $status->getWikiText() );
-				} else {
-					global $wgLang;
-					$this->showSuccess( 'centralauth-admin-unlock-success', $this->mUserName );
-					$unlocked = true;
-					$this->logAction( 'unlock', $this->mUserName, $wgRequest->getVal( 'reason' ) );
-				}
-			} elseif( $this->mMethod == 'hide' ) {
-				$status = $globalUser->adminHide();
-				if ( !$status->isGood() ) {
-					$this->showStatusError( $status->getWikiText() );
-				} else {
-					global $wgLang;
-					$this->showSuccess( 'centralauth-admin-hide-success', $this->mUserName );
-					$hidden = true;
-					$this->logAction( 'hide', $this->mUserName, $wgRequest->getVal( 'reason' ) );
-				}
-			} elseif( $this->mMethod == 'unhide' ) {
-				$status = $globalUser->adminUnhide();
-				if ( !$status->isGood() ) {
-					$this->showStatusError( $status->getWikiText() );
-				} else {
-					global $wgLang;
-					$this->showSuccess( 'centralauth-admin-unhide-success', $this->mUserName );
-					$unhidden = true;
-					$this->logAction( 'unhide', $this->mUserName, $wgRequest->getVal( 'reason' ) );
-				}
-			} elseif ( $this->mMethod == 'lockandhide' ) {
-				$hStatus = $globalUser->adminHide();
-				if ( !$hStatus->isGood() ) {
-					$this->showStatusError( $status->getWikiText() );
-				}
-				$lStatus = $globalUser->adminLock();
-				if ( !$lStatus->isGood() ) {
-					$this->showStatusError( $status->getWikiText() );
-				} elseif ($hStatus->isGood()) {
-					global $wgLang;
-					$this->showSuccess( 'centralauth-admin-lockandhide-success', $this->mUserName );
-					$unhidden = true;
-					$this->logAction( 'lockandhid', $this->mUserName, $wgRequest->getVal( 'reason' ) );
-				}
-			} else {
-				$this->showError( 'centralauth-admin-bad-input' );
-			}
-
-		}
-
+		$merged = $remainder = array();
 		$this->showUsernameForm();
-		if ( !$deleted ) {
-			$this->showInfo();
-			$this->showActionForm( 'delete' );
-			if( !$globalUser->isLocked() && !$locked )
-				$this->showActionForm( 'lock' );
-			if( $globalUser->isLocked() && !$unlocked )
-				$this->showActionForm( 'unlock' );
-			if( !$globalUser->isHidden() && !$hidden ) {
-				$this->showActionForm( 'hide' );
-			}
-			if( $globalUser->isHidden() && !$unhidden ) {
-				$this->showActionForm( 'unhide' );
+		
+		if( $this->mAttemptMerge ) {
+			if( empty( $this->mDatabases ) ) {
+				$this->showError( wfMsg( 'centralauth-admin-none-selected' ) );
+			} elseif( $this->mMethod == 'admin' ) {
+				$ok = $globalUser->adminAttach(
+					$this->mDatabases,
+					$merged,
+					$remainder );
+			} elseif( $this->mMethod == 'unmerge' ) {
+				$ok = $globalUser->adminUnattach(
+					$this->mDatabases,
+					$merged,
+					$remainder );
+			} else {
+				$this->showError( wfMsg( 'centralauth-admin-bad-input' ) );
 			}
 			
-			if ( !$globalUser->isHidden() && !$globalUser->isLocked() ) {
-				$this->showActionForm( 'lockandhide' );
-			}
+			// if (! $ok) { ....
+		} else {
+			$merged = $globalUser->listAttached();
+			$remainder = $globalUser->listUnattached();
 		}
+		
+		$this->showInfo();
 	}
-
-	function showStatusError( $wikitext ) {
+	
+	function showError( $message ) {
 		global $wgOut;
-		$wrap = Xml::tags( 'div', array( 'class' => 'error' ), $s );
-		$wgOut->addHTML( $wgOut->parse( $wrap, /*linestart*/true, /*uilang*/true ) );
+		$wgOut->addWikiText( "<div class='error'>$message</div>" );
 	}
-
-	function showError( /* varargs */ ) {
-		global $wgOut;
-		$args = func_get_args();
-		$wgOut->wrapWikiMsg( '<div class="error">$1</div>', $args );
-	}
-
-
-	function showSuccess( /* varargs */ ) {
-		global $wgOut;
-		$args = func_get_args();
-		$wgOut->wrapWikiMsg( '<div class="success">$1</div>', $args );
-	}
-
+	
 	function showUsernameForm() {
 		global $wgOut, $wgScript;
 		$wgOut->addHtml(
@@ -211,7 +103,7 @@ class SpecialCentralAuth extends SpecialPage {
 			'</form>'
 		);
 	}
-
+	
 	function prettyTimespan( $span ) {
 		$units = array(
 			'seconds' => 60,
@@ -222,47 +114,48 @@ class SpecialCentralAuth extends SpecialPage {
 			'years' => 1 );
 		foreach( $units as $unit => $chunk ) {
 			if( $span < 2*$chunk ) {
-				return wfMsgExt( "centralauth-$unit-ago", 'parsemag', $span );
+				return "$span $unit";
 			}
 			$span = intval( $span / $chunk );
 		}
-		return wfMsgExt( "centralauth-$unit-ago", 'parsemag', $span );
+		return "$span $unit";
 	}
-
+	
+	
 	function showInfo() {
 		$globalUser = new CentralAuthUser( $this->mUserName );
-
+		
 		$id = $globalUser->exists() ? $globalUser->getId() : "unified account not registered";
 		$merged = $globalUser->queryAttached();
 		$remainder = $globalUser->queryUnattached();
-
+		
 		global $wgOut, $wgLang;
 		if( $globalUser->exists() ) {
 			$reg = $globalUser->getRegistration();
 			$age = $this->prettyTimespan( wfTimestamp( TS_UNIX ) - wfTimestamp( TS_UNIX, $reg ) );
 			$attribs = array(
-				'id' => $globalUser->getId(),
-				'registered' => $wgLang->timeanddate( $reg ) . " ($age)",
-				'locked' => $globalUser->isLocked() ? wfMsg( 'centralauth-admin-yes' ) : wfMsg( 'centralauth-admin-no' ),
-				'hidden' => $globalUser->isHidden() ? wfMsg( 'centralauth-admin-yes' ) : wfMsg( 'centralauth-admin-no' ) );
+				'User id:' => $globalUser->getId(),
+				'Registered:' => $wgLang->timeanddate( $reg ) . " ($age ago)",
+				'Locked:' => $globalUser->isLocked() ? 'yes' : 'no',
+				'Hidden:' => $globalUser->isHidden() ? 'yes' : 'no' );
 			$out = '<ul>';
 			foreach( $attribs as $tag => $data ) {
-				$out .= Xml::element( 'li', array(), wfMsg( "centralauth-admin-info-$tag" ) . ' ' . $data );
+				$out .= Xml::element( 'li', array(), $tag . ' ' . $data );
 			}
 			$out .= '</ul>';
 			$wgOut->addHtml( $out );
-
-			$wgOut->addWikiText( '<h2>' . wfMsg( 'centralauth-admin-attached' ) . '</h2>' );
+			
+			$wgOut->addWikiText( "<h2>Fully merged accounts</h2>" );
 			$wgOut->addHtml( $this->listMerged( $merged ) );
-
-			$wgOut->addWikiText( '<h2>' . wfMsg( 'centralauth-admin-unattached' ) . '</h2>' );
+		
+			$wgOut->addWikiText( "<h2>Unattached accounts</h2>" );
 			if( $remainder ) {
 				$wgOut->addHtml( $this->listRemainder( $remainder ) );
 			} else {
-				$wgOut->addWikiText( wfMsg( 'centralauth-admin-no-unattached' ) );
+				$wgOut->addWikiText( 'No unmerged accounts remain.' );
 			}
 		} else {
-			$wgOut->addWikiText( wfMsg( 'centralauth-admin-no-unified' ) );
+			$wgOut->addWikiText( "No unified account for this username." );
 		}
 	}
 
@@ -270,19 +163,13 @@ class SpecialCentralAuth extends SpecialPage {
 		return $this->listForm( $list, 'listMergedWikiItem',
 			'unmerge', wfMsg( 'centralauth-admin-unmerge' ) );
 	}
-
+	
 	function listRemainder( $list ) {
-		ksort( $list );
-		$s = '<ul>';
-		foreach ( $list as $row ) {
-			$s .= '<li>' . $this->foreignUserLink( $row['wiki'] ) . "</li>\n";
-		}
-		$s .= '</ul>';
-		return $s;
+		return $this->listForm( $list, 'listRemainingWikiItem',
+		 	'admin', wfMsg( 'centralauth-admin-merge' ) );
 	}
-
+	
 	function listForm( $list, $listMethod, $action, $buttonText ) {
-		global $wgUser;
 		ksort( $list );
 		return
 			Xml::openElement( 'form',
@@ -290,11 +177,10 @@ class SpecialCentralAuth extends SpecialPage {
 					'method' => 'post',
 					'action' => $this->getTitle( $this->mUserName )->getLocalUrl( 'action=submit' ) ) ) .
 			Xml::hidden( 'wpMethod', $action ) .
-			Xml::hidden( 'wpEditToken', $wgUser->editToken() ) .
 			'<table>' .
 			'<thead>' .
 			$this->tableRow( 'th',
-				array( '', wfMsgHtml( 'centralauth-admin-list-localwiki' ), wfMsgHtml( 'centralauth-admin-list-attached-on' ), wfMsgHtml( 'centralauth-admin-list-method' ) ) ) .
+				array( '', 'Local wiki', 'Attached on', 'Method' ) ) .
 			'</thead>' .
 			'<tbody>' .
 			implode( "\n",
@@ -310,31 +196,41 @@ class SpecialCentralAuth extends SpecialPage {
 			'</table>' .
 			Xml::closeElement( 'form' );
 	}
-
+	
 	function listMergedWikiItem( $row ) {
 		global $wgLang;
 		return $this->tableRow( 'td',
 			array(
-				$this->adminCheck( $row['wiki'] ),
-				$this->foreignUserLink( $row['wiki'] ),
+				$this->adminCheck( $row['dbName'] ),
+				$this->foreignUserLink( $row['dbName'] ),
 				htmlspecialchars( $wgLang->timeanddate( $row['attachedTimestamp'] ) ),
-				htmlspecialchars( wfMsg( 'centralauth-merge-method-' . $row['attachedMethod'] ) ),
+				htmlspecialchars( $row['attachedMethod'] ),
 			)
 		);
 	}
-
+	
+	function listRemainingWikiItem( $row ) {
+		global $wgLang;
+		return $this->tableRow( 'td',
+			array(
+				$this->adminCheck( $row['dbName'] ),
+				$this->foreignUserLink( $row['dbName'] ),
+			)
+		);
+	}
+	
 	function tableRow( $element, $cols ) {
 		return "<tr><$element>" .
 			implode( "</$element><$element>", $cols ) .
 			"</$element></tr>";
 	}
-
-	function foreignUserLink( $wikiID ) {
-		$wiki = WikiMap::getWiki( $wikiID );
+	
+	function foreignUserLink( $dbname ) {
+		$wiki = WikiMap::byDatabase( $dbname );
 		if( !$wiki ) {
-			throw new MWException( "no wiki for $wikiID" );
+			throw new MWException( "no wiki for $dbname" );
 		}
-
+		
 		$hostname = $wiki->getDisplayName();
 		$userPageName = 'User:' . $this->mUserName;
 		$url = $wiki->getUrl( $userPageName );
@@ -347,34 +243,12 @@ class SpecialCentralAuth extends SpecialPage {
 			),
 			$hostname );
 	}
-
-	function adminCheck( $wikiID ) {
+	
+	function adminCheck( $dbname ) {
 		return
-			Xml::check( 'wpWikis[]', false, array( 'value' => $wikiID ) );
+			Xml::check( 'wpWikis[]', false, array( 'value' => $dbname ) );
 	}
-
-	function showActionForm( $action ) {
-		global $wgOut, $wgUser;
-		$wgOut->addHtml(
-			Xml::element( 'h2', array(), wfMsg( "centralauth-admin-{$action}-title" ) ) .
-			Xml::openElement( 'form', array(
-				'method' => 'POST',
-				'action' => $this->getTitle()->getFullUrl( 'target=' . urlencode( $this->mUserName ) ) ) ) .
-			Xml::hidden( 'wpMethod', $action ) .
-			Xml::hidden( 'wpEditToken', $wgUser->editToken() ) .
-			wfMsgExt( "centralauth-admin-{$action}-description", 'parse' ) .
-			'<p>' .
-			Xml::label( wfMsgHtml( 'centralauth-admin-reason' ), "{$action}-reason" ) . ' ' .
-			Xml::input( 'reason', false, false, array( 'id' => "{$action}-reason" ) ) .
-			'</p>' .
-			'<p>' .
-			Xml::submitButton( wfMsg( "centralauth-admin-{$action}-button" ) ) .
-			'</p>' .
-			'</form>' );
-	}
-
-	function logAction( $action, $target, $reason = '' ) {
-		$log = new LogPage( 'globalauth' );	//Not centralauth because of some weird length limitiations
-		$log->addEntry( $action, Title::newFromText( "User:{$target}@global" ), $reason );
-	}
+	
 }
+
+

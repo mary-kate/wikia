@@ -9,7 +9,6 @@ var vlcEmbed = {
 	//init vars: 
 	monitorTimerId : 0,
 	prevState : 0,
-	currentTime:0,
     userSlide:false,
     getEmbedHTML : function(){   
 		//setup the interface controls if requested		
@@ -151,9 +150,7 @@ var vlcEmbed = {
     	}
     	//do monitor update: 
 	    if( ! this.monitorTimerId ){
-	    	if(document.getElementById(this.id)){
-	        	this.monitorTimerId = setInterval('document.getElementById(\''+this.id+'\').monitor()', 250);
-	    	}
+	        this.monitorTimerId = setInterval('document.getElementById(\''+this.id+'\').monitor()', 250);
 	    }
     },
 /* events */
@@ -179,8 +176,7 @@ var vlcEmbed = {
     onPlaying : function(){ 
         this.mediaLen = this.vlc.input.length;        
        	//js_log('on playing:'+ this.mediaLen +' time:'+ this.vlc.input.time + ' p:'+this.vlc.input.position);
-       	//update the currentTime attribute 
-       	this.currentTime =this.vlc.input.time/1000;
+       	
         if( this.mediaLen > 0 || this.vlc.input.time > 0){                     
         	///set mediaLen via request Url 
 			if(this.mediaLen==0)      
@@ -220,13 +216,7 @@ var vlcEmbed = {
 		if(this.controls){
 		    this.setSliderValue(0);
 		    this.setStatus("-:--:--/-:--:--");
-		}
-		//stop updates: 
-		if( this.monitorTimerId != 0 )
-	    {
-	        clearInterval(this.monitorTimerId);
-	        this.monitorTimerId = 0;
-	    }
+		}		
 	    //document.getElementById("PlayOrPause").value = " Play ";
 	    //document.getElementById("PlayOrPause").disabled = false;
     },
@@ -268,18 +258,12 @@ var vlcEmbed = {
     fullscreen : function(){
 		this.vlc.video.toggleFullscreen();
     },
-    /* returns current time in float seconds 
-     * as per html5 we should just have an attribute by name of CurrentTime
-     * http://www.whatwg.org/specs/web-apps/current-work/#currenttime
-    currentTime : function(){
-		if(typeof this.vlc != 'undefined' ){
-			if(typeof this.vlc.input != 'undefined' ){
-				return this.vlc.input.time/1000;	
-			}
+    currentTime : function(seek_val){
+		//if we did not get a seek value then return the current time stamp: 
+		if(!seek_val){
+			return this.vlc.input.time;
 		}
-		return '0';
     },
-    */
     // get the embed vlc object 
     getVLC : function getVLC(){
     	this.vlc = this.getPluginEmbed();   		

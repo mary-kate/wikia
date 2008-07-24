@@ -68,10 +68,8 @@ class ImageMap {
 					return self::error( 'imagemap_no_image' );
 				}
 				$imageHTML = $parser->makeImage( $imageTitle, $options );
-				$parser->mOutput->addImage( $imageTitle->getDBkey() );
 
-				$domDoc = new DOMDocument();
-				$domDoc->loadXML( $imageHTML );
+				$domDoc = DOMDocument::loadXML( $imageHTML );
 				$xpath = new DOMXPath( $domDoc );
 				$imgs = $xpath->query( '//img' );
 				if ( !$imgs->length ) {
@@ -81,13 +79,8 @@ class ImageMap {
 				$thumbWidth = $imageNode->getAttribute('width');
 				$thumbHeight = $imageNode->getAttribute('height');
 
-				if( function_exists( 'wfFindFile' ) ) {
-					$imageObj = wfFindFile( $imageTitle );
-				} else {
-					// Old MW
-					$imageObj = Image::newFromTitle( $imageTitle );
-				}
-				if ( !$imageObj || !$imageObj->exists() ) {
+				$imageObj = Image::newFromTitle( $imageTitle );
+				if ( !$imageObj->exists() ) {
 					return self::error( 'imagemap_invalid_image' );
 				}
 				# Add the linear dimensions to avoid inaccuracy in the scale 
@@ -296,6 +289,7 @@ class ImageMap {
 		$output .= preg_replace( '/<\?xml[^?]*\?>/', '', $domDoc->saveXML() );
 
 		# Register links
+		$parser->mOutput->addImage( $imageTitle->getDBkey() );
 		foreach ( $links as $title ) {
 			if( $title->isExternal() || $title->getNamespace() == NS_SPECIAL ) {
 				// Don't register special or interwiki links...

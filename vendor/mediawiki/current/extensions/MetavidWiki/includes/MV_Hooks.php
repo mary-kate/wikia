@@ -82,7 +82,6 @@
 	*/
 	function mvDeleteHook(&$article, &$user, &$reason) {
 		global $mvgIP;
-		//print 'mvDeleteHook'."\n";
 		//only need to update the mvd index when in the mvd namespace: 
 		if($article->mTitle->getNamespace()==MV_NS_MVD){
 			//remove article with that title: 
@@ -134,10 +133,10 @@
 	 */
 	 function mvDoSpecialPage($wgOut){
 	 	global $wgTitle;	
-	 	//if special semantic browse page (moved to all pages)  
- 		//if($wgTitle->getNamespace()==NS_SPECIAL && $wgTitle->getText()=='Browse'){
- 		//	mvfAddHTMLHeader('smw_ext');
- 		//}
+	 	//if special semantic browse page: 
+ 		if($wgTitle->getNamespace()==NS_SPECIAL && $wgTitle->getText()=='Browse'){
+ 			mvfAddHTMLHeader('smw_ext');
+ 		}
 	 	return true;
 	 }
  	/*
@@ -214,10 +213,7 @@
 		return $MV_Overlay->get_edit_disp($titleKey, $mvd_id);
 	}
 	function mv_auto_complete_person($val=null){		
-		return MV_SpecialMediaSearch::auto_complete_person($val);
-	}
-	function mv_auto_complete_all($val=null){
-		return MV_SpecialMediaSearch::auto_complete_all($val);
+		return MV_Overlay::auto_complete_person($val);
 	}
 	function mv_auto_complete_stream_name($val=null){	
 		return 	MV_SequenceTools::auto_complete_stream_name($val);
@@ -236,12 +232,10 @@
 		}*/
 		if(!isset($_POST['do_adjust']))$_POST['do_adjust']=false;		
 		if($_POST['do_adjust']=='true'){
-			//first edit then move
-			$outputMVD = $MV_Overlay->do_edit_submit($_POST['title'], $_POST['mvd_id']);
+			$MV_Overlay->do_edit_submit($_POST['title'], $_POST['mvd_id']);
 			//clear the wgOut var: 
 			$wgOut->clearHTML();
-			//do move and display output page 			
-			return $MV_Overlay->do_adjust_submit($_POST['titleKey'], $_POST['mvd_id'], $_POST['newTitle'], $_POST['wgTitle'], $outputMVD);
+			return $MV_Overlay->do_adjust_submit($_POST['titleKey'], $_POST['mvd_id'], $_POST['newTitle'], $_POST['wgTitle']);				
 		}else{
 			return $MV_Overlay->do_edit_submit($_POST['title'], $_POST['mvd_id']);
 		}
@@ -257,12 +251,12 @@
 		$MV_Overlay = new MV_Overlay();				
 		return $MV_Overlay->get_adjust_disp($titleKey, $mvd_id);
 	}*/
-	/*function mv_adjust_submit(){
+	function mv_adjust_submit(){
 		$MV_Overlay = new MV_Overlay();		
 		if(!isset($_POST['titleKey']) || !isset($_POST['newTitle']))
 			return 'error: missing titleKey or newTitle';		
 		return $MV_Overlay->do_adjust_submit($_POST['titleKey'], $_POST['newTitle']);
-	}*/
+	}
 	function mv_seqtool_disp($tool_id){		
 		$MV_SequenceTools = new MV_SequenceTools();		
 		return $MV_SequenceTools->get_tool_html($tool_id);
@@ -300,8 +294,8 @@
 		}
 		
 		if($mvStream->db_load_stream()){			
-			global $mvServeImageRedirect, $mvExternalImages;
-			if($mvServeImageRedirect || $redirect_req || $mvExternalImages){
+			global $mvServeImageRedirect;
+			if($mvServeImageRedirect || $redirect_req){
 				header("Location:" . MV_StreamImage::getStreamImageURL($stream_id, $req_time, $req_size, true));
 			}else{								
 				//serve up the image directly

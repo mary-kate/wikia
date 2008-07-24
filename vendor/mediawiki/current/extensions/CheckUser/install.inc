@@ -15,8 +15,8 @@ function create_cu_changes( $db, $cutoff = null ) {
 	// Check if the table is empty
 	$rcRows = $db->selectField( 'recentchanges', 'COUNT(*)', false, __FUNCTION__ );
 	if ( !$rcRows ) {
-		echo "recentchanges is empty; nothing to add.\n";
-		return;
+		echo "recent_changes is empty; nothing to add.\n";
+		exit( 1 );
 	}
 	
 	if( $cutoff ) {
@@ -32,14 +32,11 @@ function create_cu_changes( $db, $cutoff = null ) {
 	
 	$start = $db->selectField( 'recentchanges', 'MIN(rc_id)', false, __FUNCTION__ );
 	$end = $db->selectField( 'recentchanges', 'MAX(rc_id)', false, __FUNCTION__ );
-	# Do remaining chunk
-	$end += BATCH_SIZE - 1;
 	$blockStart = $start;
 	$blockEnd = $start + BATCH_SIZE - 1;
 	
 	$db->begin();
 	while ( $blockStart <= $end ) {
-		echo "...doing rc_id from $blockStart to $blockEnd\n";
 		$cond = "rc_id BETWEEN $blockStart AND $blockEnd $cutoffCond";
 		$res = $db->select( 'recentchanges', '*', $cond, __FUNCTION__ );
 		$batch = array();
@@ -63,8 +60,8 @@ function create_cu_changes( $db, $cutoff = null ) {
 		if ( count( $batch ) ) {
 			$db->insert( 'cu_changes', $batch, __FUNCTION__ );
 		}
-		$blockStart += BATCH_SIZE - 1;
-		$blockEnd += BATCH_SIZE - 1;
+		$blockStart += BATCH_SIZE;
+		$blockEnd += BATCH_SIZE;
 		wfWaitForSlaves( 5 );
 	}
 	$db->commit();

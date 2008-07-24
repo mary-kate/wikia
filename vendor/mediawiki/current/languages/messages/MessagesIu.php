@@ -1,9 +1,10 @@
 <?php
 /** Inuktitut (ᐃᓄᒃᑎᑐᑦ/inuktitut)
  *
- * @ingroup Language
- * @file
+ * @addtogroup Language
  * @comment Macro language; kept for backward compatibility
+ *
  */
 
 $fallback = 'ike-cans';
+

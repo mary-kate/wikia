@@ -1,7 +1,13 @@
 <?php
 /**
- * Compress the text of a wiki.
+ * Compress the text of a wiki
  *
+ * @addtogroup Maintenance
+ */
+
+/** */
+
+/**
  * Usage:
  *
  * Non-wikimedia
@@ -22,8 +28,6 @@
  *  -h <threshold>      is a minimum number of KB, where <max-factor> cuts in
  *  --extdb <cluster>   store specified revisions in an external cluster (untested)
  *
- * @file
- * @ingroup Maintenance ExternalStorage
  */
 
 $optionsWithArgs = array( 't', 'c', 's', 'f', 'h', 'extdb', 'endid', 'e' );

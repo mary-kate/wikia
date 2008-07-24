@@ -1,10 +1,6 @@
 <?php
-/**
- * Optional upgrade script to populate the img_sha1 field
- *
- * @file
- * @ingroup MaintenanceArchive
- */
+
+# Optional upgrade script to populate the img_sha1 field
 
 $optionsWithArgs = array( 'method' );
 require_once( dirname(__FILE__).'/../commandLine.inc' );

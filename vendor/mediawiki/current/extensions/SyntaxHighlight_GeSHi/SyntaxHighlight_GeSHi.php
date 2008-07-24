@@ -43,9 +43,8 @@ if( !defined( 'MEDIAWIKI' ) )
 
 $wgExtensionCredits['parserhook']['SyntaxHighlight_GeSHi'] = array(
 	'name'           => 'SyntaxHighlight',
-	'svn-date' => '$LastChangedDate: 2008-07-10 12:45:20 +0000 (Thu, 10 Jul 2008) $',
-	'svn-revision' => '$LastChangedRevision: 37495 $',
-	'author'         => array( 'Brion Vibber', 'Tim Starling', 'Rob Church', 'Niklas Laxström' ),
+	'version'        => '2008-02-06',
+	'author'         => array( 'Brion Vibber', 'Tim Starling', 'Rob Church' ),
 	'description'    => 'Provides syntax highlighting using [http://qbnz.com/highlighter/ GeSHi Highlighter]',
 	'descriptionmsg' => 'syntaxhighlight-desc',
 	'url'            => 'http://www.mediawiki.org/wiki/Extension:SyntaxHighlight_GeSHi',
@@ -55,11 +54,7 @@ $dir = dirname(__FILE__) . '/';
 $wgExtensionMessagesFiles['SyntaxHighlight_GeSHi'] = $dir . 'SyntaxHighlight_GeSHi.i18n.php';
 $wgAutoloadClasses['SyntaxHighlight_GeSHi'] = $dir . 'SyntaxHighlight_GeSHi.class.php';
 $wgHooks['ShowRawCssJs'][] = 'SyntaxHighlight_GeSHi::viewHook';
-if ( defined( 'MW_SUPPORTS_PARSERFIRSTCALLINIT' ) ) {
-	$wgHooks['ParserFirstCallInit'][] = 'efSyntaxHighlight_GeSHiSetup';
-} else {
-	$wgExtensionFunctions[] = 'efSyntaxHighlight_GeSHiSetup';
-}
+$wgExtensionFunctions[] = 'efSyntaxHighlight_GeSHiSetup';
 
 /**
  * Register parser hook
@@ -67,5 +62,4 @@ if ( defined( 'MW_SUPPORTS_PARSERFIRSTCALLINIT' ) ) {
 function efSyntaxHighlight_GeSHiSetup() {
 	global $wgParser;
 	$wgParser->setHook( 'source', array( 'SyntaxHighlight_GeSHi', 'parserHook' ) );
-	return true;
 }

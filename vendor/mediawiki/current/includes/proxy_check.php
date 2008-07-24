@@ -50,3 +50,5 @@ if ( ( isset( $_REQUEST ) && array_key_exists( 'argv', $_REQUEST ) ) || count( $
 $output = escapeshellarg( $output );
 
 #`echo $output >> /home/tstarling/open/proxy.log`;
+
+

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-require 't/Test.php';
+require 'Test.php';
 
 plan( 2 + 255 );
 
@@ -30,3 +30,4 @@ foreach ( range( 1, 255 ) as $num ) {
 }
 
 /* vim: set filetype=php: */
+?>

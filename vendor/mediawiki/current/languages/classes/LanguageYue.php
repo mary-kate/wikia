@@ -1,7 +1,7 @@
 <?php
 /**
- * @ingroup Language
- */
+  * @addtogroup Language
+  */
 class LanguageYue extends Language {
 	function stripForSearch( $string ) {
 		# MySQL fulltext index doesn't grok utf-8, so we

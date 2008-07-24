@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * @ingroup Maintenance ExternalStorage
- */
 
 define( 'REPORTING_INTERVAL', 100 );
 

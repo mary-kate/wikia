@@ -2,16 +2,8 @@
  * The main CSS file for the Semantic Forms extension.
  */
 
-/* Override "width: 100%" setting in standard MediaWiki skins */
-textarea.createboxInput {
-	width: auto;
-}
-textarea.mandatoryField {
-	width: auto;
-}
-
 /* Used in 'create template' page */
-.fieldBox {
+.field_box {
         border: 1px black solid;
         background: #dddddd;
         padding: 10px 20px 10px 20px;
@@ -19,7 +11,7 @@ textarea.mandatoryField {
 }
 
 /* Used in 'create form' page */
-.templateForm {
+.template_form {
         border: 1px black solid;
         background: #dddddd;
         padding: 0px 20px 10px 20px;
@@ -65,14 +57,14 @@ span.mandatoryFieldsSpan {
 	padding: 4px; */
 }
 
-div.infoMessage {
+div.info_message {
 	border: 1px solid #777777;
 	padding: 12px;
 	margin: 25px;
 	width:auto;
 	background: #eeeeee;
 }
-div.warningMessage {
+div.warning_message {
 	border: 1px solid #777777;
 	padding: 12px;
 	margin: 25px;
@@ -80,10 +72,10 @@ div.warningMessage {
 	font-weight: bold;
 	color: red;
 }
-span.errorMessage {
+span.error_message {
 	color: red;
 }
-.multipleTemplate {
+.multiple_template {
 	background-color: #cccccc;
 	padding: 7px;
 	margin: 10px 0px 10px 0px;

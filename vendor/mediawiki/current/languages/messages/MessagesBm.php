@@ -1,8 +1,7 @@
 <?php
-/** Bamanankan (Bamanankan)
+/** Bambara (Bamanankan)
  *
- * @ingroup Language
- * @file
+ * @addtogroup Language
  *
  * @author Guaka
  * @author Siebrand
@@ -25,7 +24,8 @@ $messages = array(
 'august'    => 'uti',
 'aug'       => 'uti',
 
-# Categories related messages
+# Bits of text used by many pages
+'categories'      => 'Nyɛ ka cogoyaw',
 'category_header' => 'Nyɛw cogoya kɔnɔ: "$1"',
 
 'article'        => 'Nyɛ',
@@ -52,13 +52,13 @@ $messages = array(
 'otherlanguages' => 'Kanw wɛrɛ',
 
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
-'currentevents'        => 'Kunnafoni',
-'currentevents-url'    => 'Project:Kunnafoni',
-'disclaimers'          => 'Kangari',
-'edithelp'             => 'Dɛmɛ',
-'mainpage'             => 'Nyɛ fɔlɔ',
-'mainpage-description' => 'Nyɛ fɔlɔ',
-'portal'               => 'Jamaje',
+'currentevents'     => 'Kunnafoni',
+'currentevents-url' => 'Project:Kunnafoni',
+'disclaimers'       => 'Kangari',
+'edithelp'          => 'Dɛmɛ',
+'mainpage'          => 'Nyɛ fɔlɔ',
+'portal'            => 'Jamaje',
+'sitesupport'       => 'Banumanke',
 
 'editsection' => 'yɛlɛma',
 'hidetoc'     => 'dogo',
@@ -87,21 +87,21 @@ $messages = array(
 # Recent changes
 'hide' => 'dogo',
 
+# Image list
+'ilsubmit' => 'Nyini',
+
 # Random page
 'randompage' => 'Nyɛ min man ni ja',
 
 # Miscellaneous special pages
 'popularpages' => 'Nyɛw les plus consultées',
+'allpages'     => 'Nyɛw bɛɛ',
+'specialpages' => 'Nyɛw kɛrɛnkɛrɛnnen',
+'spheading'    => 'Nyɛw kɛrɛnkɛrɛnnen',
 'newpages'     => 'Nyɛw kura',
 'ancientpages' => 'Nyɛw les plus anciens',
 'move'         => 'telun',
 'movethispage' => 'Nyɛ telun',
-
-# Special:Allpages
-'allpages' => 'Nyɛw bɛɛ',
-
-# Special:Categories
-'categories' => 'Nyɛ ka cogoyaw',
 
 # Watchlist
 'watch'         => 'Tulomajɔ',
@@ -114,17 +114,11 @@ $messages = array(
 'lockconfirm' => 'Awɔ, je confirme que je souhaite verrouiller la base de données.',
 
 # Move page
-'move-page-legend' => 'Nyɛ telun',
-'movearticle'      => 'Nyɛ telun',
-'movepagebtn'      => 'Nyɛ telun',
+'movepage'    => 'Nyɛ telun',
+'movearticle' => 'Nyɛ telun',
+'movepagebtn' => 'Nyɛ telun',
 
 # Attribution
 'others' => 'wɛrɛ',
-
-# Special:Newimages
-'ilsubmit' => 'Nyini',
-
-# Special:SpecialPages
-'specialpages' => 'Nyɛw kɛrɛnkɛrɛnnen',
 
 );

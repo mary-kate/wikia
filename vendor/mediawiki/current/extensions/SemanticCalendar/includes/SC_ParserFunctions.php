@@ -62,36 +62,34 @@ function scgLanguageGetMagic( &$magicWords, $langCode = "en" ) {
 }
 
 function intToMonth($int) {
-	if ($int == '2') {return wfMsg('february'); }
-	if ($int == '3') {return wfMsg('march'); }
-	if ($int == '4') {return wfMsg('april'); }
-	if ($int == '5') {return wfMsg('may'); }
-	if ($int == '6') {return wfMsg('june'); }
-	if ($int == '7') {return wfMsg('july'); }
-	if ($int == '8') {return wfMsg('august'); }
-	if ($int == '9') {return wfMsg('september'); }
-	if ($int == '10') {return wfMsg('october'); }
-	if ($int == '11') {return wfMsg('november'); }
-	if ($int == '12') {return wfMsg('december'); }
+        if ($int == '2') {return wfMsg('february'); }
+        if ($int == '3') {return wfMsg('march'); }
+        if ($int == '4') {return wfMsg('april'); }
+        if ($int == '5') {return wfMsg('may'); }
+        if ($int == '6') {return wfMsg('june'); }
+        if ($int == '7') {return wfMsg('july'); }
+        if ($int == '8') {return wfMsg('august'); }
+        if ($int == '9') {return wfMsg('september'); }
+        if ($int == '10') {return wfMsg('october'); }
+        if ($int == '11') {return wfMsg('november'); }
+        if ($int == '12') {return wfMsg('december'); }
 	// keep it simple - if it's '1' or anything else, return January
-	return wfMsg('january');
+        return wfMsg('january');
 }
 
 function scRenderSemanticCalendar (&$parser, $inDatePropertiesStr = '', $inQueryFiltersStr = '') {
-	global $wgOut, $scgScriptPath, $wgRequest;
+	global $wgOut, $scgScriptPath, $wgRequest, $wgTitle, $wgUser;
 
-	wfLoadExtensionMessages('SemanticCalendar');
 	$wgOut->addLink( array(
 		'rel' => 'stylesheet',
 		'type' => 'text/css',
-		'media' => "screen, projection, print",
+		'media' => "screen, projection",
 		'href' => $scgScriptPath . "/skins/SC_main.css"
 	));
 
 	// initialize some variables
 	$text = "";
-	$title = $parser->getTitle();
-	$skin = $parser->getOptions()->getSkin();
+	$skin = $wgUser->getSkin();
 	$events = array();
 	$smw_version = SMW_VERSION;
 	$date_properties = explode(";", $inDatePropertiesStr);
@@ -104,7 +102,11 @@ function scRenderSemanticCalendar (&$parser, $inDatePropertiesStr = '', $inQuery
 		} else {
 			$query_filter_str = "";
 		}
-		$events = array_merge($events, scfGetEvents($date_property, $query_filter_str));
+		if ($smw_version{0} == '0') {
+			$events = array_merge($events, scfGetEvents_0_7($date_property));
+		} else {
+			$events = array_merge($events, scfGetEvents_1_0($date_property, $query_filter_str));
+		}
 	}
 
 	// get all the date-based values we need - the current month and year
@@ -145,24 +147,46 @@ function scRenderSemanticCalendar (&$parser, $inDatePropertiesStr = '', $inQuery
 	if ($cur_year == "0") {$cur_year = "1"; }
 	if ($next_year == "0") {$next_year = "1"; }
 	if ($prev_year == "0") {$prev_year = "-1"; }
-	$prev_month_url = $title->getLocalURL("month=$prev_month_num&year=$prev_year");
-	$next_month_url = $title->getLocalURL("month=$next_month_num&year=$next_year");
-	$today_url = $title->getLocalURL();
+	$prev_month_url = $wgTitle->getLocalURL("month=$prev_month_num&year=$prev_year");
+	$next_month_url = $wgTitle->getLocalURL("month=$next_month_num&year=$next_year");
+	$today_url = $wgTitle->getLocalURL();
 	$today_text = wfMsg('sc_today');
 	$prev_month_text = wfMsg('sc_previousmonth');
 	$next_month_text = wfMsg('sc_nextmonth');
 	$go_to_month_text = wfMsg('sc_gotomonth');
 
+	// error-checking - many UNIX-based systems, and Windows, can't handle
+	// years that are after the beginning of 2038, or before either 1970,
+	// 1901 or 1900, depending on the OS
+	// (see http://en.wikipedia.org/wiki/Year_2038_problem)
+	$date_error = NULL;
+	if ($cur_year >= 2038 && date("w", mktime(0, 0, 0, 2, 1, 2038)) != 1) {
+		$date_error = wfMsg('sc_error_year2038');
+	} elseif ($cur_year <= 1970 && date("w", mktime(0, 0, 0, 1, 1, 1969)) != 3) {
+		$date_error = wfMsg('sc_error_beforeyear', '1970');
+	} elseif ($cur_year <= 1901 && date("w", mktime(0, 0, 0, 1, 1, 1900)) != 1) {
+		$date_error = wfMsg('sc_error_beforeyear', '1901');
+	} elseif ($cur_year <= 1900 && date("w", mktime(0, 0, 0, 1, 1, 1899)) != 0) {
+		$date_error = wfMsg('sc_error_beforeyear', '1900');
+	}
+	if ($date_error != NULL)
+		$text .= "<div class=\"errorbox\"><strong>$date_error</strong></div>\n<div style=\"clear: both\">";
+
+
 	// get day of the week that the first of this month falls on
-	$first_day = new SCHistoricalDate();
-	$first_day->create($cur_year, $cur_month_num, 1);
-	$day_of_week_of_1 = $first_day->getDayOfWeek();
+	$day_of_week_of_1 = date("w", mktime(0, 0, 0, $cur_month_num, 1, $cur_year));
 	$start_day = 1 - $day_of_week_of_1;
-	$days_in_prev_month = SCHistoricalDate::daysInMonth($prev_year, $prev_month_num);
-	$days_in_cur_month = SCHistoricalDate::daysInMonth($cur_year, $cur_month_num);
+	$days_in_prev_month = scfDaysInMonth($prev_month_num, $prev_year);
+	$days_in_cur_month = scfDaysInMonth($cur_month_num, $cur_year);
+	// fix strange bug for December, 1 B.C.
+	if ($cur_month_num == 12 && $cur_year == -1) {
+		$days_in_cur_month = 31;
+	} elseif ($cur_month_num == 1 & $cur_year == 1) {
+		$days_in_prev_month = 31;
+	}
 	$today_string = date("Y n j", mktime());
 	$url_year = $wgRequest->getVal('year');
-	$title = $title->getPrefixedDbKey();
+	$title = str_replace(' ', '_', $wgTitle->getText());
 
 	// create table for holding calendar, and the top (navigation) row
 	$text .=<<<END
@@ -170,11 +194,11 @@ function scRenderSemanticCalendar (&$parser, $inDatePropertiesStr = '', $inQuery
 <tr>
 <td class="month_name">$cur_month $cur_year</td>
 <td class="nav_links">
-<a href="$prev_month_url" title="$prev_month_text"><img src="$scgScriptPath/skins/images/left-arrow.png" border="0" /></a>
+<a href="$prev_month_url" title="$prev_month_text"><img src="$scgScriptPath/skins/images/left-arrow.png" /></a>
 &nbsp;
 <a href="$today_url">$today_text</a>
 &nbsp;
-<a href="$next_month_url" title="$next_month_text"><img src="$scgScriptPath/skins/images/right-arrow.png" border="0" /></a>
+<a href="$next_month_url" title="$next_month_text"><img src="$scgScriptPath/skins/images/right-arrow.png" /></a>
 </td>
 <td class="nav_form">
 <form>
@@ -213,9 +237,9 @@ END;
 	$text .= "</tr>\n";
 
 	// now, create the calendar itself -
-	// loop through a set of weeks, from a Sunday (which might be
-	// before the beginning of the month) to a Saturday (which might
-	// be after the end of the month)
+        // loop through a set of weeks, from a Sunday (which might be
+        // before the beginning of the month) to a Saturday (which might
+        // be after the end of the month)
 	$day_of_the_week = 1;
 	$is_last_week = false;
 	for ($day = $start_day; (! $is_last_week || $day_of_the_week != 1); $day++) {
@@ -254,7 +278,8 @@ END;
 		foreach ($events as $event_pair) {
 			list($event_title, $event_date) = $event_pair;
 			if ($event_date == $date_str) {
-				$text .= $skin->makeLinkObj($event_title, str_replace('_', ' ', $event_title->getPrefixedDbKey()));
+				//$event_title = Title::newFromText($event_name);
+				$text .= $skin->makeLinkObj($event_title, $event_title->getText());
 				$text .= "\n\n";
 			}
 		}
@@ -273,5 +298,5 @@ END;
 
 	$text .= "</table>\n";
 
-	return array($text, 'noparse' => 'true', 'isHTML' => 'true');
+	return array($text, 'noparse' => 'true');
 }

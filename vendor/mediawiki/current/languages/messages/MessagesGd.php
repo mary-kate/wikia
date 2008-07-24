@@ -1,12 +1,12 @@
 <?php
 /** Scottish Gaelic (Gàidhlig)
  *
- * @ingroup Language
- * @file
+ * @addtogroup Language
  *
  * @author SPQRobin
- * @author Siebrand
  * @author לערי ריינהארט
+ * @author Helix84
+ * @author Nike
  * @author Sionnach
  * @author Raymond
  */
@@ -17,7 +17,8 @@ $messages = array(
 'friday'   => 'Di-Haoine',
 'august'   => 'An Lùnastal',
 
-# Categories related messages
+# Bits of text used by many pages
+'categories'      => 'Gnethan',
 'category_header' => 'Altan sa ghnè "$1"',
 'subcategories'   => 'Fo-ghnethan',
 
@@ -63,20 +64,20 @@ $messages = array(
 'protectedpage'     => 'Duilleag dìonta',
 
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
-'aboutsite'            => "Mu dheidhinn a' {{SITENAME}}",
-'aboutpage'            => 'Project:Mu',
-'copyright'            => 'Gheibhear brìgh na duilleig seo a-rèir an $1.',
-'copyrightpage'        => '{{ns:project}}:Dlighean-sgrìobhaidh',
-'currentevents'        => 'Cùisean an latha',
-'disclaimers'          => 'Àicheidhean',
-'edithelp'             => 'Cobhair deasaichaidh',
-'edithelppage'         => 'Help:Deasaicheadh',
-'helppage'             => 'Help:Cuideachadh',
-'mainpage'             => 'Prìomh-Dhuilleag',
-'mainpage-description' => 'Prìomh-Dhuilleag',
-'portal'               => 'Doras na Coimhearsnachd',
-'portal-url'           => 'Project:Doras na coimhearsnachd',
-'privacy'              => 'Polasaidh uaigneachd',
+'aboutsite'     => "Mu dheidhinn a' {{SITENAME}}",
+'aboutpage'     => 'Project:Mu',
+'copyright'     => 'Gheibhear brìgh na duilleig seo a-rèir an $1.',
+'copyrightpage' => '{{ns:project}}:Dlighean-sgrìobhaidh',
+'currentevents' => 'Cùisean an latha',
+'disclaimers'   => 'Àicheidhean',
+'edithelp'      => 'Cobhair deasaichaidh',
+'edithelppage'  => 'Help:Deasaicheadh',
+'helppage'      => 'Help:Cuideachadh',
+'mainpage'      => 'Prìomh-Dhuilleag',
+'portal'        => 'Doras na Coimhearsnachd',
+'portal-url'    => 'Project:Doras na coimhearsnachd',
+'privacy'       => 'Polasaidh uaigneachd',
+'sitesupport'   => 'Tabhartasan',
 
 'retrievedfrom'   => 'Air tarraing à "$1"',
 'newmessageslink' => 'teachdaireachdan ùra',
@@ -146,7 +147,7 @@ $1",
 'newarticle'        => '(Ùr)',
 'noarticletext'     => '(Chan eil teacsa anns an duilleig seo a-nis)',
 'updated'           => '(Nua-dheasaichte)',
-'previewnote'       => '<strong>Cuimhnichibh nach e ach roi-shealladh a tha seo, agus chan eil e air a shàbhaladh fhathast!</strong>',
+'previewnote'       => 'Cuimhnichibh nach e ach roi-shealladh a tha seo, agus chan eil e air a shàbhaladh fhathast!',
 'editing'           => "A'deasaicheadh $1",
 'editconflict'      => 'Mì-chòrdadh deasachaidh: $1',
 'explainconflict'   => "Tha cuideigin eile air an duilleig seo a mhùthadh o'n thòisich sibh fhèin a dheasaicheadh. Tha am bocsa teacsa shuas a'nochdadh na duilleig mar a tha e an dràsda. Tha na mùthaidhean agaibhse anns a'bhocsa shios. Feumaidh sibh na mùthaidhean agaibh a choimeasgachadh leis an teacsa làithreach. Cha tèid <b>ach an teacsa shuas</b> a shàbhaladh an uair a bhriogas sibh \"Sàbhail duilleag\".<p>",
@@ -157,6 +158,7 @@ $1",
 
 # History pages
 'nohistory'  => 'Chan eil eachdraidh deasachaidh aig an duilleig seo.',
+'loadhist'   => "A'luchdachadh eachdraidh na duileig",
 'currentrev' => 'Lethbhreac làithreach',
 'cur'        => 'làith',
 'next'       => 'ath',
@@ -173,8 +175,8 @@ $1",
 'prevn'             => '$1 mu dheireadh',
 'nextn'             => 'an ath $1',
 'viewprevnext'      => 'Seall ($1) ($2) ($3).',
-'showingresults'    => "A'nochdadh '''$1''' toraidhean gu h-ìosal a'tòiseachadh le #'''$2'''.",
-'showingresultsnum' => "A'nochdadh '''$3''' toraidhean gu h-ìosal a'tòiseachadh le #'''$2'''.",
+'showingresults'    => "A'nochdadh <b>$1</b> toraidhean gu h-ìosal a'tòiseachadh le #<b>$2</b>.",
+'showingresultsnum' => "A'nochdadh <b>$3</b> toraidhean gu h-ìosal a'tòiseachadh le #<b>$2</b>.",
 'powersearch'       => 'Rannsaich',
 
 # Preferences page
@@ -216,14 +218,19 @@ $1",
 'upload'        => 'Cuir ri fhaidhle',
 'filename'      => 'Ainm-faidhle',
 'filedesc'      => 'Geàrr-chùnntas',
-'filestatus'    => 'Cor dlighe-sgrìobhaidh:',
+'filestatus'    => 'Cor dlighe-sgrìobhaidh',
 'ignorewarning' => 'Leig an rabhadh seachad agus sàbhail am faidhle codhiù.',
 'badfilename'   => 'Ainm ìomhaigh air atharrachadh ri "$1".',
 'fileexists'    => 'Tha faidhle leis an ainm seo ann cheana; nach faigh sibh cinnt air <strong><tt>$1</tt></strong> gu bheil sibh ag iarraidh atharrachadh.',
 'savefile'      => 'Sàbhail faidhle',
 
-# Special:Imagelist
+# Image list
 'imagelist' => 'Liosta nan ìomhaigh',
+'ilsubmit'  => 'Rannsaich',
+'showlast'  => 'Nochd na $1 ìomhaighean mu dheireadh seòrsaichte $2.',
+'byname'    => 'air ainm',
+'bydate'    => 'air ceann-latha',
+'bysize'    => 'air meud',
 
 # Random page
 'randompage' => 'Duilleag thuairmeach',
@@ -235,7 +242,7 @@ $1",
 
 Tha na duilleagan air an sealladh '''\$3''' uairean, agus air an deasaicheadh '''\$4''' uairean o'n deach an wiki a shuidheachadh. Thig sin ri '''\$5''' deasaicheidhean anns a'mheadhan gach duilleag, agus '''\$6''' seallaidhean gach duilleag.
 
-The [http://www.mediawiki.org/wiki/Manual:Job_queue job queue] length is '''\$7'''.",
+The [http://meta.wikimedia.org/wiki/Help:Job_queue job queue] length is '''\$7'''.",
 
 'doubleredirects' => 'Ath-stiùreidhean dùbailte',
 
@@ -246,21 +253,22 @@ The [http://www.mediawiki.org/wiki/Manual:Job_queue job queue] length is '''\$7'
 'uncategorizedpages'      => 'Duilleagan neo-ghnethichte',
 'uncategorizedcategories' => 'Gnethan neo-ghnethichte',
 'unusedimages'            => 'Ìomhaighean neo-chleachdte',
+'allpages'                => 'Duilleagan uile',
 'shortpages'              => 'Duilleagan goirid',
 'longpages'               => 'Duilleagan fhada',
 'listusers'               => 'Liosta nan cleachdair',
+'specialpages'            => 'Duilleagan àraidh',
+'spheading'               => 'Duilleagan àraidh aig a h-uile cleachdair',
 'newpages'                => 'Duilleagan ùra',
 'ancientpages'            => 'Duilleagan as sìne',
 'move'                    => 'Gluais',
 'movethispage'            => 'Caraich an duilleag seo',
 
-# Special:Allpages
-'allpages' => 'Duilleagan uile',
-'nextpage' => 'An ath dhuilleag ($1)',
-
-# Special:Categories
-'categories'         => 'Gnethan',
 'categoriespagetext' => "Tha na gnethan a leanas anns a'wiki.",
+'version'            => 'Lethbhreac',
+
+# Special:Allpages
+'nextpage' => 'An ath dhuilleag ($1)',
 
 # E-mail user
 'emailfrom'    => 'Bho',
@@ -294,9 +302,10 @@ Ma bu toil leibh a dhubh a'dhuilleag as ur faire agaibh nas fadalache, cnap air 
 'revertpage'         => 'Tillte deasachadh aig [[Special:Contributions/$2|$2]] ([[User talk:$2|Deasbaireachd]]) ais ri lethbhreac mu dheireadh le [[User:$1|$1]]', # Additional available: $3: revid of the revision reverted to, $4: timestamp of the revision reverted to, $5: revid of the revision reverted from, $6: timestamp of the revision reverted from
 'protectedarticle'   => 'dìonta "[[$1]]"',
 'unprotectedarticle' => '"[[$1]]" neo-dhìonta',
-'protect-title'      => 'A\'dìonadh "$1"',
-'protect-legend'     => 'Daingnich dìonadh',
+'protectsub'         => '(A\'dìonadh "$1")',
+'confirmprotect'     => 'Daingnich dìonadh',
 'protectcomment'     => 'Aobhar airson dìonaidh',
+'unprotectsub'       => '(A\'neo-dhìonadh "$1")',
 
 # Undelete
 'undeleterevisions' => '$1 {{PLURAL:$1|lethbhreac|lethbhreacan}} taisge',
@@ -339,13 +348,13 @@ Ma bu toil leibh a dhubh a'dhuilleag as ur faire agaibh nas fadalache, cnap air 
 'lockdbsuccesssub' => 'Shoirbhich glasadh an stor-dàta',
 
 # Move page
-'move-page-legend' => 'Gluais duilleag',
-'movearticle'      => 'Gluais duilleag',
-'movepagebtn'      => 'Gluais duilleag',
-'pagemovedsub'     => 'Gluasad soirbheachail',
-'movedto'          => 'air gluasad gu',
-'1movedto2'        => '[[$1]] gluaiste ri [[$2]]',
-'1movedto2_redir'  => '[[$1]] gluaiste ri [[$2]] thairis air ath-stiùireadh',
+'movepage'        => 'Gluais duilleag',
+'movearticle'     => 'Gluais duilleag',
+'movepagebtn'     => 'Gluais duilleag',
+'pagemovedsub'    => 'Gluasad soirbheachail',
+'movedto'         => 'air gluasad gu',
+'1movedto2'       => '[[$1]] gluaiste ri [[$2]]',
+'1movedto2_redir' => '[[$1]] gluaiste ri [[$2]] thairis air ath-stiùireadh',
 
 # Namespace 8 related
 'allmessages'     => 'Uile teachdaireachdan an t-siostam',
@@ -367,18 +376,11 @@ Ma bu toil leibh a dhubh a'dhuilleag as ur faire agaibh nas fadalache, cnap air 
 'othercontribs' => 'Stèidhichte air obair le $1.',
 'others'        => 'eile',
 
+# Spam protection
+'categoryarticlecount' => 'Tha {{PLURAL:$1|1 alt|$1 altan}} sa ghnè seo.',
+
 # Info page
 'infosubtitle' => 'Fiosrachadh air duilleig',
 'numwatchers'  => 'Aireamh luchd-faire: $1',
-
-# Special:Newimages
-'ilsubmit' => 'Rannsaich',
-'bydate'   => 'air ceann-latha',
-
-# Special:Version
-'version' => 'Lethbhreac', # Not used as normal message but as header for the special page itself
-
-# Special:SpecialPages
-'specialpages' => 'Duilleagan àraidh',
 
 );

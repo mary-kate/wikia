@@ -6,8 +6,6 @@
  *
  * Made on an original idea by Fooey (freenode)
  *
- * @file
- * @ingroup Maintenance
  * @author Ashar Voultoiz <hashar@altern.org>
  */
 

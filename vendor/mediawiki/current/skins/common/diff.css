@@ -33,8 +33,6 @@ td.diff-context {
 	color: red;
 	font-weight: bold;
 	text-decoration: none;
-	white-space: pre-wrap;
-	white-space: -moz-pre-wrap;
 }
 
 table.diff {

@@ -1,10 +1,8 @@
 <?php
-/** ‫كوردي (عەرەبی)‬ (‫كوردي (عەرەبی)‬)
+/** Kurdish (Arab) (كوردي (عەرەبی))
  *
- * @ingroup Language
- * @file
+ * @addtogroup Language
  *
- * @author Siebrand
  * @author Aras Noori
  */
 
@@ -128,7 +126,8 @@ $messages = array(
 'nov'           => 'ت٢',
 'dec'           => 'كا١',
 
-# Categories related messages
+# Bits of text used by many pages
+'categories'            => '{{PLURAL:$1|هاوپۆل|هاوپۆله‌كان}}',
 'pagecategories'        => '$1 هاوپۆله‌كان',
 'category_header'       => 'په‌ڕه‌ی هاوپۆلی "$1" de',
 'subcategories'         => 'به‌شه‌هاوپۆله‌كان',
@@ -218,13 +217,11 @@ $messages = array(
 'jumptosearch'      => 'گه‌ڕان',
 
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
-'faq'                  => 'پرسیاری هه‌میشه‌ دووباره‌(پهد(',
-'mainpage'             => 'ده‌ستپێك',
-'mainpage-description' => 'ده‌ستپێك',
+'faq'      => 'پرسیاری هه‌میشه‌ دووباره‌(پهد(',
+'mainpage' => 'ده‌ستپێك',
 
 'versionrequired'     => 'پێویستیت به‌ وه‌شانی $1 ـی‌ ویكیمیدیایه‌',
-'versionrequiredtext' => 'پێویستیت به‌ وه‌شانی $1 ـێ ویكیمیدیا هه‌یه‌ بۆ به‌كاربردنی ئه‌م په‌ڕه‌یه‌
-. ته‌ماشای [[Special:Version|وه‌شانی]] بكه‌.',
+'versionrequiredtext' => 'پێویستیت به‌ وه‌شانی $1 ـێ ویكیمیدیا هه‌یه‌ بۆ به‌كاربردنی ئه‌م په‌ڕه‌یه‌. ته‌ماشای [[Special:version|وه‌شانی]] بكه‌.',
 
 'ok'                      => 'باشه‌',
 'retrievedfrom'           => 'له‌ لایه‌ن "$1" گه‌ڕاوه‌ته‌وه‌.',
@@ -258,7 +255,7 @@ $messages = array(
 'nosuchspecialpage' => 'په‌ڕه‌ی تایبه‌تی له‌و شێوه‌یه‌ نییه‌',
 'nospecialpagetext' => "<big>''په‌ڕه‌یكی تایبه‌ت ده‌خوازیت كه‌ بوونی نییه‌'''</big>
 
-لیستی په‌ڕه‌ تایبه‌تییه‌كان له‌ [[Special:Specialpages|لیسته‌ی په‌ڕه‌ تایبه‌ته‌كان]] ده‌توانرێت ببینرێت.",
+لیستی په‌ڕه‌ تایبه‌تییه‌كان له‌ [[{{ns:special}}:Specialpages|لیسته‌ی په‌ڕه‌ تایبه‌ته‌كان]] ده‌توانرێت ببینرێت.",
 
 # General errors
 'error'              => 'هه‌ڵه‌',
@@ -333,13 +330,10 @@ $messages = array(
 'showlivepreview' => 'پێشبینینی ڕاسته‌وخۆ',
 'showdiff'        => 'گۆڕانكارییه‌كان نیشانبده‌',
 
-# Special:Categories
-'categories' => 'هاوپۆله‌كان',
-
 # Tooltip help for the actions
 'tooltip-pt-userpage' => 'په‌ڕه‌ی تایبه‌تی خۆم',
 
-# Separators for various lists, etc.
+# Separators for various lists
 'semicolon-separator' => '؛',
 'comma-separator'     => '،',
 

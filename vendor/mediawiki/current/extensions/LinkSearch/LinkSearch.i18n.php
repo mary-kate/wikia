@@ -14,63 +14,13 @@ $messages['en'] = array(
 	'linksearch-pat'   => 'Search pattern:',
 	'linksearch-ns'    => 'Namespace:',
 	'linksearch-ok'    => 'Search',
-	'linksearch-text'  => 'Wildcards such as "*.wikipedia.org" may be used.<br />
-Supported protocols: <tt>$1</tt>',
+	'linksearch-text'  => 'Wildcards such as "*.wikipedia.org" may be used.<br />Supported protocols: <tt>$1</tt>',
 	'linksearch-line'  => '$1 linked from $2',
 	'linksearch-error' => 'Wildcards may appear only at the start of the hostname.',
 );
 
-/** Karelian (Karjala)
- * @author Flrn
- */
-$messages['krl'] = array(
-	'linksearch-ok' => 'Ečindy',
-);
-
-/** Eastern Mari (Олык Марий)
- * @author Сай
- */
-$messages['mhr'] = array(
-	'linksearch-ok' => 'Кучал',
-);
-
-/** Niuean (ko e vagahau Niuē)
- * @author Jose77
- */
-$messages['niu'] = array(
-	'linksearch-ok' => 'Kumi',
-);
-
-/** Afrikaans (Afrikaans)
- * @author Arnobarnard
- * @author SPQRobin
- * @author Naudefj
- */
 $messages['af'] = array(
 	'linksearch'       => 'Soek webskakels',
-	'linksearch-desc'  => "[[Special:Linksearch|Soek bladsye met eksterne skakels]] wat aan 'n bepaald patroon voldoen",
-	'linksearch-pat'   => 'Soekpatroon:',
-	'linksearch-ns'    => 'Naamruimte:',
-	'linksearch-ok'    => 'Soek',
-	'linksearch-text'  => 'Patrone soos "*.wikipedia.org" of "*.org" kan gebruik word.<br />
-Ondersteunde protokolle: <tt>$1</tt>',
-	'linksearch-line'  => '$1 geskakel vanaf $2',
-	'linksearch-error' => 'Patrone kan slegs aan die begin van die rekenaarnaam geplaas word.',
-);
-
-/** Aragonese (Aragonés)
- * @author Juanpabl
- */
-$messages['an'] = array(
-	'linksearch'       => 'Mirar binclos ta pachinas web',
-	'linksearch-desc'  => '[[Special:Linksearch|Mirar pachinas con binclos esternos]] que concuerden con patrons espezificos',
-	'linksearch-pat'   => 'Mirar patrón:',
-	'linksearch-ns'    => 'Espazio de nombres:',
-	'linksearch-ok'    => 'Mirar',
-	'linksearch-text'  => 'Pueden usar-se caráuters comodín como "*.wikipedia.org".<br />
-Protocolos suportados: <tt>$1</tt>',
-	'linksearch-line'  => '$1 tiene un binclo dende $2',
-	'linksearch-error' => "Os caráuters comodín nomás pueden apareixer en o prenzipio d'o nombre d'o sitio.",
 );
 
 /** Arabic (العربية)
@@ -78,7 +28,7 @@ Protocolos suportados: <tt>$1</tt>',
  */
 $messages['ar'] = array(
 	'linksearch'       => 'بحث وصلات الويب',
-	'linksearch-desc'  => '[[Special:Linksearch|ابحث عن الصفحات التي تحتوي على وصلات خارجية]] تطابق أنماطا معينة',
+	'linksearch-desc'  => 'ابحث عن الصفحات التي تحتوي على وصلات خارجية تطابق أنماطا معينة',
 	'linksearch-pat'   => 'نمط البحث:',
 	'linksearch-ns'    => 'النطاق:',
 	'linksearch-ok'    => 'بحث',
@@ -101,52 +51,13 @@ $messages['ast'] = array(
 	'linksearch-error' => 'Los comodinos namái puen apaecer al entamu del nome del güéspede.',
 );
 
-/** Kotava (Kotava)
- * @author Sab
- */
-$messages['avk'] = array(
-	'linksearch-ns' => 'Yoltxo :',
-	'linksearch-ok' => 'Aneyara',
-);
-
-/** Southern Balochi (بلوچی مکرانی)
- * @author Mostafadaneshvar
- */
-$messages['bcc'] = array(
-	'linksearch'       => 'گردگ لینکان وب',
-	'linksearch-desc'  => '[[Special:Linksearch|درگیز صفحاتی گون درایی لینک]] هم دپ گون حاصین الگو',
-	'linksearch-pat'   => 'گردگ الگو:',
-	'linksearch-ns'    => 'نام فضا:',
-	'linksearch-ok'    => 'گردگ',
-	'linksearch-text'  => 'تقریبانی په داب "*.wikipedia.org" شاید استفاده بیت.<br />
-داشتگین پروتوکل: <tt>$1</tt>',
-	'linksearch-line'  => '$1 لینک بوتت چه $2',
-	'linksearch-error' => 'تقریبیان شاید فقط ته اول نام هاست جاه کاینت.',
-);
-
-/** Bikol Central (Bikol Central)
- * @author Filipinayzd
- */
 $messages['bcl'] = array(
-	'linksearch-ok'   => 'Hanápon',
-	'linksearch-line' => '$1 an nakatakod sa $2',
+	'linksearch-ok'    => 'Hanápon',
+	'linksearch-line'  => '$1 an nakatakod sa $2',
 );
 
-/** Belarusian (Taraškievica orthography) (Беларуская (тарашкевіца))
- * @author EugeneZelenko
- */
-$messages['be-tarask'] = array(
-	'linksearch'    => 'Пошук вонкавых спасылак',
-	'linksearch-ns' => 'Прастора назваў:',
-);
-
-/** Bulgarian (Български)
- * @author Spiritia
- * @author Borislav
- */
 $messages['bg'] = array(
 	'linksearch'       => 'Търсене на външни препратки',
-	'linksearch-desc'  => '[[Special:Linksearch|Търсене на страници с външни препратки]], отговарящи на определен образец',
 	'linksearch-pat'   => 'Търсене по:',
 	'linksearch-ns'    => 'Именно пространство:',
 	'linksearch-ok'    => 'Търсене',
@@ -160,7 +71,6 @@ $messages['bg'] = array(
  */
 $messages['bn'] = array(
 	'linksearch'      => 'ওয়েব লিঙ্কসমূহ অনুসন্ধান করো',
-	'linksearch-pat'  => 'অনুসন্ধান প্যাটার্ণ:',
 	'linksearch-ns'   => 'নামস্থান:',
 	'linksearch-ok'   => 'অনুসন্ধান',
 	'linksearch-line' => '$2 থেকে $1 তে লিঙ্ক করা হয়েছে',
@@ -170,45 +80,16 @@ $messages['bn'] = array(
  * @author Fulup
  */
 $messages['br'] = array(
-	'linksearch'      => 'Klask liammoù Kenrouedad',
-	'linksearch-pat'  => 'Klask an droienn :',
-	'linksearch-ns'   => 'Esaouenn anv :',
-	'linksearch-ok'   => 'Klask',
-	'linksearch-line' => '$1 gant ul liamm adal $2',
+	'linksearch-ok' => 'Klask',
 );
 
-/** Catalan (Català)
- * @author SMP
- */
-$messages['ca'] = array(
-	'linksearch'       => 'Cerca enllaços web',
-	'linksearch-desc'  => '[[Special:Linksearch|Busca pàgines amb enllaços externs]] cap a determinades adreces',
-	'linksearch-pat'   => 'Patró de cerca:',
-	'linksearch-ns'    => 'Espai de noms:',
-	'linksearch-ok'    => 'Cerca',
-	'linksearch-text'  => 'Es poden fer servir caràcters comodí com «*.wikipedia.org».<br />Protocols admesos: <tt>$1</tt>',
-	'linksearch-line'  => '$1 enllaçat a $2',
-	'linksearch-error' => "Els caràcters comodí només poden aparèixer a l'inici de l'url.",
-);
-
-/** Min Dong Chinese (Mìng-dĕ̤ng-ngṳ̄) */
 $messages['cdo'] = array(
-	'linksearch-ok' => 'Sìng-tō̤',
+	'linksearch-ok'    => 'Sìng-tō̤',
 );
 
-/** Chamorro (Chamoru)
- * @author Jatrobat
- */
-$messages['ch'] = array(
-	'linksearch-ok' => 'Aligao',
-);
-
-/** Corsican (Corsu)
- * @author SPQRobin
- */
 $messages['co'] = array(
-	'linksearch-ns' => 'Spaziu:',
-	'linksearch-ok' => 'Ricerca',
+	'linksearch-ns'    => 'Spaziu:',
+	'linksearch-ok'    => 'Ricerca',
 );
 
 /** Czech (Česky)
@@ -226,27 +107,6 @@ $messages['cs'] = array(
 	'linksearch-error' => 'Zástupné znaky lze použít jen na začátku doménového jména.',
 );
 
-/** Church Slavic (Словѣ́ньскъ / ⰔⰎⰑⰂⰡⰐⰠⰔⰍⰟ)
- * @author ОйЛ
- */
-$messages['cu'] = array(
-	'linksearch-ok' => 'ищи́',
-);
-
-/** Danish (Dansk)
- * @author Morten
- */
-$messages['da'] = array(
-	'linksearch'       => 'Søg i weblinks',
-	'linksearch-desc'  => '[[Special:Linksearch|Find sider med eksterne links]] der følger bestemte mønstre',
-	'linksearch-pat'   => 'Søg efter links til:',
-	'linksearch-ns'    => 'Navnerum:',
-	'linksearch-ok'    => 'Søg',
-	'linksearch-text'  => 'Wildcards som "*.wikipedia.org" kan benyttes.<br />Understøttede protokoller: <tt>$1</tt>',
-	'linksearch-line'  => '$2 linker til $1',
-	'linksearch-error' => 'Wildcards må kun benyttes i starten af hostnavnet.',
-);
-
 /** German (Deutsch)
  * @author Raimond Spekking
  */
@@ -261,21 +121,6 @@ $messages['de'] = array(
 	'linksearch-error' => 'Wildcards können nur am Anfang der URL verwendet werden.',
 );
 
-/** Lower Sorbian (Dolnoserbski)
- * @author Michawiki
- */
-$messages['dsb'] = array(
-	'linksearch'       => 'Webwótkaze pytaś',
-	'linksearch-desc'  => '[[Special:Linksearch|Namakajo boki z eksternymi wótkazami]], kótarež danemu musteroju wótpowěduju',
-	'linksearch-pat'   => 'Pytański muster:',
-	'linksearch-ns'    => 'Mjenjowy rum:',
-	'linksearch-ok'    => 'Pytaś',
-	'linksearch-text'  => 'Jo móžno zastupne znamješka kaž "*.wikipedia.org" wužywaś.<br />
-Pódpěrane protokole: <tt>$1</tt>',
-	'linksearch-line'  => '$1 wótkazany z $2',
-	'linksearch-error' => 'Zasupne znamješko daju se jano na zachopjeńku URL wužywaś.',
-);
-
 /** Ewe (Eʋegbe)
  * @author M.M.S.
  */
@@ -283,30 +128,19 @@ $messages['ee'] = array(
 	'linksearch-ok' => 'Dii',
 );
 
-/** Greek (Ελληνικά)
- * @author Consta
- */
 $messages['el'] = array(
-	'linksearch-ok' => 'Αναζήτηση',
+	'linksearch-ok'    => 'Αναζήτηση',
 );
 
 /** Esperanto (Esperanto)
  * @author Yekrats
  */
 $messages['eo'] = array(
-	'linksearch'       => 'Serĉi retajn ligilojn',
-	'linksearch-desc'  => '[[Special:Linksearch|Trovu paĝojn kun eksteraj ligiloj]] laŭ specifa esprimo',
-	'linksearch-pat'   => 'Serĉesprimo:',
-	'linksearch-ns'    => 'Nomspaco:',
-	'linksearch-ok'    => 'Serĉi',
-	'linksearch-text'  => 'Regulesprimoj kiel "*.wikipedia.org" povas esti uzataj.<br />Subtenataj protokoloj: <tt>$1</tt>',
-	'linksearch-line'  => '$1 ligita de $2',
-	'linksearch-error' => 'Regulesprimoj povas aperi nur ĉe la komenco de la retnoda nomo.',
+	'linksearch-ns'   => 'Nomspaco:',
+	'linksearch-ok'   => 'Sercxu:',
+	'linksearch-line' => '$1 ligita de $2',
 );
 
-/** Spanish (Español)
- * @author Spacebirdy
- */
 $messages['es'] = array(
 	'linksearch'       => 'Buscar enlaces a páginas web',
 	'linksearch-pat'   => 'Patrón de búsqueda:',
@@ -316,26 +150,11 @@ $messages['es'] = array(
 	'linksearch-error' => 'Los comodines sólo pueden aparecer al principio del nombre de sitio.',
 );
 
-/** Basque (Euskara)
- * @author SPQRobin
- */
-$messages['eu'] = array(
-	'linksearch'       => 'Web loturak bilatu',
-	'linksearch-pat'   => 'Bilaketa katea:',
-	'linksearch-ns'    => 'Izen-tartea:',
-	'linksearch-ok'    => 'Bilatu',
-	'linksearch-line'  => '$1, $2(e)tik lotuta',
-	'linksearch-error' => 'Komodinak izenaren hasieran bakarrik agertu beharko lirateke.',
-);
-
-/** Extremaduran (Estremeñu)
- * @author Better
- */
 $messages['ext'] = array(
-	'linksearch-ok' => 'Landeal',
+	'linksearch-ok'    => 'Landeal',
 );
 
-/** Persian (فارسی)
+/** فارسی (فارسی)
  * @author Huji
  */
 $messages['fa'] = array(
@@ -347,43 +166,34 @@ $messages['fa'] = array(
 	'linksearch-text'  => 'نشانه‌هایی مانند "*.wikipedia.org" را می‌توان استفاده کرد.<br />پروتکل‌های پشتیبانی‌شده: <tt>$1</tt>',
 	'linksearch-line'  => '$1 از $2 پیوند دارد',
 	'linksearch-error' => 'نشانه‌ها فقط در ابتدای نام میزبان اینترنتی می‌توانند استفاده شوند.',
+
 );
 
-/** Finnish (Suomi)
- * @author Nike
- * @author Crt
- */
 $messages['fi'] = array(
 	'linksearch'       => 'Etsi ulkoisia linkkejä',
-	'linksearch-desc'  => 'Toimintosivu [[Special:Linksearch|ulkoisten linkkien käytön]] kartoittamiseen.',
 	'linksearch-pat'   => 'Osoite',
 	'linksearch-ns'    => 'Nimiavaruus',
 	'linksearch-ok'    => 'Etsi',
-	'linksearch-text'  => 'Asteriskia (*) voi käyttää jokerimerkkinä, esimerkiksi ”*.wikipedia.org”.
-
-Tuetut protokollat: <tt>$1</tt>.',
+	'linksearch-text'  => 'Asteriskia (*) voi käyttää jokerimerkkinä, esimerkiksi ”*.wikipedia.org”.',
 	'linksearch-line'  => '$1 on linkitetty sivulta $2',
 	'linksearch-error' => 'Jokerimerkkiä voi käyttää ainoastaan osoitteen alussa.',
 );
 
-/** Faroese (Føroyskt)
- * @author Spacebirdy
- */
 $messages['fo'] = array(
-	'linksearch-ns' => 'Navnarúm:',
+	'linksearch-ns'    => 'Navnarúm:',
 );
 
 /** French (Français)
- * @author Sherbrooke
  * @author Urhixidur
+ * @author Sherbrooke
  */
 $messages['fr'] = array(
 	'linksearch'       => 'Rechercher des liens Internet',
-	'linksearch-desc'  => '[[Special:Linksearch|Rechercher des pages contenant des liens externes]] (La recherche peut contenir des caractères « joker », par exemple *.wiktionary.org.)',
+	'linksearch-desc'  => 'Recherche des pages dans lesquelles un lien externe apparaît.',
 	'linksearch-pat'   => 'Rechercher l’expression :',
 	'linksearch-ns'    => 'Espace de noms :',
 	'linksearch-ok'    => 'Rechercher',
-	'linksearch-text'  => 'Des caractères « joker » peuvent être utilisés, par exemple <code>*.wikipedia.org</code>.<br />Protocoles reconnus : <tt>$1</tt>.',
+	'linksearch-text'  => 'Cette page spéciale permet de rechercher les pages dans lesquelles un lien externe apparaît.<br />Des caractères passe-partout peuvent être utilisés, par exemple <code>*.wikipedia.org</code>.',
 	'linksearch-line'  => '$1 avec un lien à partir de $2',
 	'linksearch-error' => 'Les caractères passe-partout ne peuvent être utilisés qu’au début du nom de domaine.',
 );
@@ -402,115 +212,37 @@ $messages['frp'] = array(
 	'linksearch-error' => 'Los caractèros « j·oquèr » pôvont étre utilisâs ren qu’u comencement du nom de domêno.',
 );
 
-/** Friulian (Furlan)
- * @author Klenje
- */
-$messages['fur'] = array(
-	'linksearch-ns' => 'Spazi dai nons:',
-	'linksearch-ok' => 'Cîr',
-);
-
-/** Galician (Galego)
- * @author Toliño
- * @author Alma
- * @author Xosé
- */
 $messages['gl'] = array(
 	'linksearch'       => 'Buscar ligazóns web',
-	'linksearch-desc'  => '[[Special:Linksearch|Atopar páxinas con ligazóns externas]] que coincidan cos patróns específicos',
 	'linksearch-pat'   => 'Patrón de procura:',
 	'linksearch-ns'    => 'Espazo de nomes:',
-	'linksearch-ok'    => 'Procurar',
-	'linksearch-text'  => 'Extensións como "*.wikipedia.org" poden ser usadas.<br />Protocolos soportados: <tt>$1</tt>',
-	'linksearch-line'  => '$1 ligado dende $2',
+	'linksearch-ok'    => 'Buscar',
+	'linksearch-text'  => 'Extensións como "*.wikipedia.org" poden ser usadas. <br />Protocolos soportados: <tt>$1</tt>',
+	'linksearch-line'  => '$1 vinculado a $2',
 	'linksearch-error' => 'Os comodíns só poden aparecer ao principio do nome do servidor.',
 );
 
-/** Ancient Greek (Ἀρχαία ἑλληνικὴ)
- * @author SPQRobin
- */
 $messages['grc'] = array(
-	'linksearch-ok' => 'Ζητεῖν',
+	'linksearch-ok'    => 'Ζητεῖν',
 );
 
-/** Swiss German (Alemannisch)
- * @author 80686
- * @author Siebrand
- */
-$messages['gsw'] = array(
-	'linksearch'       => 'Suech Webgleicher',
-	'linksearch-desc'  => '[[Special:Linksearch|Findet Sytene mit externe Gleicher]] wo me vorgäne Suechmuschter entschpräche',
-	'linksearch-pat'   => 'Suechmuschter:',
-	'linksearch-ns'    => 'Namensruum:',
-	'linksearch-ok'    => 'Sueche',
-	'linksearch-text'  => 'S\' chönne Platzhalter wie "*.wikipedia.org" benutzt werre.<br />Unterschtützti Protokoll: <tt>$1</tt>',
-	'linksearch-line'  => '$1 isch vo $2 verknüpft',
-	'linksearch-error' => 'Platzhalter chönne numme am Aafang verwändet werre.',
-);
-
-/** Gujarati (ગુજરાતી)
- * @author SPQRobin
- */
+/** Gujarati (ગુજરાતી) */
 $messages['gu'] = array(
 	'linksearch-ok' => 'શોધ',
 );
 
-/** Manx (Gaelg)
- * @author MacTire02
- */
-$messages['gv'] = array(
-	'linksearch-ok' => 'Ronsaghey',
-);
-
-/** Hakka (Hak-kâ-fa)
- * @author Hakka
- */
-$messages['hak'] = array(
-	'linksearch-ok' => 'Chhìm-cháu',
-);
-
-/** Hebrew (עברית)
- * @author Rotem Liss
- */
 $messages['he'] = array(
 	'linksearch'       => 'חיפוש קישורים חיצוניים',
-	'linksearch-desc'  => '[[Special:Linksearch|מציאת דפים עם קישורים חיצוניים]] התואמים לתבניות מסוימות',
 	'linksearch-pat'   => 'קישור לחיפוש:',
 	'linksearch-ns'    => 'מרחב שם:',
 	'linksearch-ok'    => 'חיפוש',
-	'linksearch-text'  => 'ניתן להשתמש בתווים כללים, לדוגמה "*.wikipedia.org".<br />פרוטוקולים נתמכים: <tt>$1</tt>',
+	'linksearch-text'  => 'ניתן להשתמש בתווים כללים, לדוגמה "‎*.wikipedia.org".<br />פרוטוקולים נתמכים: <tt>$1</tt>',
 	'linksearch-line'  => '$1 מקושר מהדף $2',
 	'linksearch-error' => 'תווים כלליים יכולים להופיע רק בתחילת שם השרת.',
 );
 
-/** Hindi (हिन्दी)
- * @author Kaustubh
- */
-$messages['hi'] = array(
-	'linksearch'       => 'वेब कड़ीयाँ खोजें',
-	'linksearch-desc'  => 'दिये हुए पाठसे मेल खानेवाले [[Special:Linksearch|बाहरी कड़ीयाँ होनेवाले पन्ने खोजें]]',
-	'linksearch-pat'   => 'खोजने के लिये पाठ:',
-	'linksearch-ns'    => 'नामस्थान:',
-	'linksearch-ok'    => 'खोजें',
-	'linksearch-text'  => '"*.wikipedia.org" जैसे वाईल्डकार्ड्स इस्तेमाल करनेकी अनुमति हैं।<br />निम्नलिखित प्रोटोकॉल्समें: <tt>$1</tt>',
-	'linksearch-line'  => '$2 में से $1 जुडा हुआ हैं',
-	'linksearch-error' => 'वाईल्डकार्ड्स होस्टनामके सिर्फ शुरु में आ सकतें हैं।',
-);
-
-/** Hiligaynon (Ilonggo)
- * @author Jose77
- */
-$messages['hil'] = array(
-	'linksearch-ok' => 'Pangita-a',
-);
-
-/** Croatian (Hrvatski)
- * @author SpeedyGonsales
- * @author Dalibor Bosits
- */
 $messages['hr'] = array(
 	'linksearch'       => 'Pretraživanje poveznica (s članaka na wikiju)',
-	'linksearch-desc'  => '[[Special:Linksearch|Pronađi stranice s vanjskim poveznicama]] koje odgovaraju određenom uzorku',
 	'linksearch-pat'   => 'Uzorak traženja:',
 	'linksearch-ns'    => 'Imenski prostor:',
 	'linksearch-ok'    => 'Traži',
@@ -534,70 +266,27 @@ $messages['hsb'] = array(
 );
 
 /** Hungarian (Magyar)
- * @author Dani
- * @author Tgr
+ * @author Bdanee
  */
 $messages['hu'] = array(
 	'linksearch'       => 'Keresés külső hivatkozások szerint',
-	'linksearch-desc'  => '[[Special:Linksearch|Lapok keresése]], amik egy megadott mintára illeszkedő külső linket tartalmaznak.',
 	'linksearch-pat'   => 'Keresett minta:',
 	'linksearch-ns'    => 'Névtér:',
 	'linksearch-ok'    => 'keresés',
-	'linksearch-text'  => 'Helyettesítő karaktereket is lehet használni, például "*.wikipedia.org".<br />
-Támogatott protokollok: <tt>$1</tt>',
+	'linksearch-text'  => 'A helyettesítő karaktereket is lehet használni, például "*.wikipedia.org".',
 	'linksearch-line'  => '$1 hivatkozva innen: $2',
 	'linksearch-error' => 'Helyettesítő karakterek csak a cím elején szerepelhetnek.',
+
 );
 
-/** Armenian (Հայերեն)
- * @author Togaed
- */
-$messages['hy'] = array(
-	'linksearch-ok' => 'Որոնել',
-);
-
-/** Interlingua (Interlingua)
- * @author Malafaya
- * @author McDutchie
- */
-$messages['ia'] = array(
-	'linksearch'       => 'Cercar per ligamines web',
-	'linksearch-desc'  => '[[Special:Linksearch|Cercar paginas con ligamines externe]] correspondente a patronos specific',
-	'linksearch-pat'   => 'Patrono a cercar:',
-	'linksearch-ns'    => 'Spatio de nomines:',
-	'linksearch-ok'    => 'Cercar',
-	'linksearch-text'  => 'Es possibile usar metacharacteres como in "*.wikipedia.org".<br />
-Protocollos supportate: <tt>$1</tt>',
-	'linksearch-line'  => '$1 ligate ab $2',
-	'linksearch-error' => 'Le metacharacteres pote apparer solmente al initio del nomine del hospite.',
-);
-
-/** Indonesian (Bahasa Indonesia)
- * @author IvanLanin
- */
 $messages['id'] = array(
 	'linksearch'       => 'Pencarian pranala luar',
-	'linksearch-desc'  => '[[Special:Linksearch|Mencari halaman dengan pranala luar]] yang cocok dengan pola tertentu',
 	'linksearch-pat'   => 'Pola pencarian:',
 	'linksearch-ns'    => 'Ruang nama:',
 	'linksearch-ok'    => 'Cari',
-	'linksearch-text'  => "Bentuk pencarian ''wildcards'' seperti \"*.wikipedia.org\" dapat digunakan.<br />Protokol yang didukung: <tt>\$1</tt>",
+	'linksearch-text'  => 'Bentuk pencarian \'\'wildcards\'\' seperti "*.wikipedia.org" dapat digunakan.<br />Protokol yang didukung: <tt>$1</tt>',
 	'linksearch-line'  => '$1 terpaut dari $2',
-	'linksearch-error' => "''Wildcards'' hanya dapat digunakan di bagian awal dari nama host.",
-);
-
-/** Iloko (Ilokano)
- * @author Saluyot
- */
-$messages['ilo'] = array(
-	'linksearch' => 'Biroken dagiti panilpo a web',
-);
-
-/** Ido (Ido)
- * @author Malafaya
- */
-$messages['io'] = array(
-	'linksearch-ns' => 'Nomaro:',
+	'linksearch-error' => '\'\'Wildcards\'\' hanya dapat digunakan di bagian awal dari nama host.'
 );
 
 /** Icelandic (Íslenska)
@@ -614,7 +303,6 @@ $messages['is'] = array(
 /** Italian (Italiano)
  * @author .anaconda
  * @author BrokenArrow
- * @author Darth Kule
  */
 $messages['it'] = array(
 	'linksearch'       => 'Ricerca collegamenti esterni',
@@ -622,8 +310,7 @@ $messages['it'] = array(
 	'linksearch-pat'   => 'Pattern di ricerca:',
 	'linksearch-ns'    => 'Namespace:',
 	'linksearch-ok'    => 'Cerca',
-	'linksearch-text'  => 'È possibile fare uso di metacaratteri, ad es. "*.wikipedia.org".<br />
-Protocolli supportati: <tt>$1</tt>',
+	'linksearch-text'  => 'È possibile fare uso di metacaratteri, ad es. "*.example.org".',
 	'linksearch-line'  => '$1 presente nella pagina $2',
 	'linksearch-error' => "I metacaratteri possono essere usati solo all'inizio del nome dell'host.",
 );
@@ -633,7 +320,7 @@ Protocolli supportati: <tt>$1</tt>',
  */
 $messages['ja'] = array(
 	'linksearch'       => '外部リンクの検索',
-	'linksearch-desc'  => '指定されたパターンに一致する[[Special:Linksearch|外部リンクを含むページを検索する]]',
+	'linksearch-desc'  => '指定されたパターンに一致する[[{{ns:special}}:Linksearch|外部リンクを含むページを検索する]]',
 	'linksearch-pat'   => '検索パターン:',
 	'linksearch-ns'    => '名前空間:',
 	'linksearch-ok'    => '検索',
@@ -642,35 +329,6 @@ $messages['ja'] = array(
 	'linksearch-error' => 'ワイルドカードはホスト名の先頭でのみ使用できます。',
 );
 
-/** Jutish (Jysk)
- * @author Huslåke
- */
-$messages['jut'] = array(
-	'linksearch'       => 'Søĝ i weblinks',
-	'linksearch-desc'  => '[[Special:Linksearch|Find sider ve eksterne links]] der følger bestemte mønstre',
-	'linksearch-pat'   => 'Søĝ æfter links til:',
-	'linksearch-ns'    => 'Navnerum:',
-	'linksearch-ok'    => 'Søĝ',
-	'linksearch-text'  => 'Wildkårter søm "*.wikipedia.org" ken benyttes.<br />Understøttede pråtåkoller: <tt>$1</tt>',
-	'linksearch-line'  => '$2 linker til $1',
-	'linksearch-error' => "Wildkårter må ken benyttes i'n stårt åf håstnavnet.",
-);
-
-/** Javanese (Basa Jawa)
- * @author Meursault2004
- */
-$messages['jv'] = array(
-	'linksearch'       => 'Golèk pranala jaba',
-	'linksearch-desc'  => '[[Special:Linksearch|Golèka kaca mawa pranala jaba]] sing cocog mawa pola/patrun tartamtu',
-	'linksearch-pat'   => 'Pola panggolèkan:',
-	'linksearch-ns'    => 'Bilik nama:',
-	'linksearch-ok'    => 'Golèk',
-	'linksearch-text'  => "''Wildcards'' kaya ta \"*.wikipedia.org\" bisa dienggo.<br />Protokol sing disengkuyung: <tt>\$1</tt>",
-	'linksearch-line'  => '$1 disambung saka $2',
-	'linksearch-error' => "''Wildcards'' namung bisa dienggo ing bagéyan awal saka jeneng host.",
-);
-
-/** Kazakh (Arabic script) (‫قازاقشا (تٴوتە)‬) */
 $messages['kk-arab'] = array(
 	'linksearch'       => 'سىرتقى سٸلتەمەلەردٸ ٸزدەۋ',
 	'linksearch-pat'   => 'ٸزدەۋ شارتى:',
@@ -681,7 +339,6 @@ $messages['kk-arab'] = array(
 	'linksearch-error' => 'بٵدەل نىشاندار تەك سەرۆەر جايى اتاۋىنىڭ باستاۋىندا بولۋى مٷمكٸن.',
 );
 
-/** Kazakh (Cyrillic) (Қазақша (Cyrillic)) */
 $messages['kk-cyrl'] = array(
 	'linksearch'       => 'Сыртқы сілтемелерді іздеу',
 	'linksearch-pat'   => 'Іздеу шарты:',
@@ -692,7 +349,6 @@ $messages['kk-cyrl'] = array(
 	'linksearch-error' => 'Бәдел нышандар тек сервер жайы атауының бастауында болуы мүмкін.',
 );
 
-/** Kazakh (Latin) (Қазақша (Latin)) */
 $messages['kk-latn'] = array(
 	'linksearch'       => 'Sırtqı siltemelerdi izdew',
 	'linksearch-pat'   => 'İzdew şartı:',
@@ -704,57 +360,16 @@ $messages['kk-latn'] = array(
 );
 
 /** Khmer (ភាសាខ្មែរ)
- * @author Lovekhmer
  * @author Chhorran
  */
 $messages['km'] = array(
-	'linksearch'      => 'ស្វែងរកតំណភ្ជាប់វិប',
-	'linksearch-desc' => '[[Special:Linksearch|រកមើលទំព័រមានតំណភ្ជាប់ខាងក្រៅ]]ស៊ីគ្នានឹងគំរូបានសំដៅ',
-	'linksearch-pat'  => 'ស្វែងរកគំរូ៖',
-	'linksearch-ns'   => 'លំហឈ្មោះ៖',
-	'linksearch-ok'   => 'ស្វែងរក',
-	'linksearch-line' => '$1បានតភ្ជាប់ពី$2',
+	'linksearch-ns' => 'វាលឈ្មោះ ៖',
 );
 
-/** Korean (한국어)
- * @author Kwj2772
- */
-$messages['ko'] = array(
-	'linksearch'     => '웹 링크 찾기',
-	'linksearch-pat' => '검색 패턴:',
-	'linksearch-ok'  => '검색',
-);
-
-/** Kinaray-a (Kinaray-a)
- * @author Jose77
- */
-$messages['krj'] = array(
-	'linksearch-ok' => 'Sagap',
-);
-
-/** Ripoarisch (Ripoarisch)
- * @author Purodha
- */
-$messages['ksh'] = array(
-	'linksearch'    => 'Lėngkß op Websigge sööke',
-	'linksearch-ok' => 'Sööke',
-);
-
-/** Kurdish (Latin) (Kurdî / كوردی (Latin))
- * @author Bangin
- * @author Siebrand
- */
-$messages['ku-latn'] = array(
-	'linksearch-ok' => 'Lêbigere',
-);
-
-/** Latin (Latina)
- * @author SPQRobin
- */
 $messages['la'] = array(
-	'linksearch'    => 'Quaerere nexus externos',
-	'linksearch-ns' => 'Spatium nominale:',
-	'linksearch-ok' => 'Quaerere',
+	'linksearch'       => 'Quaerere nexus externos',
+	'linksearch-ns'    => 'Spatium nominale:',
+	'linksearch-ok'    => 'Quaerere',
 );
 
 /** Luxembourgish (Lëtzebuergesch)
@@ -762,18 +377,9 @@ $messages['la'] = array(
  */
 $messages['lb'] = array(
 	'linksearch'      => 'Weblink-Sich',
-	'linksearch-desc' => '[[Special:Linksearch|Fënnt Säite mat externe Linken]], déi engem bestëmmte Muster entspriechen',
-	'linksearch-pat'  => 'Sich-Critère:',
 	'linksearch-ns'   => 'Nummraum:',
 	'linksearch-ok'   => 'Sichen',
 	'linksearch-line' => '$1 verlinkt vun $2',
-);
-
-/** Lingua Franca Nova (Lingua Franca Nova)
- * @author Malafaya
- */
-$messages['lfn'] = array(
-	'linksearch-ok' => 'Xerca',
 );
 
 /** Limburgish (Limburgs)
@@ -786,14 +392,13 @@ $messages['li'] = array(
 	'linksearch-pat'   => 'Zeukpatroon:',
 	'linksearch-ns'    => 'Naamruumdje:',
 	'linksearch-ok'    => 'Zeuk',
-	'linksearch-text'  => 'Wildcards wie "*.wikipedia.org" of "*.org" zeen toegestaon.<br />Supported protocols: <tt>$1</tt>',
+	'linksearch-text'  => 'Wildcards wie "*.wikipedia.org" of "*.org" zeen toegestaon.',
 	'linksearch-line'  => '$1 gelink vanaaf $2',
 	'linksearch-error' => 'Wildcards zijn alleen toegestaan aan het begin van een hostnaam.',
 );
 
-/** Lao (ລາວ) */
 $messages['lo'] = array(
-	'linksearch' => 'ຄົ້ນຫາການເຊື່ອມຕໍ່ຫາເວັບ',
+	'linksearch'       => 'ຄົ້ນຫາການເຊື່ອມຕໍ່ຫາເວັບ',
 );
 
 /** Lithuanian (Lietuvių)
@@ -806,72 +411,20 @@ $messages['lt'] = array(
 	'linksearch-ok' => 'Ieškoti',
 );
 
-/** Malayalam (മലയാളം)
- * @author Shijualex
- */
-$messages['ml'] = array(
-	'linksearch'       => 'വെബ്ബ് കണ്ണികള്‍ തിരയുക',
-	'linksearch-desc'  => 'നിര്‍ദ്ദിഷ്ട മാതൃകയുമായി യോജിക്കുന്ന [[Special:Linksearch|പുറം കണ്ണികളുള്ള താളുകള്‍ തിരയുക]]',
-	'linksearch-pat'   => 'തിരച്ചിലിന്റെ മാതൃക:',
-	'linksearch-ns'    => 'നെയിംസ്പേസ്:',
-	'linksearch-ok'    => 'തിരയൂ',
-	'linksearch-text'  => '"*.wikipedia.org" പോലുള്ള വൈല്‍ഡ് കാര്‍ഡുകള്‍ ഉപയോഗിക്കാവുന്നതാണ്‌.<br />
-പിന്താങ്ങുന്ന പ്രോട്ടോക്കോളുകള്‍: <tt>$1</tt>',
-	'linksearch-line'  => '$1,  $2ല്‍ നിന്നു കണ്ണി ചേര്‍ക്കപ്പെട്ടിരിക്കുന്നു.',
-	'linksearch-error' => 'ഹോസ്റ്റ്നെയിമിന്റെ തുടക്കത്തില്‍ മാത്രമേ വൈല്‍ഡ് കാര്‍ഡുകള്‍ വരാവൂ.',
-);
-
-/** Marathi (मराठी)
- * @author Kaustubh
- * @author Mahitgar
- */
-$messages['mr'] = array(
-	'linksearch'       => 'आंतरजाल दुवे शोधा',
-	'linksearch-desc'  => 'दिलेल्या मजकूराशी जुळणारी [[Special:Linksearch|बाह्यदुवे असणारी पाने शोधा]]',
-	'linksearch-pat'   => 'शोधण्याचा मजकूर:',
-	'linksearch-ns'    => 'नामविश्व:',
-	'linksearch-ok'    => 'शोध',
-	'linksearch-text'  => '"*.wikipedia.org" सारखी वाईल्डकार्ड्स वापरायला परवानगी आहे.<br />पुढील प्रोटोकॉल्समध्ये चालेल: <tt>$1</tt>',
-	'linksearch-line'  => '$2 मधून $1 जोडलेले आहे',
-	'linksearch-error' => 'वाईल्डकार्ड्स होस्ट नावाच्या फक्त सुरवातीलाच येऊ शकतात.',
-);
-
-/** Malay (Bahasa Melayu)
- * @author Aviator
- */
-$messages['ms'] = array(
-	'linksearch'       => 'Cari pautan web',
-	'linksearch-desc'  => '[[Special:Linksearch|Cari laman mengandungi pautan luar]] yang sepadan dengan corak tertentu',
-	'linksearch-pat'   => 'Corak carian:',
-	'linksearch-ns'    => 'Ruang nama:',
-	'linksearch-ok'    => 'Cari',
-	'linksearch-text'  => 'Kad bebas seperti "*.wikipedia.org" dibenarkan.<br />
-Protokol yang disokong: <tt>$1</tt>',
-	'linksearch-line'  => '$1 dipaut dari $2',
-	'linksearch-error' => 'Kad bebas hanya boleh digunakan pada permulaan nama hos.',
-);
-
-/** Min Nan Chinese (Bân-lâm-gú) */
 $messages['nan'] = array(
-	'linksearch' => 'Chhiau-chhoē chām-goā liân-kiat',
+	'linksearch'       => 'Chhiau-chhoē chām-goā liân-kiat',
 );
 
-/** Neapolitan (Nnapulitano)
- * @author SPQRobin
- */
 $messages['nap'] = array(
-	'linksearch-ok' => 'Truova',
+	'linksearch-ok'    => 'Truova',
 );
 
 /** Low German (Plattdüütsch)
  * @author Slomox
  */
 $messages['nds'] = array(
-	'linksearch'      => 'Weblenken söken',
-	'linksearch-pat'  => 'Söökmunster:',
-	'linksearch-ns'   => 'Naamruum:',
-	'linksearch-ok'   => 'Söken',
-	'linksearch-line' => '$1 hett en Lenk vun $2',
+	'linksearch-ns' => 'Naamruum:',
+	'linksearch-ok' => 'Söken',
 );
 
 /** Nepali (नेपाली)
@@ -888,25 +441,16 @@ $messages['ne'] = array(
  */
 $messages['nl'] = array(
 	'linksearch'       => 'Externe links zoeken',
-	'linksearch-desc'  => "[[Special:Linksearch|Pagina's zoeken met externe links]] die aan een bepaald patroon voldoen",
+	'linksearch-desc'  => "Pagina's zoeken met externe links die aan een bepaald patroon voldoen",
 	'linksearch-pat'   => 'Zoekpatroon:',
 	'linksearch-ns'    => 'Naamruimte:',
 	'linksearch-ok'    => 'Zoeken',
-	'linksearch-text'  => 'Wildcards zoals "*.wikipedia.org" of "*.org" zijn toegestaan.<br />
-Ondersteunde protocollen: <tt>$1</tt>',
+	'linksearch-text'  => 'Wildcards zoals "*.wikipedia.org" of "*.org" zijn toegestaan.',
 	'linksearch-line'  => '$1 gelinkt vanaf $2',
 	'linksearch-error' => 'Wildcards zijn alleen toegestaan aan het begin van een hostnaam.',
 );
 
-/** Norwegian Nynorsk (‪Norsk (nynorsk)‬)
- * @author Jon Harald Søby
- */
-$messages['nn'] = array(
-	'linksearch-ns' => 'Namnerom:',
-	'linksearch-ok' => 'Søk',
-);
-
-/** Norwegian (bokmål)‬ (‪Norsk (bokmål)‬)
+/** Norwegian (‪Norsk (bokmål)‬)
  * @author Jon Harald Søby
  */
 $messages['no'] = array(
@@ -941,9 +485,9 @@ $messages['oc'] = array(
 	'linksearch'       => 'Recercar de ligams Internet',
 	'linksearch-desc'  => 'Recèrca de las paginas dins lasqualas un ligam extèrn apareis.',
 	'linksearch-pat'   => 'Recercar l’expression :',
-	'linksearch-ns'    => 'Espacis de noms :',
+	'linksearch-ns'    => 'Espaci de noms :',
 	'linksearch-ok'    => 'Recercar',
-	'linksearch-text'  => 'De caractèrs « joker » pòdon èsser utilizats, per exemple <code>*.wikipedia.org</code>.<br />Protocòls reconeguts : <tt>$1</tt>.',
+	'linksearch-text'  => 'Aquesta pagina especiala permetís de recercar las paginas dins lasqualas un ligam extèrn apareis.<br />De caractèrs « joker » pòdon èsser utilizats, per exemple <code>*.wikipedia.org</code>.',
 	'linksearch-line'  => '$1 amb un ligam a partir de $2',
 	'linksearch-error' => 'Los caractèrs « joker » pòdon pas èsser utilizats qu’al començament del nom de domeni.',
 );
@@ -958,31 +502,27 @@ $messages['pag'] = array(
 );
 
 /** Polish (Polski)
- * @author Sp5uhe
  * @author Derbeth
+ * @author Sp5uhe
  */
 $messages['pl'] = array(
-	'linksearch'       => 'Wyszukiwarka linków zewnętrznych',
+	'linksearch'       => 'Szukanie linków zewnętrznych',
 	'linksearch-desc'  => 'Odnajduje strony zawierające zewnętrzne linki pasujące do zadanego wzorca',
-	'linksearch-pat'   => 'Wzorzec wyszukiwania',
-	'linksearch-ns'    => 'Przestrzeń nazw',
+	'linksearch-pat'   => 'Wzorzec wyszukiwania:',
+	'linksearch-ns'    => 'Przestrzeń nazw:',
 	'linksearch-ok'    => 'Szukaj',
-	'linksearch-text'  => 'Można użyć symbolu wieloznacznego „*”. Dla przykładu „*.wikipedia.org” spowoduje wyszukanie wszystkich linków prowadzących do domeny „wikipedia.org” i jej poddomen.<br />
-Obsługiwane protokoły: <tt>$1</tt>',
-	'linksearch-line'  => '$1 link na stronie $2',
-	'linksearch-error' => 'Symbolu wieloznacznego można użyć wyłącznie na początku nazwy hosta.',
+	'linksearch-text'  => 'Można używać masek typu "*.wikipedia.org".<br />Obsługiwane protokoły: <tt>$1</tt>',
+	'linksearch-line'  => '$1 linkuje z $2',
+	'linksearch-error' => 'Maski można użyć tylko na początku nazwy hosta.',
 );
 
-/** Piedmontese (Piemontèis)
- * @author Bèrto 'd Sèra
- */
 $messages['pms'] = array(
-	'linksearch'       => "Sërchè antra j'anliure dla Ragnà",
-	'linksearch-pat'   => "Schema d'arsërca:",
+	'linksearch'       => 'Sërchè antra j\'anliure dla Ragnà',
+	'linksearch-pat'   => 'Schema d\'arsërca:',
 	'linksearch-ns'    => 'Spassi nominal:',
 	'linksearch-ok'    => 'Sërca',
 	'linksearch-text'  => 'As peulo dovresse dij ciapatut coma "*.wikipedia.org".<br />Protocòj ch\'as peulo dovré: <tt>$1</tt>',
-	'linksearch-line'  => "$1 a l'ha n'anliura ch'a-i riva dzora da $2",
+	'linksearch-line'  => '$1 a l\'ha n\'anliura ch\'a-i riva dzora da $2',
 	'linksearch-error' => 'Ij ciapatut as peulo butesse mach an prinsipi dël nòm dël servent.',
 );
 
@@ -990,11 +530,9 @@ $messages['pms'] = array(
  * @author Ahmed-Najib-Biabani-Ibrahimkhel
  */
 $messages['ps'] = array(
-	'linksearch'      => 'د جال تړنې پلټل',
-	'linksearch-pat'  => 'د پلټنې مخبېلګه:',
-	'linksearch-ns'   => 'نوم-تشيال:',
-	'linksearch-ok'   => 'پلټل',
-	'linksearch-line' => '$1 د $2 سره تړل شوی',
+	'linksearch-pat' => 'د پلټنې مخبېلګه:',
+	'linksearch-ns'  => 'نوم-تشيال:',
+	'linksearch-ok'  => 'لټون',
 );
 
 /** Portuguese (Português)
@@ -1024,30 +562,12 @@ $messages['qu'] = array(
 	'linksearch-error' => 'Ima rantipas sananchaqa (* ?) tiyaypa qallariyninpim kanman chaylla.',
 );
 
-/** Tarifit (Tarifit)
- * @author Jose77
- */
-$messages['rif'] = array(
-	'linksearch-ok' => 'Tarzzut',
-);
-
-/** Rhaeto-Romance (Rumantsch)
- * @author SPQRobin
- */
 $messages['rm'] = array(
-	'linksearch-ok' => 'Tschertgar',
-);
-
-/** Romanian (Română)
- * @author KlaudiuMihaila
- */
-$messages['ro'] = array(
-	'linksearch-ns' => 'Spaţiu de nume:',
-	'linksearch-ok' => 'Caută',
+	'linksearch-ok'    => 'Tschertgar',
 );
 
 /** Russian (Русский)
- * @author Александр Сигачёв
+ * @author .:Ajvol:.
  */
 $messages['ru'] = array(
 	'linksearch'       => 'Поиск внешних ссылок',
@@ -1055,8 +575,7 @@ $messages['ru'] = array(
 	'linksearch-pat'   => 'Шаблон для поиска:',
 	'linksearch-ns'    => 'Пространство имён:',
 	'linksearch-ok'    => 'Найти',
-	'linksearch-text'  => 'Можно использовать подстановочные символы, например, <code>*.wikipedia.org</code>.<br />
-Поддерживаемые протоколы: <tt>$1</tt>',
+	'linksearch-text'  => 'Можно использовать подстановочные символы, например, <code>*.wikipedia.org</code>.',
 	'linksearch-line'  => 'Ссылка на $1 из $2',
 	'linksearch-error' => 'Подстановочные символы могут использоваться только в начале адресов.',
 );
@@ -1068,11 +587,8 @@ $messages['sah'] = array(
 	'linksearch'       => 'Тас сигэлэри көрдөөһүн',
 	'linksearch-desc'  => 'Этиллибит халыыпка сөп түбэһэр [[Special:Linksearch|тас сигэлээх (ыйынньыктаах) сирэйдэри көрдөрөр]]',
 	'linksearch-pat'   => 'Көрдөөһүн халыыба:',
-	'linksearch-ns'    => 'Аат хочото (namespace):',
 	'linksearch-ok'    => 'Бул',
-	'linksearch-text'  => 'Туруоран биэрэр бэлиэлэри туһаныахха сөп, холобур, "*.wikipedia.org".
-
-Өйүүр боротокуол: <tt>$1</tt>',
+	'linksearch-text'  => 'Туруоран биэрэр бэлиэлэри туһаныахха сөп, холобур, <code>*.wikipedia.org</code>.',
 	'linksearch-line'  => 'Мантан $2 манна $1 ыйынньык',
 	'linksearch-error' => 'Туруоран биэрэр бэлиэлэри аадырыс/hostname саҕаланыытыгар эрэ туттуохха сөп.',
 );
@@ -1086,48 +602,28 @@ $messages['sk'] = array(
 	'linksearch-pat'   => 'Vyhľadávací vzor:',
 	'linksearch-ns'    => 'Menný priestor:',
 	'linksearch-ok'    => 'Hľadať',
-	'linksearch-text'  => 'Je možné použiť zástupné znaky ako „*.wikipedia.org“.<br />
-Podporované protokoly: <tt>$1</tt>',
+	'linksearch-text'  => 'Je možné použiť zástupné znaky ako „*.wikipedia.org“.',
 	'linksearch-line'  => 'Na $1 odkazuje $2',
 	'linksearch-error' => 'Zástupné znaky je možné použiť iba na začiatku názvu domény.',
 );
 
-/** Albanian (Shqip) */
 $messages['sq'] = array(
 	'linksearch'       => 'Kërkoni lidhje të jashtme',
-	'linksearch-pat'   => 'Motivi kërkimor:',
-	'linksearch-ok'    => 'Kërko',
-	'linksearch-text'  => 'Ylli zëvëndësues mund të përdoret si p.sh. "*.wikipedia.org".',
 	'linksearch-error' => 'Ylli mund të përdoret vetëm në fillim të emrit',
+	'linksearch-ok'    => 'Kërko',
+	'linksearch-pat'   => 'Motivi kërkimor:',
+	'linksearch-text'  => 'Ylli zëvëndësues mund të përdoret si p.sh. "*.wikipedia.org".',
 );
 
-/** Serbian (Српски / Srpski) */
 $messages['sr'] = array(
-	'linksearch'       => 'Претрага интернет веза',
+	'linksearch'	   => 'Претрага интернет веза',
 	'linksearch-text'  => 'Џокери као што су "*.wikipedia.org" могу да се користе.',
 	'linksearch-line'  => '$1 повезана са $2',
-	'linksearch-error' => 'Џокери могу да се појављују само на почетку домена.',
+	'linksearch-error' => 'Џокери могу да се појављују само на почетку домена.'
 );
 
-/** Serbian Cyrillic ekavian (ћирилица)
- * @author Sasa Stefanovic
- * @author Millosh
- */
-$messages['sr-ec'] = array(
-	'linksearch'       => 'претрага веб линкова',
-	'linksearch-desc'  => '[[Special:Linksearch|Пронађи стране са спољашњим везама]] које се поклапају са одређеним обрасцем.',
-	'linksearch-pat'   => 'Образац претраге:',
-	'linksearch-ns'    => 'Именски простор:',
-	'linksearch-ok'    => 'Претрага',
-	'linksearch-line'  => 'страна $1 је повезана са стране $2',
-	'linksearch-error' => 'Џокери се могу појавити само на почетку имена хоста.',
-);
-
-/** Swati (SiSwati)
- * @author Jatrobat
- */
 $messages['ss'] = array(
-	'linksearch-ok' => 'Kucálata',
+	'linksearch-ok'    => 'Kucálata',
 );
 
 /** Seeltersk (Seeltersk)
@@ -1135,7 +631,6 @@ $messages['ss'] = array(
  */
 $messages['stq'] = array(
 	'linksearch'       => 'Webferbiendenge-Säike',
-	'linksearch-desc'  => '[[Special:Linksearch|Fint Sieden mäd externe Ferbiendengen]], do n foarroat Säikmuster äntspreeken dwo.',
 	'linksearch-pat'   => 'Säikmuster:',
 	'linksearch-ns'    => 'Noomensruum:',
 	'linksearch-ok'    => 'Säike',
@@ -1144,49 +639,18 @@ $messages['stq'] = array(
 	'linksearch-error' => 'Wildcards konnen bloot an dän Ounfang fon ju URL ferwoand wäide.',
 );
 
-/** Sundanese (Basa Sunda)
- * @author Kandar
- * @author Irwangatot
- */
-$messages['su'] = array(
-	'linksearch'       => 'Sungsi tumbu ramat',
-	'linksearch-desc'  => '[[Special:Linksearch|Sungsi kaca nu ngandung tumbu kaluar]] luyu jeung pola husus',
-	'linksearch-pat'   => 'Pola sungsi:',
-	'linksearch-ns'    => 'Spasi ngaran:',
-	'linksearch-ok'    => 'Sungsi',
-	'linksearch-text'  => "''Wildcard'' sarupaning \"*.wikipedia.org\" bisa dipaké.<br />Protokol nu dirojong: <tt>\$1</tt>",
-	'linksearch-line'  => '$1 ditumbu ti $2',
-	'linksearch-error' => "''Wildcard'' ngan bisa némbongan dina awal ngaran indung (''host'').",
-);
-
 /** Swedish (Svenska)
  * @author Lejonel
- * @author Boivie
  */
 $messages['sv'] = array(
 	'linksearch'       => 'Sök webblänkar',
-	'linksearch-desc'  => '[[Special:Linksearch|Sök efter externa länkar]] som matchar vissa mönster',
+	'linksearch-desc'  => 'Söker efter externa länkar som matchar vissa mönster',
 	'linksearch-pat'   => 'Sökmönster:',
 	'linksearch-ns'    => 'Namnrymd:',
 	'linksearch-ok'    => 'Sök',
-	'linksearch-text'  => 'Jokertecken (wildcards) som t ex "*.wikipedia.org" kan användas.<br />
-Stödda protokoll: <tt>$1</tt>',
+	'linksearch-text'  => 'Jokertecken (wildcards) kan användas i början av domännamn, t.ex.  "*.wikipedia.org".<br />Stödda protokoll: <tt>$1</tt>',
 	'linksearch-line'  => '$1 länkas från $2',
 	'linksearch-error' => 'Jokertecken kan bara användas i början av domännamnet.',
-);
-
-/** Silesian (Ślůnski)
- * @author Herr Kriss
- */
-$messages['szl'] = array(
-	'linksearch-ok' => 'Šnupej',
-);
-
-/** Tamil (தமிழ்)
- * @author Trengarasu
- */
-$messages['ta'] = array(
-	'linksearch-ok' => 'தேடுக',
 );
 
 /** Telugu (తెలుగు)
@@ -1204,33 +668,13 @@ $messages['te'] = array(
 	'linksearch-error' => 'హోస్ట్‌నేముకు ముందు మాత్రమే వైల్డ్ కార్డులు వాడవచ్చు.',
 );
 
-/** Tetum (Tetun)
- * @author MF-Warburg
- */
-$messages['tet'] = array(
-	'linksearch-ok' => 'Buka',
-);
-
-/** Tajik (Cyrillic) (Тоҷикӣ/tojikī (Cyrillic))
+/** Tajik (Тоҷикӣ)
  * @author Ibrahim
  */
-$messages['tg-cyrl'] = array(
-	'linksearch'       => 'Ҷусутҷӣ пайвандҳои веб',
-	'linksearch-desc'  => '[[Special:Linksearch|Саҳифаҳоеро бо пайвандҳои беруна пайдо мекунад]], ки бо нақшаҳои мушаххасе мувофиқат доранд',
-	'linksearch-pat'   => 'Ҷустуҷӯи нақш:',
-	'linksearch-ns'    => 'Фазоином:',
-	'linksearch-ok'    => 'Ҷустуҷӯ',
-	'linksearch-text'  => 'Нишонаҳои монанди "*.wikipedia.org"-ро метавон истифода кард.<br />Протоколҳои пуштибонишуда: <tt>$1</tt>',
-	'linksearch-line'  => '$1 дорои пайванд аз $2 аст',
-	'linksearch-error' => 'Нишонаҳо фақат дар ибтидои номи мизбони интернетӣ метавонанд истифода шаванд.',
-);
-
-/** Thai (ไทย)
- * @author Passawuth
- */
-$messages['th'] = array(
-	'linksearch-ns' => 'เนมสเปซ :',
-	'linksearch-ok' => 'ค้นหา',
+$messages['tg'] = array(
+	'linksearch'    => 'Ҷусутҷӣ пайвандҳои веб',
+	'linksearch-ns' => 'Фазоином:',
+	'linksearch-ok' => 'Ҷустуҷӯ',
 );
 
 /** Tonga (faka-Tonga)
@@ -1246,44 +690,7 @@ $messages['to'] = array(
  * @author Karduelis
  */
 $messages['tr'] = array(
-	'linksearch-ns' => 'İsimalanı:',
 	'linksearch-ok' => 'Ara',
-);
-
-/** Tsonga (Xitsonga)
- * @author Thuvack
- */
-$messages['ts'] = array(
-	'linksearch-ok' => 'Lava',
-);
-
-/** Ukrainian (Українська)
- * @author Ahonc
- */
-$messages['uk'] = array(
-	'linksearch'       => 'Пошук зовнішніх посилань',
-	'linksearch-desc'  => '[[Special:Linksearch|Пошук сторінок із зовнішніми посиланнями]], що відповідають зазначеному шаблону',
-	'linksearch-pat'   => 'Шаблон для пошуку:',
-	'linksearch-ns'    => 'Простір назв:',
-	'linksearch-ok'    => 'Знайти',
-	'linksearch-text'  => 'Можна використовувати підстановочні символи, наприклад, <code>*.wikipedia.org</code>.<br />Підтримувані протоколи: <tt>$1</tt>',
-	'linksearch-line'  => 'Посилання на $1 із $2',
-	'linksearch-error' => 'Підстановочні знаки можуть використовуватися лише на початку адрес.',
-);
-
-/** Vèneto (Vèneto)
- * @author Candalua
- */
-$messages['vec'] = array(
-	'linksearch'       => 'Çerca colegamenti foresti',
-	'linksearch-desc'  => '[[Special:Linksearch|Cata fora le pagine con colegamenti foresti]] che corisponde a criteri specificà',
-	'linksearch-pat'   => 'Pattern de riçerca:',
-	'linksearch-ns'    => 'Namespace:',
-	'linksearch-ok'    => 'Çerca',
-	'linksearch-text'  => 'Se pol doparar dei metacaràteri, par es. "*.wikipedia.org".<br />
-Protocòli suportè: <tt>$1</tt>',
-	'linksearch-line'  => '$1 presente ne la pagina $2',
-	'linksearch-error' => "I metacaràteri i pode vegner doparài solo a l'inizio del nome de l'host.",
 );
 
 /** Vietnamese (Tiếng Việt)
@@ -1311,10 +718,8 @@ $messages['vo'] = array(
 	'linksearch-ok' => 'Suk',
 );
 
-/** Yue (粵語) */
 $messages['yue'] = array(
 	'linksearch'       => '搵網頁連結',
-	'linksearch-desc'  => '配合指定嘅字去[[Special:Linksearch|搵外連頁]]',
 	'linksearch-pat'   => '搵嘅形態:',
 	'linksearch-ns'    => '空間名',
 	'linksearch-ok'    => '搵',
@@ -1323,11 +728,8 @@ $messages['yue'] = array(
 	'linksearch-error' => '萬用字元只可以響主機名嘅開頭度用。',
 );
 
-/** Simplified Chinese (‪中文(简体)‬)
- */
 $messages['zh-hans'] = array(
 	'linksearch'       => '搜索网页链接',
-	'linksearch-desc'  => '配合指定的字[[Special:Linksearch|搜寻含外部连结之页面]]',
 	'linksearch-pat'   => '搜索网址:',
 	'linksearch-ns'    => '名字空间:',
 	'linksearch-ok'    => '搜索',
@@ -1336,11 +738,8 @@ $messages['zh-hans'] = array(
 	'linksearch-error' => '通配符仅可在主机名称的开头使用。',
 );
 
-/** Traditional Chinese (‪中文(繁體)‬)
- */
 $messages['zh-hant'] = array(
 	'linksearch'       => '搜尋網頁連結',
-	'linksearch-desc'  => '配合指定的字[[Special:Linksearch|搜尋含外部連結之頁面]]',
 	'linksearch-pat'   => '搜尋網址:',
 	'linksearch-ns'    => '名稱空間:',
 	'linksearch-ok'    => '搜尋',

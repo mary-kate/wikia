@@ -6,20 +6,11 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 
 require_once( 'DYMNorm.php' );
 
-$wgExtensionCredits['other'][] = array(
-	'name'           => 'DidYouMean',
-	'author'         => 'hippietrail (Andrew Dunbar)',
-	'svn-date' => '$LastChangedDate: 2008-05-06 11:59:58 +0000 (Tue, 06 May 2008) $',
-	'svn-revision' => '$LastChangedRevision: 34306 $',
-	'url'            => 'http://www.mediawiki.org/wiki/Extension:DidYouMean',
-	'descriptionmsg' => 'didyoumean-desc',
-);
-$wgExtensionMessagesFiles['DidYouMean'] =  dirname(__FILE__) . '/DidYouMean.i18n.php';
+$wgExtensionCredits['other'][] = array( 'name' => 'DidYouMean', 'author' => 'hippietrail (Andrew Dunbar)' );
 
 # do database lookup from these
 $wgHooks['ArticleNoArticleText'][] = 'wfDymArticleNoArticleText';
-$wgHooks['SpecialSearchResults'][] = 'wfDymSpecialSearchNoResults';
-$wgHooks['SpecialSearchNoResults'][] = 'wfDymSpecialSearchNoResults';
+$wgHooks['SpecialSearchNogomatch'][] = 'wfDymSpecialSearchNogomatch';
 
 # db lookup + parse existing {{see}} and add enhanced one with db results
 $wgHooks['ParserBeforeStrip'][] = 'wfDymParserBeforeStrip';
@@ -36,9 +27,6 @@ $wgHooks['ArticleSaveComplete'][] = 'wfDymArticleSaveComplete';
 
 # handle undelete
 $wgHooks['ArticleUndelete'][] = 'wfDymArticleUndelete';
-
-# handle parser test setup
-$wgHooks['ParserTestTables'][] = 'wfDymParserTestTables';
 
 # set this in LocalSettings.php
 $wgDymUseSeeTemplate = false;
@@ -61,12 +49,12 @@ function wfDymArticleNoArticleText( &$article, &$text ) {
 # this is called when using the Go/Search box but it is not called when entering
 # a URL for a non-existing article
 
-function wfDymSpecialSearchNoResults( $term ) {
+function wfDymSpecialSearchNogomatch( &$title ) {
 	global $wgOut;
 
 	wfDebug( 'HIPP: ' . __METHOD__ . "\n" );
 
-	$sees = wfDymLookup( 0, $term );
+	$sees = wfDymLookup( 0, $title->getText() );
 
 	sort($sees);
 
@@ -92,45 +80,38 @@ function wfDymParserBeforeStrip( &$parser, &$text, &$stripState ) {
 
 	if (preg_match( "/{{[sS]ee\|([^}]*)}}/", $text, $see )) {
 		wfDebug( "HIPP: see Hit\n" );
-		$hasTemplate = true;
 		$sees = explode("|", $see[1]);
 	} elseif (preg_match( "/{{[xX]see(\|[^}]*)}}/", $text, $see )) {
 		wfDebug( "HIPP: xsee Hit\n" );
-		$hasTemplate = true;
 		preg_match_all( "/\|\[\[([^]|]*)(?:\|([^|]*))?\]\](?: \(([^)]*)\))?/", $see[1], $ma );
 		$sees = $ma[1];
 	} else {
 		wfDebug( "HIPP: (x)see Miss\n" );
 		# there's no {{see}} in this chunk of wikitext
 		# if this is the 1st chunk of the article itself we can put an empty {{see}} there.
-		$hasTemplate = false;
+		$text = "{{see|}}\n" . $text;
 		$sees = array();
 	}
 
 	# normalize entities and urlencoding to pure utf-8
 	foreach ($sees as &$value)
-		$value = rawurldecode(html_entity_decode($value, ENT_QUOTES, 'UTF-8'));
+		$value = urldecode(html_entity_decode($value, ENT_QUOTES, 'UTF-8'));
 
-	wfDebug( 'HIPP: Parser: ' . implode(', ', $sees) . "\n" );
-	wfDebug( 'HIPP: DBase:  ' . implode(', ', $parser->mDymSees) . "\n" );
+	wfDebug( 'HIPP: Parser: ' . utf8_decode(implode(', ', $sees)) . "\n" );
+	wfDebug( 'HIPP: DBase:  ' . utf8_decode(implode(', ', $parser->mDymSees)) . "\n" );
 
 	# add in the stuff from the database lookup
 	$sees = array_unique(array_merge($sees, $parser->mDymSees));
 	sort($sees);
 
-	wfDebug( 'HIPP: Merged: ' . implode(', ', $sees) . "\n" );
+	wfDebug( 'HIPP: Merged: ' . utf8_decode(implode(', ', $sees)) . "\n" );
 
 	# TODO is it better to use $parser->insertStripItem() ?
 
-	if (count($sees)) {
-		if( !$hasTemplate ) {
-			// We need to squish in a fresh copy of the template...
-			$text = "{{see|}}\n" . $text;
-		}
+	if (count($sees))
 		$built_sees = build_sees($sees);
-	} else {
+	else
 		$built_sees = '';
-	}
 
 	$text = preg_replace(
 		'/{{[xX]?[sS]ee\|[^}]*}}/',
@@ -197,7 +178,7 @@ function wfDymLookup( $pageid, $title ) {
 				# accumulate the db results
 				while( $o = $dbr->fetchObject( $res ) ) {
 					$t2 = str_replace('_', ' ', $o->page_title);
-					$dbo = $t2;
+					$dbo = utf8_decode($t2);
 					if ($title != $t2) {
 						array_push( $sees, $t2 );
 						$dbo = '++ ' . $dbo;
@@ -222,12 +203,12 @@ function wfDymArticleInsertComplete( &$article, &$user, $text, $summary, $ismino
 	if ($article->getTitle()->getNamespace() != 0 || $article->isRedirect() == true)
 		return true;
 
-	wfDymDoInsert( $article->getID(), $article->getTitle()->getText() );
+	wfDoInsert( $article->getID(), $article->getTitle()->getText() );
 
 	return true;
 }
 
-function wfDymArticleUndelete( &$title, &$create ) {
+function dymArticleUndelete( &$title, &$create ) {
 
 	if ($create == false || $title->getNamespace() != 0)
 		return true;
@@ -238,7 +219,7 @@ function wfDymArticleUndelete( &$title, &$create ) {
 	#	return true;
 	#}
 
-	wfDymDoInsert( $title->getArticleId(), $title->getText() );
+	doInsert( $title->getArticleId(), $title->getText() );
 
 	return true;
 }
@@ -248,7 +229,7 @@ function wfDymArticleDelete( $article, $user, $reason ) {
 	if ($article->getTitle()->getNamespace() != 0 || $article->isRedirect() == true)
 		return true;
 
-	wfDymDoDelete( $article->getID() );
+	wfDoDelete( $article->getID() );
 
 	return true;
 }
@@ -276,11 +257,11 @@ function wfDymTitleMoveComplete( &$title, &$nt, &$wgUser, &$pageid, &$redirid ) 
 	#}
 
 	if ($oldns == 0 && $newns == 0) {
-		wfDymDoUpdate( $pageid, $newtitletext );
+		wfDoUpdate( $pageid, $newtitletext );
 	} elseif ($oldns == 0) {
-		wfDymDoDelete( $pageid );
+		wfDoDelete( $pageid );
 	} elseif ($newns == 0) {
-		wfDymDoInsert( $pageid, $newtitletext );
+		wfDoInsert( $pageid, $newtitletext );
 	}
 
 	return true;
@@ -306,11 +287,11 @@ function wfDymArticleSaveComplete( $article, $user, $text, $summary, $isminor, $
 		return true;
 
 	if ($article->isRedirect($text)) {
-		if (empty( $wgParser->mDymRedirBeforeEdit ) && !($flags & EDIT_NEW))
-			wfDymDoDelete( $article->getID() );
+		if (!$wgParser->mDymRedirBeforeEdit && !($flags & EDIT_NEW))
+			wfDoDelete( $article->getID() );
 	} else {
-		if (!empty( $wgParser->mDymRedirBeforeEdit ) || $flags & EDIT_NEW)
-			wfDymDoInsert( $article->getID(), $article->getTitle()->getText() );
+		if ($wgParser->mDymRedirBeforeEdit || $flags & EDIT_NEW)
+			wfDoInsert( $article->getID(), $article->getTitle()->getText() );
 	}
 
 	$wgParser->mDymRedirBeforeEdit = false;
@@ -318,7 +299,7 @@ function wfDymArticleSaveComplete( $article, $user, $text, $summary, $isminor, $
 	return true;
 }
 
-function wfDymDoInsert( $pageid , $title ) {
+function wfDoInsert( $pageid , $title ) {
 	wfDebug( 'HIPP: ' . __METHOD__ . " INSERT\n" );
 	$dbw = wfGetDB( DB_MASTER );
 
@@ -337,12 +318,12 @@ function wfDymDoInsert( $pageid , $title ) {
 	$dbw->insert( 'dympage', array( 'dp_pageid' => $pageid, 'dp_normid' => $normid ) );
 
 	# touch all pages which will now link here
-	wfDymTouchPages( "dp_normid=$normid" );
+	wfTouchPages( "dp_normid=$normid" );
 
 }
 
 
-function wfDymTouchPages( $condition ) {
+function wfTouchPages( $condition ) {
 	global $wgDBtype;
 
 	$dbw = wfGetDB( DB_MASTER );
@@ -353,16 +334,14 @@ function wfDymTouchPages( $condition ) {
 	if ($wgDBtype == 'postgres') {
 		$sql = "UPDATE $page SET page_touched=now() FROM $dpage $whereclause";
 	} else {
-		$sql = "UPDATE $page, $dpage SET page_touched = " .
-			$dbw->addQuotes( $dbw->timestamp() ) .
-			" $whereclause";
+		$sql = "UPDATE $page, $dpage SET page_touched = " . $dbw->addQuotes( $dbw->timestamp() ) . $whereclause;
 	}
 
 	$dbw->query( $sql, __METHOD__ );
 
 }
 
-function wfDymDoDelete( $pageid ) {
+function wfDoDelete( $pageid ) {
 	wfDebug( 'HIPP: ' . __METHOD__ . " DELETE\n" );
 	$dbw = wfGetDB( DB_MASTER );
 
@@ -376,12 +355,10 @@ function wfDymDoDelete( $pageid ) {
 		$dbw->delete( 'dymnorm', array('dn_normid' => $normid) );
 
 	# touch all pages which will now link here
-	if( $normid ) {
-		wfDymTouchPages( "dp_normid=$normid" );
-	}
+	wfTouchPages( "dp_normid=$normid" );
 }
 
-function wfDymDoUpdate( $pageid, $title ) {
+function wfDoUpdate( $pageid, $title ) {
 	wfDebug( 'HIPP: ' . __METHOD__ . " MOVE\n" );
 	$dbw = wfGetDB( DB_MASTER );
 
@@ -408,13 +385,9 @@ function wfDymDoUpdate( $pageid, $title ) {
 			$dbw->delete( 'dymnorm', array('dn_normid' => $oldnormid) );
 
 		# touch all pages which linked to the old name or will link to the new one
-		wfDymTouchPages( "(dp_normid=$normid OR dp_normid=$oldnormid)" );
+		wfTouchPages( "(dp_normid=$normid OR dp_normid=$oldnormid)" );
 
 	}
 }
 
-function wfDymParserTestTables( &$tables ) {
-	$tables[] = 'dympage';
-	$tables[] = 'dymnorm';
-	return true;
-}
+

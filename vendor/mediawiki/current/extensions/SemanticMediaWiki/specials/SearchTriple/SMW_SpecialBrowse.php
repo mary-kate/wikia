@@ -7,6 +7,11 @@
  * properties.
  */
 
+if (!defined('MEDIAWIKI')) die();
+
+global $IP;
+include_once($IP . '/includes/SpecialPage.php');
+
 /**
  * A class to encapsulate the special page that allows browsing through
  * the knowledge structure of a Semantic MediaWiki.
@@ -19,26 +24,22 @@ class SMWSpecialBrowse extends SpecialPage {
 	 * Constructor
 	 */
 	public function __construct() {
+		smwfInitUserMessages();
 		parent::__construct('Browse');
-		//the key defining the group name in the language files is specialpages-group-smw_group
-		if (method_exists('SpecialPage', 'setGroup')) { 
-			parent::setGroup('Browse', 'smw_group');	
-		}
 	}
 
 	public function execute($query = '') {
-		global $wgRequest, $wgOut, $wgUser, $wgContLang;
+		global $wgRequest, $wgOut, $wgUser,$wgContLang, $smwgIP;
+		include_once($smwgIP . '/includes/storage/SMW_Store.php');
+		include_once($smwgIP . '/includes/SMW_DataValueFactory.php');
+		include_once($smwgIP . '/includes/SMW_Infolink.php');
 
 		$skin = $wgUser->getSkin();
 
 		// get the GET parameters
 		$articletext = $wgRequest->getVal( 'article' );
 		// no GET parameters? Then try the URL
-		if ('' == $articletext) {
-			$params = SMWInfolink::decodeParameters($query,false);
-			reset($params);
-			$articletext = current($params);
-		}
+		if ('' == $articletext) { $articletext = $query; }
 		$article = SMWDataValueFactory::newTypeIDValue('_wpg', $articletext);
 		$limit = $wgRequest->getVal( 'limit' );
 		if ('' == $limit) $limit =  10;
@@ -54,12 +55,11 @@ class SMWSpecialBrowse extends SpecialPage {
 			$options = new SMWRequestOptions();
 			$options->sort = TRUE;
 			$atts = &smwfGetStore()->getProperties($article->getTitle(), $options);
-			$cats = &smwfGetStore()->getSpecialValues($article->getTitle(), SMW_SP_INSTANCE_OF, $options);
+			$cats = &smwfGetStore()->getSpecialValues($article->getTitle(), SMW_SP_HAS_CATEGORY, $options);
 			$redout = &smwfGetStore()->getSpecialValues($article->getTitle(), SMW_SP_REDIRECTS_TO, $options);
-			$articledv = SMWDataValueFactory::newSpecialValue(SMW_SP_REDIRECTS_TO,$article->getTitle()->getDBkey());
-			$redin = &smwfGetStore()->getSpecialSubjects(SMW_SP_REDIRECTS_TO, $articledv, $options);
+			$redin = &smwfGetStore()->getSpecialSubjects(SMW_SP_REDIRECTS_TO, $article->getTitle(), $options);
 			$options->limit = $innerlimit;
-			$instances = &smwfGetStore()->getSpecialSubjects(SMW_SP_INSTANCE_OF, $articledv, $options);
+			$instances = &smwfGetStore()->getSpecialSubjects(SMW_SP_HAS_CATEGORY, $article->getTitle(), $options);
 			$options->limit = $limit+1;
 			$options->offset = $offset;
 			// get results (get one more, to see if we have to add a link to more)
@@ -111,8 +111,8 @@ class SMWSpecialBrowse extends SpecialPage {
 				if ((0==$offset) && ($count > 0)) {
 					foreach ($redin as $red) {
 						$count -= 1;
-						$browselink = SMWInfolink::newBrowsinglink('+', $red->getShortHTMLText());
-						$html .= $red->getShortHTMLText($skin) . '&nbsp;' . $browselink->getHTML($skin);
+						$browselink = SMWInfolink::newBrowsinglink('+', $red->getFulltext());
+						$html .= $skin->makeKnownLinkObj( $red ) . '&nbsp;' . $browselink->getHTML($skin);
 						if ($count > 0) $html .= ', ';
 					}
 					$html .= ' &nbsp;<strong>' . $skin->specialLink( 'Listredirects', 'isredirect' ) . '</strong>';
@@ -131,8 +131,8 @@ class SMWSpecialBrowse extends SpecialPage {
 					foreach ($subjects as $subject) {
 						$innercount += 1;
 						if (($innercount < $innerlimit) || !$more) {
-							$subjectlink = SMWInfolink::newBrowsingLink('+',$subject->getShortHTMLText());
-							$html .= $skin->makeKnownLinkObj($subject, smwfT($subject->getTitle(), TRUE)) . '&nbsp;' . $subjectlink->getHTML($skin);
+							$subjectlink = SMWInfolink::newBrowsingLink('+',$subject->getPrefixedText());
+							$html .= $skin->makeKnownLinkObj($subject, smwfT($subject, TRUE)) . '&nbsp;' . $subjectlink->getHTML($skin);
 							if ($innercount<$subjectcount) $html .= ", \n";
 						} else {
 							$html .= '<a href="' . $skin->makeSpecialUrl('SearchByProperty', 'property=' . urlencode($result->getPrefixedText()) . '&value=' . urlencode($article->getLongWikiText())) . '">' . wfMsg("smw_browse_more") . "</a>\n";
@@ -141,8 +141,8 @@ class SMWSpecialBrowse extends SpecialPage {
 					// replace the last two whitespaces in the relation name with
 					// non-breaking spaces. Since there seems to be no PHP-replacer
 					// for the last two, a strrev ist done twice to turn it around.
-					// That's why nbsp is written backwards.
-					$html .= ' &nbsp;<strong>' . $skin->makeKnownLinkObj($result, strrev(preg_replace('/[\s]/u', ';psbn&', strrev(smwfT($result)), 2) )) . '</strong>' . $vsep . "\n"; // TODO makeLinkObj or makeKnownLinkObj?
+					// That's why nbsp is written backward.
+					$html .= ' &nbsp;<strong>' . $skin->makeKnownLinkObj($result, strrev(preg_replace('/[\s]/', ';psbn&', strrev(smwfT($result)), 2) )) . '</strong>' . $vsep . "\n"; // TODO makeLinkObj or makeKnownLinkObj?
 				}
 				if (($offset>0) || (count($inprop)>$limit)) $html .= $navigation;
 			}
@@ -156,7 +156,7 @@ class SMWSpecialBrowse extends SpecialPage {
 // 				foreach ($outrel as $result) {
 // 					$objectoptions = new SMWRequestOptions();
 // 					$objectoptions->limit = $innerlimit;
-// 					$html .=  '<strong>' . $skin->makeKnownLinkObj($result, preg_replace('/[\s]/u', '&nbsp;', smwfT($result), 2)) . "</strong>&nbsp; \n";// TODO makeLinkObj or makeKnownLinkObj?
+// 					$html .=  '<strong>' . $skin->makeKnownLinkObj($result, preg_replace('/[\s]/', '&nbsp;', smwfT($result), 2)) . "</strong>&nbsp; \n";// TODO makeLinkObj or makeKnownLinkObj?
 // 					$objects = &smwfGetStore()->getRelationObjects($article, $result, $objectoptions);
 // 					$objectcount = count($objects);
 // 					$count = 0;
@@ -175,7 +175,7 @@ class SMWSpecialBrowse extends SpecialPage {
 // 				}
 				foreach ($atts as $att) {
 					$objectoptions = new SMWRequestOptions();
-					$html .=  '<strong>' . $skin->makeKnownLinkObj($att, preg_replace('/[\s]/u', '&nbsp;', smwfT($att), 2)) . "</strong>&nbsp; \n";
+					$html .=  '<strong>' . $skin->makeKnownLinkObj($att, preg_replace('/[\s]/', '&nbsp;', smwfT($att), 2)) . "</strong>&nbsp; \n";
 					$objects = &smwfGetStore()->getPropertyValues($article->getTitle(), $att, $objectoptions);
 					$objectcount = count($objects);
 					$count = 0;
@@ -195,9 +195,8 @@ class SMWSpecialBrowse extends SpecialPage {
 					$html .= '<strong>' . $skin->specialLink( 'Listredirects', 'isredirect' ) . '</strong>&nbsp; ';
 					foreach ($redout as $red) {
 						$count -= 1;
-						$browselink = SMWInfolink::newBrowsingLink('+', $red->getWikiValue());
-						/// TODO: inefficient to cast into Title here, we are dealing with a SMWWikiPageValue (PERFORMANCE)
-						$html .= $skin->makeLinkObj($red->getTitle(), smwfT($red->getTitle())) . '&nbsp;' . $browselink->getHTML($skin);
+						$browselink = SMWInfolink::newBrowsingLink('+', $red->getFullText());
+						$html .= $skin->makeLinkObj($red, smwfT($red)) . '&nbsp;' . $browselink->getHTML($skin);
 						if ($count > 0) $html .= ", ";
 					}
 					$html .= $vsep."\n";

@@ -1,8 +1,10 @@
 <?php
 /** Kazakh (Қазақша)
- *
- * @ingroup Language
- */
+  *
+  *
+  * @addtogroup Language
+  */
+
 
 class LanguageKk_cyrl extends Language {
 
@@ -151,7 +153,7 @@ class LanguageKk_cyrl extends Language {
 					} elseif ( in_array( $wordLastVowel, $backVowels ) ) {
 						$word = $word . "да";
 					}
-				}
+				} 
 				break;
 			case "dc41":
 			case "possessive locative": #täweldık + jatıs
@@ -167,7 +169,7 @@ class LanguageKk_cyrl extends Language {
 					} elseif ( in_array( $wordLastVowel, $backVowels ) ) {
 						$word = $word . "нда";
 					}
-				}
+				} 
 				break;
 			case "dc5":
 			case "ablative": #şığıs
@@ -371,7 +373,7 @@ class LanguageKk_cyrl extends Language {
 					} elseif ( in_array( $wordLastVowel, $backVowels ) ) {
 						$word = $word . "da";
 					}
-				}
+				} 
 				break;
 			case "dc41":
 			case "possessive locative": #täweldık + jatıs
@@ -387,7 +389,7 @@ class LanguageKk_cyrl extends Language {
 					} elseif ( in_array( $wordLastVowel, $backVowels ) ) {
 						$word = $word . "nda";
 					}
-				}
+				} 
 				break;
 			case "dc5":
 			case "ablative": #şığıs
@@ -591,7 +593,7 @@ class LanguageKk_cyrl extends Language {
 					} elseif ( in_array( $wordLastVowel, $backVowels ) ) {
 						$word = $word . "دا";
 					}
-				}
+				} 
 				break;
 			case "dc41":
 			case "possessive locative": #täweldık + jatıs
@@ -607,7 +609,7 @@ class LanguageKk_cyrl extends Language {
 					} elseif ( in_array( $wordLastVowel, $backVowels ) ) {
 						$word = $word . "ندا";
 					}
-				}
+				} 
 				break;
 			case "dc5":
 			case "ablative": #şığıs
@@ -679,7 +681,7 @@ class LanguageKk_cyrl extends Language {
 		// Put the word in a form we can play with since we're using UTF-8
 		$ar = preg_split('//u', parent::lc($word), -1, PREG_SPLIT_NO_EMPTY);
 
-		// Here's an array with the order of the letters in the word reversed
+		// Here's an array with the order of the letters in the word reversed 
 		// so we can find a match quicker *shrug*
 		$wordReversed = array_reverse( $ar );
 

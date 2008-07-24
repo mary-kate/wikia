@@ -8,63 +8,23 @@
 $messages = array();
 
 $messages['en'] = array(
-	'parserdifftest'      => 'Parser diff test',
-	'pdtest-desc'         => '[[Special:ParserDiffTest|Special page]] for comparing the output of two different parsers',
-	'pdtest_no_target'    => 'No target specified.',
+	'parserdifftest' => 'Parser diff test',
+	'pdtest-desc' => '[[Special:ParserDiffTest|Special page]] for comparing the output of two different parsers',
+	'pdtest_no_target' => 'No target specified.',
 	'pdtest_page_missing' => 'The specified page was not found in the database.',
-	'pdtest_no_changes'   => 'No changes detected.',
-	'pdtest_time_report'  => '<b>$1</b> took $2 seconds, <b>$3</b> took $4 seconds.',
-	'pdtest_title'        => 'Context title:',
-	'pdtest_text'         => 'Input text:',
-	'pdtest_ok'           => 'OK',
-	'pdtest_get_text'     => 'Get text from page',
-	'pdtest_diff'         => 'Differences',
+	'pdtest_no_changes' => 'No changes detected.',
+	'pdtest_time_report' => '<b>$1</b> took $2 seconds, <b>$3</b> took $4 seconds.',
+	'pdtest_title' => 'Context title:',
+	'pdtest_text' => 'Input text:',
+	'pdtest_ok' => 'OK',
+	'pdtest_get_text' => 'Get text from page',
+	'pdtest_diff' => 'Differences',
 	'pdtest_side_by_side' => 'Output comparison',
-	'pdt_comparing_page'  => 'Comparing parser output from [[$1]]',
-);
-
-/** Afrikaans (Afrikaans)
- * @author Arnobarnard
- * @author Naudefj
- */
-$messages['af'] = array(
-	'parserdifftest'      => 'Ontleder verskil toets',
-	'pdtest-desc'         => '[[Special:ParserDiffTest|Spesiale bladsy]] om die afvoer van twee verskillende ontleders te vergelyk',
-	'pdtest_no_target'    => 'Doel nie gespesifiseer nie.',
-	'pdtest_page_missing' => 'Die gespesifiseerde bladsy is nie in die databasis nie.',
-	'pdtest_no_changes'   => 'Geen veranderinge bespeur.',
-	'pdtest_time_report'  => '<b>$1</b> duur $2 sekondes, <b>$3</b> duur $4 sekondes.',
-	'pdtest_title'        => 'Kontekstitel:',
-	'pdtest_text'         => 'Invoerteks:',
-	'pdtest_ok'           => 'OK',
-	'pdtest_get_text'     => 'Kry teks van bladsy',
-	'pdtest_diff'         => 'Verskille',
-	'pdtest_side_by_side' => 'Afvoer vergelyking',
-	'pdt_comparing_page'  => 'Vergelyk ontleder afvoer vanaf [[$1]]',
-);
-
-/** Aragonese (Aragonés)
- * @author Juanpabl
- */
-$messages['an'] = array(
-	'parserdifftest'      => "Preba d'o diff ta o parseyador",
-	'pdtest-desc'         => '[[Special:ParserDiffTest|Pachina espezial]] ta contimparar a salida de dos pársers diferents',
-	'pdtest_no_target'    => "No s'ha espezificato un obchetibo.",
-	'pdtest_page_missing' => "A pachina espezificata no s'ha trobato en a base de datos.",
-	'pdtest_no_changes'   => "No s'han deteutato cambeos",
-	'pdtest_time_report'  => '<b>$1</b> ha costato $2 segundos, <b>$3</b> ha costato $4 segundos.',
-	'pdtest_title'        => 'Títol de contesto:',
-	'pdtest_text'         => 'Testo de dentrada:',
-	'pdtest_ok'           => "D'alcuerdo",
-	'pdtest_get_text'     => "Prener o testo d'a pachina",
-	'pdtest_diff'         => 'Esferenzias',
-	'pdtest_side_by_side' => "Comparanza d'as salidas",
-	'pdt_comparing_page'  => "Contimparando a salida d'o parseyador dende [[$1]]",
+	'pdt_comparing_page' => 'Comparing parser output from [[$1]]',
 );
 
 /** Arabic (العربية)
  * @author Meno25
- * @author Siebrand
  */
 $messages['ar'] = array(
 	'parserdifftest'      => 'اختبار فرق البارسر',
@@ -86,7 +46,7 @@ $messages['ar'] = array(
  * @author Esbardu
  */
 $messages['ast'] = array(
-	'parserdifftest'      => 'Test de diferencies pal análisis sintáuticu',
+	'parserdifftest'      => 'Test de difencies pal análisis sintáuticu',
 	'pdtest_no_target'    => "Nun s'especificó l'oxetivu.",
 	'pdtest_page_missing' => "La páxina especificada nun s'atopó na base de datos.",
 	'pdtest_no_changes'   => 'Nun se deteutaron cambeos.',
@@ -100,37 +60,10 @@ $messages['ast'] = array(
 	'pdt_comparing_page'  => "Comparando l'análisis sintáuticu de salida dende [[$1]]",
 );
 
-/** Southern Balochi (بلوچی مکرانی)
- * @author Mostafadaneshvar
- */
-$messages['bcc'] = array(
-	'parserdifftest'      => 'آزمایش تفاوت تجزیه کنوک',
-	'pdtest-desc'         => '[[Special:ParserDiffTest|حاصینlصفحه]]په مقایسه خروجی دو نجزیه کنوک متفاوت',
-	'pdtest_no_target'    => 'هدف مشخص نه بوت',
-	'pdtest_page_missing' => 'مشخص کتگین صفحه ته دیتابیس درگیزگ نه بوت',
-	'pdtest_no_changes'   => 'هچ تغییری حذف نه بوت',
-	'pdtest_time_report'  => '<b>$1</b> وهد گریت $2 ثانیه, <b>$3</b>  $4 ثانیه وهد گریت.',
-	'pdtest_title'        => 'عنوان متن',
-	'pdtest_text'         => 'متن ورودی:',
-	'pdtest_ok'           => 'هوبنت',
-	'pdtest_get_text'     => 'متن چه صفحه بگر',
-	'pdtest_diff'         => 'تفاوتان',
-	'pdtest_side_by_side' => 'مقایسه خروجی',
-	'pdt_comparing_page'  => 'مقایسه خروجی j[cdi ;k,; چه  [[$1]]',
-);
-
-/** Belarusian (Taraškievica orthography) (Беларуская (тарашкевіца))
- * @author Cesco
- */
-$messages['be-tarask'] = array(
-	'parserdifftest' => 'Праверка зьменаў сынтаксычнага аналізатару',
-);
-
 /** Bulgarian (Български)
  * @author DCLXVI
  */
 $messages['bg'] = array(
-	'pdtest-desc'         => '[[Special:ParserDiffTest|Специална страница]] за сравняване на изходните резултати на два различни парсера',
 	'pdtest_no_target'    => 'Не беше посочена цел.',
 	'pdtest_page_missing' => 'Поисканата страница не беше открита в базата данни.',
 	'pdtest_no_changes'   => 'Не са направени промени.',
@@ -164,18 +97,7 @@ $messages['bn'] = array(
  * @author Fulup
  */
 $messages['br'] = array(
-	'pdtest_no_changes' => 'Kemm ebet merzet.',
-	'pdtest_ok'         => 'Mat eo',
-	'pdtest_diff'       => "Diforc'hioù",
-);
-
-/** Catalan (Català)
- * @author Paucabot
- * @author Toniher
- */
-$messages['ca'] = array(
-	'pdtest_ok'   => "D'acord",
-	'pdtest_diff' => 'Diferències',
+	'pdtest_ok' => 'Mat eo',
 );
 
 /** Czech (Česky)
@@ -188,7 +110,7 @@ $messages['cs'] = array(
 	'pdtest_no_target'    => 'Není určen cíl.',
 	'pdtest_page_missing' => 'Určená stránka nebyla v databázi nalezena.',
 	'pdtest_no_changes'   => 'Neprojevily se žádné změny.',
-	'pdtest_time_report'  => '<b>$1</b> trval $2 {{PLURAL:$2|sekundu|sekundy|sekund}}, <b>$3</b> trval $4 {{PLURAL:$4|sekundu|sekundy|sekund}}.',
+	'pdtest_time_report'  => '<b>$1</b> trval $2 {{plural:$2|sekundu|sekundy|sekund}}, <b>$3</b> trval $4 {{plural:$4|sekundu|sekundy|sekund}}.',
 	'pdtest_title'        => 'Název stránky kvůli kontextu:',
 	'pdtest_text'         => 'Vstupní text:',
 	'pdtest_ok'           => 'OK',
@@ -196,14 +118,6 @@ $messages['cs'] = array(
 	'pdtest_diff'         => 'Rozdíly',
 	'pdtest_side_by_side' => 'Porovnání výstupu',
 	'pdt_comparing_page'  => 'Porovnání výstupu parserů pro stránku [[$1]]',
-);
-
-/** Danish (Dansk)
- * @author Jon Harald Søby
- */
-$messages['da'] = array(
-	'pdtest_ok'   => 'OK',
-	'pdtest_diff' => 'Forskelle',
 );
 
 /** German (Deutsch)
@@ -225,52 +139,6 @@ $messages['de'] = array(
 	'pdt_comparing_page'  => 'Vergleiche Parser-Ausgabe für [[$1]]',
 );
 
-/** Lower Sorbian (Dolnoserbski)
- * @author Michawiki
- */
-$messages['dsb'] = array(
-	'parserdifftest'      => 'Test rozdźělow parserowu',
-	'pdtest-desc'         => '[[Special:ParserDiffTest|Specialny bok]] za pśirownowanje wudaća dweju rozdźělneju parserowu',
-	'pdtest_no_target'    => 'Žeden cel pódany.',
-	'pdtest_page_missing' => 'Pódany bok njejo se w datowej bance namakał.',
-	'pdtest_no_changes'   => 'Žedne změny namakane.',
-	'pdtest_time_report'  => '<b>$1</b> jo $2 {{PLURAL:$2|sekundu|sekunźe|sekundy|sekundow}} pótrjebał, <b>$3</b> jo $4 {{PLURAL:$2|sekundu|sekunźe|sekundy|sekundow}} pótrjebał.',
-	'pdtest_title'        => 'Kontekstowy titel:',
-	'pdtest_text'         => 'Zapódany tekst:',
-	'pdtest_ok'           => 'W pórěźe',
-	'pdtest_get_text'     => 'Tekst z boka wótwołaś',
-	'pdtest_diff'         => 'Rozdźěle',
-	'pdtest_side_by_side' => 'Pśirownowanje wudaśa',
-	'pdt_comparing_page'  => 'Parserowe wudáse  za [[$1]] se pśirownujo',
-);
-
-/** Greek (Ελληνικά)
- * @author ZaDiak
- */
-$messages['el'] = array(
-	'pdtest_ok'   => 'Εντάξει',
-	'pdtest_diff' => 'Διαφορές',
-);
-
-/** Esperanto (Esperanto)
- * @author Yekrats
- */
-$messages['eo'] = array(
-	'parserdifftest'      => 'Ekzameno de diff por sintaksa analizilo',
-	'pdtest-desc'         => '[[Special:ParserDiffTest|Speciala paĝo]] por kompari la eligon de du apartaj sintaksaj analiziloj',
-	'pdtest_no_target'    => 'Neniu celo specifigita.',
-	'pdtest_page_missing' => 'La enigita paĝo ne estis trovita en la datumbazo.',
-	'pdtest_no_changes'   => 'Neniuj ŝanĝoj malkovritaj.',
-	'pdtest_time_report'  => '<b>$1</b> daŭris $2 sekundojn, <b>$3</b> daŭris $4 sekundojn.',
-	'pdtest_title'        => 'Kunteksta titolo:',
-	'pdtest_text'         => 'Enigu tekston:',
-	'pdtest_ok'           => 'Ek!',
-	'pdtest_get_text'     => 'Prenu tekston el paĝo',
-	'pdtest_diff'         => 'Malsamaĵoj',
-	'pdtest_side_by_side' => 'Komparo de eligaĵoj.',
-	'pdt_comparing_page'  => 'Komparante eligon de sintaksa analizilo pri [[$1]]',
-);
-
 /** Persian (فارسی)
  * @author Huji
  */
@@ -288,27 +156,6 @@ $messages['fa'] = array(
 	'pdtest_diff'         => 'تفاوت‌ها',
 	'pdtest_side_by_side' => 'مقایسهٔ خروجی',
 	'pdt_comparing_page'  => 'مقایسهٔ خروجی تحلیلگر از [[$1]]',
-);
-
-/** Finnish (Suomi)
- * @author Cimon Avaro
- * @author Crt
- * @author M.M.S.
- * @author Nike
- */
-$messages['fi'] = array(
-	'parserdifftest'      => 'Esikäsittelijöiden eroavaisuudet',
-	'pdtest-desc'         => '[[Special:ParserDiffTest|Toimintosivu]] kahden eri esikäsittelijän eroavaisuuksien vertailua varten.',
-	'pdtest_no_target'    => 'Kohdetta ei määritetty.',
-	'pdtest_page_missing' => 'Kyseistä sivua ei löytynyt tietokannasta.',
-	'pdtest_no_changes'   => 'Ei havaittuja muutoksia.',
-	'pdtest_time_report'  => '<b>$1</b> kesti $2 sekuntia. <b>$3</b> kesti $4 sekuntia.',
-	'pdtest_text'         => 'Tekstisyöte',
-	'pdtest_ok'           => 'OK',
-	'pdtest_get_text'     => 'Hae teksti sivulta',
-	'pdtest_diff'         => 'Eroavaisuudet',
-	'pdtest_side_by_side' => 'Tulosteen vertailu',
-	'pdt_comparing_page'  => 'Esikäsittelijöiden vertailu sivulle [[$1]]',
 );
 
 /** French (Français)
@@ -351,38 +198,16 @@ $messages['frp'] = array(
 );
 
 /** Galician (Galego)
- * @author Toliño
  * @author Alma
  * @author Xosé
  */
 $messages['gl'] = array(
-	'parserdifftest'      => 'Test de análise de diferenzas',
-	'pdtest-desc'         => '[[Special:ParserDiffTest|Páxina especial]] para comparar a saída de dous analizadores diferentes',
 	'pdtest_no_target'    => 'Non se especificou o destino.',
 	'pdtest_page_missing' => 'A páxina especificada non foi atopada na base de datos.',
 	'pdtest_no_changes'   => 'Non foron detectados cambios.',
-	'pdtest_time_report'  => '<b>$1</b> leva $2 segundos, <b>$3</b> leva $4 segundos.',
-	'pdtest_title'        => 'Título do contexto:',
-	'pdtest_text'         => 'Texto de entrada:',
 	'pdtest_ok'           => 'De acordo',
-	'pdtest_get_text'     => 'Obter o texto da páxina',
+	'pdtest_get_text'     => 'Obter texto da páxina',
 	'pdtest_diff'         => 'Diferenzas',
-	'pdtest_side_by_side' => 'Comparación da saída',
-	'pdt_comparing_page'  => 'Comparando a análise de saída de [[$1]]',
-);
-
-/** Manx (Gaelg)
- * @author MacTire02
- */
-$messages['gv'] = array(
-	'pdtest_ok' => 'OK',
-);
-
-/** Hawaiian (Hawai`i)
- * @author Kalani
- */
-$messages['haw'] = array(
-	'pdtest_ok' => 'Hiki nō',
 );
 
 /** Hebrew (עברית)
@@ -390,7 +215,6 @@ $messages['haw'] = array(
  */
 $messages['he'] = array(
 	'parserdifftest'      => 'בדיקת השינויים במפענח',
-	'pdtest-desc'         => '[[Special:ParserDiffTest|דף מיוחד]] להשוואת הפלט של שני מפענחים שונים',
 	'pdtest_no_target'    => 'לא נבחר יעד.',
 	'pdtest_page_missing' => 'הדף המבוקש לא נמצא במסד הנתונים.',
 	'pdtest_no_changes'   => 'לא נמצאו הבדלים.',
@@ -404,31 +228,12 @@ $messages['he'] = array(
 	'pdt_comparing_page'  => 'משווה את פלט המפענחים מהדף [[$1]]',
 );
 
-/** Hindi (हिन्दी)
- * @author Kaustubh
- */
-$messages['hi'] = array(
-	'parserdifftest'      => 'पार्सर फर्क परिक्षण',
-	'pdtest-desc'         => 'दो अलग अलग पार्सरमें से फर्क देखने के लिये [[Special:ParserDiffTest|विशेष पृष्ठ]]',
-	'pdtest_no_target'    => 'लक्ष्य दिया नहीं हैं',
-	'pdtest_page_missing' => 'दिया हुआ पन्ना डाटाबेस में मिला नहीं',
-	'pdtest_no_changes'   => 'फर्क मिले नहीं।',
-	'pdtest_time_report'  => '<b>$1</b> को $2 सेकेंड लगें, <b>$3</b> को $4 सेकेंड लगें।',
-	'pdtest_title'        => 'कंटेक्स्टका शीर्षक:',
-	'pdtest_text'         => 'इनपुट पाठ:',
-	'pdtest_ok'           => 'ओके',
-	'pdtest_get_text'     => 'पन्ने से पाठ उठायें',
-	'pdtest_diff'         => 'फर्क',
-	'pdtest_side_by_side' => 'आउटपुट कम्पॅरिज़न',
-	'pdt_comparing_page'  => '[[$1]] के पार्सर आउटपुटमें फर्क देख रहें हैं',
-);
-
 /** Croatian (Hrvatski)
  * @author Dnik
  */
 $messages['hr'] = array(
 	'parserdifftest'      => 'Test razlika parsera',
-	'pdtest-desc'         => '[[Special:ParserDiffTest|Posebna stranica]] za usporedbu rezultata dva različita parsera',
+	'pdtest-desc'         => '[[Special:ParserDiffTestSpecial|Posebna stranica]] za usporedbu rezultata dva različita parsera',
 	'pdtest_no_target'    => 'Odredište nije zadano.',
 	'pdtest_page_missing' => 'Zadana stranica nije nađena u bazi podataka.',
 	'pdtest_no_changes'   => 'Promjene nisu nađene.',
@@ -447,7 +252,7 @@ $messages['hr'] = array(
  */
 $messages['hsb'] = array(
 	'parserdifftest'      => 'Test rozdźělow parsera',
-	'pdtest-desc'         => '[[Special:ParserDiffTest|Specialna strona]] za přirunanje wudaća dweju rozdźělneju parserow',
+	'pdtest-desc'         => 'Specialna strona za přirunanje wudaća dweju rozdźělneju parserow.',
 	'pdtest_no_target'    => 'Žadyn cil podaty.',
 	'pdtest_page_missing' => 'Podata strona njebu w datowej bance namakana.',
 	'pdtest_no_changes'   => 'Žane změny wotkryte.',
@@ -462,7 +267,7 @@ $messages['hsb'] = array(
 );
 
 /** Hungarian (Magyar)
- * @author Dani
+ * @author Bdanee
  */
 $messages['hu'] = array(
 	'parserdifftest'      => 'Értelmezők közötti eltérés tesztelése',
@@ -478,51 +283,6 @@ $messages['hu'] = array(
 	'pdtest_diff'         => 'Eltérések',
 	'pdtest_side_by_side' => 'Kimenet összehasonlítása',
 	'pdt_comparing_page'  => '[[$1]] kimeneteinek összehasonlítása',
-);
-
-/** Interlingua (Interlingua)
- * @author McDutchie
- */
-$messages['ia'] = array(
-	'parserdifftest'      => 'Test de "diff" inter duo analysatores syntactic',
-	'pdtest-desc'         => '[[Special:ParserDiffTest|Pagina special]] pro comparar le output de duo differente analysatores syntactic',
-	'pdtest_no_target'    => 'Nulle objectivo specificate.',
-	'pdtest_page_missing' => 'Le pagina specificate non esseva trovate in le base de datos.',
-	'pdtest_no_changes'   => 'Nulle cambiamentos detegite.',
-	'pdtest_time_report'  => '<b>$1</b> prendeva $2 secundas, <b>$3</b> prendeva $4 secundas.',
-	'pdtest_title'        => 'Titulo del contexto:',
-	'pdtest_text'         => 'Texto de input:',
-	'pdtest_ok'           => 'OK',
-	'pdtest_get_text'     => 'Obtener le texto ab le pagina',
-	'pdtest_diff'         => 'Differentias',
-	'pdtest_side_by_side' => 'Comparation del output',
-	'pdt_comparing_page'  => 'Comparation del output del analysator syntactic ab [[$1]]',
-);
-
-/** Indonesian (Bahasa Indonesia)
- * @author IvanLanin
- */
-$messages['id'] = array(
-	'parserdifftest'      => 'Uji parser pembeda',
-	'pdtest-desc'         => '[[Special:ParserDiffTest|Halaman istimewa]] untuk membandingkan keluaran dari dua parser yang berbeda',
-	'pdtest_no_target'    => 'Tak ada target yang diberikan.',
-	'pdtest_page_missing' => 'Halaman yang diberikan tak ditemukan dalam basis data.',
-	'pdtest_no_changes'   => 'Tak ditemukan perubahan.',
-	'pdtest_time_report'  => '<b>$1</b> memerlukan $2 detik, <b>$3</b> memerlukan $4 detik.',
-	'pdtest_title'        => 'Judul konteks:',
-	'pdtest_text'         => 'Teks masukan:',
-	'pdtest_ok' => 'OK',
-	'pdtest_get_text'     => 'Ambil teks dari halaman',
-	'pdtest_diff'         => 'Perbedaan',
-	'pdtest_side_by_side' => 'Perbandingan keluaran',
-	'pdt_comparing_page'  => 'Membandingkan keluaran parser dari [[$1]]',
-);
-
-/** Ido (Ido)
- * @author Malafaya
- */
-$messages['io'] = array(
-	'pdtest_diff' => 'Diferi',
 );
 
 /** Icelandic (Íslenska)
@@ -557,7 +317,7 @@ $messages['it'] = array(
  */
 $messages['ja'] = array(
 	'parserdifftest'      => 'パーサー比較テスト',
-	'pdtest-desc'         => '2つの異なるパーサー間での出力結果を比較する[[Special:ParserDiffTest|{{int:specialpage}}]]。',
+	'pdtest-desc'         => '2つの異なるパーサー間での出力結果を比較する[[{{ns:special}}:ParserDiffTest|{{int:specialpage}}]]。',
 	'pdtest_no_target'    => '対象が指定されていません。',
 	'pdtest_page_missing' => '指定されたページはデータベースに存在していません。',
 	'pdtest_no_changes'   => '違いが検出できませんでした。',
@@ -571,111 +331,15 @@ $messages['ja'] = array(
 	'pdt_comparing_page'  => '[[$1]]のパーサー出力を比較',
 );
 
-/** Jutish (Jysk)
- * @author Ælsån
- * @author Huslåke
- */
-$messages['jut'] = array(
-	'parserdifftest'      => 'Test der Parser Ændrenger',
-	'pdtest_no_target'    => 'Ekke target spæsifiærn.',
-	'pdtest_page_missing' => "Æ spæsifiærn pæge hvás ekke fånden i'n database.",
-	'pdtest_no_changes'   => 'Ekke ændrenge dætektærn.',
-	'pdtest_time_report'  => '<b>$1</b> tåk $2 sekånd, <b>$3</b> tåk $4 sekånd.',
-	'pdtest_title'        => 'Kontekst titel:',
-	'pdtest_text'         => 'Input tekst:',
-	'pdtest_ok'           => 'OK',
-	'pdtest_get_text'     => 'Kriig tekst der pæge',
-	'pdtest_diff'         => 'Ændrenger',
-	'pdtest_side_by_side' => 'Output ændrenger',
-	'pdt_comparing_page'  => 'Ændrenger parser output der [[$1]]',
-);
-
-/** Javanese (Basa Jawa)
- * @author Meursault2004
- */
-$messages['jv'] = array(
-	'parserdifftest'      => 'Uji parser pambéda',
-	'pdtest-desc'         => '[[Special:ParserDiffTest|Kaca astaméwa]] kanggo mbandhingaké wetonan saka rong parser sing béda',
-	'pdtest_no_target'    => 'Ora ana targèt sing dispésifikasi.',
-	'pdtest_page_missing' => 'Kaca sing diwènèhaké ora ditemokaké ing sajroné database.',
-	'pdtest_no_changes'   => 'Ora ditemokaké owah-owahan.',
-	'pdtest_time_report'  => '<b>$1</b> merlokaké $2 detik, <b>$3</b> merlokaké $4 detik.',
-	'pdtest_title'        => 'Irah-irahan kontèks:',
-	'pdtest_text'         => 'Tèks sing dilebokaké',
-	'pdtest_ok'           => 'OK',
-	'pdtest_get_text'     => 'Jupuk tèks saka kaca',
-	'pdtest_diff'         => 'Prabédan',
-	'pdtest_side_by_side' => 'Prabandhingan wetonan',
-	'pdt_comparing_page'  => 'Mbandhingaké wetonan parser saka [[$1]]',
-);
-
-/** Khmer (ភាសាខ្មែរ)
- * @author Chhorran
- * @author Lovekhmer
- * @author T-Rithy
- */
-$messages['km'] = array(
-	'pdtest_no_changes' => 'មិនមានការផ្លាស់ប្តូរណាមួយបានឃើញទេ។',
-	'pdtest_text'       => 'បញ្ចូលឃ្លា៖',
-	'pdtest_ok'         => 'យល់ព្រម',
-	'pdtest_diff'       => 'ភាពខុសគ្នា',
-);
-
-/** Korean (한국어)
- * @author ToePeu
- */
-$messages['ko'] = array(
-	'parserdifftest'      => '파서 바뀐점 시험하기',
-	'pdtest-desc'         => '두개의 파서의 출력을 비교하는 [[Special:ParserDiffTest|특수문서]]',
-	'pdtest_page_missing' => '지정한 문서를 찾을 수 없습니다.',
-	'pdtest_no_changes'   => '바뀐 점이 없습니다.',
-	'pdtest_time_report'  => '<b>$1</b>은(는) $2초, <b>$3</b>은(는) $4초 걸렸습니다.',
-	'pdtest_text'         => '입력:',
-	'pdtest_ok'           => '확인',
-	'pdtest_get_text'     => '문서에서 가져오기',
-	'pdtest_diff'         => '차이',
-	'pdtest_side_by_side' => '출력 비교',
-	'pdt_comparing_page'  => '[[$1]]에서 출력 비교',
-);
-
-/** Kinaray-a (Kinaray-a)
- * @author Jose77
- */
-$messages['krj'] = array(
-	'pdtest_ok' => 'OK dun',
-);
-
-/** Ripoarisch (Ripoarisch)
- * @author Purodha
- */
-$messages['ksh'] = array(
-	'parserdifftest' => 'Ongerscheed zwesche de Parser prööfe',
-);
-
 /** Luxembourgish (Lëtzebuergesch)
  * @author Robby
  */
 $messages['lb'] = array(
-	'parserdifftest'      => 'Parser-Differenz-Test',
-	'pdtest-desc'         => "[[Special:ParserDiffTest|Spezialsäit]] fir d'Resultat vun zwee verschiddene Parseren ze vergläichen",
-	'pdtest_no_target'    => 'Keen Zil uginn.',
 	'pdtest_page_missing' => 'Déi gefrote Säit gouf net an der Datebank fonnt.',
 	'pdtest_no_changes'   => 'Keng Ännerung fonnt.',
 	'pdtest_time_report'  => '<b>$1</b> huet $2 Sekonne gedauert, <b>$3</b> huet $4 Sekonne gedauert.',
-	'pdtest_title'        => 'Titel vum Kontext:',
-	'pdtest_text'         => 'Gitt den Text an:',
 	'pdtest_ok'           => 'ok',
-	'pdtest_get_text'     => 'Den Text vun der Säit huelen',
 	'pdtest_diff'         => 'Ënnerscheed',
-	'pdtest_side_by_side' => 'Vergläiche vum Reslutat',
-	'pdt_comparing_page'  => 'Vergäich vun de Reslutater vum Parser fir [[$1]]',
-);
-
-/** Lingua Franca Nova (Lingua Franca Nova)
- * @author Malafaya
- */
-$messages['lfn'] = array(
-	'pdtest_ok' => 'Oce',
 );
 
 /** Limburgish (Limburgs)
@@ -703,84 +367,6 @@ $messages['li'] = array(
  */
 $messages['lt'] = array(
 	'pdtest_ok' => 'Gerai',
-);
-
-/** Malayalam (മലയാളം)
- * @author Shijualex
- */
-$messages['ml'] = array(
-	'parserdifftest'      => 'പാര്‍സറുകള്‍ തമ്മിലുള്ള വ്യത്യാസം അറിയാനുള്ള പരീക്ഷണം',
-	'pdtest-desc'         => 'രണ്ട് വ്യത്യസ്ത പാര്‍സറുകളുടെ ഔട്ട്പുട്ട് താരതമ്യപ്പെടുത്താനുള്ള [[Special:ParserDiffTest|പ്രത്യേക താള്‍]]',
-	'pdtest_no_target'    => 'ലക്ഷ്യം നിര്‍‌വചിച്ചിട്ടില്ല',
-	'pdtest_page_missing' => 'നിര്‍ദ്ദിഷ്ട താള്‍ ഡാറ്റാബേസില്‍ കണ്ടില്ല.',
-	'pdtest_no_changes'   => 'മാറ്റങ്ങള്‍ ഒന്നും കണ്ടെത്താന്‍ പറ്റിയില്ല.',
-	'pdtest_time_report'  => "'''$1''',  $2 സെക്കന്റുകള്‍ എടുത്തു; '''$3''', $4 സെക്കന്റുകള്‍ എടുത്തു.",
-	'pdtest_title'        => 'സാന്ദര്‍ഭിക തലക്കെട്ട്:',
-	'pdtest_text'         => 'ഇന്‍‌പുട്ട് ടെക്സ്റ്റ്',
-	'pdtest_ok'           => 'ശരി',
-	'pdtest_get_text'     => 'താളില്‍ നിന്നു ടെക്സ്റ്റ് ശേഖരിക്കുക',
-	'pdtest_diff'         => 'വ്യത്യാസങ്ങള്‍',
-	'pdtest_side_by_side' => 'ഔട്ട്പുട്ടിന്റെ താരതമ്യം',
-	'pdt_comparing_page'  => '[[$1]]ല്‍ നിന്നുള്ള പാര്‍സര്‍ ഔട്ട്പുട്ട് താരതമ്യപ്പെടുത്തുന്നു',
-);
-
-/** Marathi (मराठी)
- * @author Kaustubh
- */
-$messages['mr'] = array(
-	'parserdifftest'      => 'पार्सर मधील फरक परीक्षा',
-	'pdtest-desc'         => 'दोन वेगवेगळ्या पार्सर्स मधील फरक पाहण्यासाठी [[Special:ParserDiffTest|विशेष पान]]',
-	'pdtest_no_target'    => 'लक्ष्य दिलेले नाही',
-	'pdtest_page_missing' => 'दिलेले पान डाटाबेस मध्ये सापडलेले नाही.',
-	'pdtest_no_changes'   => 'फरक सापडले नाहीत.',
-	'pdtest_time_report'  => '<b>$1</b> ला $2 सेकंद लागले, <b>$3</b> ला $4 सेकंद लागले.',
-	'pdtest_title'        => 'कंटेक्स्टचे शीर्षक:',
-	'pdtest_text'         => 'दिलेला मजकूर:',
-	'pdtest_ok'           => 'सर्व ठीक',
-	'pdtest_get_text'     => 'पानावरील मजकूर ओढा',
-	'pdtest_diff'         => 'फरक',
-	'pdtest_side_by_side' => 'आउटपुटमधील फरक पहा',
-	'pdt_comparing_page'  => '[[$1]] च्या पार्सर आउटपुटमधील फरक पहात आहे',
-);
-
-/** Malay (Bahasa Melayu)
- * @author Aurora
- * @author Aviator
- */
-$messages['ms'] = array(
-	'parserdifftest'      => 'Ujian perbezaan penghurai',
-	'pdtest-desc'         => '[[Special:ParserDiffTest|Laman khas]] untuk membandingkan output dua penghurai yang berlainan',
-	'pdtest_no_target'    => 'Sasaran tidak dinyatakan.',
-	'pdtest_page_missing' => 'Laman yang dinyatakan tiada dalam pangkalan data.',
-	'pdtest_no_changes'   => 'Tiada perubahan dikesan.',
-	'pdtest_time_report'  => '<b>$1</b> mengambil masa $2 saat, manakala <b>$3</b> mengambil masa $4 saat.',
-	'pdtest_title'        => 'Tajuk konteks:',
-	'pdtest_text'         => 'Teks input:',
-	'pdtest_ok'           => 'OK',
-	'pdtest_get_text'     => 'Ambil teks daripada laman',
-	'pdtest_diff'         => 'Perbezaan',
-	'pdtest_side_by_side' => 'Pembandingan output',
-	'pdt_comparing_page'  => 'Membandingkan output penghurai daripada [[$1]]',
-);
-
-/** Nahuatl (Nahuatl)
- * @author Fluence
- */
-$messages['nah'] = array(
-	'pdtest_ok' => 'Cualli',
-);
-
-/** Low German (Plattdüütsch)
- * @author Slomox
- */
-$messages['nds'] = array(
-	'parserdifftest'     => 'Parser-Differenz-Test',
-	'pdtest_no_changes'  => 'Keen Ünnerscheed funnen.',
-	'pdtest_time_report' => '<b>$1</b> hett $2 Sekunnen bruukt, <b>$3</b> hett $4 Sekunnen bruukt.',
-	'pdtest_title'       => 'Kontexttitel:',
-	'pdtest_ok'          => 'OK',
-	'pdtest_get_text'    => 'Text halen vun de Siet',
-	'pdtest_diff'        => 'Ünnerscheed',
 );
 
 /** Dutch (Nederlands)
@@ -821,7 +407,7 @@ $messages['nn'] = array(
 	'pdt_comparing_page'  => 'Samanliknar parserresultat frå [[$1]]',
 );
 
-/** Norwegian (bokmål)‬ (‪Norsk (bokmål)‬)
+/** Norwegian (‪Norsk (bokmål)‬)
  * @author Jon Harald Søby
  */
 $messages['no'] = array(
@@ -859,24 +445,15 @@ $messages['oc'] = array(
 	'pdt_comparing_page'  => 'Comparason del parser en sortida a partir de [[$1]]',
 );
 
-/** Ossetic (Иронау)
- * @author Amikeco
- */
-$messages['os'] = array(
-	'pdtest_ok' => 'Афтæ уæд!',
-);
-
 /** Polish (Polski)
  * @author Sp5uhe
  */
 $messages['pl'] = array(
-	'parserdifftest'      => 'Porównanie skuteczności analizatorów składni',
 	'pdtest-desc'         => '[[Special:ParserDiffTest|Strona specjalna]] pozwalająca porównać wyniki oraz skuteczność dwóch różnych analizatorów składni',
-	'pdtest_no_target'    => 'Nie określono obiektu działania.',
+	'pdtest_no_target'    => 'Nie określono obiektu działania',
 	'pdtest_page_missing' => 'Wybranej strony nie odnaleziono w bazie danych.',
 	'pdtest_no_changes'   => 'Nie wykryto zmian.',
-	'pdtest_time_report'  => 'Analizator składni <b>$1</b> potrzebował $2 sekund, natomiast <b>$3</b> potrzebował $4 sekund.',
-	'pdtest_title'        => 'Kontekst tytułu:',
+	'pdtest_time_report'  => 'Analizator składni <b>$1</b> potrzebował $2 sekund, a <b>$3</b> potrzebował $4 sekund.',
 	'pdtest_text'         => 'Tekst wejściowy:',
 	'pdtest_ok'           => 'OK',
 	'pdtest_get_text'     => 'Pobierz tekst ze strony',
@@ -889,11 +466,9 @@ $messages['pl'] = array(
  * @author Ahmed-Najib-Biabani-Ibrahimkhel
  */
 $messages['ps'] = array(
-	'pdtest_no_changes' => 'هېڅ بدلون و نه ليدلای شو.',
-	'pdtest_title'      => 'د متن سرليک:',
-	'pdtest_text'       => 'ځايونکی متن:',
-	'pdtest_ok'         => 'ښه/هو',
-	'pdtest_diff'       => 'توپيرونه',
+	'pdtest_text' => 'ځايونکی متن:',
+	'pdtest_ok'   => 'ښه/هو',
+	'pdtest_diff' => 'توپيرونه',
 );
 
 /** Portuguese (Português)
@@ -915,19 +490,12 @@ $messages['pt'] = array(
 	'pdt_comparing_page'  => 'Comparação do resultado do analisador "parser" de [[$1]]',
 );
 
-/** Romanian (Română)
- * @author KlaudiuMihaila
- */
-$messages['ro'] = array(
-	'pdtest_ok' => 'OK',
-);
-
 /** Russian (Русский)
- * @author Александр Сигачёв
+ * @author .:Ajvol:.
  */
 $messages['ru'] = array(
 	'parserdifftest'      => 'Проверка изменений синтаксического анализатора',
-	'pdtest-desc'         => '[[Special:ParserDiffTest|Служебная страница]] для сравнения вывода двух разных парсеров',
+	'pdtest-desc'         => '[[Special:ParserDiffTestSpecial|Служебная страница]] для сравнения вывода двух разных парсеров',
 	'pdtest_no_target'    => 'Не указана цель.',
 	'pdtest_page_missing' => 'Указанная страница не найдена в базе данных.',
 	'pdtest_no_changes'   => 'Изменений не обнаружено.',
@@ -946,7 +514,7 @@ $messages['ru'] = array(
  */
 $messages['sah'] = array(
 	'parserdifftest'      => 'Синтаксис анализаторын (парсер) уларыйыытын көрүү',
-	'pdtest-desc'         => 'Икки тус туспа парсердар таһаарыыларын уратытын көрдөрөр [[Special:ParserDiffTest|аналлаах сирэй]]',
+	'pdtest-desc'         => 'Икки тус туспа парсердар таһаарыыларын уратытын көрдөрөр [[Special:ParserDiffTestSpecial|аналлаах сирэй]]',
 	'pdtest_no_target'    => 'Соруга ыйыллыбатах.',
 	'pdtest_page_missing' => 'Ыйыллыбыт сирэй билэ тиһигэр көстүбэтэ.',
 	'pdtest_no_changes'   => 'Уларыйыы көстүбэтэ.',
@@ -997,21 +565,6 @@ $messages['stq'] = array(
 	'pdt_comparing_page'  => 'Fergliek Parser-Uutgoawe foar [[$1]]',
 );
 
-/** Sundanese (Basa Sunda)
- * @author Kandar
- * @author Irwangatot
- */
-$messages['su'] = array(
-	'pdtest_page_missing' => 'Kaca nu diasupkeun euweuh dina basis data.',
-	'pdtest_no_changes'   => 'Teu kapangih parobahan',
-	'pdtest_time_report'  => '<b>$1</b> merlukeun $2 detik, <b>$3</b> merlukeun $4 detik.',
-	'pdtest_text'         => 'Téks input:',
-	'pdtest_ok'           => 'Heug',
-	'pdtest_get_text'     => 'Téang téks dina kaca',
-	'pdtest_diff'         => 'Béda',
-	'pdtest_side_by_side' => 'Babandingan output',
-);
-
 /** Swedish (Svenska)
  * @author Lejonel
  * @author M.M.S.
@@ -1032,13 +585,6 @@ $messages['sv'] = array(
 	'pdt_comparing_page'  => 'Jämför parsningsresultat av [[$1]]',
 );
 
-/** Silesian (Ślůnski)
- * @author Herr Kriss
- */
-$messages['szl'] = array(
-	'pdtest_ok' => 'OK',
-);
-
 /** Telugu (తెలుగు)
  * @author Veeven
  */
@@ -1057,79 +603,21 @@ $messages['te'] = array(
 	'pdt_comparing_page'  => '[[$1]] నుండి పార్సర్ అవుట్&zwnj;పుట్&zwnj;ని పోలుస్తున్నాం',
 );
 
-/** Tetum (Tetun)
- * @author MF-Warburg
- */
-$messages['tet'] = array(
-	'pdtest_ok' => 'OK',
-);
-
-/** Tajik (Cyrillic) (Тоҷикӣ/tojikī (Cyrillic))
+/** Tajik (Тоҷикӣ)
  * @author Ibrahim
  */
-$messages['tg-cyrl'] = array(
-	'parserdifftest'      => 'Санҷиши тафовути таҳлилгар',
-	'pdtest-desc'         => '[[Special:ParserDiffTest|Саҳифаи вижа]] барои муқоисаи хуруҷи ду таҷзеҳкунандаи мухталиф',
-	'pdtest_no_target'    => 'Ҳадафе таъйид нашудааст.',
-	'pdtest_page_missing' => 'Саҳифаи мавриди назар дар пойгоҳи дода ёфт нашуд.',
+$messages['tg'] = array(
 	'pdtest_no_changes'   => 'Ҳеҷ тағйир ҳазф нашуд.',
-	'pdtest_time_report'  => 'Барои <b>$1</b> муддат $2 сония сарф шуд, барои <b>$3</b> муддат $4 сония сарф шуд.',
-	'pdtest_title'        => 'Унвони матн:',
-	'pdtest_text'         => 'Матни вурудӣ:',
-	'pdtest_ok'           => 'Таъйид',
 	'pdtest_get_text'     => 'Дарёфти матн аз саҳифа',
 	'pdtest_diff'         => 'Фарқиятҳо',
 	'pdtest_side_by_side' => 'Муқоисаи хуруҷӣ',
-	'pdt_comparing_page'  => 'Муқоисаи хуруҷи таҳлилгар аз [[$1]]',
 );
 
 /** Turkish (Türkçe)
- * @author Runningfridgesrule
  * @author Erkan Yilmaz
  */
 $messages['tr'] = array(
-	'pdtest_no_changes' => 'Değişiklik bulunmadı.',
-	'pdtest_title'      => 'Bağlam başlığı:',
-	'pdtest_ok'         => 'Tamam',
-);
-
-/** Ukrainian (Українська)
- * @author Ahonc
- * @author AS
- */
-$messages['uk'] = array(
-	'parserdifftest'      => 'Перевірка змін синтаксичного аналізатора',
-	'pdtest-desc'         => '[[Special:ParserDiffTest|Спеціальна сторінка]] для порівняння виводу двох різних парсерів',
-	'pdtest_no_target'    => 'Не зазначена ціль.',
-	'pdtest_page_missing' => 'Зазначена сторінка не знайдена в базі даних.',
-	'pdtest_no_changes'   => 'Змін не виявлено.',
-	'pdtest_time_report'  => '<b>$1</b> зайняло $2 секунд, <b>$3</b> зайняло $4 секунд.',
-	'pdtest_title'        => 'Назва сторінки:',
-	'pdtest_text'         => 'Вхідний текст:',
-	'pdtest_ok'           => 'Гаразд',
-	'pdtest_get_text'     => 'Отримати текст зі сторінки',
-	'pdtest_diff'         => 'Відмінності',
-	'pdtest_side_by_side' => 'Порівняння виводу',
-	'pdt_comparing_page'  => 'Порівняння виводу синтаксичного аналізатора для [[$1]]',
-);
-
-/** Vèneto (Vèneto)
- * @author Candalua
- */
-$messages['vec'] = array(
-	'parserdifftest'      => 'Verifica de le modifiche introdote nel parser',
-	'pdtest-desc'         => '[[Special:ParserDiffTest|Pagina speciale]] par métar a confronto el risultato de do parser difarenti',
-	'pdtest_no_target'    => 'Nissuna pagina specificà.',
-	'pdtest_page_missing' => 'La pagina richiesta no la xe mìa stà catà nel database.',
-	'pdtest_no_changes'   => 'No xe stà catà difarense.',
-	'pdtest_time_report'  => "L'elaborassion de <b>$1</b> la gà richiesto $2 secondi, quela de <b>$3</b> $4 secondi.",
-	'pdtest_title'        => 'Titolo del contesto:',
-	'pdtest_text'         => 'Testo de input:',
-	'pdtest_ok'           => 'OK',
-	'pdtest_get_text'     => 'Preleva el testo da la pagina',
-	'pdtest_diff'         => 'Difarenze',
-	'pdtest_side_by_side' => 'Confronto tra i output',
-	'pdt_comparing_page'  => 'Confronto tra i output del parser par [[$1]]',
+	'pdtest_ok' => 'Tamam',
 );
 
 /** Vietnamese (Tiếng Việt)
@@ -1153,72 +641,14 @@ $messages['vi'] = array(
 );
 
 /** Volapük (Volapük)
- * @author Malafaya
  * @author Smeira
+ * @author Malafaya
  */
 $messages['vo'] = array(
 	'pdtest_page_missing' => 'Pad pavilöl no patuvon.',
 	'pdtest_no_changes'   => 'Votükams nonik petuvons.',
-	'pdtest_ok'           => 'Si!',
 	'pdtest_get_text'     => 'Getolöd vödemi se pad',
 	'pdtest_diff'         => 'Difs',
 	'pdtest_side_by_side' => 'Jonolöd leigodi',
-);
-
-/** Cantonese
- * @author Shinjiman
- */
-$messages['yue'] = array(
-	'parserdifftest'      => '處理器差異測試',
-	'pdtest-desc'         => '比較兩種唔同處理器嘅[[Special:ParserDiffTest|特別頁]]',
-	'pdtest_no_target'    => '無指定目標。',
-	'pdtest_page_missing' => '所指定嘅頁響資料庫度搵唔到。',
-	'pdtest_no_changes'   => '偵測唔到更改。',
-	'pdtest_time_report'  => '<b>$1</b> 要 $2 秒，<b>$3</b> 要 $4 秒。',
-	'pdtest_title'        => '內容標題:',
-	'pdtest_text'         => '輸入文字:',
-	'pdtest_ok'           => '好',
-	'pdtest_get_text'     => '響版拎字',
-	'pdtest_diff'         => '差別',
-	'pdtest_side_by_side' => '輸出比較',
-	'pdt_comparing_page'  => '而家響[[$1]]比較緊處理器輸出',
-);
-
-/** Chinese Simplified
- * @author Shinjiman
- */
-$messages['zh-hans'] = array(
-	'parserdifftest'      => '处理器差异测试',
-	'pdtest-desc'         => '比较两种不同处理器的[[Special:ParserDiffTest|特殊页面]]',
-	'pdtest_no_target'    => '无指定目标。',
-	'pdtest_page_missing' => '所指定的页面在资料库中度找不到。',
-	'pdtest_no_changes'   => '侦测到无更改。',
-	'pdtest_time_report'  => '<b>$1</b> 要 $2 秒，<b>$3</b> 要 $4 秒。',
-	'pdtest_title'        => '内容标题:',
-	'pdtest_text'         => '输入文字:',
-	'pdtest_ok'           => '确定',
-	'pdtest_get_text'     => '从页面中取戴文字',
-	'pdtest_diff'         => '差异',
-	'pdtest_side_by_side' => '输出比较',
-	'pdt_comparing_page'  => '正在从[[$1]]比较处理器输出',
-);
-
-/** Chinese Traditional
- * @author Shinjiman
- */
-$messages['zh-hant'] = array(
-	'parserdifftest'      => '處理器差異測試',
-	'pdtest-desc'         => '比較兩種不同處理器的[[Special:ParserDiffTest|特殊頁面]]',
-	'pdtest_no_target'    => '無指定目標。',
-	'pdtest_page_missing' => '所指定的頁面在資料庫中度找不到。',
-	'pdtest_no_changes'   => '偵測到無更改。',
-	'pdtest_time_report'  => '<b>$1</b> 要 $2 秒，<b>$3</b> 要 $4 秒。',
-	'pdtest_title'        => '內容標題:',
-	'pdtest_text'         => '輸入文字:',
-	'pdtest_ok'           => '確定',
-	'pdtest_get_text'     => '從頁面中取得文字',
-	'pdtest_diff'         => '差異',
-	'pdtest_side_by_side' => '輸出比較',
-	'pdt_comparing_page'  => '正在從[[$1]]比較處理器輸出',
 );
 

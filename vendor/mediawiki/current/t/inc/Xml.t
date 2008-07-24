@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-require 't/Test.php';
+require 'Test.php';
 
 plan( 8 );
 
@@ -54,3 +54,4 @@ cmp_ok(
 cmp_ok( Xml::closeElement( 'element' ), '==', '</element>', 'closeElement() shortcut' );
 
 /* vim: set filetype=php: */
+?>

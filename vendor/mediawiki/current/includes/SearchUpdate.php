@@ -1,7 +1,7 @@
 <?php
 /**
  * See deferred.txt
- * @ingroup Search
+ * @addtogroup Search
  */
 class SearchUpdate {
 
@@ -95,19 +95,21 @@ class SearchUpdate {
 		wfProfileOut( "$fname-regexps" );
 
 		wfRunHooks( 'SearchUpdate', array( $this->mId, $this->mNamespace, $this->mTitle, &$text ) );
-
+		
 		# Perform the actual update
 		$search->update($this->mId, Title::indexTitle( $this->mNamespace, $this->mTitle ),
 				$text);
-
+		
 		wfProfileOut( $fname );
 	}
 }
 
 /**
  * Placeholder class
- * @ingroup Search
+ * @addtogroup Search
  */
 class SearchUpdateMyISAM extends SearchUpdate {
 	# Inherits everything
 }
+
+

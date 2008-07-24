@@ -32,13 +32,10 @@ or you can search the wiki through an external search service:\n",
 	'searchaliases'         => ""
 );
 
-/** Afrikaans (Afrikaans)
- * @author Siebrand
- */
 $messages['af'] = array(
 	'searchnumber'          => '<strong>Resultate $1-$2 van $3</strong>',
-	'searchprev'            => "&#x00AB; <span style='font-size: small'>Vorige</span>",
-	'searchnext'            => "<span style='font-size: small'>Volgende</span> &#x00BB;",
+	'searchprev'            => '&#x00AB; <span style=\'font-size: small\'>Vorige</span>',
+	'searchnext'            => '<span style=\'font-size: small\'>Volgende</span> &#x00BB;',
 	'lucene-searchscore'    => 'Relevansie: $1%',
 	'lucene-resultsize'     => '$1 ($2 woorde)',
 	'searchdidyoumean'      => 'Het u "<a href="$1">$2</a>" bedoel?',
@@ -48,21 +45,16 @@ $messages['af'] = array(
 
 $1
 
-Soek vir $3 $9 $10',
+Soek vir $3 $9',
 );
 
 /** Amharic (አማርኛ)
  * @author Codex Sinaiticus
- * @author Siebrand
  */
 $messages['am'] = array(
 	'searchnumber'          => '<strong><big>ውጤቶች #$1 እስከ $2 (ከ$3):</big></strong>',
 	'searchnoresults'       => 'ውጤት፦ ለጥያቄዎ ምንም ተመሳሳይ ጽሕፈት በማናቸውም ጽሁፍ አይገኝም።',
-	'lucenepowersearchtext' => 'ባመለከቱት ክፍለ-ዊኪዎች ውስጥ ፍለጋ ለማድረግ፦
-
-$1
-
-ይኸው ጥያቄ ይፈለግ፡- $3 $9 $10',
+	'lucenepowersearchtext' => 'ባመለከቱት ክፍለ-ዊኪዎች ውስጥ ፍለጋ ለማድረግ፦ <br/> $1 ይኸው ጥያቄ ይፈለግ፡- $3 $9',
 );
 
 /** Aragonese (Aragonés)
@@ -83,7 +75,7 @@ $1
 
 Mirar $3 $9',
 	'lucenefallback'        => 'Bi ha abito uno problema fendo a busca en a wiki.
-Prebablement sía temporal. Prebe de fer-lo una atra begada dimpués de bels menutos,
+Prebablement sía temporal. Prebe de fer-lo una atra begada dimpués de bels menutos, 
 u faiga serbir bel buscador esterno ta esplorar a wiki.',
 	'searchexactcase'       => 'Mirar esautament (mayusclas e minusclas)',
 	'searchall'             => 'toz',
@@ -149,28 +141,23 @@ $messages['bcl'] = array(
 );
 
 /** Bulgarian (Български)
- * @author Borislav
  * @author DCLXVI
+ * @author Borislav
  */
 $messages['bg'] = array(
-	'lucene-desc'           => 'Интерфейс за търсещата машина Apache Lucene',
 	'searchnumber'          => '<strong>Резултати $1–$2 от $3</strong>',
 	'searchprev'            => "&#x00AB; <span style='font-size: small'>Предишни</span>",
 	'searchnext'            => "<span style='font-size: small'>Следващи</span> &#x00BB;",
 	'lucene-searchscore'    => 'Релевантност: $1%',
 	'lucene-resultsize'     => '$1 ($2 думи)',
-	'searchdidyoumean'      => 'Да нямате предвид „<a href="$1">$2</a>“?',
 	'searchnoresults'       => 'За съжаление нямаше точни съвпадения със заявката ви.',
-	'searchnearmatches'     => '<b>Следните страници имат сходни със заявката ви имена:</b>',
+	'searchnearmatches'     => '<b>Следните страници имат сходни с търсенето имена:</b>',
 	'lucenepowersearchtext' => 'Търсене в именни пространства:
 
 $1
 
 Търсене на $3 $9 $10',
-	'lucenefallback'        => 'В момента има проблем с търсачката на {{SITENAME}}. Възможно е това да е само временно, затова опитайте отново след минута-две. В краен случай можете да ползвате услугите на външни търсачки:',
-	'searchexactcase'       => 'Търсене с чувствителност за малки и главни букви',
 	'searchall'             => 'всички',
-	'searchincategory'      => 'в категория',
 );
 
 /** Bengali (বাংলা)
@@ -273,8 +260,8 @@ Hledat $3 $9 $10',
 $messages['de'] = array(
 	'lucene-desc'           => 'Schnittstelle für die Apache-Suchmaschine „Lucene“',
 	'searchnumber'		=> "<strong>Ergebnisse $1–$2 von $3</strong>",
-	'searchprev'            => "← <span style='font-size: smaller'>Vorherige</span>",
-	'searchnext'            => "<span style='font-size: smaller'>Nächste</span> →",
+	'searchprev'            => "&larr; <span style='font-size: smaller'>Vorherige</span>",
+	'searchnext'            => "<span style='font-size: smaller'>Nächste</span> &rarr;",
 	'lucene-searchscore'    => "Relevanz: $1 %",
 	'lucene-resultsize'     => "$1 ($2 Wörter)",
 	'searchdidyoumean'      => "Meintest du „<a href=\"$1\">$2</a>“?",
@@ -328,13 +315,10 @@ $messages['el'] = array(
 	'lucenefallback'     => 'Υπήρξε κάποιο πρόβλημα με την αναζήτηση στο wiki. Αυτό είναι μάλλον προσωρινό. Προσπαθήστε ξανά αργότερα ή πραγματοποιήστε την αναζήτησή σας στο wiki μέσω μιας εξωτερικής υπηρεσίας αναζήτησης:',
 );
 
-/** Esperanto (Esperanto)
- * @author Yekrats
- */
 $messages['eo'] = array(
 	'searchnumber'          => '<strong>Rezultoj $1-$2 el $3</strong>',
-	'searchprev'            => "&#x00AB; <span style='font-size: small'>Antaŭa</span>",
-	'searchnext'            => "<span style='font-size: small'>Sekvanta</span> &#x00BB;",
+	'searchprev'            => '&#x00AB; <span style=\'font-size: small\'>Antaŭa</span>',
+	'searchnext'            => '<span style=\'font-size: small\'>Sekvanta</span> &#x00BB;',
 	'lucene-searchscore'    => 'Kongrueco: $1%',
 	'lucene-resultsize'     => '$1 ($2 vortoj)',
 	'searchdidyoumean'      => 'Ĉu vi celis : "<a href="$1">$2</a>"?',
@@ -348,18 +332,11 @@ Serĉo de $3 $9 $10',
 	'lucenefallback'        => 'Estis problemo kun la serĉilo de ĉi vikio.
 Estas verŝajne nur portempa; bonvolu provi denove post iom da tempo
 aŭ vi povas esplori la vikion per eksteraj serĉservoj.',
-	'searchall'             => 'ĉiuj',
 );
-
-/** Spanish (Español)
- * @author Icvav
- * @author Ascánder
- */
 $messages['es'] = array(
-	'lucene-desc'           => 'Interfaz para el motor de búsqueda Apache Lucene',
 	'searchnumber'          => '<strong>Resultados $1-$2 de $3</strong>',
-	'searchprev'            => "&#x00AB; <span style='font-size: small'>Previo</span>",
-	'searchnext'            => "<span style='font-size: small'>Siguiente</span> &#x00BB;",
+	'searchprev'            => '&#x00AB; <span style=\'font-size: small\'>Previo</span>',
+	'searchnext'            => '<span style=\'font-size: small\'>Siguiente</span> &#x00BB;',
 	'lucene-searchscore'    => 'Relevancia: $1%',
 	'lucene-resultsize'     => '$1 ($2 palabras)',
 	'searchdidyoumean'      => '¿Quisiste decir «<a href="$1">$2</a>»?',
@@ -378,6 +355,31 @@ o emplee algún buscador externo para explorar la wiki.',
 	'searchincategory'      => 'en categoría',
 );
 
+/** Spanish (Español)
+ * @author Icvav
+ */
+$messages['es'] = array(
+	'searchnumber'          => '<strong>Resultados $1-$2 de $3</strong>',
+	'searchprev'            => "&#x00AB; <span style='font-size: small'>Previo</span>",
+	'searchnext'            => "<span style='font-size: small'>Siguiente</span> &#x00BB;",
+	'lucene-searchscore'    => 'Relevancia: $1%',
+	'lucene-resultsize'     => '$1 ($2 palabras)',
+	'searchdidyoumean'      => '¿Quisiste decir «<a href="$1">$2</a>»?',
+	'searchnoresults'       => 'Lo sentimos, no hay ningún artículo con el texto buscado.',
+	'searchnearmatches'     => '<b>Estas páginas tienen títulos similares a tu consulta:</b>',
+	'lucenepowersearchtext' => 'Buscar sólo en los espacios de nombre:
+
+$1
+
+Buscar $3 $9',
+	'lucenefallback'        => 'Ha habido un problema con la búsqueda.
+Probablemente sea temporal. Intentelo de nuevo en unos minutos, 
+o emplee algún buscador externo para explorar la wiki.',
+	'searchexactcase'       => 'Búsqueda sensible a mayúsculas',
+	'searchall'             => 'todos',
+	'searchincategory'      => 'en categoría',
+);
+
 $messages['et'] = array(
 	'searchnumber'          => '<strong>Tulemused $1-$2 (kokku $3)</strong>',
 	'searchprev'            => '&#x00AB; <span style=\'font-size: small\'>Eelmine</span>',
@@ -388,26 +390,6 @@ $messages['et'] = array(
 	'lucenefallback'        => 'Viki otsinguga oli mingi probleem.
 See on tõenäoliselt ainult ajutine;
 proovige mõne hetke pärast uuesti või otsige välise teenuse abil:',
-);
-
-/** Basque (Euskara)
- * @author SPQRobin
- */
-$messages['eu'] = array(
-	'searchnumber'          => '<strong>$3tik, $1-$2 emaitzak </strong>',
-	'searchprev'            => "&#x00AB; <span style='font-size: small'>Aurrekoa</span>",
-	'searchnext'            => "<span style='font-size: small'>Hurrengoa</span> &#x00BB;",
-	'lucene-searchscore'    => 'Adierazgarritasuna: %$1',
-	'lucene-resultsize'     => '$1 ($2 hitz)',
-	'searchdidyoumean'      => '"<a href="$1">$2</a>" esan nahi zenuen?',
-	'searchnoresults'       => 'Barkatu, ez dago erantzunik zure bilaketarentzat.',
-	'searchnearmatches'     => '<b>Orrialde hauek zure kontsultaren antzeko izenburuak dituzte:</b>',
-	'lucenepowersearchtext' => 'Markaturikoetan soilik bilatu:
-
-$1
-
-Bilatu: $3 $9 $10',
-	'lucenefallback'        => 'Arazo bat gertatu da wiki bilaketan. Uneko arazoa da ziurrenik; saiatu beranduxeago, edo wikian bilatu dezakezu kanpoko bilaketa zerbitzu bat erabiliz:',
 );
 
 /** Extremaduran (Estremeñu)
@@ -495,7 +477,6 @@ $messages['fo'] = array(
 
 /** French (Français)
  * @author Sherbrooke
- * @author Meithal
  * @author Grondin
  */
 $messages['fr'] = array(
@@ -506,7 +487,7 @@ $messages['fr'] = array(
 	'lucene-searchscore'    => 'Pertinence : $1%',
 	'lucene-resultsize'     => '$1 ($2 mots)',
 	'searchdidyoumean'      => 'Pensiez-vous à : « <a href="$1">$2</a> » ?',
-	'searchnoresults'       => "<big>Le moteur de recherche n'a trouvé aucune correspondance exacte à votre requête.</big>",
+	'searchnoresults'       => 'Désolé, il n’existe aucune correspondance exacte à votre requête.',
 	'searchnearmatches'     => '<strong>Ces pages ont un titre similaire à votre requête.</strong>',
 	'lucenepowersearchtext' => 'Rechercher dans les espaces :
 
@@ -545,15 +526,6 @@ ou ben d’utilisar un sèrviço de rechèrche de defôr.',
 	'searchincategory'      => 'Chèrchiér dens les catègories',
 );
 
-/** Friulian (Furlan)
- * @author Klenje
- */
-$messages['fur'] = array(
-	'searchdidyoumean'  => 'Stavitu par câs cirint "<a href="$1">$2</a>"?',
-	'searchnoresults'   => 'Nol è stât cjatât nissun risultât corispuindint esatementri ae to ricercje.',
-	'searchnearmatches' => '<b>Chestis pagjinis a àn titui simii a chel cirût:</b>',
-);
-
 /** Irish (Gaeilge)
  * @author SPQRobin
  */
@@ -561,16 +533,10 @@ $messages['ga'] = array(
 	'searchdidyoumean' => 'An raibh tú ag lorg ar an bhfrása seo? "<a href="$1">$2</a>"',
 );
 
-/** Galician (Galego)
- * @author Alma
- * @author Xosé
- * @author Toliño
- */
 $messages['gl'] = array(
-	'lucene-desc'           => 'Interface para o motor de procura Apache Lucene',
 	'searchnumber'          => '<strong>Resultados $1-$2 de $3</strong>',
-	'searchprev'            => "&#x00AB; <span style='font-size: small'>Anterior</span>",
-	'searchnext'            => "<span style='font-size: small'>Seguinte</span> &#x00BB;",
+	'searchprev'            => '&#x00AB; <span style=\'font-size: small\'>Anterior</span>',
+	'searchnext'            => '<span style=\'font-size: small\'>Seguinte</span> &#x00BB;',
 	'lucene-searchscore'    => 'Relevancia: $1%',
 	'lucene-resultsize'     => '$1 ($2 palabras)',
 	'searchdidyoumean'      => 'Quixo dicir: "<a href="$1">$2</a>"?',
@@ -581,9 +547,9 @@ $messages['gl'] = array(
 $1
 
 Procura para $3 $9 $10',
-	'lucenefallback'        => 'Houbo un problema coa procura no wiki.
-Probabelmente é temporal; ténteo de novo nuns minutos,
-ou pode buscar no wiki a través dun servizo de procura externa:',
+	'lucenefallback'        => 'Houbo un problema coa procura wiki.
+É probabelmente temporal; ténteo de novo nunhos minutos,
+ou vostede pode buscar o wiki a través dun servizo de procura externa:',
 	'searchexactcase'       => 'Caso-exacto de procura',
 	'searchall'             => 'todo',
 	'searchincategory'      => 'na categoría',
@@ -673,7 +639,7 @@ Je nachwilny problem z nutřkownej pytawu. Spytaj za někotre wokomiki hišće r
 );
 
 /** Hungarian (Magyar)
- * @author Dani
+ * @author Bdanee
  */
 $messages['hu'] = array(
 	'lucene-desc'           => 'Felület az Apache Lucene keresőmotor számára',
@@ -697,11 +663,7 @@ A hiba átmeneti; próbáld újra néhány másodperc múlva vagy kereshetsz a w
 	'searchincategory'      => 'kategóriában',
 );
 
-/** Indonesian (Bahasa Indonesia)
- * @author IvanLanin
- */
 $messages['id'] = array(
-	'lucene-desc'           => 'Antarmuka untuk mesin pencari Lucene Apache',
 	'searchnumber'          => "<strong>Hasil pencarian $1-$2 dari $3</strong>",
 	'searchprev'            => "&#x00AB; <span style='font-size: small'>Sebelumnya</span>",
 	'searchnext'            => "<span style='font-size: small'>Selanjutnya</span> &#x00BB;",
@@ -717,10 +679,7 @@ $1
 Pencarian terhadap $3 $9 $10",
 	'lucenefallback'        => "Ada masalah pada pencarian wiki.
 Masalah ini mungkin hanya sementara; silakan coba lagi dalam beberapa saat,
-atau gunakan layanan pencari eksternal:\n",
-	'searchexactcase'       => 'Pencarian kapitalisasi persis',
-	'searchall'             => 'semua',
-	'searchincategory'      => 'dalam kategori',
+atau gunakan layanan pencari eksternal:\n"
 );
 
 /** Icelandic (Íslenska)
@@ -785,32 +744,6 @@ $1
 	'searchexactcase'       => '大文字・小文字を区別する検索',
 	'searchall'             => 'all',
 	'searchincategory'      => 'incategory',
-);
-
-/** Jutish (Jysk)
- * @author Huslåke
- */
-$messages['jut'] = array(
-	'lucene-desc'           => 'Enterfæs før æ Apache Lucene søĝ måtår',
-	'searchnumber'          => '<strong>Ræsultåter $1-$2 der $3</strong>',
-	'searchprev'            => "&#x00AB; <span style='font-size: small'>Førge</span>",
-	'searchnext'            => "<span style='font-size: small'>Følgende</span> &#x00BB;",
-	'lucene-searchscore'    => 'Rælevans: $1%',
-	'lucene-resultsize'     => '$1 ($2 ørt)',
-	'searchdidyoumean'      => 'Mænest du: "<a href="$1">$2</a>"?',
-	'searchnoresults'       => 'Unskyld, her åorte ekke åverenkåmelse til deres query.',
-	'searchnearmatches'     => '<b>Dette pæges har similær titler til deres query:</b>',
-	'lucenepowersearchtext' => 'Søĝ i navnerum:
-
-$1
-
-Søĝ før $3 $9 $10',
-	'lucenefallback'        => "Her hvás en pråblæm ve'n wiki soĝ.
-Dett'er mågleg tiidleg; pråbær nurmal i en pår måmenter,
-æller du kenst søĝ i'n wiki via en ekstern søĝ service:",
-	'searchexactcase'       => 'Eksakt-lettersåk søĝ',
-	'searchall'             => 'ål',
-	'searchincategory'      => 'enklynge',
 );
 
 $messages['kaa'] = array(
@@ -891,28 +824,9 @@ nemese osı wïkïden izdew üşin sırtqı qızmetterin qoldanıñız:<br />",
 
 /** Khmer (ភាសាខ្មែរ)
  * @author Chhorran
- * @author គីមស៊្រុន
- * @author Lovekhmer
  */
 $messages['km'] = array(
-	'lucene-desc'           => 'អន្តរមុខ​សំរាប់​ឧបករណ៍ស្វែងរក Apache Lucene',
-	'searchnumber'          => '<strong>លទ្ធផល ពី $1 ដល់ $2 នៃ $3</strong>',
-	'searchprev'            => "&#x00AB; <span style='font-size: small'>មុន</span>",
-	'searchnext'            => "<span style='font-size: small'>បន្ទាប់</span> &#x00BB;",
-	'lucene-searchscore'    => 'កំរិតទាក់ទិន៖ $1%',
-	'lucene-resultsize'     => '$1 ($2 ពាក្យ)',
-	'searchdidyoumean'      => 'អ្នក គិត ដល់ ៖ "<a href="$1">$2</a>" ឬ?',
-	'lucenepowersearchtext' => 'ស្វែងរកក្នុងលំហឈ្មោះ ៖
-
-$1
-
-ស្វែងរក $3 $9 $10',
-	'lucenefallback'        => 'មានបញ្ហាជាមួយការស្វែងរកវិគី។ វា​អាចជាបញ្ហាបណ្តោះអាសន្ន។ ព្យាយាមឡើងវិញក្នុងមួយសន្ទុះទៀត 
-
-ឬ អ្នកអាចស្វែងរកវិគីតាមសេវាស្វែងរកខាងក្រៅ ៖',
-	'searchexactcase'       => 'ស្វែងរក (គិត អក្សរធំ/អក្សតូច)',
-	'searchall'             => 'ទាំងអស់',
-	'searchincategory'      => 'មិនមានចំណាត់ថ្នាក់ក្រុម',
+	'searchincategory' => 'ក្នុងចំណាត់ក្រុម',
 );
 
 $messages['la'] = array(
@@ -929,7 +843,7 @@ Petere $3 $9 $10',
  */
 $messages['lb'] = array(
 	'searchnumber'          => '<strong>Resultater $1–$2 vun $3</strong>',
-	'searchprev'            => "&#x00AB; <span style='font-size: small'>Vireg</span>",
+	'searchprev'            => "&#x00AB; <span style='font-size: small'>Virescht</span>",
 	'searchnext'            => "<span style='font-size: smaller'>Nächst</span> &#x00BB;",
 	'lucene-searchscore'    => 'Relevanz: $1 %',
 	'lucene-resultsize'     => '$1 ($2 Wierder)',
@@ -988,7 +902,6 @@ $messages['loz'] = array(
 
 /** Lithuanian (Lietuvių)
  * @author Garas
- * @author Matasg
  */
 $messages['lt'] = array(
 	'searchnumber'          => '<strong>Rezultatai $1-$2 iš $3</strong>',
@@ -1011,7 +924,6 @@ arba galite mėginti ieškoti projekte per išorines paieškos paslaugas:
 ',
 	'searchexactcase'       => 'Tikslaus raidžių dydžio paieška',
 	'searchall'             => 'visi',
-	'searchincategory'      => 'kategorijoje',
 );
 
 /** Latvian (Latviešu)
@@ -1019,33 +931,6 @@ arba galite mėginti ieškoti projekte per išorines paieškos paslaugas:
  */
 $messages['lv'] = array(
 	'searchnoresults' => 'Šeit, diemžēl, nav lapas ar tieši tādu nosaukumu.',
-);
-
-/** Marathi (मराठी)
- * @author Kaustubh
- * @author Mahitgar
- */
-$messages['mr'] = array(
-	'lucene-desc'           => 'अपाचे ल्यूसिन शोधयंत्रासाठीचा इंटरफेस',
-	'searchnumber'          => '<strong>$3 पैकी $1-$2 निकाल</strong>',
-	'searchprev'            => "&#x00AB; <span style='font-size: small'>पूर्वीचे</span>",
-	'searchnext'            => "<span style='font-size: small'>नंतरचे</span> &#x00BB;",
-	'lucene-searchscore'    => 'जुळणी: $1%',
-	'lucene-resultsize'     => '$1 ($2 शब्द)',
-	'searchdidyoumean'      => '"<a href="$1">$2</a>" असे तुमचे म्हणणे आहे का?',
-	'searchnoresults'       => 'माफ करा, पण तुम्ही दिलेल्या शोधशब्दांना १००% जुळणारे निकाल नाहीत.',
-	'searchnearmatches'     => '<b>खालील पानांची शीर्षके ही तुम्ही दिलेल्या शोधशब्दांशी मिळतीजुळती आहेत:</b>',
-	'lucenepowersearchtext' => 'नामविश्वांमध्ये शोधा:
-
-$1
-
-$3 $9 $10 साठी शोधा',
-	'lucenefallback'        => 'या विकीच्या शोधामध्ये त्रुटी आढळलेली आहे.
-ही त्रुटी थोड्यावेळाकरता आलेली असण्याची शक्यता आहे; कृपया थोडे थांबून पुन्हा प्रयत्न करा,
-किंवा तुम्ही बाह्य शोधयंत्र वापरु शकता:',
-	'searchexactcase'       => 'अगदी सारखी लिपी (case) शोध',
-	'searchall'             => 'सर्व',
-	'searchincategory'      => 'या वर्गात',
 );
 
 /** Erzya (эрзянь кель)
@@ -1105,9 +990,7 @@ $messages['nl'] = array(
 $1
 
 Zoek naar $3 $9 $10',
-	'lucenefallback'        => 'Er is een storing in de wikizoekmachine.
-Deze is waarschijnlijk tijdelijk van aard;
-probeer het over enige tijd opnieuw of doorzoek de wiki via een externe zoekmachine:',
+	'lucenefallback'        => 'Er is een storing in de wikizoekmachine. Deze is waarschijnlijk tijdelijk van aard; probeer het over enige tijd opnieuw of doorzoek de wiki via een externe zoekmachine:',
 	'searchexactcase'       => 'Hoofdlettergevoelig zoeken',
 	'searchall'             => 'alle',
 	'searchincategory'      => 'binnen categorie',
@@ -1165,14 +1048,13 @@ Søk etter $3 $9 $10',
  * @author Siebrand
  */
 $messages['oc'] = array(
-	'lucene-desc'           => 'Interfàcia pel motor de recèrca Apache Lucene',
 	'searchnumber'          => '<strong>Resultats $1-$2 sus $3</strong>',
 	'searchprev'            => "&#x00AB; <span style='font-size: small'>Prec.</span>",
 	'searchnext'            => "<span style='font-size: small'>Seg.</span> &#x00BB;",
 	'lucene-searchscore'    => 'Pertinéncia : $1%',
 	'lucene-resultsize'     => '$1 ($2 mots)',
 	'searchdidyoumean'      => 'Pensavetz a : « <a href="$1">$2</a> » ?',
-	'searchnoresults'       => 'O planhèm, existís pas cap de correspondéncia exacta a vòstra requèsta.',
+	'searchnoresults'       => 'O planhem, existís pas cap de correspondéncia exacta a vòstra requèsta.',
 	'searchnearmatches'     => '<strong>Aquestas paginas an un títol similar a vòstra requèsta.</strong>',
 	'lucenepowersearchtext' => 'Recercar dins los espacis :
 
@@ -1196,7 +1078,7 @@ $messages['pl'] = array(
 	'searchnext'            => "<span style='font-size: small'>Następna</span> &#x00BB;",
 	'lucene-searchscore'    => 'Trafność: $1%',
 	'lucene-resultsize'     => '$1 ($2 słów)',
-	'searchdidyoumean'      => 'Czy chodziło Ci o: "<a href="$1">$2</a>"?',
+	'searchdidyoumean'      => 'Czy chodziło Ci o "<a href="1">$2</a>"?',
 	'searchnoresults'       => 'Niestety nie znaleziono stron pasujących do podanych kryteriów wyszukiwania.',
 	'searchnearmatches'     => '<b>Strony o podobnych nazwach:</b>',
 	'lucenepowersearchtext' => 'Szukaj w przestrzeniach nazw:
@@ -1301,8 +1183,7 @@ ichataq hawa maskanawan wikipi maskay.",
 );
 
 /** Russian (Русский)
- * @author Александр Сигачёв
- * @author Ahonc
+ * @author .:Ajvol:.
  */
 $messages['ru'] = array(
 	'lucene-desc'           => 'Интерфейс для поискового движка Apache Lucene',
@@ -1337,7 +1218,7 @@ $messages['sah'] = array(
 	'searchnext'            => "<span style='font-size: small'>Аныг.</span> &#x00BB;",
 	'lucene-searchscore'    => 'Релевантноһа: $1%',
 	'lucene-resultsize'     => '$1 ($2 тыл)',
-	'searchdidyoumean'      => 'Баҕар маннык буолаарай «<a href="$1">$2</a>»?',
+	'searchdidyoumean'      => 'Баҕар маннык буолаарай «<a href="1">$2</a>»?',
 	'searchnoresults'       => 'Хомойуох иһин, туох да көстүбэтэ.',
 	'searchnearmatches'     => '<b>Бу сирэйдэр эн көрдүүр сирэйгэр майгынныыр ааттаахтар:</b>',
 	'lucenepowersearchtext' => 'Бу namespace`тар истэригэр көрдөөһүн:
@@ -1380,6 +1261,7 @@ Ye can rake the wiki wi an ootside rake service:',
 
 /** Slovak (Slovenčina)
  * @author Helix84
+ * @author Robbot
  */
 $messages['sk'] = array(
 	'lucene-desc'           => 'Rozhranie pre vyhľadávač Apache Lucene',
@@ -1477,7 +1359,7 @@ Uurs koast du uk do externe Säikmuugelkhaide nutsje:',
 );
 
 /** Swedish (Svenska)
- * @author M.M.S.
+ * @author Max sonnelid
  * @author Lejonel
  */
 $messages['sv'] = array(
@@ -1533,25 +1415,11 @@ $3 $9 $10 కొరకు వెతుకు',
 /** Tajik (Тоҷикӣ)
  * @author Ibrahim
  */
-$messages['tg-cyrl'] = array(
-	'lucene-desc'           => 'Интерфейс барои муҳаррики ҷустуҷӯии Апаче Лусин',
-	'searchnumber'          => '<strong>$1-$2 натоиҷ аз $3</strong>',
-	'searchprev'            => "&#x00AB; <span style='font-size: small'>Қаблӣ</span>",
-	'searchnext'            => "<span style='font-size: small'>Баъдӣ</span> &#x00BB;",
-	'lucene-searchscore'    => 'Иртибот: $1%',
-	'lucene-resultsize'     => '$1 ($2 калимаҳо)',
-	'searchdidyoumean'      => 'Оё манзури шумо буд: "<a href="$1">$2</a>"?',
-	'searchnoresults'       => 'Бубахшед, мавриди мутобиқ ба дархости шумо пайдо нашуд.',
-	'searchnearmatches'     => '<b>Ин саҳифаҳо унвонҳои шабеҳ ба дархости шумо доранд:</b>',
-	'lucenepowersearchtext' => 'Ҷустуҷӯ дар фазоҳои ном:
-
-$1
-
-Ҷустуҷӯ барои $3 $9 $10',
-	'lucenefallback'        => 'Ҷустуҷӯи вики мушкилие дорад. Эҳтимолан ин мушкили муваққатӣ аст; лутфан чанд лаҳза саъй кунед ё щумо метавонед тариқи хизмати беруна викиро ҷустуҷӯ кунед:',
-	'searchexactcase'       => 'Ҷустуҷӯи ҳассос бо ҳуруфи бузург ва хурд',
-	'searchall'             => 'ҳама',
-	'searchincategory'      => 'Дар гурӯҳ',
+$messages['tg'] = array(
+	'searchdidyoumean'  => 'Оё манзури шумо буд: "<a href="$1">$2</a>"?',
+	'searchnoresults'   => 'Бубахшед, мавриди мутобиқ ба дархости шумо пайдо нашуд.',
+	'searchnearmatches' => '<b>Ин саҳифаҳо унвонҳои шабеҳ ба дархости шумо доранд:</b>',
+	'searchall'         => 'ҳама',
 );
 
 /** Turkish (Türkçe)
@@ -1564,16 +1432,6 @@ $messages['tr'] = array(
 	'lucene-resultsize'  => '$1 ($2 kelimeler)',
 	'searchdidyoumean'   => 'Bunu mu demek istediniz: "<a href="$1">$2</a>"?',
 	'searchall'          => 'hepsi',
-);
-
-/** Ukrainian (Українська)
- * @author AS
- * @author Ahonc
- */
-$messages['uk'] = array(
-	'searchprev'      => "&#x00AB; <span style='font-size: small'>Попередні</span>",
-	'searchnext'      => "<span style='font-size: small'>Наступні</span> &#x00BB;",
-	'searchnoresults' => 'На жаль, за вашим запитом не було знайдено точних відповідників.',
 );
 
 $messages['ur'] = array(
@@ -1596,7 +1454,7 @@ $messages['vi'] = array(
 	'searchprev'            => '« <span style="font-size: small;">Trước</span>',
 	'searchnext'            => "<span style='font-size: small'>Tiếp</span> &#x00BB;",
 	'lucene-searchscore'    => 'Độ phù hợp: $1%',
-	'lucene-resultsize'     => '$1 ($2 từ)',
+	'lucene-resultsize'     => '$1 ($2 chữ)',
 	'searchdidyoumean'      => 'Bạn có muốn “<a href="$1">$2</a>” không?',
 	'searchnoresults'       => 'Không tìm thấy trang nào trùng với truy vấn của bạn.',
 	'searchnearmatches'     => '<b>Các trang ở dưới có tên giống truy vấn của bạn:</b>',

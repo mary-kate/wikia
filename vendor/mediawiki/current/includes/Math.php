@@ -1,8 +1,6 @@
 <?php
 /**
  * Contain everything related to <math> </math> parsing
- * @file
- * @ingroup Parser
  */
 
 /**
@@ -10,8 +8,8 @@
  * to rasterized PNG and HTML and MathML approximations. An appropriate
  * rendering form is picked and returned.
  *
- * @author Tomasz Wegrzanowski, with additions by Brion Vibber (2003, 2004)
- * @ingroup Parser
+ * by Tomasz Wegrzanowski, with additions by Brion Vibber (2003, 2004)
+ *
  */
 class MathRenderer {
 	var $mode = MW_MATH_MODERN;
@@ -259,7 +257,7 @@ class MathRenderer {
 				$this->html );
 		}
 	}
-
+	
 	function _attribs( $tag, $defaults=array(), $overrides=array() ) {
 		$attribs = Sanitizer::validateTagAttributes( $this->params, $tag );
 		$attribs = Sanitizer::mergeAttributes( $defaults, $attribs );
@@ -299,3 +297,4 @@ class MathRenderer {
 		return $math->render();
 	}
 }
+

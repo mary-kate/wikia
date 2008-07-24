@@ -1,8 +1,11 @@
 <?php
+/**
+ *
+ */
 
 /**
  * Pure virtual parent
- * @todo document (needs a one-sentence top-level class description, that answers the question: "what is a HistoryBlob?")
+ * @todo document (needs a one-sentence top-level class description, that answers the question: "what is a HistoryBlob?") 
  */
 interface HistoryBlob
 {
@@ -305,3 +308,6 @@ class HistoryBlobCurStub {
 		return $row->cur_text;
 	}
 }
+
+
+

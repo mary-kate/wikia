@@ -1,14 +1,10 @@
 <?php
-/**
- * @file
- * @ingroup Media
- */
 
 /**
  * Handler for Microsoft's bitmap format; getimagesize() doesn't
  * support these files
  *
- * @ingroup Media
+ * @addtogroup Media
  */
 class BmpHandler extends BitmapHandler {
 

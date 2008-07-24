@@ -3,9 +3,8 @@
  * Rebuild link tracking tables from scratch.  This takes several
  * hours, depending on the database size and server configuration.
  *
- * @file
  * @todo document
- * @ingroup Maintenance
+ * @addtogroup Maintenance
  */
 
 /** */

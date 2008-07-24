@@ -13,7 +13,7 @@
 class TitleBlacklistHooks {
 	public static function userCan( $title, $user, $action, &$result ) {
 		global $wgTitleBlacklist;
-		if( $action == 'create' || $action == 'edit' || $action == 'upload' ) {
+		if( $action == 'create' || $action == 'edit' ) {
 			efInitTitleBlacklist();
 			$blacklisted = $wgTitleBlacklist->isBlacklisted( $title, $action );
 			if( $blacklisted instanceof TitleBlacklistEntry ) {
@@ -49,7 +49,22 @@ class TitleBlacklistHooks {
 		}
 		return true;
 	}
-		
+	
+	public static function verifyUpload( $fname, $fpath, &$err ) {
+		global $wgTitleBlacklist;
+		efInitTitleBlacklist();
+		$blacklisted = $wgTitleBlacklist->isBlacklisted( Title::newFromText( $fname, NS_IMAGE ), 'upload' );
+		if( $blacklisted instanceof TitleBlacklistEntry ) {
+			wfLoadExtensionMessages( 'TitleBlacklist' );
+			$message = $blacklisted->getCustomMessage();
+			if( is_null( $message ) )
+				$message = 'titleblacklist-forbidden-upload';
+			$err = wfMsgWikiHtml( $message, htmlspecialchars( $blacklisted->getRaw() ), $fname );
+			return false;
+		}
+		return true;
+	}
+	
 	public static function validateBlacklist( $editor, $text, $section, $error ) {
 		global $wgTitleBlacklist;
 		efInitTitleBlacklist();

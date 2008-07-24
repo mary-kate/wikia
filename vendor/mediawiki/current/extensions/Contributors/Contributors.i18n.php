@@ -8,45 +8,19 @@
 
 $messages = array();
 
-/** English
- * @author Rob Church
- */
+/* English (Rob Church) */
 $messages['en'] = array(
-	'contributors'             => 'Contributors',
-	'contributors-desc'        => 'Summarises the main contributors to a page',
-	'contributors-toolbox'     => 'Main contributors',
-	'contributors-legend'      => 'List main contributors to a page',
-	'contributors-target'      => 'Title:',
-	'contributors-submit'      => 'Show',
-	'contributors-subtitle'    => 'Main contributors to $1',
-	'contributors-others-long' => 'There {{PLURAL:$1|is one other contributor|are $1 other contributors}} to this page.',
-	'contributors-others'      => 'and {{PLURAL:$1|one other|$1 others}}',
-	'contributors-badtitle'    => 'Invalid title.',
-	'contributors-nosuchpage'  => 'The page $1 does not exist.',
-);
-
-/** Faeag Rotuma (Faeag Rotuma)
- * @author Jose77
- */
-$messages['rtm'] = array(
-	'contributors-submit' => "Kel'äk",
-);
-
-/** Eastern Mari (Олык Марий)
- * @author Jose77
- */
-$messages['mhr'] = array(
-	'contributors-submit' => 'ончыкташ',
-);
-
-/** Afrikaans (Afrikaans)
- * @author Arnobarnard
- * @author Naudefj
- */
-$messages['af'] = array(
-	'contributors'        => 'Bydraers',
-	'contributors-target' => 'Titel:',
-	'contributors-submit' => 'Wys',
+	'contributors' => 'Contributors',
+	'contributors-desc' => 'Summarises the main contributors to a page',
+	'contributors-toolbox' => 'Main contributors',
+	'contributors-legend' => 'List main contributors to a page',
+	'contributors-target' => 'Title:',
+	'contributors-submit' => 'Show',
+	'contributors-subtitle' => 'Main contributors to $1',
+	'contributors-others-long' => 'There are $1 other contributors to this page.',
+	'contributors-others' => 'and $1 others',
+	'contributors-badtitle' => 'Invalid title.',
+	'contributors-nosuchpage' => 'The page $1 doesn\'t exist.',
 );
 
 /** Arabic (العربية)
@@ -106,7 +80,7 @@ $messages['bcl'] = array(
 $messages['bg'] = array(
 	'contributors-target'     => 'Заглавие:',
 	'contributors-submit'     => 'Показване',
-	'contributors-others'     => 'и {{PLURAL:$1|един друг|$1 други}}',
+	'contributors-others'     => 'и $1 други',
 	'contributors-badtitle'   => 'Невалидно заглавие.',
 	'contributors-nosuchpage' => 'Страницата $1 не съществува.',
 );
@@ -129,7 +103,6 @@ $messages['bn'] = array(
 
 /** Breton (Brezhoneg)
  * @author Fulup
- * @author Siebrand
  */
 $messages['br'] = array(
 	'contributors'             => 'Aozerien',
@@ -161,42 +134,18 @@ $messages['ca'] = array(
 	'contributors-nosuchpage'  => 'La pàgina «$1» no existeix.',
 );
 
-/** Czech (Česky)
- * @author Matěj Grabovský
- */
-$messages['cs'] = array(
-	'contributors'          => 'Přispěvatelé',
-	'contributors-desc'     => 'Shrnuje hlavní přispěvatele na stránku',
-	'contributors-toolbox'  => 'Hlavní přispěvatelé',
-	'contributors-target'   => 'Název:',
-	'contributors-submit'   => 'Zobrazit',
-	'contributors-subtitle' => 'Hlavní přispěvatelé článku $1',
-	'contributors-others'   => 'a $1 {{PLURAL:$1|další|další|dalších}}',
-	'contributors-badtitle' => 'Neplatný název.',
-);
-
-/** Danish (Dansk)
- * @author Jon Harald Søby
- */
-$messages['da'] = array(
-	'contributors-target' => 'Titel:',
-	'contributors-submit' => 'Vis',
-);
-
-/** German (Deutsch)
- * @author Raimond Spekking
- */
+/* German (Raymond) */
 $messages['de'] = array(
-	'contributors'             => 'Hauptautoren',
-	'contributors-toolbox'     => 'Hauptautoren',
-	'contributors-legend'      => 'Zeige die Hauptautoren einer Seite',
-	'contributors-target'      => 'Seite:',
-	'contributors-submit'      => 'Zeige',
-	'contributors-subtitle'    => 'Hauptautoren von $1',
-	'contributors-others-long' => 'Daneben gibt es noch {{PLURAL:$1|1 weiteren Autor|$1 weitere Autoren}} dieser Seite.',
-	'contributors-others'      => 'und {{PLURAL:$1|1 weiteren|$1 weitere}}',
-	'contributors-badtitle'    => 'Ungültige Seite',
-	'contributors-nosuchpage'  => 'Die Seite $1 ist nicht vorhanden.',
+	'contributors' => 'Hauptautoren',
+	'contributors-toolbox' => 'Hauptautoren',
+	'contributors-legend' => 'Zeige die Hauptautoren einer Seite',
+	'contributors-target' => 'Seite:',
+	'contributors-submit' => 'Zeige',
+	'contributors-subtitle' => 'Hauptautoren von $1',
+	'contributors-others-long' => 'Daneben gibt es noch $1 weitere Autoren dieser Seite.',
+	'contributors-others' => 'und $1 weitere',
+	'contributors-badtitle' => 'Ungültige Seite',
+	'contributors-nosuchpage' => 'Die Seite $1 ist nicht vorhanden.',
 );
 
 /** Lower Sorbian (Dolnoserbski)
@@ -220,39 +169,18 @@ $messages['dsb'] = array(
  * @author Consta
  */
 $messages['el'] = array(
-	'contributors'             => 'Συνεισφέροντες',
-	'contributors-target'      => 'Τίτλος:',
-	'contributors-others-long' => "Υπάρχουν $1 άλλοι συνεισφέροντες σ' αυτήν τη σελίδα.",
-	'contributors-others'      => 'και $1 άλλοι',
-	'contributors-badtitle'    => 'Άκυρος τίτλος.',
-	'contributors-nosuchpage'  => 'Η σελίδα $1 δεν υπάρχει.',
+	'contributors'            => 'Συνεισφέροντες',
+	'contributors-target'     => 'Τίτλος:',
+	'contributors-badtitle'   => 'Άκυρος τίτλος.',
+	'contributors-nosuchpage' => 'Η σελίδα $1 δεν υπάρχει.',
 );
 
-/** Esperanto (Esperanto)
- * @author Yekrats
- */
-$messages['eo'] = array(
-	'contributors'             => 'Kontribuantoj',
-	'contributors-toolbox'     => 'Ĉefaj kontribuantoj',
-	'contributors-legend'      => 'Listigi ĉefajn kontribuantojn al paĝo',
-	'contributors-target'      => 'Titolo:',
-	'contributors-submit'      => 'Montri',
-	'contributors-subtitle'    => 'Ĉefaj kontribuantoj al $1',
-	'contributors-others-long' => 'Estas $1 aliaj konribuantoj al ĉi paĝo.',
-	'contributors-others'      => 'kaj $1 aliaj',
-	'contributors-badtitle'    => 'Nevalida titolo.',
-	'contributors-nosuchpage'  => 'La paĝo $1 ne ekzistas.',
-);
-
-/** Extremaduran (Estremeñu)
- * @author Better
- */
 $messages['ext'] = array(
-	'contributors-toolbox'     => 'Prencipalis colabutaoris',
-	'contributors-target'      => 'Entítulu:',
-	'contributors-submit'      => 'Muestral',
+	'contributors-toolbox' => 'Prencipalis colabutaoris',
+	'contributors-target' => 'Entítulu:',
+	'contributors-submit' => 'Muestral',
 	'contributors-others-long' => 'Ai otrus $1 colabutaoris nesti artículu.',
-	'contributors-others'      => 'i otrus $1',
+	'contributors-others' => 'i otrus $1',
 );
 
 /** Finnish (Suomi)
@@ -266,7 +194,7 @@ $messages['fi'] = array(
 	'contributors-target'      => 'Sivun otsikko',
 	'contributors-submit'      => 'Näytä',
 	'contributors-subtitle'    => 'Sivun $1 pääasialliset muokkaajat',
-	'contributors-others-long' => 'Tätä sivua on muokannut {{PLURAL:$1|yksi muu käyttäjä|$1 muuta käyttäjää}}.',
+	'contributors-others-long' => 'Tällä sivulla on $1 muuta muokkaajaa.',
 );
 
 /** French (Français)
@@ -289,53 +217,18 @@ $messages['fr'] = array(
 
 /** Galician (Galego)
  * @author Xosé
- * @author Toliño
  */
 $messages['gl'] = array(
 	'contributors'             => 'Colaboradores',
-	'contributors-desc'        => 'Sintetiza as contribucións principais nunha páxina',
 	'contributors-toolbox'     => 'Principais colaboradores',
 	'contributors-legend'      => 'Listaxe cos principais colaboradores dunha páxina',
 	'contributors-target'      => 'Título:',
 	'contributors-submit'      => 'Amosar',
 	'contributors-subtitle'    => 'Principais colaboradores en $1',
-	'contributors-others-long' => '{{PLURAL:$1|Existe outro colaborador|Existen outros $1 colaboradores}} nesta páxina.',
-	'contributors-others'      => 'e {{PLURAL:$1|outro|outros $1}}',
+	'contributors-others-long' => 'Existen outros $1 colaboradores nesta páxina.',
+	'contributors-others'      => 'e outros $1',
 	'contributors-badtitle'    => 'Título non válido.',
 	'contributors-nosuchpage'  => 'Non existe a páxina $1.',
-);
-
-/** Manx (Gaelg)
- * @author MacTire02
- */
-$messages['gv'] = array(
-	'contributors'        => 'Cohoyrtee',
-	'contributors-target' => 'Ard-ennym:',
-	'contributors-submit' => 'Taishbyney',
-);
-
-/** Hawaiian (Hawai`i)
- * @author Singularity
- */
-$messages['haw'] = array(
-	'contributors-submit' => 'Hō‘ike',
-);
-
-/** Hindi (हिन्दी)
- * @author Kaustubh
- */
-$messages['hi'] = array(
-	'contributors'             => 'योगदानकर्ता',
-	'contributors-desc'        => 'पन्नेके मुख्य योगदानकर्ताओंकी संक्षिप्त सूची',
-	'contributors-toolbox'     => 'मुख्य योगदानकर्ता',
-	'contributors-legend'      => 'पन्ने के मुख्य योगदानकर्ताओंकी सूची बनायें',
-	'contributors-target'      => 'शीर्षक:',
-	'contributors-submit'      => 'दर्शायें',
-	'contributors-subtitle'    => '$1 के प्रमुख योगदानकर्ता',
-	'contributors-others-long' => 'इस पन्नेको अन्य $1 योगदानकर्ता हैं।',
-	'contributors-others'      => 'और $1 अन्य',
-	'contributors-badtitle'    => 'अवैध शीर्षक।',
-	'contributors-nosuchpage'  => '$1 पन्ना अस्तित्वमें नहीं हैं',
 );
 
 /** Upper Sorbian (Hornjoserbsce)
@@ -356,7 +249,7 @@ $messages['hsb'] = array(
 );
 
 /** Hungarian (Magyar)
- * @author Dani
+ * @author Bdanee
  */
 $messages['hu'] = array(
 	'contributors'             => 'Szerkesztők',
@@ -371,94 +264,46 @@ $messages['hu'] = array(
 	'contributors-nosuchpage'  => 'A(z) $1 lap nem létezik.',
 );
 
-/** Interlingua (Interlingua)
- * @author McDutchie
- */
-$messages['ia'] = array(
-	'contributors-submit' => 'Revelar',
-);
-
-/** Indonesian (Bahasa Indonesia)
- * @author Ivan Lanin
- * @author Rex
- */
+/* Indonesian (Ivan Lanin) */
 $messages['id'] = array(
-	'contributors'             => 'Kontributor utama',
-	'contributors-toolbox'     => 'Kontributor utama',
-	'contributors-legend'      => 'Daftar kontributor utama untuk suatu artikel',
-	'contributors-target'      => 'Judul:',
-	'contributors-submit'      => 'Tampilkan',
-	'contributors-subtitle'    => 'Kontributor utama untuk $1',
-	'contributors-others-long' => 'Terdapat {{PLURAL:$1|satu|$1}} kontributor lain untuk halaman ini.',
-	'contributors-others'      => 'and {{PLURAL:$1|satu|$1}} lainnya',
-	'contributors-badtitle'    => 'Judul tidak sah.',
-	'contributors-nosuchpage'  => 'Artikel $1 tidak ditemukan.',
+	'contributors' => 'Kontributor utama',
+	'contributors-toolbox' => 'Kontributor utama',
+	'contributors-legend' => 'Daftar kontributor utama untuk suatu artikel',
+	'contributors-target' => 'Judul:',
+	'contributors-submit' => 'Tampilkan',
+	'contributors-subtitle' => 'Kontributor utama untuk $1',
+	'contributors-others-long' => 'Terdapat $1 kontributor lain untuk halaman ini.',
+	'contributors-others' => 'dan $1 lainnya',
+	'contributors-badtitle' => 'Judul tidak sah.',
+	'contributors-nosuchpage' => 'Artikel $1 tidak ditemukan.',
 );
 
-/** Icelandic (Íslenska)
- * @author S.Örvarr.S
- */
-$messages['is'] = array(
-	'contributors'             => 'Framleggjendur',
-	'contributors-desc'        => 'Dregur saman aðalframleggjendur síðu',
-	'contributors-toolbox'     => 'Aðalframleggjendur',
-	'contributors-legend'      => 'Lista aðalframleggjendur síðu',
-	'contributors-target'      => 'Titill:',
-	'contributors-submit'      => 'Sýna',
-	'contributors-subtitle'    => 'Aðalframleggjendur $1',
-	'contributors-others-long' => 'Þessi síða hefur $1 aðra framleggjendur.',
-	'contributors-others'      => 'og $1 aðrir',
-	'contributors-badtitle'    => 'Ógildur titill.',
-	'contributors-nosuchpage'  => 'Síðan $1 er ekki til.',
-);
-
-/** Italian (Italiano)
- * @author Darth Kule
- * @author BrokenArrow
- */
+/* Italian (BrokenArrow) */
 $messages['it'] = array(
-	'contributors'             => 'Autori',
-	'contributors-desc'        => 'Riepiloga gli autori principali di una pagina',
-	'contributors-toolbox'     => 'Autori principali',
-	'contributors-legend'      => 'Elenca gli autori principali di una pagina',
-	'contributors-target'      => 'Titolo:',
-	'contributors-submit'      => 'Mostra',
-	'contributors-subtitle'    => 'Autori principali di $1',
-	'contributors-others-long' => 'La pagina è stata modificata anche da {{PLURAL:$1|un altro autore|$1 altri autori}}.',
-	'contributors-others'      => 'e {{PLURAL:$1|un altro|$1 altri}}',
-	'contributors-badtitle'    => 'Titolo non corretto.',
-	'contributors-nosuchpage'  => 'La pagina $1 non esiste.',
+	'contributors' => 'Autori',
+	'contributors-toolbox' => 'Autori principali',
+	'contributors-legend' => 'Elenca gli autori principali di una pagina',
+	'contributors-target' => 'Titolo:',
+	'contributors-submit' => 'Mostra',
+	'contributors-subtitle' => 'Autori principali di $1',
+	'contributors-others-long' => 'La pagina è stata modificata anche da altri $1 autori.',
+	'contributors-others' => 'e $1 altri',
+	'contributors-badtitle' => 'Titolo non corretto.',
+	'contributors-nosuchpage' => 'La pagina $1 non esiste.',
 );
 
-/** Japanese (日本語)
- * @author JtFuruhata
- */
+/* Japanese */
 $messages['ja'] = array(
-	'contributors'             => '投稿者',
-	'contributors-desc'        => 'あるページにおける主な投稿者を提示する',
-	'contributors-toolbox'     => '主な投稿者',
-	'contributors-legend'      => '投稿者一覧の作成',
-	'contributors-target'      => 'タイトル:',
-	'contributors-submit'      => '表示',
-	'contributors-subtitle'    => '$1 への主な投稿者',
+	'contributors' => '投稿者',
+	'contributors-toolbox' => '主な投稿者',
+	'contributors-legend' => '投稿者一覧の作成',
+	'contributors-target' => 'タイトル:',
+	'contributors-submit' => '表示',
+	'contributors-subtitle' => '$1 への主な投稿者',
 	'contributors-others-long' => 'ほかに $1 名の投稿者がいます。',
-	'contributors-others'      => '及びその他 $1 名',
-	'contributors-badtitle'    => '不正なページ名です。',
-	'contributors-nosuchpage'  => 'ページ $1 は存在しません。',
-);
-
-/** Javanese (Basa Jawa)
- * @author Meursault2004
- */
-$messages['jv'] = array(
-	'contributors'            => 'Para kontributor',
-	'contributors-toolbox'    => 'Para kontributor utama',
-	'contributors-legend'     => 'Tuduhna daftar kontributor utama sawijining kaca',
-	'contributors-target'     => 'Irah-irahan (judhul):',
-	'contributors-submit'     => 'Tuduhna',
-	'contributors-subtitle'   => 'Para kontributor utama kanggo $1',
-	'contributors-badtitle'   => 'Irah-irahan ora absah.',
-	'contributors-nosuchpage' => 'Artikel $1 ora ditemokaké.',
+	'contributors-others' => '及びその他 $1 名',
+	'contributors-badtitle' => '不正なページ名です。',
+	'contributors-nosuchpage' => 'ページ $1 は存在しません。',
 );
 
 /** Kabyle (Taqbaylit)
@@ -470,92 +315,46 @@ $messages['kab'] = array(
 	'contributors-nosuchpage' => 'Amagrad $1 ulac-it.',
 );
 
-/** Kazakh (China) (‫قازاقشا (جۇنگو)‬)
- * @author AlefZet
- */
+/* Kazakh Arabic (AlefZet) */
 $messages['kk-cn'] = array(
-	'contributors'             => 'ٷلەسكەرلەر',
-	'contributors-toolbox'     => 'باستى ٷلەسكەرلەر',
-	'contributors-legend'      => 'ماقالا باستى ٷلەسكەرلەرٸ تٸزٸمٸ',
-	'contributors-target'      => 'اتاۋى:',
-	'contributors-submit'      => 'كٶرسەت',
-	'contributors-subtitle'    => '$1 بەتٸنٸڭ باستى ٷلەسكەرلەرٸ',
+	'contributors' => 'ٷلەسكەرلەر',
+	'contributors-toolbox' => 'باستى ٷلەسكەرلەر',
+	'contributors-legend' => 'ماقالا باستى ٷلەسكەرلەرٸ تٸزٸمٸ',
+	'contributors-target' => 'اتاۋى:',
+	'contributors-submit' => 'كٶرسەت',
+	'contributors-subtitle' => '$1 بەتٸنٸڭ باستى ٷلەسكەرلەرٸ',
 	'contributors-others-long' => 'بۇل بەتتٸڭ باسقا $1 ٷلەسكەرٸ بار.',
-	'contributors-others'      => 'جٵنە $1 باسقالار',
-	'contributors-badtitle'    => 'جارامسىز اتاۋ.',
-	'contributors-nosuchpage'  => '$1 دەگەن ماقالا بٸزدە جوق.',
+	'contributors-others' => 'جٵنە $1 باسقالار',
+	'contributors-badtitle' => 'جارامسىز اتاۋ.',
+	'contributors-nosuchpage' => '$1 دەگەن ماقالا بٸزدە جوق.',
 );
 
-/** Kazakh (Kazakhstan) (‪Қазақша (Қазақстан)‬)
- * @author AlefZet
- */
+/* Kazakh Cyrillic (AlefZet) */
 $messages['kk-kz'] = array(
-	'contributors'             => 'Үлескерлер',
-	'contributors-toolbox'     => 'Басты үлескерлер',
-	'contributors-legend'      => 'Мақала басты үлескерлері тізімі',
-	'contributors-target'      => 'Атауы:',
-	'contributors-submit'      => 'Көрсет',
-	'contributors-subtitle'    => '$1 бетінің басты үлескерлері',
+	'contributors' => 'Үлескерлер',
+	'contributors-toolbox' => 'Басты үлескерлер',
+	'contributors-legend' => 'Мақала басты үлескерлері тізімі',
+	'contributors-target' => 'Атауы:',
+	'contributors-submit' => 'Көрсет',
+	'contributors-subtitle' => '$1 бетінің басты үлескерлері',
 	'contributors-others-long' => 'Бұл беттің басқа $1 үлескері бар.',
-	'contributors-others'      => 'және $1 басқалар',
-	'contributors-badtitle'    => 'Жарамсыз атау.',
-	'contributors-nosuchpage'  => '$1 деген мақала бізде жоқ.',
+	'contributors-others' => 'және $1 басқалар',
+	'contributors-badtitle' => 'Жарамсыз атау.',
+	'contributors-nosuchpage' => '$1 деген мақала бізде жоқ.',
 );
 
-/** Kazakh (Turkey) (‪Qazaqşa (Türkïya)‬)
- * @author AlefZet
- */
+/* Kazakh Latin (AlefZet) */
 $messages['kk-tr'] = array(
-	'contributors'             => 'Üleskerler',
-	'contributors-toolbox'     => 'Bastı üleskerler',
-	'contributors-legend'      => 'Maqala bastı üleskerleri tizimi',
-	'contributors-target'      => 'Atawı:',
-	'contributors-submit'      => 'Körset',
-	'contributors-subtitle'    => '$1 betiniñ bastı üleskerleri',
+	'contributors' => 'Üleskerler',
+	'contributors-toolbox' => 'Bastı üleskerler',
+	'contributors-legend' => 'Maqala bastı üleskerleri tizimi',
+	'contributors-target' => 'Atawı:',
+	'contributors-submit' => 'Körset',
+	'contributors-subtitle' => '$1 betiniñ bastı üleskerleri',
 	'contributors-others-long' => 'Bul bettiñ basqa $1 üleskeri bar.',
-	'contributors-others'      => 'jäne $1 basqalar',
-	'contributors-badtitle'    => 'Jaramsız ataw.',
-	'contributors-nosuchpage'  => '$1 degen maqala bizde joq.',
-);
-
-/** Khmer (ភាសាខ្មែរ)
- * @author គីមស៊្រុន
- * @author Lovekhmer
- * @author Chhorran
- */
-$messages['km'] = array(
-	'contributors'             => 'អ្នករួមចំនែក',
-	'contributors-desc'        => 'ដកស្រង់​តែ​ឈ្មោះអ្នករួមចំនែក​ចំបង​ៗទៅកាន់ទំព័រ​មួយ',
-	'contributors-toolbox'     => 'អ្នករួមចំនែក​ចំបងៗ',
-	'contributors-legend'      => 'បង្កើត​បញ្ជី​ឈ្មោះ​អ្នករួមចំនែក​ចំបងៗទៅកាន់ទំព័រមួយ',
-	'contributors-target'      => 'ចំនងជើង៖',
-	'contributors-submit'      => 'បង្ហាញ',
-	'contributors-subtitle'    => 'អ្នករួមចំនែកចំបងរបស់ $1',
-	'contributors-others-long' => 'មានអ្នករួមចំនែក​ដទៃ $1 នាក់ទៀត​ចំពោះ​ទំព័រនេះ។',
-	'contributors-others'      => 'និង $1 នាក់ផ្សេងទៀត',
-	'contributors-badtitle'    => 'ចំនងជើង​គ្មានសុពលភាព',
-	'contributors-nosuchpage'  => 'មិនមានទំព័រ$1ទេ។',
-);
-
-/** Korean (한국어)
- * @author ToePeu
- */
-$messages['ko'] = array(
-	'contributors-submit' => '보이기',
-);
-
-/** Kinaray-a (Kinaray-a)
- * @author Jose77
- */
-$messages['krj'] = array(
-	'contributors-submit' => 'Ipakita',
-);
-
-/** Ripoarisch (Ripoarisch)
- * @author Purodha
- */
-$messages['ksh'] = array(
-	'contributors-submit' => 'Zeije',
+	'contributors-others' => 'jäne $1 basqalar',
+	'contributors-badtitle' => 'Jaramsız ataw.',
+	'contributors-nosuchpage' => '$1 degen maqala bizde joq.',
 );
 
 /** Kurdish (Latin) (Kurdî / كوردی (Latin))
@@ -574,9 +373,6 @@ $messages['ku-latn'] = array(
 	'contributors-nosuchpage'  => 'Gotarê $2 tune ye.',
 );
 
-/** Latin (Latina)
- * @author SPQRobin
- */
 $messages['la'] = array(
 	'contributors-target' => 'Titulus:',
 	'contributors-submit' => 'Monstrare',
@@ -588,58 +384,15 @@ $messages['la'] = array(
  */
 $messages['lb'] = array(
 	'contributors'             => 'Auteuren',
-	'contributors-desc'        => "Faast d'Haaptkontributeure vun enger Säit zesummen",
 	'contributors-toolbox'     => 'Haaptauteuren',
 	'contributors-legend'      => "Weist d'Haaptauteure vun enger Säit",
 	'contributors-target'      => 'Titel:',
 	'contributors-submit'      => 'Weisen',
 	'contributors-subtitle'    => 'Haaptauteure vun $1',
-	'contributors-others-long' => 'Doniewt gëtt et nach $1 {{PLURAL:$1|aneren Auteur den|aner Auteuren déi}} un dëser Säit matgeschafft {{PLURAL:$1|huet|hunn}}',
-	'contributors-others'      => 'a(n) $1 {{PLURAL:$1|aneren|anerer}}',
+	'contributors-others-long' => 'Daniewt gëtt et nach $1 aner Auteuren déi un dëser Säit matgeschafft hunn.',
+	'contributors-others'      => 'a(n) $1 anerer',
 	'contributors-badtitle'    => 'Dës Säit gëtt et net.',
 	'contributors-nosuchpage'  => "D'Säit $1 gëtt et net.",
-);
-
-/** Malayalam (മലയാളം)
- * @author Shijualex
- */
-$messages['ml'] = array(
-	'contributors'             => 'സംഭാവന ചെയ്തവര്‍',
-	'contributors-desc'        => 'ഒരു താളില്‍ സംഭാവന ചെയ്ത മുഖ്യ ലേഖകരുടെ വിവരം',
-	'contributors-toolbox'     => 'സംഭാവന ചെയ്ത പ്രമുഖര്‍',
-	'contributors-legend'      => 'ഒരു താളിലെ മുഖ്യ സംഭാവനക്കാരെ പ്രദര്‍ശിപ്പിക്കുന്നു',
-	'contributors-target'      => 'ശീര്‍ഷകം:',
-	'contributors-submit'      => 'പ്രദര്‍ശിപ്പിക്കുക',
-	'contributors-subtitle'    => '$1ലെ മുഖ്യ സംഭാവക്കാര്‍',
-	'contributors-others-long' => 'ഈ താളിനു $1 മറ്റു സംഭാവക്കാര്‍ കൂടിയുണ്ട്.',
-	'contributors-others'      => '$1 മറ്റുള്ളവര്‍',
-	'contributors-badtitle'    => 'അസാധുവായ ശീര്‍ഷകം.',
-	'contributors-nosuchpage'  => '$1 എന്ന താള്‍ നിലവിലില്ല.',
-);
-
-/** Marathi (मराठी)
- * @author Mahitgar
- */
-$messages['mr'] = array(
-	'contributors'             => 'योगदानकर्ते',
-	'contributors-desc'        => 'पानाच्या मुख्य योगदानकर्त्यांची संक्षीप्तसूची',
-	'contributors-toolbox'     => 'मुख्य योगदानकर्ते',
-	'contributors-legend'      => 'पानाच्या मुख्य योगदानकर्त्यांची यादी द्या',
-	'contributors-target'      => 'शीर्षक',
-	'contributors-submit'      => 'दाखवा',
-	'contributors-subtitle'    => '$1चे योगदानकर्ते',
-	'contributors-others-long' => 'या पानास इतर योगदानकर्ते $1 आहेत.',
-	'contributors-others'      => 'आणि $1  इतर',
-	'contributors-badtitle'    => 'अयोग्य शीर्षक',
-	'contributors-nosuchpage'  => 'पान $1 अस्तीत्वात नाही.',
-);
-
-/** Nahuatl (Nahuatl)
- * @author Fluence
- */
-$messages['nah'] = array(
-	'contributors-target' => 'Tōcāitl:',
-	'contributors-submit' => 'Xiquittāz',
 );
 
 /** Low German (Plattdüütsch)
@@ -666,25 +419,17 @@ $messages['nl'] = array(
 	'contributors'             => 'Bijdragers',
 	'contributors-desc'        => 'Geeft een overzicht van de belangrijkste schrijvers aan een pagina',
 	'contributors-toolbox'     => 'Belangrijkste bijdragers',
-	'contributors-legend'      => 'Belangrijkste bijdragers van een pagina weergeven',
+	'contributors-legend'      => 'Belangrijkste bijdragers van een pagina tonen',
 	'contributors-target'      => 'Titel:',
-	'contributors-submit'      => 'Bekijken',
+	'contributors-submit'      => 'Tonen',
 	'contributors-subtitle'    => 'Belangrijkste bijdragers aan $1',
-	'contributors-others-long' => 'Er {{PLURAL:$1|is 1 andere bijdrager|zijn $1 andere bijdragers}} aan deze pagina.',
-	'contributors-others'      => 'en $1 {{PLURAL:$1|andere|anderen}}',
+	'contributors-others-long' => 'Er zijn $1 andere bijdragers aan deze pagina.',
+	'contributors-others'      => 'en $1 anderen',
 	'contributors-badtitle'    => 'Onjuiste titel.',
 	'contributors-nosuchpage'  => 'De pagina $1 bestaat niet.',
 );
 
-/** Norwegian Nynorsk (‪Norsk (nynorsk)‬)
- * @author Jon Harald Søby
- */
-$messages['nn'] = array(
-	'contributors-target' => 'Tittel:',
-	'contributors-submit' => 'Vis',
-);
-
-/** Norwegian (bokmål)‬ (‪Norsk (bokmål)‬)
+/** Norwegian (‪Norsk (bokmål)‬)
  * @author Jon Harald Søby
  */
 $messages['no'] = array(
@@ -723,8 +468,8 @@ $messages['oc'] = array(
 	'contributors-desc'        => 'Met en somari los contributors principals d’una pagina',
 	'contributors-toolbox'     => 'Contributors principals',
 	'contributors-legend'      => 'Listar los contributors principals de l’article',
-	'contributors-target'      => 'Títol :',
-	'contributors-submit'      => 'Afichar',
+	'contributors-target'      => 'Títol:',
+	'contributors-submit'      => 'Mostrar',
 	'contributors-subtitle'    => 'Contributors principals de $1',
 	'contributors-others-long' => 'I a $1 autres contributors per aquesta pagina.',
 	'contributors-others'      => 'e $1 autres',
@@ -732,21 +477,12 @@ $messages['oc'] = array(
 	'contributors-nosuchpage'  => 'L’article $1 existís pas.',
 );
 
-/** Ossetic (Иронау)
- * @author Amikeco
- */
-$messages['os'] = array(
-	'contributors-submit' => 'Равдис',
-);
-
 /** Polish (Polski)
  * @author Derbeth
  * @author Sp5uhe
- * @author Masti
  */
 $messages['pl'] = array(
 	'contributors'             => 'Autorzy',
-	'contributors-desc'        => 'Podsumowanie głównych autorów strony',
 	'contributors-toolbox'     => 'Główni autorzy',
 	'contributors-legend'      => 'Lista głównych autorów artykułu',
 	'contributors-target'      => 'Tytuł:',
@@ -758,7 +494,7 @@ $messages['pl'] = array(
 	'contributors-nosuchpage'  => 'Strona $1 nie istnieje.',
 );
 
-/** Piedmontese (Piemontèis)
+/** Piemontèis (Piemontèis)
  * @author Bèrto 'd Sèra
  */
 $messages['pms'] = array(
@@ -778,14 +514,12 @@ $messages['pms'] = array(
  * @author Ahmed-Najib-Biabani-Ibrahimkhel
  */
 $messages['ps'] = array(
-	'contributors'        => 'ونډه وال',
+	'contributors'        => 'ونډه لرونکي',
 	'contributors-target' => 'سرليک:',
-	'contributors-submit' => 'ښکاره کول',
 );
 
 /** Portuguese (Português)
  * @author Malafaya
- * @author 555
  */
 $messages['pt'] = array(
 	'contributors'             => 'Contribuidores',
@@ -795,22 +529,12 @@ $messages['pt'] = array(
 	'contributors-target'      => 'Título:',
 	'contributors-submit'      => 'Exibir',
 	'contributors-subtitle'    => 'Principais contribuidores de $1',
-	'contributors-others-long' => '{{PLURAL:$1|Ainda há outro contribuidor|Existem ainda outros $1 contribuidores}} para esta página.',
-	'contributors-others'      => 'e {{PLURAL:$1|um outro|$1 outros}}',
+	'contributors-others-long' => 'Existem ainda outros $1 contribuidores para esta página.',
+	'contributors-others'      => 'e $1 outros',
 	'contributors-badtitle'    => 'Título inválido.',
 	'contributors-nosuchpage'  => 'O artigo $1 não existe.',
 );
 
-/** Tarifit (Tarifit)
- * @author Jose77
- */
-$messages['rif'] = array(
-	'contributors-submit' => 'Smmrad',
-);
-
-/** Rhaeto-Romance (Rumantsch)
- * @author SPQRobin
- */
 $messages['rm'] = array(
 	'contributors-target' => 'Titel:',
 );
@@ -821,19 +545,18 @@ $messages['rm'] = array(
 $messages['ro'] = array(
 	'contributors'             => 'Contribuitori',
 	'contributors-toolbox'     => 'Contribuitori principali',
-	'contributors-legend'      => 'Afişează contribuitorii principali la o pagină',
+	'contributors-legend'      => 'Afişează contribuitorii principali la un articol',
 	'contributors-target'      => 'Titlu:',
 	'contributors-submit'      => 'Arată',
 	'contributors-subtitle'    => 'Contribuitori principali la $1',
 	'contributors-others-long' => 'Mai sunt $1 alţi contribuitori la această pagină.',
 	'contributors-others'      => 'şi alţii $1',
 	'contributors-badtitle'    => 'Titlu nevalid.',
-	'contributors-nosuchpage'  => 'Pagina $1 nu există.',
+	'contributors-nosuchpage'  => 'Articolul $1 nu există.',
 );
 
 /** Russian (Русский)
- * @author Ahonc
- * @author Александр Сигачёв
+ * @author .:Ajvol:.
  */
 $messages['ru'] = array(
 	'contributors'             => 'Авторы',
@@ -846,7 +569,7 @@ $messages['ru'] = array(
 	'contributors-others-long' => 'Кроме указанных, у данной страницы есть ещё $1 авторов.',
 	'contributors-others'      => 'и ещё $1 других',
 	'contributors-badtitle'    => 'Ошибочное название.',
-	'contributors-nosuchpage'  => 'Страница «$1» не существует.',
+	'contributors-nosuchpage'  => 'Статья «$1» не существует.',
 );
 
 /** Slovak (Slovenčina)
@@ -860,58 +583,52 @@ $messages['sk'] = array(
 	'contributors-target'      => 'Názov:',
 	'contributors-submit'      => 'Zobraziť',
 	'contributors-subtitle'    => 'Hlavní prispievatelia článku $1',
-	'contributors-others-long' => '{{PLURAL:$1|Existuje ďalší $1 prispievateľ|Existujú ďalší $1 prispievatelia|Existuje ďalších $1 prispievateľov}} tohto článku.',
-	'contributors-others'      => 'a {{PLURAL:$1|$1 ďalší|$1 ďalší|$1 ďalších}}',
+	'contributors-others-long' => 'Existuje ďalších $1 prispievateľov tohto článku.',
+	'contributors-others'      => 'a $1 ďalších',
 	'contributors-badtitle'    => 'Neplatný názov.',
 	'contributors-nosuchpage'  => 'Článok $1 neexistuje.',
 );
 
-/** Serbian (Српски / Srpski)
- * @author Sasa Stefanovic
- */
+/* Serbian default (Sasa Stefanovic) */
 $messages['sr'] = array(
-	'contributors'             => 'Доприносиоци',
-	'contributors-toolbox'     => 'Главни доприносиоци',
-	'contributors-legend'      => 'Списак главних доприносиоца у чланку',
-	'contributors-target'      => 'Наслов:',
-	'contributors-submit'      => 'Прикажи',
-	'contributors-subtitle'    => 'Главни доприносиоци на $1',
+	'contributors' => 'Доприносиоци',
+	'contributors-toolbox' => 'Главни доприносиоци',
+	'contributors-legend' => 'Списак главних доприносиоца у чланку',
+	'contributors-target' => 'Наслов:',
+	'contributors-submit' => 'Прикажи',
+	'contributors-subtitle' => 'Главни доприносиоци на $1',
 	'contributors-others-long' => 'Такође постоји још $1 других доприносиоца на овој страници.',
-	'contributors-others'      => 'и $1 других',
-	'contributors-badtitle'    => 'Грешка у наслову.',
-	'contributors-nosuchpage'  => 'Чланак $1 не постоји.',
+	'contributors-others' => 'и $1 других',
+	'contributors-badtitle' => 'Грешка у наслову.',
+	'contributors-nosuchpage' => 'Чланак $1 не постоји.',
 );
 
-/** Serbian Cyrillic ekavian (ћирилица)
- * @author Sasa Stefanovic
- */
+/* Serbian cyrillyc (Sasa Stefanovic) */
 $messages['sr-ec'] = array(
-	'contributors'             => 'Доприносиоци',
-	'contributors-toolbox'     => 'Главни доприносиоци',
-	'contributors-legend'      => 'Списак главних доприносиоца у чланку',
-	'contributors-target'      => 'Наслов:',
-	'contributors-submit'      => 'Прикажи',
-	'contributors-subtitle'    => 'Главни доприносиоци на $1',
-	'contributors-others-long' => '{{PLURAL:$1|Постоји још један доприносиоц|постоје још $1 доприносиоца}} на овој страници.',
-	'contributors-others'      => 'и {{PLURAL:$1|једна друга|$1 друге|$1 других}}',
-	'contributors-badtitle'    => 'Грешка у наслову.',
-	'contributors-nosuchpage'  => 'Чланак $1 не постоји.',
+	'contributors' => 'Доприносиоци',
+	'contributors-toolbox' => 'Главни доприносиоци',
+	'contributors-legend' => 'Списак главних доприносиоца у чланку',
+	'contributors-target' => 'Наслов:',
+	'contributors-submit' => 'Прикажи',
+	'contributors-subtitle' => 'Главни доприносиоци на $1',
+	'contributors-others-long' => 'Такође постоји још $1 других доприносиоца на овој страници.',
+	'contributors-others' => 'и $1 других',
+	'contributors-badtitle' => 'Грешка у наслову.',
+	'contributors-nosuchpage' => 'Чланак $1 не постоји.',
 );
 
-/** latinica (latinica)
- * @author Sasa Stefanovic
- */
+/* Serbian latin (Sasa Stefanovic) */
 $messages['sr-el'] = array(
-	'contributors'             => 'Doprinosioci',
-	'contributors-toolbox'     => 'Glavni doprinosioci',
-	'contributors-legend'      => 'Spisak glavnih doprinosioca u članku',
-	'contributors-target'      => 'Naslov:',
-	'contributors-submit'      => 'Prikaži',
-	'contributors-subtitle'    => 'Glavni doprinosioci na $1',
+	'contributors' => 'Doprinosioci',
+	'contributors-toolbox' => 'Glavni doprinosioci',
+	'contributors-legend' => 'Spisak glavnih doprinosioca u članku',
+	'contributors-target' => 'Naslov:',
+	'contributors-submit' => 'Prikaži',
+	'contributors-subtitle' => 'Glavni doprinosioci na $1',
 	'contributors-others-long' => 'Takođe postoji još $1 drugih doprinosioca na ovoj stranici.',
-	'contributors-others'      => 'i $1 drugih',
-	'contributors-badtitle'    => 'Greška u naslovu.',
-	'contributors-nosuchpage'  => 'Članak $1 ne postoji.',
+	'contributors-others' => 'i $1 drugih',
+	'contributors-badtitle' => 'Greška u naslovu.',
+	'contributors-nosuchpage' => 'Članak $1 ne postoji.',
 );
 
 /** Seeltersk (Seeltersk)
@@ -948,16 +665,15 @@ $messages['su'] = array(
 );
 
 /** Swedish (Svenska)
- * @author M.M.S.
  * @author Lejonel
- * @author Jon Harald Søby
+ * @author M.M.S.
  */
 $messages['sv'] = array(
 	'contributors'             => 'Bidragsgivare',
 	'contributors-desc'        => 'Ger en sammanställning över de huvudsakliga bidragarna till en sida',
 	'contributors-toolbox'     => 'Huvudsakliga bidragsgivare',
 	'contributors-legend'      => 'Visa de huvudsakliga bidragsgivarna till en sida',
-	'contributors-target'      => 'Titel:',
+	'contributors-target'      => 'Sidtitel:',
 	'contributors-submit'      => 'Visa',
 	'contributors-subtitle'    => 'Huvudsakliga bidragsgivare till $1',
 	'contributors-others-long' => '$1 andra användare har bidragit till denna sida.',
@@ -968,34 +684,12 @@ $messages['sv'] = array(
 
 /** Telugu (తెలుగు)
  * @author Veeven
- * @author Chaduvari
  */
 $messages['te'] = array(
-	'contributors'             => 'రచయితలు',
-	'contributors-toolbox'     => 'ముఖ్య రచయితలు',
-	'contributors-legend'      => 'పేజీకి ముఖ్య రచయితలను చూపించు',
-	'contributors-target'      => 'శీర్షిక:',
-	'contributors-submit'      => 'చూపించు',
-	'contributors-subtitle'    => '$1 యొక్క ముఖ్య రచయితలు',
-	'contributors-others-long' => 'ఈ పేజీకి ఇంకా $1గురు ఇతర రచయితలు ఉన్నారు.',
-	'contributors-others'      => 'మరియు $1గురు ఇతరులు',
-	'contributors-badtitle'    => 'తప్పుడు శీర్షిక.',
-	'contributors-nosuchpage'  => '$1 అనే పేజీ లేనే లేదు.',
-);
-
-/** Tajik (Cyrillic) (Тоҷикӣ/tojikī (Cyrillic))
- * @author Ibrahim
- */
-$messages['tg-cyrl'] = array(
-	'contributors'             => 'Ҳиссагузорон',
-	'contributors-toolbox'     => 'Ҳиссагузорони асосӣ',
-	'contributors-legend'      => 'Ҳиссагузорони асосиро ба як саҳифа феҳрист кун',
-	'contributors-target'      => 'Унвон:',
-	'contributors-subtitle'    => 'Ҳиссагузоронӣ асосӣ ба $1',
-	'contributors-others-long' => '$1 нафар дигар ҳиссагузорон ба ин саҳифа ҳастанд.',
-	'contributors-others'      => 'ва $1 дигарон',
-	'contributors-badtitle'    => 'Унвони номӯътабар',
-	'contributors-nosuchpage'  => 'Саҳифаи $1 вуҷуд надорад.',
+	'contributors-target'     => 'శీర్షిక:',
+	'contributors-submit'     => 'చూపించు',
+	'contributors-badtitle'   => 'తప్పుడు శీర్షిక.',
+	'contributors-nosuchpage' => '$1 అనే పేజీ లేనే లేదు.',
 );
 
 /** Thai (ไทย)
@@ -1004,46 +698,6 @@ $messages['tg-cyrl'] = array(
 $messages['th'] = array(
 	'contributors'         => 'ผู้เขียน',
 	'contributors-toolbox' => 'ผู้เขียนหลัก',
-);
-
-/** Turkish (Türkçe)
- * @author Suelnur
- * @author Karduelis
- */
-$messages['tr'] = array(
-	'contributors-target' => 'Başlık:',
-	'contributors-submit' => 'Göster',
-);
-
-/** Tatar (Cyrillic) (Tatarça/Татарча (Cyrillic))
- * @author Ерней
- */
-$messages['tt-cyrl'] = array(
-	'contributors-submit' => 'Күрсәтергә',
-);
-
-/** Ukrainian (Українська)
- * @author Ahonc
- */
-$messages['uk'] = array(
-	'contributors'             => 'Автори',
-	'contributors-desc'        => 'Визначає основних учасників роботи над сторінкою',
-	'contributors-toolbox'     => 'Основні автори',
-	'contributors-legend'      => 'Формує список основних авторів сторінки',
-	'contributors-target'      => 'Назва:',
-	'contributors-submit'      => 'Показати',
-	'contributors-subtitle'    => 'Основні автори $1',
-	'contributors-others-long' => 'Окрім зазначених, у цієї сторінки є ще $1 авторів.',
-	'contributors-others'      => 'і ще $1 інших',
-	'contributors-badtitle'    => 'Помилкова назва.',
-	'contributors-nosuchpage'  => 'Сторінка «$1» не існує.',
-);
-
-/** Vèneto (Vèneto)
- * @author Candalua
- */
-$messages['vec'] = array(
-	'contributors-desc' => 'Riassume i prinçipali autori de na pagina',
 );
 
 /** Vietnamese (Tiếng Việt)
@@ -1075,51 +729,45 @@ $messages['vo'] = array(
 	'contributors-nosuchpage' => 'Pad: $1 no dabinon.',
 );
 
-/** Yue (粵語)
- * @author Shinjiman
- */
+/* Cantonese (Shinjiman) */
 $messages['yue'] = array(
-	'contributors'             => '貢獻者',
-	'contributors-toolbox'     => '主要貢獻者',
-	'contributors-legend'      => '列示呢篇文章嘅主要貢獻者',
-	'contributors-target'      => '標題:',
-	'contributors-submit'      => '顯示',
-	'contributors-subtitle'    => '$1嘅主要貢獻者',
+	'contributors' => '貢獻者',
+	'contributors-toolbox' => '主要貢獻者',
+	'contributors-legend' => '列示呢篇文章嘅主要貢獻者',
+	'contributors-target' => '標題:',
+	'contributors-submit' => '顯示',
+	'contributors-subtitle' => '$1嘅主要貢獻者',
 	'contributors-others-long' => '響呢一版度重有$1位更多嘅貢獻者。',
-	'contributors-others'      => '以及另外$1位',
-	'contributors-badtitle'    => '唔正確嘅標題。',
-	'contributors-nosuchpage'  => '文章$1唔存在。',
+	'contributors-others' => '以及另外$1位',
+	'contributors-badtitle' => '唔正確嘅標題。',
+	'contributors-nosuchpage' => '文章$1唔存在。',
 );
 
-/** Simplified Chinese (‪中文(简体)‬)
- * @author Shinjiman
- */
+/* Chinese (Simplified) (Shinjiman) */
 $messages['zh-hans'] = array(
-	'contributors'             => '贡献者',
-	'contributors-toolbox'     => '主要贡献者',
-	'contributors-legend'      => '列示这篇条目的主要贡献者',
-	'contributors-target'      => '标题:',
-	'contributors-submit'      => '显示',
-	'contributors-subtitle'    => '$1的主要贡献者',
+	'contributors' => '贡献者',
+	'contributors-toolbox' => '主要贡献者',
+	'contributors-legend' => '列示这篇条目的主要贡献者',
+	'contributors-target' => '标题:',
+	'contributors-submit' => '显示',
+	'contributors-subtitle' => '$1的主要贡献者',
 	'contributors-others-long' => '在这一页中还有$1位更多的贡献者。',
-	'contributors-others'      => '以及另外$1位',
-	'contributors-badtitle'    => '不正确的标题。',
-	'contributors-nosuchpage'  => '条目$1不存在。',
+	'contributors-others' => '以及另外$1位',
+	'contributors-badtitle' => '不正确的标题。',
+	'contributors-nosuchpage' => '条目$1不存在。',
 );
 
-/** Traditional Chinese (‪中文(繁體)‬)
- * @author Shinjiman
- */
+/* Chinese (Traditional) (Shinjiman) */
 $messages['zh-hant'] = array(
-	'contributors'             => '貢獻者',
-	'contributors-toolbox'     => '主要貢獻者',
-	'contributors-legend'      => '列示這篇條目的主要貢獻者',
-	'contributors-target'      => '標題:',
-	'contributors-submit'      => '顯示',
-	'contributors-subtitle'    => '$1的主要貢獻者',
+	'contributors' => '貢獻者',
+	'contributors-toolbox' => '主要貢獻者',
+	'contributors-legend' => '列示這篇條目的主要貢獻者',
+	'contributors-target' => '標題:',
+	'contributors-submit' => '顯示',
+	'contributors-subtitle' => '$1的主要貢獻者',
 	'contributors-others-long' => '在這一頁中還有$1位更多的貢獻者。',
-	'contributors-others'      => '以及另外$1位',
-	'contributors-badtitle'    => '不正確的標題。',
-	'contributors-nosuchpage'  => '條目$1不存在。',
+	'contributors-others' => '以及另外$1位',
+	'contributors-badtitle' => '不正確的標題。',
+	'contributors-nosuchpage' => '條目$1不存在。',
 );
 

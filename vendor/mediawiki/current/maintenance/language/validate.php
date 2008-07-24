@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * @ingroup MaintenanceLanguage
- */
 
 if ( !isset( $argv[1] ) ) {
 	print "Usage: php {$argv[0]} <filename>\n";

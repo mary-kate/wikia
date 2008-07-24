@@ -29,7 +29,7 @@ if (!defined('MEDIAWIKI')) {
 }
 
 /**
- * @ingroup API
+ * @addtogroup API
  */
 class ApiOpenSearch extends ApiBase {
 
@@ -45,12 +45,11 @@ class ApiOpenSearch extends ApiBase {
 		$params = $this->extractRequestParams();
 		$search = $params['search'];
 		$limit = $params['limit'];
-		$namespaces = $params['namespace'];
-		
+
 		// Open search results may be stored for a very long time
 		$this->getMain()->setCacheMaxAge(1200);
-
-		$srchres = PrefixSearch::titleSearch( $search, $limit, $namespaces );
+		
+		$srchres = PrefixSearch::titleSearch( $search, $limit );
 
 		// Set top level elements
 		$result = $this->getResult();
@@ -67,20 +66,14 @@ class ApiOpenSearch extends ApiBase {
 				ApiBase :: PARAM_MIN => 1,
 				ApiBase :: PARAM_MAX => 100,
 				ApiBase :: PARAM_MAX2 => 100
-			),
-			'namespace' => array(
-				ApiBase :: PARAM_DFLT => NS_MAIN,
-				ApiBase :: PARAM_TYPE => 'namespace',
-				ApiBase :: PARAM_ISMULTI => true
-			),
+			)
 		);
 	}
 
 	public function getParamDescription() {
 		return array (
 			'search' => 'Search string',
-			'limit' => 'Maximum amount of results to return',
-			'namespace' => 'Namespaces to search',
+			'limit' => 'Maximum amount of results to return'
 		);
 	}
 
@@ -95,6 +88,7 @@ class ApiOpenSearch extends ApiBase {
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiOpenSearch.php 35098 2008-05-20 17:13:28Z ialex $';
+		return __CLASS__ . ': $Id: ApiOpenSearch.php 30275 2008-01-30 01:07:49Z brion $';
 	}
 }
+

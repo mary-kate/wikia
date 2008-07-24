@@ -7,14 +7,17 @@
  * @author: Markus Krötzsch
  */
 
+if( !defined( 'MEDIAWIKI' ) )   die( 1 );
+
+global $smwgIP;
+include_once($smwgIP . '/includes/articlepages/SMW_OrderedListPage.php');
+include_once($smwgIP . '/includes/SMW_DataValueFactory.php');
+
 /**
  * Implementation of MediaWiki's Article that shows additional information on
  * Type: pages. Very simliar to CategoryPage.
- * @note AUTOLOADED
  */
 class SMWTypePage extends SMWOrderedListPage {
-
-	protected $m_typevalue;
 
 	/**
 	 * Use higher limit. This operation is very similar to showing members of cateogies.
@@ -36,7 +39,6 @@ class SMWTypePage extends SMWOrderedListPage {
 		$options->limit = $this->limit + 1;
 		$options->sort = true;
 		$typevalue = SMWDataValueFactory::newTypeIDValue('__typ', $this->mTitle->getText());
-		$this->m_typevalue = $typevalue;
 		if ($this->from != '') {
 			$options->boundary = $this->from;
 			$options->ascending = true;
@@ -50,8 +52,8 @@ class SMWTypePage extends SMWOrderedListPage {
 		} else {
 			$this->articles = $store->getSpecialSubjects(SMW_SP_HAS_TYPE, $typevalue, $options);
 		}
-		foreach ($this->articles as $dv) {
-			$this->articles_start_char[] = $wgContLang->convert( $wgContLang->firstChar( $dv->getSortkey() ) );
+		foreach ($this->articles as $title) {
+			$this->articles_start_char[] = $wgContLang->convert( $wgContLang->firstChar( $title->getText() ) );
 		}
 	}
 
@@ -61,19 +63,9 @@ class SMWTypePage extends SMWOrderedListPage {
 	 */
 	protected function getPages() {
 		wfProfileIn( __METHOD__ . ' (SMW)');
-		$r = '';
-		$typevalue = $this->m_typevalue;
-		if ( $typevalue->isBuiltIn() ) {
-			$r .= '<p style="font-style: italic; ">' .wfMsg('smw_isknowntype') . "</p>\n";
-		}
-		/*
-		 * TODO: also detect isAlias()? 
-		 * But smw_isaliastype message requires determining alias target; 
-		 * code is in SMW_SpecialTypes, not SMW_DV_Types.
-		 */
 		$ti = htmlspecialchars( $this->mTitle->getText() );
 		$nav = $this->getNavigationLinks();
-		$r .= '<a name="SMWResults"></a>' . $nav . "<div id=\"mw-pages\">\n";
+		$r = '<a name="SMWResults"></a>' . $nav . "<div id=\"mw-pages\">\n";
 
 		$r .= '<h2>' . wfMsg('smw_type_header',$ti) . "</h2>\n";
 		$r .= wfMsg('smw_typearticlecount', min($this->limit, count($this->articles))) . "\n";
@@ -148,10 +140,10 @@ class SMWTypePage extends SMWOrderedListPage {
 					$cont_msg = "";
 					if ( $this->articles_start_char[$index] == $prev_start_char )
 						$cont_msg = wfMsgHtml('listingcontinuesabbrev');
-					$r .= "<h3>" . htmlspecialchars( $this->articles_start_char[$index] ) . " $cont_msg</h3>\n<ul>";
+					$r .= "<h3>" . htmlspecialchars( $this->articles_start_char[$index] ) . "$cont_msg</h3>\n<ul>";
 					$prev_start_char = $this->articles_start_char[$index];
 				}
-				$r .= "<li>" . $this->articles[$index]->getLongHTMLText($this->getSkin()) . "</li>\n";
+				$r .= "<li>" . $this->getArticleLink($this->articles[$index]) . "</li>\n";
 			}
 			if( !$atColumnTop ) {
 				$r .= "</ul>\n";
@@ -167,15 +159,20 @@ class SMWTypePage extends SMWOrderedListPage {
 	 */
 	private function shortList($start, $end) {
 		$r = '<h3>' . htmlspecialchars( $this->articles_start_char[$start] ) . "</h3>\n";
-		$r .= '<ul><li>'. $this->articles[$start]->getLongHTMLText($this->getSkin()) . '</li>';
+		$r .= '<ul><li>'. $this->getArticleLink($this->articles[$start]) . '</li>';
 		for ($index = $start+1; $index < $end; $index++ ) {
 			if ($this->articles_start_char[$index] != $this->articles_start_char[$index - 1]) {
 				$r .= "</ul><h3>" . htmlspecialchars( $this->articles_start_char[$index] ) . "</h3>\n<ul>";
 			}
-			$r .= '<li>' . $this->articles[$index]->getLongHTMLText($this->getSkin()) . '</li>';
+			$r .= '<li>' . $this->getArticleLink( $this->articles[$index] ) . '</li>';
 		}
 		$r .= '</ul>';
 		return $r;
+	}
+	
+	private function getArticleLink($title) {
+		global $wgContLang;
+		return $this->getSkin()->makeKnownLinkObj( $title, $wgContLang->convert( $title->getText() ) );
 	}
 
 }

@@ -1,10 +1,10 @@
 <?php
-
 /** Estonian (Eesti)
  *
- * @ingroup Language
+ * @addtogroup Language
  *
  */
+
 class LanguageEt extends Language {
 	/**
 	 * Avoid grouping whole numbers between 0 to 9999
@@ -17,3 +17,4 @@ class LanguageEt extends Language {
 		}
 	}
 }
+

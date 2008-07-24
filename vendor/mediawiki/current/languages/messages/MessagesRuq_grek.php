@@ -1,8 +1,9 @@
 <?php
 /** Megleno-Romanian (Greek script) (Βλαεστε)
  *
- * @ingroup Language
- * @file
+ * @addtogroup Language
+ *
  */
 
 $fallback = 'el';
+

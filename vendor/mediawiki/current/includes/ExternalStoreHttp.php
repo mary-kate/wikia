@@ -1,9 +1,11 @@
 <?php
 /**
+ *
+ *
  * Example class for HTTP accessable external objects
  *
- * @ingroup ExternalStorage
  */
+
 class ExternalStoreHttp {
 	/* Fetch data from given URL */
 	function fetchFromURL($url) {
@@ -17,3 +19,4 @@ class ExternalStoreHttp {
 	 * whatever, for initial ext storage
 	 */
 }
+

@@ -3,8 +3,7 @@
 /**
  * Delete old (non-current) revisions from the database
  *
- * @file
- * @ingroup Maintenance
+ * @addtogroup Maintenance
  * @author Rob Church <robchur@gmail.com>
  */
 

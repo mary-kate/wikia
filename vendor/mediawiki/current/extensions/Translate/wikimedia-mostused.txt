@@ -1,5 +1,4 @@
 mainpage
-mainpage-description
 aboutsite
 privacy
 disclaimers
@@ -48,8 +47,8 @@ jumptosearch
 tooltip-n-recentchanges
 tooltip-n-help
 tooltip-n-portal
+tooltip-n-sitesupport
 userlogin
-nav-login-createaccount
 tooltip-pt-login
 tooltip-n-randompage
 bad_image_list
@@ -230,6 +229,7 @@ prevn
 nextn
 returnto
 contributions
+sitesupport
 metadata-expand
 metadata-help
 metadata-fields
@@ -238,6 +238,7 @@ log
 export
 portal
 portal-url
+sitesupport-url
 viewsourcefor
 rollbacklink
 nstab-user

@@ -1,8 +1,5 @@
 <?php
 
-/**
- * @ingroup Language
- */
 class LanguageRmy extends Language {
 	/**
 	 * Convert from the nominative form of a noun to some other case
@@ -71,3 +68,5 @@ class LanguageRmy extends Language {
 		return $word; # this will return the original value for 'nominative' and all undefined case values
 	}
 }
+
+

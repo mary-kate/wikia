@@ -1,10 +1,9 @@
 <?php
 /**
- * See docs/skin.txt
+ * See skin.txt
  *
  * @todo document
- * @file
- * @ingroup Skins
+ * @addtogroup Skins
  */
 
 if( !defined( 'MEDIAWIKI' ) )
@@ -12,7 +11,7 @@ if( !defined( 'MEDIAWIKI' ) )
 
 /**
  * @todo document
- * @ingroup Skins
+ * @addtogroup Skins
  */
 class SkinNostalgia extends Skin {
 

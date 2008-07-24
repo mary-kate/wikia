@@ -46,7 +46,7 @@ var golobal_org_ptext=false;
 var mv_open_edit_mvd=null;
 if(!gMsg){var gMsg={};}
 
-gMsg['mv_open_edit'] ='you can only edit one at a time, please save or cancel other open edits first';
+gMsg['mv_open_edit'] =
 
 //@@todo context sensitive init scripts
 //init the interface on page load
@@ -260,7 +260,7 @@ function getMvdObject(mvd_id){
 
 function mv_disp_add_mvd(mvdType){
 	if(mv_open_edit_mvd){
-		js_error(gMsg['mv_open_edit']);
+		alert('');
 		return ;
 	}
 	mv_open_edit_mvd=mvdType;
@@ -301,7 +301,7 @@ function mv_disp_add_mvd(mvdType){
 }
 function mv_edit_disp(titleKey, mvd_id){	 
 	if(mv_open_edit_mvd){
-		alert(gMsg['mv_open_edit']);
+		alert('you can only edit one at a time, please close other open edits first');
 		return ;
 	}
 	mv_open_edit_mvd=mvd_id;
@@ -444,6 +444,86 @@ function add_autocomplete(mvd_id){
 }
 //submit the adjust 
 
+//creates tails for each mvd element (as to give user visual clues to mvd time layout)
+//maybe php could handle this...
+//currently broken: 
+/*function mv_add_mvd_tails(node_id){
+	js_log('add tails for: ' + node_id);
+	if(!node_id)node_id='all';
+	//if node_id is not recheck do all
+	var cur_depth='4px';
+	
+	if(node_id=='all'){
+		var fd_mvd_set = Element.getElementsByClassName('mv_fd_mvd_cont', 'mv_fd_mvd');
+		if(fd_mvd_set.length>0){	
+	   		for (var i = 0; i < fd_mvd_set.length; i++){  
+	   			var iElm= fd_mvd_set[i];
+	   			var iTitle = get_titleObject(iElm.getAttribute('name'));	   				   		
+	   			var j=i+1;	
+	   			var jElm = fd_mvd_set[j];   			
+				if(jElm){   			
+		   			var jTitle = get_titleObject(jElm.getAttribute('name'));
+		   			//js_log(iID + ':'+ iTitle.end_time + '>' + jID + ':' + jTitle.start_time);
+   					
+		   			while(iTitle.end_time > jTitle.start_time){		   				
+		   				js_log('cur depth:' + jElm.id + ' ' + cur_depth);
+		   				if(iTitle.end_time < jTitle.end_time){	
+		   					js_log(iElm.id+':'+iTitle.title+':'+iTitle.end_time +' < '+ jElm.id+':'+jTitle.title+' '+jTitle.end_time);	   						   							  
+		   					iOffset = Position.positionedOffset(iElm);
+		   					iHeight = Element.getHeight(iElm);
+		   					jOffset = Position.positionedOffset(jElm);
+		   					jHeight = Element.getHeight(jElm);
+		   					js_log(iElm.id + ' iOffset:' + iOffset+' ' + jElm.id + ' jO:' + jOffset + ' tailHeight: ' +(jOffset[1]-iOffset[1]) );
+							//depth 0
+							//var tail_top_html='<div id="tail_top'+i+'" ' +
+							//				   'style="float:left;height:'+(jOffset[1]-iOffset[1])+'px;'+
+							//				   'width:90%">';
+							var tail_color_div = '<div id="tail_clear'+i+'" style="clear:both"></div>' +
+												'<div id="tail_color_'+i+'" ' + 
+												'class="tail_color" '+
+												'style="' +
+												'top:'+(iOffset[1]+iHeight-5)+'px;'+
+												'left:'+(parseInt(iElm.getStyle('margin-left').replace('px',''))+2)+'px;'+ 
+												'height:'+(jOffset[1]-iOffset[1])+'px;'+
+												'background:'+iElm.getStyle('background')+'"></div>';
+							
+							//var tail_close_html='</div>';							
+							new Insertion.After(iElm, tail_color_div);	
+							//Position.absolutize('tail_color_'+i);
+							//shift to lower left of ielm
+							//new Insertion.After(jElm, tail_close_html);
+							break;		   				
+		   				}else{
+		   					j++;
+		   					cur_depth = parseInt(iElm.getStyle('margin-left').replace('px',''))+12;
+		   					if(j==i)break; //(should not happen)
+		   					if(fd_mvd_set[j]){
+		   						//tag each element with the current margin depth:
+		   						var pre_style =  jElm.getStyle('margin-left');
+		   						jElm.setStyle({marginLeft:cur_depth+'px'});
+		   						js_log("pre:" + pre_style + ' post:' + jElm.getStyle('margin-left'));
+		   						//increase the left hand side margin by depth*12 pixles
+			   					jTitle = get_titleObject(fd_mvd_set[j].getAttribute('name'));
+		   						var jElm = fd_mvd_set[j];   		
+		   					}else{
+		   						js_log('real long tail (end of all nodes)');
+		   						break;
+		   					}
+		   				}	
+		   			}
+				}
+	   			//go to node where start < end
+	   			//take current realOffset
+	   				//take tail node realOffset
+	   				//subtract different to get height of curNode offset
+	   		}
+		}else{
+			//empty no tails to add
+		}
+	}	
+}*/
+
+/*also needs some work: */
 //use start time of elements in the to position pieces.
 function mv_add_new_fd_mvd(titleKey, node_html){
 	//js_log('add: ' + mv_result['titleKey'] + node_html);
@@ -457,17 +537,35 @@ function mv_add_new_fd_mvd(titleKey, node_html){
 			var curTitle = get_titleObject($j(this).attr('name'));	
 			if(insertTitle.start_time < curTitle.start_time){
 				$j(this).before(node_html).show("slow");
-				js_log('inserted: ' + insertTitle.start_time + "\n" + node_html);
+				//js_log('inserted: ' + insertTitle.start_time + "\n" + node_html);
 	   			inserted=true;
+	   			//add mouse over hooks
 	   			return ;
 			}
 		}
 	});
-	//add at the end (if not before some other mvd page)
-	if(!inserted){
-		js_log('inserted: ' + insertTitle.start_time + "\n" + node_html);
-		$j('#mv_fd_mvd_cont').append(node_html);
-	}
+	/*if ($j('#mv_fd_mvd_cont').get(0).hasChildNes()){	 
+	   for (var i = 0; i < $j('#mv_fd_mvd_cont').get(0).childNodes.length; i++){   			
+	   		var curName =$j('#mv_fd_mvd_cont').get(0).childNodes[i].getAttribute('name');
+	   		if(curName){
+		   		var curTitle = get_titleObject(curName);
+		   		//compare start time if > cur_start add before			
+		   		if(insertTitle.start_time < curTitle.start_time){  		   	
+		   			//insert before:	
+		   			$j('#mv_fd_mvd_cont').insertBefore(node_html);
+		   			inserted=true;
+		   			break;
+		   		}
+	   		}else{
+	   			js_log('name not found for:' + $j('mv_fd_mvd_cont').get(0).childNodes[i].id);
+	   		}
+	   }
+	   //@@todo give the user the option to jump to the range where the clip is present:
+	   if(!inserted)alert("insert out of range of current view");
+	}else{
+		//no child nodes just do plain insert
+		$j('#mv_fd_mvd_cont').html(node_html);
+	}*/
 }
 
 function get_titleObject(titleKey){
@@ -605,7 +703,6 @@ function mv_do_ajax_form_submit(mvd_id, edit_action){
 			$j(setHtmlId).html( result) ;			
 			return ;
         }
-        js_log('req status:'+ request.status);
 		if(mvd_id=='new' && edit_action=='save'){
 			js_log("new and save");			
 			eval(result);
@@ -614,11 +711,12 @@ function mv_do_ajax_form_submit(mvd_id, edit_action){
   				//empty the add div:
 		  		$j('#mv_add_new_mvd').empty();
 		  		
-				//add mv_time_line element		  		
-		  		$j('#mv_time_line').append(mv_result['tl_mvd']);		  				  		
+		  		//@@TODO update / add mv_time_line element
+		  		
+		  		$j('#mv_time_line').append(mv_result['tl_mvd']).show("slow");		  				  		
 		  		mv_add_new_fd_mvd(mv_result['titleKey'], mv_result['fd_mvd']);	
 		  		
-		  		mv_init_interface.addHoverHooks('#mv_fd_mvd_'+mv_result['mvd_id']+',#mv_tl_mvd_'+mv_result['mvd_id']);
+		  		mv_init_interface.addHoverHooks('#mv_fd_mvd_'+mvd_id);
 		  		//scroll to the new mvd:
 		  		scroll_to_pos(mv_result['mvd_id']);			  		
   			}
@@ -754,20 +852,21 @@ function de_highlight_fd(mvd_id){
 	$j('#mv_fd_mvd_'+mvd_id).css('border', '1px solid #2F6FAB');
 }
 
+/* should be a way to do this with css */
 function highlight_tl_ts(mvd_id){
 	//make sure we don't set the original as red: 
 	if($j('#mv_tl_mvd_'+mvd_id).get(0)){
 		if($j('#mv_tl_mvd_'+mvd_id).css('background').indexOf("red")==-1)
 			mv_tl_mvd_org_color[mvd_id] = $j('#mv_tl_mvd_'+mvd_id).css('background');
 		//js_log(mvd_id + ' org color: ' + mv_tl_mvd_org_color[mvd_id]);
-		$j('#mv_tl_mvd_'+mvd_id).css({background:'red',opacity:.4}).css("z-index",10);
+		$j('#mv_tl_mvd_'+mvd_id).css({background:'red',opacity:.4});
 	}
 }
 function de_highlight_tl_ts(mvd_id){
-	if(mv_tl_mvd_org_color[mvd_id]){		
+	if(mv_tl_mvd_org_color[mvd_id]){
+		//js_log(mvd_id + ' restore ' + mv_tl_mvd_org_color[mvd_id]);
 		if($j('#mv_tl_mvd_'+mvd_id).get(0)){
-			//alert(mvd_id + ' restore ' + mv_tl_mvd_org_color[mvd_id] + ' ' + rgb2hex(mv_tl_mvd_org_color[mvd_id]));			
-			$j('#mv_tl_mvd_'+mvd_id).css({background:mv_tl_mvd_org_color[mvd_id],opacity:1}).css("z-index",0);
+			$j('#mv_tl_mvd_'+mvd_id).css({background:mv_tl_mvd_org_color[mvd_id],opacity:1});
 		}
 	}
 }
@@ -778,10 +877,13 @@ function do_video_mvd_update(mvd_id){
 		//get the current thumbnail
 		var vid_elm = document.getElementById('embed_vid');
 		if(!vid_elm)return '';
-		do_video_time_update(time_ary[1], time_ary[2],mvd_id);
+		do_video_time_update(time_ary[1], time_ary[2]);
+		//update the thumbnail: 
+		if($j('#mv_fd_mvd_'+mvd_id).attr('image_url')!=$j('#embed_vid').get(0).thumbnail)
+				$j('#embed_vid').get(0).updateThumbnail($j('#mv_fd_mvd_'+mvd_id).attr('image_url'));			
 	}
 }
-function do_video_time_update(start_time, end_time, mvd_id)	{
+function do_video_time_update(start_time, end_time)	{
 	if(mv_lock_vid_updates==false){		
 		//update the vid title:	
 		$j('#mv_videoPlayerTime').html( start_time + ' to ' + end_time );
@@ -792,37 +894,29 @@ function do_video_time_update(start_time, end_time, mvd_id)	{
 			if(new_vid_url!=$j('#embed_vid').attr('src'))
 				$j('#embed_vid').get(0).updateVideoSrc(new_vid_url);
 		}
-		do_update_thumb(mvd_id, start_time);
-	}
-}
-function do_update_thumb(mvd_id, start_time){
-	//set via mvd
-	if(mvd_id){
-		if($j('#mv_fd_mvd_'+mvd_id).attr('image_url')!=$j('#embed_vid').get(0).thumbnail){
-				$j('#embed_vid').get(0).updateThumbnail($j('#mv_fd_mvd_'+mvd_id).attr('image_url'));
-				return ;
-		}
-	}
-	//else set via org_thum_src
-	if(org_thum_src.indexOf('?')!=-1){
-		var url = org_thum_src.split('?');
-		var args = Array();
-		var arg_parts = url[1].split('&');
-		for(i in arg_parts){
-			var tmp = arg_parts[i].split('=');
-			args[tmp[0]]=tmp[1];
-		}		
-		var new_thumb = url[0]+'?';
-		for(k in args){
-			var v = args[k];
-			if(k!='t'){
-				new_thumb+=k+'='+v+'&';
+		if(org_thum_src.indexOf('?')!=-1){
+			//js_log('org src:' + org_thum_src);
+			var url = org_thum_src.split('?');
+			var args = Array();
+			//probably not the ideal implementation :P should swap out for 
+			//some library function
+			var arg_parts = url[1].split('&');
+			for(i in arg_parts){
+				var tmp = arg_parts[i].split('=');
+				args[tmp[0]]=tmp[1];
+			}		
+			var new_thumb = url[0]+'?';
+			for(k in args){
+				var v = args[k];
+				if(k!='t'){
+					new_thumb+=k+'='+v+'&';
+				}
 			}
-		}
-	 	new_thumb+= 't='+ start_time;	 
-		//js_log("new thumb:" + new_thumb);
-		if(new_thumb!=$j('#embed_vid').get(0).thumbnail)
-			$j('#embed_vid').get(0).updateThumbnail(new_thumb);		
+		 	new_thumb+= 't='+ start_time;	 
+			//js_log("new thumb:" + new_thumb);
+			if(new_thumb!=$j('#embed_vid').get(0).thumbnail)
+				$j('#embed_vid').get(0).updateThumbnail(new_thumb);		
+		}	
 	}
 }
 function mv_tool_disp(tool_id){
@@ -1001,7 +1095,7 @@ function mv_sajax_do_call(func_name, args, target, post_vars) {
 
 	return true;
 }
-
+ 
  
  
 /* custom effects */ 

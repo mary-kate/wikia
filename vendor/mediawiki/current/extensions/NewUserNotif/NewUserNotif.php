@@ -8,16 +8,15 @@ if ( ! defined( 'MEDIAWIKI' ) )
  * @author Rob Church <robchur@gmail.com>
  * @addtogroup Extensions
  * @copyright © 2006 Rob Church
- * @license GNU General Public Licence 2.0 or later
+ * @licence GNU General Public Licence 2.0 or later
  */
 
 $wgExtensionCredits['other'][] = array(
-	'name'           => 'New User Email Notification',
-	'version'        => '1.5.1',
-	'author'         => 'Rob Church',
-	'url'            => 'http://www.mediawiki.org/wiki/Extension:New_User_Email_Notification',
-	'description'    => 'Sends email notification when user accounts are created',
-	'descriptionmsg' => 'newusernotif-desc',
+	'name' => 'New User Email Notification',
+	'version' => '1.5',
+	'author' => 'Rob Church',
+	'url' => 'http://www.mediawiki.org/wiki/Extension:New_User_Email_Notification',
+	'description' => 'Sends email notification when user accounts are created',
 );
 
 $dir = dirname(__FILE__) . '/';

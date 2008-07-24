@@ -41,12 +41,3 @@ if (!isset($sdgNamespaceIndex)) {
 ## List separator character
 ###
 $sdgListSeparator = ",";
-
-###
-## Variables for display
-###
-$sdgNumResultsColumns = 3;
-$sdgNumResultsPerPage = 250;
-// set these to a positive value to trigger the "tag cloud" display
-$sdgFiltersSmallestFontSize=-1;
-$sdgFiltersLargestFontSize=-1;

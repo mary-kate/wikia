@@ -1,13 +1,10 @@
 <?php
 /**
  * See deferred.txt
- * @file
- * @ingroup Cache
  */
 
 /**
- * @todo document
- * @ingroup Cache
+ *
  */
 class SquidUpdate {
 	var $urlArr, $mMaxTitles;
@@ -84,7 +81,7 @@ class SquidUpdate {
 			echo implode("<br />\n", $urlArr) . "<br />\n";
 			return;
 		}*/
-
+		
 		if( empty( $urlArr ) ) {
 			return;
 		}
@@ -151,9 +148,8 @@ class SquidUpdate {
 					/* open the remaining sockets for this server */
 					list($server, $port) = explode(':', $wgSquidServers[$ss]);
 					if(!isset($port)) $port = 80;
-					$socket = @fsockopen($server, $port, $error, $errstr, 2);
-					@stream_set_blocking($socket,false);
-					$sockets[] = $socket;
+					$sockets[$so+1] = @fsockopen($server, $port, $error, $errstr, 2);
+					@stream_set_blocking($sockets[$so+1],false);
 				}
 				$so++;
 			}
@@ -223,10 +219,10 @@ class SquidUpdate {
 
 			foreach ( $urlArr as $url ) {
 				if( !is_string( $url ) ) {
-					throw new MWException( 'Bad purge URL' );
+					wfDebugDieBacktrace( 'Bad purge URL' );
 				}
 				$url = SquidUpdate::expand( $url );
-
+				
 				// Construct a minimal HTCP request diagram
 				// as per RFC 2756
 				// Opcode 'CLR', no response desired, no auth
@@ -264,7 +260,7 @@ class SquidUpdate {
 			wfDebug( $text );
 		}
 	}
-
+	
 	/**
 	 * Expand local URLs to fully-qualified URLs using the internal protocol
 	 * and host defined in $wgInternalServer. Input that's already fully-
@@ -286,3 +282,4 @@ class SquidUpdate {
 		return $url;
 	}
 }
+

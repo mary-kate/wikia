@@ -1,9 +1,10 @@
 <?php
 /** Megleno-Romanian (Vlăheşte)
  *
- * @ingroup Language
- * @file
+ * @addtogroup Language
  * @comment redirects to Megleno-Romanian (Latin)
+ *
  */
 
 $fallback = 'ruq-latn';
+

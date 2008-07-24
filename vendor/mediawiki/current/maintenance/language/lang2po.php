@@ -5,9 +5,6 @@
  * Todo:
  *   - generate .po header
  *   - fix escaping of \
- *
- * @file
- * @ingroup MaintenanceLanguage
  */
 
 $optionsWithArgs[] = 'lang';

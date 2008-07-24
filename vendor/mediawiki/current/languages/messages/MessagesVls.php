@@ -1,13 +1,12 @@
 <?php
 /** West-Vlams (West-Vlams)
  *
- * @ingroup Language
- * @file
+ * @addtogroup Language
  *
  * @author SPQRobin
  * @author Siebrand
- * @author Tbc
  * @author לערי ריינהארט
+ * @author Tbc
  */
 
 $fallback = 'nl';
@@ -76,7 +75,7 @@ $messages = array(
 'watch'       => 'Volgn',
 'unwatch'     => 'Nie volgn',
 
-# Displayed when you click the "watch" button and it is in the process of watching
+# Displayed when you click the "watch" button and it's in the process of watching
 'unwatching' => 'Stoppn me volgn...',
 
 # Undelete

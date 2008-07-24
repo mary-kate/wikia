@@ -1,7 +1,6 @@
 <?php
 /**
- * @file
- * @ingroup MaintenanceLanguage
+ * @addtogroup Maintenance
  *
  * Get all the translations messages, as defined in the English language file.
  */

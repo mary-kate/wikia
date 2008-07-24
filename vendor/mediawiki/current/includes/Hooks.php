@@ -19,7 +19,6 @@
  *
  * @author Evan Prodromou <evan@wikitravel.org>
  * @see hooks.txt
- * @file
  */
 
 
@@ -28,7 +27,7 @@
  * careful about its contents. So, there's a lot more error-checking
  * in here than would normally be necessary.
  */
-function wfRunHooks($event, $args = array()) {
+function wfRunHooks($event, $args = null) {
 
 	global $wgHooks;
 
@@ -109,9 +108,6 @@ function wfRunHooks($event, $args = array()) {
 			$callback = $func;
 		}
 
-		// Run autoloader (workaround for call_user_func_array bug)
-		is_callable( $callback );
-
 		/* Call the hook. */
 		wfProfileIn( $func );
 		$retval = call_user_func_array( $callback, $hook_args );
@@ -144,3 +140,4 @@ function wfRunHooks($event, $args = array()) {
 
 	return true;
 }
+

@@ -1,9 +1,7 @@
 <?php
+
 /**
  * Communications protocol...
- *
- * @file
- * @ingroup Maintenance
  */
 
 require "commandLine.inc";
@@ -12,10 +10,6 @@ $db = wfGetDB( DB_SLAVE );
 $stdin = fopen( "php://stdin", "rt" );
 while( !feof( $stdin ) ) {
 	$line = fgets( $stdin );
-	if( $line === false ) {
-		// We appear to have lost contact...
-		break;
-	}
 	$textId = intval( $line );
 	$text = doGetText( $db, $textId );
 	echo strlen( $text ) . "\n";
@@ -37,3 +31,6 @@ function doGetText( $db, $id ) {
 	}
 	return $text;
 }
+
+
+?>

@@ -9,13 +9,11 @@ $wgExtensionMessagesFiles['ProofreadPage'] = dirname(__FILE__) . '/ProofreadPage
 $wgHooks['BeforePageDisplay'][] = 'wfPRParserOutput';
 $wgHooks['GetLinkColours'][] = 'wfPRLinkColours';
 $wgHooks['ImageOpenShowImageInlineBefore'][] = 'wfPRImageMessage';
-$wgHooks['ArticleSave'][] = 'wfPRSave';
 
 $wgExtensionCredits['other'][] = array(
 	'name'           => 'ProofreadPage',
 	'author'         => 'ThomasV',
-	'svn-date' => '$LastChangedDate: 2008-07-13 16:56:03 +0000 (Sun, 13 Jul 2008) $',
-	'svn-revision' => '$LastChangedRevision: 37621 $',
+	'version'        => '2008-02-08',
 	'url'            => 'http://www.mediawiki.org/wiki/Extension:Proofread_Page',
 	'description'    => 'Allow easy comparison of text to the original scan',
 	'descriptionmsg' => 'proofreadpage_desc',
@@ -28,7 +26,7 @@ function wfPRPageList() {
 }
 
 # Bump the version number every time you change proofread.js
-$wgProofreadPageVersion = 17;
+$wgProofreadPageVersion = 15;
 
 /**
  * 
@@ -64,8 +62,9 @@ function wfPRNavigation( $image ) {
 	}
 	$dbr->freeResult( $result ) ;
 
-	//if multipage, we use the page order, but we should read pagenum from the index
-	if( $image->exists() && $image->isMultiPage() ) {
+	if( !$index_title ) { // there is no index, or no page list in the index
+
+		if( ! ($image->exists() && $image->isMultiPage() ) ) return $err;
 
 		$pagenr = 1;
 		$parts = explode( '/', $wgTitle->getText() );
@@ -79,14 +78,10 @@ function wfPRNavigation( $image ) {
 		$index_name = "$index_namespace:$name";
 		$prev_name = "$page_namespace:$name/" . ( $pagenr - 1 );
 		$next_name = "$page_namespace:$name/" . ( $pagenr + 1 );
+		$index_title = Title::newFromText( $index_name );
 		$prev_url = ( $pagenr == 1 ) ? '' : Title::newFromText( $prev_name )->getFullURL();
 		$next_url = ( $pagenr == $count ) ? '' : Title::newFromText( $next_name )->getFullURL();
 		$page_num = $pagenr;
-
-		if( !$index_title ) { 
-			//there is no index, or the page is not listed in the index : use canonical index
-			$index_title = Title::newFromText( $index_name );
-		}
 	} 
 	else {
 		$page_num = '';
@@ -94,8 +89,6 @@ function wfPRNavigation( $image ) {
 		$next_url = '';
 	}
 
-
-	if( !$index_title ) return $err;
 	$index_url = $index_title->getFullURL();
 
 	//if the index page exists, read metadata
@@ -475,19 +468,4 @@ function wfPRRenderPageList( $input, $args ) {
 
 	}
 	return $return;
-}
-
-
-/* update coloured links in index pages */
-function wfPRSave( $article ) {
-
-	wfLoadExtensionMessages( 'ProofreadPage' );
-	$page_namespace = preg_quote( wfMsgForContent( 'proofreadpage_namespace' ), '/' );
-
-	if( preg_match( "/^$page_namespace:(.*)$/", $article->mTitle->getPrefixedText() ) ) {
-		$article->mTitle->touchLinks();
-		$article->mTitle->purgeSquid();
-	}
-	return true;
-
 }

@@ -1,13 +1,11 @@
 <?php
 /** Punjabi (ਪੰਜਾਬੀ)
  *
- * @ingroup Language
- * @file
+ * @addtogroup Language
  *
  * @author Sukh
  * @author Ævar Arnfjörð Bjarmason
  * @author AS Alam
- *
  * @license http://www.gnu.org/copyleft/fdl.html GNU Free Documentation License
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @see http://bugzilla.wikimedia.org/show_bug.cgi?id=1478
@@ -126,7 +124,8 @@ $messages = array(
 'nov'           => 'ਨਵੰਬਰ',
 'dec'           => 'ਦਸੰਬਰ',
 
-# Categories related messages
+# Bits of text used by many pages
+'categories'            => 'ਕੈਟਾਗਰੀਆਂ',
 'pagecategories'        => '{{PLURAL:$1|ਕੈਟਾਗਰੀ|ਕੈਟਾਗਰੀਆਂ}}',
 'category_header'       => 'ਕੈਟਾਗਰੀ "$1" ਵਿੱਚ ਲੇਖ',
 'subcategories'         => 'ਸਬ-ਕੈਟਾਗਰੀਆਂ',
@@ -207,29 +206,30 @@ $messages = array(
 'jumptosearch'      => 'ਖੋਜ',
 
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
-'aboutsite'            => '{{SITENAME}} ਬਾਰੇ',
-'aboutpage'            => 'Project:ਬਾਰੇ',
-'bugreports'           => 'ਬੱਗ ਰਿਪੋਰਟਾਂ',
-'bugreportspage'       => 'Project:ਬੱਗ ਰਿਪੋਰਟ',
-'copyright'            => 'ਸਮੱਗਰੀ $1 ਹੇਠ ਉਪਲੱਬਧ ਹੈ।',
-'copyrightpagename'    => '{{SITENAME}} ਕਾਪੀਰਾਈਟ',
-'copyrightpage'        => '{{ns:project}}:ਕਾਪੀਰਾਈਟ',
-'currentevents'        => 'ਮੌਜੂਦਾ ਇਵੈਂਟ',
-'currentevents-url'    => 'Project:ਮੌਜੂਦਾ ਈਵੈਂਟ',
-'disclaimers'          => 'ਦਾਆਵਾ',
-'disclaimerpage'       => 'Project:ਆਮ ਡਿਕਲੇਅਮਰ',
-'edithelp'             => 'ਮੱਦਦ ਐਡੀਟਿੰਗ',
-'edithelppage'         => 'Help:ਐਡਟਿੰਗ',
-'faq'                  => 'ਸਵਾਲ-ਜਵਾਬ',
-'faqpage'              => 'Project:ਸਵਾਲ-ਜਵਾਬ',
-'helppage'             => 'Help:ਸਮੱਗਰੀ',
-'mainpage'             => 'ਮੁੱਖ ਪੇਜ਼',
-'mainpage-description' => 'ਮੁੱਖ ਪੇਜ਼',
-'policy-url'           => 'Project:ਪਾਲਸੀ',
-'portal'               => 'ਕਮਿਊਨਟੀ ਪੋਰਟਲ',
-'portal-url'           => 'Project:ਕਮਿਊਨਟੀ ਪੋਰਟਲ',
-'privacy'              => 'ਪਰਾਈਵੇਸੀ ਪਾਲਸੀ',
-'privacypage'          => 'Project:ਪਰਾਈਵੇਸ ਪੇਜ਼',
+'aboutsite'         => '{{SITENAME}} ਬਾਰੇ',
+'aboutpage'         => 'Project:ਬਾਰੇ',
+'bugreports'        => 'ਬੱਗ ਰਿਪੋਰਟਾਂ',
+'bugreportspage'    => 'Project:ਬੱਗ ਰਿਪੋਰਟ',
+'copyright'         => 'ਸਮੱਗਰੀ $1 ਹੇਠ ਉਪਲੱਬਧ ਹੈ।',
+'copyrightpagename' => '{{SITENAME}} ਕਾਪੀਰਾਈਟ',
+'copyrightpage'     => '{{ns:project}}:ਕਾਪੀਰਾਈਟ',
+'currentevents'     => 'ਮੌਜੂਦਾ ਇਵੈਂਟ',
+'currentevents-url' => 'Project:ਮੌਜੂਦਾ ਈਵੈਂਟ',
+'disclaimers'       => 'ਦਾਆਵਾ',
+'disclaimerpage'    => 'Project:ਆਮ ਡਿਕਲੇਅਮਰ',
+'edithelp'          => 'ਮੱਦਦ ਐਡੀਟਿੰਗ',
+'edithelppage'      => 'Help:ਐਡਟਿੰਗ',
+'faq'               => 'ਸਵਾਲ-ਜਵਾਬ',
+'faqpage'           => 'Project:ਸਵਾਲ-ਜਵਾਬ',
+'helppage'          => 'Help:ਸਮੱਗਰੀ',
+'mainpage'          => 'ਮੁੱਖ ਪੇਜ਼',
+'policy-url'        => 'Project:ਪਾਲਸੀ',
+'portal'            => 'ਕਮਿਊਨਟੀ ਪੋਰਟਲ',
+'portal-url'        => 'Project:ਕਮਿਊਨਟੀ ਪੋਰਟਲ',
+'privacy'           => 'ਪਰਾਈਵੇਸੀ ਪਾਲਸੀ',
+'privacypage'       => 'Project:ਪਰਾਈਵੇਸ ਪੇਜ਼',
+'sitesupport'       => 'ਦਾਨ',
+'sitesupport-url'   => 'Project:ਸਾਇਟ ਸਹਿਯੋਗ',
 
 'badaccess'        => 'ਅਧਿਕਾਰ ਗਲਤੀ',
 'badaccess-group0' => 'ਤੁਹਾਨੂੰ ਉਹ ਐਕਸ਼ਨ ਕਰਨ ਦੀ ਮਨਜ਼ੂਰੀ ਨਹੀਂ, ਜਿਸ ਦੀ ਤੁਸੀਂ ਮੰਗ ਕੀਤੀ ਹੈ।',
@@ -298,7 +298,6 @@ Your account has been created. Don't forget to change your {{SITENAME}} preferen
 'yourdomainname'             => 'ਤੁਹਾਡੀ ਡੋਮੇਨ:',
 'loginproblem'               => '<b>ਤੁਹਾਡੇ ਲਾਗਇਨ ਨਾਲ ਇੱਕ ਸਮੱਸਿਆ ਹੈ।</b><br />ਮੁੜ ਕੋਸ਼ਿਸ਼ ਕਰੋ!',
 'login'                      => 'ਲਾਗ ਇਨ',
-'nav-login-createaccount'    => 'ਲਾਗ ਇਨ / ਅਕਾਊਂਟ ਬਣਾਓ',
 'loginprompt'                => 'ਤੁਹਾਨੂੰ {{SITENAME}} ਉੱਤੇ ਲਾਗਇਨ ਕਰਨ ਲਈ ਕੂਕੀਜ਼ ਯੋਗ ਕਰਨੇ ਜ਼ਰੂਰੀ ਹਨ।',
 'userlogin'                  => 'ਲਾਗ ਇਨ / ਅਕਾਊਂਟ ਬਣਾਓ',
 'logout'                     => 'ਲਾਗ ਆਉਟ',
@@ -415,6 +414,7 @@ $1 ਘੰਟੇ ਵਿੱਚ। ਨੁਕਸਾਨ ਤੋਂ ਬਚਣ ਲਈ, $
 'note'                   => '<strong>ਨੋਟ:</strong>',
 'previewnote'            => '<strong>ਇਹ ਸਿਰਫ਼ ਇੱਕ ਝਲਕ ਹੈ; ਬਦਲਾਅ ਹਾਲੇ ਸੰਭਾਲੇ ਨਹੀਂ ਗਏ ਹਨ!</strong>',
 'editing'                => '$1 ਸੋਧਿਆ ਜਾ ਰਿਹਾ ਹੈ',
+'editinguser'            => '<b>$1</b> ਯੂਜ਼ਰ ਸੋਧਿਆ ਜਾ ਰਿਹਾ ਹੈ',
 'editingsection'         => '$1 (ਸ਼ੈਕਸ਼ਨ) ਸੋਧ',
 'editingcomment'         => '$1 (ਟਿੱਪਣੀ) ਸੋਧ',
 'editconflict'           => 'ਅਪਵਾਦ ਟਿੱਪਣੀ: $1',
@@ -435,6 +435,7 @@ $1 ਘੰਟੇ ਵਿੱਚ। ਨੁਕਸਾਨ ਤੋਂ ਬਚਣ ਲਈ, $
 # History pages
 'viewpagelogs'        => 'ਇਹ ਪੇਜ਼ ਲਈ ਲਾਗ ਵੇਖੋ',
 'revnotfound'         => 'ਰੀਵਿਜ਼ਨ ਨਹੀਂ ਲੱਭਿਆ',
+'loadhist'            => 'ਪੇਜ਼ ਅਤੀਤ ਲੋਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ',
 'currentrev'          => 'ਮੌਜੂਦਾ ਰੀਵਿਜ਼ਨ',
 'revisionasof'        => '$1 ਦੇ ਰੀਵਿਜ਼ਨ ਵਾਂਗ',
 'previousrevision'    => '←ਪੁਰਾਣਾ ਰੀਵਿਜ਼ਨ',
@@ -443,6 +444,7 @@ $1 ਘੰਟੇ ਵਿੱਚ। ਨੁਕਸਾਨ ਤੋਂ ਬਚਣ ਲਈ, $
 'cur'                 => 'ਮੌਜੂਦਾ',
 'next'                => 'ਅੱਗੇ',
 'last'                => 'ਆਖਰੀ',
+'orig'                => 'ਅਸਲੀ',
 'page_first'          => 'ਪਹਿਲਾਂ',
 'page_last'           => 'ਆਖਰੀ',
 'deletedrev'          => '[ਹਟਾਇਆ]',
@@ -532,14 +534,16 @@ $1 ਘੰਟੇ ਵਿੱਚ। ਨੁਕਸਾਨ ਤੋਂ ਬਚਣ ਲਈ, $
 'files'                 => 'ਫਾਇਲਾਂ',
 
 # User rights
-'userrights-lookup-user'   => 'ਯੂਜ਼ਰ ਗਰੁੱਪ ਦੇਖਭਾਲ',
-'userrights-user-editname' => 'ਇੱਕ ਯੂਜ਼ਰ ਨਾਂ ਦਿਓ:',
-'editusergroup'            => 'ਯੂਜ਼ਰ ਗਰੁੱਪ ਸੋਧ',
-'editinguser'              => '<b>$1</b> ਯੂਜ਼ਰ ਸੋਧਿਆ ਜਾ ਰਿਹਾ ਹੈ ([[User talk:$1|{{int:talkpagelinktext}}]] | [[Special:Contributions/$1|{{int:contribslink}}]])',
-'userrights-editusergroup' => 'ਯੂਜ਼ਰ ਗਰੁੱਪ ਸੋਧ',
-'saveusergroups'           => 'ਯੂਜ਼ਰ ਗਰੁੱਪ ਸੰਭਾਲੋ',
-'userrights-groupsmember'  => 'ਇਸ ਦਾ ਮੈਂਬਰ:',
-'userrights-reason'        => 'ਬਦਲਣ ਦੇ ਕਾਰਨ:',
+'userrights-lookup-user'      => 'ਯੂਜ਼ਰ ਗਰੁੱਪ ਦੇਖਭਾਲ',
+'userrights-user-editname'    => 'ਇੱਕ ਯੂਜ਼ਰ ਨਾਂ ਦਿਓ:',
+'editusergroup'               => 'ਯੂਜ਼ਰ ਗਰੁੱਪ ਸੋਧ',
+'userrights-editusergroup'    => 'ਯੂਜ਼ਰ ਗਰੁੱਪ ਸੋਧ',
+'saveusergroups'              => 'ਯੂਜ਼ਰ ਗਰੁੱਪ ਸੰਭਾਲੋ',
+'userrights-groupsmember'     => 'ਇਸ ਦਾ ਮੈਂਬਰ:',
+'userrights-groupsavailable'  => 'ਉਪਲੱਬਧ ਗਰੁੱਪ:',
+'userrights-reason'           => 'ਬਦਲਣ ਦੇ ਕਾਰਨ:',
+'userrights-available-add'    => 'ਤੁਸੀਂ ਯੂਜ਼ਰਾਂ ਨੂੰ $1 ਵਿੱਚ ਸ਼ਾਮਲ ਕਰ ਸਕਦੇ ਹੋ।',
+'userrights-available-remove' => 'ਤੁਸੀਂ ਯੂਜ਼ਰਾਂ ਨੂੰ $1 ਵਿੱਚ ਹਟਾ ਕਰ ਸਕਦੇ ਹੋ।',
 
 # Groups
 'group' => 'ਗਰੁੱਪ:',
@@ -571,8 +575,8 @@ to upload files.',
 'filename'             => 'ਫਾਇਲ ਨਾਂ',
 'filedesc'             => 'ਸੰਖੇਪ',
 'fileuploadsummary'    => 'ਸੰਖੇਪ:',
-'filestatus'           => 'ਕਾਪੀਰਾਈਟ ਹਾਲਤ:',
-'filesource'           => 'ਸੋਰਸ:',
+'filestatus'           => 'ਕਾਪੀਰਾਈਟ ਹਾਲਤ',
+'filesource'           => 'ਸੋਰਸ',
 'uploadedfiles'        => 'ਅੱਪਲੋਡ ਕੀਤੀਆਂ ਫਾਇਲਾਂ',
 'ignorewarning'        => 'ਚੇਤਾਵਨੀ ਅਣਡਿੱਠੀ ਕਰਕੇ ਕਿਵੇਂ ਵੀ ਫਾਇਲ ਸੰਭਾਲੋ।',
 'minlength1'           => 'ਫਾਇਲ ਨਾਂ ਵਿੱਚ ਘੱਟੋ-ਘੱਟ ਇੱਕ ਅੱਖਰ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ।',
@@ -590,7 +594,7 @@ to upload files.',
 'uploadedimage'        => '"[[$1]]" ਅੱਪਲੋਡ',
 'uploaddisabled'       => 'ਅੱਪਲੋਡ ਆਯੋਗ ਹੈ',
 'uploadvirus'          => 'ਇਹ ਫਾਇਲ ਵਿੱਚ ਵਾਇਰਸ ਹੈ! ਵੇਰਵੇ ਲਈ ਵੇਖੋ: $1',
-'sourcefilename'       => 'ਸੋਰਸ ਫਾਇਲ ਨਾਂ:',
+'sourcefilename'       => 'ਸੋਰਸ ਫਾਇਲ ਨਾਂ',
 'watchthisupload'      => 'ਇਹ ਪੇਜ਼ ਵਾਚ ਕਰੋ',
 
 'upload-file-error' => 'ਅੰਦਰੂਨੀ ਗਲਤੀ',
@@ -599,21 +603,20 @@ to upload files.',
 # Some likely curl errors. More could be added from <http://curl.haxx.se/libcurl/c/libcurl-errors.html>
 'upload-curl-error28' => 'ਅੱਪਲੋਡ ਟਾਈਮ-ਆਉਟ',
 
-'license'            => 'ਲਾਈਸੈਂਸਿੰਗ:',
+'license'            => 'ਲਾਈਸੈਂਸਿੰਗ',
 'nolicense'          => 'ਕੁਝ ਵੀ ਚੁਣਿਆ',
 'license-nopreview'  => '(ਝਲਕ ਉਪਲੱਬਧ ਨਹੀਂ)',
 'upload_source_file' => ' (ਤੁਹਾਡੇ ਕੰਪਿਊਟਰ ਉੱਤੇ ਇੱਕ ਫਾਇਲ)',
 
-# Special:Imagelist
-'imgfile'               => 'ਫਾਇਲ',
-'imagelist'             => 'ਫਾਇਲ ਲਿਸਟ',
-'imagelist_date'        => 'ਮਿਤੀ',
-'imagelist_name'        => 'ਨਾਂ',
-'imagelist_user'        => 'ਯੂਜ਼ਰ',
-'imagelist_size'        => 'ਆਕਾਰ',
-'imagelist_description' => 'ਵੇਰਵਾ',
-
-# Image description page
+# Image list
+'imagelist'                 => 'ਫਾਇਲ ਲਿਸਟ',
+'ilsubmit'                  => 'ਖੋਜ',
+'byname'                    => 'ਨਾਂ ਨਾਲ',
+'bydate'                    => 'ਮਿਤੀ ਨਾਲ',
+'bysize'                    => 'ਆਕਾਰ ਨਾਲ',
+'imgdelete'                 => 'ਹਟਾਓ',
+'imgdesc'                   => 'ਵੇਰਵਾ',
+'imgfile'                   => 'ਫਾਇਲ',
 'filehist'                  => 'ਫਾਇਲ ਅਤੀਤ',
 'filehist-deleteall'        => 'ਸਭ ਹਟਾਓ',
 'filehist-deleteone'        => 'ਇਹ ਹਟਾਓ',
@@ -627,6 +630,11 @@ to upload files.',
 'imagelinks'                => 'ਲਿੰਕ',
 'noimage-linktext'          => 'ਇਹ ਅੱਪਲੋਡ',
 'uploadnewversion-linktext' => 'ਇਸ ਫਾਇਲ ਦਾ ਇੱਕ ਨਵਾਂ ਵਰਜਨ ਅੱਪਲੋਡ ਕਰੋ',
+'imagelist_date'            => 'ਮਿਤੀ',
+'imagelist_name'            => 'ਨਾਂ',
+'imagelist_user'            => 'ਯੂਜ਼ਰ',
+'imagelist_size'            => 'ਆਕਾਰ',
+'imagelist_description'     => 'ਵੇਰਵਾ',
 
 # File reversion
 'filerevert'         => '$1 ਰੀਵਰਟ',
@@ -659,7 +667,9 @@ to upload files.',
 'unusedcategories'  => 'ਅਣਵਰਤੀਆਂ ਕੈਟਾਗਰੀਆਂ',
 'unusedimages'      => 'ਅਣਵਰਤੀਆਂ ਫਾਇਲਾਂ',
 'popularpages'      => 'ਪਾਪੂਲਰ ਪੇਜ਼',
+'allpages'          => 'ਸਭ ਪੇਜ਼',
 'listusers'         => 'ਯੂਜ਼ਰ ਲਿਸਟ',
+'specialpages'      => 'ਖਾਸ ਪੇਜ਼',
 'newpages'          => 'ਨਵੇਂ ਪੇਜ਼',
 'newpages-username' => 'ਯੂਜ਼ਰ ਨਾਂ:',
 'ancientpages'      => 'ਸਭ ਤੋਂ ਪੁਰਾਣੇ ਪੇਜ਼',
@@ -671,6 +681,9 @@ to upload files.',
 'booksources'    => 'ਕਿਤਾਬ ਸਰੋਤ',
 'booksources-go' => 'ਜਾਓ',
 
+'data'    => 'ਡਾਟਾ',
+'version' => 'ਵਰਜਨ',
+
 # Special:Log
 'specialloguserlabel'  => 'ਯੂਜ਼ਰ:',
 'speciallogtitlelabel' => 'ਟਾਇਟਲ:',
@@ -679,7 +692,6 @@ to upload files.',
 'log-search-submit'    => 'ਜਾਓ',
 
 # Special:Allpages
-'allpages'          => 'ਸਭ ਪੇਜ਼',
 'nextpage'          => 'ਅੱਗੇ ਪੇਜ਼ ($1)',
 'prevpage'          => 'ਪਿੱਛੇ ਪੇਜ਼ ($1)',
 'allarticles'       => 'ਸਭ ਲੇਖ',
@@ -688,9 +700,6 @@ to upload files.',
 'allpagesprev'      => 'ਪਿੱਛੇ',
 'allpagesnext'      => 'ਅੱਗੇ',
 'allpagessubmit'    => 'ਜਾਓ',
-
-# Special:Categories
-'categories' => 'ਕੈਟਾਗਰੀਆਂ',
 
 # Special:Listusers
 'listusers-submit'   => 'ਵੇਖੋ',
@@ -741,7 +750,7 @@ to upload files.',
 'rollbacklink'     => 'ਰੋਲਬੈਕ',
 'rollbackfailed'   => 'ਰੋਲਬੈਕ ਫੇਲ੍ਹ',
 'protectlogpage'   => 'ਸੁਰੱਖਿਆ ਲਾਗ',
-'protect-legend'   => 'ਸੁਰੱਖਿਆ ਕਨਫਰਮ',
+'confirmprotect'   => 'ਸੁਰੱਖਿਆ ਕਨਫਰਮ',
 'protectcomment'   => 'ਟਿੱਪਣੀ:',
 'protectexpiry'    => 'ਮਿਆਦ:',
 'protect-default'  => '(ਡਿਫਾਲਟ)',
@@ -812,19 +821,20 @@ to upload files.',
 'lockdb' => 'ਡਾਟਾਬੇਸ ਲਾਕ',
 
 # Move page
-'move-page-legend' => 'ਪੇਜ਼ ਮੂਵ ਕਰੋ',
-'movearticle'      => 'ਪੇਜ਼ ਮੂਵ ਕਰੋ:',
-'movenologin'      => 'ਲਾਗਇਨ ਨਹੀਂ ਹੋ',
-'movenologintext'  => 'ਇੱਕ ਪੇਜ਼ ਮੂਵ ਕਰਨ ਲਈ ਤੁਸੀਂ ਰਜਿਸਟਰਡ ਯੂਜ਼ਰ ਹੋਣੇ ਚਾਹੀਦੇ ਹੋ ਅਤੇ [[Special:Userlogin|logged in]] ਕੀਤਾ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ।',
-'newtitle'         => 'ਨਵੇਂ ਟਾਇਟਲ ਲਈ:',
-'move-watch'       => 'ਇਹ ਪੇਜ਼ ਵਾਚ ਕਰੋ',
-'movepagebtn'      => 'ਪੇਜ਼ ਮੂਵ ਕਰੋ',
-'pagemovedsub'     => 'ਮੂਵ ਸਫ਼ਲ ਰਿਹਾ',
-'movedto'          => 'ਮੂਵ ਕੀਤਾ',
-'movelogpage'      => 'ਮੂਵ ਲਾਗ',
-'movereason'       => 'ਕਾਰਨ:',
-'revertmove'       => 'ਰੀਵਰਟ',
-'delete_and_move'  => 'ਹਟਾਓ ਅਤੇ ਮੂਵ ਕਰੋ',
+'movepage'        => 'ਪੇਜ਼ ਮੂਵ ਕਰੋ',
+'movearticle'     => 'ਪੇਜ਼ ਮੂਵ ਕਰੋ:',
+'movenologin'     => 'ਲਾਗਇਨ ਨਹੀਂ ਹੋ',
+'movenologintext' => 'ਇੱਕ ਪੇਜ਼ ਮੂਵ ਕਰਨ ਲਈ ਤੁਸੀਂ ਰਜਿਸਟਰਡ ਯੂਜ਼ਰ ਹੋਣੇ ਚਾਹੀਦੇ ਹੋ ਅਤੇ [[Special:Userlogin|logged in]] ਕੀਤਾ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ।',
+'newtitle'        => 'ਨਵੇਂ ਟਾਇਟਲ ਲਈ:',
+'move-watch'      => 'ਇਹ ਪੇਜ਼ ਵਾਚ ਕਰੋ',
+'movepagebtn'     => 'ਪੇਜ਼ ਮੂਵ ਕਰੋ',
+'pagemovedsub'    => 'ਮੂਵ ਸਫ਼ਲ ਰਿਹਾ',
+'movepage-moved'  => '<big>\'\'\'"$1" ਨੂੰ "$2"\'\'\' ਉੱਤੇ ਮੂਵ ਕੀਤਾ</big>', # The two titles are passed in plain text as $3 and $4 to allow additional goodies in the message.
+'movedto'         => 'ਮੂਵ ਕੀਤਾ',
+'movelogpage'     => 'ਮੂਵ ਲਾਗ',
+'movereason'      => 'ਕਾਰਨ:',
+'revertmove'      => 'ਰੀਵਰਟ',
+'delete_and_move' => 'ਹਟਾਓ ਅਤੇ ਮੂਵ ਕਰੋ',
 
 # Export
 'export'        => 'ਸਫ਼ੇ ਐਕਸਪੋਰਟ ਕਰੋ',
@@ -867,6 +877,7 @@ to upload files.',
 'tooltip-n-mainpage'         => 'ਮੁੱਖ ਪੇਜ਼ ਖੋਲ੍ਹੋ',
 'tooltip-n-randompage'       => 'ਇੱਕ ਰਲਵਾਂ ਪੇਜ਼ ਲੋਡ ਕਰੋ',
 'tooltip-n-help'             => 'ਖੋਜਣ ਲਈ ਥਾਂ',
+'tooltip-n-sitesupport'      => 'ਸਾਡੀ ਮੱਦਦ ਕਰੋ',
 'tooltip-t-emailuser'        => 'ਇਹ ਯੂਜ਼ਰ ਨੂੰ ਮੇਲ ਭੇਜੋ',
 'tooltip-t-upload'           => 'ਚਿੱਤਰ ਜਾਂ ਮੀਡਿਆ ਫਾਇਲਾਂ ਅੱਪਲੋਡ ਕਰੋ',
 'tooltip-ca-nstab-main'      => 'ਸਮਗੱਰੀ ਪੇਜ਼ ਵੇਖੋ',
@@ -911,8 +922,6 @@ to upload files.',
 # Special:Newimages
 'newimages' => 'ਨਵੀਆਂ ਫਾਇਲਾਂ ਦੀ ਗੈਲਰੀ',
 'noimages'  => 'ਵੇਖਣ ਲਈ ਕੁਝ ਨਹੀਂ',
-'ilsubmit'  => 'ਖੋਜ',
-'bydate'    => 'ਮਿਤੀ ਨਾਲ',
 
 # EXIF tags
 'exif-imagewidth'       => 'ਚੌੜਾਈ',
@@ -986,6 +995,7 @@ to upload files.',
 'imgmultipageprev' => '← ਪੇਜ਼ ਪਿੱਛੇ',
 'imgmultipagenext' => 'ਪੇਜ਼ ਅੱਗੇ →',
 'imgmultigo'       => 'ਜਾਓ!',
+'imgmultigotopre'  => 'ਪੇਜ਼ ਉੱਤੇ ਜਾਓ',
 
 # Table pager
 'table_pager_next'         => 'ਪੇਜ਼ ਅੱਗੇ',
@@ -1008,11 +1018,5 @@ to upload files.',
 'watchlistedit-raw-titles'  => 'ਟਾਇਟਲ:',
 'watchlistedit-raw-added'   => '{{PLURAL:$1|1 title was|$1 titles were}} ਸ਼ਾਮਲ:',
 'watchlistedit-raw-removed' => '{{PLURAL:$1|1 title was|$1 titles were}} ਹਟਾਓ:',
-
-# Special:Version
-'version' => 'ਵਰਜਨ', # Not used as normal message but as header for the special page itself
-
-# Special:SpecialPages
-'specialpages' => 'ਖਾਸ ਪੇਜ਼',
 
 );

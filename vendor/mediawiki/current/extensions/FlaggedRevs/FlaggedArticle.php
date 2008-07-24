@@ -1,105 +1,47 @@
 <?php
 
-class FlaggedArticle extends Article {
+class FlaggedArticle {
 	public $isDiffFromStable = false;
-	protected $stableRev = null;
-	protected $pageConfig = null;
-	protected $flags = null;
+	public $skipReviewDiff = false;
+	public $skipAutoReview = false;
+
+	public $stablerev = null;
+	public $pageconfig = null;
+	public $flags = null;
+
+	protected $dbr = null;
+
 	protected $reviewNotice = '';
-	protected $file = NULL;
-	protected $parent;
-
-	/**
-	 * Get the FlaggedArticle instance associated with $wgArticle/$wgTitle,
-	 * or false if there isn't such a title
-	 */
-	public static function getGlobalInstance() {
-		global $wgArticle, $wgTitle;
-		if ( !empty( $wgArticle ) ) {
-			return self::getInstance( $wgArticle );
-		} elseif ( !empty( $wgTitle ) ) {
-			return self::getTitleInstance( $wgTitle );
-		} else {
-			return false;
-		}
-	}
-
-	/**
-	 * Get a FlaggedArticle for a given title.
-	 * getInstance() is preferred if you have an Article available.
-	 */
-	public static function getTitleInstance( $title ) {
-		if ( !isset( $title->flaggedRevsArticle ) ) {
-			$article = MediaWiki::articleFromTitle( $title );
-			$article->flaggedRevsArticle = new FlaggedArticle( $article );
-			$title->flaggedRevsArticle =& $article->flaggedRevsArticle;
-		}
-		return $title->flaggedRevsArticle;
-	}
-
-	/**
-	 * Get an instance of FlaggedArticle for a given Article or Title object
-	 * @param Article $article
-	 */
-	public static function getInstance( $article ) {
-		# If instance already cached, return it!
-		if( isset($article->flaggedRevsArticle) ) {
-			return $article->flaggedRevsArticle;
-		}
-		if( isset( $article->getTitle()->flaggedRevsArticle ) ) {
-			// Already have a FlaggedArticle cached in the Title object
-			$article->flaggedRevsArticle =& $article->getTitle()->flaggedRevsArticle;
-		} else {
-			// Create new FlaggedArticle
-			$article->flaggedRevsArticle = new FlaggedArticle( $article );
-			$article->getTitle()->flaggedRevsArticle =& $article->flaggedRevsArticle;
-		}
-		return $article->flaggedRevsArticle;
-	}
-
-	/**
-	 * Construct a new FlaggedArticle from its Article parent
-	 * Should not be called directly, use FlaggedArticle::getInstance()
-	 */
-	function __construct( $parent ) {
-		$this->parent = $parent;
-	}
-
 	/**
 	 * Does the config and current URL params allow
 	 * for overriding by stable revisions?
 	 */
-	public function pageOverride() {
-		global $wgUser, $wgRequest;
-		# This only applies to viewing content pages
+    public function pageOverride() {
+    	global $wgUser, $wgRequest;
+    	# This only applies to viewing content pages
 		$action = $wgRequest->getVal( 'action', 'view' );
-		if( ($action !='view' && $action !='purge') || !$this->isReviewable() )
+    	if( ($action !='view' && $action !='purge') || !$this->isReviewable() )
 			return false;
-		# Does not apply to diffs/old revision. Explicit requests
-		# for a certain stable version will be handled elsewhere.
-		if( $wgRequest->getVal('oldid') || $wgRequest->getVal('diff') || $wgRequest->getVal('stableid') )
+    	# Does not apply to diffs/old revisions
+    	if( $wgRequest->getVal('oldid') || $wgRequest->getVal('diff') )
 			return false;
-		# Check user preferences
-		if( $wgUser->getOption('flaggedrevsstable') )
-			return !( $wgRequest->getIntOrNull('stable') === 0 );
 		# Get page configuration
 		$config = $this->getVisibilitySettings();
-		# Does the stable version override the current one?
-		if( $config['override'] ) {
-			global $wgFlaggedRevsExceptions;
-			# Viewer sees current by default (editors, insiders, ect...) ?
-			foreach( $wgFlaggedRevsExceptions as $group ) {
-				if( $group == 'user' ) {
-					if( $wgUser->getID() ) {
-						return ( $wgRequest->getIntOrNull('stable') === 1 );
-					}
-				} else if( in_array( $group, $wgUser->getGroups() ) ) {
-					return ( $wgRequest->getIntOrNull('stable') === 1 );
-				}
-			}
+    	# Does the stable version override the current one?
+    	if( $config['override'] ) {
+    		global $wgFlaggedRevsExceptions;
+    		# Viewer sees current by default (editors, insiders, ect...) ?
+    		foreach( $wgFlaggedRevsExceptions as $group ) {
+    			if( $group == 'user' ) {
+    				if( !$wgUser->isAnon() )
+    					return ( $wgRequest->getIntOrNull('stable') === 1 );
+    			} else if( in_array( $group, $wgUser->getGroups() ) ) {
+    				return ( $wgRequest->getIntOrNull('stable') === 1 );
+    			}
+    		}
 			# Viewer sees stable by default
-			return !( $wgRequest->getIntOrNull('stable') === 0 );
-		# We are explicity requesting the stable version?
+    		return !( $wgRequest->getIntOrNull('stable') === 0 );
+    	# We are explicity requesting the stable version?
 		} else if( $wgRequest->getIntOrNull('stable') === 1 ) {
 			return true;
 		}
@@ -110,20 +52,20 @@ class FlaggedArticle extends Article {
 	 * Is this user shown the stable version by default for this page?
 	 */
 	public function showStableByDefault() {
-		global $wgFlaggedRevsExceptions, $wgUser;
+		global $wgFlaggedRevsOverride, $wgFlaggedRevsExceptions, $wgUser;
 		# Get page configuration
 		$config = $this->getVisibilitySettings();
 		if( !$config['override'] )
 			return false;
-		# Viewer sees current by default (editors, insiders, ect...) ?
-		foreach( $wgFlaggedRevsExceptions as $group ) {
-			if( $group == 'user' ) {
-				if( !$wgUser->isAnon() )
-					return false;
-			} else if( in_array( $group, $wgUser->getGroups() ) ) {
-				return false;
-			}
-		}
+    	# Viewer sees current by default (editors, insiders, ect...) ?
+    	foreach( $wgFlaggedRevsExceptions as $group ) {
+    		if( $group == 'user' ) {
+    			if( !$wgUser->isAnon() )
+    				return false;
+    		} else if( in_array( $group, $wgUser->getGroups() ) ) {
+    			return false;
+    		}
+    	}
 		return true;
 	}
 
@@ -131,255 +73,157 @@ class FlaggedArticle extends Article {
 	 * Is this article reviewable?
 	 */
 	public function isReviewable() {
-		return FlaggedRevs::isPageReviewable( $this->parent->getTitle() );
+		global $wgTitle;
+
+		return FlaggedRevs::isPageReviewable( $wgTitle );
 	}
-	
-	 /**
-	 * Output review notice
+
+    /**
+	 * Adds the review notic tag by the title
 	 */
-	private function displayTag() {
-		global $wgOut;
-		$wgOut->appendSubtitle( $this->reviewNotice );
+	public function displayReviewTag( $notice ) {
+		$notice .= $this->reviewNotice;
+
 		return true;
 	}
-	
-	
-	 /**
-	 * Add a stable link when viewing old versions of an article that
-	 * have been reviewed. (e.g. for &oldid=x urls)
-	 */
-	public function addStableLink() {
-		global $wgRequest, $wgOut, $wgLang;
-		if( $wgRequest->getVal('oldid') ) {
-			# We may have nav links like "direction=prev&oldid=x"
-			$revID = $this->parent->getOldIDFromRequest();
-			$frev = FlaggedRevision::newFromTitle( $this->parent->getTitle(), $revID );
-			# Give a notice if this rev ID corresponds to a reviewed version...
-			if( !is_null($frev) ) {
-				$time = $wgLang->date( $frev->getTimestamp(), true );
-				$flags = $frev->getTags();
-				$quality = FlaggedRevs::isQuality( $flags );
-				$msg = $quality ? 'revreview-quality-source' : 'revreview-basic-source';
-				$tag = wfMsgExt( $msg, array('parseinline'), $frev->getRevId(), $time );
-				# Hide clutter
-				if( !FlaggedRevs::useSimpleUI() && !empty($flags) ) {
-					$tag .= " " . FlaggedRevsXML::ratingToggle() . "<span id='mw-revisionratings' style='display:block;'>" .
-						"<br/>" . wfMsgHtml('revreview-oldrating') . FlaggedRevsXML::addTagRatings( $flags ) . '</span>';
-				}
-				$tag = "<div id='mw-revisiontag-old' class='flaggedrevs_notice plainlinks noprint'>$tag</div>";
-				$wgOut->addHTML( $tag );
-			}
-		}
-		return true;
-	}
-	
+
 	 /**
 	 * Replaces a page with the last stable version if possible
 	 * Adds stable version status/info tags and notes
 	 * Adds a quick review form on the bottom if needed
 	 */
-	public function setPageContent( &$outputDone, &$pcache ) {
-		global $wgRequest, $wgOut, $wgUser, $wgLang;
-		# Only trigger for reviewable pages
-		if( !FlaggedRevs::isPageReviewable( $this->parent->getTitle() ) ) {
-			return true;
-		}
-		# Only trigger on article view for content pages, not for protect/delete/hist...
+	public function setPageContent( $article, &$outputDone, &$pcache ) {
+		global $wgRequest, $wgOut, $wgUser;
+
+		$skin = $wgUser->getSkin();
+		
 		$action = $wgRequest->getVal( 'action', 'view' );
-		if( ($action !='view' && $action !='purge') || !$this->parent->exists() )
-			return true;
-		# Do not clutter up diffs any further and leave archived versions alone...
-		if( $wgRequest->getVal('diff') || $wgRequest->getVal('oldid') ) {
-			return true;
-		}
-		$simpleTag = $old = $stable = false;
-		$tag = $notes = $pending = '';
-		# Check the newest stable version.
-		$srev = $this->getStableRev( true );
-		$frev = $srev;
-		$stableId = $frev ? $frev->getRevId() : 0;
-		# Also, check for any explicitly requested old stable version...
-		$reqId = $wgRequest->getVal('stableid');
-		if( $reqId === "best" ) {
-			$reqId = FlaggedRevs::getPrimeFlaggedRevId( $this->parent );
-		}
-		if( $stableId && $reqId ) {
-			if( $reqId != $stableId ) {
-				$frev = FlaggedRevision::newFromTitle( $this->parent->getTitle(), $reqId, true );
-				$old = true; // old reviewed version requested by ID
-				if( !$frev ) {
-					$wgOut->addWikiText( wfMsg('revreview-invalid') );
-					$wgOut->returnToMain( false, $this->parent->getTitle() );
-					# Tell MW that parser output is done
-					$outputDone = true;
-					$pcache = false;
-					return true;
-				}
-			} else {
-				$stable = true; // stable version requested by ID
+		# For unreviewable pages, allow for basic patrolling
+		if( !FlaggedRevs::isPageReviewable( $article->getTitle() ) ) {
+			# If we have been passed an &rcid= parameter, we want to give the user a
+			# chance to mark this new article as patrolled.
+			$rcid = $wgRequest->getIntOrNull( 'rcid' );
+			if( !is_null( $rcid ) && $rcid != 0 && $wgUser->isAllowed( 'review' ) ) {
+				$reviewtitle = SpecialPage::getTitleFor( 'Revisionreview' );
+				$wgOut->addHTML( "<div class='patrollink'>" .
+					wfMsgHtml( 'markaspatrolledlink',
+					$skin->makeKnownLinkObj( $reviewtitle, wfMsgHtml('markaspatrolledtext'),
+						"patrolonly=1&target={$article->getTitle()->getPrefixedUrl()}&rcid={$rcid}" )
+			 		) .
+					'</div>'
+			 	);
 			}
+			return true;
 		}
+		# Do not clutter up diffs any further...
+		if( $wgRequest->getVal('diff') || $wgRequest->getVal('oldid') ) {
+    		return true;
+		}
+		# Only trigger on article view for content pages, not for protect/delete/hist
+		if( ($action !='view' && $action !='purge') || !$article || !$article->exists() )
+			return true;
+		# Grab page and rev ids
+		$revid = $article->mRevision ? $article->mRevision->mId : $article->getLatest();
+		if( !$revid )
+			return true;
+		
+		$tag = $notes = '';
+		# Check the newest stable version...
+		$tfrev = $this->getStableRev( true );
+		$simpleTag = false;
 		// Is there a stable version?
-		if( !is_null($frev) ) {
+		if( !is_null($tfrev) ) {
+			global $wgLang;
 			# Get flags and date
-			$time = $wgLang->date( $frev->getTimestamp(), true );
-			$flags = $frev->getTags();
+			$flags = $tfrev->getTags();
 			# Get quality level
 			$quality = FlaggedRevs::isQuality( $flags );
 			$pristine =  FlaggedRevs::isPristine( $flags );
-			// Looking at some specific old stable revision ("&stableid=x")
-			// set to override given the relevant conditions. If the user is
-			// requesting the stable revision ("&stableid=x"), defer to override 
-			// behavior below, since it is the same as ("&stable=1").
-			if( $old ) {
-				$revsSince = FlaggedRevs::getRevCountSince( $this->parent, $frev->getRevId() );
-				$text = $frev->getTextForParse();
-	   			$parserOut = FlaggedRevs::parseStableText( $this->parent, $text, $frev->getRevId() );
-				# Construct some tagging for non-printable outputs. Note that the pending
-				# notice has all this info already, so don't do this if we added that already.
-				if( !$wgOut->isPrintable() ) {
-					$class = $quality ? 'fr-icon-quality' : 'fr-icon-stable';
-					$tooltip = $quality ? 'revreview-quality-title' : 'revreview-stable-title';
-					$tooltip = wfMsgHtml($tooltip);
-					// Simple icon-based UI
-					if( FlaggedRevs::useSimpleUI() ) {
-						$msg = $quality ? 'revreview-quick-quality-old' : 'revreview-quick-basic-old';
-						$html = "<span class='{$class}' title=\"{$tooltip}\"></span>" . 
-							wfMsgExt( $msg, array('parseinline'), $frev->getRevId(), $time );
-						$tag .= FlaggedRevsXML::prettyRatingBox( $frev, $html, $revsSince, true, false, $old );
-					// Standard UI
-					} else {
-						$msg = $quality ? 'revreview-quality-old' : 'revreview-basic-old';
-						$tag .= "<span class='{$class}' title=\"{$tooltip}\"></span>" . 
-							wfMsgExt( $msg, array('parseinline'), $frev->getRevId(), $time );
-						# Hide clutter
-						if( !empty($flags) ) {
-							$tag .= " " . FlaggedRevsXML::ratingToggle();
-							$tag .= "<span id='mw-revisionratings' style='display:block;'><br/>" .
-								wfMsgHtml('revreview-oldrating') . FlaggedRevsXML::addTagRatings( $flags ) . '</span>';
-						}
-					}
-				}
-				# Output HTML
-	   			$wgOut->addParserOutput( $parserOut );
-				$wgOut->setRevisionId( $frev->getRevId() );
-				$notes = $this->getReviewNotes( $frev );
-				# Index the stable version only
-				$wgOut->setRobotpolicy( 'noindex,nofollow' );
-				# Tell MW that parser output is done
-				$outputDone = true;
-				$pcache = false;
-			// Looking at some specific old revision (&oldid=x) or if FlaggedRevs is not
-			// set to override given the relevant conditions (like &action=protect).
-			} else if( !$stable && !$this->pageOverride() ) {
-				$revsSince = FlaggedRevs::getRevCountSince( $this->parent, $frev->getRevId() );
-				$synced = false;
-				if( $srev->getRevId() == $frev->getRevId() ) {
-					$synced = FlaggedRevs::stableVersionIsSynced( $frev, $this->parent );
-				}
-				# Give notice to newewer users if an unreviewed edit was completed...
-				if( $wgRequest->getVal('shownotice') && !$synced && !$wgUser->isAllowed('review') ) {
-					$tooltip = wfMsgHtml('revreview-draft-title');
-					$pending = "<span class='fr-icon-current' title=\"{$tooltip}\"></span>" . 
-						wfMsgExt('revreview-edited',array('parseinline'),$frev->getRevId(),$revsSince);
-					$pending = "<div id='mw-reviewnotice' class='flaggedrevs_preview plainlinks'>$pending</div>";
-					# Notice should always use subtitle
-					$this->reviewNotice = $pending;
-				}
+			
+			$time = $wgLang->date( $tfrev->getTimestamp(), true );
+			// Looking at some specific old rev or if flagged revs override only for anons
+			if( !$this->pageOverride() ) {
+				$revs_since = FlaggedRevs::getRevCountSince( $article, $tfrev->getRevId() );
+				
+				$synced = FlaggedRevs::flaggedRevIsSynced( $tfrev, $article, null, null );
 				# If they are synced, do special styling
 				$simpleTag = !$synced;
-				# Construct some tagging for non-printable outputs. Note that the pending
-				# notice has all this info already, so don't do this if we added that already.
-				if( !$wgOut->isPrintable() && !$pending && !(FlaggedRevs::lowProfileUI() && $synced) ) {
-					$class = 'fr-icon-current'; // default
-					$tooltip = 'revreview-draft-title';
-					// Simple icon-based UI
+				# Construct some tagging
+				if( !$wgOut->isPrintable() ) {
 					if( FlaggedRevs::useSimpleUI() ) {
 						if( $synced ) {
 							$msg = $quality ? 'revreview-quick-quality-same' : 'revreview-quick-basic-same';
-							$class = $quality ? 'fr-icon-quality' : 'fr-icon-stable';
-							$tooltip = $quality ? 'revreview-quality-title' : 'revreview-stable-title';
-							$msgHTML = wfMsgExt( $msg, array('parseinline'), $frev->getRevId(), $revsSince );
+							$css = $quality ? 'fr-tab_quality' : 'fr-tab_stable';
 						} else {
 							$msg = $quality ? 'revreview-quick-see-quality' : 'revreview-quick-see-basic';
-							$msgHTML = wfMsgExt( $msg, array('parseinline'), $frev->getRevId(), $revsSince );
+							$css = 'fr-tab_current';
 						}
-						$tooltip = wfMsgHtml($tooltip);
-						$msgHTML = "<span class='{$class}' title=\"{$tooltip}\"></span>$msgHTML";
-						$tag .= FlaggedRevsXML::prettyRatingBox( $frev, $msgHTML, $revsSince, $synced, $synced, $old );
-					// Standard UI
+						$tag .= "<span class='{$css} plainlinks'></span>" .
+								wfMsgExt( $msg, array('parseinline'), $tfrev->getRevId(), $revs_since );
+						$tag .= $this->prettyRatingBox( $tfrev, $flags, $revs_since, false, $synced );
 					} else {
 						if( $synced ) {
 							$msg = $quality ? 'revreview-quality-same' : 'revreview-basic-same';
-							$class = $quality ? 'fr-icon-quality' : 'fr-icon-stable';
-							$tooltip = $quality ? 'revreview-quality-title' : 'revreview-stable-title';
-							$msgHTML = wfMsgExt( $msg, array('parseinline'), $frev->getRevId(), $time, $revsSince );
 						} else {
 							$msg = $quality ? 'revreview-newest-quality' : 'revreview-newest-basic';
-							$msg .= ($revsSince == 0) ? '-i' : '';
-							$msgHTML = wfMsgExt( $msg, array('parseinline'), $frev->getRevId(), $time, $revsSince );
 						}
-						$tooltip = wfMsgHtml($tooltip);
-						$tag .= "<span class='{$class}' title=\"{$tooltip}\"></span>" . $msgHTML;
+						$tag .= wfMsgExt( $msg, array('parseinline'), $tfrev->getRevId(), $time, $revs_since );
 						# Hide clutter
 						if( !empty($flags) ) {
-							$tag .= " " . FlaggedRevsXML::ratingToggle();
-							$tag .= "<span id='mw-revisionratings' style='display:block;'><br/>" .
-								wfMsgHtml('revreview-oldrating') . FlaggedRevsXML::addTagRatings( $flags ) . '</span>';
+							$tag .= " <span id='mw-revisiontoggle' class='flaggedrevs_toggle' style='display:none; cursor:pointer;'" .
+								" onclick='javascript:toggleRevRatings()'>".wfMsg('revreview-toggle') . "</span>";
+							$tag .= "<span id='mw-revisionratings' style='display:block;'>" .
+								wfMsgHtml('revreview-oldrating') . $this->addTagRatings( $flags ) . '</span>';
 						}
 					}
 				}
-				# Index the stable version only if it is the default
-				if( $this->showStableByDefault() ) {
-					$wgOut->setRobotpolicy( 'noindex,nofollow' );
-				}
-			// The relevant conditions are met to override the page with the stable version.
+			// Viewing the page normally: override the page
 			} else {
-	   			# We will be looking at the reviewed revision...
-	   			$revsSince = FlaggedRevs::getRevCountSince( $this->parent, $frev->getRevId() );
+       			# We will be looking at the reviewed revision...
+       			$revs_since = FlaggedRevs::getRevCountSince( $article, $tfrev->getRevId() );
+				
 				# Get parsed stable version
-				$parserOut = FlaggedRevs::getPageCache( $this->parent );
-				if( $parserOut == false ) {
-					$text = $frev->getTextForParse();
-	   				$parserOut = FlaggedRevs::parseStableText( $this->parent, $text, $frev->getRevId() );
-	   				# Update the stable version cache
-					FlaggedRevs::updatePageCache( $this->parent, $parserOut );
-	   			}
-				$synced = FlaggedRevs::stableVersionIsSynced( $frev, $this->parent, $parserOut, null );
+				$parserOut = FlaggedRevs::getPageCache( $article );
+				if( $parserOut==false ) {
+					global $wgUseStableTemplates;
+					if( $wgUseStableTemplates ) {
+						$rev = Revision::newFromId( $tfrev->getRevId() );
+						$text = $rev->getText();
+					} else {
+						$text = $tfrev->getText();
+					}
+       				$parserOut = FlaggedRevs::parseStableText( $article, $text, $tfrev->getRevId() );
+       				# Update the stable version cache
+       				FlaggedRevs::updatePageCache( $article, $parserOut );
+       			}
+				
+				$synced = FlaggedRevs::flaggedRevIsSynced( $tfrev, $article, $parserOut, null );
 				# Construct some tagging
-				if( !$wgOut->isPrintable() && !FlaggedRevs::lowProfileUI() ) {
-					$class = $quality ? 'fr-icon-quality' : 'fr-icon-stable';
-					$tooltip = $quality ? 'revreview-quality-title' : 'revreview-stable-title';
-					$tooltip = wfMsgHtml($tooltip);
-					// Simple icon-based UI
+				if( !$wgOut->isPrintable() ) {
 					if( FlaggedRevs::useSimpleUI() ) {
 						$msg = $quality ? 'revreview-quick-quality' : 'revreview-quick-basic';
-						$msg = $synced ? "{$msg}-same" : $msg;
-						$html = "<span class='{$class}' title=\"{$tooltip}\"></span>" .
-							wfMsgExt( $msg, array('parseinline'), $frev->getRevId(), $revsSince );
+						$msg = $synced ? $msg . '-same' : $msg;
+						$css = $quality ? 'fr-tab_quality' : 'fr-tab_stable';
 						
-						$tag = FlaggedRevsXML::prettyRatingBox( $frev, $html, $revsSince, true, $synced );
-					// Standard UI
+						$tag = "<span class='{$css} plainlinks'></span>" .
+							wfMsgExt( $msg, array('parseinline'), $tfrev->getRevId(), $revs_since );
+					 	$tag .= $this->prettyRatingBox( $tfrev, $flags, $revs_since, true, $synced );
 					} else {
 						$msg = $quality ? 'revreview-quality' : 'revreview-basic';
-						if( $synced ) {
-							$msg .= '-same';
-						} else if( $revsSince == 0 ) {
-							$msg .= '-i';
-						}
-						$tag = "<span class='{$class} plainlinks' title=\"{$tooltip}\"></span>" .
-							wfMsgExt( $msg, array('parseinline'), $frev->getRevId(), $time, $revsSince );
+						$msg = $synced ? $msg . '-same' : $msg;
+						
+						$tag = wfMsgExt( $msg, array('parseinline'), $tfrev->getRevId(), $time, $revs_since );
 						if( !empty($flags) ) {
-							$tag .= " " . FlaggedRevsXML::ratingToggle();
-							$tag .= "<span id='mw-revisionratings' style='display:block;'><br/>" . 
-								FlaggedRevsXML::addTagRatings( $flags ) . '</span>';
+							$tag .= " <span id='mw-revisiontoggle' class='flaggedrevs_toggle' style='display:none; cursor:pointer;'" .
+								" onclick='javascript:toggleRevRatings()'>" . wfMsg('revreview-toggle') . "</span>";
+							$tag .= "<span id='mw-revisionratings' style='display:block;'>" .
+								$this->addTagRatings( $flags ) . '</span>';
 						}
 					}
 				}
 				# Output HTML
-	   			$wgOut->addParserOutput( $parserOut );
-				$wgOut->setRevisionId( $frev->getRevId() );
-				$notes = $this->getReviewNotes( $frev );
+       			$wgOut->addParserOutput( $parserOut );
+				$notes = $this->ReviewNotes( $tfrev );
 				# Tell MW that parser output is done
 				$outputDone = true;
 				$pcache = false;
@@ -390,693 +234,778 @@ class FlaggedArticle extends Article {
 			else if( $simpleTag )
 				$tagClass = 'flaggedrevs_notice';
 			else if( $pristine )
-				$tagClass = 'flaggedrevs_pristine';
+				$tagClass = 'flaggedrevs_tag3';
 			else if( $quality )
-				$tagClass = 'flaggedrevs_quality';
+				$tagClass = 'flaggedrevs_tag2';
 			else
-				$tagClass = 'flaggedrevs_basic';
+				$tagClass = 'flaggedrevs_tag1';
 			# Wrap tag contents in a div
-			if( $tag !='' ) {
-				$tag = "<div id='mw-revisiontag' class='$tagClass plainlinks noprint'>$tag</div>";
-				$this->reviewNotice .= $tag;
-			}
-			# Add revision notes
-			$wgOut->mBodytext = $wgOut->mBodytext . $notes;
-		// Add "no reviewed version" tag, but not for main page or printable output.
-		} else if( !$wgOut->isPrintable() ) {
-			// Simple icon-based UI
+			if( $tag !='' )
+				$tag = '<div id="mw-revisiontag" class="'.$tagClass.' plainlinks">'.$tag.'</div>';
+			# Set the new body HTML, place a tag on top
 			if( FlaggedRevs::useSimpleUI() ) {
-				$msg = $old ? 'revreview-quick-invalid' : 'revreview-quick-none';
-				$tag .= "<span class='fr-icon-current plainlinks'></span>" .
-					wfMsgExt($msg,array('parseinline'));
-				$tag = "<div id='mw-revisiontag' class='flaggedrevs_short plainlinks noprint'>$tag</div>";
-				$this->reviewNotice .= $tag;
-			// Standard UI
+				$this->reviewNotice = $tag;
 			} else {
-				$msg = $old ? 'revreview-invalid' : 'revreview-noflagged';
-				$tag = "<div id='mw-revisiontag' class='flaggedrevs_notice plainlinks noprint'>" .
-					wfMsgExt($msg, array('parseinline')) . "</div>";
-				$this->reviewNotice .= $tag;
+				$this->reviewNotice = $tag;
+			}
+			$wgOut->mBodytext = $wgOut->mBodytext . $notes;
+		// Add "no reviewed version" tag, but not for main page
+		} else if( !$wgOut->isPrintable() && !FlaggedRevs::isMainPage( $article->getTitle() ) ) {
+			if( FlaggedRevs::useSimpleUI() ) {
+				$tag .= "<span class='fr-tab_current plainlinks'></span>" .
+					wfMsgExt('revreview-quick-none',array('parseinline'));
+				$tag = '<div id="mw-revisiontag" class="flaggedrevs_short plainlinks">'.$tag.'</div>';
+				$this->reviewNotice = $tag;
+			} else {
+				$tag = '<div id="mw-revisiontag" class="flaggedrevs_notice plainlinks">' .
+					wfMsgExt('revreview-noflagged', array('parseinline')) . '</div>';
+				$this->reviewNotice = $tag;
 			}
 		}
-		$this->displayTag();
 
 		return true;
-	}
-	
-	/**
-	 * Get the normal and display files for the underlying ImagePage.
-	 * If the a stable version needs to be displayed, this will set $normalFile
-	 * to the current version, and $displayFile to the desired version.
-	 *
-	 * If no stable version is required, the reference parameters will not be set
-	 *
-	 * Depends on $wgRequest
-	 */
-	public function imagePageFindFile( &$normalFile, &$displayFile ) {
-		global $wgRequest;
-		# Determine timestamp. A reviewed version may have explicitly been requested...
-		$frev = null;
-		$time = false;
-		if( $reqId = $wgRequest->getVal('stableid') ) {
-			$frev = FlaggedRevision::newFromTitle( $this->parent->getTitle(), $reqId );
-		} else if( $this->pageOverride() ) {
-			$frev = $this->getStableRev( true );
-		}
-		if( !is_null($frev) ) {
-			$time = $frev->getFileTimestamp();
-			// B/C, may be stored in associated image version metadata table
-			if( !$time ) {
-				$dbr = wfGetDB( DB_SLAVE );
-				$time = $dbr->selectField( 'flaggedimages', 
-					'fi_img_timestamp',
-					array( 'fi_rev_id' => $frev->getRevId(),
-						'fi_name' => $this->parent->getTitle()->getDBkey() ),
-					__METHOD__ );
-			}
-			# NOTE: if not found, this will use the current
-			$this->parent = new ImagePage( $this->parent->getTitle(), $time );
-		}
-		if ( !$time ) {
-			# Try request parameter
-			$time = $wgRequest->getVal( 'filetimestamp', false );
-		}
+    }
 
-		if ( !$time ) {
-			// Use the default behaviour
-			return;
-		}
-
-		$title = $this->parent->getTitle();
-		$displayFile = wfFindFile( $title, $time );
-		# If none found, try current
-		if ( !$displayFile ) {
-			wfDebug( __METHOD__.": {$title->getPrefixedDBkey()}: $time not found, using current\n" );
-			$displayFile = wfFindFile( $title );
-			# If none found, use a valid local placeholder
-			if( !$displayFile ) {
-				$displayFile = wfLocalFile( $title ); // fallback to current
-			}
-			$normalFile = $displayFile;
-		# If found, set $normalFile
-		} else {
-			wfDebug( __METHOD__.": {$title->getPrefixedDBkey()}: using timestamp $time\n" );
-			$normalFile = wfFindFile( $title );
-		}
-	}
-
-	/**
+    /**
 	 * Adds latest stable version tag to page when editing
 	 */
-	public function addToEditView( $editPage ) {
-		global $wgRequest, $wgOut;
+    public function addToEditView( $editform ) {
+		global $wgRequest, $wgTitle, $wgOut;
 		# Talk pages cannot be validated
-		if( !$this->isReviewable() )
+		if( !$editform->mArticle || !$this->isReviewable() )
 			return false;
 		# Find out revision id
-	   	$revId = $editPage->oldid ? $editPage->oldid : $this->parent->getLatest();
+		if( $editform->mArticle->mRevision ) {
+       		$revid = $editform->mArticle->mRevision->mId;
+		} else {
+       		$revid = $editform->mArticle->getLatest();
+       	}
 		# Grab the ratings for this revision if any
-		if( !$revId )
+		if( !$revid )
 			return true;
 		# Set new body html text as that of now
-		$tag = $warning = '';
+		$tag = '';
 		# Check the newest stable version
-		$frev = $this->getStableRev();
-		if( !is_null($frev) ) {
+		$tfrev = $this->getStableRev();
+		if( !is_null($tfrev) ) {
 			global $wgLang, $wgUser, $wgFlaggedRevsAutoReview;
 
-			$time = $wgLang->date( $frev->getTimestamp(), true );
-			$flags = $frev->getTags();
-			$revsSince = FlaggedRevs::getRevCountSince( $this->parent, $frev->getRevId() );
+			$time = $wgLang->date( $tfrev->getTimestamp(), true );
+			$flags = $tfrev->getTags();
+			$revs_since = FlaggedRevs::getRevCountSince( $editform->mArticle, $tfrev->getRevId() );
 			# Construct some tagging
 			$quality = FlaggedRevs::isQuality( $flags );
-			/*
+			# Hide clutter
+			if( FlaggedRevs::useSimpleUI() ) {
+				$msg = $quality ? 'revreview-quick-see-quality' : 'revreview-quick-see-basic';
+				$tag = "<span class='fr-tab_current plainlinks'></span>" .
+					wfMsgExt( $msg,array('parseinline'), $tfrev->getRevId(), $revs_since );
+				$tag .= $this->prettyRatingBox( $tfrev, $flags, $revs_since, false );
+				$tag = '<div id="mw-revisiontag" class="flaggedrevs_short plainlinks">'.$tag.'</div>';
+				
+				$this->reviewNotice = $tag;
+			} else {
+				$msg = $quality ? 'revreview-newest-quality' : 'revreview-newest-basic';
+				$tag = wfMsgExt( $msg, array('parseinline'), $tfrev->getRevId(), $time, $revs_since );
+				# Hide clutter
+				if( !empty($flags) ) {
+					$tag .= ' <span id="mw-revisiontoggle" class="flaggedrevs_toggle" style="display:none; cursor:pointer;"' .
+						' onclick="javascript:toggleRevRatings()">'.wfMsg('revreview-toggle').'</span>';
+					$tag .= '<span id="mw-revisionratings" style="display:block;">' .
+						wfMsg('revreview-oldrating') . $this->addTagRatings( $flags ) . '</span>';
+				}
+				$tag = '<div id="mw-revisiontag" class="flaggedrevs_notice plainlinks">' . $tag . '</div>';
+				
+				$this->reviewNotice = $tag;
+			}
+			
+			if( !empty($flags) ) {
+				$tag = ' <span id="mw-revisiontoggle" class="flaggedrevs_toggle" style="display:none; cursor:pointer;"' .
+					' onclick="javascript:toggleRevRatings()">'.wfMsg('revreview-toggle').'</span>';
+				$tag .= '<span id="mw-revisionratings" style="display:block;">' .
+					wfMsg('revreview-oldrating') . $this->addTagRatings( $flags ) .
+					'</span>';
+			}
 			# If this will be autoreviewed, notify the user...
-			if( $wgFlaggedRevsAutoReview && $wgUser->isAllowed('review') ) {
-				# If we are editing some reviewed revision, any changes this user
-				# makes will be autoreviewed...
-				$ofrev = FlaggedRevision::newFromTitle( $this->parent->getTitle(), $revId );
-				if( !is_null($ofrev) ) {
-					$msg = ( $revId==$frev->getRevId() ) ? 'revreview-auto-w' : 'revreview-auto-w-old';
-					$warning = "<div id='mw-autoreviewtag' class='flaggedrevs_warning plainlinks'>" .
-						wfMsgExt($msg,array('parseinline')) . "</div>";
-				}
-			}
-			*/
-			if( $frev->getRevId() != $revId ) {
-				# Streamlined UI
-				if( FlaggedRevs::useSimpleUI() ) {
-					$msg = $quality ? 'revreview-newest-quality' : 'revreview-newest-basic';
-					$msg .= ($revsSince == 0) ? '-i' : '';
-					$tag = "<span class='fr-checkbox'></span>" . 
-						wfMsgExt( $msg, array('parseinline'), $frev->getRevId(), $time, $revsSince );
-					$tag = "<div id='mw-revisiontag-edit' class='flaggedrevs_editnotice plainlinks'>$tag</div>";
-				# Standard UI
-				} else {
-					$msg = $quality ? 'revreview-newest-quality' : 'revreview-newest-basic';
-					$msg .= ($revsSince == 0) ? '-i' : '';
-					$tag = "<span class='fr-checkbox'></span>" . 
-						wfMsgExt( $msg, array('parseinline'), $frev->getRevId(), $time, $revsSince );
-					# Hide clutter
-					if( !empty($flags) ) {
-						$tag .= " " . FlaggedRevsXML::ratingToggle();
-						$tag .= '<span id="mw-revisionratings" style="display:block;"><br/>' .
-							wfMsg('revreview-oldrating') . FlaggedRevsXML::addTagRatings( $flags ) . '</span>';
+			if( !$wgFlaggedRevsAutoReview )
+				return true;
+			if( $wgUser->isAllowed('review') && $tfrev->getRevId()==$editform->mArticle->getLatest() ) {
+				# Check if user is allowed to renew the stable version.
+				# If it has been reviewed too highly for this user, abort.
+				foreach( $flags as $quality => $level ) {
+					if( !Revisionreview::userCan($quality,$level) ) {
+						return true;
 					}
-					$tag = "<div id='mw-revisiontag-edit' class='flaggedrevs_editnotice plainlinks'>$tag</div>";
 				}
-			}
-			# Output notice and warning for editors
-			$wgOut->addHTML( $tag . $warning );
-			
-			# Show diff to stable, to make things less confusing.
-			if( $frev->getRevId() == $revId )
-				return true; // nothing to show here
-			# Don't show for old revisions, diff, preview, or undo.
-			if( $editPage->oldid || $editPage->section === "new" || in_array($editPage->formtype,array('diff','preview')) ) {
-				return true; // nothing to show here
-			}
-			$leftNote = $quality ? 'revreview-quality-title' : 'revreview-stable-title';
-			$rightNote = 'revreview-draft-title';
-			$text = $frev->getRevText();
-			# Are we editing a section?
-			$section = ($editPage->section == "") ? false : intval($editPage->section);
-			if( $section !== false ) {
-				$text = $this->parent->getSection( $text, $section );
-			}
-			if( $text !== false && strcmp($text,$editPage->textbox1) !== 0 ) {
-				$diffEngine = new DifferenceEngine();
-				$diffEngine->showDiffStyle();
-				$wgOut->addHtml(
-					"<div>" .
-					"<table border='0' width='98%' cellpadding='0' cellspacing='4' class='diff'>" .
-					"<col class='diff-marker' />" .
-					"<col class='diff-content' />" .
-					"<col class='diff-marker' />" .
-					"<col class='diff-content' />" .
-					"<tr>" .
-						"<td colspan='2' width='50%' align='center' class='diff-otitle'><b>[" . wfMsgHtml($leftNote) . "]</b></td>" .
-						"<td colspan='2' width='50%' align='center' class='diff-ntitle'><b>[" . wfMsgHtml($rightNote) . "]</b></td>" .
-					"</tr>" .
-					$diffEngine->generateDiffBody( $text, $editPage->textbox1 ) .
-					"</table>" .
-					"</div>\n" );
+				$msg = ($revid==$tfrev->getRevId()) ? 'revreview-auto-w' : 'revreview-auto-w-old';
+				$wgOut->addHTML( '<div id="mw-autoreviewtag" class="flaggedrevs_warning plainlinks">' .
+					'<span class="fr-checkbox"></span>' . wfMsgExt($msg,array('parseinline')) . '</div>' );
 			}
 		}
 		return true;
-	}
-	
-	/**
-	 * Add unreviewed pages links
-	 */
-	public function addToCategoryView() {
-		global $wgOut, $wgUser;
-		
-		if( !$wgUser->isAllowed( 'review' ) )
-			return true;
-		# Load special page names
-		wfLoadExtensionMessages( 'OldReviewedPages' );
-		wfLoadExtensionMessages( 'UnreviewedPages' );
-		
-		$category = $this->parent->getTitle()->getText();
-		
-		$unreviewed = SpecialPage::getTitleFor( 'UnreviewedPages' );
-		$unreviewedLink = $wgUser->getSkin()->makeKnownLinkObj( $unreviewed, wfMsgHtml('unreviewedpages'),
-			"category={$category}" );
-		
-		$oldreviewed = SpecialPage::getTitleFor( 'OldReviewedPages' );
-		$oldreviewedLink = $wgUser->getSkin()->makeKnownLinkObj( $oldreviewed, wfMsgHtml('oldreviewedpages'),
-			"category={$category}" );
-			
-		$wgOut->appendSubtitle( "<p>$unreviewedLink / $oldreviewedLink</p>" );
-		
-		return true;
-	}
+    }
 
 	 /**
-	 * Add review form to pages when necessary
+	 * Add review form to page when necessary
 	 */
-	public function addReviewForm( $out ) {
-		global $wgRequest, $wgUser;
-		if( !$this->parent->exists() || !$this->isReviewable() || !$out->mRevisionId ) {
-			return true;
-		}
-		# Check action and if page is protected
-		$action = $wgRequest->getVal( 'action', 'view' );
-		if( ($action !='view' && $action !='purge') || !$this->parent->getTitle()->quickUserCan('edit') ) {
-			return true;
-		}
-		# User must have review rights
-		if( $wgUser->isAllowed( 'review' ) ) {
-			$this->addQuickReview( $out, (bool)$wgRequest->getVal('diff') );
-		}
-		return true;
-	}
-	
+    public function addReviewForm( $out ) {
+    	global $wgRequest, $wgArticle;
 
-	 /**
-	 * Add feedback form to pages when necessary
-	 */
-	public function addFeedbackForm( $out ) {
-		global $wgRequest, $wgUser;
-		# Check action and if page is protected
+		if( !$wgArticle || !$wgArticle->exists() || !$this->isReviewable() )
+			return true;
+		# Check if page is protected
 		$action = $wgRequest->getVal( 'action', 'view' );
-		if( ($action !='view' && $action !='purge') || !$out->mRevisionId ) {
+		if( ($action !='view' && $action !='purge') || !$wgArticle->getTitle()->quickUserCan( 'edit' ) ) {
 			return true;
 		}
-		# User must not have review rights
-		if( $wgUser->isAllowed( 'feedback' ) && !$wgUser->isAllowed( 'review' ) ) {
-			$this->addQuickFeedback( $out );
-		}
+		# Get revision ID
+		$revId = $out->mRevisionId ? $out->mRevisionId : $wgArticle->getLatest();
+		# We cannot review deleted revisions
+		if( !is_null($wgArticle->mRevision) && $wgArticle->mRevision->isDeleted( Revision::DELETED_TEXT ) )
+			return true;
+		# Add review form
+		$this->addQuickReview( $revId, $out, $this->isDiffFromStable );
+
 		return true;
-	}
-	
-	 /**
-	 * Adds a patrol link to non-reviewable pages
-	 */
-	public function addPatrolLink( &$outputDone, &$pcache ) {
-		global $wgRequest, $wgOut, $wgUser;
-		# For unreviewable pages, allow for basic patrolling
-		if( FlaggedRevs::isPagePatrollable( $this->parent->getTitle() ) ) {
-			# If we have been passed an &rcid= parameter, we want to give the user a
-			# chance to mark this new article as patrolled.
-			$rcid = $wgRequest->getIntOrNull( 'rcid' );
-			if( !is_null( $rcid ) && $rcid != 0 && $wgUser->isAllowed( 'review' ) ) {
-				$reviewTitle = SpecialPage::getTitleFor( 'RevisionReview' );
-				$wgOut->addHTML( "<div class='patrollink'>" .
-					wfMsgHtml( 'markaspatrolledlink',
-					$wgUser->getSkin()->makeKnownLinkObj( $reviewTitle, wfMsgHtml('markaspatrolledtext'),
-						"patrolonly=1&target={$this->parent->getTitle()->getPrefixedUrl()}&rcid={$rcid}" .
-						"&token=" . urlencode( $wgUser->editToken( $this->parent->getTitle()->getPrefixedText(), $rcid ) ) )
-			 		) .
-					'</div>'
-			 	);
-			}
-		}
-		return true;
-	}
+    }
+
 	 /**
 	 * Add link to stable version setting to protection form
 	 */
-	public function addVisibilityLink( $out ) {
-		global $wgUser, $wgRequest;
+    public function addVisibilityLink( $out ) {
+    	global $wgUser, $wgRequest, $wgTitle;
 
-		if( !$this->isReviewable() )
-			return true;
+    	if( !$this->isReviewable() )
+    		return true;
 
-		$action = $wgRequest->getVal( 'action', 'view' );
-		if( $action == 'protect' || $action == 'unprotect' ) {
+    	$action = $wgRequest->getVal( 'action', 'view' );
+    	if( $action=='protect' || $action=='unprotect' ) {
 			# Check for an overridabe revision
-			$frev = $this->getStableRev( true );
-			if( !$frev )
+			$tfrev = $this->getStableRev();
+			if( !$tfrev )
 				return true;
-			# Load special page name	
-			wfLoadExtensionMessages( 'Stabilization' );
 			$title = SpecialPage::getTitleFor( 'Stabilization' );
 			# Give a link to the page to configure the stable version
-			$out->mBodytext = "<span class='plainlinks'>" .
+			$out->mBodytext = '<span class="plainlinks">' .
 				wfMsgExt( 'revreview-visibility',array('parseinline'), $title->getPrefixedText() ) .
-				"</span>" . $out->mBodytext;
+				'</span>' . $out->mBodytext;
 		}
 		return true;
-	}
+    }
+
+	 /**
+	 * Set permalink to stable version if we are viewing a stable version.
+	 * Also sets the citation link if that extension is on.
+	 */
+    public function setPermaLink( $sktmp, &$nav_urls, &$revid, &$revid ) {
+		# Non-content pages cannot be validated
+		if( !$this->pageOverride() )
+			return true;
+		# Check for an overridabe revision
+		$tfrev = $this->getStableRev();
+		if( !$tfrev )
+			return true;
+		# Replace "permalink" with an actual permanent link
+		$nav_urls['permalink'] = array(
+			'text' => wfMsg( 'permalink' ),
+			'href' => $sktmp->makeSpecialUrl( 'Stableversions', "page=" . wfUrlencode( "{$sktmp->thispage}" ) . "&oldid={$tfrev->getRevId()}" )
+		);
+		# Are we using the popular cite extension?
+		global $wgHooks;
+		if( in_array('wfSpecialCiteNav',$wgHooks['SkinTemplateBuildNavUrlsNav_urlsAfterPermalink']) ) {
+			if( FlaggedRevs::isPageReviewable( $sktmp->mTitle ) && $revid !== 0 ) {
+				$nav_urls['cite'] = array(
+					'text' => wfMsg( 'cite_article_link' ),
+					'href' => $sktmp->makeSpecialUrl( 'Cite', "page=" . wfUrlencode( "{$sktmp->thispage}" ) . "&id={$tfrev->getRevId()}" )
+				);
+			}
+		}
+		return true;
+    }
 
 	 /**
 	 * Add stable version tabs. Rename some of the others if necessary.
 	 */
-	public function setActionTabs( $skin, &$contentActions ) {
-		global $wgRequest, $wgUser, $wgFlaggedRevsOverride, $wgFlaggedRevTabs;
+    public function setActionTabs( $sktmp, &$content_actions ) {
+    	global $wgRequest, $wgUser, $wgFlaggedRevsOverride, $wgFlaggedRevTabs;
 		# Get the subject page, not all skins have it :(
-		if( !isset($skin->mTitle) )
+		if( !isset($sktmp->mTitle) )
 			return true;
-		$title = $skin->mTitle->getSubjectPage();
+		$title = $sktmp->mTitle->getSubjectPage();
 		# Non-content pages cannot be validated
 		if( !FlaggedRevs::isPageReviewable( $title ) || !$title->exists() )
 			return true;
 		$article = new Article( $title );
 		$action = $wgRequest->getVal( 'action', 'view' );
-		# Add rating tab
-		if( $wgUser->isAllowed( 'feedback' ) ) {
-			wfLoadExtensionMessages( 'RatingHistory' );
-			$ratingTitle = SpecialPage::getTitleFor( 'RatingHistory' );
-			$contentActions['ratinghist'] = array(
-				'class' => false,
-				'text' => wfMsg('ratinghistory-tab'),
-				'href' => $ratingTitle->getLocalUrl('target='.$title->getPrefixedUrl())
-			);
-		}
 		# If we are viewing a page normally, and it was overridden,
 		# change the edit tab to a "current revision" tab
-	   	$srev = $this->getStableRev( true );
-	   	# No quality revs? Find the last reviewed one
-	   	if( is_null($srev) ) {
+       	$tfrev = $this->getStableRev();
+       	# No quality revs? Find the last reviewed one
+       	if( is_null($tfrev) ) {
 			return true;
 		}
-	   	# Be clear about what is being edited...
-		$synced = FlaggedRevs::stableVersionIsSynced( $srev, $article );
-	   	if( !$skin->mTitle->isTalkPage() && !$synced ) {
-	   		if( isset( $contentActions['edit'] ) ) {
-				if( $this->showStableByDefault() )
-					$contentActions['edit']['text'] = wfMsg('revreview-edit');
-				# If the user is requesting the draft or some revision, they don't need a diff.
-				if( $this->pageOverride() )
-					$contentActions['edit']['href'] = $title->getLocalUrl( 'action=edit' );
-	   		} if( isset( $contentActions['viewsource'] ) ) {
-				if( $this->showStableByDefault() )
-					$contentActions['viewsource']['text'] = wfMsg('revreview-source');
-				# If the user is requesting the draft or some revision, they don't need a diff.
-				if( $this->pageOverride() )
-					$contentActions['viewsource']['href'] = $title->getLocalUrl( 'action=edit' );
-			}
-	   	}
+       	# Be clear about what is being edited...
+       	if( !$sktmp->mTitle->isTalkPage() && $this->showStableByDefault() && !FlaggedRevs::flaggedRevIsSynced( $tfrev, $article ) ) {
+       		if( isset( $content_actions['edit'] ) )
+       			$content_actions['edit']['text'] = wfMsg('revreview-edit');
+       		if( isset( $content_actions['viewsource'] ) )
+       			$content_actions['viewsource']['text'] = wfMsg('revreview-source');
+       	}
 		# We can change the behavoir of stable version for this page to be different
 		# than the site default.
-		if( !$skin->mTitle->isTalkPage() && $wgUser->isAllowed('stablesettings') ) {
-			wfLoadExtensionMessages( 'Stabilization' );
-			$stableTitle = SpecialPage::getTitleFor( 'Stabilization' );
-			if( !isset($contentActions['protect']) && !isset($contentActions['unprotect']) ) {
-				wfLoadExtensionMessages( 'Stabilization' );
-				$contentActions['default'] = array(
-					'class' => false,
-					'text' => wfMsg('stabilization-tab'),
-					'href' => $stableTitle->getLocalUrl('page='.$title->getPrefixedUrl())
-				);
-			}
+		if( !$sktmp->mTitle->isTalkPage() && $wgUser->isAllowed('stablesettings') ) {
+			$stabTitle = SpecialPage::getTitleFor( 'Stabilization' );
+			$content_actions['default'] = array(
+				'class' => false,
+				'text' => wfmsg('stabilization-tab'),
+				'href' => $stabTitle->getLocalUrl('page='.$title->getPrefixedUrl())
+			);
 		}
 		// Add auxillary tabs...
-	 	if( !$wgFlaggedRevTabs || $synced )
-	   		return true;
-		// We are looking at the stable version
-		if( $this->pageOverride() || $wgRequest->getVal('stableid') ) {
-			$draftTabCss = '';
-			$stableTabCss = 'selected';
-		// We are looking at the talk page or diffs/hist/oldids
-		} else if( !in_array($action,array('view','purge','edit')) || $skin->mTitle->isTalkPage() ) {
-			$draftTabCss = '';
-			$stableTabCss = '';
-		// We are looking at the current revision or in edit mode
-		} else {
-			$draftTabCss = 'selected';
-			$stableTabCss = '';
-		}
-		$newActions = array();
-		$first = true;
-		# Straighten out order, set the tab AFTER the main tab is set
-		foreach( $contentActions as $tabAction => $data ) {
-			# Main page tab...
-			if( $first ) {
-				$first = false;
-				if( $synced ) {
-					$newActions[$tabAction] = $data; // keep it
-				} else {
-					# Add new tabs after first one
-					$newActions['stable'] = array(
-						'class' => $stableTabCss,
-						'text' => wfMsg('revreview-stable'),
-						'href' => $title->getLocalUrl( 'stable=1' )
-					);
-					$newActions['current'] = array(
-						'class' => $draftTabCss,
-						'text' => wfMsg('revreview-current'),
-						'href' => $title->getLocalUrl( 'stable=0' )
+     	if( !$wgFlaggedRevTabs )
+       		return true;
+       	// We are looking at the stable version
+       	if( $this->pageOverride() ) {
+			$new_actions = array(); $counter = 0;
+			# Straighten out order, set the tab AFTER the main tab is set
+			foreach( $content_actions as $tab_action => $data ) {
+				if( $counter==1 ) {
+					if( $this->showStableByDefault() ) {
+						$new_actions['current'] = array(
+							'class' => '',
+							'text' => wfMsg('revreview-current'),
+							'href' => $title->getLocalUrl( 'stable=0' )
 						);
+					} else {
+						$new_actions['stable'] = array(
+							'class' => 'selected',
+							'text' => wfMsg('revreview-stable'),
+							'href' => $title->getLocalUrl( 'stable=1' )
+						);
+					}
 				}
-			# The others...
-			} else {
-				$newActions[$tabAction] = $data;
-			}
-	   	}
-	   	# Reset static array
-	   	$contentActions = $newActions;
-		return true;
-	}
+       			$new_actions[$tab_action] = $data;
+       			$counter++;
+       		}
+       		# Reset static array
+       		$content_actions = $new_actions;
+    	} else if( ($action !='view' && $action !='purge') || $sktmp->mTitle->isTalkPage() ) {
+    	// We are looking at the talk page or diffs/hist/oldids, or in edit mode
+			$new_actions = array(); $counter = 0;
+			# Straighten out order, set the tab AFTER the main tab is set
+			foreach( $content_actions as $tab_action => $data ) {
+				if( $counter==1 ) {
+					if( $this->showStableByDefault() ) {
+						$new_actions['current'] = array(
+							'class' => '',
+							'text' => wfMsg('revreview-current'),
+							'href' => $title->getLocalUrl( 'stable=0' )
+						);
+					} else {
+						$new_actions['stable'] = array(
+							'class' => '',
+							'text' => wfMsg('revreview-stable'),
+							'href' => $title->getLocalUrl( 'stable=1' )
+						);
+					}
+				}
+       			$new_actions[$tab_action] = $data;
+       			$counter++;
+       		}
+       		# Reset static array
+       		$content_actions = $new_actions;
+    	} else if( $wgFlaggedRevTabs ) {
+		// We are looking at the current revision
+			$new_actions = array(); $counter = 0;
+			# Straighten out order, set the tab AFTER the main tab is set
+			foreach( $content_actions as $tab_action => $data ) {
+				if( $counter==1 ) {
+					if( $this->showStableByDefault() ) {
+						$new_actions['current'] = array(
+							'class' => 'selected',
+							'text' => wfMsg('revreview-current'),
+							'href' => $title->getLocalUrl( 'stable=0' )
+						);
+					} else {
+						$new_actions['stable'] = array(
+							'class' => '',
+							'text' => wfMsg('revreview-stable'),
+							'href' => $title->getLocalUrl( 'stable=1' )
+						);
+				 	}
+				}
+       			$new_actions[$tab_action] = $data;
+       			$counter++;
+       		}
+       		# Reset static array
+       		$content_actions = $new_actions;
+    	}
+    	return true;
+    }
 
 	 /**
 	 * Add link to stable version of reviewed revisions
 	 */
-	public function addToHistLine( $history, $row, &$s ) {
-		global $wgUser;
-		# Non-content pages cannot be validated. Stable version must exist.
-		if( !$this->isReviewable() || !$this->getStableRev() )
+    public function addToHistLine( $row, &$s ) {
+    	global $wgUser, $wgTitle;
+		# Non-content pages cannot be validated
+		if( !$this->isReviewable() )
 			return true;
+
+		if( !$this->dbr ) {
+    		$this->dbr = wfGetDB( DB_SLAVE );
+    	}
+
+    	$quality = $this->dbr->selectField( 'flaggedrevs', 'fr_quality',
+    		array( 'fr_page_id' => $wgTitle->getArticleID(),
+				'fr_rev_id' => $row->rev_id ),
+			__METHOD__,
+			array( 'FORCE INDEX' => 'PRIMARY' ) );
+
+    	if( $quality !== false ) {
+    		$skin = $wgUser->getSkin();
+
+    		$msg = ($quality >= 1) ? 'hist-quality' : 'hist-stable';
+    		$special = SpecialPage::getTitleFor( 'Stableversions' );
+    		$s .= ' <small><strong>' .
+				$skin->makeLinkObj( $special, wfMsgHtml( $msg ),
+					'page=' . urlencode( $wgTitle->getPrefixedText() ) .
+					'&oldid=' . $row->rev_id ) .
+				'</strong></small>';
+		}
+
+		return true;
+    }
+
+	 /**
+	 * Adds a brief review form to a page.
+	 * @param Integer $id, the revision ID
+	 * @param OutputPage $out
+	 * @param bool $top, should this form always go on top?
+	 */
+    public function addQuickReview( $id, $out, $top=false ) {
+		global $wgOut, $wgTitle, $wgUser, $wgRequest, $wgFlaggedRevComments, $wgFlaggedRevsOverride;
+		# User must have review rights
+		if( !$wgUser->isAllowed( 'review' ) )
+			return;
+		# Looks ugly when printed
+		if( $out->isPrintable() )
+			return;
+
 		$skin = $wgUser->getSkin();
-		list($link,$class) = FlaggedRevs::markHistoryRow( $this->parent->getTitle(), $row, $skin );
-		if( $link ) {
-			$s = "<span class='$class'>$s</span> <small><strong>[$link]</strong></small>";
-		}
-		return true;
-	}
-
-	 /**
-	 * Add link to stable version of reviewed revisions
-	 */
-	public function addToFileHistLine( $historyList, $file, &$s, &$css ) {
-		# Non-content pages cannot be validated. Stable version must exist.
-		if( !$this->isReviewable() || !$this->getStableRev() )
-			return true;
-		# Quality level for old versions selected all at once.
-		# Commons queries cannot be done all at once...
-		if( !$file->isOld() || !$file->isLocal() ) {
-			$quality = wfGetDB(DB_SLAVE)->selectField( 'flaggedrevs', 'fr_quality',
-				array( 'fr_img_sha1' => $file->getSha1(), 'fr_img_timestamp' => $file->getTimestamp() ),
-				__METHOD__ );
+		# If we are reviewing updates to a page, start off with the stable revision's
+		# flags. Otherwise, we just fill them in with the selected revision's flags.
+		if( $this->isDiffFromStable ) {
+			$flags = $this->getFlagsForRevision( $wgRequest->getVal('oldid') );
+			# Check if user is allowed to renew the stable version.
+			# It may perhaps have been reviewed too highly for this user, if so,
+			# then get the flags for the new revision itself.
+			foreach( $flags as $quality => $level ) {
+				if( !Revisionreview::userCan($quality,$level) ) {
+					$flags = $this->getFlagsForRevision( $id );
+					break;
+				}
+			}
 		} else {
-			$quality = is_null($file->quality) ? false : $file->quality;
+			$flags = $this->getFlagsForRevision( $id );
 		}
-		# If reviewed, class the line
-		if( $quality !== false ) {
-			$css = FlaggedRevsXML::getQualityColor( $quality );
+
+		$reviewtitle = SpecialPage::getTitleFor( 'Revisionreview' );
+		$action = $reviewtitle->getLocalUrl( 'action=submit' );
+		$form = Xml::openElement( 'form', array( 'method' => 'post', 'action' => $action ) );
+		$form .= "<fieldset><legend>" . wfMsgHtml( 'revreview-flag' ) . "</legend>\n";
+
+		if( $wgFlaggedRevsOverride )
+			$form .= '<p>'.wfMsgExt( 'revreview-text', array('parseinline') ).'</p>';
+
+		$form .= Xml::hidden( 'title', $reviewtitle->getPrefixedText() );
+		$form .= Xml::hidden( 'target', $wgTitle->getPrefixedText() );
+		$form .= Xml::hidden( 'oldid', $id );
+		$form .= Xml::hidden( 'action', 'submit');
+        $form .= Xml::hidden( 'wpEditToken', $wgUser->editToken() );
+
+		foreach( FlaggedRevs::$dimensions as $quality => $levels ) {
+			$options = array();
+			$disabled = false;
+			foreach( $levels as $idx => $label ) {
+				$selected = ( $flags[$quality]==$idx || $flags[$quality]==0 && $idx==1 );
+				# Do not show options user's can't set unless that is the status quo
+				if( !Revisionreview::userCan($quality, $flags[$quality]) ) {
+					$disabled = true;
+					$options[] = Xml::option( wfMsg( "revreview-$label" ), $idx, $selected );
+				} else if( Revisionreview::userCan($quality, $idx) ) {
+					$options[] = Xml::option( wfMsg( "revreview-$label" ), $idx, $selected );
+				}
+			}
+			$form .= "\n" . wfMsgHtml("revreview-$quality") . ": ";
+			$selectAttribs = array( 'name' => "wp$quality" );
+			if( $disabled )
+				$selectAttribs['disabled'] = 'disabled';
+			$form .= Xml::openElement( 'select', $selectAttribs );
+			$form .= implode( "\n", $options );
+			$form .= Xml::closeElement('select')."\n";
 		}
-		return true;
+        if( $wgFlaggedRevComments && $wgUser->isAllowed( 'validate' ) ) {
+			$form .= "<br/><p>" . wfMsgHtml( 'revreview-notes' ) . "</p>" .
+			"<p><textarea tabindex='1' name='wpNotes' id='wpNotes' rows='2' cols='80' style='width:100%'></textarea>" .
+			"</p>\n";
+		}
+
+		$imageParams = $templateParams = '';
+        if( !isset($out->mTemplateIds) || !isset($out->fr_ImageSHA1Keys) ) {
+        	return; // something went terribly wrong...
+        }
+        # Hack, add NS:title -> rev ID mapping
+        foreach( $out->mTemplateIds as $namespace => $title ) {
+        	foreach( $title as $dbkey => $id ) {
+        		$title = Title::makeTitle( $namespace, $dbkey );
+        		$templateParams .= $title->getPrefixedText() . "|" . $id . "#";
+        	}
+        }
+        $form .= Xml::hidden( 'templateParams', $templateParams ) . "\n";
+        # Hack, image -> timestamp mapping
+        foreach( $out->fr_ImageSHA1Keys as $dbkey => $timeAndSHA1 ) {
+        	foreach( $timeAndSHA1 as $time => $sha1 ) {
+        		$imageParams .= $dbkey . "|" . $time . "|" . $sha1 . "#";
+        	}
+        }
+		# For image pages, note the current image version
+		if( $wgTitle->getNamespace() == NS_IMAGE ) {
+			$file = wfFindFile( $wgTitle );
+			if( $file ) {
+				$imageParams .= $wgTitle->getDBkey() . "|" . $file->getTimestamp() . "|" . $file->getSha1() . "#";
+			}
+		}
+		$form .= Xml::hidden( 'imageParams', $imageParams ) . "\n";
+		
+		# Special token to discourage fiddling...
+		$checkCode = FlaggedRevs::getValidationKey( $templateParams, $imageParams, $wgUser->getID() );
+		
+		$form .= Xml::hidden( 'validatedParams', $checkCode ) . "\n";
+
+		$form .= "<p>".Xml::inputLabel( wfMsg( 'revreview-log' ), 'wpReason', 'wpReason', 50 )."\n";
+
+		$form .= '&nbsp;&nbsp;&nbsp;'.Xml::submitButton( wfMsg( 'revreview-submit' ) )."</p></fieldset>";
+		$form .= Xml::closeElement( 'form' );
+
+		if( $top )
+			$out->mBodytext =  $form . $out->mBodytext;
+		else
+			$wgOut->addHTML( '<hr style="clear:both"/>' . $form );
+    }
+
+	/**
+	 * @param array $flags
+	 * @param bool $prettybox
+	 * @param string $css, class to wrap box in
+	 * @return string
+	 * Generates a review box/tag
+	 */
+    public function addTagRatings( $flags, $prettyBox = false, $css='' ) {
+        global $wgFlaggedRevTags;
+
+        $tag = '';
+        if( $prettyBox )
+        	$tag .= "<table align='center' class='$css' cellpadding='0'>";
+		foreach( FlaggedRevs::$dimensions as $quality => $value ) {
+			$level = isset( $flags[$quality] ) ? $flags[$quality] : 0;
+			$encValueText = wfMsgHtml('revreview-' . FlaggedRevs::$dimensions[$quality][$level]);
+            $level = $flags[$quality];
+            $minlevel = $wgFlaggedRevTags[$quality];
+            if( $level >= $minlevel )
+                $classmarker = 2;
+            elseif( $level > 0 )
+                $classmarker = 1;
+            else
+                $classmarker = 0;
+
+            $levelmarker = $level * 20 + 20;
+            if( $prettyBox ) {
+            	$tag .= "<tr><td class='fr-text' valign='middle'>" . wfMsgHtml("revreview-$quality") .
+					"</td><td class='fr-value$levelmarker' valign='middle'>" .
+					$encValueText . "</td></tr>\n";
+            } else {
+				$tag .= "&nbsp;<span class='fr-marker-$levelmarker'><strong>" .
+					wfMsgHtml("revreview-$quality") .
+					"</strong>: <span class='fr-text-value'>$encValueText&nbsp;</span>&nbsp;" .
+					"</span>\n";
+			}
+		}
+		if( $prettyBox )
+			$tag .= '</table>';
+
+		return $tag;
+    }
+
+	/**
+	 * @param Row $trev, flagged revision row
+	 * @param array $flags
+	 * @param int $revs_since, revisions since review
+	 * @param bool $stable, are we referring to the stable revision?
+	 * @param bool $synced, does stable=current and this is one of them?
+	 * @return string
+	 * Generates a review box using a table using addTagRatings()
+	 */
+	public function prettyRatingBox( $tfrev, $flags, $revs_since, $stable=true, $synced=false ) {
+		global $wgLang;
+		# Get quality level
+		$quality = FlaggedRevs::isQuality( $flags );
+		$pristine = FlaggedRevs::isPristine( $flags );
+		$time = $wgLang->date( $tfrev->getTimestamp(), true );
+		# Some checks for which tag CSS to use
+		if( $pristine )
+			$tagClass = 'flaggedrevs_box3';
+		else if( $quality )
+			$tagClass = 'flaggedrevs_box2';
+		else
+			$tagClass = 'flaggedrevs_box1';
+        # Construct some tagging
+		if( $synced ) {
+			$msg = $quality ? 'revreview-quality-same' : 'revreview-basic-same';
+		} else {
+			$msg = $stable ? 'revreview-' : 'revreview-newest-';
+			$msg .= $quality ? 'quality' : 'basic';
+		}
+		# Make facny box...
+		$box = ' <span id="mw-revisiontoggle" class="flaggedrevs_toggle" style="display:none; cursor:pointer;"
+			onclick="javascript:toggleRevRatings();">'.wfMsgHtml('revreview-toggle').'</span>';
+		$box .= '<div id="mw-revisionratings" style="clear: both;">' .
+			wfMsgExt($msg, array('parseinline'), $tfrev->getRevId(), $time, $revs_since);
+
+		if( $stable && !empty($flags) ) {
+			$box .= $this->addTagRatings( $flags, true, "{$tagClass}a" );
+		}
+		$box .= '</div>';
+
+        return $box;
 	}
 
 	/**
 	 * @param FlaggedRevision $frev
 	 * @return string, revision review notes
 	 */
-	public function getReviewNotes( $frev ) {
-		global $wgUser;
-		if( !FlaggedRevs::allowComments() || !$frev || !$frev->getComment() ) {
+    public function ReviewNotes( $frev ) {
+    	global $wgUser, $wgFlaggedRevComments;
+
+    	if( !$wgFlaggedRevComments || !$row || $row->fr_comment == '' )
 			return '';
-		}
-   		$notes = "<div class='flaggedrevs_notes plainlinks'>";
-   		$notes .= wfMsgExt('revreview-note', array('parseinline'), User::whoIs( $frev->getUser() ) );
-   		$notes .= '<br/><i>' . $wgUser->getSkin()->formatComment( $frev->getComment() ) . '</i></div>';
-		return $notes;
-	}
+
+   		$skin = $wgUser->getSkin();
+   		$notes = '<p><div class="flaggedrevs_notes plainlinks">';
+   		$notes .= wfMsgExt('revreview-note', array('parse'), User::whoIs( $row->fr_user ) );
+   		$notes .= '<i>' . $skin->formatComment( $frev->getComment() ) . '</i></div></p><br/>';
+
+    	return $notes;
+    }
 
 	/**
 	* When comparing the stable revision to the current after editing a page, show
 	* a tag with some explaination for the diff.
 	*/
-	public function addDiffNoticeAndIncludes( $diff, $oldRev, $newRev ) {
+	public function addDiffNoticeAndIncludes( $diff, $OldRev, $NewRev ) {
 		global $wgRequest, $wgUser, $wgOut;
 
-		$diffOnly = $wgRequest->getBool( 'diffonly', $wgUser->getOption( 'diffonly' ) );
-
-		if( $wgOut->isPrintable() || !FlaggedRevs::isPageReviewable( $newRev->getTitle() ) )
+		if( $wgOut->isPrintable() )
 			return true;
-		# Check if this might be the diff to stable. If so, enhance it.
-		if( $newRev->isCurrent() && $oldRev ) {
-			$frev = $this->getStableRev();
-			if( $frev && $frev->getRevId() == $oldRev->getID() ) {
-				global $wgMemc, $wgParserCacheExpireTime, $wgUseStableTemplates, $wgUseStableImages;
-				
-				$changeList = array();
-				$skin = $wgUser->getSkin();
-				$article = new Article( $newRev->getTitle() );
-				
-				# Try the cache. Uses format <page ID>-<UNIX timestamp>.
-				$key = wfMemcKey( 'flaggedrevs', 'stableDiffs', 'templates', (bool)$wgUseStableTemplates, 
-					$article->getId(), $article->getTouched() );
-				$value = $wgMemc->get($key);
-				$tmpChanges = $value ? unserialize($value) : false;
-				
-				# Make a list of each changed template...
-				if( $tmpChanges === false ) {
-					$dbr = wfGetDB( DB_SLAVE );
-					// Get templates where the current and stable are not the same revision
-					if( $wgUseStableTemplates ) {
-						$ret = $dbr->select( array('flaggedtemplates','page','flaggedpages'),
-							array( 'ft_namespace', 'ft_title', 'fp_stable','ft_tmp_rev_id' ),
-							array( 'ft_rev_id' => $frev->getRevId(),
-								'page_namespace = ft_namespace',
-								'page_title = ft_title',
-								// If the page has a stable version, is it current?
-								// If not, is the specified one at review time current?
-								'fp_stable IS NOT NULL AND (fp_stable != page_latest) OR 
-									fp_stable IS NULL AND (ft_tmp_rev_id != page_latest)' ),
-							__METHOD__,
-							array(), /* OPTIONS */
-							array( 'flaggedpages' => array('LEFT JOIN','fp_page_id = page_id') )
-						);
-					// Get templates that are newer than the ones of the stable version of this page
-					} else {
-						$ret = $dbr->select( array('flaggedtemplates','page'),
-							array( 'ft_namespace', 'ft_title', 'ft_tmp_rev_id' ),
-							array( 'ft_rev_id' => $frev->getRevId(),
-								'page_namespace = ft_namespace',
-								'page_title = ft_title',
-								'ft_tmp_rev_id != page_latest' ),
-							__METHOD__ );
-					}
-					$tmpChanges = array();
-					while( $row = $dbr->fetchObject( $ret ) ) {
-						$title = Title::makeTitle( $row->ft_namespace, $row->ft_title );
-						$revID = isset($row->fp_stable) ? $row->fp_stable : $row->ft_tmp_rev_id;
-						$tmpChanges[] = $skin->makeKnownLinkObj( $title, $title->getPrefixedText(), 
-							"diff=cur&oldid={$revID}" );
-					}
-					$wgMemc->set( $key, serialize($tmpChanges), $wgParserCacheExpireTime );
-				}
-				# Add set to list
-				if( $tmpChanges )
-					$changeList += $tmpChanges;
-				
-				# Try the cache. Uses format <page ID>-<UNIX timestamp>.
-				$key = wfMemcKey( 'flaggedrevs', 'stableDiffs', 'images', (bool)$wgUseStableImages,
-					$article->getId(), $article->getTouched() );
-				$value = $wgMemc->get($key);
-				$imgChanges = $value ? unserialize($value) : false;
-				
-				// Get list of each changed image...
-				if( $imgChanges === false ) {
-					global $wgUseStableImages;
-					$dbr = wfGetDB( DB_SLAVE );
-					// Get images where the current and stable are not the same revision
-					if( $wgUseStableImages ) {
-						$ret = $dbr->select( array('flaggedimages','page','image','flaggedpages','flaggedrevs'),
-							array( 'fi_name' ),
-							array( 'fi_rev_id' => $frev->getRevId(),
-								// If the file has a stable version, is it current?
-								// If not, is the specified one at review time current?
-								'fr_img_sha1 IS NOT NULL AND (fr_img_sha1 != img_sha1) OR 
-									fr_img_sha1 IS NULL AND (fi_img_sha1 != img_sha1)' ),
-							__METHOD__,
-							array(), /* OPTIONS */
-							array( 'page' => array('INNER JOIN','page_namespace = '. NS_IMAGE .' AND page_title = fi_name'),
-								'image' => array('INNER JOIN','img_name = fi_name'),
-								'flaggedpages' => array('LEFT JOIN','fp_page_id = page_id'),
-								'flaggedrevs' => array('LEFT JOIN','fr_page_id = fp_page_id AND fr_rev_id = fp_stable') )
-						);
-					// Get images that are newer than the ones of the stable version of this page
-					} else {
-						$ret = $dbr->select( array('flaggedimages','image'),
-							array( 'fi_name' ),
-							array( 'fi_rev_id' => $frev->getRevId(),
-								'fi_name = img_name',
-								'fi_img_sha1 != img_sha1' ),
-							__METHOD__ );
-					}
-					$imgChanges = array();
-					while( $row = $dbr->fetchObject( $ret ) ) {
-						$title = Title::makeTitle( NS_IMAGE, $row->fi_name );
-						$imgChanges[] = $skin->makeKnownLinkObj( $title, $title->getPrefixedText() );
-					}
-					$wgMemc->set( $key, serialize($imgChanges), $wgParserCacheExpireTime );
-				}
-				if( $imgChanges )
-					$changeList += $imgChanges;
-				
-				# Some important information...
-				if( ($wgUseStableTemplates || $wgUseStableImages) && !empty($changeList) ) {
-					$notice = '<br/>' . wfMsgExt('revreview-update-use', array('parseinline'));
-				} else {
-					$notice = "";
-				}
-				# Explanatory text
-				if( $diffOnly && $wgUser->isAllowed('review') ) {
-					$exp = '<br/>'. wfMsgExt('revreview-diffonly', array('parseinline'));
-				} else {
-					$exp = "";
-				}
 
-				# If the user is allowed to review, prompt them!
-				if( empty($changeList) && $wgUser->isAllowed('review') ) {
-					$wgOut->addHTML( "<div id='mw-difftostable' class='flaggedrevs_diffnotice plainlinks'>" .
-						wfMsgExt('revreview-update-none', array('parseinline')).$notice.$exp.'</div>' );
-				} else if( !empty($changeList) && $wgUser->isAllowed('review') ) {
-					$changeList = implode(', ',$changeList);
-					$wgOut->addHTML( "<div id='mw-difftostable' class='flaggedrevs_diffnotice plainlinks'>" .
-						wfMsgExt('revreview-update', array('parseinline')).'&nbsp;'.$changeList.$notice.$exp.'</div>' );
-				} else if( !empty($changeList) ) {
-					$changeList = implode(', ',$changeList);
-					$wgOut->addHTML( "<div id='mw-difftostable' class='flaggedrevs_diffnotice plainlinks'>" .
-						wfMsgExt('revreview-update-includes', array('parseinline')).'&nbsp;'.$changeList.$notice.$exp.'</div>' );
-				}
-				# Set flag for review form to tell it to autoselect tag settings from the
-				# old revision unless the current one is tagged to.
-				if( !FlaggedRevision::newFromTitle( $diff->mTitle, $newRev->getID() ) ) {
-					$this->isDiffFromStable = true;
-				}
-			}
+		if( !$wgUser->isAllowed('review') || !$NewRev->isCurrent() || !$OldRev )
+			return true;
+
+		$frev = $this->getStableRev();
+		if( is_null($frev) || $frev->getRevId() != $OldRev->getID() )
+			return true;
+
+		$changeList = array();
+		$skin = $wgUser->getSkin();
+		# Make a list of each changed template...
+		$dbr = wfGetDB( DB_SLAVE );
+		$ret = $dbr->select( array('flaggedtemplates','page'),
+			array( 'ft_namespace', 'ft_title', 'ft_tmp_rev_id' ),
+			array( 'ft_rev_id' => $frev->getRevId(),
+				'ft_namespace = page_namespace',
+				'ft_title = page_title',
+				'ft_tmp_rev_id != page_latest' ),
+			__METHOD__ );
+
+		while( $row = $dbr->fetchObject( $ret ) ) {
+			$title = Title::makeTitle( $row->ft_namespace, $row->ft_title );
+			$changeList[] = $skin->makeKnownLinkObj( $title, $title->GetPrefixedText(),
+				"diff=cur&oldid=" . $row->ft_tmp_rev_id );
 		}
-		$newRevQ = FlaggedRevs::getRevQuality( $newRev->getTitle(), $newRev->getId() );
-		$oldRevQ = $oldRev ? FlaggedRevs::getRevQuality( $newRev->getTitle(), $oldRev->getId() ) : false;
-		# Diff between two revisions
-		if( $oldRev ) {
-			$wgOut->addHTML( "<table class='fr-diff-ratings' width='100%'><tr>" );
-			
-			$class = FlaggedRevsXML::getQualityColor( $oldRevQ );
-			if( $oldRevQ !== false ) {
-				$msg = $oldRevQ ? 'hist-quality' : 'hist-stable';
-			} else {
-				$msg = 'hist-draft';
-			}
-			$wgOut->addHTML( "<td width='50%' align='center'>" );
-			$wgOut->addHTML( "<span class='$class'><b>[" . wfMsgHtml( $msg ) . "]</b></span>" );
+		# And images...
+		$ret = $dbr->select( array('flaggedimages','image'),
+			array( 'fi_name' ),
+			array( 'fi_rev_id' => $frev->getRevId(),
+				'fi_name = img_name',
+				'fi_img_sha1 != img_sha1' ),
+			__METHOD__ );
 
-			$class = FlaggedRevsXML::getQualityColor( $newRevQ );
-			if( $newRevQ !== false ) {
-				$msg = $newRevQ ? 'hist-quality' : 'hist-stable';
-			} else {
-				$msg = 'hist-draft';
-			}
-			$wgOut->addHTML( "</td><td width='50%' align='center'>" );
-			$wgOut->addHTML( "<span class='$class'><b>[" . wfMsgHtml( $msg ) . "]</b></span>" );
+		while( $row = $dbr->fetchObject( $ret ) ) {
+			$title = Title::makeTitle( NS_IMAGE, $row->fi_name );
+			$changeList[] = $skin->makeKnownLinkObj( $title );
+		}
 
-			$wgOut->addHTML( '</td></tr></table>' );
-		# New page "diffs" - just one rev
+		if( empty($changeList) ) {
+			$wgOut->addHTML( '<div id="mw-difftostable" class="flaggedrevs_notice plainlinks">' .
+				wfMsgExt('revreview-update-none', array('parseinline')).'</div>' );
 		} else {
-			if( $newRevQ !== false ) {
-				$msg = $newRevQ ? 'hist-quality' : 'hist-stable';
-			} else {
-				$msg = 'hist-draft';
-			}
-			$wgOut->addHTML( "<table class='fr-diff-ratings' width='100%'><tr><td class='fr-$msg' align='center'>" );
-			$wgOut->addHTML( "<b>[" . wfMsgHtml( $msg ) . "]</b>" );
-			$wgOut->addHTML( '</td></tr></table>' );
+			$changeList = implode(', ',$changeList);
+			$wgOut->addHTML( '<div id="mw-difftostable" class="flaggedrevs_notice plainlinks"><p>' .
+				wfMsgExt('revreview-update', array('parseinline')) . ' ' . $changeList . '</div>' );
 		}
+		# Set flag for review form to tell it to autoselect tag settings from the
+		# old revision unless the current one is tagged to.
+		if( !FlaggedRevs::getFlaggedRev( $diff->mTitle, $NewRev->getID() ) ) {
+			$this->isDiffFromStable = true;
+		}
+
 		return true;
 	}
-	
+
+	/**
+	* Redirect users out to review the changes to the stable version.
+	* Only for people who can review and for pages that have a stable version.
+	*/
+    public function injectReviewDiffURLParams( $article, &$sectionanchor, &$extraq ) {
+    	global $wgUser, $wgReviewChangesAfterEdit;
+
+    	$frev = $this->getStableRev();
+		# Was this already autoreviewed, are we allowed?
+		if( $wgReviewChangesAfterEdit && !$this->skipReviewDiff && $frev && $wgUser->isAllowed('review') ) {
+			$extraq .= "oldid={$frev->getRevId()}&diff=cur";
+		} else {
+			if( $frev ){
+				$extraq .= "stable=0";
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	* When a new page is made by a reviwer, try to automatically review it.
+	*/
+	public function maybeMakeNewPageReviewed( $article, $user, $text, $c, $flags, $a, $b, $flags, $rev ) {
+		global $wgFlaggedRevsAutoReviewNew;
+
+		if( $this->skipAutoReview || !$wgFlaggedRevsAutoReviewNew || !$user->isAllowed('review') )
+			return true;
+		# Revision will be null for null edits
+		if( !$rev ) {
+			$this->skipReviewDiff = true; // Don't jump to diff...
+			return true;
+		}
+		# Assume basic flagging level
+		$flags = array();
+    	foreach( FlaggedRevs::$dimensions as $tag => $minQL ) {
+    		$flags[$tag] = 1;
+    	}
+		FlaggedRevs::autoReviewEdit( $article, $user, $text, $rev, $flags );
+
+		$this->skipReviewDiff = true; // Don't jump to diff...
+		$this->skipAutoReview = true; // Be sure not to do stuff twice
+
+		return true;
+	}
+
+	/**
+	* When an edit is made by a reviwer, if the current revision is the stable
+	* version, try to automatically review it.
+	*/
+	public function maybeMakeEditReviewed( $article, $user, $text, $c, $m, $a, $b, $flags, $rev ) {
+		global $wgFlaggedRevsAutoReview;
+
+		if( $this->skipAutoReview || !$wgFlaggedRevsAutoReview || !$user->isAllowed('review') )
+			return true;
+		# Revision will be null for null edits
+		if( !$rev ) {
+			$this->skipReviewDiff = true; // Don't jump to diff...
+			return true;
+		}
+		# The previous revision was the current one.
+		$prev_id = $article->getTitle()->getPreviousRevisionID( $rev->getID() );
+		if( !$prev_id )
+			return true;
+		$frev = FlaggedRevs::getStablePageRev( $article->getTitle() );
+		# Is this an edit directly to the stable version?
+		if( is_null($frev) || $prev_id != $frev->getRevId() )
+			return true;
+		# Grab the flags for this revision
+		$flags = $frev->getTags();
+		# Check if user is allowed to renew the stable version.
+		# If it has been reviewed too highly for this user, abort.
+		foreach( $flags as $quality => $level ) {
+			if( !Revisionreview::userCan($quality,$level) ) {
+				return true;
+			}
+		}
+		FlaggedRevs::autoReviewEdit( $article, $user, $text, $rev, $flags );
+
+		$this->skipReviewDiff = true; // Don't jump to diff...
+		$this->skipAutoReview = true; // Be sure not to do stuff twice
+
+		return true;
+	}
+
+	/**
+	* When a rollback is made by a reviwer, try to automatically review it.
+	*/
+	public function maybeMakeRollbackReviewed( $article, $user, $rev ) {
+		global $wgFlaggedRevsAutoReview;
+
+		if( $this->skipAutoReview || !$wgFlaggedRevsAutoReview || !$user->isAllowed('review') )
+			return true;
+		# Was this revision flagged?
+		$frev = FlaggedRevs::getFlaggedRev( $article->getTitle(), $rev->getID() );
+		if( is_null($frev) )
+			return true;
+		# Grab the flags for this revision
+		$flags = FlaggedRevs::getRevisionTags( $rev->getID() );
+		# Check if user is allowed to renew the stable version.
+		# If it has been reviewed too highly for this user, abort.
+		foreach( $flags as $quality => $level ) {
+			if( !Revisionreview::userCan($quality,$level) ) {
+				return true;
+			}
+		}
+		# Select the version that is now current. Create a new article object
+		# to avoid using one with outdated field data.
+		$article = new Article( $article->getTitle() );
+		$newRev = Revision::newFromId( $article->getLatest() );
+		FlaggedRevs::autoReviewEdit( $article, $user, $rev->getText(), $newRev, $flags );
+
+		$this->skipReviewDiff = true; // Don't jump to diff...
+		$this->skipAutoReview = true; // Be sure not to do stuff twice
+
+		return true;
+	}
+
 	/**
 	* Add a link to patrol non-reviewable pages.
 	* Also add a diff to stable for other pages if possible.
 	*/
-	public function addPatrolAndDiffLink( $diff, $oldRev, $newRev ) {
+	public function addPatrolAndDiffLink( $diff, $OldRev, $NewRev ) {
 		global $wgUser, $wgOut;
 		// Is there a stable version?
-		if( FlaggedRevs::isPageReviewable( $newRev->getTitle() ) ) {
-			if( !$oldRev ) {
+		if( FlaggedRevs::isPageReviewable( $NewRev->getTitle() ) ) {
+			if( !$OldRev )
 				return true;
-			}
+
 			$frev = $this->getStableRev();
-			if( $frev && $frev->getRevId() == $oldRev->getID() && $newRev->isCurrent() ) {
+			if( $frev && $frev->getRevId()==$OldRev->getID() && $NewRev->isCurrent() ) {
 				$this->isDiffFromStable = true;
 			}
 			# Give a link to the diff-to-stable if needed
 			if( $frev && !$this->isDiffFromStable ) {
-				$article = new Article( $newRev->getTitle() );
-				# Is the stable revision using the same revision as the current?
-				if( $article->getLatest() != $frev->getRevId() ) {
-					$patrol = '(' . $wgUser->getSkin()->makeKnownLinkObj( $newRev->getTitle(),
-						wfMsgHtml( 'review-diff2stable' ), "oldid={$frev->getRevId()}&diff=cur&diffonly=0" ) . ')';
-					$wgOut->addHTML( "<div class='fr-diff-to-stable' align='center'>$patrol</div>" );
-				}
+				$skin = $wgUser->getSkin();
+
+				$patrol = '(' . $skin->makeKnownLinkObj( $NewRev->getTitle(),
+					wfMsgHtml( 'review-diff2stable' ),
+					"oldid={$frev->getRevId()}&diff=cur" ) . ')';
+				$wgOut->addHTML( '<div align=center>' . $patrol . '</div>' );
 			}
 		// Prepare a change patrol link, if applicable
-		} else if( FlaggedRevs::isPagePatrollable( $newRev->getTitle() ) && $wgUser->isAllowed( 'review' ) ) {
+		} else if( $wgUser->isAllowed( 'review' ) ) {
 			// If we've been given an explicit change identifier, use it; saves time
 			if( $diff->mRcidMarkPatrolled ) {
 				$rcid = $diff->mRcidMarkPatrolled;
@@ -1102,10 +1031,11 @@ class FlaggedArticle extends Article {
 			}
 			// Build the link
 			if( $rcid ) {
-				$reviewTitle = SpecialPage::getTitleFor( 'RevisionReview' );
-				$patrol = '[' . $wgUser->getSkin()->makeKnownLinkObj( $reviewTitle, wfMsgHtml( 'revreview-patrol' ),
-					"patrolonly=1&target=" . $newRev->getTitle()->getPrefixedUrl() . "&rcid={$rcid}" .
-					"&token=" . urlencode( $wgUser->editToken( $newRev->getTitle()->getPrefixedText(), $rcid ) ) ) . ']';
+				$skin = $wgUser->getSkin();
+
+				$reviewtitle = SpecialPage::getTitleFor( 'Revisionreview' );
+				$patrol = '[' . $skin->makeKnownLinkObj( $reviewtitle, wfMsgHtml( 'revreview-patrol' ),
+					"patrolonly=1&target=" . $NewRev->getTitle()->getPrefixedUrl() . "&rcid={$rcid}" ) . ']';
 			} else {
 				$patrol = '';
 			}
@@ -1115,385 +1045,98 @@ class FlaggedArticle extends Article {
 	}
 
 	/**
-	* Redirect users out to review the changes to the stable version.
-	* Only for people who can review and for pages that have a stable version.
-	*/
-	public function injectReviewDiffURLParams( &$sectionAnchor, &$extraQuery ) {
-		global $wgUser, $wgReviewChangesAfterEdit;
-		# Don't show this for the talk page
-		if( !$this->isReviewable() || $this->parent->getTitle()->isTalkPage() )
-			return true;
-		# Get the stable version, from master
-		$frev = $this->getStableRev( false, true );
-		if( !$frev )
-			return true;
-		$latest = $this->parent->getTitle()->getLatestRevID(GAID_FOR_UPDATE);
-		// If we are supposed to review after edit, and it was not autoreviewed,
-		// and the user can actually make new stable version, take us to the diff...
-		if( $wgReviewChangesAfterEdit && $frev && $latest > $frev->getRevId() && $frev->userCanSetFlags() ) {
-			$extraQuery .= "oldid={$frev->getRevId()}&diff=cur&diffonly=0"; // override diff-only
-		// ...otherwise, go to the current revision after completing an edit.
-		} else {
-			if( $frev ){
-				$extraQuery .= "stable=0";
-				if( !$wgUser->isAllowed('review') && $this->showStableByDefault() ) {
-					$extraQuery .= "&shownotice=1";
-				}
-			}
-		}
-		return true;
-	}
-	
-	/**
-	* Add a hidden revision ID field to edit form.
-	* Needed for autoreview so it can select the flags from said revision.
-	*/
-	public function addRevisionIDField( $editPage, $out ) {
-		global $wgRequest;
-		# Find out revision id
-		if( $this->parent->mRevision ) {
-	   		$revId = $this->parent->mRevision->mId;
-		} else {
-			$latest = $this->parent->getTitle()->getLatestRevID(GAID_FOR_UPDATE);
-	   		$revId = $latest;
-	   	}
-		# If undoing a few consecutive top edits, we know the base ID
-		if( $undo = $wgRequest->getIntOrNull('undo') ) {
-			$undoAfter = $wgRequest->getIntOrNull('undoafter');
-			$latest = isset($latest) ? $latest : $this->parent->getTitle()->getLatestRevID(GAID_FOR_UPDATE);
-			if( $undoAfter && $undo == $this->parent->getLatest() ) {
-				$revId = $undoAfter;
-			}
-		}
-		$out->addHTML( "\n" . Xml::hidden( 'baseRevId', $revId ) );
-		return true;
-	}
-
-	/**
 	 * Get latest quality rev, if not, the latest reviewed one
 	 * @param Bool $getText, get text and params columns?
 	 * @param Bool $forUpdate, use DB master and avoid page table?
 	 * @return Row
 	 */
-	public function getStableRev( $getText = false, $forUpdate = false ) {
-		if( $this->stableRev === false ) {
+	public function getStableRev( $getText=false, $forUpdate=false ) {
+		if( $this->stablerev === false ) {
 			return null; // We already looked and found nothing...
 		}
-		# Cached results available?
-		if( !is_null($this->stableRev) ) {
-			return $this->stableRev;
-		}
+        # Cached results available?
+        if( $getText ) {
+  			if( !is_null($this->stablerev) && isset($this->stablerev->fr_text) ) {
+				return $this->stablerev;
+			}
+        } else {
+ 			if( !is_null($this->stablerev) ) {
+				return $this->stablerev;
+			}
+        }
 		# Get the content page, skip talk
-		$title = $this->parent->getTitle()->getSubjectPage();
+		global $wgTitle;
+		$title = $wgTitle->getSubjectPage();
 		# Do we have one?
-		$srev = FlaggedRevision::newFromStable( $title, $getText, $forUpdate );
-		if( $srev ) {
-			$this->stableRev = $srev;
-			$this->flags[$srev->getRevId()] = $srev->getTags();
-			return $srev;
-		} else {
-			$this->stableRev = false;
-			return null;
-		}
+		$row = FlaggedRevs::getStablePageRev( $title, $getText, $forUpdate );
+        if( $row ) {
+			$this->stablerev = $row;
+			return $row;
+	    } else {
+            $this->stablerev = false;
+            return null;
+        }
 	}
 
-	/**
+    /**
 	 * Get visiblity restrictions on page
 	 * @param Bool $forUpdate, use DB master?
 	 * @returns Array (select,override)
 	*/
-	public function getVisibilitySettings( $forUpdate = false ) {
-		# Cached results available?
-		if( !is_null($this->pageConfig) ) {
-			return $this->pageConfig;
+    public function getVisibilitySettings( $forUpdate=false ) {
+    	global $wgTitle;
+        # Cached results available?
+		if( !is_null($this->pageconfig) ) {
+			return $this->pageconfig;
 		}
 		# Get the content page, skip talk
-		$title = $this->parent->getTitle()->getSubjectPage();
+		$title = $wgTitle->getSubjectPage();
 
 		$config = FlaggedRevs::getPageVisibilitySettings( $title, $forUpdate );
-		$this->pageConfig = $config;
+		$this->pageconfig = $config;
 
 		return $config;
 	}
 
 	/**
-	 * @param int $revId
+	 * @param int $rev_id
 	 * @eturns Array, output of the flags for a given revision
 	 */
-	public function getFlagsForRevision( $revId ) {
-		# Cached results?
-		if( isset($this->flags[$revId]) ) {
-			return $this->flags[$revId];
-		}
-		# Get the flags
-		$flags = FlaggedRevs::getRevisionTags( $this->parent->getTitle(), $revId );
+    public function getFlagsForRevision( $rev_id ) {
+    	global $wgFlaggedRevTags;
+    	# Cached results?
+    	if( isset($this->flags[$rev_id]) && $this->flags[$rev_id] )
+    		return $this->flags[$rev_id];
+    	# Get the flags
+    	$flags = FlaggedRevs::getRevisionTags( $rev_id );
 		# Try to cache results
-		$this->flags[$revId] = $flags;
+		$this->flags[$rev_id] = $flags;
 
 		return $flags;
-	}
-	
-	 /**
-	 * Adds a brief review form to a page.
-	 * @param OutputPage $out
-	 * @param Title $title
-	 * @param bool $top, should this form always go on top?
-	 */
-	public function addQuickReview( $out, $top = false ) {
-		global $wgOut, $wgUser, $wgRequest, $wgFlaggedRevsOverride;
-		# Revision being displayed
-		$id = $out->mRevisionId;
-		# Must be a valid non-printable output
-		if( !$id || $out->isPrintable() ) {
-			return false;
-		}
-		if( !isset($out->mTemplateIds) || !isset($out->fr_ImageSHA1Keys) ) {
-			return false; // something went terribly wrong...
-		}
-		$skin = $wgUser->getSkin();
-		
-		# Variable for sites with no flags, otherwise discarded
-		$approve = $wgRequest->getBool('wpApprove');
-		# See if the version being displayed is flagged...
-		$oldFlags = $this->getFlagsForRevision( $id );
-		# If we are reviewing updates to a page, start off with the stable revision's
-		# flags. Otherwise, we just fill them in with the selected revision's flags.
-		if( $this->isDiffFromStable ) {
-			$srev = $this->getStableRev( true );
-			$flags = $srev->getTags();
-			# Check if user is allowed to renew the stable version. 
-			# If not, then get the flags for the new revision itself.
-			if( !RevisionReview::userCanSetFlags( $oldFlags ) ) {
-				$flags = $oldFlags;
-			}
-		} else {
-			$flags = $this->getFlagsForRevision( $id );
-		}
-
-		$reviewTitle = SpecialPage::getTitleFor( 'RevisionReview' );
-		$action = $reviewTitle->getLocalUrl( 'action=submit' );
-		$form = Xml::openElement( 'form', array( 'method' => 'post', 'action' => $action, 'id' => 'mw-reviewform' ) );
-		$form .= Xml::openElement( 'fieldset', array('class' => 'flaggedrevs_reviewform noprint') );
-		$form .= "<legend>" . wfMsgHtml( 'revreview-flag', $id ) . "</legend>\n";
-
-		if( $wgFlaggedRevsOverride ) {
-			$form .= wfMsgExt( 'revreview-text', array('parse') );
-		} else {
-			$form .= wfMsgExt( 'revreview-text2', array('parse') );
-		}
-
-		# Current user has too few rights to change at least one flag, thus entire form disabled
-		$disabled = !RevisionReview::userCanSetFlags( $flags );
-		if( $disabled ) {
-			$form .= Xml::openElement( 'div', array('class' => 'fr-rating-controls-disabled',
-				'id' => 'fr-rating-controls-disabled') );
-			$toggle = array( 'disabled' => "disabled" );
-		} else {
-			$form .= Xml::openElement( 'div', array('class' => 'fr-rating-controls', 'id' => 'fr-rating-controls') );
-			$toggle = array();
-		}
-		$size = count(FlaggedRevs::getDimensions(),1) - count(FlaggedRevs::getDimensions());
-
-		$form .= Xml::openElement( 'span', array('id' => 'mw-ratingselects') );
-		# Loop through all different flag types
-		foreach( FlaggedRevs::getDimensions() as $quality => $levels ) {
-			$label = array();
-			$selected = ( isset($flags[$quality]) && $flags[$quality] > 0 ) ? $flags[$quality] : 1;
-			if( $disabled ) {
-				$label[$selected] = $levels[$selected];
-			# else collect all quality levels of a flag current user can set
-			} else {
-				foreach( $levels as $i => $name ) {
-					if ( !RevisionReview::userCan($quality, $i) ) {
-						break;
-					}
-					$label[$i] = $name;
-				}
-			}
-			$quantity = count( $label );
-			$form .= Xml::openElement( 'span', array('class' => 'fr-rating-options') ) . "\n";
-			$form .= "<b>" . wfMsgHtml("revreview-$quality") . ":</b>&nbsp;";
-			# If the sum of qualities of all flags is above 6, use drop down boxes
-			# 6 is an arbitrary value choosen according to screen space and usability
-			if( $size > 6 ) {
-				$attribs = array( 'name' => "wp$quality", 'onchange' => "updateRatingForm()" ) + $toggle;
-				$form .= Xml::openElement( 'select', $attribs );
-				foreach( $label as $i => $name ) {
-					$optionClass = array( 'class' => "fr-rating-option-$i" );
-					$form .= Xml::option( wfMsg( "revreview-$name" ), $i, ($i == $selected), $optionClass )
-						."\n";
-				}
-				$form .= Xml::closeElement('select')."\n";
-			# If there are more than two qualities (none, 1 and more) current user gets radio buttons
-			} else if( $quantity > 2 ) {
-				foreach( $label as $i => $name ) {
-					$attribs = array( 'class' => "fr-rating-option-$i", 'onchange' => "updateRatingForm()" );
-					$form .= Xml::radioLabel( wfMsg( "revreview-$name" ), "wp$quality", $i, "wp$quality".$i,
-						($i == $selected), $attribs ) . "\n";
-				}
-			# Otherwise make checkboxes (two qualities available for current user
-			# and disabled fields in case we are below the magic 6)
-			} else {
-				$i = ( $disabled ) ? $selected : 1;
-				$attribs = array( 'class' => "fr-rating-option-$i", 'onchange' => "updateRatingForm()" ) + $toggle;
-				$form .= Xml::checkLabel( wfMsg( "revreview-$label[$i]" ), "wp$quality", "wp$quality".$i,
-					($selected == $i), $attribs ) . "\n";
-			}
-			$form .= Xml::closeElement( 'span' );
-		}
-		# If there were none, make one checkbox to approve/unapprove
-		if( FlaggedRevs::dimensionsEmpty() ) {
-			$form .= Xml::openElement( 'span', array('class' => 'fr-rating-options') ) . "\n";
-			$form .= Xml::checkLabel( wfMsg( "revreview-approved" ), "wpApprove", "wpApprove", 1 ) . "\n";
-			$form .= Xml::closeElement( 'span' );
-		}
-		$form .= Xml::closeElement( 'span' );
-		
-		if( FlaggedRevs::allowComments() && $wgUser->isAllowed( 'validate' ) ) {
-			$form .= "<div id='mw-notebox'>\n";
-			$form .= "<p>".wfMsgHtml( 'revreview-notes' ) . "</p>\n";
-			$form .= Xml::openElement( 'textarea', array('name' => 'wpNotes', 'id' => 'wpNotes',
-				'class' => 'fr-notes-box', 'rows' => '2', 'cols' => '80') ) . Xml::closeElement('textarea') . "\n";
-			$form .= "</div>\n";
-		}
-
-		$imageParams = $templateParams = $fileVersion = '';
-		# NS -> title -> rev ID mapping
-		foreach( $out->mTemplateIds as $namespace => $title ) {
-			foreach( $title as $dbKey => $revId ) {
-				$title = Title::makeTitle( $namespace, $dbKey );
-				$templateParams .= $title->getPrefixedDBKey() . "|" . $revId . "#";
-			}
-		}	
-		# Image -> timestamp -> sha1 mapping
-		foreach( $out->fr_ImageSHA1Keys as $dbKey => $timeAndSHA1 ) {
-			foreach( $timeAndSHA1 as $time => $sha1 ) {
-				$imageParams .= $dbKey . "|" . $time . "|" . $sha1 . "#";
-			}
-		}
-		# For image pages, note the displayed image version
-		if( $this->parent instanceof ImagePage ) {
-			$file = $this->parent->getDisplayedFile();
-			$fileVersion = $file->getTimestamp() . "#" . $file->getSha1();
-		}
-
-		$form .= Xml::openElement( 'span', array('style' => 'white-space: nowrap;') );
-		# Hide comment if needed
-		if( !$disabled ) {
-			$form .= "<span id='mw-commentbox' style='clear:both'>" . Xml::inputLabel( wfMsg('revreview-log'), 'wpReason', 
-				'wpReason', 50, '', array('class' => 'fr-comment-box') ) . "&nbsp;&nbsp;&nbsp;</span>";
-		}
-		$form .= Xml::submitButton( wfMsg('revreview-submit'), 
-			array('id' => 'submitreview','accesskey' => wfMsg('revreview-ak-review'), 
-			'title' => wfMsg('revreview-tt-review').' ['.wfMsg('revreview-ak-review').']' )+$toggle 
-		);
-		$form .= Xml::closeElement( 'span' );
-		
-		$form .= Xml::closeElement( 'div' );
-		
-		# Hidden params
-		$form .= Xml::hidden( 'title', $reviewTitle->getPrefixedText() ) . "\n";
-		$form .= Xml::hidden( 'target', $this->parent->getTitle()->getPrefixedText() ) . "\n";
-		$form .= Xml::hidden( 'oldid', $id ) . "\n";
-		$form .= Xml::hidden( 'action', 'submit') . "\n";
-		$form .= Xml::hidden( 'wpEditToken', $wgUser->editToken() ) . "\n";
-		# Add review parameters
-		$form .= Xml::hidden( 'templateParams', $templateParams ) . "\n";
-		$form .= Xml::hidden( 'imageParams', $imageParams ) . "\n";
-		$form .= Xml::hidden( 'fileVersion', $fileVersion ) . "\n";
-		# Pass this in if given; useful for new page patrol
-		$form .= Xml::hidden( 'rcid', $wgRequest->getVal('rcid') ) . "\n";
-		# Special token to discourage fiddling...
-		$checkCode = RevisionReview::validationKey( $templateParams, $imageParams, $fileVersion, $id );
-		$form .= Xml::hidden( 'validatedParams', $checkCode ) . "\n";
-		
-		$form .= Xml::closeElement( 'fieldset' );
-		$form .= Xml::closeElement( 'form' );
-
-		if( $top ) {
-			$out->mBodytext = $form . $out->mBodytext;
-		} else {
-			$wgOut->addHTML( $form );
-		}
-		return true;
-	}
-	
-	 /**
-	 * Adds a brief feedback form to a page.
-	 * @param OutputPage $out
-	 * @param Title $title
-	 * @param bool $top, should this form always go on top?
-	 */
-	public function addQuickFeedback( $out, $top = false ) {
-		global $wgOut, $wgUser, $wgRequest, $wgFlaggedRevsFeedbackTags;
-		# Are there any reader input tags?
-		if( empty($wgFlaggedRevsFeedbackTags) ) {
-			return false;
-		}
-		$id = $out->mRevisionId; // Revision being displayed
-		$reviewTitle = SpecialPage::getTitleFor( 'ReaderFeedback' );
-		$action = $reviewTitle->getLocalUrl( 'action=submit' );
-		$form = Xml::openElement( 'form', array( 'method' => 'post', 'action' => $action, 'id' => 'mw-feedbackform' ) );
-		$form .= Xml::openElement( 'fieldset', array('class' => 'flaggedrevs_reviewform noprint') );
-		$form .= "<legend>" . wfMsgHtml( 'readerfeedback' ) . "</legend>\n";
-		$form .= wfMsgExt( 'readerfeedback-text', array('parse') );
-		$form .= Xml::openElement( 'span', array('id' => 'mw-feedbackselects') );
-		# Loop through all different flag types
-		foreach( FlaggedRevs::getFeedbackTags() as $quality => $levels ) {
-			$label = array();
-			$selected = ( isset($flags[$quality]) && $flags[$quality] > 0 ) ? $flags[$quality] : 2;
-			$form .= "<b>" . wfMsgHtml("readerfeedback-$quality") . ":</b>&nbsp;";
-			$attribs = array( 'name' => "wp$quality", 'onchange' => "updateFeedbackForm()" );
-			$form .= Xml::openElement( 'select', $attribs );
-			foreach( $levels as $i => $name ) {
-				$optionClass = array( 'class' => "fr-rating-option-$i" );
-				$form .= Xml::option( wfMsg( "readerfeedback-level-$i" ), $i, ($i == $selected), $optionClass ) ."\n";
-			}
-			$form .= Xml::closeElement( 'select' )."\n";
-		}
-		$form .= Xml::closeElement( 'span' );
-		$form .= Xml::submitButton( wfMsg('readerfeedback-submit'), 
-			array('id' => 'submitfeedback','accesskey' => wfMsg('revreview-ak-review'), 
-			'title' => wfMsg('revreview-tt-review').' ['.wfMsg('revreview-ak-review').']' )
-		);
-		# Hidden params
-		$form .= Xml::hidden( 'title', $reviewTitle->getPrefixedText() ) . "\n";
-		$form .= Xml::hidden( 'target', $this->parent->getTitle()->getPrefixedText() ) . "\n";
-		$form .= Xml::hidden( 'oldid', $id ) . "\n";
-		$form .= Xml::hidden( 'action', 'submit') . "\n";
-		$form .= Xml::hidden( 'wpEditToken', $wgUser->editToken() ) . "\n";
-		# Add review parameters
-		$form .= Xml::closeElement( 'fieldset' );
-		$form .= Xml::closeElement( 'form' ); 
-		if( $top ) {
-			$out->mBodytext = $form . $out->mBodytext;
-		} else {
-			$wgOut->addHTML( $form );
-		}
-		return true;
 	}
 
 	/**
 	* Updates parser cache output to included needed versioning params.
 	*/
-	public function maybeUpdateMainCache( &$outputDone, &$pcache ) {
+	public function maybeUpdateMainCache( $article, &$outputDone, &$pcache ) {
 		global $wgUser, $wgRequest;
 
 		$action = $wgRequest->getVal( 'action', 'view' );
 		# Only trigger on article view for content pages, not for protect/delete/hist
 		if( ($action !='view' && $action !='purge') || !$wgUser->isAllowed( 'review' ) )
 			return true;
-		if( !$this->parent->exists() || !FlaggedRevs::isPageReviewable( $this->parent->getTitle() ) )
+		if( !$article || !$article->exists() || !FlaggedRevs::isPageReviewable( $article->getTitle() ) )
 			return true;
 
 		$parserCache = ParserCache::singleton();
-		$parserOut = $parserCache->get( $this->parent, $wgUser );
+		$parserOut = $parserCache->get( $article, $wgUser );
 		if( $parserOut ) {
 			# Clear older, incomplete, cached versions
 			# We need the IDs of templates and timestamps of images used
-			if( !isset($parserOut->fr_newestTemplateID) || !isset($parserOut->fr_newestImageTime) )
-				$this->parent->getTitle()->invalidateCache();
+			if( !isset($parserOut->mTemplateIds) || !isset($parserOut->fr_ImageSHA1Keys) )
+				$article->getTitle()->invalidateCache();
 		}
 		return true;
 	}
 }
+

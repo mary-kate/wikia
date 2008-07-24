@@ -29,7 +29,7 @@ if (!defined('MEDIAWIKI')) {
 }
 
 /**
- * @ingroup API
+ * @addtogroup API
  */
 class ApiFormatJson extends ApiFormatBase {
 
@@ -54,7 +54,7 @@ class ApiFormatJson extends ApiFormatBase {
 		$params = $this->extractRequestParams();
 		$callback = $params['callback'];
 		if(!is_null($callback)) {
-			$prefix = preg_replace("/[^][.\\'\\\"_A-Za-z0-9]/", "", $callback ) . "(";
+			$prefix = ereg_replace("[^_A-Za-z0-9]", "", $callback ) . "(";
 			$suffix = ")";
 		}
 
@@ -86,6 +86,7 @@ class ApiFormatJson extends ApiFormatBase {
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiFormatJson.php 35098 2008-05-20 17:13:28Z ialex $';
+		return __CLASS__ . ': $Id: ApiFormatJson.php 31484 2008-03-03 05:46:20Z brion $';
 	}
 }
+

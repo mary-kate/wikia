@@ -1,9 +1,7 @@
 <?php
+
 /**
  * Send purge requests for listed pages to squid
- *
- * @file
- * @ingroup Maintenance
  */
 
 require_once( "commandLine.inc" );

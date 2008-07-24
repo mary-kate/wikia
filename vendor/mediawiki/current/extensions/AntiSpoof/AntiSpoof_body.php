@@ -203,7 +203,7 @@ class AntiSpoof {
 	/**
 	 * Convert string into array of Unicode code points as integers
 	 */
-	public static function stringToList( $str ) {
+	private static function stringToList( $str ) {
 		if ( !preg_match_all( '/./us', $str, $ar ) ) {
 			return array();
 		}
@@ -214,7 +214,7 @@ class AntiSpoof {
 		return $out;
 	}
 	
-	public static function listToString( $list ) {
+	private static function listToString( $list ) {
 		$out = '';
 		foreach( $list as $cp ) {
 			$out .= codepointToUtf8( $cp );
@@ -226,7 +226,7 @@ class AntiSpoof {
 		return implode( '', $a_list );
 	}
 	
-	public static function equivString( $testName ) {
+	private static function equivString( $testName ) {
 		$out = array();
 		self::initEquivSet();
 		foreach( $testName as $codepoint ) {

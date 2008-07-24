@@ -7,7 +7,7 @@
 if (!defined('MEDIAWIKI')) {
         echo <<<EOT
 To install my extension, put the following line in LocalSettings.php:
-require_once( "\$IP/extensions/SignDocument/SignDocument.php.php" );
+require_once( "$IP/extensions/SignDocument/SignDocument.php.php" );
 EOT;
         exit( 1 );
 }
@@ -37,8 +37,7 @@ $wgExtensionCredits['specialpage'][] = array(
 	'author' => 'Daniel Cannon',
 	'description' => 'Enables document signing',
 	'descriptionmsg' => 'signature-desc',
-	'svn-date' => '$LastChangedDate: 2008-06-14 09:32:06 +0000 (Sat, 14 Jun 2008) $',
-	'svn-revision' => '$LastChangedRevision: 36279 $',
+	'version' => '2008-01-15',
 	'url' => 'http://www.mediawiki.org/wiki/Extension:SignDocument',
 );
 

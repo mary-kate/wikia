@@ -36,8 +36,7 @@ if (!defined('MEDIAWIKI')) die();
 # Credentials.
 $wgExtensionCredits['specialpage'][] = array(
 	'name' => 'Special:Chemicalsources',
-	'svn-date' => '$LastChangedDate: 2008-05-06 11:59:58 +0000 (Tue, 06 May 2008) $',
-	'svn-revision' => '$LastChangedRevision: 34306 $',
+	'version' => '2008-01-01',
 	'description' => '[[Special:Chemicalsources|Special page]] for Chemical sources',
 	'author' => 'Dirk Beetstra',
 	'url' => 'http://www.mediawiki.org/wiki/Extension:Chemistry/ChemFunctions.php'

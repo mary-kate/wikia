@@ -1,9 +1,8 @@
 <?php
-
 /**
  * Japanese (日本語)
  *
- * @ingroup Language
+ * @addtogroup Language
  */
 class LanguageJa extends Language {
 	function stripForSearch( $string ) {
@@ -38,3 +37,5 @@ class LanguageJa extends Language {
 		return $text;
 	}
 }
+
+

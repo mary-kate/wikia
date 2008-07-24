@@ -8,21 +8,10 @@
 
 if (!defined('MEDIAWIKI')) die();
 
-class SFCreateCategory extends SpecialPage {
+global $IP;
+require_once( "$IP/includes/SpecialPage.php" );
 
-	/**
-	 * Constructor
-	 */
-	function SFCreateCategory() {
-		SpecialPage::SpecialPage('CreateCategory');
-		wfLoadExtensionMessages('SemanticForms');
-	}
-
-	function execute() {
-		$this->setHeaders();
-		doSpecialCreateCategory();
-	}
-}
+SpecialPage::addPage( new SpecialPage('CreateCategory','',true,'doSpecialCreateCategory',false) );
 
 function createCategoryText($default_form, $category_name, $parent_category) {
 	global $sfgContLang;
@@ -70,7 +59,7 @@ function doSpecialCreateCategory() {
 			$full_text = createCategoryText($default_form, $category_name, $parent_category);
 			// HTML-encode
 			$full_text = str_replace('"', '&quot;', $full_text);
-			$text = sffPrintRedirectForm($title, $full_text, "", $save_page, $preview_page, false, false, false, null, null);
+			$text = sffPrintRedirectForm($title, $full_text, "", $save_page, $preview_page, false, false, false);
 			$wgOut->addHTML($text);
 			return;
 		}

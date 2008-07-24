@@ -18,22 +18,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  * http://www.gnu.org/copyleft/gpl.html
  *
- * @file
- * @ingroup Dump Maintenance
+ * @addtogroup SpecialPage
  */
 
-/**
- * @ingroup Dump Maintenance
- */
 class DumpDBZip2Output extends DumpPipeOutput {
 	function DumpDBZip2Output( $file ) {
 		parent::DumpPipeOutput( "dbzip2", $file );
 	}
 }
 
-/**
- * @ingroup Dump Maintenance
- */
 class BackupDumper {
 	var $reportingInterval = 100;
 	var $reporting = true;
@@ -47,7 +40,6 @@ class BackupDumper {
 	var $endId      = 0;
 	var $sink       = null; // Output filters
 	var $stubText   = false; // include rev_text_id instead of text; for 2-pass dump
-	var $dumpUploads = false;
 
 	function BackupDumper( $args ) {
 		$this->stderr = fopen( "php://stderr", "wt" );
@@ -185,7 +177,6 @@ class BackupDumper {
 
 		$db = $this->backupDb();
 		$exporter = new WikiExporter( $db, $history, WikiExporter::STREAM, $text );
-		$exporter->dumpUploads = $this->dumpUploads;
 
 		$wrapper = new ExportProgressFilter( $this->sink, $this );
 		$exporter->setOutputSink( $wrapper );
@@ -302,3 +293,5 @@ class ExportProgressFilter extends DumpFilter {
 		$this->progress->revCount();
 	}
 }
+
+?>

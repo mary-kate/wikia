@@ -1,14 +1,13 @@
 <?php
 /** Aramaic (ܐܪܡܝܐ)
  *
- * @ingroup Language
- * @file
+ * @addtogroup Language
  *
- * @author 334a
- * @author SPQRobin
- * @author Siebrand
  * @author A2raya07
  * @author The Thadman
+ * @author Siebrand
+ * @author SPQRobin
+ * @author 334a
  */
 
 $rtl = true;
@@ -103,12 +102,12 @@ $messages = array(
 'jumptosearch'      => 'ܒܨܐ',
 
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
-'currentevents'        => 'ܓܕ̈ܫܐ ܗܫ̈ܝܐ',
-'currentevents-url'    => 'Project:ܓܕ̈ܫܐ ܗܫܝܐ',
-'mainpage'             => 'ܕܦܐ ܪܫܝܐ',
-'mainpage-description' => 'ܕܦܐ ܪܫܝܐ',
-'portal'               => 'ܬܪܥܐ ܕܟܢܫܐ',
-'portal-url'           => 'Project:ܬܪܥܐ ܕܟܢܫܐ',
+'currentevents'     => 'ܓܕ̈ܫܐ ܗܫ̈ܝܐ',
+'currentevents-url' => 'Project:ܓܕ̈ܫܐ ܗܫܝܐ',
+'mainpage'          => 'ܕܦܐ ܪܫܝܐ',
+'portal'            => 'ܬܪܥܐ ܕܟܢܫܐ',
+'portal-url'        => 'Project:ܬܪܥܐ ܕܟܢܫܐ',
+'sitesupport'       => 'ܕܚܘܝܬܐ',
 
 'ok'              => 'ܛܒ',
 'newmessageslink' => 'ܣܒܪ̈ܬܐ ܚܕ̈ܬܬܐ',
@@ -147,7 +146,7 @@ $messages = array(
 # Preferences page
 'mypreferences' => 'ܦܪ̈ܝܫܘܬܝ',
 'math'          => 'ܡܬܡܐܛܝܩܘܬܐ',
-'prefs-rc'      => 'ܫܘܚ̈ܠܦܐ ܚܕ̈ܬܐ',
+'prefs-rc'      => 'ܫܘ̈ܚ̈ܠܦܐ ܚܕ̈ܬܐ',
 'saveprefs'     => 'ܚܡܝ',
 
 # Recent changes
@@ -160,21 +159,23 @@ $messages = array(
 'upload'   => 'ܛܥܢܐ ܦ̮ܥܝܠ',
 'filename' => 'ܫܡܐ ܕܫܘܦܝܢܐ',
 
-# Special:Imagelist
+# Image list
+'ilsubmit'       => 'ܛܥܘܝܐ',
 'imagelist_name' => 'ܫܡܐ',
 
 # Random page
 'randompage' => 'ܡܓܠܬܐ ܚܘܝܚܐ',
 
 # Miscellaneous special pages
-'move' => 'ܡܓ̰ܘܓ̰',
+'allpages'     => 'ܟܠ ܦܐܬܐ',
+'specialpages' => 'ܦܐܬܘܬ̈ܐ ܪܫܝܐ',
+'move'         => 'ܡܓ̰ܘܓ̰',
 
 # Book sources
 'booksources'    => 'ܙܠ',
 'booksources-go' => 'ܙܠ',
 
 # Special:Allpages
-'allpages'       => 'ܟܠ ܦܐܬܐ',
 'allarticles'    => 'ܟܠ ܡ̈ܓܠܐ',
 'allpagessubmit' => 'ܙܠ',
 
@@ -204,9 +205,6 @@ $messages = array(
 # Namespace 8 related
 'allmessagesname' => 'ܫܡܐ',
 
-# Special:Newimages
-'ilsubmit' => 'ܛܥܘܝܐ',
-
 # 'all' in various places, this might be different for inflected languages
 'recentchangesall' => 'ܟܠ',
 'namespacesall'    => 'ܟܠ',
@@ -223,8 +221,5 @@ $messages = array(
 # Special:Filepath
 'filepath'        => 'ܫܒܝܠܐ ܕܫܘܦܝܢܐ',
 'filepath-submit' => 'ܫܒܝܠܐ',
-
-# Special:SpecialPages
-'specialpages' => 'ܦܐܬܘܬ̈ܐ ܪܫܝܐ',
 
 );

@@ -7,23 +7,10 @@
 
 if (!defined('MEDIAWIKI')) die();
 
-class SFTemplates extends SpecialPage {
+global $IP;
+require_once( "$IP/includes/SpecialPage.php" );
 
-	/**
-	 * Constructor
-	 */
-	function SFTemplates() {
-		SpecialPage::SpecialPage('Templates');
-		wfLoadExtensionMessages('SemanticForms');
-	}
-
-	function execute() {
-		$this->setHeaders();
-		list( $limit, $offset ) = wfCheckLimits();
-		$rep = new TemplatesPage();
-		return $rep->doQuery( $offset, $limit );
-	}
-}
+SpecialPage::addPage( new SpecialPage('Templates','',true,'doSpecialTemplates',false) );
 
 class TemplatesPage extends QueryPage {
 	function getName() {
@@ -84,4 +71,10 @@ class TemplatesPage extends QueryPage {
 			$text .= ' ' . wfMsg('sf_templates_definescat') . ' ' . sffLinkText(NS_CATEGORY, $category);
 		return $text;
 	}
+}
+
+function doSpecialTemplates() {
+	list( $limit, $offset ) = wfCheckLimits();
+	$rep = new TemplatesPage();
+	return $rep->doQuery( $offset, $limit );
 }

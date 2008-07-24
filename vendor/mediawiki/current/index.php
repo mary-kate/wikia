@@ -15,8 +15,7 @@
  *
  * Copyright (C) 2001-2008 Magnus Manske, Brion Vibber, Lee Daniel Crocker,
  * Tim Starling, Erik Möller, Gabriel Wicke, Ævar Arnfjörð Bjarmason,
- * Niklas Laxström, Domas Mituzas, Rob Church, Yuri Astrakhan, Aryeh Gregor,
- * Aaron Schulz and others.
+ * Niklas Laxström, Domas Mituzas, Rob Church and others.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,12 +56,10 @@ if ( !is_null( $maxLag ) ) {
 $action = $wgRequest->getVal( 'action', 'view' );
 $title = $wgRequest->getVal( 'title' );
 
-$wgTitle = $mediaWiki->checkInitialQueries( $title, $action );
+$wgTitle = $mediaWiki->checkInitialQueries( $title,$action,$wgOut, $wgRequest, $wgContLang );
 if ($wgTitle == NULL) {
 	unset( $wgTitle );
 }
-
-wfProfileOut( 'main-misc-setup' );
 
 #
 # Send Ajax requests to the Ajax dispatcher.
@@ -72,29 +69,29 @@ if ( $wgUseAjax && $action == 'ajax' ) {
 
 	$dispatcher = new AjaxDispatcher();
 	$dispatcher->performAction();
-	$mediaWiki->restInPeace();
+	$mediaWiki->restInPeace( $wgLoadBalancer );
 	exit;
 }
 
-# Setting global variables in mediaWiki
-$mediaWiki->setVal( 'action', $action );
-$mediaWiki->setVal( 'CommandLineMode', $wgCommandLineMode );
-$mediaWiki->setVal( 'DisabledActions', $wgDisabledActions );
-$mediaWiki->setVal( 'DisableHardRedirects', $wgDisableHardRedirects );
-$mediaWiki->setVal( 'DisableInternalSearch', $wgDisableInternalSearch );
-$mediaWiki->setVal( 'EnableCreativeCommonsRdf', $wgEnableCreativeCommonsRdf );
-$mediaWiki->setVal( 'EnableDublinCoreRdf', $wgEnableDublinCoreRdf );
-$mediaWiki->setVal( 'JobRunRate', $wgJobRunRate );
-$mediaWiki->setVal( 'Server', $wgServer );
-$mediaWiki->setVal( 'SquidMaxage', $wgSquidMaxage );
-$mediaWiki->setVal( 'UseExternalEditor', $wgUseExternalEditor );
-$mediaWiki->setVal( 'UsePathInfo', $wgUsePathInfo );
 
-$mediaWiki->initialize( $wgTitle, $wgArticle, $wgOut, $wgUser, $wgRequest );
-$mediaWiki->finalCleanup ( $wgDeferredUpdateList, $wgOut );
+wfProfileOut( 'main-misc-setup' );
+
+# Setting global variables in mediaWiki
+$mediaWiki->setVal( 'Server', $wgServer );
+$mediaWiki->setVal( 'DisableInternalSearch', $wgDisableInternalSearch );
+$mediaWiki->setVal( 'action', $action );
+$mediaWiki->setVal( 'SquidMaxage', $wgSquidMaxage );
+$mediaWiki->setVal( 'EnableDublinCoreRdf', $wgEnableDublinCoreRdf );
+$mediaWiki->setVal( 'EnableCreativeCommonsRdf', $wgEnableCreativeCommonsRdf );
+$mediaWiki->setVal( 'CommandLineMode', $wgCommandLineMode );
+$mediaWiki->setVal( 'UseExternalEditor', $wgUseExternalEditor );
+$mediaWiki->setVal( 'DisabledActions', $wgDisabledActions );
+
+$wgArticle = $mediaWiki->initialize ( $wgTitle, $wgOut, $wgUser, $wgRequest );
+$mediaWiki->finalCleanup ( $wgDeferredUpdateList, $wgLoadBalancer, $wgOut );
 
 # Not sure when $wgPostCommitUpdateList gets set, so I keep this separate from finalCleanup
 $mediaWiki->doUpdates( $wgPostCommitUpdateList );
 
-$mediaWiki->restInPeace();
+$mediaWiki->restInPeace( $wgLoadBalancer );
 

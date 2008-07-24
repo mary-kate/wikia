@@ -2,8 +2,6 @@
 
 /**
  * Background job to update links for a given title.
- *
- * @ingroup JobQueue
  */
 class RefreshLinksJob extends Job {
 
@@ -19,7 +17,7 @@ class RefreshLinksJob extends Job {
 		global $wgParser;
 		wfProfileIn( __METHOD__ );
 
-		$linkCache = LinkCache::singleton();
+		$linkCache =& LinkCache::singleton();
 		$linkCache->clear();
 
 		if ( is_null( $this->title ) ) {
@@ -47,3 +45,4 @@ class RefreshLinksJob extends Job {
 		return true;
 	}
 }
+

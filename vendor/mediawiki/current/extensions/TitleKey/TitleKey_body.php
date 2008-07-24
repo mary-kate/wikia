@@ -110,13 +110,12 @@ class TitleKey {
 	 * Status info is sent to stdout.
 	 */
 	static function schemaUpdates() {
-		global $wgDBtype;
 		$db = wfGetDB( DB_MASTER );
 		if( $db->tableExists( 'titlekey' ) ) {
 			echo "...titlekey already exists.\n";
 		} else {
 			echo "...creating titlekey table...\n";
-			$sourcefile = $wgDBtype == 'postgres' ? '/titlekey.pg.sql' : '/titlekey.sql';
+			$sourcefile = '/titlekey.sql';
 			$err = $db->sourceFile( dirname( __FILE__ ) . $sourcefile );
 			if( $err !== true ) {
 				throw new MWException( $err );
@@ -185,11 +184,7 @@ class TitleKey {
 		return false;
 	}
 	
-	static function prefixSearch( $namespaces, $search, $limit ) {
-		$ns = array_shift( $namespaces ); // support only one namespace
-		if( in_array( NS_MAIN, $namespaces ) )
-			$ns = NS_MAIN; // if searching on many always default to main 
-		
+	static function prefixSearch( $ns, $search, $limit ) {
 		$key = self::normalize( $search );
 		
 		$dbr = wfGetDB( DB_SLAVE );
@@ -203,7 +198,7 @@ class TitleKey {
 			),
 			__METHOD__,
 			array(
-				'ORDER BY' => 'tk_key',
+				'ORDER BY' => 'tk_namespace, tk_key',
 				'LIMIT' => $limit ) );
 		
 		// Reformat useful data for future printing by JSON engine

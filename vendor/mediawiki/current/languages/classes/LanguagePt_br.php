@@ -1,9 +1,10 @@
 <?php
-
 /** Brazilian Portugese (Portuguêsi do Brasil)
  *
- * @ingroup Language
+ * @addtogroup Language
+ *
  */
+
 class LanguagePt_br extends Language {
 	/**
 	 * Use singular form for zero (see bug 7309)
@@ -15,3 +16,4 @@ class LanguagePt_br extends Language {
 		return ($count <= 1) ? $forms[0] : $forms[1];
 	}
 }
+

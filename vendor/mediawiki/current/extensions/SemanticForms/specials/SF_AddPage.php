@@ -9,21 +9,10 @@
  */
 if (!defined('MEDIAWIKI')) die();
 
-class SFAddPage extends SpecialPage {
+global $IP;
+require_once( "$IP/includes/SpecialPage.php" );
 
-	/**
-	 * Constructor
-	 */
-	function SFAddPage() {
-		SpecialPage::SpecialPage('AddPage');
-		wfLoadExtensionMessages('SemanticForms');
-	}
-
-	function execute($query = '') {
-		$this->setHeaders();
-		doSpecialAddPage($query);
-	}
-}
+SpecialPage::addPage( new SpecialPage('AddPage','',true,'doSpecialAddPage',false) );
 
 function doSpecialAddPage($query = '') {
 	global $wgOut, $wgRequest, $sfgScriptPath;
@@ -42,10 +31,6 @@ function doSpecialAddPage($query = '') {
 			$form_name = substr($form_name, 0, $namespace_label_loc);
 		}
 	}
-
-	// remove forbidden characters from form name
-	$forbidden_chars = array('"', "'", '<', '>', '{', '}', '(', ')', '[', ']', '=');
-	$form_name = str_replace($forbidden_chars, "", $form_name);
 
 	// get title of form
 	$form_title = Title::newFromText($form_name, SF_NS_FORM);

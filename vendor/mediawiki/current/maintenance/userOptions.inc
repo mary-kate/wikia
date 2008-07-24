@@ -1,18 +1,10 @@
 <?php
-/**
- * @file
- * @ingroup Maintenance
- */
-
 // Options we will use
 $options = array( 'list', 'nowarn', 'quiet', 'usage', 'dry' );
 $optionsWithArgs = array( 'old', 'new' );
 
 require_once( 'commandLine.inc' );
 
-/**
- * @ingroup Maintenance
- */
 class userOptions {
 	public $mQuick;
 	public $mQuiet;
@@ -257,3 +249,4 @@ WARN;
 	}
 
 }
+?>

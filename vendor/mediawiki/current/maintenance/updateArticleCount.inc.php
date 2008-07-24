@@ -1,9 +1,9 @@
 <?php
+
 /**
  * Support class for the updateArticleCount.php maintenance script
  *
- * @file
- * @ingroup Maintenance
+ * @addtogroup Maintenance
  * @author Rob Church <robchur@gmail.com>
  */
 

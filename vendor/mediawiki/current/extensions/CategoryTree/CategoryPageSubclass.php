@@ -12,48 +12,35 @@ class CategoryTreeCategoryPage extends CategoryPage {
 }
 
 class CategoryTreeCategoryViewer extends CategoryViewer {
-	var $child_cats;
-
-	function getCategoryTree() {
-		global $wgOut, $wgCategoryTreeCategoryPageOptions, $wgCategoryTreeForceHeaders;
-
-		if ( ! isset($this->categorytree) ) {
-			if ( !$wgCategoryTreeForceHeaders ) CategoryTree::setHeaders( $wgOut );
-
-			$this->categorytree = new CategoryTree( $wgCategoryTreeCategoryPageOptions );
-		}
-
-		return $this->categorytree;
-	}
+	var $child_titles;
 
 	/**
 	 * Add a subcategory to the internal lists
 	 */
-	function addSubcategoryObject( $cat, $sortkey, $pageLength ) {
-		global $wgContLang, $wgOut, $wgRequest;
-
-		$title = $cat->getTitle();
+	function addSubcategory( $title, $sortkey, $pageLength ) {
+		global $wgContLang, $wgOut, $wgRequest, $wgCategoryTreeCategoryPageMode;
 
 		if ( $wgRequest->getCheck( 'notree' ) ) {
-			return parent::addSubcategoryObject( $cat, $sortkey, $pageLength );
+			return parent::addSubcategory( $title, $sortkey, $pageLength );
 		}
 
-		/*if ( ! $GLOBALS['wgCategoryTreeUnifiedView'] ) {
-			$this->child_cats[] = $cat;
-			return parent::addSubcategory( $cat, $sortkey, $pageLength );
-		}*/
+		if ( ! $GLOBALS['wgCategoryTreeUnifiedView'] ) {
+			$this->child_titles[] = $title;
+			return parent::addSubcategory( $title, $sortkey, $pageLength );
+		}
 
-		$tree = $this->getCategoryTree();
+		if ( ! isset($this->categorytree) ) {
+			CategoryTree::setHeaders( $wgOut );
+			$this->categorytree = new CategoryTree;
+		}
 
-		$this->children[] = $tree->renderNodeInfo( $title, $cat );
+		$this->children[] = $this->categorytree->renderNode( $title, $wgCategoryTreeCategoryPageMode );
 
 		$this->children_start_char[] = $this->getSubcategorySortChar( $title, $sortkey );
 	}
 
-	/* 
-	# this is a pain to keep this consistent, and no one should be using wgCategoryTreeUnifiedView = false anyway.
 	function getSubcategorySection() {
-		global $wgOut, $wgRequest, $wgCookiePrefix;
+		global $wgOut, $wgRequest, $wgCookiePrefix, $wgCategoryTreeCategoryPageMode;
 
 		if ( $wgRequest->getCheck( 'notree' ) ) {
 			return parent::getSubcategorySection();
@@ -111,10 +98,11 @@ class CategoryTreeCategoryViewer extends CategoryViewer {
 		if ( $showAs == 'list' ) {
 			$r .= $this->formatList( $this->children, $this->children_start_char );
 		} else {
-			$ct = $this->getCategoryTree();
+			CategoryTree::setHeaders( $wgOut );
+			$ct = new CategoryTree;
 
-			foreach ( $this->child_cats as $cat ) {
-				$r .= $ct->renderNodeInfo( $cat->getTitle(), $cat );
+			foreach ( $this->child_titles as $title ) {
+				$r .= $ct->renderNode( $title, $wgCategoryTreeCategoryPageMode );
 			}
 		}
 		return $r;
@@ -128,16 +116,16 @@ class CategoryTreeCategoryViewer extends CategoryViewer {
 		} else {
 			return $this->getSkin()->makeKnownLinkObj( $this->title, $msg, "showas=$targetValue" );
 		}
-	} */
+	}
 
 	function clearCategoryState() {
-		$this->child_cats = array();
+		$this->child_titles = array();
 		parent::clearCategoryState();
 	}
 
 	function finaliseCategoryState() {
 		if( $this->flip ) {
-			$this->child_cats = array_reverse( $this->child_cats );
+			$this->child_titles = array_reverse( $this->child_titles );
 		}
 		parent::finaliseCategoryState();
 	}

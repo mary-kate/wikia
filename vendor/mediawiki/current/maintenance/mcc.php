@@ -2,9 +2,8 @@
 /**
  * memcached diagnostic tool
  *
- * @file
  * @todo document
- * @ingroup Maintenance
+ * @addtogroup Maintenance
  */
 
 /** */

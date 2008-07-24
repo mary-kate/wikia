@@ -1,7 +1,6 @@
 <?php
 /**
- * @file
- * @ingroup Maintenance ExternalStorage
+ * @addtogroup Maintenance
  */
 
 /** */
@@ -301,3 +300,4 @@ function compressWithConcat( $startId, $maxChunkSize, $maxChunkFactor, $factorTh
 	}
 	return true;
 }
+?>

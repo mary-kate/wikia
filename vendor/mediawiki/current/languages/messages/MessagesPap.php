@@ -1,13 +1,11 @@
 <?php
 /** Papiamento (Papiamentu)
  *
- * @ingroup Language
- * @file
+ * @addtogroup Language
  *
+ * @author Kamizu
  * @author לערי ריינהארט
  * @author SPQRobin
- * @author Siebrand
- * @author Kamizu
  */
 
 $messages = array(
@@ -47,7 +45,8 @@ $messages = array(
 'nov'       => 'nov',
 'dec'       => 'des',
 
-# Categories related messages
+# Bits of text used by many pages
+'categories'      => 'Kategorianan',
 'category_header' => 'Artíkulonan den kategoria "$1"',
 'subcategories'   => 'Supkategorianan',
 
@@ -83,19 +82,18 @@ $messages = array(
 'otherlanguages'    => 'Na otro idioma',
 
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
-'aboutsite'            => 'Tokante {{SITENAME}}',
-'aboutpage'            => 'Project:Info',
-'copyrightpage'        => '{{ns:project}}:Derechinan di outor',
-'currentevents'        => 'Eventonan aktual',
-'currentevents-url'    => 'Project:Eventonan aktual',
-'edithelp'             => 'Ayudo ku editamentu',
-'edithelppage'         => 'Help:Kon pa editá artíkulo',
-'faqpage'              => 'Project:FAQ',
-'helppage'             => 'Help:Kontenido',
-'mainpage'             => 'Página Prinsipal',
-'mainpage-description' => 'Página Prinsipal',
-'portal'               => 'Portal di komunidat',
-'portal-url'           => 'Project:Portal di komunidat',
+'aboutsite'         => 'Tokante {{SITENAME}}',
+'aboutpage'         => 'Project:Info',
+'copyrightpage'     => '{{ns:project}}:Derechinan di outor',
+'currentevents'     => 'Eventonan aktual',
+'currentevents-url' => 'Project:Eventonan aktual',
+'edithelp'          => 'Ayudo ku editamentu',
+'edithelppage'      => 'Help:Kon pa editá artíkulo',
+'faqpage'           => 'Project:FAQ',
+'helppage'          => 'Help:Kontenido',
+'mainpage'          => 'Página Prinsipal',
+'portal'            => 'Portal di komunidat',
+'portal-url'        => 'Project:Portal di komunidat',
 
 'badaccess' => 'Eror di permiso',
 
@@ -122,7 +120,7 @@ $messages = array(
 'nosuchspecialpage' => 'E página spesial no ta eksistí',
 'nospecialpagetext' => "<big>'''Bo a pidi un página spesial inválido.'''</big>
 
-Bo por haña un lista di tur [[Special:Specialpages|{{int:specialpages}}]].",
+Bo por haña un lista di tur página spesial [[Special:Specialpages|aki]].",
 
 # General errors
 'error'         => 'Eror',
@@ -135,8 +133,8 @@ Bo por haña un lista di tur [[Special:Specialpages|{{int:specialpages}}]].",
 
 # Login and logout pages
 'welcomecreation'            => '== Bon bini, $1! ==
-Bo kuenta ta trahá.
-No lubidá di kambia bo {{SITENAME}} preferensianan.',
+
+Bo kuenta ta trahá. No lubidá di kambia bo [[Special:Preferences|{{SITENAME}} preferensianan]].',
 'yourname'                   => 'Nòmber di uzadó',
 'yourpassword'               => 'Kontraseña',
 'yourpasswordagain'          => 'Hinka kontraseña atrobe',
@@ -163,8 +161,7 @@ No lubidá di kambia bo {{SITENAME}} preferensianan.',
 
 # Edit pages
 'watchthis'          => 'Observá e página aki',
-'anoneditwarning'    => 'Bo no a outentiká bo mes.
-Bo por kambia página libremente, pero tene kuenta ku lo nota bo IP adrès den e historia di kambionan hasí na e página aki.',
+'anoneditwarning'    => 'Bo no a [[Special:Userlogin|outentiká bo mes]]. Bo por kambia página libremente, pero tene kuenta ku lo nota bo IP adrès den e historia di kambionan hasí na e página aki.',
 'blockedtitle'       => 'Uzadó ta blokiá',
 'whitelistedittitle' => 'Mester outentiká promé pa editá',
 'whitelistreadtitle' => 'Mester outentiká promé pa lesa',
@@ -226,16 +223,20 @@ Bo por kambia página libremente, pero tene kuenta ku lo nota bo IP adrès den e
 'unusedcategories'        => 'Kategorianan no uzá',
 'wantedcategories'        => 'Kategorianan deseá',
 'wantedpages'             => 'Páginanan deseá',
+'allpages'                => 'Tur página',
+'specialpages'            => 'Páginanan Spesial',
+'spheading'               => 'Páginanan spesial pa tur uzadó',
 'ancientpages'            => 'Páginanan mas bieu',
 'unusedcategoriestext'    => 'E siguiente kategorianan ta eksistí pero ningun artíkulo òf kategoria ta hasi uzo di nan.',
+
+'categoriespagetext' => 'Esaki ta e kategorianan ku ta eksistí den {{SITENAME}}.',
+'alphaindexline'     => '$1 pa $2',
 
 # Special:Log
 'alllogstext' => 'Esaki ta un bista kombiná di registronan.
 Bo por skohe un tipo di registro tambe, òf filtrá e bista ku un nòmber di uzadó òf un título di un artíkulo.',
 
 # Special:Allpages
-'allpages'          => 'Tur página',
-'alphaindexline'    => '$1 pa $2',
 'allpagesfrom'      => 'Mustra páginanan kuminsando na:',
 'allarticles'       => 'Tur artíkulo',
 'allinnamespace'    => 'Tur página (dominio $1)',
@@ -244,15 +245,10 @@ Bo por skohe un tipo di registro tambe, òf filtrá e bista ku un nòmber di uza
 'allpagesnext'      => 'Siguiente',
 'allpagesprefix'    => 'Mustra páginanan kuminsando ku e prefiho:',
 
-# Special:Categories
-'categories'         => 'Kategorianan',
-'categoriespagetext' => 'Esaki ta e kategorianan ku ta eksistí den {{SITENAME}}.',
-
 # E-mail user
 'emailuser'       => 'Manda e-mail pa e uzadó aki',
 'emailpage'       => 'Manda e-mail',
-'emailpagetext'   => 'E formulario aki lo manda un e-mail pa e uzadò aki.
-Bo e-mail adrès (manera ta pará den bo preferensianan) lo aparesé den e e-mail pa e resipiente por respondé na bo direktamente.',
+'emailpagetext'   => "E formulario aki lo manda un e-mail pa e uzadò aki. '''Bo e-mail adrès''' (manera ta pará den [[Special:Preferences|bo preferensianan]]) '''lo aparesé''' den e e-mail pa e resipiente por respondé na bo direktamente.",
 'defemailsubject' => 'E-mail di {{SITENAME}}',
 'emailfrom'       => 'Di',
 'emailto'         => 'Pa',
@@ -287,7 +283,7 @@ Si despues bo ke kita e página for di bo lista di observashon, primi \"Stop di 
 # Delete/protect/revert
 'confirm'        => 'Konfirmá',
 'actioncomplete' => 'Akshon kompletá',
-'protect-legend' => 'Konfirmá protekshon',
+'confirmprotect' => 'Konfirmá protekshon',
 
 # Undelete
 'undelete' => 'Wak páginanan kitá',
@@ -307,8 +303,7 @@ Si despues bo ke kita e página for di bo lista di observashon, primi \"Stop di 
 'blockip'            => 'Blokia uzadó',
 'badipaddress'       => 'IP adrès ta inválido',
 'blockipsuccesssub'  => 'Blokeo eksitoso',
-'blockipsuccesstext' => '[[Special:Contributions/$1|$1]] tabata blokiá.<br />
-Wak e [[Special:Ipblocklist|lista di blokeonan]] pa wak tur blokeo aktivo.',
+'blockipsuccesstext' => '[[Special:Contributions/$1|$1]] tabata blokiá. <br />Wak e [[Special:Ipblocklist|lista di blokeonan]] pa wak tur blokeo aktivo, òf e [[Special:Log/block|registro di blokeo]] pa blokeonan históriko.',
 'unblockip'          => 'Desblokia uzadó',
 'blocklink'          => 'blokia',
 'unblocklink'        => 'desblokia',
@@ -335,6 +330,10 @@ Por fabor skohe un otro título.',
 # Attribution
 'anonymous' => 'Uzadó(nan) anonimo di {{SITENAME}}',
 
+# Spam protection
+'subcategorycount'     => 'Tin {{PLURAL:$1|1 supkategoria|$1 supkategorianan}} bou di e kategoria aki.',
+'categoryarticlecount' => 'Tin {{PLURAL:$1|1 artíkulo|$1 artíkulonan}} den e kategoria aki.',
+
 # Info page
 'infosubtitle' => 'Informashon pa página',
 
@@ -349,10 +348,7 @@ Por fabor skohe un otro título.',
 
 # E-mail address confirmation
 'confirmemail'           => 'Konfirmá e-mail adrès',
-'confirmemail_text'      => 'Bo mester validá bo e-mail adrès pa uza funkshonnan di e-mail.
-Primi e boton abou pa manda un e-mail di konfirmashon pa bo e-mail adrès.
-Ora bo haña e e-mail, bo ta sigui e instrukshonnan aden.
-Pa kontrolá si bo ta konfirmá kaba, wak bo preferensianan.',
+'confirmemail_text'      => 'Bo mester validá bo e-mail adrès pa uza funkshonnan di e-mail. Primi e boton abou pa manda un e-mail di konfirmashon pa bo e-mail adrès. Ora bo haña e e-mail, bo ta sigui e instrukshonnan aden. Pa kontrolá si bo ta konfirmá kaba, wak [[Special:Preferences|bo preferensianan]].',
 'confirmemail_send'      => 'Manda un kódigo di konfirmashon via e-mail.',
 'confirmemail_sent'      => 'E-mail pa konfirmashon mandá.',
 'confirmemail_invalid'   => 'Kódigo di konfirmashon inválido. Ta posibel ku e kódigo a kaduká.',
@@ -368,12 +364,8 @@ funkshonnan di e-mail riba {{SITENAME}}, por fabor habri e link aki:
 
 $3
 
-Si esaki *no* ta abo, por fabor no habri e link.
-Follow this link to cancel the e-mail address confirmation:
-
-$5
-
-E kódigo di konfirmashon aki lo kaduká riba $4.',
+Si esaki *no* ta abo, por fabor no habri e link. E kódigo di konfirmashon
+aki lo kaduká riba $4.',
 
 # Delete conflict
 'confirmrecreate' => "[[User:$1|$1]] ([[User talk:$1|diskushon]]) a kita e artíkulo aki despues ku bo ta kuminsá editá. E rason ta:
@@ -383,8 +375,5 @@ Por fabor konfirmá ku bo ke traha e artíkulo aki di nobo.",
 # AJAX search
 'articletitles' => "Artíkulonan kuminsando ku ''$1''",
 'hideresults'   => 'Skonde resultado',
-
-# Special:SpecialPages
-'specialpages' => 'Páginanan Spesial',
 
 );

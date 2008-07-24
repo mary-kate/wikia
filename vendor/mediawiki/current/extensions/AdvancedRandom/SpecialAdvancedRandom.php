@@ -31,7 +31,6 @@ $wgExtensionCredits['specialpage'][] = array(
 
 $dir = dirname(__FILE__) . '/';
 $wgExtensionMessagesFiles['AdvancedRandom'] = $dir . 'SpecialAdvancedRandom.i18n.php';
-$wgExtensionAliasesFiles['AdvancedRandom'] = $dir . 'AdvancedRandom.alias.php';
 
 $wgAutoloadClasses['SpecialAdvancedRandom'] = $dir . 'AdvancedRandom_body.php';
 

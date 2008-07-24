@@ -17,8 +17,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  * http://www.gnu.org/copyleft/gpl.html
  *
- * @file
- * @ingroup Maintenance
+ * @addtogroup Maintenance
  */
 
 $optionsWithArgs = array( 'target', 'repository', 'repos' );
@@ -29,9 +28,6 @@ define('EXTINST_NOPATCH', 0);
 define('EXTINST_WRITEPATCH', 6);
 define('EXTINST_HOTPATCH', 10);
 
-/**
- * @ingroup Maintenance
- */
 class InstallerRepository {
 	var $path;
 	
@@ -47,7 +43,7 @@ class InstallerRepository {
 		trigger_error( 'override InstallerRepository::getResource()', E_USER_ERROR );
 	}        
 	
-	static function makeRepository( $path, $type = NULL ) {
+	/*static*/ function makeRepository( $path, $type = NULL ) {
 		if ( !$type ) {
 			$m = array();
 			preg_match( '!(([-+\w]+)://)?.*?(\.[-\w\d.]+)?$!', $path, $m );
@@ -68,9 +64,6 @@ class InstallerRepository {
 	}
 }
 
-/**
- * @ingroup Maintenance
- */
 class LocalInstallerRepository extends InstallerRepository {
 
 	function LocalInstallerRepository ( $path ) {
@@ -108,9 +101,6 @@ class LocalInstallerRepository extends InstallerRepository {
 	}        
 }
 
-/**
- * @ingroup Maintenance
- */
 class WebInstallerRepository extends InstallerRepository {
 
 	function WebInstallerRepository ( $path ) {
@@ -154,9 +144,6 @@ class WebInstallerRepository extends InstallerRepository {
 	}        
 }
 
-/**
- * @ingroup Maintenance
- */
 class SVNInstallerRepository extends InstallerRepository {
 
 	function SVNInstallerRepository ( $path ) {
@@ -189,9 +176,6 @@ class SVNInstallerRepository extends InstallerRepository {
 	}        
 }
 
-/**
- * @ingroup Maintenance
- */
 class InstallerResource {
 	var $path;
 	var $isdir;
@@ -259,9 +243,6 @@ class InstallerResource {
 	}
 }
 
-/**
- * @ingroup Maintenance
- */
 class LocalInstallerResource extends InstallerResource {
 	function LocalInstallerResource( $path ) {
 		InstallerResource::InstallerResource( $path, is_dir( $path ), true );
@@ -274,9 +255,6 @@ class LocalInstallerResource extends InstallerResource {
         
 }
 
-/**
- * @ingroup Maintenance
- */
 class WebInstallerResource extends InstallerResource {
 	function WebInstallerResource( $path ) {
 		InstallerResource::InstallerResource( $path, false, false );
@@ -300,9 +278,6 @@ class WebInstallerResource extends InstallerResource {
 	}        
 }
 
-/**
- * @ingroup Maintenance
- */
 class SVNInstallerResource extends InstallerResource {
 	function SVNInstallerResource( $path ) {
 		InstallerResource::InstallerResource( $path, true, false );
@@ -322,9 +297,6 @@ class SVNInstallerResource extends InstallerResource {
 	}        
 }
 
-/**
- * @ingroup Maintenance
- */
 class ExtensionInstaller {
 	var $source;
 	var $target;
@@ -347,15 +319,15 @@ class ExtensionInstaller {
 		#TODO: allow a config file different from "LocalSettings.php"
 	}
 
-	static function note( $msg ) {
+	function note( $msg ) {
 		print "$msg\n";
 	}
 
-	static function warn( $msg ) {
+	function warn( $msg ) {
 		print "WARNING: $msg\n";
 	}
 
-	static function error( $msg ) {
+	function error( $msg ) {
 		print "ERROR: $msg\n";
 	}
 
@@ -498,18 +470,18 @@ class ExtensionInstaller {
 		#TODO: allow custom installer scripts + sql patches
 		
 		if ( !file_exists( $f ) ) {
-			self::warn( "No install.settings file provided!" );
+			$this->warn( "No install.settings file provided!" );
 			$this->tasks[] = "Please read the instructions and edit LocalSettings.php manually to activate the extension.";
 			return '?';
 		}
 		else {
-			self::note( "applying settings patch..." );
+			$this->note( "applying settings patch..." );
 		}
 		
 		$settings = file_get_contents( $f );
 		                
 		if ( !$settings ) {
-			self::error( "failed to read settings from $f!" );
+			$this->error( "failed to read settings from $f!" );
 			return false;
 		}
 		                
@@ -517,7 +489,7 @@ class ExtensionInstaller {
 		
 		if ( $mode == EXTINST_NOPATCH ) {
 			$this->tasks[] = "Please put the following into your LocalSettings.php:" . "\n$settings\n";
-			self::note( "Skipping patch phase, automatic patching is off." );
+			$this->note( "Skipping patch phase, automatic patching is off." );
 			return true;
 		}
 		
@@ -528,18 +500,18 @@ class ExtensionInstaller {
 			$ok = copy( $t, $bak );
 			                
 			if ( !$ok ) {
-				self::warn( "failed to create backup of LocalSettings.php!" );
+				$this->warn( "failed to create backup of LocalSettings.php!" );
 				return false;
 			}
 			else {
-				self::note( "created backup of LocalSettings.php at $bak" );
+				$this->note( "created backup of LocalSettings.php at $bak" );
 			}
 		}
 		                
 		$localsettings = file_get_contents( $t );
 		                
 		if ( !$settings ) {
-			self::error( "failed to read $t for patching!" );
+			$this->error( "failed to read $t for patching!" );
 			return false;
 		}
 		                
@@ -562,14 +534,14 @@ class ExtensionInstaller {
 		$ok = file_put_contents( $t, $localsettings );
 		
 		if ( !$ok ) {
-			self::error( "failed to patch $t!" );
+			$this->error( "failed to patch $t!" );
 			return false;
 		}
 		else if ( $mode == EXTINST_HOTPATCH ) {
-			self::note( "successfully patched $t" );
+			$this->note( "successfully patched $t" );
 		}
 		else  {
-			self::note( "created patched settings file $t" );
+			$this->note( "created patched settings file $t" );
 			$this->tasks[] = "Replace your current LocalSettings.php with ".basename($t);
 		}
 		

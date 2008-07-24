@@ -6,14 +6,12 @@
  * @addtogroup Extensions
  * @author Rob Church <robchur@gmail.com>
  * @copyright © 2006 Rob Church
- * @license GNU General Public Licence 2.0 or later
+ * @licence GNU General Public Licence 2.0 or later
  */
 
 $messages = array();
 
-/** English
- * @author Rob Church
- */
+/* English (Rob Church) */
 $messages['en'] = array(
 	'makebot'                 => 'Grant or revoke bot status',
 	'makebot-desc'            => 'Special page allows local bureaucrats to grant and revoke bot permissions',
@@ -33,15 +31,11 @@ $messages['en'] = array(
 	'makebot-logpagetext'     => 'This is a log of changes to users\' [[{{MediaWiki:Grouppage-bot}}|bot]] status.',
 	'makebot-logentrygrant'   => 'granted bot status to [[$1]]',
 	'makebot-logentryrevoke'  => 'removed bot status from [[$1]]',
-	'right-makebot'           => 'Grant and revoke bot flags',
 );
 
-/** Arabic (العربية)
- * @author Meno25
- */
+/* Arabic */
 $messages['ar'] = array(
 	'makebot'                 => 'منح أو سحب صلاحية بوت',
-	'makebot-desc'            => 'صفحة خاصة تسمح للبيروقراطيين المحليين بمنح وسحب سماحات البوت',
 	'makebot-header'          => '\'\'\'يمكن للبيروقراط المحلي استخدام هذه الصفحة لإعطاء [[مساعدة:بوت|صلاحية بوت]] لحساب مستخدم آخر.\'\'\'<br />تخفي صلاحية البوت تعديلات المستخدم من صفحة أحدث التغييرات و القوائم المماثلة، و هذا يعتبر مفيدا إلى المستخدمين الذين يقومون بتعديلات آلية. يجب أن يكون هذا تبعا للسياسات المتبعة.',
 	'makebot-username'        => 'اسم المستخدم:',
 	'makebot-search'          => 'اذهب',
@@ -58,7 +52,6 @@ $messages['ar'] = array(
 	'makebot-logpagetext'     => 'هذا سجل لتغييرات صلاحية [[{{MediaWiki:Grouppage-bot}}|البوت]].',
 	'makebot-logentrygrant'   => 'منح صلاحية بوت إلى [[$1]]',
 	'makebot-logentryrevoke'  => 'سحب صلاحية بوت من [[$1]]',
-	'right-makebot'           => 'منح وسحب أعلام البوت',
 );
 
 /** Asturian (Asturianu)
@@ -225,7 +218,6 @@ $messages['de'] = array(
 	'makebot-logpagetext'    => 'Dieses Logbuch protokolliert alle [[Help:Bot|Botstatus]]-Änderungen.',
 	'makebot-logentrygrant'  => 'erteilte Botstatus für „[[$1]]“',
 	'makebot-logentryrevoke' => 'entfernte den Botstatus von „[[$1]]“',
-	'right-makebot'          => 'Botflag erteilen und entziehen',
 );
 
 /** Zazaki (Zazaki)
@@ -447,30 +439,25 @@ $messages['haw'] = array(
 	'makebot-username' => "Inoa mea ho'ohana:",
 );
 
-/** Hebrew (עברית)
- * @author Rotem Liss
- */
+/* Hebrew (Rotem Liss) */
 $messages['he'] = array(
-	'makebot'                => 'הענקת או ביטול הרשאת בוט',
-	'makebot-desc'           => 'דף מיוחד המאפשר לביורוקרטים מקומיים להעניק ולבטל הרשאות בוט',
-	'makebot-header'         => "'''ניתן להשתמש בדף זה כדי להעניק או לבטל [[Project:בוט|הרשאות בוט]] למשתמשים אחרים.'''<br />הרשאת בוט מסתירה את עריכותיו של המשתמש מ[[Special:Recentchanges|השינויים האחרונים]] ורשימות דומות, ושימושית למשתמשים המבצעים עריכות אוטומטיות. יש להעניק הרשאת בוט אך ורק לפי הנהלים המתאימים.",
-	'makebot-username'       => 'שם משתמש:',
-	'makebot-search'         => 'הצגה',
-	'makebot-isbot'          => 'למשתמש [[User:$1|$1]] יש הרשאת בוט.',
-	'makebot-notbot'         => 'למשתמש [[User:$1|$1]] אין הרשאת בוט.',
-	'makebot-privileged'     => 'למשתמש [[User:$1|$1]] יש כבר [[Special:Listusers/sysop|הרשאות מפעיל מערכת או ביורוקרט]], ולפיכך אי אפשר להעניק לו דגל בוט.',
-	'makebot-change'         => 'מה לבצע:',
-	'makebot-grant'          => 'הענקת הרשאה',
-	'makebot-revoke'         => 'ביטול הרשאה',
-	'makebot-comment'        => 'סיבה:',
-	'makebot-granted'        => 'המשתמש [[{{ns:user}}:$1|$1]] קיבל הרשאת בוט.',
-	'makebot-revoked'        => 'הרשאת הבוט של המשתמש [[{{ns:user}}:$1|$1]] הוסרה בהצלחה.',
+	'makebot'          => 'הענקת או ביטול הרשאת בוט',
+	'makebot-header'   => "'''ניתן להשתמש בדף זה כדי להעניק או לבטל [[Project:בוט|הרשאות בוט]] למשתמשים אחרים.'''<br />הרשאת בוט מסתירה את עריכותיו של המשתמש מ[[Special:Recentchanges|השינויים האחרונים]] ורשימות דומות, ושימושית למשתמשים המבצעים עריכות אוטומטיות. יש להעניק הרשאת בוט אך ורק לפי הנהלים המתאימים.",
+	'makebot-username' => 'שם משתמש:',
+	'makebot-search'   => 'הצגה',
+	'makebot-isbot'      => 'למשתמש [[User:$1|$1]] יש הרשאת בוט.',
+	'makebot-notbot'     => 'למשתמש [[User:$1|$1]] אין הרשאת בוט.',
+	'makebot-privileged' => 'למשתמש [[User:$1|$1]] יש כבר [[Special:Listusers/sysop|הרשאות מפעיל מערכת או ביורוקרט]], ולפיכך אי אפשר להעניק לו דגל בוט.',
+	'makebot-change'     => 'מה לבצע:',
+	'makebot-grant'      => 'הענקת הרשאה',
+	'makebot-revoke'     => 'ביטול הרשאה',
+	'makebot-comment'    => 'סיבה:',
+	'makebot-granted'    => 'המשתמש [[{{ns:user}}:$1|$1]] קיבל הרשאת בוט.',
+	'makebot-revoked'    => 'הרשאת הבוט של המשתמש [[{{ns:user}}:$1|$1]] הוסרה בהצלחה.',
 	'makebot-logpage'        => 'יומן הרשאות בוט',
 	'makebot-logpagetext'    => 'זהו יומן השינויים בהרשאות ה[[{{ns:help}}:בוט|בוט]] של המשתמשים.',
 	'makebot-logentrygrant'  => 'העניק הרשאת בוט למשתמש [[$1]]',
 	'makebot-logentryrevoke' => 'ביטל את הרשאת הבוט למשתמש [[$1]]',
-
-	'right-makebot' => 'הענקת וביטול הרשאת בוט',
 );
 
 $messages['hr'] = array(
@@ -514,7 +501,7 @@ $messages['hsb'] = array(
 );
 
 /** Hungarian (Magyar)
- * @author Dani
+ * @author Bdanee
  */
 $messages['hu'] = array(
 	'makebot'                => 'Botstátusz megadása vagy visszavonása',
@@ -536,12 +523,9 @@ $messages['hu'] = array(
 	'makebot-logentryrevoke' => '[[$1]] botstátuszát elvette',
 );
 
-/** Indonesian (Bahasa Indonesia)
- * @author IvanLanin
- */
+/* Indonesian (Ivan Lanin) */
 $messages['id'] = array(
 	'makebot'                 => 'Pemberian atau penarikan status bot',
-	'makebot-desc'            => 'Halaman istimewa yang mengizinkan birokrat lokal untuk memberikan atau menarik hak akses bot',
 	'makebot-header'          => '\'\'\'Birokrat lokal dapat menggunakan halaman ini untuk memberikan atau menarik [[{{MediaWiki:Grouppage-bot}}|status bot]] untuk akun pengguna lain.\'\'\'<br />Status bot akan menyembunyikan suntingan pengguna dari [[Special:Recentchanges|perubahan terbaru]] dan daftar serupa lainnya, dan berguna untuk menandai pengguna yang melakukan penyuntingan otomatis. Hal ini harus dilakukan sesuai dengan kebijakan yang telah digariskan.',
 	'makebot-username'        => 'Nama pengguna:',
 	'makebot-search'          => 'Cari',
@@ -736,7 +720,7 @@ $messages['la'] = array(
  */
 $messages['lb'] = array(
 	'makebot'                => 'Botstatus autoriséieren oder ofhuelen',
-	'makebot-header'         => "'''E Bürokrat vun dëser Wiki kann anere Benotzer - no de lokale Riichtlinnen - de [[{{MediaWiki:Grouppage-bot}}|Botstatus]] erdeelen oder entzéien.<br /> Mat dem Botstatus ass et méiglech, d'Kontributiounen vu Bot-Benotzerkonten an der Lëscht vun de '''[[Special:Recentchanges|rezenten Ännerungen]]''' an an änleche Lëschten ze verstoppen. D'Botmarkéierung ass doriwwer eraus nëtzlech fir automatesch Verännerunge vun Säiten z'erkennen.",
+	'makebot-header'         => "'''E Bürokrat vun dëser Wiki kann anere Benotzer - no de lokale Riichtlinnen - de [[{{MediaWiki:Grouppage-bot}}|Botstatus]] erdeelen oder entzéien.<br/> Mat dem Botstatus ass et méiglech, d'Kontributiounen vu Bot-Benotzerkonten an der Lëscht vun de '''[[Special:Recentchanges|rezenten Ännerungen]]''' an an änleche Lëschten ze verstoppen. D'Botmarkéierung ass doriwwer eraus nëtzlech fir automatesch Verännerunge vun Säiten z'erkennen.",
 	'makebot-username'       => 'Benotzernumm:',
 	'makebot-search'         => 'Status offroen',
 	'makebot-isbot'          => 'De [[User:$1|$1]] huet Botstatus.',
@@ -956,6 +940,7 @@ $messages['ru'] = array(
 
 /** Slovak (Slovenčina)
  * @author Helix84
+ * @author Robbot
  */
 $messages['sk'] = array(
 	'makebot'                => 'Udeliť alebo odobrať status bota',
@@ -1152,7 +1137,7 @@ $messages['tet'] = array(
 	'makebot-logentryrevoke' => 'hasai kuana bot [[User:$1|$1]] nian',
 );
 
-$messages['tg-cyrl'] = array(
+$messages['tg'] = array(
 	'makebot-username'        => 'Корбар:',
 );
 
@@ -1219,7 +1204,6 @@ $messages['wuu'] = array(
 /* Cantonese (Hillgentleman, Shinjiman) */
 $messages['yue'] = array(
 	'makebot'                 => '畀或收番機械人身份',
-	'makebot-desc'            => '特別頁容許本地事務員去畀同收番機械人權限',
 	'makebot-header'          => '\'\'\'本地事務員可以用哩頁畀或收番另一用户嘅 [[{{MediaWiki:Grouppage-bot}}|機械人身份]]。\'\'\'<br />機械人可以喺[[Special:Recentchanges|最近更改]]之類嘅表道匿埋。機械人身份可用來嘜住啲自動化嘅編者。記住要參攷相關嘅政策。',
 	'makebot-username'        => '用户名：',
 	'makebot-search'          => '去',
@@ -1236,13 +1220,11 @@ $messages['yue'] = array(
 	'makebot-logpagetext'     => '哩頁紀錄各用户啲 [[{{MediaWiki:Grouppage-bot}}|機械人]]身份記錄。',
 	'makebot-logentrygrant'   => '畀咗[[$1]]嘅機械人身份',
 	'makebot-logentryrevoke'  => ' 收番[[$1]]嘅機械人身份',
-	'right-makebot'           => '畀同收機械人旗',
 );
 
 /* Chinese (Simplified) (下一次登录) */
 $messages['zh-hans'] = array(
 	'makebot'                 => '授予或中止机器人身份',
-	'makebot-desc'            => '特殊页面容许本地行政员去授予及终止机器人权限',
 	'makebot-header'          => '\'\'\'本地行政员可以使用此页授予或中止另一个帐号的[[{{MediaWiki:Grouppage-bot}}|机器人身份]]。\'\'\'<br />机器人状态会导致该用户的编辑不被显示在[[Special:Recentchanges|最近更改]]和其他类似列表中，因此用于标识进行自动编辑的用户，但需要依据相应的可行方针。',
 	'makebot-username'        => '用户名：',
 	'makebot-search'          => '搜索',
@@ -1259,13 +1241,11 @@ $messages['zh-hans'] = array(
 	'makebot-logpagetext'     => '这是用户[[{{MediaWiki:Grouppage-bot}}|机器人]]更改的日志。',
 	'makebot-logentrygrant'   => '授予[[$1]]机器人身份',
 	'makebot-logentryrevoke'  => ' 中止[[$1]]的机器人身份',
-	'right-makebot'           => '授予和终止机器人身份',
 );
 
 /* Chinese (Traditional) (KilluaZaoldyeck, Shinjiman) */
 $messages['zh-hant'] = array(
 	'makebot'                 => '授予或終止機器人身分',
-	'makebot-desc'            => '特殊頁面容許本地行政員去授予及終止機器人權限',
 	'makebot-header'          => '\'\'\'所屬行政員允許使用此頁面授予或終止另一個帳號的[[{{MediaWiki:Grouppage-bot}}|機器人身分]]。\'\'\'<br />機器人身分的帳號所進行的修改將不被顯示在[[Special:Recentchanges|最近更改]]和其他類關列表中，因此，此身分用於標記自動編輯的帳號。此項的相關操作必須符合現行方針。',
 	'makebot-username'        => '帳號名稱：',
 	'makebot-search'          => '搜索',
@@ -1282,22 +1262,25 @@ $messages['zh-hant'] = array(
 	'makebot-logpagetext'     => '這是用戶[[{{MediaWiki:Grouppage-bot}}|機器人]]更改的記錄。',
 	'makebot-logentrygrant'   => '授予[[$1]]機器人身分',
 	'makebot-logentryrevoke'  => ' 終止[[$1]]機器人身分',
-	'right-makebot'           => '授予和終止機器人身分',
 );
 
 /* Chinese (Hong Kong) (KilluaZaoldyeck, Shinjiman) */
 $messages['zh-hk'] = array(
 	'makebot'                 => '授予或終止機械人身份',
-	'makebot-desc'            => '特殊頁面容許本地行政員去授予及終止番機械人權限',
 	'makebot-header'          => '\'\'\'所屬行政員允許使用此頁面授予或終止另一個帳號的[[{{MediaWiki:Grouppage-bot}}|機械人身份]]。\'\'\'<br />機械人身份的帳號所進行的修改將不被顯示在[[Special:Recentchanges|最近更改]]和其他類關列表中，因此，此身份用於標記自動編輯的帳號。此項的相關操作必須符合現行方針。',
+	'makebot-username'        => '用戶名：',
+	'makebot-search'          => '搜索',
 	'makebot-isbot'           => '[[User:$1|$1]]擁有機械人身份。',
 	'makebot-notbot'          => '[[User:$1|$1]]沒有機械人身份。',
 	'makebot-privileged'      => '[[User:$1|$1]]是[[Special:Listadmins|管理員]]，不能使用機械人身份。',
+	'makebot-change'          => '改變身份：',
+	'makebot-grant'           => '授予',
+	'makebot-revoke'          => '終止',
+	'makebot-comment'         => '備註：',
 	'makebot-granted'         => '[[User:$1|$1]]擁有機械人身份。',
 	'makebot-revoked'         => '[[User:$1|$1]]失去機械人身份。',
 	'makebot-logpage'         => '機械人身份記錄',
 	'makebot-logpagetext'     => '這是用戶[[{{MediaWiki:Grouppage-bot}}|機械人]]更改的記錄。',
 	'makebot-logentrygrant'   => '授予[[$1]]機械人身份',
 	'makebot-logentryrevoke'  => ' 終止[[$1]]機械人身份',
-	'right-makebot'           => '授予和終止機械人身份',
 );

@@ -21,27 +21,20 @@
  * http://www.gnu.org/copyleft/gpl.html
  */
 
-
-# Not a valid entry point, skip unless MEDIAWIKI is defined
-if ( !defined( 'MEDIAWIKI' ) ) {
-	echo <<<EOT
-To install the Collection extension, put the following line in LocalSettings.php:
-require_once( "\$IP/extensions/Collection/Collection.php" );
-EOT;
-	exit( 1 );
-}
-
 require_once( "$IP/extensions/Collection/Version.php" );
 
 # ==============================================================================
 
 # Configuration:
 
-/** URL of PDF server */
-$wgCollectionMWServeURL = 'http://tools.pediapress.com/mw-serve/';
+/** The mw-pdf command shipped with mwlib.rl */
+$wgMWPDFCommand = 'mw-pdf';
 
-/** Login credentials to this MediaWiki as 'USERNAME:PASSWORD' string */
-$wgCollectionMWServeCredentials = null;
+/** The mw-zip command shipped with mwlib */
+$wgMWZipCommand = 'mw-zip';
+
+/** The configuration file used by mw-pdf and mw-zip */
+$wgMWLibConfig = '/etc/mwlib.config';
 
 /** Namespace for "community collections" */
 $wgCommunityCollectionNamespace = NS_MEDIAWIKI;
@@ -49,31 +42,25 @@ $wgCommunityCollectionNamespace = NS_MEDIAWIKI;
 /** Maximum no. of articles in a collection */
 $wgCollectionMaxArticles = 500;
 
-/** Name of license */
-$wgLicenseName = null;
-
-/** HTTP(s) URL pointing to license in wikitext format: */
-$wgLicenseURL = null;
-
-/** Template blacklist article */
-$wgPDFTemplateBlacklist = 'MediaWiki:PDF Template Blacklist';
-
-/** List of available download formats,
-    as mapping of mwlib writer to format name */
-$wgCollectionFormats = array(
-	'rl' => 'PDF',
-);
-
 # ==============================================================================
 
 
+# Not a valid entry point, skip unless MEDIAWIKI is defined
+if ( !defined( 'MEDIAWIKI' ) ) {
+        echo <<<EOT
+To install the Collection extension, put the following line in LocalSettings.php:
+require_once( "$IP/extensions/Collection/Collection.php" );
+EOT;
+        exit( 1 );
+}
+
 $wgExtensionCredits['specialpage'][] = array(
-	'name' => 'Collection',
-	'version' => '1.0',
-	'author' => 'PediaPress GmbH',
-	'url' => 'http://www.mediawiki.org/wiki/Extension:Collection',
-	'description' => 'Collect articles, generate PDFs',
-	'descriptionmsg' => 'coll-desc',
+    'name' => 'Collection',
+    'version' => '1.0',
+    'author' => 'PediaPress GmbH',
+    'url' => 'http://www.mediawiki.org/wiki/Extension:Collection',
+    'description' => 'Collect articles, generate PDFs',
+    'descriptionmsg' => 'coll-desc',
 );
 
 # register Special:Collection:
@@ -89,35 +76,35 @@ $wgHooks['MonoBookTemplateToolboxEnd'][] = 'Collection::insertMonoBookToolboxLin
 
 
 function collectionLocalizedPageName(&$specialPageArray, $code) {
-	wfLoadExtensionMessages( 'Collection' );
-	$text = wfMsg( 'coll-collection' );
-	$title = Title::newFromText( $text );
-	$specialPageArray['Collection'][] = $title->getDBKey();
-	return true;
+    wfLoadExtensionMessages( 'Collection' );
+    $text = wfMsg( 'coll-collection' );
+    $title = Title::newFromText( $text );
+    $specialPageArray['Collection'][] = $title->getDBKey();
+    return true;
 }
 
 # register global Ajax functions:
 
 function wfAjaxGetCollection() {
-	$json = new Services_JSON();
-	if ( isset( $_SESSION['wsCollection'] ) ) {
-		$collection = $_SESSION['wsCollection'];
-	} else {
-		$collection = array();
-	}
-	return $json->encode( array( 'collection' => $collection ) );
+    $json = new Services_JSON();
+    if ( isset( $_SESSION['wsCollection'] ) ) {
+        $collection = $_SESSION['wsCollection'];
+    } else {
+        $collection = array();
+    }
+    return $json->encode( array( 'collection' => $collection ) );
 }
 
 $wgAjaxExportList[] = 'wfAjaxGetCollection';
 
 function wfAjaxPostCollection( $collection='' ) {
-	$json = new Services_JSON( SERVICES_JSON_LOOSE_TYPE );
-	if( session_id() == '' ) {
+    $json = new Services_JSON( SERVICES_JSON_LOOSE_TYPE );
+    if( session_id() == '' ) {
 		wfSetupSession();
 	}
 	$collection = $json->decode( $collection );
-	$_SESSION['wsCollection'] = $collection;
-	return $json->encode( array( 'collection' => $collection ) );
+    $_SESSION['wsCollection'] = $collection;
+    return $json->encode( array( 'collection' => $collection ) );
 }
 
 $wgAjaxExportList[] = 'wfAjaxPostCollection';

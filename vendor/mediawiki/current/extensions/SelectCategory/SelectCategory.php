@@ -87,6 +87,10 @@ function fnSelectCategory() {
 	$wgHooks['EditPage::attemptSave'][] = array( 'fnSelectCategorySaveHook', false );
 	# Hook when saving the upload:
 	$wgHooks['UploadForm:BeforeProcessing'][] = array( 'fnSelectCategorySaveHook', true );
+
+	## Infrastructure
+	# Hook our own CSS:
+	$wgHooks['OutputPageParserOutput'][] = 'fnSelectCategoryOutputHook';
 }
 
 ## Load the file containing the hook functions:

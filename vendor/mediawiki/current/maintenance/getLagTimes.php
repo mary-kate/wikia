@@ -1,20 +1,14 @@
 <?php
-/**
- * @file
- * @ingroup Maintenance
- */
 
 require 'commandLine.inc';
 
-$lb = wfGetLB();
-
-if( $lb->getServerCount() == 1 ) {
+if( empty( $wgDBservers ) ) {
 	echo "This script dumps replication lag times, but you don't seem to have\n";
 	echo "a multi-host db server configuration.\n";
 } else {
-	$lags = $lb->getLagTimes();
+	$lags = $wgLoadBalancer->getLagTimes();
 	foreach( $lags as $n => $lag ) {
-		$host = $lb->getServerName( $n );
+		$host = $wgDBservers[$n]["host"];
 		if( IP::isValid( $host ) ) {
 			$ip = $host;
 			$host = gethostbyaddr( $host );

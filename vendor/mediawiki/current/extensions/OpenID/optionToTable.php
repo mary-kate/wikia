@@ -47,3 +47,4 @@ while ($res && $row = $dbr->fetchObject($res)) {
 	OpenIDSetUserUrl($user, $user->getOption('openid_url'));
 }
 $dbr->freeResult($res);
+

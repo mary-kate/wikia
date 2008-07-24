@@ -7,16 +7,15 @@
 mv_addLoadEvent(mv_pre_setup_search); 	
 
 var maxFilters = 8;
-var mv_search_action='';
-function mv_pre_setup_search(req_mode){
+function mv_pre_setup_search(){
 	//make sure we have jQuery and any base requried libs: 
 	mvJsLoader.doLoad(mvEmbed.lib_jquery, function(){
  		_global['$j'] = jQuery.noConflict();
-		mv_setup_search(req_mode);
+		mv_setup_search();
 	});
 }
-function mv_setup_search(req_mode){	
-	js_log('mv_setup_search: '+  req_mode);
+function mv_setup_search(){
+	js_log('mv_setup_search');
 	add_highlight_function();
 	//look for existing auto completes:
 	for(i=0;i<maxFilters;i++){
@@ -24,14 +23,6 @@ function mv_setup_search(req_mode){
 			mv_add_person_ac(i);
 		}
 	}
-	//if in ajax req mode (re-write "run_search" button)
-	if(req_mode=='ajax'){
-		//store action
-		mv_search_action = $j('#mv_media_search').attr('action');
-		//change form action
-		$j('#mv_media_search').attr('action','javascript:mv_do_ajax_search()');
-	}
-	
 	//look for search results (enable button actions)
 	$j('.mv_stream_play_button').click(function(){
 		window.location.href = wgScript+ '/'+
@@ -133,35 +124,6 @@ function mv_setup_search(req_mode){
 		};	
 	});
 }
-function mv_do_ajax_search(){
-	js_log('mv_do_ajax_search '); 	
-	//build req url: 
-	var req_query=(mv_search_action.indexOf('?')!==-1)?'&':'?';
- 	req_query+= 'seq_inline=true';
-	$j('#mv_media_search :input').each(function(){
-		if($j(this).attr('name')){
-			req_query+='&'+$j(this).attr('name')+'='+$j(this).val();
-		}
-	});
-	mv_do_ajax_search_request( mv_search_action+ req_query);
-	
-}
-function mv_do_ajax_search_request(url){
-	//(don't) annimate the transition: 
-	//$j('#mv_search_results_container').fadeOut(function(){	
-	//});
-	$j('#mv_search_results_container').html(getMsg('loading_txt'));		
-	$j.get(url, function(data){
-		//populate results
-		$j('#mv_search_results_container').html(data);
-		//run callback: 
-		if(typeof mv_ajax_search_callback == 'function'){
-			mv_ajax_search_callback();		
-		}else{
-			js_log('ajax_search_callback type was: '+ typeof mv_ajax_search_callback);
-		}
-	});
-}
 function add_date_binddings(inx, mvDateInitObj){
 	//@@todo load the date format from the server
 	Date.format = 'mm/dd/yyyy';
@@ -233,18 +195,15 @@ function add_date_binddings(inx, mvDateInitObj){
 	);
 }
 function mv_ex(mvd_id){
-	uri = wgServer +((wgServer == null) ? (wgScriptPath + "/index.php") : wgScript);	
-	js_log('expand ' + mvd_id);	
+	uri = wgServer +
+	((wgServer == null) ? (wgScriptPath + "/index.php") : wgScript);	
+	js_log(mvd_id);	
 	//swap the image: 
 	img_parts = $j('#mv_img_ex_'+mvd_id).attr('src').split('/');
 	if(img_parts.pop()=='closed.png'){
-		//$j('#mvr_desc_'+mvd_id).fadeOut('fast');
+		$j('#mvr_desc_'+mvd_id).fadeOut('fast');
 		
 		$j('#mv_img_ex_'+mvd_id).attr('src', img_parts.join('/') + '/opened.png');
-		$j('#mv_watch_clip_'+mvd_id).fadeOut('fast', function(){
-			$j('#mv_close_clip_'+mvd_id).fadeIn('fast');
-		});
-		
 		$j('#mvr_'+mvd_id).css('display', 'block').html(global_loading_txt);
 		//grab search terms:
 		var terms='';
@@ -255,18 +214,14 @@ function mv_ex(mvd_id){
 		{action:'ajax',rs:'mv_expand_wt', "rsargs[0]":mvd_id, "st":terms},
 		function(data){				
 			//run highlighter on data: 
-			//js_log('set to: '+ data);
+			js_log('set to: '+ data);
 			$j('#mvr_'+mvd_id).html(data);
 			hl_search_terms('#mvr_'+mvd_id);
-			//rewrite video tag: 
-			rewrite_by_id('vid_'+mvd_id);
+			//re run mv_embed rewrite: 
+			init_mv_embed(true);
 		});
 	}else{
-		$j('#mv_close_clip_'+mvd_id).fadeOut('fast', function(){
-			$j('#mv_watch_clip_'+mvd_id).fadeIn('fast');
-		});
-		//$j('#mvr_desc_'+mvd_id).fadeIn('fast');
-		//$j('#vrdesc_'+mvd_id).fadeIn('fast');		
+		$j('#mvr_desc_'+mvd_id).fadeIn('fast');
 		$j('#mv_img_ex_'+mvd_id).attr('src', img_parts.join('/') + '/closed.png');
 		$j('#mvr_'+mvd_id).css('display', 'none');
 	}		
@@ -287,7 +242,7 @@ function hl_search_terms(result_selector){
 	$j(result_selector).each(function(){
 		for(i in terms){
 			term = terms[i];
-			//js_log("do hl call: "+ term);
+			js_log("do hl call: "+ term);
 			$j.highlight(this, term);
 		}
 	});
@@ -336,7 +291,7 @@ function mv_add_person_ac(inx){
 		{
 			autoFill:true,
 			onItemSelect:function(v){		
-				js_log('selected:' + v.innerHTML );
+				console.log('selected:' + v.innerHTML );
 				//update the image: 
 				$j('#mv_person_img_'+inx).attr('src', $j(v).children('img').attr('src'));
 			},
@@ -347,10 +302,9 @@ function mv_add_person_ac(inx){
 			extraParams:{action:'ajax',rs:'mv_auto_complete_person'},
 			paramName:'rsargs[]',
 			resultElem:'#mv_person_choices_'+inx
-		});			
-	$j('#mv_person_choices_'+inx).css({
-		'left':$j('#mv_person_input_'+inx).get(0).offsetLeft,
-		'top':$j('#mv_person_input_'+inx).get(0).offsetTop + $j('#mv_person_input_'+inx).height()+6 });
+		});
+	var offset = $j('#mv_person_input_'+inx).offset();
+	$j('#mv_person_choices_'+inx).css('left', offset.left-205);
 }
 function mv_add_filter(){
 	//close the first filter select rename inx to inx+1

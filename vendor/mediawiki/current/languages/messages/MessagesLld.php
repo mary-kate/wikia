@@ -1,8 +1,9 @@
 <?php
 /** Ladin (Ladin)
  *
- * @ingroup Language
- * @file
+ * @addtogroup Language
+ *
  */
 
 $fallback = 'it';
+

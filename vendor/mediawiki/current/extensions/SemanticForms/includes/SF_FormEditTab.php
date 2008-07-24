@@ -12,19 +12,18 @@ function sffFormEditTab($obj, $content_actions) {
   if (isset($obj->mTitle) && ($obj->mTitle->getNamespace() != NS_CATEGORY)) {
     $form_name = sffGetFormForArticle($obj);
     if ($form_name) {  
-      global $wgRequest, $wgUser;
+      global $wgRequest;
       global $sfgRenameEditTabs;
 
-      $user_can_edit = $wgUser->isAllowed('edit') && $obj->mTitle->userCanEdit();
       // create the form edit tab, and apply whatever changes are specified
       // by the edit-tab global variables
       if ($sfgRenameEditTabs) {
-        $form_edit_tab_text = $user_can_edit ? wfMsg('edit') : wfMsg('sf_viewform');
+        $form_edit_tab_text = wfMsg('edit');
         if (array_key_exists('edit', $content_actions)) {
-          $content_actions['edit']['text'] = $user_can_edit ? wfMsg('sf_editsource') : wfMsg('viewsource');
+          $content_actions['edit']['text'] = wfMsg('edit_source');
         }
       } else {
-        $form_edit_tab_text = $user_can_edit ? wfMsg('sf_formedit') : wfMsg('sf_viewform');
+        $form_edit_tab_text = wfMsg('form_edit');
       }
 
       $class_name = ($wgRequest->getVal('action') == 'formedit') ? 'selected' : '';
@@ -58,9 +57,7 @@ function sffFormEditTab($obj, $content_actions) {
 
       global $wgUser;
       if (! $wgUser->isAllowed('viewedittab')) {
-        // the tab can have either of those two actions
         unset($content_actions['edit']);
-        unset($content_actions['viewsource']);
       }
 
       return true;
