@@ -68,7 +68,7 @@ class SearchRankBot {
 	}
 	
 	
-	public function run($bVerbose = true) {
+	public function run($bVerbose = true, $iEntryId = 0) {
 		global $wgSharedDB, $wgSearchRankTrackerConfig;
 		$this->printDebug("Starting SearchRankBot ...", $bVerbose);
 		
@@ -80,7 +80,7 @@ class SearchRankBot {
 		$dbr = wfGetDB(DB_SLAVE);
 		$dbr->selectDB($wgSharedDB);
 
-		$oResource = $dbr->query("SELECT * FROM rank_entry ORDER BY ren_city_id, ren_id");
+		$oResource = $dbr->query("SELECT * FROM rank_entry " . ($iEntryId ? "WHERE ren_id='" . addslashes($iEntryId) . "' " : "") . "ORDER BY ren_city_id, ren_id");
 		
 		if($oResource) {
 			while($oResultRow = $dbr->fetchObject($oResource)) {
@@ -177,7 +177,7 @@ class SearchRankBot {
 			}
 			else {
 				// no links were found, end of results or invalid pattern.
-				$this->printDebug("=> (google) No links were found (end or results or invalid pattern) - offset: $iOffset");				
+				$this->printDebug("=> (google) No links were found (end or results or invalid pattern) - offset: $iOffset", false, (!$iOffset?$sResult:""));				
 				break;
 			}
 
@@ -238,7 +238,7 @@ class SearchRankBot {
 			}
 			else {
 				// no links were found, end of results or invalid pattern.
-				$this->printDebug("=> (yahoo) No links were found (end of results or invalid pattern) - offset: $iOffset");
+				$this->printDebug("=> (yahoo) No links were found (end of results or invalid pattern) - offset: $iOffset", false, (!$iOffset?$sResult:""));
 				break;
 			}
 
@@ -296,7 +296,7 @@ class SearchRankBot {
 			}
 			else {
 				// no links were found, end of results or invalid pattern.
-				$this->printDebug("=> (MSN) No links were found (end of results or invalid pattern) - offset: $iOffset");
+				$this->printDebug("=> (MSN) No links were found (end of results or invalid pattern) - offset: $iOffset", false, (!$iOffset?$sResult:""));
 				break;
 			}
 
@@ -350,7 +350,7 @@ class SearchRankBot {
 			}
 			else {
 				// no links were found, end of results or invalid pattern.
-				$this->printDebug("=> (altavista) No links were found (end of results or invalid pattern) - offset: $iOffset");
+				$this->printDebug("=> (altavista) No links were found (end of results or invalid pattern) - offset: $iOffset", false, (!$iOffset?$sResult:""));
 				break;
 			}
 				
@@ -363,9 +363,14 @@ class SearchRankBot {
 		return $iRank;
 	}
 
-	private function printDebug($sMessage, $bForceDebugMode = false) {
+	private function printDebug($sMessage, $bForceDebugMode = false, $sExtraInfo = "") {
 		if($this->mDebugMode || $bForceDebugMode) {  
-			print "[SearchRankBot] " . $sMessage . "\n";  
+			print "[SearchRankBot] " . $sMessage . "\n";
+			if(!empty($sExtraInfo)) {
+				print "===START: extra info===\n";
+				print $sExtraInfo . "\n";
+				print "===END: extra info===\n";
+			}
 		}
 	}
 	
