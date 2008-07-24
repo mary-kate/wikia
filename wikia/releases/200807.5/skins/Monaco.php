@@ -1000,7 +1000,7 @@ echo AdServer::getInstance()->getAd('js_bot1');
 wfRunHooks('GetHTMLAfterBody', array ($this));
 ?>
 
-		<div style="display: none;">
+		<div style="font-size: 1px; position: absolute;">
 			<a href="/wiki/Special:Recentchanges" accesskey="r">Recent changes</a>
 			<a href="/wiki/Special:Random" accesskey="x">Random page</a>
 		</div>
