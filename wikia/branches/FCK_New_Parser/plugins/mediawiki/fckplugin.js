@@ -796,6 +796,17 @@ FCK.DataProcessor =
 	}
 })();
 
+var FCKDocumentProcessor_CreateFakeSpan = function( fakeClass, realElement )
+{
+        var oImg = FCKTools.GetElementDocument( realElement ).createElement( 'SPAN' ) ;
+        oImg.className = fakeClass ;
+        oImg.src = FCKConfig.FullBasePath + 'images/spacer.gif' ;
+        oImg.setAttribute( '_fckfakelement', 'true', 0 ) ;
+        oImg.setAttribute( '_fckrealelement', FCKTempBin.AddElement( realElement ), 0 ) ;
+        return oImg ;
+}
+
+
 // MediaWiki document processor.
 FCKDocumentProcessor.AppendNew().ProcessDocument = function( document )
 {
@@ -838,12 +849,20 @@ FCKDocumentProcessor.AppendNew().ProcessDocument = function( document )
 			case 'fck_mw_onlyinclude' :
 				if ( className == null )
 					className = 'FCK__MWOnlyinclude' ;
-					
-				var oImg = FCKDocumentProcessor_CreateFakeImage( className, eSpan.cloneNode(true) ) ;
-				oImg.setAttribute( '_' + eSpan.className, 'true', 0 ) ;
 
-				eSpan.parentNode.insertBefore( oImg, eSpan ) ;
-				eSpan.parentNode.removeChild( eSpan ) ;
+				if (className != 'FCK__MWTemplate') {    				
+					var oImg = FCKDocumentProcessor_CreateFakeImage( className, eSpan.cloneNode(true) ) ;
+					oImg.setAttribute( '_' + eSpan.className, 'true', 0 ) ;
+
+					eSpan.parentNode.insertBefore( oImg, eSpan ) ;
+					eSpan.parentNode.removeChild( eSpan ) ;
+				} else {
+					var oImg = FCKDocumentProcessor_CreateFakeSpan( className, eSpan.cloneNode(true) ) ;
+					oImg.setAttribute( '_' + eSpan.className, 'true', 0 ) ;
+
+					eSpan.parentNode.insertBefore( oImg, eSpan ) ;
+					eSpan.parentNode.removeChild( eSpan ) ;
+				}
 			break ;
 		}
 	}
