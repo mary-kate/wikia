@@ -77,3 +77,9 @@ body.rtl .magnify { float:left; }
 
 body.ltr .thumbcaption { text-align:left; }
 body.ltr .magnify { float:right; }
+
+/**
+ * for registration - Bartek 2008.07.25
+ */
+
+#captcha-div { margin-top: -3px; }
