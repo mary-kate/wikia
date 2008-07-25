@@ -800,7 +800,6 @@ var FCKDocumentProcessor_CreateFakeSpan = function( fakeClass, realElement )
 {
         var oImg = FCKTools.GetElementDocument( realElement ).createElement( 'SPAN' ) ;
         oImg.className = fakeClass ;
-        oImg.src = FCKConfig.FullBasePath + 'images/spacer.gif' ;
         oImg.setAttribute( '_fckfakelement', 'true', 0 ) ;
         oImg.setAttribute( '_fckrealelement', FCKTempBin.AddElement( realElement ), 0 ) ;
         return oImg ;
