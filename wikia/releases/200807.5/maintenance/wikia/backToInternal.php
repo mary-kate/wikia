@@ -11,7 +11,7 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 
 
 
-function moveToExternal( $cluster ) {
+function moveToExternal( ) {
 	$fname = __METHOD__;
 	$dbw = wfGetDB( DB_MASTER );
 	$dbr = wfGetDB( DB_SLAVE );
@@ -67,24 +67,14 @@ function moveToExternal( $cluster ) {
 		}
 
 		$text = ExternalStore::fetchFromURL( $url );
-
-/**
-		$url = $ext->store( $cluster, $text );
-		if ( !$url ) {
-			print "Error writing to external storage\n";
-			exit;
-		}
-
-		print "Storing "  . strlen( $text ) . " bytes to $url\n";
-		print "old_id=$id\n";
+		echo "moved url {$url} back to {$id} with flags {$flags}\n";
 
 		$dbw->update(
 			'text',
-			array( 'old_flags' => $flags, 'old_text' => $url ),
+			array( 'old_flags' => $flags, 'old_text' => $text ),
 			array( 'old_id' => $id ),
 			$fname
 		);
-**/
 		$numMoved++;
 	}
 	$dbr->freeResult( $res );
