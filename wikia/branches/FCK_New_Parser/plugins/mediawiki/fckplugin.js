@@ -820,9 +820,6 @@ FCKDocumentProcessor.AppendNew().ProcessDocument = function( document )
 			case 'fck_mw_magic' :
 				if ( className == null )
 					className = 'FCK__MWMagicWord' ;
-			case 'fck_mw_magic' :
-				if ( className == null )
-					className = 'FCK__MWMagicWord' ;
 			case 'fck_mw_special' : //YC
 				if ( className == null )
 					className = 'FCK__MWSpecial' ;
