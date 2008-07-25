@@ -3,27 +3,16 @@
 ini_set( "include_path", dirname(__FILE__)."/../" );
 
 if ( !defined( 'MEDIAWIKI' ) ) {
-	$optionsWithArgs = array( 'm', 's' );
 
 	require_once( dirname(__FILE__) . '/../commandLine.inc' );
 	require_once( 'ExternalStoreDB.php' );
-	require_once( 'maintenance/storage/resolveStubs.php' );
-
-	$fname = 'moveToExternal';
-
-	if ( !isset( $args[0] ) ) {
-		print "Usage: php moveToExternal.php <cluster>\n";
-		exit;
-	}
-
-	$cluster = $args[0];
-	moveToExternal( $cluster );
+	moveToExternal();
 }
 
 
 
 function moveToExternal( $cluster ) {
-	$fname = 'moveToExternal';
+	$fname = __METHOD__;
 	$dbw = wfGetDB( DB_MASTER );
 	$dbr = wfGetDB( DB_SLAVE );
 
@@ -34,7 +23,7 @@ function moveToExternal( $cluster ) {
 	$res = $dbr->query(
 		"SELECT * FROM revision r1 FORCE INDEX (PRIMARY), text t2
 		WHERE old_id = rev_text_id
-		AND old_flags NOT LIKE '%external%'
+		AND old_flags LIKE '%external%'
 		ORDER BY rev_timestamp, rev_id",
 		$fname
 	);
@@ -43,18 +32,26 @@ function moveToExternal( $cluster ) {
 	while ( $row = $dbr->fetchObject( $res ) ) {
 		$text = $row->old_text;
 		$id = $row->old_id;
-		if ( $row->old_flags === '' ) {
-			$flags = 'external';
-		} else {
-			$flags = "{$row->old_flags},external";
+
+		/**
+		 * do the trick with spliiting string and rejoining without external
+		 * flag
+		 */
+		$flags = explode(",", $row->old_flags );
+		$ftmp = array();
+		foreach( $flags as $f ) {
+			$f = trim( $f );
+			if( $f === "external" ) {
+				continue;
+			}
+			$ftmp[] = $f;
 		}
+		$flags = implode(",", $ftmp );
 
 		if ( strpos( $flags, 'object' ) !== false ) {
 			$obj = unserialize( $text );
 			$className = strtolower( get_class( $obj ) );
 			if ( $className == 'historyblobstub' ) {
-				#resolveStub( $id, $row->old_text, $row->old_flags );
-				#$numStubs++;
 				continue;
 			} elseif ( $className == 'historyblobcurstub' ) {
 				$text = gzdeflate( $obj->getText() );
@@ -69,6 +66,7 @@ function moveToExternal( $cluster ) {
 			$className = false;
 		}
 
+/**
 		$url = $ext->store( $cluster, $text );
 		if ( !$url ) {
 			print "Error writing to external storage\n";
@@ -84,15 +82,7 @@ function moveToExternal( $cluster ) {
 			array( 'old_id' => $id ),
 			$fname
 		);
-
-		$revision = Revision::newFromId( $row->rev_id );
-		if( $revision ) {
-			$extUpdate = new ExternalStorageUpdate( $url, $revision );
-			$extUpdate->doUpdate();
-		}
-		else {
-			echo "Cannot load revision by id = {$row->rev_id}\n";
-		}
+**/
 		$numMoved++;
 	}
 	$dbr->freeResult( $res );
