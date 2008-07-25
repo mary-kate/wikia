@@ -42,24 +42,30 @@ function WidgetBookmark($id) {
 		$pages = WidgetBookmarkGetPages();
 	}
 
-	$list = '<ul>';
+	// count pages from current wiki
+	$count = 0;
 
 	if ( is_array($pages) && count($pages) > 0 ) {
 
 		// the newest bookmarks on top
 		$pages = array_reverse($pages);	
 
-		$list .= '<!-- '.count($pages).' bookmarks -->';
+		$list = '<ul><!-- '.count($pages).' bookmarks -->';
 
 		foreach($pages as $page_id => $page) {
 			// filter the list by cityId
 			if (isset($page['city']) && $page['city'] == $wgCityId) {
 				$list .= '<li><a href="'.$page['href'].'">'.htmlspecialchars(  shortenText($page['title'], 30)  ).'</a>'.
 				'<a class="WidgetBookmarkRemove" onclick="WidgetBookmarkDo('.$id.', \'remove\', \''.$page_id.'\')">x</a></li>';
+				$count++;
 			}
 		}
+		$list .= '</ul>';
 	}
-	$list .= '</ul>';
+	
+	if ($count == 0) {
+		$list = wfMsg('widget-bookmark-empty');
+	}
 
 	// menu
 	$menu = '<div class="WidgetBookmarkMenu">'.

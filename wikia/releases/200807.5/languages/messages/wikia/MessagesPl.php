@@ -21,6 +21,7 @@ $messages = array_merge( $messages, array(
 'wt_show_period' => 'Wybierz okres statystyk',
 'widget-wikipage-title' => 'Tytuł widżeta',
 'widget-wikipage-source' => 'Strona źródłowa',
+'widget-bookmark-empty' => 'Dodawaj swoje ulubione artykuły klikając na powyższą ikonkę',
 'widgets' => 'Lista widgetów',
 'widgets-specialpage-info' => 'Widżety działają najlepiej w jednej z najnowszych skórek, np. [{{SERVER}}/index.php?title=Special:Widgets&useskin=monaco Monaco].
 
