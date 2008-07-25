@@ -862,22 +862,6 @@ FCKDocumentProcessor.AppendNew().ProcessDocument = function( document )
 	}
 }
 
-// Context menu for templates.
-FCK.ContextMenu.RegisterListener({
-	AddItems : function( contextMenu, tag, tagName )
-	{
-		if ( tagName == 'IMG' )
-		{
-			if ( tag.getAttribute( '_fck_mw_special' ) || tag.getAttribute( '_fck_mw_nowiki' ) || tag.getAttribute( '_fck_mw_includeonly' ) || tag.getAttribute( '_fck_mw_noinclude' ) || tag.getAttribute( '_fck_mw_onlyinclude' ) || tag.getAttribute( '_fck_mw_gallery' )) //YC
-			{
-				contextMenu.AddSeparator() ;
-				contextMenu.AddItem( 'MW_Special', 'Special Tag Properties' ) ;
-			}
-		}
-	}
-}) ;
-
-
 /* patch for 2.6.1 */
 if (window.parent.FCKeditor.prototype.VersionBuild > 18219) 
 {
