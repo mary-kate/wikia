@@ -347,6 +347,7 @@ class FCKeditorParser extends Parser
                 $text = $frame->expand( $dom, $flags );
 
 		$tags = array();
+		$result = array () ;
 		$offset=0;
 		$textTmp = $text;
 		while (false !== ($pos = strpos($textTmp, "<!--FCK_SKIP_START-->")))
@@ -374,6 +375,7 @@ class FCKeditorParser extends Parser
 			$lastSum=0;
 			$finalString = "";
 			$stringToParse = "";
+			$templates = "";
 			$startingPos = 0;
 			$inner = "";
 			$strtr_span = array();
@@ -386,6 +388,7 @@ class FCKeditorParser extends Parser
 				else if ($sum == 0) {
 					$stringToParse .= 'Fckmw'.$this->fck_mw_strtr_span_counter.'fckmw';
 					$inner = htmlspecialchars(strtr(substr($text, $startingPos, $pos - $startingPos + 19), $strtr));
+					$templates .= "<span class=\"fck_mw_template\">" . $inner . "</span>" ;
 					$this->fck_mw_strtr_span['href="Fckmw'.$this->fck_mw_strtr_span_counter.'fckmw"'] = 'href="'.$inner.'"';
 					$this->fck_mw_strtr_span['Fckmw'.$this->fck_mw_strtr_span_counter.'fckmw'] = '<span class="fck_mw_template">'.str_replace(array("\r\n", "\n", "\r"),"fckLR",$inner).'</span>';
 					$startingPos = $pos + 19;
@@ -396,8 +399,11 @@ class FCKeditorParser extends Parser
 			$stringToParse .= substr($text, $startingPos);
 			$text = &$stringToParse;
 		}
-
-		return $text;
+		
+       	 	return array (
+				"text" => $text ,
+				"templates" => $templates
+		       ) ;
 	}
 
 	function internalParse ( $text ) {
@@ -411,8 +417,11 @@ class FCKeditorParser extends Parser
 
 		//html comments shouldn't be stripped
 		$text = $this->fck_replaceHTMLcomments( $text );
+
 		//as well as templates
-		$text = $this->fck_replaceTemplates( $text );
+		$replacedTemplates = $this->fck_replaceTemplates( $text );
+		$text = $replacedTemplates ["text"] ;
+		$templates = $replacedTemplates ["templates"] ;
 
 		$finalString = parent::internalParse($text);
 
