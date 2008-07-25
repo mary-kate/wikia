@@ -69,7 +69,10 @@ class MostpopulararticlesPage extends QueryPage {
 			$this->data[$result->title] = $result->value;
 			return false;
 		} else {
-			return wfSpecialList( $result->title, $result->value );
+			$title = Title::makeTitle( NS_MAIN, $result->title ); # Note this only makes NS_MAIN links!
+			$titleText = $skin->makeLinkObj( $title, htmlspecialchars( $title->getText() ) ); 
+
+			return wfSpecialList( $titleText, $result->value );
 		}
 	}
 
