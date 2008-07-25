@@ -40,9 +40,7 @@ FCKConfig.EditorAreaStyles = '\
 } \
 .FCK__MWTemplate \
 { \
-	background-image: url(' + FCKConfig.PluginsPath + 'mediawiki/images/icon_template.gif); \
-	width: 20px; \
-	height: 15px; \
+	background: #fbdf47 ; \
 } \
 .FCK__MWRef \
 { \
