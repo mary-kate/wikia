@@ -30,7 +30,7 @@ function moveToExternal( $cluster ) {
 	$ext = new ExternalStoreDB;
 
 	while ( $row = $dbr->fetchObject( $res ) ) {
-		$text = $row->old_text;
+		$url = $row->old_text;
 		$id = $row->old_id;
 
 		/**
@@ -65,6 +65,8 @@ function moveToExternal( $cluster ) {
 		} else {
 			$className = false;
 		}
+
+		$text = ExternalStore::fetchFromURL( $url );
 
 /**
 		$url = $ext->store( $cluster, $text );
