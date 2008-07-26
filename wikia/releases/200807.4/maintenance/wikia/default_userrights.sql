@@ -43,7 +43,7 @@ insert into user_groups(ug_user, ug_group) values
 (/*Wiffle*/305670,'staff'),
 (/*WikiaBot*/269919,'staff'),
 (/*Yukichi*/126117,'staff'),
-(/*Zuirdj*/47,'staff'),
+(/*Zuirdj*/47,'staff')
 ;
 
 delete from user_groups where ug_user in (
