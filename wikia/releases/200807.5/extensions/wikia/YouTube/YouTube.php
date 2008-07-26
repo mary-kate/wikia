@@ -40,10 +40,10 @@ $wgExtensionFunctions[] = 'wfYouTube';
 $wgExtensionCredits['parserhook'][] = array
 (
 	'name'        => 'YouTube',
-	'version'     => '1.5',
+	'version'     => '1.6',
 	'author'      => 'Przemek Piotrowski',
 	'url'         => 'http://help.wikia.com/wiki/Help:YouTube',
-	'description' => 'embeds YouTube and Google Video movies + Archive.org audio and video + WeGame video + Tangler forum',
+	'description' => 'embeds YouTube and Google Video movies + Archive.org audio and video + WeGame and Gametrailers video + Tangler forum',
 );
 
 function wfYouTube() 
@@ -56,6 +56,7 @@ function wfYouTube()
 	$wgParser->setHook('aoaudio', 'embedArchiveOrgAudio');
 	$wgParser->setHook('wegame', 'embedWeGame');
 	$wgParser->setHook('tangler', 'embedTangler');
+	$wgParser->setHook('gtrailer', 'embedGametrailers');
 }
 
 function embedYouTube_url2ytid($url)
@@ -322,5 +323,52 @@ function embedTangler($input, $argv, &$parser)
 	if (!empty($tid) && !empty($gid))
 	{
 		return "<p style=\"width: 410px; height: 480px\" id=\"tangler-embed-topic-{$tid}\"></p><script src=\"http://www.tangler.com/widget/embedtopic.js?id={$tid}&gId={$gid}\"></script>";
+	}
+}
+
+function embedYouTube_url2gtid($url)
+{
+	$id = $url;
+
+	if (preg_match('/^http:\/\/www\.gametrailers\.com\/player\/(.+)\.html$/', $url, $preg))
+	{
+		$id = $preg[1];
+	} elseif (preg_match('/^http:\/\/www\.gametrailers\.com\/remote_wrap\.php\?mid=(.+)$/', $url, $preg))
+	{
+		$id = $preg[1];
+	}
+
+	preg_match('/([0-9]+)/', $id, $preg);
+	$id = $preg[1];
+
+	return $id;
+}
+
+function embedGametrailers($input, $argv, &$parser)
+{
+	$gtid   = '';
+	$width  = $width_max  = 480;
+	$height = $height_max = 392;
+
+	if (!empty($argv['gtid']))
+	{
+		$gtid = embedYouTube_url2gtid($argv['gtid']);
+	} elseif (!empty($input))
+	{
+		$gtid = embedYouTube_url2gtid($input);
+	}
+	if (!empty($argv['width']) && settype($argv['width'], 'integer') && ($width_max >= $argv['width']))
+	{
+		$width = $argv['width'];
+	}
+	if (!empty($argv['height']) && settype($argv['height'], 'integer') && ($height_max >= $argv['height']))
+	{
+		$height = $argv['height'];
+	}
+
+	if (!empty($gtid))
+	{
+		$url = "http://www.gametrailers.com/remote_wrap.php?mid={$gtid}";
+		return "<object type=\"application/x-shockwave-flash\" width=\"{$width}\" height=\"{$height}\"><param name=\"movie\" value=\"{$url}\"/></object>"; 
 	}
 }
