@@ -47,13 +47,6 @@ insert into user_groups(ug_user, ug_group) values
 ;
 
 delete from user_groups where ug_user in (
-/*Jasonr*/1
-) and ug_group="searchadmin";
-insert into user_groups(ug_user, ug_group) values
-(/*Jasonr*/1,'searchadmin')
-;
-
-delete from user_groups where ug_user in (
 /*Greyman*/87167,
 /*Jaymach*/7701,
 /*Uberfuzzy*/161697
