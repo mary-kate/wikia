@@ -372,7 +372,7 @@ class SpecialProblemReports extends SpecialPage
 
 		// add CSS (from static file)
 		$wgOut->addScript(
-			'<link rel="stylesheet" type="text/css" href="'.$wgExtensionsPath.'/wikia/ProblemReports/css/ProblemReports.css?'.$wgStyleVersion.'" />'.
+			'<link rel="stylesheet" type="text/css" href="'.$wgExtensionsPath.'/wikia/ProblemReports/css/SpecialProblemReports.css?'.$wgStyleVersion.'" />'.
 			"\n\t\t".'<script type="text/javascript" src="'.$wgExtensionsPath.'/wikia/ProblemReports/js/SpecialProblemReports.js?'.$wgStyleVersion.'" ></script>'.
 			"\n"
 		);
