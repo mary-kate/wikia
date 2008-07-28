@@ -29,6 +29,7 @@
     
     <textarea name="mailer-message" id="mailer-message" rows="15">
 
+
 ----
 <?= $problem['server'] . Title::newFromText('ProblemReports/'.$problem['id'], NS_SPECIAL)->escapeLocalURL(); ?></textarea><br style="clear: both" />
     <input type="checkbox" name="mailer-ccme" id="mailer-ccme" /><label for="mailer-ccme"><?= wfMsg('emailccme') ?></label><br />
