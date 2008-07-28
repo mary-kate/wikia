@@ -27,7 +27,10 @@
 		<div style="margin: 20px 0 0 50px; text-align: right; font-size: 0.9em"><?= $wgOut->parse(wfMsg('pr_mailer_tmp_info')) ?></div>
 	</div>
     
-    <textarea name="mailer-message" id="mailer-message" rows="15"></textarea><br style="clear: both" />
+    <textarea name="mailer-message" id="mailer-message" rows="15">
+
+----
+<?= $problem['server'] . Title::newFromText('ProblemReports/'.$problem['id'], NS_SPECIAL)->escapeLocalURL(); ?></textarea><br style="clear: both" />
     <input type="checkbox" name="mailer-ccme" id="mailer-ccme" /><label for="mailer-ccme"><?= wfMsg('emailccme') ?></label><br />
     
     <div class="actionBar">
@@ -35,7 +38,7 @@
     </div>
     
     <script type="text/javascript">/*<![CDATA[*/
-		reportProblemMailerResponsesTemplatesSetup(YAHOO.util.Dom.get('mailer-templates-list'), YAHOO.util.Dom.get('mailer-message'));
+		reportProblemMailerResponsesTemplatesSetup(YAHOO.util.Dom.get('mailer-templates-list'), YAHOO.util.Dom.get('mailer-message'), "<?= $problem['server'] . Title::newFromText('ProblemReports/'.$problem['id'], NS_SPECIAL)->escapeLocalURL(); ?>");
     /*]]>*/</script>
     
     </form><?php } ?>
