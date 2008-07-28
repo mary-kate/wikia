@@ -20,7 +20,7 @@ if (isset($options['help'])) {
 
 		  --help     you are reading it right now
 		  --verbose  print out information on each operation
-		  --dryrun   do not perform and operations on the database\n\n");
+		  --dryrun   do not perform any operations on the database\n\n");
 }
 
 $db = wfGetDB(DB_MASTER);
