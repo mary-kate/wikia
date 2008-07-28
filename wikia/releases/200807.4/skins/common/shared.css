@@ -78,5 +78,5 @@ body.rtl .magnify { float:left; }
 body.ltr .thumbcaption { text-align:left; }
 body.ltr .magnify { float:right; }
 
-#wpCaptchaWordLabel { vertical-align: bottom; padding-bottom: 10px; }
+#wpCaptchaWordLabel { vertical-align: bottom; padding-bottom: 9px; }
 
