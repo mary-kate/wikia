@@ -56,10 +56,10 @@ a:hover {
 a.stub {
 	color: #772233;
 }
-a.new, #p-personal a.new {
+a.new {
 	color: #ba0000 !important;
 }
-a.new:visited, #p-personal a.new:visited {
+a.new:visited {
 	color: #a55858;
 }
 
@@ -172,7 +172,6 @@ select {
 }
 abbr, acronym, .explain {
 	border-bottom: 1px dotted black;
-	/*color: black;CHRISTIAN*/
 	background: none;
 	cursor: help;
 }
