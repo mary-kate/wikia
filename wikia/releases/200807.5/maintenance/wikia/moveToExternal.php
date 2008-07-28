@@ -3,13 +3,14 @@
 ini_set( "include_path", dirname(__FILE__)."/../" );
 
 if ( !defined( 'MEDIAWIKI' ) ) {
-	$optionsWithArgs = array( 'm', 's' );
+	$optionsWithArgs = array( 'limit' );
 
 	require_once( dirname(__FILE__) . '/../commandLine.inc' );
 	require_once( 'ExternalStoreDB.php' );
 	require_once( 'maintenance/storage/resolveStubs.php' );
 
 	$fname = 'moveToExternal';
+	$limit = isset( $options[ "limit" ] ) ? $options[ "limit" ] : false;
 
 	if ( !isset( $args[0] ) ) {
 		print "Usage: php moveToExternal.php <cluster>\n";
@@ -17,12 +18,12 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 	}
 
 	$cluster = $args[0];
-	moveToExternal( $cluster );
+	moveToExternal( $cluster, $limit );
 }
 
 
 
-function moveToExternal( $cluster ) {
+function moveToExternal( $cluster, $limit ) {
 	$fname = 'moveToExternal';
 	$dbw = wfGetDB( DB_MASTER );
 	$dbr = wfGetDB( DB_SLAVE );
@@ -30,13 +31,16 @@ function moveToExternal( $cluster ) {
 	$ext = new ExternalStoreDB;
 	$numMoved = 0;
 	$numStubs = 0;
+	$limit =  $limit ? "LIMIT $limit" : "";
 
 	$res = $dbr->query(
 		"SELECT * FROM revision r1 FORCE INDEX (PRIMARY), text t2
 		WHERE old_id = rev_text_id
 		AND old_flags NOT LIKE '%external%'
-		ORDER BY rev_timestamp, rev_id",
-		$fname
+		ORDER BY rev_timestamp, rev_id
+		$limit
+		",
+		__METHOD__
 	);
 	$ext = new ExternalStoreDB;
 
