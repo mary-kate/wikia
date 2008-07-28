@@ -194,6 +194,13 @@ class SpecialProblemReports extends SpecialPage
 		}
 	}
 	
+	static function makeEmailTitle($city) {
+		global $wgSitename;
+
+		$msg =  wfMsg('defemailsubject');
+		$citySitename = WikiaApiQueryProblemReports::getCitySitename($city);
+		return str_replace($wgSitename, $citySitename, $msg);
+	}
 	
 	
 	function buildSubtitleAndLocalURL($title, $params) {
