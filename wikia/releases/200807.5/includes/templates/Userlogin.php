@@ -298,20 +298,20 @@ class UsercreateTemplate extends QuickTemplate {
 	<script type="text/javascript">
 		function checkEmail() {
 			var email_elem = document.getElementById('wpEmail') ;
-			if (email_elem) {				
+			if (email_elem) {
 				var email = email_elem.value;
 				if (email == '') {
 					YAHOO.util.Dom.removeClass('wpEmailTD', 'mw-input-error');
 					YAHOO.util.Dom.removeClass('wpEmailTD', 'mw-input-ok');
 					errorEmail = false;
-				} else if (email.match(/^[a-z0-9._%+-]+@(?:[a-z0-9\-]+\.)+[a-z]{2,4}$/m)) {
+				} else if (email.match(/^[a-z0-9._%+-]+@(?:[a-z0-9\-]+\.)+[a-z]{2,4}$/mi)) {
 					YAHOO.util.Dom.removeClass('wpEmailTD', 'mw-input-error');
 					YAHOO.util.Dom.addClass('wpEmailTD', 'mw-input-ok');
 					errorEmail = false;
 				} else {
 					YAHOO.util.Dom.addClass('wpEmailTD', 'mw-input-error');
 					YAHOO.util.Dom.removeClass('wpEmailTD', 'mw-input-ok');
-					errorEmail = true;		
+					errorEmail = true;
 				}
 			} else {
 				errorEmail = false ;
@@ -368,7 +368,7 @@ class UsercreateTemplate extends QuickTemplate {
 		document.getElementById('wpName2').onfocus = function(){if (dateAccessed == 1) {dateAccessed = 2; checkDate();}};
 		if (document.getElementById('wpEmail')) {
 			document.getElementById('wpEmail').onfocus = function(){if (dateAccessed == 1) {dateAccessed = 2; checkDate();}};
-			document.getElementById('wpEmail').onblur = checkEmail;		
+			document.getElementById('wpEmail').onblur = checkEmail;
 		}
 		document.getElementById('wpPassword2').onfocus = function(){if (dateAccessed == 1) {dateAccessed = 2; checkDate();}};
 		document.getElementById('wpRetype').onfocus = function(){if (dateAccessed == 1) {dateAccessed = 2; checkDate();}};
