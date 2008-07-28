@@ -260,7 +260,7 @@ class UsercreateTemplate extends QuickTemplate {
 		</tr>
 	<?php if($this->haveData('captcha')) { ?>
 		<tr>
-			<td class="mw-label"><label for='wpCaptchaWord'><?php $this->msg('userlogin-captcha-label') ?></label></td>
+			<td class="mw-label" id="wpCaptchaWordLabel"><label for='wpCaptchaWord'><?php $this->msg('userlogin-captcha-label') ?></label></td>
 			<td class="mw-input">
 				<?php $this->html('captcha'); ?>
 			</td>
