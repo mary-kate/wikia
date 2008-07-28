@@ -78,8 +78,5 @@ body.rtl .magnify { float:left; }
 body.ltr .thumbcaption { text-align:left; }
 body.ltr .magnify { float:right; }
 
-/**
- * for registration - Bartek 2008.07.25
- */
+#wpCaptchaWordLabel { vertical-align: bottom; padding-bottom: 10px; }
 
-#captcha-div { margin-top: -3px; }
