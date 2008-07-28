@@ -49,10 +49,13 @@ class MostpopulararticlesPage extends QueryPage {
 	function isSyndicated() { return false; }
 
 	function getSQL() {
+		global $wgContentNamespaces;
+
 		$dbr = wfGetDB( DB_SLAVE );
 		list( $page, $revision ) = $dbr->tableNamesN( 'page', 'revision' );
 
-		$where = " where page_namespace = 0 ";
+		# Get all content (aka article) pages
+		$where = " where page_namespace in (" . implode( ",", $wgContentNamespaces ) . ") ";
 
 		$sql = "SELECT 'Mostpopulararticles' as type,page_namespace as namespace,page_title as title,
 		(select count(*) from $revision where rev_page = page_id) as value FROM $page $where";
@@ -69,8 +72,8 @@ class MostpopulararticlesPage extends QueryPage {
 			$this->data[$result->title] = $result->value;
 			return false;
 		} else {
-			$title = Title::makeTitle( NS_MAIN, $result->title ); # Note this only makes NS_MAIN links!
-			$titleText = $skin->makeLinkObj( $title, htmlspecialchars( $title->getText() ) ); 
+			$title = Title::makeTitle( $result->namespace, $result->title );
+			$titleText = $skin->makeLinkObj( $title, htmlspecialchars( $title->getPrefixedtext() ) ); 
 
 			return wfSpecialList( $titleText, $result->value );
 		}
