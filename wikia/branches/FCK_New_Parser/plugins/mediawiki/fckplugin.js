@@ -33,6 +33,7 @@ FCKToolbarItems.RegisterItem( 'Source', new FCKToolbarButton( 'Source', 'Wikitex
 
 FCK.RegisterDoubleClickHandler( FCKImage_OnDoubleClick, 'IMG' ) ;
 
+
 // Register our toolbar buttons.
 var tbButton = new FCKToolbarButton( 'MW_Template', 'Template', 'Insert/Edit Template', null, false, true ) ;
 tbButton.IconPath = FCKConfig.PluginsPath + 'mediawiki/images/tb_icon_template.gif' ;
@@ -796,11 +797,17 @@ FCK.DataProcessor =
 	}
 })();
 
-var FCKDocumentProcessor_CreateFakeSpan = function( fakeClass, realElement )
+var FCKDocumentProcessor_CreateFakeSpan = function( fakeClass, realElement, contentHtml )
 {
-        var oImg = FCKTools.GetElementDocument( realElement ).createElement( 'SPAN' ) ;
+        var oImg = FCKTools.GetElementDocument( realElement ).createElement( 'LABEL' ) ;
+
         oImg.className = fakeClass ;
+
+	contentHtml = 'Placeholder' ;
+
+	oImg.innerHTML = contentHtml ;
         oImg.setAttribute( '_fckfakelement', 'true', 0 ) ;
+	oImg.setAttribute('readonly', true) ;
         oImg.setAttribute( '_fckrealelement', FCKTempBin.AddElement( realElement ), 0 ) ;
         return oImg ;
 }
