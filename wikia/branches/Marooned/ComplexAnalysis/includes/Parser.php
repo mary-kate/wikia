@@ -9,7 +9,7 @@
 
 
 /**
- * PHP Parser - Processes wiki markup (which uses a more user-friendly 
+ * PHP Parser - Processes wiki markup (which uses a more user-friendly
  * syntax, such as "[[link]]" for making links), and provides a one-way
  * transformation of that wiki markup it into XHTML output / markup
  * (which in turn the browser understands, and can display).
@@ -82,7 +82,7 @@ class Parser
 	const OT_WIKI = 2;
 	const OT_PREPROCESS = 3;
 	const OT_MSG = 3;
-	
+
 	/**#@+
 	 * @private
 	 */
@@ -136,7 +136,7 @@ class Parser
 		$this->mMarkerIndex = 0;
 		$this->mFirstCall = true;
 	}
-	
+
 	/**
 	 * Do various kinds of initialisation on the first call of the parser
 	 */
@@ -145,7 +145,7 @@ class Parser
 			return;
 		}
 		$this->mFirstCall = false;
-		
+
 		wfProfileIn( __METHOD__ );
 		global $wgAllowDisplayTitle, $wgAllowSlowParserFunctions;
 
@@ -236,7 +236,7 @@ class Parser
 		 * since it shouldn't match when butted up against identifier-like
 		 * string constructs.
 		 *
-		 * Must not consist of all title characters, or else it will change 
+		 * Must not consist of all title characters, or else it will change
 		 * the behaviour of <nowiki> in a link.
 		 */
 		#$this->mUniqPrefix = "\x07UNIQ" . Parser::getRandomString();
@@ -434,8 +434,8 @@ class Parser
 		# Information on include size limits, for the benefit of users who try to skirt them
 		if ( $this->mOptions->getEnableLimitReport() ) {
 			$max = $this->mOptions->getMaxIncludeSize();
-			$limitReport = 
-				"NewPP limit report\n" . 
+			$limitReport =
+				"NewPP limit report\n" .
 				"Preprocessor node count: {$this->mPPNodeCount}/{$this->mOptions->mMaxPPNodeCount}\n" .
 				"Post-expand include size: {$this->mIncludeSizes['post-expand']}/$max bytes\n" .
 				"Template argument size: {$this->mIncludeSizes['arg']}/$max bytes\n";
@@ -738,7 +738,7 @@ class Parser
 
 	/**
 	 * Use the HTML tidy PECL extension to use the tidy library in-process,
-	 * saving the overhead of spawning a new process. 
+	 * saving the overhead of spawning a new process.
 	 *
 	 * 'pear install tidy' should be able to compile the extension module.
 	 *
@@ -761,8 +761,8 @@ class Parser
 			$cleansource = tidy_get_output( $tidy );
 		}
 		if ( $wgDebugTidy && $tidy->getStatus() > 0 ) {
-			$cleansource .= "<!--\nTidy reports:\n" . 
-				str_replace( '-->', '--&gt;', $tidy->errorBuffer ) . 
+			$cleansource .= "<!--\nTidy reports:\n" .
+				str_replace( '-->', '--&gt;', $tidy->errorBuffer ) .
 				"\n-->";
 		}
 
@@ -809,10 +809,11 @@ class Parser
 				array_push ( $tr_history , false );
 				array_push ( $tr_attributes , '' );
 				array_push ( $has_opened_tr , false );
+				wfCountWikiElement('table');
 			} else if ( count ( $td_history ) == 0 ) {
 				// Don't do any of the following
 				continue;
-			} else if ( substr ( $line , 0 , 2 ) == '|}' ) { 
+			} else if ( substr ( $line , 0 , 2 ) == '|}' ) {
 				// We are ending a table
 				$line = '</table>' . substr ( $line , 2 );
 				$last_tag = array_pop ( $last_tag_history );
@@ -1083,6 +1084,10 @@ class Parser
 		wfProfileIn( $fname );
 		for ( $i = 6; $i >= 1; --$i ) {
 			$h = str_repeat( '=', $i );
+			$matches = array();
+			if ($count = preg_match_all("/^$h(.+)$h\\s*$/m", $text, $matches)) {
+				wfCountWikiElement("h$i", $count);
+			}
 			$text = preg_replace( "/^$h(.+)$h\\s*$/m",
 			  "<h$i>\\1</h$i>", $text );
 		}
@@ -1222,37 +1227,37 @@ class Parser
 						else if ($state == 'bi')
 						{ $output .= '</i>'; $state = 'b'; }
 						else if ($state == 'ib')
-						{ $output .= '</b></i><b>'; $state = 'b'; }
+						{ $output .= '</b></i><b>'; $state = 'b'; wfCountWikiElement('b');}
 						else if ($state == 'both')
-						{ $output .= '<b><i>'.$buffer.'</i>'; $state = 'b'; }
+						{ $output .= '<b><i>'.$buffer.'</i>'; $state = 'b'; wfCountWikiElement('b');wfCountWikiElement('i');}
 						else # $state can be 'b' or ''
-						{ $output .= '<i>'; $state .= 'i'; }
+						{ $output .= '<i>'; $state .= 'i'; wfCountWikiElement('i');}
 					}
 					else if (strlen ($r) == 3)
 					{
 						if ($state == 'b')
 						{ $output .= '</b>'; $state = ''; }
 						else if ($state == 'bi')
-						{ $output .= '</i></b><i>'; $state = 'i'; }
+						{ $output .= '</i></b><i>'; $state = 'i'; wfCountWikiElement('i');}
 						else if ($state == 'ib')
 						{ $output .= '</b>'; $state = 'i'; }
 						else if ($state == 'both')
-						{ $output .= '<i><b>'.$buffer.'</b>'; $state = 'i'; }
+						{ $output .= '<i><b>'.$buffer.'</b>'; $state = 'i'; wfCountWikiElement('b');}
 						else # $state can be 'i' or ''
-						{ $output .= '<b>'; $state .= 'b'; }
+						{ $output .= '<b>'; $state .= 'b'; wfCountWikiElement('b');}
 					}
 					else if (strlen ($r) == 5)
 					{
 						if ($state == 'b')
-						{ $output .= '</b><i>'; $state = 'i'; }
+						{ $output .= '</b><i>'; $state = 'i'; wfCountWikiElement('i');}
 						else if ($state == 'i')
-						{ $output .= '</i><b>'; $state = 'b'; }
+						{ $output .= '</i><b>'; $state = 'b'; wfCountWikiElement('b');}
 						else if ($state == 'bi')
 						{ $output .= '</i></b>'; $state = ''; }
 						else if ($state == 'ib')
 						{ $output .= '</b></i>'; $state = ''; }
 						else if ($state == 'both')
-						{ $output .= '<i><b>'.$buffer.'</b></i>'; $state = ''; }
+						{ $output .= '<i><b>'.$buffer.'</b></i>'; $state = ''; wfCountWikiElement('b');wfCountWikiElement('i');}
 						else # ($state == '')
 						{ $buffer = ''; $state = 'both'; }
 					}
@@ -1267,8 +1272,11 @@ class Parser
 			if ($state == 'bi')
 				$output .= '</b>';
 			# There might be lonely ''''', so make sure we have a buffer
-			if ($state == 'both' && $buffer)
+			if ($state == 'both' && $buffer) {
 				$output .= '<b><i>'.$buffer.'</i></b>';
+				wfCountWikiElement('b');
+				wfCountWikiElement('i');
+			}
 			return $output;
 		}
 	}
@@ -1356,6 +1364,7 @@ class Parser
 			# This prevents spammers from hiding links from the filters
 			$pasteurized = Parser::replaceUnusualEscapes( $url );
 			$this->mOutput->addExternalLink( $pasteurized );
+			wfCountWikiElement('external link');
 		}
 
 		wfProfileOut( $fname );
@@ -1433,6 +1442,7 @@ class Parser
 					# Replace unnecessary URL escape codes with their equivalent characters
 					$pasteurized = Parser::replaceUnusualEscapes( $url );
 					$this->mOutput->addExternalLink( $pasteurized );
+					wfCountWikiElement('external link');
 				}
 				$s .= $text . $trail;
 			} else {
@@ -1489,7 +1499,7 @@ class Parser
 		$imagesexception = !empty($imagesfrom);
 		$text = false;
 		if ( $this->mOptions->getAllowExternalImages()
-		     || ( $imagesexception && strpos( $url, $imagesfrom ) === 0 ) 
+		     || ( $imagesexception && strpos( $url, $imagesfrom ) === 0 )
 			 || ( !empty($wgAllowExternalWhitelistImages) && wfRunHooks('outputMakeExternalImage', array(&$url)) )
 	    ) {
 			if ( preg_match( self::EXT_IMAGE_REGEX, $url ) ) {
@@ -1672,6 +1682,7 @@ class Parser
 							$found = true;
 							$text .= "[[{$m[0]}]]{$m[1]}";
 							$trail = $m[2];
+							wfCountWikiElement('whats this #1 - image with link?');
 							break;
 						} elseif ( count( $m ) == 2 ) {
 							#if there's exactly one ]] that's fine, we'll keep looking
@@ -1729,12 +1740,14 @@ class Parser
 						# cloak any absolute URLs inside the image markup, so replaceExternalLinks() won't touch them
 						$s .= $prefix . $this->armorLinks( $this->makeImage( $nt, $text ) ) . $trail;
 						$this->mOutput->addImage( $nt->getDBkey() );
+						wfCountWikiElement('image - ? #1');
 
 						wfProfileOut( "$fname-image" );
 						continue;
 					} else {
 						# We still need to record the image's presence on the page
 						$this->mOutput->addImage( $nt->getDBkey() );
+						wfCountWikiElement('image - ? #2');
 					}
 					wfProfileOut( "$fname-image" );
 
@@ -1753,6 +1766,7 @@ class Parser
 					$sortkey = str_replace( "\n", '', $sortkey );
 					$sortkey = $wgContLang->convertCategoryKey( $sortkey );
 					$this->mOutput->addCategory( $nt->getDBkey(), $sortkey );
+					wfCountWikiElement('category');
 
 					/**
 					 * Strip the whitespace Category links produce, see bug 87
@@ -1769,6 +1783,7 @@ class Parser
 			if( $nt->getFragment() === '' ) {
 				if( in_array( $nt->getPrefixedText(), $selflink, true ) ) {
 					$s .= $prefix . $sk->makeSelfLinkObj( $nt, $text, '', $trail );
+					wfCountWikiElement('self link');
 					continue;
 				}
 			}
@@ -1779,8 +1794,10 @@ class Parser
 				# Cloak with NOPARSE to avoid replacement in replaceExternalLinks
 				$s .= $prefix . $this->armorLinks( $link ) . $trail;
 				$this->mOutput->addImage( $nt->getDBkey() );
+				wfCountWikiElement('image - ? #3');
 				continue;
 			} elseif( $ns == NS_SPECIAL ) {
+				wfCountWikiElement('internal link: special page');
 				if( SpecialPage::exists( $nt->getDBkey() ) ) {
 					$s .= $this->makeKnownLinkHolder( $nt, $text, '', $trail, $prefix );
 				} else {
@@ -1795,10 +1812,12 @@ class Parser
 					// auto-generated page.
 					$s .= $this->makeKnownLinkHolder( $nt, $text, '', $trail, $prefix );
 					$this->mOutput->addLink( $nt );
+					wfCountWikiElement('internal link');
 					continue;
 				}
 			}
 			$s .= $this->makeLinkHolder( $nt, $text, '', $trail, $prefix );
+			wfCountWikiElement('internal link');
 		}
 		wfProfileOut( $fname );
 		return $s;
@@ -1998,12 +2017,13 @@ class Parser
 	/* private */ function openList( $char ) {
 		$result = $this->closeParagraph();
 
-		if ( '*' == $char ) { $result .= '<ul><li>'; }
-		else if ( '#' == $char ) { $result .= '<ol><li>'; }
-		else if ( ':' == $char ) { $result .= '<dl><dd>'; }
+		if ( '*' == $char ) { $result .= '<ul><li>'; wfCountWikiElement('list: unordered');}
+		else if ( '#' == $char ) { $result .= '<ol><li>'; wfCountWikiElement('list: ordered');}
+		else if ( ':' == $char ) { $result .= '<dl><dd>'; wfCountWikiElement('list: definition: description');}
 		else if ( ';' == $char ) {
 			$result .= '<dl><dt>';
 			$this->mDTopen = true;
+			wfCountWikiElement('list: definition: term');
 		}
 		else { $result = '<!-- ERR 1 -->'; }
 
@@ -2401,7 +2421,7 @@ class Parser
 			$oldtz = getenv( 'TZ' );
 			putenv( 'TZ='.$wgLocaltimezone );
 		}
-		
+
 		wfSuppressWarnings(); // E_STRICT system time bitching
 		$localTimestamp = date( 'YmdHis', $ts );
 		$localMonth = date( 'm', $ts );
@@ -2610,22 +2630,22 @@ class Parser
 
 	/**
 	 * Preprocess some wikitext and return the document tree.
-	 * This is the ghost of replace_variables(). 
+	 * This is the ghost of replace_variables().
 	 *
 	 * @param string $text The text to parse
 	 * @param integer flags Bitwise combination of:
-	 *          self::PTD_FOR_INCLUSION    Handle <noinclude>/<includeonly> as if the text is being 
-	 *                                     included. Default is to assume a direct page view. 
+	 *          self::PTD_FOR_INCLUSION    Handle <noinclude>/<includeonly> as if the text is being
+	 *                                     included. Default is to assume a direct page view.
 	 *
 	 * The generated DOM tree must depend only on the input text and the flags.
-	 * The DOM tree must be the same in OT_HTML and OT_WIKI mode, to avoid a regression of bug 4899. 
+	 * The DOM tree must be the same in OT_HTML and OT_WIKI mode, to avoid a regression of bug 4899.
 	 *
-	 * Any flag added to the $flags parameter here, or any other parameter liable to cause a 
-	 * change in the DOM tree for a given text, must be passed through the section identifier 
-	 * in the section edit link and thus back to extractSections(). 
+	 * Any flag added to the $flags parameter here, or any other parameter liable to cause a
+	 * change in the DOM tree for a given text, must be passed through the section identifier
+	 * in the section edit link and thus back to extractSections().
 	 *
-	 * The output of this function is currently only cached in process memory, but a persistent 
-	 * cache may be implemented at a later date which takes further advantage of these strict 
+	 * The output of this function is currently only cached in process memory, but a persistent
+	 * cache may be implemented at a later date which takes further advantage of these strict
 	 * dependency requirements.
 	 *
 	 * @private
@@ -2635,7 +2655,7 @@ class Parser
 		return $dom;
 	}
 
-	/* 
+	/*
 	 * Return a three-element array: leading whitespace, string contents, trailing whitespace
 	 */
 	public static function splitWhitespace( $s ) {
@@ -2741,8 +2761,8 @@ class Parser
 		# Title object, where $text came from
 		$title = NULL;
 
-		# $part1 is the bit before the first |, and must contain only title characters. 
-		# Various prefixes will be stripped from it later. 
+		# $part1 is the bit before the first |, and must contain only title characters.
+		# Various prefixes will be stripped from it later.
 		$titleWithSpaces = $frame->expand( $piece['title'] );
 		$part1 = trim( $titleWithSpaces );
 		$titleText = false;
@@ -2987,10 +3007,10 @@ class Parser
 		elseif ( is_string( $text ) && !$piece['lineStart'] && preg_match('/^(?:{\\||:|;|#|\*)/', $text)) /*}*/{
 			$text = "\n" . $text;
 		}
-		
+
 		if ( is_string( $text ) && !$this->incrementIncludeSize( 'post-expand', strlen( $text ) ) ) {
 			# Error, oversize inclusion
-			$text = "[[$originalTitle]]" . 
+			$text = "[[$originalTitle]]" .
 				$this->insertStripItem( '<!-- WARNING: template omitted, post-expand include size too large -->' );
 		}
 
@@ -3011,7 +3031,7 @@ class Parser
 	function getTemplateDom( $title ) {
 		$cacheTitle = $title;
 		$titleText = $title->getPrefixedDBkey();
-		
+
 		if ( isset( $this->mTplRedirCache[$titleText] ) ) {
 			list( $ns, $dbk ) = $this->mTplRedirCache[$titleText];
 			$title = Title::makeTitle( $ns, $dbk );
@@ -3033,7 +3053,7 @@ class Parser
 		$this->mTplDomCache[ $titleText ] = $dom;
 
 		if (! $title->equals($cacheTitle)) {
-			$this->mTplRedirCache[$cacheTitle->getPrefixedDBkey()] = 
+			$this->mTplRedirCache[$cacheTitle->getPrefixedDBkey()] =
 				array( $title->getNamespace(),$cdb = $title->getDBkey() );
 		}
 
@@ -3069,13 +3089,13 @@ class Parser
 		$text = $skip = false;
 		$finalTitle = $title;
 		$deps = array();
-		
+
 		// Loop to fetch the article, with up to 1 redirect
 		for ( $i = 0; $i < 2 && is_object( $title ); $i++ ) {
 			# Give extensions a chance to select the revision instead
 			$id = false; // Assume current
 			wfRunHooks( 'BeforeParserFetchTemplateAndtitle', array( false, &$title, &$skip, &$id ) );
-			
+
 			if( $skip ) {
 				$text = false;
 				$deps[] = array(
@@ -3087,9 +3107,9 @@ class Parser
 			$rev = $id ? Revision::newFromId( $id ) : Revision::newFromTitle( $title );
 			$rev_id = $rev ? $rev->getId() : 0;
 
-			$deps[] = array( 
-				'title' => $title, 
-				'page_id' => $title->getArticleID(), 
+			$deps[] = array(
+				'title' => $title,
+				'page_id' => $title->getArticleID(),
 				'rev_id' => $rev_id );
 
 			if( $rev ) {
@@ -3173,10 +3193,10 @@ class Parser
 		$argName = trim( $nameWithSpaces );
 		$object = false;
 		$text = $frame->getArgument( $argName );
-		if (  $text === false && $parts->getLength() > 0 
-		  && ( 
-		    $this->ot['html'] 
-		    || $this->ot['pre'] 
+		if (  $text === false && $parts->getLength() > 0
+		  && (
+		    $this->ot['html']
+		    || $this->ot['pre']
 		    || ( $this->ot['wiki'] && $frame->isTemplate() )
 		  )
 		) {
@@ -3224,7 +3244,7 @@ class Parser
 		$content = !isset( $params['inner'] ) ? null : $frame->expand( $params['inner'] );
 
 		$marker = "{$this->mUniqPrefix}-$name-" . sprintf('%08X', $this->mMarkerIndex++) . $this->mMarkerSuffix;
-		
+
 		if ( $this->ot['html'] ) {
 			$name = strtolower( $name );
 
@@ -3561,7 +3581,7 @@ class Parser
 			# give headline the correct <h#> tag
 			if( $showEditLink && $sectionIndex !== false ) {
 				if( $isTemplate ) {
-					# Put a T flag in the section identifier, to indicate to extractSections() 
+					# Put a T flag in the section identifier, to indicate to extractSections()
 					# that sections inside <includeonly> should be counted.
 					$editlink = $sk->editSectionLinkForOther($titleText, "T-$sectionIndex");
 				} else {
@@ -3581,7 +3601,7 @@ class Parser
 		if( $numVisible < 1 ) {
 			$enoughToc = false;
 		}
-		
+
 		if( $enoughToc ) {
 			if( $prevtoclevel > 0 && $prevtoclevel < $wgMaxTocLevel ) {
 				$toc .= $sk->tocUnindent( $prevtoclevel - 1 );
@@ -3730,11 +3750,11 @@ class Parser
 	 */
 	function getUserSig( &$user ) {
 		global $wgMaxSigChars;
-		
+
 		$username = $user->getName();
 		$nickname = $user->getOption( 'nickname' );
 		$nickname = $nickname === '' ? $username : $nickname;
-		
+
 		if( mb_strlen( $nickname ) > $wgMaxSigChars ) {
 			$nickname = $username;
 			wfDebug( __METHOD__ . ": $username has overlong signature.\n" );
@@ -4323,7 +4343,7 @@ class Parser
 		if( isset( $params['heights'] ) ) {
 			$ig->setHeights( $params['heights'] );
 		}
-		
+
 		wfRunHooks( 'BeforeParserrenderImageGallery', array( &$this, &$ig ) );
 
 		$lines = explode( "\n", $text );
@@ -4370,9 +4390,9 @@ class Parser
 			// Initialise static lists
 			static $internalParamNames = array(
 				'horizAlign' => array( 'left', 'right', 'center', 'none' ),
-				'vertAlign' => array( 'baseline', 'sub', 'super', 'top', 'text-top', 'middle', 
+				'vertAlign' => array( 'baseline', 'sub', 'super', 'top', 'text-top', 'middle',
 					'bottom', 'text-bottom' ),
-				'frame' => array( 'thumbnail', 'manualthumb', 'framed', 'frameless', 
+				'frame' => array( 'thumbnail', 'manualthumb', 'framed', 'frameless',
 					'upright', 'border' ),
 			);
 			static $internalParamMap;
@@ -4427,7 +4447,7 @@ class Parser
 		#  * middle
 		#  * bottom
 		#  * text-bottom
-		
+
 		$parts = array_map( 'trim', explode( '|', $options) );
 		$sk = $this->mOptions->getSkin();
 
@@ -4447,14 +4467,14 @@ class Parser
 
 		# Process the input parameters
 		$caption = '';
-		$params = array( 'frame' => array(), 'handler' => array(), 
+		$params = array( 'frame' => array(), 'handler' => array(),
 			'horizAlign' => array(), 'vertAlign' => array() );
 		foreach( $parts as $part ) {
 			list( $magicName, $value ) = $mwArray->matchVariableStartToEnd( $part );
 			if ( isset( $paramMap[$magicName] ) ) {
 				list( $type, $paramName ) = $paramMap[$magicName];
 				$params[$type][$paramName] = $value;
-				
+
 				// Special case; width and height come in one variable together
 				if( $type == 'handler' && $paramName == 'width' ) {
 					$m = array();
@@ -4561,13 +4581,13 @@ class Parser
 	 *   <flag1> - <flag2> - ... - <section number>
 	 *
 	 * Currently the only recognised flag is "T", which means the target section number
-	 * was derived during a template inclusion parse, in other words this is a template 
-	 * section edit link. If no flags are given, it was an ordinary section edit link. 
-	 * This flag is required to avoid a section numbering mismatch when a section is 
+	 * was derived during a template inclusion parse, in other words this is a template
+	 * section edit link. If no flags are given, it was an ordinary section edit link.
+	 * This flag is required to avoid a section numbering mismatch when a section is
 	 * enclosed by <includeonly> (bug 6563).
 	 *
-	 * The section number 0 pulls the text before the first heading; other numbers will 
-	 * pull the given section along with its lower-level subsections. If the section is 
+	 * The section number 0 pulls the text before the first heading; other numbers will
+	 * pull the given section along with its lower-level subsections. If the section is
 	 * not found, $mode=get will return $newtext, and $mode=replace will return $text.
 	 *
 	 * @param string $mode One of "get" or "replace"
@@ -4643,11 +4663,11 @@ class Parser
 			}
 			$node = $node->getNextSibling();
 		} while ( $node );
-		
+
 		// Write out the remainder (in replace mode only)
 		if ( $mode == 'replace' ) {
 			// Output the replacement text
-			// Add two newlines on -- trailing whitespace in $newText is conventionally 
+			// Add two newlines on -- trailing whitespace in $newText is conventionally
 			// stripped by the editor, so we need both newlines to restore the paragraph gap
 			$outText .= $newText . "\n\n";
 			while ( $node ) {
@@ -4741,8 +4761,8 @@ class Parser
 	}
 
 	/**
-	 * Try to guess the section anchor name based on a wikitext fragment 
-	 * presumably extracted from a heading, for example "Header" from 
+	 * Try to guess the section anchor name based on a wikitext fragment
+	 * presumably extracted from a heading, for example "Header" from
 	 * "== Header ==".
 	 */
 	public function guessSectionNameFromWikiText( $text ) {
@@ -4765,14 +4785,14 @@ class Parser
 
 	/**
 	 * Strips a text string of wikitext for use in a section anchor
-	 * 
+	 *
 	 * Accepts a text string and then removes all wikitext from the
 	 * string and leaves only the resultant text (i.e. the result of
 	 * [[User:WikiSysop|Sysop]] would be "Sysop" and the result of
 	 * [[User:WikiSysop]] would be "User:WikiSysop") - this is intended
 	 * to create valid section anchors by mimicing the output of the
 	 * parser when headings are parsed.
-	 * 
+	 *
 	 * @param $text string Text string to be stripped of wikitext
 	 * for use in a Section anchor
 	 * @return Filtered text string
@@ -4781,15 +4801,15 @@ class Parser
 		# Strip internal link markup
 		$text = preg_replace('/\[\[:?([^[|]+)\|([^[]+)\]\]/','$2',$text);
 		$text = preg_replace('/\[\[:?([^[]+)\|?\]\]/','$1',$text);
-		
+
 		# Strip external link markup (FIXME: Not Tolerant to blank link text
 		# I.E. [http://www.mediawiki.org] will render as [1] or something depending
 		# on how many empty links there are on the page - need to figure that out.
 		$text = preg_replace('/\[(?:' . wfUrlProtocols() . ')([^ ]+?) ([^[]+)\]/','$2',$text);
-		
+
 		# Parse wikitext quotes (italics & bold)
 		$text = $this->doQuotes($text);
-		
+
 		# Strip HTML tags
 		$text = StringUtils::delimiterReplace( '<', '>', '', $text );
 		return $text;
@@ -4907,7 +4927,7 @@ class StripState {
 class OnlyIncludeReplacer {
 	var $output = '';
 
-	function replace( $matches ) { 
+	function replace( $matches ) {
 		if ( substr( $matches[1], -1 ) == "\n" ) {
 			$this->output .= substr( $matches[1], 0, -1 );
 		} else {

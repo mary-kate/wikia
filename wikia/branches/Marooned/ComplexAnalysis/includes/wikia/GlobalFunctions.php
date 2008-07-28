@@ -460,3 +460,11 @@ if (!function_exists('wfGetDBStats')) {
 	}
 }
 
+/**
+ * @author Marooned <marooned@wikia.com>
+ * @return nothing
+ */
+function wfCountWikiElement($element, $count=1) {
+	global $wgCityId, $wgTitle;
+	file_put_contents('complexity data file.txt', "CityId = $wgCityId, article = {$wgTitle->mDbkeyform}, element = $element, count = $count\n", FILE_APPEND);
+}
