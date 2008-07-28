@@ -33,22 +33,21 @@ function moveToExternal( $cluster, $limit ) {
 	$numStubs = 0;
 	$limit =  ( $limit !== false) ? "LIMIT $limit" : "";
 
-
-	$res = $dbr->query(
-		"SELECT * FROM revision r1 FORCE INDEX (PRIMARY), text t2
+	$sql = "SELECT * FROM revision r1 FORCE INDEX (PRIMARY), text t2
 		WHERE old_id = rev_text_id
 		AND old_flags NOT LIKE '%external%'
-		ORDER BY rev_timestamp, rev_id
-		$limit
-		",
-		__METHOD__
-	);
-	echo $limit."\n";
-	$ext = new ExternalStoreDB;
+                AND old_text NOT LIKE '%HistoryBlobStub%' 
+		ORDER BY rev_id
+		$limit";
 
+	$res = $dbr->query( $sql, __METHOD__ );
+	echo $sql."\n";
+	$ext = new ExternalStoreDB;
+	echo "Get external storage object\n";
 	while ( $row = $dbr->fetchObject( $res ) ) {
 		$text = $row->old_text;
 		$id = $row->old_id;
+#		echo $row->rev_id.":".$row->old_flags."\n";
 		if ( $row->old_flags === '' ) {
 			$flags = 'external';
 		} else {
