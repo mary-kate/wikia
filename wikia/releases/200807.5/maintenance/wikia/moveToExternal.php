@@ -31,7 +31,8 @@ function moveToExternal( $cluster, $limit ) {
 	$ext = new ExternalStoreDB;
 	$numMoved = 0;
 	$numStubs = 0;
-	$limit =  $limit ? "LIMIT $limit" : "";
+	$limit =  ( $limit !== false) ? "LIMIT $limit" : "";
+
 
 	$res = $dbr->query(
 		"SELECT * FROM revision r1 FORCE INDEX (PRIMARY), text t2
@@ -42,6 +43,7 @@ function moveToExternal( $cluster, $limit ) {
 		",
 		__METHOD__
 	);
+	echo $limit."\n";
 	$ext = new ExternalStoreDB;
 
 	while ( $row = $dbr->fetchObject( $res ) ) {
