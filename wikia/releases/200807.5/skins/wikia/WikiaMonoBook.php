@@ -71,9 +71,9 @@ class WikiaSkinMonoBook extends SkinTemplate {
 			GetReferences('monobook_js').
 			"\n\t\t".
 			"<!-- YUI CSS -->\n\t\t".
-			'<link rel="stylesheet" type="text/css" href="'.$wgStylePath.'/common/yui/2.3.1/container/assets/container.css?'.$wgStyleVersion.'"/>'.
-			'<link rel="stylesheet" type="text/css" href="'.$wgStylePath.'/common/yui/2.3.1/logger/assets/logger.css?'.$wgStyleVersion.'"/>'.
-			'<link rel="stylesheet" type="text/css" href="'.$wgStylePath.'/common/yui/2.3.1/tabview/assets/tabview.css?'.$wgStyleVersion.'"/>'.
+			'<link rel="stylesheet" type="text/css" href="'.$wgStylePath.'/common/yui_2.5.2/container/assets/container.css?'.$wgStyleVersion.'"/>'.
+			'<link rel="stylesheet" type="text/css" href="'.$wgStylePath.'/common/yui_2.5.2/logger/assets/logger.css?'.$wgStyleVersion.'"/>'.
+			'<link rel="stylesheet" type="text/css" href="'.$wgStylePath.'/common/yui_2.5.2/tabview/assets/tabview.css?'.$wgStyleVersion.'"/>'.
 			"\n\t\t".'<!-- /Wikia -->'."\n\n");
 
 		global $wgCurse, $wgStylePath, $wgOut, $wgHooks;
