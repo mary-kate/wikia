@@ -8,6 +8,7 @@ class FCKeditorParser extends Parser
 	protected $fck_mw_taghook;
 	protected $fck_internal_parse_text;
 	protected $fck_matches = array();
+	protected $fck_parsed_templates ;
 
 	private $FCKeditorMagicWords = array(
 	'__NOTOC__',
@@ -424,7 +425,8 @@ class FCKeditorParser extends Parser
 		$templates = $replacedTemplates ["templates"] ;
 
 		$finalString = parent::internalParse($text);
-
+		$this->fck_parsed_templates = parent::internalParse($templates) ;
+		
 		return $finalString;
 	}
 	function fck_includeonly( $matches ) {
