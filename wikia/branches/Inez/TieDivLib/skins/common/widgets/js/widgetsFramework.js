@@ -221,6 +221,17 @@ YAHOO.extend(YAHOO.wikia.ddObject, YAHOO.util.DDProxy, {
 
 	startDrag: function(x, y) {
 		var clickEl = this.getEl();
+
+		if(YAHOO.util.Dom.hasClass(clickEl, 'WidgetAdvertiser')) {
+			var adSpaceId = clickEl.childNodes[1].childNodes[1].id;
+			var items = TieDivLib.getItems();
+			for(var i = 0; i < items.length; i++) {
+				if(items[i][1] == adSpaceId) {
+					$(items[i][0]).style.visibility = 'hidden';
+				}
+			}
+		}
+
 		if (this.isThumb == false) {
 			Dom.setStyle(clickEl, 'visibility', 'hidden');
 		}
@@ -255,6 +266,17 @@ YAHOO.extend(YAHOO.wikia.ddObject, YAHOO.util.DDProxy, {
 		a.onComplete.subscribe(function() {
 			Dom.setStyle(proxyid, 'visibility', 'hidden');
 			Dom.setStyle(thisid, 'visibility', '');
+
+			if(YAHOO.util.Dom.hasClass(srcEl, 'WidgetAdvertiser')) {
+				var adSpaceId = srcEl.childNodes[1].childNodes[1].id;
+				var items = TieDivLib.getItems();
+				for(var i = 0; i < items.length; i++) {
+					if(items[i][1] == adSpaceId) {
+						$(items[i][0]).style.visibility = 'visible';
+					}
+				}
+			}
+
 		});
 		a.animate();
 
@@ -327,6 +349,7 @@ YAHOO.extend(YAHOO.wikia.ddObject, YAHOO.util.DDProxy, {
 	},
 
 	onDrag: function(e) {
+		TieDivLib.recalc();
 		var y = Event.getPageY(e);
 		if(y < this.lastY) {
 			this.goingUp = true;
@@ -360,12 +383,12 @@ var carouselShown = false;
 
 function showCarousel(e) {
 	if (Dom.get("headerMenuUser")) {
-		Dom.get("headerMenuUser").style.visibility = 'hidden';	
+		Dom.get("headerMenuUser").style.visibility = 'hidden';
 	}
 	Event.preventDefault(e);
 
 	carouselShown = true;
-	
+
 	// macbre: scroll to top of the page
 	window.scrollTo(0,0);
 
@@ -447,7 +470,7 @@ function showCarousel(e) {
 			}
 		}
 
-		Event.addListener(window, 'resize', getNumberForCarousel); 
+		Event.addListener(window, 'resize', getNumberForCarousel);
 	}
 }
 

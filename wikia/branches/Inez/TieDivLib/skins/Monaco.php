@@ -1598,7 +1598,7 @@ if(!empty($wgFASTSIDE) && isset($wgFASTSIDE[1])) {
 
 		</div>
 		<!-- /WIDGETS -->
-	</div>
+	<!--/div-->
 <?php
 wfProfileOut( __METHOD__ . '-widgets');
 
@@ -1622,10 +1622,18 @@ if($wgAdServingType === 1) {
 		else { return 100; }
 	}
 	uasort($adsDisplayed, "cmpAds");
+
+	echo '<div id="realAdsContainer">';
+	echo '<script type="text/javascript">TieDivLib.start();</script>';
 	foreach($adsDisplayed as $adSpace => $ad) {
-?><script type="text/javascript">ad_call(<?= $adSpace ?>,'<?= $ad[0] ?>','<?= $ad[1] ?>');</script><script type="text/javascript">if(curAdSpaceId != -1) document.write('<scr'+'ipt type="text/javascript">disableWikiaWriter();</scr'+'ipt>');</script><?php
+		echo '<div id="realAd'.$adSpace.'" style="display: none">';
+		echo '<script type="text/javascript">ad_call('.$adSpace.', "'.$ad[0].'", "'.$ad[1].'");</script>';
+		echo '</div>';
+		echo '<script type="text/javascript">if(curAdSpaceId != -1) TieDivLib.tie("realAd'.$adSpace.'", "adSpace"+curAdSpaceId, "'.$ad[1].'");</script>';
 	}
+	echo '</div>';
 }
+echo '</div>';
 echo AdServer::getInstance()->getAd('js_bot2');
 echo AdServer::getInstance()->getAd('js_bot3');
 echo AdServer::getInstance()->getAd('js_bot4');
