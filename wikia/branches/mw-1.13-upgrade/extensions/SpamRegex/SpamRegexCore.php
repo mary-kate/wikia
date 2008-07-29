@@ -1,6 +1,6 @@
 <?php
 
-/* 
+/*
 	fetch phrases to block, and fill $wgSpamRegex with them, rather than scribble that into the variable at startup
 */
 
@@ -8,7 +8,6 @@ global $wgHooks;
 /* initialize hook, FilterEdit is too far in code */
 $wgHooks['AlternateEdit'][] = 'wfGetSpamRegex';
 $wgHooks['EditFilter'][] = 'wfGetSummarySpamRegex';
-$wgHooks['SpecialMovepageBeforeMove'][] = 'wfGetMoveSpamRegex' ;
 
 function wfGetSpamRegex () {
 	global $wgSpamRegex;
@@ -39,19 +38,9 @@ function wfGetSummarySpamRegex ($editpage) {
 		$wgOut->setRobotPolicy( 'noindex,nofollow' );
 		$wgOut->setArticleRelated( false );
 
-	// here we get only the phrases for blocking in summaries...	
-	$s_phrases = array () ;
-	$s_phrases = wfFetchSpamRegexData (SPAMREGEX_SUMMARY) ;
-	if ( $s_phrases && ($movepage->reason != '')) {		
-		foreach ($s_phrases as $s_phrase) {
-			if (preg_match ($s_phrase, $movepage->reason, $s_matches)) {				
-				$spammessage = wfMsg ('spamregex-move') ;
-				$spammessage .= wfMsg ('spamprotectionmatch', "<nowiki>{$s_matches[0]}</nowiki>") ;
-				$movepage->showForm ('hookaborted', $spammessage) ;
-
-				wfProfileOut( __METHOD__ );
-				return false ;
-			}
+		$wgOut->addWikiText( wfMsg( 'spamprotectiontext' ) );
+		if ( $matches[0] ) {
+			$wgOut->addWikiText( wfMsg( 'spamprotectionmatch', "<nowiki>{$matches[0]}</nowiki>" ) );
 		}
 		$wgOut->addWikiText ( wfMsg ('spamregex_summary') );
 
@@ -62,11 +51,10 @@ function wfGetSummarySpamRegex ($editpage) {
 	return true;
 }
 
-
 function wfFetchSpamRegexData ($mode) {
 	global $wgMemc, $wgUser, $wgSpamRegex, $wgSharedDB;
 
-	$phrases = array () ;
+	$phrases = "" ;
 	$first = true ;
 
 	/* first, check if regex string is already stored in memcache */
@@ -93,7 +81,6 @@ function wfFetchSpamRegexData ($mode) {
 	} else {
 		/* take from cache */
 		$phrases = $cached;
-	}	
-	wfProfileOut( __METHOD__ );
+	}
 	return $phrases;
 }

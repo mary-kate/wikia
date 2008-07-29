@@ -314,10 +314,6 @@ class ImageMap {
 		}
 		# Armour output against broken parser
 		$output = str_replace( "\n", '', $output );
-
-		# Wikia: fix IE6/7 bug
-		$output = '<div class="ImageMapWrapper">' . $output . '</div>';
-
 		return $output;
 	}
 

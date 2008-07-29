@@ -2384,7 +2384,7 @@ class BotQueryProcessor {
 				"  You are " . ($wgUser->isAnon() ? "an anonymous" : "a logged-in") . " " . ($this->isBot ? "bot" : "user") . " " . $wgUser->getName(),
 				"",
 				"*Version*",
-				'  $Id: query.php 30090 2008-01-24 00:16:33Z brion $',
+				'  $Id$',
 				"",
 				);
 

@@ -70,7 +70,6 @@ function sfgSetupExtension() {
 	global $sfgIP, $wgExtensionCredits;
 
 	require_once($sfgIP . '/includes/SF_FormEditTab.php');
-	require_once($sfgIP . '/includes/SF_AutocompleteAPI.php');
 
 	wfLoadExtensionMessages('SemanticForms');
 

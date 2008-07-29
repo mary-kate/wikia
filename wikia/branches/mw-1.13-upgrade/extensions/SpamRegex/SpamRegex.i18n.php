@@ -35,7 +35,6 @@ Caution advised, expressions should not be too short or too common.',
 	'spamregex-block-submit'         => 'Block&nbsp;this&nbsp;phrase',
 	'spamregex-text'                 => '(Text)',
 	'spamregex-summary-log'          => '(Summary)',
-	'spamregex-move' => 'The reason you entered contained a blocked phrase. ' ,
 );
 
 /** Eastern Mari (Олык Марий)

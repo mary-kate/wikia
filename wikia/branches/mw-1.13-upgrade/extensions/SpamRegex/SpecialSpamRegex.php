@@ -11,6 +11,7 @@ if(!defined('MEDIAWIKI'))
 $wgAvailableRights[] = 'spamregex';
 $wgGroupPermissions['staff']['spamregex'] = true;
 
+$wgExtensionFunctions[] = 'wfSpamRegexSetup';
 $wgExtensionCredits['specialpage'][] = array(
 	'name' => 'Regular Expression Spam Block',
 	'author' => 'Bartek Łapiński',
@@ -43,7 +44,6 @@ function wfSpamRegexGetListBits () {
 /* the core */
 function wfSpamRegexSpecial( $par ) {
 	global $wgOut, $wgUser, $wgRequest;
-	wfLoadExtensionMessages( 'SpamRegex' );
 	$wgOut->setPageTitle(wfMsgHtml('spamregex-page-title'));
 	$sRF = new spamRegexForm($par);
 	$sRL = new spamRegexList($par);
@@ -66,7 +66,7 @@ function wfSpamRegexSpecial( $par ) {
 	} else {
 		$sRF->showForm('');
 	}
-		$sRL->showList ('') ;
+		$sRL->showList ('', $offset ) ;
 }
 
 /* useful for cleaning the memcached keys */
@@ -133,7 +133,6 @@ class spamRegexList {
 		$dbr->freeResult($res);
 		$wgOut->addHTML("</ul></form>");
 		$this->showPrevNext($wgOut);
-		wfProfileOut( __METHOD__ );
 	}
 
 	/* remove from list - without confirmation */
@@ -321,13 +320,11 @@ class spamRegexForm {
 		/* empty name */
 		if ( strlen($this->mBlockedPhrase) == 0 ) {
 			$this->showForm (wfMsgHtml('spamregex-warning-1'));
-			wfProfileOut( __METHOD__ );
 			return ;
 		}
 		/* validate expression */
 		if (!$simple_regex = wfValidRegex ($this->mBlockedPhrase) ) {
 			$this->showForm (wfMsgHtml('spamregex-error-1'));
-			wfProfileOut( __METHOD__ );
 			return ;
 		}
 

@@ -1,4 +1,4 @@
-dnl $Id: config.m4 4266 2004-07-12 06:13:44Z jeluf $
+dnl $Id$
 dnl config.m4 for extension MediaWiki
 
 dnl Comments in this file start with the string 'dnl'.

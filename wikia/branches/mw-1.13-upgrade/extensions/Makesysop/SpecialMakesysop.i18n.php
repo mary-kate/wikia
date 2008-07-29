@@ -772,23 +772,23 @@ $messages['it'] = array(
 );
 
 $messages['ja'] = array(
-	'makesysoptitle' => ' 利用者を管理者にする',
-	'makesysoptext' => 'このフォームは通常の利用者を管理者にするために使用します。管理者にする利用者名を入力し、「利用者権限の設定」というボタンを押してください。',
+	'makesysoptitle' => '{{int:Makesysop}}',
+	'makesysoptext' => 'このフォームは通常の利用者を{{int:group-sysop}}にするために使用します。{{int:group-sysop}}にする利用者名を入力し、{{int:Makesysopsubmit}}ボタンを押してください。',
 	'makesysopname' => '利用者名:',
-	'makesysopsubmit' => 'この利用者を管理者にする',
-	'makesysopok' => '<b>利用者 "$1" を管理者にしました。</b>',
-	'makesysopfail' => '<b>利用者 "$1" を管理者にできませんでした。利用者名を正しく入力していたかどうか確認してください。</b>',
-	'setbureaucratflag' => '“ビューロクラット” フラグをセット',
+	'makesysopsubmit' => 'この利用者を{{int:group-sysop}}にする',
+	'makesysopok' => '<b>利用者 "$1" を{{int:group-sysop}}にしました。</b>',
+	'makesysopfail' => '<b>利用者 "$1" を{{int:group-sysop}}にできませんでした。利用者名を正しく入力していたかどうか確認してください。</b>',
+	'setbureaucratflag' => '“{{int:group-bureaucrat}}” フラグをセット',
 	'rights' => '権限:',
 	'set_user_rights' => '利用者権限の設定',
 	'set_rights_fail' => '<b>利用者 "$1" の権限を設定できませんでした。利用者名を正しく入力していたかどうか確認してください。</b>',
-	'makesysop' => '利用者を管理者にする',
-	'already_sysop' => '利用者は既に管理者です。',
-	'already_bureaucrat' => '利用者は既にビューロクラットです。',
+	'makesysop' => '利用者を{{int:group-sysop}}にする',
+	'already_sysop' => '利用者は既に{{int:group-sysop}}です。',
+	'already_bureaucrat' => '利用者は既に{{int:group-bureaucrat}}です。',
 	'group-steward' => 'スチュワード',
-	'group-steward-member' => 'スチュワード',
-	'grouppage-steward' => '{{ns:project}}:スチュワード',
-	);
+	'group-steward-member' => '{{int:group-steward}}',
+	'grouppage-steward' => '{{ns:project}}:{{int:group-steward}}',
+);
 
 $messages['ka'] = array(
 	'makesysopname' => 'მომხმარებლის სახელი:',

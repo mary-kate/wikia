@@ -49,7 +49,6 @@ function smwfParserHook(&$parser, &$text) {
 	                        \]\]                # End of link
 	                        /xu';
 	$text = preg_replace_callback($semanticLinkPattern, 'smwfParsePropertiesCallback', $text);
-
 	SMWFactbox::printFactbox($text);
 
 	// add link to RDF to HTML header
@@ -226,15 +225,9 @@ function smwfSaveDataForTitle($title) {
 *  Restore semantic data if articles are undeleted.
 */
 function smwfUndeleteHook(&$title, $create) {
-	include_once($smwgIP . '/includes/SMW_Factbox.php');
-	if ($title instanceof Title) {
-		SMWFactbox::initStorage($title);
-		if ($create) {
-			SMWFactbox::setNewArticle();
-		}
-		SMWFactbox::storeData(smwfIsSemanticsProcessed($title->getNamespace()));
+	if ($create) {
+		SMWFactbox::setNewArticle();
 	}
-
 	SMWFactbox::storeData(smwfIsSemanticsProcessed($title->getNamespace()));
 	return true; // always return true, in order not to stop MW's hook processing!
 }

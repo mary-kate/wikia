@@ -235,8 +235,6 @@ function beforeTidyHook($parser, $text) {
     $starting_level = wfDetermineStartingLevel($text);
     $text = wfRecurrentParse ($text, $starting_level, 0);
 	return true;
-
-    return true;
 }
 
 # Not a valid entry point, skip unless MEDIAWIKI is defined
@@ -368,7 +366,6 @@ function wfWikiwygToggle ($toggles) {
 	wfLoadExtensionMessages('Wikiwyg');
 	$toggles["in-page"] = "in-page";
 	return true;
-	return true ;
 }
 
 function wfWikiwygAddEditingPrefs ($prefsForm, $prefs) {
@@ -377,7 +374,6 @@ function wfWikiwygAddEditingPrefs ($prefsForm, $prefs) {
 						'in-page'
 					));
 	return true;
-	return true ;
 }
 
 function wfWikiwygHandleEditingPrefs () {

@@ -20,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *
- * $Id: LuceneSearch.php 30935 2008-02-14 07:36:13Z raymond $
+ * $Id$
  */
 
 # To use this, add something like the following to LocalSettings:

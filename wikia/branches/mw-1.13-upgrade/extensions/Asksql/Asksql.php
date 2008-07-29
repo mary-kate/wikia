@@ -1,5 +1,5 @@
 <?php
-/* $Id: Asksql.php 30419 2008-02-02 12:31:13Z grondin $ */
+/* $Id$ */
 
 /**
  * If enabled through $wgAllowSysopQueries = true, this class
