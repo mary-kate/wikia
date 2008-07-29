@@ -160,12 +160,7 @@ TieDivLib = new function() {
 
 		$(source).style.display = '';
 		$(source).style.position = 'absolute';
-
-		if(pos == 'bl' || pos == 'r' || pos == 'FAST_SIDE') {
-			$(source).style.zIndex = 21;
-		} else {
-			$(source).style.zIndex = 5;
-		}
+		$(source).style.zIndex = (pos == 'bl' || pos == 'r' || pos == 'FAST_SIDE') ? 21 : 5;
 	}
 
 	this.start = function() {
