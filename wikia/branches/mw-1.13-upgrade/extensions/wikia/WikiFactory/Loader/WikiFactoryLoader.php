@@ -15,7 +15,7 @@ require_once( "$IP/includes/Defines.php" );
 require_once( "$IP/includes/DefaultSettings.php" );
 require_once( "$IP/includes/GlobalFunctions.php" );
 require_once( "$IP/includes/Exception.php" );
-require_once( "$IP/includes/Database.php" );
+require_once( "$IP/includes/db/Database.php" );
 require_once( "$IP/includes/BagOStuff.php" );
 require_once( "$IP/includes/ObjectCache.php" );
 require_once( "$IP/extensions/wikia/WikiFactory/WikiFactory.php" );
