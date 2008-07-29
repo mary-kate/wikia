@@ -267,6 +267,10 @@ TieDivLib = new function() {
 		YAHOO.util.Event.addListener(document, 'keydown', function() {
 			setTimeout(TieDivLib.recalc, 1);
 		});
+
+		YAHOO.util.Event.addListener(window, 'resize', function() {
+			TieDivLib.recalc();
+		});
 	}
 
 	this.getItems = function() {
