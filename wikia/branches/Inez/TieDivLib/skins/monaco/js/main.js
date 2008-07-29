@@ -528,10 +528,11 @@ TieDivLib = new function() {
 
 	this.start = function() {
 		TieDivLib.timer();
-
 		YAHOO.util.Event.addListener(window, 'resize', TieDivLib.recalc);
-		YAHOO.util.Event.addListener(window, 'click', TieDivLib.recalc);
-
+		YAHOO.util.Event.addListener(window, 'click', function() {
+			TieDivLib.recalc();
+			setTimeout(TieDivLib.recalc, 200);
+		});
 		YAHOO.util.Event.addListener(window, 'load', function() {
 			TieDivLib.setInterval(5000);
 		});
@@ -551,7 +552,6 @@ TieDivLib = new function() {
 			TieDivLib.recalc();
 			TieDivLib.setInterval(5000);
 		});
-
 	}
 
 	this.timer = function() {
