@@ -23,7 +23,7 @@ $wgWidgets['WidgetAdvertiser'] = array(
 
 function WidgetAdvertiser($id, $params) {
     wfProfileIn(__METHOD__);
-    global $wgUser, $wgShowAds, $wgUseAdServer, $wgAdCalled;
+    global $wgUser, $wgShowAds, $wgUseAdServer, $wgAdCalled, $wgRequest;
 
 	if(!$wgShowAds || !$wgUseAdServer) {
 		wfProfileOut(__METHOD__);
@@ -31,6 +31,10 @@ function WidgetAdvertiser($id, $params) {
 	}
     $ret = '';
 	$type = $wgUser->isLoggedIn() ? 'user' : 'anon';
+
+	if($wgRequest->getVal('action', 'view') != 'view') {
+		return '';
+	}
 
 	switch ($type) {
 		case 'anon':
