@@ -603,7 +603,7 @@ class ApiMain extends ApiBase {
 	public function getVersion() {
 		$vers = array ();
 		$vers[] = 'MediaWiki ' . SpecialVersion::getVersion();
-		$vers[] = __CLASS__ . ': $Id: ApiMain.php 581 2008-07-29 13:20:14Z emil $';
+		$vers[] = __CLASS__ . ': $Id: ApiMain.php 37349 2008-07-08 20:53:41Z catrope $';
 		$vers[] = ApiBase :: getBaseVersion();
 		$vers[] = ApiFormatBase :: getBaseVersion();
 		$vers[] = ApiQueryBase :: getBaseVersion();

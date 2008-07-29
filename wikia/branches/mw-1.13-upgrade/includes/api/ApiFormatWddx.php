@@ -85,6 +85,6 @@ class ApiFormatWddx extends ApiFormatBase {
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiFormatWddx.php 581 2008-07-29 13:20:14Z emil $';
+		return __CLASS__ . ': $Id: ApiFormatWddx.php 35098 2008-05-20 17:13:28Z ialex $';
 	}
 }

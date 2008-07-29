@@ -263,6 +263,6 @@ class ApiLogin extends ApiBase {
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiLogin.php 581 2008-07-29 13:20:14Z emil $';
+		return __CLASS__ . ': $Id: ApiLogin.php 35565 2008-05-29 19:23:37Z btongminh $';
 	}
 }

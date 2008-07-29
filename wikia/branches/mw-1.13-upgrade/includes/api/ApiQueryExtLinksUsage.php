@@ -206,6 +206,6 @@ class ApiQueryExtLinksUsage extends ApiQueryGeneratorBase {
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiQueryExtLinksUsage.php 581 2008-07-29 13:20:14Z emil $';
+		return __CLASS__ . ': $Id: ApiQueryExtLinksUsage.php 37909 2008-07-22 13:26:15Z catrope $';
 	}
 }

@@ -123,6 +123,6 @@ class ApiQueryExternalLinks extends ApiQueryBase {
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiQueryExternalLinks.php 581 2008-07-29 13:20:14Z emil $';
+		return __CLASS__ . ': $Id: ApiQueryExternalLinks.php 37270 2008-07-07 17:32:22Z catrope $';
 	}
 }

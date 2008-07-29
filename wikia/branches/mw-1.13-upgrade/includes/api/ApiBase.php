@@ -814,6 +814,6 @@ abstract class ApiBase {
 	 * Returns a String that identifies the version of this class.
 	 */
 	public static function getBaseVersion() {
-		return __CLASS__ . ': $Id: ApiBase.php 581 2008-07-29 13:20:14Z emil $';
+		return __CLASS__ . ': $Id: ApiBase.php 36309 2008-06-15 20:37:28Z catrope $';
 	}
 }

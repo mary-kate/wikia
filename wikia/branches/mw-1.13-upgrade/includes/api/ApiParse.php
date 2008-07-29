@@ -226,6 +226,6 @@ class ApiParse extends ApiBase {
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiParse.php 581 2008-07-29 13:20:14Z emil $';
+		return __CLASS__ . ': $Id: ApiParse.php 36983 2008-07-03 15:01:50Z catrope $';
 	}
 }

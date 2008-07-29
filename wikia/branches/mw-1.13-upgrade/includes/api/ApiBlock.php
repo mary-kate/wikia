@@ -157,6 +157,6 @@ class ApiBlock extends ApiBase {
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiBlock.php 581 2008-07-29 13:20:14Z emil $';
+		return __CLASS__ . ': $Id: ApiBlock.php 35388 2008-05-27 10:18:28Z catrope $';
 	}
 }

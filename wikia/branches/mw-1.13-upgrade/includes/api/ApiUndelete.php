@@ -123,6 +123,6 @@ class ApiUndelete extends ApiBase {
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiUndelete.php 581 2008-07-29 13:20:14Z emil $';
+		return __CLASS__ . ': $Id: ApiUndelete.php 35348 2008-05-26 10:51:31Z catrope $';
 	}
 }
