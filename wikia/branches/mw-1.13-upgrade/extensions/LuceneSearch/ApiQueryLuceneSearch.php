@@ -132,7 +132,7 @@ class ApiQueryLuceneSearch extends ApiQueryGeneratorBase {
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id$';
+		return __CLASS__ . ': $Id: ApiQueryLuceneSearch.php 31522 2008-03-03 21:27:18Z btongminh $';
 	}
 }
 

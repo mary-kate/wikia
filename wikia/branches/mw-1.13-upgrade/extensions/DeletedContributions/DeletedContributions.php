@@ -7,8 +7,8 @@
 
 $wgExtensionCredits['specialpage'][] = array(
 	'author' => 'Aaron Schulz',
-	'svn-date' => '$LastChangedDate$',
-	'svn-revision' => '$LastChangedRevision$',
+	'svn-date' => '$LastChangedDate: 2008-07-15 08:54:15 +0000 (Tue, 15 Jul 2008) $',
+	'svn-revision' => '$LastChangedRevision: 37682 $',
 	'name' => 'Deleted user contributions',
 	'url' => 'http://www.mediawiki.org/wiki/Extension:DeletedContributions',
 	'description' => 'Gives sysops the ability to browse a user\'s deleted edits',

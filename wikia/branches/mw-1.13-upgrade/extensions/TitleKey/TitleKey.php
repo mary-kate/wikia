@@ -21,8 +21,8 @@
 
 $wgExtensionCredits['other'][] = array(
 	'name' => 'TitleKey',
-	'svn-date' => '$LastChangedDate$',
-	'svn-revision' => '$LastChangedRevision$',
+	'svn-date' => '$LastChangedDate: 2008-05-06 11:59:58 +0000 (Tue, 06 May 2008) $',
+	'svn-revision' => '$LastChangedRevision: 34306 $',
 	'author' => 'Brion Vibber',
 	'description' => 'Title prefix search suggestion backend',
 	'descriptionmsg' => 'titlekey-desc',

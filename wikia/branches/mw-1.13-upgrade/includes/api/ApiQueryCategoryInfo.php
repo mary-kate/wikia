@@ -86,6 +86,6 @@ class ApiQueryCategoryInfo extends ApiQueryBase {
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id$';
+		return __CLASS__ . ': $Id: ApiQueryCategoryInfo.php 581 2008-07-29 13:20:14Z emil $';
 	}
 }

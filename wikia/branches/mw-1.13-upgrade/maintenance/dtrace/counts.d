@@ -1,7 +1,7 @@
 /*
  * This software is in the public domain.
  *
- * $Id: counts.d 10510 2005-08-15 01:46:19Z kateturner $
+ * $Id: counts.d 581 2008-07-29 13:20:14Z emil $
  */
 
 #pragma D option quiet

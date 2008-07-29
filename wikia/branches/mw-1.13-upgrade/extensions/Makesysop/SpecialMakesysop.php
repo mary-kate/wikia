@@ -15,8 +15,8 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 $wgExtensionCredits['specialpage'][] = array(
 	'author' => 'Tim Starling',
 	'name' => 'Makesysop',
-	'svn-date' => '$LastChangedDate$',
-	'svn-revision' => '$LastChangedRevision$',
+	'svn-date' => '$LastChangedDate: 2008-07-09 16:57:18 +0000 (Wed, 09 Jul 2008) $',
+	'svn-revision' => '$LastChangedRevision: 37410 $',
 	'description' => 'Gives bureaucrats the ability to make users into sysops or bureaucrats',
 	'descriptionmsg' => 'makesysop-desc',
 	'url' => 'http://www.mediawiki.org/wiki/Extension:Makesysop'

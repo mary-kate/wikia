@@ -53,6 +53,6 @@ class ApiFormatTxt extends ApiFormatBase {
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id$';
+		return __CLASS__ . ': $Id: ApiFormatTxt.php 581 2008-07-29 13:20:14Z emil $';
 	}
 }

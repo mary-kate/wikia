@@ -2,8 +2,8 @@
 
 $wgExtensionCredits['other'][] = array(
 	'name' => 'DismissableSiteNotice',
-	'svn-date' => '$LastChangedDate$',
-	'svn-revision' => '$LastChangedRevision$',
+	'svn-date' => '$LastChangedDate: 2008-07-29 13:59:13 +0000 (Tue, 29 Jul 2008) $',
+	'svn-revision' => '$LastChangedRevision: 584 $',
 	'author' => 'Brion Vibber',
 	'description' => 'Allows users to close the sitenotice.',
 	'descriptionmsg' => 'sitenotice-desc',

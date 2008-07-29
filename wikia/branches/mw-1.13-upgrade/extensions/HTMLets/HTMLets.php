@@ -23,8 +23,8 @@ $wgExtensionCredits['parserhook'][] = array(
 	'name'           => 'HTMLets', 
 	'author'         => 'Daniel Kinzler', 
 	'url'            => 'http://mediawiki.org/wiki/Extension:HTMLets',
-	'svn-date' => '$LastChangedDate$',
-	'svn-revision' => '$LastChangedRevision$',
+	'svn-date' => '$LastChangedDate: 2008-05-06 11:59:58 +0000 (Tue, 06 May 2008) $',
+	'svn-revision' => '$LastChangedRevision: 34306 $',
 	'description'    => 'lets you inline HTML snippets from files',
 	'descriptionmsg' => 'htmlets-desc',
 );

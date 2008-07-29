@@ -161,6 +161,6 @@ class ApiParamInfo extends ApiBase {
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id$';
+		return __CLASS__ . ': $Id: ApiParamInfo.php 581 2008-07-29 13:20:14Z emil $';
 	}
 }

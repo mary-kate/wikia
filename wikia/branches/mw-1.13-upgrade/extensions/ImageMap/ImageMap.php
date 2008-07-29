@@ -11,8 +11,8 @@ if ( defined( 'MW_SUPPORTS_PARSERFIRSTCALLINIT' ) ) {
 
 $wgExtensionCredits['parserhook']['ImageMap'] = array(
 	'name'           => 'ImageMap',
-	'svn-date' => '$LastChangedDate$',
-	'svn-revision' => '$LastChangedRevision$',
+	'svn-date' => '$LastChangedDate: 2008-06-06 20:38:04 +0000 (Fri, 06 Jun 2008) $',
+	'svn-revision' => '$LastChangedRevision: 35980 $',
 	'author'         => 'Tim Starling',
 	'url'            => 'http://www.mediawiki.org/wiki/Extension:ImageMap',
 	'description'    => 'Allows client-side clickable image maps using <nowiki><imagemap></nowiki> tag.',

@@ -11,8 +11,8 @@ if (!defined('MEDIAWIKI')) {
 $wgExtensionCredits['other'][] = array(
 	'name'           => 'BoardVote',
 	'url'            => 'http://www.mediawiki.org/wiki/Extension:BoardVote',
-	'svn-date'       => '$LastChangedDate$',
-	'svn-revision'   => '$LastChangedRevision$',
+	'svn-date'       => '$LastChangedDate: 2008-07-10 06:27:11 +0000 (Thu, 10 Jul 2008) $',
+	'svn-revision'   => '$LastChangedRevision: 37462 $',
 	'description'    => '[[meta:Board elections|Wikimedia Board of Trustees election]]',
 	'descriptionmsg' => 'boardvote-desc',
 );

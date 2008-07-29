@@ -1,4 +1,4 @@
-dnl $Id$
+dnl $Id: config.m4 584 2008-07-29 13:59:13Z emil $
 dnl config.m4 for extension proctitle
 
 dnl Comments in this file start with the string 'dnl'.

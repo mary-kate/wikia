@@ -32,8 +32,8 @@
 $wgExtensionCredits['other'][] = array(
 	'name'           => 'UniversalEditButton',
 	'url'            => 'http://www.mediawiki.org/wiki/Extension:UniversalEditButton',
-	'svn-date'       => '$LastChangedDate$',
-	'svn-revision'   => '$LastChangedRevision$',
+	'svn-date'       => '$LastChangedDate: 2008-07-09 12:41:27 +0000 (Wed, 09 Jul 2008) $',
+	'svn-revision'   => '$LastChangedRevision: 37386 $',
 	'description'    => 'Adds HTML header <code>&lt;link&gt;</code> to support Universal Edit Button browser extension.',
 	'descriptionmsg' => 'universaleditbutton-desc',
 	'author'         => array( 'Brion Vibber', 'Danny B.' ),

@@ -3,7 +3,7 @@
  * This script makes several 'set', 'incr' and 'get' requests on every
  * memcached server and shows a report.
  *
- * $Id$
+ * $Id: mctest.php 581 2008-07-29 13:20:14Z emil $
  * @file
  * @ingroup Maintenance
  */
