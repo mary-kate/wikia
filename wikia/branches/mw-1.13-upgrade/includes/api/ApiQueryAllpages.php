@@ -65,7 +65,7 @@ class ApiQueryAllpages extends ApiQueryGeneratorBase {
 		$from = (is_null($params['from']) ? null : $this->titleToKey($params['from']));
 		$this->addWhereRange('page_title', $dir, $from, null);
 		if (isset ($params['prefix']))
-			$this->addWhere("lower(page_title) LIKE '" . $db->escapeLike($this->titleToKey($params['prefix'])) . "%'");
+			$this->addWhere("page_title LIKE '" . $db->escapeLike($this->titleToKey($params['prefix'])) . "%'");
 
 		$forceNameTitleIndex = true;
 		if (isset ($params['minsize'])) {
@@ -244,6 +244,6 @@ class ApiQueryAllpages extends ApiQueryGeneratorBase {
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiQueryAllpages.php 581 2008-07-29 13:20:14Z emil $';
+		return __CLASS__ . ': $Id: ApiQueryAllpages.php 37775 2008-07-17 09:26:01Z brion $';
 	}
 }

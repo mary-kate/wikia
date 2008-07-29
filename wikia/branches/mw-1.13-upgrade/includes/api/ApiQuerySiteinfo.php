@@ -314,6 +314,6 @@ class ApiQuerySiteinfo extends ApiQueryBase {
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiQuerySiteinfo.php 581 2008-07-29 13:20:14Z emil $';
+		return __CLASS__ . ': $Id: ApiQuerySiteinfo.php 37034 2008-07-04 09:21:11Z vasilievvv $';
 	}
 }

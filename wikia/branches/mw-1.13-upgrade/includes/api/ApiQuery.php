@@ -229,13 +229,10 @@ class ApiQuery extends ApiBase {
 	 * Create instances of all modules requested by the client
 	 */
 	private function InstantiateModules(&$modules, $param, $moduleList) {
-		if (!empty($this->params[$param]))
-		{
-			$list = $this->params[$param];
-			if (isset ($list))
-				foreach ($list as $moduleName)
-					$modules[] = new $moduleList[$moduleName] ($this, $moduleName);
-		}
+		$list = $this->params[$param];
+		if (isset ($list))
+			foreach ($list as $moduleName)
+				$modules[] = new $moduleList[$moduleName] ($this, $moduleName);
 	}
 
 	/**
@@ -512,7 +509,7 @@ class ApiQuery extends ApiBase {
 	public function getVersion() {
 		$psModule = new ApiPageSet($this);
 		$vers = array ();
-		$vers[] = __CLASS__ . ': $Id: ApiQuery.php 581 2008-07-29 13:20:14Z emil $';
+		$vers[] = __CLASS__ . ': $Id: ApiQuery.php 35098 2008-05-20 17:13:28Z ialex $';
 		$vers[] = $psModule->getVersion();
 		return $vers;
 	}
