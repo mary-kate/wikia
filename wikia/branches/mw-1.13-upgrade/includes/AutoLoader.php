@@ -543,4 +543,3 @@ if ( function_exists( 'spl_autoload_register' ) ) {
 	}
 }
 
-include_once( "$IP/includes/wikia/AutoLoader.php" );
