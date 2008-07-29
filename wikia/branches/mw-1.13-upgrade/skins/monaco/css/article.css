@@ -7,7 +7,7 @@
 	position: relative;
 	top: -176px;
 	z-index: 5;
-	overflow: hidden;
+	overflow: visible;
 }
 
 #page_bar {
@@ -130,7 +130,7 @@
 	min-height: 200px;
 	padding: 10px;
 	position: relative;
-	overflow: auto;
+	overflow: visible;
 }
 
 /*** ARTICLE FOOTER ***/

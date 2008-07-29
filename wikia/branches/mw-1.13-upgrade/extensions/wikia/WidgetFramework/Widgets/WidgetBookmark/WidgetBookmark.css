@@ -25,6 +25,15 @@ div.WidgetBookmark .WidgetBookmarkMenu a.addBookmark {
 	top: -33px;
 }
 
+body.rtl .WidgetBookmark .WidgetBookmarkMenu a.addBookmark {
+	left: -3px;
+	right: auto;
+}
+
+body.rtl div.WidgetBookmark .WidgetBookmarkMenu a.addBookmark {
+	left: 20px;
+}
+
 .WidgetBookmark .WidgetBookmarkRemove {
 	margin-left: 10px;
 	cursor: pointer;
