@@ -93,7 +93,7 @@ class SpecialVersion {
 				</tr>\n
 				<tr>
 					<td>[http://www.mediawiki.org/ MediaWiki]</td>
-					<td>" . self::getVersionLinked() . "</td>
+					<td>" . self::getVersion() . "</td>
 				</tr>\n
 				<tr>
 					<td>Wikia</td>
