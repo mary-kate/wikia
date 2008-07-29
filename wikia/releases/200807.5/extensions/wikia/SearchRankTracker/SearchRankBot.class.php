@@ -15,7 +15,7 @@ class SearchRankBot {
 	private $mDebugMode = false;
 	private $mCacheDir = false;
 	private $mCacheExpire = 4; // in hours
-	private $mMaxResultFetched = 1000;
+	private $mMaxResultFetched = 500;
 	private $mUserAgent = 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; SV1; .NET CLR 1.1.4322)';
 	private $mCurlEngine = null;
 
@@ -68,7 +68,7 @@ class SearchRankBot {
 	}
 	
 	
-	public function run($bVerbose = true, $iEntryId = 0) {
+	public function run($bVerbose = true, $iEntryId = 0, $iMaxEntriesLimit = 0) {
 		global $wgSharedDB, $wgSearchRankTrackerConfig;
 		$this->printDebug("Starting SearchRankBot ...", $bVerbose);
 		
@@ -83,7 +83,11 @@ class SearchRankBot {
 		$oResource = $dbr->query("SELECT * FROM rank_entry " . ($iEntryId ? "WHERE ren_id='" . addslashes($iEntryId) . "' " : "") . "ORDER BY ren_city_id, ren_id");
 		
 		if($oResource) {
+			$iResultsFetched = 0;
 			while($oResultRow = $dbr->fetchObject($oResource)) {
+				if($iMaxEntriesLimit && ($iResultsFetched > $iMaxEntriesLimit)) {
+					break;
+				}
 				// get entry object
 				$oSearchEntry = new SearchRankEntry(0, $oResultRow);
 				$this->printDebug("-> Checking rank for URL: " . $oSearchEntry->getPageUrl() . ", Phrase: \"" . $oSearchEntry->getPhrase() . "\" (ren_id: " . $oSearchEntry->getId() . ")", $bVerbose);
@@ -98,6 +102,7 @@ class SearchRankBot {
 					 else {
 					 	$this->printDebug("=> ($sEngineName) ERROR: Rank result save failed.");
 					 }
+						$iResultsFetched++;			 
 					}
 					else {
 						$this->printDebug("   ($sEngineName) Rank result exists for current date.", $bVerbose);
@@ -243,7 +248,7 @@ class SearchRankBot {
 			}
 
 			$iOffset += 10;
-			if($iOffset >= $this->mMaxResultFetched) {  
+			if($iOffset >= 250) {
 				// we've ran out of Yahoo results
 				break;  
 			}
@@ -301,7 +306,7 @@ class SearchRankBot {
 			}
 
 			$iOffset += 10;
-	  if($iOffset >= 820) { 
+	  if($iOffset >= $this->mMaxResultFetched) { 
 				// we've ran out of MSN results
 	  	break;  
 	  }
