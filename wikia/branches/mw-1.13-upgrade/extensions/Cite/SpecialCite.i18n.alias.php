@@ -73,7 +73,7 @@ $aliases['lb'] = array(
 
 /** Nahuatl (Nahuatl) */
 $aliases['nah'] = array(
-	'Cite' => array( 'Tlahtoa', 'Citar' ),
+	'Cite' => array( 'Tlahtoa' ),
 );
 
 /** Dutch (Nederlands) */

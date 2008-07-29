@@ -69,7 +69,7 @@ smwfInitNamespaces();
 # display for individual pages. Other options for this setting include:
 ##
 $smwgShowFactbox = SMW_FACTBOX_NONEMPTY;
-// $smwgShowFactbox = SMW_FACTBOX_SPECIAL # show only if special properties were set
+//$smwgShowFactbox = SMW_FACTBOX_SPECIAL # show only if special properties were set
 //$smwgShowFactbox = SMW_FACTBOX_HIDDEN; # hide always
 //$smwgShowFactbox = SMW_FACTBOX_SHOWN;  # show always, buggy and not recommended
 ##
@@ -194,8 +194,7 @@ $smwgEnableUpdateJobs = true;
 # during full RDF export, unless they are referred to from another
 # article.
 ##
-# Only set if not overridden in WikiFactory, trac #3241
-if (empty($smwgNamespacesWithSemanticLinks)) $smwgNamespacesWithSemanticLinks = array(
+$smwgNamespacesWithSemanticLinks = array(
 	              NS_MAIN => true,
 	              NS_TALK => false,
 	              NS_USER => true,

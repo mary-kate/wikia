@@ -1,4 +1,4 @@
-dnl $Id: config.m4 9174 2005-05-24 16:39:22Z midom $
+dnl $Id$
 dnl config.m4 for extension proctitle
 
 dnl Comments in this file start with the string 'dnl'.

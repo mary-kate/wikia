@@ -6,6 +6,7 @@
  * @author Yaron Koren
  */
 
+if (!defined('MEDIAWIKI')) die();
 
 class SFCreateProperty extends SpecialPage {
 

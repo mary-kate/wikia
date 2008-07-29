@@ -8,8 +8,6 @@
  * @author Harold Solbrig
  */
 
-require_once( $sfgIP . "/includes/SF_FormInputs.inc" );
-
 class SFFormPrinter {
 
   var $mSemanticTypeHooks;

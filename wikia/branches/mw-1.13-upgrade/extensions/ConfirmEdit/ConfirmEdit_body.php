@@ -68,7 +68,7 @@ class SimpleCaptcha {
 		global $wgCaptchaStorageClass;
 		$this->storage = new $wgCaptchaStorageClass;
 	}
-
+	
 	function getCaptcha() {
 		$a = mt_rand(0, 100);
 		$b = mt_rand(0, 10);
@@ -147,29 +147,9 @@ class SimpleCaptcha {
 	function injectUserCreate( &$template ) {
 		global $wgCaptchaTriggers, $wgOut;
 		if( $wgCaptchaTriggers['createaccount'] ) {
-			$template->set( 'captcha',
-				"<div class='captcha' id='captcha-div'>" .
+			$template->set( 'header',
+				"<div class='captcha'>" .
 				$wgOut->parse( $this->getMessage( 'createaccount' ) ) .
-				'<div id="captcha-more-info-div" style="display:none">' .
-				wfMsg( 'captchahelp-text' ) .
-				( $this->storage->cookiesNeeded() ? wfMsg( 'captchahelp-cookies-needed' ) : '') .
-				'</div>' .
-				'<script type="text/javascript">
-				var link = document.getElementById("captcha-div").getElementsByTagName("a")[0];
-				link.innerHTML += " +";
-				function more_info(e){
-					YAHOO.util.Event.preventDefault(e);
-					var d = document.getElementById("captcha-more-info-div");
-					if (d.style.display == "block") {
-						d.style.display = "none";
-						link.innerHTML = link.innerHTML.substr(0, link.innerHTML.length-1) + "+";
-					}
-					else {
-						d.style.display = "block";
-						link.innerHTML = link.innerHTML.substr(0, link.innerHTML.length-1) + "-";
-					}
-				}
-				YAHOO.util.Event.addListener(link, "click", more_info);</script>' .
 				$this->getForm() .
 				"</div>\n" );
 		}
@@ -194,7 +174,7 @@ class SimpleCaptcha {
 		}
 		return true;
 	}
-
+	
 	/**
 	 * When a bad login attempt is made, increment an expiring counter
 	 * in the memcache cloud. Later checks for this may trigger a
@@ -216,7 +196,7 @@ class SimpleCaptcha {
 		}
 		return true;
 	}
-
+	
 	/**
 	 * Check if a bad login has already been registered for this
 	 * IP address. If so, require a captcha.
@@ -227,7 +207,7 @@ class SimpleCaptcha {
 		global $wgMemc, $wgCaptchaBadLoginAttempts;
 		return intval( $wgMemc->get( $this->badLoginKey() ) ) >= $wgCaptchaBadLoginAttempts;
 	}
-
+	
 	/**
 	 * Internal cache key for badlogin checks.
 	 * @return string
@@ -236,7 +216,7 @@ class SimpleCaptcha {
 	function badLoginKey() {
 		return wfMemcKey( 'captcha', 'badlogin', 'ip', wfGetIP() );
 	}
-
+	
 	/**
 	 * Check if the submitted form matches the captcha session data provided
 	 * by the plugin when the form was generated.
@@ -259,7 +239,7 @@ class SimpleCaptcha {
 	 * @return bool true if action triggers captcha on editPage's namespace
 	 */
 	function captchaTriggers( &$editPage, $action) {
-		global $wgCaptchaTriggers, $wgCaptchaTriggersOnNamespace;
+		global $wgCaptchaTriggers, $wgCaptchaTriggersOnNamespace;	
 		//Special config for this NS?
 		if (isset( $wgCaptchaTriggersOnNamespace[$editPage->mTitle->getNamespace()][$action] ) )
 			return $wgCaptchaTriggersOnNamespace[$editPage->mTitle->getNamespace()][$action];
@@ -396,7 +376,7 @@ class SimpleCaptcha {
 		global $wgCaptchaWhitelist;
 		$source = wfMsgForContent( 'captcha-addurl-whitelist' );
 
-		$whitelist = wfEmptyMsg( 'captcha-addurl-whitelist', $source )
+		$whitelist = wfEmptyMsg( 'captcha-addurl-whitelist', $source ) 
 			? false
 			: $this->buildRegexes( explode( "\n", $source ) );
 
@@ -460,7 +440,7 @@ class SimpleCaptcha {
 	function getLinksFromTracker( $title ) {
 		$dbr =& wfGetDB( DB_SLAVE );
 		$id = $title->getArticleId(); // should be zero queries
-		$res = $dbr->select( 'externallinks', array( 'el_to' ),
+		$res = $dbr->select( 'externallinks', array( 'el_to' ), 
 			array( 'el_from' => $id ), __METHOD__ );
 		$links = array();
 		while ( $row = $dbr->fetchObject( $res ) ) {
@@ -543,7 +523,7 @@ class SimpleCaptcha {
 		}
 		return true;
 	}
-
+	
 	/**
 	 * Hook for user login form submissions.
 	 * @param User $u
@@ -687,7 +667,7 @@ class CaptchaSessionStore {
 	function store( $index, $info ) {
 		$_SESSION['captcha' . $info['index']] = $info;
 	}
-
+	
 	function retrieve( $index ) {
 		if( isset( $_SESSION['captcha' . $index] ) ) {
 			return $_SESSION['captcha' . $index];
@@ -695,7 +675,7 @@ class CaptchaSessionStore {
 			return false;
 		}
 	}
-
+	
 	function clear( $index ) {
 		unset( $_SESSION['captcha' . $index] );
 	}
@@ -721,7 +701,7 @@ class CaptchaCacheStore {
 			return false;
 		}
 	}
-
+	
 	function clear( $index ) {
 		global $wgMemc;
 		$wgMemc->delete( wfMemcKey( 'captcha', $index ) );

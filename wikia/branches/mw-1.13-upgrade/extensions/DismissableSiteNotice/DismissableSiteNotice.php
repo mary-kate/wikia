@@ -63,8 +63,8 @@ if (cookieValue != siteNoticeID) {
 		var element = document.getElementById('siteNotice');
 		element.parentNode.removeChild(element);
 	}
-	document.writeln('<table width="100%" id="mw-dismissable-notice"><tr><td width="100%">'+siteNoticeValue+'</td>');
-	document.writeln('<td><span style="margin:0 30px">[<a href="javascript:dismissNotice();">'+msgClose+'</a>]</span></td></tr></table>');
+	document.writeln('<table width="100%" id="mw-dismissable-notice"><tr><td width="80%">'+siteNoticeValue+'</td>');
+	document.writeln('<td width="20%" align="right">[<a href="javascript:dismissNotice();">'+msgClose+'</a>]</td></tr></table>');
 }
 -->
 </script>

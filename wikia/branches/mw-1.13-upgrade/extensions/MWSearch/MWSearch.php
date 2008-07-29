@@ -20,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  * 
- * $Id: MWSearch.php 24558 2007-08-03 06:55:27Z brion $
+ * $Id$
  */
 
 # To use this, add something like the following to LocalSettings:

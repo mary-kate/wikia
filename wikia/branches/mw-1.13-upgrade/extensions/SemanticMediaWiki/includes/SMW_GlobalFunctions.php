@@ -166,7 +166,6 @@ function enableSemantics($namespace = '', $complete = false) {
 	$wgSpecialPages['SMWAdmin']                     = array('SMWAdmin');
 	$wgSpecialPageGroups['SMWAdmin']                = 'smw_group';
 	
-	
 	// suboptimal special pages using the SMWSpecialPage wrapper class:
 	$wgAutoloadClasses['SMWSpecialPage']            = $smwgIP . '/includes/SMW_SpecialPage.php';
 	$wgSpecialPages['Properties']                   = array('SMWSpecialPage','Properties', 'smwfDoSpecialProperties', $smwgIP . '/specials/QueryPages/SMW_SpecialProperties.php');
@@ -522,19 +521,8 @@ function smwfAddHTMLHeadersOutput(&$out) {
 		$magicWords['concept'] = array( 0, 'concept' );
 		$magicWords['SMW_NOFACTBOX'] = array( 0, '__NOFACTBOX__' );
 		$magicWords['SMW_SHOWFACTBOX'] = array( 0, '__SHOWFACTBOX__' );
-		$magicWords['SMW_NOFACTBOX'] = array( 0, '__NOFACTBOX__' );
-		$magicWords['SMW_SHOWFACTBOX'] = array( 0, '__SHOWFACTBOX__' );
 		return true;
 	}
-
-//   function smwfAddMagicWords(&$magicWords) {
-//     $magicWords[] = 'MAG_NOTITLE';
-//     return true;
-//   }
-//  
-//   function smwfAddMagicWordIds(&$magicWords) {
-//     $magicWords[] = MAG_NOTITLE;
-//   }
 
 	/**
 	 * Initialise a global language object for content language. This

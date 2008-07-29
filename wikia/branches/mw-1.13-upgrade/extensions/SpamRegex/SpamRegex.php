@@ -27,7 +27,7 @@ function wfSpamRegexGetTable() {
 if (!defined('MEDIAWIKI')) die();
 
 $dir = dirname(__FILE__) . '/';
-$wgExtensionMessagesFiles['SpamRegex'] = $dir . 'SpamRegex.i18n.php';
+$wgExtensionMessagesFiles['Spamregex'] = $dir . 'SpamRegex.i18n.php';
 
 require_once ($IP.SPAMREGEX_PATH."extensions/SpamRegex/SpecialSpamRegex.php");
 //will need more, maybe Core?
