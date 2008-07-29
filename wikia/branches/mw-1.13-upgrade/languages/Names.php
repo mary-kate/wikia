@@ -65,6 +65,7 @@
 	'da' => 'Dansk',		# Danish
 	'de' => 'Deutsch',		# German ("Du")
 	'de-formal' => 'Deutsch (Sie-Form)',		# German - formal address ("Sie")
+	'de-weigsbrag' => 'Deutsch (Weigsbrag)', # German - ("Weigsbrag")
 	'diq' => 'Zazaki',		# Zazaki
 	'dk' => 'Dansk (deprecated:da)', 		# Unused code currently redirecting to Danish, 'da' is correct for the language
 	'dsb' => 'Dolnoserbski', # Lower Sorbian

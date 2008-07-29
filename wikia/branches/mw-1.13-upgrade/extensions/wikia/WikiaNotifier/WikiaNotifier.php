@@ -7,7 +7,7 @@ define ('NOTIFY_TABLE', "CREATE TABLE `_wikialogs_`.`notify_log` (`nl_id` int(11
 
 $wgHooks['NotifyOnPageChangeComplete'][] = 'wfNotifyOnPageChangeComplete';
 
-function wfNotifyOnPageChangeComplete($notify, $watcher) {
+function wfNotifyOnPageChangeComplete($title, $timestamp, $watcher) {
 	global $wgCityId, $wgDBname, $wgUser, $wgCityId;
     wfProfileIn( __METHOD__ );
 
@@ -21,11 +21,11 @@ function wfNotifyOnPageChangeComplete($notify, $watcher) {
 		wfProfileOut( __METHOD__ );
 		return true;
 	}
-	if ( empty($notify->title) || !($notify->title instanceof Title) ) {
+	if ( empty($title) || !($title instanceof Title) ) {
 		wfProfileOut( __METHOD__ );
 		return true;
 	}
-	$namespace = $notify->title->getNamespace();
+	$namespace = $title->getNamespace();
 	if ( $namespace < 0 ) {
 		wfProfileOut( __METHOD__ );
 		return true;
@@ -49,9 +49,9 @@ function wfNotifyOnPageChangeComplete($notify, $watcher) {
 		'nl_type'		=> $notify_type,
 		'nl_editor' 	=> $editor_id,
 		'nl_watcher'	=> $watcher_id,
-		'nl_title' 		=> $notify->title->getDBkey(),
+		'nl_title' 		=> $title->getDBkey(),
 		'nl_namespace' 	=> $namespace,
-		'nl_timestamp'	=> $dbw->timestamp($notify->timestamp)
+		'nl_timestamp'	=> $dbw->timestamp($timestamp)
 	), __METHOD__);
 	wfProfileOut( __METHOD__ );
 	return true;

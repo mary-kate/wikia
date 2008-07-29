@@ -95,6 +95,16 @@ YE.addListener("rw-language", "change", WR.watchLanguage );
 YE.addListener("rw-title", "change", WR.Uppercase, "rw-title" );
 YE.addListener("rw-submit", "submit", WR.watchForm );
 
+// #3296
+WR.addTracker = function(elem, type, url) {
+        YE.addListener(elem, type, function(e, url) {
+                YAHOO.Wikia.Tracker.trackByStr(null, 'RequestWiki/' + url);
+        }, url);
+}
+
+WR.addTracker('rw-form', 'submit', 'SubmitRequest');
+WR.addTracker('rw-submit', 'click', 'SubmitRequest');
+
 /*]]>*/
 </script>
 <?php if (!empty($is_staff)): ?>

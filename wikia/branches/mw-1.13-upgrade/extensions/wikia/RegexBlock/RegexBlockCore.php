@@ -307,10 +307,10 @@ function wfRegexBlockExpireCheck ($user, $array_match = null, $ips = 0, $iregex 
         if ( empty($cached) || (!is_object ($cached)) ) {
             /* get from database */
             $dbr =& wfGetDB( DB_MASTER );
-            $where = array("blckby_name like '%{$single}%'");
+            $where = array("blckby_name like '%". $dbr->escapeLike( $single )  ."%'");
             if ( !empty($iregex) ) {
             	$where = array("blckby_name = " . $dbr->addQuotes($single));
-			}
+	    }
             $oRes = $dbr->select(
                 wfSharedTable(REGEXBLOCK_TABLE), 
                 array("blckby_id", "blckby_timestamp", "blckby_expire", "blckby_blocker", "blckby_create", "blckby_exact", "blckby_reason"),
