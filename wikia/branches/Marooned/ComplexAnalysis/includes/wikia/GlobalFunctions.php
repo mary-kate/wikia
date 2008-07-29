@@ -465,6 +465,27 @@ if (!function_exists('wfGetDBStats')) {
  * @return nothing
  */
 function wfCountWikiElement($element, $count=1) {
-	global $wgCityId, $wgTitle;
-	file_put_contents('complexity data file.txt', "CityId = $wgCityId, article = {$wgTitle->mDbkeyform}, element = $element, count = $count\n", FILE_APPEND);
+	global $wgCityId, $wgTitle, $wgElementsCount;
+	if (strpos($element, '*special:start:') === 0 || !isset($wgElementsCount)) {
+		$wgElementsCount = array();
+		return;
+	}
+	if (strpos($element, '*special:stop:') === 0) {
+	//	"*special:start:{$wgCityId}|{page_id}|{rev_id}"
+
+		$db = wfGetDB(DB_MASTER);
+
+		$dataTable = wfSharedTable('complex_data');
+		$artData = explode('|', substr($element, 14));
+		$sqlData = $db->addQuotes(serialize($wgElementsCount));
+
+		$sql = "INSERT INTO $dataTable (city_id, article_id, rev_id, data) VALUES ({$artData[0]}, {$artData[1]}, {$artData[2]}, $sqlData) ON DUPLICATE KEY UPDATE data=$sqlData, rev_id={$artData[2]};";
+		$db->query($sql);
+	} else {
+		if (empty($wgElementsCount[$element])) {
+			$wgElementsCount[$element] = $count;
+		} else {
+			$wgElementsCount[$element] += $count;
+		}
+	}
 }
