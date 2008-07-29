@@ -1759,14 +1759,15 @@ class Parser
 
 					if ( $wasblank ) {
 						$sortkey = $this->getDefaultSort();
+						wfCountWikiElement('category');
 					} else {
 						$sortkey = $text;
+						wfCountWikiElement('category with sortkey');
 					}
 					$sortkey = Sanitizer::decodeCharReferences( $sortkey );
 					$sortkey = str_replace( "\n", '', $sortkey );
 					$sortkey = $wgContLang->convertCategoryKey( $sortkey );
 					$this->mOutput->addCategory( $nt->getDBkey(), $sortkey );
-					wfCountWikiElement('category');
 
 					/**
 					 * Strip the whitespace Category links produce, see bug 87
@@ -1794,7 +1795,7 @@ class Parser
 				# Cloak with NOPARSE to avoid replacement in replaceExternalLinks
 				$s .= $prefix . $this->armorLinks( $link ) . $trail;
 				$this->mOutput->addImage( $nt->getDBkey() );
-				wfCountWikiElement('image - ? #3');
+				wfCountWikiElement('internal link: media');
 				continue;
 			} elseif( $ns == NS_SPECIAL ) {
 				wfCountWikiElement('internal link: special page');
@@ -1812,7 +1813,7 @@ class Parser
 					// auto-generated page.
 					$s .= $this->makeKnownLinkHolder( $nt, $text, '', $trail, $prefix );
 					$this->mOutput->addLink( $nt );
-					wfCountWikiElement('internal link');
+					wfCountWikiElement('internal link: file');
 					continue;
 				}
 			}
@@ -2401,7 +2402,7 @@ class Parser
 	 */
 	function getVariableValue( $index ) {
 		global $wgContLang, $wgSitename, $wgServer, $wgServerName, $wgScriptPath;
-
+		wfCountWikiElement('magic: variable');
 		/**
 		 * Some of these require message or data lookups and can be
 		 * expensive to check many times.
@@ -2840,6 +2841,7 @@ class Parser
 					}
 				}
 				if ( $function ) {
+					wfCountWikiElement('magic: function');
 					list( $callback, $flags ) = $this->mFunctionHooks[$function];
 					$initialArgs = array( &$this );
 					$funcArgs = array( trim( substr( $part1, $colonPos + 1 ) ) );
@@ -2941,6 +2943,9 @@ class Parser
 				if ( !$found && ( $this->ot['html'] || $this->ot['pre'] ) ) {
 					$text = "[[:$titleText]]";
 					$found = true;
+				}
+				if ($found) {
+					wfCountWikiElement('special: template');
 				}
 			} elseif ( $title->isTrans() ) {
 				// Interwiki transclusion
