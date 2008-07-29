@@ -44,7 +44,6 @@ define( 'CITE_DEFAULT_GROUP', '');
  * groups; or remove all references from this file to enable unconditionally
  */
 $wgAllowCiteGroups = true; 
-		var $mGroupCnt = array();
 
 function wfCite() {
 	new Cite;
