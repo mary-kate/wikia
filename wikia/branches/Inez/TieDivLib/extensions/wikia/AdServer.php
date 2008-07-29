@@ -121,7 +121,7 @@ class AdServer {
 				if($ad['server'] == 'L') {
 					if($this->skinName == 'monaco' && $wgAdServingType == 1) {
 						$this->adsDisplayed[] = array($ad['zone'], $ad_pos);
-						return "<!-- adserver={$ad['server']} {$ad_pos} {$ad['zone']} -->".'<div id="adSpace'.(count($this->adsDisplayed) - 1).'"'.(($ad_pos == 'FAST_HOME1' || $ad_pos == 'FAST_HOME2') ? ' class="'.$ad_pos.'"' : '').'></div>';
+						return "<!-- adserver={$ad['server']} {$ad_pos} {$ad['zone']} -->".'<div id="adSpace'.(count($this->adsDisplayed) - 1).'"'.(($ad_pos == 'FAST_HOME1' || $ad_pos == 'FAST_HOME2') ? ' class="'.$ad_pos.'"' : '').'>&nbsp;</div>';
 					} else {
 						return "<!-- adserver={$ad['server']} {$ad_pos} {$ad['zone']} -->
 <script type='text/javascript'><!--//<![CDATA[
