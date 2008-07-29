@@ -22,6 +22,11 @@ YAHOO.Wikia.Tracker = {
 		if(wgIsArticle) {
 			this.trackByStr(null, 'view');
 		}
+		
+		// Edit page
+		if(wgArticleId != 0 && wgAction == 'edit') {
+			this.trackByStr(null, 'editpage/view');
+		}
 
 		// EditSimilar extension - result links (Bartek)
 		Event.addListener('editsimilar_links', 'click', function(e) {
