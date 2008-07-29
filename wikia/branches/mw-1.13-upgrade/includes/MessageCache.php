@@ -397,6 +397,12 @@ class MessageCache {
 		$sidebarKey = wfMemcKey( 'sidebar', $code );
 		$parserMemc->delete( $sidebarKey );
 
+		$parserMemc->delete( wfMemcKey( 'quartzsidebar', $code ) );
+		$parserMemc->delete( wfMemcKey( 'navlinks', $code ) );
+		$parserMemc->delete( wfMemcKey( 'MonacoData', $code ) );
+
+		wfRunHooks( "wfMessageCacheReplace", array( $title, $text ) );
+
 		wfProfileOut( __METHOD__ );
 	}
 
@@ -451,11 +457,6 @@ class MessageCache {
 			$this->mMemc->delete( $statusKey );
 			$success = true;
 		}
-		$parserMemc->delete( wfMemcKeyLang( 'quartzsidebar', $code ) );
-		$parserMemc->delete( wfMemcKeyLang( 'navlinks', $code ) );
-		$parserMemc->delete( wfMemcKeyLang( 'MonacoData', $code ) );
-
-		wfRunHooks( "wfMessageCacheReplace", array( $title, $text ) );
 		wfProfileOut( __METHOD__ );
 		return $success;
 	}
