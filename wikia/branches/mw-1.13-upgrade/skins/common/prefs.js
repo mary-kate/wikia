@@ -3,8 +3,8 @@
 // XXX: needs testing on IE/Mac and safari
 // more comments to follow
 function tabbedprefs() {
-	var prefform = document.getElementById('preferences');
-	if (!prefform || !document.createElement) {
+	// modified by Bartek for Wikia, 01.04.2008/29.07.2008 (load optimization)
+	if if (!document.createElement) { {
 		return;
 	}
 	if (prefform.nodeName.toLowerCase() == 'a') {
@@ -56,6 +56,53 @@ function tabbedprefs() {
 	}
 	prefform.parentNode.insertBefore(toc, prefform.parentNode.childNodes[0]);
 	document.getElementById('prefsubmit').id = 'prefcontrol';
+}
+
+// added by Bartek for Wikia, 18.03.2008/29.07.2008
+// // it can be used by any feature to link to specific tabs of
+// // Special:Preferences
+function initprefs () {
+        if (typeof (wgCanonicalSpecialPageName) != 'undefined') {
+                if ('Preferences' == wgCanonicalSpecialPageName) {
+                        var prefform = document.getElementById('preferences');
+                        if (prefform) {
+                                tabbedprefs (prefform) ;
+                                loadsection (prefform) ;
+                        }
+                }
+        }
+}
+
+// added by Bartek for Wikia, 18.03.2008/29.07.2008
+// // it can be used by any feature to link to specific tabs of
+// // Special:Preferences
+function loadsection (prefform) {
+        if (!document.createElement) {
+                return;
+        }
+        if (prefform.nodeName.toLowerCase() == 'a') {
+                return; //  Occasional IE problem
+        }
+
+        var our_loc = window.location.href ;
+        var section_loc = our_loc.split ("#") ;
+        if (section_loc [1]) {
+                // make a switch and go to appriopriate section
+                var first_sec = document.getElementById ("prefsection-0") ;
+                var init_sec = document.getElementById (section_loc [1]) ;
+                var sec_num = section_loc [1].split ("-") ;
+                if (sec_num [1]) {
+                        var ul = document.getElementById('preftoc');
+                        first_sec.style.display = 'none';
+                        init_sec.style.display = 'block';
+                        ul.selectedid = section_loc [1] ;
+                        var lis = ul.getElementsByTagName ('li');
+                        for (var i = 0; i< lis.length; i++) {
+                                lis[i].className = '';
+                        }
+                        ul.childNodes [sec_num [1]].className = 'selected' ;
+                }
+        }
 }
 
 function uncoversection() {
@@ -116,4 +163,4 @@ function guessTimezone(box) {
 }
 
 hookEvent("load", unhidetzbutton);
-hookEvent("load", tabbedprefs);
+hookEvent("load", initprefs);
