@@ -28,8 +28,8 @@ $wgExtensionCredits['specialpage'][] = array(
 	'name' => 'regexBlock',
 	'author' => 'Bartek Łapiński',
 	'url' => 'http://www.mediawiki.org/wiki/Extension:RegexBlock',
-	'svn-date' => '$LastChangedDate$',
-	'svn-revision' => '$LastChangedRevision$',
+	'svn-date' => '$LastChangedDate: 2008-06-14 09:32:06 +0000 (Sat, 14 Jun 2008) $',
+	'svn-revision' => '$LastChangedRevision: 36279 $',
 	'description' => 'Extension used for blocking users names and IP addresses with regular expressions. Contains both the blocking mechanism and a special page to add/manage blocks.',
 	'descriptionmsg' => 'regexblock-desc',
 );

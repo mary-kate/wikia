@@ -9,8 +9,8 @@ if( !defined( 'MEDIAWIKI' ) ) die();
  * @license GPLv2 or higher
  */
 $wgExtensionCredits['other'][] = array(
-	'svn-date'       => '$LastChangedDate$',
-	'svn-revision'   => '$LastChangedRevision$',
+	'svn-date'       => '$LastChangedDate: 2008-07-12 22:03:56 +0000 (Sat, 12 Jul 2008) $',
+	'svn-revision'   => '$LastChangedRevision: 37603 $',
 	'name'           => 'ErrorHandler',
 	'author'         => 'Alexandre Emsenhuber',
 	'url'            => 'http://www.mediawiki.org/wiki/Extension:ErrorHandler',

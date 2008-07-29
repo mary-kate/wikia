@@ -363,6 +363,6 @@ class ApiQuerySiteMatrix extends ApiQueryBase {
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id$';
+		return __CLASS__ . ': $Id: SiteMatrix_body.php 37923 2008-07-22 20:53:43Z ialex $';
 	}
 }

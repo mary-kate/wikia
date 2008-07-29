@@ -22,8 +22,8 @@ if( defined( 'MEDIAWIKI' ) ) {
 		'url'            => 'http://www.mediawiki.org/wiki/Extension:MakeBot',
 		'description'    => 'Special page allows local bureaucrats to grant and revoke bot permissions',
 		'descriptionmsg' => 'makebot-desc',
-		'svn-date' => '$LastChangedDate$',
-		'svn-revision' => '$LastChangedRevision$',
+		'svn-date' => '$LastChangedDate: 2008-07-09 16:57:18 +0000 (Wed, 09 Jul 2008) $',
+		'svn-revision' => '$LastChangedRevision: 37410 $',
 	 );
 
 	/**

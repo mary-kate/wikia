@@ -21,8 +21,8 @@ $wgExtensionCredits['parserhook'][] = array(
 	'name'           => 'EasyTimeline',
 	'author'         => 'Erik Zachte',
 	'url'            => 'http://www.mediawiki.org/wiki/Extension:EasyTimeline',
-	'svn-date' => '$LastChangedDate$',
-	'svn-revision' => '$LastChangedRevision$',
+	'svn-date' => '$LastChangedDate: 2008-07-19 12:04:52 +0000 (Sat, 19 Jul 2008) $',
+	'svn-revision' => '$LastChangedRevision: 37843 $',
 	'description'    => 'Timeline extension',
 	'descriptionmsg' => 'timeline-desc',
 );

@@ -22,8 +22,8 @@ if( defined( 'MEDIAWIKI' ) ) {
 	$wgExtensionCredits['parserhook'][] = array(
 		'name'           => 'OpenStreetMap Slippy Map',
 		'author'         => '[http://harrywood.co.uk Harry Wood], Jens Frank',
-		'svn-date'       => '$LastChangedDate$',
-		'svn-revision'   => '$LastChangedRevision$',
+		'svn-date'       => '$LastChangedDate: 2008-07-03 20:13:10 +0000 (Thu, 03 Jul 2008) $',
+		'svn-revision'   => '$LastChangedRevision: 37003 $',
 		'url'            => 'http://wiki.openstreetmap.org/index.php/Slippy_Map_MediaWiki_Extension',
 		'description'    => 'Allows the use of the &lt;slippymap&gt; tag to display an OpenLayers slippy map. Maps are from [http://openstreetmap.org openstreetmap.org]',
 		'descriptionmsg' => 'slippymap_desc',

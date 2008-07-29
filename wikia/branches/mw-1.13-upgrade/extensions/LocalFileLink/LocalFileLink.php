@@ -6,8 +6,8 @@
 $wgExtensionCredits['other'][] = array(
 	'name' => 'LocalFileLink',
 	'author' => 'Moisa Doru (tmoisa@optaros.com), Optaros Inc.',
-	'svn-date' => '$LastChangedDate$',
-	'svn-revision' => '$LastChangedRevision$',
+	'svn-date' => '$LastChangedDate: 2008-05-06 11:59:58 +0000 (Tue, 06 May 2008) $',
+	'svn-revision' => '$LastChangedRevision: 34306 $',
 	'description' => 'Allows the usage of local file links with FCKEditor',
 );
 

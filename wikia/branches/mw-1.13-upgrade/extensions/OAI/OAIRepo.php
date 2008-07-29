@@ -59,8 +59,8 @@ $wgExtensionCredits['specialpage'][] = array(
 	'name'           => 'OAIRepository',
 	'author'         => 'Brion Vibber',
 	'url'            => 'http://www.mediawiki.org/wiki/Extension:OAIRepository',
-	'svn-date'       => '$LastChangedDate$',
-	'svn-revision'   => '$LastChangedRevision$',
+	'svn-date'       => '$LastChangedDate: 2008-05-28 06:03:21 +0000 (Wed, 28 May 2008) $',
+	'svn-revision'   => '$LastChangedRevision: 35465 $',
 	'description'    => 'Provides [http://www.openarchives.org/OAI/openarchivesprotocol.html OAI-PMH] repository interface',
 	'descriptionmsg' => 'oai-desc',
 );

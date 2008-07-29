@@ -20,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  * 
- * $Id$
+ * $Id: MWSearch.php 584 2008-07-29 13:59:13Z emil $
  */
 
 # To use this, add something like the following to LocalSettings:
@@ -56,8 +56,8 @@ $wgLuceneSearchCacheExpiry = 0;
 
 $wgExtensionCredits['other'][] = array(
 	'name'           => 'MWSearch',
-	'svn-date' => '$LastChangedDate$',
-	'svn-revision' => '$LastChangedRevision$',
+	'svn-date' => '$LastChangedDate: 2008-07-29 13:59:13 +0000 (Tue, 29 Jul 2008) $',
+	'svn-revision' => '$LastChangedRevision: 584 $',
 	'author'         => array( 'Kate Turner', 'Brion Vibber' ),
 	'descriptionmsg' => 'mwsearch-desc',
 	'url'            => 'http://www.mediawiki.org/wiki/Extension:MWSearch',

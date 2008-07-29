@@ -25,7 +25,7 @@ define('Invitations',1);
 
 $wgExtensionCredits['specialpage'][] = array(
 	'author'         => 'Andrew Garrett',
-	'version'        => '$Revision$',
+	'version'        => '$Revision: 36735 $',
 	'name'           => 'Invitations',
 	'url'            => 'http://www.mediawiki.org/wiki/Extension:Invitations',
 	'description'    => 'Allows management of new features by restricting them to an invitation-based system.',
