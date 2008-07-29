@@ -2158,7 +2158,6 @@ class User {
 			$cookies['Token'] = false;
 		}
 
-		wfRunHooks('SetExtraCookies', array($this)); # Wikia
 		wfRunHooks( 'UserSetCookies', array( $this, &$session, &$cookies ) );
 		$_SESSION = $session + $_SESSION;
 		foreach ( $cookies as $name => $value ) {
