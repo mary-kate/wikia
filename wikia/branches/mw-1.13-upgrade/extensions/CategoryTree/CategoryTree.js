@@ -7,6 +7,9 @@
  * @author Daniel Kinzler, brightbyte.de
  * @copyright © 2006 Daniel Kinzler
  * @licence GNU General Public Licence 2.0 or later
+ *
+ * NOTE: if you change this, increment $wgCategoryTreeVersion 
+ *       in CategoryTree.php to avoid users getting stale copies from cache.
 */
 
 // Default messages if new code loaded with old cached page
@@ -23,40 +26,92 @@ var categoryTreeRetryMsg = "Please wait a moment and try again.";
       return n;
     }
 
-    function categoryTreeExpandNode(cat, mode, lnk) {
+    function categoryTreeExpandNode(cat, options, lnk) {
       var div= categoryTreeNextDiv( lnk.parentNode.parentNode );
 
       div.style.display= 'block';
-      lnk.innerHTML= '&ndash;';
+      lnk.innerHTML= categoryTreeCollapseBulletMsg;
       lnk.title= categoryTreeCollapseMsg;
-      lnk.onclick= function() { categoryTreeCollapseNode(cat, mode, lnk) }
+      lnk.onclick= function() { categoryTreeCollapseNode(cat, options, lnk) }
 
-      if (lnk.className != "CategoryTreeLoaded") {
-        categoryTreeLoadNode(cat, mode, lnk, div);
+      if (!lnk.className.match(/(^| )CategoryTreeLoaded($| )/)) {
+        categoryTreeLoadNode(cat, options, lnk, div);
       }
     }
 
-    function categoryTreeCollapseNode(cat, mode, lnk) {
+    function categoryTreeCollapseNode(cat, options, lnk) {
       var div= categoryTreeNextDiv( lnk.parentNode.parentNode );
 
       div.style.display= 'none';
-      lnk.innerHTML= '+';
+      lnk.innerHTML= categoryTreeExpandBulletMsg;
       lnk.title= categoryTreeExpandMsg;
-      lnk.onclick= function() { categoryTreeExpandNode(cat, mode, lnk) }
+      lnk.onclick= function() { categoryTreeExpandNode(cat, options, lnk) }
     }
 
-    function categoryTreeLoadNode(cat, mode, lnk, div) {
+    function categoryTreeLoadNode(cat, options, lnk, div) {
       div.style.display= 'block';
       lnk.className= 'CategoryTreeLoaded';
-      lnk.innerHTML= '&ndash;';
+      lnk.innerHTML= categoryTreeCollapseBulletMsg;
       lnk.title= categoryTreeCollapseMsg;
-      lnk.onclick= function() { categoryTreeCollapseNode(cat, mode, lnk) }
+      lnk.onclick= function() { categoryTreeCollapseNode(cat, options, lnk) }
 
-      categoryTreeLoadChildren(cat, mode, div)
+      categoryTreeLoadChildren(cat, options, div)
     }
 
-    function categoryTreeLoadChildren(cat, mode, div) {
+    function categoryTreeEncodeValue(value) {
+          switch (typeof value) {
+              case 'function': 
+                  throw new Error("categoryTreeEncodeValue encountered a function");
+                  break;
+
+              case 'string': 
+                  s = '"' + value.replace(/([\\"'])/g, "\\$1") + '"';
+                  break;
+
+              case 'number':
+              case 'boolean':
+              case 'null':
+                  s = String(value);
+                  break;
+
+              case 'object':
+                  if ( !value ) {
+                      s = 'null';
+                  }
+                  else if (typeof value.length === 'number' && !(value.propertyIsEnumerable('length'))) {
+                      s = '';
+                      for (i = 0; i<value.length; i++) {
+                          v = value[i];
+                          if ( s!='' ) s += ', ';
+                          s += categoryTreeEncodeValue( v );
+                      }
+                      s = '[' + s + ']';
+                  }
+                  else {
+                      s = '';
+                      for (k in value) {
+                          v = value[k];
+                          if ( s!='' ) s += ', ';
+                          s += categoryTreeEncodeValue( k );
+                          s += ': ';
+                          s += categoryTreeEncodeValue( v );
+                      }
+                      s = '{' + s + '}';
+                  }
+                  break;
+              default:
+                  throw new Error("categoryTreeEncodeValue encountered strange variable type " + (typeof value));
+          }
+
+      return s;
+    }
+
+    function categoryTreeLoadChildren(cat, options, div) {
       div.innerHTML= '<i class="CategoryTreeNotice">' + categoryTreeLoadingMsg + '</i>';
+
+      if ( typeof options == "string" ) { //hack for backward compatibility
+          options = { mode : options };
+      }
 
       function f( request ) {
           if (request.status != 200) {
@@ -64,7 +119,7 @@ var categoryTreeRetryMsg = "Please wait a moment and try again.";
               var retryLink = document.createElement('a');
               retryLink.innerHTML = categoryTreeRetryMsg;
               retryLink.onclick = function() {
-                  categoryTreeLoadChildren(cat, mode, div);
+                  categoryTreeLoadChildren(cat, options, div, enc);
               }
               div.appendChild(retryLink);
               return;
@@ -76,8 +131,9 @@ var categoryTreeRetryMsg = "Please wait a moment and try again.";
           if ( result == '' ) {
                     result= '<i class="CategoryTreeNotice">';
 
-                    if ( mode == 0 ) result= categoryTreeNoSubcategoriesMsg;
-                    else if ( mode == 10 ) result= categoryTreeNoPagesMsg;
+                    if ( options.mode == 0 ) result= categoryTreeNoSubcategoriesMsg;
+                    else if ( options.mode == 10 ) result= categoryTreeNoPagesMsg;
+                    else if ( options.mode == 100 ) result= categoryTreeNoParentCategoriesMsg;
                     else result= categoryTreeNothingFoundMsg;
 
                     result+= '</i>';
@@ -87,5 +143,6 @@ var categoryTreeRetryMsg = "Please wait a moment and try again.";
           div.innerHTML= result;
       }
 
-      sajax_do_call( "efCategoryTreeAjaxWrapper", [cat, mode] , f );
+      var opt = categoryTreeEncodeValue(options);
+      sajax_do_call( "efCategoryTreeAjaxWrapper", [cat, opt, 'json'] , f );
     }

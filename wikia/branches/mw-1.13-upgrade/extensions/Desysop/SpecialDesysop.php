@@ -10,7 +10,8 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 
 $wgExtensionCredits['specialpage'][] = array(
 	'name' => 'Desysop',
-	'version' => '2008-01-09',
+	'svn-date' => '$LastChangedDate$',
+	'svn-revision' => '$LastChangedRevision$',
 	'description' => 'Gives bureaucrats the ability to revoke Sysop access',
 	'author' => 'Andrew Garrett',
 	'url' => 'http://www.mediawiki.org/wiki/Extension:Desysop',
@@ -31,6 +32,7 @@ $wgExtensionMessagesFiles['Desysop'] = dirname(__FILE__) . '/SpecialDesysop.i18n
 $wgAlternateMaster = array();
 
 $wgGroupPermissions['bureaucrat']['desysop'] = true;
+$wgAvailableRights[] = 'desysop';
 
 # Register special page
 if ( !function_exists( 'extAddSpecialPage' ) ) {

@@ -5,7 +5,11 @@
  *
  * If this is not on the primary database connection, don't forget
  * to also set up $wgDBservers to have an entry with a groupLoads
- * setting for the 'CentralAuth' group.
+ * setting for the 'CentralAuth' group. Alternatively you can use 
+ * $wgLBFactoryConf to set up an LBFactory_Multi object.
+ *
+ * To use a database with a table prefix, set this variable to 
+ * "{$database}-{$prefix}".
  */
 $wgCentralAuthDatabase = 'centralauth';
 
@@ -38,13 +42,86 @@ $wgCentralAuthStrict = false;
  */
 $wgCentralAuthDryRun = false;
 
+/**
+ * If true, global session and token cookies will be set alongside the
+ * per-wiki session and login tokens when users log in with a global account.
+ * This allows other wikis on the same domain to transparently log them in.
+ */
+$wgCentralAuthCookies = false;
+
+/**
+ * Domain to set global cookies for.
+ * For instance, '.wikipedia.org' to work on all wikipedia.org subdomains
+ * instead of just the current one.
+ *
+ * Leave blank to set the cookie for the current domain only, such as if
+ * all your wikis are hosted on the same subdomain.
+ */
+$wgCentralAuthCookieDomain = '';
+
+/**
+ * Prefix for CentralAuth global authentication cookies.
+ */
+$wgCentralAuthCookiePrefix = 'centralauth_';
+
+/**
+ * List of wiki IDs which should be called on login/logout to set third-party 
+ * cookies for the global session state.
+ *
+ * The wiki ID is typically the database name, except when table prefixes are 
+ * used, in which case it is the database name, a hyphen separator, and then 
+ * the table prefix.
+ *
+ * This allows a farm with multiple second-level domains to set up a global 
+ * session on all of them by hitting one wiki from each domain 
+ * (en.wikipedia.org, en.wikinews.org, etc).
+ *
+ * Done by $wgCentralAuthLoginIcon from Special:AutoLogin on each wiki.
+ *
+ * If empty, no other wikis will be hit.
+ *
+ * The key should be set to the cookie domain name.
+ */
+$wgCentralAuthAutoLoginWikis = array();
+
+/**
+ * Local filesystem path to the icon returned by Special:AutoLogin
+ * Should be a 20x20px PNG.
+ */
+$wgCentralAuthLoginIcon = false;
+
+/**
+ * If true, local accounts will be created for active global sessions
+ * on any page view. This is kind of creepy, so we're gonna have it off
+ * for a little bit.
+ *
+ * With other default options, the local autocreation will be held off
+ * until an active login attempt, while global sessions will still
+ * automatically log in those who already have a merged account.
+ */
+$wgCentralAuthCreateOnView = false;
+
+/**
+ * Extension credits
+ */
 $wgExtensionCredits['specialpage'][] = array(
 	'name' => 'Central Auth',
 	'url' => 'http://www.mediawiki.org/wiki/Extension:CentralAuth',
-	'version' => '2008-01-07',
+	'svn-date' => '$LastChangedDate$',
+	'svn-revision' => '$LastChangedRevision$',
 	'author' => 'Brion Vibber',
 	'description' => 'Merge Account across Wikimedia Foundation wikis',
 	'descriptionmsg' => 'centralauth-desc',
+);
+
+$wgExtensionCredits['specialpage'][] = array(
+	'name'           => 'MergeAccount',
+	'author'         => 'Brion Vibber',
+	'url'            => 'http://meta.wikimedia.org/wiki/Help:Unified_login',
+	'svn-date' => '$LastChangedDate$',
+	'svn-revision' => '$LastChangedRevision$',
+	'description'    => '[[Special:MergeAccount|Merges multiple accounts]] for Single User Login',
+	'descriptionmsg' => 'centralauth-mergeaccount-desc',
 );
 
 /**
@@ -53,126 +130,74 @@ $wgExtensionCredits['specialpage'][] = array(
 $caBase = dirname( __FILE__ );
 $wgAutoloadClasses['SpecialCentralAuth'] = "$caBase/SpecialCentralAuth.php";
 $wgAutoloadClasses['SpecialMergeAccount'] = "$caBase/SpecialMergeAccount.php";
+$wgAutoloadClasses['SpecialGlobalUsers'] = "$caBase/SpecialGlobalUsers.php";
 $wgAutoloadClasses['CentralAuthUser'] = "$caBase/CentralAuthUser.php";
 $wgAutoloadClasses['CentralAuthPlugin'] = "$caBase/CentralAuthPlugin.php";
+$wgAutoloadClasses['CentralAuthHooks'] = "$caBase/CentralAuthHooks.php";
 $wgAutoloadClasses['WikiMap'] = "$caBase/WikiMap.php";
 $wgAutoloadClasses['WikiReference'] = "$caBase/WikiMap.php";
+$wgAutoloadClasses['SpecialAutoLogin'] = "$caBase/SpecialAutoLogin.php";
+$wgAutoloadClasses['CentralAuthUserArray'] = "$caBase/CentralAuthUserArray.php";
+$wgAutoloadClasses['CentralAuthUserArrayFromResult'] = "$caBase/CentralAuthUserArray.php";
+$wgAutoloadClasses['SpecialGlobalGroupMembership'] = "$caBase/SpecialGlobalGroupMembership.php";
+$wgAutoloadClasses['CentralAuthGroupMembershipProxy'] = "$caBase/CentralAuthGroupMembershipProxy.php";
+$wgAutoloadClasses['SpecialGlobalGroupPermissions'] = "$caBase/SpecialGlobalGroupPermissions.php";
+
 $wgExtensionMessagesFiles['SpecialCentralAuth'] = "$caBase/CentralAuth.i18n.php";
 
-$wgExtensionFunctions[] = 'wfSetupCentralAuth';
-$wgHooks['AuthPluginSetup'][] = 'wfSetupCentralAuthPlugin';
-$wgHooks['AddNewAccount'][] = 'wfCentralAuthAddNewAccount';
-$wgHooks['PreferencesUserInformationPanel'][] = 'wfCentralAuthInformationPanel';
+$wgHooks['AuthPluginSetup'][] = 'CentralAuthHooks::onAuthPluginSetup';
+$wgHooks['AddNewAccount'][] = 'CentralAuthHooks::onAddNewAccount';
+$wgHooks['PreferencesUserInformationPanel'][] = 'CentralAuthHooks::onPreferencesUserInformationPanel';
+$wgHooks['AbortNewAccount'][] = 'CentralAuthHooks::onAbortNewAccount';
+$wgHooks['UserLoginComplete'][] = 'CentralAuthHooks::onUserLoginComplete';
+$wgHooks['UserLoadFromSession'][] = 'CentralAuthHooks::onUserLoadFromSession';
+$wgHooks['UserLogout'][] = 'CentralAuthHooks::onUserLogout';
+$wgHooks['UserLogoutComplete'][] = 'CentralAuthHooks::onUserLogoutComplete';
+$wgHooks['GetCacheVaryCookies'][] = 'CentralAuthHooks::onGetCacheVaryCookies';
+$wgHooks['UserArrayFromResult'][] = 'CentralAuthHooks::onUserArrayFromResult';
+$wgHooks['UserGetEmail'][] = 'CentralAuthHooks::onUserGetEmail';
+$wgHooks['UserGetEmailAuthenticationTimestamp'][] = 'CentralAuthHooks::onUserGetEmailAuthenticationTimestamp';
+$wgHooks['UserSetEmail'][] = 'CentralAuthHooks::onUserSetEmail';
+$wgHooks['UserSaveSettings'][] = 'CentralAuthHooks::onUserSaveSettings';
+$wgHooks['UserSetEmailAuthenticationTimestamp'][] = 'CentralAuthHooks::onUserSetEmailAuthenticationTimestamp';
+$wgHooks['UserGetRights'][] = 'CentralAuthHooks::onUserGetRights';
+$wgHooks['UserSetCookies'][] = 'CentralAuthHooks::onUserSetCookies';
+$wgHooks['UserLoadDefaults'][] = 'CentralAuthHooks::onUserLoadDefaults';
+$wgHooks['getUserPermissionsErrorsExpensive'][] = 'CentralAuthHooks::onGetUserPermissionsErrorsExpensive';
 
 // For interaction with the Special:Renameuser extension
-$wgHooks['RenameUserAbort'][] = 'wfCentralAuthRenameUserAbort';
-$wgHooks['RenameUserComplete'][] = 'wfCentralAuthRenameUserComplete';
+$wgHooks['RenameUserWarning'][] = 'CentralAuthHooks::onRenameUserWarning';
+$wgHooks['RenameUserPreRename'][] = 'CentralAuthHooks::onRenameUserPreRename';
+$wgHooks['RenameUserComplete'][] = 'CentralAuthHooks::onRenameUserComplete';
 
+$wgAvailableRights[] = 'centralauth-admin';
+$wgAvailableRights[] = 'centralauth-merge';
+$wgAvailableRights[] = 'globalgrouppermissions';
+$wgAvailableRights[] = 'globalgroupmembership';
 $wgGroupPermissions['steward']['centralauth-admin'] = true;
+$wgGroupPermissions['*']['centralauth-merge'] = true;
 
 $wgSpecialPages['CentralAuth'] = 'SpecialCentralAuth';
+$wgSpecialPages['AutoLogin'] = 'SpecialAutoLogin';
 $wgSpecialPages['MergeAccount'] = 'SpecialMergeAccount';
+$wgSpecialPages['GlobalGroupMembership'] = 'SpecialGlobalGroupMembership';
+$wgSpecialPages['GlobalGroupPermissions'] = 'SpecialGlobalGroupPermissions';
+$wgSpecialPages['GlobalUsers'] = 'SpecialGlobalUsers';
+$wgSpecialPageGroups['GlobalUsers'] = 'users';
 
-function wfSetupCentralAuth() {
-	wfLoadExtensionMessages('SpecialCentralAuth');
-	}
+$wgLogTypes[]                      = 'globalauth';
+$wgLogNames['globalauth']          = 'centralauth-log-name';
+$wgLogHeaders['globalauth']        = 'centralauth-log-header';
+$wgLogActions['globalauth/delete'] = 'centralauth-log-entry-delete';
+$wgLogActions['globalauth/lock']   = 'centralauth-log-entry-lock';
+$wgLogActions['globalauth/unlock'] = 'centralauth-log-entry-unlock';
+$wgLogActions['globalauth/hide']   = 'centralauth-log-entry-hide';
+$wgLogActions['globalauth/unhide'] = 'centralauth-log-entry-unhide';
+$wgLogActions['globalauth/lockandhid'] = 'centralauth-log-entry-lockandhide';
 
-function wfSetupCentralAuthPlugin( &$auth ) {
-	$auth = new StubObject( 'wgAuth', 'CentralAuthPlugin' );
-	return true;
-}
-
-/**
- * Add a little pretty to the preferences user info section
- */
-function wfCentralAuthInformationPanel( $prefsForm, &$html ) {
-	global $wgUser;
-	$skin = $wgUser->getSkin();
-	$special = SpecialPage::getTitleFor( 'MergeAccount' );
-	
-	
-	// Possible states:
-	// - account not merged at all
-	// - global accounts exists, but this local account is unattached
-	// - this local account is attached, but migration incomplete
-	// - all local accounts are attached
-	
-	$global = new CentralAuthUser( $wgUser->getName() );
-	if( $global->exists() ) {
-		if( $global->isAttached() ) {
-			// Local is attached...
-			$attached = count( $global->listAttached() );
-			$unattached = count( $global->listUnattached() );
-			if( $unattached ) {
-				// Migration incomplete
-				$message = '<strong>' . wfMsgHtml( 'centralauth-prefs-migration' ) . '</strong>' .
-					'<br />' .
-					htmlspecialchars( wfMsgExt( 'centralauth-prefs-count-attached', array( 'parsemag' ), $attached ) ) .
-					'<br />' .
-					htmlspecialchars( wfMsgExt( 'centralauth-prefs-count-unattached', array( 'parsemag' ), $unattached ) );
-			} else {
-				// Migration complete
-				$message = '<strong>' . wfMsgHtml( 'centralauth-prefs-complete' ) . '</strong>' .
-					'<br />' .
-					htmlspecialchars( wfMsgExt( 'centralauth-prefs-count-attached', array( 'parsemag' ), $attached ) );
-			}
-		} else {
-			// Account is in migration, but the local account is not attached
-			$message = '<strong>' . wfMsgHtml( 'centralauth-prefs-unattached' ) . '</strong>' .
-				'<br />' .
-				wfMsgHtml( 'centralauth-prefs-detail-unattached' );
-		}
-	} else {
-		// Not migrated.
-		$message = wfMsgHtml( 'centralauth-prefs-not-managed' );
-	}
-	
-	$manageLink = $skin->makeKnownLinkObj( $special,
-		wfMsgHtml( 'centralauth-prefs-manage' ) );
-	$html .= $prefsForm->tableRow(
-		wfMsgHtml( 'centralauth-prefs-status' ),
-		"$message<br />($manageLink)" );
-	return true;
-}
-
-/**
- * Make sure migration information in localuser table is populated
- * on local account creation
- */
-function wfCentralAuthAddNewAccount( $user ) {
-	global $wgDBname;
-	$central = new CentralAuthUser( $user->getName() );
-	$central->addLocalName( $wgDBname );
-	return true;
-}
-
-/**
- * Don't allow an attached local account to be renamed with the old system.
- */
-function wfCentralAuthRenameUserAbort( $userId, $oldName, $newName ) {
-	$central = new CentralAuthUser( $oldName );
-	if( $central->exists() && $central->isAttached() ) {
-		global $wgOut;
-		$wgOut->addWikiText( wfMsg( 'centralauth-renameuser-abort', $oldName ) );
-		return false;
-	}
-	
-	// If no central record is present or this local account isn't attached,
-	// do as thou wilt.
-	return true;
-}
-
-/**
- * When renaming an account, ensure that the presence records are updated.
- */
-function wfCentralAuthRenameUserComplete( $userId, $oldName, $newName ) {
-	global $wgDBname;
-	
-	$oldCentral = new CentralAuthUser( $oldName );
-	$oldCentral->removeLocalName( $wgDBname );
-	
-	$newCentral = new CentralAuthUser( $newName );
-	$newCentral->addLocalName( $wgDBname );
-	
-	return true;
-}
+$wgLogTypes[]                      = 'gblrights';
+$wgLogNames['gblrights']          = 'centralauth-rightslog-name';
+$wgLogHeaders['gblrights']	   = 'centralauth-rightslog-header';
+$wgLogActions['gblrights/usergroups'] = 'centralauth-rightslog-entry-usergroups';
+$wgLogActions['gblrights/groupperms']   = 'centralauth-rightslog-entry-groupperms';
+$wgLogActions['gblrights/groupperms2']   = 'centralauth-rightslog-entry-groupperms2';

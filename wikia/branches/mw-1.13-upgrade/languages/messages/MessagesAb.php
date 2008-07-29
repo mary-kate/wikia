@@ -1,9 +1,7 @@
 <?php
-/** Abkhazian (Аҧсуа)
- *
- * @addtogroup Language
- *
+/**
+ * @ingroup Language
+ * @file
  */
 
 $fallback = 'ru';
-

@@ -18,6 +18,7 @@ protected $m_DatatypeLabels = array(
 	'_wpg' => '页面',	//'Page', // name of page datatype
 	'_str' => '字串',	//'String',  // name of the string type
 	'_txt' => '文字',	//'Text',  // name of the text type
+	'_cod' => 'Code',  // name of the (source) code type //TODO: translate
 	'_boo' => '布林',	//'Boolean',  // name of the boolean type
 	'_num' => '数字',	//'Number',  // name for the datatype of numbers
 	'_geo' => '地理学的座标',	//'Geographic coordinate', // name of the geocoord type
@@ -83,6 +84,8 @@ protected $m_Namespaces = array(
 	SMW_NS_PROPERTY_TALK  => '性质讨论',	//'Property_talk',
 	SMW_NS_TYPE           => '型态',	//'Type',
 	SMW_NS_TYPE_TALK      => '型态讨论',	//'Type_talk'
+	SMW_NS_CONCEPT        => 'Concept', // TODO: translate
+	SMW_NS_CONCEPT_TALK   => 'Concept_talk' // TODO: translate
 );
 
 protected $m_NamespaceAliases = array(
@@ -92,7 +95,9 @@ protected $m_NamespaceAliases = array(
 	'Property'      => SMW_NS_PROPERTY,
 	'Property_talk' => SMW_NS_PROPERTY_TALK,
 	'Type'          => SMW_NS_TYPE,
-	'Type_talk'     => SMW_NS_TYPE_TALK
+	'Type_talk'     => SMW_NS_TYPE_TALK,
+	'Concept'       => SMW_NS_CONCEPT,
+	'Concept_talk'  => SMW_NS_CONCEPT_TALK
 );
 
 }

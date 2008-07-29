@@ -172,11 +172,11 @@ class SpamBlacklist {
 		return $httpText;
 	}
 	
-	function getLocalBlacklists() {
+	static function getLocalBlacklists() {
 		return SpamRegexBatch::regexesFromMessage( 'spam-blacklist' );
 	}
 	
-	function getWhitelists() {
+	static function getWhitelists() {
 		return SpamRegexBatch::regexesFromMessage( 'spam-whitelist' );
 	}
 
@@ -185,10 +185,11 @@ class SpamBlacklist {
 	 * @param string $text Text of section, or entire text if $editPage!=false
 	 * @param string $section Section number or name
 	 * @param EditPage $editPage EditPage if EditFilterMerged was called, false otherwise
+	 * @param EditSummary $editSummary Edit summary if one exists, some people use urls there too
 	 * @return True if the edit should not be allowed, false otherwise
 	 * If the return value is true, an error will have been sent to $wgOut
 	 */
-	function filter( &$title, $text, $section, $editPage = false ) {
+	function filter( &$title, $text, $section, $editPage = false, $editsummary = '' ) {
 		global $wgArticle, $wgVersion, $wgOut, $wgParser, $wgUser;
 
 		$fname = 'wfSpamBlacklistFilter';
@@ -222,7 +223,18 @@ class SpamBlacklist {
 				$text = $wgParser->preSaveTransform( $text, $title, $wgUser, $options );
 				$out = $wgParser->parse( $text, $title, $options );
 			}
-			$links = implode( "\n", array_keys( $out->getExternalLinks() ) );
+			$newLinks = array_keys( $out->getExternalLinks() );
+			$oldLinks = $this->getCurrentLinks( $title );
+			$addedLinks = array_diff( $newLinks, $oldLinks );
+			
+			// We add the edit summary if one exists
+			if ( !empty( $editsummary ) ) $addedLinks[] = $editsummary;
+			
+			wfDebugLog( 'SpamBlacklist', "Old URLs: " . implode( ', ', $oldLinks ) );
+			wfDebugLog( 'SpamBlacklist', "New URLs: " . implode( ', ', $newLinks ) );
+			wfDebugLog( 'SpamBlacklist', "Added URLs: " . implode( ', ', $addedLinks ) );
+			
+			$links = implode( "\n", $addedLinks );
 
 			# Strip whitelisted URLs from the match
 			if( is_array( $whitelists ) ) {
@@ -249,6 +261,8 @@ class SpamBlacklist {
 				wfRestoreWarnings();
 				if( $check ) {
 					wfDebugLog( 'SpamBlacklist', "Match!\n" );
+					$ip = wfGetIP();
+					wfDebugLog( 'SpamBlacklistHit', "$ip caught submitting spam: {$matches[0]}\n" );
 					if ( $editPage ) {
 						$editPage->spamPage( $matches[0] );
 					} else {
@@ -264,6 +278,24 @@ class SpamBlacklist {
 
 		wfProfileOut( $fname );
 		return $retVal;
+	}
+	
+	/**
+	 * Look up the links currently in the article, so we can
+	 * ignore them on a second run.
+	 *
+	 * WARNING: I can add more *of the same link* with no problem here.
+	 */
+	function getCurrentLinks( $title ) {
+		$dbr =& wfGetDB( DB_SLAVE );
+		$id = $title->getArticleId(); // should be zero queries
+		$res = $dbr->select( 'externallinks', array( 'el_to' ), 
+			array( 'el_from' => $id ), __METHOD__ );
+		$links = array();
+		while ( $row = $dbr->fetchObject( $res ) ) {
+			$links[] = $row->el_to;
+		}
+		return $links;
 	}
 
 	/**
@@ -371,7 +403,7 @@ class SpamRegexBatch {
 	 * @private
 	 * @static
 	 */
-	function buildRegexes( $lines, $batchSize=4096 ) {
+	static function buildRegexes( $lines, $batchSize=4096 ) {
 		# Make regex
 		# It's faster using the S modifier even though it will usually only be run once
 		//$regex = 'https?://+[a-z0-9_\-.]*(' . implode( '|', $lines ) . ')';
@@ -409,7 +441,7 @@ class SpamRegexBatch {
 	 * @private
 	 * @static
 	 */
-	function validateRegexes( $regexes ) {
+	static function validateRegexes( $regexes ) {
 		foreach( $regexes as $regex ) {
 			wfSuppressWarnings();
 			$ok = preg_match( $regex, '' );
@@ -427,7 +459,7 @@ class SpamRegexBatch {
 	 * @private
 	 * @static
 	 */
-	function stripLines( $lines ) {
+	static function stripLines( $lines ) {
 		return array_filter(
 			array_map( 'trim',
 					preg_replace( '/#.*$/', '',
@@ -442,7 +474,7 @@ class SpamRegexBatch {
 	 * @private
 	 * @static
 	 */
-	function buildSafeRegexes( $lines, $fileName=false ) {
+	static function buildSafeRegexes( $lines, $fileName=false ) {
 		$lines = SpamRegexBatch::stripLines( $lines );
 		$regexes = SpamRegexBatch::buildRegexes( $lines );
 		if( SpamRegexBatch::validateRegexes( $regexes ) ) {
@@ -463,7 +495,7 @@ class SpamRegexBatch {
 	 * @return array of input lines which produce invalid input, or empty array if no problems
 	 * @static
 	 */
-	function getBadLines( $lines ) {
+	static function getBadLines( $lines ) {
 		$lines = SpamRegexBatch::stripLines( $lines );
 		$regexes = SpamRegexBatch::buildRegexes( $lines );
 		if( SpamRegexBatch::validateRegexes( $regexes ) ) {
@@ -490,7 +522,7 @@ class SpamRegexBatch {
 	 * @return array of regular expressions, potentially empty
 	 * @static
 	 */
-	function regexesFromText( $source, $fileName=false ) {
+	static function regexesFromText( $source, $fileName=false ) {
 		$lines = explode( "\n", $source );
 		return SpamRegexBatch::buildSafeRegexes( $lines, $fileName );
 	}
@@ -502,7 +534,7 @@ class SpamRegexBatch {
 	 * @return array of regular expressions, potentially empty
 	 * @static
 	 */
-	function regexesFromMessage( $message ) {
+	static function regexesFromMessage( $message ) {
 		$source = wfMsgForContent( $message );
 		if( $source && !wfEmptyMsg( $message, $source ) ) {
 			return SpamRegexBatch::regexesFromText( $source );

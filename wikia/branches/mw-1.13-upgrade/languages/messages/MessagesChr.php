@@ -1,7 +1,8 @@
 <?php
 /** Cherokee (ᏣᎳᎩ)
  *
- * @addtogroup Language
+ * @ingroup Language
+ * @file
  *
  * @author SPQRobin
  */
@@ -26,11 +27,11 @@ $messages = array(
 'otherlanguages'   => 'ᎭᏫᎾᏗᏢ ᏐᎢ ᏗᎦᏬᏂᎯᏍᏗ',
 
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
-'aboutpage'     => 'Project:ᎬᏩᏚᏫᏛ',
-'currentevents' => 'ᏗᏤᎢ',
-'mainpage'      => 'ᎤᎵᎮᎵᏍᏗ',
-'portal'        => 'ᎾᎥ ᏄᎾᏓᎸ ᎠᏍᏚᎢᏍᏗ',
-'sitesupport'   => 'ᎠᎵᏍᎪᎸᏙᏗ',
+'aboutpage'            => 'Project:ᎬᏩᏚᏫᏛ',
+'currentevents'        => 'ᏗᏤᎢ',
+'mainpage'             => 'ᎤᎵᎮᎵᏍᏗ',
+'mainpage-description' => 'ᎤᎵᎮᎵᏍᏗ',
+'portal'               => 'ᎾᎥ ᏄᎾᏓᎸ ᎠᏍᏚᎢᏍᏗ',
 
 # Short words for each namespace, by default used in the namespace tab in monobook
 'nstab-main'     => 'ᎤᏓᏡᎬ',
@@ -51,14 +52,8 @@ $messages = array(
 # Upload
 'upload' => 'ᎦᎸᎳᏗᏢ ᎠᎧᎵᎢ ᎠᏝᎥᎢ',
 
-# Image list
-'ilsubmit' => 'ᎠᏯᏍᏗ',
-
 # Random page
 'randompage' => 'ᎤᏍᏆᏂᎪᏗ ᎤᏆᏓᏛ',
-
-# Miscellaneous special pages
-'specialpages' => 'ᎤᏤᎵᏛ ᏚᏆᏓᏛ',
 
 # Delete/protect/revert
 'actioncomplete' => 'ᎠᏍᏆᏙᏅᎯ',
@@ -68,5 +63,11 @@ $messages = array(
 
 # Block/unblock
 'proxyblocksuccess' => 'ᎠᏍᏆᏛᎯ.',
+
+# Special:Newimages
+'ilsubmit' => 'ᎠᏯᏍᏗ',
+
+# Special:SpecialPages
+'specialpages' => 'ᎤᏤᎵᏛ ᏚᏆᏓᏛ',
 
 );

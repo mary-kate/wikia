@@ -22,6 +22,10 @@ class ConfirmEditHooks {
 	static function confirmEditMerged( &$editPage, $newtext ) {
 		return self::getInstance()->confirmEditMerged( $editPage, $newtext );
 	}
+	
+	static function confirmEditAPI( &$editPage, $newtext, &$resultArr ) {
+		return self::getInstance()->confirmEditAPI( $editPage, $newtext, $resultArr );
+	}
 
 	static function injectUserCreate( &$template ) {
 		return self::getInstance()->injectUserCreate( $template );
@@ -65,6 +69,25 @@ class SimpleCaptcha {
 		$this->storage = new $wgCaptchaStorageClass;
 	}
 
+	function getCaptcha() {
+		$a = mt_rand(0, 100);
+		$b = mt_rand(0, 10);
+		$op = mt_rand(0, 1) ? '+' : '-';
+
+		$test = "$a $op $b";
+		$answer = ($op == '+') ? ($a + $b) : ($a - $b);
+		return array('question' => $test, 'answer' => $answer);
+	}
+	
+	function addCaptchaAPI(&$resultArr) {
+		$captcha = $this->getCaptcha();
+		$index = $this->storeCaptcha( $captcha );
+		$resultArr['captcha']['type'] = 'simple';
+		$resultArr['captcha']['mime'] = 'text/plain';
+		$resultArr['captcha']['id'] = $index;
+		$resultArr['captcha']['question'] = $captcha['question'];
+	}
+	
 	/**
 	 * Insert a captcha prompt into the edit form.
 	 * This sample implementation generates a simple arithmetic operation;
@@ -75,16 +98,10 @@ class SimpleCaptcha {
 	 * @return string HTML
 	 */
 	function getForm() {
-		$a = mt_rand(0, 100);
-		$b = mt_rand(0, 10);
-		$op = mt_rand(0, 1) ? '+' : '-';
+		$captcha = $this->getCaptcha();
+		$index = $this->storeCaptcha( $captcha );
 
-		$test = "$a $op $b";
-		$answer = ($op == '+') ? ($a + $b) : ($a - $b);
-
-		$index = $this->storeCaptcha( array( 'answer' => $answer ) );
-
-		return "<p><label for=\"wpCaptchaWord\">$test</label> = " .
+		return "<p><label for=\"wpCaptchaWord\">{$captcha['question']}</label> = " .
 			wfElement( 'input', array(
 				'name' => 'wpCaptchaWord',
 				'id'   => 'wpCaptchaWord',
@@ -207,8 +224,8 @@ class SimpleCaptcha {
 	 * @access private
 	 */
 	function isBadLoginTriggered() {
-		global $wgMemc;
-		return intval( $wgMemc->get( $this->badLoginKey() ) ) > 0;
+		global $wgMemc, $wgCaptchaBadLoginAttempts;
+		return intval( $wgMemc->get( $this->badLoginKey() ) ) >= $wgCaptchaBadLoginAttempts;
 	}
 
 	/**
@@ -411,7 +428,7 @@ class SimpleCaptcha {
 			//$regex = 'http://+[a-z0-9_\-.]*(' . implode( '|', $lines ) . ')';
 			//return '/' . str_replace( '/', '\/', preg_replace('|\\\*/|', '/', $regex) ) . '/Si';
 			$regexes = '';
-			$regexStart = '/http:\/\/+[a-z0-9_\-.]*(';
+			$regexStart = '/^https?:\/\/+[a-z0-9_\-.]*(';
 			$regexEnd = ')/Si';
 			$regexMax = 4096;
 			$build = false;
@@ -451,20 +468,16 @@ class SimpleCaptcha {
 		}
 		return $links;
 	}
-
+	
 	/**
-	 * The main callback run on edit attempts.
-	 * @param EditPage $editPage
-	 * @param string $newtext
-	 * @param string $section
-	 * @param bool true to continue saving, false to abort and show a captcha form
+	 * Backend function for confirmEdit() and confirmEditAPI()
+	 * @return bool false if the CAPTCHA is rejected, true otherwise
 	 */
-	function confirmEdit( &$editPage, $newtext, $section, $merged = false ) {
+	private function doConfirmEdit( &$editPage, $newtext, $section, $merged = false ) {
 		if( $this->shouldCheck( $editPage, $newtext, $section, $merged ) ) {
 			if( $this->passCaptcha() ) {
 				return true;
 			} else {
-				$editPage->showEditForm( array( &$this, 'editCallback' ) );
 				return false;
 			}
 		} else {
@@ -474,12 +487,43 @@ class SimpleCaptcha {
 	}
 
 	/**
+	 * The main callback run on edit attempts.
+	 * @param EditPage $editPage
+	 * @param string $newtext
+	 * @param string $section
+	 * @param bool $merged
+	 * @return bool true to continue saving, false to abort and show a captcha form
+	 */
+	function confirmEdit( &$editPage, $newtext, $section, $merged = false ) {
+		global $wgTitle;
+		if( is_null( $wgTitle ) ) {
+			# API mode
+			# The CAPTCHA was already checked and approved 
+			return true;
+		}
+		if( !$this->doConfirmEdit( $editPage, $newtext, $section, $merged ) ) {
+			$editPage->showEditForm( array( &$this, 'editCallback' ) );
+			return false;
+		}
+		return true;
+	}
+
+	/**
 	 * A more efficient edit filter callback based on the text after section merging
 	 * @param EditPage $editPage
 	 * @param string $newtext
 	 */
 	function confirmEditMerged( &$editPage, $newtext ) {
 		return $this->confirmEdit( $editPage, $newtext, false, true );
+	}
+	
+	
+	function confirmEditAPI( &$editPage, $newtext, &$resultArr) {
+		if( !$this->doConfirmEdit( $editPage, $newtext, false, false ) ) {
+			$this->addCaptchaAPI($resultArr);
+			return false;
+		}
+		return true;
 	}
 
 	/**

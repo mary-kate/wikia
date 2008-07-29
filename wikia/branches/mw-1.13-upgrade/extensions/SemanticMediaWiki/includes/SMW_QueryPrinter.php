@@ -21,8 +21,10 @@ abstract class SMWResultPrinter {
 	protected $mLinkOthers; // should article names of other columns (besides the first) be linked?
 	protected $mDefault = ''; // default return value for empty queries
 	protected $mShowHeaders = true; // should the headers (property names) be printed?
+	protected $mShowErrors = true; // should errors possibly be printed?
 	protected $mInline; // is this query result "inline" in some page (only then a link to unshown results is created, error handling may also be affected)
 	protected $mLinker; // Linker object as needed for making result links. Might come from some skin at some time.
+	
 
 	/**
 	 * Constructor. The parameter $format is a format string
@@ -146,12 +148,30 @@ abstract class SMWResultPrinter {
 	}
 
 	/**
+	 * Some printers can produce not only embeddable HTML or Wikitext, but
+	 * can also produce stand-alone files. An example is RSS or iCalendar.
+	 * This function returns a filename that is to be sent to the caller
+	 * in such a case (the default filename is created by browsers from the
+	 * URL, and it is often not pretty).
+	 */
+	public function getFileName($res) {
+		return false;
+	}
+
+	/**
 	 * Provides a simple formatted string of all the error messages that occurred.
 	 * Can be used if not specific error formatting is desired. Compatible with HTML
 	 * and Wiki.
 	 */
-	protected function getErrorString($res) {
-		return smwfEncodeMessages($res->getErrors());
+	public function getErrorString($res) {
+		return $this->mShowErrors?smwfEncodeMessages($res->getErrors()):'';
+	}
+
+	/**
+	 * Change if errors should be shown-
+	 */
+	public function setShowErrors($show) {
+		$this->mShowErrors = $show;
 	}
 
 	/**

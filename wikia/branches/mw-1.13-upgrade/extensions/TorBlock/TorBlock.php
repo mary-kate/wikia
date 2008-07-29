@@ -18,8 +18,8 @@ $dir = dirname(__FILE__);
 $wgExtensionCredits['other'][] = array(
 	'name'           => 'TorBlock',
 	'author'         => 'Andrew Garrett',
-	'svn-date'       => '$LastChangedDate: 2008-06-04 10:13:43 +0200 (Śr, 04 cze 2008) $',
-	'svn-revision'   => '$LastChangedRevision: 35854 $',
+	'svn-date'       => '$LastChangedDate$',
+	'svn-revision'   => '$LastChangedRevision$',
 	'description'    => 'Prevents Tor exit nodes from editing a wiki',
 	'descriptionmsg' => 'torblock-desc',
 	'url'            => 'http://www.mediawiki.org/wiki/Extension:TorBlock',
@@ -32,6 +32,10 @@ $wgHooks['getUserPermissionsErrorsExpensive'][] = 'TorBlock::onGetUserPermission
 $wgHooks['AbortAutoblock'][] = 'TorBlock::onAbortAutoblock';
 $wgHooks['GetAutoPromoteGroups'][] = 'TorBlock::onGetAutoPromoteGroups';
 $wgHooks['GetBlockedStatus'][] = 'TorBlock::onGetBlockedStatus';
+$wgHooks['AutopromoteCondition'][] = 'TorBlock::onAutopromoteCondition';
+
+// Define new autopromote condition
+define('APCOND_TOR', 'tor'); // Numbers won't work, we'll get collisions
 
 /**
  * Permission keys that bypass Tor blocks.
@@ -48,12 +52,6 @@ $wgGroupPermissions['user']['torunblocked'] = true;
  * maintenance script
  */
 $wgTorLoadNodes = true;
-
-/**
- * What IPs people can access your site with.
- * Needed for checking against exit policies.
- */
-$wgTorIPs = array();
 
 /**
  * Actions tor users are allowed to do.
@@ -73,3 +71,8 @@ $wgTorAutoConfirmCount = 0;
  * (i.e. all IPs which can be used to access the site.
  */
 $wgTorIPs = array( '208.80.152.2' );
+
+/**
+ * Disable existing blocks of Tor nodes
+ */
+$wgTorDisableAdminBlocks = true;

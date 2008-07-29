@@ -1,6 +1,8 @@
 <?php
 /**
  * Contain a class for special pages
+ * @file
+ * @ingroup SpecialPages
  */
 
 /**
@@ -29,7 +31,6 @@ $wgQueryPages = array(
 	array( 'MostlinkedPage',                'Mostlinked'                    ),
 	array( 'MostrevisionsPage',             'Mostrevisions'                 ),
 	array( 'FewestrevisionsPage',           'Fewestrevisions'               ),
-	array( 'NewPagesPage',                  'Newpages'                      ),
 	array( 'ShortPagesPage',                'Shortpages'                    ),
 	array( 'UncategorizedCategoriesPage',   'Uncategorizedcategories'       ),
 	array( 'UncategorizedPagesPage',        'Uncategorizedpages'            ),
@@ -54,7 +55,7 @@ if ( !$wgDisableCounters )
  * This is a class for doing query pages; since they're almost all the same,
  * we factor out some of the functionality into a superclass, and let
  * subclasses derive from it.
- * @addtogroup SpecialPage
+ * @ingroup SpecialPage
  */
 class QueryPage {
 	/**
@@ -236,7 +237,7 @@ class QueryPage {
 				if ( isset( $row->value ) ) {
 					$value = $row->value;
 				} else {
-					$value = '';
+					$value = 0;
 				}
 
 				$insertSql .= '(' .
@@ -448,7 +449,18 @@ class QueryPage {
 	 * Similar to above, but packaging in a syndicated feed instead of a web page
 	 */
 	function doFeed( $class = '', $limit = 50 ) {
-		global $wgFeedClasses;
+		global $wgFeed, $wgFeedClasses;
+
+		if ( !$wgFeed ) {
+			global $wgOut;
+			$wgOut->addWikiMsg( 'feed-unavailable' );
+			return;
+		}
+		
+		global $wgFeedLimit;
+		if( $limit > $wgFeedLimit ) {
+			$limit = $wgFeedLimit;
+		}
 
 		if( isset($wgFeedClasses[$class]) ) {
 			$feed = new $wgFeedClasses[$class](
@@ -527,5 +539,3 @@ class QueryPage {
 		return $title->getFullURL();
 	}
 }
-
-

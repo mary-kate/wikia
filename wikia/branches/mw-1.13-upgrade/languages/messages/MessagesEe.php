@@ -1,11 +1,12 @@
 <?php
 /** Ewe (Eʋegbe)
  *
- * @addtogroup Language
+ * @ingroup Language
+ * @file
  *
+ * @author M.M.S.
  * @author Natsubee
  * @author Cbrown1023
- * @author M.M.S.
  */
 
 $messages = array(
@@ -80,7 +81,6 @@ $messages = array(
 'edithelp'          => 'Kpekpeɖeŋu na etɔtrɔ',
 'portal'            => 'Takpekpewɔƒe',
 'portal-url'        => 'Project:Takpekpewɔƒe',
-'sitesupport'       => 'Wɔ nunana',
 
 'newmessageslink' => 'du yeyewo',
 'editsection'     => 'trɔ asi le eŋu',
@@ -133,7 +133,7 @@ $messages = array(
 'upload'    => 'Ɖo agbalẽ ɖa',
 'uploadbtn' => 'Ɖo agbalẽ ɖa',
 
-# Image list
+# Image description page
 'filehist-user' => 'Ezãla',
 
 # MIME search
@@ -141,21 +141,18 @@ $messages = array(
 
 # Miscellaneous special pages
 'wantedpages'    => 'Axawo siwo le hahĩam',
-'allpages'       => 'Axawo katã',
 'shortpages'     => 'Axa kpuiwo',
 'protectedpages' => 'Axawo siwo ŋu wole dzɔdzɔm',
 'listusers'      => 'Ezãlawo ƒe xexlẽme',
-'specialpages'   => 'Axa tɔxewo',
 'newpages'       => 'Axa yeyewo',
 'move'           => 'Ɖɔli eƒe nɔƒe',
 'movethispage'   => 'Ɖɔli axa sia ƒe nɔƒe',
-
-'version' => 'Tata',
 
 # Special:Log
 'specialloguserlabel' => 'Ezãla:',
 
 # Special:Allpages
+'allpages'       => 'Axawo katã',
 'allpagessubmit' => 'Yi',
 
 # Watchlist
@@ -169,11 +166,11 @@ $messages = array(
 'whatlinkshere' => 'Nusiwo kaa afii ŋu',
 
 # Move page
-'movepage'    => 'Ɖɔli eƒe nɔƒe',
-'movearticle' => 'Ɖɔli eƒe nɔƒe:',
-'move-watch'  => 'Le ŋku ɖe axa sia ŋu',
-'movepagebtn' => 'Ɖɔli eƒe nɔƒe',
-'1movedto2'   => '[[$1]] wohee yi [[$2]]',
+'move-page-legend' => 'Ɖɔli eƒe nɔƒe',
+'movearticle'      => 'Ɖɔli eƒe nɔƒe:',
+'move-watch'       => 'Le ŋku ɖe axa sia ŋu',
+'movepagebtn'      => 'Ɖɔli eƒe nɔƒe',
+'1movedto2'        => '[[$1]] wohee yi [[$2]]',
 
 # Namespace 8 related
 'allmessages' => 'Nuŋɔŋlɔwo',
@@ -185,7 +182,6 @@ $messages = array(
 'tooltip-search'          => 'Dii {{SITENAME}}',
 'tooltip-n-recentchanges' => 'Tɔtrɔ yeyewo le wiki sia me.',
 'tooltip-n-help'          => 'Nuwo srɔ̃ƒe',
-'tooltip-n-sitesupport'   => 'Kpe ɖe mía ŋu',
 'tooltip-t-whatlinkshere' => 'Wiki nuŋɔŋlɔwo katã siwo ku ɖe afii ŋuti',
 'tooltip-t-upload'        => 'Ɖo nutatawo kple nuƒoƒowo ɖa',
 'tooltip-t-specialpages'  => 'Axa tɔxewo ƒe xexlẽme',
@@ -197,5 +193,11 @@ $messages = array(
 # 'all' in various places, this might be different for inflected languages
 'watchlistall2' => 'katã',
 'namespacesall' => 'katã',
+
+# Special:Version
+'version' => 'Tata', # Not used as normal message but as header for the special page itself
+
+# Special:SpecialPages
+'specialpages' => 'Axa tɔxewo',
 
 );

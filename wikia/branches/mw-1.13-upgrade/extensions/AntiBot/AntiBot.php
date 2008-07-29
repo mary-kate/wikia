@@ -33,8 +33,8 @@ $wgAntiBotPayloads = array(
 
 $wgExtensionCredits['other'][] = array(
 	'name' => 'AntiBot',
-	'svn-date' => '$LastChangedDate: 2008-06-20 01:46:02 +0200 (Pt, 20 cze 2008) $',
-	'svn-revision' => '$LastChangedRevision: 36492 $',
+	'svn-date' => '$LastChangedDate$',
+	'svn-revision' => '$LastChangedRevision$',
 	'url' => 'http://www.mediawiki.org/wiki/Extension:AntiBot',
 	'author' => 'Tim Starling',
 	'description' => 'Simple framework for spambot checks and trigger payloads',
@@ -53,7 +53,7 @@ $wgAntiBotPayloadTypes = array(
 );
 
 # Load plugins
-foreach ( glob( dirname( __FILE__ ) . '../../../wikia-extras/trunk/AntiBot/active/*.php' ) as $file ) {
+foreach ( glob( dirname( __FILE__ ) . '/active/*.php' ) as $file ) {
 	require( $file );
 }
 

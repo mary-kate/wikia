@@ -18,6 +18,7 @@ class SMWListResultPrinter extends SMWResultPrinter {
 
 	protected $mSep = '';
 	protected $mTemplate = '';
+	protected $mUserParam = '';
 
 	protected function readParameters($params,$outputmode) {
 		SMWResultPrinter::readParameters($params,$outputmode);
@@ -30,6 +31,9 @@ class SMWListResultPrinter extends SMWResultPrinter {
 		}
 		if (array_key_exists('template', $params)) {
 			$this->mTemplate = trim($params['template']);
+		}
+		if (array_key_exists('userparam', $params)) {
+			$this->mUserParam = trim($params['userparam']);
 		}
 	}
 
@@ -84,7 +88,7 @@ class SMWListResultPrinter extends SMWResultPrinter {
 
 			$first_col = true;
 			if ($usetemplate) { // build template code
-				$wikitext = '';
+				$wikitext = ($this->mUserParam)?"|userparam=$this->mUserParam":'';
 				$i = 1; // explicitly number parameters for more robust parsing (values may contain "=")
 				foreach ($row as $field) {
 					$wikitext .= '|' . $i++ . '=';
@@ -156,7 +160,7 @@ class SMWListResultPrinter extends SMWResultPrinter {
 // 				$link->setParameter($this->mSep,'sep');
 // 			}
 
-			$link->setParameter('ul','format'); // always use ul, other formats suck as search page output
+			$link->setParameter('ul','format'); // always use ul, other formats hardly work as search page output
 			if ($this->mTemplate != '') {
 				$link->setParameter($this->mTemplate,'template');
 				if (array_key_exists('link', $this->m_params)) { // linking may interfere with templates

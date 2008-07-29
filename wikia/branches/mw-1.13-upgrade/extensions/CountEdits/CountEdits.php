@@ -11,7 +11,8 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 
 $wgExtensionCredits['specialpage'][] = array(
 	'name' => 'Count Edits',
-	'version' => '2008-01-11',
+	'svn-date' => '$LastChangedDate$',
+	'svn-revision' => '$LastChangedRevision$',
 	'author' => 'Rob Church',
 	'description' => '[Special:CountEdits|Special page]] that counts user edits and provides a top-ten contributor list',
 	'descriptionmsg' => 'countedits-desc',
