@@ -19,7 +19,9 @@ function refreshLinks( $start, $newOnly = false, $maxLag = false, $end = 0, $red
 	$wgUser->setOption('math', MW_MATH_SOURCE);
 
 	# Don't generate extension images (e.g. Timeline)
-	$wgParser->clearTagHooks();
+	if( method_exists( $wgParser, "clearTagHooks" ) ) {
+		$wgParser->clearTagHooks();
+	}
 
 	# Don't generate thumbnail images
 	$wgUseImageResize = false;

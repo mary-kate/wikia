@@ -16,9 +16,9 @@ class SkinHome extends SkinTemplate {
 	function initPage(&$out) {
 
 		wfProfileIn(__METHOD__);
-		
+
 		SkinTemplate::initPage($out);
-		
+
 		$this->skinname  = 'home';
 		$this->stylename = 'home';
 		$this->template  = 'HomeTemplate';
@@ -688,17 +688,7 @@ _udn = "none";_uff = 0;_uacct="UA-288915-3"; urchinTracker();
 </script>
 <?php
     }
-
-
-/**
- * eloy, display 1x1 dot for simple stats
- */
-if (!empty($wgDotDisplay)) {
-    $wWebStats = new WikiaWebStats( $GLOBALS['wgCityId'], 0);
-?>
-    <img src="<?= $wgAdServerUrl; ?>/1dot.php?<?= (!empty($wgAdServerTest))?"db_test=1&":"" ?>js=<?= $wWebStats->makeStatUrl(); ?>" alt="." width="1" height="1" border="0" />
-<?php
-}
+	$this->html('bottomscripts');
 ?>
 
 <!-- Start Quantcast tag -->

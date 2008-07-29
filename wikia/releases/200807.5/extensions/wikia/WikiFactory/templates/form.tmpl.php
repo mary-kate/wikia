@@ -70,7 +70,7 @@ $Factory.randid = function(){var a=""; for(var i=0; i<10; i++){var d=Math.floor(
 
 $Factory.VariableCallback = {
     success: function( oResponse ) {
-        var aData = YAHOO.lang.JSON.parse(oResponse.responseText);
+        var aData = YAHOO.Tools.JSONParse(oResponse.responseText);
         var div = $Dom.get( aData["div-name"] );
         div.innerHTML = aData["div-body"];
         //--- now add listeners and events
@@ -85,7 +85,7 @@ $Factory.VariableCallback = {
 
 $Factory.FilterCallback = {
     success: function( oResponse ) {
-        var aData = YAHOO.lang.JSON.parse( oResponse.responseText );
+        var aData = YAHOO.Tools.JSONParse( oResponse.responseText );
         $Dom.get( "wk-variable-select" ).innerHTML = aData["selector"];
         $Dom.get( "wk-variable-select" ).disabled = false;
         $Factory.Busy(0);
@@ -100,7 +100,7 @@ $Factory.FilterCallback = {
 
 $Factory.ReplaceCallback = {
     success: function( oResponse ) {
-        var Data = YAHOO.lang.JSON.parse(oResponse.responseText);
+        var Data = YAHOO.Tools.JSONParse(oResponse.responseText);
         $Dom.get( Data["div-name"] ).innerHTML = Data["div-body"];
         $Factory.Busy(0);
         // other conditions
@@ -125,7 +125,7 @@ $Factory.Busy = function (state) {
 
 $Factory.Domain.Callback = {
     success: function( oResponse ) {
-        var oReturn = YAHOO.lang.JSON.parse( oResponse.responseText );
+        var oReturn = YAHOO.Tools.JSONParse(oResponse.responseText);
         var aDomains = oReturn["domains"];
         var sInfo = oReturn["info"];
 

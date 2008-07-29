@@ -14,7 +14,8 @@ $bVerboseMode = (isset($options['v']) || isset($options['verbose'])) ? true : fa
 $bDebugMode = (isset($options['d']) || isset($options['debug'])) ? true : false;
 $bNoCache = isset($options['no-cache']) ? true : false;
 $bNoProxy = isset($options['no-proxy']) ? true : false;
- 
+$iEntryId = isset($options['entry']) ? $options['entry'] : 0;
+  
 if($bNoCache) {
 	define('RANKBOT_CACHE_DIR', '');	
 }
@@ -32,7 +33,7 @@ else {
 
 if(class_exists('SearchRankBot')) {
 	$oRankBot = new SearchRankBot(RANKBOT_CACHE_DIR, RANKBOT_PROXY, $bDebugMode);
-	$oRankBot->run($bVerboseMode);
+	$oRankBot->run($bVerboseMode, $iEntryId);
 }
 else {
 	print "SearchRanktTracker extension is not installed.\n";
