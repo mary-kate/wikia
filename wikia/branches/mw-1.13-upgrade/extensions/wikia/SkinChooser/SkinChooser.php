@@ -3,12 +3,13 @@
  * Author: Inez Korczynski
  */
 
-$wgHooks['SetExtraCookies'][] = 'SetSkinChooserCookies';
-function SetSkinChooserCookies($user) {
-	global $wgCookieExpiration, $wgCookiePath, $wgCookieDomain, $wgCookieSecure, $wgCookiePrefix;
-	$exp = time() + $wgCookieExpiration;
-	$skinpref = join('-',array($user->getOption('skin'), $user->getOption('theme'), $user->getOption('skinoverwrite')));
-	setcookie( $wgCookiePrefix.'skinpref', $skinpref, $exp, $wgCookiePath, $wgCookieDomain, $wgCookieSecure );
+$wgHooks['UserSetCookies'][] = 'SetSkinChooserCookies';
+function SetSkinChooserCookies($user, &$session, &$cookies) {
+	$cookies[$wgCookiePrefix.'skinpref'] = join( '-', array(
+								$user->getOption('skin'), 
+								$user->getOption('theme'), 
+								$user->getOption('skinoverwrite') 
+							) );
 	return true;
 }
 
