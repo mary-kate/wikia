@@ -138,13 +138,13 @@
 
 <?php if ($can_do_actions && $single_report) :?>
 
-<?php include 'change_type.php'; ?>
+<?php include 'change_type.tmpl.php'; ?>
 
 <?php endif ?>
 
 <?php if ($show_mailer) :?>
 
-<?php include 'user_mailer.php'; ?>
+<?php include 'user_mailer.tmpl.php'; ?>
 
 <!-- log -->
 <h3>Log</h3>

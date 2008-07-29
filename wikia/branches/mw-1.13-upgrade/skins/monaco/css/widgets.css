@@ -287,9 +287,13 @@
 /* macbre: <widget> */
 .widgetTag {
 	width: 200px;
+	position: static;
 }
 
 .widgetTag .widget_title {
 	display: none;
 }
 
+.widgetTag dl {
+	position: relative;
+}

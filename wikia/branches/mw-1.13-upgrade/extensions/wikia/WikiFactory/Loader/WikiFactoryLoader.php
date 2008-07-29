@@ -365,11 +365,12 @@ class WikiFactoryLoader {
 		 * if wikia is not defined or is disabled we redirecting to Not_a_valid_Wikia
 		 */
 		if( empty($this->mWikiID) || empty($this->mIsWikiaActive) ) {
+			global $wgNotAValidWikia;
 			wfDebug("wikifactory: {$this->mWikiID}:{$this->mIsWikiaActive}) wiki id empty or Wikia disabled", true);
 			if ( !empty( self::$mDebug ) ) {
-				error_log("wikifactory: redirected to http://www.wikia.com/wiki/Not_a_valid_Wikia");
+				error_log("wikifactory: redirected to $wgNotAValidWikia");
 			}
-			header("Location: http://www.wikia.com/wiki/Not_a_valid_Wikia");
+			header("Location: $wgNotAValidWikia");
 			wfProfileOut( __METHOD__ );
 			exit(0);
 		}
