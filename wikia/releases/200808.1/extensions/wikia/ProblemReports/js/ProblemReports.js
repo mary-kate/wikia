@@ -77,13 +77,18 @@ YAHOO.wikia.ProblemReportsDialog.prototype = {
 		var left = parseInt(YAHOO.util.Dom.getViewportWidth() / 2 - 580/2);
 		YAHOO.util.Dom.setStyle(this.form, 'left', left + 'px');
 
-		// register handler for close button
+		// register event handlers
 		if (firstTime) {
+			// register handler for close button
 			YAHOO.util.Event.addListener("pr_cancel", "click", function(ev,o) {
 				o.panel.hide();
-				o.track('cancel'); // track cancelled problem reports
 			}, this);
-		}
+		}	
+
+		// register handler for beforeHideEvent
+		this.panel.beforeHideEvent.subscribe(function(name, args, o) {
+			o.track('cancel'); // track cancelled problem reports
+		}, this);
 
 		this.panel.show();
 
