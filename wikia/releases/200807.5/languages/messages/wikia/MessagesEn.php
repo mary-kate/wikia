@@ -952,7 +952,7 @@ If you think this was sent in error, please let us know at support@wikia.com',
 'userlogin-captcha-label' => 'Enter the word that appears:',
 'userlogin-form-error' => 'Please fix errors above before proceeding.',
 'unable-block-edit' => 'You are not allowed to edit this page. Try again later.',
-'var_logheader' => '123',
+'var_logheader' => 'Below is a list of the most recent configuration changes for this wiki.',
 'tog-showAds' => '<b>Show all advertisements</b><br/>Select this option to see article pages as logged-out users see them.<br/><br/>',
 'fast-adv' => 'Advertisement',
 ) );
