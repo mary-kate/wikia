@@ -653,9 +653,11 @@ function wfHostname() {
 	}
 	if( is_array( $uname ) && isset( $uname['nodename'] ) ) {
 		return $uname['nodename'];
-	} else {
+	} elseif( isset($_SERVER['SERVER_NAME']) ) {	//$_SERVER['SERVER_NAME'] does not exist when running from command line
 		# This may be a virtual server.
 		return $_SERVER['SERVER_NAME'];
+	} else {
+		return '';
 	}
 }
 
