@@ -41,6 +41,10 @@ function mwSetupToolbar() {
 	var textbox = document.getElementById('wpTextbox1');
 	if (!textbox) { return false; }
 
+	if (textbox.style.display == 'none') { // Wikia fix (Bartek)
+		return false;
+	}
+
 	// Don't generate buttons for browsers which don't fully
 	// support it.
 	if (!(document.selection && document.selection.createRange)
