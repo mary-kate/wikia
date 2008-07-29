@@ -258,48 +258,6 @@ class SquidUpdate {
 		wfProfileOut( $fname );
 	}
 
-	/* static */ function purgeAkamai( $urlArr ) {
-		global $wgAkamaiDisablePurge, $wgAkamaiUser, $wgAkamaiPassword, $wgAkamaiNotificationEmail, $IP;
-		$wsdl_filename = "$IP/extensions/wikia/Akamai/ccuapi.wsdl";
-
-		if( class_exists ( 'SoapClient' )
-			&& file_exists ( $wsdl_filename )
-			&& $wgAkamaiDisablePurge != true
-			&& $wgAkamaiUser != ''
-			&& $wgAkamaiPassword != '' )
-		{
-			// Rewrite only urls for images to an another array
-			$url = array();
-			foreach($urlArr as $key)
-			{
-				if ( strpos ( $key, 'images.wikia.com' ) !== false )
-				{
-					$url[] = $key;
-				}
-			}
-
-			if ( count ( $url ) > 0 )
-			{
-				$options = array();
-				$options[] = '';
-				if( isset ( $wgAkamaiNotificationEmail ) )
-				{
-					$options[] = 'email-notification='.$wgAkamaiNotificationEmail;
-				}
-
-				try
-				{
-					$client = new SoapClient($wsdl_filename);
-					$client->purgeRequest ( $wgAkamaiUser , $wgAkamaiPassword , 'ff' , $options , $url );
-				}
-				catch(SoapFault $e)
-				{
-					wfDebug("SoapFault occurs in SquidUpdate::purgeAkamai: " . $e->faultstring);
-				}
-			}
-		}
-	}
-
 	function debug( $text ) {
 		global $wgDebugSquid;
 		if ( $wgDebugSquid ) {
