@@ -373,6 +373,7 @@ class SpecialProblemReports extends SpecialPage
 		// add CSS (from static file)
 		$wgOut->addScript(
 			'<link rel="stylesheet" type="text/css" href="'.$wgExtensionsPath.'/wikia/ProblemReports/css/SpecialProblemReports.css?'.$wgStyleVersion.'" />'.
+			"\n\t\t".'<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="'.$wgExtensionsPath.'/wikia/ProblemReports/css/SpecialProblemReports.ieFixes.css?'.$wgStyleVersion.'" /><![endif]-->'.
 			"\n\t\t".'<script type="text/javascript" src="'.$wgExtensionsPath.'/wikia/ProblemReports/js/SpecialProblemReports.js?'.$wgStyleVersion.'" ></script>'.
 			"\n"
 		);

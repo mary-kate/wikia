@@ -16,6 +16,11 @@ YAHOO.util.Event.onDOMReady( function () {
 					wikiaProblemReportsDialog.fire();
 				}
 			});
+			YAHOO.util.Get.css(wgExtensionsPath + '/wikia/ProblemReports/css/ProblemReports.css?' + wgStyleVersion, {
+				onSuccess: function() {
+					YAHOO.log('ProblemReports: CSS loaded');
+				}
+			});
 		}
 		else {
 			wikiaProblemReportsDialog.fire();

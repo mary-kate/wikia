@@ -39,7 +39,7 @@ if (!defined('MEDIAWIKI')) die();
 $wgExtensionCredits['other'][] = array(
 	'name' => 'ProblemReports',
 	'url' => 'http://help.wikia.com/wiki/Help:ProblemReports',
-	'version' => '2.23',
+	'version' => '2.3',
 	'description' => 'Allows users to report problems with wiki-articles and helpers/sysops/janitors/staff to view & resolve them',
 	'author' => '[http://pl.inside.wikia.com/wiki/User:Macbre Maciej Brencz]'
 );
@@ -71,9 +71,6 @@ function wfProblemReports()
 	
 		// add "Report a problem" link and return html of Report a problem" dialog
 		$wgHooks['SkinTemplateContentActions'][] = 'wfProblemReportsAddLink';
-		
-		// what's why we all love u$ IE :)
-		$wgOut->addScript('<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="'.$wgExtensionsPath.'/wikia/ProblemReports/css/ProblemReports.ieFixes.css?'.$wgStyleVersion.'" /><![endif]-->'."\n");
 	}
 
 	// setup for Special:Log
