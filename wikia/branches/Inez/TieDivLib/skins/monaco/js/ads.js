@@ -1,4 +1,67 @@
 /**
+ * http://www.hedgerwow.com/360/dhtml/js-onfontresize2.html
+ */
+YAHOO.namespace('YAHOO.example').FontSizeMonitor = (function(){
+	var $E = YAHOO.util.Event;
+	var $D = YAHOO.util.Dom;
+	var p_frame = document.createElement('iframe');
+	var p_ie = !!(document.expando && document.uniqueID);
+	var p_gecko = !!(document.getBoxObjectFor);
+	var p_init = function(){
+		var dB = document.body;
+		if(!dB ) return setTimeout(p_init,0);
+		if(!p_frame._ready){
+			with(p_frame.style){
+				width = '10em';
+				height = '50pt';
+				visibility = 'hidden';
+				position = 'absolute';
+				zIndex = -1;
+				top = '0';
+				left = '0';
+				border = 'none';
+				background = "red";
+			};
+			dB.insertBefore(p_frame,dB.firstChild);
+		};
+		if(p_ie){
+			p_frame._ready = true ;
+			$E.on(p_frame,'resize',oApi._onFontResize,oApi,true);
+			} else {
+			if(!p_gecko){
+				var dDoc = p_frame.contentDocument || p_frame.contentWindow;
+				if(!dDoc) return setTimeout(p_init,0);
+				p_frame._ready = true ;
+				dDoc.onresize = function(e){
+					oApi._onFontResize.call(oApi,e);
+				};;
+				}else{
+				with(p_frame.style){
+					visibility = 'visible';
+					zIndex = 1000;
+					left = '-5000px';
+				};
+				var sHtml = [
+				'<html><body><script>',
+				'self.onresize=function(e){parent.YAHOO.example.FontSizeMonitor._onFontResize(e);}',
+				'<\/script></body></html>'].join('');
+				p_frame.src= 'data:text/html;charset=utf-8,' + encodeURIComponent(sHtml);
+			}
+		}
+	};
+	var onResize = function(){
+	};
+	var oApi = {
+		_onFontResize:function(e){
+			var n = p_frame.offsetWidth / 10;
+			this.onChange.fire(n);
+		},
+		onChange:new YAHOO.util.CustomEvent('change')
+	};
+	p_init();
+	return oApi;
+})();
+/**
  * @author Inez Korczynski
  */
 var HCHARS = "0123456789ABCDEF";
@@ -140,81 +203,74 @@ TieDivLib = new function() {
 
 	var items = Array();
 
-	var interval = 300;
+	var interval = 350;
 
 	var block = false;
 
-	var adjustY = ((YAHOO.env.ua.ie > 0) ? 2 : 0) + YAHOO.util.Dom.getY('monaco_shrinkwrap_main');
+	var adjustY;
 
-	var adjustX = (YAHOO.env.ua.ie > 0) ? YAHOO.util.Dom.getX('wikia_header') : 0;
+	var adjustX;
 
 	this.tie = function(source, target, pos) {
 
 		if($(target).style.height == '') {
-			$(target).style.height = '75px';
-			$(target).style.width = '200px';
-			$(target).style.margin = '0 auto';
+			with($(target).style) {
+				height = '75px';
+				width = '200px';
+				margin = '0 auto';
+			}
 		}
 
 		items.push([source, target]);
 
-		$(source).style.display = '';
-		$(source).style.position = 'absolute';
-		$(source).style.zIndex = (pos == 'bl' || pos == 'r' || pos == 'FAST_SIDE') ? 21 : 5;
-	}
-
-	this.start = function() {
-		TieDivLib.timer();
-		YAHOO.util.Event.addListener(window, 'resize', TieDivLib.recalc);
-		YAHOO.util.Event.addListener(window, 'click', function() {
-			TieDivLib.recalc();
-			setTimeout(TieDivLib.recalc, 200);
-		});
-		YAHOO.util.Event.addListener(window, 'load', function() {
-			TieDivLib.setInterval(5000);
-		});
-		YAHOO.util.Event.addListener(window, 'keydown', function() {
-			TieDivLib.recalc();
-			TieDivLib.setInterval(300);
-		});
-		YAHOO.util.Event.addListener(window, 'mousedown', function() {
-			TieDivLib.recalc();
-			TieDivLib.setInterval(300);
-		});
-		YAHOO.util.Event.addListener(window, 'keyup', function() {
-			TieDivLib.recalc();
-			TieDivLib.setInterval(5000);
-		});
-		YAHOO.util.Event.addListener(window, 'mouseup', function() {
-			TieDivLib.recalc();
-			TieDivLib.setInterval(5000);
-		});
-	}
-
-	this.timer = function() {
-		TieDivLib.recalc();
-		setTimeout(TieDivLib.timer, interval);
+		with($(source).style) {
+			position = 'absolute';
+			zIndex = (pos == 'bl' || pos == 'r' || pos == 'FAST_SIDE') ? 21 : 5;
+		}
 	}
 
 	this.recalc = function() {
-		if(block) {
-			return;
-		}
+		if(block) return;
 		block = true;
 		for(i = 0; i < items.length; i++) {
 			if(YAHOO.util.Dom.getXY(items[i][0]) != YAHOO.util.Dom.getXY(items[i][1])) {
-				$(items[i][0]).style.top = (YAHOO.util.Dom.getY(items[i][1]) - adjustY) + 'px';
-				$(items[i][0]).style.left = (YAHOO.util.Dom.getX(items[i][1]) - adjustX) + 'px';
+				with($(items[i][0]).style) {
+					top = (YAHOO.util.Dom.getY(items[i][1]) - adjustY) + 'px';
+					left = (YAHOO.util.Dom.getX(items[i][1]) - adjustX) + 'px';
+					display = '';
+				}
 			}
 		}
 		block = false;
 	}
 
-	this.setInterval = function(n) {
-		interval = n;
+	this.timer = function() {
+		TieDivLib.recalc();
+		if(interval != -1) setTimeout(TieDivLib.timer, interval);
+	}
+
+	this.init = function() {
+		adjustY = ((YAHOO.env.ua.ie > 0) ? 2 : 0) + YAHOO.util.Dom.getY('monaco_shrinkwrap_main');
+		adjustX = (YAHOO.env.ua.ie > 0) ? YAHOO.util.Dom.getX('wikia_header') : 0;
+
+		TieDivLib.timer();
+
+		YAHOO.util.Event.addListener(window, 'load', function() {
+			setTimeout(function() { interval = -1; }, 1000);
+			YAHOO.example.FontSizeMonitor.onChange.subscribe(TieDivLib.recalc);
+		});
+
+		YAHOO.util.Event.addListener(document, 'click', function() {
+			setTimeout(TieDivLib.recalc, 1);
+		});
+
+		YAHOO.util.Event.addListener(document, 'keydown', function() {
+			setTimeout(TieDivLib.recalc, 1);
+		});
 	}
 
 	this.getItems = function() {
 		return items;
 	}
+
 }
