@@ -1,7 +1,8 @@
 <?php
 /** Fijian (Na Vosa Vakaviti)
  *
- * @addtogroup Language
+ * @ingroup Language
+ * @file
  *
  * @author SPQRobin
  */
@@ -80,12 +81,12 @@ $messages = array(
 'jumptosearch'     => 'Vaqaqara',
 
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
-'currentevents'     => 'Tukutuku kuruvaki',
-'currentevents-url' => 'Project:Tukutuku kuruvaki',
-'edithelp'          => 'Veivukei',
-'mainpage'          => 'Tabana levu',
-'portal'            => 'Soqosoqo toso',
-'sitesupport'       => 'Soli',
+'currentevents'        => 'Tukutuku kuruvaki',
+'currentevents-url'    => 'Project:Tukutuku kuruvaki',
+'edithelp'             => 'Veivukei',
+'mainpage'             => 'Tabana levu',
+'mainpage-description' => 'Tabana levu',
+'portal'               => 'Soqosoqo toso',
 
 'editsection' => 'Veisautaki',
 'editold'     => 'Veisautaki',
@@ -137,9 +138,6 @@ $messages = array(
 'fileuploadsummary' => 'Kena i Soqoni:',
 'watchthisupload'   => 'Vakaraica toka na tabana oqo',
 
-# Image list
-'ilsubmit' => 'Vaqaqara',
-
 # Random page
 'randompage' => 'Vakawasoma',
 
@@ -147,7 +145,6 @@ $messages = array(
 'brokenredirects-delete' => '(Vakarusa)',
 
 # Miscellaneous special pages
-'specialpages'      => 'Tabana vakamareqeti',
 'newpages-username' => 'Yaca vakayagataki:',
 'move'              => 'Toso',
 'movethispage'      => 'Toso na tabana oqo',
@@ -180,11 +177,11 @@ $messages = array(
 'ipbreason' => 'Vuna',
 
 # Move page
-'movepage'    => 'Toso kina yasana kadua',
-'movearticle' => 'Toso kina yasana kadua',
-'move-watch'  => 'Vakaraica toka na tabana oqo',
-'movepagebtn' => 'Toso kina yasana kadua',
-'movereason'  => 'Vuna',
+'move-page-legend' => 'Toso kina yasana kadua',
+'movearticle'      => 'Toso kina yasana kadua',
+'move-watch'       => 'Vakaraica toka na tabana oqo',
+'movepagebtn'      => 'Toso kina yasana kadua',
+'movereason'       => 'Vuna',
 
 # Tooltip help for the actions
 'tooltip-pt-preferences' => 'Ulutaga taleitaki',
@@ -193,10 +190,16 @@ $messages = array(
 'tooltip-search'         => 'Vaqaqara {{SITENAME}}',
 'tooltip-p-logo'         => 'Tabana levu',
 
+# Special:Newimages
+'ilsubmit' => 'Vaqaqara',
+
 # Multipage image navigation
 'imgmultigo' => 'Lako!',
 
 # Table pager
 'table_pager_limit_submit' => 'Lako',
+
+# Special:SpecialPages
+'specialpages' => 'Tabana vakamareqeti',
 
 );

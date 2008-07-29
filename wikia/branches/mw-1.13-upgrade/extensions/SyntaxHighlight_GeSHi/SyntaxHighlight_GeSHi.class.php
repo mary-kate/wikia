@@ -22,7 +22,9 @@ class SyntaxHighlight_GeSHi {
 	 */
 	public static function parserHook( $text, $args = array(), $parser ) {
 		self::initialise();
-		$text = trim( $text );
+		$text = rtrim( $text );
+		// Don't trim leading spaces away, just the linefeeds
+		$text = preg_replace( '/^\n+/', '', $text );
 		// Validate language
 		if( isset( $args['lang'] ) ) {
 			$lang = strtolower( $args['lang'] );
@@ -35,15 +37,26 @@ class SyntaxHighlight_GeSHi {
 		if( !$geshi instanceof GeSHi )
 			return self::formatError( htmlspecialchars( wfMsgForContent( 'syntaxhighlight-err-language' ) ) );
 		// "Enclose" parameter
-		$enclose = isset( $args['enclose'] ) && $args['enclose'] == 'div'
-			? GESHI_HEADER_DIV
-			: GESHI_HEADER_PRE;
-		// Line numbers?
-		if( isset( $args['line'] ) ) {
+		if ( isset( $args['enclose'] ) && $args['enclose'] == 'div' ) {
+			$enclose = GESHI_HEADER_DIV;
+		} elseif ( defined('GESHI_HEADER_PRE_VALID') ) {
+			// Since version 1.0.8 geshi can produce valid pre, but we need to check for it
+			$enclose = GESHI_HEADER_PRE_VALID;
+		} elseif( isset( $args['line'] ) ) {
 			// Force <div> mode to maintain valid XHTML, see
 			// http://sourceforge.net/tracker/index.php?func=detail&aid=1201963&group_id=114997&atid=670231
 			$enclose = GESHI_HEADER_DIV;
+		} else {
+			$enclose = GESHI_HEADER_PRE;
+		}
+		// Line numbers
+		if( isset( $args['line'] ) ) {
 			$geshi->enable_line_numbers( GESHI_FANCY_LINE_NUMBERS );
+		}
+		// Highlighting specific lines
+		if( isset( $args['highlight'] ) ) {
+			$lines = self::parseHighlightLines( $args['highlight'] );
+			if ( count($lines) ) $geshi->highlight_lines_extra( $lines );
 		}
 		// Starting line number
 		if( isset( $args['start'] ) )
@@ -66,6 +79,55 @@ class SyntaxHighlight_GeSHi {
 			$parser->mOutput->addHeadItem( self::buildHeadItem( $geshi ), "source-{$lang}" );
 			return '<div dir="ltr" style="text-align: left;">' . $out . '</div>';
 		}
+	}
+	
+	/**
+	 * Take an input specifying a list of lines to highlight, returning
+	 * a raw list of matching line numbers.
+	 *
+	 * Input is comma-separated list of lines or line ranges.
+	 *
+	 * @input string
+	 * @return array of ints
+	 */
+	protected static function parseHighlightLines( $arg ) {
+		$lines = array();
+		$values = array_map( 'trim', explode( ',', $arg ) );
+		foreach ( $values as $value ) {
+			if ( ctype_digit($value) ) {
+				$lines[] = (int) $value;
+			} elseif ( strpos( $value, '-' ) !== false ) {
+				list( $start, $end ) = array_map( 'trim', explode( '-', $value ) );
+				if ( self::validHighlightRange( $start, $end ) ) {
+					for ($i = intval( $start ); $i <= $end; $i++ ) {
+						$lines[] = $i;
+					}
+				} else {
+					wfDebugLog( 'geshi', "Invalid range: $value\n" );
+				}
+			} else {
+				wfDebugLog( 'geshi', "Invalid line: $value\n" );
+			}
+		}
+		return $lines;
+	}
+	
+	/**
+	 * Validate a provided input range
+	 */
+	protected static function validHighlightRange( $start, $end ) {
+		// Since we're taking this tiny range and producing a an
+		// array of every integer between them, it would be trivial
+		// to DoS the system by asking for a huge range.
+		// Impose an arbitrary limit on the number of lines in a
+		// given range to reduce the impact.
+		$arbitrarilyLargeConstant = 10000;
+		return
+			ctype_digit($start) &&
+			ctype_digit($end) &&
+			$start > 0 &&
+			$start < $end &&
+			$end - $start < $arbitrarilyLargeConstant;
 	}
 
 	/**
@@ -128,7 +190,9 @@ class SyntaxHighlight_GeSHi {
 		$lang = $geshi->language;
 		$css[] = '<style type="text/css">/*<![CDATA[*/';
 		$css[] = ".source-$lang {line-height: normal;}";
-		$css[] = ".source-$lang li {line-height: normal;}";
+		$css[] = ".source-$lang li, .source-$lang pre {";
+		$css[] = "\tline-height: normal; border: 0px none white;";
+		$css[] = "}";
 		$css[] = $geshi->get_stylesheet( false );
 		$css[] = '/*]]>*/';
 		$css[] = '</style>';

@@ -6,6 +6,15 @@ class MathCaptcha extends SimpleCaptcha {
 	function keyMatch( $answer, $info ) {
 		return (int)$answer == (int)$info['answer'];
 	}
+
+	function addCaptchaAPI(&$resultArr) {
+		list( $sum, $answer ) = $this->pickSum();
+		$index = $this->storeCaptcha( array('answer' => $answer ) );
+		$resultArr['captcha']['type'] = 'math';
+		$resultArr['captcha']['mime'] = 'text/tex';
+		$resultArr['captcha']['id'] = $index;
+		$resultArr['captcha']['question'] = $sum;
+	}
 	
 	/** Produce a nice little form */
 	function getForm() {

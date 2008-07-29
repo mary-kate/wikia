@@ -3,12 +3,11 @@ if ( ! defined( 'MEDIAWIKI' ) )
     die();
 
 /**#@+
- * An extension that allows users to upload multiple photos at once.
+ * An extension that allows users to upload multiple files at once.
  *
  * @addtogroup Extensions
  *
  * @link http://www.mediawiki.org/wiki/Extension:MultiUpload
- *
  *
  * @author Travis Derouin <travis@wikihow.com>
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License 2.0 or later
@@ -27,6 +26,7 @@ $wgExtensionFunctions[] = 'wfMultipleUpload';
 $wgExtensionCredits['specialpage'][] = array(
 	'name'           => 'MultipleUpload',
 	'author'         => 'Travis Derouin',
+	'version'        => '1.0',
 	'description'    => 'Allows users to upload several files at once.',
 	'descriptionmsg' => 'multipleupload-desc',
 	'url'            => 'http://www.mediawiki.org/wiki/Extension:MultiUpload',
@@ -35,6 +35,7 @@ $wgExtensionCredits['specialpage'][] = array(
 $dir = dirname(__FILE__) . '/';
 $wgExtensionMessagesFiles['MultipleUpload'] = $dir . 'SpecialMultipleUpload.i18n.php';
 $wgSpecialPages['MultipleUpload'] =  array( 'MultipleUploadPage', 'MultipleUpload' );
+$wgExtensionAliasesFiles['MultiUpload'] = $dir . 'SpecialMultipleUpload.alias.php';
 
 
 function wfMultipleUpload() {
@@ -46,12 +47,6 @@ function wfMultipleUpload() {
 	$wgHooks['SkinTemplateBuildNavUrlsNav_urlsAfterPermalink'][] = 'wfSpecialMultiUploadNav';
 }
 
-
-/**
- *
- */
-require_once 'SpecialUpload.php';
-require_once 'SpecialPage.php';
 
 /**
  * Only for lazy loading
@@ -260,8 +255,7 @@ class MultipleUploadForm extends UploadForm {
 		$reupload = wfMsgHtml( 'reupload' );
 		$iw = wfMsgWikiHtml( 'multipleupload-ignoreallwarnings' );
 		$reup = wfMsgWikiHtml( 'reuploaddesc' );
-		if ( $wgUseCopyrightUpload )
-		{
+		if ( $wgUseCopyrightUpload ) {
 			$copyright =  "
 	<input type='hidden' name='wpUploadCopyStatus' value=\"" . htmlspecialchars( $this->mUploadCopyStatus ) . "\" />
 	<input type='hidden' name='wpUploadSource' value=\"" . htmlspecialchars( $this->mUploadSource ) . "\" />
@@ -471,8 +465,8 @@ function fillDestFilenameMulti(i) {
 	<form id='upload' method='post' enctype='multipart/form-data' action="$action">
 		<table border='0'>
 		<tr>
-			<td align='left'><label for='wpUploadFile'><b>{$sourcefilename}:</b></label></td>
-			<td align='left'><label for='wpDestFile'><b>{$destfilename}:</b></label></td>
+			<td align='left'><label for='wpUploadFile'><b>{$sourcefilename}</b></label></td>
+			<td align='left'><label for='wpDestFile'><b>{$destfilename}</b></label></td>
 			<td align='left' valign='middle'><b>{$summary}</b></td>
 		</tr>
 EOT
@@ -531,18 +525,18 @@ EOT
 			$uploadsource = htmlspecialchars( $this->mUploadSource );
 
 			$wgOut->addHTML( "
-			        <td align='right' nowrap='nowrap'><label for='wpUploadCopyStatus'>$filestatus:</label></td>
+			        <td align='right' nowrap='nowrap'><label for='wpUploadCopyStatus'>$filestatus</label></td>
 			        <td><input tabindex='5' type='text' name='wpUploadCopyStatus' id='wpUploadCopyStatus' value=\"$copystatus\" size='40' /></td>
 		        </tr>
 			<tr>
-		        	<td align='right'><label for='wpUploadCopyStatus'>$filesource:</label></td>
+		        	<td align='right'><label for='wpUploadCopyStatus'>$filesource</label></td>
 			        <td><input tabindex='6' type='text' name='wpUploadSource' id='wpUploadCopyStatus' value=\"$uploadsource\" size='40' /></td>
 			</tr>
 			<tr>
 		");
 		}
 
-		$wgOut->addHtml( "
+		$wgOut->addHTML( "
 		<td>
  			<input tabindex='7' type='checkbox' name='wpWatchthis' id='wpWatchthis' $watchChecked value='true' />
 			<label for='wpWatchthis'>" . wfMsgHtml( 'watchthis' ) . "</label>

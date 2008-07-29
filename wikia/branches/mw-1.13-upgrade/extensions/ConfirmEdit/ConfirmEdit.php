@@ -37,6 +37,8 @@ $wgExtensionFunctions[] = 'confirmEditSetup';
 $wgExtensionCredits['other'][] = array(
 	'name' => 'ConfirmEdit',
 	'author' => 'Brion Vibber',
+	'svn-date' => '$LastChangedDate$',
+	'svn-revision' => '$LastChangedRevision$',
 	'url' => 'http://www.mediawiki.org/wiki/Extension:ConfirmEdit',
 	'description' => 'Simple captcha implementation',
 	'descriptionmsg' => 'captcha-desc',
@@ -55,6 +57,7 @@ $wgGroupPermissions['user'         ]['skipcaptcha'] = false;
 $wgGroupPermissions['autoconfirmed']['skipcaptcha'] = false;
 $wgGroupPermissions['bot'          ]['skipcaptcha'] = true; // registered bots
 $wgGroupPermissions['sysop'        ]['skipcaptcha'] = true;
+$wgAvailableRights[] = 'skipcaptcha';
 
 /**
  * List of IP ranges to allow to skip the captcha, similar to the group setting:
@@ -146,6 +149,13 @@ $wgCaptchaBadLoginExpiration = 5 * 60;
 global $ceAllowConfirmedEmail;
 $ceAllowConfirmedEmail = false;
 
+/** 
+ * Number of bad login attempts before triggering the captcha.  0 means the
+ * captcha is presented on the first login.
+ */
+global $wgCaptchaBadLoginAttempts;
+$wgCaptchaBadLoginAttempts = 3;
+
 /**
  * Regex to whitelist URLs to known-good sites...
  * For instance:
@@ -166,7 +176,6 @@ $wgCaptchaWhitelist = false;
 $wgCaptchaRegexes = array();
 
 /** Register special page */
-global $wgSpecialPages;
 $wgSpecialPages['Captcha'] = array( /*class*/'CaptchaSpecialPage', /*name*/'Captcha' );
 
 $wgConfirmEditIP = dirname( __FILE__ );
@@ -182,6 +191,8 @@ $wgHooks['AbortNewAccount'][] = 'ConfirmEditHooks::confirmUserCreate';
 $wgHooks['LoginAuthenticateAudit'][] = 'ConfirmEditHooks::triggerUserLogin';
 $wgHooks['UserLoginForm'][] = 'ConfirmEditHooks::injectUserLogin';
 $wgHooks['AbortLogin'][] = 'ConfirmEditHooks::confirmUserLogin';
+# Register API hook
+$wgHooks['APIEditBeforeSave'][] = 'ConfirmEditHooks::confirmEditAPI';
 
 $wgAutoloadClasses['ConfirmEditHooks'] 
 	= $wgAutoloadClasses['SimpleCaptcha'] 

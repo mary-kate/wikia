@@ -17,7 +17,7 @@ ini_set( 'include_path',
 	ini_get( 'include_path' ) );
 
 // Bump this when updating OggPlayer.js to help update caches
-$wgOggScriptVersion = '5';
+$wgOggScriptVersion = '7';
 
 $wgExtensionMessagesFiles['OggHandler'] = "$oggDir/OggHandler.i18n.php";
 $wgParserOutputHooks['OggHandler'] = array( 'OggHandler', 'outputHook' );
@@ -25,7 +25,8 @@ $wgHooks['LanguageGetMagic'][] = 'OggHandler::registerMagicWords';
 $wgExtensionCredits['media'][] = array(
 	'name'           => 'OggHandler',
 	'author'         => 'Tim Starling',
-	'version'        => '2008-02-08',
+	'svn-date' => '$LastChangedDate$',
+	'svn-revision' => '$LastChangedRevision$',
 	'url'            => 'http://www.mediawiki.org/wiki/Extension:OggHandler',
 	'description'    => 'Handler for Ogg Theora and Vorbis files, with JavaScript player.',
 	'descriptionmsg' => 'ogg-desc',
@@ -48,5 +49,4 @@ $wgFFmpegLocation = 'ffmpeg';
 // as the uploaded media files or Java security rules will
 // prevent the applet from loading them.
 //
-$wgCortadoJarFile = "cortado-ovt-stripped-0.2.2-patched.jar";
-#$wgCortadoJarFile = "cortado-ovt-stripped-0.2.2.jar";
+$wgCortadoJarFile = "cortado-ovt-stripped-wm_r36976.jar";

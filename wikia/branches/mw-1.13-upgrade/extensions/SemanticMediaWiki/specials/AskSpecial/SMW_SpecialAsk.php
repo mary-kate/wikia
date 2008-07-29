@@ -1,10 +1,5 @@
 <?php
 
-if (!defined('MEDIAWIKI')) die();
-
-global $IP;
-include_once($IP . '/includes/SpecialPage.php');
-
 /**
  * @author Markus Krötzsch
  *
@@ -25,10 +20,14 @@ class SMWAskPage extends SpecialPage {
 	 */
 	public function __construct() {
 		parent::__construct('Ask');
+		//the key defining the group name in the language files is specialpages-group-smw_group
+		if (method_exists('SpecialPage', 'setGroup')) { 
+			parent::setGroup('Ask', 'smw_group');	
+		}
 	}
 
 	function execute($p = '') {
-		global $wgOut, $wgRequest, $smwgIP, $smwgQEnabled, $smwgRSSEnabled;
+		global $wgOut, $wgRequest, $smwgQEnabled, $smwgRSSEnabled;
 		wfProfileIn('doSpecialAsk (SMW)');
 		if ( ($wgRequest->getVal( 'query' ) != '') ) { // old processing
 			$this->executeSimpleAsk();
@@ -36,7 +35,7 @@ class SMWAskPage extends SpecialPage {
 			return;
 		}
 		if (!$smwgQEnabled) {
-			$wgOut->addHTML('<br />' . wfMsgForContent('smw_iq_disabled'));
+			$wgOut->addHTML('<br />' . wfMsg('smw_iq_disabled'));
 		} else {
 			$this->extractQueryParameters($p);
 			$this->makeHTMLResult();
@@ -48,7 +47,7 @@ class SMWAskPage extends SpecialPage {
 		// This code rather hacky since there are many ways to call that special page, the most involved of
 		// which is the way that this page calls itself when data is submitted via the form (since the shape
 		// of the parameters then is governed by the UI structure, as opposed to being governed by reason).
-		global $wgRequest, $smwgIP;
+		global $wgRequest;
 
 		// First make all inputs into a simple parameter list that can again be parsed into components later.
 
@@ -76,7 +75,6 @@ class SMWAskPage extends SpecialPage {
 		}
 
 		// Now parse parameters and rebuilt the param strings for URLs
-		include_once( "$smwgIP/includes/SMW_QueryProcessor.php" );
 		SMWQueryProcessor::processFunctionParams($rawparams,$this->m_querystring,$this->m_params,$this->m_printouts);
 		// Try to complete undefined parameter values from dedicated URL params
 		if ( !array_key_exists('format',$this->m_params) ) {
@@ -160,15 +158,41 @@ class SMWAskPage extends SpecialPage {
 			$queryobj = SMWQueryProcessor::createQuery($this->m_querystring, $this->m_params, false, '', $this->m_printouts);
 			$queryobj->querymode = SMWQuery::MODE_INSTANCES; ///TODO: Somewhat hacky (just as the query mode computation in SMWQueryProcessor::createQuery!)
 			$res = smwfGetStore()->getQueryResult($queryobj);
-			$printer = SMWQueryProcessor::getResultPrinter($this->m_params['format'],false,$res);
+			// try to be smart for rss/ical if no description/title is given and we have a concept query:
+			if ($this->m_params['format'] == 'rss') {
+				$desckey = 'rssdescription';
+				$titlekey = 'rsstitle';
+			} elseif ($this->m_params['format'] == 'icalendar') {
+				$desckey = 'icalendardescription';
+				$titlekey = 'icalendartitle';
+			} else { $desckey = false; }
+			if ( ($desckey) && ($queryobj->getDescription() instanceof SMWConceptDescription) &&
+			     (!isset($this->m_params[$desckey]) || !isset($this->m_params[$titlekey])) ) {
+				$concept = $queryobj->getDescription()->getConcept();
+				if ( !isset($this->m_params[$titlekey]) ) {
+					$this->m_params[$titlekey] = $concept->getText();
+				}
+				if ( !isset($this->m_params[$desckey]) ) {
+					$dv = end(smwfGetStore()->getSpecialValues($concept, SMW_SP_CONCEPT_DESC));
+					if ($dv instanceof SMWConceptValue) {
+						$this->m_params[$desckey] = $dv->getDocu();
+					}
+				}
+			}
+			$printer = SMWQueryProcessor::getResultPrinter($this->m_params['format'], SMWQueryProcessor::SPECIAL_PAGE, $res);
 			$result_mime = $printer->getMimeType($res);
 			if ($result_mime == false) {
-				$navigation = $this->getNavigationBar($res, $urltail);
-				$result = '<div style="text-align: center;">' . $navigation;
-				$result .= '</div>' . $printer->getResult($res, $this->m_params,SMW_OUTPUT_HTML);
-				$result .= '<div style="text-align: center;">' . $navigation . '</div>';
+				if ($res->getCount() > 0) {
+					$navigation = $this->getNavigationBar($res, $urltail);
+					$result = '<div style="text-align: center;">' . $navigation;
+					$result .= '</div>' . $printer->getResult($res, $this->m_params,SMW_OUTPUT_HTML);
+					$result .= '<div style="text-align: center;">' . $navigation . '</div>';
+				} else {
+					$result = '<div style="text-align: center;">' . wfMsg('smw_result_noresults') . '</div>';
+				}
 			} else { // make a stand-alone file
 				$result = $printer->getResult($res, $this->m_params,SMW_OUTPUT_FILE);
+				$result_name = $printer->getFileName($res); // only fetch that after initialising the parameters
 			}
 		}
 
@@ -183,6 +207,9 @@ class SMWAskPage extends SpecialPage {
 		} else {
 			$wgOut->disable();
 			header( "Content-type: $result_mime; charset=UTF-8" );
+			if ($result_name !== false) {
+				header( "Content-Disposition: attachment; filename=$result_name");
+			}
 			print $result;
 		}
 	}
@@ -282,7 +309,7 @@ class SMWAskPage extends SpecialPage {
 	 * certain parameters.
 	 */
 	protected function executeSimpleAsk() {
-		global $wgRequest, $wgOut, $smwgQEnabled, $smwgQMaxLimit, $wgUser, $smwgQSortingSupport, $smwgIP;
+		global $wgRequest, $wgOut, $smwgQEnabled, $smwgQMaxLimit, $wgUser, $smwgQSortingSupport;
 
 		$skin = $wgUser->getSkin();
 
@@ -313,7 +340,6 @@ class SMWAskPage extends SpecialPage {
 		
 		// print results if any
 		if ($smwgQEnabled && ('' != $query) ) {
-			include_once( "$smwgIP/includes/SMW_QueryProcessor.php" );
 			$params = array('offset' => $offset, 'limit' => $limit, 'format' => 'broadtable', 'mainlabel' => ' ', 'link' => 'all', 'default' => wfMsg('smw_result_noresults'), 'sort' => $sort, 'order' => $order);
 			$queryobj = SMWQueryProcessor::createQuery($query, $params, false);
 			$res = smwfGetStore()->getQueryResult($queryobj);
@@ -354,7 +380,7 @@ class SMWAskPage extends SpecialPage {
 			$html .= '<br />' . $result;
 			$html .= '<br />' . $navigation . '</div>';
 		} elseif (!$smwgQEnabled) {
-			$html .= '<br />' . wfMsgForContent('smw_iq_disabled');
+			$html .= '<br />' . wfMsg('smw_iq_disabled');
 		}
 		$wgOut->addHTML($html);
 	}

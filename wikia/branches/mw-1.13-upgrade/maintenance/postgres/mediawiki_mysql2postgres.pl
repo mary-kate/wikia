@@ -9,7 +9,6 @@
 ## If having UTF-8 problems, there are reports that adding --compatible=postgresql
 ## may help.
 
-
 use strict;
 use warnings;
 use Data::Dumper;
@@ -203,6 +202,7 @@ print q{
 BEGIN;
 SET client_min_messages = 'WARNING';
 SET timezone = 'GMT';
+SET DateStyle = 'ISO, YMD';
 };
 
 warn qq{Reading in the Postgres schema information\n} if $verbose;
@@ -275,7 +275,7 @@ $verbose and warn qq{Writing truncates to empty existing tables\n};
 for my $t (@torder, 'objectcache', 'querycache') {
 	next if $t eq '---';
 	my $tname = $special{$t}||$t;
-	printf qq{TRUNCATE TABLE %-20s CASCADE;\n}, qq{"$tname"};
+	printf qq{TRUNCATE TABLE %-20s;\n}, qq{"$tname"};
 }
 print "\n\n";
 

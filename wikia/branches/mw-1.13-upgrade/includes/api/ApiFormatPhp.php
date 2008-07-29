@@ -29,7 +29,7 @@ if (!defined('MEDIAWIKI')) {
 }
 
 /**
- * @addtogroup API
+ * @ingroup API
  */
 class ApiFormatPhp extends ApiFormatBase {
 
@@ -53,4 +53,3 @@ class ApiFormatPhp extends ApiFormatBase {
 		return __CLASS__ . ': $Id: ApiFormatPhp.php 30222 2008-01-28 19:05:26Z catrope $';
 	}
 }
-

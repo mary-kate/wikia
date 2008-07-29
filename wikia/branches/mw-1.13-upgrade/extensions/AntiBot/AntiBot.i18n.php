@@ -14,11 +14,25 @@ $messages['en'] = array(
 	'antibot-desc' => 'Simple framework for spambot checks and trigger payloads',
 );
 
+/** Afrikaans (Afrikaans)
+ * @author Naudefj
+ */
+$messages['af'] = array(
+	'antibot-desc' => 'Eenvoudige raamwerk vir die kontrole van spambots en trigger payloads',
+);
+
 /** Arabic (العربية)
  * @author Meno25
  */
 $messages['ar'] = array(
 	'antibot-desc' => 'إطار بسيط للتحقق من بوت السبام والأحمال',
+);
+
+/** Belarusian (Taraškievica orthography) (Беларуская (тарашкевіца))
+ * @author EugeneZelenko
+ */
+$messages['be-tarask'] = array(
+	'antibot-desc' => 'Просты сродак абароны ад спам-робатаў і робатаў, якія выклікаюць перагрузку сэрвэра',
 );
 
 /** Czech (Česky)
@@ -42,12 +56,20 @@ $messages['de'] = array(
 	'antibot-desc' => 'Einfaches Framework für Spambot-Prüfungen',
 );
 
+/** Lower Sorbian (Dolnoserbski)
+ * @author Michawiki
+ */
+$messages['dsb'] = array(
+	'antibot-desc' => 'Jadnory framework za kontrole pśeśiwo spambotam',
+);
+
 /** French (Français)
  * @author Grondin
  * @author Verdy p
+ * @author Louperivois
  */
 $messages['fr'] = array(
-	'antibot-desc' => 'Environnement simple de vérification contre les robots spammeurs et les soumissions de contenus à déclenchement conditionnel automatisé.',
+	'antibot-desc' => 'Environnement simple de vérification contre les robots spammeurs et les soumissions de contenus à déclenchement conditionnel automatisé',
 );
 
 /** Galician (Galego)
@@ -140,6 +162,13 @@ $messages['su'] = array(
  */
 $messages['sv'] = array(
 	'antibot-desc' => 'Enkel struktur för spambotskontroller och nyttolastsutlösare.',
+);
+
+/** Ukrainian (Українська)
+ * @author AS
+ */
+$messages['uk'] = array(
+	'antibot-desc' => 'Просте середовище для виявлення спамботів та роботів, що викликають зайве навантаження сервера',
 );
 
 /** Vietnamese (Tiếng Việt)

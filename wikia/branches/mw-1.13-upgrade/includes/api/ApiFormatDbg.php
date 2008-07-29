@@ -29,7 +29,7 @@ if (!defined('MEDIAWIKI')) {
 }
 
 /**
- * @addtogroup API
+ * @ingroup API
  */
 class ApiFormatDbg extends ApiFormatBase {
 
@@ -53,7 +53,6 @@ class ApiFormatDbg extends ApiFormatBase {
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiFormatPhp.php 23531 2007-06-29 01:19:14Z simetrical $';
+		return __CLASS__ . ': $Id$';
 	}
 }
-

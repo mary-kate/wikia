@@ -42,7 +42,7 @@ class TorBlock {
 			return self::$mExitNodes;
 		}
 
-		global $wgMemc, $wgTorLoadNodes;
+		global $wgMemc;
 
 		$nodes = $wgMemc->get( 'mw-tor-exit-nodes' ); // No use of wfMemcKey because it should be multi-wiki.
 
@@ -117,7 +117,8 @@ class TorBlock {
 	}
 
 	public static function onGetBlockedStatus( &$user ) {
-		if (self::isExitNode() && $user->mBlock && !$user->mBlock->mUser) {
+		global $wgTorDisableAdminBlocks;
+		if ($wgTorDisableAdminBlocks && self::isExitNode() && $user->mBlock && !$user->mBlock->mUser) {
 			wfDebug( "User using Tor node. Disabling IP block as it was probably targetted at the tor node." );
 			// Node is probably blocked for being a Tor node. Remove block.
 			$user->mBlockedby = 0;
@@ -151,6 +152,14 @@ class TorBlock {
 			$promote = array();
 		}
 
+		return true;
+	}
+	
+	public static function onAutopromoteCondition( $type, $args, $user, &$result ) {
+		if ($type == APCOND_TOR) {
+			$result = self::isExitNode();
+		}
+		
 		return true;
 	}
 }

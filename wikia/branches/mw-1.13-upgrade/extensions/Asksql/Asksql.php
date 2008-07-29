@@ -16,22 +16,27 @@ if (!defined('MEDIAWIKI'))
 
 $wgExtensionCredits['specialpage'][] = array(
 	'name' => 'Ask SQL',
-	'version' => '2008-01-31',
+	'svn-date' => '$LastChangedDate$',
+	'svn-revision' => '$LastChangedRevision$',
 	'description' => 'Do SQL queries through a [[Special:Asksql|special page]]',
 	'descriptionmsg' => 'asksql-desc',
 	'author' => 'Brion Vibber',
 	'url' => 'http://www.mediawiki.org/wiki/Extension:Asksql',
 );
 
+/** Dangerous if not configured properly. */
 # Sysop SQL queries
 #   The sql user shouldn't have too many rights other the database, restrict
 #   it to SELECT only on 'page', 'revision' and 'text' tables for example
 #
-/** Dangerous if not configured properly. */
-$wgAllowSysopQueries = true;
+# Copy & paste the following three line into your localSettings.php and replace 'sqluser' and 'sqlpass' with the real values:
 #$wgDBsqluser = 'sqluser';
 #$wgDBsqlpassword = 'sqlpass';
+#$wgGroupPermissions['sysop']['asksql'] = true;
+
+$wgAllowSysopQueries = true;
 $wgSqlLogFile = "{$wgUploadDirectory}/sqllog_mFhyRe6";
+$wgAvailableRights[] = 'asksql';
 
 $dir = dirname(__FILE__) . '/';
 $wgExtensionMessagesFiles['Asksql'] = $dir . 'Asksql.i18n.php';

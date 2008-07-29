@@ -11,10 +11,12 @@ EOT;
 $wgAutoloadClasses['ParserDiffTest'] = dirname(__FILE__) . '/ParserDiffTest_body.php';
 $wgExtensionMessagesFiles['ParserDiffTest'] = dirname(__FILE__).'/ParserDiffTest.i18n.php';
 $wgSpecialPages['ParserDiffTest'] = 'ParserDiffTest';
+$wgSpecialPageGroups['ParserDiffTest'] = 'wiki';
 
 $wgExtensionCredits['specialpage'][] = array(
 	'name' => 'Parser Diff Test',
-	'version' => '2008-01-29',
+	'svn-date' => '$LastChangedDate$',
+	'svn-revision' => '$LastChangedRevision$',
 	'author' => 'Tim Starling',
 	'description' => 'Special page for comparing the output of two different parsers.',
 	'descriptionmsg' => 'pdtest-desc',

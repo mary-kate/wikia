@@ -1,12 +1,13 @@
 <?php
 
 $wgExtensionCredits['other'][] = array(
-        'name' => 'DismissableSiteNotice',
-        'version' => '2008-01-09',
-        'author' => 'Brion Vibber',
-        'description' => 'Allows users to close the sitenotice.',
+	'name' => 'DismissableSiteNotice',
+	'svn-date' => '$LastChangedDate$',
+	'svn-revision' => '$LastChangedRevision$',
+	'author' => 'Brion Vibber',
+	'description' => 'Allows users to close the sitenotice.',
 	'descriptionmsg' => 'sitenotice-desc',
-        'url' => 'http://www.mediawiki.org/wiki/Extension:DismissableSiteNotice',
+	'url' => 'http://www.mediawiki.org/wiki/Extension:DismissableSiteNotice',
 );
 
 $wgExtensionMessagesFiles['DismissableSiteNotice'] = dirname(__FILE__) . '/DismissableSiteNotice.i18n.php';

@@ -17,7 +17,8 @@ if (!defined('MEDIAWIKI')) die();
 
 $wgExtensionCredits['other'][] = array(
 	'name'           => 'ChemFunctions',
-	'version'        => '2008-01-08',
+	'svn-date' => '$LastChangedDate$',
+	'svn-revision' => '$LastChangedRevision$',
 	'description'    => 'Adds the tag <nowiki><chemform></nowiki>, for chemical formulae',
 	'descriptionmsg' => 'chemicalsource-desc',
 	'author'         => 'Dirk Beetstra',

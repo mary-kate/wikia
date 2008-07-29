@@ -16,10 +16,10 @@ class SMWiCalendarResultPrinter extends SMWResultPrinter {
 	protected function readParameters($params,$outputmode) {
 		SMWResultPrinter::readParameters($params,$outputmode);
 		if (array_key_exists('icalendartitle', $this->m_params)) {
-			$this->m_title = $this->m_params['icalendartitle'];
+			$this->m_title = trim($this->m_params['icalendartitle']);
 		}
 		if (array_key_exists('icalendardescription', $this->m_params)) {
-			$this->m_description = $this->m_params['icalendardescription'];
+			$this->m_description = trim($this->m_params['icalendardescription']);
 		}
 	}
 
@@ -30,6 +30,14 @@ class SMWiCalendarResultPrinter extends SMWResultPrinter {
 
 	public function getMimeType($res) {
 		return 'text/calendar';
+	}
+
+	public function getFileName($res) {
+		if ($this->m_title != '') {
+			return str_replace(' ', '_',$this->m_title) . '.ics';
+		} else {
+			return 'iCalendar.ics';
+		}
 	}
 
 	protected function getResultText($res, $outputmode) {
@@ -55,6 +63,7 @@ class SMWiCalendarResultPrinter extends SMWResultPrinter {
 				$startdate = '';
 				$enddate = '';
 				$location = '';
+				$description = '';
 				foreach ($row as $field) {
 					// later we may add more things like a generic
 					// mechanism to add whatever you want :)
@@ -78,6 +87,12 @@ class SMWiCalendarResultPrinter extends SMWResultPrinter {
 							$location = $value->getShortWikiText();
 						}
 					}
+					if (strtolower($req->getLabel()) == "description") {
+						$value = current($field->getContent()); // save only the first
+						if ($value !== false) {
+							$description = $value->getShortWikiText();
+						}
+					}
 				}
 				$title = $wikipage->getTitle();
 				$article = new Article($title);
@@ -89,6 +104,7 @@ class SMWiCalendarResultPrinter extends SMWResultPrinter {
 				if ($startdate != "") $result .= "DTSTART:" . $this->parsedate($startdate,$enddate) . "\r\n";
 				if ($enddate != "")   $result .= "DTEND:" . $this->parsedate($enddate,$startdate,true) . "\r\n";
 				if ($location != "")  $result .= "LOCATION:$location\r\n";
+				if ($description != "")  $result .= "DESCRIPTION:$description\r\n";
 				$result .= "DTSTAMP:" . $this->parsedate($article->getTimestamp()) . "\r\n";
 				$result .= "SEQUENCE:" . $title->getLatestRevID() . "\r\n";
 				$result .= "END:VEVENT\r\n";
@@ -116,9 +132,6 @@ class SMWiCalendarResultPrinter extends SMWResultPrinter {
 			}
 
 			$result .= $link->getText($outputmode,$this->mLinker);
-
-			// is this useful?
-			//smwfRequireHeadItem('ical' . $smwgIQRunningNumber, '<link rel="alternate" type="text/calendar" title="' . $this->m_title . '" href="' . $link->getURL() . '" />');
 		}
 
 		return $result;

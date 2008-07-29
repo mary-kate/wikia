@@ -16,23 +16,25 @@ $wgGroupPermissions['bureaucrat']['renameuser'] = true;
 
 $wgExtensionCredits['specialpage'][] = array(
 	'name' => 'Renameuser',
-	'author' => 'Ævar Arnfjörð Bjarmason',
+	'author' => 'Ævar Arnfjörð Bjarmason, Aaron Schulz',
 	'url' => 'http://www.mediawiki.org/wiki/Extension:Renameuser',
 	'description' => 'Rename a user (need \'\'renameuser\'\' right)',
 	'descriptionmsg' => 'renameuser-desc',
-	'version' => '2008-01-14',
+	'svn-date' => '$LastChangedDate$',
+	'svn-revision' => '$Rev$',
 );
 
 # Internationalisation file
 $dir = dirname(__FILE__) . '/';
 $wgExtensionMessagesFiles['Renameuser'] = $dir . 'SpecialRenameuser.i18n.php';
+$wgExtensionAliasesFiles['Renameuser'] = $dir . 'SpecialRenameuser.alias.php';
 
 /**
  * The maximum number of edits a user can have and still be allowed renaming,
  * set it to 0 to disable the limit.
  */
-//define( 'RENAMEUSER_CONTRIBLIMIT', 6800 );
-define( 'RENAMEUSER_CONTRIBLIMIT', 200000 );
+define( 'RENAMEUSER_CONTRIBLIMIT', 2000000 );
+define( 'RENAMEUSER_CONTRIBJOB', 10000 );
 
 # Add a new log type
 global $wgLogTypes, $wgLogNames, $wgLogHeaders, $wgLogActions;
@@ -44,4 +46,5 @@ $wgLogActions['renameuser/renameuser'] = 'renameuserlogentry';
 $wgAutoloadClasses['SpecialRenameuser'] = dirname( __FILE__ ) . '/SpecialRenameuser_body.php';
 $wgAutoloadClasses['RenameUserJob'] = dirname(__FILE__) . '/RenameUserJob.php';
 $wgSpecialPages['Renameuser'] = 'SpecialRenameuser';
+$wgSpecialPageGroups['Renameuser'] = 'users';
 $wgJobClasses['renameUser'] = 'RenameUserJob';
