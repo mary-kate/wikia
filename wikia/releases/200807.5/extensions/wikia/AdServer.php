@@ -103,6 +103,18 @@ class AdServer {
 	public function getAd($ad_pos) {
 		global $wgAdServingType, $wgShowAds, $wgUseAdServer;
 
+		if($this->skinName == 'monaco') {
+			if($ad_pos == 'b' && !isset($this->adsConfig[$ad_pos])) {
+				$ad_pos = 'bb';
+			} else if($ad_pos == 'bb2' && !isset($this->adsConfig[$ad_pos])) {
+				$ad_pos = 'bb3';
+			} else if($ad_pos == 'bb4' && !isset($this->adsConfig[$ad_pos])) {
+				$ad_pos = 'bb5';
+			} else if($ad_pos == 'r' && !isset($this->adsConfig[$ad_pos])) {
+				$ad_pos = 'bl';
+			}
+		}
+
 		if(isset($this->adsConfig[$ad_pos]) && !empty($wgShowAds) && !empty($wgUseAdServer)) {
 			$ad = $this->adsConfig[$ad_pos];
 			if(is_array($ad)) {
