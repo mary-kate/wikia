@@ -704,7 +704,7 @@ class CreateWikiForm extends SpecialPage {
 
 		 $sDBstarter = "{$prefix}starter";
 
-			#--- first check if database whether starter exists
+			#--- first check whether database starter exists
 			$sql = sprintf( "SHOW DATABASES LIKE '%s';", $sDBstarter );
 			$oRes = $dbw->query( $sql, __METHOD__ );
 			$iNumRows = $oRes->numRows();
