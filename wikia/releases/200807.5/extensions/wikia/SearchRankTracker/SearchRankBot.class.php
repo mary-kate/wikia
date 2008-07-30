@@ -93,7 +93,7 @@ class SearchRankBot {
 				$this->printDebug("-> Checking rank for URL: " . $oSearchEntry->getPageUrl() . ", Phrase: \"" . $oSearchEntry->getPhrase() . "\" (ren_id: " . $oSearchEntry->getId() . ")", $bVerbose);
 				foreach($wgSearchRankTrackerConfig['searchEngines'] as $sEngineName => $aEngineConfig) {
 					$oRankResults = $oSearchEntry->getRankResults($sEngineName, $iCurrentYear, $iCurrentMonth, $iCurrentDay);
-					if(!$oRankResults) {
+					if(!$oRankResults) {						
 						$iRank = $this->getRank($sEngineName, $oSearchEntry);
 					 $iResultInsertId = $oSearchEntry->setRankResult($sEngineName, $sCurrentTime, $iRank);
 					 if($iResultInsertId) {
@@ -147,6 +147,12 @@ class SearchRankBot {
 		$this->mCurlEngine->setReferer('http://www.google.com/');
 
 		while($iRank == 0) {
+			$iDelayTime = rand(0,6);
+		 if($iDelayTime) {
+				sleep($iDelayTime);
+			 $this->printDebug("=> (google) CURL call delayed for $iDelayTime secs.");
+		 }
+		 
 			$sResult = $this->mCurlEngine->get('http://www.google.com/search', 
 				array( 
 					'q'     => $sPhrase,
