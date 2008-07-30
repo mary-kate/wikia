@@ -234,11 +234,8 @@ TieDivLib = new function() {
 		block = true;
 		for(i = 0; i < items.length; i++) {
 			if(YAHOO.util.Dom.getXY(items[i][0]) != YAHOO.util.Dom.getXY(items[i][1])) {
-				with($(items[i][0]).style) {
-					top = (YAHOO.util.Dom.getY(items[i][1]) - adjustY) + 'px';
-					left = (YAHOO.util.Dom.getX(items[i][1]) - adjustX) + 'px';
-					display = '';
-				}
+				YAHOO.util.Dom.setXY(items[i][0], YAHOO.util.Dom.getXY(items[i][1]));
+				$(items[i][0]).style.display = '';
 			}
 		}
 		block = false;
