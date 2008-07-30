@@ -243,7 +243,7 @@ class SearchRankBot {
 			}
 			else {
 				// no links were found, end of results or invalid pattern.
-				$this->printDebug("=> (yahoo) No links were found (end of results or invalid pattern) - offset: $iOffset", false, (!$iOffset?$sResult:""));
+				$this->printDebug("=> (yahoo) No links were found (end of results or invalid pattern) - offset: $iOffset", false, (($iOffset == 1)?$sResult:""));
 				break;
 			}
 
