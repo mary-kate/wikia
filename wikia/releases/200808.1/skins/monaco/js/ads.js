@@ -225,7 +225,7 @@ TieDivLib = new function() {
 
 		with($(source).style) {
 			position = 'absolute';
-			zIndex = (pos == 'bl' || pos == 'r' || pos == 'FAST_SIDE') ? 21 : 5;
+			zIndex = (pos == 'bl' || pos == 'r' || pos == 'FAST_SIDE' || pos == 'FAST_HOME3' || pos == 'FAST_HOME4') ? 21 : 5;
 		}
 	}
 
@@ -233,10 +233,11 @@ TieDivLib = new function() {
 		if(block) return;
 		block = true;
 		for(i = 0; i < items.length; i++) {
-			if(items[i][2] == 'FAST_HOME1' || items[i][2] == 'FAST_HOME2' || items[i][2] == 'FAST_TOP') {
+
+		if((YAHOO.util.Dom.hasClass(document.body, 'rtl') && (items[i][2] == 'bl' || items[i][2] == 'r' || items[i][2] == 'FAST_HOME3' || items[i][2] == 'FAST_HOME4' || items[i][2] == 'FAST_SIDE')) || items[i][2] == 'FAST_HOME1' || items[i][2] == 'FAST_HOME2' || items[i][2] == 'FAST_TOP') {
 				if($(items[i][0]).style.right == '') {
 					$(items[i][0]).style.display = '';
-					$(items[i][0]).style.right = YAHOO.util.Dom.getDocumentWidth() - (YAHOO.util.Dom.getX(items[i][1]) + $(items[i][1]).offsetWidth) + 'px';
+					$(items[i][0]).style.right = ((items[i][2] == 'bl' || items[i][2] == 'r' || items[i][2] == 'FAST_HOME3' || items[i][2] == 'FAST_HOME4' || items[i][2] == 'FAST_SIDE') ? YAHOO.util.Dom.getViewportWidth() : YAHOO.util.Dom.getDocumentWidth()) - (YAHOO.util.Dom.getX(items[i][1]) + $(items[i][1]).offsetWidth) + 'px';
 				}
 				if(YAHOO.util.Dom.getY(items[i][0]) != YAHOO.util.Dom.getY(items[i][1])) {
 					YAHOO.util.Dom.setY(items[i][0], YAHOO.util.Dom.getY(items[i][1]));
