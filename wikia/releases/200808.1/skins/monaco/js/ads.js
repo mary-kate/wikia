@@ -203,9 +203,9 @@ TieDivLib = new function() {
 
 	var items = Array();
 
-	var interval = 350;
-
 	var block = false;
+
+	var loopCount = 300;
 
 	var adjustY;
 
@@ -230,6 +230,7 @@ TieDivLib = new function() {
 	}
 
 	this.recalc = function() {
+		console.log("-");
 		if(block) return;
 		block = true;
 		for(i = 0; i < items.length; i++) {
@@ -243,7 +244,10 @@ TieDivLib = new function() {
 
 	this.timer = function() {
 		TieDivLib.recalc();
-		if(interval != -1) setTimeout(TieDivLib.timer, interval);
+		loopCount--;
+		if(loopCount > 0) {
+			setTimeout(TieDivLib.timer, 350);
+		}
 	}
 
 	this.init = function() {
@@ -253,21 +257,28 @@ TieDivLib = new function() {
 		TieDivLib.timer();
 
 		YAHOO.util.Event.addListener(window, 'load', function() {
-			setTimeout(function() { interval = -1; }, 1000);
+			setTimeout(function() { loopCount = 0; }, 1000);
 			YAHOO.example.FontSizeMonitor.onChange.subscribe(TieDivLib.recalc);
 		});
 
 		YAHOO.util.Event.addListener(document, 'click', function() {
-			setTimeout(TieDivLib.recalc, 1);
+			TieDivLib.loop(3);
 		});
 
 		YAHOO.util.Event.addListener(document, 'keydown', function() {
-			setTimeout(TieDivLib.recalc, 1);
+			TieDivLib.loop(3);
 		});
 
 		YAHOO.util.Event.addListener(window, 'resize', function() {
 			TieDivLib.recalc();
 		});
+	}
+
+	this.loop = function(count) {
+		var go = false;
+		if(loopCount <= 0) go = true;
+		loopCount = count;
+		if(go) TieDivLib.timer();
 	}
 
 	this.getItems = function() {
