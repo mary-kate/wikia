@@ -351,6 +351,7 @@ class LoginForm {
 		$u = $this->initUser( $u, false );
 		$user_id = $u->getID();
 		if(!empty($user_id)) {
+			$dbw = wfGetDB(DB_MASTER);
 			$dbw->update(
 				'user',
 				array( 'user_birthdate' => date('Y-m-d', $userBirthDay) ),
