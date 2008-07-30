@@ -39,7 +39,7 @@ YAHOO.namespace('YAHOO.example').FontSizeMonitor = (function(){
 				with(p_frame.style){
 					visibility = 'visible';
 					zIndex = 1000;
-					left = '-5000px';
+					left = (YAHOO.util.Dom.hasClass(document.body, 'rtl') ? '' : '-') + '5000px';
 				};
 				var sHtml = [
 				'<html><body><script>',
