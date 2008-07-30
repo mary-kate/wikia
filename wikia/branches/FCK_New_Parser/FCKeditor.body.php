@@ -451,8 +451,6 @@ function onLoadFCKeditor()
 				FCKinstance.SwitchEditMode () ;
 			}
 
-			// check here if we had something... inedible
-			// and if so, fall back immediately to a normal editor...
 			var saveButton = document.getElementById ('wpSave') ;			
 			var previewButton = document.getElementById ('wpPreview') ;				
 			var diffButton = document.getElementById ('wpDiff') ;				
@@ -478,6 +476,7 @@ function onLoadFCKeditor()
 			}
 			document.getElementById ('wpSummaryLabel').style.display = 'inline' ;
 			saveButton.parentNode.parentNode.style.display = 'inline' ;			
+		      	FCKinstance.refillTemplates () ;
 		}
 
 		insertTags = function (tagOpen, tagClose, sampleText)

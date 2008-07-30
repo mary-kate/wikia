@@ -797,6 +797,16 @@ FCK.DataProcessor =
 	}
 })();
 
+(function()
+{
+	FCK.refillTemplates = function () {
+		var text = parent.document.getElementById ('fck_parsed_templates').value ;
+        	return false ;
+	}
+})();
+
+
+
 var FCKDocumentProcessor_CreateFakeSpan = function( fakeClass, realElement, contentHtml )
 {
         var oImg = FCKTools.GetElementDocument( realElement ).createElement( 'LABEL' ) ;
