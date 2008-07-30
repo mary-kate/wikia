@@ -64,7 +64,7 @@ function tabbedprefs() {
 function initprefs () {
         if (typeof (wgCanonicalSpecialPageName) != 'undefined') {
                 if ('Preferences' == wgCanonicalSpecialPageName) {
-                        var prefform = document.getElementById('preferences');
+                        var prefform = document.getElementById('mw-preferences-form');
                         if (prefform) {
                                 tabbedprefs (prefform) ;
                                 loadsection (prefform) ;
