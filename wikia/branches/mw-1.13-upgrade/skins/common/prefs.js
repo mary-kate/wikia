@@ -64,7 +64,7 @@ function tabbedprefs(prefform) {
 function initprefs () {
         if (typeof (wgCanonicalSpecialPageName) != 'undefined') {
                 if ('Preferences' == wgCanonicalSpecialPageName) {
-                        var prefform = document.getElementById('mw-preferences-form');
+                        var prefform = document.getElementById('preferences');
                         if (prefform) {
                                 tabbedprefs (prefform) ;
                                 loadsection (prefform) ;
@@ -83,7 +83,6 @@ function loadsection (prefform) {
         if (prefform.nodeName.toLowerCase() == 'a') {
                 return; //  Occasional IE problem
         }
-
         var our_loc = window.location.href ;
         var section_loc = our_loc.split ("#") ;
         if (section_loc [1]) {
