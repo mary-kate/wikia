@@ -795,40 +795,39 @@ FCK.DataProcessor =
 	}
 	return false ;
 	}
-})();
+	})();
 
-(function()
-{
-	FCK.refillTemplates = function () {
-		var text = unescape (parent.document.getElementById ('fck_parsed_templates').value) ;
-		var max = text.length ;
-		var pos = 0 ;
-		var temp = '' ;
-		var parts = new Array () ;
-		while ((pos < max) && (pos > -1)) {
-			pos = text.indexOf ('<span class="fck_mw_template">', pos) ;			
-			if (pos != -1) {
-				parts.push (pos) ;
-				pos += 30 ;
-			}
+FCKDocumentProcessor.refillTemplates = function () {
+	var text = unescape (parent.document.getElementById ('fck_parsed_templates').value) ;
+	var max = text.length ;
+	var pos = 0 ;
+	var temp = '' ;
+	var parts = new Array () ;
+	var templates = new Array () ;
+	while ((pos < max) && (pos > -1)) {
+		pos = text.indexOf ('<span class="fck_mw_template">', pos) ;			
+		if (pos != -1) {
+			parts.push (pos) ;
+			pos += 30 ;
 		}
-		var end = 0 ;
-		for (var i = 0; i < parts.length; i++ ) {
-			if ((i+1) > (parts.length - 1)) {
-				end = text.length ;
-			} else {
-				end = parts [i + 1];
-			}				
-			temp = text.substring (parts[i], end) ;
-		}                 	
 	}
-})();
+	var end = 0 ;
+	for (var i = 0; i < parts.length; i++ ) {
+		if ((i+1) > (parts.length - 1)) {
+			end = text.length ;
+		} else {
+			end = parts [i + 1];
+		}				
+		templates.push (text.substring (parts[i], end)) ;
+	}                 	
+	return templates ;
+}
 
 var FCKDocumentProcessor_CreateFakeSpan = function( fakeClass, realElement, contentHtml )
 {
-        var oImg = FCKTools.GetElementDocument( realElement ).createElement( 'LABEL' ) ;
+	var oImg = FCKTools.GetElementDocument( realElement ).createElement( 'LABEL' ) ;
 
-        oImg.className = fakeClass ;
+	oImg.className = fakeClass ;
 
 	contentHtml = 'Placeholder' ;
 
@@ -844,6 +843,7 @@ var FCKDocumentProcessor_CreateFakeSpan = function( fakeClass, realElement, cont
 FCKDocumentProcessor.AppendNew().ProcessDocument = function( document )
 {
 	// Templates and magic words.
+	var templates = FCKDocumentProcessor.refillTemplates () ;
 	var aSpans = document.getElementsByTagName( 'SPAN' ) ;
 	var numTemplates = 0 ;
 	var eSpan ;
@@ -893,6 +893,7 @@ FCKDocumentProcessor.AppendNew().ProcessDocument = function( document )
 					var oImg = FCKDocumentProcessor_CreateFakeSpan( className, eSpan.cloneNode(true) ) ;
 					oImg.setAttribute( '_' + eSpan.className, 'true', 0 ) ;
 					oImg.setAttribute ('id', 'fck_templ_' + numTemplates) ;
+					oImg.innerHTML = templates [numTemplates] ;
 					numTemplates++ ;
 
 					eSpan.parentNode.insertBefore( oImg, eSpan ) ;

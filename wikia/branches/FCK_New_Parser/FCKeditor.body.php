@@ -476,7 +476,6 @@ function onLoadFCKeditor()
 			}
 			document.getElementById ('wpSummaryLabel').style.display = 'inline' ;
 			saveButton.parentNode.parentNode.style.display = 'inline' ;			
-		      	FCKinstance.refillTemplates () ;
 		}
 
 		insertTags = function (tagOpen, tagClose, sampleText)
