@@ -230,7 +230,6 @@ TieDivLib = new function() {
 	}
 
 	this.recalc = function() {
-		console.log("-");
 		if(block) return;
 		block = true;
 		for(i = 0; i < items.length; i++) {
