@@ -2,7 +2,7 @@
 // generate toc from prefs form, fold sections
 // XXX: needs testing on IE/Mac and safari
 // more comments to follow
-function tabbedprefs() {
+function tabbedprefs(prefform) {
 	// modified by Bartek for Wikia, 01.04.2008/29.07.2008 (load optimization)
 	if (!document.createElement) {
 		return;
