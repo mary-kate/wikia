@@ -40,7 +40,7 @@ $wgExtensionFunctions[] = 'wfYouTube';
 $wgExtensionCredits['parserhook'][] = array
 (
 	'name'        => 'YouTube',
-	'version'     => '1.6',
+	'version'     => '1.7',
 	'author'      => 'Przemek Piotrowski',
 	'url'         => 'http://help.wikia.com/wiki/Help:YouTube',
 	'description' => 'embeds YouTube and Google Video movies + Archive.org audio and video + WeGame and Gametrailers video + Tangler forum',
@@ -57,6 +57,7 @@ function wfYouTube()
 	$wgParser->setHook('wegame', 'embedWeGame');
 	$wgParser->setHook('tangler', 'embedTangler');
 	$wgParser->setHook('gtrailer', 'embedGametrailers');
+	$wgParser->setHook('nicovideo', 'embedNicovideo');
 }
 
 function embedYouTube_url2ytid($url)
@@ -372,3 +373,33 @@ function embedGametrailers($input, $argv, &$parser)
 		return "<object type=\"application/x-shockwave-flash\" width=\"{$width}\" height=\"{$height}\"><param name=\"movie\" value=\"{$url}\"/></object>"; 
 	}
 }
+
+function embedYouTube_url2nvid($url)
+{
+	$id = $url;
+
+	preg_match('/([0-9A-Za-z]+)/', $id, $preg);
+	$id = $preg[1];
+
+	return $id;
+}
+
+function embedNicovideo($input, $argv, &$parser)
+{
+	$nvid = '';
+
+	if (!empty($argv['nvid']))
+	{
+		$nvid = embedYouTube_url2nvid($argv['nvid']);
+	} elseif (!empty($input))
+	{
+		$nvid = embedYouTube_url2nvid($input);
+	}
+
+	if (!empty($nvid))
+	{
+		$url = "http://ext.nicovideo.jp/thumb_watch/{$nvid}";
+		return "<script type=\"text/javascript\" src=\"{$url}\"></script>";
+	}
+}
+
