@@ -239,14 +239,13 @@ TieDivLib = new function() {
 					$(items[i][0]).style.display = '';
 					$(items[i][0]).style.right = ((items[i][2] == 'bl' || items[i][2] == 'r' || items[i][2] == 'FAST_HOME3' || items[i][2] == 'FAST_HOME4' || items[i][2] == 'FAST_SIDE') ? YAHOO.util.Dom.getViewportWidth() : YAHOO.util.Dom.getDocumentWidth()) - (YAHOO.util.Dom.getX(items[i][1]) + $(items[i][1]).offsetWidth) + 'px';
 				}
-				if(YAHOO.util.Dom.getY(items[i][0]) != YAHOO.util.Dom.getY(items[i][1])) {
+				if(Math.round(YAHOO.util.Dom.getY(items[i][0])) != Math.round(YAHOO.util.Dom.getY(items[i][1]))) {
 					YAHOO.util.Dom.setY(items[i][0], Math.round(YAHOO.util.Dom.getY(items[i][1])));
 				}
 			} else {
-				if(YAHOO.util.Dom.getXY(items[i][0]) != YAHOO.util.Dom.getXY(items[i][1])) {
+				if(Math.round(YAHOO.util.Dom.getX(items[i][0])) != Math.round(YAHOO.util.Dom.getX(items[i][1])) || Math.round(YAHOO.util.Dom.getY(items[i][0])) != Math.round(YAHOO.util.Dom.getY(items[i][1]))) {
 					$(items[i][0]).style.display = '';
-					YAHOO.util.Dom.setX(items[i][0], Math.round(YAHOO.util.Dom.getX(items[i][1])));
-					YAHOO.util.Dom.setY(items[i][0], Math.round(YAHOO.util.Dom.getY(items[i][1])));
+					YAHOO.util.Dom.setXY(items[i][0], YAHOO.util.Dom.getXY(items[i][1]));
 				}
 			}
 		}
