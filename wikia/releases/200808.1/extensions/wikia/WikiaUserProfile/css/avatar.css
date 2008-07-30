@@ -25,4 +25,5 @@
 	position:absolute;
 	vertical-align:middle;
 	z-index:10;
+	-ie-xp: expression( this.style.left = '10px' );
 }
