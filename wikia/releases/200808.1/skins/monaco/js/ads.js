@@ -237,6 +237,8 @@ TieDivLib = new function() {
 				if($(items[i][0]).style.right == '') {
 					$(items[i][0]).style.display = '';
 					$(items[i][0]).style.right = YAHOO.util.Dom.getDocumentWidth() - (YAHOO.util.Dom.getX(items[i][1]) + $(items[i][1]).offsetWidth) + 'px';
+				}
+				if(YAHOO.util.Dom.getY(items[i][0]) != YAHOO.util.Dom.getY(items[i][1])) {
 					YAHOO.util.Dom.setY(items[i][0], YAHOO.util.Dom.getY(items[i][1]));
 				}
 			} else {
