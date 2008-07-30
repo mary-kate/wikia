@@ -388,6 +388,7 @@ class Parser
 			list( $element, $content, $params, $tag ) = $data;
 			$tagName = strtolower( $element );
 			if( isset( $this->mTransparentTagHooks[$tagName] ) ) {
+				wfCountWikiElement('extra tags: transparent parser hook');
 				$output = call_user_func_array( $this->mTransparentTagHooks[$tagName],
 					array( $content, $params, $this ) );
 			} else {
@@ -2945,7 +2946,8 @@ class Parser
 					$found = true;
 				}
 				if ($found) {
-					wfCountWikiElement('special: template');
+					wfCountWikiElement('special: template ' . ($args->getLength() ? 'with' : 'without') . ' parameters');
+					$text = '';	//cut off content of template - we don't want to include it in stats
 				}
 			} elseif ( $title->isTrans() ) {
 				// Interwiki transclusion
@@ -3260,12 +3262,14 @@ class Parser
 			switch ( $name ) {
 				case 'html':
 					if( $wgRawHtml ) {
+						wfCountWikiElement('extra tags: core');
 						$output = $content;
 						break;
 					} else {
 						throw new MWException( '<html> extension tag encountered unexpectedly' );
 					}
 				case 'nowiki':
+					wfCountWikiElement('extra tags: core');
 					$output = Xml::escapeTagsOnly( $content );
 					break;
 				/*
@@ -3275,6 +3279,7 @@ class Parser
 					break;
 				*/
 				case 'gallery':
+					wfCountWikiElement('extra tags: core');
 					$output = $this->renderImageGallery( $content, $attributes );
 					break;
 				default:
@@ -3283,6 +3288,7 @@ class Parser
 						if ( !is_callable( $this->mTagHooks[$name] ) ) {
 							throw new MWException( "Tag hook for $name is not callable\n" );
 						}
+						wfCountWikiElement('extra tags: parser hook');
 						$output = call_user_func_array( $this->mTagHooks[$name],
 							array( $content, $attributes, $this ) );
 					} else {
