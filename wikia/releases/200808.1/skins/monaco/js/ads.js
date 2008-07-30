@@ -233,7 +233,7 @@ TieDivLib = new function() {
 		if(block) return;
 		block = true;
 		for(i = 0; i < items.length; i++) {
-			if(!YAHOO.util.Dom.hasClass(document.body, 'rtl') && (items[i][2] == 'FAST_HOME1' || items[i][2] == 'FAST_HOME2' || items[i][2] == 'FAST_TOP')) {
+			if(items[i][2] == 'FAST_HOME1' || items[i][2] == 'FAST_HOME2' || items[i][2] == 'FAST_TOP') {
 				if($(items[i][0]).style.right == '') {
 					$(items[i][0]).style.display = '';
 					$(items[i][0]).style.right = YAHOO.util.Dom.getDocumentWidth() - (YAHOO.util.Dom.getX(items[i][1]) + $(items[i][1]).offsetWidth) + 'px';
