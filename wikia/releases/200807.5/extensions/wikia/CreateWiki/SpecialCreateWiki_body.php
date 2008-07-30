@@ -696,7 +696,7 @@ class CreateWikiForm extends SpecialPage {
 		$fExecTimeCur = wfTime();
 
 		#--- importing content from starter.wikia.com (language starter)
-		if ($this->mParams["wpCreateWikiImportStarter"] && (in_array($aWiki["language"], array("en", "de", "ja")))) {
+		if ($this->mParams["wpCreateWikiImportStarter"]) {
 			$prefix = "";
 		 if ($aWiki["language"] != "en") {
 				$prefix = $aWiki["language"];
@@ -704,7 +704,7 @@ class CreateWikiForm extends SpecialPage {
 
 		 $sDBstarter = "{$prefix}starter";
 
-			#--- first check if database for starter exists
+			#--- first check if database whether starter exists
 			$sql = sprintf( "SHOW DATABASES LIKE '%s';", $sDBstarter );
 			$oRes = $dbw->query( $sql, __METHOD__ );
 			$iNumRows = $oRes->numRows();
@@ -738,12 +738,13 @@ class CreateWikiForm extends SpecialPage {
 					$wgWikiaLocalSettingsPath
 				);
 				wfShellExec( $cmd );
+				
+				wfDebugLog( "createwiki", sprintf("Copying starter database: %F", wfTime() - $fExecTimeCur ));
+				$fExecTimeCur = wfTime();
 			}
 			else {
 				error_log("no starter database");
 			}
-			wfDebugLog( "createwiki", sprintf("Copying starter database: %F", wfTime() - $fExecTimeCur ));
-			$fExecTimeCur = wfTime();
 		}
 
 		#--- making the wiki founder a sysop/bureaucrat
