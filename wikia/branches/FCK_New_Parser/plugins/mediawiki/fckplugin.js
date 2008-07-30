@@ -803,6 +803,7 @@ FCK.DataProcessor =
 		var text = parent.document.getElementById ('fck_parsed_templates').innerHTML ;
 		var max = text.length ;
 		var pos = 0 ;
+		var temp = '' ;
 		var parts = new Array () ;
 		while ((pos < max) && (pos > -1)) {
 			pos = text.indexOf ('<span class="fck_mw_template">', pos) ;			
@@ -813,11 +814,12 @@ FCK.DataProcessor =
 		}
 		var end = 0 ;
 		for (var i = 0; i < parts.length; i++ ) {
-			if ((i+1) > parts.length) {
-				end = parts.length - 1 ;
+			if ((i+1) > (parts.length - 1)) {
+				end = text.length ;
 			} else {
 				end = parts [i + 1];
 			}				
+			temp = text.substring (parts[i], end) ;
 		}                 	
 	}
 })();
