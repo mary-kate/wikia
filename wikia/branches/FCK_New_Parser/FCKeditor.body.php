@@ -324,8 +324,18 @@ class FCKeditor_MediaWiki
 		$options->setTidy(true);
 		$parser = new FCKeditorParser();
 		$parser->setOutputType(OT_HTML);
+		$old_parser = new Parser() ;
+        	$old_parser->setOutputType(OT_HTML);
+		
 		$wgFCKWikiTextBeforeParse = $form->textbox1;
 		$form->textbox1 = $parser->parse($form->textbox1, $wgTitle, $options)->getText();
+	
+		$parsed_templates = $old_parser->parse ($parser->fck_parsed_templates, $wgTitle, $options)->getText()  ;
+
+		// insert the parsed templates into some hidden input, we will need them in a moment...
+		$wgOut->addHTML ("
+			<div id=\"fck_parsed_templates\" style=\"display:none;\">" . $parsed_templates ."</div>
+		") ;
 
 		$printsheet = htmlspecialchars( "$wgStylePath/common/wikiprintable.css?$wgStyleVersion" );
 
