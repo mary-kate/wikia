@@ -845,7 +845,7 @@ FCKDocumentProcessor.AppendNew().ProcessDocument = function( document )
 {
 	// Templates and magic words.
 	var aSpans = document.getElementsByTagName( 'SPAN' ) ;
-
+	var numTemplates = 0 ;
 	var eSpan ;
 	var i = aSpans.length - 1 ;
 	while ( i >= 0 && ( eSpan = aSpans[i--] ) )
@@ -892,6 +892,8 @@ FCKDocumentProcessor.AppendNew().ProcessDocument = function( document )
 				} else {
 					var oImg = FCKDocumentProcessor_CreateFakeSpan( className, eSpan.cloneNode(true) ) ;
 					oImg.setAttribute( '_' + eSpan.className, 'true', 0 ) ;
+					oImg.setAttribute ('id', 'fck_templ_' + numTemplates) ;
+					numTemplates++ ;
 
 					eSpan.parentNode.insertBefore( oImg, eSpan ) ;
 					eSpan.parentNode.removeChild( eSpan ) ;
