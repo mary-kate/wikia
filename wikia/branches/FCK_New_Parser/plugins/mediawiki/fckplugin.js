@@ -800,12 +800,27 @@ FCK.DataProcessor =
 (function()
 {
 	FCK.refillTemplates = function () {
-		var text = parent.document.getElementById ('fck_parsed_templates').value ;
-        	return false ;
+		var text = parent.document.getElementById ('fck_parsed_templates').innerHTML ;
+		var max = text.length ;
+		var pos = 0 ;
+		var parts = new Array () ;
+		while ((pos < max) && (pos > -1)) {
+			pos = text.indexOf ('<span class="fck_mw_template">', pos) ;			
+			if (pos != -1) {
+				parts.push (pos) ;
+				pos += 30 ;
+			}
+		}
+		var end = 0 ;
+		for (var i = 0; i < parts.length; i++ ) {
+			if ((i+1) > parts.length) {
+				end = parts.length - 1 ;
+			} else {
+				end = parts [i + 1];
+			}				
+		}                 	
 	}
 })();
-
-
 
 var FCKDocumentProcessor_CreateFakeSpan = function( fakeClass, realElement, contentHtml )
 {
