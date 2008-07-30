@@ -16,6 +16,8 @@ adSizes["FAST_HOME3"] = [160,600];
 adSizes["FAST_HOME4"] = [160,600];
 adSizes["FAST_HOME2"] = [300,250];
 
+var fast_bottom_type;
+
 if($('toc')) {
 	FASTtoc = true;
 	FASTtocY = YAHOO.util.Dom.getY('toc');
@@ -44,6 +46,7 @@ function FASTfix(banner) {
 			}
 		});
 	} else if(banner == 'FAST3') {
+		fast_bottom_type = banner;
 		Dom.setStyle('adSpace' + curAdSpaceId, 'float', 'left');
 		Dom.setStyle('adSpace' + curAdSpaceId, 'margin-right', '20px');
 		Dom.setStyle('adSpace' + curAdSpaceId, 'margin-bottom', '10px');
@@ -60,6 +63,7 @@ function FASTfix(banner) {
 			}
 		});
 	} else if(banner == 'FAST4') {
+		fast_bottom_type = banner;
 		Dom.setStyle('adSpace' + curAdSpaceId, 'float', 'right');
 		Dom.setStyle('adSpace' + curAdSpaceId, 'margin-left', '10px');
 		Dom.setStyle('adSpace' + curAdSpaceId, 'margin-bottom', '10px');
@@ -76,6 +80,7 @@ function FASTfix(banner) {
 			}
 		});
 	} else if(banner == 'FAST5') {
+		fast_bottom_type = banner;
 		if($('adSpaceFAST5')) {
 			curAdSpaceId = 'FAST5';
 		}
