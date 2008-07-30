@@ -334,7 +334,7 @@ class FCKeditor_MediaWiki
 
 		// insert the parsed templates into some hidden input, we will need them in a moment...
 		$wgOut->addHTML ("
-			<div id=\"fck_parsed_templates\" style=\"display:none;\">" . $parsed_templates ."</div>
+			<textarea id=\"fck_parsed_templates\" style=\"display:none;\">" . htmlspecialchars ($parsed_templates) ."</textarea>
 		") ;
 
 		$printsheet = htmlspecialchars( "$wgStylePath/common/wikiprintable.css?$wgStyleVersion" );
