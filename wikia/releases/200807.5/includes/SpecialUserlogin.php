@@ -348,7 +348,16 @@ class LoginForm {
 			return false;
 		}
 
-		return $this->initUser( $u, false );
+		$u = $this->initUser( $u, false );
+		//add birth date to db - Marooned [at] wikia.com
+		$uID = $u->getID();
+		if ($uID) {
+			$userBirthDay = date('Y-m-d', $userBirthDay);
+			$db = wfGetDB(DB_MASTER);
+			$sql = "UPDATE user SET user_birthdate = '$userBirthDay' WHERE user_id = $uID;";
+			$db->query($sql);
+		}
+		return $u;
 	}
 
 	/**
