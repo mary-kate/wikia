@@ -800,7 +800,7 @@ FCK.DataProcessor =
 (function()
 {
 	FCK.refillTemplates = function () {
-		var text = parent.document.getElementById ('fck_parsed_templates').innerHTML ;
+		var text = unescape (parent.document.getElementById ('fck_parsed_templates').value) ;
 		var max = text.length ;
 		var pos = 0 ;
 		var temp = '' ;
