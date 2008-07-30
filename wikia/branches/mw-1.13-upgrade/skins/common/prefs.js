@@ -4,7 +4,7 @@
 // more comments to follow
 function tabbedprefs() {
 	// modified by Bartek for Wikia, 01.04.2008/29.07.2008 (load optimization)
-	if if (!document.createElement) { {
+	if (!document.createElement) {
 		return;
 	}
 	if (prefform.nodeName.toLowerCase() == 'a') {
