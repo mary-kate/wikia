@@ -253,15 +253,29 @@ TieDivLib = new function() {
 					}
 				}
 
-				if(Math.floor(Dom.getY(items[i][0])) != Math.floor(Dom.getY(items[i][1]))) {
-					Dom.setY(items[i][0], Math.floor(Dom.getY(items[i][1])));
+				if(Math.ceil(Dom.getY(items[i][0])) != Math.ceil(Dom.getY(items[i][1]))) {
+					if(Dom.getY(items[i][1]) - Dom.getY('monaco_shrinkwrap_main') < 0) {
+						Dom.setY(items[i][0], Math.floor(Dom.getY(items[i][1])));
+					} else {
+						Dom.setY(items[i][0], Math.ceil(Dom.getY(items[i][1])));
+					}
 				}
+
 			} else {
 				if(Math.ceil(Dom.getY(items[i][0])) != Math.ceil(Dom.getY(items[i][1])) || Math.ceil(Dom.getX(items[i][0])) != Math.ceil(Dom.getX(items[i][1]))) {
 					if(Dom.getStyle(items[i][0], 'display') != 'block') {
 						Dom.setStyle(items[i][0], 'display', 'block');
 					}
-					Dom.setXY(items[i][0], Dom.getXY(items[i][1]));
+					if(!rtl) {
+						var xy = Dom.getXY(items[i][1]);
+					} else {
+						if(Dom.getY(items[i][1]) - Dom.getY('monaco_shrinkwrap_main') < 0) {
+							var xy = [Dom.getX(items[i][1]), Math.floor(Dom.getY(items[i][1]))];
+						} else {
+							var xy = [Dom.getX(items[i][1]), Math.ceil(Dom.getY(items[i][1]))];
+						}
+					}
+					Dom.setXY(items[i][0], xy);
 				}
 			}
 		}
