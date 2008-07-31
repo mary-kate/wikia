@@ -22,5 +22,5 @@ $messages["en"] = array(
 	'multilookupdetails' => 'See details',
 	'multilookuplistwikiainfo' => 'List of wikis where articles were edited by users from IP: <b>$1</b>',
 	'multilookupinvaliduser' => '<p class="error">IP "<b>$1</b>" does not exist. Check given IP for possible typos.</p>',
-	'multilookuplastedit' => 'Last edit: '
+	'multilookuplastedit' => 'Last edit from this IP: '
 );

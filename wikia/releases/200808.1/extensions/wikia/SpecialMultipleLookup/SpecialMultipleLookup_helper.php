@@ -109,16 +109,15 @@ class MultipleLookupCore {
 			/* don't check these databases - their structure is not overly compactible */
 			$userTable = wfSharedTable("user");
 			$res = $dbr->select(
-				"`{$this->__getDBname($database)}`.`recentchanges`, {$userTable}",
-				array( 'user_name', 'max(rc_timestamp) as rc_timestamp' ),
+				"`{$this->__getDBname($database)}`.`recentchanges`",
+				array( 'rc_user_text as user_name', 'max(rc_timestamp) as rc_timestamp' ),
 				array(
-					'rc_ip' => $this->mUsername,
-					' user_id = rc_user '
+					'rc_ip' => $this->mUsername
 				),
 				__METHOD__,
 				array(
-					'GROUP BY' => 'user_name',
-					'ORDER BY'	=> 'user_name'
+					'GROUP BY' => 'rc_user_text',
+					'ORDER BY'	=> 'rc_user_text'
 				)
 			);
 
@@ -214,13 +213,12 @@ class MultipleLookupCore {
 		$sk = $wgUser->getSkin();
 		$page_user = Title::makeTitle (NS_USER, $row->user_name);
 		$page_contribs = Title::makeTitle (NS_SPECIAL, "Contributions/{$row->user_name}");
-		return array('link' => "<a href=\"{$page_contribs->getFullURL()}\">{$row->user_name}</a>", 'last_edit' => $wgLang->timeanddate( wfTimestamp( TS_MW, $row->rc_timestamp ), true ));
 		
-		/*$meta = strtr($row->rc_city_title,' ','_');
-		$contrib = '('.$this->produceLink ($page_contribs, 'contribs', '', $row->rc_url, $sk, $meta, $row->rc_namespace, $row->page_id ) .')';
-		$result = array();
+		$meta = strtr($row->rc_city_title,' ','_');
+		$contrib = $this->produceLink ($page_contribs, $row->user_name, '', $row->rc_url, $sk, $meta, 0, 0 );
+		return array('link' => $contrib, 'last_edit' => $wgLang->timeanddate( wfTimestamp( TS_MW, $row->rc_timestamp ), true ));
 
-		$page = Title::makeTitle ($row->rc_namespace, $row->rc_title);
+		/*$page = Title::makeTitle ($row->rc_namespace, $row->rc_title);
 		$link = $this->produceLink ($page, '', '', $row->rc_url, $sk, $meta, $row->rc_namespace, $row->page_id) . ( $row->log_comment ? " <small>($row->log_comment)</small>" : "" );
 		$time = $wgLang->timeanddate( wfTimestamp( TS_MW, $row->timestamp ), true );
 		$diff = '('.$this->produceLink ($page, 'diff', 'diff=prev&oldid='.$row->rev_id, $row->rc_url, $sk, $meta, $row->rc_namespace, $row->page_id ).')';
