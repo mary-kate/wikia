@@ -1683,7 +1683,7 @@ class Parser
 							$found = true;
 							$text .= "[[{$m[0]}]]{$m[1]}";
 							$trail = $m[2];
-							wfCountWikiElement('whats this #1 - image with link?');
+							wfCountWikiElement('image with link');
 							break;
 						} elseif ( count( $m ) == 2 ) {
 							#if there's exactly one ]] that's fine, we'll keep looking
@@ -1741,14 +1741,14 @@ class Parser
 						# cloak any absolute URLs inside the image markup, so replaceExternalLinks() won't touch them
 						$s .= $prefix . $this->armorLinks( $this->makeImage( $nt, $text ) ) . $trail;
 						$this->mOutput->addImage( $nt->getDBkey() );
-						wfCountWikiElement('image - ? #1');
+						wfCountWikiElement('image');
 
 						wfProfileOut( "$fname-image" );
 						continue;
 					} else {
 						# We still need to record the image's presence on the page
 						$this->mOutput->addImage( $nt->getDBkey() );
-						wfCountWikiElement('image - ? #2');
+						wfCountWikiElement('image');
 					}
 					wfProfileOut( "$fname-image" );
 
