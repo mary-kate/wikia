@@ -31,7 +31,7 @@ FCKConfig.DefaultLanguage		= 'en' ;
 // FCKConfig.DisableObjectResizing = true ;
 
 FCKConfig.EditorAreaStyles = '\
-.FCK__MWTemplate, .FCK__MWRef, .FCK__MWSpecial, .FCK__MWReferences, .FCK__MWNowiki, .FCK__MWIncludeonly, .FCK__MWNoinclude, .FCK__MWOnlyinclude, .FCK__MWGallery \
+.FCK__MWRef, .FCK__MWSpecial, .FCK__MWReferences, .FCK__MWNowiki, .FCK__MWIncludeonly, .FCK__MWNoinclude, .FCK__MWOnlyinclude, .FCK__MWGallery \
 { \
 	border: 1px dotted #00F; \
 	background-position: center center; \
@@ -41,6 +41,7 @@ FCKConfig.EditorAreaStyles = '\
 .FCK__MWTemplate \
 { \
 	background: #fbdf47 ; \
+	border: 1px dotted #00F; \
 } \
 .FCK__MWRef \
 { \

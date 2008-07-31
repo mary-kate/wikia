@@ -825,7 +825,7 @@ FCKDocumentProcessor.refillTemplates = function () {
 
 var FCKDocumentProcessor_CreateFakeSpan = function( fakeClass, realElement, contentHtml )
 {
-	var oImg = FCKTools.GetElementDocument( realElement ).createElement( 'LABEL' ) ;
+	var oImg = FCKTools.GetElementDocument( realElement ).createElement( 'DIV' ) ;
 
 	oImg.className = fakeClass ;
 
@@ -834,6 +834,7 @@ var FCKDocumentProcessor_CreateFakeSpan = function( fakeClass, realElement, cont
 	oImg.innerHTML = contentHtml ;
         oImg.setAttribute( '_fckfakelement', 'true', 0 ) ;
 	oImg.setAttribute('readonly', true) ;
+	oImg.setAttribute ('contentEditable', false) ;
         oImg.setAttribute( '_fckrealelement', FCKTempBin.AddElement( realElement ), 0 ) ;
         return oImg ;
 }
