@@ -6,4 +6,5 @@ $messages['en'] = array(
 	'editingtips_exit_widescreen' => 'Exit Widescreen' ,	
 	'editingtips_hide' => 'Hide Editing Tips' ,
 	'editingtips_show' => 'Show Editing Tips' ,
+	'editingTips' => 'Add your tips [[MediaWiki:EditingTips|here]]',
 );
