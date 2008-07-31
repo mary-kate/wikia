@@ -832,10 +832,11 @@ var FCKDocumentProcessor_CreateFakeSpan = function( fakeClass, realElement, cont
 	contentHtml = 'Placeholder' ;
 
 	oImg.innerHTML = contentHtml ;
+	oImg.contentEditable = false ;
         oImg.setAttribute( '_fckfakelement', 'true', 0 ) ;
 	oImg.setAttribute('readonly', true) ;
-	oImg.setAttribute ('contentEditable', false) ;
         oImg.setAttribute( '_fckrealelement', FCKTempBin.AddElement( realElement ), 0 ) ;
+
         return oImg ;
 }
 
