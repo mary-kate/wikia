@@ -32,6 +32,7 @@
 FCKToolbarItems.RegisterItem( 'Source', new FCKToolbarButton( 'Source', 'Wikitext', null, FCK_TOOLBARITEM_ICONTEXT, true, true, 1 ) ) ;
 
 FCK.RegisterDoubleClickHandler( FCKImage_OnDoubleClick, 'IMG' ) ;
+FCK.RegisterDoubleClickHandler( FCKDiv_OnDoubleClick, 'DIV' ) ;
 
 
 // Register our toolbar buttons.
@@ -840,7 +841,6 @@ var FCKDocumentProcessor_CreateFakeSpan = function( fakeClass, realElement, cont
         return oImg ;
 }
 
-
 // MediaWiki document processor.
 FCKDocumentProcessor.AppendNew().ProcessDocument = function( document )
 {
@@ -988,6 +988,14 @@ function FCKImage_OnDoubleClick (img) {
 		}
 		if ( img.getAttribute( '_fck_mw_special' ) || img.getAttribute( '_fck_mw_nowiki' ) || img.getAttribute( '_fck_mw_includeonly' ) || img.getAttribute( '_fck_mw_noinclude' ) || img.getAttribute( '_fck_mw_onlyinclude' ) || img.getAttribute( '_fck_mw_gallery' )) {
 	                FCKCommands.GetCommand( 'MW_Special' ).Execute() ;
+		}
+	}
+}
+
+function FCKDiv_OnDoubleClick (span) {
+	if (span.tagName == 'DIV') {
+		if (span.getAttribute ('_fck_mw_template') ) {
+			FCKCommands.GetCommand( 'MW_Template' ).Execute() ;
 		}
 	}
 }
