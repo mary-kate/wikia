@@ -486,6 +486,9 @@ class Sanitizer {
 						$rest = str_replace( '>', '&gt;', $rest );
 						$close = ( $brace == '/>' && !$slash ) ? ' /' : '';
 						$text .= "<$slash$t$newparams$close>$rest";
+						if (!$slash) {
+							wfCountWikiElement("html: $t");
+						}
 						continue;
 					}
 				}
