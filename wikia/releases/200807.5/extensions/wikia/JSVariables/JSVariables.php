@@ -32,9 +32,7 @@ function wfExtendJSGlobalVars($vars) {
 		$vars['ajaxLogin2'] = wfMsg('ajaxLogin2');
 	}
 	$vars['wgMainpage'] = wfMsgForContent( 'mainpage' );
-	$vars['wgIsMainpage'] = ($vars['wgMainpage'] == (empty($vars['wgCanonicalNamespace']) ?
-							$vars['wgTitle'] :
-							$vars['wgCanonicalNamespace'].':'.$vars['wgTitle']));
+	$vars['wgIsMainpage'] = ( str_replace( ' ', '_', $vars['wgMainpage'] ) == $vars['wgPageName'] );
 
 	$vars['wgStyleVersion'] = isset($wgStyleVersion) ? $wgStyleVersion : '' ;
 	if(isset($wgUser->getSkin()->themename)) {
