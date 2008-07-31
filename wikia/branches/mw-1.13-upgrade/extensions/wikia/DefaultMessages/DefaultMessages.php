@@ -17,8 +17,8 @@ function wfReplaceDefaultMessages() {
 
 	global $wgMemc, $wgMessageCache, $wgContLang, $wgDefaultMessagesDB, $wgDBprefix;
 	if( !empty( $wgDefaultMessagesDB ) && is_object( $wgMessageCache ) ) {
-		$_filecache = '/tmp/default_messages_v3.ser';
-		$memcKey = "$wgDefaultMessagesDB:default_messages:v3";
+		$_filecache = '/tmp/default_messages.ser';
+		$memcKey = "$wgDefaultMessagesDB:default_messages";
 
 		$_touched = $wgMemc->get( $memcKey . ":touched" );
 		wfDebug( "trying file cache $_filecache with touched=$_touched\n" );
@@ -74,9 +74,8 @@ function wfReplaceDefaultMessages() {
 function wfDefaultMessagesReplace( $title, $text ) {
 	global $wgDefaultMessagesDB, $wgMemc, $wgContLang;
 
-for( $i=2; $i<=3; $i++ ) {
-	$_filecache = "/tmp/default_messages_v$i.ser";
-	$memcKey = "$wgDefaultMessagesDB:default_messages:v$i";
+	$_filecache = "/tmp/default_messages.ser";
+	$memcKey = "$wgDefaultMessagesDB:default_messages";
 
 	$defaultMessages = $wgMemc->get( $memcKey );
 	if( !empty( $defaultMessages ) ) {
@@ -101,7 +100,6 @@ for( $i=2; $i<=3; $i++ ) {
 		$wgMemc->set( $memcKey . ":touched", $_touched );
 		WikiFactory::store( $_filecache, $defaultMessages, 60*60, $_touched );
 	}
-}
 
 	return true;
 }
