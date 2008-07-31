@@ -207,9 +207,13 @@ TieDivLib = new function() {
 
 	var loopCount = 300;
 
+	var rtl;
+
 	var adjustY;
 
 	var adjustX;
+
+	var Dom = YAHOO.util.Dom;
 
 	this.tie = function(source, target, pos) {
 
@@ -233,18 +237,35 @@ TieDivLib = new function() {
 		if(block) return;
 		block = true;
 		for(i = 0; i < items.length; i++) {
-			if(YAHOO.env.ua.gecko > 0 && ((items[i][2] == 'FAST_BOTTOM' && fast_bottom_type == 'FAST4') || (YAHOO.util.Dom.hasClass(document.body, 'rtl') && (items[i][2] == 'bl' || items[i][2] == 'r' || items[i][2] == 'FAST_HOME3' || items[i][2] == 'FAST_HOME4' || items[i][2] == 'FAST_SIDE')) || items[i][2] == 'FAST_HOME1' || items[i][2] == 'FAST_HOME2' || items[i][2] == 'FAST_TOP')) {
-				if($(items[i][0]).style.right == '') {
-					$(items[i][0]).style.display = '';
-					$(items[i][0]).style.right = (((YAHOO.util.Dom.hasClass(document.body, 'rtl') && (items[i][2] == 'FAST_TOP' || items[i][2] == 'FAST_HOME1' || items[i][2] == 'FAST_HOME2')) || items[i][2] == 'bl' || items[i][2] == 'r' || items[i][2] == 'FAST_HOME3' || items[i][2] == 'FAST_HOME4' || items[i][2] == 'FAST_SIDE') ? YAHOO.util.Dom.getViewportWidth() : YAHOO.util.Dom.getDocumentWidth()) - (YAHOO.util.Dom.getX(items[i][1]) + $(items[i][1]).offsetWidth) + 'px';
+
+			if((YAHOO.env.ua.gecko > 0 && !rtl) &&
+					(items[i][2] == 'FAST_HOME1' ||
+					items[i][2] == 'FAST_HOME2' ||
+					items[i][2] == 'FAST_TOP' ||
+					(items[i][2] == 'FAST_BOTTOM' && fast_bottom_type == 'FAST4')) ||
+				((YAHOO.env.ua.gecko > 0 || YAHOO.env.ua.webkit > 0) &&
+					(rtl &&
+						(items[i][2] == 'bl' ||
+						items[i][2] == 'r' ||
+						items[i][2] == 'FAST_HOME3' ||
+						items[i][2] == 'FAST_HOME4' ||
+						items[i][2] == 'FAST_SIDE' ||
+						(items[i][2] == 'FAST_BOTTOM' && fast_bottom_type == 'FAST5'))))) {
+				if(Dom.getStyle(items[i][0], 'display') != 'block') {
+					Dom.setStyle(items[i][0], 'display', 'block');
 				}
-				if(Math.round(YAHOO.util.Dom.getY(items[i][0])) != Math.round(YAHOO.util.Dom.getY(items[i][1]))) {
-					YAHOO.util.Dom.setY(items[i][0], Math.round(YAHOO.util.Dom.getY(items[i][1])));
+				if($(items[i][0]).style.right == '') {
+					$(items[i][0]).style.right = ((rtl || items[i][2] == 'FAST_HOME1' || items[i][2] == 'FAST_HOME2' || items[i][2] == 'FAST_TOP' || (items[i][2] == 'FAST_BOTTOM' && fast_bottom_type == 'FAST4')) ? Dom.getViewportWidth() : Dom.getDocumentWidth()) - (Dom.getX(items[i][1]) + $(items[i][1]).offsetWidth) + 'px';
+				}
+				if(Math.ceil(Dom.getY(items[i][0])) != Math.ceil(Dom.getY(items[i][1]))) {
+					Dom.setY(items[i][0], Dom.getY(items[i][1]));
 				}
 			} else {
-				if(Math.round(YAHOO.util.Dom.getX(items[i][0])) != Math.round(YAHOO.util.Dom.getX(items[i][1])) || Math.round(YAHOO.util.Dom.getY(items[i][0])) != Math.round(YAHOO.util.Dom.getY(items[i][1]))) {
-					$(items[i][0]).style.display = '';
-					YAHOO.util.Dom.setXY(items[i][0], YAHOO.util.Dom.getXY(items[i][1]));
+				if(Math.ceil(Dom.getY(items[i][0])) != Math.ceil(Dom.getY(items[i][1])) || Math.ceil(Dom.getX(items[i][0])) != Math.ceil(Dom.getX(items[i][1]))) {
+					if(Dom.getStyle(items[i][0], 'display') != 'block') {
+						Dom.setStyle(items[i][0], 'display', 'block');
+					}
+					Dom.setXY(items[i][0], Dom.getXY(items[i][1]));
 				}
 			}
 		}
@@ -260,13 +281,15 @@ TieDivLib = new function() {
 	}
 
 	this.init = function() {
-		adjustY = ((YAHOO.env.ua.ie > 0) ? 2 : 0) + YAHOO.util.Dom.getY('monaco_shrinkwrap_main');
-		adjustX = (YAHOO.env.ua.ie > 0) ? YAHOO.util.Dom.getX('wikia_header') : 0;
+		rtl = Dom.hasClass(document.body, 'rtl');
+
+		adjustY = ((YAHOO.env.ua.ie > 0) ? 2 : 0) + Dom.getY('monaco_shrinkwrap_main');
+		adjustX = (YAHOO.env.ua.ie > 0) ? Dom.getX('wikia_header') : 0;
 
 		TieDivLib.timer();
 
 		YAHOO.util.Event.addListener(window, 'load', function() {
-			setTimeout(function() { loopCount = 0; }, 1000);
+			setTimeout(function() { loopCount = 0; }, 2000);
 			YAHOO.example.FontSizeMonitor.onChange.subscribe(TieDivLib.recalc);
 		});
 
