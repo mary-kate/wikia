@@ -34,8 +34,6 @@ function WikiwygAlternateEdit ($epage) {
     global $wgServer, $wgWikiwygJsPath, $wgWikiwygCssPath, $wgWikiwygImagePath, $wgStyleVersion;
     global $wgUser, $wgServer, $wgArticlePath, $wgEnableAjaxLogin;
 
-	wfLoadExtensionMessages('Wikiwyg');
-
     /* in-page disabled automatically disables this loading */
     if ( wfGetDependingOnSkin () == 0 ) {
 	return true;
