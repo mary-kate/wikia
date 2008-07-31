@@ -830,8 +830,6 @@ var FCKDocumentProcessor_CreateFakeSpan = function( fakeClass, realElement, cont
 
 	oImg.className = fakeClass ;
 
-	contentHtml = 'Placeholder' ;
-
 	oImg.innerHTML = contentHtml ;
 	oImg.contentEditable = false ;
         oImg.setAttribute( '_fckfakelement', 'true', 0 ) ;
