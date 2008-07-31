@@ -233,24 +233,25 @@ TieDivLib = new function() {
 		}
 	}
 
+	this.smoothly = function(pos) {
+		if(!rtl && YAHOO.env.ua.gecko > 0) {
+			if(items[i][2] == 'FAST_HOME1' || items[i][2] == 'FAST_HOME2' || items[i][2] == 'FAST_TOP' || (items[i][2] == 'FAST_BOTTOM' && fast_bottom_type == 'FAST4')) {
+				return true;
+			}
+		}
+		if(rtl) {
+			if(items[i][2] == 'bl' || items[i][2] == 'r' || items[i][2] == 'FAST_HOME3' || items[i][2] == 'FAST_HOME4' || items[i][2] == 'FAST_SIDE' || (items[i][2] == 'FAST_BOTTOM' && fast_bottom_type == 'FAST5')) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	this.recalc = function() {
 		if(block) return;
 		block = true;
 		for(i = 0; i < items.length; i++) {
-
-			if((YAHOO.env.ua.gecko > 0 && !rtl) &&
-					(items[i][2] == 'FAST_HOME1' ||
-					items[i][2] == 'FAST_HOME2' ||
-					items[i][2] == 'FAST_TOP' ||
-					(items[i][2] == 'FAST_BOTTOM' && fast_bottom_type == 'FAST4')) ||
-				((YAHOO.env.ua.gecko > 0 || YAHOO.env.ua.webkit > 0) &&
-					(rtl &&
-						(items[i][2] == 'bl' ||
-						items[i][2] == 'r' ||
-						items[i][2] == 'FAST_HOME3' ||
-						items[i][2] == 'FAST_HOME4' ||
-						items[i][2] == 'FAST_SIDE' ||
-						(items[i][2] == 'FAST_BOTTOM' && fast_bottom_type == 'FAST5'))))) {
+			if(TieDivLib.smoothly(items[i][2])) {
 				if(Dom.getStyle(items[i][0], 'display') != 'block') {
 					Dom.setStyle(items[i][0], 'display', 'block');
 				}
