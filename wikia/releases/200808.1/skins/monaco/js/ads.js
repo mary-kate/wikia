@@ -233,7 +233,7 @@ TieDivLib = new function() {
 		if(block) return;
 		block = true;
 		for(i = 0; i < items.length; i++) {
-			if((items[i][2] == 'FAST_BOTTOM' && fast_bottom_type == 'FAST4') || (YAHOO.util.Dom.hasClass(document.body, 'rtl') && (items[i][2] == 'bl' || items[i][2] == 'r' || items[i][2] == 'FAST_HOME3' || items[i][2] == 'FAST_HOME4' || items[i][2] == 'FAST_SIDE')) || items[i][2] == 'FAST_HOME1' || items[i][2] == 'FAST_HOME2' || items[i][2] == 'FAST_TOP') {
+			if(YAHOO.env.ua.gecko > 0 && ((items[i][2] == 'FAST_BOTTOM' && fast_bottom_type == 'FAST4') || (YAHOO.util.Dom.hasClass(document.body, 'rtl') && (items[i][2] == 'bl' || items[i][2] == 'r' || items[i][2] == 'FAST_HOME3' || items[i][2] == 'FAST_HOME4' || items[i][2] == 'FAST_SIDE')) || items[i][2] == 'FAST_HOME1' || items[i][2] == 'FAST_HOME2' || items[i][2] == 'FAST_TOP')) {
 				if($(items[i][0]).style.right == '') {
 					$(items[i][0]).style.display = '';
 					$(items[i][0]).style.right = (((YAHOO.util.Dom.hasClass(document.body, 'rtl') && (items[i][2] == 'FAST_TOP' || items[i][2] == 'FAST_HOME1' || items[i][2] == 'FAST_HOME2')) || items[i][2] == 'bl' || items[i][2] == 'r' || items[i][2] == 'FAST_HOME3' || items[i][2] == 'FAST_HOME4' || items[i][2] == 'FAST_SIDE') ? YAHOO.util.Dom.getViewportWidth() : YAHOO.util.Dom.getDocumentWidth()) - (YAHOO.util.Dom.getX(items[i][1]) + $(items[i][1]).offsetWidth) + 'px';
