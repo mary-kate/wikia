@@ -1197,6 +1197,7 @@ function do_populate_parent_id() {
 }
 
 function update_password_format() {
+	/*
 	if ( update_row_exists( 'password format' ) ) {
 		echo "...password hash format already changed\n";
 		return;
@@ -1217,6 +1218,7 @@ function update_password_format() {
 	$wgDatabase->insert( 'updatelog', array( 'ul_key' => 'password format' ), __METHOD__ );
 
 	echo "done\n";
+	 */
 }
 
 function
