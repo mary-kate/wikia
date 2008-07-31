@@ -986,6 +986,13 @@ echo '<link rel="apple-touch-icon" href="'. $wgLogo .'" />';
 
 	<body <?php if($this->data['body_onload'    ]) { ?>onload="<?php     $this->text('body_onload')     ?>"<?php } ?>
  class="mediawiki <?php $this->text('nsclass') ?> <?php $this->text('dir') ?> <?php $this->text('pageclass') ?><?php if(!empty($this->data['printable']) ) { ?> printable<?php } ?><?php if (!$wgUser->isLoggedIn()) { ?> loggedout<?php } ?> color2 wikiaSkinMonaco<?=$isMainpage?>" id="body">
+
+ <?php
+   if(!empty($skin->timemarker)) {
+	echo $skin->timemarker;
+   }
+ ?> 
+
 			<div id="widget_cockpit" class="color1">
 				<div id="carousel-prev" class="widget_cockpit_controls">&laquo;</div>
 				<div id="carousel-next" class="widget_cockpit_controls"><div id="cockpit1_close"></div>&raquo;</div>

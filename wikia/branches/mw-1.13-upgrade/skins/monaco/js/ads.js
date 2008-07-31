@@ -39,7 +39,7 @@ YAHOO.namespace('YAHOO.example').FontSizeMonitor = (function(){
 				with(p_frame.style){
 					visibility = 'visible';
 					zIndex = 1000;
-					left = '-5000px';
+					left = (YAHOO.util.Dom.hasClass(document.body, 'rtl') ? '' : '-') + '5000px';
 				};
 				var sHtml = [
 				'<html><body><script>',
@@ -203,9 +203,9 @@ TieDivLib = new function() {
 
 	var items = Array();
 
-	var interval = 350;
-
 	var block = false;
+
+	var loopCount = 300;
 
 	var adjustY;
 
@@ -221,11 +221,11 @@ TieDivLib = new function() {
 			}
 		}
 
-		items.push([source, target]);
+		items.push([source, target, pos]);
 
 		with($(source).style) {
 			position = 'absolute';
-			zIndex = (pos == 'bl' || pos == 'r' || pos == 'FAST_SIDE') ? 21 : 5;
+			zIndex = (pos == 'bl' || pos == 'r' || pos == 'FAST_SIDE' || pos == 'FAST_HOME3' || pos == 'FAST_HOME4') ? 21 : 5;
 		}
 	}
 
@@ -233,9 +233,19 @@ TieDivLib = new function() {
 		if(block) return;
 		block = true;
 		for(i = 0; i < items.length; i++) {
-			if(YAHOO.util.Dom.getXY(items[i][0]) != YAHOO.util.Dom.getXY(items[i][1])) {
-				YAHOO.util.Dom.setXY(items[i][0], YAHOO.util.Dom.getXY(items[i][1]));
-				$(items[i][0]).style.display = '';
+			if(YAHOO.env.ua.gecko > 0 && ((items[i][2] == 'FAST_BOTTOM' && fast_bottom_type == 'FAST4') || (YAHOO.util.Dom.hasClass(document.body, 'rtl') && (items[i][2] == 'bl' || items[i][2] == 'r' || items[i][2] == 'FAST_HOME3' || items[i][2] == 'FAST_HOME4' || items[i][2] == 'FAST_SIDE')) || items[i][2] == 'FAST_HOME1' || items[i][2] == 'FAST_HOME2' || items[i][2] == 'FAST_TOP')) {
+				if($(items[i][0]).style.right == '') {
+					$(items[i][0]).style.display = '';
+					$(items[i][0]).style.right = (((YAHOO.util.Dom.hasClass(document.body, 'rtl') && (items[i][2] == 'FAST_TOP' || items[i][2] == 'FAST_HOME1' || items[i][2] == 'FAST_HOME2')) || items[i][2] == 'bl' || items[i][2] == 'r' || items[i][2] == 'FAST_HOME3' || items[i][2] == 'FAST_HOME4' || items[i][2] == 'FAST_SIDE') ? YAHOO.util.Dom.getViewportWidth() : YAHOO.util.Dom.getDocumentWidth()) - (YAHOO.util.Dom.getX(items[i][1]) + $(items[i][1]).offsetWidth) + 'px';
+				}
+				if(Math.round(YAHOO.util.Dom.getY(items[i][0])) != Math.round(YAHOO.util.Dom.getY(items[i][1]))) {
+					YAHOO.util.Dom.setY(items[i][0], Math.round(YAHOO.util.Dom.getY(items[i][1])));
+				}
+			} else {
+				if(Math.round(YAHOO.util.Dom.getX(items[i][0])) != Math.round(YAHOO.util.Dom.getX(items[i][1])) || Math.round(YAHOO.util.Dom.getY(items[i][0])) != Math.round(YAHOO.util.Dom.getY(items[i][1]))) {
+					$(items[i][0]).style.display = '';
+					YAHOO.util.Dom.setXY(items[i][0], YAHOO.util.Dom.getXY(items[i][1]));
+				}
 			}
 		}
 		block = false;
@@ -243,7 +253,10 @@ TieDivLib = new function() {
 
 	this.timer = function() {
 		TieDivLib.recalc();
-		if(interval != -1) setTimeout(TieDivLib.timer, interval);
+		loopCount--;
+		if(loopCount > 0) {
+			setTimeout(TieDivLib.timer, 350);
+		}
 	}
 
 	this.init = function() {
@@ -253,21 +266,28 @@ TieDivLib = new function() {
 		TieDivLib.timer();
 
 		YAHOO.util.Event.addListener(window, 'load', function() {
-			setTimeout(function() { interval = -1; }, 1000);
+			setTimeout(function() { loopCount = 0; }, 1000);
 			YAHOO.example.FontSizeMonitor.onChange.subscribe(TieDivLib.recalc);
 		});
 
 		YAHOO.util.Event.addListener(document, 'click', function() {
-			setTimeout(TieDivLib.recalc, 1);
+			TieDivLib.loop(3);
 		});
 
 		YAHOO.util.Event.addListener(document, 'keydown', function() {
-			setTimeout(TieDivLib.recalc, 1);
+			TieDivLib.loop(3);
 		});
 
 		YAHOO.util.Event.addListener(window, 'resize', function() {
 			TieDivLib.recalc();
 		});
+	}
+
+	this.loop = function(count) {
+		var go = false;
+		if(loopCount <= 0) go = true;
+		loopCount = count;
+		if(go) TieDivLib.timer();
 	}
 
 	this.getItems = function() {
