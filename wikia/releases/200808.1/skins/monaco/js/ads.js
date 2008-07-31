@@ -253,8 +253,8 @@ TieDivLib = new function() {
 					}
 				}
 
-				if(Math.ceil(Dom.getY(items[i][0])) != Math.ceil(Dom.getY(items[i][1]))) {
-					Dom.setY(items[i][0], Math.ceil(Dom.getY(items[i][1])));
+				if(Math.floor(Dom.getY(items[i][0])) != Math.floor(Dom.getY(items[i][1]))) {
+					Dom.setY(items[i][0], Math.floor(Dom.getY(items[i][1])));
 				}
 			} else {
 				if(Math.ceil(Dom.getY(items[i][0])) != Math.ceil(Dom.getY(items[i][1])) || Math.ceil(Dom.getX(items[i][0])) != Math.ceil(Dom.getX(items[i][1]))) {
