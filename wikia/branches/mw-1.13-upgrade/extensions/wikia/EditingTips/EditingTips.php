@@ -53,7 +53,9 @@ function getEditingTips() {
 					}
 				}
 			} else {
-				$tips[$j]['body'] .= getTextOfDomElement($element);
+				if( isset( $tips[$j]['body'] ) ) {
+					$tips[$j]['body'] .= getTextOfDomElement($element);
+				}
 			}
 			$i++;
 		}
