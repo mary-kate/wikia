@@ -93,7 +93,7 @@ function moveToExternal( $cluster, $limit ) {
 
 		$revision = Revision::newFromId( $row->rev_id );
 		if( $revision ) {
-			$extUpdate = new ExternalStorageUpdate( $url, $revision );
+			$extUpdate = new ExternalStorageUpdate( $url, $revision, $flags );
 			$extUpdate->doUpdate();
 		}
 		else {
