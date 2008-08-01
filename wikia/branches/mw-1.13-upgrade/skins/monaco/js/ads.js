@@ -1,4 +1,16 @@
 /**
+ * http://acko.net/blog/mouse-handling-and-absolute-positions-in-javascript
+ */
+function getAbsolutePosition(element){
+	var r = {x:element.offsetLeft,y:element.offsetTop};
+	if(element.offsetParent){
+		var tmp = getAbsolutePosition(element.offsetParent);
+		r.x += tmp.x;
+		r.y += tmp.y;
+	}
+	return r;
+};
+/**
  * http://www.hedgerwow.com/360/dhtml/js-onfontresize2.html
  */
 YAHOO.namespace('YAHOO.example').FontSizeMonitor = (function(){
@@ -200,16 +212,15 @@ function ad_call(adSpaceId, zoneId, pos) {
  * @author Inez Korczynski
  */
 TieDivLib = new function() {
-
+	var Dom = YAHOO.util.Dom;
 	var items = Array();
-
 	var block = false;
-
 	var loopCount = 300;
-
+	var rtl;
 	var adjustY;
-
 	var adjustX;
+	var shrink;
+	var xy;
 
 	this.tie = function(source, target, pos) {
 
@@ -233,18 +244,32 @@ TieDivLib = new function() {
 		if(block) return;
 		block = true;
 		for(i = 0; i < items.length; i++) {
-			if(YAHOO.env.ua.gecko > 0 && ((items[i][2] == 'FAST_BOTTOM' && fast_bottom_type == 'FAST4') || (YAHOO.util.Dom.hasClass(document.body, 'rtl') && (items[i][2] == 'bl' || items[i][2] == 'r' || items[i][2] == 'FAST_HOME3' || items[i][2] == 'FAST_HOME4' || items[i][2] == 'FAST_SIDE')) || items[i][2] == 'FAST_HOME1' || items[i][2] == 'FAST_HOME2' || items[i][2] == 'FAST_TOP')) {
-				if($(items[i][0]).style.right == '') {
-					$(items[i][0]).style.display = '';
-					$(items[i][0]).style.right = (((YAHOO.util.Dom.hasClass(document.body, 'rtl') && (items[i][2] == 'FAST_TOP' || items[i][2] == 'FAST_HOME1' || items[i][2] == 'FAST_HOME2')) || items[i][2] == 'bl' || items[i][2] == 'r' || items[i][2] == 'FAST_HOME3' || items[i][2] == 'FAST_HOME4' || items[i][2] == 'FAST_SIDE') ? YAHOO.util.Dom.getViewportWidth() : YAHOO.util.Dom.getDocumentWidth()) - (YAHOO.util.Dom.getX(items[i][1]) + $(items[i][1]).offsetWidth) + 'px';
+
+			xy = getAbsolutePosition($(items[i][1]));
+
+			if(!rtl && (items[i][2].substring(0, 4) == 'FAST' || items[i][2] == 'bl' || items[i][2] == 'r')) {
+				if(Dom.getStyle(items[i][0], 'display') != 'block') {
+					Dom.setStyle(items[i][0], 'display', 'block');
 				}
-				if(Math.round(YAHOO.util.Dom.getY(items[i][0])) != Math.round(YAHOO.util.Dom.getY(items[i][1]))) {
-					YAHOO.util.Dom.setY(items[i][0], Math.round(YAHOO.util.Dom.getY(items[i][1])));
+				if(items[i][2] == 'FAST_HOME1' || items[i][2] == 'FAST_HOME2' || items[i][2] == 'FAST_TOP' || (items[i][2] == 'FAST_BOTTOM' && fast_bottom_type == 'FAST4')) {
+					if($(items[i][0]).style.right == '') {
+						$(items[i][0]).style.right = Dom.getDocumentWidth() - (Dom.getX(items[i][1]) + $(items[i][1]).offsetWidth) + 'px';
+					}
+				} else {
+					if($(items[i][0]).style.left == '') {
+						$(items[i][0]).style.left = Dom.getX(items[i][1]) + 'px';
+					}
+				}
+				if(xy.y != parseFloat($(items[i][0]).style.top) + shrink) {
+					$(items[i][0]).style.top = (xy.y - shrink) + 'px';
 				}
 			} else {
-				if(Math.round(YAHOO.util.Dom.getX(items[i][0])) != Math.round(YAHOO.util.Dom.getX(items[i][1])) || Math.round(YAHOO.util.Dom.getY(items[i][0])) != Math.round(YAHOO.util.Dom.getY(items[i][1]))) {
-					$(items[i][0]).style.display = '';
-					YAHOO.util.Dom.setXY(items[i][0], YAHOO.util.Dom.getXY(items[i][1]));
+				if(xy.y != parseFloat($(items[i][0]).style.top) + shrink || xy.x != parseFloat($(items[i][0]).style.left)) {
+					if(Dom.getStyle(items[i][0], 'display') != 'block') {
+						Dom.setStyle(items[i][0], 'display', 'block');
+					}
+					$(items[i][0]).style.top = (xy.y - shrink) + 'px';
+					$(items[i][0]).style.left = xy.x + 'px';
 				}
 			}
 		}
@@ -260,13 +285,15 @@ TieDivLib = new function() {
 	}
 
 	this.init = function() {
-		adjustY = ((YAHOO.env.ua.ie > 0) ? 2 : 0) + YAHOO.util.Dom.getY('monaco_shrinkwrap_main');
-		adjustX = (YAHOO.env.ua.ie > 0) ? YAHOO.util.Dom.getX('wikia_header') : 0;
+		rtl = Dom.hasClass(document.body, 'rtl');
+		shrink = Math.round(Dom.getY('monaco_shrinkwrap_main'));
+		adjustY = ((YAHOO.env.ua.ie > 0) ? 2 : 0) + shrink;
+		adjustX = (YAHOO.env.ua.ie > 0) ? Dom.getX('wikia_header') : 0;
 
 		TieDivLib.timer();
 
 		YAHOO.util.Event.addListener(window, 'load', function() {
-			setTimeout(function() { loopCount = 0; }, 1000);
+			setTimeout(function() { loopCount = 0; }, 2000);
 			YAHOO.example.FontSizeMonitor.onChange.subscribe(TieDivLib.recalc);
 		});
 
