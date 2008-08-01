@@ -17,12 +17,28 @@ $wgExtensionCredits['other'][] = array(
 );
 
 include_once( "$IP/extensions/wikia/WikiCurl/WikiCurl.php" );
+include_once( "live_lib/windowslivelogin.php" ); //php lib for micrsoft live api
 
 class WikiContacts
 {
+    static $live_services = array(
+    		"hotmail","hotmail.co.uk","hotmail.de", "hotmail.es", "hotmail.fr","hotmail.it","hotmail.co.jp",
+		"live","live.fr","live.de","live.jp","live.cl","live.ca",
+		"MSN"
+    );
+    						
+    final public static function isLiveService( $provider ) {
+	    return in_array( $provider, self::$live_services );
+		 
+    }
+    
     final public static function fetch( $provider, $username, $password ) 
     {
-		switch ( $provider ) 
+	    if( strpos( $provider, "yahoo.") !== false  ){
+		    return self::fetchYahooAPI  ( $username  );
+	    }
+	
+	    switch ( $provider ) 
 		{
 			case 'gmail':    return self::fetchGmail  ( $username, $password );
 			case 'yahoo':    return self::fetchYahoo  ( $username, $password );
@@ -30,7 +46,147 @@ class WikiContacts
 			default:         return self::fetchGmail  ( $username, $password );
 		}
     }
+  
+    final public static function fetchYahooAPI( $cookie ) 
+    {
+	    global $wgYahooAPIAppid;
+	   
+	    if( ! $_COOKIE["yahoo_wssid"] ) return false;
+	    
+	    $url = "http://address.yahooapis.com/v1/searchContacts";
+	    $url .= "?format=json";
+	    $url .= "&appid=" . $wgYahooAPIAppid;
+	    $url .= "&WSSID=" . $_COOKIE["yahoo_wssid"];
 
+	    //make the GET Request to Yahoo API in CURL
+	    $headers = array("Cookie: " . $_COOKIE["yahoo_cookie"]);
+	    $curl = curl_init();
+	    curl_setopt($curl, CURLOPT_URL, $url);
+	    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+	    curl_setopt($curl, CURLOPT_TIMEOUT, 60);
+	    curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+	    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+		
+	    $json = curl_exec($curl);
+	    $curlinfo = curl_getinfo($curl);
+	    curl_close($curl);
+	    
+	    if( $curlinfo["http_code"] != 200 ) return false;
+
+	    $yahoo_contacts = json_decode( $json );
+
+	    $contacts = array();
+	
+	    foreach ($yahoo_contacts->contacts as $contact){
+		    $email = "";
+		    $name = "";
+		
+		    foreach( $contact->fields as $field ){
+			    if( $field->type == "email" ){
+				    $email = $field->data;
+			    }
+			    if( $field->type == "name"){
+				    $name = $field->first . " " . $field->last;
+			    }
+		    }
+		    if( $email ){
+			    if( !$name ) $name = $email;
+			    $contacts[] = array( 
+						"email" => "{$email}",
+						"name" => "{$name}"
+						);
+		    }
+	    }
+	    return $contacts;
+	    
+    }
+    
+    final public static function fetchMS( $cookie ) 
+    {
+	global $wgLiveAPIApplicationKey;
+	
+	if ($cookie) {
+		$wll = WindowsLiveLogin::initFromXml($wgLiveAPIApplicationKey);
+		$token = $wll->processConsentToken($cookie);
+	}
+	if ($token && !$token->isValid()) {
+		return false;
+	}
+	
+	$delegation_token = $token->getDelegationToken();
+	$cid = $token->getLocationID();
+	
+	// convert the cid to a signed 64-bit integer
+	$lid = self::hexaTo64SignedDecimal($cid, 16, 10);
+	$uri = "https://livecontacts.services.live.com/users/@C@" . $lid . "/rest/livecontacts";
+	
+	$host = "livecontacts.services.live.com";
+	$urisplit = split("://", $uri);
+	$page = substr($urisplit[1], strlen($host));
+	
+	// Add the token to the header
+	$headers = array("Authorization: DelegatedToken dt=\"$delegation_token\"");
+	
+	$curl = curl_init();
+	curl_setopt($curl, CURLOPT_URL, $uri);
+	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt($curl, CURLOPT_TIMEOUT, 60);
+	curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+	curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+	
+	$xml = curl_exec($curl);
+
+	// Get the info and close the connection
+	$curlinfo = curl_getinfo($curl);
+	curl_close($curl);
+	
+	if ($xml !== false)
+	{
+	    $oSimpleXML = new SimpleXMLElement($xml);
+	    $contacts = array();
+	    $i = 0;
+	    $contactsroot = $oSimpleXML->Contacts[0];
+	
+	    foreach ($contactsroot->Contact as $contact)
+	    {
+		$firstname = $middlename = $lastname = $fullname = "";
+	
+		if (isset($contact->Profiles->Personal->FirstName))
+		    $firstname = $contact->Profiles->Personal->FirstName;
+		if (isset($contact->Profiles->Personal->MiddleName))
+		    $middlename = $contact->Profiles->Personal->MiddleName;
+		if (isset($contact->Profiles->Personal->LastName))
+		    $lastname = $contact->Profiles->Personal->LastName;
+	
+		// Concatenate the 3 variables
+		$fullname = $firstname . " " . $middlename . " " . $lastname;
+		$fullname = str_replace("  ", " ", $fullname);
+		$fullname = trim($fullname);
+	
+		// If there is no full name available, use the displayname
+		if ($fullname == "")
+		    $fullname = $contact->Profiles->Personal->DisplayName;
+	
+		// If there is no displayname, use the unique name
+		if ($fullname == "")
+		    $fullname = $contact->Profiles->Personal->UniqueName;
+	
+		foreach ($contact->Emails->Email as $email){
+		    $contacts[] = array( 
+		    			"name" => "{$fullname}",
+					"email" => "{$email->Address}"
+					);
+	    
+		}
+	    }
+	
+	
+	}
+	
+	//$contacts = array_unique($contacts);
+	return $contacts;
+    }
+    
     private static function utf162utf8($utf16)
     {
         // oh please oh please oh please oh please oh please
@@ -129,12 +285,12 @@ class WikiContacts
 		}
     }
 
-    private static function fetchYahoo( $username, $password ) 
+    private static function fetchYahoo( $username, $password, $login_domain="http://login.yahoo.com/config/login" ) 
     {
 		$handler = new WikiCurl();
 		$handler->setCookies( '/dev/null' );
 
-		$ret = $handler->post('http://login.yahoo.com/config/login', array( 
+		$ret = $handler->post($login_domain, array( 
 											'login'      => $username,
 											'passwd'     => $password,
 											'.src'       => '',
@@ -159,8 +315,8 @@ class WikiContacts
 											'.done'      => 'http://address.mail.yahoo.com/',
 											'.last'      => '',
 											'.pd'		 =>	'_var=0&c=' ));
-
-		if ( !preg_match( "/invalid/i", $ret ) && !preg_match( "/not yet taken/i", $ret ) )  // we are logged in, let's analyze the Contacts page
+		
+		if ( !preg_match( "/Sign in to Yahoo/i", $ret )   )  // we are logged in, let's analyze the Contacts page
 		{  
 			// get random value of URL -> added by MoLi
 			$res = $handler->get('http://address.mail.yahoo.com',array());
@@ -180,7 +336,8 @@ class WikiContacts
 									'A' => 'B' 
 								 )
 							);
-
+			echo $ret;
+			exit();
 			$ret = substr( $ret, strpos( $ret, "\r\n\r\n" ) + 4 );
 			//$wgOut->addWikiText( '<pre>' . $ret . '</pre>' );
 
@@ -236,7 +393,7 @@ class WikiContacts
 	    	return false;
 		}
     }
-
+    
     private static function fetchMyspace( $username, $password ) 
     {  // 151235739
 		$handler = new WikiCurl();
@@ -309,6 +466,91 @@ class WikiContacts
 	    	return false;
 		}
     }
+    public function hexaTo64SignedDecimal($hexa)
+	{
+	    $bin = self::fixed_base_convert($hexa, 16, 2);
+	    if (64 === strlen($bin) and 1 == $bin[0])
+	    {
+		$inv_bin = strtr($bin, '01', '10');
+		$i = 63;
+		while (0 !== $i)
+		{
+		    if (0 == $inv_bin[$i])
+		    {
+			$inv_bin[$i] = 1;
+			$i = 0;
+		    }
+		    else
+		    {
+			$inv_bin[$i] = 0;
+			$i--;
+		    }
+		}
+		return '-' . self::fixed_base_convert($inv_bin, 2, 10);
+	    }
+	    else
+	    {
+		return self::fixed_base_convert($hexa, 16, 10);
+	    }
+	}
+	
+	/* fixed_base_convert is used to correctly convert the CID's to INT64 LID's
+	Follows the syntax of base_convert (http://www.php.net/base_convert)
+	Created by Michael Renner @ http://www.php.net/base_convert
+	17-May-2006 03:24
+	*/
+	public function fixed_base_convert($numstring, $frombase, $tobase)
+	{
+	    $chars = "0123456789abcdefghijklmnopqrstuvwxyz";
+	    $tostring = substr($chars, 0, $tobase);
+	
+	    $length = strlen($numstring);
+	    $result = '';
+	    for ($i = 0; $i < $length; $i++)
+	    {
+		$number[$i] = strpos($chars, $numstring{$i});
+	    }
+	    do
+	    {
+		$divide = 0;
+		$newlen = 0;
+		for ($i = 0; $i < $length; $i++)
+		{
+		    $divide = $divide * $frombase + $number[$i];
+		    if ($divide >= $tobase)
+		    {
+			$number[$newlen++] = (int)($divide / $tobase);
+			$divide = $divide % $tobase;
+		    } elseif ($newlen > 0)
+		    {
+			$number[$newlen++] = 0;
+		    }
+		}
+		$length = $newlen;
+		$result = $tostring{$divide} . $result;
+	    } while ($newlen != 0);
+	    return $result;
+	}   
+
 }
 
+function sign_yahoo_url( $url ) {
+	global $YahooAPISecret;
+	$parts = parse_url( $url );
+	
+	$ts = time();
+	$relative_uri = "";
+	if ( isset( $parts["path"] ) ){
+		$relative_uri .= $parts["path"];
+	}
+	if ( isset ( $parts["query" ] ) ) {
+		$relative_uri .= "?" . $parts["query"] . "&ts=$ts";
+	}
+	
+	$sig = md5( $relative_uri . $YahooAPISecret );
+	
+	$signed_url = $parts["scheme"] . "://" .  $parts["host"] . $relative_uri . "&sig=$sig";
+	
+	return $signed_url;
+}
 ?>
