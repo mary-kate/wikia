@@ -320,7 +320,7 @@ class SpecialProblemReports extends SpecialPage
 	
 		wfProfileIn(__METHOD__);
 		
-		global $wgDBname, $wgOut, $wgRequest, $wgUser;
+		global $wgDBname, $wgOut, $wgUser;
 	
 		$dbr =& wfGetDB( DB_SLAVE );
 		
