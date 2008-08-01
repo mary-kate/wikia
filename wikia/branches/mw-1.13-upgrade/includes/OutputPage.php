@@ -729,6 +729,7 @@ class OutputPage {
 		wfProfileIn( __METHOD__ );
 
 		if ( $wgUseAjax ) {
+			global $wgStylePath, $wgStyleVersion;
 
 			if(get_class($wgUser->getSkin()) != 'SkinMonaco') {
 				$this->addScript( "<script type=\"{$wgJsMimeType}\" src=\"{$wgStylePath}/common/ajax.js?$wgStyleVersion\"></script>\n" );
