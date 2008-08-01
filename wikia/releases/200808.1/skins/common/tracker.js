@@ -53,7 +53,25 @@ YAHOO.Wikia.Tracker = {
 		if ( wgCanonicalSpecialPageName && wgCanonicalSpecialPageName == 'Userlogin' ) {
 			Event.addListener($('userloginlink').getElementsByTagName('a')[0], 'click', YAHOO.Wikia.Tracker.trackByStr, 'loginActions/goToSignup');
 		}
+		
+		// Special:Search (Macbre)
+		if ( wgCanonicalSpecialPageName && wgCanonicalSpecialPageName == 'Search' ) {
+			lists = Dom.get('bodyContent').getElementsByTagName('ol');
 
+			if (lists && lists.length > 0) {
+
+				listNames = ['title', 'text'];
+
+				for (l=0; l < lists.length; l++) {
+					offset = lists[l].start;
+					anchors = lists[l].getElementsByTagName('a');
+
+					for (a=0; a < anchors.length; a++) {
+						Event.addListener(anchors[a], 'click', YAHOO.Wikia.Tracker.trackByStr, 'searchResults/' + listNames[l] + 'Match/' + (offset + a));
+					}
+				}
+			}
+		}
 	},
 
 	trackByStr: function(e, str) {
