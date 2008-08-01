@@ -320,31 +320,23 @@ class SpecialProblemReports extends SpecialPage
 	
 		wfProfileIn(__METHOD__);
 		
-		global $wgDBname, $wgOut, $wgRequest;
+		global $wgDBname, $wgOut, $wgRequest, $wgUser;
 	
 		$dbr =& wfGetDB( DB_SLAVE );
 		
 		// switch to DB of wikia report was made from
 		$dbr->selectDB( $report['db'] );
-		
-		$logReader = new LogReader( $wgRequest );
-		$logReader->limitType( 'pr_rep_log' );					// only log entries for ProblemReports ...
-		$logReader->whereClauses[] = "log_params LIKE '%\n{$report['id']}%'";	// .. and for given report
-		
-		$logViewer = new LogViewer( $logReader );
-		
-		// format log list
-		$result = $logViewer->getLogRows();
-		$logs = '';
 
-		if ($logViewer->numResults > 0) {
-			$result->seek( 0 );
-			
-			while( $s = $result->fetchObject() ) {
-				$logs .= $logViewer->logLine( $s );
-			}
-		}
-		
+		// setup classes for log
+		$loglist = new LogEventsList( $wgUser->getSkin(), $wgOut );
+		$pager = new LogPager( $loglist, 'pr_rep_log' );
+
+		// show logs only for given report
+		$pager->mConds[] = "log_params LIKE '%\n{$report['id']}%'";
+	
+		// get logs	
+		$logs = $pager->getBody();
+
 		// switch back to our DB
 		$dbr->selectDB( $wgDBname );
 		
