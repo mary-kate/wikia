@@ -82,7 +82,10 @@ function moveToExternal( $cluster, $limit ) {
 
 		$lag = $dbr->getLag();
 		print "Storing "  . strlen( $text ) . " bytes to {$url}, old_id=$id\n";
-		print "lag: {$lag}\n";
+		if( $lag > 4 ) {
+			print "lag: {$lag}. waiting...\n";
+			sleep( floor( $lag ) );
+		}
 
 		$dbw->update(
 			'text',
