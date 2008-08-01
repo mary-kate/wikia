@@ -16,10 +16,7 @@ function wfProblemReportsAjaxGetDialog($ns, $title)
 {
 	wfProfileIn(__METHOD__);
 
-	global $mediaWiki, $wgTitle, $wgRequest, $wgUser, $wgOut;
-    	
-	// initialize basic MW objects
-	$article = $mediaWiki->initialize ( $wgTitle, $wgOut, $wgUser, $wgRequest );
+	global $wgUser, $wgOut;
 
 	// load extension messages
    	wfLoadExtensionMessages( 'ProblemReports' );
