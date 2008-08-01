@@ -219,6 +219,8 @@ TieDivLib = new function() {
 	var rtl;
 	var xy;
 	var pos = [];
+	var aX;
+	var aY;
 
 	this.tie = function(source, target, pos) {
 
@@ -249,6 +251,7 @@ TieDivLib = new function() {
 			pos.sidebarH = $('widget_sidebar').offsetHeight;
 			for(i = 0; i < items.length; i++) {
 				xy = getAbsolutePosition($(items[i][1]));
+				xy.x = Dom.getX($(items[i][1]));
 				if(!rtl && (items[i][2].substring(0, 4) == 'FAST' || items[i][2] == 'bl' || items[i][2] == 'r')) {
 					if(Dom.getStyle(items[i][0], 'display') != 'block') {
 						Dom.setStyle(items[i][0], 'display', 'block');
@@ -259,19 +262,19 @@ TieDivLib = new function() {
 						}
 					} else {
 						if($(items[i][0]).style.left == '') {
-							$(items[i][0]).style.left = Dom.getX(items[i][1]) + 'px';
+							$(items[i][0]).style.left = Dom.getX(items[i][1]) - aX + 'px';
 						}
 					}
 					if(xy.y != parseFloat($(items[i][0]).style.top) + pos.shrink) {
-						$(items[i][0]).style.top = (xy.y - pos.shrink) + 'px';
+						$(items[i][0]).style.top = (xy.y - pos.shrink + aY) + 'px';
 					}
 				} else {
 					if(xy.y != parseFloat($(items[i][0]).style.top) + pos.shrink || xy.x != parseFloat($(items[i][0]).style.left)) {
 						if(Dom.getStyle(items[i][0], 'display') != 'block') {
 							Dom.setStyle(items[i][0], 'display', 'block');
 						}
-						$(items[i][0]).style.top = (xy.y - pos.shrink) + 'px';
-						$(items[i][0]).style.left = xy.x + 'px';
+						$(items[i][0]).style.top = xy.y - pos.shrink + aY + 'px';
+						$(items[i][0]).style.left = xy.x - aX + 'px';
 					}
 				}
 			}
@@ -289,7 +292,8 @@ TieDivLib = new function() {
 
 	this.init = function() {
 		rtl = Dom.hasClass(document.body, 'rtl');
-
+		aX = (YAHOO.env.ua.ie > 0) ? Dom.getX('wikia_header') : 0;
+		aY = ((YAHOO.env.ua.ie > 0) ? 2 : 0);
 		TieDivLib.timer();
 
 		YAHOO.util.Event.addListener(window, 'load', function() {
