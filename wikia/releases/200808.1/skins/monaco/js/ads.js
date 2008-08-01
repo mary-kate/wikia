@@ -251,7 +251,7 @@ TieDivLib = new function() {
 			pos.sidebarH = $('widget_sidebar').offsetHeight;
 			for(i = 0; i < items.length; i++) {
 				xy = getAbsolutePosition($(items[i][1]));
-				xy.x = Dom.getX($(items[i][1]));
+				xy.x = Dom.getX(items[i][1]);
 				if(!rtl && (items[i][2].substring(0, 4) == 'FAST' || items[i][2] == 'bl' || items[i][2] == 'r')) {
 					if(Dom.getStyle(items[i][0], 'display') != 'block') {
 						Dom.setStyle(items[i][0], 'display', 'block');
@@ -259,6 +259,11 @@ TieDivLib = new function() {
 					if(items[i][2] == 'FAST_HOME1' || items[i][2] == 'FAST_HOME2' || items[i][2] == 'FAST_TOP' || (items[i][2] == 'FAST_BOTTOM' && fast_bottom_type == 'FAST4')) {
 						if($(items[i][0]).style.right == '') {
 							$(items[i][0]).style.right = Dom.getDocumentWidth() - (Dom.getX(items[i][1]) + $(items[i][1]).offsetWidth) + 'px';
+							$(items[i][0]).style.left = '';
+						}
+						if(Math.abs(xy.x - Dom.getX(items[i][0])) > 15) {
+							$(items[i][0]).style.left = xy.x - aX + 'px';
+							$(items[i][0]).style.right = '';
 						}
 					} else {
 						if($(items[i][0]).style.left == '') {
