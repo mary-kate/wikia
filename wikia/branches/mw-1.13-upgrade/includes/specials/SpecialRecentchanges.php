@@ -16,6 +16,8 @@ class SpecialRecentChanges extends SpecialPage {
 	 * @return FormOptions
 	 */
 	public function getDefaultOptions() {
+		global $wgUser;
+
 		$opts = new FormOptions();
 
 		$opts->add( 'days',  (int)User::getDefaultOption( 'rcdays' ) );
@@ -673,7 +675,7 @@ class SpecialRecentChanges extends SpecialPage {
 		// show from this onward link
 		$now = $wgLang->timeanddate( wfTimestampNow(), true );
 		$tl =  $this->makeOptionsLink( $now, array( 'from' => wfTimestampNow()), $nondefaults );
-	$enhancedLink = makeOptionsLink( $showhide[1-$options['hideenhanced']],
+		$enhancedLink = $this->makeOptionsLink( $showhide[1-$options['hideenhanced']],
 		array( 'hideenhanced' => 1-$options['hideenhanced'] ), $nondefaults);
 
 		$rclinks = wfMsgExt( 'rclinks', array( 'parseinline', 'replaceafter'),
