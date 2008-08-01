@@ -36,8 +36,8 @@ function moveToExternal( $cluster, $limit ) {
 	$sql = "SELECT * FROM revision r1 FORCE INDEX (PRIMARY), text t2
 		WHERE old_id = rev_text_id
 		AND old_flags NOT LIKE '%external%'
-                AND old_text NOT LIKE '%HistoryBlobStub%'
-		ORDER BY rev_id
+		AND old_text NOT LIKE '%HistoryBlobStub%'
+		ORDER BY rev_id DESC
 		$limit";
 
 	$res = $dbr->query( $sql, __METHOD__ );
