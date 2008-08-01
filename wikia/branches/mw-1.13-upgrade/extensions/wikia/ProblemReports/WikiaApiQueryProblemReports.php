@@ -51,17 +51,17 @@ class WikiaApiQueryProblemReports extends WikiaApiQuery {
 	
 		global $wgServerName;
 	
-        $params  = $this->getInitialParams();
+ 		$params  = $this->getInitialParams();
 		
 		// validate given token
 		$isTokenValid = ( !empty($params['token']) && WikiaApiQueryProblemReports::getToken($wgServerName) == $params['token'] );
 
-        // database instance
-        $db =& $this->getDB(DB_SLAVE);
+		// database instance
+		$db =& $this->getDB(DB_SLAVE);
 
-        // build query
-        $this->addTables( array( wfSharedTable('problem_reports'), wfSharedTable('city_list') ) );
-        $this->addFields( array
+		// build query
+		$this->addTables( array( wfSharedTable('problem_reports'), wfSharedTable('city_list') ) );
+		$this->addFields( array
 			(
 				'problem_reports.pr_id as id',
 				'problem_reports.pr_city_id as city_id',
@@ -862,6 +862,10 @@ class WikiaApiQueryProblemReports extends WikiaApiQuery {
 		switch($key) {
 			// problem is reported
 			case 'pr_rep_log/prl_rep':
+				// dirty hack
+				if (empty($params[1])) {
+					$params = explode("\n", $params[0]);
+				}
 				$rt = wfMsg( $wgLogActions[$key], $titleLink, '[[Special:ProblemReports/'.$params[1].'|#'.$params[1].']]' );
 				break;
 		
