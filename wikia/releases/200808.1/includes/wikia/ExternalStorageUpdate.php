@@ -16,6 +16,7 @@ CREATE TABLE `blobs` (
   `rev_user_text` varchar(255) character set latin1 collate latin1_bin NOT NULL default '',
   `rev_timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
   `blob_text` mediumtext NOT NULL,
+  `rev_flags` tinyblob default NULL
   PRIMARY KEY  (`blob_id`),
   KEY `rev_page_id` (`rev_wikia_id`,`rev_page_id`,`rev_id`),
   KEY `rev_namespace` (`rev_wikia_id`,`rev_page_id`,`rev_namespace`),
@@ -39,11 +40,12 @@ $wgHooks[ "RevisionInsertComplete" ][] = array( "ExternalStorageUpdate::addDefer
 
 class ExternalStorageUpdate {
 
-	private $mId, $mUrl, $mPageId, $mRevision;
+	private $mId, $mUrl, $mPageId, $mRevision, $mFlags;
 
-	public function __construct( $url, $revision ) {
+	public function __construct( $url, $revision, $flags ) {
 		$this->mUrl = $url;
 		$this->mRevision = $revision;
+		$this->mFlags = $flags;
 	}
 
 	/**
@@ -65,11 +67,13 @@ class ExternalStorageUpdate {
 		$cluster  = $path[2];
 		$id	      = $path[3];
 
+		wfProfileIn( __METHOD__ );
 		if( $this->mRevision instanceof Revision ) {
 			$this->mPageId = $this->mRevision->getPage();
 			$Title = Title::newFromID( $this->mPageId );
 			if( ! $Title  ) {
-				error_log( __METHOD__.": title is null, page id = {$this->mPageId}" );
+				wfDebug( __METHOD__.": title is null, page id = {$this->mPageId}" );
+				wfProfileOut( __METHOD__ );
 				return false;
 			}
 
@@ -93,6 +97,7 @@ class ExternalStorageUpdate {
 					"rev_wikia_id"  => $wgCityId,
 					"rev_namespace" => $Title->getNamespace(),
 					"rev_user_text" => $this->mRevision->getUserText(),
+					"rev_flags"     => $this->mFlags
 				),
 				array( "blob_id" => $id ),
 				__METHOD__
@@ -149,8 +154,9 @@ class ExternalStorageUpdate {
 			}
 		}
 		else {
-			echo "revision object is not Revision instance\n";
+			wfDebug( __METHOD__.": revision object is not Revision instance\n" );
 		}
+		wfProfileOut( __METHOD__ );
 		return true;
 	}
 
@@ -173,7 +179,7 @@ class ExternalStorageUpdate {
 		global $wgDeferredUpdateList;
 
 		if( strpos( $flags, "external" ) !== false ) {
-			$u = new ExternalStorageUpdate( $url, $revision );
+			$u = new ExternalStorageUpdate( $url, $revision, $flags );
 			array_push( $wgDeferredUpdateList, $u );
 		}
 		return true;
