@@ -14,6 +14,7 @@
 # To activate the extension, include it from your LocalSettings.php
 # with: include("extensions/poll.php");
 $wgExtensionFunctions[] = "wfPoll";
+$wgExtensionMessagesFiles['poll'] = dirname(__FILE__) . '/poll.i18n.php';
 
 function wfPoll() {
   global $wgParser;
@@ -162,26 +163,7 @@ function buildHTML($ID, $user, $lines="", $extra_from_ajax="") {
 
   $wgUseAjax = 0;
 
-  $wgMessageCache->addMessages(array(
-	"pollVoteUpdate" => "Your vote has been updated.",
-	"pollVoteAdd"    => "Your vote has been added.",
-	"pollVoteError"  => "There was a problem with processing your vote, please try again.",
-	"pollPercentVotes" => "%d%% of all votes", // %d is the percentage number of the votes
-	"pollYourVote"   => "You already voted for \"%s\" on %s, you can change your vote by clicking an answer below.", // First %s is the answer name, second %s is the date when the answer was casted
-	"pollNoVote"     => "Please vote below or <a href=\"\">click here</a> to see the results.",
-	"pollInfo"       => "There were %d votes since the poll was created on %s.", // %d is the number of votes, %s is when the poll was started
-	"pollSubmitting" => "Please wait, submitting your vote."
-  ), "en");
-  $wgMessageCache->addMessages(array(
-	"pollVoteUpdate" => "Twój głos został zmieniony.",
-	"pollVoteAdd"    => "Twój głos został dodany.",
-	"pollVoteError"  => "Wystąpił błąd w czasie dodawania głosu, proszę spróbować później.",
-	"pollPercentVotes" => "%d%% wszystkich głosów",
-	"pollYourVote"   => "Zagłosowałeś juz na \"%s\" %s, możesz zaktualizować swój głos klikając na odpowiedź poniżej.",
-	"pollNoVote"     => "Podaj swój głos poniżej lub <a href=\"\">kliknij tu</a>, żeby zobaczyć oddane głosy.",
-	"pollInfo"       => "Oddano już %d głosy/ów od założenia ankiety dnia %s.",
-	"pollSubmitting" => "Proszę czekać, trwa dodawanie głosu."
-  ), "pl");
+  wfLoadExtensionMessages('poll');  
 
   $dbw = wfGetDB( DB_SLAVE );
 
@@ -208,7 +190,7 @@ function buildHTML($ID, $user, $lines="", $extra_from_ajax="") {
   $q = $dbw->query("SELECT poll_answer, poll_date FROM poll_vote WHERE poll_id='{$ID}' AND poll_user={$dbw->addQuotes($user)}");
 
   if ($r = $dbw->fetchRow($q)) {
-  	$tmp_date = sprintf(wfMsg("pollYourVote"), $lines[ $r[0]-1 ], date("d M Y H:i:s e", strtotime(str_replace(array(" ", ":", "-"), "", $r[1]))));
+  	$tmp_date = wfMsg("pollYourVote", $lines[ $r[0]-1 ], date("d M Y H:i:s e", strtotime(str_replace(array(" ", ":", "-"), "", $r[1]))));
   }
   //$wgLang->formatNum($num);
   $ret = "<div id='pollId".$ID."' class='poll'><div class='pollAjax' id='pollAjax".$ID."'".(!empty($extra_from_ajax)?" style='display: block;'":"").">".wfMsg($extra_from_ajax)."</div><div class='pollQuestion'>".strip_tags( $lines[0] )."</div>";
@@ -238,13 +220,19 @@ function buildHTML($ID, $user, $lines="", $extra_from_ajax="") {
        else
          $ajax_no_ajax = "document.getElementById(\"pollIdAnswer".$ID."\").submit();";
 
-       $ret .= "<div class='pollAnswer' id='pollAnswer".$ans_no."'><div class='pollAnswerName'><label for='pollAnswerRadio".$ans_no."' onclick='document.getElementById(\"pollAjax".$ID."\").innerHTML=\"".wfMsg("pollSubmitting")."\"; document.getElementById(\"pollAjax".$ID."\").style.display=\"block\"; this.getElementsByTagName(\"input\")[0].checked = true; ".$ajax_no_ajax."'><input type='radio' id='p_answer".$ans_no."' name='p_answer' value='".$i."' />".strip_tags( $lines[$i] )."</label></div> <div class='pollAnswerVotes".($our?" ourVote":"")."' onmouseover='span=this.getElementsByTagName(\"span\")[0];tmpPollVar=span.innerHTML;span.innerHTML=span.title;span.title=\"\";' onmouseout='span=this.getElementsByTagName(\"span\")[0];span.title=span.innerHTML;span.innerHTML=tmpPollVar;'><span title='".sprintf(wfMsg("pollPercentVotes"), $percent."%")."'>".((isset($poll_result)&&!empty($poll_result[$i+1]))?$poll_result[$i+1]:0)."</span><div style='width: ".$percent."%;".($percent==0?" border:0;":"")."'></div></div></div>";
+       $ret .= "<div class='pollAnswer' id='pollAnswer".$ans_no."'><div class='pollAnswerName'>" .
+               "<label for='pollAnswerRadio".$ans_no."' onclick='document.getElementById(\"pollAjax".$ID."\").innerHTML=\"".wfMsg("pollSubmitting")."\"; document.getElementById(\"pollAjax".$ID."\").style.display=\"block\"; this.getElementsByTagName(\"input\")[0].checked = true; ".$ajax_no_ajax."'>" .
+		"<input type='radio' id='p_answer".$ans_no."' name='p_answer' value='".$i."' />".strip_tags( $lines[$i] ) .
+		"</label></div>" .
+		"<div class='pollAnswerVotes".($our?" ourVote":"")."' onmouseover='span=this.getElementsByTagName(\"span\")[0];tmpPollVar=span.innerHTML;span.innerHTML=span.title;span.title=\"\";' onmouseout='span=this.getElementsByTagName(\"span\")[0];span.title=span.innerHTML;span.innerHTML=tmpPollVar;'><span title='".wfMsg("pollPercentVotes",$percent)."'>".((isset($poll_result)&&!empty($poll_result[$i+1]))?$poll_result[$i+1]:0)."</span>" .
+		"<div style='width: ".$percent."%;".($percent==0?" border:0;":"")."'></div>" . 
+		"</div></div>";
   }
 
   $ret .= "</form>";
 
   // Misc
-  $tmp_date = sprintf(wfMsg("pollInfo"), $t, date("d M Y H:i:s e", strtotime(str_replace(array(" ", ":", "-"), "", $start_date))));
+  $tmp_date = wfMsg("pollInfo", $t, date("d M Y H:i:s e", strtotime(str_replace(array(" ", ":", "-"), "", $start_date))));
 
   $ret .= "<div id='pollInfo'>".$tmp_date."</div>";
 
@@ -252,4 +240,3 @@ function buildHTML($ID, $user, $lines="", $extra_from_ajax="") {
 
   return $ret;
 }
-?>
