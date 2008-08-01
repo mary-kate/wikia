@@ -115,7 +115,6 @@ YAHOO.util.Event.onDOMReady( function() {
 			for (i=0; i<images.length; i++) {
 				YD.setStyle(images[i], 'width', images[i].width + 'px');
 				YD.setStyle(images[i], 'height', images[i].height + 'px');
-				// YD.setStyle(images[i], 'background-image', 'url(' + images[i].src + ')');
 				YD.setStyle(images[i], 'filter', 'progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\'' + images[i].src + '\', sizingMethod=\'crop\')');
 				images[i].src = '/skins/common/dot.gif';
 			}
