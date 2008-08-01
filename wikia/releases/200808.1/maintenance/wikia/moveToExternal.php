@@ -80,13 +80,6 @@ function moveToExternal( $cluster, $limit ) {
 			exit;
 		}
 
-		$lag = $dbr->getLag();
-		print "Storing "  . strlen( $text ) . " bytes to {$url}, old_id=$id\n";
-		if( $lag > 4 ) {
-			print "lag: {$lag}. waiting...\n";
-			sleep( floor( $lag ) );
-		}
-
 		$dbw->update(
 			'text',
 			array( 'old_flags' => $flags, 'old_text' => $url ),
@@ -102,6 +95,14 @@ function moveToExternal( $cluster, $limit ) {
 		else {
 			echo "Cannot load revision by id = {$row->rev_id}\n";
 		}
+
+		$lag = $dbr->getLag();
+		print "Storing "  . strlen( $text ) . " bytes to {$url}, old_id=$id\n";
+		if( $lag > 4 ) {
+			print "lag: {$lag}. waiting...\n";
+			sleep( floor( $lag ) );
+		}
+
 		$numMoved++;
 	}
 	$dbr->freeResult( $res );
