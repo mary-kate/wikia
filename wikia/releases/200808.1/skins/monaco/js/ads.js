@@ -217,10 +217,8 @@ TieDivLib = new function() {
 	var block = false;
 	var loopCount = 300;
 	var rtl;
-	var adjustY;
-	var adjustX;
-	var shrink;
 	var xy;
+	var pos = [];
 
 	this.tie = function(source, target, pos) {
 
@@ -243,33 +241,38 @@ TieDivLib = new function() {
 	this.recalc = function() {
 		if(block) return;
 		block = true;
-		for(i = 0; i < items.length; i++) {
-
-			xy = getAbsolutePosition($(items[i][1]));
-
-			if(!rtl && (items[i][2].substring(0, 4) == 'FAST' || items[i][2] == 'bl' || items[i][2] == 'r')) {
-				if(Dom.getStyle(items[i][0], 'display') != 'block') {
-					Dom.setStyle(items[i][0], 'display', 'block');
-				}
-				if(items[i][2] == 'FAST_HOME1' || items[i][2] == 'FAST_HOME2' || items[i][2] == 'FAST_TOP' || (items[i][2] == 'FAST_BOTTOM' && fast_bottom_type == 'FAST4')) {
-					if($(items[i][0]).style.right == '') {
-						$(items[i][0]).style.right = Dom.getDocumentWidth() - (Dom.getX(items[i][1]) + $(items[i][1]).offsetWidth) + 'px';
-					}
-				} else {
-					if($(items[i][0]).style.left == '') {
-						$(items[i][0]).style.left = Dom.getX(items[i][1]) + 'px';
-					}
-				}
-				if(xy.y != parseFloat($(items[i][0]).style.top) + shrink) {
-					$(items[i][0]).style.top = (xy.y - shrink) + 'px';
-				}
-			} else {
-				if(xy.y != parseFloat($(items[i][0]).style.top) + shrink || xy.x != parseFloat($(items[i][0]).style.left)) {
+		if(pos.loaded != true || pos.shrink != Math.round(Dom.getY('monaco_shrinkwrap_main')) || pos.articleW != $('article').offsetWidth || pos.articleH != $('article').offsetHeight || pos.sidebarW != $('widget_sidebar').offsetWidth || pos.sidebarH != $('widget_sidebar').offsetHeight) {
+			pos.shrink = Math.round(Dom.getY('monaco_shrinkwrap_main'));
+			pos.articleW = $('article').offsetWidth;
+			pos.articleH = $('article').offsetHeight;
+			pos.sidebarW = $('widget_sidebar').offsetWidth;
+			pos.sidebarH = $('widget_sidebar').offsetHeight;
+			for(i = 0; i < items.length; i++) {
+				xy = getAbsolutePosition($(items[i][1]));
+				if(!rtl && (items[i][2].substring(0, 4) == 'FAST' || items[i][2] == 'bl' || items[i][2] == 'r')) {
 					if(Dom.getStyle(items[i][0], 'display') != 'block') {
 						Dom.setStyle(items[i][0], 'display', 'block');
 					}
-					$(items[i][0]).style.top = (xy.y - shrink) + 'px';
-					$(items[i][0]).style.left = xy.x + 'px';
+					if(items[i][2] == 'FAST_HOME1' || items[i][2] == 'FAST_HOME2' || items[i][2] == 'FAST_TOP' || (items[i][2] == 'FAST_BOTTOM' && fast_bottom_type == 'FAST4')) {
+						if($(items[i][0]).style.right == '') {
+							$(items[i][0]).style.right = Dom.getDocumentWidth() - (Dom.getX(items[i][1]) + $(items[i][1]).offsetWidth) + 'px';
+						}
+					} else {
+						if($(items[i][0]).style.left == '') {
+							$(items[i][0]).style.left = Dom.getX(items[i][1]) + 'px';
+						}
+					}
+					if(xy.y != parseFloat($(items[i][0]).style.top) + pos.shrink) {
+						$(items[i][0]).style.top = (xy.y - pos.shrink) + 'px';
+					}
+				} else {
+					if(xy.y != parseFloat($(items[i][0]).style.top) + pos.shrink || xy.x != parseFloat($(items[i][0]).style.left)) {
+						if(Dom.getStyle(items[i][0], 'display') != 'block') {
+							Dom.setStyle(items[i][0], 'display', 'block');
+						}
+						$(items[i][0]).style.top = (xy.y - pos.shrink) + 'px';
+						$(items[i][0]).style.left = xy.x + 'px';
+					}
 				}
 			}
 		}
@@ -286,14 +289,11 @@ TieDivLib = new function() {
 
 	this.init = function() {
 		rtl = Dom.hasClass(document.body, 'rtl');
-		shrink = Math.round(Dom.getY('monaco_shrinkwrap_main'));
-		adjustY = ((YAHOO.env.ua.ie > 0) ? 2 : 0) + shrink;
-		adjustX = (YAHOO.env.ua.ie > 0) ? Dom.getX('wikia_header') : 0;
 
 		TieDivLib.timer();
 
 		YAHOO.util.Event.addListener(window, 'load', function() {
-			setTimeout(function() { loopCount = 0; }, 2000);
+			setTimeout(function() { loopCount = 0; pos.loaded = true; }, 2000);
 			YAHOO.example.FontSizeMonitor.onChange.subscribe(TieDivLib.recalc);
 		});
 
