@@ -250,9 +250,9 @@ TieDivLib = new function() {
 			pos.sidebarW = $('widget_sidebar').offsetWidth;
 			pos.sidebarH = $('widget_sidebar').offsetHeight;
 			for(i = 0; i < items.length; i++) {
-				xy = getAbsolutePosition($(items[i][1]));
-				xy.x = Dom.getX(items[i][1]);
 				if(!rtl && (items[i][2].substring(0, 4) == 'FAST' || items[i][2] == 'bl' || items[i][2] == 'r')) {
+					xy = getAbsolutePosition($(items[i][1]));
+					xy.x = Dom.getX(items[i][1]);
 					if(Dom.getStyle(items[i][0], 'display') != 'block') {
 						Dom.setStyle(items[i][0], 'display', 'block');
 					}
@@ -274,12 +274,11 @@ TieDivLib = new function() {
 						$(items[i][0]).style.top = (xy.y - pos.shrink + aY) + 'px';
 					}
 				} else {
-					if(xy.y != parseFloat($(items[i][0]).style.top) + pos.shrink || xy.x != parseFloat($(items[i][0]).style.left)) {
-						if(Dom.getStyle(items[i][0], 'display') != 'block') {
-							Dom.setStyle(items[i][0], 'display', 'block');
-						}
-						$(items[i][0]).style.top = xy.y - pos.shrink + aY + 'px';
-						$(items[i][0]).style.left = xy.x - aX + 'px';
+					if(Dom.getStyle(items[i][0], 'display') != 'block') {
+						Dom.setStyle(items[i][0], 'display', 'block');
+					}
+					if(Dom.getXY(items[i][0]) != Dom.getXY(items[i][1])) {
+						Dom.setXY(items[i][0], Dom.getXY(items[i][1]));
 					}
 				}
 			}
