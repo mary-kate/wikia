@@ -36,7 +36,7 @@ function moveToExternal( $cluster, $limit ) {
 	$sql = "SELECT * FROM revision r1 FORCE INDEX (PRIMARY), text t2
 		WHERE old_id = rev_text_id
 		AND old_flags NOT LIKE '%external%'
-                AND old_text NOT LIKE '%HistoryBlobStub%' 
+                AND old_text NOT LIKE '%HistoryBlobStub%'
 		ORDER BY rev_id
 		$limit";
 
@@ -80,8 +80,9 @@ function moveToExternal( $cluster, $limit ) {
 			exit;
 		}
 
-		print "Storing "  . strlen( $text ) . " bytes to $url\n";
-		print "old_id=$id\n";
+		$lag = $dbr->getLag();
+		print "Storing "  . strlen( $text ) . " bytes to {$url}, old_id=$id\n";
+		print "lag: {$lag}\n";
 
 		$dbw->update(
 			'text',
