@@ -767,7 +767,6 @@ class memcached
     */
    function get_sock ($key)
    {
-global $memc_host;
       if (!$this->_active)
          return false;
 
@@ -799,7 +798,7 @@ global $memc_host;
       for ($tries = 0; $tries<20; $tries++)
       {
          $host = $this->_buckets[$hv % $this->_bucketcount];
-$memc_host = $host;
+         $this->_memc_host = $host;
          $sock = $this->sock_to_host($host);
          if (is_resource($sock)) {
             $this->_flush_read_buffer($sock);
@@ -878,7 +877,6 @@ $memc_host = $host;
     */
    function _load_items ($sock, &$ret, $key='')
    {
-      global $memc_host;
       while (1)
       {
          $decl = fgets($sock);
@@ -927,9 +925,9 @@ $memc_host = $host;
             if ($this->_debug)
                $this->_debugprint("Error parsing memcached response\n");
             if( !empty( $key ) )
-	        error_log( "memcached ($memc_host) - Error parsing memcached response. The key was: $key. And we got: $decl" );
+	        error_log( "memcached ({$this->memc_host}) - Error parsing memcached response. The key was: $key. And we got: $decl" );
             else
-	        error_log( "memcached ($memc_host) - Error parsing memcached response. We got: $decl" );
+	        error_log( "memcached ({$this->memc_host}) - Error parsing memcached response. We got: $decl" );
             return 0;
          }
       }
