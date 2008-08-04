@@ -282,6 +282,12 @@ TieDivLib = new function() {
 					if (items[i][2].substring(0,1) == 'b') {
 						$(items[i][0]).style.left = (Dom.getX(items[i][1]) + aX) + 'px';
 					}
+					// fix for "Wikia Spotlight" widget
+					if (items[i][2] == 'bl') {
+						$(items[i][0]).style.left = (document.body.offsetWidth - pos.sidebarW - (ie > 6 ? 2 : 3)) + 'px';
+						//$(items[i][0]).style.border = 'solid 1px green';
+					}
+
 				}
 			}
 		}
