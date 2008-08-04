@@ -40,7 +40,7 @@ $wgExtensionFunctions[] = 'wfYouTube';
 $wgExtensionCredits['parserhook'][] = array
 (
 	'name'        => 'YouTube',
-	'version'     => '1.6',
+	'version'     => '1.7.1',
 	'author'      => 'Przemek Piotrowski',
 	'url'         => 'http://help.wikia.com/wiki/Help:YouTube',
 	'description' => 'embeds YouTube and Google Video movies + Archive.org audio and video + WeGame and Gametrailers video + Tangler forum',
@@ -57,6 +57,7 @@ function wfYouTube()
 	$wgParser->setHook('wegame', 'embedWeGame');
 	$wgParser->setHook('tangler', 'embedTangler');
 	$wgParser->setHook('gtrailer', 'embedGametrailers');
+	$wgParser->setHook('nicovideo', 'embedNicovideo');
 }
 
 function embedYouTube_url2ytid($url)
@@ -369,6 +370,38 @@ function embedGametrailers($input, $argv, &$parser)
 	if (!empty($gtid))
 	{
 		$url = "http://www.gametrailers.com/remote_wrap.php?mid={$gtid}";
-		return "<object type=\"application/x-shockwave-flash\" width=\"{$width}\" height=\"{$height}\"><param name=\"movie\" value=\"{$url}\"/></object>"; 
+		// return "<object type=\"application/x-shockwave-flash\" width=\"{$width}\" height=\"{$height}\"><param name=\"movie\" value=\"{$url}\"/></object>"; 
+		// gametrailers' flash doesn't work on FF with object tag alone )-: weird, yt and gvideo are ok )-: valid xhtml no more )-:
+		return "<object classid=\"clsid:d27cdb6e-ae6d-11cf-96b8-444553540000\"  codebase=\"http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0\" id=\"gtembed\" width=\"{$width}\" height=\"{$height}\">	<param name=\"allowScriptAccess\" value=\"sameDomain\" /> 	<param name=\"allowFullScreen\" value=\"true\" /> <param name=\"movie\" value=\"{$url}\"/> <param name=\"quality\" value=\"high\" /> <embed src=\"{$url}\" swLiveConnect=\"true\" name=\"gtembed\" align=\"middle\" allowScriptAccess=\"sameDomain\" allowFullScreen=\"true\" quality=\"high\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" type=\"application/x-shockwave-flash\" width=\"{$width}\" height=\"{$height}\"></embed> </object>";
 	}
 }
+
+function embedYouTube_url2nvid($url)
+{
+	$id = $url;
+
+	preg_match('/([0-9A-Za-z]+)/', $id, $preg);
+	$id = $preg[1];
+
+	return $id;
+}
+
+function embedNicovideo($input, $argv, &$parser)
+{
+	$nvid = '';
+
+	if (!empty($argv['nvid']))
+	{
+		$nvid = embedYouTube_url2nvid($argv['nvid']);
+	} elseif (!empty($input))
+	{
+		$nvid = embedYouTube_url2nvid($input);
+	}
+
+	if (!empty($nvid))
+	{
+		$url = "http://ext.nicovideo.jp/thumb_watch/{$nvid}";
+		return "<script type=\"text/javascript\" src=\"{$url}\"></script>";
+	}
+}
+
