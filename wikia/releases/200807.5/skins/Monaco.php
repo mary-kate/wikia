@@ -393,8 +393,7 @@ class SkinMonaco extends SkinTemplate {
 			$results = DataProvider::$extraWords[strtolower($node['org'])][1]();
 			$results[] = array('url' => Title::makeTitle(NS_SPECIAL, 'Top/'.$extraWords[strtolower($node['org'])][0])->getLocalURL(), 'text' => strtolower(wfMsg('moredotdotdot')), /*'class' => 'yuimenuitemmore'*/);
 			global $wgUser;
-			$ug = $wgUser->getGroups();
-			if(in_array('staff', $ug) || in_array('sysop', $ug)) {
+			if( $wgUser->isAllowed( 'editinterface' ) ) {
 				if(strtolower($node['org']) == '#popular#') {
 					$results[] = array('url' => Title::makeTitle(NS_MEDIAWIKI, 'Most popular articles')->getLocalUrl(), 'text' => wfMsg('monaco-edit-this-menu'), /*'class' => 'yuimenuitemedit2'*/);
 				}
@@ -713,8 +712,7 @@ class SkinMonaco extends SkinTemplate {
 			$results = DataProvider::$extraWords[strtolower($node['org'])][1]();
 			$results[] = array('url' => Title::makeTitle(NS_SPECIAL, 'Top/'.$extraWords[strtolower($node['org'])][0])->getLocalURL(), 'text' => strtolower(wfMsg('moredotdotdot')), 'class' => 'yuimenuitemmore');
 			global $wgUser;
-			$ug = $wgUser->getGroups();
-			if(in_array('staff', $ug) || in_array('sysop', $ug)) {
+			if( $wgUser->isAllowed( 'editinterface' ) ) {
 				if(strtolower($node['org']) == '#popular#') {
 					$results[] = array('url' => Title::makeTitle(NS_MEDIAWIKI, 'Most popular articles')->getLocalUrl(), 'text' => wfMsg('monaco-edit-this-menu'), 'class' => 'yuimenuitemedit2');
 				}
