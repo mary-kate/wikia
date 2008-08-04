@@ -839,12 +839,24 @@ var FCKDocumentProcessor_CreateFakeSpan = function( fakeClass, realElement, cont
         return oImg ;
 }
 
+//similar to placeholder plugin
+function FCK_SetupTemplatesForGecko () {
+        FCK_TemplatesClickListener = function( e ) {
+                if ( e.target.tagName == 'DIV' && e.target.getAttribute ('_fck_mw_template') ) {
+                	FCKSelection.SelectNode( e.target ) ;
+		}
+        }
+        FCK.EditorDocument.addEventListener( 'click', FCK_TemplatesClickListener, true ) ; 
+}
+
 // MediaWiki document processor.
 FCKDocumentProcessor.AppendNew().ProcessDocument = function( document )
 {
 	// Templates and magic words.
 	if (parent.showFCKTemplates) {
 		var templates = FCKDocumentProcessor.refillTemplates () ;
+		 if ( FCKBrowserInfo.IsGecko )
+			FCK_SetupTemplatesForGecko () ;
 	}
 	var aSpans = document.getElementsByTagName( 'SPAN' ) ;
 	var numTemplates = 0 ;
