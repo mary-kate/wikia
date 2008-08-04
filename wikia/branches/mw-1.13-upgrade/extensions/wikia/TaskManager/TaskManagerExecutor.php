@@ -23,7 +23,7 @@ class TaskManagerExecutor {
 	const LOGFILE = "/tmp/taskmanager.log";
 	const DEBUG = true;
 	public $mTasksClasses, $mTaskData;
-	private $mAlarmMails = array( "eloy@wikia.com", "ops@wikia-inc.com" );
+	private $mAlarmMails = array( "eloy@wikia-inc.com", "ops@wikia-inc.com" );
 
     /**
      * __construct
@@ -79,7 +79,7 @@ class TaskManagerExecutor {
 	 * mark task as running
 	 *
 	 * @access private
-	 * @author eloy@wikia
+	 * @author eloy@wikia-inc.com
 	 *
 	 * @param integer $taskid: task identifier from wikia_tasks table
 	 *
@@ -106,7 +106,7 @@ class TaskManagerExecutor {
 	 * mark task as finished,
 	 *
 	 * @access private
-	 * @author eloy@wikia
+	 * @author eloy@wikia-inc.com
 	 *
 	 * @param integer $taskid: task identifier from wikia_tasks table
 	 * @param boolean $status: status of operation
@@ -145,7 +145,7 @@ class TaskManagerExecutor {
 	 * return task class or false is class is uknown
 	 *
 	 * @access private
-	 * @author eloy@wikia
+	 * @author eloy@wikia-inc.com
 	 *
 	 * @return boolean: status of operation
 	 */
@@ -228,7 +228,7 @@ class TaskManagerExecutor {
 	 * if time to live is longer that TTL value finish it with ERROR status
 	 *
 	 * @access public
-	 * @author eloy
+	 * @author eloy@wikia-inc.com
 	 *
 	 * @param array $ids: identifiers of running tasks
 	 *
@@ -279,7 +279,7 @@ class TaskManagerExecutor {
 	 * send email when task is finished because TTl expiration
 	 *
 	 * @access private
-	 * @author eloy
+	 * @author eloy@wikia-inc.com
 	 *
 	 * @param array $ids: identifiers of running tasks
 	 *
