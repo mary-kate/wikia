@@ -833,6 +833,9 @@ var FCKDocumentProcessor_CreateFakeSpan = function( fakeClass, realElement, cont
 	oImg.innerHTML = contentHtml ;
 	oImg.contentEditable = false ;
         oImg.setAttribute( '_fckfakelement', 'true', 0 ) ;
+
+        if ( FCKBrowserInfo.IsGecko )
+                oImg.style.cursor = 'default' ;
 	oImg.setAttribute('readonly', true) ;
         oImg.setAttribute( '_fckrealelement', FCKTempBin.AddElement( realElement ), 0 ) ;
 
