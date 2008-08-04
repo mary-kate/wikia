@@ -88,7 +88,7 @@ FCKConfig.EditorAreaStyles = '\
 } \
 ' ;
 
-if (!showFCKTemplates) {
+if (!parent.showFCKTemplates) {
 	FCKConfig.EditorAreaStyles += '\
 		.FCK__MWTemplate \
 		{ \
@@ -105,13 +105,8 @@ if (!showFCKTemplates) {
 	FCKConfig.EditorAreaStyles += '\
 		.FCK__MWTemplate \
 		{ \
-     			background-image: url(' + FCKConfig.PluginsPath + 'mediawiki/images/icon_template.gif); \
-			width: 20px; \
+			background: #fbdf47 ; \
 			border: 1px dotted #00F; \
-			height: 15px; \
-		        background-position: center center; \
-		        background-repeat: no-repeat; \
-		        vertical-align: middle; \
 		} \
 	';
 }
