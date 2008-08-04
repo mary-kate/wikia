@@ -407,17 +407,11 @@ function onLoadFCKeditor()
 				offset = offset.offsetParent ;
 			}
 			
-			// Add a small space to be left in the bottom.
 			height -= 20 ;
 		}
 
-		// Enforce a minimum height.
 		height = ( !height || height < 300 ) ? 300 : height ;
 		
-		// Create the editor instance and replace the textarea.
-	
-		// make a backup holder just in case...
-
 		var oFCKeditor = new FCKeditor('wpTextbox1') ;
                 oFCKeditor.Domain = '$wgFCKEditorDomain' ;
                 if (oFCKeditor.Domain != '') {
@@ -431,9 +425,7 @@ function onLoadFCKeditor()
 		oFCKeditor.ToolbarSet = '$wgFCKEditorToolbarSet' ;
 		oFCKeditor.ReplaceTextarea() ;
 		
-		// Hide the default toolbar.
 		document.getElementById('toolbar').style.cssText = 'display:none;' ;
-		// do things with CharInsert for example
 
 		var edittools_markup = document.getElementById ('editpage-specialchars') ;
 		if (edittools_markup) {
@@ -442,7 +434,6 @@ function onLoadFCKeditor()
 
 		var needToConfirm = true ;	
 	
-		/* comfirming exit from page */
 		function confirmExit(){
 			if (needToConfirm){
 				return "You have attempted to leave this page. If you have made any changes to the fields without clicking the Save button, your changes will be lost. Are you sure you want to exit this page?";
@@ -492,7 +483,6 @@ function onLoadFCKeditor()
 			}
 			else if (document.editform)
 			{
-				// if we have FCK enabled, behave differently...
 				FCKarea = document.getElementById( oFCKeditor.InstanceName ) ;
 				if ( FCKarea.style.display == 'none' )
 				{
@@ -525,7 +515,6 @@ function onLoadFCKeditor()
 			}
 			else
 			{
-				// some alternate form? take the first one we can find
 				var areas = document.getElementsByTagName( 'textarea' ) ;
 				txtarea = areas[0] ;
 			}
@@ -533,42 +522,37 @@ function onLoadFCKeditor()
 			var selText, isSample = false ;
 
 			if ( document.selection  && document.selection.createRange ) 
-			{ // IE/Opera
+			{
 				if (isFCK) {				
 					var inDocument = window.frames["wpTextbox1___Frame"].document ;
 				} else {
 					var inDocument = document ;
 				}
-				//save window scroll position
 				if ( inDocument.documentElement && inDocument.documentElement.scrollTop )
 					var winScroll = inDocument.documentElement.scrollTop ;
 				else if ( document.body )
 					var winScroll = inDocument.body.scrollTop ;
 
-				//get current selection
 				txtarea.focus() ;
 				var range = inDocument.selection.createRange() ;
 				selText = range.text ;
-				//insert tags
 				if (!selText) {
 					selText = sampleText;
 					isSample = true;
-				} else if (selText.charAt(selText.length - 1) == ' ') { //exclude ending space char
+				} else if (selText.charAt(selText.length - 1) == ' ') {
 					selText = selText.substring(0, selText.length - 1);
 					tagClose += ' '
 				}
 
 				range.text = tagOpen + selText + tagClose ;
-				//mark sample text as selected
 				if ( isSample && range.moveStart )
 				{
 					if (window.opera)
-						tagClose = tagClose.replace(/\\n/g,'') ; //check it out one more time
+						tagClose = tagClose.replace(/\\n/g,'') ;
 					range.moveStart('character', - tagClose.length - selText.length) ;
 					range.moveEnd('character', - tagClose.length) ;
 				}
 				range.select();
-				//restore window scroll position
 				if ( inDocument.documentElement && inDocument.documentElement.scrollTop )
 					inDocument.documentElement.scrollTop = winScroll ;
 				else if ( document.body )
@@ -576,30 +560,26 @@ function onLoadFCKeditor()
 
 			} 
 			else if ( txtarea.selectionStart || txtarea.selectionStart == '0' ) 
-			{ // Mozilla
+			{
 
-				//save textarea scroll position
 				var textScroll = txtarea.scrollTop ;
-				//get current selection
 				txtarea.focus() ;
 				var startPos = txtarea.selectionStart ;
 				var endPos = txtarea.selectionEnd ;
 				selText = txtarea.value.substring( startPos, endPos ) ;
 				
-				//insert tags
 				if (!selText) 
 				{
 					selText = sampleText ;
 					isSample = true ;
 				} 
 				else if (selText.charAt(selText.length - 1) == ' ')
-				{ //exclude ending space char
+				{
 					selText = selText.substring(0, selText.length - 1) ;
 					tagClose += ' ' ;
 				}
 				txtarea.value = txtarea.value.substring(0, startPos) + tagOpen + selText + tagClose + 
 								txtarea.value.substring(endPos, txtarea.value.length) ;
-				//set new selection
 				if (isSample) 
 				{
 					txtarea.selectionStart = startPos + tagOpen.length ;
@@ -610,7 +590,6 @@ function onLoadFCKeditor()
 					txtarea.selectionStart = startPos + tagOpen.length + selText.length + tagClose.length ;
 					txtarea.selectionEnd = txtarea.selectionStart;
 				}
-				//restore textarea scroll position
 				txtarea.scrollTop = textScroll;
 			}
 		}
