@@ -107,7 +107,7 @@ body.rtl #spotlight_footer {
 	direction: ltr;
 }
 
-body.rtl #adSpaceFAST5 {
+#adSpaceFAST5 {
 	width: auto;
 	display: block;
 	position: relative;
