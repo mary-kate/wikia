@@ -38,11 +38,6 @@ FCKConfig.EditorAreaStyles = '\
 	background-repeat: no-repeat; \
 	vertical-align: middle; \
 } \
-.FCK__MWTemplate \
-{ \
-	background: #fbdf47 ; \
-	border: 1px dotted #00F; \
-} \
 .FCK__MWRef \
 { \
 	background-image: url(' + FCKConfig.PluginsPath + 'mediawiki/images/icon_ref.gif); \
@@ -92,3 +87,32 @@ FCKConfig.EditorAreaStyles = '\
 	height: 15px; \
 } \
 ' ;
+
+if (!showFCKTemplates) {
+	FCKConfig.EditorAreaStyles += '\
+		.FCK__MWTemplate \
+		{ \
+     			background-image: url(' + FCKConfig.PluginsPath + 'mediawiki/images/icon_template.gif); \
+			width: 20px; \
+			border: 1px dotted #00F; \
+			height: 15px; \
+		        background-position: center center; \
+		        background-repeat: no-repeat; \
+		        vertical-align: middle; \
+		} \
+	';
+} else {
+	FCKConfig.EditorAreaStyles += '\
+		.FCK__MWTemplate \
+		{ \
+     			background-image: url(' + FCKConfig.PluginsPath + 'mediawiki/images/icon_template.gif); \
+			width: 20px; \
+			border: 1px dotted #00F; \
+			height: 15px; \
+		        background-position: center center; \
+		        background-repeat: no-repeat; \
+		        vertical-align: middle; \
+		} \
+	';
+}
+
