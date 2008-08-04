@@ -217,10 +217,9 @@ TieDivLib = new function() {
 	var block = false;
 	var loopCount = 300;
 	var rtl;
+	var ie;
 	var xy;
 	var pos = [];
-	var aX;
-	var aY;
 
 	this.tie = function(source, target, pos) {
 
@@ -250,35 +249,36 @@ TieDivLib = new function() {
 			pos.sidebarW = $('widget_sidebar').offsetWidth;
 			pos.sidebarH = $('widget_sidebar').offsetHeight;
 			for(i = 0; i < items.length; i++) {
+				xy = getAbsolutePosition($(items[i][1]));
 				if(!rtl && (items[i][2].substring(0, 4) == 'FAST' || items[i][2] == 'bl' || items[i][2] == 'r')) {
-					xy = getAbsolutePosition($(items[i][1]));
-					xy.x = Dom.getX(items[i][1]);
 					if(Dom.getStyle(items[i][0], 'display') != 'block') {
 						Dom.setStyle(items[i][0], 'display', 'block');
 					}
 					if(items[i][2] == 'FAST_HOME1' || items[i][2] == 'FAST_HOME2' || items[i][2] == 'FAST_TOP' || (items[i][2] == 'FAST_BOTTOM' && fast_bottom_type == 'FAST4')) {
 						if($(items[i][0]).style.right == '') {
 							$(items[i][0]).style.right = Dom.getDocumentWidth() - (Dom.getX(items[i][1]) + $(items[i][1]).offsetWidth) + 'px';
-							$(items[i][0]).style.left = '';
-						}
-						if(Math.abs(xy.x - Dom.getX(items[i][0])) > 15) {
-							$(items[i][0]).style.left = xy.x - aX + 'px';
-							$(items[i][0]).style.right = '';
 						}
 					} else {
 						if($(items[i][0]).style.left == '') {
-							$(items[i][0]).style.left = Dom.getX(items[i][1]) - aX + 'px';
+							$(items[i][0]).style.left = Dom.getX(items[i][1]) + 'px';
 						}
 					}
 					if(xy.y != parseFloat($(items[i][0]).style.top) + pos.shrink) {
-						$(items[i][0]).style.top = (xy.y - pos.shrink + aY) + 'px';
+						$(items[i][0]).style.top = (xy.y - pos.shrink) + 'px';
 					}
 				} else {
-					if(Dom.getStyle(items[i][0], 'display') != 'block') {
-						Dom.setStyle(items[i][0], 'display', 'block');
+					if(xy.y != parseFloat($(items[i][0]).style.top) + pos.shrink || xy.x != parseFloat($(items[i][0]).style.left)) {
+						if(Dom.getStyle(items[i][0], 'display') != 'block') {
+							Dom.setStyle(items[i][0], 'display', 'block');
+						}
+						$(items[i][0]).style.top = (xy.y - pos.shrink) + 'px';
+						$(items[i][0]).style.left = xy.x + 'px';
 					}
-					if(Dom.getXY(items[i][0]) != Dom.getXY(items[i][1])) {
-						Dom.setXY(items[i][0], Dom.getXY(items[i][1]));
+				}
+				if (ie) {
+					// fix for spotlights
+					if (items[i][2].substring(0,1) == 'b') {
+						$(items[i][0]).style.left = (Dom.getX(items[i][1]) - (rtl ? 0 : 0)) + 'px';
 					}
 				}
 			}
@@ -296,8 +296,8 @@ TieDivLib = new function() {
 
 	this.init = function() {
 		rtl = Dom.hasClass(document.body, 'rtl');
-		aX = (YAHOO.env.ua.ie > 0) ? Dom.getX('wikia_header') : 0;
-		aY = ((YAHOO.env.ua.ie > 0) ? 2 : 0);
+		ie = YAHOO.env.ua.ie;
+
 		TieDivLib.timer();
 
 		YAHOO.util.Event.addListener(window, 'load', function() {
