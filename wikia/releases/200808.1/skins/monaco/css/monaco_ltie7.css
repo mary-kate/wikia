@@ -107,6 +107,13 @@ body.rtl #spotlight_footer {
 	direction: ltr;
 }
 
+body.rtl #adSpaceFAST5 {
+	width: auto;
+	display: block;
+	position: relative;
+	margin-right: 8px;
+}
+
 body.rtl #spotlight_footer td {
 	width: 250px;
 }
