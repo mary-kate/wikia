@@ -160,8 +160,7 @@ class SkinMonaco extends SkinTemplate {
 			}
 		}
 
-		$ug = $wgUser->getGroups();
-		if(in_array('staff', $ug) || in_array('sysop', $ug)) {
+		if( $wgUser->isAllowed( 'editinterface' ) ) {
 			if(isset($data_array['sidebarmenu'])) {
 				$monacoSidebarUrl = Title::makeTitle(NS_MEDIAWIKI, 'Monaco-sidebar')->getLocalUrl('action=edit');
 				foreach($data_array['sidebarmenu'] as $nodeKey => $nodeVal) {
