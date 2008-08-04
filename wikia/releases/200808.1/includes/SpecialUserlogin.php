@@ -348,7 +348,18 @@ class LoginForm {
 			return false;
 		}
 
-		return $this->initUser( $u, false );
+		$u = $this->initUser( $u, false );
+		$user_id = $u->getID();
+		if(!empty($user_id)) {
+			$dbw = wfGetDB(DB_MASTER);
+			$dbw->update(
+				'user',
+				array( 'user_birthdate' => date('Y-m-d', $userBirthDay) ),
+				array( 'user_id' => $user_id ),
+				__METHOD__
+			);
+		}
+		return $u;
 	}
 
 	/**
