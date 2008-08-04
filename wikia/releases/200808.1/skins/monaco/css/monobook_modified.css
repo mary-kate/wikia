@@ -1233,18 +1233,37 @@ div#mw-recreate-deleted-warn ul li {
         background-repeat: no-repeat;
 }
 
-.mw-arr-d {
+.mw-arr-d,
+.mw-sort-desc {
         background-image: url('../../common/images/Arr_d.png');
         background-repeat: no-repeat;
 }
 
-.mw-arr-u {
+.mw-arr-u,
+.mw-sort-asc {
         background-image: url('../../common/images/Arr_u.png');
         background-repeat: no-repeat;
 }
 
 .mw-hide-images img {
         display: none;
+}
+
+/* Table Sort */
+.TablePager_sort {
+	background-position: 2px 50%;
+}
+
+.TablePager th a {
+	display: block;
+}
+
+.TablePager_sort a {
+	padding: 0 4px 0 16px;
+}
+
+.TablePager_sort img {
+	display: none;
 }
 
 
