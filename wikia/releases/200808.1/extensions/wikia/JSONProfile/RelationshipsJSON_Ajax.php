@@ -548,7 +548,7 @@ function wfAddRelationshipJSON(){
 			
 			$user_name_to = $wgRequest->getVal("user_name");
 			$relationship_type = $wgRequest->getVal("rel_type");
-			$message = $wgRequest->getVal("message");
+			$message = urldecode($wgRequest->getVal("message"));
 			$wpSourceForm = $wgRequest->getVal("wpSourceForm");
 			$trust_type = $wgRequest->getVal("rel_trust_type");
 			
