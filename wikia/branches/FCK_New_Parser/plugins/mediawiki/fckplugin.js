@@ -843,7 +843,9 @@ var FCKDocumentProcessor_CreateFakeSpan = function( fakeClass, realElement, cont
 FCKDocumentProcessor.AppendNew().ProcessDocument = function( document )
 {
 	// Templates and magic words.
-	var templates = FCKDocumentProcessor.refillTemplates () ;
+	if (parent.showFCKTemplates) {
+		var templates = FCKDocumentProcessor.refillTemplates () ;
+	}
 	var aSpans = document.getElementsByTagName( 'SPAN' ) ;
 	var numTemplates = 0 ;
 	var eSpan ;
@@ -883,23 +885,20 @@ FCKDocumentProcessor.AppendNew().ProcessDocument = function( document )
 				if ( className == null )
 					className = 'FCK__MWOnlyinclude' ;
 
-				if (className != 'FCK__MWTemplate') {    				
+				if ((className != 'FCK__MWTemplate') || !parent.showFCKTemplates) {    				
 					var oImg = FCKDocumentProcessor_CreateFakeImage( className, eSpan.cloneNode(true) ) ;
 					oImg.setAttribute( '_' + eSpan.className, 'true', 0 ) ;
-
-					eSpan.parentNode.insertBefore( oImg, eSpan ) ;
-					eSpan.parentNode.removeChild( eSpan ) ;
 				} else {
 					var oImg = FCKDocumentProcessor_CreateFakeSpan( className, eSpan.cloneNode(true) ) ;
 					oImg.setAttribute( '_' + eSpan.className, 'true', 0 ) ;
 					oImg.setAttribute ('id', 'fck_templ_' + numTemplates) ;
 					oImg.innerHTML = templates [numTemplates] ;
 					numTemplates++ ;
-
-					eSpan.parentNode.insertBefore( oImg, eSpan ) ;
-					eSpan.parentNode.removeChild( eSpan ) ;
 				}
-			break ;
+				eSpan.parentNode.insertBefore( oImg, eSpan ) ;
+				eSpan.parentNode.removeChild( eSpan ) ;
+
+				break ;
 		}
 	}
 	

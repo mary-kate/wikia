@@ -372,7 +372,8 @@ HEREDOC;
 sEditorAreaCSS += ",'.implode(',', $userStyles).'";
 </script>';
 		}
-
+    		global $wgFCKEditorVisibleTemplates ;
+		empty ($wgFCKEditorVisibleTemplates) ? $showTemplates = 'false' : $showTemplates = 'true' ;
 		$script .= <<<HEREDOC
 <script type="text/javascript"> 
 
@@ -383,6 +384,8 @@ else if ( window.detachEvent )
 	window.detachEvent( 'onload', mwSetupToolbar ) ;
 	
 mwSetupToolbar = function() { return false ; } ;
+
+var showFCKTemplates = $showTemplates ;
 
 function onLoadFCKeditor()
 {
