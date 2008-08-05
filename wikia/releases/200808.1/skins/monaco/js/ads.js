@@ -298,7 +298,7 @@ TieDivLib = new function() {
 	this.init = function() {
 		rtl = Dom.hasClass(document.body, 'rtl');
 		aX = (YAHOO.env.ua.ie > 0) ? Dom.getX('wikia_header') : 0;
-		aY = ((YAHOO.env.ua.ie > 0) ? 1 : 0);
+		aY = ((YAHOO.env.ua.ie > 0) ? 2 : 0) - 1;
 		TieDivLib.timer();
 
 		YAHOO.util.Event.addListener(window, 'load', function() {
