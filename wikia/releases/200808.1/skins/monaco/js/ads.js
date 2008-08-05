@@ -250,32 +250,37 @@ TieDivLib = new function() {
 			pos.sidebarW = $('widget_sidebar').offsetWidth;
 			pos.sidebarH = $('widget_sidebar').offsetHeight;
 			for(i = 0; i < items.length; i++) {
-				xy = getAbsolutePosition($(items[i][1]));
-				xy.x = Dom.getX($(items[i][1]));
-				if(!rtl && (items[i][2].substring(0, 4) == 'FAST' || items[i][2] == 'bl' || items[i][2] == 'r')) {
-					if(Dom.getStyle(items[i][0], 'display') != 'block') {
-						Dom.setStyle(items[i][0], 'display', 'block');
-					}
-					if(items[i][2] == 'FAST_HOME1' || items[i][2] == 'FAST_HOME2' || items[i][2] == 'FAST_TOP' || (items[i][2] == 'FAST_BOTTOM' && fast_bottom_type == 'FAST4')) {
-						if($(items[i][0]).style.right == '') {
-							$(items[i][0]).style.right = Dom.getDocumentWidth() - (Dom.getX(items[i][1]) + $(items[i][1]).offsetWidth) + 'px';
+
+				if(Dom.getStyle(items[i][0], 'display') != 'block') {
+					Dom.setStyle(items[i][0], 'display', 'block');
+				}
+
+				if(!rtl) {
+					xy = getAbsolutePosition($(items[i][1]));
+					xy.x = Dom.getX(items[i][1]);
+					if(items[i][2].substring(0, 4) == 'FAST' || items[i][2] == 'bl' || items[i][2] == 'r') {
+						if(items[i][2] == 'FAST_HOME1' || items[i][2] == 'FAST_HOME2' || items[i][2] == 'FAST_TOP' || (items[i][2] == 'FAST_BOTTOM' && fast_bottom_type == 'FAST4')) {
+							if($(items[i][0]).style.right == '') {
+								$(items[i][0]).style.right = 5 + Dom.getX('wikia_page') + $('wikia_page').offsetWidth - (Dom.getX(items[i][1]) + $(items[i][1]).offsetWidth) + 'px';
+							}
+						} else {
+							if($(items[i][0]).style.left == '') {
+								$(items[i][0]).style.left = Dom.getX(items[i][1]) - aX + 'px';
+							}
+						}
+						if(xy.y != parseFloat($(items[i][0]).style.top) + pos.shrink) {
+							$(items[i][0]).style.top = (xy.y - pos.shrink + aY) + 'px';
 						}
 					} else {
-						if($(items[i][0]).style.left == '') {
-							$(items[i][0]).style.left = Dom.getX(items[i][1]) - aX + 'px';
+						if(xy.y != parseFloat($(items[i][0]).style.top) + pos.shrink || xy.x != parseFloat($(items[i][0]).style.left)) {
+							$(items[i][0]).style.top = xy.y - pos.shrink + aY + 'px';
+							$(items[i][0]).style.left = xy.x - aX + 'px';
 						}
-					}
-					if(xy.y != parseFloat($(items[i][0]).style.top) + pos.shrink) {
-						$(items[i][0]).style.top = (xy.y - pos.shrink + aY) + 'px';
 					}
 				} else {
-					if(xy.y != parseFloat($(items[i][0]).style.top) + pos.shrink || xy.x != parseFloat($(items[i][0]).style.left)) {
-						if(Dom.getStyle(items[i][0], 'display') != 'block') {
-							Dom.setStyle(items[i][0], 'display', 'block');
-						}
-						$(items[i][0]).style.top = xy.y - pos.shrink + aY + 'px';
-						$(items[i][0]).style.left = xy.x - aX + 'px';
-					}
+					xy = getAbsolutePosition($(items[i][1]));
+					$(items[i][0]).style.top = xy.y - pos.shrink + aY + 'px';
+					Dom.setX(items[i][0], xy.x);
 				}
 			}
 		}
