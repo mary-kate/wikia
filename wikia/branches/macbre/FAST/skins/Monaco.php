@@ -1629,7 +1629,7 @@ if($wgAdServingType === 1) {
 	}
 	uasort($adsDisplayed, "cmpAds");
 
-	echo '<div id="realAdsContainer">';
+	echo '<div id="realAdsContainer" class="reset">';
 	echo '<script type="text/javascript">TieDivLib.init();</script>';
 	foreach($adsDisplayed as $adSpace => $ad) {
 		echo '<div id="realAd'.$adSpace.'" style="display: none">';
