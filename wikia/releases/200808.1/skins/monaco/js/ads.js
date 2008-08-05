@@ -243,8 +243,8 @@ TieDivLib = new function() {
 	this.recalc = function() {
 		if(block) return;
 		block = true;
-		if(pos.loaded != true || pos.shrink != getAbsolutePosition($('monaco_shrinkwrap_main')).y || pos.articleW != $('article').offsetWidth || pos.articleH != $('article').offsetHeight || pos.sidebarW != $('widget_sidebar').offsetWidth || pos.sidebarH != $('widget_sidebar').offsetHeight) {
-			pos.shrink = getAbsolutePosition($('monaco_shrinkwrap_main')).y;
+		if(pos.loaded != true || pos.shrink != Math.round(Dom.getY('monaco_shrinkwrap_main')) || pos.articleW != $('article').offsetWidth || pos.articleH != $('article').offsetHeight || pos.sidebarW != $('widget_sidebar').offsetWidth || pos.sidebarH != $('widget_sidebar').offsetHeight) {
+			pos.shrink = Math.round(Dom.getY('monaco_shrinkwrap_main'));
 			pos.articleW = $('article').offsetWidth;
 			pos.articleH = $('article').offsetHeight;
 			pos.sidebarW = $('widget_sidebar').offsetWidth;
