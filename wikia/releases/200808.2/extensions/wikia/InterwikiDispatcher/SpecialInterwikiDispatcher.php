@@ -2,9 +2,11 @@
 /**
  * InterwikiDispatcher - see ticket #2954
  *
- * @author Maciej B³aszkowski (Marooned) <marooned@wikia.com>
+ * @author Maciej Bï¿½aszkowski (Marooned) <marooned@wikia.com>
+ * @author Adrian 'ADi' Wieczorek <adi(at)wikia.com> 
+ * 
  * @date 2008-07-08
- * @copyright Copyright (C) 2008 Maciej B³aszkowski, Wikia Inc.
+ * @copyright Copyright (C) 2008 Maciej Bï¿½aszkowski, Wikia Inc.
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License 2.0 or later
  * @package MediaWiki
  * @subpackage SpecialPage
@@ -21,12 +23,15 @@ if (!defined('MEDIAWIKI')) {
 
 $wgExtensionCredits['specialpage'][] = array(
 	'name' => 'InterwikiDispatcher',
-	'author' => '[http://www.wikia.com/wiki/User:Marooned Maciej B³aszkowski (Marooned)]',
+	'author' => '[http://www.wikia.com/wiki/User:Marooned Maciej Bï¿½aszkowski (Marooned)]',
 	'description' => 'This extension provides an interface for sending messages seen on all wikis.'
 );
 
 $wgExtensionFunctions[] = 'InterwikiDispatcherInit';
 $wgExtensionMessagesFiles['SpecialInterwikiDispatcher'] = dirname(__FILE__) . '/SpecialInterwikiDispatcher.i18n.php';
+
+//Register hook
+$wgHooks['GetFullURL'][] = 'InterwikiDispatcher::getInterWikiaURL';
 
 //Register special page
 if (!function_exists('extAddSpecialPage')) {
@@ -37,4 +42,3 @@ extAddSpecialPage(dirname(__FILE__) . '/SpecialInterwikiDispatcher_body.php' /* 
 function InterwikiDispatcherInit() {
 
 }
-?>
