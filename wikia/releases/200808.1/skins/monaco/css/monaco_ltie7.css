@@ -93,28 +93,3 @@ body.ltr #articleFooter ul.actions li div {
 .ImageMapWrapper {
 	clear: both;
 }
-
-#current-rating span {
-	display: none;
-}
-
-/* ADS fix */
-body.rtl #wikia_page {
-	overflow: hidden;
-}
-
-body.rtl #spotlight_footer {
-	direction: ltr;
-}
-
-#adSpaceFAST5 {
-	width: auto;
-	display: block;
-	position: relative;
-	margin-right: 8px;
-}
-
-body.rtl #spotlight_footer td {
-	width: 250px;
-}
-
