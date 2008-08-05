@@ -46,50 +46,26 @@ insert into user_groups(ug_user, ug_group) values
 (/*Zuirdj*/47,'staff')
 ;
 
-delete from user_groups where ug_user in (
-/*Greyman*/87167,
-/*Jaymach*/7701,
-/*Uberfuzzy*/161697
-) and ug_group="janitor";
+delete from user_groups where ug_group="janitor";
 insert into user_groups(ug_user, ug_group) values
 (/*Greyman*/87167,'janitor'),
 (/*Jaymach*/7701,'janitor'),
+(/*PanSola*/12719,'janitor'),
 (/*Uberfuzzy*/161697, 'janitor')
 ;
 
-delete from user_groups where ug_user in (
-/*AnnElida*/792759,
-/*Bola*/126681,
-/*Datrio*/57466,
-/*Jnewcombe*/801589,
-/*JoePlay*/171752,
-/*MeatMan*/226254,
-/*Merrystar*/11001,
-/*Multimoog*/20290,
-/*Muppets101*/77907,
-/*PanSola*/12719,
-/*Peteparker*/122657,
-/*Rieke Hain*/26246,
-/*Richard1990*/25261,
-/*Splarka*/8245,
-/*Tommy6*/239851,
-/*Uberfuzzy*/161697
-) and ug_group="helper";
+delete from user_groups where ug_group="helper";
 insert into user_groups(ug_user, ug_group) values
 (/*AnnElida*/792759,'helper'),
 (/*Bola*/126681,'helper'),
-(/*Datrio*/57466,'helper'),
 (/*Jnewcombe*/801589,'helper'),
 (/*JoePlay*/171752,'helper'),
 (/*MeatMan*/226254,'helper'),
 (/*Merrystar*/11001,'helper'),
 (/*Muppets101*/77907,'helper'),
 (/*Multimoog*/20290,'helper'),
-(/*PanSola*/12719,'helper'),
 (/*Peteparker*/122657, 'helper'),
-(/*Rieke Hain*/26246,'helper'),
 (/*Richard1990*/25261,'helper'),
-(/*Splarka*/8245,'helper'),
 (/*Tommy6*/239851,'helper'),
 (/*Uberfuzzy*/161697, 'helper')
 ;

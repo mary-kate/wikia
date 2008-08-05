@@ -60,7 +60,11 @@ $MF['quartz_js']['source'] = array(
 );
 $MF['quartz_js']['source'] = array_merge($MF['quartz_js']['source'], $widgetsAssets['js']);
 
-$MF['quartz_css']['source'] = $widgetsAssets['css'];
+$MF['quartz_css']['source'] = array(
+	'../extensions/wikia/EditSimilar/EditSimilar.css',
+);
+
+$MF['quartz_css']['source'] = array_merge($MF['quartz_css']['source'],$widgetsAssets['css']);
 
 $MF['monobook_js']['source'] = array(
 	'common/yui_2.5.2/utilities/utilities.js',
@@ -78,6 +82,10 @@ $MF['monobook_js']['source'] = array(
 	'common/tracker.js',
 	'../extensions/wikia/ProblemReports/js/ProblemReports-loader.js',
 	'../extensions/wikia/onejstorule.js',
+);
+
+$MF['monobook_css']['source'] = array(
+	'../extensions/wikia/EditSimilar/EditSimilar.css',
 );
 
 $MF['monaco_loggedin_js']['source'] = array(
@@ -147,5 +155,6 @@ $MF['monaco_css']['source'] = array(
 	'monaco/css/footer.css',
 	'monaco/css/star_rating.css',
 	'monaco/css/ny.css',
+	'../extensions/wikia/EditSimilar/EditSimilar.css',
 );
 $MF['monaco_css']['source'] = array_merge($MF['monaco_css']['source'], $widgetsAssets['css']);
