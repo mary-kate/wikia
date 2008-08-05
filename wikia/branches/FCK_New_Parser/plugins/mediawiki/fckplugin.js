@@ -28,7 +28,6 @@
  *	http://meta.wikimedia.org/wiki/Meta:Sandbox
  */
 
-// Rename the "Source" buttom to "Wikitext".
 FCKToolbarItems.RegisterItem( 'Source', new FCKToolbarButton( 'Source', 'Wikitext', null, FCK_TOOLBARITEM_ICONTEXT, true, true, 1 ) ) ;
 
 FCK.RegisterDoubleClickHandler( FCKImage_OnDoubleClick, 'IMG' ) ;
@@ -91,7 +90,6 @@ FCKToolbarButton.prototype.Click = function()
 {
 	var oToolbarButton = this._ToolbarButton || this ;
 	
-	// for some buttons, do something else instead...
 	var CMode = false ;
 	if ( oToolbarButton.SourceView && (FCK_EDITMODE_SOURCE == FCK.EditMode) )
 	{
@@ -800,7 +798,7 @@ FCK.DataProcessor =
 	}
 	return false ;
 	}
-	})();
+})();
 
 FCKDocumentProcessor.refillTemplates = function () {
 	var text = unescape (parent.document.getElementById ('fck_parsed_templates').value) ;
@@ -828,7 +826,7 @@ FCKDocumentProcessor.refillTemplates = function () {
 	return templates ;
 }
 
-var FCKDocumentProcessor_CreateFakeSpan = function( fakeClass, realElement, contentHtml )
+var FCKDocumentProcessor_CreateFakeElem = function( fakeClass, realElement, contentHtml )
 {
 	var oImg = FCKTools.GetElementDocument( realElement ).createElement( 'DIV' ) ;
 
@@ -917,7 +915,7 @@ FCKDocumentProcessor.AppendNew().ProcessDocument = function( document )
 					var oImg = FCKDocumentProcessor_CreateFakeImage( className, eSpan.cloneNode(true) ) ;
 					oImg.setAttribute( '_' + eSpan.className, 'true', 0 ) ;
 				} else {
-					var oImg = FCKDocumentProcessor_CreateFakeSpan( className, eSpan.cloneNode(true) ) ;
+					var oImg = FCKDocumentProcessor_CreateFakeElem( className, eSpan.cloneNode(true) ) ;
 					oImg.setAttribute( '_' + eSpan.className, 'true', 0 ) ;
 					oImg.setAttribute ('id', 'fck_templ_' + numTemplates) ;
 					oImg.innerHTML = templates [numTemplates] ;
