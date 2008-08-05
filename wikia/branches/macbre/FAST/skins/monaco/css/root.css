@@ -2,6 +2,7 @@ body {
 	font-family: arial, sans-serif;
 	font-size: 10pt;
 	margin: 0;
+	padding: 0;
 }
 .color1, .color1 a, .yui-panel .hd {
 	background-color: #36C;
