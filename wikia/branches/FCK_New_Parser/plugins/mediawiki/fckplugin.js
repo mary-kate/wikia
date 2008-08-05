@@ -845,8 +845,17 @@ var FCKDocumentProcessor_CreateFakeSpan = function( fakeClass, realElement, cont
 //similar to placeholder plugin
 function FCK_SetupTemplatesForGecko () {
         FCK_TemplatesClickListener = function( e ) {
-                if ( e.target.tagName == 'DIV' && e.target.getAttribute ('_fck_mw_template') ) {
-                	FCKSelection.SelectNode( e.target ) ;
+		var our_target = e.target ;
+                if (our_target.tagName == 'DIV' && our_target.getAttribute ('_fck_mw_template')) {
+			FCKSelection.SelectNode( our_target ) ;
+		} else {		
+			while ((our_target.tagName != "BODY") && (our_target.tagName != "HTML")) {
+				our_target = our_target.parentNode ;
+				if (our_target.tagName == 'DIV' && our_target.getAttribute ('_fck_mw_template')) {
+					FCKSelection.SelectNode( our_target ) ;				
+					break ;
+				}			
+			}
 		}
         }
         FCK.EditorDocument.addEventListener( 'click', FCK_TemplatesClickListener, true ) ; 
