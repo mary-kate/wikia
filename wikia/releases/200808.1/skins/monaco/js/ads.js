@@ -279,6 +279,7 @@ TieDivLib = new function() {
 					}
 				} else {
 					xy = getAbsolutePosition($(items[i][1]));
+					xy.y = Dom.getY(items[i][1]);
 					Dom.setXY(items[i][0], [xy.x, xy.y]);
 				}
 			}
