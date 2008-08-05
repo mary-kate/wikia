@@ -47,6 +47,7 @@ class CreateWikiTask extends BatchTask {
 	function execute( $params = null ) {
 		global $IP, $wgDevelEnvironment;
 		global $wgWikiaLocalSettingsPath, $wgWikiaAdminSettingsPath;
+		global $wgHubCreationVariables;
 
 		if( !isset( $wgWikiaAdminSettingsPath ) ) {
 			$wgWikiaAdminSettingsPath = dirname( $wgWikiaLocalSettingsPath ) . "/../AdminSettings.php";
@@ -143,11 +144,27 @@ class CreateWikiTask extends BatchTask {
 		$this->addLog( $retval );
 
 		/**
-		 * Add aditional domains
+		 * Add additional domains
 		 */
 		$this->addDomains( $this->mParams["params"]["wpCreateWikiDomains"] );
 
 		echo "Hi! its ".__METHOD__." task_id={$this->mData->task_id}\n";
+
+		/**
+		 * Modify wiki's variables based on hub and $wgHubCreationVariables values
+		 */
+		$hub = $this->mParams["params"]["wpCreateWikiCategory"];
+		if (!empty($hub) && is_array($wgHubCreationVariables[$hub])) {
+			$success = array_walk(
+				$wgHubCreationVariables[$hub],
+				'CreateWikiTask::addHubSettings',
+				$this->mWikiID
+			);
+			if ( !$success ) {
+				echo "Modifing settings for hub failed...\n";
+			}
+		}
+
 		return true;
 	}
 
@@ -606,4 +623,15 @@ class CreateWikiTask extends BatchTask {
 		}
 		return false;
 	}
-}
+
+	/**
+	 * addHubSettings
+	 *
+	 * a simple wrapper used by hub-based array_walk in execute()
+	 *
+	 * @author tor@wikia-inc.com
+	 */
+	public static function addHubSettings( $value, $var, $city_id ) {
+		WikiFactory::setVarByName($var, $city_id, $value);
+	}	
+}	
