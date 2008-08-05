@@ -1606,6 +1606,8 @@ if(!empty($wgFASTSIDE) && isset($wgFASTSIDE[1])) {
 <?php
 wfProfileOut( __METHOD__ . '-widgets');
 
+echo '</div>';
+
 // curse like cobranding
 $this->printCustomFooter();
 global $wgAdServingType;
@@ -1637,7 +1639,6 @@ if($wgAdServingType === 1) {
 	}
 	echo '</div>';
 }
-echo '</div>';
 echo AdServer::getInstance()->getAd('js_bot2');
 echo AdServer::getInstance()->getAd('js_bot3');
 echo AdServer::getInstance()->getAd('js_bot4');
