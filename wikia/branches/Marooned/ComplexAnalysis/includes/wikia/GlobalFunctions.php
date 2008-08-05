@@ -472,7 +472,10 @@ function wfCountWikiElement($element, $count=1) {
 	}
 	if (strpos($element, '*special:stop:') === 0) {
 	//	"*special:start:{$wgCityId}|{page_id}|{rev_id}"
-
+		//hack - subtract "image with link" from "images" so we don't count images twice
+		if (!empty($wgElementsCount['image with link'])) {
+			$wgElementsCount['image'] -= $wgElementsCount['image with link'];
+		}
 		$db = wfGetDB(DB_MASTER);
 
 		$dataTable = wfSharedTable('complex_data');
