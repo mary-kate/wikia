@@ -62,13 +62,15 @@ body.ltr #articleFooter ul.actions li div {
 	margin: 0 0 0 20px;
 }
 
-
 /* ads fix */
-#monaco_shrinkwrap_main,
-#navigation_widget,
-#navigation,
-#navigation .menu-item {
-	z-index: 20;
+/* http://www.last-child.com/conflicting-z-index-in-ie6/ */
+#navigation_widget {
+	position: relative;
+	z-index: 5;
+}
+
+#navigation .sub-menu .menu-item {
+	z-index: 10;
 	position: relative;
 }
 
@@ -76,6 +78,13 @@ body.ltr #articleFooter ul.actions li div {
 	position: absolute;
 	top: 0;
 }
+
+/* search suggest */
+#searchSuggestContainer {
+	position: absolute;
+	z-index: 50;
+}
+
 
 /* user menu fix */
 #monaco_shrinkwrap_main,
