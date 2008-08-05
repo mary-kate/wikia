@@ -33,7 +33,9 @@ FCKToolbarItems.RegisterItem( 'Source', new FCKToolbarButton( 'Source', 'Wikitex
 
 FCK.RegisterDoubleClickHandler( FCKImage_OnDoubleClick, 'IMG' ) ;
 FCK.RegisterDoubleClickHandler( FCKDiv_OnDoubleClick, 'DIV' ) ;
-
+if ( FCKBrowserInfo.IsGecko ) {
+	FCK.AttachToOnSelectionChange( FCK_VisibleTemplatesCheck ) ;
+}
 
 // Register our toolbar buttons.
 var tbButton = new FCKToolbarButton( 'MW_Template', 'Template', 'Insert/Edit Template', null, false, true ) ;
@@ -1019,5 +1021,15 @@ function FCKDiv_OnDoubleClick (span) {
 			FCKCommands.GetCommand( 'MW_Template' ).Execute() ;
 		}
 	}
+}
+
+
+function FCK_VisibleTemplatesCheck () {
+	// this will disallow for template content selection under Firefox
+	// more of a placeholder for now
+        var sel = FCKSelection.GetSelection() ;
+        if ( !sel || sel.rangeCount < 1 )
+                return ;
+        var range = sel.getRangeAt( 0 );
 }
 
