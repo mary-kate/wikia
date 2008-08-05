@@ -16,6 +16,7 @@ ul.star-rating
     padding:0px;
     position:relative;
     width:85px;
+    overflow: hidden;
 }
 
 .star-rating li
