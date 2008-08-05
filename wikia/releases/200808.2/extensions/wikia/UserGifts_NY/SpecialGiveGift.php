@@ -281,7 +281,7 @@ class GiveGift extends SpecialPage {
 			$give_gift_link=Title::makeTitle(NS_SPECIAL, "GiveGift");
 			
 			$numofpages = $total / $per_page; 
-			$user_safe = urlencode($user->getPrefixedText());
+			$user_safe = urlencode($user->getText());
 			if($numofpages>1){
 				$output .= "<div class=\"page-nav\">";
 				if ($page > 1) { 

@@ -285,19 +285,6 @@ class EditSimilar {
 	// message box wrapper
 	static public function showMessage ($text) {
 		global $wgOut, $wgUser, $wgScript ;
-		$wgOut->addHTML ("
-			<style type=\"text/css\">
-				.editsimilar {
-					background-color: #c0fec0;
-					border: solid 1px #006400;
-				}
-
-				.editsimilar_dismiss {
-					float:right;
-					font-size:0.9em;
-				}
-			</style>
-		");
 		$wgOut->addScript ("
 			<script type=\"text/javascript\">
 				if (YAHOO.Wikia && YAHOO.Wikia.Tracker) {
