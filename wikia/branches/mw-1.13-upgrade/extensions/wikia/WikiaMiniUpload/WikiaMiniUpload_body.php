@@ -15,7 +15,7 @@ class WikiaMiniUpload {
 		global $IP, $wmu;
 		require_once($IP . '/includes/SpecialPage.php');
 		require_once($IP . '/includes/specials/SpecialNewimages.php');
-		$isp = new IncludableSpecialPage('Newimages', '', 1, 'wfSpecialNewimages', $IP . '/includes/SpecialNewimages.php');
+		$isp = new IncludableSpecialPage('Newimages', '', 1, 'wfSpecialNewimages', $IP . '/includes/specials/SpecialNewimages.php');
 		wfSpecialNewimages(8, $isp);
 		$tmpl = new EasyTemplate(dirname(__FILE__).'/templates/');
 		$tmpl->set_vars(array('data' => $wmu));
