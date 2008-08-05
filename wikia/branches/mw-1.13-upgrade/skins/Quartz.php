@@ -667,7 +667,7 @@ if(isset($navLinks[2])) {
 				echo $copywarn ;
 			}
 			?>
-        	<?php if($this->data['catlinks']) { ?><div id="catlinks"><?php       $this->html('catlinks') ?></div><?php } ?>
+        	<?php if($this->data['catlinks']) { $this->html('catlinks'); } ?>
 			<!-- end content -->
 		</div>
 	<!-- /article -->
