@@ -277,7 +277,7 @@ span.subpages {
 	border: 1px solid #aaa;
 	background-color: #f9f9f9;
 	color: black; /*CHRISTIAN*/
-	padding: 5px;
+	padding: 10px 5px;
 	margin-top: 1em;
 	clear: both;
 }
