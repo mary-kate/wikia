@@ -24,6 +24,11 @@ body {
     float: left;
 }
 
+/* Fix for Opera bug with horizontal scroll */
+#articleFooter{
+	position: relative;
+}
+
 /* fixing FF bug - https://bugzilla.mozilla.org/show_bug.cgi?id=380925 */
 #bodyContent p a,
 #bodyContent li a {
