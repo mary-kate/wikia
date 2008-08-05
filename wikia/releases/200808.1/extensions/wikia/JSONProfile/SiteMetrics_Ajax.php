@@ -16,10 +16,93 @@ function wfSiteMetricsReadLang(){
 	}
 }
 
+$wgAjaxExportList [] = 'wfQueryComplete';
+function wfQueryComplete(){
+	global $wgMemc;
+
+        $query = $_REQUEST["q"];
+        $lang = "en";
+
+        $start = microtime();
+
+        $dbr =& wfGetDB( DB_SLAVE );
+        
+	$query = mysql_real_escape_string($query);
+        $obj = null;
+        
+        for($i=strlen($query); $i>=0 && !$obj; $i--){
+                $smallquery = substr($query, 0, $i);
+        	$key = wfMemcKey( 'wikiasearch' , 'autocomplete_en' , $lang, $smallquery );
+        	$obj = $wgMemc->get($key);
+        }
+
+        $lenDiff = strlen($query) - strlen($smallquery);
+
+	if($lenDiff < 3 && $obj){
+                
+                if($smallquery == $query){
+                        $data = array_slice($obj, 0, 15);
+                        return arrayToUL($start, $data, true);
+                }
+                
+                $matches = array();
+                
+                foreach($obj as $d){
+                        $part = substr($d["query"], 0, strlen($query));
+                        
+                        if( $part == $query )
+                                $matches[] = $d;
+                                
+                        if(count($matches) > 15)
+                                break;
+                }
+                
+                $data = array_slice($matches, 0, 15);
+                return arrayToUL($start, $data, true);
+                
+        }
+	
+        $sql = "SELECT * FROM autocomplete_en WHERE `query` LIKE '" . $query . "%' LIMIT 2000";
+	$res = $dbr->query($sql);
+        
+	$obj = array();
+	
+	while ($row = $dbr->fetchObject( $res ) ) {
+                $i = array();
+                        
+		$i["query"] = $row->query;
+		$i["count"] = $row->count;
+	
+                $obj[] = $i;
+        }
+        
+        $key = wfMemcKey( 'wikiasearch' , 'autocomplete_en' , $lang, $query );
+        $wgMemc->set( $key, $obj );
+        $data = array_slice($obj, 0, 15);
+        
+        return arrayToUL($start, $data);
+}
+
+function arrayToUL($start, $data, $cache = false){
+        
+        $ret =  "<ul>\n";
+        
+        foreach ($data as $d){
+                $ret .= "<li> " . $d['query'] . " <span class='informal'>" . $d['count'] . " searches</span></li>\n";
+        }
+        
+        $ret .= ($cache ? "<li>cached</li>" : "<li>not cached</li>");
+        $ret .= "<li>" . (microtime() - $start) . "</li>";
+        $ret .= "\n";
+        
+        $ret .= "</ul>";
+        return $ret;
+}
+
 $wgAjaxExportList [] = 'wfQueryCounter';
 function wfQueryCounter($callback){
         global $wgMemc, $wgRequest;
-        $dbr =& wfGetDB( DB_MASTER );
+        $dbr =& wfGetDB( DB_SLAVE );
         
         $key = wfMemcKey( 'wikiasearch' , 'metric' , 'querycounter', 'queryratesw' );
         $obj = $wgMemc->get($key);
@@ -155,7 +238,7 @@ function wfSiteMetricsJSON($metric, $callback){
 	}
         
         if(strlen($payload["key"]) > 2){
-                $wgMemc->set( $payload["key"], $payload["data"], 3600 );
+                $wgMemc->set( $payload["key"], $payload["data"], 10800 );
         }else{
                 
         }
@@ -178,7 +261,7 @@ function fetchTrends($metric, $callback){
 	// go back a month by default
 	$DEFAULT_TIME = 86400 * 30;
         
-        $dbr =& wfGetDB( DB_MASTER );
+        $dbr =& wfGetDB( DB_SLAVE );
         
 	// grab some query params
 	$queries = $_REQUEST["query"];        
@@ -221,9 +304,9 @@ function fetchTrends($metric, $callback){
                 $sql .= ' ORDER BY created_at DESC
                           LIMIT 365;';
                 
-                $key = wfMemcKey( 'wikiasearch' , 'metriks' , $metric, $callback, $q );
+                $key = wfMemcKey( 'wikiasearch' , 'metricsv2.0' , $metric, $callback, $q );
                 
-                if(true || !$data = $wgMemc->get($key)){
+                if(!$data = $wgMemc->get($key)){
                 
                         $res = $dbr->query($sql);
                         $data = array();
@@ -275,12 +358,12 @@ function fetchWfMessages($metric, $callback){
         
         global $wgMemc;
         
-        $key = wfMemcKey( 'wikiasearch' , 'metriks' , $metric, $callback );
+        $key = wfMemcKey( 'wikiasearch' , 'metricsv2.0' , $metric, $callback );
         
         if( $res = $wgMemc->get($key) )
                 return $res;
         
-        $dbr =& wfGetDB( DB_MASTER );
+        $dbr =& wfGetDB( DB_SLAVE );
         
 	$msg = efWikiaSiteMetrics();
 	$keys = array_keys($msg["en"]);
@@ -312,12 +395,12 @@ function fetchWfMessages($metric, $callback){
 }
 
 function fetchTopUsers($metric, $callback){
-        $dbr =& wfGetDB( DB_MASTER );
+        $dbr =& wfGetDB( DB_SLAVE );
         
 	global $wgRequest, $wgMemc;
 	
-        $dbr =& wfGetDB( DB_MASTER );
-	$keyMemcache = wfMemcKey( 'wikiasearch' , 'metriks' , $metric, $callback );
+        $dbr =& wfGetDB( DB_SLAVE );
+	$keyMemcache = wfMemcKey( 'wikiasearch' , 'metricsv2.0' , $metric, $callback );
 	 
        $result = $wgMemc->get($keyMemcache);
        if($result){ return array("html" => $result, "key" => ""); }
@@ -353,10 +436,10 @@ function fetchTopUsers($metric, $callback){
         
 }
 
-function createJSON($sql, $boundSQL){
+function createJSON($sql, $boundSQL, $timeSql){
         global $wgRequest;
         
-        $dbr =& wfGetDB( DB_MASTER );
+        $dbr =& wfGetDB( DB_SLAVE );
         $IsByMonth = $wgRequest->getVal("month", false);
         $outputCSV = $wgRequest->getVal("csv", false);
 
@@ -384,7 +467,8 @@ function createJSON($sql, $boundSQL){
                         
 			if(!array_key_exists($key, $monthBuckets)){
 				$monthBuckets[$key] = 0;
-				$monthTimes[$key] = substr($d["timestamp"], 0, 6) . "0000";
+				// $monthTimes[$key] = substr($d["timestamp"], 0, 6) . "0000";
+                                $monthTimes[$key] = $d["timestamp"];
 			}
 			
 			$monthBuckets[$key] += $d["count"];
@@ -430,7 +514,7 @@ function createJSON($sql, $boundSQL){
 			$data[$i]["count"] = round( $data[$i]["count"] + ($data[$i]["count"]/$hours) * (24-$hours) );
 			$data[$i]["predicted"] = true;
 		}
-			
+			          
 		if($IsByMonth && $thisDate["mon"] == $month && $thisDate["year"] == $year){
 			$data[$i]["count"] = round( $data[$i]["count"] + ( ($data[$i]["count"]/$day) * (30-$day) ) );
 			$data[$i]["predicted"] = true;
@@ -500,6 +584,9 @@ function createJSON($sql, $boundSQL){
 	$messages = array();
 	foreach($keys as $key){ $messages[$key] = wfMsg($key); }
 
+        if(!$IsByMonth)
+                $finalData = doBackAverages($finalData, $timeSql, $IsByMonth);
+
 	// concat up the arrays
 	$stats = array();
 	$stats["tableData"] = $finalData;
@@ -523,19 +610,81 @@ function createJSON($sql, $boundSQL){
         return $stats;
 }
 
+function doBackAverages($finalData, $timeSql, $IsByMonth){
+        
+        $dbr =& wfGetDB( DB_SLAVE );
+	
+        $data = array();
+	// get the data into an array
+	$res = $dbr->query($timeSql);
+        
+	while ($row = $dbr->fetchObject( $res ) ) {
+		$data[] = array(
+                                "timestamp"=>$row->the_date,
+                                "date"=>date("n/j/Y", $row->the_date),
+				"count"=>round($row->the_count)
+                                );
+	}
+        
+        $len = count($data);
+        $arr = array();
+        
+        $longSumTo = 27;
+        $longRollingSum = 0;
+        
+        $shortSumTo = 6;
+        $shortSum = 0;
+        
+        for($i=$len-1; $i>=0; $i--){
+                $arr[] = $data[$i];
+        }
+        
+        for($i=0; $i<count($finalData); $i++){
+               
+                $finalData[$i]["longAverage"] = "N/A";
+                $finalData[$i]["shortAverage"] = "N/A";
+                
+                $arr[] = $finalData[$i];
+        }
+        
+        for($i=0; $i < count($arr); $i++){
+                
+                $shortSum += $arr[$i]["count"];
+                $longRollingSum += $arr[$i]["count"];
+                
+                if($i >= $longSumTo){
+                        $arr[$i]["longAverage"] = round($longRollingSum / $longSumTo);
+                        $longRollingSum -= $arr[$i-$longSumTo]["count"];
+                }
+                
+                if($i >= $shortSumTo){
+                        $arr[$i]["shortAverage"] = round($shortSum / $shortSumTo);
+                        $shortSum -= $arr[$i-$shortSumTo]["count"];      
+                }
+        }
+        
+        $arr = array_slice($arr, count($data));
+                
+        return $arr;
+}
+
 function fetchGlobalKTTrend($metric, $callback){
 	global $wgRequest, $wgMemc;
 	
 	// go back a month by default
 	$DEFAULT_TIME = 86400 * 30;
         
-        $dbr =& wfGetDB( DB_MASTER );
+        $dbr =& wfGetDB( DB_SLAVE );
         
 	// grab some query params
 	$startDate = $wgRequest->getVal("startDate");
 	$endDate = $wgRequest->getVal("endDate");
 	$IsByMonth = $wgRequest->getVal("month", false);
         $outputCSV = $wgRequest->getVal("csv", false);
+        
+        if($IsByMonth){
+                $DEFAULT_TIME = 86400 * 365;
+        }
         
 	// if there isnt a start date figure one out
 	if(!is_null($startDate)){
@@ -547,20 +696,27 @@ function fetchGlobalKTTrend($metric, $callback){
         
 	$endDateSql = date("Y-m-d 23:59:59", $endDate);
         $startDateSql = date("Y-m-d 00:00:00", $startDate);
-	
+        $backdate = date("Y-m-d 00:00:00", $startDate-(28*86400));
+        
 	$sql = 'SELECT SUM(`count`) AS the_count, UNIX_TIMESTAMP(created_at) AS the_date
                         FROM metrics_ktops
                         WHERE created_at > "' . $startDateSql . '" AND created_at < "' . $endDateSql . '"
                         GROUP BY DATE(created_at)
                         ORDER BY created_at DESC LIMIT 365;';
+        
+        $timeSql = 'SELECT SUM(`count`) AS the_count, UNIX_TIMESTAMP(created_at) AS the_date
+                        FROM metrics_ktops
+                        WHERE created_at > "' . $backdate . '" AND created_at < "' . $startDateSql . '"
+                        GROUP BY DATE(created_at)
+                        ORDER BY created_at DESC LIMIT 365;';
                         
         $boundSQL = 'SELECT UNIX_TIMESTAMP(created_at) AS the_date FROM metrics_ktops ORDER BY created_at DESC LIMIT 1';
-        $keyMemcache = wfMemcKey( 'wikiasearch' , 'metricsx' , $metric, $callback,
+        $keyMemcache = wfMemcKey( 'wikiasearch' , 'metricsv2.0' , $metric, $callback,
                                         $IsByMonth, str_replace(" ", "", $startDateSql), str_replace(" ", "", $endDateSql) );
 	
 	$result = $wgMemc->get($keyMemcache);
 	if(!$result){
-                $result = createJSON($sql, $boundSQL);
+                $result = createJSON($sql, $boundSQL, $timeSql);
         }else{
                 $keyMemcache = "";
         }
@@ -584,7 +740,7 @@ function fetchSiteMetrics($metric, $callback){
 	// go back a month by default
 	$DEFAULT_TIME = 86400 * 30;
 	
-	$dbr =& wfGetDB( DB_MASTER );
+	$dbr =& wfGetDB( DB_SLAVE );
 	
 	if(is_null($callback)){ $callback = "displayMetric"; }
 	
@@ -594,45 +750,43 @@ function fetchSiteMetrics($metric, $callback){
 	$outputCSV = $wgRequest->getVal("csv", false);
 	$IsByMonth = $wgRequest->getVal("month", false);
 	
+        if($IsByMonth){
+             $DEFAULT_TIME = 86400  * 365;
+        }
+        
 	// if there isnt a start date figure one out
 	if(!is_null($startDate)){
 	
 		$endDate = !is_null($endDate) ? $endDate : time();
-		$endDateSql = date("Y-m-d 23:59:59", $endDate);
-		
-		// go back the AVERAGE_TIME so we'll have enough data to provide running averages	
-		$fixedStartDate = date("Y-m-d 00:00:00", $startDate);
 	
 		// if we have start and end dates then dont do the default query	
 		$hasTimeBound = ( !is_null($startDate) && !is_null($endDateSql) );
 	}else{
+                $endDate = time();
 		$startDate = time() - $DEFAULT_TIME;
-		$endDate = time();
+                
 	}
 	
-	// by default go back a while - but actually go back far enough to get running averages
-	$lastWeek = date("Y-m-d 00:00:00", time() - $DEFAULT_TIME);
-	$fixedLastWeek = date("Y-m-d 00:00:00", time() - $DEFAULT_TIME );
-	
-	if($hasTimeBound){
-		$key = wfMemcKey( 'wikiasearch' , 'metricsx' , $metric, $callback,
+        $fixedStartDate = date("Y-m-d 00:00:00", $startDate);
+        $endDateSql = date("Y-m-d 23:59:59", $endDate);
+        
+        $key = wfMemcKey( 'wikiasearch' , 'metricsv2.0' , $metric, $callback,
                                         $IsByMonth, str_replace(" ", "", $fixedStartDate),  str_replace(" ", "",$endDateSql) );
-	}else{
-		$key = wfMemcKey( 'wikiasearch' , 'metricsx' , $metric, $callback, $IsByMonth, str_replace(" ", "", $fixedLastWeek) );
-	}
-	
+        
+        $backdate = date("Y-m-d 00:00:00", $startDate-(28*86400));
+        
 	switch($metric){
 	case 0:
 		$sql = "SELECT count( * ) / 2 AS the_count, UNIX_TIMESTAMP(r_date) as the_date
-				FROM `user_relationship` ";
-		
-		if($hasTimeBound){
-			$sql .= "WHERE r_type=1 AND r_date > '" . $fixedStartDate . "' AND r_date < '" . $endDateSql . "'";
-		}else{
-			$sql .= "WHERE r_type=1 AND r_date > '" . $fixedLastWeek . "'";
-		}
-		
-		$sql .= " GROUP BY DATE(r_date) ORDER BY DATE(r_date) DESC";
+				FROM `user_relationship`
+                                WHERE r_type=1 AND r_date > '" . $fixedStartDate . "' AND r_date < '" . $endDateSql . "'
+                                GROUP BY DATE(r_date) ORDER BY DATE(r_date) DESC";
+
+		$timeSql = "SELECT count( * ) / 2 AS the_count, UNIX_TIMESTAMP(r_date) as the_date
+				FROM `user_relationship`
+                                WHERE r_type=1 AND r_date > '" . $backdate . "' AND r_date < '" . $fixedStartDate . "'
+                                GROUP BY DATE(r_date) ORDER BY DATE(r_date) DESC";
+
 		
 		$boundSQL = "SELECT UNIX_TIMESTAMP(r_date) as the_date
 				FROM `user_relationship` WHERE r_type=1
@@ -642,16 +796,17 @@ function fetchSiteMetrics($metric, $callback){
 	
 	case 1:
 		$sql = "SELECT count(*) AS the_count, UNIX_TIMESTAMP(ub_date) AS the_date
-			FROM user_board ";
-			
-		if($hasTimeBound){
-			$sql .= "WHERE ub_date > '" . $fixedStartDate . "' AND ub_date < '" . $endDateSql . "'";
-		}else{
-			$sql .= "WHERE ub_date > '" . $fixedLastWeek . "'";
-		}
-			
-		$sql .= " GROUP BY DATE(ub_date)
+			FROM user_board
+                        WHERE ub_date > '" . $fixedStartDate . "' AND ub_date < '" . $endDateSql . "'
+                        GROUP BY DATE(ub_date)
 			ORDER BY DATE(ub_date) DESC";
+
+		$timeSql = "SELECT count(*) AS the_count, UNIX_TIMESTAMP(ub_date) AS the_date
+			FROM user_board
+                        WHERE ub_date > '" . $backdate . "' AND ub_date < '" . $fixedStartDate . "'
+                        GROUP BY DATE(ub_date)
+			ORDER BY DATE(ub_date) DESC";
+
 			
 		$boundSQL = "SELECT UNIX_TIMESTAMP(ub_date) AS the_date
 				FROM user_board
@@ -661,17 +816,17 @@ function fetchSiteMetrics($metric, $callback){
     
 	case 2:
 		$sql = "SELECT count(*) AS the_count, UNIX_TIMESTAMP(log_timestamp) AS the_date
-			FROM logging WHERE log_type='profile' ";
-
-		if($hasTimeBound){
-			$sql .= "AND log_timestamp > '" . $fixedStartDate . "' AND log_timestamp < '" . $endDateSql . "'";
-		}else{
-			$sql .= "AND log_timestamp > '" . $fixedLastWeek . "'";
-		}
-
-		$sql .=	" GROUP BY DATE(log_timestamp)
+			FROM logging WHERE log_type='profile'
+                        AND log_timestamp > '" . $fixedStartDate . "' AND log_timestamp < '" . $endDateSql . "'
+                        GROUP BY DATE(log_timestamp)
 			ORDER BY DATE(log_timestamp) DESC";
-		
+
+		$timeSql = "SELECT count(*) AS the_count, UNIX_TIMESTAMP(log_timestamp) AS the_date
+			FROM logging WHERE log_type='profile'
+                        AND log_timestamp > '" . $backdate . "' AND log_timestamp < '" . $fixedStartDate . "'
+                        GROUP BY DATE(log_timestamp)
+			ORDER BY DATE(log_timestamp) DESC";
+
 		$boundSQL = "SELECT UNIX_TIMESTAMP(log_timestamp) AS the_date
 				FROM logging WHERE log_type='profile'
 				GROUP BY DATE(log_timestamp)
@@ -680,16 +835,17 @@ function fetchSiteMetrics($metric, $callback){
 	
 	case 3:
 		$sql = "SELECT count(*) AS the_count, UNIX_TIMESTAMP(poke_date) AS the_date
-			FROM poke WHERE ";
-		
-		if($hasTimeBound){
-			$sql .= " poke_date > '" . $fixedStartDate . "' AND poke_date < '" . $endDateSql . "'";
-		}else{
-			$sql .= " poke_date > '" . $fixedLastWeek . "'";
-		}
-		
-		$sql .= " GROUP BY DATE(poke_date)
+			FROM poke WHERE
+                        poke_date > '" . $fixedStartDate . "' AND poke_date < '" . $endDateSql . "'
+                        GROUP BY DATE(poke_date)
 			ORDER BY DATE(poke_date) DESC";
+
+		$timeSql = "SELECT count(*) AS the_count, UNIX_TIMESTAMP(poke_date) AS the_date
+			FROM poke WHERE
+                        poke_date > '" . $backdate . "' AND poke_date < '" . $fixedStartDate . "'
+                        GROUP BY DATE(poke_date)
+			ORDER BY DATE(poke_date) DESC";
+
 		
 		$boundSQL = "SELECT UNIX_TIMESTAMP(poke_date) AS the_date
 				FROM poke
@@ -699,16 +855,17 @@ function fetchSiteMetrics($metric, $callback){
 
 	case 4:
 		$sql = "SELECT count(*) AS the_count, UNIX_TIMESTAMP(img_timestamp) AS the_date
-			FROM image WHERE ";
-
-		if($hasTimeBound){
-			$sql .= "img_timestamp > '" . $fixedStartDate . "' AND img_timestamp < '" . $endDateSql . "'";
-		}else{
-			$sql .= "img_timestamp > '" . $fixedLastWeek . "'";
-		}
-
-		$sql .= " GROUP BY DATE(img_timestamp)
+			FROM image WHERE
+                        img_timestamp > '" . $fixedStartDate . "' AND img_timestamp < '" . $endDateSql . "'
+                        GROUP BY DATE(img_timestamp)
 			ORDER BY DATE(img_timestamp) DESC";
+
+		$timeSql = "SELECT count(*) AS the_count, UNIX_TIMESTAMP(img_timestamp) AS the_date
+			FROM image WHERE
+                        img_timestamp > '" . $backdate . "' AND img_timestamp < '" . $fixedStartDate . "'
+                        GROUP BY DATE(img_timestamp)
+			ORDER BY DATE(img_timestamp) DESC";
+
 			
 		$boundSQL = "SELECT UNIX_TIMESTAMP(img_timestamp) AS the_date
 				FROM image
@@ -718,17 +875,17 @@ function fetchSiteMetrics($metric, $callback){
 	
 	case 5:
 		$sql = "SELECT count(*) AS the_count, UNIX_TIMESTAMP(us_date) AS the_date
-			FROM user_profile_status WHERE ";
+			FROM user_profile_status WHERE
+                        us_date > '" . $fixedStartDate . "' AND us_date < '" . $endDateSql . "'
+                        GROUP BY DATE(us_date)
+			ORDER BY DATE(us_date) DESC";
 
-		if($hasTimeBound){
-			$sql .= "us_date > '" . $fixedStartDate . "' AND us_date < '" . $endDateSql . "'";
-		}else{
-			$sql .= "us_date > '" . $fixedLastWeek . "'";
-		}
+		$timeSql = "SELECT count(*) AS the_count, UNIX_TIMESTAMP(us_date) AS the_date
+			FROM user_profile_status WHERE
+                        us_date > '" . $backdate . "' AND us_date < '" . $fixedStartDate . "'
+                        GROUP BY DATE(us_date)
+			ORDER BY DATE(us_date) DESC";
 
-		$sql .= " GROUP BY DATE(us_date)
-			  ORDER BY DATE(us_date) DESC";
-			  
 		$boundSQL = "SELECT UNIX_TIMESTAMP(us_date) AS the_date
 				FROM user_profile_status
 				GROUP BY DATE(us_date)
@@ -737,17 +894,17 @@ function fetchSiteMetrics($metric, $callback){
 	
   	case 6:
 		$sql = "SELECT count(*) AS the_count, UNIX_TIMESTAMP(ur_date) AS the_date
-			FROM user_register_track WHERE ";
-			
-		if($hasTimeBound){
-			$sql .= " ur_date > '" . $fixedStartDate . "' AND ur_date < '" . $endDateSql . "'";
-		}else{
-			$sql .= " ur_date > '" . $fixedLastWeek . "'";
-		}
-			
-		$sql .= " GROUP BY DATE(ur_date)
-			  ORDER BY DATE(ur_date) DESC";
-		
+			FROM user_register_track WHERE
+                        ur_date > '" . $fixedStartDate . "' AND ur_date < '" . $endDateSql . "'
+                        GROUP BY DATE(ur_date)
+			ORDER BY DATE(ur_date) DESC";
+
+		$timeSql = "SELECT count(*) AS the_count, UNIX_TIMESTAMP(ur_date) AS the_date
+			FROM user_register_track WHERE
+                        ur_date > '" . $backdate . "' AND ur_date < '" . $fixedStartDate . "'
+                        GROUP BY DATE(ur_date)
+			ORDER BY DATE(ur_date) DESC";
+
 		$boundSQL = "SELECT UNIX_TIMESTAMP(ur_date) AS the_date
 				FROM user_register_track
 				GROUP BY DATE(ur_date)
@@ -756,16 +913,17 @@ function fetchSiteMetrics($metric, $callback){
 
 	case 7:
 		$sql = "SELECT SUM(num_queries) as the_count, UNIX_TIMESTAMP(created_at) as the_date
-			FROM metrics_hourly_queries WHERE ";
-		
-		if($hasTimeBound){
-			$sql .= " created_at > '" . $fixedStartDate . "' AND created_at < '" . $endDateSql . "'";
-		}else{
-			$sql .= " created_at > '" . $fixedLastWeek . "'";
-		}
-	
-		$sql .= " GROUP BY DATE(created_at)
+			FROM metrics_hourly_queries WHERE
+                        created_at > '" . $fixedStartDate . "' AND created_at < '" . $endDateSql . "'
+                        GROUP BY DATE(created_at)
 			ORDER BY DATE(created_at) DESC";
+
+		$timeSql = "SELECT SUM(num_queries) as the_count, UNIX_TIMESTAMP(created_at) as the_date
+			FROM metrics_hourly_queries WHERE
+                        created_at > '" . $backdate . "' AND created_at < '" . $fixedStartDate . "'
+                        GROUP BY DATE(created_at)
+			ORDER BY DATE(created_at) DESC";
+
 			
 		$boundSQL = "SELECT UNIX_TIMESTAMP(created_at) as the_date
 				FROM metrics_hourly_queries
@@ -780,7 +938,7 @@ function fetchSiteMetrics($metric, $callback){
 	if($result){
                 $key = "";
         }else{
-                $result = createJSON($sql, $boundSQL);
+                $result = createJSON($sql, $boundSQL, $timeSql);
         }
         
         if($outputCSV){
@@ -815,7 +973,7 @@ function fetchQueryTrend($metric, $callback){
 	// go back a month by default
 	$DEFAULT_TIME = 86400 * 30;
         
-        $dbr =& wfGetDB( DB_MASTER );
+        $dbr =& wfGetDB( DB_SLAVE );
         
 	// grab some query params
 	$startDate = $wgRequest->getVal("startDate");
@@ -826,6 +984,10 @@ function fetchQueryTrend($metric, $callback){
 	$lang = mysql_real_escape_string($wgRequest->getVal("lang", false));
         $outputCSV = $wgRequest->getVal("csv", false);
         
+        if($IsByMonth){
+                $DEFAULT_TIME = 86400 * 365;
+        }
+        
 	// if there isnt a start date figure one out
 	if(!is_null($startDate)){
 		$endDate = !is_null($endDate) ? $endDate : time();		
@@ -835,8 +997,12 @@ function fetchQueryTrend($metric, $callback){
 	}
         
 	$endDateSql = date("Y-m-d 23:59:59", $endDate);
+        
         $startDateSql = date("Y-m-d 00:00:00", $startDate);
 	
+        $backdate = date("Y-m-d 00:00:00", $startDate-(28*86400));
+
+        
 	// figure out if we want a KT or a search trend
 	switch($metric){
 		case 14:
@@ -848,11 +1014,20 @@ function fetchQueryTrend($metric, $callback){
 					GROUP BY DATE(created_at)
 					ORDER BY created_at DESC
 					LIMIT 365;';
+                                
+                                $timeSql = 'SELECT SUM(`count`) AS the_count, `query` AS the_query, UNIX_TIMESTAMP(created_at) AS the_date
+					FROM metrics_current_top_queries
+					WHERE `query`="' . $query.  '" AND `language`="' . $lang . '"
+                                        AND created_at > "' . $backdate . '" AND created_at < "' . $startDateSql . '"
+					GROUP BY DATE(created_at)
+					ORDER BY created_at DESC
+					LIMIT 365;';
+                                
                                 $boundSQL = 'SELECT UNIX_TIMESTAMP(created_at) AS the_date
                                                 FROM metrics_current_top_queries
                                                 WHERE `query`="' . $query.  '" AND `language`="' . $lang . '"
                                                 ORDER BY created_at DESC LIMIT 1';
-				$key = wfMemcKey( 'wikiasearch' , 'metricsx' , $metric, $callback, $query, $lang, $IsByMonth, str_replace(" ", "",$startDateSql), str_replace(" ", "",$endDateSql) );
+				$key = wfMemcKey( 'wikiasearch' , 'metricsv2.0' , $metric, $callback, $query, $lang, $IsByMonth, str_replace(" ", "",$startDateSql), str_replace(" ", "",$endDateSql) );
 			}else{
 				$sql = 'SELECT SUM(`count`) AS the_count, `keyword` AS the_query, UNIX_TIMESTAMP(created_at) AS the_date
 					FROM metrics_current_ktkeywords
@@ -861,17 +1036,26 @@ function fetchQueryTrend($metric, $callback){
 					GROUP BY DATE(created_at)
 					ORDER BY created_at DESC
 					LIMIT 365;';
+                                        
+				$timeSql = 'SELECT SUM(`count`) AS the_count, `keyword` AS the_query, UNIX_TIMESTAMP(created_at) AS the_date
+					FROM metrics_current_ktkeywords
+					WHERE `keyword`="' . $query.  '"
+                                        AND created_at > "' . $backdate . '" AND created_at < "' . $startDateSql . '"
+					GROUP BY DATE(created_at)
+					ORDER BY created_at DESC
+					LIMIT 365;';
+                                        
                                 $boundSQL = 'SELECT UNIX_TIMESTAMP(created_at) AS the_date
                                                 FROM metrics_current_ktkeywords
                                                 WHERE `keyword`="' . $query.  '" ORDER BY created_at DESC LIMIT 1';
-				$key = wfMemcKey( 'wikiasearch' , 'metricsx' , $metric, $callback, $query, $IsByMonth, str_replace(" ", "",$startDateSql), str_replace(" ", "",$endDateSql) );
+				$key = wfMemcKey( 'wikiasearch' , 'metricsv2.0' , $metric, $callback, $query, $IsByMonth, str_replace(" ", "",$startDateSql), str_replace(" ", "",$endDateSql) );
 			}
 		break;
 	}
 	
 	$result = $wgMemc->get($key);
 	if(!$result){
-                $result = createJSON($sql, $boundSQL);
+                $result = createJSON($sql, $boundSQL, $timeSql);
         }else{
                 $key = "";
         }
@@ -896,7 +1080,7 @@ function fetchKTTrend($metric, $callback){
 	// go back a month by default
 	$DEFAULT_TIME = 86400 * 30;
         
-        $dbr =& wfGetDB( DB_MASTER );
+        $dbr =& wfGetDB( DB_SLAVE );
         
 	// grab some query params
 	$startDate = $wgRequest->getVal("startDate");
@@ -904,6 +1088,10 @@ function fetchKTTrend($metric, $callback){
 	$IsByMonth = $wgRequest->getVal("month", false);
         $op = mysql_real_escape_string( $wgRequest->getVal("op", "add") );
         $outputCSV = $wgRequest->getVal("csv", false);
+        
+        if($IsByMonth){
+                $DEFAULT_TIME = 86400 * 365;
+        }
         
 	// if there isnt a start date figure one out
 	if(!is_null($startDate)){
@@ -916,7 +1104,11 @@ function fetchKTTrend($metric, $callback){
 	$endDateSql = date("Y-m-d 23:59:59", $endDate);
         $startDateSql = date("Y-m-d 00:00:00", $startDate);
         
-        $key = wfMemcKey( 'wikiasearch' , 'metricssx' , $metric, $callback, $op, $IsByMonth, str_replace(" ", "",$startDateSql), str_replace(" ", "",$endDateSql) );
+        
+        $backdate = date("Y-m-d 00:00:00", $startDate-(28*86400));
+
+        
+        $key = wfMemcKey( 'wikiasearch' , 'metricsv2.0' , $metric, $callback, $op, $IsByMonth, str_replace(" ", "",$startDateSql), str_replace(" ", "",$endDateSql) );
         
 	$sql = "SELECT SUM(`count`) AS the_count, op, UNIX_TIMESTAMP(created_at) AS the_date
                         FROM metrics_ktops
@@ -924,11 +1116,17 @@ function fetchKTTrend($metric, $callback){
 			GROUP BY DATE(created_at)
 			ORDER BY created_at DESC LIMIT 365;";
 
+        $timeSql = "SELECT SUM(`count`) AS the_count, op, UNIX_TIMESTAMP(created_at) AS the_date
+                        FROM metrics_ktops
+			WHERE op='" . $op . "' AND created_at > '" . $backdate . "' AND created_at < '" . $startDateSql ."'
+			GROUP BY DATE(created_at)
+			ORDER BY created_at DESC LIMIT 365;";
+
         $boundSQL = "SELECT UNIX_TIMESTAMP(created_at) AS the_date FROM metrics_ktops WHERE op=\"{$op}\" ORDER BY created_at DESC LIMIT 1";
 
 	$result = $wgMemc->get($key);
 	if(!$result){
-                $result = createJSON($sql, $boundSQL);
+                $result = createJSON($sql, $boundSQL, $timeSql);
         }else{
                 $key = "";
         }
@@ -951,13 +1149,13 @@ function fetchKTTrend($metric, $callback){
 function fetchKTStats($metric, $callback){
 	global $wgRequest, $wgMemc;
 	
-	$dbr =& wfGetDB( DB_MASTER );
+	$dbr =& wfGetDB( DB_SLAVE );
 	
         $sql = "SELECT SUM(`count`) AS the_count, op
 			FROM metrics_ktops
 			GROUP BY op
 			ORDER BY the_count DESC LIMIT 12;";
-	$keyMemcache = wfMemcKey( 'wikiasearch' , 'metricsx' , $metric, $callback );
+	$keyMemcache = wfMemcKey( 'wikiasearch' , 'metricsv2.0' , $metric, $callback );
 	
 	$result = $wgMemc->get($keyMemcache);	
 	if($result){
@@ -1000,16 +1198,16 @@ function fetchKTStats($metric, $callback){
 function fetchQueryData($metric, $callback){
 	global $wgRequest, $wgMemc;
 	
-        $dbr =& wfGetDB( DB_MASTER );
+        $dbr =& wfGetDB( DB_SLAVE );
 	$lang = mysql_real_escape_string($wgRequest->getVal("lang", false));
 	
 	$hasLang = false;
 	$noCount = false;
 	
 	if($lang){
-		$keyMemcache = wfMemcKey( 'wikiasearch' , 'metricx' , $metric, $callback, $lang );
+		$keyMemcache = wfMemcKey( 'wikiasearch' , 'metricsv2.0' , $metric, $callback, $lang );
 	}else{
-		$keyMemcache = wfMemcKey( 'wikiasearch' , 'metricx' , $metric, $callback );
+		$keyMemcache = wfMemcKey( 'wikiasearch' , 'metricsv2.0' , $metric, $callback );
 	}
 	
         
