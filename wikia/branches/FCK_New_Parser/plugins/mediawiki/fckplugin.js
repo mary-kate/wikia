@@ -32,7 +32,9 @@
 FCKToolbarItems.RegisterItem( 'Source', new FCKToolbarButton( 'Source', 'Wikitext', null, FCK_TOOLBARITEM_ICONTEXT, true, true, 1 ) ) ;
 
 FCK.RegisterDoubleClickHandler( FCKImage_OnDoubleClick, 'IMG' ) ;
-FCK.RegisterDoubleClickHandler( FCKDiv_OnDoubleClick, 'DIV' ) ;
+if (parent.showFCKTemplates) {
+	FCK.RegisterDoubleClickHandler( FCKDiv_OnDoubleClick, 'DIV' ) ;
+}
 if ( FCKBrowserInfo.IsGecko ) {
 	FCK.AttachToOnSelectionChange( FCK_VisibleTemplatesCheck ) ;
 }
@@ -1022,7 +1024,6 @@ function FCKDiv_OnDoubleClick (span) {
 		}
 	}
 }
-
 
 function FCK_VisibleTemplatesCheck () {
 	// this will disallow for template content selection under Firefox
