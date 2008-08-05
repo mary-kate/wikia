@@ -72,6 +72,11 @@ body.ltr #articleFooter ul.actions li div {
 	position: relative;
 }
 
+#realAdsContainer {
+	position: absolute;
+	top: 0;
+}
+
 /* user menu fix */
 #monaco_shrinkwrap_main,
 #wikia_page {
