@@ -25,19 +25,3 @@ body.rtl #articleFooter .actions li div a {
 	clear: both;
 }
 
-#current-rating span {
-	display: none;
-}
-
-/* ADS fix */
-body.rtl #wikia_page {
-	overflow: hidden;
-}
-
-body.rtl #spotlight_footer {
-	direction: ltr;
-}
-
-body.rtl #spotlight_footer td {
-	width: 250px;
-}
