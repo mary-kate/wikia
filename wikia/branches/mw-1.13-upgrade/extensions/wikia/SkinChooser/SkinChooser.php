@@ -5,6 +5,9 @@
 
 $wgHooks['UserSetCookies'][] = 'SetSkinChooserCookies';
 function SetSkinChooserCookies($user, &$session, &$cookies) {
+
+	global $wgCookiePrefix;
+
 	$cookies[$wgCookiePrefix.'skinpref'] = join( '-', array(
 								$user->getOption('skin'), 
 								$user->getOption('theme'), 
