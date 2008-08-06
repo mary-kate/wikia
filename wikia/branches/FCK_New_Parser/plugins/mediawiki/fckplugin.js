@@ -755,7 +755,9 @@ FCK.DataProcessor =
 
 		var loadHTMLFromAjax = function( result )
 		{
-			FCK.EditingArea.Textarea.value = result.responseText ;
+			console.log (result.responseText) ;
+			var splitResult = result.responseText.split ("<FCK_SajaxResponse_splitter_tag/>") ;
+			FCK.EditingArea.Textarea.value = splitResult [0] ;
 			parent.document.getElementById ('FCKmode').value = 'html' ;
 			original.apply( FCK, args ) ;
 		}
