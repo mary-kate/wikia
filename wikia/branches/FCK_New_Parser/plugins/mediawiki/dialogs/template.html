@@ -59,7 +59,7 @@ var oTemplateSpan ;
 
 if ( oFakeImage )
 {
-	if ( oFakeImage.tagName == 'IMG' && oFakeImage.getAttribute('_fck_mw_template') )
+	if ( oFakeImage.tagName == 'DIV' && oFakeImage.getAttribute('_fck_mw_template') )
 		oTemplateSpan = FCK.GetRealElement( oFakeImage ) ;
 	else
 		oFakeImage = null ;
