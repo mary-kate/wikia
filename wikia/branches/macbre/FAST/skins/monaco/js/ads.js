@@ -236,7 +236,7 @@ TieDivLib = new function() {
 
 		with($(source).style) {
 			position = 'absolute';
-			zIndex = (pos == 'bl' || pos == 'r' || pos == 'FAST_SIDE' || pos == 'FAST_HOME3' || pos == 'FAST_HOME4') ? 21 : 15;
+			zIndex = (pos == 'bl' || pos == 'r' || pos == 'FAST_SIDE' || pos == 'FAST_HOME3' || pos == 'FAST_HOME4') ? 21 : 5;
 		}
 	}
 
@@ -244,7 +244,7 @@ TieDivLib = new function() {
 		if(block) return;
 		block = true;
 		if(pos.loaded != true || pos.shrink != Math.round(Dom.getY('monaco_shrinkwrap_main')) || pos.articleW != $('article').offsetWidth || pos.articleH != $('article').offsetHeight || pos.sidebarW != $('widget_sidebar').offsetWidth || pos.sidebarH != $('widget_sidebar').offsetHeight) {
-			pos.shrink = 0; //Math.round(Dom.getY('monaco_shrinkwrap_main'));
+			pos.shrink = Math.round(Dom.getY('monaco_shrinkwrap_main'));
 			pos.articleW = $('article').offsetWidth;
 			pos.articleH = $('article').offsetHeight;
 			pos.sidebarW = $('widget_sidebar').offsetWidth;
