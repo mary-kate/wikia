@@ -1032,6 +1032,5 @@ function FCK_VisibleTemplatesCheck () {
         if ( !sel || sel.rangeCount < 1 )
                 return ;
         var range = sel.getRangeAt( 0 );
-	console.log (range.toString()) ;
 }
 
