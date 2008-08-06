@@ -182,6 +182,13 @@ function wfSajaxWikiToHTML( $wiki )
 	$options->setTidy(true);
 	$parser = new FCKeditorParser();
 	$parser->setOutputType(OT_HTML);
+	$old_parser = new Parser() ;
+        $old_parser->setOutputType(OT_HTML);
+	
+	$parsed_text = $parser->parse($wiki, $wgTitle, $options)->getText() ;
+	$parsed_templates = $old_parser->parse ($parser->fck_parsed_templates, $wgTitle, $options)->getText() ;
 
-	return $parser->parse($wiki, $wgTitle, $options)->getText();
+	$result_text = $parsed_text . "<FCK_SajaxResponse_splitter_tag/>" . $parsed_templates ;
+
+	return $result_text ;
 }
