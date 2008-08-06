@@ -87,7 +87,7 @@ function wfDoGetContactsJSON( $callback="renderContacts" ){
 		$username = $contact_login_info["username"];
 		$password = $contact_login_info["password"];
 		$type = $contact_login_info["type"];
-		$_SESSION["contact_login_info"] = "";
+		//$_SESSION["contact_login_info"] = "";
 	}
 	
 	//check sesssion
@@ -259,7 +259,7 @@ function wfDoSendContactsFriendRequestJSON( $userids, $callback="send_finish"){
 			$user = User::newFromId( $user_id );
 			$user->loadFromId();
 			
-			//$rel->addRelationshipRequest($user->getName(),1,"",true,3);
+			$rel->addRelationshipRequest($user->getName(),1,"",true,3);
 			 
 			$key = wfMemcKey( 'user', 'profile', 'notifupdated', $user_id );
 			$wgMemc->set($key,false);
