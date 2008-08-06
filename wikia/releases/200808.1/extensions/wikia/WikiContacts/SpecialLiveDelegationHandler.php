@@ -61,7 +61,7 @@ class LiveDelegationHandler extends SpecialPage {
 		    $message_html = "<script>
 		    window.location='http://re.search.wikia.com/JSON/msform.html'
 		    //window.opener.get_ms_contacts()
-		    window.close();
+		    //window.close();
 		    </script>";
 		 
 		}
