@@ -63,33 +63,33 @@ body.ltr #articleFooter ul.actions li div {
 }
 
 /* ads fix */
-/* http://www.last-child.com/conflicting-z-index-in-ie6/ */
-#navigation_widget {
-	position: relative;
-	z-index: 5;
-}
-
-#navigation .sub-menu .menu-item {
-	z-index: 10;
-	position: relative;
+/* http://www.last-child.com/conflicting-z-index-in-ie6 */
+/* http://css-discuss.incutio.com/?page=OverlappingAndZIndex */
+#navigation_widget,
+#navigation,
+#navigation .menu-item {
+        z-index: 20 !important;
+        position: relative;
 }
 
 #realAdsContainer {
-	position: absolute;
-	top: 0;
+	z-index: 15 !important;
 }
 
 /* search suggest */
 #searchSuggestContainer {
 	position: absolute;
-	z-index: 50;
+	z-index: 50 !important;
 }
 
+#search_box {
+	z-index: 50 !important;
+}
 
 /* user menu fix */
 #monaco_shrinkwrap_main,
 #wikia_page {
-	z-index: 1 !important;
+	z-index: 12 !important;
 }
 
 /* widget dashboard (#2397) */
