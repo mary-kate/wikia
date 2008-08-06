@@ -1120,4 +1120,44 @@ class WikiFactory {
 		wfProfileOut( __METHOD__ );
 		return $oRow;
 	}
+
+	/**
+	 * clearInterwikiCache
+	 *
+	 * clear the interwiki links for ALL languages in memcached.
+	 *
+	 * @author moli@wikia
+	 * @access public
+	 * @static
+	 *
+	 * @param 
+	 *
+	 * @param integer $wiki: identifier from city_list
+	 *
+	 * @return string: path to file or null if id is not a number
+	 */
+	static public function clearInterwikiCache() {
+		global $wgLocalDatabases, $wgDBname;
+		global $wgMemc;
+		
+		wfProfileIn( __METHOD__ );
+		if (empty($wgLocalDatabases)) {
+			$wgLocalDatabases = array();
+		}
+		$wgLocalDatabases[] = $wgDBname;
+
+		$dbr = wfGetDB( DB_SLAVE );
+		$res = $dbr->select( 'interwiki', array( 'iw_prefix' ), false );
+		$prefixes = array();
+		$loop = 0;
+		while ( $row = $dbr->fetchObject( $res ) ) {
+			foreach ( $wgLocalDatabases as $db ) {
+				$wgMemc->delete("$db:interwiki:" . $row->iw_prefix);
+				$loop++;
+			}
+		}
+
+		wfProfileOut( __METHOD__ );
+		return $loop;
+	}		
 };
