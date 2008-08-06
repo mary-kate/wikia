@@ -465,13 +465,14 @@ if (!function_exists('wfGetDBStats')) {
  * @return nothing
  */
 function wfCountWikiElement($element, $count=1) {
-	global $wgCityId, $wgTitle, $wgElementsCount;
+	global $wgElementsCount, $wgPossibleElements, $wgComplexDataFile;
 	if (strpos($element, '*special:start:') === 0 || !isset($wgElementsCount)) {
 		$wgElementsCount = array();
 		return;
 	}
 	if (strpos($element, '*special:stop:') === 0) {
-	//	"*special:start:{$wgCityId}|{page_id}|{rev_id}"
+		//"*special:stop:{$wgCityId}|{page_id}|{rev_id}"
+
 		//hack - subtract "image with link" from "images" so we don't count images twice
 		if (!empty($wgElementsCount['image with link'])) {
 			$wgElementsCount['image'] -= $wgElementsCount['image with link'];
@@ -484,6 +485,12 @@ function wfCountWikiElement($element, $count=1) {
 
 		$sql = "INSERT INTO $dataTable (city_id, article_id, rev_id, data) VALUES ({$artData[0]}, {$artData[1]}, {$artData[2]}, $sqlData) ON DUPLICATE KEY UPDATE data=$sqlData, rev_id={$artData[2]};";
 		$db->query($sql);
+
+		if (!empty($wgComplexDataFile)) {
+			$fp = fopen($wgComplexDataFile, 'a');
+			fputcsv($fp, array_merge(array_fill_keys($wgPossibleElements, 0), $wgElementsCount, array('city_id' => $artData[0], 'article_id' => $artData[1], 'rev_id' => $artData[2])));
+			fclose($fp);
+		}
 	} else {
 		if (empty($wgElementsCount[$element])) {
 			$wgElementsCount[$element] = $count;
