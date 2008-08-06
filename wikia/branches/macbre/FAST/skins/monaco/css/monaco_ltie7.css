@@ -64,12 +64,19 @@ body.ltr #articleFooter ul.actions li div {
 
 
 /* ads fix */
-#monaco_shrinkwrap_main,
+#monaco_ads_wrapper,
+#monaco_shrinkwrap_main {
+	z-index: 10 !important;
+}
 #navigation_widget,
 #navigation,
 #navigation .menu-item {
-	z-index: 20;
+	z-index: 30 !important;
 	position: relative;
+}
+
+#realAdsContainer {
+	z-index: 12 !important;
 }
 
 /* search suggest fix */
@@ -79,9 +86,8 @@ body.ltr #articleFooter ul.actions li div {
 }
 
 /* user menu fix */
-#monaco_shrinkwrap_main,
 #wikia_page {
-	z-index: 1 !important;
+	z-index: 10 !important;
 }
 
 /* widget dashboard (#2397) */
