@@ -46,6 +46,7 @@ $wgAutoloadClasses["ApiPartnerWikiConfig"] = "extensions/wikia/FeaturedContent/A
 $wgAutoloadClasses["WikiaApiAjaxLogin"] = "extensions/wikia/WikiaApi/WikiaApiAjaxLogin.php";
 $wgAutoloadClasses["ApiImageThumb"] = $GLOBALS["IP"]."/extensions/wikia/Our404Handler/ApiImageThumb.php";
 //$wgAutoloadClasses["ApiRecentChangesCombined"] = "extensions/wikia/RecentChangesCombined/ApiRecentChangesCombined.php";
+$wgAutoloadClasses["WikiaApiQuerySiteInfo"] = "extensions/wikia/WikiaApi/WikiaApiQuerySiteinfo.php";
 
 
 /**
@@ -61,6 +62,12 @@ $wgApiQueryListModules["wkeditpage"] = "WikiaApiQueryLastEditPages";
 $wgApiQueryListModules["wkedituser"] = "WikiaApiQueryTopEditUsers";
 $wgApiQueryListModules["wkmostvisit"] = "WikiaApiQueryMostVisitedPages";
 $wgApiQueryListModules["wkreferer"] = "WikiaApiQueryReferers";
+
+/**
+ * registered API methods
+ */
+$wgApiQueryMetaModules["siteinfo"] = "WikiaApiQuerySiteInfo";
+
 
 /**
  * registered Ajax methods
