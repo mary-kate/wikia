@@ -832,6 +832,9 @@ var FCKDocumentProcessor_CreateFakeElem = function( fakeClass, realElement, cont
 
 	oImg.className = fakeClass ;
 
+	if (contentHtml == undefined) {
+		contentHtml = '(this template has no visible content)' ;
+	}
 	oImg.innerHTML = contentHtml ;
 	oImg.contentEditable = false ;
         oImg.setAttribute( '_fckfakelement', 'true', 0 ) ;
@@ -915,10 +918,9 @@ FCKDocumentProcessor.AppendNew().ProcessDocument = function( document )
 					var oImg = FCKDocumentProcessor_CreateFakeImage( className, eSpan.cloneNode(true) ) ;
 					oImg.setAttribute( '_' + eSpan.className, 'true', 0 ) ;
 				} else {
-					var oImg = FCKDocumentProcessor_CreateFakeElem( className, eSpan.cloneNode(true) ) ;
+					var oImg = FCKDocumentProcessor_CreateFakeElem( className, eSpan.cloneNode(true), templates [numTemplates] ) ;
 					oImg.setAttribute( '_' + eSpan.className, 'true', 0 ) ;
 					oImg.setAttribute ('id', 'fck_templ_' + numTemplates) ;
-					oImg.innerHTML = templates [numTemplates] ;
 					numTemplates++ ;
 				}
 				eSpan.parentNode.insertBefore( oImg, eSpan ) ;
@@ -1030,5 +1032,6 @@ function FCK_VisibleTemplatesCheck () {
         if ( !sel || sel.rangeCount < 1 )
                 return ;
         var range = sel.getRangeAt( 0 );
+	console.log (range.toString()) ;
 }
 
