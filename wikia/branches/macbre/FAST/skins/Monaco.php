@@ -1177,7 +1177,6 @@ if( $custom_user_data ) {
 		<!-- PAGE -->
 <?php		wfProfileIn( __METHOD__ . '-page'); ?>
 	
-	<!-- div id="monaco_ads_wrapper" class="monaco_shrinkwrap" -->
 	<div class="monaco_shrinkwrap" id="monaco_shrinkwrap_main">
 		<div id="wikia_page">
 			<div id="page_bar" class="reset color1 clearfix">
@@ -1628,7 +1627,6 @@ if($wgAdServingType === 1) {
 	}
 	uasort($adsDisplayed, "cmpAds");
 
-	echo '<div id="realAdsContainer">';
 	echo '<script type="text/javascript">TieDivLib.init();</script>';
 	foreach($adsDisplayed as $adSpace => $ad) {
 		echo '<div id="realAd'.$adSpace.'" style="display: none">';
@@ -1636,9 +1634,7 @@ if($wgAdServingType === 1) {
 		echo '</div>';
 		echo '<script type="text/javascript">if(curAdSpaceId != -1) TieDivLib.tie("realAd'.$adSpace.'", "adSpace"+curAdSpaceId, "'.$ad[1].'");</script>';
 	}
-	echo '</div>';
 }
-echo '<!--/div-->';
 echo AdServer::getInstance()->getAd('js_bot2');
 echo AdServer::getInstance()->getAd('js_bot3');
 echo AdServer::getInstance()->getAd('js_bot4');
