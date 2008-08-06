@@ -25,8 +25,3 @@ body.rtl #articleFooter .actions li div a {
 	clear: both;
 }
 
-/* ads fix */
-#realAdsContainer {
-	position: absolute;
-	top: 0;
-}

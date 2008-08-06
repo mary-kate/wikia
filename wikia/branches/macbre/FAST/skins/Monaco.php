@@ -983,6 +983,7 @@ echo '<link rel="apple-touch-icon" href="'. $wgLogo .'" />';
 
 	<body <?php if($this->data['body_onload'    ]) { ?>onload="<?php     $this->text('body_onload')     ?>"<?php } ?>
  class="mediawiki <?php $this->text('nsclass') ?> <?php $this->text('dir') ?> <?php $this->text('pageclass') ?><?php if(!empty($this->data['printable']) ) { ?> printable<?php } ?><?php if (!$wgUser->isLoggedIn()) { ?> loggedout<?php } ?> color2 wikiaSkinMonaco<?=$isMainpage?>" id="body">
+
  <?php
    if(!empty($skin->timemarker)) {
 	echo $skin->timemarker;
@@ -1605,8 +1606,6 @@ if(!empty($wgFASTSIDE) && isset($wgFASTSIDE[1])) {
 <?php
 wfProfileOut( __METHOD__ . '-widgets');
 
-echo '</div>';
-
 // curse like cobranding
 $this->printCustomFooter();
 global $wgAdServingType;
@@ -1628,7 +1627,7 @@ if($wgAdServingType === 1) {
 	}
 	uasort($adsDisplayed, "cmpAds");
 
-	echo '<div id="realAdsContainer" class="reset">';
+	echo '<div id="realAdsContainer">';
 	echo '<script type="text/javascript">TieDivLib.init();</script>';
 	foreach($adsDisplayed as $adSpace => $ad) {
 		echo '<div id="realAd'.$adSpace.'" style="display: none">';
@@ -1638,6 +1637,7 @@ if($wgAdServingType === 1) {
 	}
 	echo '</div>';
 }
+echo '</div>';
 echo AdServer::getInstance()->getAd('js_bot2');
 echo AdServer::getInstance()->getAd('js_bot3');
 echo AdServer::getInstance()->getAd('js_bot4');
