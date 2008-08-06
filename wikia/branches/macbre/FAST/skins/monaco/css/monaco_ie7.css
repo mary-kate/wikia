@@ -25,3 +25,8 @@ body.rtl #articleFooter .actions li div a {
 	clear: both;
 }
 
+/* spotlights fix */
+#spotlight_footer {
+	height: 1px;
+	margin-bottom: 100px;
+}

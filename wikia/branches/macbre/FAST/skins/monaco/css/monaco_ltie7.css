@@ -62,32 +62,10 @@ body.ltr #articleFooter ul.actions li div {
 	margin: 0 0 0 20px;
 }
 
-
 /* spotlights fix */
-/* http://verens.com/archives/2005/07/15/ie-z-index-bug */
-/* http://www.agum.com/web/2008/03/05/css-z-index-so-what-appears-on-top/ */
-/* http://www.agum.com/web/2008/01/17/css-absolute-position-in-a-relative-block-and-ies-haslayout-property/ */
-#navigation_widget,
-#navigation,
-#navigation .menu-item {
-	z-index: 30 !important;
-	position: relative;
-}
-
-#realAdsContainer {
-	z-index: 8 !important;
-}
-
-/* now here's the trick */
 #spotlight_footer {
 	height: 1px;
 	margin-bottom: 100px;
-}
-
-/* search suggest fix */
-#search_box,
-#searchSuggestContainer {
-	z-index: 50 !important;
 }
 
 /* user menu fix */
