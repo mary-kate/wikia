@@ -236,7 +236,7 @@ TieDivLib = new function() {
 
 		with($(source).style) {
 			position = 'absolute';
-			zIndex = (pos == 'bl' || pos == 'r' || pos == 'FAST_SIDE' || pos == 'FAST_HOME3' || pos == 'FAST_HOME4') ? 21 : 5;
+			zIndex = (pos == 'bl' || pos == 'r' || pos == 'FAST_SIDE' || pos == 'FAST_HOME3' || pos == 'FAST_HOME4') ? 21 : 15;
 		}
 	}
 
