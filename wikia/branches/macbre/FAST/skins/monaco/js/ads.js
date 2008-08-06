@@ -234,9 +234,13 @@ TieDivLib = new function() {
 
 		items.push([source, target, pos]);
 
-		with($(source).style) {
-			position = 'absolute';
-			zIndex = pos.substr(0,4) == 'FAST' ? 50 : 5;
+		with($(source)) {
+			style.position = 'absolute';
+			if (pos.substr(0,4) == 'FAST') {
+				style.zIndex=50;
+			} else {
+				className = 'wikia_spotlight';
+			}
 		}
 	}
 
