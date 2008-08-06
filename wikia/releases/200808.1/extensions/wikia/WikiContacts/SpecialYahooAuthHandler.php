@@ -46,7 +46,7 @@ class YahooAuthHandler extends SpecialPage {
 		    $message_html = "<script>
 		    window.location='http://re.search.wikia.com/JSON/yform.html'
 		    //window.opener.get_ms_contacts()
-		    window.close();
+		    //window.close();
 		    </script>";
 		 
 		}else{
