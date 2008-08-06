@@ -43,6 +43,7 @@ body.mainpage {
 #realAdsContainer {
 	position: absolute;
 	top: 0;
+	width: 100%;
 }
 #background_accent1 {
 	background-repeat: no-repeat;
