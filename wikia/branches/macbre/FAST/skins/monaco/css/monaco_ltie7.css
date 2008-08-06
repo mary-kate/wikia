@@ -67,13 +67,6 @@ body.ltr #articleFooter ul.actions li div {
 /* http://verens.com/archives/2005/07/15/ie-z-index-bug */
 /* http://www.agum.com/web/2008/03/05/css-z-index-so-what-appears-on-top/ */
 /* http://www.agum.com/web/2008/01/17/css-absolute-position-in-a-relative-block-and-ies-haslayout-property/ */
-#monaco_ads_wrapper,
-#monaco_shrinkwrap_main {
-	z-index: 10 !important;
-}
-#widget_sidebar {
-	z-index: 30 !important;
-}
 #navigation_widget,
 #navigation,
 #navigation .menu-item {
@@ -82,7 +75,13 @@ body.ltr #articleFooter ul.actions li div {
 }
 
 #realAdsContainer {
-	z-index: 5 !important;
+	z-index: 15 !important;
+}
+
+/* now here's the trick */
+#spotlight_footer {
+	height: 1px;
+	margin-bottom: 100px;
 }
 
 /* search suggest fix */
@@ -92,6 +91,7 @@ body.ltr #articleFooter ul.actions li div {
 }
 
 /* user menu fix */
+#monaco_shrinkwrap_main,
 #wikia_page {
 	z-index: 10 !important;
 }
