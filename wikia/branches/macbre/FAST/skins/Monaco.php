@@ -1176,7 +1176,8 @@ if( $custom_user_data ) {
 
 		<!-- PAGE -->
 <?php		wfProfileIn( __METHOD__ . '-page'); ?>
-
+	
+	<div id="monaco_ads_wrapper" class="monaco_shrinkwrap">
 	<div class="monaco_shrinkwrap" id="monaco_shrinkwrap_main">
 		<div id="wikia_page">
 			<div id="page_bar" class="reset color1 clearfix">
@@ -1602,7 +1603,7 @@ if(!empty($wgFASTSIDE) && isset($wgFASTSIDE[1])) {
 
 		</div>
 		<!-- /WIDGETS -->
-	<!--/div-->
+	</div>
 <?php
 wfProfileOut( __METHOD__ . '-widgets');
 

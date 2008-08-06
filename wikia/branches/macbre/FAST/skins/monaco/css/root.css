@@ -40,6 +40,10 @@ body.mainpage {
 	position: relative;
 	width: 100%;
 }
+#realAdsContainer {
+	position: absolute;
+	top: 0;
+}
 #background_accent1 {
 	background-repeat: no-repeat;
 	margin-right: 481px;
