@@ -75,7 +75,7 @@ body.ltr #articleFooter ul.actions li div {
 }
 
 #realAdsContainer {
-	z-index: 15 !important;
+	z-index: 8 !important;
 }
 
 /* now here's the trick */
