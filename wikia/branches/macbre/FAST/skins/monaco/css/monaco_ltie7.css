@@ -63,10 +63,14 @@ body.ltr #articleFooter ul.actions li div {
 }
 
 
-/* ads fix */
+/* spotlights fix */
+/* http://verens.com/archives/2005/07/15/ie-z-index-bug */
 #monaco_ads_wrapper,
 #monaco_shrinkwrap_main {
 	z-index: 10 !important;
+}
+#widget_sidebar {
+	z-index: 30 !important;
 }
 #navigation_widget,
 #navigation,
@@ -76,7 +80,7 @@ body.ltr #articleFooter ul.actions li div {
 }
 
 #realAdsContainer {
-	z-index: 12 !important;
+	z-index: 5 !important;
 }
 
 /* search suggest fix */
