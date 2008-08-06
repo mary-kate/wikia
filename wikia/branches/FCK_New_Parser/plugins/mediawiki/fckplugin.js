@@ -824,6 +824,7 @@ FCKDocumentProcessor.refillTemplates = function () {
 			end = parts [i + 1];
 		}				
 		templates.push (text.substring (parts[i], end)) ;
+		console.log (text.substring (parts[i], end)) ;
 	}                 	
 	return templates ;
 }
@@ -878,7 +879,7 @@ FCKDocumentProcessor.AppendNew().ProcessDocument = function( document )
 			FCK_SetupTemplatesForGecko () ;
 	}
 	var aSpans = document.getElementsByTagName( 'SPAN' ) ;
-	var numTemplates = 0 ;
+	var numTemplates = templates.length - 1 ;
 	var eSpan ;
 	var i = aSpans.length - 1 ;
 	while ( i >= 0 && ( eSpan = aSpans[i--] ) )
@@ -921,9 +922,10 @@ FCKDocumentProcessor.AppendNew().ProcessDocument = function( document )
 					oImg.setAttribute( '_' + eSpan.className, 'true', 0 ) ;
 				} else {
 					var oImg = FCKDocumentProcessor_CreateFakeElem( className, eSpan.cloneNode(true), templates [numTemplates] ) ;
+					console.log (templates [numTemplates]) ;
 					oImg.setAttribute( '_' + eSpan.className, 'true', 0 ) ;
 					oImg.setAttribute ('id', 'fck_templ_' + numTemplates) ;
-					numTemplates++ ;
+					numTemplates-- ;
 				}
 				eSpan.parentNode.insertBefore( oImg, eSpan ) ;
 				eSpan.parentNode.removeChild( eSpan ) ;
