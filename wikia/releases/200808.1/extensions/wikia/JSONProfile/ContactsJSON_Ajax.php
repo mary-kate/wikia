@@ -274,12 +274,12 @@ function wfDoSendContactsFriendRequestJSON( $userids, $callback="send_finish"){
 
 $wgAjaxExportList [] = 'wfDoContactsUploadCSV';
 function wfDoContactsUploadCSV( ){
-	global $wgRequest;
+	global $wgRequest, $wgUser, $wgUploadDirectory;
 	if( $wgRequest->wasPosted() ){
 		$file = $wgRequest->getFileTempname( 'ufile' );
-		move_uploaded_file( $file, $file . "-tmp-csv" );
+		move_uploaded_file( $file, $wgUploadDirectory . "/" . $wgUser->getID() . "-tmp-csv" );
 		
-		$file = $wgRequest->getFileTempname( 'ufile' ) . "-tmp-csv";
+		$file = $wgUploadDirectory . "/" . $wgUser->getID() . "-tmp-csv";
 		$_SESSION["contact_login_info"] = array(
 			"file" => $file,
 			"type" => "csv"
@@ -288,7 +288,7 @@ function wfDoContactsUploadCSV( ){
 		if( $_POST['upload_csv'] == 2 ){
 			$_SESSION["contacts_upload_csv"] = $file;
 		}
-		return "<script type=\"text/javascript\">;\n\nlocation.href='{$from}?csvupload=1';</script>";
+		return "<script type=\"text/javascript\">\n\nlocation.href='{$from}?csvupload=1';</script>";
 	}
 }
 
@@ -311,8 +311,8 @@ function wfDoGetContactsCSVJSON( $callback="renderContacts"){
 	}
 
 	if( $file ){
-		//return "<script>alert('" . $file . "')</script>";
 		$contacts_json["contacts"] = WikiaSearch_getContactsCSV( $file );
+		unlink( $file );
 		return "var json_contacts=" . jsonify($contacts_json) . ";\n\nparent.{$callback}(json_contacts)";
 	}else{
 		$contacts_json["error"] = 1;
@@ -352,9 +352,40 @@ function WikiaSearch_getContactsCSV( $file ){
 	if( !is_file($file) ) return false;
 	
 	$fp = fopen ($file,"r");
+	
+	$delim = ",";
+	
 	while (!feof($fp)){
-		$data = WikiaSearch_fgetcsv( $fp, ',' );
-
+	    $line = trim( fgets( $fp ), "\r\n" );
+	    $fields = array();
+	    $fldCount = 0;
+	    $inQuotes = false;
+		    
+	    for ($i = 0; $i < mb_strlen($line); $i++) {
+		if (!isset($fields[$fldCount])) $fields[$fldCount] = "";
+		$tmp = mb_substr($line, $i, mb_strlen($delim));
+		if ($tmp === $delim && !$inQuotes) {
+		    $fldCount++;
+		    $i+= mb_strlen($delim) - 1;
+		}
+		else if ($fields[$fldCount] == "" && mb_substr($line, $i, 1) == '"' && !$inQuotes) {
+		    if (!$removeQuotes) $fields[$fldCount] .= mb_substr($line, $i, 1);
+		    $inQuotes = true;
+		} 
+		else if (mb_substr($line, $i, 1) == '"') {
+		    if (mb_substr($line, $i+1, 1) == '"') {
+			$i++;
+			$fields[$fldCount] .= mb_substr($line, $i, 1);
+		    } else {
+			if (!$removeQuotes) $fields[$fldCount] .= mb_substr($line, $i, 1);
+			$inQuotes = false;
+		    }
+		}
+		else {
+		    $fields[$fldCount] .= mb_substr($line, $i, 1);
+		}
+	    }
+	    $data = $fields;
 		//try outlook
 		if( strpos( $data[57], "@" ) !== false ){
 			$email = $data[57];
@@ -391,12 +422,13 @@ function WikiaSearch_getContactsCSV( $file ){
 	return $addresses;
 }
 
-function WikiaSearch_fgetcsv( $file, $delim = ',', $removeQuotes = true )
+function WikiaSearch_fgetcsv( &$fp, $delim = ',', $removeQuotes = true )
 {
-    if( !$file ) return false;
-    if( !is_file($file) ) return false;
-    
-    $line = trim( fgets( $file ), "\r\n" );
+    if( !$fp ) return false;
+    if( !is_file($fp) ) return false;
+    echo "get";
+    exit();
+    $line = trim( fgets( $fp ), "\r\n" );
     $fields = array();
     $fldCount = 0;
     $inQuotes = false;
