@@ -120,3 +120,9 @@ $wgLogHeaders['var_log'] = 'var_logheader';
 $wgLogNames['var_log'] = 'var_logtext';
 $wgLogNames['var_set'] = 'var_set';
 $wgLogActions['var_log/var_set'] = 'var_set';
+
+/**
+ * Global category blacklist
+ * (introduced by Tor in r846)
+ */
+$wgBiggestCategoriesBlacklist = array();
