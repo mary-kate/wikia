@@ -122,7 +122,8 @@ $wgLogNames['var_set'] = 'var_set';
 $wgLogActions['var_log/var_set'] = 'var_set';
 
 /**
- * Global category blacklist
- * (introduced by Tor in r846)
+ * @name $wgBiggestCategoriesBlacklist
+ * Lists phrases that disqualify a category from appearing in
+ * the biggest category list (Monaco sidebar)
  */
 $wgBiggestCategoriesBlacklist = array();
