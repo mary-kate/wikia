@@ -34,7 +34,7 @@ function WidgetWatchlist($id, $params) {
 
 	$ret = '';
 
-	if ( isset($results) && is_array($results['query']['watchlist']) && count($results['query']['watchlist']) > 0 ) {
+	if ( isset($results) && isset($results['query']) && is_array($results['query']['watchlist']) && count($results['query']['watchlist']) > 0 ) {
 	
 	    $list = array();
 	
