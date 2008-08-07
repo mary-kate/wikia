@@ -2138,7 +2138,7 @@ class Database {
 		global $wgUseNewLagCheck;
 		// slave lag check by Artur
 		if( !empty( $wgUseNewLagCheck ) ) {
-			$res = $this->query( 'SELECT UNIX_TIMESTAMP(replicated_ping)-UNIX_TIMESTAMP(recorded_ping) AS lag_time, UNIX_TIMESTAMP()-UNIX_TIMESTAMP(recorded_ping) AS behind FROM replicationstatus.lagcheck WHERE recorded_ping = (SELECT MAX(recorded_ping) FROM lagcheck) LIMIT 1' );
+			$res = $this->query( 'SELECT UNIX_TIMESTAMP(replicated_ping)-UNIX_TIMESTAMP(recorded_ping) AS lag_time, UNIX_TIMESTAMP()-UNIX_TIMESTAMP(recorded_ping) AS behind FROM replicationstatus.lagcheck WHERE recorded_ping = (SELECT MAX(recorded_ping) FROM replicationstatus.lagcheck) LIMIT 1' );
 			if( $row = $this->fetchObject( $res ) ) {
 				$this->freeResult( $res );
 				if( $row->behind < 30 ) {
