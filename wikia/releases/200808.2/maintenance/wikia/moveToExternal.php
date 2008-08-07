@@ -97,9 +97,9 @@ function moveToExternal( $cluster, $limit ) {
 		}
 
 		$lag = $dbr->getLag();
-		print "Storing "  . strlen( $text ) . " bytes to {$url}, old_id=$id\n";
+		printf("%s storing %8d bytes to %s, old_id=%8d\n", wfTimestamp( TS_DB, time() ), strlen( $text ), $url, $id );
 		if( $lag > 4 ) {
-			print "lag: {$lag}. waiting...\n";
+			printf("%s lag: {$lag}. waiting...\n", wfTimestamp( TS_DB, time() ) );
 			sleep( floor( $lag ) );
 		}
 
