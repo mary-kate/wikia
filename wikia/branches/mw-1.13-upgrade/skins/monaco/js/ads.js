@@ -265,7 +265,7 @@ TieDivLib = new function() {
 							}
 						} else {
 							if($(items[i][0]).style.left == '') {
-								$(items[i][0]).style.left = Dom.getX(items[i][1]) - aX + 'px';
+								$(items[i][0]).style.left = Dom.getX(items[i][1]) - aX - (YAHOO.util.Dom.getX('wikia_page') - parseFloat(YAHOO.util.Dom.getStyle('wikia_page', 'margin-left'))) + 'px';
 							}
 						}
 						if(xy.y != parseFloat($(items[i][0]).style.top) + pos.shrink) {
@@ -274,12 +274,12 @@ TieDivLib = new function() {
 					} else {
 						if(xy.y != parseFloat($(items[i][0]).style.top) + pos.shrink || xy.x != parseFloat($(items[i][0]).style.left)) {
 							$(items[i][0]).style.top = xy.y - pos.shrink + aY + 'px';
-							$(items[i][0]).style.left = xy.x - aX + 'px';
+							$(items[i][0]).style.left = xy.x - (YAHOO.util.Dom.getX('wikia_page') - parseFloat(YAHOO.util.Dom.getStyle('wikia_page', 'margin-left'))) - aX + 'px';
 						}
 					}
 				} else {
 					xy = getAbsolutePosition($(items[i][1]));
-					xy.x = Dom.getX(items[i][1]);
+					xy.x = Dom.getX(items[i][1]) - (YAHOO.util.Dom.getX('wikia_page') - parseFloat(YAHOO.util.Dom.getStyle('wikia_page', 'margin-left')));
 					Dom.setXY(items[i][0], [xy.x, xy.y]);
 				}
 			}
@@ -298,7 +298,7 @@ TieDivLib = new function() {
 	this.init = function() {
 		rtl = Dom.hasClass(document.body, 'rtl');
 		aX = (YAHOO.env.ua.ie > 0) ? Dom.getX('wikia_header') : 0;
-		aY = ((YAHOO.env.ua.ie > 0) ? 2 : 0);
+		aY = ((YAHOO.env.ua.ie > 0) ? 2 : 0) - 1;
 		TieDivLib.timer();
 
 		YAHOO.util.Event.addListener(window, 'load', function() {

@@ -48,7 +48,13 @@ function UserengagementAjax( ) {
 	//only english wikis && article
 	if( ( $wgLanguageCode == 'en' ) ) {
 		if( ( $mVisit == 1 ) || ( $mVisit == 2 ) || ( $mVisit == 3 ) || ( $mVisit == 6 ) || ( $mVisit == 8 ) ) {
-			$mResponse = array( 'response' => str_replace( '%SITENAME%', $wgSitename, wfMsg( 'Ue-VisitN' . $mVisit ) ), 'msg_id' => 'Ue-VisitN' . $mVisit );
+		
+			if( trim( wfMsg( 'Ue-VisitN' . $_SERVER['SERVER_NAME'] . $mVisit ) ) != '&lt;' . 'Ue-VisitN' . $_SERVER['SERVER_NAME'] . $mVisit . '&gt;' ){	
+				$mResponse = array( 'response' => str_replace( '%SITENAME%', $wgSitename, wfMsg( 'Ue-VisitN' . $_SERVER['SERVER_NAME'] . $mVisit ) ), 'msg_id' => 'Ue-VisitN' . $_SERVER['SERVER_NAME'] . $mVisit );
+			}else{
+				$mResponse = array( 'response' => str_replace( '%SITENAME%', $wgSitename, wfMsg( 'Ue-VisitN' . $mVisit ) ), 'msg_id' => 'Ue-VisitN' . $mVisit );			
+			}
+		
 		}
 	}
 	return new AjaxResponse( Wikia::json_encode( $mResponse ) );

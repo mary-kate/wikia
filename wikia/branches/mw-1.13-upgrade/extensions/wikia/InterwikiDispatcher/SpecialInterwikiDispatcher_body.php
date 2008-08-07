@@ -88,8 +88,13 @@ class InterwikiDispatcher extends SpecialPage {
 				if($iCityId) {
 					$sArticlePath = WikiFactory::getVarValueByName('wgArticlePath', $iCityId);
 					$sArticlePath = !empty($sArticlePath) ? $sArticlePath : $wgArticlePath;
-					
-					$url = str_replace('$1',  $aLinkParts[2], ("http://"	. $aLinkParts[1] . ".wikia.com" . $sArticlePath));
+					if(!empty($sArticlePath)) {
+						$sArticleTitle = "";
+						for($i = 2; $i < count($aLinkParts); $i++) {
+							$sArticleTitle .= (!empty($sArticleTitle)?":":"") . $aLinkParts[$i];
+						}
+						$url = str_replace('$1',  $sArticleTitle, ("http://"	. $aLinkParts[1] . ".wikia.com" . $sArticlePath));						
+					}
 				}
 			}
 		}

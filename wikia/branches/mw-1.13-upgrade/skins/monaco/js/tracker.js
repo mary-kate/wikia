@@ -179,4 +179,29 @@ var initTracker = function() {
 		Tracker.trackByStr(e, 'search/submit/click/' +  escape(Dom.get('search_field').value.replace(/ /g, '_')));
 	});
 
+	// Spotlights
+	footerSpotlights = Dom.get('spotlight_footer').getElementsByTagName('div');
+	sidebarSpotlight = Dom.get('102_content'); 
+
+	// Advertiser Widget
+	if (sidebarSpotlight) {
+		sidebarSpotlight = sidebarSpotlight.getElementsByTagName('div');
+	}
+
+	if (footerSpotlights.length > 0) {
+		for (s=0; s < footerSpotlights.length; s++) {
+			var id = parseInt(footerSpotlights[s].id.substr( footerSpotlights[s].id.length - 1 ));
+			Event.addListener('realAd' + id, 'click', function(e, id) {
+				Tracker.trackByStr(e, 'spotlights/footer' + (id+1));
+			}, s);
+		}
+	}
+
+	if (sidebarSpotlight.length > 0) {
+		var id = sidebarSpotlight[0].id.substr( sidebarSpotlight[0].id.length - 1 );
+		Event.addListener('realAd' + id, 'click', function(e) {
+			Tracker.trackByStr(e, 'spotlights/sidebar1');
+		});
+	}
+
 };

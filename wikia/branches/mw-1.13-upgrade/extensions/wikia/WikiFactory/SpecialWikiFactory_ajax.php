@@ -205,6 +205,7 @@ function axWFactoryClearCache()
 
     if (empty($iError)) {
         WikiFactory::clearCache( $iCityId );
+        WikiFactory::clearInterwikiCache();
 
         #--- send response
         $aResponse = array(

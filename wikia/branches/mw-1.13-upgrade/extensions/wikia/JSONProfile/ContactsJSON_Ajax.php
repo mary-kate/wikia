@@ -79,8 +79,16 @@ function wfInitContactsEmail( $callback="populateEmail"){
 }
 
 $wgAjaxExportList [] = 'wfDoGetContactsJSON';
-function wfDoGetContactsJSON( $callback="renderContacts"){
+function wfDoGetContactsJSON( $callback="renderContacts" ){
 	global $IP;
+	
+	$contact_login_info = $_SESSION["contact_login_info"];
+	if( is_array( $contact_login_info ) ){
+		$username = $contact_login_info["username"];
+		$password = $contact_login_info["password"];
+		$type = $contact_login_info["type"];
+		//$_SESSION["contact_login_info"] = "";
+	}
 	
 	//check sesssion
 	$contact_login = $_SESSION["contact_login"];
@@ -89,12 +97,12 @@ function wfDoGetContactsJSON( $callback="renderContacts"){
 		$password = $contact_login["password"];
 		$type = $contact_login["type"];
 		$_SESSION["contact_login"] = "";
-	}else{
+	}/*else{
 	//get from post
 		$username = $_POST['email'];
 		$password = $_POST['password'];
 		$type = $_POST['type'];
-	}
+	}*/
 		
 	if(!isset( $username ) || !isset( $password )  ) {
 		return "no";
@@ -115,14 +123,15 @@ function wfDoGetContactsJSON( $callback="renderContacts"){
 	
 	$contacts_json["type"] = $type;
 	$contacts_json["contacts"] = $contacts;
-	return "<script type=\"text/javascript\">var json_contacts=" . jsonify($contacts_json) . ";\n\nparent.{$callback}(json_contacts);</script>";
+	return "var json_contacts=" . jsonify($contacts_json) . ";\n\n{$callback}(json_contacts);";
+	//return "<script type=\"text/javascript\">var json_contacts=" . jsonify($contacts_json) . ";\n\nparent.{$callback}(json_contacts);</script>";
 }
 
 $wgAjaxExportList [] = 'wfDoSendContactsEmailJSON';
-function wfDoSendContactsEmailJSON( $callback="send_finish"){
+function wfDoSendContactsEmailJSON( $emails, $callback="send_finish"){
 	global $wgUser;
 	
-	$emails = $_POST["emails"];
+	//$emails = $_POST["emails"];
 	if( !$emails )return "no";
 	
 	$dbw = wfGetDB( DB_MASTER );
@@ -156,22 +165,51 @@ function wfDoSendContactsEmailJSON( $callback="send_finish"){
 		}
 		
 	}
-	return "<script type=\"text/javascript\">parent.{$callback}({$emails_sent});</script>";
+	return "{$callback}({$emails_sent})";
+	//return "<script type=\"text/javascript\">parent.{$callback}({$emails_sent});</script>";
+}
+
+$wgAjaxExportList [] = 'wfDoContactsLogin';
+function wfDoContactsLogin( ){
+	$username = $_POST['email'];
+	$password = $_POST['password'];
+	$type = $_POST['type'];
+	$from = $_POST['wpSourceForm'];
+	
+	//store in session for later import
+	$_SESSION["contact_login_info"] = array(
+		"username" => $username,
+		"password" => $password,
+		"type" => $type
+	);
+	return "<script type=\"text/javascript\">\n\nlocation.href='{$from}?loggedin=1';</script>";
 }
 
 $wgAjaxExportList [] = 'wfDoGetContactsAsUsersJSON';
 function wfDoGetContactsAsUsersJSON( $callback="renderContacts"){
 	global $IP, $wgUser, $wgMemc;
 	
-	if(!isset($_POST['email']) || !isset($_POST['password'])  ) {
+	$contact_login_info = $_SESSION["contact_login_info"];
+	if( is_array( $contact_login_info ) ){
+		$username = $contact_login_info["username"];
+		$password = $contact_login_info["password"];
+		$type = $contact_login_info["type"];
+		$_SESSION["contact_login_info"] = "";
+	}
+	
+	/*
+	$username = $_POST['email'];
+	$password = $_POST['password'];
+	$type = $_POST['type'];
+	*/
+	
+	if(!isset($username ) || !isset($password)  ) {
 		return "no";
 	}
 	
 	require_once ( "$IP/extensions/wikia/WikiContacts/WikiContacts.php" );
 	
-	$username = $_POST['email'];
-	$password = $_POST['password'];
-	$type = $_POST['type'];
+
 	
 	//store in session for later import
 	$_SESSION["contact_login"] = array(
@@ -180,7 +218,7 @@ function wfDoGetContactsAsUsersJSON( $callback="renderContacts"){
 		"type" => $type
 	);
 	
-	if( WikiContacts::isLiveService( $_POST['type'] ) ){
+	if( WikiContacts::isLiveService( $type ) ){
 		$contacts = class_exists( 'WikiContacts' ) ? WikiContacts::fetchMS( @$_COOKIE["delauthtoken"] ) : array();
 	}else{
 		$contacts = class_exists( 'WikiContacts' ) ? WikiContacts::fetch( $type, $username, $password ) : array();
@@ -188,21 +226,23 @@ function wfDoGetContactsAsUsersJSON( $callback="renderContacts"){
 	if ( $contacts === false ) {
 		$users["error"] = 1;
 		$users["error_message"] = "Your login information in incorrect.  Please try again.";
-		return "<script type=\"text/javascript\">json_contacts=" . jsonify($users) . ";\n\nparent.{$callback}(json_contacts);</script>";
+		return "json_contacts=" . jsonify($users) . ";\n\n{$callback}(json_contacts);";
+		//return "<script type=\"text/javascript\">json_contacts=" . jsonify($users) . ";\n\nparent.{$callback}(json_contacts);</script>";
 	}
 	
 	$users = WikiaSearch_GetContactsAsUsers( $contacts );
 
 	$users["type"] = $type;
 	
-	return "<script type=\"text/javascript\">json_contacts=" . jsonify($users) . ";\n\nparent.{$callback}(json_contacts);</script>";
+	return "json_contacts=" . jsonify($users) . ";\n\nparent.{$callback}(json_contacts)";
+	//return "<script type=\"text/javascript\">json_contacts=" . jsonify($users) . ";\n\nparent.{$callback}(json_contacts);</script>";
 }
 
 $wgAjaxExportList [] = 'wfDoSendContactsFriendRequestJSON';
-function wfDoSendContactsFriendRequestJSON( $callback="send_finish"){
+function wfDoSendContactsFriendRequestJSON( $userids, $callback="send_finish"){
 	global $wgUser, $wgMemc;
 	
-	$userids = $_POST["userids"];
+	//$userids = $_POST["userids"];
 	if( !$userids )return "no";
 	
 	$rel = new UserRelationship($wgUser->getName() );
@@ -228,53 +268,82 @@ function wfDoSendContactsFriendRequestJSON( $callback="send_finish"){
 		}
 		
 	}
-	return "<script type=\"text/javascript\">parent.{$callback}({$req_sent});</script>";
+	return "{$callback}({$req_sent})";
+	//return "<script type=\"text/javascript\">parent.{$callback}({$req_sent});</script>";
+}
+
+$wgAjaxExportList [] = 'wfDoContactsUploadCSV';
+function wfDoContactsUploadCSV( ){
+	global $wgRequest;
+	if( $wgRequest->wasPosted() ){
+		$file = $wgRequest->getFileTempname( 'ufile' );
+		move_uploaded_file( $file, $file . "-tmp-csv" );
+		
+		$file = $wgRequest->getFileTempname( 'ufile' ) . "-tmp-csv";
+		$_SESSION["contact_login_info"] = array(
+			"file" => $file,
+			"type" => "csv"
+		);
+		$from = $_POST['csvSourceForm'];
+		if( $_POST['upload_csv'] == 2 ){
+			$_SESSION["contacts_upload_csv"] = $file;
+		}
+		return "<script type=\"text/javascript\">;\n\nlocation.href='{$from}?csvupload=1';</script>";
+	}
 }
 
 $wgAjaxExportList [] = 'wfDoGetContactsCSVJSON';
 function wfDoGetContactsCSVJSON( $callback="renderContacts"){
 	global $wgRequest;
 	$contacts_json["type"] = "csv";
-	if( $wgRequest->wasPosted() ){
-		$file = $wgRequest->getFileTempname( 'ufile' );
-		if( !$file ){
-			$file = $_SESSION["contacts_upload_csv"] . "-tmp-csv";
-		}
-	}else{
+	
+	//first check uploaded file
+	$contact_login_info = $_SESSION["contact_login_info"];
+	if( is_array( $contact_login_info ) ){
+		$file = $contact_login_info["file"];
+		$_SESSION["contact_login_info"] = "";
+	}
+	
+	//check if uploaded from finder on reg
+	if( $_SESSION["contacts_upload_csv"] ){
+		$file = $_SESSION["contacts_upload_csv"];
 		$_SESSION["contacts_upload_csv"] = "";
 	}
 
 	if( $file ){
 		//return "<script>alert('" . $file . "')</script>";
 		$contacts_json["contacts"] = WikiaSearch_getContactsCSV( $file );
-		return "<script type=\"text/javascript\">var json_contacts=" . jsonify($contacts_json) . ";\n\nparent.{$callback}(json_contacts);</script>";
+		return "var json_contacts=" . jsonify($contacts_json) . ";\n\nparent.{$callback}(json_contacts)";
 	}else{
 		$contacts_json["error"] = 1;
 		$contacts_json["error_message"] = "Upload failed.  Please try again.";
 	}
-	return "<script>void(0)</script>";
+	return "void(0)";
 }
 
 $wgAjaxExportList [] = 'wfDoGetContactsAsUsersCSVJSON';
 function wfDoGetContactsAsUsersCSVJSON( $callback="renderContacts" ){
 	global $wgRequest;
-	
-	if( $wgRequest->wasPosted() ){
-		$file = $wgRequest->getFileTempname( 'ufile' );
-		if( !$file ){
-			$contacts_json["error"] = 1;
-			$contacts_json["error_message"] = "Upload failed.  Please try again.";
-		}else{
-			$contacts = WikiaSearch_getContactsCSV( $file );
-			move_uploaded_file( $file, $file . "-tmp-csv" );
-		
-			$_SESSION["contacts_upload_csv"] = $wgRequest->getFileTempname( 'ufile' );
-			$users = WikiaSearch_GetContactsAsUsers( $contacts );
-			$users["type"] = "csv";
-		}
-		return "<script type=\"text/javascript\">json_contacts=" . jsonify($users) . ";\n\nparent.{$callback}(json_contacts);</script>";
+
+	//first check uploaded file
+	$contact_login_info = $_SESSION["contact_login_info"];
+	if( is_array( $contact_login_info ) ){
+		$file = $contact_login_info["file"];
+		$_SESSION["contact_login_info"] = "";
 	}
-	return "<script>void(0)</script>";
+	
+	if( !$file ){
+		$contacts_json["error"] = 1;
+		$contacts_json["error_message"] = "Upload failed.  Please try again.";
+	}else{
+		$contacts = WikiaSearch_getContactsCSV( $file );
+		$users = WikiaSearch_GetContactsAsUsers( $contacts );
+		$users["type"] = "csv";
+		return "json_contacts=" . jsonify($users) . ";\n\nparent.{$callback}(json_contacts);";
+	
+	}
+	
+	return "void(0)";
 }
 
 function WikiaSearch_getContactsCSV( $file ){
