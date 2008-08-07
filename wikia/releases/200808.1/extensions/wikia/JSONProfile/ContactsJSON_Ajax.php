@@ -349,6 +349,7 @@ function wfDoGetContactsAsUsersCSVJSON( $callback="renderContacts" ){
 function WikiaSearch_getContactsCSV( $file ){
 	$addresses = array();
 	if( !$file ) return $addresses;
+	if( !is_file($file) ) return false;
 	
 	$fp = fopen ($file,"r");
 	while (!feof($fp)){
@@ -393,6 +394,7 @@ function WikiaSearch_getContactsCSV( $file ){
 function WikiaSearch_fgetcsv( $file, $delim = ',', $removeQuotes = true )
 {
     if( !$file ) return false;
+    if( !is_file($file) ) return false;
     
     $line = trim( fgets( $file ), "\r\n" );
     $fields = array();
@@ -429,8 +431,8 @@ function WikiaSearch_fgetcsv( $file, $delim = ',', $removeQuotes = true )
 $wgAjaxExportList [] = 'wfGetYahooSignInUrl';
 function wfGetYahooSignInUrl( $url  ){
 	
-	global $wgYahooAPISecret;
-
+	global $wgYahooAPISecret, $wgYahooAPIAppid;
+	//$url = $url . "?appid=" . $wgYahooAPIAppid; 
 	$parts = parse_url( $url );
 	
 	$ts = time();
