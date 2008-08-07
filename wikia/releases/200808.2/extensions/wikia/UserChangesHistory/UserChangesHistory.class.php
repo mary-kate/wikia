@@ -43,4 +43,10 @@ class UserChangesHistory {
 
 		return true;
 	}
+
+
+	static public function SavePreferencesInsert( $preferences, $User, $msg ) {
+
+	}
+
 }
