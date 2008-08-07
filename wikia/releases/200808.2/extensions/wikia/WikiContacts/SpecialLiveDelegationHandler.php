@@ -59,8 +59,9 @@ class LiveDelegationHandler extends SpecialPage {
 		  
 		    // Prepare the message to display the consent token contents.
 		    $message_html = "<script>
-		    window.opener.get_ms_contacts()
-		    window.close();
+		    window.location='http://re.search.wikia.com/JSON/msform.html'
+		    //window.opener.get_ms_contacts()
+		    //window.close();
 		    </script>";
 		 
 		}
