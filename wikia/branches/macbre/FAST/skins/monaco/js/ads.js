@@ -236,9 +236,11 @@ TieDivLib = new function() {
 
 		with($(source)) {
 			style.position = 'absolute';
-			if (pos.substr(0,4) == 'FAST') {
+			if (pos.substr(0,4) == 'FAST' || pos == 'bl') {
+				// FAST ads and spotlight in sidebar
 				style.zIndex=50;
 			} else {
+				// spotlights in footer
 				className = 'wikia_spotlight';
 			}
 		}
