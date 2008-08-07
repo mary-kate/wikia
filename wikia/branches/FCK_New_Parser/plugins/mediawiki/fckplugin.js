@@ -824,7 +824,6 @@ FCKDocumentProcessor.refillTemplates = function () {
 			end = parts [i + 1];
 		}				
 		templates.push (text.substring (parts[i], end)) ;
-		console.log (text.substring (parts[i], end)) ;
 	}                 	
 	return templates ;
 }
@@ -922,7 +921,6 @@ FCKDocumentProcessor.AppendNew().ProcessDocument = function( document )
 					oImg.setAttribute( '_' + eSpan.className, 'true', 0 ) ;
 				} else {
 					var oImg = FCKDocumentProcessor_CreateFakeElem( className, eSpan.cloneNode(true), templates [numTemplates] ) ;
-					console.log (templates [numTemplates]) ;
 					oImg.setAttribute( '_' + eSpan.className, 'true', 0 ) ;
 					oImg.setAttribute ('id', 'fck_templ_' + numTemplates) ;
 					numTemplates-- ;
