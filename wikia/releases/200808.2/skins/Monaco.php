@@ -536,7 +536,6 @@ class SkinMonaco extends SkinTemplate {
 			$data = $wgMemc->get($key);
 			if(empty($data)) {
 				$filterWordsA = array();
-				if (!is_array($wgBiggestCategoriesBlacklist)) $wgBiggestCategoriesBlacklist = array();
 				foreach($wgBiggestCategoriesBlacklist as $word) {
 					$filterWordsA[] = '(cl_to not like "%'.$word.'%")';
 				}
