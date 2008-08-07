@@ -438,9 +438,6 @@ class FCKeditorParser extends Parser
 	function fck_onlyinclude( $matches ) {
 		return $this->fck_wikiTag('onlyinclude', $matches[1]);
 	}
-	function fck_leaveTemplatesAlone( $matches ) {
-		return "<!--FCK_SKIP_START-->".$matches['text']."<!--FCK_SKIP_END-->";
-	}
 	function formatHeadings( $text, $isMain=true ) {
 		return $text;
 	}
