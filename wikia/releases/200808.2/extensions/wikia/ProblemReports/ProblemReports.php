@@ -51,9 +51,9 @@ $wgExtensionFunctions[] = 'wfProblemReports';
 $wgExtensionMessagesFiles['ProblemReports'] = $IP . '/extensions/wikia/ProblemReports/ProblemReports.i18n.php';
 
 // load files
-require_once( "$IP/extensions/wikia/ProblemReports/ProblemReports.i18n.php" );
-require_once( "$IP/extensions/wikia/ProblemReports/ProblemReportsDialog.php" );
-require_once( "$IP/extensions/wikia/ProblemReports/ProblemReportsAjax.php" );
+require( "$IP/extensions/wikia/ProblemReports/ProblemReports.i18n.php" );
+require( "$IP/extensions/wikia/ProblemReports/ProblemReportsDialog.php" );
+require( "$IP/extensions/wikia/ProblemReports/ProblemReportsAjax.php" );
 
 // special page
 $wgSpecialPages['ProblemReports'] = 'SpecialProblemReports'; 
