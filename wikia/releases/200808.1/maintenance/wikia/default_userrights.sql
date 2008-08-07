@@ -72,9 +72,11 @@ insert into user_groups(ug_user, ug_group) values
 
 delete from user_groups where ug_user in (
 /*Default*/49312,
+/*Maintenance script*/375130,
 /*WikiaBot*/269919
 ) and ug_group="bot";
 insert into user_groups(ug_user, ug_group) values
 (/*Default*/49312,'bot'),
+(/*Maintenance script*/375130,'bot'),
 (/*WikiaBot*/269919,'bot')
 ;
