@@ -530,7 +530,7 @@ class SkinMonaco extends SkinTemplate {
 	 */
 	private function getBiggestCategory($index) {
 		wfProfileIn( __METHOD__ );
-		global $wgMemc;
+		global $wgMemc, $wgBiggestCategoriesBlacklist;
 
 		$limit = max($index, 15);
 
@@ -538,9 +538,8 @@ class SkinMonaco extends SkinTemplate {
 			$key = wfMemcKey('biggest', $limit);
 			$data = $wgMemc->get($key);
 			if(empty($data)) {
-				$filterWords = array('Image', 'images', 'Stub', 'stubs', 'Screenshot', 'screenshots', 'Screencap','screencaps', 'Article', 'articles', 'Copy_edit', 'Fair_use', 'File', 'files', 'Panel', 'panels', 'Redirect', 'redirects', 'Template', 'templates', 'Delete', 'deletion', 'TagSynced');
 				$filterWordsA = array();
-				foreach($filterWords as $word) {
+				foreach($wgBiggestCategoriesBlacklist as $word) {
 					$filterWordsA[] = '(cl_to not like "%'.$word.'%")';
 				}
 				$dbr =& wfGetDB( DB_SLAVE );
