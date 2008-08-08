@@ -1172,6 +1172,7 @@ function do_restrictions_update() {
 }
 
 function do_category_population() {
+	/*
 	if( update_row_exists( 'populate category' ) ) {
 		echo "...category table already populated.\n";
 		return;
@@ -1183,9 +1184,11 @@ function do_category_population() {
 "populateCategory.php.\n";
 	populateCategory( '', 10, 0, true );
 	echo "Done populating category table.\n";
+	 */
 }
 
 function do_populate_parent_id() {
+	/*
 	if( update_row_exists( 'populate rev_parent_id' ) ) {
 		echo "...rev_parent_id column already populated.\n";
 		return;
@@ -1194,6 +1197,7 @@ function do_populate_parent_id() {
 	
 	global $wgDatabase;
 	populate_rev_parent_id( $wgDatabase );
+	 */
 }
 
 function update_password_format() {
