@@ -40,10 +40,26 @@ $wgPossibleElements = array(
 	//html elements
 	'html: abbr', 'html: acronym', 'html: b', 'html: big', 'html: blockquote', 'html: br', 'html: caption', 'html: center', 'html: cite', 'html: code', 'html: dd', 'html: del', 'html: div', 'html: dl', 'html: dt', 'html: em', 'html: font', 'html: h1', 'html: h2', 'html: h3', 'html: h4', 'html: h5', 'html: h6', 'html: hr', 'html: i', 'html: ins', 'html: li', 'html: ol', 'html: p', 'html: pre', 'html: q', 'html: rb', 'html: rp', 'html: rt', 'html: ruby', 'html: s', 'html: small', 'html: span', 'html: strike', 'html: strong', 'html: sub', 'html: sup', 'html: table', 'html: td', 'html: th', 'html: tr', 'html: tt', 'html: u', 'html: ul', 'html: var'
 );
-if (!empty($wgComplexDataFile)) {
-	$fp = fopen($wgComplexDataFile, 'w');
-	fputcsv($fp, $wgPossibleElements);
-	fclose($fp);
+
+$dataTable = wfSharedTable('complex_data');
+if (isset($options['csv'])) {
+	if (!empty($wgComplexDataFile)) {
+		$fp = fopen($wgComplexDataFile, 'w');
+		fputcsv($fp, $wgPossibleElements);
+
+		$db = wfGetDB(DB_SLAVE);
+		$sql = "SELECT city_id, article_id, rev_id, data FROM $dataTable;";
+		$res = $db->query($sql);
+		while ($row = $db->fetchObject($res)) {
+			$wgElementsCount = unserialize($row->data);
+			fputcsv($fp, array_merge(array_fill_keys($wgPossibleElements, 0), $wgElementsCount, array('city_id' => $row->city_id, 'article_id' => $row->article_id, 'rev_id' => $row->rev_id)));
+		}
+
+		fclose($fp);
+	} else {
+		echo 'Please set the variable $wgComplexDataFile so it points to the output file.';
+	}
+	exit;
 }
 
 $time_start = microtime(true);
@@ -51,7 +67,7 @@ $time_start = microtime(true);
 $db = wfGetDB(DB_SLAVE);
 
 $lastRevision = '';
-$sql = 'SELECT max(rev_id) AS rev_id FROM ' . wfSharedTable('complex_data') . ';';
+$sql = "SELECT max(rev_id) AS rev_id FROM $dataTable;";
 $res = $db->query($sql);
 $row = $db->fetchObject($res);
 if (!empty($row->rev_id)) {
