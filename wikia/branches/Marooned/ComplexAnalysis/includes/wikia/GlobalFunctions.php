@@ -485,12 +485,6 @@ function wfCountWikiElement($element, $count=1) {
 
 		$sql = "INSERT INTO $dataTable (city_id, article_id, rev_id, data) VALUES ({$artData[0]}, {$artData[1]}, {$artData[2]}, $sqlData) ON DUPLICATE KEY UPDATE data=$sqlData, rev_id={$artData[2]};";
 		$db->query($sql);
-
-		if (!empty($wgComplexDataFile)) {
-			$fp = fopen($wgComplexDataFile, 'a');
-			fputcsv($fp, array_merge(array_fill_keys($wgPossibleElements, 0), $wgElementsCount, array('city_id' => $artData[0], 'article_id' => $artData[1], 'rev_id' => $artData[2])));
-			fclose($fp);
-		}
 	} else {
 		if (empty($wgElementsCount[$element])) {
 			$wgElementsCount[$element] = $count;
