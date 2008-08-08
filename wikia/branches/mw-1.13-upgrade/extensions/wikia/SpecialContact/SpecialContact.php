@@ -26,7 +26,7 @@ function wfSpecialContactSetup() {
 class ContactForm extends SpecialPage {
 	var $mName, $mPassword, $mRetype, $mReturnto, $mCookieCheck, $mPosted;
 	var $mAction, $mCreateaccount, $mCreateaccountMail, $mMailmypassword;
-	var $mLoginattempt, $mRemember, $mEmail;
+	var $mLoginattempt, $mRemember, $mEmail, $mBrowser;
 
 	function ContactForm() {
 		SpecialPage::SpecialPage("Contact");
@@ -44,6 +44,7 @@ class ContactForm extends SpecialPage {
 		$this->mPosted = $wgRequest->wasPosted();
 		$this->mAction = $wgRequest->getVal( 'action' );
 		$this->mEmail = $wgRequest->getText( 'wpEmail' );
+		$this->mBrowser = $wgRequest->getText( 'wpBrowser' );
 
 		$this->setupMessages();
 
@@ -70,7 +71,8 @@ class ContactForm extends SpecialPage {
 
 		$m = "$this->mRealName";
 		$m .= " <$this->mEmail> <{$this->mWhichWiki}/wiki/User:$this->mName> contacted Wikia about ";
-	        $m .= "$this->mProblem.\n\n";
+		$m .= "$this->mProblem.\n";
+		$m .= "User browser data: $this->mBrowser\n\n";
 		$m .= "$this->mProblemDesc\n";
 
 
@@ -140,6 +142,20 @@ class ContactForm extends SpecialPage {
 		$wgOut->addHTML( "
         {$cwt}
 	<form name=\"contactform\" id=\"contactform\" method=\"post\" action=\"{$action}\">
+	<input type=\"hidden\" id=\"wpBrowser\" name=\"wpBrowser\" />
+	<script type=\"text/javascript\">
+		//user agent
+		info = 'Browser: ' + YAHOO.Tools.getBrowserEngine().ua;
+		//flash
+		flashVer = parseInt(YAHOO.Tools.checkFlash()) ? YAHOO.Tools.checkFlash() : 'none';
+		info += ' Flash: ' + flashVer;
+		//skin and theme
+		info += ' Skin: ' + skin;
+		if (typeof themename != 'undefined') {
+			info += '-' + themename;
+		}
+		document.getElementById('wpBrowser').value = info;
+	</script>
 	<table border='0'><tr>
 	<td align='right'>$yn:</td>
 	<td align='left'>
