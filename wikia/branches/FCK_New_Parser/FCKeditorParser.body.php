@@ -174,7 +174,7 @@ class FCKeditorParser extends Parser
                                                 throw new MWException( '<html> extension tag encountered unexpectedly' );
                                         }
                                 case 'nowiki':
-                                        $output = Xml::escapeTagsOnly( $content );
+					$output = $this->fck_wikiTag('nowiki', $content, $params); //required by FCKeditor
                                         break;
                                 /*
                                 case 'math':
@@ -183,7 +183,8 @@ class FCKeditorParser extends Parser
                                         break;
                                 */
                                 case 'gallery':
-                                        $output = $this->renderImageGallery( $content, $attributes );
+					$output = $this->fck_wikiTag('gallery', $content, $params); //required by FCKeditor
+                                        //$output = $this->renderImageGallery( $content, $attributes );				
                                         break;
                                 default:
                                         if( isset( $this->mTagHooks[$name] ) ) {
@@ -191,6 +192,7 @@ class FCKeditorParser extends Parser
                                                 if ( !is_callable( $this->mTagHooks[$name] ) ) {
                                                         throw new MWException( "Tag hook for $name is not callable\n" );
                                                 }
+					        $this->fck_mw_taghook = $name; //required by FCKeditor 
                                                 $output = call_user_func_array( $this->mTagHooks[$name],
                                                         array( $content, $attributes, $this ) );
                                         } else {
@@ -220,6 +222,7 @@ class FCKeditorParser extends Parser
                 } else {
                         $this->mStripState->general->setPair( $marker, $output );
                 }
+		$this->fck_matches = $matches;
                 return $marker;
         }
 
