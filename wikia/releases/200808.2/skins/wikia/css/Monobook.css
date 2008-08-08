@@ -34,8 +34,7 @@ body.with-adsense #content
 
 
 /* SendToAFriend & ProblemReports */
-#notifyForm,
-#reportProblemForm
+#notifyForm
 {
     background-color: #fff;
     color: #000000;
@@ -48,14 +47,7 @@ body.with-adsense #content
     padding: 8px 12px 0px 8px;
 }
 
-#reportProblemForm
-{
-	width: 580px !important;
-	left: -300px;
-}
-
-#notifyForm form,
-#reportProblemForm form
+#notifyForm form
 {
     padding: 5px 12px 12px 5px;
 }
@@ -74,10 +66,7 @@ body.with-adsense #content
 }
 
 #notifyForm input[type="text"],
-#reportProblemForm input[type="text"],
 #notifyForm textarea,
-#reportProblemForm textarea,
-#reportProblemForm select,
 .monotype
 {
   width: 100%;
@@ -105,8 +94,7 @@ body.with-adsense #content
 }
 
 /* hide unneeded elements */
-#notifyForm .boxHeader,
-#notifyReport .boxHeader
+#notifyForm .boxHeader
 {
   border-bottom: none;
   cursor: default;
@@ -114,10 +102,7 @@ body.with-adsense #content
 
 #notifyForm_c .underlay,
 #notifyForm .hd,
-#notifyForm .ft,
-#reportProblemForm_c .underlay,
-#reportProblemForm .hd,
-#reportProblemForm .ft
+#notifyForm .ft
 {
   display: none !important;
 }
