@@ -137,6 +137,92 @@ class FCKeditorParser extends Parser
 		return $replacement;
 	}
 
+       /**
+         * Return the text to be used for a given extension tag.
+         * This is the ghost of strip().
+         *
+         * @param array $params Associative array of parameters:
+         *     name       PPNode for the tag name
+         *     attr       PPNode for unparsed text where tag attributes are thought to be
+         *     attributes Optional associative array of parsed attributes
+         *     inner      Contents of extension element
+         *     noClose    Original text did not have a close tag
+         * @param PPFrame $frame
+         */
+        function extensionSubstitution( $params, $frame ) {
+                global $wgRawHtml, $wgContLang;
+
+                $name = $frame->expand( $params['name'] );
+                $attrText = !isset( $params['attr'] ) ? null : $frame->expand( $params['attr'] );
+                $content = !isset( $params['inner'] ) ? null : $frame->expand( $params['inner'] );
+
+                $marker = "{$this->mUniqPrefix}-$name-" . sprintf('%08X', $this->mMarkerIndex++) . $this->mMarkerSuffix;
+
+                if ( $this->ot['html'] ) {
+                        $name = strtolower( $name );
+
+                        $attributes = Sanitizer::decodeTagAttributes( $attrText );
+                        if ( isset( $params['attributes'] ) ) {
+                                $attributes = $attributes + $params['attributes'];
+                        }
+                        switch ( $name ) {
+                                case 'html':
+                                        if( $wgRawHtml ) {
+                                                $output = $content;
+                                                break;
+                                        } else {
+                                                throw new MWException( '<html> extension tag encountered unexpectedly' );
+                                        }
+                                case 'nowiki':
+                                        $output = Xml::escapeTagsOnly( $content );
+                                        break;
+                                /*
+                                case 'math':
+                                        $output = $wgContLang->armourMath(
+                                                MathRenderer::renderMath( $content, $attributes ) );
+                                        break;
+                                */
+                                case 'gallery':
+                                        $output = $this->renderImageGallery( $content, $attributes );
+                                        break;
+                                default:
+                                        if( isset( $this->mTagHooks[$name] ) ) {
+                                                # Workaround for PHP bug 35229 and similar
+                                                if ( !is_callable( $this->mTagHooks[$name] ) ) {
+                                                        throw new MWException( "Tag hook for $name is not callable\n" );
+                                                }
+                                                $output = call_user_func_array( $this->mTagHooks[$name],
+                                                        array( $content, $attributes, $this ) );
+                                        } else {
+                                                throw new MWException( "Invalid call hook $name" );
+                                        }
+                        }
+                } else {
+                        if ( is_null( $attrText ) ) {
+                                $attrText = '';
+                        }
+                        if ( isset( $params['attributes'] ) ) {
+                                foreach ( $params['attributes'] as $attrName => $attrValue ) {
+                                        $attrText .= ' ' . htmlspecialchars( $attrName ) . '="' .
+                                                htmlspecialchars( $attrValue ) . '"';
+                                }
+                        }
+                        if ( $content === null ) {
+                                $output = "<$name$attrText/>";
+                        } else {
+                                $close = is_null( $params['close'] ) ? '' : $frame->expand( $params['close'] );
+                                $output = "<$name$attrText>$content$close";
+                        }
+                }
+
+                if ( $name == 'html' || $name == 'nowiki' ) {
+                        $this->mStripState->nowiki->setPair( $marker, $output );
+                } else {
+                        $this->mStripState->general->setPair( $marker, $output );
+                }
+                return $marker;
+        }
+
 	/** Replace HTML comments with unique text using fck_addToStrtr function
 	 *
 	 * @private
