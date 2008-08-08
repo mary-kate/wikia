@@ -185,7 +185,7 @@ function ad_call(adSpaceId, zoneId, pos) {
 		curAdSpaceId = adSpaceId;
 
  		var source = Array();
- 		source.push('cat=' + wgWikiaAdvertiserCategory);
+ 		source.push('catid=' + wgCatId);
  		source.push('lang=' + wgContentLanguage);
 		if(pos == 'FAST_BOTTOM' && FASTisCollisionBottom()) {
 			source.push('fast=1');
