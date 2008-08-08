@@ -966,7 +966,6 @@ class MonacoTemplate extends QuickTemplate {
 		$this->html('headscripts');
 	}
 
-echo '<link rel="apple-touch-icon" href="'. $wgLogo .'" />';
 ?>
 	</head>
 <?php		wfProfileOut( __METHOD__ . '-head'); ?>
