@@ -12,8 +12,8 @@ $wgExtensionCredits['other'][] = array(
 $wgHooks['GetHTMLAfterBody'][] = 'GetAjaxLoginForm';
 
 function GetAjaxLoginForm($skin) {
-	global $wgTitle;
-	if($wgTitle->getNamespace() != 8 && $wgTitle->getDBkey() != 'Userlogin') {
+	global $wgTitle, $wgUser;
+	if($wgUser->isAnon() && $wgTitle->getNamespace() != 8 && $wgTitle->getDBkey() != 'Userlogin') {
 		$tmpl = new EasyTemplate(dirname( __FILE__ ));
 		echo $tmpl->execute('AjaxLogin');
 	}
