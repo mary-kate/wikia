@@ -15,7 +15,6 @@ EOT;
         exit( 1 );
 }
 
-$wgExtensionFunctions[] = 'wfSpecialDatalag';
 $wgExtensionCredits['specialpage'][] = array(
 	'name' => 'Datalag',
 	'author' => 'Andrew Yasinsky',
