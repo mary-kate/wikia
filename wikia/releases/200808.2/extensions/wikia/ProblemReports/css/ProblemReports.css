@@ -39,38 +39,25 @@
 	padding: 5px 12px 12px 5px;
 }
 
-#reportProblemForm input[type="text"],
-#reportProblemForm textarea,
-#reportProblemForm select,
-.monotype {
-	width: 100%;
-	border: solid 1px #87888C;
-	background-color: #fff;
-	padding: 2px;
-}
-
-
 #reportProblemForm a {
 	color: inherit;
 	text-decoration: underline
 }
 
+#reportProblem input[type="text"],
+#reportProblem textarea,
+#reportProblem select {
+	border: solid 1px #87888C;
+	padding: 2px;
+	margin: 7px 0 7px 10px;
+}
+
 #reportProblem label.floaty {
 	width: 120px;
-	display: inline;
 	float: left;
 	padding: 10px 0;
 	text-align: left;
 	margin: 0
-}
-
-#reportProblem input.floaty,
-#reportProblem select.floaty,
-#reportProblem textarea {
-	width:405px;
-	display: inline;
-	float: left;
-	margin: 7px 0 7px 10px
 }
 
 #reportProblem input.floaty {
@@ -84,6 +71,10 @@
 	clear: both
 }
 
+#reportProblem textarea {
+	width: 405px;
+}
+
 #reportProblemForm .errorField {
 	border: solid 1px #DC143C !important;
 	background-color: #FFFAFA !important;
@@ -93,6 +84,10 @@
 	margin: 5px 0 5px 130px;
 	font-size: 0.8em;
 	color: #666
+}
+
+#wikiaDialogInfo {
+	color: #000;
 }
 
 /* Quartz */
