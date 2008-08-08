@@ -218,3 +218,10 @@ $wgLogHeaders['var_log'] = 'var_logheader';
 $wgLogNames['var_log'] = 'var_logtext';
 $wgLogNames['var_set'] = 'var_set';
 $wgLogActions['var_log/var_set'] = 'var_set';
+
+/**
+ * @name $wgBiggestCategoriesBlacklist
+ * Lists phrases that disqualify a category from appearing in
+ * the biggest category list (Monaco sidebar)
+ */
+$wgBiggestCategoriesBlacklist = array();
