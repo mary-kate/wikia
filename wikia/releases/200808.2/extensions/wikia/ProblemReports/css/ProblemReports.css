@@ -47,7 +47,6 @@
 #reportProblem input[type="text"],
 #reportProblem textarea,
 #reportProblem select {
-	border: solid 1px #87888C;
 	padding: 2px;
 	margin: 7px 0 7px 10px;
 }
