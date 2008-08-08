@@ -137,6 +137,11 @@ body.rtl #reportProblem .boxHeader {
 	z-index: 1900 !important; /* show it above ProblemReportsDialog */
 }
 
+body.rtl #_yuiResizeMonitor {
+	right: -137px !important;
+	left: auto !important;
+}
+
 /* IE fixes */
 * html #reportProblem label.floaty {
 	width: 100px;
