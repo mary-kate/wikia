@@ -121,6 +121,10 @@ body.wikiaSkinQuartz #reportProblemForm #pr_browser {
 	padding: 7px;
 }
 
+body.rtl #reportProblem .boxHeader {
+	padding-right: 22px;
+}
+
 #reportProblemForm_c .underlay,
 #reportProblemForm .hd,
 #reportProblemForm .ft {
@@ -128,15 +132,15 @@ body.wikiaSkinQuartz #reportProblemForm #pr_browser {
 }
 
 #reportProblemForm_mask {
-	z-index: 1500 !important
-}
-
-#reportProblemForm_c {
-	z-index: 1750 !important
+	position: fixed; /* this fixes Opera bug with horizontal scroll */
 }
 
 #wikiaDialogInfo_c {
-	z-index: 2000 !important
+	z-index: 2000 !important /* show it above ProblemReports dialog */
+}
+
+#wikiaDialogInfo_mask {
+	z-index: 1900 !important; /* show it above ProblemReportsDialog */
 }
 
 /* IE fixes */
