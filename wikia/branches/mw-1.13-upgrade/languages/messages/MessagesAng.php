@@ -5,9 +5,7 @@
  * @file
  *
  * @author JJohnson
- * @author SPQRobin
  * @author Wōdenhelm
- * @author Siebrand
  */
 
 $messages = array(
@@ -247,9 +245,6 @@ Edscēawa þīne wrītunge, oþþe brūc þone form under tō settene nīwne br�
 'showpreview'            => 'Forescēawian',
 'whitelistedittitle'     => 'Inmeldunge behófod tó ádihtenne',
 'whitelistedittext'      => 'Þu scealt $1 tó ádihtenne trametas.',
-'whitelistreadtitle'     => 'Inmeldunge behōfod tō rǣdenne',
-'whitelistacctitle'      => 'Þē nis ālīefed tō settenne hordcleofan',
-'whitelistacctext'       => 'Tō bēonne gelīefed tō settenne hordcleofan in þissum Wici, þu scealt [[Special:Userlogin|inmeldian]] and habban þā gerādlican geþafunga.',
 'loginreqlink'           => 'inmeldian',
 'loginreqpagetext'       => 'Þū scealt $1 tō scēawienne view ōðre trametas.',
 'accmailtitle'           => 'Gelēafnesword gesended.',
@@ -368,7 +363,7 @@ Bidde behycge þæt þu bricst þone tramet intō smalrum dǣlum.',
 
 'nolicense' => 'Nǣnne gecorenne',
 
-# Special:Imagelist
+# Special:ImageList
 'imagelist_search_for'  => 'Sēcan biliþnaman:',
 'imagelist'             => 'Biliþgetalu',
 'imagelist_date'        => 'Tælmearc',
@@ -438,7 +433,7 @@ Bidde behycge þæt þu bricst þone tramet intō smalrum dǣlum.',
 'log'                  => 'Cranicas',
 'log-search-submit'    => 'Gān',
 
-# Special:Allpages
+# Special:AllPages
 'allpages'       => 'Trametas',
 'alphaindexline' => '$1 tō $2',
 'nextpage'       => 'Nīehsta tramet ($1)',
@@ -452,7 +447,7 @@ Bidde behycge þæt þu bricst þone tramet intō smalrum dǣlum.',
 'categories'         => 'Floccas',
 'categoriespagetext' => 'Þā folgendan floccas standaþ in þǣm wici.',
 
-# Special:Listusers
+# Special:ListUsers
 'listusers-noresult' => 'Nǣnne brūcend gefundenne.',
 
 # E-mail user
@@ -601,7 +596,7 @@ Bidde cēos ōðerne naman.',
 'imagemaxsize' => 'Settan biliðu on biliþgemearcungtrametum tō:',
 'thumbsize'    => 'Þumannæglmicelnes:',
 
-# Special:Newimages
+# Special:NewImages
 'imagelisttext' => 'Under is getalu $1 biliða gedæfted $2.',
 'noimages'      => 'Nāht tō sēonne.',
 'ilsubmit'      => 'Sēcan',
@@ -679,7 +674,7 @@ Gif þis is *nā* þū, ne folga þisne bend. Þēos āsēðungrūn forealdaþ �
 'scarytranscludetoolong' => '[URL is tō lang; sarig]',
 
 # HTML dump
-'redirectingto' => 'Edlǣdeþ tō [[$1]]...',
+'redirectingto' => 'Edlǣdeþ tō [[:$1]]...',
 
 # AJAX search
 'searchnamed' => "Sēcan gewritu genemnodu ''$1''.",
