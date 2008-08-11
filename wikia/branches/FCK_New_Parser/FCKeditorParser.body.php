@@ -114,16 +114,7 @@ class FCKeditorParser extends Parser
 	* @return string
 	*/
 	function fck_wikiTag( $tagName, $str, $argv = array()) {
-		if (empty($argv)) {
-			$ret = "<span class=\"fck_mw_".$tagName."\" _fck_mw_customtag=\"true\" _fck_mw_tagname=\"".$tagName."\">";
-		}
-		else {
-			$ret = "<span class=\"fck_mw_".$tagName."\" _fck_mw_customtag=\"true\" _fck_mw_tagname=\"".$tagName."\">";
-			foreach ($argv as $key=>$value) {
-				$ret .= " ".$key."=\"".$value."\"";
-			}
-			$ret .=">";
-		}
+		$ret = "<span class=\"fck_mw_".$tagName."\" _fck_mw_customtag=\"true\" _fck_mw_tagname=\"".$tagName."\">";
 		if (is_null($str)) {
 			$ret = substr($ret, 0, -1) . " />";
 		}
