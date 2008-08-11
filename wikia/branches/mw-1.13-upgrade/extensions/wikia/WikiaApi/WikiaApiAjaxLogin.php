@@ -26,6 +26,11 @@ class WikiaApiAjaxLogin extends ApiBase {
 				'wpLoginattempt' => $Loginattempt
 			));
 
+			// Init session if necessary
+			if ( session_id() == '' ) {
+				wfSetupSession();
+			}
+
 			$result = array ();
 			$loginForm = new LoginForm($params);
 			switch ($loginForm->authenticateUserData()) {
