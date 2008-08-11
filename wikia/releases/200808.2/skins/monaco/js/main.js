@@ -40,6 +40,8 @@ Event.onDOMReady(function() {
 		Dom.get('searchform').submit();
 	});
 
+	searchField.blur(); // #3083
+
 	var submitAutoComplete_callback = {
 		success: function(o) {
 			if(o.responseText !== undefined) {
