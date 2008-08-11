@@ -5,10 +5,9 @@
  * @file
  *
  * @author ILVI
+ * @author Runningfridgesrule
  * @author Taichi
  * @author לערי ריינהארט
- * @author SPQRobin
- * @author Runningfridgesrule
  */
 
 $fallback = 'es';
@@ -212,7 +211,7 @@ $messages = array(
 'ancientpages' => 'Artikolos mas viejos',
 'move'         => 'Trasladar',
 
-# Special:Allpages
+# Special:AllPages
 'allpages'       => 'Todas las pajinas',
 'alphaindexline' => '$1 a $2',
 'allarticles'    => 'Todos los artikolos',
@@ -280,7 +279,7 @@ $messages = array(
 'recreate' => 'Krear de muevo',
 
 # HTML dump
-'redirectingto' => 'Redirijiendo a [[$1]]...',
+'redirectingto' => 'Redirijiendo a [[:$1]]...',
 
 # action=purge
 'confirm_purge_button' => 'Akseptár',

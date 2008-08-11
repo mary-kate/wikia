@@ -4,13 +4,11 @@
  * @ingroup Language
  * @file
  *
- * @author SabineCretella
+ * @author Carmine Colacino
  * @author Cryptex
  * @author E. abu Filumena
- * @author SPQRobin
- * @author Siebrand
+ * @author SabineCretella
  * @author לערי ריינהארט
- * @author Carmine Colacino
  */
 
 $fallback = 'it';
@@ -257,7 +255,7 @@ Putite cuntinuà a ausà {{SITENAME}} comme n'utente senza nomme, o si nò putit
 'fileexists-thumb' => "<center>'''Immagine esistente'''</center>",
 'uploadedimage'    => 'ha carecato "[[$1]]"',
 
-# Special:Imagelist
+# Special:ImageList
 'imagelist_name' => 'Nomme',
 
 # Image description page
@@ -285,7 +283,7 @@ Putite cuntinuà a ausà {{SITENAME}} comme n'utente senza nomme, o si nò putit
 'move'         => 'Spusta',
 'movethispage' => 'Spusta chesta paggena',
 
-# Special:Allpages
+# Special:AllPages
 'allpages'       => "Tutte 'e ppaggene",
 'allarticles'    => "Tutt' 'e vvoce",
 'allinnamespace' => "Tutt' 'e ppaggene d&#39;&#39;o namespace $1",
@@ -341,7 +339,7 @@ Putite cuntinuà a ausà {{SITENAME}} comme n'utente senza nomme, o si nò putit
 'blocklink'          => 'ferma',
 'blocklogpage'       => 'Blocche',
 'blocklogentry'      => 'ha fermato "[[$1]]" pe\' nu mumento \'e $2 $3',
-'blocklogtext'       => "Chesta è 'a lista d&#39;&#39;e azzione 'e blocco e sblocco utente.  'E nnerizze IP bloccate automaticamente nun nce so'. Addumannà 'a [[Special:Ipblocklist|lista IP bloccate]] pp' 'a lista d&#39;&#39;e nnerizze e nomme utente 'o ca blocco nce sta.",
+'blocklogtext'       => "Chesta è 'a lista d&#39;&#39;e azzione 'e blocco e sblocco utente.  'E nnerizze IP bloccate automaticamente nun nce so'. Addumannà 'a [[Special:IPBlockList|lista IP bloccate]] pp' 'a lista d&#39;&#39;e nnerizze e nomme utente 'o ca blocco nce sta.",
 
 # Move page
 'movearticle'             => "Spusta 'a paggena",
@@ -385,7 +383,7 @@ Putite cuntinuà a ausà {{SITENAME}} comme n'utente senza nomme, o si nò putit
 'numedits'    => "Nummero 'e cagnamiente (articulo): $1",
 'numwatchers' => "Nummero 'e asservature: $1",
 
-# Special:Newimages
+# Special:NewImages
 'noimages' => "Nun nc'è nind' 'a veré.",
 'ilsubmit' => 'Truova',
 
@@ -403,7 +401,7 @@ Putite cuntinuà a ausà {{SITENAME}} comme n'utente senza nomme, o si nò putit
 'exif-subjectdistancerange-0' => 'Scanusciuta',
 
 # External editor support
-'edit-externally-help' => "Pe piglià cchiù nfromma veré 'e [http://meta.wikimedia.org/wiki/Help:External_editors struzione] ('n ngrese)",
+'edit-externally-help' => "Pe piglià cchiù nfromma veré 'e [http://www.mediawiki.org/wiki/Manual:External_editors struzione] ('n ngrese)",
 
 # 'all' in various places, this might be different for inflected languages
 'namespacesall' => 'Tutte',

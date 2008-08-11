@@ -119,14 +119,13 @@ $messages = array(
 'email'             => "'Imeli",
 
 # Edit pages
-'summary'          => "'Oto'otoga",
-'minoredit'        => "'O se teuteuga la'itiiti lenei",
-'watchthis'        => 'Matau lenei itulau',
-'savearticle'      => 'Sefe le itulau',
-'showpreview'      => "Fa'aali teuteuga",
-'showdiff'         => "Fa'aali suiga",
-'whitelistacctext' => 'To be allowed to create accounts in {{SITENAME}} you have to [[Special:Userlogin|log]] in and have the appropriate permissions.',
-'loginreqlink'     => "Fa'aola",
+'summary'      => "'Oto'otoga",
+'minoredit'    => "'O se teuteuga la'itiiti lenei",
+'watchthis'    => 'Matau lenei itulau',
+'savearticle'  => 'Sefe le itulau',
+'showpreview'  => "Fa'aali teuteuga",
+'showdiff'     => "Fa'aali suiga",
+'loginreqlink' => "Fa'aola",
 
 # Search results
 'powersearch' => "Su'e",
@@ -163,7 +162,7 @@ $messages = array(
 # Book sources
 'booksources-go' => 'Alu',
 
-# Special:Allpages
+# Special:AllPages
 'allpagessubmit' => 'Alu',
 
 # E-mail user
@@ -195,7 +194,6 @@ $messages = array(
 # Move page
 'move-page-legend' => "Si'i le itulau",
 'movearticle'      => "Si'i le itulau",
-'movenologin'      => "Le'i fa'aolaina",
 'newtitle'         => "'I le ulutala fou",
 'move-watch'       => 'Matau lenei itulau',
 'movepagebtn'      => "Si'i le itulau",
@@ -205,7 +203,7 @@ $messages = array(
 # Namespace 8 related
 'allmessagesname' => 'Igoa',
 
-# Special:Newimages
+# Special:NewImages
 'ilsubmit' => "Su'e",
 
 # 'all' in various places, this might be different for inflected languages
