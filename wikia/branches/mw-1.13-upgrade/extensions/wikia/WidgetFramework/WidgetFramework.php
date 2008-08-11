@@ -335,9 +335,8 @@ class WidgetFramework {
 		$wgUser->setOption('widgets', serialize($this->config));
 		$wgUser->saveSettings();
 
-		// Added when migrating to MediaWiki 1.12.0
 		$dbw = wfGetDB( DB_MASTER );
-		$dbw->close();
+		$dbw->commit(); // macbre: $dbw->close() was causing fatal error in MW1.13
 
 		return true;
 	}
