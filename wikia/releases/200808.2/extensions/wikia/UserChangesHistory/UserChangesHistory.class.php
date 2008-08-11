@@ -51,18 +51,27 @@ class UserChangesHistory {
 		 * if user id is empty it means that user object is not loaded
 		 * store information only for registered users
 		 */
-		$user_id = $User->getId();
-		if ( $user_id ) {
-			$dbw = wfGetDB( DB_MASTER );
-			$dbw->insert(
-				wfSharedTable( "user_login_history" ),
+		$id = $User->getId();
+		if ( $id ) {
+
+			$external = new ExternalStoreDB();
+			$dbw = $external->getMaster( self::$mCluster );
+			$dbw->begin();
+			$status = $dbw->insert(
+				"user_login_history",
 				array(
-					"user_id" => $user_id,
-					"city_id" => $wgCityId,
+					"user_id"    => $id,
+					"city_id"    => $wgCityId,
 					"login_from" => $from
 				),
 				__METHOD__
 			);
+			if( $status ) {
+				$dbw->commit();
+			}
+			else {
+				$dbw->rollback();
+			}
 		}
 
 		wfProfileOut( __METHOD__ );
@@ -97,15 +106,15 @@ class UserChangesHistory {
 			$status = $dbw->insert(
 				"user_history",
 				array(
-					"user_id" => $User->mId,
-					"user_name" => $User->mName,
-					"user_real_name" => $User->mRealName,
-					"user_password" => $User->mPassword,
+					"user_id"          => $id,
+					"user_name"        => $User->mName,
+					"user_real_name"   => $User->mRealName,
+					"user_password"    => $User->mPassword,
 					"user_newpassword" => $User->mNewpassword,
-					"user_email" => $User->mEmail,
-					"user_options" => $User->encodeOptions(),
-					"user_touched" => $User->mTouched,
-					"user_token" => $User->mToken,
+					"user_email"       => $User->mEmail,
+					"user_options"     => $User->encodeOptions(),
+					"user_touched"     => $User->mTouched,
+					"user_token"       => $User->mToken,
 				),
 				__METHOD__
 			);
