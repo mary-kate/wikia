@@ -229,10 +229,12 @@ class ApiQuery extends ApiBase {
 	 * Create instances of all modules requested by the client
 	 */
 	private function InstantiateModules(&$modules, $param, $moduleList) {
-		$list = $this->params[$param];
-		if (isset ($list))
-			foreach ($list as $moduleName)
-				$modules[] = new $moduleList[$moduleName] ($this, $moduleName);
+		if ( array_key_exists($param,$this->params) ) {
+			$list = $this->params[$param];
+			if (isset ($list))
+				foreach ($list as $moduleName)
+					$modules[] = new $moduleList[$moduleName] ($this, $moduleName);
+		}
 	}
 
 	/**
