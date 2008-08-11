@@ -985,6 +985,12 @@ if (window.parent.FCKeditor.prototype.VersionBuild > 18219)
 	}
 }
 
+function _FCK_GetEditorAreaStyleTags()
+{
+	var fixedStyle = '<' + 'link href="' + FCKConfig.EditorAreaCSS + '" type="text/css" rel="stylesheet" />' ;
+        return  fixedStyle + FCKTools.GetStyleHtml( FCKConfig.EditorAreaStyles ) ;
+}
+
 FCKContextMenu.prototype.SetMouseClickWindow = function( mouseClickWindow )
 {
         if ( !FCKBrowserInfo.IsIE )
