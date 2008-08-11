@@ -27,7 +27,8 @@ CREATE TABLE `user_history` (
   `user_token` varchar(32) character set latin1 collate latin1_bin NOT NULL default '',
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
   KEY `user_name` (`user_name`(10))
-) ENGINE=InnoDB DEFAULT CHARSET=utf-8
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+
 **/
 
 /**
@@ -35,7 +36,7 @@ CREATE TABLE `user_history` (
  */
 class UserChangesHistory {
 
-	private $mCluster = "archive1";
+	static $mCluster = "archive1";
 
 	/**
 	 * LoginHistoryInsert
@@ -84,17 +85,16 @@ class UserChangesHistory {
 			 * caanot use "insert from select" because we got two different db
 			 * clusters. But we should have all user data already loaded.
 			 */
-			print_pre( $User );
-
 
 			$external = new ExternalStoreDB();
-			$dbw = $external->getMaster( $this->mCluster );
+			$dbw = $external->getMaster( self::$mCluster );
 
 			/**
 			 * so far encodeOptions is public by default but could be
 			 * private in future
 			 */
-			$dbw->insert(
+			$dbw->begin();
+			$status = $dbw->insert(
 				"user_history",
 				array(
 					"user_id" => $User->mId,
@@ -106,10 +106,15 @@ class UserChangesHistory {
 					"user_options" => $User->encodeOptions(),
 					"user_touched" => $User->mTouched,
 					"user_token" => $User->mToken,
-
 				),
 				__METHOD__
 			);
+			if( $status ) {
+				$dbw->commit();
+			}
+			else {
+				$dbw->rollback();
+			}
 		}
 
 		return true;

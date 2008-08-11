@@ -6,8 +6,8 @@
  * @author Krzysztof Krzyżaniak <eloy@wikia.com>
  */
 
-$wgHooks[ "UserLoginComplete" ][ ] = array( "UserChangesHistory::LoginHistoryInsert", "form" );
-$wgHooks[ "UserLoadFromSession" ][ ] = array( "UserChangesHistory::LoginHistoryInsert", "auto" );
+#$wgHooks[ "UserLoginComplete" ][ ] = array( "UserChangesHistory::LoginHistoryInsert", "form" );
+#$wgHooks[ "UserLoadFromSession" ][ ] = array( "UserChangesHistory::LoginHistoryInsert", "auto" );
 $wgHooks[ "SavePreferences" ][ ] = array( "UserChangesHistory::SavePreferencesHook" );
 
 /**
