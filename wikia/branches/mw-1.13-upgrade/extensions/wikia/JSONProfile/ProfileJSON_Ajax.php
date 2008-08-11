@@ -1030,6 +1030,7 @@ function wfUpdateProfileBGJSON($user_name, $bg, $scroll=0) {
 $wgAjaxExportList [] = 'wfGetURLContents';
 
 function wfGetURLContents($url, $callback) {
+	$url = urldecode( $url );
 	$html = file_get_contents( $url );
 	
 	preg_match("/<title[^>]*?>(.*?)<\/title>/si", $html, $matches );
