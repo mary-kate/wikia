@@ -36,7 +36,7 @@ $wgPossibleElements = array(
 	//meta data
 	'city_id', 'article_id', 'rev_id',
 	//wiki elements
-	'b', 'i', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'image', 'image with link', 'table', 'category', 'category with sortkey', 'internal link', 'internal link: media', 'internal link: special page', 'internal link: file', 'external link', 'self link', 'list: unordered', 'list: ordered', 'list: definition: description', 'list: definition: term', 'magic: variable', 'magic: function', 'special: template with parameters', 'special: template without parameters', 'extra tags: core', 'extra tags: parser hook', 'extra tags: transparent parser hook', 
+	'b', 'i', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'image', 'image with link', 'table', 'category', 'category with sortkey', 'internal link', 'internal link: media', 'internal link: special page', 'internal link: file', 'external link', 'self link', 'list: unordered', 'list: ordered', 'list: definition: description', 'list: definition: term', 'magic: variable', 'magic: function', 'special: template with parameters', 'special: template without parameters', 'extra tags: core', 'extra tags: parser hook', 'extra tags: transparent parser hook',
 	//html elements
 	'html: abbr', 'html: acronym', 'html: b', 'html: big', 'html: blockquote', 'html: br', 'html: caption', 'html: center', 'html: cite', 'html: code', 'html: dd', 'html: del', 'html: div', 'html: dl', 'html: dt', 'html: em', 'html: font', 'html: h1', 'html: h2', 'html: h3', 'html: h4', 'html: h5', 'html: h6', 'html: hr', 'html: i', 'html: ins', 'html: li', 'html: ol', 'html: p', 'html: pre', 'html: q', 'html: rb', 'html: rp', 'html: rt', 'html: ruby', 'html: s', 'html: small', 'html: span', 'html: strike', 'html: strong', 'html: sub', 'html: sup', 'html: table', 'html: td', 'html: th', 'html: tr', 'html: tt', 'html: u', 'html: ul', 'html: var'
 );
@@ -61,7 +61,7 @@ if (isset($options['csv'])) {
 	}
 	exit;
 }
-
+echo "Parsing articles started: CityID = $wgCityId, DB name = $wgDBname\n";
 $time_start = microtime(true);
 
 $db = wfGetDB(DB_SLAVE);
