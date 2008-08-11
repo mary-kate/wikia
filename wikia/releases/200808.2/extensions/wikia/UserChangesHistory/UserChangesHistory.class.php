@@ -88,6 +88,8 @@ class UserChangesHistory {
 	 */
 	static public function SavePreferencesHook( $preferences, $User, $msg ) {
 
+		wfProfileIn( __METHOD__ );
+
 		$id = $User->getId();
 		if( $id ) {
 			/**
@@ -125,6 +127,8 @@ class UserChangesHistory {
 				$dbw->rollback();
 			}
 		}
+
+		wfProfileOut( __METHOD__ );
 
 		return true;
 	}
