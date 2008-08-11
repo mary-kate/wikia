@@ -5,8 +5,6 @@
  * @file
  *
  * @author MF-Warburg
- * @author Siebrand
- * @author SPQRobin
  */
 
 $skinNames = array(
@@ -388,7 +386,7 @@ $messages = array(
 'uploadbtn'       => 'Tau iha arkivu laran',
 'watchthisupload' => "Hateke pájina ne'e",
 
-# Special:Imagelist
+# Special:ImageList
 'imagelist_name' => 'Naran',
 'imagelist_user' => "Uza-na'in",
 
@@ -415,15 +413,15 @@ $messages = array(
 # Statistics
 'statistics'    => 'Estátistika',
 'sitestats'     => '{{SITENAME}} estátistika',
-'userstatstext' => "Iha ne'e registrar tiha ona '''$1''' [[Special:Listusers|uza-na'in]], '''$2''' (ka '''$4%''') $5.",
+'userstatstext' => "Iha ne'e registrar tiha ona '''$1''' {{PLURAL:$1|[[Special:ListUsers|uza-na'in]]|[[Special:ListUsers|uza-na'in]]}}, '''$2''' (ka '''$4%''') $5.",
 
 'brokenredirects-edit'   => '(edita)',
 'brokenredirects-delete' => '(halakon)',
 
 # Miscellaneous special pages
 'nlinks'            => '$1 ligasaun',
-'nmembers'          => '$1 membru',
-'nrevisions'        => '$1 versaun',
+'nmembers'          => '$1 {{PLURAL:$1|membru|membru}}',
+'nrevisions'        => '$1 {{PLURAL:$1|versaun|versaun}}',
 'shortpages'        => 'Pájina badak',
 'longpages'         => 'Pájina naruk',
 'listusers'         => "Lista uza-na'in",
@@ -440,7 +438,7 @@ $messages = array(
 'specialloguserlabel' => "Uza-na'in:",
 'log-search-submit'   => 'Bá',
 
-# Special:Allpages
+# Special:AllPages
 'allpages'       => 'Pájina hotu',
 'alphaindexline' => "$1 to'o $2",
 'nextpage'       => 'Pájina oinmai ($1)',
@@ -451,10 +449,10 @@ $messages = array(
 # Special:Categories
 'categories' => 'Kategoría',
 
-# Special:Listusers
+# Special:ListUsers
 'listusers-submit' => 'Hatudu',
 
-# Special:Listgrouprights
+# Special:ListGroupRights
 'listgrouprights-group'  => 'Lubu',
 'listgrouprights-rights' => 'Priviléjiu',
 
@@ -517,7 +515,7 @@ $messages = array(
 'undeletelink'           => 'restaurar',
 'undeletecomment'        => 'Komentáriu:',
 'undeletedarticle'       => 'restaurar "[[$1]]"',
-'undeletedrevisions'     => 'restaurar $1 versaun',
+'undeletedrevisions'     => 'restaurar $1 {{PLURAL:$1|versaun|versaun}}',
 'undelete-search-submit' => 'Buka',
 
 # Namespace form on various pages
@@ -580,7 +578,7 @@ $messages = array(
 'allmessagescurrent' => 'Testu atuál',
 
 # Import log
-'import-logentry-interwiki-detail' => '$1 versaun husi $2',
+'import-logentry-interwiki-detail' => '$1 {{PLURAL:$1|versaun|versaun}} husi $2',
 
 # Tooltip help for the actions
 'tooltip-pt-userpage'      => "Ha'u-nia pájina uza-na'in",
@@ -611,7 +609,7 @@ $messages = array(
 'previousdiff' => '←Diferensa molok',
 'nextdiff'     => 'Diferensa oinmai→',
 
-# Special:Newimages
+# Special:NewImages
 'showhidebots' => '($1 bot sira)',
 'ilsubmit'     => 'Buka',
 

@@ -1,13 +1,13 @@
 <?php
 
-function update_flaggedrevs() {
+function update_flaggedrevs( $start = null ) {
 	echo "Populating and correcting flaggedrevs columns\n";
 	
 	$BATCH_SIZE = 500;
 	
 	$db = wfGetDB( DB_MASTER );
 	
-	$start = $db->selectField( 'revision', 'MIN(rev_id)', false, __FUNCTION__ );
+	$start = $start ? $start : $db->selectField( 'revision', 'MIN(rev_id)', false, __FUNCTION__ );
 	$end = $db->selectField( 'revision', 'MAX(rev_id)', false, __FUNCTION__ );
 	if( is_null( $start ) || is_null( $end ) ){
 		echo "...revision table seems to be empty.\n";
@@ -25,7 +25,7 @@ function update_flaggedrevs() {
 			AND fr_page_id = rev_page AND fr_rev_id = rev_id AND page_id = rev_page";
 		$res = $db->select( array('revision','flaggedrevs','page'),
 			array('fr_rev_id','fr_tags','fr_quality','page_namespace','page_title',
-				'fr_img_name','fr_img_timestamp','fr_img_sha1'), 
+				'fr_img_name','fr_img_timestamp','fr_img_sha1','rev_page'), 
 			$cond, __FUNCTION__ );
 		# Go through and clean up missing items, as well as correct fr_quality...
 		foreach( $res as $row ) {
@@ -47,6 +47,21 @@ function update_flaggedrevs() {
 				$time = $irow ? $irow->fi_img_timestamp : null;
 				$sha1 = $irow ? $irow->fi_img_sha1 : null;
 				$file = $irow ? $row->page_title : null;
+				# Fill in from current if broken
+				if( !$irow ) {
+					$crow = $db->selectRow( 'image',
+						array( 'img_timestamp', 'img_sha1' ),
+						array( 'img_name' => $row->page_title ),
+						__METHOD__ );
+					$time = $crow ? $crow->img_timestamp : null;
+					$sha1 = $crow ? $crow->img_sha1 : null;
+					$file = $crow ? $row->page_title : null;
+				}
+			# Leave it alone if already set
+			} else if( $row->fr_img_name && $row->page_namespace == NS_IMAGE ) {
+				$time = $row->fr_img_timestamp;
+				$sha1 = $row->fr_img_sha1;
+				$file = $row->fr_img_name;
 			}
 			if( $file && ($file != $row->fr_img_name || $time != $row->fr_img_timestamp || $sha1 != $row->fr_img_sha1) ) {
 				$changed++;
@@ -59,7 +74,7 @@ function update_flaggedrevs() {
 					'fr_img_name' => $file,
 					'fr_img_sha1' => $sha1,
 					'fr_img_timestamp' => $time ),
-				array( 'fr_rev_id' => $row->fr_rev_id ),
+				array( 'fr_rev_id' => $row->fr_rev_id, 'fr_page_id' => $row->rev_page ),
 				__FUNCTION__ );
 			$count++;
 		}
@@ -71,14 +86,14 @@ function update_flaggedrevs() {
 	echo "fr_quality and fr_img_* columns update complete ... {$count} rows [{$changed} changed]\n";
 }
 
-function update_flaggedpages() {
+function update_flaggedpages( $start = null ) {
 	echo "Populating and correcting flaggedpages columns\n";
 	
 	$BATCH_SIZE = 500;
 	
 	$db = wfGetDB( DB_MASTER );
 	
-	$start = $db->selectField( 'page', 'MIN(page_id)', false, __FUNCTION__ );
+	$start = $start ? $start : $db->selectField( 'page', 'MIN(page_id)', false, __FUNCTION__ );
 	$end = $db->selectField( 'page', 'MAX(page_id)', false, __FUNCTION__ );
 	if( is_null( $start ) || is_null( $end ) ){
 		echo "...flaggedpages table seems to be empty.\n";
@@ -98,7 +113,7 @@ function update_flaggedpages() {
 		foreach( $res as $row ) {
 			$title = Title::makeTitle( $row->page_namespace, $row->page_title );
 			# Replaces new fields into flaggedpages
-			$frev = FlaggedRevision::newFromStable( $title, false, true );
+			$frev = FlaggedRevision::newFromStable( $title, FR_FOR_UPDATE );
 			# Update fp_stable, fp_quality, and fp_reviewed
 			if( $frev ) {
 				$article = new Article( $title );
@@ -120,14 +135,14 @@ function update_flaggedpages() {
 	echo "flaggedpage columns update complete ... {$count} rows [{$deleted} deleted]\n";
 }
 
-function update_flaggedtemplates() {
+function update_flaggedtemplates( $start = null ) {
 	echo "Removing unreferenced flaggedtemplates columns\n";
 	
 	$BATCH_SIZE = 500;
 	
 	$db = wfGetDB( DB_MASTER );
 	
-	$start = $db->selectField( 'flaggedtemplates', 'MIN(ft_rev_id)', false, __FUNCTION__ );
+	$start = $start ? $start : $db->selectField( 'flaggedtemplates', 'MIN(ft_rev_id)', false, __FUNCTION__ );
 	$end = $db->selectField( 'flaggedtemplates', 'MAX(ft_rev_id)', false, __FUNCTION__ );
 	if( is_null( $start ) || is_null( $end ) ){
 		echo "...flaggedtemplates table seems to be empty.\n";
@@ -165,14 +180,14 @@ function update_flaggedtemplates() {
 	echo "flaggedtemplates columns update complete ... {$count} rows [{$deleted} deleted]\n";
 }
 
-function update_flaggedimages() {
+function update_flaggedimages( $start = null ) {
 	echo "Removing unreferenced flaggedimages columns\n";
 	
 	$BATCH_SIZE = 500;
 	
 	$db = wfGetDB( DB_MASTER );
 	
-	$start = $db->selectField( 'flaggedimages', 'MIN(fi_rev_id)', false, __FUNCTION__ );
+	$start = $start ? $start : $db->selectField( 'flaggedimages', 'MIN(fi_rev_id)', false, __FUNCTION__ );
 	$end = $db->selectField( 'flaggedimages', 'MAX(fi_rev_id)', false, __FUNCTION__ );
 	if( is_null( $start ) || is_null( $end ) ){
 		echo "...flaggedimages table seems to be empty.\n";

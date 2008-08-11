@@ -4,9 +4,8 @@
  * This file contains the main include file for the Inputbox extension of 
  * MediaWiki. 
  *
- * Usage: require_once("path/to/inputbox.php"); in LocalSettings.php
- *
- * This extension requires MediaWiki 1.5 or higher.
+ * Usage: Add the following line in LocalSettings.php:
+ * require_once( "$IP/extensions/Inputbox/Inputbox.php" );
  *
  * @author Erik Moeller <moeller@scireview.de>
  *  namespaces search improvements partially by
@@ -27,8 +26,8 @@ if ( defined( 'MW_SUPPORTS_PARSERFIRSTCALLINIT' ) ) {
 $wgExtensionCredits['parserhook'][] = array(
 	'name'           => 'Inputbox',
 	'author'         => array( 'Erik Moeller', 'Leonardo Pimenta', 'Rob Church' ),
-	'svn-date'       => '$LastChangedDate: 2008-07-09 05:37:55 +0000 (Wed, 09 Jul 2008) $',
-	'svn-revision'   => '$LastChangedRevision: 37366 $',
+	'svn-date'       => '$LastChangedDate: 2008-07-29 17:26:10 +0000 (Tue, 29 Jul 2008) $',
+	'svn-revision'   => '$LastChangedRevision: 38194 $',
 	'url'            => 'http://www.mediawiki.org/wiki/Extension:Inputbox',
 	'description'    => 'Allow inclusion of predefined HTML forms.',
 	'descriptionmsg' => 'inputbox-desc',

@@ -4,9 +4,8 @@
  * @ingroup Language
  * @file
  *
- * @author לערי ריינהארט
- * @author Siebrand
  * @author Albert Fazlî
+ * @author לערי ריינהארט
  */
 
 $namespaceNames = array(
@@ -309,9 +308,6 @@ Anı alğaç monda tağın kerep qara.',
 'showpreview'        => 'Qarap alu...',
 'blockedtitle'       => 'Qullanuçı tíıldı',
 'whitelistedittitle' => 'Üzgärtü öçen, kerü täläp itelä',
-'whitelistreadtitle' => 'Uqu öçen kerü täläp itelä',
-'whitelistreadtext'  => 'Bitlärne uqu öçen, säxifägä isem belän [[Special:Userlogin|keräse]].',
-'whitelistacctitle'  => 'Siña xísap yasaw tíılğan',
 'loginreqtitle'      => 'Kerergä Kiräk',
 'loginreqlink'       => 'keräse',
 'accmailtitle'       => 'Sersüz künderelde.',
@@ -415,7 +411,7 @@ Zínhar, bu bitneñ wağraq kisäklärgä bülü turında uylap qara.",
 'reupload'          => 'Qabat yökläw',
 'reuploaddesc'      => 'Yökläw bitenä qaytu.',
 'uploadnologin'     => 'Kermädeñ',
-'uploadnologintext' => 'Birem yökläw öçen, säxifägä isem belän [[Special:Userlogin|keräse]].',
+'uploadnologintext' => 'Birem yökläw öçen, säxifägä isem belän [[Special:UserLogin|keräse]].',
 'uploaderror'       => 'Yökläw xatası',
 'uploadlog'         => 'yökläw könlege',
 'uploadlogpage'     => 'Yökläw_könlege',
@@ -435,7 +431,7 @@ Zínhar, bu bitneñ wağraq kisäklärgä bülü turında uylap qara.",
 'uploaddisabled'    => 'Ğafu it, yökläw sünderelgän kileş tora.',
 'uploadcorrupt'     => 'Bu birem yä üze watıq, yä quşımtası yaraqsız. Birem tikşerüdän soñ qabat yöklä zínhar.',
 
-# Special:Imagelist
+# Special:ImageList
 'imgfile'   => 'fayl',
 'imagelist' => 'Räsem tezmäse',
 
@@ -502,7 +498,7 @@ Zínhar, bu bitneñ wağraq kisäklärgä bülü turında uylap qara.",
 'log'           => 'Köndelikler',
 'all-logs-page' => 'Barlıq köndelik',
 
-# Special:Allpages
+# Special:AllPages
 'allpages'     => 'Bar bitlär',
 'nextpage'     => 'Kiläse bit ($1)',
 'prevpage'     => 'Ötken bet ($1)',
@@ -512,7 +508,7 @@ Zínhar, bu bitneñ wağraq kisäklärgä bülü turında uylap qara.",
 'categories'         => 'Cíıntıqlar',
 'categoriespagetext' => "Bu wiki'dä kiläse cíıntıqlar bar.",
 
-# Special:Listusers
+# Special:ListUsers
 'listusers-submit' => 'Körset',
 
 # E-mail user
@@ -532,7 +528,7 @@ Zínhar, bu bitneñ wağraq kisäklärgä bülü turında uylap qara.",
 'mywatchlist'      => 'Saqtezmäm',
 'nowatchlist'      => 'Saqtezmäñdä kertemnär yuq.',
 'watchnologin'     => 'Kermädeñ',
-'watchnologintext' => 'Saqtezmäñ üzgärtü öçen, säxifägä isem belän [[Special:Userlogin|keräse]].',
+'watchnologintext' => 'Saqtezmäñ üzgärtü öçen, säxifägä isem belän [[Special:UserLogin|keräse]].',
 'addedwatch'       => 'Saqtezmägä quşıldı',
 'removedwatch'     => 'Saqtezmädän salındı',
 'removedwatchtext' => '«[[:$1]]» atlı bit saqtezmäñnän töşerelde.',
@@ -624,7 +620,6 @@ Soñğı beterülär $2 bitendä terkälenä.',
 # Move page
 'move-page-legend' => 'Bit küçerü',
 'movearticle'      => 'Küçeräse bit',
-'movenologin'      => 'Kermädeñ',
 'newtitle'         => 'Yaña başlıq',
 'movepagebtn'      => 'Küçer bitne',
 'pagemovedsub'     => 'Küçerü uñışlı uzdı',
@@ -702,7 +697,7 @@ yä isä saylanğan isem yaraqsız buldı. Başqa isem sayla zínhar.',
 # Media information
 'show-big-image' => 'Towlı ölçemi',
 
-# Special:Newimages
+# Special:NewImages
 'ilsubmit' => 'Ezläw',
 'bydate'   => 'waqıt buyınça',
 
