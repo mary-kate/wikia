@@ -4,11 +4,9 @@
  * @ingroup Language
  * @file
  *
+ * @author Aksi great
  * @author Dsvyas
  * @author לערי ריינהארט
- * @author Aksi great
- * @author Siebrand
- * @author SPQRobin
  */
 
 $digitTransformTable = array(
@@ -120,12 +118,15 @@ $messages = array(
 'about'         => 'વિષે',
 'newwindow'     => '(નવા પાનામાં ખુલશે)',
 'cancel'        => 'રદ કરો',
+'qbfind'        => 'શોધો',
+'qbedit'        => 'ફેરફાર કરો',
 'moredotdotdot' => 'વધારે...',
 'mypage'        => 'મારું પાનું',
 'mytalk'        => 'મારી ચર્ચા',
 'navigation'    => 'ભ્રમણ',
 'and'           => 'અને',
 
+'errorpagetitle'   => 'ત્રુટિ',
 'returnto'         => '$1 પર પાછા જાઓ.',
 'tagline'          => '{{SITENAME}} થી',
 'help'             => 'મદદ',
@@ -223,16 +224,31 @@ $messages = array(
 'nav-login-createaccount' => 'પ્રવેશ કરો / નવું ખાતું ખોલો',
 'loginprompt'             => '{{SITENAME}}માં પ્રવેશ કરવા માટે તમારા બ્રાઉઝરમાં કુકીઝ એનેબલ કરેલી હોવી જોઇશે.',
 'userlogin'               => 'પ્રવેશ કરો / નવું ખાતું ખોલો',
+'logout'                  => 'બહાર નીકળો',
 'userlogout'              => 'બહાર નીકળો/લૉગ આઉટ',
 'nologin'                 => 'શું તમારૂં ખાતું નથી? $1.',
 'nologinlink'             => 'ખાતું ખોલો',
 'createaccount'           => 'નવું ખાતું ખોલો',
+'gotaccount'              => 'પહેલેથી ખાતું ખોલેલું છે? $1.',
 'gotaccountlink'          => 'પ્રવેશો (લૉગ ઇન કરો)',
 'yourrealname'            => 'સાચું નામ:',
 'yourlanguage'            => 'ભાષા',
+'prefs-help-realname'     => 'સાચું નામ મરજીયાત છે.
+જો આપ સાચું નામ આપવાનું પસંદ કરશો, તો તેનો ઉપયોગ તમારા કરેલાં યોગદાનનું શ્રેય આપવા માટે થશે.',
+'loginsuccesstitle'       => 'પ્રવેશ સફળ',
 'loginsuccess'            => "'''તમે હવે {{SITENAME}}માં \"\$1\" તરીકે પ્રવેશી ચુક્યા છો.'''",
+'nosuchuser'              => '"$1" નામ ધરાવતો કોઇ સભ્ય અસ્તિત્વમાં નથી.
+કૃપા કરી સ્પેલીંગ/જોડણી ચકાસો અથવા નવું ખાતુ ખોલો.',
 'nosuchusershort'         => '"<nowiki>$1</nowiki>" નામનો કોઇ સભ્ય નથી, તમારી જોડણી તપાસો.',
+'nouserspecified'         => 'તમારે સભ્ય નામ દર્શાવવાની જરૂર છે.',
+'wrongpassword'           => 'તમે લખેલી ગુપ્ત સંજ્ઞા ખોટી છે.
+ફરીથી પ્રયત્ન કરો.',
+'wrongpasswordempty'      => 'તમે ગુપ્ત સંજ્ઞા લખવાનું ભુલી ગયા લાગો છો.
+ફરીથી પ્રયત્ન કરો.',
+'passwordtooshort'        => 'તમે દાખલ કરેલી ગુપ્ત સંજ્ઞા ખુબજ ટુંકી છે અથવા અસ્વિકાર્ય છે.
+તેમાં ઓછામાં {{PLURAL:$1|ઓછો એક અક્ષર હોવો |ઓછા $1 અક્ષર હોવા}} જોઇએ અને તેમાં તમારા સભ્ય નામનો સમાવેશ ના થવો જોઇએ.',
 'mailmypassword'          => 'પાસવર્ડ ઇ-મેલમાં મોકલો',
+'passwordremindertitle'   => '{{SITENAME}} માટેની નવી કામચલાઉ ગુપ્ત સંજ્ઞા',
 'accountcreated'          => 'ખાતું ખોલવામાં આવ્યું છે',
 
 # Edit page toolbar
@@ -266,6 +282,19 @@ $messages = array(
 'showdiff'               => 'ફેરફારો બતાવો',
 'anoneditwarning'        => "'''ચેતવણી:''' તમે તમારા સભ્ય નામથી પ્રવેશ કર્યો નથી.
 આ પાનાનાં ઇતિહાસમાં તમારૂં આઇ.પી. (IP) એડ્રેસ નોંધવામાં આવશે.",
+'blockedtext'            => "<big>'''આપનાં સભ્ય નામ અથવા આઇ.પી. એડ્રેસ પર પ્રતિબંધ મુકવામાં આવ્યો છે.'''</big>
+
+આ પ્રતિબંધ  $1એ મુક્યો છે.
+જેને માટે કારણ આપવામાં આવ્યું છે કે, ''$2''.
+
+* પ્રતિબંધ મુક્યા તારીખ: $8
+* પ્રતિબંધ ઉઠાવવાની તારીખ: $6
+* જેના ઉપર પ્રતિબંધ મુક્યો છે તે: $7
+
+આપનાં પર મુકવામાં આવેલાં પ્રતિબંધ વિષે ચર્ચા કરવા માટે આપ $1નો કે અન્ય [[{{MediaWiki:Grouppage-sysop}}|પ્રબંધક]]નો સંપર્ક કરી શકો છો.
+આપ 'સભ્યને ઇ-મેલ કરો' ની કડી વાપરી નહી શકો, પરંતુ જો આપનાં [[Special:Preferences|મારી પસંદ]]માં યોગ્ય ઇ-મેલ સરનામું વાપર્યું હશે અને તમારા તે ખાતું વાપરવા ઉપર પ્રતિબંધ નહી મુક્યો હોય તો તમે તે કડીનો ઉપયોગ કરી શકશો.
+તમારૂં હાલનું આઇ.પી સરનામું છે $3, અને જેના પર પ્રતિબંધ મુકવામાં આવ્યો છે તે છે  #$5.
+મહેરબાની કરીને કોઇ પણ પત્ર વ્યવહારમાં ઉપરનાંમાંથી એકનો કે બન્નેનો ઉલ્લેખ કરશો.",
 'blockededitsource'      => "'''$1''' માટે '''તમારા ફેરફારો''' નીચે દેખાય છે:",
 'newarticle'             => '(નવિન)',
 'newarticletext'         => "આપ જે કડીને અનુસરીને અહીં પહોંચ્યા છો તે પાનું અસ્તિત્વમાં નથી.
@@ -281,11 +310,15 @@ $messages = array(
 <br />જો આપ ના ચાહતા હોવ કે તમારા યોગદાનમાં અન્ય કોઇ વ્યક્તિ બેધડક પણે ફેરફાર કરે અને તેને પુનઃપ્રકાશિત કરે, તો અહીં યોગદાન કરશો નહી.
 <br />સાથે સાથે તમે અમને એમ પણ ખાતરી આપી રહ્યા છો કે આ લખાણ તમે મૌલિક રીતે લખ્યું છે, અથવાતો પબ્લિક ડોમેઇન કે તેવા અન્ય મુક્ત સ્ત્રોતમાંથી લીધું છે.
 <br /><strong>પરવાનગી વગર પ્રકાશનાધિકાર થી સુરક્ષિત (COPYRIGHTED) કાર્ય અહીં પ્રકાશિત ના કરશો!</strong>',
+'longpagewarning'        => '<strong>ચેતવણી: આ પાનું $1 કિલોબાઇટ્સ લાંબુ છે;
+કેટલાંક બ્રાઉઝરોમાં લગભગ ૩૨ કિલોબાઇટ્સ જેટલાં કે તેથી મોટાં પાનાઓમાં ફેરફાર કરવામાં મુશ્કેલી પડી શકે છે.
+બને ત્યાં સુધી પાનાને નાનાં વિભાગોમાં વિભાજીત કરી નાંખો.</strong>',
 'templatesused'          => 'આ પાનામાં વપરાયેલા ઢાંચાઓ:',
+'templatesusedpreview'   => 'આ પૂર્વાવલોકનમાં વપરાયેલાં ઢાંચાઓ:',
 'template-protected'     => '(સુરક્ષિત)',
 'template-semiprotected' => '(અર્ધ સુરક્ષિત)',
 'nocreatetext'           => '{{SITENAME}}માં નવું પાનુ બનાવવા ઉપર નિયંત્રણ આવી ગયું છે.
-<br />આપ પાછા જઇને હયાત પાનામાં ફેરફાર કરી શકો છો, નહિતર [[Special:Userlogin|પ્રવેશ કરો કે નવું ખાતું ખોલો]].',
+<br />આપ પાછા જઇને હયાત પાનામાં ફેરફાર કરી શકો છો, નહિતર [[Special:UserLogin|પ્રવેશ કરો કે નવું ખાતું ખોલો]].',
 'recreate-deleted-warn'  => "'''ચેતવણી: તમે જે પાનું નવું બનાવવા જઇ રહ્યાં છો તે પહેલાં દૂર કરવામાં આવ્યું છે.'''
 
 આગળ વધતાં બે વખત વિચારજો અને જો તમને લાગે કે આ પાનું ફરી વાર બનાવવું ઉચિત છે, તો જ અહીં ફેરફાર કરજો.
@@ -309,12 +342,16 @@ $messages = array(
 'histlast'            => 'સૌથી નવું',
 'historyempty'        => '(ખાલી)',
 
+# Revision feed
+'history-feed-item-nocomment' => '$1, $2 સમયે', # user at time
+
 # Diffs
 'history-title'           => '"$1" નાં ફેરફારોનો ઇતિહાસ',
 'difference'              => '(પુનરાવર્તનો વચ્ચેનો તફાવત)',
 'lineno'                  => 'લીટી $1:',
 'compareselectedversions' => 'પસંદ કરેલા સરખાવો',
 'editundo'                => 'રદ કરો',
+'diff-multi'              => '({{PLURAL:$1|વચગાળાનું એક પુનરાવર્તન|વચગાળાનાં $1 પુનરાવર્તનો}} દર્શાવેલ નથી.)',
 
 # Search results
 'searchresults' => 'પરિણામોમાં શોધો',
@@ -326,6 +363,7 @@ $messages = array(
 'powersearch'   => 'શોધો (વધુ પર્યાય સાથે)',
 
 # Preferences page
+'preferences'       => 'પસંદ',
 'mypreferences'     => 'મારી પસંદ',
 'datetime'          => 'તારીખ અને સમય',
 'prefs-watchlist'   => 'ધ્યાનસૂચી',
@@ -345,11 +383,14 @@ $messages = array(
 'grouppage-sysop' => '{{ns:project}}:પ્રબંધકો',
 
 # User rights log
+'rightslog'  => 'સભ્ય હક્ક માહિતિ પત્રક',
 'rightsnone' => '(કોઈ નહિ)',
 
 # Recent changes
+'nchanges'          => '$1 {{PLURAL:$1|ફેરફાર|ફેરફારો}}',
 'recentchanges'     => 'હાલ માં થયેલા ફેરફાર',
 'rcnote'            => "નીચે $5, $4 સુધીમાં અને તે પહેલાનાં '''$2''' દિવસમાં {{PLURAL:$1| થયેલો '''1''' માત્ર ફેરફાર|થયેલાં છેલ્લા  '''$1''' ફેરફારો}} દર્શાવ્યાં છે .",
+'rcnotefrom'        => "નીચે '''$2'''થી થયેલાં '''$1''' ફેરફારો દર્શાવ્યાં છે.",
 'rclistfrom'        => '$1 બાદ થયેલા નવા ફેરફારો બતાવો',
 'rcshowhideminor'   => 'નાના ફેરફારો $1',
 'rcshowhidebots'    => 'બૉટો $1',
@@ -374,24 +415,34 @@ $messages = array(
 <br />[[Special:Watchlist|તમારી ધ્યાનસૂચિમાં]] હોય તેવા પાનાં '''ઘાટા અક્ષર'''માં વર્ણવ્યાં છે",
 
 # Upload
-'upload'     => 'ફાઇલ ચડાવો',
-'uploadbtn'  => 'ફાઇલ ચડાવો',
-'reupload'   => 'ફરી ચડાવો',
-'filesource' => 'સ્ત્રોત:',
+'upload'        => 'ફાઇલ ચડાવો',
+'uploadbtn'     => 'ફાઇલ ચડાવો',
+'reupload'      => 'ફરી ચડાવો',
+'uploadlogpage' => 'ચઢાવેલી ફાઇલોનું માહિતિ પત્રક',
+'filesource'    => 'સ્ત્રોત:',
+
+# Special:ImageList
+'imagelist' => 'ફાઇલોની યાદી',
 
 # Image description page
-'filehist'            => 'ફાઇલનો ઇતિહાસ',
-'filehist-help'       => 'તારિખ/સમય ઉપર ક્લિક કરવાથી તે સમયે ફાઇલ કેવી હતી તે જોવા મળશે',
-'filehist-current'    => 'વર્તમાન',
-'filehist-datetime'   => 'તારીખ/સમય',
-'filehist-user'       => 'સભ્ય',
-'filehist-dimensions' => 'પરિમાણ',
-'filehist-filesize'   => 'ફાઇલનું કદ',
-'filehist-comment'    => 'ટિપ્પણી',
-'imagelinks'          => 'કડીઓ',
-'linkstoimage'        => 'આ ફાઇલ સાથે {{PLURAL:$1|નીચેનું પાનું જોડાયેલું|$1 નીચેનાં પાનાઓ જોડાયેલાં}} છે',
-'nolinkstoimage'      => 'આ ફાઇલ સાથે કોઇ પાનાં જોડાયેલાં નથી.',
-'sharedupload'        => 'આ ફાઇલ સહિયારી રીતે ચઢાવવામાં આવી છે અને તેનો ઉપયોગ અન્ય પરિયોજનાઓમાં પણ થઇ શકે છે.',
+'filehist'                  => 'ફાઇલનો ઇતિહાસ',
+'filehist-help'             => 'તારિખ/સમય ઉપર ક્લિક કરવાથી તે સમયે ફાઇલ કેવી હતી તે જોવા મળશે',
+'filehist-current'          => 'વર્તમાન',
+'filehist-datetime'         => 'તારીખ/સમય',
+'filehist-user'             => 'સભ્ય',
+'filehist-dimensions'       => 'પરિમાણ',
+'filehist-filesize'         => 'ફાઇલનું કદ',
+'filehist-comment'          => 'ટિપ્પણી',
+'imagelinks'                => 'કડીઓ',
+'linkstoimage'              => 'આ ફાઇલ સાથે {{PLURAL:$1|નીચેનું પાનું જોડાયેલું|$1 નીચેનાં પાનાઓ જોડાયેલાં}} છે',
+'nolinkstoimage'            => 'આ ફાઇલ સાથે કોઇ પાનાં જોડાયેલાં નથી.',
+'sharedupload'              => 'આ ફાઇલ સહિયારી રીતે ચઢાવવામાં આવી છે અને તેનો ઉપયોગ અન્ય પરિયોજનાઓમાં પણ થઇ શકે છે.',
+'noimage'                   => 'આ નામ વાળી કોઇ ફાઇલ અસ્તિત્વમાં નથી, તમે તેને $1 શકો છો.',
+'noimage-linktext'          => 'ચઢાવી',
+'uploadnewversion-linktext' => 'આ ફાઇલની નવી આવૃત્તિ ચઢાવો',
+
+# List redirects
+'listredirects' => 'અન્યત્ર વાળેલાં પાનાંઓની યાદી',
 
 # Unused templates
 'unusedtemplates' => 'વણ વપરાયેલાં ઢાંચા',
@@ -399,28 +450,40 @@ $messages = array(
 # Random page
 'randompage' => 'કોઈ પણ એક લેખ',
 
+# Statistics
+'statistics' => 'આંકડાકિય માહિતિ',
+
 'brokenredirects-edit'   => '(ફેરફાર કરો)',
 'brokenredirects-delete' => '(હટાવો)',
+
+'withoutinterwiki' => 'અન્ય ભાષાઓની કડીઓ વગરનાં પાનાં',
 
 'fewestrevisions' => 'સૌથી ઓછાં ફેરફાર થયેલા પાનાં',
 
 # Miscellaneous special pages
 'nbytes'                  => '$1 {{PLURAL:$1|બાઇટ|બાઇટ્સ}}',
+'nlinks'                  => '$1 {{PLURAL:$1|કડી|કડીઓ}}',
 'nmembers'                => '$1 {{PLURAL:$1|સદસ્ય|સદસ્યો}}',
 'specialpage-empty'       => 'આ પાનું ખાલી છે.',
 'lonelypages'             => 'અનાથ પાના',
+'uncategorizedpages'      => 'અવર્ગિકૃત પાનાં',
 'uncategorizedcategories' => 'અવર્ગિકૃત શ્રેણીઓ',
 'uncategorizedimages'     => 'અવર્ગિકૃત દસ્તાવેજો',
 'uncategorizedtemplates'  => 'અવર્ગિકૃત ઢાંચાઓ',
 'unusedcategories'        => 'વણ વપરાયેલી શ્રેણીઓ',
 'unusedimages'            => 'વણ વપરાયેલાં દસ્તાવેજો',
+'wantedcategories'        => 'ઇચ્છિત શ્રેણીઓ',
+'wantedpages'             => 'ઇચ્છિત પાનાં',
+'mostcategories'          => 'સૌથી વધુ શ્રેણીઓ ધરાવતાં પાનાં',
 'mostrevisions'           => 'સૌથી વધુ ફેરફાર થયેલા પાનાં',
 'shortpages'              => 'નાનાં પાનાં',
 'longpages'               => 'લાંબા પાનાઓ',
 'protectedpages'          => 'સંરક્ષિત પાનાઓ',
+'listusers'               => 'સભ્યોની યાદી',
 'newpages'                => 'નવા પાના',
 'ancientpages'            => 'સૌથી જૂનાં પાના',
 'move'                    => 'નામ બદલો',
+'movethispage'            => 'આ પાનું ખસેડો',
 
 # Book sources
 'booksources'      => 'પુસ્તક સ્ત્રોત',
@@ -428,10 +491,13 @@ $messages = array(
 'booksources-go'   => 'જાઓ',
 
 # Special:Log
-'log'               => 'લૉગ',
-'log-search-submit' => 'શોધો',
+'specialloguserlabel'  => 'સભ્ય:',
+'speciallogtitlelabel' => 'શિર્ષક:',
+'log'                  => 'લૉગ',
+'all-logs-page'        => 'બધાં માહિતિ પત્રકો',
+'log-search-submit'    => 'શોધો',
 
-# Special:Allpages
+# Special:AllPages
 'allpages'       => 'બધા પાના',
 'alphaindexline' => '$1 થી $2',
 'nextpage'       => 'આગળનું પાનું ($1)',
@@ -445,7 +511,7 @@ $messages = array(
 'categories'         => 'શ્રેણીઓ',
 'categoriespagetext' => 'નીચેની શ્રેણીઓમાં પાના કે અન્ય સભ્યો છે.',
 
-# Special:Listusers
+# Special:ListUsers
 'listusers-submit' => 'બતાવો',
 
 # E-mail user
@@ -460,7 +526,11 @@ $messages = array(
 'watchlist'            => 'મારી ધ્યાનસૂચી',
 'mywatchlist'          => 'મારી ધ્યાનસૂચિ',
 'watchlistfor'         => "('''$1'''ને માટે)",
+'addedwatch'           => 'ધ્યાનસૂચિમાં ઉમેરવામાં આવ્યું છે',
+'removedwatch'         => 'ધ્યાનસૂચિમાંથી કાઢી નાંખ્યું છે',
+'removedwatchtext'     => '"[[:$1]]" શિર્ષક હેઠળનું પાનું તમારી ધ્યાનસૂચિમાંથી કાઢી નાંખવામાં આવ્યું છે.',
 'watch'                => 'ધ્યાન માં રાખો',
+'watchthispage'        => 'આ પાનું ધ્યાનમાં રાખો',
 'unwatch'              => 'ધ્યાનસૂચિમાંથી હટાવો',
 'watchlist-details'    => 'ચર્ચા વાળા પાના ન ગણતા {{PLURAL:$1|$1 પાનું|$1 પાનાં}} ધ્યાનસૂચી મા છે.',
 'watchlistcontains'    => 'તમારી ધ્યાનસૂચીમાં $1 {{PLURAL:$1|પાનું|પાનાં}} છે.',
@@ -477,13 +547,29 @@ $messages = array(
 'changed'            => 'બદલાયેલું',
 
 # Delete/protect/revert
-'deletepage'     => 'પાનું હટાવો',
-'confirm'        => 'ખાતરી કરો',
-'exblank'        => 'પાનું ખાલી હતું',
-'actioncomplete' => 'કામ પૂરું થઈ ગયું',
-'deletedarticle' => 'હટાવવામાં આવેલા "[[$1]]"',
-'dellogpage'     => 'હટાવેલાઓનું માહિતિ પત્રક (ડિલિશન લૉગ)',
-'rollbacklink'   => 'પાછું વાળો',
+'deletepage'                  => 'પાનું હટાવો',
+'confirm'                     => 'ખાતરી કરો',
+'exblank'                     => 'પાનું ખાલી હતું',
+'actioncomplete'              => 'કામ પૂરું થઈ ગયું',
+'deletedtext'                 => '"<nowiki>$1</nowiki>" દૂર કરવામાં આવ્યું છે.
+તાજેતરમાં દૂર કરેલા લેખોની વિગત માટે $2 જુઓ.',
+'deletedarticle'              => 'હટાવવામાં આવેલા "[[$1]]"',
+'dellogpage'                  => 'હટાવેલાઓનું માહિતિ પત્રક (ડિલિશન લૉગ)',
+'deletecomment'               => 'હટાવવા માટેનું કારણ:',
+'deleteotherreason'           => 'અન્ય/વધારાનું કારણ:',
+'deletereasonotherlist'       => 'અન્ય કારણ',
+'rollbacklink'                => 'પાછું વાળો',
+'protectlogpage'              => 'સુરક્ષા માહિતિ પત્રક',
+'protectcomment'              => 'ટિપ્પણી:',
+'protectexpiry'               => 'સમાપ્તિ:',
+'protect_expiry_invalid'      => 'સમાપ્તિનો સમય માન્ય નથી.',
+'protect_expiry_old'          => 'સમાપ્તિનો સમય ભૂતકાળમાં છે.',
+'protect-level-autoconfirmed' => 'નહી નોંધાયેલા સભ્યો પર પ્રતિબંધ',
+'protect-level-sysop'         => 'માત્ર પ્રબંધકો',
+'protect-expiring'            => '$1 (UTC) એ સમાપ્ત થાય છે',
+'protect-cascade'             => 'આ પાનાંમાં સમાવિષ્ટ પેટા પાનાં પણ સુરક્ષિત કરો (કૅસ્કેડીંગ સુરક્ષા)',
+'protect-cantedit'            => 'આપ આ પાનાનાં સુરક્ષા સ્તરમાં ફેરફાર ના કરી શકો, કેમકે આપને અહિં ફેરફાર કરવાની પરવાનગી નથી.',
+'restriction-type'            => 'પરવાનગી:',
 
 # Restrictions (nouns)
 'restriction-edit' => 'બદલો',
@@ -505,8 +591,9 @@ $messages = array(
 'month'         => ':મહિનાથી (અને પહેલાનાં)',
 'year'          => ':વર્ષથી (અને પહેલાનાં)',
 
-'sp-contributions-blocklog' => 'પ્રતિબંધ સૂચિ',
-'sp-contributions-submit'   => 'શોધો',
+'sp-contributions-newbies-sub' => 'નવા ખાતાઓ માટે',
+'sp-contributions-blocklog'    => 'પ્રતિબંધ સૂચિ',
+'sp-contributions-submit'      => 'શોધો',
 
 # What links here
 'whatlinkshere'       => 'અહિયાં શું જોડાય છે',
@@ -525,7 +612,7 @@ $messages = array(
 'ipbreason'          => 'કારણ',
 'ipbreasonotherlist' => 'બીજું કારણ',
 'ipbother'           => 'અન્ય સમય',
-'ipboptions'         => '2 hours:૨ કલાક,1 day:૧ દિવસ,3 days:૩ દિવસ,1 week:૧ અઠવાડિયું,2 weeks:૨ અઠવાડિયું,1 month:૧ માસ,3 months:૩ માસ,6 months:૬ માસ,1 year:૧ વર્ષ,infinite:અમર્યાદ', # display1:time1,display2:time2,...
+'ipboptions'         => '૨ કલાક:2 hours,૧ દિવસ:1 day,૩ દિવસ:3 days,૧ સપ્તાહ:1 week,૨ સપ્તાહ:2 weeks,૧ માસ:1 month,૩ માસ:3 months,૬ માસ:6 months,૧ વર્ષ:1 year,અમર્યાદ:infinite', # display1:time1,display2:time2,...
 'ipbotheroption'     => 'બીજું',
 'ipblocklist'        => 'પ્રતિબંધિત IP સરનામા અને સભ્યોની યાદી',
 'ipblocklist-submit' => 'શોધો',
@@ -534,9 +621,21 @@ $messages = array(
 'unblocklink'        => 'પ્રતિબંધ હટાવો',
 'contribslink'       => 'યોગદાન',
 'blocklogpage'       => 'પ્રતિબંધ સૂચિ',
+'blocklogentry'      => '[[$1]] પર પ્રતિબંધ $2 $3 સુધી મુકવામાં આવ્યો છે.',
 
 # Move page
+'movearticle'             => 'આ પાનાનું નામ બદલો:',
+'newtitle'                => 'આ નવું નામ આપો:',
+'move-watch'              => 'આ પાનું ધ્યાનમાં રાખો',
+'movepagebtn'             => 'પાનું ખસેડો',
+'pagemovedsub'            => 'પાનું સફળતા પૂર્વક ખસેડવામાં આવ્યું છે',
+'movepage-moved'          => '<big>\'\'\'"$1" નું નામ બદલીને "$2" કરવામાં આવ્યું છે\'\'\'</big>', # The two titles are passed in plain text as $3 and $4 to allow additional goodies in the message.
+'articleexists'           => 'આ નામનું પાનું અસ્તિત્વમાં છે, અથવાતો તમે પસંદ કરેલું નામ અસ્વિકાર્ય છો.
+કૃપા કરી અન્ય નામ પસંદ કરો.',
+'movedto'                 => 'બદલ્યા પછીનું નામ',
+'movetalk'                => 'સંલગ્ન ચર્ચાનું પાનું પણ ખસેડો',
 '1movedto2'               => '[[$1]] નું નામ બદલી ને [[$2]] કરવામાં આવ્યું છે.',
+'movelogpage'             => 'નામ ફેર માહિતિ પત્રક',
 'movereason'              => 'કારણ',
 'revertmove'              => 'પૂર્વવત',
 'delete_and_move'         => 'હટાવો અને નામ બદલો',
@@ -554,6 +653,9 @@ $messages = array(
 # Thumbnails
 'thumbnail-more'  => 'વિસ્તૃત કરો',
 'thumbnail_error' => 'નાની છબી (થંબનેઇલ-thumbnail) બનાવવામાં ત્રુટિ: $1',
+
+# Import log
+'importlogpage' => 'આયાત માહિતિ પત્રક',
 
 # Tooltip help for the actions
 'tooltip-pt-userpage'             => 'મારૂં પાનું',
@@ -610,13 +712,15 @@ $messages = array(
 # Media information
 'file-info-size'       => '($1 × $2 પીક્સલ, ફાઇલનું કદ: $3, MIME પ્રકાર: $4)',
 'file-nohires'         => '<small>આથી વધુ આવર્તન ઉપલબ્ધ નથી.</small>',
+'svg-long-desc'        => '(SVG ફાઇલ, માત્ર $1 × $2 પીક્સલ, ફાઇલનું કદ: $3)',
 'show-big-image'       => 'મહત્તમ આવર્તન',
 'show-big-image-thumb' => '<small>આ પુર્વાવલોકનનું પરિમાણ: $1 × $2 પીક્સલ</small>',
 
-# Special:Newimages
-'noimages' => 'જોવા માટે કશું નથી.',
-'ilsubmit' => 'શોધો',
-'bydate'   => 'તારીખ પ્રમાણે',
+# Special:NewImages
+'newimages' => 'નવી ફાઇલોની ઝાંખી',
+'noimages'  => 'જોવા માટે કશું નથી.',
+'ilsubmit'  => 'શોધો',
+'bydate'    => 'તારીખ પ્રમાણે',
 
 # Metadata
 'metadata'          => 'મૅટાડેટા',
@@ -659,7 +763,7 @@ $messages = array(
 
 # External editor support
 'edit-externally'      => 'બાહ્ય સોફ્ટવેર વાપરીને આ ફાઇલમાં ફેરફાર કરો',
-'edit-externally-help' => 'વધુ માહિતિ માટે જુઓ: [http://meta.wikimedia.org/wiki/Help:External_editors setup instructions]',
+'edit-externally-help' => 'વધુ માહિતિ માટે જુઓ: [http://www.mediawiki.org/wiki/Manual:External_editors setup instructions]',
 
 # 'all' in various places, this might be different for inflected languages
 'recentchangesall' => 'બધા',
@@ -690,6 +794,9 @@ $messages = array(
 'watchlisttools-view' => 'બંધબેસતાં ફેરફારો નિહાળો',
 'watchlisttools-edit' => 'ધ્યાનસૂચી જુઓ અને બદલો',
 'watchlisttools-raw'  => 'કાચી ધ્યાનસૂચિમાં ફેરફાર કરો',
+
+# Special:Version
+'version' => 'આવૃત્તિ', # Not used as normal message but as header for the special page itself
 
 # Special:SpecialPages
 'specialpages' => 'ખાસ પાનાં',

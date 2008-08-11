@@ -3,8 +3,12 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 	echo "FlaggedRevs extension\n";
 	exit( 1 );
 }
-
 wfLoadExtensionMessages( 'ProblemPages' );
+wfLoadExtensionMessages( 'FlaggedRevs' );
+
+if( !defined('READER_FEEDBACK_SIZE') )
+	define('READER_FEEDBACK_SIZE',15);
+
 class ProblemPages extends SpecialPage
 {
     function __construct() {
@@ -53,7 +57,7 @@ class ProblemPages extends SpecialPage
 	}
 
 	protected function showPageList() {
-		global $wgOut, $wgUser, $wgLang;
+		global $wgOut;
 		$pager = new ProblemPagesPager( $this, array(), $this->namespace, $this->tag );
 		if( $pager->getNumRows() ) {
 			$wgOut->addHTML( wfMsgExt('problempages-list', array('parse') ) );
@@ -77,7 +81,10 @@ class ProblemPages extends SpecialPage
 			else
 				$stxt = ' <small>' . wfMsgExt('historysize', array('parsemag'), $wgLang->formatNum( $size ) ) . '</small>';
 		}
-		return "<li>$link $stxt ($hist) [<b>{$row->rfp_ave_val}</b>]</li>";
+		$ratinghist = SpecialPage::getTitleFor( 'RatingHistory' );
+		$graph = $this->skin->makeKnownLinkObj( $ratinghist, wfMsg('problempages-graphs'), 
+			'target='.$title->getPrefixedUrl() );
+		return "<li>$link $stxt ($hist) ($graph)</li>";
 	}
 }
 
@@ -112,6 +119,16 @@ class ProblemPagesPager extends AlphabeticPager {
 		$conds[] = 'rfp_page_id = page_id';
 		$conds['rfp_tag'] = $this->tag;
 		$conds['page_namespace'] = $this->namespace;
+		// Has to be bad enough
+		$x = 3;
+		if( $this->tag == 'overall' ) {
+			global $wgFlaggedRevsFeedbackTags;
+			$s = 3*array_sum($wgFlaggedRevsFeedbackTags);
+			$x = intval( floor($s/count($wgFlaggedRevsFeedbackTags)) );
+		}
+		$conds[] = "rfp_ave_val < $x";
+		// Reasonable sample
+		$conds[] = 'rfp_count >= '.READER_FEEDBACK_SIZE;
 		return array(
 			'tables' => array('reader_feedback_pages','page'),
 			'fields' => 'page_namespace,page_title,page_len,rfp_ave_val',

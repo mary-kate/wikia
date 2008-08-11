@@ -4,12 +4,10 @@
  * @ingroup Language
  * @file
  *
+ * @author Maartenvdbent
  * @author Pyt
  * @author Snakesteuben
- * @author Siebrand
  * @author לערי ריינהארט
- * @author SPQRobin
- * @author Maartenvdbent
  */
 
 $skinNames = array(
@@ -372,10 +370,10 @@ De behearder hat dizze útlis joen:
 <p>$1</p>',
 'missing-article'      => 'Yn de database is gjin ynhâld oantroffen foar de side "$1" dy\'t der wol wêze moatte soe ($2). 
 
-Dat kin foarkomme as Jo in ferâldere ferwizing nei it ferskil tusken twa ferzjes fan in side folgje of in ferzje opfreegje dy\'t fuorthelle is.
+Dat kin foarkomme as Jo in ferâldere ferwizing nei it ferskil tusken twa ferzjes fan in side folgje of in ferzje opfreegje dy\'t wiske is.
 
 As dat net sa is, hawwe Jo faaks in fout yn \'e software fûn.
-Meitsje dêr melding fan by in systeembehearder fan {{SITENAME}} en neam dêrby de URL fan dizze side.',
+Meitsje dêr melding fan by in [[Special:ListUsers/sysop|systeembehearder]] fan {{SITENAME}} en neam dêrby de URL fan dizze side.',
 'missingarticle-rev'   => '(ferzjenûmer: $1)',
 'missingarticle-diff'  => '(Feroaring: $1, $2)',
 'readonly_lag'         => 'De database is automatysk beskoattele wylst de ûndergeskikte databaseservers syngronisearje mei de haadserver.',
@@ -424,14 +422,15 @@ De oanfierde reden is ''$2''.",
 
 # Login and logout pages
 'logouttitle'                => 'Ofmelde',
-'logouttext'                 => "<strong>Jo binne no ôfmeld.</strong><br />
+'logouttext'                 => "<strong>Jo binne no ôfmeld.</strong>
+
 Jo kinne de {{SITENAME}} fierders anonym brûke,
-of jo op 'e nij oanmelde ûnder deselde of in oare namme.
+of jo op 'e [[Special:UserLogin|nij oanmelde]] ûnder deselde of in oare namme.
 Mûglik wurdt noch in tal siden werjûn as wiene Jo oanmeld, oant Jo de cache fan Jo browser leegje.",
 'welcomecreation'            => '<h2>Wolkom, $1!</h2><p>Jo ynstellings bin oanmakke.
 Ferjit net se oan jo foarkar oan te passen.',
 'loginpagetitle'             => 'Oanmelde',
-'yourname'                   => 'Jo brûkersnamme',
+'yourname'                   => 'Jo brûkersnamme:',
 'yourpassword'               => 'Jo wachtwurd',
 'yourpasswordagain'          => 'Jo wachtwurd (nochris)',
 'remembermypassword'         => 'Oare kear fansels oanmelde.',
@@ -590,10 +589,6 @@ Jou beide gegevens op as jo earne oer dizze blokkade reagearje.",
 'blockededitsource'                => "Hjir ûnder stiet de tekst fan '''jo bewurkings''' oan '''$1''':",
 'whitelistedittitle'               => 'Foar bewurkjen is oanmelden ferplichte',
 'whitelistedittext'                => 'Jo moatte $1 om siden te bewurkjen.',
-'whitelistreadtitle'               => 'Foar lêstagong is oanmelden ferplichte',
-'whitelistreadtext'                => '[[Special:Userlogin|Meld jo oan]] foar lêstagong ta siden.',
-'whitelistacctitle'                => 'Jo kinnne gjin brûker registreareje',
-'whitelistacctext'                 => 'Jo moatte [[Special:Userlogin|oanmeld]] wêze en de krekte rjochten hawwe om brûkers oan te meitsjen yn {{SITENAME}}.',
 'confirmedittitle'                 => 'Netpostbefêstiging frege foar bewurkjen',
 'confirmedittext'                  => "Jo moatte jo e-mailadres befêstichje foar't jo siden feroarje kinne. Fier in e-mailedres yn by jo [[Special:Preferences|ynstellings]] en befêstichje it.",
 'nosuchsectiontitle'               => 'Dizze subkop bestiet net',
@@ -608,8 +603,7 @@ Jou beide gegevens op as jo earne oer dizze blokkade reagearje.",
 Om sels tekst te meistjsen kinne jo dy gewoan yntype in dit bewurkingsfjild
 ([[{{MediaWiki:Helppage}}|Mear ynformaasje oer bewurkjen]].)
 Oars kinne jo tebek mei de tebek-knop fan jo blêder.",
-'anontalkpagetext'                 => "----
-''Dit is de oerlisside fan in ûnbekinde brûker; in brûker dy't him/har net oanmeld hat. Om't der gjin namme bekend is, wurdt it Ynternet-adres brûkt om oan te jaan wa. Mar faak is it sa dat sa'n adres net altyd troch deselde persoan brûkt wurdt. As jo it idee hawwe dat jo as ûnbekinde brûker opmerkings foar in oar krije, dan kinne jo jo [[Special:Userlogin|oanmelde]], sadat jo allinnich opmerkings foar josels krije.''",
+'anontalkpagetext'                 => "----''Dit is de oerlisside fan in ûnbekende meidogger; in meidogger dy't him/har net oanmeld hat. Om't der gjin namme bekend is, wurdt it Ynternet-adres brûkt om oan te jaan wa. Mar faak is it sa dat sa'n adres net altyd troch deselde persoan brûkt wurdt. As jo it idee hawwe dat jo as ûnbekende meidogger opmerkings foar in oar krije, dan kinne jo [[Special:UserLogin/signup|in meidogger namme oanmeitsje]], of jo [[Special:UserLogin|oanmelde]], sadat jo allinnich opmerkings foar josels krije.''",
 'noarticletext'                    => 'Der stjit noch gjin tekst op dizze side. Jo kinne
 [[Special:Search/{{PAGENAME}}|hjirboppe nei dy tekst sykje]], of [{{fullurl:{{FULLPAGENAME}}|action=edit}} de side skriuwe].',
 'userpage-userdoesnotexist'        => 'Jo bewurkje in brûkersside fan in brûker dy\'t net bestiet (brûker "$1").
@@ -626,7 +620,7 @@ Kontrolearje oft jo dizze side wol oanmeitsje/bewurkje wolle.',
 'previewnote'                      => '<strong>Tink der om dat dizze side noch net fêstlein is!</strong>',
 'previewconflict'                  => 'Dizze side belanget allinich it earste bewurkingsfjild oan.',
 'session_fail_preview'             => "<strong>Spitich! Jo bewurking is net ferwurke, om't de sessygegevens ferlern gien binne.
-Besykje it nochris. As it dan noch net slagget, meld jo dan ôf en wer oan.</strong>",
+Besykje it nochris. As it dan noch net slagget, [[Special:UserLogout|meld jo dan ôf]] en wer oan.</strong>",
 'token_suffix_mismatch'            => "<strong>Jo bewurking is wegere om't jo blêder de lêstekens yn it bewurkingstoken ûnkrekt behannele hat.
 De bewurking is wegere om skeinen fan 'e sidetekst tefoaren te kommen.
 Dat bart soms as der in webbasearre proxytsjinst brûkt wurdt dy't flaters befettet.</strong>",
@@ -666,7 +660,7 @@ It wie baas en nim de tekst foar letter oer yn in tekstbestân.</strong>',
 {{PLURAL:$1|kategory|kategoryen}}:',
 'nocreatetitle'                    => 'It oanmeitsjen fan siden is beheind',
 'nocreatetext'                     => '{{SITENAME}} hat de mûglikheid beheind om nije siden te meitsjen.
-Jo kinne al besteande siden feroarje of jo kinne [[Special:Userlogin|jo oanmelde of in brûker oanmeitsje]].',
+Jo kinne al besteande siden feroarje of jo kinne [[Special:UserLogin|jo oanmelde of in brûker oanmeitsje]].',
 'nocreate-loggedin'                => 'Jo kinne gjin nije siden meitsje op {{SITENAME}}.',
 'permissionserrors'                => 'Flaters yn rjochten',
 'permissionserrorstext'            => 'Jo hawwe gjin rjochtem dit te dwaan om de folgjende {{PLURAL:$1|reden|redenen}}:',
@@ -684,7 +678,10 @@ No binne it $1, wylst it minder as $2 wêze moatte.',
 'post-expand-template-argument-category'  => "Siden dy't missende sjabloaneleminten befetsje",
 
 # "Undo" feature
+'undo-success' => 'De feroaring kin werom set wurde. Kontrolearje de ferliking hjirûnder om wis te wêzen dat jo dit feroarje wolle en druk dan op fêstlizze om it werom setten troch te fieren.',
 'undo-failure' => 'De feroaring kin net ûngedien makke wurde fanwege oare stridige bewurkings.',
+'undo-norev'   => 'De feroaring kin werom set wurde, omdat it net bestiet of is wiske.',
+'undo-summary' => 'Werom sette fan ferzje $1 fan [[Special:Contributions/$2|$2]] ([[User talk:$2|Oerlis]])',
 
 # Account creation failure
 'cantcreateaccounttitle' => 'Registrearjen is mislearre.',
@@ -711,9 +708,51 @@ Gean nei of de keppeling dy jo brûkt hawwe wol goed is.",
 'deletedrev'          => '[fuorthelle]',
 'histfirst'           => 'Aldste',
 'histlast'            => 'Nijste',
+'historysize'         => '({{PLURAL:$1|1 byte|$1 bytes}})',
+'historyempty'        => '(leech)',
 
 # Revision feed
+'history-feed-title'          => 'Sideskiednis',
+'history-feed-description'    => 'Sideskiednis foar dizze side op de wiki',
 'history-feed-item-nocomment' => '$1 op $2', # user at time
+
+# Revision deletion
+'rev-deleted-comment'     => '(opmerking wiske)',
+'rev-deleted-user'        => '(meidoggernamme wiske)',
+'rev-delundel'            => 'sjen litte/ferbergje',
+'revisiondelete'          => 'Wiskje/weromsette ferzjes',
+'revdelete-nooldid-title' => 'Gjin doelferzje',
+'revdelete-selected'      => 'Spesifisearre {{PLURAL:$2|ferzje|ferzjes}} fan [[:$1]]:',
+'logdelete-selected'      => '{{PLURAL:$1|keazen lochboekregel|keazen lochboekregels}}:',
+'revdelete-hide-user'     => 'Meidoggernamme/IP fan de meidogger ferskûlje',
+'revdelete-hide-image'    => 'Triem ynhâld ferskûlje',
+'pagehist'                => 'Sideskiednis',
+'deletedhist'             => 'Wiske skiednis',
+'revdelete-content'       => 'ynhâld',
+'revdelete-uname'         => 'meidoggernamme',
+'revdelete-unhid'         => '$1 net mear ferburgen',
+'revdelete-log-message'   => '$1 foar $2 {{PLURAL:$2|ferzje|ferzjes}}',
+'logdelete-log-message'   => '$1 foar $2 {{PLURAL:$2|lochboekregel|lochboekregels}}',
+
+# History merging
+'mergehistory'                     => 'Skiednis fan kombinearjen',
+'mergehistory-box'                 => 'Ferzjes fan twa siden kombinearje:',
+'mergehistory-from'                => 'Triemnamme boarne:',
+'mergehistory-into'                => 'Bestimmingside:',
+'mergehistory-go'                  => "Besjen bewurkings dy't kombinearre wurde kinne",
+'mergehistory-submit'              => 'Kombinearje ferzjes',
+'mergehistory-empty'               => 'Gjin ferzjes kinne kombinearren wurde.',
+'mergehistory-success'             => 'Kombinearjen slagge fan $3 {{PLURAL:$3|ferzje|ferzjes}} fan [[:$1]] no [[:$2]].',
+'mergehistory-fail'                => 'It is net mooglik de skiednis te kombinearje; kontrolearje nochris de side en tiidparameters.',
+'mergehistory-no-source'           => 'Boarneside $1 bestiet net.',
+'mergehistory-no-destination'      => 'Doelside $1 bestiet net.',
+'mergehistory-invalid-source'      => 'De titel fan de boarneside moet jildich wêze.',
+'mergehistory-invalid-destination' => 'De titel fan de doelside moet jildich wêze.',
+'mergehistory-autocomment'         => '[[:$1]] kombinearre mei [[:$2]]',
+'mergehistory-comment'             => '[[:$1]] kombinearre mei [[:$2]]: $3',
+
+# Merge log
+'pagemerge-logentry' => '[[$1]] kombinearre mei [[$2]] (maksimaal $3 ferzjes)',
 
 # Diffs
 'history-title'           => 'Skiednis fan "$1"',
@@ -724,34 +763,54 @@ Gean nei of de keppeling dy jo brûkt hawwe wol goed is.",
 'diff-multi'              => '({{PLURAL:$1|Ien tuskenlizzende ferzje wurdt|$1 tuskenlizzende ferzjes wurde}} net sjen litten.)',
 
 # Search results
-'searchresults'         => 'Sykresultaat',
-'searchresulttext'      => '[[{{MediaWiki:Helppage}}|{{int:help}}]]; Ynformaasje oer it sykjen troch de {{SITENAME}}.',
-'searchsubtitle'        => 'Foar fraach "[[:$1]]"',
-'searchsubtitleinvalid' => 'Foar fraach "$1"',
-'noexactmatch'          => "'''Der is gjin side mei krekt de titel \"\$1\".'''
+'searchresults'             => 'Sykresultaat',
+'searchresulttext'          => 'Lês foar mear ynformaasje oer it sykjen yn de {{SITENAME}} de [[{{MediaWiki:Helppage}}|{{int:help}}]].',
+'searchsubtitle'            => 'Foar fraach "[[:$1]]"',
+'searchsubtitleinvalid'     => 'Foar fraach "$1"',
+'noexactmatch'              => "'''Der is gjin side mei krekt de titel \"\$1\".'''
 Jo kinne de [[:\$1|side oanmeitsje]].",
-'titlematches'          => 'Titels',
-'notitlematches'        => 'Gjin titels',
-'textmatches'           => 'Siden',
-'notextmatches'         => 'Gjin siden',
-'prevn'                 => 'foarige $1',
-'nextn'                 => 'folgende $1',
-'viewprevnext'          => '($1) ($2) ($3) besjen.',
-'showingresults'        => '<b>$1</b> resultaten fan <b>$2</b> ôf.',
-'showingresultsnum'     => '<b>$3</b> resultaten fan <b>$2</b> ôf.',
-'nonefound'             => 'As der gjin resultaten binne, tink der dan om dat der <b>net</b> socht
+'noexactmatch-nocreate'     => "'''Der is gjin side mei krekt de titel \"\$1\".'''",
+'titlematches'              => 'Titels',
+'notitlematches'            => 'Gjin titels',
+'textmatches'               => 'Siden',
+'notextmatches'             => 'Gjin siden',
+'prevn'                     => 'foarige $1',
+'nextn'                     => 'folgende $1',
+'viewprevnext'              => '($1) ($2) ($3) besjen.',
+'search-result-size'        => '$1 ({{PLURAL:$2|1 wurd|$2 wurden}})',
+'search-result-score'       => 'Relevante: $1%',
+'search-redirect'           => '(trochferwizing $1)',
+'search-section'            => '(seksje $1)',
+'search-suggest'            => 'Bedoele jo: $1',
+'search-interwiki-caption'  => 'Susterprojekten',
+'search-interwiki-default'  => '$1 resultaten:',
+'search-interwiki-more'     => '(mear)',
+'search-mwsuggest-enabled'  => 'mei suggestjes',
+'search-mwsuggest-disabled' => 'gjin suggestjes',
+'search-relatedarticle'     => 'Besibbe',
+'searchrelated'             => 'besibbe',
+'searchall'                 => 'alle',
+'showingresults'            => "{{PLURAL:$1|'''1''' resultaat|'''$1''' resultaten}} fan #'''$2''' ôf.",
+'showingresultsnum'         => "{{PLURAL:$3|'''1''' resultaat|'''$3''' resultaten}} fan #'''$2''' ôf.",
+'showingresultstotal'       => "It binne hjirûnder  {{PLURAL:$3|resultaat '''$1''' fan '''$3'''|resultaten '''$1 - $2''' fan '''$3'''}}",
+'nonefound'                 => 'As der gjin resultaten binne, tink der dan om dat der <b>net</b> socht
 wurde kin om wurden as "it" en "in", om\'t dy net byhâlden wurde, en dat as der mear
 wurden syke wurde, allinnich siden fûn wurde wêr\'t <b>alle</b> worden op fûn wurde.',
-'powersearch'           => 'Sykje',
-'searchdisabled'        => "<p>Op it stuit stjit it trochsykjen fan tekst net oan, om't de
+'powersearch'               => 'Sykje',
+'powersearch-legend'        => 'Sykje',
+'powersearch-ns'            => 'Sykje op nammeromten:',
+'powersearch-field'         => 'Sykje op',
+'search-external'           => 'Ekstern sykjen',
+'searchdisabled'            => "<p>Op it stuit stjit it trochsykjen fan tekst net oan, om't de
 tsjinner it net oankin. Mei't we nije apparatuer krije wurdt it nei alle gedanken wer
 mooglik. Foar now kinne jo sykje fia Google:</p>",
 
 # Preferences page
 'preferences'              => 'Ynstellings',
 'mypreferences'            => 'Myn foarkarynstellings',
+'prefs-edits'              => 'Tal bewurkings:',
 'prefsnologin'             => 'Net oanmeld',
-'prefsnologintext'         => 'Jo moatte [[Special:Userlogin|oanmeld]] wêze om jo ynstellings te feroarjen.',
+'prefsnologintext'         => 'Jo moatte [[Special:UserLogin|oanmeld]] wêze om jo ynstellings te feroarjen.',
 'prefsreset'               => "De ynstellings binne tebek set sa't se fêstlein wienen.",
 'qbsettings'               => 'Menu',
 'qbsettings-none'          => 'Ut',
@@ -770,6 +829,15 @@ mooglik. Foar now kinne jo sykje fia Google:</p>",
 'math_unknown_function'    => 'Unbekinde funksje',
 'math_lexing_error'        => 'Unbekind wurd',
 'math_syntax_error'        => 'Sinboufout',
+'math_bad_tmpdir'          => 'De tydlike formulepad kin net skreaun of makke wêze.',
+'math_bad_output'          => 'De formulepad kin net skreaun of makke wêze.',
+'math_notexvc'             => 'It programma texvc net fûn; sjoch math/README te ynstallearjen.',
+'prefs-personal'           => 'Persoanlike gegevens',
+'prefs-rc'                 => 'Koartlyn feroare',
+'prefs-watchlist'          => 'Folchlist',
+'prefs-watchlist-days'     => 'Oantal dagen yn folchlist sjen litte:',
+'prefs-watchlist-edits'    => 'Tal wizigings om sjen te litten yn de útwreide folchlist:',
+'prefs-misc'               => 'Ferskaat',
 'saveprefs'                => 'Ynstellings fêstlizze',
 'resetprefs'               => 'Ynstellings tebek sette',
 'oldpassword'              => 'Ald wachtwurd',
@@ -782,108 +850,166 @@ mooglik. Foar now kinne jo sykje fia Google:</p>",
 'resultsperpage'           => 'Treffers de side',
 'contextlines'             => 'Rigels ynhâld de treffer:',
 'contextchars'             => 'Tekens fan de ynhâld de rigel:',
+'recentchangesdays'        => 'Dagen om sjen te litten yn Koartlyn feroare:',
 'recentchangescount'       => "Nûmer of titels op 'Koarts feroare'",
 'savedprefs'               => 'Jo ynstellings binne fêstlein.',
+'timezonelegend'           => 'Tiidsône',
 'timezonetext'             => 'Jou it tal fan oeren dat jo tiidsône ferskilt fan UTC (Greenwich).',
 'localtime'                => 'Jo tiidsône',
 'timezoneoffset'           => 'Ferskil',
 'servertime'               => 'UTC',
 'guesstimezone'            => 'Freegje de blêder',
 'allowemail'               => 'Netpost fan oare meidoggers tastean',
+'prefs-searchoptions'      => 'Sykje-ynstellings',
+'prefs-namespaces'         => 'Nammeromten',
 'defaultns'                => "Nammeromten dy't normaal trochsocht wurde:",
+'default'                  => 'standert',
+'files'                    => 'Triemen',
 
 # User rights
-'userrights'  => 'Behear fan meidoggerrjochten', # Not used as normal message but as header for the special page itself
-'editinguser' => "Bewurkje '''[[User:$1|$1]]''' ([[User talk:$1|{{int:talkpagelinktext}}]] | [[Special:Contributions/$1|{{int:contribslink}}]])",
+'userrights'                  => 'Behear fan meidoggerrjochten', # Not used as normal message but as header for the special page itself
+'userrights-lookup-user'      => 'Behear fan meidoggerrjochten',
+'userrights-user-editname'    => 'Meidoggernamme:',
+'editusergroup'               => 'Wizigje meidoggerrjochten',
+'editinguser'                 => "Bewurkje meidoggerrjochten fan '''[[User:$1|$1]]''' ([[User talk:$1|{{int:talkpagelinktext}}]] | [[Special:Contributions/$1|{{int:contribslink}}]])",
+'userrights-editusergroup'    => 'Wizigje meidoggerrjochten',
+'saveusergroups'              => 'Meidoggerrjochten fêstlizze',
+'userrights-groupsmember'     => 'Sit yn group:',
+'userrights-reason'           => 'Utlis foar wizigjen:',
+'userrights-no-interwiki'     => "Jo hawwe gjin rjochten om meidoggerrjochten op oare wiki's te wizigjen.",
+'userrights-nologin'          => 'Jo moatte jo [[Special:UserLogin|oanmelde]] as rjochtenútfurder om rjochten fan meidoggers wizigje te kinnen.',
+'userrights-notallowed'       => 'Jo hawwe gjin rjochten om rjochten fan meidoggers te wizigjen.',
+'userrights-changeable-col'   => "Groepen dy't jo beheare kinne",
+'userrights-unchangeable-col' => "Groepen dy't jo net beheare kinne",
 
-'grouppage-sysop' => '{{ns:project}}:Behearders',
+# Groups
+'group'            => 'Groep:',
+'group-user'       => 'Meidoggers',
+'group-bot'        => 'Bots',
+'group-sysop'      => 'Behearders',
+'group-bureaucrat' => 'Rjochtenútfurders',
+'group-all'        => '(alle)',
+
+'group-user-member'       => 'Meidogger',
+'group-bot-member'        => 'Bot',
+'group-sysop-member'      => 'Behearder',
+'group-bureaucrat-member' => 'Rjochtenútfurder',
+
+'grouppage-user'       => '{{ns:project}}:Meidoggers',
+'grouppage-bot'        => '{{ns:project}}:Bots',
+'grouppage-sysop'      => '{{ns:project}}:Behearders',
+'grouppage-bureaucrat' => '{{ns:project}}:Rjochtenútfurders',
+
+# Rights
+'right-read'                 => 'Siden sjen',
+'right-edit'                 => 'Siden bewurkjen',
+'right-createpage'           => 'Siden oanmeitsjen (net oerlissiden)',
+'right-createtalk'           => 'Oerlissiden oanmeitsjen',
+'right-minoredit'            => 'Bydragen markearje as tekstwiziging',
+'right-move'                 => 'Siden werneamen',
+'right-upload'               => 'Triemmen oanbieden',
+'right-reupload'             => 'In besteande triem oerskriuwen',
+'right-upload_by_url'        => 'Triemen oanbieden fia in URL',
+'right-delete'               => 'Siden wiskjen',
+'right-bigdelete'            => 'Wiskjen siden mei grutte skiednis',
+'right-deleterevision'       => 'Spesifisearre ferzjes fan siden wiskjen',
+'right-importupload'         => 'Ymportearjen siden fan in triemoanbied',
+'right-userrights'           => 'Alle meidoggerrjochten bywurkje',
+'right-userrights-interwiki' => "Wizigje meidoggerrjochten fan meidoggers yn oare wiki's",
 
 # User rights log
-'rightslog' => 'Brûkersrjochte-lochboek',
+'rightslog'      => 'Brûkersrjochte-lochboek',
+'rightslogtext'  => 'Hjirûnder binne de wizigjen fan meidoggerrjochten.',
+'rightslogentry' => 'groep is feroare foar meidogger $1 fan $2 no $3',
+'rightsnone'     => '(gjin)',
 
 # Recent changes
-'nchanges'                       => '$1 {{PLURAL:$1|bewurking|bewurkings}}',
-'recentchanges'                  => 'Koarts feroare',
-'recentchangestext'              => 'De lêste feroarings fan de {{SITENAME}}.',
-'recentchanges-feed-description' => 'Mei dizze feed kinne jo de nijste feroarings yn dizze wiki besjen.',
-'rcnote'                         => 'Dit binne de lêste <strong>$1</strong> feroarings yn de lêste <strong>$2</strong> dagen.',
-'rcnotefrom'                     => 'Dit binne de feroarings sûnt <b>$2</b> (maksimaal <b>$1</b>).',
-'rclistfrom'                     => 'Jou nije feroarings, begjinnende mei $1',
-'rcshowhideminor'                => 'lytse feroarings $1',
-'rcshowhidebots'                 => 'bots $1',
-'rcshowhideliu'                  => 'oanmelde brûkers $1',
-'rcshowhideanons'                => 'anonime brûkers $1',
-'rcshowhidepatr'                 => 'kontrolearre bewurkings $1',
-'rcshowhidemine'                 => 'myn bewurkings $1',
-'rclinks'                        => 'Jou $1 nije feroarings yn de lêste $2 dagen; $3 tekstwiziging',
-'diff'                           => 'ferskil',
-'hist'                           => 'skiednis',
-'hide'                           => 'gjin',
-'show'                           => 'al',
-'minoreditletter'                => 'T',
-'newpageletter'                  => 'N',
-'boteditletter'                  => 'b',
+'nchanges'                          => '$1 {{PLURAL:$1|bewurking|bewurkings}}',
+'recentchanges'                     => 'Koarts feroare',
+'recentchangestext'                 => 'De lêste feroarings fan de {{SITENAME}}.',
+'recentchanges-feed-description'    => 'Mei dizze feed kinne jo de nijste feroarings yn dizze wiki besjen.',
+'rcnote'                            => "Dit {{PLURAL:$1|is de lêste feroaring|binne de lêste '''$1''' feroarings}} yn de lêste {{PLURAL:$2|dei|'''$2''' dagen}}, fan $4 $5.",
+'rcnotefrom'                        => 'Dit binne de feroarings sûnt <b>$2</b> (maksimaal <b>$1</b>).',
+'rclistfrom'                        => 'Jou nije feroarings, begjinnende mei $1',
+'rcshowhideminor'                   => 'lytse feroarings $1',
+'rcshowhidebots'                    => 'bots $1',
+'rcshowhideliu'                     => 'oanmelde brûkers $1',
+'rcshowhideanons'                   => 'anonime brûkers $1',
+'rcshowhidepatr'                    => 'kontrolearre bewurkings $1',
+'rcshowhidemine'                    => 'myn bewurkings $1',
+'rclinks'                           => 'Jou $1 nije feroarings yn de lêste $2 dagen; $3 tekstwiziging',
+'diff'                              => 'ferskil',
+'hist'                              => 'skiednis',
+'hide'                              => 'gjin',
+'show'                              => 'al',
+'minoreditletter'                   => 'T',
+'newpageletter'                     => 'N',
+'boteditletter'                     => 'b',
+'number_of_watching_users_pageview' => '[$1 folgjende {{PLURAL:$1|meidogger|meidoggers}}]',
+'rc_categories'                     => 'Alline kategoryen (skiede mei in "|")',
+'newsectionsummary'                 => '/* $1 */ nije seksje',
 
 # Recent changes linked
 'recentchangeslinked'          => 'Folgje keppelings',
 'recentchangeslinked-title'    => 'Feroarings yn ferbân mei "$1"',
 'recentchangeslinked-noresult' => "Der hawwe gjin bewurkings yn 'e bedoelde perioade west op'e siden dy't hjirwei linke wurde.",
-'recentchangeslinked-summary'  => "Dizze spesjale side lit de lêste bewurkings sjen op siden dy't linke wurde fan dizze side ôf. Siden dy't op [[Special:Watchlist|jo folchlist]] steane, wurde '''tsjûk''' werjûn.",
+'recentchangeslinked-summary'  => "Dizze spesjale side lit de lêste bewurkings sjen op siden dy't keppele wurde fan in spesifisearre side ôf (of fan in spesifisearre Kategory ôf). Siden dy't op [[Special:Watchlist|jo folchlist]] steane, wurde '''tsjûk''' werjûn.",
+'recentchangeslinked-page'     => 'Sidenamme:',
 
 # Upload
-'upload'            => 'Bied bestân oan',
-'uploadbtn'         => 'Bied bestân oan',
-'reupload'          => "Op 'e nij oanbiede",
-'reuploaddesc'      => 'Werom nei oanbied-side.',
-'uploadnologin'     => 'Net oanmelde',
-'uploadnologintext' => 'Jo moatte [[Special:Userlogin|oanmeld]] wêze om in bestân oanbieden te kinnen.',
-'uploaderror'       => 'Oanbied-fout',
-'uploadtext'        => "'''STOP!''' Lês ear't jo eat oanbiede
-de regels foar ôfbyldbrûk foar de {{SITENAME}}.
+'upload'                     => 'Bied bestân oan',
+'uploadbtn'                  => 'Bied bestân oan',
+'reupload'                   => "Op 'e nij oanbiede",
+'reuploaddesc'               => 'Werom nei oanbied-side.',
+'uploadnologin'              => 'Net oanmelde',
+'uploadnologintext'          => 'Jo moatte [[Special:UserLogin|oanmeld]] wêze om in bestân oanbieden te kinnen.',
+'upload_directory_read_only' => 'De webserver kin net skriuwe yn de oanbiedpad ($1).',
+'uploaderror'                => 'Oanbied-fout',
+'uploadtext'                 => "Om't nije triemmen oan te bieden, brûke jo de ûndersteande fekjes. Earder oanbeane triemmen, kinne jo fine op de [[Special:ImageList|list of oanbeane ôfbylden]].
+Wat oanbean en wat wiske wurdt, wurdt delskreaun yn it [[Special:Log/upload|lochboek]].
 
-Earder oanbeane ôfbylden, kinne jo fine op de
-[[Special:Imagelist|list of oanbeane ôfbylden]].
-Wat oanbean en wat wiske wurdt, wurdt delskreaun yn it
-[[Special:Log/delete|lochboek]].
-
-Om't nije ôfbylden oan te bieden, kieze jo in bestân út sa't dat
-normaal is foar jo blêder en bestjoersysteem.
-Dan jouwe jo oan jo gjin auteursrjocht skeine troch it oanbieden.
-Mei \"Bied oan\" begjinne jo dan it oanbieden.
-Dit kin efkes duorje as jo Ynternet-ferbining net sa flug is.
-
-Foar de bestânsfoarm wurdt foto's JPEG oanret, foar tekenings ensfh. PNG, en foar
-lûden OGG. Brûk in dúdlike bestânsnamme, sa't in oar ek wit wat it is.
-
-Om it ôfbyld yn in side op te nimmen, meitsje jo dêr sa'n keppeling:<br />
-'''<nowiki>[[</nowiki>{{ns:image}}<nowiki>:jo_foto.jpg|omskriuwing]]</nowiki>''' of
-'''<nowiki>[[</nowiki>{{ns:image}}<nowiki>:jo_logo.png|omskriuwing]]</nowiki>''';
-en foar lûden '''<nowiki>[[</nowiki>{{ns:media}}<nowiki>:jo_lûd.ogg]]</nowiki>'''.
-
-Tink derom dat oaren bewurkje kinne wat jo oanbiede, as dat better is foar de {{SITENAME}},
-krekt's sa't dat foar siden jildt, en dat jo útsletten wurde kinne as jo misbrûk
-meitsje fan it systeem..",
-'uploadlog'         => 'oanbied log',
-'uploadlogpage'     => 'Oanbied_log',
-'uploadlogpagetext' => 'Liste fan de lêst oanbeane bestannen.
+Om de triem yn in side op te nimmen, meitsje jo dêr sa'n keppeling:
+*'''<nowiki>[[</nowiki>{{ns:image}}<nowiki>:jo_foto.jpg]]</nowiki>''',
+*'''<nowiki>[[</nowiki>{{ns:image}}<nowiki>:jo_logo.png|omskriuwing]]</nowiki>''', of
+*'''<nowiki>[[</nowiki>{{ns:media}}<nowiki>:jo_lûd.ogg]]</nowiki>''', foar direkt keppeling fan mediatriemmen dy't gjin ôfbylden binne.",
+'upload-prohibited'          => 'Ferbouden triemtypes: $1.',
+'uploadlog'                  => 'oanbied log',
+'uploadlogpage'              => 'Oanbied_log',
+'uploadlogpagetext'          => 'Liste fan de lêst oanbeane bestannen.
 (Tiid oanjûn as UTC).',
-'filename'          => 'Bestânsnamme',
-'filedesc'          => 'Omskriuwing',
-'uploadedfiles'     => 'Oanbeane bestannen',
-'badfilename'       => 'De ôfbyldnamme is feroare nei "$1".',
-'successfulupload'  => 'Oanbieden slagge.',
-'uploadwarning'     => 'Oanbied waarskôging',
-'savefile'          => 'Lis bestân fêst',
-'uploadedimage'     => ' "[[$1]]" oanbean',
-'uploaddisabled'    => 'Sorry, op dizze tsjinner kin net oanbean wurde.',
+'filename'                   => 'Bestânsnamme',
+'filedesc'                   => 'Omskriuwing',
+'fileuploadsummary'          => 'Gearfetting:',
+'filestatus'                 => 'Auteursrjochtensituaasje:',
+'filesource'                 => 'Boarne:',
+'uploadedfiles'              => 'Oanbeane bestannen',
+'ignorewarning'              => 'Negearje de warskôging en lis triem dochs fêst.',
+'ignorewarnings'             => 'Negearje warskôgings',
+'minlength1'                 => 'Triemnammen moatte minstens út ien teken bestean.',
+'badfilename'                => 'De ôfbyldnamme is feroare nei "$1".',
+'successfulupload'           => 'Oanbieden slagge.',
+'uploadwarning'              => 'Oanbied waarskôging',
+'savefile'                   => 'Lis bestân fêst',
+'uploadedimage'              => ' "[[$1]]" oanbean',
+'uploaddisabled'             => 'Sorry, op dizze tsjinner kin net oanbean wurde.',
+'sourcefilename'             => 'Triemnamme boarne:',
+'destfilename'               => 'Triemnamme om op te slaan:',
+'watchthisupload'            => 'Folgje dizze side',
+'filename-bad-prefix'        => 'De namme fan de triem dy\'t jo oanbied begjint mei <strong>"$1"</strong>, dit wiist op in namme dy\'t automatysk troch in digitale kamera oanmakke wurdt. Feroarje de namme as jo wolle yn ien dy\'t in omskriuwing jout fan de triem.',
 
-# Special:Imagelist
+'license' => 'Lisinsje:',
+
+# Special:ImageList
+'imgfile'        => 'triem',
 'imagelist'      => 'Ofbyld list',
 'imagelist_name' => 'Namme',
 
 # Image description page
 'filehist'                  => 'Triemskiednis',
 'filehist-help'             => "Klik op in datum/tiid om de triem te sjen sa't er doedestiids wie.",
+'filehist-deleteall'        => 'wiskje alles',
+'filehist-deleteone'        => 'wiskje dizze',
+'filehist-revert'           => 'werom sette',
 'filehist-current'          => 'rinnend',
 'filehist-datetime'         => 'Datum/tiid',
 'filehist-user'             => 'Brûker',
@@ -898,6 +1024,22 @@ meitsje fan it systeem..",
 'noimage-linktext'          => 'oplade',
 'uploadnewversion-linktext' => 'In nije ferzje fan dizze triem oplade',
 
+# File reversion
+'filerevert'         => '$1 weromsette',
+'filerevert-legend'  => 'Triem weromsette',
+'filerevert-comment' => 'Oanmerking:',
+'filerevert-submit'  => 'werom sette',
+
+# File deletion
+'filedelete'                  => 'Wiskje $1',
+'filedelete-legend'           => 'Wiskje triem',
+'filedelete-intro-old'        => "Jo wiskje de ferzje fan '''[[Media:$1|$1]]''' fan [$4 $3, $2].",
+'filedelete-comment'          => 'Reden foar it wiskjen:',
+'filedelete-submit'           => 'Wiskje',
+'filedelete-success'          => "'''$1''' is wiske.",
+'filedelete-otherreason'      => 'Oare/eventuele reden:',
+'filedelete-reason-otherlist' => 'Oare reden',
+
 # MIME search
 'mimesearch' => 'Sykje op MIME-type',
 
@@ -908,7 +1050,8 @@ meitsje fan it systeem..",
 'listredirects' => 'List fan trochferwizings',
 
 # Unused templates
-'unusedtemplates' => 'Net brûkte sjabloanen',
+'unusedtemplates'    => 'Net brûkte sjabloanen',
+'unusedtemplateswlh' => 'oare keppelings',
 
 # Random page
 'randompage' => 'Samar in side',
@@ -920,46 +1063,50 @@ meitsje fan it systeem..",
 'statistics'    => 'Statistyk',
 'sitestats'     => 'Side statistyk',
 'userstats'     => 'Brûker statistyk',
-'sitestatstext' => "It tal fan siden in de {{SITENAME}} is: <b>$2</b>.<br />
-(Oerlissiden, siden oer de {{SITENAME}}, oare bysûndere siden, stobben en trochferwizings yn de databank binne dêrby net meiteld.)<br />
-It tal fan siden in de databank is: <b>$1</b>.
+'sitestatstext' => "It {{PLURAL:$1|is '''1''' side|binne '''$1''' siden}} yn de databank.
+Oerlissiden, siden oer de {{SITENAME}}, stobben, trochferwizings, en oare bysûndere siden, binne dêrby meiteld. Sûnder dizze siden, it {{PLURAL:$2|is '''1''' side|binne '''$2''' siden}} mei materiaal en ynhâld. 
 
-'''$8''' files have been uploaded.
+'''$8''' {{PLURAL:$8|triem wurdt|triemmen wurde}} al oanbied.
 
-Der is <b>$3</b> kear in side opfrege, en <b>$4</b> kear in side bewurke, sûnt it programma bywurke is (15 oktober 2002). Dat komt yn trochslach del op <b>$5</b> kear bewurke de side, en <b>$6</b> kear opfrege de bewurking.
+Der {{PLURAL:$3|is '''1''' sidelêzing|binne '''$3''' sidelêzings}}, en '''$4''' {{PLURAL:$4|bewurking|bewurkings}} sûnt {{SITENAME}} begûnen. Dat komt yn trochslach del op '''$5''' bewurkings per side, en '''$6''' lêzings per bewurking.  
 
-The [http://www.mediawiki.org/wiki/Manual:Job_queue job queue] length is '''$7'''.",
-'userstatstext' => 'It tal fan registreare brûkers is <b>$1</b>.
-It tal fan behearders dêrfan is: <b>$2</b>.',
+De lingte fan de [http://www.mediawiki.org/wiki/Manual:Job_queue job queue] is '''$7'''.",
+'userstatstext' => "It tal fan registrearre meidoggers is '''{{PLURAL:$1|1|$1}}'''.
+It tal fan meidoggers dêrfan mei $5rjochten is '''{{PLURAL:$2|1|$2}}''' (of '''{{PLURAL:$4|1|$4}}''').",
 
 'disambiguations'      => 'Trochverwizings',
 'disambiguationspage'  => 'Project:trochferwizing',
-'disambiguations-text' => 'Dizze siden binne keppele fia in [[MediaWiki:Disambiguationspage]].
-Se soenen mei de side sels keppele wurde moatte.<br />
-(Allinnich siden út deselde nammeromte binne oanjûn.)',
+'disambiguations-text' => "De ûndersteande siden keppelje mei in '''Betsjuttingssiden'''.
+Se soenen mei de side sels keppele wurde moatte.<br /> In side wurdt sjoen as betsjuttingssiden, as de side ien berjocht fan [[MediaWiki:Disambiguationspage]] brûkt.",
 
-'doubleredirects'     => 'Dûbele trochverwizings',
+'doubleredirects'     => 'Dûbele trochferwizings',
 'doubleredirectstext' => '<b>Let op!</b> Der kinne missen yn dizze list stean!
 Dat komt dan ornaris troch oare keppelings ûnder de "#REDIRECT".<br />
 Eltse rigel jout keppelings nei de earste en twadde trochverwizing, en dan de earste regel fan
 de twadde trochferwizing, wat it "echte" doel wêze moat.',
 
-'brokenredirects'     => 'Misse trochferwizings',
-'brokenredirectstext' => "Dizze trochferwizings ferwize nei siden dy't der net binne.",
+'brokenredirects'        => 'Misse trochferwizings',
+'brokenredirectstext'    => "Dizze trochferwizings ferwize nei siden dy't der net binne.",
+'brokenredirects-edit'   => '(bewurkje)',
+'brokenredirects-delete' => '(wiskje)',
 
-'withoutinterwiki' => 'Siden sûnder links nei oare talen',
+'withoutinterwiki'        => 'Siden sûnder links nei oare talen',
+'withoutinterwiki-submit' => 'Sjen litte',
 
 'fewestrevisions' => 'Siden mei de minste bewurkings',
 
 # Miscellaneous special pages
-'nbytes'                  => '$1 byte',
-'nlinks'                  => '$1 keer keppele',
+'nbytes'                  => '$1 {{PLURAL:$1|byte|bytes}}',
+'ncategories'             => '$1 {{PLURAL:$1|kategory|kategoryen}}',
+'nlinks'                  => '$1 {{PLURAL:$1|keppeling|keppelings}}',
 'nmembers'                => '$1 {{PLURAL:$1|ynskriuwing|ynskriuwings}}',
-'nviews'                  => '$1 kear sjoen',
+'nrevisions'              => '$1 {{PLURAL:$1|ferzje|ferzjes}}',
+'nviews'                  => '{{PLURAL:$1|1 kear|$1 kear}} sjoen',
+'specialpage-empty'       => 'Gjin resultaten foar dit rapport.',
 'lonelypages'             => 'Lossteande siden',
 'uncategorizedpages'      => 'Net-kategorisearre siden',
 'uncategorizedcategories' => 'Net-kategorisearre kategoryen',
-'uncategorizedimages'     => 'Net-kategorisearre ôfbyldings',
+'uncategorizedimages'     => 'Net-kategorisearre triemen',
 'uncategorizedtemplates'  => 'Net-kategorisearre sjabloanen',
 'unusedcategories'        => 'Net-brûkte kategoryen',
 'unusedimages'            => 'Lossteande ôfbylden',
@@ -970,23 +1117,26 @@ de twadde trochferwizing, wat it "echte" doel wêze moat.',
 'mostlinkedcategories'    => "Kategoryen dêr't it meast nei ferwiisd wurdt",
 'mostlinkedtemplates'     => 'Meast brûkte sjabloanen',
 'mostcategories'          => 'Siden mei de measte kategoryen',
-'mostimages'              => 'Meast brûkte ôfbyldings',
+'mostimages'              => 'Meast brûkte triemmen',
 'mostrevisions'           => 'Siden mei de measte bewurkings',
 'prefixindex'             => 'Alle siden neffens foarheaksel',
 'shortpages'              => 'Koarte siden',
 'longpages'               => 'Lange siden',
 'deadendpages'            => 'Siden sûnder links',
 'protectedpages'          => 'Befeilige siden',
+'protectedpagestext'      => 'De neikommende siden binne skoattele foar werneamen of wizigjen',
 'listusers'               => 'Brûkerlist',
 'newpages'                => 'Nije siden',
+'newpages-username'       => 'Meidoggernamme:',
 'ancientpages'            => 'Alde siden',
 'move'                    => 'Ferskowe nei oare namme',
-'movethispage'            => 'Move this side',
+'movethispage'            => 'Werneam dizze side',
 'unusedimagestext'        => '<p>Tink derom dat ore web sides lykas fan de oare
 parten fan it meartaliche projekt mei in keppeling nei in direkte URL nei
 an ôfbyld makke hawwe kinne. Dan wurde se noch brûke, mar stean al in dizze list.',
 'notargettitle'           => 'Gjin side',
 'notargettext'            => 'Jo hawwe net sein oer hokfoar side jo dit witte wolle.',
+'pager-older-n'           => '{{PLURAL:$1|1 âlder|$1 âlder}}',
 
 # Book sources
 'booksources' => 'Boekynformaasje',
@@ -998,8 +1148,9 @@ an ôfbyld makke hawwe kinne. Dan wurde se noch brûke, mar stean al in dizze li
 'all-logs-page'        => 'Alle lochboeken',
 'alllogstext'          => 'Kombinearre loch de {{SITENAME}}.
 Jo kinne it oersjoch beheine troch in loch, in meidoggernamme of in side oan te jaan.',
+'logempty'             => 'Gjin treffers yn it loch.',
 
-# Special:Allpages
+# Special:AllPages
 'allpages'          => 'Alle siden',
 'alphaindexline'    => "$1 oan't $2",
 'nextpage'          => 'Folgjende side ($1)',
@@ -1017,15 +1168,24 @@ Jo kinne it oersjoch beheine troch in loch, in meidoggernamme of in side oan te 
 'categories'         => 'Kategoryen',
 'categoriespagetext' => 'Dizze wiki hat de neikommende kategoryen:',
 
+# Special:ListUsers
+'listusersfrom'    => 'Lit meidoggers sjen fanôf:',
+'listusers-submit' => 'Sjen litte',
+
+# Special:ListGroupRights
+'listgrouprights-group'  => 'Groep',
+'listgrouprights-rights' => 'Rjochten',
+
 # E-mail user
 'mailnologin'     => 'Gjin adres beskikber',
-'mailnologintext' => 'Jo moatte [[Special:Userlogin|oanmeld]] wêze, en in jildich e-postadres [[Special:Preferences|ynsteld]] hawwe, om oan oare brûkers e-post stjoere te kinnen.',
+'mailnologintext' => 'Jo moatte [[Special:UserLogin|oanmeld]] wêze, en in jildich e-postadres [[Special:Preferences|ynsteld]] hawwe, om oan oare brûkers e-post stjoere te kinnen.',
 'emailuser'       => 'Skriuw dizze brûker',
-'emailpage'       => 'E-post nei brûker',
+'emailpage'       => 'E-post nei meidogger',
 'emailpagetext'   => "As dizze brûker in jildich e-postadres in ynsteld hat,
 dan kinne jo ien berjocht ferstjoere.
 It e-postadres dat jo ynsteld hawwe wurdt brûkt as de ôfstjoerder, sa't de ûntfanger
 antwurdzje kin.",
+'defemailsubject' => 'E-post fan {{SITENAME}}',
 'noemailtitle'    => 'Gjin e-postadres',
 'noemailtext'     => 'Dizze brûker had gjin jildich e-postadres ynsteld,
 of hat oanjaan gjin post fan oare brûkers krije te wollen.',
@@ -1043,9 +1203,9 @@ of hat oanjaan gjin post fan oare brûkers krije te wollen.',
 'watchlistfor'         => "(foar '''$1''')",
 'nowatchlist'          => 'Jo hawwe gjin siden op jo folchlist.',
 'watchnologin'         => 'Not oanmeld in',
-'watchnologintext'     => 'Jo moatte [[Special:Userlogin|oanmeld]] wêze om jo folchlist te feroarjen.',
+'watchnologintext'     => 'Jo moatte [[Special:UserLogin|oanmeld]] wêze om jo folchlist te feroarjen.',
 'addedwatch'           => 'Oan folchlist tafoege',
-'addedwatchtext'       => "De side \"'''[[:\$1]]'''\" is tafoege oan jo [[Special:Watchlist|folchlist]]. Bewurkings fan dizze side en oerlisside wurde yn de takomst op jo folchlist oanjûn. Hja wurde foar jo ek '''fet''' printe op [[Special:Recentchanges|Koartlyn feroare]].
+'addedwatchtext'       => "De side \"'''[[:\$1]]'''\" is tafoege oan jo [[Special:Watchlist|folchlist]]. Bewurkings fan dizze side en oerlisside wurde yn de takomst op jo folchlist oanjûn. Hja wurde foar jo ek '''fet''' printe op [[Special:RecentChanges|Koartlyn feroare]].
 
 At jo letter in side net mear folgje wolle, dan brûke jo op dy side de keppeling \"Ferjit dizze side.\" Jo [[Special:Watchlist|folchlist]] hat ek in keppeling \"Jo folchlist bewurkje,\" foar at jo mear as ien side \"ferjitte\" wolle.",
 'removedwatch'         => 'Net mear folgje',
@@ -1056,12 +1216,12 @@ At jo letter in side net mear folgje wolle, dan brûke jo op dy side de keppelin
 'unwatchthispage'      => 'Ferjit dizze side',
 'notanarticle'         => 'Dit kin net folge wurde.',
 'watchnochange'        => "Fan de siden dy't jo folgje is der yn dizze perioade net ien feroare.",
-'watchlist-details'    => 'Jo folchlist hat $1 siden (oerlissiden net meiteld).',
+'watchlist-details'    => 'Jo folchlist hat {{PLURAL:$1|$1 side|$1 siden}}, oerlissiden net meiteld.',
 'watchmethod-recent'   => 'Koarts feroare ...',
 'watchmethod-list'     => 'Folge ...',
-'watchlistcontains'    => 'Jo folgje op it stuit $1 siden.',
+'watchlistcontains'    => 'Jo folgje op it stuit $1 {{PLURAL:$1|side|siden}}.',
 'iteminvalidname'      => 'Misse namme: "$1" ...',
-'wlnote'               => 'Dit binne de lêste <strong>$1</strong> feroarings yn de lêste <strong>$2</strong> oeren.',
+'wlnote'               => "Dit {{PLURAL:$1|is de lêste feroaring|binne de lêste '''$1''' feroarings}} yn de lêste {{PLURAL:$2|oer|'''$2''' oeren}}.",
 'wlshowlast'           => 'Lêste $1 oeren, $2 dagen sjen litte ($3)',
 'watchlist-hide-bots'  => 'Botbewurkings ferskûlje',
 'watchlist-hide-own'   => 'Myn bewurkings ferskûlje',
@@ -1071,15 +1231,42 @@ At jo letter in side net mear folgje wolle, dan brûke jo op dy side de keppelin
 'watching'   => "Dwaande mei op'e folchlist te setten ...",
 'unwatching' => "Dwaande mei fan'e folchlist ôf te heljen ...",
 
-'changed' => 'feroare',
-'created' => 'oanmakke',
+'enotif_newpagetext' => 'Dit is in nije side.',
+'changed'            => 'feroare',
+'created'            => 'oanmakke',
+'enotif_body'        => 'Bêste $WATCHINGUSERNAME,
+
+De {{SITENAME}}side \'$PAGETITLE\' is op $PAGEEDITDATE $CHANGEDORCREATED troch meidogger $PAGEEDITOR; 
+sjoch $PAGETITLE_URL foar de aktuele ferzje.
+
+$NEWPAGE
+
+Gearfetting: $PAGESUMMARY $PAGEMINOREDIT
+
+Foar oerlis mei meidogger $PAGEEDITOR:
+- netpost: $PAGEEDITOR_EMAIL
+- wiki: $PAGEEDITOR_WIKI
+
+Fierdere meldings wurde jo net tastjoerd, oant jo de side lêzen hawwe. Op jo folchlist kinne jo op \'e nij meldings foar al jo folge siden freegje.
+
+                 Jo freonlike {{SITENAME}}-meldingssysteem.
+
+-- 
+Gean nei {{fullurl:{{ns:special}}:Watchlist/edit}}
+om jo folchlistynstellings te feroarjen.
+
+Reaksjes en fierdere help:
+{{fullurl:{{MediaWiki:Helppage}}}}',
 
 # Delete/protect/revert
 'deletepage'                  => 'Wisk side',
 'confirm'                     => 'Befêstigje',
 'excontent'                   => "ynhâld wie: '$1'",
+'excontentauthor'             => "ynhâld wie: '$1' (en de ienige bewurker wie: '[[Special:Contributions/$2|$2]]')",
 'exbeforeblank'               => "foar de tekst wiske wie, wie dat: '$1'",
 'exblank'                     => 'side wie leech',
+'delete-confirm'              => '"$1" wiskje',
+'delete-legend'               => 'Wiskje',
 'historywarning'              => "Waarskôging: De side dy't jo wiskje wolle hat skiednis:",
 'confirmdeletetext'           => 'Jo binne dwaande mei it foar altyd wiskjen fan in side
 of ôfbyld, tegearre mei alle skiednis, út de databank.
@@ -1088,7 +1275,7 @@ is en dat jo dit dogge neffens de [[{{MediaWiki:Policy-url}}]].',
 'actioncomplete'              => 'Dien',
 'deletedtext'                 => '"<nowiki>$1</nowiki>" is wiske.
 Sjoch "$2" foar in list fan wat resint wiske is.',
-'deletedarticle'              => '"$1" is wiske',
+'deletedarticle'              => '"[[$1]]" is wiske',
 'dellogpage'                  => 'Wisk_loch',
 'dellogpagetext'              => 'Dit is wat der resint wiske is.
 (Tiden oanjûn as UTC).',
@@ -1097,7 +1284,12 @@ Sjoch "$2" foar in list fan wat resint wiske is.',
 'deletecomment'               => 'Reden foar it wiskjen',
 'deleteotherreason'           => 'Oare/eventuele reden:',
 'deletereasonotherlist'       => 'Oare reden',
+'deletereason-dropdown'       => '*Faak-brûkte redenen
+** Frege troch de skriuwer
+** Skeining fan auteursrjocht
+** Fandalisme',
 'rollback'                    => 'Feroarings tebeksette',
+'rollback_short'              => 'Werom sette',
 'rollbacklink'                => 'feroaring tebeksette',
 'rollbackfailed'              => 'Feroaring tebeksette net slagge',
 'cantrollback'                => "Disse feroaringt kin net tebek set, om't der mar ien skriuwer is.",
@@ -1107,8 +1299,13 @@ inoar hat de feroaring tebekset, of oars wat oan de side feroare.
 
 De lêste feroaring wie fan [[User:$3|$3]] ([[User talk:$3|Oerlis]]).',
 'editcomment'                 => 'De gearfetting wie: "<i>$1</i>".', # only shown if there is an edit comment
-'revertpage'                  => 'Tebek set ta de ferzje fan "$1"', # Additional available: $3: revid of the revision reverted to, $4: timestamp of the revision reverted to, $5: revid of the revision reverted from, $6: timestamp of the revision reverted from
+'revertpage'                  => 'Feroarings werom set fan [[Special:Contributions/$2|$2]] ([[User talk:$2|Oerlis]]) nei de lêste ferzje fan [[User:$1|$1]]', # Additional available: $3: revid of the revision reverted to, $4: timestamp of the revision reverted to, $5: revid of the revision reverted from, $6: timestamp of the revision reverted from
+'rollback-success'            => 'Feroarings werom set fan $1; werom set nei de lêste ferzje fan $2.',
 'protectlogpage'              => 'Befeiligingslochboek',
+'protectlogtext'              => 'Hjirûnder wurdt it skoattele en frijjaan fan siden oanjûn. 
+Sjoch [[Special:ProtectedPages|Skoattele side]] foar mear ynformaasje.',
+'protectedarticle'            => '"[[$1]]" skoattele',
+'unprotectedarticle'          => 'joech "[[$1]]" frij',
 'protect-legend'              => 'Befeiliging befêstigje',
 'protectcomment'              => 'Oanmerkings:',
 'protectexpiry'               => 'Doer:',
@@ -1129,21 +1326,44 @@ Dit binne de rinnende ynstellings foar de side <strong>$1</strong>:",
 'protect-cantedit'            => "Jo kinne it befeiligingsnivo fan dizze side net feroarje, om't jo gjin rjochten hawwe om it te bewurkjen.",
 'restriction-type'            => 'Rjochten:',
 'restriction-level'           => 'Beheiningsnivo:',
+'minimum-size'                => 'Min. grutte',
+'maximum-size'                => 'Max. grutte:',
+'pagesize'                    => '(bytes)',
 
 # Restrictions (nouns)
+'restriction-edit'   => 'Wizigje',
+'restriction-move'   => 'Werneam',
 'restriction-create' => 'Oanmeitsje',
 
+# Restriction levels
+'restriction-level-sysop'         => 'folslein skoattele',
+'restriction-level-autoconfirmed' => 'skoattele foar anonymen',
+'restriction-level-all'           => "alle nivo's",
+
 # Undelete
-'undelete'          => 'Side werom set',
-'undeletepage'      => 'Side besjen en werom sette',
-'undeletepagetext'  => 'Dizze siden binne wiske, mar sitte noch yn it argyf en kinne weromset wurde.
+'undelete'                => 'Side werom set',
+'undeletepage'            => 'Side besjen en werom sette',
+'viewdeletedpage'         => 'Wiske siden besjen',
+'undeletepagetext'        => 'Dizze siden binne wiske, mar sitte noch yn it argyf en kinne weromset wurde.
 (It argyf kin út en troch leechmeitsje wurde.)',
-'undeleterevisions' => '$1 ferzjes in it argyf',
-'undeletehistory'   => 'Soenen jo dizze side weromsette, dan wurde alle ferzjes weromset as part
+'undelete-fieldset-title' => 'Ferzjes werom sette',
+'undeleteextrahelp'       => "Om in side hielendal werom te setten, lit alle seleksjefakjes iepen en klik '''''Weromsette'''''. Om in bepaalde ferzje werom te setten, klik de fakjes dy't mei de ferzjes oerienkomme, en klik '''''Weromsette'''''. Klik '''''Leechmeitsje''''' om it kommentaar fjild ensafuorthinne leech te meitsjen.",
+'undeleterevisions'       => '$1 {{PLURAL:$1|ferzje|ferzjes}} in it argyf',
+'undeletehistory'         => 'Soenen jo dizze side weromsette, dan wurde alle ferzjes weromset as part
 fan de skiednis. As der in nije side is mei dizze namme, dan wurd de hjoeddeise ferzje <b>net</b>
 troch de lêste ferzje út dy weromsette skiednis ferfangen.',
-'undeletebtn'       => 'Weromset!',
-'undeletedarticle'  => '"$1" weromset',
+'undelete-revision'       => 'Wiske ferzje fan $1 (op $2) fan $3:',
+'undelete-nodiff'         => 'Gjin eardere ferzje fûn.',
+'undeletebtn'             => 'Weromset!',
+'undeletelink'            => 'werom sette',
+'undeletereset'           => 'Leechmeitsje',
+'undeletecomment'         => 'Utlis foar weromsetten:',
+'undeletedarticle'        => '"$1" weromset',
+'undelete-header'         => 'Sjoch [[Special:Log/delete|de wiskloch]] foar resint wiske siden.',
+'undelete-search-box'     => 'Sykje wiske siden',
+'undelete-search-prefix'  => "Lit siden sjen dy't begjinne mei:",
+'undelete-search-submit'  => 'Sykje',
+'undelete-no-results'     => 'Gjin oerienkommende siden fûn yn it wisk argyf.',
 
 # Namespace form on various pages
 'namespace'      => 'Nammerûmte:',
@@ -1161,47 +1381,74 @@ troch de lêste ferzje út dy weromsette skiednis ferfangen.',
 
 'sp-contributions-newbies-sub' => 'Foar nijlingen',
 'sp-contributions-blocklog'    => 'Blokkearlochboek',
+'sp-contributions-search'      => 'Sykje nei bydragen',
+'sp-contributions-username'    => 'IP Adres of meidoggernamme:',
+'sp-contributions-submit'      => 'Sykje',
 
 # What links here
-'whatlinkshere'       => 'Wat is hjirmei keppele',
-'whatlinkshere-title' => "Siden dy't ferwize nei $1",
-'whatlinkshere-page'  => 'Side:',
-'linklistsub'         => '(List fan keppelings)',
-'linkshere'           => 'Dizze siden binne hjirmei keppele:',
-'nolinkshere'         => 'Gjinien side is hjirmei keppele!',
-'isredirect'          => 'trochverwizing',
-'istemplate'          => 'ynfoege as sjabloan',
-'whatlinkshere-prev'  => '{{PLURAL:$1|foargeande|foargeande $1}}',
-'whatlinkshere-next'  => '{{PLURAL:$1|folgjende|folgjende $1}}',
-'whatlinkshere-links' => '← links dêrnei ta',
+'whatlinkshere'            => 'Wat is hjirmei keppele',
+'whatlinkshere-title'      => 'Siden dy\'t ferwize nei "$1"',
+'whatlinkshere-page'       => 'Side:',
+'linklistsub'              => '(List fan keppelings)',
+'linkshere'                => "Dizze siden binne keppele oan '''[[:$1]]''':",
+'nolinkshere'              => "Der binne gjin siden oan '''[[:$1]]''' keppele.",
+'nolinkshere-ns'           => "Gjin siden yn de keazen nammeromte keppelje nei '''[[:$1]]'''.",
+'isredirect'               => 'trochferwizing',
+'istemplate'               => 'ynfoege as sjabloan',
+'isimage'                  => 'byld keppeling',
+'whatlinkshere-prev'       => '{{PLURAL:$1|foargeande|foargeande $1}}',
+'whatlinkshere-next'       => '{{PLURAL:$1|folgjende|folgjende $1}}',
+'whatlinkshere-links'      => '← links dêrnei ta',
+'whatlinkshere-hideredirs' => '$1 trochferwizings',
+'whatlinkshere-hidetrans'  => '$1 trânsklúzjes',
+'whatlinkshere-hidelinks'  => '$1 keppelings',
 
 # Block/unblock
-'blockip'            => 'Slút brûker út',
-'blockip-legend'     => 'Slút brûker út',
-'blockiptext'        => "Brûk dizze fjilden om in brûker fan skriuwtagong út te sluten.
+'blockip'             => 'Slút brûker út',
+'blockip-legend'      => 'Slút brûker út',
+'blockiptext'         => "Brûk dizze fjilden om in brûker fan skriuwtagong út te sluten.
 Dit soe allinnich omwillens fan fandalisme dwaan wurde moatte, sa't de
 [[{{MediaWiki:Policy-url}}|útslut-rie]] it oanjout.
 Meld de krekte reden! Begelyk, neam de siden dy't oantaaste waarden.",
-'ipaddress'          => 'Brûkernamme of Ynternet-adres',
-'ipbreason'          => 'Reden',
-'ipbsubmit'          => 'Slut dizze brûker út',
-'ipboptions'         => '15 minuten:15 min,1 oere:1 hour,2 oeren:2 hours,6 oeren:6 hours,12 oeren:12 hours,1 dei:1 day,3 dagen:3 days,1 wike:1 week,2 wiken:2 weeks,1 moanne:1 month,3 moanne:3 months,6 moanne:6 months,1 jier:1 year,ûnbeheind:infinite', # display1:time1,display2:time2,...
-'badipaddress'       => 'Dy brûker bestiet net',
-'blockipsuccesssub'  => 'Utsluting slagge',
-'blockipsuccesstext' => 'Brûker [[Special:Contributions/$1|$1]] is útsletten.<br />
-(List fan [[Special:Ipblocklist|útslette brûkers]].)',
-'unblockip'          => 'Lit brûker der wer yn',
-'unblockiptext'      => 'Brûk dizze fjilden om in brûker wer skriuwtagong te jaan.',
-'ipusubmit'          => 'Lit dizze brûker der wer yn',
-'ipblocklist'        => 'List fan útsletten Ynternet-adressen en brûkersnammen',
-'blocklistline'      => '"$3", troch "$2" op $1 ($4)',
-'blocklink'          => 'slut út',
-'unblocklink'        => 'lit yn',
-'contribslink'       => 'bydragen',
-'autoblocker'        => 'Jo wiene útsletten om\'t jo ynternet-adres oerienkomt mei dat fan "[[User:$1|$1]]". Foar it útsluten fan dy meidogger waard dizze reden jûn: "$2".',
-'blocklogpage'       => 'Blokkearlochboek',
-'blocklogentry'      => 'blokkearre "[[$1]]" foar de doer fan $2 $3',
-'blocklogtext'       => 'Dit is in loch fan it útsluten en talitten fan meidoggers. Fansels útsletten net-adressen binne net opnaam. Sjoch de [[Special:Ipblocklist|útsletlist]] foar de no jildende utslettings.',
+'ipaddress'           => 'Brûkernamme of Ynternet-adres',
+'ipadressorusername'  => 'IP Adres of meidoggernamme:',
+'ipbexpiry'           => 'Ferrint nei:',
+'ipbreason'           => 'Reden',
+'ipbreasonotherlist'  => 'Oare reden',
+'ipbanononly'         => 'Slút allinich anonyme meidoggers út',
+'ipbcreateaccount'    => 'Blokkearje it oanmeitsjen fan in nij profyl',
+'ipbenableautoblock'  => "Automatysk de lêste IP adressen útslute dy't troch dizze meidogger brûkt binne.",
+'ipbsubmit'           => 'Slut dizze brûker út',
+'ipbother'            => 'In oare tiid:',
+'ipboptions'          => '15 minuten:15 min,1 oere:1 hour,2 oeren:2 hours,6 oeren:6 hours,12 oeren:12 hours,1 dei:1 day,3 dagen:3 days,1 wike:1 week,2 wiken:2 weeks,1 moanne:1 month,3 moanne:3 months,6 moanne:6 months,1 jier:1 year,ûnbeheind:infinite', # display1:time1,display2:time2,...
+'ipbotheroption'      => 'oare tiid',
+'ipbotherreason'      => 'Oare/eventuele reden:',
+'badipaddress'        => 'Dy brûker bestiet net',
+'blockipsuccesssub'   => 'Utsluting slagge',
+'blockipsuccesstext'  => 'Brûker [[Special:Contributions/$1|$1]] is útsletten.<br />
+(List fan [[Special:IPBlockList|útslette brûkers]].)',
+'ipb-unblock-addr'    => 'Lit $1 yn',
+'ipb-unblock'         => 'Lit in meidogger of IP-adres yn',
+'ipb-blocklist-addr'  => 'Besteande útsluting foar $1 besjen',
+'ipb-blocklist'       => 'Besteande útslutings besjen',
+'unblockip'           => 'Lit brûker der wer yn',
+'unblockiptext'       => 'Brûk dizze fjilden om in brûker wer skriuwtagong te jaan.',
+'ipusubmit'           => 'Lit dizze brûker der wer yn',
+'ipblocklist'         => 'List fan útsletten Ynternet-adressen en brûkersnammen',
+'ipblocklist-submit'  => 'Sykje',
+'blocklistline'       => '"$3", troch "$2" op $1 ($4)',
+'infiniteblock'       => 'trochgeand',
+'blocklink'           => 'slut út',
+'unblocklink'         => 'lit yn',
+'contribslink'        => 'bydragen',
+'autoblocker'         => 'Jo wiene útsletten om\'t jo ynternet-adres oerienkomt mei dat fan "[[User:$1|$1]]". Foar it útsluten fan dy meidogger waard dizze reden jûn: "$2".',
+'blocklogpage'        => 'Blokkearlochboek',
+'blocklogentry'       => 'blokkearre "[[$1]]" foar de doer fan $2 $3',
+'blocklogtext'        => 'Dit is in loch fan it útsluten en talitten fan meidoggers. Fansels útsletten net-adressen binne net opnaam. Sjoch de [[Special:IPBlockList|útsletlist]] foar de no jildende utslettings.',
+'ipb_expiry_invalid'  => 'Tiid fan ferrinnen is net goed.',
+'ipb_already_blocked' => '"$1" is al útsluten',
+'ipb_cant_unblock'    => 'Flater: It útsluten fan ID $1 kin net fûn wurde. It is miskien al net mear útsluten.',
+'proxyblocksuccess'   => 'Dien.',
 
 # Developer tools
 'lockdb'              => "Meitsje de database 'Net-skriuwe'",
@@ -1225,8 +1472,9 @@ Befêstigje dat dit is wat jo wolle.',
 'unlockdbsuccesstext' => 'De {{SITENAME}} databank is skriuwber makke.',
 
 # Move page
-'move-page-legend' => 'Werneam side',
-'movepagetext'     => "Dit werneamt in side, mei alle sideskiednis.
+'move-page'               => 'Werneam  $1',
+'move-page-legend'        => 'Werneam side',
+'movepagetext'            => "Dit werneamt in side, mei alle sideskiednis.
 De âlde titel wurdt in trochferwizing nei de nije.
 Keppelings mei de âlde side wurde net feroare;
 gean sels nei of't der dûbele of misse ferwizings binne.
@@ -1235,34 +1483,45 @@ It hinget fan jo ôf of't de siden noch keppelen binne sa't it mient wie.
 De side wurdt '''net''' werneamt as der al in side mei dy namme is, útsein as it in side
 sûnder skiednis is en de side leech is of in trochferwizing is. Sa kinne jo in side
 daalks weromneame as jo in flater meitsje, mar jo kinne in oare side net oerskriuwe.",
-'movepagetalktext' => "As der in oerlisside by heart, dan bliuwt dy oan de side keppele, '''útsein''':
+'movepagetalktext'        => "As der in oerlisside by heart, dan bliuwt dy oan de side keppele, '''útsein''':
 *De nije sidenamme yn in oare nammeromte is,
 *Der keppele oan de nije namme al in net-lege oerlisside is, of
 *Jo dêr net foar kieze.
 
 In dizze gefallen is it oan jo hoe't jo de oerlisside werneame of ynfoegje wolle.",
-'movearticle'      => 'Werneam side',
-'movenologin'      => 'Net oameld',
-'movenologintext'  => 'Jo moatte [[Special:Userlogin|oanmeld]] wêze om in side wer te neamen.',
-'newtitle'         => 'As nij titel',
-'move-watch'       => 'Dizze side folgje',
-'movepagebtn'      => 'Werneam side',
-'pagemovedsub'     => 'Werneamen slagge',
-'articleexists'    => 'In side mei dy namme bestiet al of de sidenamme is ûnjildich.
+'movearticle'             => 'Werneam side',
+'newtitle'                => 'As nij titel',
+'move-watch'              => 'Dizze side folgje',
+'movepagebtn'             => 'Werneam side',
+'pagemovedsub'            => 'Werneamen slagge',
+'movepage-moved'          => '<big>\'\'\'"$1" hjit no "$2"\'\'\'</big>', # The two titles are passed in plain text as $3 and $4 to allow additional goodies in the message.
+'articleexists'           => 'In side mei dy namme bestiet al of de sidenamme is ûnjildich.
 Kies in  oare sidenamme a.j.w.',
-'talkexists'       => "It werneamen op sich is slagge, mar de eardere oerlisside is
+'talkexists'              => "It werneamen op sich is slagge, mar de eardere oerlisside is
 net mear keppele om't der foar de nije namme el al in oerlisside wie.
 Gearfoegje de oerlissiden hânmjittig.",
-'movedto'          => 'werenamd as',
-'movetalk'         => 'Derby hearrende oerlisside ferskowe',
-'1movedto2'        => '[[$1]] ferskood nei [[$2]]',
-'1movedto2_redir'  => '[[$1]] ferskood nei [[$2]], wat in synonym wie',
-'movelogpage'      => 'Lochboek fan ferskode siden',
-'movereason'       => 'Reden:',
-'revertmove'       => 'tebekdraaie',
+'movedto'                 => 'werenamd as',
+'movetalk'                => 'Derby hearrende oerlisside ferskowe',
+'movepage-page-moved'     => 'De side $1 is werneamd nei $2.',
+'1movedto2'               => '[[$1]] ferskood nei [[$2]]',
+'1movedto2_redir'         => '[[$1]] ferskood nei [[$2]], wat in synonym wie',
+'movelogpage'             => 'Lochboek fan ferskode siden',
+'movelogpagetext'         => 'Dit is in list fan feroare titels.',
+'movereason'              => 'Reden:',
+'revertmove'              => 'werom sette',
+'delete_and_move'         => 'Wiskje en werneam',
+'delete_and_move_text'    => '== Wiskjen nedich ==
+De doelside "[[:$1]]" is der al. Moat dy wiske wurde om plak te meitsjen foar it werneamen?',
+'delete_and_move_confirm' => 'Ja, wiskje de side',
+'delete_and_move_reason'  => 'Wiske om plak te meitsjen foar in werneamde side',
+'immobile_namespace'      => "De nije titel is yn in nammeromte dêr't gjin siden oan tafoege wurde kinne.",
 
 # Export
-'export' => 'Eksportearje',
+'export'           => 'Eksportearje',
+'export-submit'    => 'Eksportearje',
+'export-addcat'    => 'Tafoegje',
+'export-download'  => 'Fêstlizze as triem',
+'export-templates' => 'Tafoegje berjochten',
 
 # Namespace 8 related
 'allmessages'         => 'Alle wikiberjochten',
@@ -1276,10 +1535,29 @@ Sjoch: [http://www.mediawiki.org/wiki/Localisation MediaWiki Localisation], [htt
 
 # Thumbnails
 'thumbnail-more'  => 'Grutter',
+'filemissing'     => 'Triem net fûn',
 'thumbnail_error' => 'Flater by it oanmeitsjen fan thumbnail: $1',
 
+# Special:Import
+'import'                  => 'Importearje siden',
+'import-interwiki-submit' => 'Ymportearje',
+'importstart'             => 'Siden oan it ymportearjen ...',
+'import-revision-count'   => '$1 {{PLURAL:$1|ferzje|ferzjes}}',
+'importnopages'           => 'Gjin siden te ymportearjen.',
+'importfailed'            => 'Ymport fout: <nowiki>$1</nowiki>',
+'importcantopen'          => 'De ymporttriem koe net iepenen wurde.',
+'importbadinterwiki'      => 'Ferkearde ynterwikiferwizing',
+'importnotext'            => 'Leech of gjin tekst',
+'importsuccess'           => 'Ymport slagge!',
+'importnofile'            => 'Gjin ymporttriem is oanbeane.',
+'import-noarticle'        => 'Gjin side te ymportearjen!',
+'import-nonewrevisions'   => 'Alle ferzjes wurde al ymportearre.',
+'xml-error-string'        => '$1 op regel $2, kolom $3 (byte $4): $5',
+
 # Import log
-'importlogpage' => 'Ymportlochboek',
+'importlogpage'                    => 'Ymportlochboek',
+'import-logentry-upload-detail'    => '$1 {{PLURAL:$1|ferzje|ferzjes}}',
+'import-logentry-interwiki-detail' => '$1 {{PLURAL:$1|ferzje|ferzjes}} fan $2',
 
 # Tooltip help for the actions
 'tooltip-pt-userpage'             => 'Myn brûkersside',
@@ -1299,6 +1577,7 @@ Sjoch: [http://www.mediawiki.org/wiki/Localisation MediaWiki Localisation], [htt
 'tooltip-ca-watch'                => 'Dizze side oan myn folchside tafoegje',
 'tooltip-ca-unwatch'              => 'Dizze side fan myn folchlist ôfhelje',
 'tooltip-search'                  => '{{SITENAME}} trochsykje',
+'tooltip-p-logo'                  => 'Haadside',
 'tooltip-n-mainpage'              => 'Gean nei de haadside',
 'tooltip-n-portal'                => "Oer it projekt: wat'st dwaan kinst, wêr'st dingen fine kinst.",
 'tooltip-n-currentevents'         => 'Eftergrûnynformaasje oer rinnende saken.',
@@ -1325,6 +1604,14 @@ Sjoch: [http://www.mediawiki.org/wiki/Localisation MediaWiki Localisation], [htt
 
 # Attribution
 'anonymous' => 'Anonime meidogger(s) fan {{SITENAME}}',
+'siteuser'  => '{{SITENAME}} meidogger $1',
+'siteusers' => '{{SITENAME}} meidogger(s) $1',
+
+# Spam protection
+'spamprotectiontext' => "De side dy't jo fêstlizze woene is blokkearre troch in spam filter. Dit wurdt wierskynlik feroarsake troch in ferwizing nei in ekstern webstee.",
+
+# Info page
+'infosubtitle' => 'Ynformaasje foar side',
 
 # Math options
 'mw_math_png'    => 'Altiten as PNG ôfbyldzje',
@@ -1334,27 +1621,41 @@ Sjoch: [http://www.mediawiki.org/wiki/Localisation MediaWiki Localisation], [htt
 'mw_math_modern' => 'Oanbefelle foar resinte blêders',
 'mw_math_mathml' => 'MathML',
 
+# Patrolling
+'markaspatrolleddiff'                 => 'Markearje as kontroleare',
+'markaspatrolledtext'                 => 'Markearje dizze side as kontrolearre',
+'markedaspatrolled'                   => 'Markearre as kontrolearre',
+'markedaspatrolledtext'               => 'De selektearre ferzje is markearre as kontrolearre.',
+'markedaspatrollederror'              => 'Kin net as kontrolearre markearre wurde',
+'markedaspatrollederrortext'          => "Jo moatte in ferzje oanjaan dy't jo as kontrolearre markearje.",
+'markedaspatrollederror-noautopatrol' => 'Jo meie jo eigen bewurkings net sels markearre.',
+
 # Browsing diffs
 'previousdiff' => '← Foargeande feroaring',
 'nextdiff'     => 'Folgjende feroaring →',
 
 # Media information
+'imagemaxsize'         => 'Behein ôfmjittings fan ôfbyld op beskriuwingsside ta:',
+'thumbsize'            => 'Mjitte fan miniatueren:',
+'file-info'            => '(triemgrutte: $1, MIME-type: $2)',
 'file-info-size'       => '($1 × $2 pixel, triemgrutte: $3, MIME type: $4)',
 'file-nohires'         => '<small>Gjin hegere resolúsje beskikber.</small>',
 'svg-long-desc'        => '(SVG-triem, nominaal $1 × $2 pixels, triemgrutte: $3)',
 'show-big-image'       => 'Hegere resolúsje',
 'show-big-image-thumb' => '<small>Grutte fan dizze ôfbylding: $1 × $2 pixels</small>',
 
-# Special:Newimages
+# Special:NewImages
 'newimages'     => 'Nije ôfbyldings',
-'imagelisttext' => 'Dit is in list fan $1 ôfbylden, op $2.',
+'imagelisttext' => "Dit is in list fan '''$1''' {{PLURAL:$1|triem|triemen}}, op $2.",
+'showhidebots'  => '(Bots $1)',
+'noimages'      => 'Neat te sjen.',
 'ilsubmit'      => 'Sykje',
 'bydate'        => 'datum',
 
 # Bad image list
 'bad_image_list' => "De opmaak is as folget:
 
-Allinne rigels fan in list dy't begjinne mei * wurde ferwurke. De earste link op in rigel moat in link wêze nei in net winske ôfbylding.
+Allinne rigels fan in list (rigels dy't begjinne mei *) wurde ferwurke. De earste link op in rigel moat in link wêze nei in net winske ôfbylding.
 Alle folgjende links dy't op deselde rigel steane, wurde behannele as útsûndering, lykas bygelyks siden dêr't de ôfbylding yn'e tekst opnommen is.",
 
 # Metadata
@@ -1370,19 +1671,59 @@ Alle folgjende links dy't op deselde rigel steane, wurde behannele as útsûnder
 * fnumber
 * focallength', # Do not translate list items
 
+# EXIF tags
+'exif-imagedescription'    => 'Ofbylding titel',
+'exif-make'                => 'Kamera makker',
+'exif-artist'              => 'Auteur',
+'exif-makernote'           => 'Opmerkings fan makker',
+'exif-usercomment'         => 'Opmerkings',
+'exif-relatedsoundfile'    => 'Besibbe audiotriem',
+'exif-exposuretime-format' => '$1 sek ($2)',
+'exif-gpsdatestamp'        => 'GPS-datum',
+
+'exif-unknowndate' => 'Datum ûnbekend',
+
+'exif-orientation-1' => 'Normaal', # 0th row: top; 0th column: left
+
+'exif-exposureprogram-0' => 'Net bepaald',
+'exif-exposureprogram-2' => 'Normaal programma',
+
+'exif-subjectdistance-value' => '$1 meter',
+
+'exif-meteringmode-0' => 'Unbekend',
+
+'exif-lightsource-0' => 'Unbekend',
+
+'exif-customrendered-0' => 'Normale ferwurking',
+
+'exif-scenecapturetype-0' => 'Standert',
+
+'exif-gaincontrol-0' => 'Gjin',
+
+'exif-contrast-0' => 'Normaal',
+
+'exif-saturation-0' => 'Normaal',
+
+'exif-sharpness-0' => 'Normaal',
+
+'exif-subjectdistancerange-0' => 'Unbekend',
+
 # External editor support
 'edit-externally'      => 'Dizze triem bewurkje mei in ekstern programma',
-'edit-externally-help' => 'Sjoch de [http://meta.wikimedia.org/wiki/Help:External_editors ynstel-hantlieding] foar mear ynformaasje.',
+'edit-externally-help' => 'Sjoch de [http://www.mediawiki.org/wiki/Manual:External_editors ynstel-hantlieding] foar mear ynformaasje.',
 
 # 'all' in various places, this might be different for inflected languages
-'watchlistall2' => 'alles',
-'namespacesall' => 'alle',
-'monthsall'     => 'alle',
+'recentchangesall' => 'alle',
+'imagelistall'     => 'alle',
+'watchlistall2'    => 'alles',
+'namespacesall'    => 'alle',
+'monthsall'        => 'alle',
 
 # E-mail address confirmation
 'confirmemail'            => 'Befêstigjen netpostadres',
 'confirmemail_text'       => '{{SITENAME}} freget dat jo jo netpostadres befêstigje eart jo hjir netpost brûke. Brûk de knop hjirûnder om josels in befêstigingskoade ta te stjoeren op it adres dat jo opjûn hawwe. Iepenje de koade dan yn jo blêder om te befêstigjen dat jo netpostadres jildich is.',
 'confirmemail_send'       => 'Stjoer in befêstigingskoade',
+'confirmemail_sent'       => 'Befêstiginskoade tastjoerd.',
 'confirmemail_sendfailed' => 'De befêstiginskoade koe net stjoerd wurde. Faaks stean der ferkearde tekens yn it netpostadres.
 
 Berjocht: $1',
@@ -1409,6 +1750,9 @@ Dit berjocht jildt oant $4.',
 : ''$2''
 Wolle jo de side wier op 'e nij skriuwe?",
 
+# HTML dump
+'redirectingto' => 'Synonym foar [[:$1]]...',
+
 # Auto-summaries
 'autosumm-blank'   => 'Alle ynhâld fan de side weismiten',
 'autosumm-replace' => "Side ferfong mei '$1'",
@@ -1418,18 +1762,56 @@ Wolle jo de side wier op 'e nij skriuwe?",
 # Live preview
 'livepreview-loading' => 'Ynlade...',
 
+# Watchlist editor
+'watchlistedit-raw-titles' => 'Siden:',
+'watchlistedit-raw-added'  => '{{PLURAL:$1|1 side is|$1 siden binne}} tafoege:',
+
 # Watchlist editing tools
 'watchlisttools-view' => 'Folchlist besjen',
 'watchlisttools-edit' => 'Folchlist besjen en bewurkje',
 'watchlisttools-raw'  => 'Rûge folchlist bewurkje',
 
 # Special:Version
-'version' => 'Programmatuerferzje', # Not used as normal message but as header for the special page itself
+'version'                  => 'Programmatuerferzje', # Not used as normal message but as header for the special page itself
+'version-version'          => 'Ferzje',
+'version-license'          => 'Lisinsje',
+'version-software-product' => 'Produkt',
+'version-software-version' => 'Ferzje',
 
-# Special:Filepath
-'filepath' => 'Triempad',
+# Special:FilePath
+'filepath'        => 'Triempad',
+'filepath-page'   => 'Triem:',
+'filepath-submit' => 'Pad',
+
+# Special:FileDuplicateSearch
+'fileduplicatesearch'          => 'Sykje op duplikaten',
+'fileduplicatesearch-legend'   => 'Sykje op duplikaten',
+'fileduplicatesearch-filename' => 'Triemnamme:',
+'fileduplicatesearch-submit'   => 'Sykje',
+'fileduplicatesearch-info'     => '$1 × $2 pixel<br />Triemgrutte: $3<br />MIME-type: $4',
+'fileduplicatesearch-result-1' => 'De triem "$1" hat gjin duplikaten.',
+'fileduplicatesearch-result-n' => 'De triem "$1" hat {{PLURAL:$2|1 duplikaat|$2 duplikaten}}.',
 
 # Special:SpecialPages
-'specialpages' => 'Bysûndere siden',
+'specialpages'                   => 'Bysûndere siden',
+'specialpages-note'              => '----
+* Normale bysûndere siden.
+* <span class="mw-specialpagerestricted">Beheinde bysûndere siden.</span>',
+'specialpages-group-maintenance' => 'Underhâld siden',
+'specialpages-group-other'       => 'Oare bysûndere siden',
+'specialpages-group-login'       => 'Oanmelde',
+'specialpages-group-changes'     => 'Koartlyn feroare en lochs',
+'specialpages-group-media'       => 'Oanbieden en oare triemsiden',
+'specialpages-group-users'       => 'Meidoggers en rjochten',
+'specialpages-group-highuse'     => "Siden dy't in protte brûkt wurde",
+'specialpages-group-pages'       => 'List fan siden',
+'specialpages-group-pagetools'   => 'Sidehelpmiddels',
+'specialpages-group-wiki'        => 'Wikigegevens en -helpmiddels',
+'specialpages-group-redirects'   => 'Trochferwizende bysûndere siden',
+'specialpages-group-spam'        => 'Spamhelpmiddels',
+
+# Special:BlankPage
+'blankpage'              => 'Side is leech',
+'intentionallyblankpage' => 'Dizze side is bewust leech lizzen en wurdt brûkt foar benchmarks, ensfh.',
 
 );

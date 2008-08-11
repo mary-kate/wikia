@@ -4,10 +4,8 @@
  * @ingroup Language
  * @file
  *
- * @author לערי ריינהארט
  * @author Gion-andri
- * @author SPQRobin
- * @author Siebrand
+ * @author לערי ריינהארט
  */
 
 $messages = array(
@@ -251,10 +249,6 @@ Perquei è anc nagin retschaiver e trametter dad emails per las suandantas funcz
 'anoneditwarning'      => "Vus essas betg annunziads. Empè dal num d'utilisader vign l'adressa dad IP registrada en la historia da las versiuns.",
 'blockedtitle'         => 'Utilisader è bloccà',
 'whitelistedittitle'   => "t'annunzia per editar",
-'whitelistreadtitle'   => "per leger stos ti t'annunziar",
-'whitelistreadtext'    => "Ti stos [[Special:Userlogin|t'annunziar]] per leger las paginas.",
-'whitelistacctitle'    => 'Ti na dastgas betg crear in nov conto',
-'whitelistacctext'     => "Per dastgar crear contos en questa wiki stos ti [[Special:Userlogin|t'annunziar]] ed avair ils dretgs correspundents.",
 'confirmedittitle'     => 'Per editar è la confermaziun da la adressa dad email necessaria',
 'confirmedittext'      => 'Ti stos confermar tia adressa dad email avant che editar paginas. Inditgescha e conferma per plaschair tia adressa dad email en tias [[Special:Preferences|preferenzas]].',
 'loginreqtitle'        => 'Annunzia necessari',
@@ -279,6 +273,7 @@ Ponderai per plaschair da divider quest artitgel en pli pitschnas parts. </stron
 'longpageerror'        => "<strong>ERRUR: Il text che ti has tramess è $1 kilobytes gronds. Quei ei pli grond ch'il maximum da $2 kilobytes. Il text na sa betg vegnir arcunà. </strong>",
 'protectedpagewarning' => '<strong>ATTENZIUN: Questa pagina è vegnida bloccada, uschè che be utilisaders cun dretgs dad administraturs pon editar ella. </strong>',
 'templatesused'        => 'Templates utilisads sin questa pagina:',
+'edittools'            => '<!-- Text here will be shown below edit and upload forms. -->',
 
 # Account creation failure
 'cantcreateaccounttitle' => "Betg pussaivel da crear l'account",
@@ -319,7 +314,7 @@ Ponderai per plaschair da divider quest artitgel en pli pitschnas parts. </stron
 'preferences'           => 'Preferenzas',
 'mypreferences'         => 'Mias preferenzas',
 'prefsnologin'          => 'betg annunzià',
-'prefsnologintext'      => 'Vus stuais esser [[Special:Userlogin|annunziads]] per midar vossas preferenzas.',
+'prefsnologintext'      => 'Vus stuais esser [[Special:UserLogin|annunziads]] per midar vossas preferenzas.',
 'prefsreset'            => 'Preferenzas da standard ein vegnì reconstruidas.',
 'changepassword'        => 'Midar pled-clav',
 'dateformat'            => 'format da las datas',
@@ -371,8 +366,8 @@ Ponderai per plaschair da divider quest artitgel en pli pitschnas parts. </stron
 'uploadbtn'         => 'Chargiar si il file',
 'reupload'          => 'chargiar si danovamain',
 'reuploaddesc'      => 'Anavos tar la pagina da chargiar si.',
-'uploadnologintext' => "Ti stos [[Special:Userlogin|t'annunziar]] per chargiar si files.",
-'uploadtext'        => "Cun il formular sutvart pos ti chargiar si files, per vesair u tschertgar maletgs gia chargiads si, dovra [[Special:Imagelist|quest link]]. I dat er ina [[Special:Log/upload|glista dals files chargiads si u stidads]].
+'uploadnologintext' => "Ti stos [[Special:UserLogin|t'annunziar]] per chargiar si files.",
+'uploadtext'        => "Cun il formular sutvart pos ti chargiar si files, per vesair u tschertgar maletgs gia chargiads si, dovra [[Special:ImageList|quest link]]. I dat er ina [[Special:Log/upload|glista dals files chargiads si u stidads]].
 
 Per integrar il maletg/purtret en tes artitgel sas ti per exempel duvrar in dals suandants cumonds: 
 * '''<nowiki>[[</nowiki>{{ns:image}}<nowiki>:file.png]]</nowiki>'''
@@ -386,7 +381,7 @@ Per integrar il maletg/purtret en tes artitgel sas ti per exempel duvrar in dals
 'sourcefilename'    => 'file sin tes computer:',
 'destfilename'      => 'num dal file sin il server:',
 
-# Special:Imagelist
+# Special:ImageList
 'imagelist' => 'Glista dals maletgs',
 
 # MIME search
@@ -416,7 +411,7 @@ since {{SITENAME}} was setup.
 That comes to '''\$5''' average edits per page, and '''\$6''' views per edit.
 
 La lunghezza da la [http://www.mediawiki.org/wiki/Manual:Job_queue job queue]: '''\$7'''.",
-'userstatstext' => "There {{PLURAL:$1|is '''1''' registered [[Special:Listusers|user]]|are '''$1''' registered [[Special:Listusers|users]]}}, of which
+'userstatstext' => "There {{PLURAL:$1|is '''1''' registered [[Special:ListUsers|user]]|are '''$1''' registered [[Special:ListUsers|users]]}}, of which
 '''$2''' (or '''$4%''') {{PLURAL:$2|has|have}} $5 rights.",
 
 'disambiguations' => 'pagina per la decleraziun da noziuns',
@@ -447,7 +442,7 @@ La lunghezza da la [http://www.mediawiki.org/wiki/Manual:Job_queue job queue]: '
 'speciallogtitlelabel' => 'Titel:',
 'log'                  => 'logs / cudesch da navigaziun',
 
-# Special:Allpages
+# Special:AllPages
 'allpages'          => 'tut ils *** artitgels',
 'alphaindexline'    => '$1 enfin $2',
 'nextpage'          => 'proxima pagina ($1)',
@@ -464,7 +459,7 @@ La lunghezza da la [http://www.mediawiki.org/wiki/Manual:Job_queue job queue]: '
 'categories' => 'Categorias',
 
 # E-mail user
-'mailnologintext' => "Ti stos [[Special:Userlogin|t'annunziar]] ed avair ina adressa d'email valaivla en tias [[Special:Preferences|preferenzas]] per trametter emails ad auters utilisaders.",
+'mailnologintext' => "Ti stos [[Special:UserLogin|t'annunziar]] ed avair ina adressa d'email valaivla en tias [[Special:Preferences|preferenzas]] per trametter emails ad auters utilisaders.",
 'emailuser'       => 'Trametter in email a quest utilisader',
 'emailpage'       => 'Utilisader dad email',
 'emailpagetext'   => "Sche quest utilisader ha inditgà ina adressa da mail valaivla, pudais vus al trametter cun il formular cheusut in email. Sco speditur (Absender) vegn menziunà l'adressa che vus avais inditga en vossas preferenzas, per che l'utilisader as po rispunder.",
@@ -481,10 +476,10 @@ La lunghezza da la [http://www.mediawiki.org/wiki/Manual:Job_queue job queue]: '
 'watchlist'            => "mia glista d'observaziun",
 'watchlistfor'         => "(per '''$1''')",
 'watchnologin'         => "Ti n'es betg s'annunzià!",
-'watchnologintext'     => "Ti stos [[Special:Userlogin|t'annunziar]] per midar tia glista d'observaziun.",
+'watchnologintext'     => "Ti stos [[Special:UserLogin|t'annunziar]] per midar tia glista d'observaziun.",
 'addedwatch'           => 'Agiuntà a la glista dad observaziun',
 'addedwatchtext'       => "L'artitgel \"[[:\$1]]\" è vegnì agiuntà a vossa [[Special:Watchlist|glista dad observaziun]]. 
-Midadas futuras vid quai artitgel e la pagina da discussiun appertegnenta vegnan enumeradas là e l'artitgel vegn marcà '''grass''' en la [[Special:Recentchanges|glista da las ultimas midadas]].",
+Midadas futuras vid quai artitgel e la pagina da discussiun appertegnenta vegnan enumeradas là e l'artitgel vegn marcà '''grass''' en la [[Special:RecentChanges|glista da las ultimas midadas]].",
 'watch'                => 'observar',
 'watchthispage'        => 'Guarda questa pagina!',
 'unwatch'              => 'betg pli observar',
@@ -550,7 +545,6 @@ Quest calöri è  [[User:$3|$3]] ([[User talk:$3|discussiun]]).",
 'databasenotlocked' => 'Questa banca da datas è betg bloccada.',
 
 # Move page
-'movenologintext'         => "Ti stos [[Special:Userlogin|t'annunziar]] per spustar in artitgel.",
 'pagemovedsub'            => 'Spustà cun success',
 'articleexists'           => 'I exista gia in artitgel cun quai num. Tscherni per plaschair in auter.',
 '1movedto2'               => 'Spustà [[$1]] tar [[$2]]',
@@ -558,7 +552,7 @@ Quest calöri è  [[User:$3|$3]] ([[User talk:$3|discussiun]]).",
 'delete_and_move'         => 'Stidar e spustar',
 'delete_and_move_text'    => '==Stidar necessari==
 
-L\'artitgel da destinaziun "[[$1]]" exista gia. Vul ti stidar el per far plaz per spustar?',
+L\'artitgel da destinaziun "[[:$1]]" exista gia. Vul ti stidar el per far plaz per spustar?',
 'delete_and_move_confirm' => 'Gea, stidar il artitgel da destinaziun per spustar',
 'delete_and_move_reason'  => 'Stidà per far plaz per spustar',
 
@@ -615,7 +609,7 @@ Fai ina visita sin [http://www.mediawiki.org/wiki/Localisation MediaWiki Localis
 'imagemaxsize' => 'Grondezza maximala per maletgs sin paginas da descripziun',
 'thumbsize'    => 'grondezza dals maletgs da prevista (thumbnails):',
 
-# Special:Newimages
+# Special:NewImages
 'newimages' => 'Novs maletgs',
 'ilsubmit'  => 'Tschertgar',
 'bydate'    => 'tenor data',

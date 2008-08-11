@@ -4,8 +4,6 @@
  * @ingroup Language
  * @file
  *
- * @author SPQRobin
- * @author Siebrand
  * @author ne.wikipedia.org sysops
  */
 
@@ -221,8 +219,6 @@ $messages = array(
 'blockedoriginalsource'  => "'''$1''' को स्रोत तल देखाइएको छ:",
 'whitelistedittitle'     => 'सम्पादन गर्नको लागि प्रवेश (लग इन) आवश्यक छ',
 'whitelistedittext'      => 'पाना सम्पादन गर्न तपाँईले $1 गर्नु पर्दछ।',
-'whitelistreadtitle'     => 'यो सामाग्री पढ्नको लागि तपाइले प्रवेश गरेको हुनुपर्दछ।',
-'whitelistacctitle'      => 'तपाईंले खाता खोल्न पाउनु हुन्न',
 'confirmedittitle'       => 'सम्पादन गर्न इमेल पुष्टि गर्नु आवस्यक छ',
 'loginreqlink'           => 'प्रवेश (लग ईन)',
 'accmailtitle'           => 'पासवर्ड पठाइयो',
@@ -308,7 +304,7 @@ $messages = array(
 
 'nolicense' => 'केहिपनि छानिएन',
 
-# Special:Imagelist
+# Special:ImageList
 'imagelist_date'        => 'मिति',
 'imagelist_name'        => 'नाम',
 'imagelist_user'        => 'प्रयोगकर्ता',
@@ -360,7 +356,7 @@ $messages = array(
 'specialloguserlabel'  => 'प्रयोगकर्ता:',
 'speciallogtitlelabel' => 'शिर्षक:',
 
-# Special:Allpages
+# Special:AllPages
 'allpages'       => 'सबै पृष्ठहरु',
 'alphaindexline' => '$1 लाई $2 मा',
 'nextpage'       => 'अर्को पृष्ठ ($1)',
@@ -373,12 +369,12 @@ $messages = array(
 # Special:Categories
 'categories' => 'श्रेणीहरू',
 
-# Special:Listusers
+# Special:ListUsers
 'listusers-submit' => 'देखाउनुहोस्',
 
 # E-mail user
 'mailnologin'     => 'ईमेल पठाउने ठेगाना नै भएन ।',
-'mailnologintext' => 'तपाईले अरु प्रयोगकर्ताहरुलाई ईमेल पठाउनको लागी आफु पहिले [[Special:Userlogin|प्रवेश(लगइन)गरेको]] हुनुपर्छ र [[Special:Preferences|आफ्नो रोजाइहरुमा]] यौटा वैध ईमेल ठेगाना भएको हुनुपर्छ।',
+'mailnologintext' => 'तपाईले अरु प्रयोगकर्ताहरुलाई ईमेल पठाउनको लागी आफु पहिले [[Special:UserLogin|प्रवेश(लगइन)गरेको]] हुनुपर्छ र [[Special:Preferences|आफ्नो रोजाइहरुमा]] यौटा वैध ईमेल ठेगाना भएको हुनुपर्छ।',
 'emailuser'       => 'यो प्रयोगकर्तालाई ई-मेल पठाउनुहोस्',
 'emailpage'       => 'प्रयोगकर्तालाई इमेल गर्नुहोस्',
 'noemailtitle'    => 'ईमेल ठेगाना नभएको',
@@ -392,7 +388,7 @@ $messages = array(
 'mywatchlist'          => 'मेरो अवलोकनसूची',
 'nowatchlist'          => 'तपाईको अवलोकन(वाचलिस्ट)मा कुनैपनि चिज छैन।',
 'watchnologin'         => 'प्रवेश (लग ईन) नगरिएको',
-'watchnologintext'     => 'आफ्नो अवलोकनलाइ परिवर्तन गर्नको लागि त तपाइ यसमा [[Special:Userlogin|प्रवेश(लगइन)]] गर्नुपर्छ।',
+'watchnologintext'     => 'आफ्नो अवलोकनलाइ परिवर्तन गर्नको लागि त तपाइ यसमा [[Special:UserLogin|प्रवेश(लगइन)]] गर्नुपर्छ।',
 'addedwatch'           => 'अवलोकनसूची मा थपियो',
 'watch'                => 'अवलोकन',
 'watchthispage'        => 'यो पृष्ठ अवलोकन गर्नुहोस्',
@@ -460,7 +456,6 @@ $messages = array(
 # Move page
 'move-page-legend'        => 'पृष्ठ सार्नुहोस्',
 'movearticle'             => 'पृष्ठ सार्नुहोस्',
-'movenologin'             => 'प्रवेश (लग ईन) नगरिएको',
 'movepagebtn'             => 'पृष्ठ सार्नुहोस्',
 'pagemovedsub'            => 'सार्ने काम सफल भयो',
 'movedto'                 => 'मा सारियो',
@@ -521,7 +516,7 @@ $messages = array(
 'previousdiff' => '← अधिल्लो भिन्नता',
 'nextdiff'     => 'पछिल्लो भिन्नता →',
 
-# Special:Newimages
+# Special:NewImages
 'noimages' => 'हेर्नको लागि केही छैन.',
 'ilsubmit' => 'खोज्नुहोस्',
 'bydate'   => 'मिति अनुसार',
@@ -618,7 +613,7 @@ $messages = array(
 # Live preview
 'livepreview-loading' => 'लोड गरिंदै छ…',
 
-# Special:Filepath
+# Special:FilePath
 'filepath-page' => 'फाइल',
 
 # Special:SpecialPages

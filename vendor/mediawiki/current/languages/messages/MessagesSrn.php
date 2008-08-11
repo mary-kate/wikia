@@ -4,12 +4,10 @@
  * @ingroup Language
  * @file
  *
- * @author Stretsh
  * @author Adfokati
  * @author Jordi
- * @author Siebrand
  * @author Ooswesthoesbes
- * @author Jon Harald Søby
+ * @author Stretsh
  */
 
 $fallback = 'nl';
@@ -291,7 +289,7 @@ $messages = array(
 'nosuchspecialpage' => 'A spesrutu papira disi no de',
 'nospecialpagetext' => "<big>'''Yu aksi fu si wan spesrutu papira san no de.'''</big>
 
-Wan réy fu spesrutu papira de fu feni na [[Special:Specialpages|{{int:specialpages}}]].",
+Wan réy fu spesrutu papira de fu feni na [[Special:SpecialPages|{{int:specialpages}}]].",
 
 # General errors
 'error'                => 'Fowtu',
@@ -454,9 +452,6 @@ Yu n'o man kebroiki 'e-mail a kebroikiman disi', efu yu no abi wan bun email-nen
 Yu IP now na $3 en a tapu pasi ID na #$5. Gi wan, noso ala tu, ini yu brifi te yu o skrifi fu aksi san psa.",
 'whitelistedittitle'     => 'Yu mu kon fu a kenki',
 'whitelistedittext'      => 'Yu mu $1 fu a kenki fu peprewoysi.',
-'whitelistreadtitle'     => 'Yu mu kon fu a leysi',
-'whitelistreadtext'      => 'Yu mu [[Special:Userlogin|kon]] fu a leysi fu peprewoysi.',
-'whitelistacctitle'      => 'Yu kan no masyin skopu',
 'loginreqtitle'          => 'Yu mu kon',
 'loginreqlink'           => 'kon',
 'loginreqpagetext'       => 'Yu mu $1 tu a libi si fu trawan peprewoysi.',
@@ -488,7 +483,7 @@ Kande yu kan prati a papira disi ini moro pikin pisi.</strong>',
 'template-protected'     => '(a sroto)',
 'template-semiprotected' => '(sroto wan pisi)',
 'nocreatetext'           => '{{SITENAME}} puru den primisi fu meki nyun papira.
-Yu kan go baka fu kenki papira di de kba, noso yu kan [[Special:Userlogin|psa kon noso meki wan account]].',
+Yu kan go baka fu kenki papira di de kba, noso yu kan [[Special:UserLogin|psa kon noso meki wan account]].',
 'recreate-deleted-warn'  => "'''Warskow: yu e meki wan papira, di ben puru fu dyaso kaba, baka.'''
 
 Denki fosi efu na wan bun sani fu meki a papira disi baka. A log buku fu puru sori dyaso gi yepi:",
@@ -686,7 +681,7 @@ Papira ini [[Special:Watchlist|yu Tan Luku réy]] '''fatu'''.",
 
 'license-nopreview' => '(No fusi)',
 
-# Special:Imagelist
+# Special:ImageList
 'imagelist_search_for'  => 'Suku na gefre:',
 'imgfile'               => 'gefre',
 'imagelist'             => 'Réy fu file',
@@ -721,17 +716,17 @@ Papira ini [[Special:Watchlist|yu Tan Luku réy]] '''fatu'''.",
 # File reversion
 'filerevert'                => '$1 bakadray',
 'filerevert-legend'         => 'Gefre bakadray',
-'filerevert-intro'          => '<span class="plainlinks">Yu ben \'\'\'[[Media:$1|$1]]\'\'\' bakadrayn tu a [$4 si opo $2, $3]</span>.',
+'filerevert-intro'          => "Yu ben '''[[Media:$1|$1]]''' bakadrayn tu a [$4 si opo $2, $3]",
 'filerevert-comment'        => 'Opotaki:',
 'filerevert-defaultcomment' => 'E bakadray tu a si opo $1, $2',
 'filerevert-submit'         => 'Bakadray',
-'filerevert-success'        => '<span class="plainlinks">\'\'\'[[Media:$1|$1]]\'\'\' ben bakadray tu a [$4 si opo $2, $3]</span>.',
+'filerevert-success'        => "'''[[Media:$1|$1]]''' ben bakadray tu a [$4 si opo $2, $3]",
 
 # File deletion
 'filedelete'             => '"$1" trowe',
 'filedelete-legend'      => 'Gefre trowe',
 'filedelete-intro'       => "Yu ben '''[[Media:$1|$1]]''' trowen.",
-'filedelete-intro-old'   => '<span class="plainlinks">Yu ben a si fu \'\'\'[[Media:$1|$1]]\'\'\' fu [$4 $3, $2] trowen.</span>',
+'filedelete-intro-old'   => "Yu ben a si fu '''[[Media:$1|$1]]''' fu [$4 $3, $2] trowen.",
 'filedelete-comment'     => 'Opotaki:',
 'filedelete-submit'      => 'Trowe',
 'filedelete-success'     => "'''$1''' ben e trowe.",
@@ -841,7 +836,7 @@ A gran fu a [http://www.mediawiki.org/wiki/Manual:Job_queue job queue] ben '''$7
 'log-search-submit'    => 'Go',
 'log-title-wildcard'   => 'Peprewoysi suku dy nanga disi nen bigin',
 
-# Special:Allpages
+# Special:AllPages
 'allpages'          => 'Ala papira',
 'alphaindexline'    => '$1 te go miti $2',
 'nextpage'          => "A papira d'e kon ($1)",
@@ -857,7 +852,7 @@ A gran fu a [http://www.mediawiki.org/wiki/Manual:Job_queue job queue] ben '''$7
 # Special:Categories
 'categories' => 'Den grupu',
 
-# Special:Listusers
+# Special:ListUsers
 'listusersfrom'      => 'Masyin libi si fu:',
 'listusers-submit'   => 'Libi si',
 'listusers-noresult' => 'No masyin dyaso.',
@@ -879,7 +874,7 @@ A gran fu a [http://www.mediawiki.org/wiki/Manual:Job_queue job queue] ben '''$7
 'mywatchlist'          => 'Mi Tan luku réy',
 'watchlistfor'         => "(fu '''$1''')",
 'addedwatch'           => 'Presi a yu sirey',
-'addedwatchtext'       => "A papira \"[[:\$1]]\" ben presi a yu [[Special:Watchlist|sirey]]. Folo kenki fu disi papira nanga a taki sey opo [[Special:Watchlist|yu sirey]] nanga sey '''deku''' ini a [[Special:Recentchanges|rey fu bakseywan kenki]].
+'addedwatchtext'       => "A papira \"[[:\$1]]\" ben presi a yu [[Special:Watchlist|sirey]]. Folo kenki fu disi papira nanga a taki sey opo [[Special:Watchlist|yu sirey]] nanga sey '''deku''' ini a [[Special:RecentChanges|rey fu bakseywan kenki]].
 
 Iksi yu wan papira no langar wana si, go na a papira nanga du opo \"No si\" ini a menu.",
 'removedwatch'         => 'Trowe fu yu sirey',
@@ -995,7 +990,6 @@ Ben suri taki den folo abrasi ben pre yu disi aksi du.",
 * A takipapira ondro a nyun nen da ala ben;
 * Yu a ondroben box odu.",
 'movearticle'      => 'Dribi papira:',
-'movenologin'      => 'No kon',
 'newtitle'         => 'Na nyun papiranen:',
 'move-watch'       => 'Disi papira si',
 'movepagebtn'      => 'Dribi papira',
@@ -1087,7 +1081,7 @@ Yu ka luku a source.',
 'show-big-image'       => 'Moro srapu',
 'show-big-image-thumb' => '<small>Bigi fu a luku-na-fesi disi: $1 × $2 pixel</small>',
 
-# Special:Newimages
+# Special:NewImages
 'newimages'    => 'Nyun file',
 'showhidebots' => '(Bot $1)',
 'noimages'     => 'Noti a si.',
@@ -1117,7 +1111,7 @@ Trawan o kibri.
 
 # External editor support
 'edit-externally'      => 'Kenki a file disi ini wan dorosey wrokosani.',
-'edit-externally-help' => 'Luku ini a [http://meta.wikimedia.org/wiki/Help:External_editors skorobuku fu den seti] gi moro yepi.',
+'edit-externally-help' => 'Luku ini a [http://www.mediawiki.org/wiki/Manual:External_editors skorobuku fu den seti] gi moro yepi.',
 
 # 'all' in various places, this might be different for inflected languages
 'recentchangesall' => 'ala',

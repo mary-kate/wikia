@@ -4,11 +4,9 @@
  * @ingroup Language
  * @file
  *
- * @author SPQRobin
- * @author Siebrand
+ * @author Chechenka
  * @author Girdi
  * @author Mega programmer
- * @author Chechenka
  */
 
 $fallback = 'ru';
@@ -202,7 +200,7 @@ $messages = array(
 'upload'   => 'Чуоза Файл',
 'filename' => 'файл цIе',
 
-# Special:Imagelist
+# Special:ImageList
 'imagelist_name' => 'Файли цІе',
 'imagelist_user' => 'юзер',
 
@@ -221,7 +219,7 @@ $messages = array(
 # Special:Log
 'specialloguserlabel' => 'Юзер:',
 
-# Special:Allpages
+# Special:AllPages
 'allpages'       => 'Массо таптараш',
 'allarticles'    => 'Массо таптараш',
 'allpagessubmit' => 'кхочушде',
@@ -285,7 +283,7 @@ $messages = array(
 # Media information
 'show-big-image' => 'Доккха де сурт',
 
-# Special:Newimages
+# Special:NewImages
 'newimages' => 'Керла файлаш галерей',
 
 'exif-scenetype-1' => 'Сурт сфотографировано напрямую',

@@ -14,6 +14,20 @@ $aliases['en'] = array(
     'Makesysop'            => array('MakeSysop')
 );
 
+/** Arabic (العربية)
+ * @author Meno25
+ */
+$aliases['ar'] = array(
+    'Makesysop'            => array('ترقية_مدير_نظام')
+);
+
+/** Egyptian Spoken Arabic (مصرى)
+ * @author Meno25
+ */
+$aliases['arz'] = array(
+    'Makesysop' => array( 'ترقية_مدير_نظام' ),
+);
+
 /** Norwegian (Norsk (bokmål))
  * @author Jon Harald Søby
  */

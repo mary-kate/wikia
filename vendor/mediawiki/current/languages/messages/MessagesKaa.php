@@ -4,12 +4,9 @@
  * @ingroup Language
  * @file
  *
- * @author Atabek
  * @author AlefZet
+ * @author Atabek
  * @author Jiemurat
- * @author Siebrand
- * @author SPQRobin
- * @author Jon Harald Søby
  */
 
 $fallback = 'kk-latn';
@@ -366,7 +363,7 @@ $messages = array(
 'nosuchspecialpage' => 'Bunday arnawlı bet joq',
 'nospecialpagetext' => "<big>'''Siz sorag'an bunday arnawlı bet joq.'''</big>
 
-Arnawlı betlerdin' dizimin [[Special:Specialpages|{{int:specialpages}}]] betinen tabıwın'ızg'a boladı.",
+Arnawlı betlerdin' dizimin [[Special:SpecialPages|{{int:specialpages}}]] betinen tabıwın'ızg'a boladı.",
 
 # General errors
 'error'                => "Qa'telik",
@@ -590,10 +587,6 @@ to'mende ko'rsetilgen:",
 'blockededitsource'         => "'''$1''' degennin' '''siz ozgertken''' teksti to'mende ko'rsetilgen:",
 'whitelistedittitle'        => "O'zgertiw ushın sistemag'a kiriwin'iz kerek",
 'whitelistedittext'         => "Betterdi o'zgertiw ushın $1 sha'rt.",
-'whitelistreadtitle'        => "Oqıw ushın sistemag'a kiriwin'iz kerek",
-'whitelistreadtext'         => "Betterdi oqıw ushın [[Special:Userlogin|kiriwin'iz]] kerek.",
-'whitelistacctitle'         => "Sizin' akkaunt jaratıwg'a ruxsatın'ız joq",
-'whitelistacctext'          => "{{SITENAME}} saytında akkaunt jaratıw ushın [[Special:Userlogin|kirwin'iz]] kerek ha'mde kerekli ruqsatların'ız bolıwı kerek.",
 'confirmedittitle'          => "O'zgertiw ushın e-mail tastıyıqlaması kerek",
 'confirmedittext'           => "Betlerge o'zgeris kiritiwin'iz ushın aldın E-pochta adresin'izdi tastıyıqlawın'ız kerek.
 E-pochta adresin'izdi [[Special:Preferences|paydalanıwshı sazlawları bo'limi]] arqalı ko'rsetin' ha'm jaramlılıg'ın tekserin'.",
@@ -634,7 +627,7 @@ Qosqan u'lesin'iz o'zin'izdin' jazg'anın'ız yamasa ashıq tu'rdegi derekten al
 'template-semiprotected'    => "(yarım-qorg'alg'an)",
 'nocreatetitle'             => 'Bet jaratıw sheklengen',
 'nocreatetext'              => "{{SITENAME}} saytında taza betlerdi jaratıw sheklengen.
-Arqag'a qaytıp bar betti o'zgertiwin'izge yamasa [[Special:Userlogin|kiriwin'izge / akkaunt jaratıwın'ızg'a]] boladı.",
+Arqag'a qaytıp bar betti o'zgertiwin'izge yamasa [[Special:UserLogin|kiriwin'izge / akkaunt jaratıwın'ızg'a]] boladı.",
 'nocreate-loggedin'         => "{{SITENAME}} proyektinde taza betler jaratıwın'ızg'a ruxsatın'ız joq.",
 'permissionserrors'         => 'Ruxsatnamalar Qatelikleri',
 'recreate-deleted-warn'     => "'''Esletpe: Aldın o'shirilgen betti qayta jaratajaqsız.'''
@@ -870,7 +863,7 @@ Sha'rtli belgiler: (ha'z.) = ha'zirgi nusqasi menen parqı,
 'nolicense'          => "Hesh na'rse saylanbag'an",
 'upload_source_file' => " (sizin' kompyuterin'izdegi fayl)",
 
-# Special:Imagelist
+# Special:ImageList
 'imagelist_search_for'  => 'Media atamasın izlew:',
 'imgfile'               => 'fayl',
 'imagelist'             => 'Fayllar dizimi',
@@ -907,7 +900,7 @@ Sha'rtli belgiler: (ha'z.) = ha'zirgi nusqasi menen parqı,
 'filedelete'             => "$1 degendi o'shiriw",
 'filedelete-legend'      => "Fayldı o'shiriw",
 'filedelete-intro'       => "'''[[Media:$1|$1]]''' o'shirilmekte.",
-'filedelete-intro-old'   => "<span class=\"plainlinks\"> [\$4 \$3, \$2] waqtındag'ı '''[[Media:\$1|\$1]]''' nusqası o'shirilmekte.</span>",
+'filedelete-intro-old'   => "[$4 $3, $2] waqtındag'ı '''[[Media:$1|$1]]''' nusqası o'shirilmekte.",
 'filedelete-comment'     => 'Kommentariy:',
 'filedelete-submit'      => "O'shiriw",
 'filedelete-success'     => "'''$1''' o'shirildi.",
@@ -951,7 +944,7 @@ Usılardı esapqa almag'anda, haqıyqıy mag'lıwmatqa iye '''$2''' bet bar dep 
 Bunın' na'tiyjesinde ortasha esap penen ha'r bir betke '''$5''' o'zgeris tuwrı keledi, ha'mde ha'r bir o'zgeriske '''$6''' qaraw tuwrı  keledi.
 
 [http://www.mediawiki.org/wiki/Manual:Job_queue Tapsırımalar gezeginin'] uzınlıg'ı: '''$7'''.",
-'userstatstext'          => "Bul jerde '''$1''' [[Special:Listusers|esapqa alıng'an paydalanıwshı]] bar, solardın' ishinen '''$2''' (yag'nıy '''$4 %''') paydalanıwshısında $5 huquqları bar.",
+'userstatstext'          => "Bul jerde '''$1''' [[Special:ListUsers|esapqa alıng'an paydalanıwshı]] bar, solardın' ishinen '''$2''' (yag'nıy '''$4 %''') paydalanıwshısında $5 huquqları bar.",
 'statistics-mostpopular' => "En' ko'p ko'rilgen betler",
 
 'disambiguations'     => "Ko'p ma'nisli betler",
@@ -1020,7 +1013,7 @@ Bunın' na'tiyjesinde ortasha esap penen ha'r bir betke '''$5''' o'zgeris tuwrı
 'log-search-submit'    => "O'tin'",
 'log-title-wildcard'   => "Usı tekstten baslang'an atamalardı izlew",
 
-# Special:Allpages
+# Special:AllPages
 'allpages'          => "Ha'mme betler",
 'alphaindexline'    => '$1 — $2',
 'nextpage'          => 'Keyingi bet ($1)',
@@ -1039,7 +1032,7 @@ Bunın' na'tiyjesinde ortasha esap penen ha'r bir betke '''$5''' o'zgeris tuwrı
 'categories'         => 'Kategoriyalar',
 'categoriespagetext' => 'Kelesi kategoriyalar ishinde betler yamasa media bar.',
 
-# Special:Listusers
+# Special:ListUsers
 'listusersfrom'      => "Mına paydalanıwshıdan baslap ko'rsetiw:",
 'listusers-submit'   => "Ko'rset",
 'listusers-noresult' => 'Paydalanıwshı tabılmadı.',
@@ -1065,10 +1058,10 @@ Bunın' na'tiyjesinde ortasha esap penen ha'r bir betke '''$5''' o'zgeris tuwrı
 'nowatchlist'          => "Baqlaw dizimin'iz bos.",
 'watchlistanontext'    => "Baqlaw dizimin'izdegilerdi qaraw yamasa o'zgertiw ushın $1 kerek.",
 'watchnologin'         => 'Kirilmegen',
-'watchnologintext'     => "Baqlaw dizimin'izdi o'zgertiw ushın [[Special:Userlogin|kiriwin'iz]] kerek.",
+'watchnologintext'     => "Baqlaw dizimin'izdi o'zgertiw ushın [[Special:UserLogin|kiriwin'iz]] kerek.",
 'addedwatch'           => 'Baqlaw dizimine qosıldı',
 'addedwatchtext'       => "\"[[:\$1]]\" beti [[Special:Watchlist|baqlaw dizimin'izge]] qosıldı.
-Usı ha'm og'an baylanıslı bolg'an sa'wbet betlerinde bolatug'ın keleshektegi o'zgerisler usı dizimde ko'rsetiledi ha'mde betti tabıwdı an'satlastırıw ushın [[Special:Recentchanges|taza o'zgerisler diziminde]] '''juwan ha'ripte''' ko'rsetiledi.
+Usı ha'm og'an baylanıslı bolg'an sa'wbet betlerinde bolatug'ın keleshektegi o'zgerisler usı dizimde ko'rsetiledi ha'mde betti tabıwdı an'satlastırıw ushın [[Special:RecentChanges|taza o'zgerisler diziminde]] '''juwan ha'ripte''' ko'rsetiledi.
 Eger siz bul betti baqlaw dizimin'izden o'shirmekshi bolsan'ız bettin' joqarg'ı on' jag'ındag'ı \"Baqlamaw\" jazıwın basın'.",
 'removedwatch'         => "Baqlaw diziminen o'shirildi",
 'removedwatchtext'     => '"[[:$1]]" beti baqlaw dizimin\'izden o\'shirildi.',
@@ -1231,7 +1224,7 @@ Aqırg'ı o'shirilgenlerdin' dizimin ko'riw ushin \$2 ni qaran'",
 'badipaddress'                => 'Jaramsız IP adres',
 'blockipsuccesssub'           => 'Tabıslı qulplaw',
 'blockipsuccesstext'          => "[[Special:Contributions/$1|$1]] bloklang'an.<br />
-Basqa bloklawlar ushın [[Special:Ipblocklist|IP bloklaw dizimin]] ko'rip shıg'ın'iz.",
+Basqa bloklawlar ushın [[Special:IPBlockList|IP bloklaw dizimin]] ko'rip shıg'ın'iz.",
 'ipb-edit-dropdown'           => "Bloklaw sebeplerin o'zgertiw",
 'ipb-unblock-addr'            => '$1 degennin qulpın sheshiw',
 'ipb-unblock'                 => "Paydalanıwshının' yamasa IP adrestin' qulpın shesh",
@@ -1296,7 +1289,6 @@ dawam ettiriwden aldın qanday aqıbetlerge alıp keliwin oylap ko'rin'.",
 
 Bul jag'daylarda eger qa'lesen'iz betti qoldan ko'shiriwin'iz yamasa qosıwın'izg'a boladı.",
 'movearticle'             => "Ko'shiriletug'ın bet:",
-'movenologin'             => 'Kirilmegen',
 'newtitle'                => 'Taza atama:',
 'move-watch'              => 'Bul betti baqlaw',
 'movepagebtn'             => "Betti ko'shir",
@@ -1447,7 +1439,7 @@ Please visit [http://www.mediawiki.org/wiki/Localisation MediaWiki Localisation]
 'show-big-image'       => 'Joqarı imkaniyatlı',
 'show-big-image-thumb' => "<small>Bul aldinnan ko'riwdin' ha'jmi: $1 × $2 piksel</small>",
 
-# Special:Newimages
+# Special:NewImages
 'newimages'             => 'Taza fayllar galereyasi',
 'showhidebots'          => '(botlardı $1)',
 'noimages'              => "Ko'riwge su'wret joq.",
@@ -1488,7 +1480,7 @@ Eger fayl jaratılg'anınan keyin o'zgertilgen bolsa, geybir parametrleri o'zger
 
 # External editor support
 'edit-externally'      => "Bul fayldı sırtqı bag'darlama arqalı o'zgertiw",
-'edit-externally-help' => "Ko'birek mag'lıwmat ushın [http://meta.wikimedia.org/wiki/Help:External_editors ornatıw jolların] qaran'.",
+'edit-externally-help' => "Ko'birek mag'lıwmat ushın [http://www.mediawiki.org/wiki/Manual:External_editors ornatıw jolların] qaran'.",
 
 # 'all' in various places, this might be different for inflected languages
 'recentchangesall' => "ha'mmesin",
@@ -1538,7 +1530,7 @@ Bul tastıyıqlaw kodının' pitetug'ın waqtı: $4.",
 'unit-pixel' => ' px',
 
 # HTML dump
-'redirectingto' => '[[$1]] degenge burılmaqta...',
+'redirectingto' => '[[:$1]] degenge burılmaqta...',
 
 # action=purge
 'confirm_purge_button' => 'OK',
@@ -1596,7 +1588,7 @@ Bul tastıyıqlaw kodının' pitetug'ın waqtı: $4.",
 # Special:Version
 'version' => "MediaWikidin' nusqası", # Not used as normal message but as header for the special page itself
 
-# Special:Filepath
+# Special:FilePath
 'filepath' => 'Fayl jolı',
 
 # Special:SpecialPages

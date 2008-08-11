@@ -4,10 +4,9 @@
  * @ingroup Language
  * @file
  *
+ * @author Felipe Aira
  * @author Sky Harbor
  * @author לערי ריינהארט
- * @author Felipe Aira
- * @author Siebrand
  */
 
 $messages = array(
@@ -264,7 +263,7 @@ ang gawang itinakda ng URL',
 'nosuchspecialpage' => 'Walang ganoong natatanging pahina',
 'nospecialpagetext' => "<big>'''Humiling ka ng isang natatanging pahina na walang saysay.'''</big>
 
-Isang tala ng mga natatanging pahina na may saysay ay matatagpuan sa [[Special:Specialpages|{{int:specialpages}}]].",
+Isang tala ng mga natatanging pahina na may saysay ay matatagpuan sa [[Special:SpecialPages|{{int:specialpages}}]].",
 
 # General errors
 'error'                => 'Kamalian',
@@ -393,7 +392,7 @@ Nilikha na ang iyong kuwenta. Huwag kalimutang baguhin ang iyong mga kagustuhan 
 'reupload'          => 'Magkarga muli',
 'reuploaddesc'      => 'Bumalik sa pormularyo ng pagkarga',
 'uploadnologin'     => 'Hindi nakalagda',
-'uploadnologintext' => 'Dapat ikaw ay [[Special:Userlogin|nakalagda]]
+'uploadnologintext' => 'Dapat ikaw ay [[Special:UserLogin|nakalagda]]
 upang makapagkarga ng talaksan.',
 'uploaderror'       => 'Kamalian sa pagkarga',
 'watchthisupload'   => 'Bantayan itong pahina',
@@ -440,7 +439,7 @@ upang makapagkarga ng talaksan.',
 'move'              => 'Ilipat',
 'movethispage'      => 'Ilipat itong pahina',
 
-# Special:Allpages
+# Special:AllPages
 'allpages'        => 'Lahat ng pahina',
 'allpages-bad-ns' => 'Wala sa {{SITENAME}} ang ngalan-espasyong "$1".',
 
@@ -530,8 +529,6 @@ $1',
 'unlockdb' => 'Buksan ang kalipunan ng datos',
 
 # Move page
-'movenologin'             => 'Hindi nakalagda',
-'movenologintext'         => 'Kailangang ikaw ay isang naka-rehistrong manggagamit at ay [[Special:Userlogin|nakalagda]] upang makapaglipat ng pahina.',
 'movenotallowed'          => 'Wala kang permisong maglipat ng pahina sa {{SITENAME}}.',
 'newtitle'                => 'Sa bagong pamagat:',
 'move-watch'              => 'Bantayan itong pahina',
@@ -600,7 +597,7 @@ Please visit [http://www.mediawiki.org/wiki/Localisation MediaWiki Localisation]
 'show-big-image'       => 'Buong resolusyon',
 'show-big-image-thumb' => '<small>Laki ng itong pribyu: $1 × $2 piksel</small>',
 
-# Special:Newimages
+# Special:NewImages
 'newimages' => 'Galeriya ng mga bagong talaksan',
 
 # External editor support
@@ -611,7 +608,7 @@ Please visit [http://www.mediawiki.org/wiki/Localisation MediaWiki Localisation]
 'recreate'            => 'Likhain muli',
 
 # HTML dump
-'redirectingto' => 'Nagkakarga sa [[$1]]...',
+'redirectingto' => 'Nagkakarga sa [[:$1]]...',
 
 # action=purge
 'confirm_purge' => 'Linisin ang baunan ng pahinang ito?
@@ -644,7 +641,7 @@ $1',
 'version-software-product'  => 'Produkto',
 'version-software-version'  => 'Bersyon',
 
-# Special:Filepath
+# Special:FilePath
 'filepath-page' => 'Talaksan:',
 
 # Special:SpecialPages

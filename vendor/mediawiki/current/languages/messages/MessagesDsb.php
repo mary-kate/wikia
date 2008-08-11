@@ -4,17 +4,14 @@
  * @ingroup Language
  * @file
  *
- * @author Nepl1
+ * @author Dunak
+ * @author Dundak
  * @author Michawiki
+ * @author Murjarik
+ * @author Nepl1
  * @author Pe7er
  * @author Qualia
- * @author Dundak
- * @author Siebrand
- * @author Murjarik
  * @author Tlustulimu
- * @author SPQRobin
- * @author Jon Harald Søby
- * @author Dunak
  * @author Tlustulimu Nepl1
  */
 
@@ -422,7 +419,7 @@ $messages = array(
 'nosuchspecialpage' => 'Toś ten specialny bok njeeksistěrujo',
 'nospecialpagetext' => "<big>'''Toś ten specialny bok w toś tom wikiju njeeksistěrujo'''</big>
 
-Lisćina płaśecych specialnych bokow namakajo se pód [[Special:Specialpages|{{int:specialpages}}]].",
+Lisćina płaśecych specialnych bokow namakajo se pód [[Special:SpecialPages|{{int:specialpages}}]].",
 
 # General errors
 'error'                => 'Zmólka',
@@ -659,10 +656,6 @@ ID twójogo blokěrowanja jo $5. Pšosym pódaj ju w swójich pšašanjach.",
 'blockededitsource'                => "Žrědłowy tekst '''Twójich pśinoskow''' do '''$1''' jo:",
 'whitelistedittitle'               => 'Za wobźěłanje dejš se pśizjawiś',
 'whitelistedittext'                => 'Musyš se $1, aby mógał boki wobźěłowaś.',
-'whitelistreadtitle'               => 'Za cytanje dejš se pśizjawiś',
-'whitelistreadtext'                => 'Za cytanje bokow dejš se [[Special:Userlogin|how pśizjawiś]].',
-'whitelistacctitle'                => 'Njamaš pšawo, wužywarske konto załožyś.',
-'whitelistacctext'                 => 'Aby mógał pód {{SITENAME}} wužywarske konta załožyś, musyš [[Special:Userlogin|how se pśizjawiś]] a wótpowědujuce pšawa měś.',
 'confirmedittitle'                 => 'Za wobźěłanje jo wobkšuśenje e-mailki notne.',
 'confirmedittext'                  => 'Nježli až móžoš źěłaš, musyš swóju e-mailowu adresu wobkšuśiś. Pšosym dodaj a wobkšuś swóju e-mailowu adresu w [[Special:Preferences|nastajenjach]].',
 'nosuchsectiontitle'               => 'Wótrězk njeeksistěrujo.',
@@ -676,7 +669,7 @@ ID twójogo blokěrowanja jo $5. Pšosym pódaj ju w swójich pšašanjach.",
 'newarticletext'                   => 'Sy slědował wótkaz na bok, kótaryž hyšći njeeksistěrujo.
 Aby bok wutwórił, ga napiš do kašćika spózy.
 (Dokradnjejše informacije pód: [[{{MediaWiki:Helppage}}|help page]]).',
-'anontalkpagetext'                 => "---- ''Toś ten bok słužy za diskusiju z anonymnym wužywarjom, kótaryž njejo dotychměst žedno wužywarske konto załožył, abo swójo konto njewužywa. Togodla dejmy jogo numerisku ip-adresu wužywaś, aby jogo identificěrowali. Taka ip-adresa móžo wót wšakich wužywarjow se wužywaś. Jolic sy anonymny wužywaŕ a se mysliš, až su se njerelewantne komentary na tebje měrili, pšosym [[Special:Userlogin|załož konto abo pśizjaw se]], až njeby wěcej k takim zamólenjam došło.",
+'anontalkpagetext'                 => "---- ''Toś ten bok słužy za diskusiju z anonymnym wužywarjom, kótaryž njejo dotychměst žedno wužywarske konto załožył, abo swójo konto njewužywa. Togodla dejmy jogo numerisku ip-adresu wužywaś, aby jogo identificěrowali. Taka ip-adresa móžo wót wšakich wužywarjow se wužywaś. Jolic sy anonymny wužywaŕ a se mysliš, až su se njerelewantne komentary na tebje měrili, pšosym [[Special:UserLogin|załož konto abo pśizjaw se]], až njeby wěcej k takim zamólenjam došło.",
 'noarticletext'                    => 'Dotychměst njewopśimjejo toś ten bok hyšći žeden tekst. Móžoš w drugich bokach [[Special:Search/{{PAGENAME}}|za napismom togo boka pytaś]] abo [{{fullurl:{{FULLPAGENAME}}|action=edit}} toś ten bok wobźěłaś].',
 'userpage-userdoesnotexist'        => 'Wužywarske konto "$1" njejo zregistrěrowane. Pšosym pśeglědaj, lěc coš toś ten bok wopšawdu napóraś/wobźěłaś.',
 'clearyourcache'                   => "'''Pokazka: Jo móžno, až dejš wuprozniś cache wobglědowaka, aby změny wiźeł.'''
@@ -734,7 +727,7 @@ Pšosym pśemysli, lic njamóžo se bok na mjeńše wótrězki rozdźěliś.</st
 'hiddencategories'                 => 'Toś ten bok jo jadna z {{PLURAL:$1|1 schowaneje kategorije|$1 schowaneju kategorijow|$1 schowanych kategorijow|$1 schowanych kategorijow}}:',
 'edittools'                        => '<!-- Tekst how buźo wiźeś pód wobźěłowańskimi a upload-formularami. -->',
 'nocreatetitle'                    => 'Załožowanje nowych bokow jo se wobgranicowało.',
-'nocreatetext'                     => 'Na {{GRAMMAR:lokatiw|{{SITENAME}}}} jo se załoženje nowych bokow wót serwera wobgranicowało. Móžoš hyś slědk a eksistěrujucy bok wobźěłaś, abo se [[Special:Userlogin|pśizjawiś]].',
+'nocreatetext'                     => 'Na {{GRAMMAR:lokatiw|{{SITENAME}}}} jo se załoženje nowych bokow wót serwera wobgranicowało. Móžoš hyś slědk a eksistěrujucy bok wobźěłaś, abo se [[Special:UserLogin|pśizjawiś]].',
 'nocreate-loggedin'                => 'Njamaš pšawo, w {{GRAMMAR:lokatiw|{{SITENAME}}}} nowy bok załožyś.',
 'permissionserrors'                => 'Problem z pšawami',
 'permissionserrorstext'            => 'Njamaš pšawo to cyniś. {{PLURAL:$1|Pśicyna|Pśicynje|Pśicyny}}:',
@@ -846,7 +839,7 @@ Dalšne administratory we {{GRAMMAR:lokatiw|{{SITENAME}}}} mógu ale pśecej hy�
 
 # Suppression log
 'suppressionlog'     => 'Protokol pódłocowanjow',
-'suppressionlogtext' => 'To jo lisćina wulašowanjow a blokěrowanjow, kótaraž ma wopśimjeśe, kótarež jo za administratorow schowane. Glědaj  [[Special:Ipblocklist|lisćinu blokěrowanjow IP]] za lisćinu aktualnych wugnanjow a blokěrowanjow.',
+'suppressionlogtext' => 'To jo lisćina wulašowanjow a blokěrowanjow, kótaraž ma wopśimjeśe, kótarež jo za administratorow schowane. Glědaj  [[Special:IPBlockList|lisćinu blokěrowanjow IP]] za lisćinu aktualnych wugnanjow a blokěrowanjow.',
 
 # History merging
 'mergehistory'                     => 'Zwězaś stawizny bokow',
@@ -930,7 +923,7 @@ Móžoš bok ale teke [[:$1|sam załožyś]].",
 'mypreferences'            => 'móje nastajenja',
 'prefs-edits'              => 'Licba wobźěłanjow:',
 'prefsnologin'             => 'Njejsy pśizjawjony',
-'prefsnologintext'         => 'Musyš se [[Special:Userlogin|pśizjawiś]], aby mógał swóje nastajenja změniś.',
+'prefsnologintext'         => 'Musyš se [[Special:UserLogin|pśizjawiś]], aby mógał swóje nastajenja změniś.',
 'prefsreset'               => 'Nastajenja su ze składa se wótnowili. Twóje změny njejsu se składowali.',
 'qbsettings'               => 'Bocna lejstwa',
 'qbsettings-none'          => 'Žedne',
@@ -1004,7 +997,7 @@ Móžoš bok ale teke [[:$1|sam załožyś]].",
 'userrights-reason'           => 'Pśicyna změny:',
 'userrights-no-interwiki'     => 'Njamaš pšawo wužywarske pšawa w drugich wikijach změniś.',
 'userrights-nodatabase'       => 'Datowa banka $1 njeeksistěrujo abo njejo lokalna.',
-'userrights-nologin'          => 'Musyš se z administratorowym kontom [[Special:Userlogin|pśizjawiś]], aby wužywarske pšawa změnił.',
+'userrights-nologin'          => 'Musyš se z administratorowym kontom [[Special:UserLogin|pśizjawiś]], aby wužywarske pšawa změnił.',
 'userrights-notallowed'       => 'Twóje konto njama pšawa, aby wužywarske pšawa změniło.',
 'userrights-changeable-col'   => 'Kupki, kótarež móžoš změniś',
 'userrights-unchangeable-col' => 'Kupki, kótarež njamóžoš změniś',
@@ -1134,13 +1127,13 @@ Boki na [[Special:Watchlist|wobglědowańce]] su '''tucne'''.",
 'reupload'                    => 'Dataju hyšći raz pósłaś.',
 'reuploaddesc'                => 'Upload pśetergnuś a slědk k uploadowemu formularoju',
 'uploadnologin'               => 'Njepśizjawjony(a)',
-'uploadnologintext'           => 'Dejš se [[Special:Userlogin|pśizjawiś]], aby mógał dataje uploadowaś.',
+'uploadnologintext'           => 'Dejš se [[Special:UserLogin|pśizjawiś]], aby mógał dataje uploadowaś.',
 'upload_directory_missing'    => 'Nagrawański zapis ($1) felujo a njejo se pśez webserwer napóraś dał.',
 'upload_directory_read_only'  => 'Seśowy serwer njamóžo do uploadowego zapisa ($1) pisaś.',
 'uploaderror'                 => 'Zmólka pśi uploadowanju',
 'uploadtext'                  => "Wužyj toś ten formular za uploadowanje nowych datajow.
 
-Źi na [[Special:Imagelist|lisćinu uploadowanych datajow]], aby mógł juž uploadowane dataje pytaś a pokazaś, uploadowanja a lašowanja se teke w [[Special:Log/upload|protokol uploadowanjow]] protokoluju.
+Źi na [[Special:ImageList|lisćinu uploadowanych datajow]], aby mógł juž uploadowane dataje pytaś a pokazaś, uploadowanja a lašowanja se teke w [[Special:Log/upload|protokol uploadowanjow]] protokoluju.
 
 Aby dataju do boka zapśimjeł, wužyj wótkaz we formje
 '''<nowiki>[[</nowiki>{{ns:image}}<nowiki>:Dataja.jpg]]</nowiki>''',
@@ -1240,7 +1233,7 @@ PICT # misc.
 'upload_source_url'  => ' (płaśeca, zjawnje pśistupna URL)',
 'upload_source_file' => ' (dataja na twójom kompjuterje)',
 
-# Special:Imagelist
+# Special:ImageList
 'imagelist-summary'     => 'Toś ten specialny bok nalicyjo wšykne uploadowane dataje. Normalnje pokazuje se te dataje, ako su slědne se uploadowali, ako prědne w lisćinje. Tłocenje na napise špaltow změnijo sortěrowanje.',
 'imagelist_search_for'  => 'Za medijowym mjenim pytaś:',
 'imgfile'               => 'dataja',
@@ -1266,7 +1259,7 @@ PICT # misc.
 'imagelinks'                     => 'Wótkaze',
 'linkstoimage'                   => '{{PLURAL:$1|Slědujucy bok wótkazujo|Slědujucej $1 boka wótkazujotej|Slědujuce $1 boki wótkazuju|Slědujucych $1 bokow wótkazujo}} na toś tu dataju:',
 'nolinkstoimage'                 => 'Žedne boki njewótkazuju na toś tu dataju.',
-'morelinkstoimage'               => '[[Special:Whatlinkshere/$1|Dalšne wótkazy]] k toś tej dataji wobglědaś.',
+'morelinkstoimage'               => '[[Special:WhatLinksHere/$1|Dalšne wótkazy]] k toś tej dataji wobglědaś.',
 'redirectstofile'                => '{{PLURAL:$1|Slědujuca dataja dalej pósrědnja|Slědujucej $1 dataji dalej pósrědnjatej|slědujuce $1 dataje dalej póšrědnjaju|Slědujucych $1 datajow dalej pósrědnja}} k toś tej dataji:',
 'duplicatesoffile'               => '{{PLURAL:$1|Slědujuca dataja jo duplikat|Slědujucej $1 dataji stej duplikata|Slědujuce dataje $1 su duplikaty|Slědujucych $1 datajow jo duplikaty}} toś teje dataje:',
 'sharedupload'                   => 'Toś ta dataja se gromaźe wužywa - snaź teke w drugich projektach.',
@@ -1285,18 +1278,18 @@ PICT # misc.
 # File reversion
 'filerevert'                => 'Slědk wześ $1',
 'filerevert-legend'         => 'Dataju nawrośiś',
-'filerevert-intro'          => '<span class="plainlinks">Nawrośijoš dataju \'\'\'[[Media:$1|$1]]\'\'\' na [$4 wersiju wót $2, $3 góź.].</span>',
+'filerevert-intro'          => "Nawrośijoš dataju '''[[Media:$1|$1]]''' na [$4 wersiju wót $2, $3 góź.].",
 'filerevert-comment'        => 'Komentar:',
 'filerevert-defaultcomment' => 'Nawrośona na wersiju wót $1, $2 góź.',
 'filerevert-submit'         => 'Slědk wześ',
-'filerevert-success'        => '<span class="plainlinks">\'\'\'[[Media:$1|$1]]\'\'\' jo se nawrośiło na [$4 wersiju wót $2, $3 góź.].</span>',
+'filerevert-success'        => "'''[[Media:$1|$1]]''' jo se nawrośiło na [$4 wersiju wót $2, $3 góź.].",
 'filerevert-badversion'     => 'Za pódany cas njeeksistěrujo žedna wersija dataje.',
 
 # File deletion
 'filedelete'                  => 'Wulašowaś $1',
 'filedelete-legend'           => 'Wulašowaś dataje',
 'filedelete-intro'            => "Ty wulašujoš '''[[Media:$1|$1]]'''.",
-'filedelete-intro-old'        => '<span class="plainlinks">Wulašujoš [$4 wersiju wót $2, $3 góź.] dataje \'\'\'„[[Media:$1|$1]]“\'\'\'.</span>',
+'filedelete-intro-old'        => "Wulašujoš [$4 wersiju wót $2, $3 góź.] dataje '''„[[Media:$1|$1]]“'''.",
 'filedelete-comment'          => 'Komentar:',
 'filedelete-submit'           => 'Wulašowaś',
 'filedelete-success'          => "'''$1''' wulašowane.",
@@ -1351,7 +1344,7 @@ Dogromady {{PLURAL:$3|běšo|běštej|běchu}} '''$3''' {{PLURAL:$3|wótwołanje
 To wucynjujo '''$5''' {{PLURAL:$5|wobźěłanje|wobźěłani|wobźěłanja}} na bok a '''$6''' {{PLURAL:$6|wótwołanje|wótwołani|wótwołanja}} na wobźěłanje.
 
 Dłujkosć [http://www.mediawiki.org/wiki/Manual:Job_queue „Job queue“]: '''$7'''",
-'userstatstext'          => "Dajo '''$1''' {{PLURAL:$1|registrěrowanego|registrěrowaneju|registrěrowanych}} [[Special:Listusers|{{PLURAL:$1|wužywarja|wužywarjowu|wužywarjow}}]].
+'userstatstext'          => "Dajo '''$1''' {{PLURAL:$1|registrěrowanego|registrěrowaneju|registrěrowanych}} [[Special:ListUsers|{{PLURAL:$1|wužywarja|wužywarjowu|wužywarjow}}]].
 Wót togo {{PLURAL:$2|jo|stej|su}} '''$2''' (=$4 %) $5.",
 'statistics-mostpopular' => 'Nejwěcej woglědane boki',
 
@@ -1447,7 +1440,7 @@ Bok wobjadnawa se ako bok wujasnjenja zapśimjeśa, gaž wótkazujo na nju [[Med
 'logempty'             => 'Žedne se góźece zapise njeeksistěruju.',
 'log-title-wildcard'   => 'Pytaś nadpismo, kótarež zachopijo z ...',
 
-# Special:Allpages
+# Special:AllPages
 'allpages'          => 'Wšykne boki',
 'alphaindexline'    => '$1 do $2',
 'nextpage'          => 'Slědujucy bok ($1)',
@@ -1470,12 +1463,12 @@ Bok wobjadnawa se ako bok wujasnjenja zapśimjeśa, gaž wótkazujo na nju [[Med
 'special-categories-sort-count' => 'pśewuběrowaś pó licbje',
 'special-categories-sort-abc'   => 'pśewuběrowaś pó alfabeśe',
 
-# Special:Listusers
+# Special:ListUsers
 'listusersfrom'      => 'Pokaž wužywarjow wót:',
 'listusers-submit'   => 'Pokazaś',
 'listusers-noresult' => 'Žeden wužywaŕ njejo se namakał.',
 
-# Special:Listgrouprights
+# Special:ListGroupRights
 'listgrouprights'          => 'Pšawa wužywarskeje kupki',
 'listgrouprights-summary'  => 'To jo lisćina wužywarskich kupkow definěrowanych w toś tom wikiju z jich zwězanymi pśistupnymi pšawami. Pśidatne informacije wó jadnotliwych pšawach daje so na [[{{MediaWiki:Listgrouprights-helppage}}]] namakaś.',
 'listgrouprights-group'    => 'Kupka',
@@ -1485,7 +1478,7 @@ Bok wobjadnawa se ako bok wujasnjenja zapśimjeśa, gaž wótkazujo na nju [[Med
 
 # E-mail user
 'mailnologin'     => 'Njejo móžno e-mailku pósłaś.',
-'mailnologintext' => 'Dejš [[Special:Userlogin|pśizjawjony]] byś a płaśiwu e-mailowu adresu w swójich [[Special:Preferences|nastajenjach]] měś, aby drugim wužywarjam e-mail pósłał.',
+'mailnologintext' => 'Dejš [[Special:UserLogin|pśizjawjony]] byś a płaśiwu e-mailowu adresu w swójich [[Special:Preferences|nastajenjach]] měś, aby drugim wužywarjam e-mail pósłał.',
 'emailuser'       => 'Toś tomu wužywarjeju e-mail pósłaś',
 'emailpage'       => 'E-mail wužywarjeju',
 'emailpagetext'   => 'Jo-lic toś ten wužywaŕ płaśecu e-mailowu adresu zapódał, móžoš jomu z pomocu dołojcnego formulara e-mail pósłaś. Ako wótpósłaŕ pódajo se e-mailowa adresa z twójich nastajenjow, aby mógał wužywaŕ wótegroniś.',
@@ -1511,11 +1504,11 @@ Bok wobjadnawa se ako bok wujasnjenja zapśimjeśa, gaž wótkazujo na nju [[Med
 'nowatchlist'          => 'Žedne zapise w Twójich wobglědowańkach.',
 'watchlistanontext'    => 'Dejš se $1, aby mógał swóje wobglědowańka wiźeś abo zapise w nich wobźěłaś.',
 'watchnologin'         => 'Njepśizjawjony(a)',
-'watchnologintext'     => 'Musyš byś [[Special:Userlogin|pśizjawjony]], aby mógał swóje wobglědowańka wobźěłaś.',
+'watchnologintext'     => 'Musyš byś [[Special:UserLogin|pśizjawjony]], aby mógał swóje wobglědowańka wobźěłaś.',
 'addedwatch'           => 'Jo k wobglědowańkam se dodało',
 'addedwatchtext'       => 'Bok „<nowiki>$1</nowiki>“ jo k twójim [[Special:Watchlist|wobglědowańkam]] se dodał.
 
-Pózdźejšne změny na toś tom boku a w pśisłušecej diskusiji se tam nalicuju a w pśeglěźe [[Special:Recentchanges|slědnych změnow]] tucnje wóznamjeniju.
+Pózdźejšne změny na toś tom boku a w pśisłušecej diskusiji se tam nalicuju a w pśeglěźe [[Special:RecentChanges|slědnych změnow]] tucnje wóznamjeniju.
 
 Coš-lic bok zasej z twójich wobglědowańkow wulašowaś, kliknij na wótpowědujucem boce na "dalej njewobglědowaś".',
 'removedwatch'         => 'Jo z wobglědowańkow se wulašowało',
@@ -1622,7 +1615,7 @@ Slědnu změnu jo wugbał [[User:$3|$3]] ([[User talk:$3|diskusija]]).',
 Wěstoty dla jo akcija se pśetergnuła, aby se zadorało wopacnemu pśirědowanjoju twójeje změny drugemu wužywarjeju.
 Pšosym nawroś se na bok, wót kótaregož sy pśišeł a wopytaj hyšći raz.',
 'protectlogpage'              => 'Log-lisćina šćitanych bokow.',
-'protectlogtext'              => 'To jo log-lisćina šćitanych bokow. Glědaj do [[Special:Protectedpages|lisćiny šćitanych bokow]], aby wiźeł wšykne aktualnje šćitane boki.',
+'protectlogtext'              => 'To jo log-lisćina šćitanych bokow. Glědaj do [[Special:ProtectedPages|lisćiny šćitanych bokow]], aby wiźeł wšykne aktualnje šćitane boki.',
 'protectedarticle'            => 'Bok „[[$1]]“ jo se šćitał.',
 'modifiedarticleprotection'   => 'Šćitanska rownina za „[[$1]]“ jo se změniła.',
 'unprotectedarticle'          => 'Šćit za „[[$1]]“ jo se wótpórał.',
@@ -1781,7 +1774,7 @@ $1',
 'badipaddress'                    => 'IP-adresa jo njekorektna',
 'blockipsuccesssub'               => 'Wuspěšnje blokěrowane',
 'blockipsuccesstext'              => 'Wužywaŕ/IP-adresa [[Special:Contributions/$1|$1]] jo se blokěrował(a).<br />
-Glědaj do [[Special:Ipblocklist|lisćiny aktiwnych blokěrowanjow]].',
+Glědaj do [[Special:IPBlockList|lisćiny aktiwnych blokěrowanjow]].',
 'ipb-edit-dropdown'               => 'Pśicyny blokěrowanja wobźěłaś',
 'ipb-unblock-addr'                => '$1 dopušćiś',
 'ipb-unblock'                     => 'Wužywarske mě abo IP-adresu dopušćiś',
@@ -1813,7 +1806,7 @@ Glědaj do [[Special:Ipblocklist|lisćiny aktiwnych blokěrowanjow]].',
 'blocklogentry'                   => '[[$1]] blokěrujo se na $2 $3',
 'blocklogtext'                    => 'To jo log-lisćina blokěrowanjow a dopušćenjow.
 IP-adresy, ako su awtomatiski se blokěrowali, se njepokažu.
-Na boce [[Special:Ipblocklist|Lisćina blokěrowanych IP-adresow a wužywarskich mjenjow]] jo móžno, akualne blokěrowanja pśeglědowaś.',
+Na boce [[Special:IPBlockList|Lisćina blokěrowanych IP-adresow a wužywarskich mjenjow]] jo móžno, akualne blokěrowanja pśeglědowaś.',
 'unblocklogentry'                 => 'jo $1 zasej dopušćił',
 'block-log-flags-anononly'        => 'jano anonymne',
 'block-log-flags-nocreate'        => 'stwórjenje konta jo se znjemóžniło',
@@ -1848,7 +1841,7 @@ Na boce [[Special:Ipblocklist|Lisćina blokěrowanych IP-adresow a wužywarskich
 'lockdbsuccesssub'    => 'Datowa banka jo zamknjona.',
 'unlockdbsuccesssub'  => 'Datowa banka jo zasej se spśistupniła.',
 'lockdbsuccesstext'   => 'Datowa banka jo zamknjona.
-<br />Njezabydń ju [[Special:Unlockdb|zasej spśistupniś]], gaž swójo zeźěłajoš.',
+<br />Njezabydń ju [[Special:UnlockDB|zasej spśistupniś]], gaž swójo zeźěłajoš.',
 'unlockdbsuccesstext' => 'Datowa banka jo zasej pśistupna.',
 'lockfilenotwritable' => 'Njejo móžno, blokěrowansku dataju datoweje banki změniś. Coš-lic datowu banku zamknuś abo zasej spśistupniś, dej webowy serwer měś pšawo, do njeje pisaś.',
 'databasenotlocked'   => 'Datowa banka njejo zamknjona.',
@@ -1873,8 +1866,6 @@ pšosym zawěsć, až konsekwency rozmijoš, nježli až pókšacujoš.",
 
 W toś tyma padoma dej wopśimjeśe boka manualnje se pśesunuś resp. gromadu wjasć, jolic až to coš.",
 'movearticle'             => 'Bok pśesunuś',
-'movenologin'             => 'Njepśizjawjony(a)',
-'movenologintext'         => 'Aby mógał bok pśesunuś, dejš byś [[Special:Userlogin|pśizjawjony wužywaŕ]].',
 'movenotallowed'          => 'Njamaš pšawo pśesuwaś boki we {{GRAMMAR:lokatiw|{{SITENAME}}}}.',
 'newtitle'                => 'nowy nadpis:',
 'move-watch'              => 'Toś ten bok wobglědowaś',
@@ -1901,7 +1892,7 @@ W toś tyma padoma dej wopśimjeśe boka manualnje se pśesunuś resp. gromadu w
 'delete_and_move'         => 'Wulašowaś a pśesunuś',
 'delete_and_move_text'    => '==Celowy bok eksistěrujo - wulašowaś??==
 
-Bok „[[$1]]“ južo eksistěrujo. Coš jen wulašowaś, aby mógał toś ten bok pśesunuś?',
+Bok „[[:$1]]“ južo eksistěrujo. Coš jen wulašowaś, aby mógał toś ten bok pśesunuś?',
 'delete_and_move_confirm' => 'Jo, toś ten bok wulašowaś',
 'delete_and_move_reason'  => 'wulašowane, aby było městno za pśesunjenje',
 'selfmove'                => 'Wuchadne a celowe mě stej identiskej; njejo móžno, bok na sam se pśesunuś.',
@@ -2136,7 +2127,7 @@ $1',
 'show-big-image'       => 'Połne optiske wótgranicowanje.',
 'show-big-image-thumb' => '<small>wjelikosć pśeglěda: $1 × $2 pikselow</small>',
 
-# Special:Newimages
+# Special:NewImages
 'newimages'             => 'Nowe dataje',
 'imagelisttext'         => "How jo lisćina '''$1''' {{PLURAL:$1|dataje|datajowu|datajow}}, sortěrowane $2.",
 'newimages-summary'     => 'Toś ten specialny bok pokazujo wobraze a dataje, kótarež ako slědne su se uploadowali.',
@@ -2421,7 +2412,7 @@ Slědujuce wótkaze w tej samej smužce se za wuwześa naglědaju, w kótarychž
 
 # External editor support
 'edit-externally'      => 'Dataje z eksternym programom wobźěłaś',
-'edit-externally-help' => 'Za dalšne informacije glědaj [http://meta.wikimedia.org/wiki/Help:External_editors setup instructions].',
+'edit-externally-help' => 'Za dalšne informacije glědaj [http://www.mediawiki.org/wiki/Manual:External_editors setup instructions].',
 
 # 'all' in various places, this might be different for inflected languages
 'recentchangesall' => 'wšykne',
@@ -2483,7 +2474,7 @@ Pšosym wobkšuśiś, až napšawdu coš ten bok zasej wutwóriś.",
 'recreate'            => 'Wótnowótki wutwóriś',
 
 # HTML dump
-'redirectingto' => 'Pśeadresěrowanje do [[$1]]...',
+'redirectingto' => 'Pśeadresěrowanje do [[:$1]]...',
 
 # action=purge
 'confirm_purge'        => 'Wulašowaś cache togo boka? $1',
@@ -2591,7 +2582,7 @@ Móžoš teke [[Special:Watchlist/edit|standardny editor wužywaś]].',
 'version-software-product'         => 'Produkt',
 'version-software-version'         => 'Wersija',
 
-# Special:Filepath
+# Special:FilePath
 'filepath'         => 'Datajowa droga',
 'filepath-page'    => 'Dataja:',
 'filepath-submit'  => 'Droga',
@@ -2629,7 +2620,7 @@ Zapódaj datajowe mě bźez prefiksa "{{ns:image}}:".',
 'specialpages-group-redirects'   => 'Dalej pósrědnjajuce boki',
 'specialpages-group-spam'        => 'Spamowe rědy',
 
-# Special:Blankpage
+# Special:BlankPage
 'blankpage'              => 'Prozny bok',
 'intentionallyblankpage' => 'Toś ten bok jo z wótglědom prozny.',
 

@@ -100,7 +100,7 @@ if (!defined('MEDIAWIKI')) {
 			if(isset($this->prop['editcount']))
 				$data[$r->user_name]['editcount'] = $r->user_editcount;
 			if(isset($this->prop['registration']))
-				$data[$r->user_name]['registration'] = wfTimestamp(TS_ISO_8601, $r->user_registration);
+				$data[$r->user_name]['registration'] = wfTimestampOrNull(TS_ISO_8601, $r->user_registration);
 			if(isset($this->prop['groups']))
 				// This row contains only one group, others will be added from other rows
 				if(!is_null($r->ug_group))
@@ -164,6 +164,6 @@ if (!defined('MEDIAWIKI')) {
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiQueryUsers.php 35098 2008-05-20 17:13:28Z ialex $';
+		return __CLASS__ . ': $Id: ApiQueryUsers.php 38183 2008-07-29 12:58:04Z rotem $';
 	}
 }

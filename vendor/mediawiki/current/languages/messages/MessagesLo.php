@@ -4,10 +4,8 @@
  * @ingroup Language
  * @file
  *
- * @author Tuinui
  * @author Passawuth
- * @author Siebrand
- * @author Jon Harald Søby
+ * @author Tuinui
  */
 
 $namespaceNames = array(
@@ -339,8 +337,6 @@ $messages = array(
 'blockededitsource'        => "ເນື້ອໃນ ຂອງ '''ການດັດແປງໂດຍທ່ານ '''ຕໍ່ກັບ '''$1''' ມີດັ່ງລຸ່ມນີ້:",
 'whitelistedittitle'       => 'ຕ້ອງເຊັນເຂົ້າ ຈຶ່ງຈະສາມາດດັດແກ້ໄດ້',
 'whitelistedittext'        => 'ທ່ານ ຈະຕ້ອງ  $1 ເພື່ອ ຈະດັດແກ້.',
-'whitelistreadtitle'       => 'ຈະຕ້ອງ ເຊັນເຂົ້າ ເພື່ອອ່ານໜ້ານີ້',
-'whitelistacctitle'        => 'ທ່ານຖືກຫ້າມສ້າງບັນຊີ',
 'confirmedittitle'         => 'ຕ້ອງຢືນຢັນ ທີ່ຢູ່ ອີເມລ ຈຶ່ງຈະສາມາດ ດັດແກ້',
 'loginreqtitle'            => 'ຈຳເປັນຕ້ອງ ເຊັນເຂົ້າ',
 'loginreqlink'             => 'ເຊັນເຂົ້າ',
@@ -369,7 +365,7 @@ $messages = array(
 'template-protected'       => '(ປົກປ້ອງ)',
 'template-semiprotected'   => '(ເຄິ່ງປົກປ້ອງ)',
 'nocreatetext'             => '{{SITENAME}} ໄດ້ຈຳກັດການສ້າງໜ້າໃໝ່.
-ທ່ານສາມາດກັບໄປ ດັດແກ້ ໜ້າທີ່ມີແລ້ວ ຫຼື [[Special:Userlogin|ເຊັນເຂົ້າ ຫຼື ສ້າງບັນຊີ]].',
+ທ່ານສາມາດກັບໄປ ດັດແກ້ ໜ້າທີ່ມີແລ້ວ ຫຼື [[Special:UserLogin|ເຊັນເຂົ້າ ຫຼື ສ້າງບັນຊີ]].',
 
 # Account creation failure
 'cantcreateaccounttitle' => 'ບໍ່ສາມາດສ້າງ ບັນຊີ ໄດ້',
@@ -495,7 +491,7 @@ $messages = array(
 'savefile'          => 'ບັນທຶກໄຟລ໌',
 'watchthisupload'   => 'ຕິດຕາມໜ້ານີ້',
 
-# Special:Imagelist
+# Special:ImageList
 'imagelist' => 'ລາຍຊື່ໄຟລ໌',
 
 # Image description page
@@ -584,7 +580,7 @@ $messages = array(
 'log-search-submit' => 'ໄປ',
 'logempty'          => 'ຍັງບໍ່ພົບເນື້ອໃນບັນທຶກ.',
 
-# Special:Allpages
+# Special:AllPages
 'allpages'       => 'ທຸກໆໜ້າ',
 'alphaindexline' => '$1 ຫາ $2',
 'nextpage'       => 'ໜ້າຕໍ່ໄປ ($1)',
@@ -600,7 +596,7 @@ $messages = array(
 'categories'         => 'ໝວດ',
 'categoriespagetext' => 'ມີ ບັນດາ ໝວດ ຕໍ່ໄປນີ້ ຢູ່ ວິກີ.',
 
-# Special:Listusers
+# Special:ListUsers
 'listusers-submit' => 'ສະແດງ',
 
 # E-mail user
@@ -736,7 +732,6 @@ $messages = array(
 'movepagetext'            => 'ທ່ານສາມາດ ປ່ຽນຊື່ໜ້າ ແລະ ຍ້າຍປະຫວັດການດັດແກ້ ຂອງໜ້າໃດໜຶ່ງ ໄປ ໜ້າໃໝ',
 'movepagetalktext'        => "ໜ້າສົນທະນາຈະຖືກຍ້າຍໄປພ້ອມກັນ '''ເວັ້ນເສຍແຕ່:''",
 'movearticle'             => 'ຍ້າຍໜ້າ:',
-'movenologin'             => 'ຍັງບໍ່ໄດ້ເຊັນເຂົ້າເທື່ອ',
 'newtitle'                => 'ຫາ ຫົວຂໍ້ໃໝ່',
 'move-watch'              => 'ຕິດຕາມໜ້ານີ້',
 'movepagebtn'             => 'ຍ້າຍໜ້າ',
@@ -821,7 +816,7 @@ $messages = array(
 'show-big-image'       => 'ເຕັມຂະໜາດ',
 'show-big-image-thumb' => '<small>ຂະໜາດລອງເບິ່ງ: $1 × $2 ປິກເຊລ</small>',
 
-# Special:Newimages
+# Special:NewImages
 'newimages'         => 'ໄຟລ໌ຮູບໃໝ່',
 'newimages-summary' => 'ໜ້າພິເສດນີ້ສະແດງໄຟລ໌ທີ່ຖຶກອັປໂຫຼດຫຼ້າສຸດ',
 'noimages'          => 'ບໍ່ມີຫຍັງເບິ່ງ.',
@@ -840,7 +835,7 @@ $messages = array(
 
 # External editor support
 'edit-externally'      => 'ດັດແກ້ໄຟລ໌ນີ້ໂດຍໂປແກຣມພາຍນອກ',
-'edit-externally-help' => 'ເບິ່ງ ຂໍ້ມູນເພີ່ມຕື່ມ ຢູ່ [http://meta.wikimedia.org/wiki/Help:External_editors setup instructions]',
+'edit-externally-help' => 'ເບິ່ງ ຂໍ້ມູນເພີ່ມຕື່ມ ຢູ່ [http://www.mediawiki.org/wiki/Manual:External_editors setup instructions]',
 
 # 'all' in various places, this might be different for inflected languages
 'recentchangesall' => 'ທັງໝົດ',
@@ -875,7 +870,7 @@ $messages = array(
 'recreate' => 'ສ້າງຄືນ',
 
 # HTML dump
-'redirectingto' => 'ພວມໂອນໄປ ຫາ [[$1]]...',
+'redirectingto' => 'ພວມໂອນໄປ ຫາ [[:$1]]...',
 
 # action=purge
 'confirm_purge_button' => 'ຕົກລົງ',
@@ -904,7 +899,7 @@ $messages = array(
 # Special:Version
 'version' => 'ສະບັບ', # Not used as normal message but as header for the special page itself
 
-# Special:Filepath
+# Special:FilePath
 'filepath' => 'ທາງໄປຫາໄຟລ໌',
 
 # Special:SpecialPages

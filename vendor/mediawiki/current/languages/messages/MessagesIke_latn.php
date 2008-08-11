@@ -4,8 +4,6 @@
  * @ingroup Language
  * @file
  *
- * @author SPQRobin
- * @author M.M.S.
  */
 
 $messages = array(
@@ -237,7 +235,7 @@ pigivuq qatannguti uikipitia kiinaujaqutiqarvik isuillingaitjapaa. iqtuu suqusiq
 # Special:Log
 'log-search-submit' => 'aivuk',
 
-# Special:Allpages
+# Special:AllPages
 'allpages'       => 'sunamittuq mappitaq',
 'nextpage'       => 'tagga mappitaq ($1)',
 'allpagesprev'   => 'tunullipaaq',
@@ -333,7 +331,7 @@ pigivuq qatannguti uikipitia kiinaujaqutiqarvik isuillingaitjapaa. iqtuu suqusiq
 'previousdiff' => '← tunullipaaq asiaNngutuq',
 'nextdiff'     => 'tagga asiaNngutuq mappitaq →',
 
-# Special:Newimages
+# Special:NewImages
 'ilsubmit' => 'ivaaqpuq',
 'bydate'   => 'pitaaruttuq inuulirvik',
 
@@ -350,7 +348,7 @@ pigivuq qatannguti uikipitia kiinaujaqutiqarvik isuillingaitjapaa. iqtuu suqusiq
 'monthsall' => 'sunamittuq',
 
 # HTML dump
-'redirectingto' => 'qaningani kamagijaq aasit nakit [[$1]]...',
+'redirectingto' => 'qaningani kamagijaq aasit nakit [[:$1]]...',
 
 # action=purge
 'confirm_purge_button' => 'akaujuq',

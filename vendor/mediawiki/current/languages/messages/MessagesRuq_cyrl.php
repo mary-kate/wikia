@@ -4,10 +4,9 @@
  * @ingroup Language
  * @file
  *
- * @author Макѕе
  * @author Кумулај Маркус
+ * @author Макѕе
  * @author Приетен тев
- * @author Siebrand
  */
 
 $fallback = 'mk';
@@ -242,7 +241,7 @@ $3',
 # Book sources
 'booksources' => 'Сурсе де цајрћи',
 
-# Special:Allpages
+# Special:AllPages
 'allpages'       => 'Тоатс пажи',
 'alphaindexline' => '$1 во $2',
 'allarticles'    => 'Тоат пажи',
