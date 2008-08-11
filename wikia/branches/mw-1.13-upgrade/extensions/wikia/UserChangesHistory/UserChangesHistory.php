@@ -7,7 +7,7 @@
  */
 
 $wgHooks[ "UserLoginComplete" ][ ] = array( "UserChangesHistory::LoginHistoryInsert", "form" );
-$wgHooks[ "UserLoadFromSession" ][ ] = array( "UserChangesHistory::LoginHistoryInsert", "auto" );
+#$wgHooks[ "UserLoadFromSession" ][ ] = array( "UserChangesHistory::LoginHistoryInsert", "auto" );
 $wgHooks[ "SavePreferences" ][ ] = array( "UserChangesHistory::SavePreferencesHook" );
 
 /**
