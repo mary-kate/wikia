@@ -133,12 +133,6 @@ class ContactForm extends SpecialPage {
 		$encEmail = htmlspecialchars( $this->mEmail );
 		$encSitename = htmlspecialchars( $wgSitename );
 
-		if ($wgUser->getID() != 0) {
-			$cambutton = "<input tabindex='6' type='submit' name=\"wpCreateaccountMail\" value=\"{$cam}\" />";
-		} else {
-			$cambutton = '';
-		}
-
 		$wgOut->addHTML( "
         {$cwt}
 	<form name=\"contactform\" id=\"contactform\" method=\"post\" action=\"{$action}\">
