@@ -29,31 +29,20 @@ function WidgetAdvertiser($id, $params) {
 		wfProfileOut(__METHOD__);
 		return '';
 	}
-    $ret = '';
-	$type = $wgUser->isLoggedIn() ? 'user' : 'anon';
 
 	if($wgRequest->getVal('action', 'view') != 'view') {
+		wfProfileOut(__METHOD__);
 		return '';
 	}
 
-	switch ($type) {
-		case 'anon':
-			if(get_class($wgUser->getSkin()) == 'SkinMonaco') {
-				$ret = AdServer::getInstance()->getAd('bl');
-			} else {
-				$ret = str_replace('&','&amp;',WidgetAdvertiserWrapAd('tr', $id)) . str_replace('&','&amp;',WidgetAdvertiserWrapAd('l', $id));
-			}
-			break;
-		case 'user':
-			if(get_class($wgUser->getSkin()) == 'SkinMonaco') {
-				$ret = AdServer::getInstance()->getAd('r');
-			} else {
-				$ret = str_replace('&','&amp;',WidgetAdvertiserWrapAd('tl', $id )) . str_replace('&','&amp;',WidgetAdvertiserWrapAd('t', $id));
-			}
-			break;
+	if(get_class($wgUser->getSkin()) == 'SkinMonaco') {
+		$ret = AdServer::getInstance()->getAd('bl');
+	} else {
+		$ret = str_replace('&','&amp;',WidgetAdvertiserWrapAd('tr', $id)) . str_replace('&','&amp;',WidgetAdvertiserWrapAd('l', $id));
 	}
+
 	wfProfileOut(__METHOD__);
-    return $ret;
+	return $ret;
 }
 
 function WidgetAdvertiserWrapAd($pos, $id) {

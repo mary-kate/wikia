@@ -8,9 +8,34 @@
  */
 
 /**
+CREATE TABLE `user_login_history` (
+  `user_id` int(5) unsigned NOT NULL,
+  `city_id` int(9) unsigned default '0',
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  `login_from` varchar(10) NOT NULL default 'auto'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+
+CREATE TABLE `user_history` (
+  `user_id` int(5) unsigned NOT NULL,
+  `user_name` varchar(255) character set latin1 collate latin1_bin NOT NULL default '',
+  `user_real_name` varchar(255) character set latin1 collate latin1_bin NOT NULL default '',
+  `user_password` tinyblob NOT NULL,
+  `user_newpassword` tinyblob NOT NULL,
+  `user_email` tinytext NOT NULL,
+  `user_options` blob NOT NULL,
+  `user_touched` varchar(14) character set latin1 collate latin1_bin NOT NULL default '',
+  `user_token` varchar(32) character set latin1 collate latin1_bin NOT NULL default '',
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  KEY `user_name` (`user_name`(10))
+) ENGINE=InnoDB DEFAULT CHARSET=utf-8
+**/
+
+/**
  * static methods, wait for PHP with namespaces
  */
 class UserChangesHistory {
+
+	private $mCluster = "archive1";
 
 	/**
 	 * LoginHistoryInsert
@@ -45,8 +70,49 @@ class UserChangesHistory {
 	}
 
 
-	static public function SavePreferencesInsert( $preferences, $User, $msg ) {
+	/**
+	 * SavePreferencesHook
+	 *
+	 * Store row from user table before changes of preferences are saved.
+	 * Row is stored in external storage archive1
+	 */
+	static public function SavePreferencesHook( $preferences, $User, $msg ) {
 
+		$id = $User->getId();
+		if( $id ) {
+			/**
+			 * caanot use "insert from select" because we got two different db
+			 * clusters. But we should have all user data already loaded.
+			 */
+			print_pre( $User );
+
+
+			$external = new ExternalStoreDB();
+			$dbw = $external->getMaster( $this->mCluster );
+
+			/**
+			 * so far encodeOptions is public by default but could be
+			 * private in future
+			 */
+			$dbw->insert(
+				"user_history",
+				array(
+					"user_id" => $User->mId,
+					"user_name" => $User->mName,
+					"user_real_name" => $User->mRealName,
+					"user_password" => $User->mPassword,
+					"user_newpassword" => $User->mNewpassword,
+					"user_email" => $User->mEmail,
+					"user_options" => $User->encodeOptions(),
+					"user_touched" => $User->mTouched,
+					"user_token" => $User->mToken,
+
+				),
+				__METHOD__
+			);
+		}
+
+		return true;
 	}
 
 }

@@ -35,12 +35,13 @@ class InterwikiDispatcher extends SpecialPage {
 		wfLoadExtensionMessages('SpecialInterwikiDispatcher');
 
 		$redirect = $wgNotAValidWikia;
-		$url = $wgRequest->getText('wikia');
+		$wikia = $wgRequest->getText('wikia');
 		$art = $wgRequest->getText('article');
 
-		if (!empty($url)) {
-			if (self::isWikiExists($url)) {	//wiki exists
-				$redirect = "http://$url.wikia.com/";
+		if (!empty($wikia)) {
+			$iCityId = self::isWikiExists($wikia);
+			if ($iCityId) {	//wiki exists
+				$redirect = self::getCityUrl($iCityId);
 				if (empty($art)) {	//no article set - redir to the main page
 					$output = null;
 					exec ("'echo Title::newMainPage();' | SERVER_ID={$row->city_id} /opt/wikia/php/bin/php /usr/wikia/source/wiki/maintenance/eval.php --conf /usr/wikia/docroot/wiki.factory/LocalSettings.php", $output);
@@ -75,11 +76,26 @@ class InterwikiDispatcher extends SpecialPage {
 			$DBr->FreeResult($dbResult);
 			return false;
 		}
-		
 	}
+	
+	private static function getCityUrl($iCityId) {
+		$DBr = wfGetDB(DB_SLAVE);
+		$dbResult = $DBr->Query(
+			  'SELECT city_url'
+			. ' FROM ' . wfSharedTable('city_list')
+			. ' WHERE city_id = ' . $DBr->AddQuotes($iCityId)
+			. ';'
+			, __METHOD__
+		);
+
+		$row = $DBr->FetchObject($dbResult);
+		$DBr->FreeResult($dbResult);
+		
+		return $row->city_url;
+	} 
 
 	public static function getInterWikiaURL(&$title, &$url, $query) {
-		global $wgArticlePath;
+		global $wgArticlePath, $wgScriptPath;
 
 		if(in_array($title->mInterwiki, array('w', 'wikia', 'wikicities'))) {
 			$aLinkParts = explode(':', $title->getText());
@@ -88,12 +104,23 @@ class InterwikiDispatcher extends SpecialPage {
 				if($iCityId) {
 					$sArticlePath = WikiFactory::getVarValueByName('wgArticlePath', $iCityId);
 					$sArticlePath = !empty($sArticlePath) ? $sArticlePath : $wgArticlePath;
+ 
+					/* $wgScriptPath is already included in city_url 
+					$sScriptPath = WikiFactory::getVarValueByName('wgScriptPath', $iCityId);
+					$sScriptPath = !empty($sScriptPath) ? $sScriptPath : $wgScriptPath;
+					*/
+					
 					if(!empty($sArticlePath)) {
 						$sArticleTitle = "";
 						for($i = 2; $i < count($aLinkParts); $i++) {
 							$sArticleTitle .= (!empty($sArticleTitle)?":":"") . $aLinkParts[$i];
 						}
-						$url = str_replace('$1',  $sArticleTitle, ("http://"	. $aLinkParts[1] . ".wikia.com" . $sArticlePath));						
+						
+						$sCityUrl = self::getCityUrl($iCityId);
+						if(!empty($sCityUrl)) {
+							$url = str_replace(array('$1', '$wgScriptPath'),  array($sArticleTitle, ''), $sArticlePath);												
+							$url = $sCityUrl . ltrim($url, '/'); 
+						}
 					}
 				}
 			}

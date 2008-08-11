@@ -25,7 +25,6 @@ function wfExtendJSGlobalVars($vars) {
 	$vars['wgReturnTo'] = isset($_REQUEST['returnto']) ? $_REQUEST['returnto'] : '';
 	$vars['wgDB'] = $wgDBname;
 	$vars['wgPrivateTracker'] = !empty($wgPrivateTracker) ? $wgPrivateTracker : false;
-	$vars['wgWikiaAdvertiserCategory'] = $wgWikiaAdvertiserCategory;
 	if($vars['wgIsArticle'] == false && $vars['wgEnableAjaxLogin']) {
 		$vars['ajaxLogin1'] = wfMsg('ajaxLogin1');
 		$vars['ajaxLogin2'] = wfMsg('ajaxLogin2');

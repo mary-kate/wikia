@@ -969,7 +969,6 @@ class MonacoTemplate extends QuickTemplate {
 		$this->html('headscripts');
 	}
 
-echo '<link rel="apple-touch-icon" href="'. $wgLogo .'" />';
 ?>
 	</head>
 <?php		wfProfileOut( __METHOD__ . '-head'); ?>
@@ -990,7 +989,7 @@ echo '<link rel="apple-touch-icon" href="'. $wgLogo .'" />';
    if(!empty($skin->timemarker)) {
 	echo $skin->timemarker;
    }
- ?> 
+ ?>
 
 			<div id="widget_cockpit" class="color1">
 				<div id="carousel-prev" class="widget_cockpit_controls">&laquo;</div>
@@ -1390,13 +1389,13 @@ if(!$custom_article_footer && $displayArticleFooter) {
 		<table>
 		<tr>
 			<td>
-				<?= $wgUser->isLoggedIn() ? AdServer::getInstance()->getAd('b') : AdServer::getInstance()->getAd('bb') ?>
+				<?= AdServer::getInstance()->getAd('bb') ?>
 			</td>
 			<td>
-				<?= $wgUser->isLoggedIn() ? AdServer::getInstance()->getAd('bb2') : AdServer::getInstance()->getAd('bb3') ?>
+				<?= AdServer::getInstance()->getAd('bb3') ?>
 			</td>
 			<td>
-				<?= $wgUser->isLoggedIn() ? AdServer::getInstance()->getAd('bb4') : AdServer::getInstance()->getAd('bb5') ?>
+				<?= AdServer::getInstance()->getAd('bb5') ?>
 			</td>
 		</tr>
 		</table>
