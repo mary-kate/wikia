@@ -29,24 +29,14 @@ class UserBulletin {
 		return $types[ $name ];
 	}
 	
-	static function getBulletinText( $name, $text, $gender=0 ){
-		
-		//$params = split("|", $text);
-	
-		/*
-		switch( $name ){
-			case "status":
-				$text = wfMsgExt("bulletin_$name", "parse", $text );
-				break;
-			case "status":
-				$text = wfMsgExt("bulletin_$name", "parse", $text );
-				break;
-				
-		}
-		*/
+	static function getBulletinText( $name, $text, $gender=0, $display_name = "" ){
+
 		if ($gender) $gender_term = "her";
 		else $gender_term = "his";
-		$text = wfMsgExt("bulletin_$name", "parse", $text, $gender_term );
+		
+		if( !$display_name ) $display_name = $text;
+		
+		$text = wfMsgExt("bulletin_$name", "parse", $text, $gender_term, $display_name );
 		
 		//really bad hack because we want to parse=firstline, but don't want wrapping <p> tags
 		if( substr( $text, 0 , 3) == "<p>" ){
