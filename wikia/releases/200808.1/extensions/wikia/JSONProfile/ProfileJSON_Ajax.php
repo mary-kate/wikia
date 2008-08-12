@@ -1032,12 +1032,11 @@ $wgAjaxExportList [] = 'wfGetURLContents';
 function wfGetURLContents($url, $callback) {
 	$url = urldecode( $url );
 	$html = file_get_contents( $url );
-	$html = utf8_encode( $html );
+	$html = mb_convert_encoding($html, 'UTF-8',mb_detect_encoding($html, 'UTF-8, ISO-8859-1', true));
 	
 	preg_match("/<title[^>]*?>(.*?)<\/title>/si", $html, $matches );
-
 	$title = $matches[1];
-	
+
 	preg_match("/<body[^>]*?>(.*?)<\/body>/si", $html, $matches );
 	$body = $matches[1];
 	$body =  preg_replace('/<script[^>]*?>.*?<\/script>/si', '', $body);
@@ -1049,9 +1048,9 @@ function wfGetURLContents($url, $callback) {
 	$page["url"] = $url;
 	$page["html"] = $html;
 	$page["title"] = $title;
+	
 	$page["body"] = $body;
 	$page["description"] = $meta_description;
-	
 	return "var page=" . jsonify($page) . ";\n\n{$callback}(page);";
 	
 }
