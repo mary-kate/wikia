@@ -30,7 +30,7 @@ function wfExtendJSGlobalVars($vars) {
 		$vars['ajaxLogin2'] = wfMsg('ajaxLogin2');
 	}
 	$vars['wgMainpage'] = wfMsgForContent( 'mainpage' );
-	$vars['wgIsMainpage'] = $wgTitle->getArticleId() == Title::newMainPage()->getArticleId();
+	$vars['wgIsMainpage'] = Title::newMainPage()->getPrefixedText() == $vars['wgMainpage'];
 
 	$vars['wgStyleVersion'] = isset($wgStyleVersion) ? $wgStyleVersion : '' ;
 	if(isset($wgUser->getSkin()->themename)) {
