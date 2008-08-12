@@ -167,15 +167,8 @@ class FCKeditorParser extends Parser
                                 case 'nowiki':
 					$output = $this->fck_wikiTag('nowiki', $content, $params); //required by FCKeditor
                                         break;
-                                /*
-                                case 'math':
-                                        $output = $wgContLang->armourMath(
-                                                MathRenderer::renderMath( $content, $attributes ) );
-                                        break;
-                                */
                                 case 'gallery':
 					$output = $this->fck_wikiTag('gallery', $content, $params); //required by FCKeditor
-                                        //$output = $this->renderImageGallery( $content, $attributes );				
                                         break;
                                 default:
                                         if( isset( $this->mTagHooks[$name] ) ) {
