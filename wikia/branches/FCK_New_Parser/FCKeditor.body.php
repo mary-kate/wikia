@@ -112,6 +112,11 @@ class FCKeditor_MediaWiki
 			<input type=\"hidden\" name=\"FCKmode\" id=\"FCKmode\" value=\"$FCKmode\" />
                 	<div id=\"FCKwarning\" style=\"display: none\">" . wfMsg ('fck-noscript-warning') . "</div> 
 			<textarea id=\"wpTextbox1_Backup\" name=\"wpTextbox1_Backup\" style=\"display: none;\">$old_content</textarea>
+			<div style=\"float: right; margin-top: 20px;\">
+				<a href=\"#\">" . wfMsg ('save'). "</a> | 
+				<a href=\"#\">" . wfMsg ('preview') . "</a> |
+				<a href=\"#\">" . wfMsg ('cancel') . "</a>
+			</div>
 		") ;
 		                  	
 		return true;
