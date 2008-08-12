@@ -724,9 +724,12 @@ div#userlogin form#userlogin2 {
 	border: 1px solid #aaa;
 	clear: both;
 	color: #000;
-	float: left;
 	margin: 0 3em 1em 0;
 	padding: 1.5em 2em;
+}
+
+#userloginForm form {
+	float: left;
 }
 
 div#userlogin form#userlogin2 table {
