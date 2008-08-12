@@ -6,7 +6,7 @@
 $wgHooks['ExtendJSGlobalVars'][] = 'wfExtendJSGlobalVars';
 
 function wfExtendJSGlobalVars($vars) {
-	global $wgCurse, $wgCityId, $wgEnableAjaxLogin, $wgUser, $wgDBname, $wgPrivateTracker, $wgWikiaAdvertiserCategory, $wgExtensionsPath, $wgTitle, $wgStyleVersion;
+	global $wgCurse, $wgCityId, $wgEnableAjaxLogin, $wgUser, $wgDBname, $wgPrivateTracker, $wgWikiaAdvertiserCategory, $wgExtensionsPath, $wgTitle, $wgArticle, $wgStyleVersion;
 
 	$cats = wfGetBreadCrumb();
 	$idx = count($cats)-2;
@@ -30,7 +30,14 @@ function wfExtendJSGlobalVars($vars) {
 		$vars['ajaxLogin2'] = wfMsg('ajaxLogin2');
 	}
 	$vars['wgMainpage'] = wfMsgForContent( 'mainpage' );
-	$vars['wgIsMainpage'] = Title::newMainPage()->getPrefixedText() == $vars['wgMainpage'];
+	$vars['wgIsMainpage'] = $wgTitle->getArticleId() == Title::newMainPage()->getArticleId();
+	if(!$vars['wgIsMainpage']) {
+		if(!empty($wgArticle->mRedirectedFrom)) {
+			if($vars['wgMainpage'] == $wgArticle->mRedirectedFrom->getPrefixedText()) {
+				$vars['wgIsMainpage'] = true;
+			}
+		}
+	}
 
 	$vars['wgStyleVersion'] = isset($wgStyleVersion) ? $wgStyleVersion : '' ;
 	if(isset($wgUser->getSkin()->themename)) {
