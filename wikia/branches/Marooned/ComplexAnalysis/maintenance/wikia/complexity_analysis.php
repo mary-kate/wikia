@@ -23,7 +23,7 @@ CREATE TABLE `complex_data` (
   PRIMARY KEY  (`city_id`,`article_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 */
-require_once(dirname(__FILE__) . '../commandLine.inc');
+require_once(dirname(__FILE__) . '/../commandLine.inc');
 
 if (isset($options['help'])) {
 	die("Parse every article in current wiki.\n
