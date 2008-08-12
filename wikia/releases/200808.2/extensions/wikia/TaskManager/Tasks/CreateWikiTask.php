@@ -631,7 +631,7 @@ class CreateWikiTask extends BatchTask {
 		if (!empty($hub) && is_array($wgHubCreationVariables[$hub])) {
 			$this->addLog("Found hub \"$hub\" in HubCreationVariables.");
 			foreach ($wgHubCreationVariables[$hub] as $key => $value) {
-				$success = WikiFactory::setVarByName($key, $this->mWikiID, $value);
+				$success = WikiFactory::setVarById($key, $this->mWikiID, $value);
 				if ($success) {
 	                                $this->addLog("Successfully added hub setting: $key = $value");
 				} else {
