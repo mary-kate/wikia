@@ -451,4 +451,7 @@ div.widget_cockpit_controls {
 .WidgetBookmarkThumb div {
         background-image: url(../../common/widgets/icons/widget_bookmark.png);
 }
+.WidgetContribsThumb div {
+        background-image: url(../../common/widgets/icons/widget_contribs.png);
+}
 
