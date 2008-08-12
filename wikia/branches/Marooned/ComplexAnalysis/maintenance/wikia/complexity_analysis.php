@@ -67,7 +67,7 @@ $time_start = microtime(true);
 $db = wfGetDB(DB_SLAVE);
 
 $lastRevision = '';
-$sql = "SELECT max(rev_id) AS rev_id FROM $dataTable;";
+$sql = "SELECT max(rev_id) AS rev_id FROM $dataTable WHERE city_id = $wgCityId;";
 $res = $db->query($sql);
 $row = $db->fetchObject($res);
 if (!empty($row->rev_id)) {
@@ -75,13 +75,13 @@ if (!empty($row->rev_id)) {
 }
 
 $nameSpaces = 'AND page_namespace IN (' . implode(',', $wgContentNamespaces) . ')';
-$sql = "SELECT rev_id, page_id, rev_id FROM page, revision WHERE rev_id = page_latest $nameSpaces $lastRevision ORDER BY rev_id;";
+$sql = "SELECT page_id, rev_id FROM page, revision WHERE rev_id = page_latest $nameSpaces $lastRevision ORDER BY rev_id;";
 $res = $db->query($sql);
 $countAll = 0;
 while ($row = $db->fetchObject($res)) {
-	$title = Title::newFromID($row->page_id);
-	if (is_object($title)) {
-		$revision = Revision::newFromTitle($title);
+	$wgTitle = Title::newFromID($row->page_id);	//setting global wgTitle - some parser functions require this
+	if (is_object($wgTitle)) {
+		$revision = Revision::newFromTitle($wgTitle);
 		if(is_object($revision)) {
 			wfCountWikiElement("*special:start:{$wgCityId}|{$row->page_id}|{$row->rev_id}");
 			$wgOut->parse($revision->getText());
