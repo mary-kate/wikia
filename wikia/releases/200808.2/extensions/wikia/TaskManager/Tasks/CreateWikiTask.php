@@ -47,7 +47,6 @@ class CreateWikiTask extends BatchTask {
 	function execute( $params = null ) {
 		global $IP, $wgDevelEnvironment;
 		global $wgWikiaLocalSettingsPath, $wgWikiaAdminSettingsPath;
-		global $wgHubCreationVariables;
 
 		if( !isset( $wgWikiaAdminSettingsPath ) ) {
 			$wgWikiaAdminSettingsPath = dirname( $wgWikiaLocalSettingsPath ) . "/../AdminSettings.php";
@@ -128,6 +127,12 @@ class CreateWikiTask extends BatchTask {
 			foreach( $oWikiMover->getLog( true ) as $log ) {
 				$this->addLog( $log["info"], $log["timestamp"] );
 			}
+
+			#--- clear message cache, in case we ovewrote some MediaWiki ns pages
+			$cmd = sprintf("SERVER_ID={$this->mWikiID} php {$IP}/maintenance/rebuildmessages.php --conf {$wgWikiaLocalSettingsPath} --aconf {$wgWikiaAdminSettingsPath}");
+			$this->addLog( "Running {$cmd}");
+			$retval = wfShellExec( $cmd, $status );
+			$this->addLog( $retval );
 		}
 
 		/**
@@ -153,17 +158,7 @@ class CreateWikiTask extends BatchTask {
 		/**
 		 * Modify wiki's variables based on hub and $wgHubCreationVariables values
 		 */
-		$hub = $this->mParams["params"]["wpCreateWikiCategory"];
-		if (!empty($hub) && is_array($wgHubCreationVariables[$hub])) {
-			$success = array_walk(
-				$wgHubCreationVariables[$hub],
-				'CreateWikiTask::addHubSettings',
-				$this->mWikiID
-			);
-			if ( !$success ) {
-				echo "Modifing settings for hub failed...\n";
-			}
-		}
+		$this->addHubSettings( $this->mParams["params"]["wpCreateWikiCategory"]  );
 
 		return true;
 	}
@@ -627,11 +622,24 @@ class CreateWikiTask extends BatchTask {
 	/**
 	 * addHubSettings
 	 *
-	 * a simple wrapper used by hub-based array_walk in execute()
-	 *
 	 * @author tor@wikia-inc.com
+	 * @param  string $hub 
 	 */
-	public static function addHubSettings( $value, $var, $city_id ) {
-		WikiFactory::setVarByName($var, $city_id, $value);
+	public static function addHubSettings( $hub ) {
+		global $wgHubCreationVariables;
+
+		if (!empty($hub) && is_array($wgHubCreationVariables[$hub])) {
+			$hub = $this->mParams["params"]["wpCreateWikiCategory"];
+			if (!empty($hub) && is_array($wgHubCreationVariables[$hub])) {
+				$this->addLog("Found hub \"$hub\" in HubCreationVariables.");
+				foreach ($wgHubCreationVariables[$hub] as $key => $value) {
+					$this->addLog("Hub Settings: Setting $key to $value");
+					WikiFactory::setVarByName($key, $this->mWikiID, $value);
+				}
+				$this->addLog("Finished adding hub settings.");
+			} else {
+				$this->addLog("Hub not found in HubCreationVariables. Skipping this step.");
+			}
+		}
 	}	
 }	
