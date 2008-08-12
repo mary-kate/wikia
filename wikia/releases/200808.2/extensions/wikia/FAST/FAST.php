@@ -22,14 +22,6 @@ function fastGetConfig() {
 	global $wgTitle, $wgArticle, $wgRequest, $wgUser, $wgEnableFAST_HOME2;
 
 	$mainpage = $wgTitle->getArticleId() == Title::newMainPage()->getArticleId();
-	if(!$mainpage) {
-		if(!empty($wgArticle->mRedirectedFrom)) {
-			if(wfMsgForContent('mainpage') == $wgArticle->mRedirectedFrom->getPrefixedText()) {
-				$mainpage = true;
-			}
-		}
-	}
-
 	$isContentPage = in_array($wgTitle->getNamespace(), array(NS_MAIN, NS_IMAGE, NS_CATEGORY)) || $wgTitle->getNamespace() >= 100;
 	$isView = $wgRequest->getVal('action', 'view') == 'view';
 	$isPreview = $wgRequest->getVal('wpPreview') != '' && $wgRequest->getVal('action') == 'submit';
