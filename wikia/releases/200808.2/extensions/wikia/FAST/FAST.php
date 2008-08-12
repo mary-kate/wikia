@@ -19,9 +19,17 @@ function fastUserToggle(&$extraToggle) {
 }
 
 function fastGetConfig() {
-	global $wgTitle, $wgRequest, $wgUser, $wgEnableFAST_HOME2;
+	global $wgTitle, $wgArticle, $wgRequest, $wgUser, $wgEnableFAST_HOME2;
 
 	$mainpage = $wgTitle->getArticleId() == Title::newMainPage()->getArticleId();
+	if(!$mainpage) {
+		if(!empty($wgArticle->mRedirectedFrom)) {
+			if(wfMsgForContent('mainpage') == $wgArticle->mRedirectedFrom->getPrefixedText()) {
+				$mainpage = true;
+			}
+		}
+	}
+
 	$isContentPage = in_array($wgTitle->getNamespace(), array(NS_MAIN, NS_IMAGE, NS_CATEGORY)) || $wgTitle->getNamespace() >= 100;
 	$isView = $wgRequest->getVal('action', 'view') == 'view';
 	$isPreview = $wgRequest->getVal('wpPreview') != '' && $wgRequest->getVal('action') == 'submit';
@@ -101,7 +109,7 @@ function fastProcess(&$out, &$text, $category = false) {
 		strrpos($text, '</span></h6>')
 	);
 	rsort($headlineArray);
-	
+
 	$pos = $headlineArray[0];
 
 	if(in_array('FAST4', $fastConfig)) {
