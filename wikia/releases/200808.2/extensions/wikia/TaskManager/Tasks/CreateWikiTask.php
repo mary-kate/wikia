@@ -625,21 +625,22 @@ class CreateWikiTask extends BatchTask {
 	 * @author tor@wikia-inc.com
 	 * @param  string $hub 
 	 */
-	public static function addHubSettings( $hub ) {
+	public function addHubSettings( $hub ) {
 		global $wgHubCreationVariables;
 
 		if (!empty($hub) && is_array($wgHubCreationVariables[$hub])) {
-			$hub = $this->mParams["params"]["wpCreateWikiCategory"];
-			if (!empty($hub) && is_array($wgHubCreationVariables[$hub])) {
-				$this->addLog("Found hub \"$hub\" in HubCreationVariables.");
-				foreach ($wgHubCreationVariables[$hub] as $key => $value) {
-					$this->addLog("Hub Settings: Setting $key to $value");
-					WikiFactory::setVarByName($key, $this->mWikiID, $value);
+			$this->addLog("Found hub \"$hub\" in HubCreationVariables.");
+			foreach ($wgHubCreationVariables[$hub] as $key => $value) {
+				$success = WikiFactory::setVarByName($key, $this->mWikiID, $value);
+				if ($success) {
+	                                $this->addLog("Successfully added hub setting: $key = $value");
+				} else {
+					$this->addLog("Failed to add hub setting: $key = $value");
 				}
-				$this->addLog("Finished adding hub settings.");
-			} else {
-				$this->addLog("Hub not found in HubCreationVariables. Skipping this step.");
 			}
+			$this->addLog("Finished adding hub settings.");
+		} else {
+			$this->addLog("Hub not found in HubCreationVariables. Skipping this step.");
 		}
 	}	
 }	
