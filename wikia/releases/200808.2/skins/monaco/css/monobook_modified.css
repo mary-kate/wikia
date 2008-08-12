@@ -728,8 +728,10 @@ div#userlogin form#userlogin2 {
 	padding: 1.5em 2em;
 }
 
+/* 3338 */
 #userloginForm form {
-	float: left;
+	float: left !important;
+	position: relative;
 }
 
 div#userlogin form#userlogin2 table {
