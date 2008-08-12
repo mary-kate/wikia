@@ -350,7 +350,7 @@ class FCKeditorParser extends Parser
 		
        	 	return array (
 				"text" => $text ,
-				"templates" => $templates
+				"templates" => $templates . "__NOTOC__"
 		       ) ;
 	}
 
