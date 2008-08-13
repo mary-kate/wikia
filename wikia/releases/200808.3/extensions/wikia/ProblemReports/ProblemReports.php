@@ -108,8 +108,6 @@ function wfProblemReports()
 	$wgAjaxExportList[] = 'wfProblemReportsAjaxAPI';
 	$wgAjaxExportList[] = 'wfProblemReportsAjaxReport';
 
-	wfDebug("ProblemReports: extension initalized\n");
-
 	// fixes #2791
 	global $wgRequest;
 
