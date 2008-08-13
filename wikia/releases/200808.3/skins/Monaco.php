@@ -611,12 +611,12 @@ class SkinMonaco extends SkinTemplate {
 	private function getReferencesLinks(&$tpl) {
 		wfProfileIn( __METHOD__ );
 		global $wgStylePath, $wgStyleVersion, $wgMergeStyleVersionCSS, $wgExtensionsPath, $wgContLang;
-		$js = $css = $cssstyle= array();
+		$js = $css = $cssstyle = $allinoneCSS = array();
 
 		// CSS - begin
 		$cssTemp = GetReferences('monaco_css', true);
 		foreach($cssTemp as $cssFile) {
-			$css[] = array('url' => $wgStylePath.'/'.$cssFile.'?'.$wgMergeStyleVersionCSS);
+			$allinoneCSS[] = array('url' => $wgStylePath.'/'.$cssFile.'?'.$wgMergeStyleVersionCSS);
 		}
 
 		if(isset($this->themename)) {
@@ -659,7 +659,7 @@ class SkinMonaco extends SkinTemplate {
 		// JS - end
 
 		wfProfileOut( __METHOD__ );
-		return array('js' => $js, 'css' => $css, 'cssstyle' => $cssstyle);
+		return array('js' => $js, 'css' => $css, 'cssstyle' => $cssstyle, 'allinone_css' => $allinoneCSS);
 	}
 
 	/**
@@ -943,6 +943,16 @@ class MonacoTemplate extends QuickTemplate {
 		<?php $this->html('headlinks') ?>
 		<title><?php $this->text('pagetitle') ?></title>
 		<?php print Skin::makeGlobalVariablesScript( $this->data ); ?>
+		<style type="text/css">/*<![CDATA[*/
+<?php
+	/* macbre: #3432 */
+	foreach($this->data['references']['allinone_css'] as $css) {
+?>
+			@import "<?= $css['url']; ?>";
+<?php
+	}
+?>
+		/*]]>*/</style>
 <?php
 	foreach($this->data['references']['css'] as $css) {
 ?>
