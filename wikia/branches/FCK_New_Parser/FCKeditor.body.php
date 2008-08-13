@@ -452,7 +452,11 @@ function onLoadFCKeditor()
 
 			var saveButton = document.getElementById ('wpSave') ;			
 			var previewButton = document.getElementById ('wpPreview') ;				
-			var diffButton = document.getElementById ('wpDiff') ;				
+			var diffButton = document.getElementById ('wpDiff') ;	
+			var cancelButton = document.getElementById ('wpCancel') ;			
+			var upperSave = document.getElementById ('upperFCKSave') ;
+			var upperPreview = document.getElementById ('upperFCKPreview') ;
+			var upperCancel = document.getElementById ('upperFCKCancel') ;
 
 			if (FCKinstance.isInedible ()) {
                                 var fckIframe = document.getElementById ("wpTextbox1___Frame")  ;
@@ -472,6 +476,9 @@ function onLoadFCKeditor()
 			} else {
 				window.onbeforeunload = confirmExit ;
 				saveButton.onclick = previewButton.onclick = diffButton.onclick = function () {needToConfirm = false ;} ;
+				upperSave.onclick = function () {saveButton.click () ;} ;
+				upperPreview.onclick = function () {previewButton.click () ;} ;
+				upperCancel.onclick = function () {cancelButton.click () ;} ;
 			}
 			document.getElementById ('wpSummaryLabel').style.display = 'inline' ;
 			saveButton.parentNode.parentNode.style.display = 'inline' ;			
