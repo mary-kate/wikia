@@ -347,7 +347,7 @@ class CreatePageCreateplateForm {
 
 	// existing article check, returns different stuff for ajax and non-ajax versions
 	function checkArticleExists ($given, $ajax = false) {
-		global $wgOut ;
+		global $wgOut, $wgUser ;
 
 		if ($ajax) {
 			$wgOut->setArticleBodyOnly( true );
@@ -362,12 +362,13 @@ class CreatePageCreateplateForm {
 			$page = $title->getText () ;
 			$page = str_replace( ' ', '_', $page ) ;
 			$dbr =& wfGetDB (DB_SLAVE);
-			$exists = $dbr->selectField ('page', 'page_title', array ('page_title' => $page)) ;
+			$exists = $dbr->selectField ('page', 'page_title', array ('page_title' => $page, 'page_namespace' => $title->getNamespace() )) ;
 			if ($exists != '') {
 				if ($ajax) {
 					$wgOut->addHTML('pagetitleexists');
 				} else {
-					return wfMsg ('createpage_article_exists') ;
+					$sk = $wgUser->getSkin();
+					return wfMsg ('createpage_article_exists', $sk->makeKnownLink( $title->getPrefixedText() ));
 				}
 			}
 			if (!$ajax) return false ;		
