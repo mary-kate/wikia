@@ -960,7 +960,7 @@ class MonacoTemplate extends QuickTemplate {
 		echo $wgUser->isLoggedIn() ? GetReferences("monaco_loggedin_js") : GetReferences("monaco_non_loggedin_js");
 		foreach($this->data['references']['js'] as $script) {
 ?>
-		<script type="<?= $script['mime'] ?>" src="<?= $script['url'] ?>"></script>
+		<script type="<?= $script['mime'] ?>" src="<?= htmlspecialchars($script['url']) ?>"></script>
 <?php
 		}
 		$this->html('headscripts');
