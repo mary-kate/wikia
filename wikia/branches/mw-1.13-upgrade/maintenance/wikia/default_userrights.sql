@@ -5,7 +5,6 @@ insert into user_groups(ug_user, ug_group) values
 (/*Angela*/2,'staff'),
 (/*Angies*/67261,'staff'),
 (/*Avatar*/349903, 'staff'),
-(/*Awrigh01*/67758,'staff'),
 (/*BartL*/80238,'staff'),
 (/*BillK*/38903,'staff'),
 (/*BladeBronson*/140142,'staff'),

@@ -97,7 +97,8 @@ class ExternalStorageUpdate {
 					"rev_wikia_id"  => $wgCityId,
 					"rev_namespace" => $Title->getNamespace(),
 					"rev_user_text" => $this->mRevision->getUserText(),
-					"rev_flags"     => $this->mFlags
+					"rev_flags"     => $this->mFlags,
+					"rev_timestamp" => wfTimestamp( TS_DB, $this->mRevision->mTimestamp )
 				),
 				array( "blob_id" => $id ),
 				__METHOD__

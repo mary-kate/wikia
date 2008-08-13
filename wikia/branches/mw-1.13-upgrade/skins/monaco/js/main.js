@@ -40,6 +40,10 @@ Event.onDOMReady(function() {
 		Dom.get('searchform').submit();
 	});
 
+	// #3083: blur() is buggy in IE
+	searchField.disabled = true;
+	searchField.disabled = false;
+
 	var submitAutoComplete_callback = {
 		success: function(o) {
 			if(o.responseText !== undefined) {

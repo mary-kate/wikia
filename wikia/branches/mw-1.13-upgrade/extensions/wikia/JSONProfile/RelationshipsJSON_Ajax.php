@@ -994,22 +994,36 @@ function wfFriendsActivityJSON($user_name="", $count = 25){
 		$key = wfMemcKey( 'user', 'friendsactivity', $user_id );
 		$wgMemc->delete($key);
 		$data = $wgMemc->get( $key );
+		$bulletin_tracker = array();
+		$max_bulletins = array();
+		$max_bulletins["wall"] = 2;
+		$max_bulletins["basic profile"] = 1;
+		$max_bulletins["personal profile"] = 1;
+		$max_bulletins["work profile"] = 1;
+		$max_bulletins["status"] = 1;
 		
 		if( !$data ){
 			$dbr =& wfGetDB( DB_MASTER );
 			$sql = "SELECT ub_id, ub_user_id, ub_user_name, ub_type, UNIX_TIMESTAMP(ub_date) as timestamp, ub_message FROM user_bulletin
-			WHERE ub_user_id IN (select r_user_id from user_relationship where r_user_id_relation = {$user_id}) order by ub_id desc LIMIT 0,{$count}";
+			WHERE ub_user_id IN (select r_user_id from user_relationship where r_user_id_relation = {$user_id}) order by ub_id desc LIMIT 0," . $count*3;
 		
 			$res = $dbr->query($sql);
 			$bulletins = array();
 			while ($row = $dbr->fetchObject( $res ) ) {
 				 $type_name = UserBulletin::$bulletin_types[ $row->ub_type ];
+				
+				 $bulletin_tracker[ $row->ub_user_id ][$type_name] = $bulletin_tracker[ $row->ub_user_id ][$type_name] + 1;
+				 
+				 if( $max_bulletins[$type_name] &&  $bulletin_tracker[ $row->ub_user_id ][$type_name] > $max_bulletins[$type_name] ){
+					 continue;
+				 }
 				 
 				 $user_name_display_m = "";
 				 if( $row->ub_type == 1 || $row->ub_type == 3){
 					$user_id_m = User::idFromName( $row->ub_message );
 					$user_name_display_m = user_name_display( $user_id_m, $row->ub_message );
 				 }
+				 
 				 $bulletins[] = array(
 					 "id"=>$row->ub_id,"timestamp"=>($row->timestamp ) , "ago" => get_time_ago( $row->timestamp ),
 					 "type"=>($row->ub_type ), "type_name" => $type_name,
@@ -1020,6 +1034,7 @@ function wfFriendsActivityJSON($user_name="", $count = 25){
 				);
 				
 			}
+			$bulletins = array_slice( $bulletins, 0, $count );
 			$wgMemc->set($key, $bulletins, 60 * 5);
 		}else{
 			$bulletins = $data;
