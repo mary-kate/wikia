@@ -108,14 +108,20 @@ class FCKeditor_MediaWiki
 		}
 		$FCKmode = $wgRequest->getVal ('FCKmode') ;
 		$old_content = $pageEditor->getWikiContent();
+		$sk = $wgUser->getSkin () ;
+		$cancel = $sk->makeKnownLink( $wgTitle->getPrefixedText(),
+				wfMsgExt('cancel', array('parseinline')),
+				'', '', '',
+				'id="wpUpperFCKCancel"');
+
 		$wgOut->addHTML ("
 			<input type=\"hidden\" name=\"FCKmode\" id=\"FCKmode\" value=\"$FCKmode\" />
                 	<div id=\"FCKwarning\" style=\"display: none\">" . wfMsg ('fck-noscript-warning') . "</div> 
 			<textarea id=\"wpTextbox1_Backup\" name=\"wpTextbox1_Backup\" style=\"display: none;\">$old_content</textarea>
 			<div style=\"float: right; margin-top: 20px;\">
-				<a href=\"#\" id=\"upperFCKSave\">" . wfMsg ('save'). "</a> | 
-				<a href=\"#\" id=\"upperFCKPreview\">" . wfMsg ('preview') . "</a> |
-				<a href=\"#\" id=\"upperFCKCancel\">" . wfMsg ('cancel') . "</a>
+				<a href=\"#\" id=\"wpUpperFCKSave\">" . wfMsg ('save'). "</a> | 
+				<a href=\"#\" id=\"wpUpperFCKPreview\">" . wfMsg ('preview') . "</a> |
+				$cancel
 			</div>
 		") ;
 		                  	
@@ -453,9 +459,9 @@ function onLoadFCKeditor()
 			var saveButton = document.getElementById ('wpSave') ;			
 			var previewButton = document.getElementById ('wpPreview') ;				
 			var diffButton = document.getElementById ('wpDiff') ;	
-			var upperSave = document.getElementById ('upperFCKSave') ;
-			var upperPreview = document.getElementById ('upperFCKPreview') ;
-			var upperCancel = document.getElementById ('upperFCKCancel') ;
+			var upperSave = document.getElementById ('wpUpperFCKSave') ;
+			var upperPreview = document.getElementById ('wpUpperFCKPreview') ;
+			var upperCancel = document.getElementById ('wpUpperFCKCancel') ;
 
 			if (FCKinstance.isInedible ()) {
                                 var fckIframe = document.getElementById ("wpTextbox1___Frame")  ;
