@@ -113,9 +113,9 @@ class FCKeditor_MediaWiki
                 	<div id=\"FCKwarning\" style=\"display: none\">" . wfMsg ('fck-noscript-warning') . "</div> 
 			<textarea id=\"wpTextbox1_Backup\" name=\"wpTextbox1_Backup\" style=\"display: none;\">$old_content</textarea>
 			<div style=\"float: right; margin-top: 20px;\">
-				<a href=\"#\">" . wfMsg ('save'). "</a> | 
-				<a href=\"#\">" . wfMsg ('preview') . "</a> |
-				<a href=\"#\">" . wfMsg ('cancel') . "</a>
+				<a href=\"#\" id=\"upperFCKSave\">" . wfMsg ('save'). "</a> | 
+				<a href=\"#\" id=\"upperFCKPreview\">" . wfMsg ('preview') . "</a> |
+				<a href=\"#\" id=\"upperFCKCancel\">" . wfMsg ('cancel') . "</a>
 			</div>
 		") ;
 		                  	
