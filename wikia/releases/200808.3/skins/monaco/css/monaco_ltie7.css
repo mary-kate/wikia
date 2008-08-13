@@ -98,3 +98,9 @@ body.ltr #articleFooter ul.actions li div {
 #wpTextbox1 {
 	width: 99% !important;
 }
+
+/* #3433 */
+#headerButtonHub {
+	margin-left: 0 !important;
+	left: -50%;
+}
