@@ -78,10 +78,10 @@ class EditPage {
 	public $editFormTextAfterWarn;
 	public $editFormTextAfterTools;
 	public $editFormTextBottom;
-	
+
 	/* $didSave should be set to true whenever an article was succesfully altered. */
 	public $didSave = false;
-	
+
 	public $suppressIntro = false;
 
 	/**
@@ -359,7 +359,7 @@ class EditPage {
 			wfProfileOut( __METHOD__ );
 			return;
 		}
-		
+
 		if( wfReadOnly() ) {
 			$wgOut->readOnlyPage( $this->getContent() );
 			wfProfileOut( __METHOD__ );
@@ -661,7 +661,7 @@ class EditPage {
 			$ip = User::isIP( $username );
 
 			if ( $id == 0 && !$ip ) {
-				$wgOut->wrapWikiMsg( '<div class="mw-userpage-userdoesnotexist error">$1</div>', 
+				$wgOut->wrapWikiMsg( '<div class="mw-userpage-userdoesnotexist error">$1</div>',
 					array( 'userpage-userdoesnotexist', $username ) );
 			}
 		}
@@ -829,7 +829,7 @@ class EditPage {
 			}
 
 			$isComment = ( $this->section == 'new' );
-			
+
 			$this->mArticle->insertNewArticle( $this->textbox1, $this->summary,
 				$this->minoredit, $this->watchthis, false, $isComment, $bot);
 
@@ -1079,13 +1079,13 @@ class EditPage {
 			}
 			if ( isset( $this->mArticle ) && isset( $this->mArticle->mRevision ) ) {
 			// Let sysop know that this will make private content public if saved
-				
+
 				if( !$this->mArticle->mRevision->userCan( Revision::DELETED_TEXT ) ) {
 					$wgOut->addWikiMsg( 'rev-deleted-text-permission' );
 				} else if( $this->mArticle->mRevision->isDeleted( Revision::DELETED_TEXT ) ) {
 					$wgOut->addWikiMsg( 'rev-deleted-text-view' );
 				}
-				
+
 				if( !$this->mArticle->mRevision->isCurrent() ) {
 					$this->mArticle->setOldSubtitle( $this->mArticle->mRevision->getId() );
 					$wgOut->addWikiMsg( 'editingold' );
@@ -1178,11 +1178,11 @@ class EditPage {
 
 		global $wgRightsText;
 		if ( $wgRightsText ) {
-			$copywarnMsg = array( 'copyrightwarning', 
+			$copywarnMsg = array( 'copyrightwarning',
 				'[[' . wfMsgForContent( 'copyrightpage' ) . ']]',
 				$wgRightsText );
 		} else {
-			$copywarnMsg = array( 'copyrightwarning2', 
+			$copywarnMsg = array( 'copyrightwarning2',
 				'[[' . wfMsgForContent( 'copyrightpage' ) . ']]' );
 		}
 
@@ -1224,7 +1224,7 @@ class EditPage {
 				$this->showDiff();
 			}
 		}
-		
+
 		wfRunHooks( 'EditPage::showEditForm:initial2', array( &$this ) ) ;
 
 		$wgOut->addHTML( $this->editFormTextTop );
@@ -1290,20 +1290,20 @@ class EditPage {
 		$safemodehtml = $this->checkUnicodeCompliantBrowser()
 			? '' : Xml::hidden( 'safemode', '1' );
 
-	// maybe... just maybe... somebody would want the toolbar not in the default place?
-	// by Bartek for Wikia
-	wfRunHooks ('EditPage::showEditForm:toolbar', array (&$this, &$wgOut, &$toolbar)) ;	
+		// maybe... just maybe... somebody would want the toolbar not in the default place?
+		// by Bartek for Wikia
+		wfRunHooks ('EditPage::showEditForm:toolbar', array (&$this, &$wgOut, &$toolbar)) ;
+
+		//used mainly by captcha - moved above the toolbar - Marooned [at] wikia.com
+		if( is_callable( $formCallback ) ) {
+			call_user_func_array( $formCallback, array( &$wgOut ) );
+		}
 
 		$wgOut->addHTML( <<<END
 {$toolbar}
 <form id="editform" name="editform" method="post" action="$action" enctype="multipart/form-data">
 END
 );
-
-		if( is_callable( $formCallback ) ) {
-			call_user_func_array( $formCallback, array( &$wgOut ) );
-		}
-
 		wfRunHooks( 'EditPage::showEditForm:fields', array( &$this, &$wgOut ) );
 
 		// Put these up at the top to ensure they aren't lost on early form submission
@@ -1572,7 +1572,7 @@ END
 			if( ( $dt = $parserOutput->getDisplayTitle() ) !== false ) {
 				$wgOut->setPageTitle( wfMsg( 'editing', $dt ) );
 			} else {
-				$wgOut->setPageTitle( wfMsg( 'editing', $wgTitle->getPrefixedText() ) );			
+				$wgOut->setPageTitle( wfMsg( 'editing', $wgTitle->getPrefixedText() ) );
 			}
 
 			foreach ( $parserOutput->getTemplates() as $ns => $template)
@@ -1887,7 +1887,7 @@ END
 				$sample = $tool['sample'],
 				$cssId = $tool['id'],
 			);
-			
+
 			$paramList = implode( ',',
 				array_map( array( 'Xml', 'encodeJsVar' ), $params ) );
 			$toolbar.="addButton($paramList);\n";
@@ -2020,7 +2020,7 @@ END
 			'title'     => wfMsg( 'tooltip-diff' ).' ['.wfMsg( 'accesskey-diff' ).']'
 		);
 		$buttons['diff'] = wfElement('input', $temp, '');
-		
+
 		wfRunHooks( 'EditPageBeforeEditButtons', array( &$this, &$buttons ) );
 		return $buttons;
 	}
@@ -2238,7 +2238,7 @@ END
 
 		$resultDetails = false;
 		$value = $this->internalAttemptSave( $resultDetails, $wgUser->isAllowed('bot') && $wgRequest->getBool('bot', true) );
-		
+
 		if( $value == self::AS_SUCCESS_UPDATE || $value == self::AS_SUCCESS_NEW_ARTICLE ) {
 			$this->didSave = true;
 		}
@@ -2288,7 +2288,7 @@ END
 		 	case self::AS_NO_CREATE_PERMISSION;
 		 		$this->noCreatePermission();
 		 		return;
-		 	
+
 			case self::AS_BLANK_ARTICLE:
 		 		$wgOut->redirect( $wgTitle->getFullURL() );
 		 		return false;
