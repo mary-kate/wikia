@@ -1343,11 +1343,11 @@ function wfUpdateProfileJSON(){
 
 function saveWikiaSettings_basicJSON(){
 			global $wgUser, $wgOut, $wgRequest, $wgSiteView;
-			
+		
 			$real_name = trim( $wgRequest->getVal("first_name") ) . " " . trim( $wgRequest->getVal("last_name") );
-			
+			$real_name = urldecode($real_name);
 			$wgUser->setRealName( $real_name);
-			$wgUser->setEmail( $wgRequest->getVal("email") );
+			$wgUser->setEmail( urldecode($wgRequest->getVal("email")) );
 		
 			if($wgUser->getEmail()!=$wgRequest->getVal("email")){
 				$wgUser->mEmailAuthenticated = null; # but flag as "dirty" = unauthenticated
@@ -1373,22 +1373,22 @@ function saveProfileBasicJSON(){
 	$dbw =& wfGetDB( DB_MASTER );
 		$dbw->update( '`user_profile`',
 		array( /* SET */
-			'up_location_city' => $wgRequest->getVal("location_city"),
-			'up_location_state' => $wgRequest->getVal("location_state"),
-			'up_location_country' => $wgRequest->getVal("location_country"),
+			'up_location_city' => urldecode($wgRequest->getVal("location_city")),
+			'up_location_state' => urldecode($wgRequest->getVal("location_state")),
+			'up_location_country' => urldecode($wgRequest->getVal("location_country")),
 			
-			'up_hometown_city' => $wgRequest->getVal("hometown_city"),
-			'up_hometown_state' => $wgRequest->getVal("hometown_state"),
-			'up_hometown_country' => $wgRequest->getVal("hometown_country"),
+			'up_hometown_city' => urldecode($wgRequest->getVal("hometown_city")),
+			'up_hometown_state' => urldecode($wgRequest->getVal("hometown_state")),
+			'up_hometown_country' => urldecode($wgRequest->getVal("hometown_country")),
 			
 			//'up_birthday' => UpdateProfile::formatBirthdayDB($wgRequest->getVal("birthday")),
 			'up_birthday' => formatBirthdayFromDropdowns($wgRequest->getVal("birthyear"), $wgRequest->getVal("birthmonth"), $wgRequest->getVal("birthdate")),
-			'up_about' => $wgRequest->getVal("about"),
-			'up_occupation' => $wgRequest->getVal("occupation"),
-			'up_schools' => $wgRequest->getVal("schools"),
-			'up_places_lived' => $wgRequest->getVal("places"),
-			'up_websites' => $wgRequest->getVal("websites"),
-			'up_gender' => $wgRequest->getVal("gender"),
+			'up_about' => urldecode($wgRequest->getVal("about")),
+			'up_occupation' => urldecode($wgRequest->getVal("occupation")),
+			'up_schools' => urldecode($wgRequest->getVal("schools")),
+			'up_places_lived' => urldecode($wgRequest->getVal("places")),
+			'up_websites' => urldecode($wgRequest->getVal("websites")),
+			'up_gender' => urldecode($wgRequest->getVal("gender")),
 			//'up_relationship' => $wgRequest->getVal("relationship")
 			'up_relationship' => ''
 		), array( /* WHERE */
@@ -1413,11 +1413,11 @@ function saveProfileEducationJSON(){
 		//if ($wgRequest->getVal("school_id-0")) {
 			
 		$school_id = $wgRequest->getVal("school_id-{$the_change}");
-		$school_type = $wgRequest->getVal("school_type-{$the_change}");
-		$attended_for = $wgRequest->getVal("attended_for-{$the_change}");
-		$concentration = $wgRequest->getVal("concentration-{$the_change}");
+		$school_type = urldecode($wgRequest->getVal("school_type-{$the_change}"));
+		$attended_for = urldecode($wgRequest->getVal("attended_for-{$the_change}"));
+		$concentration = urldecode($wgRequest->getVal("concentration-{$the_change}"));
 		$classyear = $wgRequest->getVal("classyear-{$the_change}");
-		$degree = $wgRequest->getVal("degree-{$the_change}");
+		$degree = urldecode($wgRequest->getVal("degree-{$the_change}"));
 			
 		if ($the_change==="0") {
 			if ($school_id) {
@@ -1527,12 +1527,12 @@ function saveProfileWorkJSON(){
 			if( $wgRequest->getVal("work-{$x}-id") > 0 ){
 				$dbw->update( '`user_profile_work`',
 					array( /* SET */
-						'w_employer' => $wgRequest->getVal("work-{$x}-employer"),
-						'w_position' => $wgRequest->getVal("work-{$x}-position"),
-						'w_description' => $wgRequest->getVal("work-{$x}-desc"),
-						'w_location_city' => $wgRequest->getVal("work-{$x}-city"),
-						'w_location_state' => $wgRequest->getVal("work-{$x}-state"),
-						'w_location_country' => $wgRequest->getVal("work-{$x}-country"),
+						'w_employer' => urldecode($wgRequest->getVal("work-{$x}-employer")),
+						'w_position' => urldecode($wgRequest->getVal("work-{$x}-position")),
+						'w_description' => urldecode($wgRequest->getVal("work-{$x}-desc")),
+						'w_location_city' => urldecode($wgRequest->getVal("work-{$x}-city")),
+						'w_location_state' => urldecode($wgRequest->getVal("work-{$x}-state")),
+						'w_location_country' => urldecode($wgRequest->getVal("work-{$x}-country")),
 						'w_is_current' => $wgRequest->getVal("work-{$x}-iscurrent"),
 						'w_emp_from' => $start,
 						'w_emp_to' => $end,
@@ -1548,12 +1548,12 @@ function saveProfileWorkJSON(){
 					array(
 						'w_user_name' => $wgUser->getName(),
 						'w_user_id' => $wgUser->getID(),
-						'w_employer' => $wgRequest->getVal("work-{$x}-employer"),
-						'w_position' => $wgRequest->getVal("work-{$x}-position"),
-						'w_description' => $wgRequest->getVal("work-{$x}-desc"),
-						'w_location_city' => $wgRequest->getVal("work-{$x}-city"),
-						'w_location_state' => $wgRequest->getVal("work-{$x}-state"),
-						'w_location_country' => $wgRequest->getVal("work-{$x}-country"),
+						'w_employer' => urldecode($wgRequest->getVal("work-{$x}-employer")),
+						'w_position' => urldecode($wgRequest->getVal("work-{$x}-position")),
+						'w_description' => urldecode($wgRequest->getVal("work-{$x}-desc")),
+						'w_location_city' => urldecode($wgRequest->getVal("work-{$x}-city")),
+						'w_location_state' => urldecode($wgRequest->getVal("work-{$x}-state")),
+						'w_location_country' => urldecode($wgRequest->getVal("work-{$x}-country")),
 						'w_is_current' => $wgRequest->getVal("work-{$x}-iscurrent"),
 						'w_emp_from' => $start,
 						'w_emp_to' => $end,
@@ -1616,17 +1616,17 @@ function saveWikiaSettings_prefJSON(){
 				$dbw->update( '`user_profile`',
 				array( /* SET */
 					
-					'up_companies' => $wgRequest->getVal("companies"),
+					'up_companies' => urldecode($wgRequest->getVal("companies")),
 				
 					
-					'up_movies' => $wgRequest->getVal("movies"),
-					'up_music' => $wgRequest->getVal("music"),
-					'up_tv' => $wgRequest->getVal("tv"),
-					'up_books' => $wgRequest->getVal("books"),
-					'up_magazines' => $wgRequest->getVal("magazines"),
-					'up_video_games' => $wgRequest->getVal("videogames"),
-					'up_snacks' => $wgRequest->getVal("snacks"),
-					'up_drinks' => $wgRequest->getVal("drinks")
+					'up_movies' => urldecode($wgRequest->getVal("movies")),
+					'up_music' => urldecode($wgRequest->getVal("music")),
+					'up_tv' => urldecode($wgRequest->getVal("tv")),
+					'up_books' => urldecode($wgRequest->getVal("books")),
+					'up_magazines' => urldecode($wgRequest->getVal("magazines")),
+					'up_video_games' => urldecode($wgRequest->getVal("videogames")),
+					'up_snacks' => urldecode($wgRequest->getVal("snacks")),
+					'up_drinks' => urldecode($wgRequest->getVal("drinks"))
 				), array( /* WHERE */
 					'up_user_id' => $wgUser->getID()
 				), ""
@@ -1641,10 +1641,10 @@ function saveWikiaSettings_prefJSON(){
 			$dbw =& wfGetDB( DB_MASTER );
 				$dbw->update( '`user_profile`',
 				array( /* SET */
-					'up_custom_1' => $wgRequest->getVal("custom1"),
-					'up_custom_2' => $wgRequest->getVal("custom2"),
-					'up_custom_3' => $wgRequest->getVal("custom3"),
-					'up_custom_4' => $wgRequest->getVal("custom4")
+					'up_custom_1' => urldecode($wgRequest->getVal("custom1")),
+					'up_custom_2' => urldecode($wgRequest->getVal("custom2")),
+					'up_custom_3' => urldecode($wgRequest->getVal("custom3")),
+					'up_custom_4' => urldecode($wgRequest->getVal("custom4"))
 					
 				), array( /* WHERE */
 					'up_user_id' => $wgUser->getID()

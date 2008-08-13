@@ -11,6 +11,19 @@ var initTracker = function() {
 	var Event = YAHOO.util.Event;
 	var lang = YAHOO.lang;
 
+	if(wgID == 2428) {
+		Event.addListener(['realAd0','realAd1'], 'click', function(e) {
+			var el = Event.getTarget(e);
+			if(el.innerHTML == 'Close ad') {
+				if(wgIsMainpage) {
+					Tracker.trackByStr(e, 'CloseAd/MainPage');
+				} else {
+					Tracker.trackByStr(e, 'CloseAd/ArticlePage');
+				}
+			}
+		});
+	}
+
 	// Request Wiki
 	Event.addListener('request_wiki', 'click', function(e) {
 		Tracker.trackByStr(e, 'RequestWiki/initiate_click');
@@ -181,7 +194,7 @@ var initTracker = function() {
 
 	// Spotlights
 	footerSpotlights = Dom.get('spotlight_footer').getElementsByTagName('div');
-	sidebarSpotlight = Dom.get('102_content'); 
+	sidebarSpotlight = Dom.get('102_content');
 
 	// Advertiser Widget
 	if (sidebarSpotlight) {

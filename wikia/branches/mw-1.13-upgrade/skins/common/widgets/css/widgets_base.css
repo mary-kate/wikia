@@ -593,6 +593,12 @@ li.WidgetMostPopularThumb
         background-image: url('../icons/widget_bookmark.png');
         text-indent: -500px;
 }
+.WidgetContribsThumb
+{
+	 background-image: url('../icons/widget_contribs.png');
+	 text-indent: -500px;
+}
+
 
 
 /* RTL fixes */
