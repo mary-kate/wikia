@@ -100,7 +100,7 @@ body.ltr #articleFooter ul.actions li div {
 }
 
 /* #3433 */
-#headerButtonHub {
+#wikia_header #headerButtonHub {
 	margin-left: 0 !important;
 	left: -50%;
 }
