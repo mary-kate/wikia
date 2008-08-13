@@ -42,12 +42,10 @@ function WidgetActiveTalkPages($id, $params) {
 		'rclimit'	=> 100
 	));
 
-	//print_pre($results['query']['recentchanges']);
-
 	$list = array();
 
-	if ( isset($results) && is_array($results['query']['recentchanges']) ) {
-	    // prevent showing the same page more then one time
+	if ( !empty($results['query']['recentchanges']) ) {
+	    // prevent showing the same page more then once
 	    foreach($results['query']['recentchanges'] as $edit)
 	    {
 		$timestamp = strtotime($edit['timestamp']);
@@ -78,6 +76,4 @@ function WidgetActiveTalkPages($id, $params) {
 	$more = Title::newFromText('Recentchanges', NS_SPECIAL)->getLocalURL('namespace=1');
 
 	return WidgetFrameworkWrapLinks($list) . WidgetFrameworkMoreLink($more);
-
-	//return '<ul>'.implode("\n\t", $list).'</ul><div class="widgetMoreLink"><a href="'.$more->getFullURL('namespace=1').'">'.wfMsg('moredotdotdot').'</a></div>';
 }
