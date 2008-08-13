@@ -89,7 +89,7 @@
 <?php if( !empty($problem['summary']) ): ?>    <a onclick="reportProblemToogleSummary(<?= $problem['id'] ?>)" class="problemReportsInfo" title="<?= wfMsg('pr_table_description')?>">&nbsp;</a><?php endif; ?>
 	<a href="<?= Title::newFromText('ProblemReports/'.$problem['id'], NS_SPECIAL)->escapeLocalURL() ?>" title="<?= htmlspecialchars(wfMsg('moredotdotdot')) ?>">#<?= number_format($problem['id'], 0, '.', '.') ?></a>&nbsp;<?php if (!empty($problem['summary'])):?>
 <?php endif ?></td>
-    <td><a href="<?= $more_url ?>" title="<?= wfMsg('pr_raports_from_this_wikia') ?>"><?= str_replace(array('http://', '.wikia.com', '.wikia-inc.com'), '', $problem['server']) ?></a>&nbsp;<sup><a href="<?= Title::newFromText('ProblemReports', NS_SPECIAL)->escapeLocalURL('showall=1&lang='.$problem['lang']) ?>"><?= $problem['lang'] ?></sup></a></td>
+    <td><a href="<?= $more_url ?>" title="<?= wfMsg('pr_raports_from_this_wikia') ?>"><?= str_replace(array('http://', '.wikia.com', '.wikia-inc.com'), '', $problem['server']) ?></a>&nbsp;<sup><a href="<?= Title::newFromText('ProblemReports', NS_SPECIAL)->escapeLocalURL('showall=1&lang='.$problem['lang']) ?>"><?= $problem['lang'] ?></a></sup></td>
     <td style="text-align: center; width: 40px"><?= htmlspecialchars($problemTypes[$problem['type']]) ?></td>
     <td><a href="<?= $url ?>"><?= wordwrap(htmlspecialchars($problem['title']), 30, ' <br />', true) ?></a></td>
     <td style="text-align: center"><?= $date ?></td>
