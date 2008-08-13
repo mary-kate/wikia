@@ -16,6 +16,8 @@ EOT;
 }
 
 $wgAjaxExportList[] = 'datalagAjax';
+$wgAjaxExportList[] = 'datalagsAjax';
+
 
 function datalagAjax() {
   global $wgLoadBalancer;
@@ -37,5 +39,18 @@ function datalagAjax() {
   }
  }	
 	$response = array('maxlag_host'=>$host, 'maxlag_sec'=>$lag);
+	return new AjaxResponse( Wikia::json_encode( $response ) );
+}
+
+function datalagsAjax() {
+  global $wgLoadBalancer;
+  $res = 'none';
+ 
+ if( !empty( $wgLoadBalancer->mServers ) ){
+  if( count( $wgLoadBalancer->mServers) > 1){  	
+	$res = $wgLoadBalancer->getLagTimes();
+  }
+ }	
+	$response = array('lagdata'=>$res);
 	return new AjaxResponse( Wikia::json_encode( $response ) );
 }
