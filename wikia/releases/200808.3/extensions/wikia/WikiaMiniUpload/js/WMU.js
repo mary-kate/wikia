@@ -103,7 +103,7 @@ function WMU_loadMain() {
 		success: function(o) {
 			$('ImageUploadMain').innerHTML = o.responseText;
 			WMU_indicator(1, false);
-			if($('ImageQuery')) $('ImageQuery').focus();
+			if($('ImageQuery') && WMU_panel.element.style.visibility == 'visible') $('ImageQuery').focus();
 		}
 	}
 	WMU_indicator(1, true);
