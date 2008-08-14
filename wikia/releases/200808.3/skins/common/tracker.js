@@ -70,6 +70,9 @@ YAHOO.Wikia.Tracker = {
 						Event.addListener(anchors[a], 'click', YAHOO.Wikia.Tracker.trackByStr, 'searchResults/' + listNames[l] + 'Match/' + (offset + a));
 					}
 				}
+
+				// #3439
+				this.trackByStr(null, 'searchResults/view');
 			}
 		}
 	},
