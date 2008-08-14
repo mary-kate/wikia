@@ -188,7 +188,7 @@ var initTracker = function() {
 		sidebarSpotlight = sidebarSpotlight.getElementsByTagName('div');
 	}
 
-	if (footerSpotlights.length > 0) {
+	if (footerSpotlights && footerSpotlights.length > 0) {
 		for (s=0; s < footerSpotlights.length; s++) {
 			var id = parseInt(footerSpotlights[s].id.substr( footerSpotlights[s].id.length - 1 ));
 			Event.addListener('realAd' + id, 'click', function(e, id) {
@@ -197,7 +197,7 @@ var initTracker = function() {
 		}
 	}
 
-	if (sidebarSpotlight.length > 0) {
+	if (sidebarSpotlight && sidebarSpotlight.length > 0) {
 		var id = sidebarSpotlight[0].id.substr( sidebarSpotlight[0].id.length - 1 );
 		Event.addListener('realAd' + id, 'click', function(e) {
 			Tracker.trackByStr(e, 'spotlights/sidebar1');
