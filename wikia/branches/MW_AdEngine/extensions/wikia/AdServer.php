@@ -116,7 +116,7 @@ class AdServer {
 
 		if(substr($ad_pos,0,4) == 'HOME') {
 			$this->adsDisplayed[] = array($ad_pos, AdEngine::getInstance()->getAd($ad_pos));
-			return "<!-- adserver={$ad['server']} {$ad_pos} -->".'<div id="adSpace'.(count($this->adsDisplayed) - 1).'"'.(($ad_pos == 'HOME_TOP_LEADERBOARD' || $ad_pos == 'HOME_TOP_RIGHT_BOXAD') ? ' class="'.$ad_pos.'"' : '').'>&nbsp;</div>';
+			return "<!-- {$ad_pos} -->".'<div id="adSpace'.(count($this->adsDisplayed) - 1).'"'.(($ad_pos == 'HOME_TOP_LEADERBOARD' || $ad_pos == 'HOME_TOP_RIGHT_BOXAD') ? ' class="'.$ad_pos.'"' : '').'>&nbsp;</div>';
 		}
 
 		if($this->skinName == 'monaco') {
