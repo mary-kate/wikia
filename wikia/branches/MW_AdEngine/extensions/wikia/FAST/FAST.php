@@ -130,12 +130,10 @@ function fastProcess(&$out, &$text, $category = false) {
 		$wgFASTSIDE[1] = '<div id="adSpaceFAST7"></div>';
 	} else {
 		if(in_array('FAST_HOME3', $fastConfig)) {
-			//$wgFASTSIDE[0] = AdServer::getInstance()->getAd('FAST_HOME3');
-			$wgFASTSIDE[0] = AdServer::getInstance()->getAd('HOME_LEFT_SKYSCRAPER_1');
+			$wgFASTSIDE[0] = AdServer::getInstance()->getAd('FAST_HOME3');
 		}
 		if(in_array('FAST_HOME4', $fastConfig)) {
-			//$wgFASTSIDE[1] = AdServer::getInstance()->getAd('FAST_HOME4');
-			$wgFASTSIDE[1] = AdServer::getInstance()->getAd('HOME_LEFT_SKYSCRAPER_2');
+			$wgFASTSIDE[1] = AdServer::getInstance()->getAd('FAST_HOME4');
 		}
 	}
 

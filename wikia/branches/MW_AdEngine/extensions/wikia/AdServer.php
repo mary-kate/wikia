@@ -101,7 +101,18 @@ class AdServer {
 	}
 
 	public function getAd($ad_pos) {
-		global $wgAdServingType, $wgShowAds, $wgUseAdServer;
+		global $wgAdServingType, $wgShowAds, $wgUseAdServer, $wgUseDARTOnMainPAge;
+
+		//$wgUseDARTOnMainPAge = true;
+
+		if(empty($wgUseDARTOnMainPAge)) {
+			if($ad_pos == 'HOME_TOP_LEADERBOARD') {
+				$ad_pos = 'FAST_HOME1';
+			}
+			if($ad_pos == 'HOME_TOP_RIGHT_BOXAD') {
+				$ad_pos = 'FAST_HOME2';
+			}
+		}
 
 		if(substr($ad_pos,0,4) == 'HOME') {
 			$this->adsDisplayed[] = array($ad_pos, AdEngine::getInstance()->getAd($ad_pos));
