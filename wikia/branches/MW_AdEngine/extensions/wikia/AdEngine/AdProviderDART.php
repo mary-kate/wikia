@@ -6,6 +6,8 @@ $wgExtensionCredits['other'][] = array(
 
 class AdProviderDART implements iAdProvider {
 
+	private $isMainPage;
+
 	protected static $instance = false;
 
 	public static function getInstance() {
@@ -13,6 +15,11 @@ class AdProviderDART implements iAdProvider {
 			self::$instance = new AdProviderDART();
 		}
 		return self::$instance;
+	}
+
+	protected function __construct() {
+		global $wgTitle;
+		$this->isMainPage = $wgTitle->getArticleId() == Title::newMainPage()->getArticleId();
 	}
 
 	public function getAd($slotname, $slot){
@@ -107,9 +114,7 @@ class AdProviderDART implements iAdProvider {
 
 	// Page type, ie, "home" or "article"
 	function getZone2(){
-		global $wgIsMainPage;
-		// Note sure if this will work or not in mediawiki env, may need more work.
-		if($wgIsMainPage){
+		if($this->isMainPage) {
 			return 'home';
 		} else {
 			return 'article';
@@ -117,11 +122,12 @@ class AdProviderDART implements iAdProvider {
 	}
 
 	function getDartUrl(){
+		global $wgTitle;
+		return $wgTitle->getText();
 		/* From DART doc:
 		url is a key value that pulls in page-specific attributes from the actual page url (forward slashes and other non alpha-numeric characters must be converted to underscores) */
 		// Nick wrote: I don't know what that really means. I asked for clarification
 		// via skype, leaving this blank until I know what it means.
-		return '';
 	}
 
 
