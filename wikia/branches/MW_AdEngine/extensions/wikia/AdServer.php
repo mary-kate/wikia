@@ -101,11 +101,11 @@ class AdServer {
 	}
 
 	public function getAd($ad_pos) {
-		global $wgAdServingType, $wgShowAds, $wgUseAdServer, $wgUseDARTOnMainPAge;
+		global $wgAdServingType, $wgShowAds, $wgUseAdServer, $wgUseDARTOnMainPage;
 
 		//$wgUseDARTOnMainPAge = true;
 
-		if(empty($wgUseDARTOnMainPAge)) {
+		if(empty($wgUseDARTOnMainPage)) {
 			if($ad_pos == 'HOME_TOP_LEADERBOARD') {
 				$ad_pos = 'FAST_HOME1';
 			}
