@@ -1,7 +1,4 @@
 <?php
-ini_set('display_errors', true);
-chdir('../..');
-require 'includes/WebStart.php';
 
 $wgExtensionCredits['other'][] = array(
 	'name' => 'AdEngine',
@@ -15,7 +12,7 @@ interface iAdProvider {
 
 class AdEngine {
 
-	const cacheKeyVersion = "1.1";
+	const cacheKeyVersion = "1.2";
 
 	const cacheTimeout = 1800;
 
@@ -102,18 +99,3 @@ class AdEngine {
 		}
 	}
 }
-
-echo '<pre>';
-echo AdEngine::getInstance()->getAd('HOME_TOP_LEADERBOARD');echo "\n\n";
-echo AdEngine::getInstance()->getAd('HOME_TOP_RIGHT_BOXAD');echo "\n\n";
-echo AdEngine::getInstance()->getAd('HOME_LEFT_SKYSCRAPER_1');echo "\n\n";
-echo AdEngine::getInstance()->getAd('HOME_LEFT_SKYSCRAPER_2');echo "\n\n";
-echo AdEngine::getInstance()->getAd('TOP_LEADERBOARD');echo "\n\n";
-echo AdEngine::getInstance()->getAd('TOP_RIGHT_BOXAD');echo "\n\n";
-echo AdEngine::getInstance()->getAd('LEFT_SKYSCRAPER_1');echo "\n\n";
-echo AdEngine::getInstance()->getAd('LEFT_SKYSCRAPER_2');echo "\n\n";
-echo AdEngine::getInstance()->getAd('FOOTER_BOXAD');echo "\n\n";
-echo AdEngine::getInstance()->getAd('LEFT_SPOTLIGHT_1');echo "\n\n";
-echo AdEngine::getInstance()->getAd('FOOTER_SPOTLIGHT_LEFT');echo "\n\n";
-echo AdEngine::getInstance()->getAd('FOOTER_SPOTLIGHT_MIDDLE');echo "\n\n";
-echo AdEngine::getInstance()->getAd('FOOTER_SPOTLIGHT_RIGHT');echo "\n\n";
