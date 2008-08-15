@@ -39,6 +39,8 @@ class AdProviderDART implements iAdProvider {
 		$url .= "tile=" . $this->getTile($slotname) . ';';
 		$url .= "dcopt=" . $this->getDcopt($slotname) . ';';
 		$url .= "sz=" . $slot['size'] . ';';
+		// special "end" delimiter per Michael
+		$url .= 'endtag=$;';
 		$url .= "ord=" . $this->getSessionRandom();  // FIXME change to javascript rand
 
 		$out = "<!-- " . __CLASS__ . " slot: $slotname , " . print_r($slot, true) . "-->";
@@ -65,6 +67,7 @@ class AdProviderDART implements iAdProvider {
 		// Why oh why couldn't they have made this easier?
 		switch(@$wgCat['name']){
 			case 'Auto' : return 'wka.auto';
+			case 'Books' : return 'wka.books';
 			case 'Creative' : return 'wka.crea';
 			case 'Education' : return 'wka.edu';
 			case 'Entertainment' : return 'wka.ent';
@@ -74,15 +77,15 @@ class AdProviderDART implements iAdProvider {
 			case 'Humor' : return 'wka.humor';
 			case 'Lifestyle' : return 'wka.life';
 			case 'Music' : return 'wka.music';
-			case 'Philosophy' : return 'wka.phil';
-			case 'Politics' : return 'wka.poli';
-			case 'Science' : return 'wka.sci';
+			case 'Philosophy and Religion' : return 'wka.phil';
+			case 'Politics and Activism' : return 'wka.poli';
+			case 'Science and Nature' : return 'wka.sci';
 			case 'Sports' : return 'wka.sports';
 			case 'Technology' : return 'wka.tech';
 			case 'Test Site' : return 'wka.test';
 			case 'Toys' : return 'wka.toys';
 			case 'Travel' : return 'wka.travel';
-			case 'www.wikia.com' : return 'wka.wikia';
+			// "Miscellaneous" goes to default.
 			default: return 'wka.wikia';
 		}
 	}
