@@ -1270,9 +1270,9 @@ if(!$custom_article_footer && $displayArticleFooter) {
 					<tr>
 						<td class="col1">
 							<ul class="actions" id="articleFooterActions">
-								<li><a rel="nofollow" id="fe_edit_icon" href="<?= $wgTitle->getEditURL() ?>"><img src="<?= $wgStylePath ?>/monobook/blank.gif" id="fe_edit_icon" class="sprite" alt="<?= wfMsg('edit') ?>" /></a> <div><?= wfMsg('footer_1', $wgSitename) ?> <a id="fe_edit_link" rel="nofollow" href="<?= $wgTitle->getEditURL() ?>"><?= wfMsg('footer_1.5') ?></a></div></li>
-								<li id="fe_talk"><a rel="nofollow" id="fe_talk_icon" href="<?= $this->data['content_actions']['history']['href'] ?>"><img src="<?= $wgStylePath ?>/monobook/blank.gif" id="fe_talk_icon" class="sprite" alt="<?= wfMsg('history_short') ?>" /></a> <div><a id="fe_talk_link" rel="nofollow" href="<?=$this->data['content_actions']['history']['href']?>"><?=$this->data['content_actions']['history']['text']?></a></div></li>
-								<li id="fe_permalink"><a rel="nofollow" id="fe_permalink_icon" href="<?= $this->data['nav_urls']['permalink']['href'] ?>"><img src="<?= $wgStylePath ?>/monobook/blank.gif" id="fe_permalink_icon" class="sprite" alt="<?= wfMsg('permalink') ?>" /></a> <div><a id="fe_permalink_link" rel="nofollow" href="<?=$this->data['nav_urls']['permalink']['href']?>"><?=$this->data['nav_urls']['permalink']['text']?></a></div></li>
+								<li><a rel="nofollow" id="fe_edit_icon" href="<?= htmlspecialchars($wgTitle->getEditURL()) ?>"><img src="<?= $wgStylePath ?>/monobook/blank.gif" id="fe_edit_icon" class="sprite" alt="<?= wfMsg('edit') ?>" /></a> <div><?= wfMsg('footer_1', $wgSitename) ?> <a id="fe_edit_link" rel="nofollow" href="<?= htmlspecialchars($wgTitle->getEditURL()) ?>"><?= wfMsg('footer_1.5') ?></a></div></li>
+								<li id="fe_talk"><a rel="nofollow" id="fe_talk_icon" href="<?= htmlspecialchars($this->data['content_actions']['history']['href']) ?>"><img src="<?= $wgStylePath ?>/monobook/blank.gif" id="fe_talk_icon" class="sprite" alt="<?= wfMsg('history_short') ?>" /></a> <div><a id="fe_talk_link" rel="nofollow" href="<?=htmlspecialchars($this->data['content_actions']['history']['href'])?>"><?=$this->data['content_actions']['history']['text']?></a></div></li>
+								<li id="fe_permalink"><a rel="nofollow" id="fe_permalink_icon" href="<?= htmlspecialchars($this->data['nav_urls']['permalink']['href']) ?>"><img src="<?= $wgStylePath ?>/monobook/blank.gif" id="fe_permalink_icon" class="sprite" alt="<?= wfMsg('permalink') ?>" /></a> <div><a id="fe_permalink_link" rel="nofollow" href="<?=htmlspecialchars($this->data['nav_urls']['permalink']['href'])?>"><?=$this->data['nav_urls']['permalink']['text']?></a></div></li>
 <?php
 	$timestamp = $wgArticle->getTimestamp();
 	$lastUpdate = $wgLang->date($timestamp);
@@ -1350,19 +1350,16 @@ if(!$custom_article_footer && $displayArticleFooter) {
 							<div id="share">
 							<dl id="shareDelicious" class="share">
 								<dt>del.icio.us</dt>
-								<dd><a rel="nofollow" href="http://del.icio.us/post?v=4&noui&jump=close&url=<?=$url?>&title=<?=$title?>" id="shareDelicious_a"></a></dd>
+								<dd><a rel="nofollow" href="http://del.icio.us/post?v=4&amp;noui&amp;jump=close&amp;url=<?=$url?>&amp;title=<?=$title?>" id="shareDelicious_a"></a></dd>
 							</dl>
-							</a>
 							<dl id="shareStumble" class="share">
 								<dt>StumbleUpon</dt>
-								<dd><a rel="nofollow" href="http://www.stumbleupon.com/submit?url=<?=$url?>&title=<?=$title?>" id="shareStumble_a"></a></dd>
+								<dd><a rel="nofollow" href="http://www.stumbleupon.com/submit?url=<?=$url?>&amp;title=<?=$title?>" id="shareStumble_a"></a></dd>
 							</dl>
-							</a>
 							<dl id="shareDigg" class="share">
 								<dt>Digg</dt>
-								<dd><a rel="nofollow" href="http://digg.com/submit?phase=2&url=<?=$url?>&title=<?=$title?>" id="shareDigg_a"></a></dd>
+								<dd><a rel="nofollow" href="http://digg.com/submit?phase=2&amp;url=<?=$url?>&amp;title=<?=$title?>" id="shareDigg_a"></a></dd>
 							</dl>
-							</a>
 							</div>
 						</td>
 					</tr>
