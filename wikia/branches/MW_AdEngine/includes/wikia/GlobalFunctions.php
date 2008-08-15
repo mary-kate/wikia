@@ -10,7 +10,7 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 
 require( "$IP/extensions/wikia/AdServer.php" );
 require( "$IP/extensions/wikia/AdEngine/AdEngine.php" );
-require( "$IP/extensions/wikia/MergeFiles/MergeFiles.php" );
+require_once( "$IP/extensions/wikia/MergeFiles/MergeFiles.php" );
 
 /**
  * Author: Inez Korczyński
