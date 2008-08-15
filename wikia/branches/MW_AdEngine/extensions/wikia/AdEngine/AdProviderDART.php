@@ -43,10 +43,14 @@ class AdProviderDART implements iAdProvider {
 		$url .= 'endtag=$;';
 		$url .= "ord=" . $this->getSessionRandom();  // FIXME change to javascript rand
 
+		return $url;
+
+		/*
 		$out = "<!-- " . __CLASS__ . " slot: $slotname , " . print_r($slot, true) . "-->";
 		$out .= '<script src="' . $url . '" type="text/javascript"></script>';
 
 		return $out;
+		*/
 	}
 
 	/* From DART Webmaster guide:

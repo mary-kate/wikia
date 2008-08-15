@@ -174,6 +174,13 @@ function AdGetColor(type) {
  */
 function ad_call(adSpaceId, zoneId, pos) {
 
+	if(pos.substring(0,4) == 'http') {
+		curAdSpaceId = adSpaceId;
+		FASTfix(zoneId);
+		document.write('<scr'+'ipt type="text/javascript" src="'+pos+'"></scr'+'ipt>');
+		return;
+	}
+
 	curAdSpaceId = -1;
 
 	if($('adSpace' + adSpaceId)) {

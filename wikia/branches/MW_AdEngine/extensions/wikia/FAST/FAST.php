@@ -85,10 +85,12 @@ function fastProcess(&$out, &$text, $category = false) {
 		$text = AdServer::getInstance()->getAd('FAST_TOP').$text;
 	} else {
 		if(in_array('FAST_HOME2', $fastConfig)) {
-			$text = AdServer::getInstance()->getAd('FAST_HOME2').$text;
+			//$text = AdServer::getInstance()->getAd('FAST_HOME2').$text;
+			$text = AdServer::getInstance()->getAd('HOME_TOP_RIGHT_BOXAD').$text;
 		}
 		if(in_array('FAST_HOME1', $fastConfig)) {
-			$text = AdServer::getInstance()->getAd('FAST_HOME1').$text;
+			//$text = AdServer::getInstance()->getAd('FAST_HOME1').$text;
+			$text = AdServer::getInstance()->getAd('HOME_TOP_LEADERBOARD').$text;
 		}
 	}
 	/*
@@ -101,7 +103,7 @@ function fastProcess(&$out, &$text, $category = false) {
 		strrpos($text, '</span></h6>')
 	);
 	rsort($headlineArray);
-	
+
 	$pos = $headlineArray[0];
 
 	if(in_array('FAST4', $fastConfig)) {
@@ -128,10 +130,12 @@ function fastProcess(&$out, &$text, $category = false) {
 		$wgFASTSIDE[1] = '<div id="adSpaceFAST7"></div>';
 	} else {
 		if(in_array('FAST_HOME3', $fastConfig)) {
-			$wgFASTSIDE[0] = AdServer::getInstance()->getAd('FAST_HOME3');
+			//$wgFASTSIDE[0] = AdServer::getInstance()->getAd('FAST_HOME3');
+			$wgFASTSIDE[0] = AdServer::getInstance()->getAd('HOME_LEFT_SKYSCRAPER_1');
 		}
 		if(in_array('FAST_HOME4', $fastConfig)) {
-			$wgFASTSIDE[1] = AdServer::getInstance()->getAd('FAST_HOME4');
+			//$wgFASTSIDE[1] = AdServer::getInstance()->getAd('FAST_HOME4');
+			$wgFASTSIDE[1] = AdServer::getInstance()->getAd('HOME_LEFT_SKYSCRAPER_2');
 		}
 	}
 
