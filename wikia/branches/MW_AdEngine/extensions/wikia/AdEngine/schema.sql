@@ -44,5 +44,5 @@ CREATE TABLE ad_provider_value (
   KEY (provider_id, city_id)
 ) ENGINE=InnoDB;
 
-INSERT INTO ad_provider_value VALUES (NULL, 1, NULL, 'alldart', 'true');
---INSERT INTO ad_provider_value VALUES (NULL, 1, 490, 'wowwikidart', 'true');
+-- INSERT INTO ad_provider_value VALUES (NULL, 1, NULL, 'alldart', 'true');
+-- INSERT INTO ad_provider_value VALUES (NULL, 1, 490, 'wowwikidart', 'true');
