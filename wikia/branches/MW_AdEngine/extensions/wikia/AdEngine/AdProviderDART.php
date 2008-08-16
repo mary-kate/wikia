@@ -23,7 +23,6 @@ class AdProviderDART implements iAdProvider {
 	}
 
 	public function getAd($slotname, $slot){
-		global $wgTitle;
 
 		$url = 'http://ad.doubleclick.net/';
 		$url .= $this->getAdType() . '/';
@@ -33,16 +32,9 @@ class AdProviderDART implements iAdProvider {
 		$url .= 's1=' . $this->getZone1() . ';'; // this seems redundant
 		$url .= 's2=' . $this->getZone2() . ';';
 		$url .= 'pos=' . $slotname . ';';
-		$url .= 'url=' . $this->getDartUrl() . ';';
 		$url .= 'kw=' . urlencode($this->getSearchKeywords()) . ';';
 		$url .= $this->getKeyValues($slot);
-
-		// Title is one of the always-present key-values
-		if (is_object($wgTitle)){
-			// FIXME fill in the title
-			$url.="title=" . ';';
-		}
-
+		$url .= $this->getArticleID();
 		$url .= "tile=" . $this->getTile($slotname) . ';';
 		$url .= "dcopt=" . $this->getDcopt($slotname) . ';';
 		$url .= "sz=" . $slot['size'] . ';';
@@ -195,4 +187,16 @@ class AdProviderDART implements iAdProvider {
 		}
 		return $number;
 	}
+
+	
+	// Title is one of the always-present key-values
+	public function getArticleID(){
+		global $wgTitle;
+		if (is_object($wgTitle)){
+			return "articleid=" . $wgTitle->getArticleID() . ';';
+		} else {
+			return '';
+		}
+	}
+	
 }
