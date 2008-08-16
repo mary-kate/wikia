@@ -70,7 +70,6 @@ class AdProviderDART implements iAdProvider {
 		// Why oh why couldn't they have made this easier?
 		switch(@$wgCat['name']){
 			case 'Auto' : return 'wka.auto';
-			case 'Books' : return 'wka.books';
 			case 'Creative' : return 'wka.crea';
 			case 'Education' : return 'wka.edu';
 			case 'Entertainment' : return 'wka.ent';
