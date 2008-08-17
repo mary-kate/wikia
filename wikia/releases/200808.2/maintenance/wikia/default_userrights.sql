@@ -79,3 +79,10 @@ insert into user_groups(ug_user, ug_group) values
 (/*Maintenance script*/375130,'bot'),
 (/*WikiaBot*/269919,'bot')
 ;
+
+delete from user_groups where ug_user in (
+/*Uberfuzzy*/161697
+) and ug_group="checkuser";
+insert into user_groups(ug_user, ug_group) values
+(/*Uberfuzzy*/161697, 'checkuser')
+;
