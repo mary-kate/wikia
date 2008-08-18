@@ -27,7 +27,6 @@ $wgWidgets['WidgetEditedRecently'] = array(
     'editable' => true,
 );
 
-// TODO: fix bug with widget edition -> widget doesn't know article ID we're on
 function WidgetEditedRecently($id, $params) {
     	wfProfileIn( __METHOD__ );
     	global $wgTitle, $wgRequest;
@@ -53,11 +52,11 @@ function WidgetEditedRecently($id, $params) {
 	// create list of recent contributors
 	$items = array();
 
-	if( isset( $res['query']['pages'] ) && is_array( $res['query']['pages'] ) ) {
+	if( !empty($res['query']['pages']) ) {
 
 	    $contribs = array_shift($res['query']['pages']);
 
-	    if ( isset($contribs['revisions']) && is_array($contribs['revisions']) ) {
+	    if ( !empty($contribs['revisions']) ) {
 		foreach ($contribs['revisions'] as $contrib) {
 		    $is_anon = isset($contrib['anon']);
 

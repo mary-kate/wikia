@@ -15,34 +15,42 @@ EOT;
         exit( 1 );
 }
 
-$wgExtensionCredits['specialpage'][] = array(
-	'name' => 'Datalag',
-	'author' => 'Andrew Yasinsky',
-	'description' => 'Database Lag Status',
-);
-
-#--- permissions
-$wgAvailableRights[] = 'datalag';
-$wgGroupPermissions['staff']['datalag'] = true;
-$wgSpecialPages['datalag'] = array('Datalag', 'datalag', false,false);
 $wgAjaxExportList[] = 'datalagAjax';
+$wgAjaxExportList[] = 'datalagsAjax';
+
 
 function datalagAjax() {
   global $wgLoadBalancer;
   $lag = 0;
   $host = 'none';
-    
+ 
+ if( !empty( $wgLoadBalancer->mServers ) ){
+ 	
+  
   if( count( $wgLoadBalancer->mServers) > 1){  	
 
   list( $host, $lag ) = $wgLoadBalancer->getMaxLag();
-    $name = @gethostbyaddr( $host );
+    $name = gethostbyaddr( $host );
 	
 	if ( $name !== false ) {
 		$host = $name;
 	}
    
   }
-	
+ }	
 	$response = array('maxlag_host'=>$host, 'maxlag_sec'=>$lag);
+	return new AjaxResponse( Wikia::json_encode( $response ) );
+}
+
+function datalagsAjax() {
+  global $wgLoadBalancer;
+  $res = 'none';
+ 
+ if( !empty( $wgLoadBalancer->mServers ) ){
+  if( count( $wgLoadBalancer->mServers) > 1){  	
+	$res = $wgLoadBalancer->getLagTimes();
+  }
+ }	
+	$response = array('lagdata'=>$res);
 	return new AjaxResponse( Wikia::json_encode( $response ) );
 }

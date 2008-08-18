@@ -25,3 +25,9 @@ body.rtl #articleFooter .actions li div a {
 	clear: both;
 }
 
+/* #3433 */
+#wikia_header #headerButtonHub {
+	margin-left: 0 !important;
+	left: -50%;
+}
+

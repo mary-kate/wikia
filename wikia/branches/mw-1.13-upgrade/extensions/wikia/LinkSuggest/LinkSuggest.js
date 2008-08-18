@@ -224,6 +224,16 @@ YAHOO.lang.extend(YAHOO.example.AutoCompleteTextArea, YAHOO.widget.AutoComplete,
 		elContainer.style.left = position[0] + 'px'
 		elContainer.style.top = position[1] + 'px'
 
+		/* #3378  */
+		var maxLen = 20;
+
+		for (var n=0; n<aResults.length; n++) {
+			var len = aResults[n][0].length;
+			if (maxLen < len) maxLen = len;
+		}
+
+		elContainer.style.width = Math.round((maxLen*7.5) < 400 ? maxLen*7.5 : 400) +'px';
+
 		if (!this.isContainerOpen()) {
 			this.track('open');
 			this._suggestionSuccessful = false;

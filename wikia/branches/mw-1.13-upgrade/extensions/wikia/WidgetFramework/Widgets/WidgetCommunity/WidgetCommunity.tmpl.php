@@ -62,6 +62,7 @@
 			<a rel="nofollow" href="<?= htmlentities(Skin::makeSpecialUrl('WhosOnline')) ?>"><?= strtolower(wfMsg('moredotdotdot')) ?></a>
 		</li>
 	</ul>
-	</div>
 <?php
 	}
+?>
+</div>
