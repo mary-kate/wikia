@@ -105,7 +105,7 @@ class CovertOps extends SpecialPage {
 					array(
 						'pr_page' => $mArticle->getId(),
 						'pr_type' => 'edit',
-						'pr_level' => 'sysop',
+						'pr_level' => 'autoconfirmed',
 						'pr_cascade' => 0,	
 						'pr_user' => NULL,
 						'pr_expiry' => 'infinity',
