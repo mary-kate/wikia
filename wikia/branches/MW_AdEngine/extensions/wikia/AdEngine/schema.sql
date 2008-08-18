@@ -26,11 +26,11 @@ INSERT INTO ad_slot VALUES (NULL, 'FOOTER_SPOTLIGHT_RIGHT', 'monaco', '200x75', 
 
 DROP TABLE IF EXISTS ad_slot_override;
 CREATE TABLE ad_slot_override (
-  id SMALLINT UNSIGNED NOT NULL,
+  ad_slot_id SMALLINT UNSIGNED NOT NULL,
   city_id INT UNSIGNED NOT NULL,
   provider_id TINYINT UNSIGNED DEFAULT NULL,
   enabled ENUM('Yes', 'No') DEFAULT NULL,
-  PRIMARY KEY(id, city_id),
+  PRIMARY KEY(ad_slot_id, city_id),
   KEY(city_id)
 ) ENGINE=InnoDB;
 
