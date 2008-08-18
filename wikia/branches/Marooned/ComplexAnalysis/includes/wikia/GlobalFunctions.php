@@ -485,6 +485,8 @@ function wfCountWikiElement($element, $count=1) {
 
 		$sql = "INSERT INTO $dataTable (city_id, article_id, rev_id, data) VALUES ({$artData[0]}, {$artData[1]}, {$artData[2]}, $sqlData) ON DUPLICATE KEY UPDATE data=$sqlData, rev_id={$artData[2]};";
 		$db->query($sql);
+		unset($wgElementsCount);
+		unset($sqlData);
 	} else {
 		if (empty($wgElementsCount[$element])) {
 			$wgElementsCount[$element] = $count;
