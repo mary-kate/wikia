@@ -16,8 +16,7 @@ class AdEngine {
 
 	const cacheTimeout = 1800;
 
-	private $providers = array(	1 => 'DART',
-								2 => 'OpenX');
+	private $providers = array(1 => 'DART', 2 => 'OpenX');
 
 	private $slots = array();
 
@@ -39,19 +38,20 @@ class AdEngine {
 
 	public function loadConfig() {
 		$skin_name = 'monaco';
-		$city_id = 490;
+		global $wgMemc, $wgCityId;
 
-		global $wgMemc;
-
-		$key = wfMemcKey('slots', $skin_name, self::cacheKeyVersion);
-		$this->slots = $wgMemc->get($key);
+		$cacheKey = wfMemcKey('slots', $skin_name, self::cacheKeyVersion);
+		$this->slots = $wgMemc->get($cacheKey);
 
 		if(empty($this->slots) && !is_array($this->slots)) {
 			$db = wfGetDB(DB_SLAVE);
 
-			$sql = "SELECT ad_slot.id, ad_slot.name, ad_slot.size, COALESCE(adso.provider_id, ad_slot.provider_id) AS provider_id, COALESCE(adso.enabled, ad_slot.enabled) AS enabled
+			$sql = "SELECT ad_slot.id, ad_slot.name, ad_slot.size,
+					COALESCE(adso.provider_id, ad_slot.provider_id) AS provider_id,
+					COALESCE(adso.enabled, ad_slot.enabled) AS enabled
 					FROM wikicities.ad_slot
-					LEFT OUTER JOIN wikicities.ad_slot_override AS adso ON ad_slot.id = adso.id AND city_id=".intval($city_id)."
+					LEFT OUTER JOIN wikicities.ad_slot_override AS adso
+					  ON ad_slot.id = adso.id AND city_id=".intval($wgCityId)."
 					WHERE skin='".$db->strencode($skin_name)."'";
 
 			$res = $db->query($sql);
@@ -65,7 +65,8 @@ class AdEngine {
 				);
 			}
 
-			$sql = "SELECT * FROM wikicities.ad_provider_value WHERE (city_id = ".intval($city_id)." OR city_id IS NULL)";
+			$sql = "SELECT * FROM wikicities.ad_provider_value WHERE
+				 (city_id = ".intval($wgCityId)." OR city_id IS NULL)";
 			$res = $db->query($sql);
 			while($row = $db->fetchObject($res)) {
 				 foreach($this->slots as $slotname => $slot) {
@@ -74,7 +75,7 @@ class AdEngine {
 				 	}
 				 }
 			}
-			$wgMemc->set($key, $this->slots, self::cacheTimeout);
+			$wgMemc->set($cacheKey, $this->slots, self::cacheTimeout);
 		}
 
 		return true;

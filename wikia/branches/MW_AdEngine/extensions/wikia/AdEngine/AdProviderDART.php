@@ -44,7 +44,7 @@ class AdProviderDART implements iAdProvider {
 
 		return $url;
 
-		/*
+		/* For now we are returning url. End system will return tag.
 		$out = "<!-- " . __CLASS__ . " slot: $slotname , " . print_r($slot, true) . "-->";
 		$out .= '<script src="' . $url . '" type="text/javascript"></script>';
 
@@ -122,6 +122,7 @@ class AdProviderDART implements iAdProvider {
 	}
 
 
+	/* See the DART webmaster guide for a full explanation of DART key values. */
 	function getKeyValues($slot){
 		if(empty($slot['provider_values'])){
 			return '';
@@ -129,10 +130,52 @@ class AdProviderDART implements iAdProvider {
 
 		$out='';
 		foreach ($slot['provider_values'] as $keyname => $keyvalue){
-			$out .= $keyname . '=' . urlencode($keyvalue) . ';';
+			$out .= $this->sanitizeKeyName($keyname) . '=' . $this->sanitizeKeyValue($keyvalue) . ';';
 		}
 		return $out;
 	}
+
+
+	/* See full explanation on limitations in the DART webmaster guide */
+	function sanitizeKeyName($keyname){
+		$out=preg_replace('/[^a-z0-9A-Z]/', '', $keyname); // alnum only
+		$out=preg_replace('/^[0-9]/', '', $out); // not start with a number
+		$out=substr($out, 0, 5); // limited to 5 chars
+
+		if ($keyname != $out){
+			trigger_error("DART key-name was invalid, changed from '$keyname' to '$out'", E_USER_NOTICE);
+		}
+
+		return $out;
+	}
+
+
+	/* See full explanation on limitations in the DART webmaster guide */
+	function sanitizeKeyValue($keyvalue){
+		$invalids=array('/', '#', ',', '*', '.', '(', ')', '=', '+', '<', '>', '[', ']');
+		$out=str_replace($invalids, '', $keyvalue);
+		$out=substr($out, 0, 55); // limited to 55 chars
+
+		// Spaces are allowed in key-values only if an escaped character %20 is used, otherwise the key- 
+		// value will not be funtional. 
+		// Nick wrote: Retarted. They should just use url-encoding.
+		$out=str_replace(' ', '%20 ', $out);
+
+		// The value of a key-value cannot be empty (e.g., cat= or cat=” “ or cat=’ ‘), however, where there 
+		// are instances where the value is intentionally blank, populate the value with null or some other 
+		// value indicating a blank, e.g. cat=null 
+		if ($out==''){
+			$out='null';
+		}
+
+		if ($keyvalue != $out){
+			trigger_error("DART key-value was invalid, changed from '$keyvalue' to '$out'", E_USER_NOTICE);
+		}
+	
+		return urlencode($out);
+	}
+
+	
 
 	function getTile($slotname){
 		/* From DART doc:
