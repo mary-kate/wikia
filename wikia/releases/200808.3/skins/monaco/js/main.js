@@ -14,7 +14,7 @@ Event.onDOMReady(function() {
 	}
 	else if (searchField.value != searchField.title) {
 		value = searchField.title;
-		searchField.style.color = 'black';
+		Dom.addClass('search_field', 'field_active');
 	}
 	else {
 		value = searchField.title;
@@ -22,14 +22,14 @@ Event.onDOMReady(function() {
 	Event.addListener('search_field', 'click', function() {
 		if(value == null || value == Dom.get('search_field').value) {
 			Dom.get('search_field').value = '';
-			Dom.get('search_field').style.color = 'black';
+			Dom.addClass('search_field', 'field_active');
 		}
 		Dom.get('search_field').focus();
 	});
 	Event.addListener('search_field', 'blur', function() {
 		if(Dom.get('search_field').value == '') {
 			Dom.get('search_field').value = value;
-			Dom.get('search_field').style.color = 'gray';
+			Dom.removeClass('search_field', 'field_active');
 		}
 	});
 	Event.addListener('search_button', 'click', function() {
