@@ -6,8 +6,6 @@ $wgExtensionCredits['other'][] = array(
 
 class AdProviderDART implements iAdProvider {
 
-	private $isMainPage;
-
 	protected static $instance = false;
 
 	public static function getInstance() {
@@ -22,15 +20,36 @@ class AdProviderDART implements iAdProvider {
 		$this->isMainPage = $wgTitle->getArticleId() == Title::newMainPage()->getArticleId();
 	}
 
+	private $sites = array(	'Auto' => 'wka.auto',
+							'Creative' => 'wka.crea',
+							'Education' => 'wka.edu',
+							'Entertainment' => 'wka.ent',
+							'Finance' => 'wka.fin',
+							'Gaming' => 'wka.gaming',
+							'Green' => 'wka.green',
+							'Humor' => 'wka.humor',
+							'Lifestyle' => 'wka.life',
+							'Music' => 'wka.music',
+							'Philosophy and Religion' => 'wka.phil',
+							'Politics and Activism' => 'wka.poli',
+							'Science and Nature' => 'wka.sci',
+							'Sports' => 'wka.sports',
+							'Technology' => 'wka.tech',
+							'Test Site' => 'wka.test',
+							'Toys' => 'wka.toys',
+							'Travel' => 'wka.travel');
+
+	private $isMainPage;
+
 	public function getAd($slotname, $slot){
 
 		/* Nick wrote: Note, be careful of the order of the key values. From Dart Webmaster guide:
-		 * 	Order of multiple key-values in DART ad tags:  For best performance, DoubleClick recommends 
-		 * 	that reserved key-values be placed as the last attributes in the DART ad tags, after any custom key- 
-		 * 	values. In particular, the following key-values must be used in the following order: 
- 		 * 	sz=widthxheight 
-		 * 	tile=value or ptile=value 
-		 * 	ord=value 
+		 * 	Order of multiple key-values in DART ad tags:  For best performance, DoubleClick recommends
+		 * 	that reserved key-values be placed as the last attributes in the DART ad tags, after any custom key-
+		 * 	values. In particular, the following key-values must be used in the following order:
+ 		 * 	sz=widthxheight
+		 * 	tile=value or ptile=value
+		 * 	ord=value
 		 * 	The ord=value key-value must be the last attribute in the DART ad tag.
 		 *
 		 * 	Note that we also have an "endtag", which slightly contradicts the above, but apparently that's ok
@@ -47,11 +66,11 @@ class AdProviderDART implements iAdProvider {
 		$url .= $this->getArticleKV();
 		$url .= 'pos=' . $slotname . ';';
 		$url .= $this->getKeywordsKV();
-		$url .= $this->getDcoptKV($slotname); 
+		$url .= $this->getDcoptKV($slotname);
 		$url .= "sz=" . $slot['size'] . ';';
 		$url .= $this->getTileKV($slotname);
 		// special "end" delimiter, this is for when we redirect ads to other places. Per Michael
-		$url .= 'endtag=$;'; 
+		$url .= 'endtag=$;';
 		$url .= "ord=RANDOM"; // See note above, ord MUST be last.
 
 		return $url;
@@ -79,29 +98,12 @@ class AdProviderDART implements iAdProvider {
 
 	function getDartSite(){
 		global $wgCat;
-		// Why oh why couldn't they have made this easier?
-		switch(@$wgCat['name']){
-			case 'Auto' : return 'wka.auto';
-			case 'Creative' : return 'wka.crea';
-			case 'Education' : return 'wka.edu';
-			case 'Entertainment' : return 'wka.ent';
-			case 'Finance' : return 'wka.fin';
-			case 'Gaming' : return 'wka.gaming';
-			case 'Green' : return 'wka.green';
-			case 'Humor' : return 'wka.humor';
-			case 'Lifestyle' : return 'wka.life';
-			case 'Music' : return 'wka.music';
-			case 'Philosophy and Religion' : return 'wka.phil';
-			case 'Politics and Activism' : return 'wka.poli';
-			case 'Science and Nature' : return 'wka.sci';
-			case 'Sports' : return 'wka.sports';
-			case 'Technology' : return 'wka.tech';
-			case 'Test Site' : return 'wka.test';
-			case 'Toys' : return 'wka.toys';
-			case 'Travel' : return 'wka.travel';
-			// "Miscellaneous" goes to default.
-			default: return 'wka.wikia';
+		if(!empty($wgCat['name'])) {
+			if(!empty($this->sites[$wgCat['name']])) {
+				return $this->sites[$wgCat['name']];
+			}
 		}
+		return 'wka.wikia';
 	}
 
 	// Effectively the dbname, defaulting to wikia.
@@ -168,14 +170,14 @@ class AdProviderDART implements iAdProvider {
 		$out=str_replace($invalids, '', $keyvalue);
 		$out=substr($out, 0, 55); // limited to 55 chars
 
-		// Spaces are allowed in key-values only if an escaped character %20 is used, otherwise the key- 
-		// value will not be funtional. 
+		// Spaces are allowed in key-values only if an escaped character %20 is used, otherwise the key-
+		// value will not be funtional.
 		// Nick wrote: Retarted. They should just use url-encoding.
 		$out=str_replace(' ', '%20 ', $out);
 
-		// The value of a key-value cannot be empty (e.g., cat= or cat=” “ or cat=’ ‘), however, where there 
-		// are instances where the value is intentionally blank, populate the value with null or some other 
-		// value indicating a blank, e.g. cat=null 
+		// The value of a key-value cannot be empty (e.g., cat= or cat=” “ or cat=’ ‘), however, where there
+		// are instances where the value is intentionally blank, populate the value with null or some other
+		// value indicating a blank, e.g. cat=null
 		if ($out==''){
 			$out='null';
 		}
@@ -183,11 +185,11 @@ class AdProviderDART implements iAdProvider {
 		if ($keyvalue != $out){
 			trigger_error("DART key-value was invalid, changed from '$keyvalue' to '$out'", E_USER_NOTICE);
 		}
-	
+
 		return urlencode($out);
 	}
 
-	
+
 
 	function getTileKV($slotname){
 		/* From DART doc:
