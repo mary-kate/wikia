@@ -172,12 +172,13 @@ function AdGetColor(type) {
 /**
  * @author Inez Korczynski
  */
+var DARTord = (new Date).valueOf();
 function ad_call(adSpaceId, zoneId, pos) {
 
 	if(pos.substring(0,4) == 'http') {
 		curAdSpaceId = adSpaceId;
 		FASTfix(zoneId);
-		document.write('<scr'+'ipt type="text/javascript" src="'+pos+'"></scr'+'ipt>');
+		document.write('<scr'+'ipt type="text/javascript" src="'+pos.replace(/RANDOM/, DARTord)+'"></scr'+'ipt>');
 		return;
 	}
 

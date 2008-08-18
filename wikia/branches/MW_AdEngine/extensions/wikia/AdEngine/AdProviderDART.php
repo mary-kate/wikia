@@ -40,7 +40,7 @@ class AdProviderDART implements iAdProvider {
 		$url .= "sz=" . $slot['size'] . ';';
 		// special "end" delimiter per Michael
 		$url .= 'endtag=$;';
-		$url .= "ord=" . $this->getSessionRandom();  // FIXME change to javascript rand
+		$url .= "ord=RANDOM";
 
 		return $url;
 
@@ -220,17 +220,6 @@ class AdProviderDART implements iAdProvider {
 		}
 	}
 
-	// A "cache busting" random number, but constant across the script invocation,
-	// Note DART will prevent the same ad twice if the number is the same
-	public function getSessionRandom() {
-		static $number = null;
-		if(is_null($number)){
-			$number = mt_rand(1, 99999999);
-		}
-		return $number;
-	}
-
-	
 	// Title is one of the always-present key-values
 	public function getArticleID(){
 		global $wgTitle;
@@ -240,5 +229,5 @@ class AdProviderDART implements iAdProvider {
 			return '';
 		}
 	}
-	
+
 }
