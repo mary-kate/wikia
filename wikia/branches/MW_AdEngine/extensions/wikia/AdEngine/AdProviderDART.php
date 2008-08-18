@@ -126,16 +126,6 @@ class AdProviderDART implements iAdProvider {
 		}
 	}
 
-	function getDartUrl(){
-		global $wgTitle;
-		return $wgTitle->getText();
-		/* From DART doc:
-		url is a key value that pulls in page-specific attributes from the actual page url (forward slashes and other non alpha-numeric characters must be converted to underscores) */
-		// Nick wrote: I don't know what that really means. I asked for clarification
-		// via skype, leaving this blank until I know what it means.
-	}
-
-
 	/* See the DART webmaster guide for a full explanation of DART key values. */
 	function getProviderValues($slot){
 		if(empty($slot['provider_values'])){
