@@ -204,7 +204,7 @@ class UserBoard {
 	}
 	
 	public function getUserBoardMessages($user_id,$user_id_2=0,$limit=0,$page=0){
-		global $wgUser, $wgOut, $wgTitle;
+		global $wgUser, $wgOut, $wgTitle, $wgParser;
 		$dbr =& wfGetDB( DB_MASTER );
 		
 		if($limit>0){
@@ -240,8 +240,7 @@ class UserBoard {
 		$res = $dbr->query($sql);
 		$messages = array();
 		while ($row = $dbr->fetchObject( $res ) ) {
-			$CommentParser = new Parser();
-			$message_text = $CommentParser->parse( $row->ub_message, $wgTitle, $wgOut->parserOptions(),true );
+			$message_text = $wgParser->parse( $row->ub_message, $wgTitle, $wgOut->parserOptions(),true );
 			$message_text = $message_text->getText();
 		
 			 $messages[] = array(
@@ -256,7 +255,7 @@ class UserBoard {
 	}
 
 	public function getAnonUserBoardMessages($user_name,$user_id_2=0,$limit=0,$page=0){
-		global $wgUser, $wgOut, $wgTitle;
+		global $wgUser, $wgOut, $wgTitle, $wgParser;
 		$dbr =& wfGetDB( DB_MASTER );
 		
 		if($limit>0){
@@ -292,8 +291,7 @@ class UserBoard {
 		$res = $dbr->query($sql);
 		$messages = array();
 		while ($row = $dbr->fetchObject( $res ) ) {
-			$CommentParser = new Parser();
-			$message_text = $CommentParser->parse( $row->ub_message, $wgTitle, $wgOut->parserOptions(),true );
+			$message_text = $wgParser->parse( $row->ub_message, $wgTitle, $wgOut->parserOptions(),true );
 			$message_text = $message_text->getText();
 		
 			 $messages[] = array(
