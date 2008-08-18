@@ -30,7 +30,8 @@ CREATE TABLE ad_slot_override (
   city_id INT UNSIGNED NOT NULL,
   provider_id TINYINT UNSIGNED DEFAULT NULL,
   enabled ENUM('Yes', 'No') DEFAULT NULL,
-  PRIMARY KEY(id, city_id)
+  PRIMARY KEY(id, city_id),
+  KEY(city_id)
 ) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS ad_provider_value;
@@ -43,6 +44,3 @@ CREATE TABLE ad_provider_value (
   PRIMARY KEY (id),
   KEY (provider_id, city_id)
 ) ENGINE=InnoDB;
-
--- INSERT INTO ad_provider_value VALUES (NULL, 1, NULL, 'alldart', 'true');
--- INSERT INTO ad_provider_value VALUES (NULL, 1, 490, 'wowwikidart', 'true');
