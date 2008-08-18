@@ -1,6 +1,12 @@
 <?php
 
 class FCKPreprocessor_DOM extends Preprocessor_DOM {
+	public $mTemplateRun ;
+
+	function __construct($parser) {
+                parent::__construct($parser);
+        	$this->mTemplateRun = false ;
+        }
 
         function newFrame() {
                 return new FCK_PPFrame_DOM( $this );
