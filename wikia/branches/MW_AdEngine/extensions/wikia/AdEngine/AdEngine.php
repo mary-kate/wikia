@@ -16,7 +16,8 @@ class AdEngine {
 
 	const cacheTimeout = 1800;
 
-	private $providers = array(1 => 'DART', 2 => 'OpenX');
+	// TODO: pull these from wikicities.provider
+	private $providers = array('1' => 'DART', '2' => 'OpenX', '3' => 'Google', '-1' => 'Null');
 
 	private $slots = array();
 
@@ -24,8 +25,9 @@ class AdEngine {
 
 	protected function __construct() {
 		$this->loadConfig();
-		foreach($this->providers as $provider) {
-			require(dirname(__FILE__) . '/AdProvider'.$provider.'.php');
+		global $wgAutoloadClasses;
+		foreach($this->providers as $p) {
+			$wgAutoloadClasses['AdProvider' . $p]=dirname(__FILE__) . '/AdProvider'.$p.'.php';
 		}
 	}
 
@@ -101,7 +103,9 @@ class AdEngine {
 		} else if($this->providers[$provider_id] == 'OpenX') {
 			return AdProviderOpenX::getInstance();
 		} else {
-			throw new Exception();
+			// Note: Don't throw an exception here. Fail gracefully for ads,
+			// don't under any circumstances fail the rendering of the page
+			return AdProviderNull::getInstance();
 		}
 	}
 }
