@@ -24,6 +24,18 @@ class AdProviderDART implements iAdProvider {
 
 	public function getAd($slotname, $slot){
 
+		/* Nick wrote: Note, be careful of the order of the key values. From Dart Webmaster guide:
+		 * 	Order of multiple key-values in DART ad tags:  For best performance, DoubleClick recommends 
+		 * 	that reserved key-values be placed as the last attributes in the DART ad tags, after any custom key- 
+		 * 	values. In particular, the following key-values must be used in the following order: 
+ 		 * 	sz=widthxheight 
+		 * 	tile=value or ptile=value 
+		 * 	ord=value 
+		 * 	The ord=value key-value must be the last attribute in the DART ad tag.
+		 *
+		 * 	Note that we also have an "endtag", which slightly contradicts the above, but apparently that's ok
+		 */
+
 		$url = 'http://ad.doubleclick.net/';
 		$url .= $this->getAdType() . '/';
 		$url .= $this->getDartSite() . '/';
@@ -31,16 +43,16 @@ class AdProviderDART implements iAdProvider {
 		$url .= $this->getZone2() . ';';
 		$url .= 's1=' . $this->getZone1() . ';'; // this seems redundant
 		$url .= 's2=' . $this->getZone2() . ';';
+		$url .= $this->getProviderValues($slot);
+		$url .= $this->getArticleKV();
 		$url .= 'pos=' . $slotname . ';';
-		$url .= 'kw=' . urlencode($this->getSearchKeywords()) . ';';
-		$url .= $this->getKeyValues($slot);
-		$url .= $this->getArticleID();
-		$url .= "tile=" . $this->getTile($slotname) . ';';
-		$url .= "dcopt=" . $this->getDcopt($slotname) . ';';
+		$url .= $this->getKeywordsKV();
+		$url .= $this->getDcoptKV($slotname); 
 		$url .= "sz=" . $slot['size'] . ';';
-		// special "end" delimiter per Michael
-		$url .= 'endtag=$;';
-		$url .= "ord=RANDOM";
+		$url .= $this->getTileKV($slotname);
+		// special "end" delimiter, this is for when we redirect ads to other places. Per Michael
+		$url .= 'endtag=$;'; 
+		$url .= "ord=RANDOM"; // See note above, ord MUST be last.
 
 		return $url;
 
@@ -123,7 +135,7 @@ class AdProviderDART implements iAdProvider {
 
 
 	/* See the DART webmaster guide for a full explanation of DART key values. */
-	function getKeyValues($slot){
+	function getProviderValues($slot){
 		if(empty($slot['provider_values'])){
 			return '';
 		}
@@ -177,33 +189,33 @@ class AdProviderDART implements iAdProvider {
 
 	
 
-	function getTile($slotname){
+	function getTileKV($slotname){
 		/* From DART doc:
 		 * tile=1 is a parameter that, in conjunction with other sequential tile values on a page, will enable the competitive categories and roadblock features to work. Tile values should match the amount of ads on a given page, but they do not necessarily need to match the order in which the ads appear.													*/
 		// Nick wrote: Chose to hard code this for now based on slot, for simplicity
 		switch($slotname) {
-			case 'TOP_LEADERBOARD': return 1;
-			case 'TOP_RIGHT_BOXAD': return 2;
-			case 'LEFT_SKYSCRAPER_1': return 3;
-			case 'LEFT_SKYSCRAPER_2': return 4;
-			case 'FOOTER_BOXAD': return 5;
-			case 'HOME_TOP_LEADERBOARD': return 1;
-			case 'HOME_TOP_RIGHT_BOXAD': return 2;
-			case 'HOME_LEFT_SKYSCRAPER_1': return 3;
-			case 'HOME_LEFT_SKYSCRAPER_2': return 4;
+			case 'TOP_LEADERBOARD': return 'tile=1;';
+			case 'TOP_RIGHT_BOXAD': return 'tile=2;';
+			case 'LEFT_SKYSCRAPER_1': return 'tile=3;';
+			case 'LEFT_SKYSCRAPER_2': return 'tile=4;';
+			case 'FOOTER_BOXAD': return 'tile=5;';
+			case 'HOME_TOP_LEADERBOARD': return 'tile=1;';
+			case 'HOME_TOP_RIGHT_BOXAD': return 'tile=2;';
+			case 'HOME_LEFT_SKYSCRAPER_1': return 'tile=3;';
+			case 'HOME_LEFT_SKYSCRAPER_2': return 'tile=4;';
 			default: return '';
 		}
 	}
 
-	function getDcopt($slotname){
+	function getDcoptKV($slotname){
 		/* From DART doc:
 			dcopt=ist is a parameter that enables interstitial ad types to run.
 			This should only be included in the top tag on each page.
 		*/
 		// Nick wrote: Chose to hard code this for now based on slot, for simplicity
 		switch ($slotname){
-			case 'TOP_LEADERBOARD': return 'ist';
-			case 'HOME_TOP_LEADERBOARD': return 'ist';
+			case 'TOP_LEADERBOARD': return 'dcopt=ist;';
+			case 'HOME_TOP_LEADERBOARD': return 'dcopt=ist;';
 			default: return '';
 		}
 	}
@@ -212,16 +224,16 @@ class AdProviderDART implements iAdProvider {
 	 * If no search was done, false is returned.
 	 * Note that this is raw input from the user, and should be escaped.
 	 */
-	public function getSearchKeywords(){
-		if(isset($_GET['search'])){
-			return $_GET['search'];
+	public function getKeywordsKV(){
+		if(!empty($_GET['search'])){
+			return 'kw=' . $this->sanitizeKeyValue($_GET['search']) . ';';
 		} else {
-			return false;
+			return '';
 		}
 	}
 
 	// Title is one of the always-present key-values
-	public function getArticleID(){
+	public function getArticleKV(){
 		global $wgTitle;
 		if (is_object($wgTitle)){
 			return "articleid=" . $wgTitle->getArticleID() . ';';
