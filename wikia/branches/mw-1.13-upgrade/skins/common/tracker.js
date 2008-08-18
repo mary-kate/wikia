@@ -67,9 +67,12 @@ YAHOO.Wikia.Tracker = {
 					anchors = lists[l].getElementsByTagName('a');
 
 					for (a=0; a < anchors.length; a++) {
-						Event.addListener(anchors[a], 'click', YAHOO.Wikia.Tracker.trackByStr, 'searchResults/' + listNames[l] + 'Match/' + (offset + a));
+						Event.addListener(anchors[a], 'click', YAHOO.Wikia.Tracker.trackByStr, 'search/searchResults/' + listNames[l] + 'Match/' + (offset + a));
 					}
 				}
+
+				// #3439
+				this.trackByStr(null, 'search/searchResults/view');
 			}
 		}
 	},

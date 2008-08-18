@@ -260,7 +260,7 @@ class SpecialProblemReports extends SpecialPage
 		}
 		
 		// RSS link
-		$subtitle .= ' | <a href="'.$wgRequest->appendQuery('feed=rss').'">RSS</a>';
+		$subtitle .= ' | <a href="'.htmlspecialchars($wgRequest->appendQuery('feed=rss')).'">RSS</a>';
 
 
 		// link to Special:Log/pr_rep_log

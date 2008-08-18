@@ -385,7 +385,7 @@ class EditPage {
 			wfProfileOut( __METHOD__ );
 			return;
 		}
-		
+
 		$wgOut->addScriptFile( 'edit.js' );
 
 		if( wfReadOnly() ) {
@@ -1262,7 +1262,7 @@ class EditPage {
 				$this->showDiff();
 			}
 		}
-		
+
 		wfRunHooks( 'EditPage::showEditForm:initial2', array( &$this ) ) ;
 
 		$wgOut->addHTML( $this->editFormTextTop );
@@ -1345,20 +1345,20 @@ class EditPage {
 		$safemodehtml = $this->checkUnicodeCompliantBrowser()
 			? '' : Xml::hidden( 'safemode', '1' );
 
-	// maybe... just maybe... somebody would want the toolbar not in the default place?
-	// by Bartek for Wikia
-	wfRunHooks ('EditPage::showEditForm:toolbar', array (&$this, &$wgOut, &$toolbar)) ;	
+		// maybe... just maybe... somebody would want the toolbar not in the default place?
+		// by Bartek for Wikia
+		wfRunHooks ('EditPage::showEditForm:toolbar', array (&$this, &$wgOut, &$toolbar)) ;
+
+		//used mainly by captcha - moved above the toolbar - Marooned [at] wikia.com
+		if( is_callable( $formCallback ) ) {
+			call_user_func_array( $formCallback, array( &$wgOut ) );
+		}
 
 		$wgOut->addHTML( <<<END
 {$toolbar}
 <form id="editform" name="editform" method="post" action="$action" enctype="multipart/form-data">
 END
 );
-
-		if( is_callable( $formCallback ) ) {
-			call_user_func_array( $formCallback, array( &$wgOut ) );
-		}
-
 		wfRunHooks( 'EditPage::showEditForm:fields', array( &$this, &$wgOut ) );
 
 		// Put these up at the top to ensure they aren't lost on early form submission

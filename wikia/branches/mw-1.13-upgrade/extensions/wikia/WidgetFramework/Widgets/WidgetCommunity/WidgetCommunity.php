@@ -43,7 +43,7 @@ function WidgetCommunity($id, $params) {
 	global $wgEnableWhosOnlineExt;
 	if( !empty( $wgEnableWhosOnlineExt ) ) {
 		$aResult = WidgetFrameworkCallAPI(array('action' => 'query', 'list' => 'whosonline', 'wklimit' => 5));
-		if(isset($aResult) && isset($aResult['query']['whosonline'])) {
+		if(!empty($aResult['query']['whosonline'])) {
 			$online = $aResult['query']['whosonline'];
 		}
 	}
@@ -57,7 +57,7 @@ function WidgetCommunity($id, $params) {
 		"rcnamespace" => "0|1|2|3|6|7",
 		"rcprop" => "title|timestamp|user"));
 
-	if(isset($aResult['query']) && isset($aResult['query']['recentchanges'])) {
+	if(!empty($aResult['query']['recentchanges'])) {
 		$recentlyEdited = $aResult['query']['recentchanges'];
 	} else {
 		$recentlyEdited = array();

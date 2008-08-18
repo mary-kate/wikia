@@ -174,6 +174,9 @@ YAHOO.wikia.ProblemReportsDialog.prototype = {
 			return;
 		}
 
+		// don't track when we hide the panel
+		this.panel.beforeHideEvent.unsubscribe();
+
 		// report was saved -> hide report dialog and show summary dialog
 		this.panel.hide();
 

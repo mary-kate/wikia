@@ -93,3 +93,14 @@ body.ltr #articleFooter ul.actions li div {
 .ImageMapWrapper {
 	clear: both;
 }
+
+/* edit page */
+#wpTextbox1 {
+	width: 99% !important;
+}
+
+/* #3433 */
+#wikia_header #headerButtonHub {
+	margin-left: 0 !important;
+	left: -50%;
+}
