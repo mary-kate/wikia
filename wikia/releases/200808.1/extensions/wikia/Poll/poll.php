@@ -36,7 +36,8 @@ function renderPoll( $input, $argv=array() ) {
 
   $IP = wfGetIP();
 
-  $wgParser->disableCache();
+  #$wgParser->disableCache();
+  $wgParser->mOutput->mCacheTime = 60;
 
   if ($wgUser->mName == "") $user = $IP;
   else                      $user = $wgUser->mName;
