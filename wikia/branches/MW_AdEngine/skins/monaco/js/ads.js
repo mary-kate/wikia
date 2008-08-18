@@ -266,8 +266,8 @@ TieDivLib = new function() {
 				if(!rtl) {
 					xy = getAbsolutePosition($(items[i][1]));
 					xy.x = Dom.getX(items[i][1]);
-					if(items[i][2].substring(0, 4) == 'FAST' || items[i][2] == 'bl' || items[i][2] == 'r') {
-						if(items[i][2] == 'FAST_HOME1' || items[i][2] == 'FAST_HOME2' || items[i][2] == 'FAST_TOP' || (items[i][2] == 'FAST_BOTTOM' && fast_bottom_type == 'FAST4')) {
+					if(items[i][2].substring(0, 4) == 'http' || items[i][2].substring(0, 4) == 'FAST' || items[i][2] == 'bl' || items[i][2] == 'r') {
+						if(items[i][2].substring(0, 4) == 'http' || items[i][2] == 'FAST_HOME1' || items[i][2] == 'FAST_HOME2' || items[i][2] == 'FAST_TOP' || (items[i][2] == 'FAST_BOTTOM' && fast_bottom_type == 'FAST4')) {
 							if($(items[i][0]).style.right == '') {
 								$(items[i][0]).style.right = 5 + Dom.getX('wikia_page') + $('wikia_page').offsetWidth - (Dom.getX(items[i][1]) + $(items[i][1]).offsetWidth) + 'px';
 							}
