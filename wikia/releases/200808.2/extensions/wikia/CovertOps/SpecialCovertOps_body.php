@@ -63,7 +63,7 @@ class CovertOps extends SpecialPage {
 				$mRevision = Revision::newFromId ( $mArticle->getLatest() );
 
 				/* do a backup and replace current rev text */
-				$this->replaceText ( $mRevision->getTextId() );
+				$this->replaceText ( $mRevision );
 
 				/* add page semi-protection */
 				$this->covertProtect ( $mArticle );
@@ -109,7 +109,7 @@ class CovertOps extends SpecialPage {
 		$wgOut->addHTML($oTmpl->execute($template));
 	}
 
-	function replaceText ( $textId ) {
+	function replaceText ( $revision ) {
 		global $wgRequest, $wgDefaultExternalStore, $wgCityId;
 
 		$dbw =& wfGetDb( DB_MASTER );
@@ -125,11 +125,13 @@ class CovertOps extends SpecialPage {
  				'old_text' => 'old_text'
 			),
                         array (
-				'old_id' => $textId
+				'old_id' => $revision->getTextId()
 			),
 			'CovertOps::replaceText',
 			array( 'IGNORE' ) # Backup 1st one only, subsequent edits are corrections of the *new* text
 		);
+
+		$flags = Revision::compressRevisionText( $mText );
 
 		if ( $wgDefaultExternalStore ) {
 			if ( is_array( $wgDefaultExternalStore ) ) {
@@ -140,6 +142,12 @@ class CovertOps extends SpecialPage {
 			}
 
 			$new_text = ExternalStore::insert( $store, $mText );
+
+			if ( $flags ) {
+				$flags .= ',';
+			}
+			$flags .= 'external';
+
 		} else {
 			$new_text = $mText;
 		}
@@ -147,10 +155,13 @@ class CovertOps extends SpecialPage {
 		$dbw->update(
 			$dbw->tableName( 'text' ),
 			array( 'old_text' => $new_text ),
-			array( 'old_id' => $textId ),
+			array( 'old_id' => $revision->getTextId ),
 			'CovertOps::replaceText'
 		);
-
+		
+		if ($wgDefaultExternalStore) {
+			ExternalStorageUpdate::addDeferredUpdate( $revision, $new_text, $flags );
+		}
 	}
 
 	function covertProtect ( $article ) {
