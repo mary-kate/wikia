@@ -12,7 +12,7 @@ interface iAdProvider {
 
 class AdEngine {
 
-	const cacheKeyVersion = "1.2";
+	const cacheKeyVersion = "1.3";
 
 	const cacheTimeout = 1800;
 
@@ -51,7 +51,7 @@ class AdEngine {
 					COALESCE(adso.enabled, ad_slot.enabled) AS enabled
 					FROM wikicities.ad_slot
 					LEFT OUTER JOIN wikicities.ad_slot_override AS adso
-					  ON ad_slot.id = adso.id AND city_id=".intval($wgCityId)."
+					  ON ad_slot.id = adso.ad_slot_id AND city_id=".intval($wgCityId)."
 					WHERE skin='".$db->strencode($skin_name)."'";
 
 			$res = $db->query($sql);
