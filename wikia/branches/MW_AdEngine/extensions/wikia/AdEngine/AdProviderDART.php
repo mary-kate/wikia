@@ -111,7 +111,7 @@ class AdProviderDART implements iAdProvider {
 		if(empty($wgDBname)) {
 			return '_wikia';
 		} else {
-			return '_' . $wgDBname;
+			return '_' . preg_replace('/[^0-9A-Z_a-z]/', '_', $wgDBname);
 		}
 	}
 
@@ -236,7 +236,7 @@ class AdProviderDART implements iAdProvider {
 	public function getArticleKV(){
 		global $wgTitle;
 		if (is_object($wgTitle)){
-			return "articleid=" . $wgTitle->getArticleID() . ';';
+			return "artid=" . $wgTitle->getArticleID() . ';';
 		} else {
 			return '';
 		}
