@@ -28,7 +28,9 @@ function wfRandomSelection() {
 function renderChosen( $input, $argv, &$parser ) {
 	# Prevent caching
 	#$parser->disableCache();
-	$parser->mOutput->mCacheTime = 60;
+	global $wgParserCacheExpireTime;
+	$wgParserCacheExpireTime = 60;
+	wfDebug( "soft disable Cache (choose)\n" );
  
 	# Parse the options and calculate total weight
 	$len = preg_match_all("/<option(?:(?:\\s[^>]*?)?\\sweight=[\"']?([^\\s>]+))?"

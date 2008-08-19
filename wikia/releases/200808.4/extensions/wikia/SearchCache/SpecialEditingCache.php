@@ -35,7 +35,8 @@
 	$formAction = $wgTitle->escapeLocalURL();
 	$d = array();
 	$dbstats = 'dbstats';
-	$db = Database::newFromParams( 'sayid.sjc.wikia-inc.com', $wgDBuser, $wgDBpassword, $dbstats );
+	$external = new ExternalStoreDB();
+	$db = $external->getSlave( "archive1" );
 	$res = $db->query( "select rc_timestamp, rc_title, rc_type, rc_namespace, rc_city_id from $dbstats.city_recentchanges_3_days where mod( rc_namespace, 2) = 0 " . limit2langs('rc_city_id')  . "group by rc_title order by rc_timestamp desc limit $cnt" );
 	$db = wfGetDB( DB_SLAVE );
 	while( $o = $db->fetchObject( $res ) )
