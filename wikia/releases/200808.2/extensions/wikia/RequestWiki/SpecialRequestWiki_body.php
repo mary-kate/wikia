@@ -312,7 +312,8 @@ class RequestWikiPage extends SpecialPage {
 		}
 
 		#--- category
-		$categories = explode('|', wfMsg('requestwiki-second-category-list'));
+		$hubs = WikiFactoryHub::getInstance();
+		$categories = $hubs->getCategories();
 		if (empty($params['request_category']) || !in_array(htmlspecialchars_decode($params['request_category']), $categories)) {
 			$errors['rw-category'] = Wikia::errormsg(wfMsg('requestwiki-error-bad-category'));
 		}
