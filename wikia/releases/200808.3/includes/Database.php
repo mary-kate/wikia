@@ -650,7 +650,10 @@ class Database {
 					$this->query( 'SET NAMES utf8', __METHOD__ );
 				}
 				// Turn off strict mode
-				$this->query( "SET sql_mode = ''", __METHOD__ );
+				/* Nick wrote: Our sql_mode is already =''. Turning this off to save
+  				 * approx 16,000,000+ sql statements per day. 
+				 * $this->query( "SET sql_mode = ''", __METHOD__ );
+				 */
 			}
 
 			// Turn off strict mode if it is on
