@@ -9,12 +9,14 @@ adSizes["FAST2"] = [300,250];
 adSizes["FAST3"] = [300,250];
 adSizes["FAST4"] = [300,250];
 adSizes["FAST5"] = [728,90];
-adSizes["FAST_HOME1"] = [728,90];
 adSizes["FAST6"] = [160,600];
 adSizes["FAST7"] = [160,600];
+adSizes["FAST_HOME1"] = [728,90];
+adSizes["FAST_HOME2"] = [300,250];
 adSizes["FAST_HOME3"] = [160,600];
 adSizes["FAST_HOME4"] = [160,600];
-adSizes["FAST_HOME2"] = [300,250];
+adSizes["HOME_TOP_LEADERBOARD"] = [728,90];
+adSizes["HOME_TOP_RIGHT_BOXAD"] = [300,250];
 
 var fast_bottom_type;
 
@@ -94,7 +96,7 @@ function FASTfix(banner) {
 		}
 		Dom.setStyle($('adSpace' + curAdSpaceId).parentNode, 'display', '');
 		Dom.setStyle('adSpace' + curAdSpaceId, 'margin', '0 auto');
-	} else if(banner == 'FAST_HOME1') {
+	} else if(banner == 'HOME_TOP_LEADERBOARD' || banner == 'FAST_HOME1') {
 		Dom.setStyle('adSpace' + curAdSpaceId, 'margin-bottom', '10px');
 		Dom.setStyle('adSpace' + curAdSpaceId, 'text-align', 'right');
 		Dom.setStyle('adSpace' + curAdSpaceId, 'margin-left', 'auto');

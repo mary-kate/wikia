@@ -825,7 +825,7 @@ class CreateWikiForm extends SpecialPage {
 			$sPage = str_ireplace("RequestForm4", "RequestForm4a", $sPage);
 			$sPage = str_ireplace("###REQUEST_CLOSED###", date('YmdHis'), $sPage);
 
-			$oArticle->doEdit( $sPage, "request accepted", EDIT_UPDATE|EDIT_MINOR );
+			$oArticle->doEdit( $sPage, "request accepted", EDIT_UPDATE );
 		}
 		wfDebugLog( "createwiki", sprintf( "update request page: %F", wfTime() - $fExecTimeCur ));
 		$fExecTimeCur = wfTime();
