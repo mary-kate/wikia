@@ -25,12 +25,12 @@ class CreateWikiTask extends BatchTask {
 	 * contructor
 	 */
 	function  __construct() {
-        	$this->mType = "createwiki";
-        	$this->mVisible = false;
-        	$this->mTTL = 1800;
-        	parent::__construct();
+		$this->mType = "createwiki";
+		$this->mVisible = false;
+		$this->mTTL = 1800;
+		parent::__construct();
 		$this->mDebug = true;
-    	}
+	}
 
 	/**
 	 * execute
@@ -82,10 +82,6 @@ class CreateWikiTask extends BatchTask {
 		/**
 		 * maintenance tasks
 		 */
-		$cmd = sprintf("SERVER_ID={$this->mWikiID} php {$IP}/extensions/CheckUser/install.php --quick --conf {$wgWikiaLocalSettingsPath} --aconf {$wgWikiaAdminSettingsPath}");
-		$this->addLog( "Running {$cmd}" );
-		$retval = wfShellExec( $cmd, $status );
-		$this->addLog( $retval );
 
 		$this->mWikiParams = WikiFactory::getWikiByID( $this->mWikiID );
 		if( !isset( $this->mWikiParams->city_id ) ) {
@@ -159,6 +155,14 @@ class CreateWikiTask extends BatchTask {
 		 * Modify wiki's variables based on hub and $wgHubCreationVariables values
 		 */
 		$this->addHubSettings( $this->mParams["params"]["wpCreateWikiCategory"]  );
+
+		/**
+		 * we need some stuffs in recent changes so this one is run last
+		 */
+		$cmd = sprintf("SERVER_ID={$this->mWikiID} php {$IP}/extensions/CheckUser/install.php --quick --conf {$wgWikiaLocalSettingsPath} --aconf {$wgWikiaAdminSettingsPath}");
+		$this->addLog( "Running {$cmd}" );
+		$retval = wfShellExec( $cmd, $status );
+		$this->addLog( $retval );
 
 		return true;
 	}
@@ -623,7 +627,7 @@ class CreateWikiTask extends BatchTask {
 	 * addHubSettings
 	 *
 	 * @author tor@wikia-inc.com
-	 * @param  string $hub 
+	 * @param  string $hub
 	 */
 	public function addHubSettings( $hub ) {
 		global $wgHubCreationVariables;
@@ -642,5 +646,5 @@ class CreateWikiTask extends BatchTask {
 		} else {
 			$this->addLog("Hub not found in HubCreationVariables. Skipping this step.");
 		}
-	}	
-}	
+	}
+}

@@ -14,27 +14,27 @@ Event.onDOMReady(function() {
 	}
 	else if (searchField.value != searchField.title) {
 		value = searchField.title;
-		searchField.style.color = 'black';
+		Dom.addClass(searchField, 'field_active');
 	}
 	else {
 		value = searchField.title;
 	}
-	Event.addListener('search_field', 'click', function() {
-		if(value == null || value == Dom.get('search_field').value) {
-			Dom.get('search_field').value = '';
-			Dom.get('search_field').style.color = 'black';
+	Event.addListener(searchField, 'click', function() {
+		if(value == null || value == searchField.value) {
+			searchField.value = '';
+			Dom.addClass(searchField, 'field_active');
 		}
-		Dom.get('search_field').focus();
+		searchField.focus();
 	});
-	Event.addListener('search_field', 'blur', function() {
-		if(Dom.get('search_field').value == '') {
-			Dom.get('search_field').value = value;
-			Dom.get('search_field').style.color = 'gray';
+	Event.addListener(searchField, 'blur', function() {
+		if(searchField.value == '') {
+			searchField.value = value;
+			Dom.removeClass(searchField, 'field_active');
 		}
 	});
 	Event.addListener('search_button', 'click', function() {
-		if (Dom.get('search_field').value == value) {
-			Dom.get('search_field').value = '';
+		if (searchField.value == value) {
+			searchField.value = '';
 		}
 
 		Dom.get('searchform').submit();

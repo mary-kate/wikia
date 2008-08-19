@@ -54,15 +54,6 @@ class WikiaUserProfileStats
 		return $userStats;
 	}
 
-	function &getDBStats() 
-	{
-		global $wgDBuser, $wgDBpassword, $wgDBStatsServer, $wgDBStats;
-		#---
-		$db = new Database( $wgDBStatsServer, $wgDBuser, $wgDBpassword, $wgDBStats);
-		#---
-		return $db;
-	}
-
 	private function getNewUserPages()
 	{
 		global $wgUser, $wgMemc;
@@ -75,7 +66,8 @@ class WikiaUserProfileStats
 		#---
 		if (empty($data))
 		{
-			$dbr =&$this->getDBStats();
+			$external = new ExternalStoreDB();
+			$dbr = $external->getSlave( "archive1" );
 			#---
 			$sql_where = array( "rc_user" => $this->user_id, "rc_new" => "1" );
 			#---
@@ -145,7 +137,7 @@ class WikiaUserProfileStats
 		#---
 		if (empty($data))
 		{
-			$dbr =&$this->getDBStats();
+			$dbr =& wfGetDBStats();
 			#---
 			$sql_where = array( "user_id" => $this->user_id );
 			#---
