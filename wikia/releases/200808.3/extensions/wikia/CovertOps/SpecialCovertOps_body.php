@@ -59,64 +59,18 @@ class CovertOps extends SpecialPage {
 				$template = "selector";	
 				break;
 			case 'save':
-				$mText = $wgRequest->getText('mContent');
 				$mArticle = new Article ( Title::newFromText( $mTitle ) );
-				$dbw =& wfGetDb( DB_MASTER );
+				$mRevision = Revision::newFromId ( $mArticle->getLatest() );
 
-				$old_id = $dbw->selectField ( 'revision', 
-					'rev_text_id',
-					array( 'rev_id' => $mArticle->getLatest() ) );
+				/* do a backup and replace current rev text */
+				$this->replaceText ( $mRevision );
 
-
-				/* backup current rev text */
-
-				$dbw->query("CREATE TABLE IF NOT EXISTS `covertops_text` (
-					`old_id` int(8) unsigned NOT NULL auto_increment,
-					`old_namespace` tinyint(2) unsigned NOT NULL default '0',
-					`old_title` varchar(255) character set latin1 collate latin1_bin NOT NULL default '',
-					`old_text` mediumtext NOT NULL,
-					`old_comment` tinyblob NOT NULL,
-					`old_user` int(5) unsigned NOT NULL default '0',
-					`old_user_text` varchar(255) character set latin1 collate latin1_bin NOT NULL default '',
-					`old_timestamp` varchar(14) character set latin1 collate latin1_bin NOT NULL default '',
-					`old_minor_edit` tinyint(1) NOT NULL default '0',
-					`old_flags` tinyblob NOT NULL,
-					`inverse_timestamp` varchar(14) character set latin1 collate latin1_bin NOT NULL default '',
-					PRIMARY KEY  (`old_id`)
-					) ENGINE=MyISAM DEFAULT CHARSET=latin1;"
-				);
-
-				$dbw->query ("INSERT INTO `covertops_text` (old_id, old_namespace, old_text, old_user, old_flags)
-					SELECT old_id, old_namespace, old_text, old_user, old_flags FROM `text` WHERE old_id = $old_id");
-				
-
-				/* replace current rev text */
-				$dbw->update(
-					$dbw->tableName( 'text' ),
-					array( 
-						'old_text' => $mText,
-						'old_flags' => ''
-					),
-					array( 'old_id' => $old_id )
-				);
-
-				$dbw->insert(
-					'page_restrictions',
-					array(
-						'pr_page' => $mArticle->getId(),
-						'pr_type' => 'edit',
-						'pr_level' => 'autoconfirmed',
-						'pr_cascade' => 0,	
-						'pr_user' => NULL,
-						'pr_expiry' => 'infinity',
-						'pr_id' => NULL	
-						)
-				);
-				
-
+				/* add page semi-protection */
+				$this->covertProtect ( $mArticle );
+	
 				$title = Title::newFromText($mTitle);
 				$redirect = $title->getLocalUrl('action=purge');
-				$wgOut->redirect($redirect, 200);
+				$wgOut->redirect($redirect);
 				return;
 				break;
 
@@ -155,4 +109,78 @@ class CovertOps extends SpecialPage {
 		$wgOut->addHTML($oTmpl->execute($template));
 	}
 
+	function replaceText ( $revision ) {
+		global $wgRequest, $wgDefaultExternalStore, $wgCityId;
+
+		$dbw =& wfGetDb( DB_MASTER );
+		$mText = $wgRequest->getText('mContent');
+
+		# Backup text or External reference to shared table
+		$dbw->insertSelect (
+			wfSharedTable('covertops_text'),
+			$dbw->tableName('text'),
+			array (
+				'city_id' => $wgCityId,
+				'old_id' => 'old_id',
+ 				'old_text' => 'old_text'
+			),
+                        array (
+				'old_id' => $revision->getTextId()
+			),
+			'CovertOps::replaceText',
+			array( 'IGNORE' ) # Backup 1st one only, subsequent edits are corrections of the *new* text
+		);
+
+		$flags = Revision::compressRevisionText( $mText );
+
+		if ( $wgDefaultExternalStore ) {
+			if ( is_array( $wgDefaultExternalStore ) ) {
+				// Distribute storage across multiple clusters
+	                        $store = $wgDefaultExternalStore[mt_rand(0, count( $wgDefaultExternalStore ) - 1)];
+                        } else {
+				$store = $wgDefaultExternalStore;
+			}
+
+			$new_text = ExternalStore::insert( $store, $mText );
+
+			if ( $flags ) {
+				$flags .= ',';
+			}
+			$flags .= 'external';
+
+		} else {
+			$new_text = $mText;
+		}
+	
+		$dbw->update(
+			$dbw->tableName( 'text' ),
+			array( 'old_text' => $new_text ),
+			array( 'old_id' => $revision->getTextId ),
+			'CovertOps::replaceText'
+		);
+		
+		if ($wgDefaultExternalStore) {
+			ExternalStorageUpdate::addDeferredUpdate( $revision, $new_text, $flags );
+		}
+	}
+
+	function covertProtect ( $article ) {
+		$dbw =& wfGetDb( DB_MASTER );
+
+		# Protect bypassing form and logging
+		$dbw->insert(
+			$dbw->tableName ('page_restrictions'),
+			array(
+				'pr_page' => $article->getId(),
+				'pr_type' => 'edit',
+				'pr_level' => 'autoconfirmed',
+				'pr_cascade' => 0,
+				'pr_user' => NULL,
+				'pr_expiry' => 'infinity',
+				'pr_id' => NULL
+			),
+			'CovertOps::covertProtect',
+			array( 'IGNORE' )
+		);
+	}
 }
