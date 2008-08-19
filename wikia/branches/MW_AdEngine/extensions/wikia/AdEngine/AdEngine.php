@@ -12,7 +12,7 @@ interface iAdProvider {
 
 class AdEngine {
 
-	const cacheKeyVersion = "1.4";
+	const cacheKeyVersion = "1.5";
 
 	const cacheTimeout = 1800;
 
@@ -72,7 +72,7 @@ class AdEngine {
 		}
 
 		$sql = "SELECT * FROM wikicities.ad_provider_value WHERE
-			 (city_id = ".intval($wgCityId)." OR city_id IS NULL)";
+			 (city_id = ".intval($wgCityId)." OR city_id IS NULL) ORDER by city_id";
 		$res = $db->query($sql);
 		while($row = $db->fetchObject($res)) {
 			 foreach($this->slots as $slotname => $slot) {
