@@ -194,6 +194,8 @@ class RequestWikiPage extends SpecialPage {
 			$aLinks['request more info'] = $oLinksTitle->getLocalUrl("action=req_more_info&request={$params["request_id"]}");
 		}
 
+		$hubs = WikiFactoryHub::getInstance();
+
 		$oTmpl->set_vars( array(
 			'user'      => $oRequester,
 			'title'     => $this->mTitle,
@@ -203,7 +205,7 @@ class RequestWikiPage extends SpecialPage {
 			'editing'   => $editing,
 			'is_staff'  => $is_staff,
 			'languages' => $languages,
-			'categories'    => explode('|', wfMsg('requestwiki-second-category-list')),
+			'categories'    => $hubs->getCategories(), #--- explode('|', wfMsg('requestwiki-second-category-list')),
 			'request_id'    => $iRequestID,
 			'is_requester'  => $is_requester
 		));

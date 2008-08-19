@@ -149,6 +149,9 @@
 	width: 85%;
 	color: gray;
 }
+#search_field.field_active {
+	color: #000;
+}
 #search_button {
 	background: url(../images/search.png);
 	clip: rect(0px 20px 22px 0px);
