@@ -8,7 +8,8 @@ if ( !defined( 'MEDIAWIKI' ) ) {
  * Global functions used everywhere for Wikia purposes.
  */
 
-require_once( "$IP/extensions/wikia/AdServer.php" );
+require( "$IP/extensions/wikia/AdServer.php" );
+require( "$IP/extensions/wikia/AdEngine/AdEngine.php" );
 require_once( "$IP/extensions/wikia/MergeFiles/MergeFiles.php" );
 
 /**
