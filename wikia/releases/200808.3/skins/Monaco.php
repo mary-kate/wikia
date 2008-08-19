@@ -1620,6 +1620,8 @@ if($wgAdServingType === 1) {
 		if($a[1] == 'FAST_TOP') { return 0; }
 		else if($a[1] == 'FAST_HOME1') { return 1; }
 		else if($a[1] == 'FAST_HOME2') { return 2; }
+		else if($a[1] == 'HOME_TOP_LEADERBOARD') { return 1; }
+		else if($a[1] == 'HOME_TOP_RIGHT_BOXAD') { return 2; }
 		else if($a[1] == 'FAST_BOTTOM') { return 3; }
 		else if($a[1] == 'FAST_HOME3') { return 4; }
 		else if($a[1] == 'FAST_HOME4') { return 5; }
