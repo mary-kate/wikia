@@ -416,6 +416,8 @@ http request headers:\n";
 foreach( $_headers as $_h => $_v ) {
   $_e .= "$_h: $_v\n";
 }
+$_e .= "raw post data:\n";
+$_e .= $GLOBALS['HTTP_RAW_POST_DATA'];
 error_log( $_e );
 			return self::NO_NAME;
 		}
