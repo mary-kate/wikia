@@ -410,27 +410,10 @@ class LoginForm {
 	function authenticateUserData() {
 		global $wgUser, $wgAuth;
 		if ( '' == $this->mName ) {
-$_headers = apache_request_headers();
-$_e = "authenticateUserData failed due to no name
-http request headers:\n";
-foreach( $_headers as $_h => $_v ) {
-  $_e .= "$_h: $_v\n";
-}
-$_e .= "raw post data:\n";
-$_e .= serialize( $_POST );
-error_log( $_e );
 			return self::NO_NAME;
 		}
 		$u = User::newFromName( $this->mName );
 		if( is_null( $u ) || !User::isUsableName( $u->getName() ) ) {
-$_headers = apache_request_headers();
-$_e = "authenticateUserData failed due to illegal user name
-mName = {$this->mName}; u->getName = {$u->getName()}
-http request headers:\n";
-foreach( $_headers as $_h => $_v ) {
-  $_e .= "$_h: $_v\n";
-}
-error_log( $_e );
 			return self::ILLEGAL;
 		}
 		if ( 0 == $u->getID() ) {
