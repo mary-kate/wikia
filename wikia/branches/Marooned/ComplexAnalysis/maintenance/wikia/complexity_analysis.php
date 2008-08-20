@@ -63,7 +63,7 @@ if (isset($options['csv'])) {
 }
 echo "Parsing articles started: CityID = $wgCityId, DB name = $wgDBname\n";
 $time_start = microtime(true);
-
+echo 'Memory usage: ' . memory_get_usage() . "\n";
 $db = wfGetDB(DB_SLAVE);
 
 $lastRevision = '';
@@ -79,17 +79,26 @@ $sql = "SELECT page_id, rev_id FROM page, revision WHERE rev_id = page_latest $n
 $res = $db->query($sql);
 $countAll = 0;
 while ($row = $db->fetchObject($res)) {
+	echo 'Memory usage - before Title creation: ' . memory_get_usage() . "\n";
 	$wgTitle = Title::newFromID($row->page_id);	//setting global wgTitle - some parser functions require this
+	echo 'Memory usage - after Title creation: ' . memory_get_usage() . "\n";
+	echo 'Title object created, article name = ' . $wgTitle->getText() . "\n";
 	if (is_object($wgTitle)) {
+		echo 'Memory usage - before Revision creation: ' . memory_get_usage() . "\n";
 		$revision = Revision::newFromTitle($wgTitle);
+		echo 'Memory usage - after Revision creation: ' . memory_get_usage() . "\n";
+		echo "Revision object created\n";
 		if(is_object($revision)) {
 			wfCountWikiElement("*special:start:{$wgCityId}|{$row->page_id}|{$row->rev_id}");
+			echo 'Memory usage - before parser: ' . memory_get_usage() . "\n";
 			$wgOut->parse($revision->getText());
+			echo 'Memory usage - after parser: ' . memory_get_usage() . "\n";
 			wfCountWikiElement("*special:stop:{$wgCityId}|{$row->page_id}|{$row->rev_id}");
 			$countAll++;
 		}
 	}
 }
+echo 'Memory usage - after all articles: ' . memory_get_usage() . "\n";
 $time = microtime(true) - $time_start;
 echo "Parsed $countAll articles. Execution time: $time seconds\n";
 ?>
