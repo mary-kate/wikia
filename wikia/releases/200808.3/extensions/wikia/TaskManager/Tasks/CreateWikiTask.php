@@ -82,6 +82,10 @@ class CreateWikiTask extends BatchTask {
 		/**
 		 * maintenance tasks
 		 */
+		$cmd = sprintf("SERVER_ID={$this->mWikiID} php {$IP}/extensions/CheckUser/install.php --quick --conf {$wgWikiaLocalSettingsPath} --aconf {$wgWikiaAdminSettingsPath}");
+		$this->addLog( "Running {$cmd}" );
+		$retval = wfShellExec( $cmd, $status );
+		$this->addLog( $retval );
 
 		$this->mWikiParams = WikiFactory::getWikiByID( $this->mWikiID );
 		if( !isset( $this->mWikiParams->city_id ) ) {
