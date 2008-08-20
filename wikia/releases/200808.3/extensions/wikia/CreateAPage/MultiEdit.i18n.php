@@ -9,6 +9,7 @@ $messages['en'] = array(
 	'me_edit_muli_editor' => 'Multi-edit Editor' ,
 	'me_upload' => 'Upload image' ,
 	'me_hide' => 'Hide' ,
+	'me_show' => 'Show' ,
         'createpage_title' => 'Create a new article' ,
 	'createpage_title_additional' => "You've followed a link to a page that doesn't exist yet. To create the page, start typing in the box below" ,
         'createpage_title_caption' => 'Article Title' ,
