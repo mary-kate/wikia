@@ -59,24 +59,15 @@ class WikiaApiQueryReferers extends WikiaApiQuery {
 		}
 	}
 
-	private function &getDBStats()
-	{
-		global $wgDBuser, $wgDBpassword, $wgDBStatsServer, $wgDBStats;
-		wfProfileIn( __METHOD__ );
-		#---
-		if ( (!isset($wgDBStatsServer)) || (!isset($wgDBStats)) ) {
-			return null;
-		}
-
-		#---
-		$db = new Database( $wgDBStatsServer, $wgDBuser, $wgDBpassword, $wgDBStats);
-		#---
-		wfProfileOut( __METHOD__ );
-		return $db;
-	}
-
 	protected function getDB() {
-		return $this->getDBStats();
+		$db = "";
+		if (class_exists("ExternalStoreDB")) {
+			$external = new ExternalStoreDB();
+			$db = $external->getSlave( "archive1" );
+		} else {
+			$db = wfGetDBStats();
+		}
+		return $db;
 	}
 
 	/*
@@ -105,7 +96,7 @@ class WikiaApiQueryReferers extends WikiaApiQuery {
 		$where_derived = " and ref_domain != '".$wgServerName."' and ref_domain not like '%$wgDBname.wikia%' and ref_domain not like '%wikia-inc.com%'";
 		try {
 			#--- database instance - DB_SLAVE
-			$dbs =& $this->getDBStats();
+			$dbs = $this->getDB();
 
 			if ( is_null($dbs) ) {
 				throw new WikiaApiQueryError(0);

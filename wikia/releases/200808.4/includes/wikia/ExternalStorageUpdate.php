@@ -84,10 +84,6 @@ class ExternalStorageUpdate {
 			$external = new ExternalStoreDB();
 			$dbw = $external->getMaster( $cluster );
 
-			/**
-			 * explicite transaction
-			 */
-			$dbw->begin();
 			$ret = $dbw->update(
 				"blobs",
 				array(
@@ -148,10 +144,10 @@ class ExternalStorageUpdate {
 						__METHOD__
 					);
 				}
+				/**
+				 * be sure that data is written
+				 */
 				$dbw->commit();
-			}
-			else {
-				$dbw->rollback();
 			}
 		}
 		else {

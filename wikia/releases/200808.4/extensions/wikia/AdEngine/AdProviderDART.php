@@ -30,9 +30,9 @@ class AdProviderDART implements iAdProvider {
 							'Humor' => 'wka.humor',
 							'Lifestyle' => 'wka.life',
 							'Music' => 'wka.music',
-							'Philosophy and Religion' => 'wka.phil',
-							'Politics and Activism' => 'wka.poli',
-							'Science and Nature' => 'wka.sci',
+							'Philosophy' => 'wka.phil',
+							'Politics' => 'wka.poli',
+							'Science' => 'wka.sci',
 							'Sports' => 'wka.sports',
 							'Technology' => 'wka.tech',
 							'Test Site' => 'wka.test',
@@ -40,6 +40,8 @@ class AdProviderDART implements iAdProvider {
 							'Travel' => 'wka.travel');
 
 	private $isMainPage;
+
+	private $dartSite;
 
 	public function getAd($slotname, $slot){
 
@@ -97,13 +99,16 @@ class AdProviderDART implements iAdProvider {
 	}
 
 	function getDartSite(){
-		global $wgCat;
-		if(!empty($wgCat['name'])) {
-			if(!empty($this->sites[$wgCat['name']])) {
-				return $this->sites[$wgCat['name']];
+		if(empty($this->dartSite)) { // Only do the work of loading from cats the first time, it won't change
+	                $cats = wfGetBreadCrumb();
+	                $idx = count($cats)-2; // Use always second to last in array
+	                if(isset($cats[$idx]) && !empty($this->sites[$cats[$idx]['name']])) {
+	                        $this->dartSite = $this->sites[$cats[$idx]['name']];
+	                } else {
+		                $this->dartSite = 'wka.wikia';
 			}
 		}
-		return 'wka.wikia';
+		return $this->dartSite;
 	}
 
 	// Effectively the dbname, defaulting to wikia.
