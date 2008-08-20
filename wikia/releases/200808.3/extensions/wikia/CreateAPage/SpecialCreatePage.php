@@ -368,7 +368,10 @@ class CreatePageCreateplateForm {
 					$wgOut->addHTML('pagetitleexists');
 				} else {
 					$sk = $wgUser->getSkin();
-					return wfMsg ('createpage_article_exists', $sk->makeKnownLink( $title->getPrefixedText() ));
+					# Mimick the way AJAX version displays things and use the same two messages. 2 are needed for full i18n support.
+					return wfMsg ('createpage_article_exists') . " " 
+						. $sk->makeKnownLinkObj( $title, '', 'action=edit' )
+						. wfMsg ('createpage_article_exists2');
 				}
 			}
 			if (!$ajax) return false ;		
