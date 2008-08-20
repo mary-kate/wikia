@@ -461,3 +461,17 @@ if (!function_exists('wfGetDBStats')) {
 	}
 }
 
+
+/**
+ * @author MoLi <moli@wikia.com>
+ * @return db's handle for external storage
+ */
+function wfGetDBExt($conn = DB_MASTER) {
+	$db = null;
+	if( class_exists("ExternalStoreDB") ) {
+		$external = new ExternalStoreDB();
+		$func = ($conn == DB_MASTER) ? "getMaster" : "getSlave";
+		$db = $external->$func( "archive1" );
+	}
+	return $db;
+}
