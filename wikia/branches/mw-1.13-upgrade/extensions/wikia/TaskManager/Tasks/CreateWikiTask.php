@@ -129,6 +129,9 @@ class CreateWikiTask extends BatchTask {
 			$this->addLog( "Running {$cmd}");
 			$retval = wfShellExec( $cmd, $status );
 			$this->addLog( $retval );
+			
+			#--- modify wiki's variables based on hub and $wgHubCreationVariables values
+	                $this->addHubSettings( $this->mParams["params"]["wpCreateWikiCategory"]  );
 		}
 
 		/**
@@ -150,11 +153,6 @@ class CreateWikiTask extends BatchTask {
 		$this->addDomains( $this->mParams["params"]["wpCreateWikiDomains"] );
 
 		echo "Hi! its ".__METHOD__." task_id={$this->mData->task_id}\n";
-
-		/**
-		 * Modify wiki's variables based on hub and $wgHubCreationVariables values
-		 */
-		$this->addHubSettings( $this->mParams["params"]["wpCreateWikiCategory"]  );
 
 		/**
 		 * we need some stuffs in recent changes so this one is run last

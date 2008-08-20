@@ -11,9 +11,11 @@
 CREATE TABLE `user_login_history` (
   `user_id` int(5) unsigned NOT NULL,
   `city_id` int(9) unsigned default '0',
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
-  `login_from` varchar(10) NOT NULL default 'auto'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
+  `ulh_timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  `ulh_from` tinyint(4) default '0',
+  KEY `idx_user_login_history_timestamp` (`ulh_timestamp`),
+  KEY `idx_user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `user_history` (
   `user_id` int(5) unsigned NOT NULL,
@@ -36,13 +38,15 @@ CREATE TABLE `user_history` (
  */
 class UserChangesHistory {
 
-	static $mCluster = "archive1";
+	const CLUSTER = "archive1";
+	const LOGIN_AUTO = 0;
+	const LOGIN_FORM = 1;
 
 	/**
 	 * LoginHistoryInsert
 	 *
 	 */
-	static public function LoginHistoryInsert( $from, $User ) {
+	static public function LoginHistoryHook( $from, $User ) {
 		global $wgCityId; #--- private wikia identifier, you can use wgDBname
 
 		wfProfileIn( __METHOD__ );
@@ -55,14 +59,15 @@ class UserChangesHistory {
 		if ( $id ) {
 
 			$external = new ExternalStoreDB();
-			$dbw = $external->getMaster( self::$mCluster );
+			$dbw = $external->getMaster( self::CLUSTER );
+			$dbw->selectDb( "dbstats" );
 			$dbw->begin();
 			$status = $dbw->insert(
 				"user_login_history",
 				array(
-					"user_id"    => $id,
-					"city_id"    => $wgCityId,
-					"login_from" => $from
+					"user_id"   => $id,
+					"city_id"   => $wgCityId,
+					"ulh_from"  => $from
 				),
 				__METHOD__
 			);
@@ -98,12 +103,13 @@ class UserChangesHistory {
 			 */
 
 			$external = new ExternalStoreDB();
-			$dbw = $external->getMaster( self::$mCluster );
+			$dbw = $external->getMaster( self::CLUSTER );
 
 			/**
 			 * so far encodeOptions is public by default but could be
 			 * private in future
 			 */
+			$dbw->selectDb( "dbstats" );
 			$dbw->begin();
 			$status = $dbw->insert(
 				"user_history",
