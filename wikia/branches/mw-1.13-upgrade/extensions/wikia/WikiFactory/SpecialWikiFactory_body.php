@@ -259,7 +259,10 @@ class WikiFactoryPage extends SpecialPage {
 			$hub = WikiFactoryHub::getInstance();
 			$hub->setCategory( $this->mWiki->city_id, $cat_id );
 		}
-		return Wikia::successmsg( "Hubs data updated" );
+
+		$categories = $hub->getCategories();
+
+		return Wikia::successmsg( "Hub is now set to: ". $categories[ $cat_id ] );
 	}
 
     /**

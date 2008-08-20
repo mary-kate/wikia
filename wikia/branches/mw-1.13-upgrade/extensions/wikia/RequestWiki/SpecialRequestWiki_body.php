@@ -205,7 +205,7 @@ class RequestWikiPage extends SpecialPage {
 			'editing'   => $editing,
 			'is_staff'  => $is_staff,
 			'languages' => $languages,
-			'categories'    => $hubs->getCategories(), #--- explode('|', wfMsg('requestwiki-second-category-list')),
+			'categories'    => $hubs->getCategories(),
 			'request_id'    => $iRequestID,
 			'is_requester'  => $is_requester
 		));
@@ -218,13 +218,19 @@ class RequestWikiPage extends SpecialPage {
 		}
 	}
 
-	#--- do_thirdstep -------------------------------------------------------
 	/**
+	 * do_thirdstep
+	 *
 	 * third step, validate all params and store request in database.
 	 * if there are errors redirect to do_secondstep
+	 *
+	 * @access public
+	 * @author Krzysztof Krzyżaniak <eloy@wikia-inc.com>
+	 * @author Maciej Błaszkowski <marooned@wikia-inc.com>
+	 *
+	 * @return string	HTML code with page
 	 */
-	function do_thirdstep()
-	{
+	public function do_thirdstep() {
 		global $wgOut, $wgRequest, $wgContLang, $wgDBname, $wgUser;
 
 		#-- some initialization
@@ -278,10 +284,10 @@ class RequestWikiPage extends SpecialPage {
 		$sRequestUserName = $wgRequest->getVal('rw-username');
 		$languages = Language::getLanguageNames();
 
-		#---
-		# staff can change username, we would know about it by comparing
-		# $sRequestUserName with getName user object created from $iRequestUserID
-
+		/**
+		 * staff can change username, we would know about it by comparing
+		 * $sRequestUserName with getName user object created from $iRequestUserID
+		 */
 		$oRequester = User::newFromId($iRequestUserID);
 		$oRequester->load();
 
@@ -312,7 +318,8 @@ class RequestWikiPage extends SpecialPage {
 		}
 
 		#--- category
-		$categories = explode('|', wfMsg('requestwiki-second-category-list'));
+		$hubs = WikiFactoryHub::getInstance();
+		$categories = $hubs->getCategories();
 		if (empty($params['request_category']) || !in_array(htmlspecialchars_decode($params['request_category']), $categories)) {
 			$errors['rw-category'] = Wikia::errormsg(wfMsg('requestwiki-error-bad-category'));
 		}
@@ -479,7 +486,8 @@ class RequestWikiPage extends SpecialPage {
 			'pr_cascade' => 0,
 			'pr_user' => null,
 			'pr_expiry' => 'infinity'
-		));
+			), __METHOD__
+		);
 		$dbw->insert('page_restrictions', array(
 			'pr_page' => $oArticle->getID(),
 			'pr_type' => 'move',
@@ -487,12 +495,8 @@ class RequestWikiPage extends SpecialPage {
 			'pr_cascade' => 0,
 			'pr_user' => null,
 			'pr_expiry' => 'infinity'
-		));
-
-		#$oArticle->updateRestrictions(
-		#            array( "edit" => "sysop", "move" => "sysop" ),
-		#    "auto after creating or editing", 0, "infinity"
-		#);
+			), __METHOD__
+		);
 
 		#--- now if name was changed we have to edit old page and made redirect
 		if ( $bTitleChanged == true ) {
