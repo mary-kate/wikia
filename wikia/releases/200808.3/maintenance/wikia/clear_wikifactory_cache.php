@@ -7,23 +7,22 @@
  *
  * Usage:
  * (particular wiki)
- * maintenance/wikia/clear_wikifactory_cache.php --city=<city_id_from_city_list>
+ * SERVER_ID=<city_id_from_city_list> php maintenance/wikia/clear_wikifactory_cache.php
  *
  * or
  * (whole cache, all wikis)
- * maintenance/wikia/clear_wikifactory_cache.php
+ * SERVER_ID=177 php maintenance/wikia/clear_wikifactory_cache.php --all
  */
 
 ini_set( "include_path", dirname(__FILE__)."/.." );
 require_once( "commandLine.inc" );
 
-$optionsWithArgs = array( "city" );
-print_r( $options );
-$city_id = isset( $options[ "city" ] ) ? $options[ "city" ] : false;
-echo $city_id."\n";
-$condition = ( $city_id )
-	? array( "city_public"  => 1, "city_id" => $city_id )
-	: array( "city_public"  => 1 );
+
+$all = isset( $options[ "all" ] ) ? $options[ "all" ] : false;
+
+$condition = ( $all )
+	? array( "city_public"  => 1 )
+	: array( "city_public"  => 1, "city_id" => $wgCityId );
 
 
 $dbr = wfGetDB( DB_SLAVE );
