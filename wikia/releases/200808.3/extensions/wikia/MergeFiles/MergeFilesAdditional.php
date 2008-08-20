@@ -33,6 +33,7 @@ global $MF;
 
 $MF['quartz_js']['source'] = array(
 	'common/yui_2.5.2/utilities/utilities.js',
+	'common/yui_2.5.2/cookie/cookie-beta-min.js',
 	'common/yui_2.5.2/container/container.js',
 	'common/yui_2.5.2/autocomplete/autocomplete.js',
 	'common/yui_2.5.2/logger/logger.js',
@@ -68,6 +69,7 @@ $MF['quartz_css']['source'] = array_merge($MF['quartz_css']['source'],$widgetsAs
 
 $MF['monobook_js']['source'] = array(
 	'common/yui_2.5.2/utilities/utilities.js',
+	'common/yui_2.5.2/cookie/cookie-beta-min.js',
 	'common/yui_2.5.2/container/container.js',
 	'common/yui_2.5.2/autocomplete/autocomplete.js',
 	'common/yui_2.5.2/logger/logger.js',
@@ -90,6 +92,7 @@ $MF['monobook_css']['source'] = array(
 
 $MF['monaco_loggedin_js']['source'] = array(
 	'common/yui_2.5.2/utilities/utilities.js',
+	'common/yui_2.5.2/cookie/cookie-beta-min.js',
 	'common/yui_2.5.2/container/container.js',
 	'common/yui_2.5.2/autocomplete/autocomplete.js',
 	'common/yui_2.5.2/animation/animation-min.js',
@@ -117,6 +120,7 @@ $MF['monaco_loggedin_js']['source'] = array_merge($MF['monaco_loggedin_js']['sou
 
 $MF['monaco_non_loggedin_js']['source'] = array(
 	'common/yui_2.5.2/utilities/utilities.js',
+	'common/yui_2.5.2/cookie/cookie-beta-min.js',
 	'common/yui_2.5.2/container/container.js',
 	'common/yui_2.5.2/autocomplete/autocomplete.js',
 	'common/yui_2.5.2/animation/animation-min.js',
