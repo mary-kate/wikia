@@ -38,7 +38,6 @@ CREATE TABLE `user_history` (
  */
 class UserChangesHistory {
 
-	const CLUSTER = "archive1";
 	const LOGIN_AUTO = 0;
 	const LOGIN_FORM = 1;
 
@@ -58,9 +57,8 @@ class UserChangesHistory {
 		$id = $User->getId();
 		if ( $id ) {
 
-			$external = new ExternalStoreDB();
-			$dbw = $external->getMaster( self::CLUSTER );
-			$dbw->selectDb( "dbstats" );
+			$dbw = wfGetDBExt( DB_MASTER ) ;
+
 			$dbw->begin();
 			$status = $dbw->insert(
 				"user_login_history",
@@ -102,14 +100,12 @@ class UserChangesHistory {
 			 * clusters. But we should have all user data already loaded.
 			 */
 
-			$external = new ExternalStoreDB();
-			$dbw = $external->getMaster( self::CLUSTER );
+			$dbw = wfGetDBExt( DB_MASTER ) ;
 
 			/**
 			 * so far encodeOptions is public by default but could be
 			 * private in future
 			 */
-			$dbw->selectDb( "dbstats" );
 			$dbw->begin();
 			$status = $dbw->insert(
 				"user_history",
@@ -138,5 +134,4 @@ class UserChangesHistory {
 
 		return true;
 	}
-
 }
