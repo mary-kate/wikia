@@ -107,7 +107,7 @@ class LookupContribsCore {
 		$memkey = wfForeignMemcKey( $wgSharedDB, null, "LookupContribs", "UserActivity", $username );
 		$cached = $wgMemc->get($memkey);
 		if (!is_array ($cached) || LOOKUPCONTRIBS_NO_CACHE) { 
-			$dbs =& wfGetDBStats();
+			$dbs = wfGetDBExt();
 			if (!is_null($dbs)) {
 				$query = "select ca_latest_activity from `{$wgDBStats}`.`city_user_activity` where ca_user_text = {$dbs->addQuotes($username)}";
 				$res = $dbs->query ($query);
@@ -134,7 +134,6 @@ class LookupContribsCore {
 	/* fetch all contributions from that given database */
 	function fetchContribs ($database, $fetch_mode) {
 		global $wgOut, $wgRequest, $wgLang, $wgMemc, $wgSharedDB ;
-		global $wgDBStatsServer, $wgDBStats;
 		wfProfileIn( __METHOD__ );
 
 		/* todo since there are now TWO modes, we need TWO keys to rule them all */
