@@ -43,8 +43,13 @@ document.write( '<script src="' + FCKConfig.BasePath + 'dialog/common/fck_dialog
 
 // oLink: The actual selected link in the editor.
 var oLink = FCK.Selection.MoveToAncestorNode( 'A' ) ;
-if ( oLink )
+if ( oLink ) {
 	FCK.Selection.SelectNode( oLink ) ;
+} else { // or, return selection, if text
+	if ('Text' == FCK.Selection.GetType()) {
+		var sSelectedText = FCK.Selection.GetSelection().getRangeAt(0)  ;				
+	}
+}
 
 var bLinkEqualsName	= false ;
 	
@@ -63,17 +68,20 @@ window.onload = function()
 
 function LoadSelection()
 {
-	if ( !oLink ) return ;
+	if ( !oLink && !sSelectedText) return ;
+	if (oLink) {
+		// Get the actual Link href.
+		var sHRef = oLink.getAttribute( '_fcksavedurl' ) ;
+		if ( sHRef == null )
+			sHRef = oLink.getAttribute( 'href' , 2 ) || '' ;
 
-	// Get the actual Link href.
-	var sHRef = oLink.getAttribute( '_fcksavedurl' ) ;
-	if ( sHRef == null )
-		sHRef = oLink.getAttribute( 'href' , 2 ) || '' ;
-		
-	if ( sHRef == oLink.innerHTML )
-		bLinkEqualsName = true ;
+		if ( sHRef == oLink.innerHTML )
+			bLinkEqualsName = true ;
 
-	GetE('txtUrl').value = sHRef ;
+		GetE('txtUrl').value = sHRef ;
+	} else {
+        	GetE('txtUrl').value = sSelectedText ;
+	}
 }
 
 var searchTimer ;
@@ -97,7 +105,7 @@ function OnUrlChange()
 		SetSearchMessage( 'e-mail link... no search for it' ) ;
 		return ;
 	} 
-	
+
 	if( /^\w+:\/\//.test( link ) )
 	{
 		SetSearchMessage( 'external link... no search for it' ) ;
