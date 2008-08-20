@@ -7,7 +7,7 @@
  *
  * Usage:
  * (particular wiki)
- * maintenance/wikia/clear_wikifactory_cache.php -i <city_id_from_city_list>
+ * maintenance/wikia/clear_wikifactory_cache.php --city=<city_id_from_city_list>
  *
  * or
  * (whole cache, all wikis)
@@ -17,29 +17,27 @@
 ini_set( "include_path", dirname(__FILE__)."/.." );
 require_once( "commandLine.inc" );
 
-$wikiId = isset( $options['i'] ) ? $options['i'] : null;
+$optionsWithArgs = array( "city" );
+print_r( $options );
+$city_id = isset( $options[ "city" ] ) ? $options[ "city" ] : false;
+echo $city_id."\n";
+$condition = ( $city_id )
+	? array( "city_public"  => 1, "city_id" => $city_id )
+	: array( "city_public"  => 1 );
 
-if( is_null( $wikiId ) ) {
-    WikiFactory::clearCache( $wikiId );
+
+$dbr = wfGetDB( DB_SLAVE );
+
+$res = $dbr->select(
+	wfSharedTable( "city_list" ),
+	array( "city_id", "city_dbname" ),
+	$condition,
+	__FILE__,
+	array( "ORDER BY" => "city_id" )
+);
+
+while ( $row = $dbr->fetchObject( $res ) ) {
+	WikiFactory::clearCache( $row->city_id );
+	printf("%s removing %5d:%s from cache\n", wfTimestamp( TS_DB, time() ), $row->city_id, $row->city_dbname  );
 }
-else {
-    $dbw = wfGetDB( DB_SLAVE );
-
-    $oRes = $dbw->select(
-    	wfSharedTable("city_list"),
-    	array( "city_id", "city_dbname" ),
-    	array( "city_public = 1"),
-    	__FILE__,
-    	array( "ORDER BY" => "city_id" )
-    );
-
-    $aWikis = array();
-
-    while ( $oRow = $dbw->fetchObject( $oRes ) ) {
-    	WikiFactory::clearCache( $oRow->city_id );
-    	echo "{$oRow->city_id}\t{$oRow->city_dbname}\tremoved from cache\n";
-    }
-
-    $dbw->freeResult( $oRes );
-    $dbw->close();
-}
+$dbr->close();
