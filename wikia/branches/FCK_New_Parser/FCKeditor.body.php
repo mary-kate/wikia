@@ -444,7 +444,7 @@ function onLoadFCKeditor()
 		}
 
 		var needToConfirm = true ;	
-	
+
 		function confirmExit(){
 			if (needToConfirm){
 				return "You have attempted to leave this page. If you have made any changes to the fields without clicking the Save button, your changes will be lost. Are you sure you want to exit this page?";
@@ -454,6 +454,14 @@ function onLoadFCKeditor()
 		FCKeditor_OnComplete = function (FCKinstance) {
 			if ('source' == document.getElementById ("FCKmode").value) {
 				FCKinstance.SwitchEditMode () ;
+			}
+
+			insertFckTags = function (tag) {
+				if (FCKinstance.EditMode == FCK_EDITMODE_SOURCE) {
+					insertTags (tag, '', '') ;	
+        			} else {
+        				//todo parse and construct link from this markup		
+				}
 			}
 
 			var saveButton = document.getElementById ('wpSave') ;			
