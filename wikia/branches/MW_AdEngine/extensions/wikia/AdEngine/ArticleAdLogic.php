@@ -5,7 +5,7 @@
  * ) If it it an article with html that will collide with the Box Ad, so it should have a banner instead
  */
 $wgExtensionCredits['other'][] = array(
-        'name' => 'ArticleAdInspect',
+        'name' => 'ArticleAdLogic',
         'author' => 'Nick Sullivan'
 );
 
@@ -15,15 +15,16 @@ TODO/Think about:
 - Reporting on collisions via javascript
 - Implementing the Magic word
 - What hook should this run from?
+- Reporting on how many pages have the wikia magic words
 */
-class ArticleAdInspect {
+class ArticleAdLogic {
 
 	// Play with these levels, once we get more test cases.
-	const shortArticleThreshold=1000; // what defines a "short" article. # of characters *after* html has been stripped.
-	const longArticleThreshold=3500; // what defines a "long" article. # of characters *after* html has been stripped.
-	const collisionRankThreshold=.15;  // what collison score constitutes a collision. 0-1
-	const firstHtmlThreshold=1500; // Check this much of the html for collision causing tags
-	const wideObjectThreshold=300; // what is a "wide" object that will cause a collision, in pixels
+	const shortArticleThreshold = 1000; // what defines a "short" article. # of characters *after* html has been stripped.
+	const longArticleThreshold = 3500; // what defines a "long" article. # of characters *after* html has been stripped.
+	const collisionRankThreshold = .15;  // what collison score constitutes a collision. 0-1
+	const firstHtmlThreshold = 1500; // Check this much of the html for collision causing tags
+	const wideObjectThreshold = 300; // what is a "wide" object that will cause a collision, in pixels
 
 	public static function isShortArticle($html){
 		return strlen(strip_tags($html)) < self::shortArticleThreshold;
@@ -48,41 +49,43 @@ class ArticleAdInspect {
  	 * based on the likelihood of that item causing a collision, ala Mr. Bayes.
  	 */
 	public static function getCollisionRank($html){
-		$score=0;
+		$score = 0;
 
-		$firstHtml=substr($html, 0, self::firstHtmlThreshold);
+		$firstHtml = substr($html, 0, self::firstHtmlThreshold);
 
 		// Look for html tags that may cause collisions, and evaluate them
 		if (preg_match_all('/<(table|img)[^>]+>/is', $firstHtml, $matches, PREG_OFFSET_CAPTURE)){
 
 			// PHP's preg_match_all return is a PITA to deal with	
-			for ($i=0; $i< sizeof($matches[0]); $i++){
-				$wholetag=$matches[0][$i];
-				$tag=$matches[1][$i][0];
+			for ($i = 0; $i< sizeof($matches[0]); $i++){
+				$wholetag = $matches[0][$i];
+				$tag = $matches[1][$i][0];
 
 				// Get attributes from tag.
 				// Note, this requires well-formed html with quoted attributes. Second regexp for poor html?
 				$pattern='/\s([a-zA-Z]+)\=[\x22\x27]([^\x22\x27]+)[\x22\x27]/';
 				$attr=array();
 				if (preg_match_all($pattern, $matches[0][$i][0], $attmatch)){
-					for ($j=0; $j<sizeof($attmatch[1]); $j++){
-						$attr[$attmatch[1][$j]]=$attmatch[2][$j];
+					for ($j = 0; $j<sizeof($attmatch[1]); $j++){
+						$attr[$attmatch[1][$j]] = $attmatch[2][$j];
 					}
 				}
 
-				$score+=self::getTagCollisionScore($tag, $attr);
+				$score += self::getTagCollisionScore($tag, $attr);
+				
+				
 			}
 		}
 
 		// Score is between 0 and 1, so if it's over 1, reset it to 1
-		if ($score > 1) $score=1;
+		if ($score > 1) $score = 1;
 
 		return $score;
 	}
 
 	
 	/* Find out how naughty a particular tag is.*/
-	function getTagCollisionScore($tag, $attr){
+	private function getTagCollisionScore($tag, $attr){
 		switch (strtolower($tag)){
 		  // The tag itself gets a store
 		  case 'table':
