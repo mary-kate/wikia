@@ -12,7 +12,7 @@ WR.toggle = function(e, data)
 	if ('none' != YD.getStyle(data[0], 'display'))
 	{
 		display = 'none';
-		text    = 'show';
+		text    = <?= Xml::encodeJsVar( wfMsg('me_show') ) ?>;
 		opacity =  0;
 
 		onFadeEnd = function()
@@ -27,7 +27,7 @@ WR.toggle = function(e, data)
 	} else
 	{
 		display = 'block';
-		text    = 'hide';
+		text    = <?= Xml::encodeJsVar( wfMsg('me_hide') ) ?>;
 		opacity =  1;
 
 		YD.setStyle(data[0], 'opacity', 0);
