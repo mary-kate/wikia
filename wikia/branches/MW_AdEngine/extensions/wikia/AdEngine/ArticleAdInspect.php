@@ -1,22 +1,29 @@
 <?php
+/* This script will look at the html of an article and evaluate it for ads, determining attributes like:
+ * ) If it is a "short" article that should have no ads at all?
+ * ) If it is a "long" article that can have additional ads in the left nav?
+ * ) If it it an article with html that will collide with the Box Ad, so it should have a banner instead
+ */
 $wgExtensionCredits['other'][] = array(
         'name' => 'ArticleAdInspect',
         'author' => 'Nick Sullivan'
 );
 
 /*
-Think about:
-Reporting on collisions via javascript
+TODO/Think about:
 
+- Reporting on collisions via javascript
+- Implementing the Magic word
+- What hook should this run from?
 */
 class ArticleAdInspect {
 
-	// Play with these levels
-	const shortArticleThreshold=1000; 
-	const longArticleThreshold=3500; 
-	const collisionRankThreshold=.15; 
+	// Play with these levels, once we get more test cases.
+	const shortArticleThreshold=1000; // what defines a "short" article. # of characters *after* html has been stripped.
+	const longArticleThreshold=3500; // what defines a "long" article. # of characters *after* html has been stripped.
+	const collisionRankThreshold=.15;  // what collison score constitutes a collision. 0-1
 	const firstHtmlThreshold=1500; // Check this much of the html for collision causing tags
-	const wideObjectThreshold=300; 
+	const wideObjectThreshold=300; // what is a "wide" object that will cause a collision, in pixels
 
 	public static function isShortArticle($html){
 		return strlen(strip_tags($html)) < self::shortArticleThreshold;
@@ -54,7 +61,7 @@ class ArticleAdInspect {
 				$tag=$matches[1][$i][0];
 
 				// Get attributes from tag.
-				// Note, this requires well-formed html with quoted attributes.
+				// Note, this requires well-formed html with quoted attributes. Second regexp for poor html?
 				$pattern='/\s([a-zA-Z]+)\=[\x22\x27]([^\x22\x27]+)[\x22\x27]/';
 				$attr=array();
 				if (preg_match_all($pattern, $matches[0][$i][0], $attmatch)){
@@ -67,16 +74,19 @@ class ArticleAdInspect {
 			}
 		}
 
+		// Score is between 0 and 1, so if it's over 1, reset it to 1
 		if ($score > 1) $score=1;
 
 		return $score;
 	}
 
 	
-	/* Find out how naughty a particular tag is. */
+	/* Find out how naughty a particular tag is.*/
 	function getTagCollisionScore($tag, $attr){
 		switch (strtolower($tag)){
+		  // The tag itself gets a store
 		  case 'table':
+			// And it gets a higher score if has a wide width
 			if (isset($attr['width']) && $attr['width'] >= self::wideObjectThreshold){
 				return .5;
 			} else {
