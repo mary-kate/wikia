@@ -20,23 +20,27 @@ require_once( "commandLine.inc" );
 
 $all = isset( $options[ "all" ] ) ? $options[ "all" ] : false;
 
-$condition = ( $all )
-	? array( "city_public"  => 1 )
-	: array( "city_public"  => 1, "city_id" => $wgCityId );
-
-
-$dbr = wfGetDB( DB_SLAVE );
-
-$res = $dbr->select(
-	wfSharedTable( "city_list" ),
-	array( "city_id", "city_dbname" ),
-	$condition,
-	__FILE__,
-	array( "ORDER BY" => "city_id" )
-);
-
-while ( $row = $dbr->fetchObject( $res ) ) {
-	WikiFactory::clearCache( $row->city_id );
-	printf("%s removing %5d:%s from cache\n", wfTimestamp( TS_DB, time() ), $row->city_id, $row->city_dbname  );
+if ( ! $all ) {
+	WikiFactory::clearCache( $wgCityId );
+	printf("%s removing %5d:%s from cache\n", wfTimestamp( TS_DB, time() ), $wgCityId, $wgDBname );
 }
-$dbr->close();
+else {
+	/**
+	 * iterate through city_list
+	 */
+	$dbr = wfGetDB( DB_SLAVE );
+
+	$res = $dbr->select(
+		wfSharedTable( "city_list" ),
+		array( "city_id", "city_dbname" ),
+		array( "city_public"  => 1 ),
+		__FILE__,
+		array( "ORDER BY" => "city_id" )
+	);
+
+	while ( $row = $dbr->fetchObject( $res ) ) {
+		WikiFactory::clearCache( $row->city_id );
+		printf("%s removing %5d:%s from cache\n", wfTimestamp( TS_DB, time() ), $row->city_id, $row->city_dbname  );
+	}
+	$dbr->close();
+}
