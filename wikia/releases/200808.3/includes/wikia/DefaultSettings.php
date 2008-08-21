@@ -28,8 +28,8 @@ if( !defined( 'MEDIAWIKI' ) ) {
  */
 
 
-$wgStyleVersion         = '1012';
-$wgMergeStyleVersionJS  = '1012';
+$wgStyleVersion         = '1099';
+$wgMergeStyleVersionJS  = '1099';
 $wgMergeStyleVersionCSS = '1012';
 
 /**
