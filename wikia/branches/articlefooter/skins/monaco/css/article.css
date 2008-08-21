@@ -2,7 +2,7 @@
 	background: #FFF;
 	border: 1px solid #AAA;
 	height: 1%;
-	margin: 0 5px 0 216px;
+	margin: 0 5px -176px 216px;
 	/*margin: -36px 5px 10px 22em;*/
 	position: relative;
 	top: -176px;
@@ -131,6 +131,36 @@
 	padding: 10px;
 	position: relative;
 	overflow: visible;
+}
+
+/*** THREE FOOTER ***/
+/*temp*/
+#monaco_footer {
+	display: none;
+}
+#wikia_footer_inside {
+	clear: both;
+	font-size: 9pt;
+}
+#wikia_footer_outside {
+	margin-left: 216px;
+}
+.wikia_footer_table {
+	width: 100%;
+}
+.wikia_footer_headline {
+	background-color: #F9F9F9;
+	border-top: 1px solid #AAA;
+	border-bottom: 1px solid #AAA;
+	color: #36C;
+	font-family: arial;
+	font-size: 11pt;
+	font-weight: bold;
+	padding: 3px 5px !important;
+	text-transform: uppercase;
+}
+.wikia_footer_module {
+	padding: 10px !important;
 }
 
 /*** ARTICLE FOOTER ***/
