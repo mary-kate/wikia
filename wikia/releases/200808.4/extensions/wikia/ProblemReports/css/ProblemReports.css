@@ -125,10 +125,6 @@ body.rtl #reportProblem .boxHeader {
 	display: none !important;
 }
 
-#reportProblemForm_mask {
-	position: fixed; /* this fixes Opera bug with horizontal scroll */
-}
-
 #wikiaDialogInfo_c {
 	z-index: 2000 !important /* show it above ProblemReports dialog */
 }
