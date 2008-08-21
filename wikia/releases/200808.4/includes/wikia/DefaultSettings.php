@@ -27,9 +27,9 @@ if( !defined( 'MEDIAWIKI' ) ) {
  * Use revision number
  */
 
-$wgStyleVersion         = '1096';
-$wgMergeStyleVersionJS  = '1096';
-$wgMergeStyleVersionCSS = '1096';
+$wgStyleVersion         = '1099';
+$wgMergeStyleVersionJS  = '1099';
+$wgMergeStyleVersionCSS = '1012';
 
 /**
  * @name $wgCityId
@@ -127,3 +127,8 @@ $wgLogActions['var_log/var_set'] = 'var_set';
  * the biggest category list (Monaco sidebar)
  */
 $wgBiggestCategoriesBlacklist = array();
+
+/**
+ * extensions path as seen by users
+ */
+$wgExtensionsPath = false; /// defaults to "{$wgScriptPath}/extensions"

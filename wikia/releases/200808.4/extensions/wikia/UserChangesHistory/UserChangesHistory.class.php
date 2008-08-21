@@ -116,4 +116,4 @@ class UserChangesHistory {
 
 		return true;
 	}
-};
+}

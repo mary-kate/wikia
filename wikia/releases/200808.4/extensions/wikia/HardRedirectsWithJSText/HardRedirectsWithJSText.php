@@ -66,8 +66,6 @@ function jsRedirectedFromText($out){
 		return true;
 	}
  
-	// Supposedly this will be part of allinone, when it is, remove this.
-	$out->addScript('<script src="http://yui.yahooapis.com/2.5.1/build/cookie/cookie-beta-min.js"></script>');
 	$out->addInlineScript('
 	  var jsrdCookie="' . addslashes($wgCookiePrefix) . 'RedirectedFrom";
 	  var jsrdText="' . addslashes(wfMsg('redirectedfrom')) . '";
@@ -95,11 +93,11 @@ function jsRedirectedFromText($out){
  * Set a cookie for the "Redirected From" text.
  */
 function hardRedirectWithCookie($wgTitle, $target){
+
 	global $wgEnableHardRedirectsWithJSText;
 	if ($wgEnableHardRedirectsWithJSText){
 		global $wgOut, $wgCookiePrefix, $wgCookiePath, $wgCookieDomain,
 			$wgCookieSecure, $wgRequest;
-
 		if ($wgRequest->getVal('redirect')!='no'){
 			 // Only set the cookie if they are not on a 'redirect=no' page.
 			 setcookie( $wgCookiePrefix.'RedirectedFrom',

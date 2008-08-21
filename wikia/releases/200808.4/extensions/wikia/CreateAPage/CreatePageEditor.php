@@ -109,17 +109,20 @@ class CreatePageMultiEditor extends CreatePageEditor {
 
 	// take given categories and glue them together
 	function GlueCategories ($checkboxes_array, $categories) {
+		global $wgContLang;
+
 		$text = '' ;
-		// todo insert Category: in different languages
+		$ns_cat = $wgContLang->getFormattedNsText( NS_CATEGORY );
+
 		foreach ($checkboxes_array as $category) {
-			$text .= "\n[[Category:" . $category . "]]" ;
+			$text .= "\n[[" . $ns_cat . ":" . $category . "]]" ;
 		} 
 
 		// parse the textarea
         	$categories_array = preg_split ("/,/", $categories, -1) ;
 		foreach ($categories_array as $category) {
 			if (!empty ($category)) {
-				$text .= "\n[[Category:" . $category . "]]" ;
+				$text .= "\n[[" . $ns_cat . ":" . $category . "]]" ;
 			}
 		} 
 		
