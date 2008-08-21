@@ -38,8 +38,9 @@ if(skin == 'monaco') {
 }
 
 function WMU_addHandler() {
-	var btn = $('mw-editbutton-wmu');
-	if(btn == null) {
+	var btn = $('mw-editbutton-wmu');	//regular editor
+	var fck = $('wpTextbox1___Frame');	//fck editor
+	if(btn == null && fck == null) {
 		setTimeout('WMU_addHandler()', 250);
 		return;
 	}
@@ -103,7 +104,7 @@ function WMU_loadMain() {
 		success: function(o) {
 			$('ImageUploadMain').innerHTML = o.responseText;
 			WMU_indicator(1, false);
-			if($('ImageQuery')) $('ImageQuery').focus();
+			if($('ImageQuery') && WMU_panel.element.style.visibility == 'visible') $('ImageQuery').focus();
 		}
 	}
 	WMU_indicator(1, true);
@@ -317,6 +318,7 @@ function WMU_insertImage(e, type) {
 					$('ImageUploadBack').style.display = 'none';
 					$('ImageUpload' + WMU_curScreen).innerHTML = o.responseText;
 					insertTags($('ImageUploadTag').innerHTML, '', '');
+					insertFckTags($('ImageUploadTag').innerHTML);
 					break;
 				case 'existing':
 					WMU_displayDetails(o.responseText);
