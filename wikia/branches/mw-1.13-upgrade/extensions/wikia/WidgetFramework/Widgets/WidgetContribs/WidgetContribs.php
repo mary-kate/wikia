@@ -37,7 +37,7 @@ function WidgetContribs($id, $params) {
 
 	$ret = '';
 
-	if ( isset($results) && is_array($results['query']['usercontribs']) && count($results['query']['usercontribs']) > 0 ) {
+	if ( !empty($results['query']['usercontribs']) ) {
 	
 	    $list = array();
 	

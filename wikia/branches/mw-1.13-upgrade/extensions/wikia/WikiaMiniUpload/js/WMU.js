@@ -40,15 +40,23 @@ if(skin == 'monaco') {
 function WMU_addHandler() {
 	var btn = $('mw-editbutton-wmu');
 	if(btn == null) {
-		setTimeout('WMU_addHandler()', 250);
-		return;
-	}
-	$('wmuLink').onclick = WMU_show;
-	btn.onclick = WMU_show;
+ 		setTimeout('WMU_addHandler()', 250);
+  		return;
+  	}
+  	YAHOO.util.Event.addListener(['wmuLink', 'wmuHelpLink', btn], 'click',  WMU_show);
 }
 
-function WMU_show() {
-	WMU_track('open'); // tracking
+function WMU_show(e) {
+	var el = YAHOO.util.Event.getTarget(e);
+	if (el.id == 'wmuLink') {
+		WMU_track('open/fromLinkAboveToolbar'); //tracking
+	} else if (el.id == 'wmuHelpLink') {
+		WMU_track('open/fromEditTips'); //tracking
+	} else if (el.id == 'mw-editbutton-wmu') {
+		WMU_track('open/fromToolbar'); //tracking
+	} else {
+		WMU_track('open');
+	}
 
 	YAHOO.util.Dom.setStyle('header_ad', 'display', 'none');
 	if(WMU_panel != null) {

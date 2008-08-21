@@ -193,6 +193,7 @@ function ad_call(adSpaceId, zoneId, pos) {
 		curAdSpaceId = adSpaceId;
 
  		var source = Array();
+ 		source.push('slot=' + pos);
  		source.push('catid=' + wgCatId);
  		source.push('lang=' + wgContentLanguage);
 		if(pos == 'FAST_BOTTOM' && FASTisCollisionBottom()) {
@@ -211,6 +212,7 @@ function ad_call(adSpaceId, zoneId, pos) {
 		document.write('base_url += "&cb=" + Math.floor(Math.random()*99999999999);');
 		document.write('if(typeof document.MAX_used != "undefined" && document.MAX_used != ",") base_url += "&exclude=" + document.MAX_used;');
 		document.write('base_url += "&source='+source.join(';')+'";');
+		document.write('base_url += "&block=1";');
 		document.write('</scr'+'ipt>');
 		document.write('<scr'+'ipt type="text/javascript" src="'+base_url+'"></scr'+'ipt>');
 	}

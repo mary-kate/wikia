@@ -23,6 +23,7 @@ body {
 .mask {
 	background: #000;
 	opacity: .6;
+	position: fixed;
 }
 .right {
 	text-align: right;
