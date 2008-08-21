@@ -128,3 +128,8 @@ $wgLogActions['var_log/var_set'] = 'var_set';
  * the biggest category list (Monaco sidebar)
  */
 $wgBiggestCategoriesBlacklist = array();
+
+/**
+ * extensions path as seen by users
+ */
+$wgExtensionsPath = false; /// defaults to "{$wgScriptPath}/extensions"
