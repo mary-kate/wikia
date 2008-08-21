@@ -14,6 +14,10 @@ if(!defined('MEDIAWIKI')) {
 
 $wgAdCalled = array();
 
+global $abtest;
+//TODO: ABTest framework included here
+//$abtest = 3;
+
 class SkinMonaco extends SkinTemplate {
 
 	/**
@@ -55,7 +59,7 @@ class SkinMonaco extends SkinTemplate {
 			$wgCat = array('id' => -1);
 			wfDebugLog('monaco', 'No category info');
 		}
-
+		
 		// Function addVariables will be called to populate all needed data to render skin
 		$wgHooks['SkinTemplateOutputPageBeforeExec'][] = array(&$this, 'addVariables');
 		wfProfileOut(__METHOD__);
@@ -929,8 +933,9 @@ class MonacoTemplate extends QuickTemplate {
 
 	function execute() {
 		wfProfileIn( __METHOD__ );
-		global $wgUser, $wgLogo, $wgStylePath, $wgRequest, $wgTitle, $wgSitename;
+		global $wgUser, $wgLogo, $wgStylePath, $wgRequest, $wgTitle, $wgSitename, $abtest;
 		$skin = $wgUser->getSkin();
+
 
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="<?php $this->text('xhtmldefaultnamespace') ?>" <?php
@@ -975,7 +980,89 @@ class MonacoTemplate extends QuickTemplate {
 		}
 		$this->html('headscripts');
 	}
+if( $abtest == 7 ) { ?>
+	<style type="text/css">
+		#control_edit {
+			background: #FFF;
+			margin-top: 5px;
+			padding: 0px 5px 5px 23px !important;
+		}
+		#control_edit div {
+			margin-left: 5px;
+			margin-top: 3px;
+		}
+		#ca-edit {
+			color: #00F;
+			line-height: 22px;
+		}
+	</style>
+<?php } else if ( $abtest == 4 ) { ?>
+	<style type="text/css">
+		.editsection {
+			float: none;
+		}
+	</style>
+<?php } else if ( $abtest == 10 ) { ?>
+	<style type="text/css">
+		#control_edit {
+			display: none;
+		}
+		#ca-edittab {
+			color: #00F !important;
+			font-weight: normal;
+		}
+	</style>
+<?php } else if ( $abtest == 1 ) { ?>
+	<style type="text/css">
+		#adSpace0 {
+			clear: right;
+		}
+	</style>
+<?php } else if ( $abtest == 3 ) { ?>
+	<style type="text/css">
+		.editsection {
+			float: none;
+		}
+	</style>
+<?php } else if ( $abtest == 6 ) { ?>i
+	<style type="text/css">
+		.mw-headline {
+			float: left;
+		}
+		.editsection {
+			background: url(/skins/monaco/images/section_edit_button.png);
+			color: #090;
+			display: block;
+			float: left;
+			height: 21px;
+			line-height: 21px;
+			text-align: center;
+			width: 50px;
+		}
+		.editsection a {
+			color: #FFF;
+			font-weight: bold;
+		}
+	</style>
+<?php } else if ( $abtest == 5 ) { ?>
+	<style type="text/css">
+		.editsection {
+			background: url(/skins/monaco/images/section_edit_button.png);
+			color: #090;
+			display: block;
+			height: 21px;
+			line-height: 21px;
+			text-align: center;
+			width: 50px;
+		}
+		.editsection a {
+			color: #FFF;
+			font-weight: bold;
+		}
+	</style>
+<?php }
 
+echo '<link rel="apple-touch-icon" href="'. $wgLogo .'" />';
 ?>
 	</head>
 <?php		wfProfileOut( __METHOD__ . '-head'); ?>
@@ -1201,6 +1288,11 @@ if(isset($this->data['articlelinks']['left'])) {
 				</ul>
 				<ul id="page_tabs">
 <?php
+if ( $abtest == 10 ) {
+?>
+	<li class="selected"><a href="<?=$wgTitle->getEditURL() ?>" id="ca-edittab">Edit this page</a></li>
+<?php
+}
 if(isset($this->data['articlelinks']['right'])) {
 	foreach($this->data['articlelinks']['right'] as $key => $val) {
 ?>
@@ -1218,6 +1310,13 @@ if(isset($this->data['articlelinks']['right'])) {
 
 				<a name="top" id="top"></a>
 				<?php if($this->data['sitenotice']) { ?><div id="siteNotice"><?php $this->html('sitenotice') ?></div><?php } ?>
+				<?php 
+					if( $abtest == 8 || $abtest == 12 ) {
+						echo '<a href="'. $wgTitle->getEditURL() .'" class="bigButton"><big>Edit this page</big><small>&nbsp;</small></a><br style="clear: both;" />';
+					} else if ( $abtest == 1 ) {
+						echo '<a href="'. Skin::makeSpecialUrl( 'Createpage?createplates=Recipe' ) .'" class="bigButton" style="float: right;"><big>Add a recipe!</big><small>&nbsp;</small></a>';
+					}
+				?>	
 				<?php
 				global $wgSupressPageTitle;
 				if( empty( $wgSupressPageTitle ) ){ ?><h1 class="firstHeading"><?php $this->data['displaytitle']!=""?$this->html('title'):$this->text('title') ?></h1><?php } ?>
@@ -1245,7 +1344,11 @@ if(isset($this->data['articlelinks']['right'])) {
 
 				<!--google_ad_section_end-->
 				<!--contextual_targeting_end-->
-
+				<?php
+					if ( $abtest == 9 || $abtest == 12 ) {
+						echo '<a href="'. $wgTitle->getEditURL() .'" class="bigButton"><big>Edit this page</big><small>&nbsp;</small></a><br style="clear: both;" />';
+					}
+				?>
 			</div>
 			<!-- /ARTICLE -->
 <?php		wfProfileOut( __METHOD__ . '-article'); ?>
@@ -1501,6 +1604,11 @@ if(count($wikiafooterlinks) > 0) {
 
 	echo '<script type="text/javascript">var submenu_array = new Array();var
 menuitem_array = new Array();var submenuitem_array = new Array();</script>';
+			if ($abtest == 11) {
+				echo '<a href="'. $wgTitle->getEditURL() .'" class="bigButton" style="margin: 3px; float: none;"><big style="width: 95%; text-align: center;">Edit this page</big><small>&nbsp;</small></a>';
+			} else if ($abtest == 2) {
+				echo '<a href="'. Skin::makeSpecialUrl( 'Createpage?createplates=Recipe' ) .'" class="bigButton" style="margin: 3px; float: none;"><big style="width: 95%; text-align: center;">Add a recipe!</big><small>&nbsp;</small></a>';
+			}
 	$this->navmenu_array = array();
 	$this->navmenu = $this->data['data']['sidebarmenu'];
 	echo $this->printMenu(0);
