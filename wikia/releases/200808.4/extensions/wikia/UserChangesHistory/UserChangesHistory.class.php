@@ -2,49 +2,31 @@
 
 /**
  * Register when & where user is logged in and what was changed in
- * user preferences. Could be used for restoring badly saved preferences (undo).
+ * user preferences. Could be used for restoring wrongly saved preferences (undo).
  *
  * @author Krzysztof Krzyżaniak <eloy@wikia-inc.com>
  */
-
-/**
-CREATE TABLE `user_login_history` (
-  `user_id` int(5) unsigned NOT NULL,
-  `city_id` int(9) unsigned default '0',
-  `ulh_timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
-  `ulh_from` tinyint(4) default '0',
-  KEY `idx_user_login_history_timestamp` (`ulh_timestamp`),
-  KEY `idx_user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE `user_history` (
-  `user_id` int(5) unsigned NOT NULL,
-  `user_name` varchar(255) character set latin1 collate latin1_bin NOT NULL default '',
-  `user_real_name` varchar(255) character set latin1 collate latin1_bin NOT NULL default '',
-  `user_password` tinyblob NOT NULL,
-  `user_newpassword` tinyblob NOT NULL,
-  `user_email` tinytext NOT NULL,
-  `user_options` blob NOT NULL,
-  `user_touched` varchar(14) character set latin1 collate latin1_bin NOT NULL default '',
-  `user_token` varchar(32) character set latin1 collate latin1_bin NOT NULL default '',
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
-  KEY `user_name` (`user_name`(10))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
-
-**/
 
 /**
  * static methods, wait for PHP with namespaces
  */
 class UserChangesHistory {
 
-	const CLUSTER = "archive1";
 	const LOGIN_AUTO = 0;
 	const LOGIN_FORM = 1;
 
 	/**
-	 * LoginHistoryInsert
+	 * LoginHistoryHook
 	 *
+	 * store information about when & where user logged in, for stats
+	 * purposes, called by Hook UserLoginComplete and UserLoadFromSession
+	 * Data is stored in external storage archive1
+	 *
+	 * @author Krzysztof Krzyżaniak (eloy) <eloy@wikia-inc.com>
+	 * @access public
+	 * @static
+	 *
+	 * @return true		process other hooks
 	 */
 	static public function LoginHistoryHook( $from, $User ) {
 		global $wgCityId; #--- private wikia identifier, you can use wgDBname
@@ -58,10 +40,8 @@ class UserChangesHistory {
 		$id = $User->getId();
 		if ( $id ) {
 
-			$external = new ExternalStoreDB();
-			$dbw = $external->getMaster( self::CLUSTER );
-			$dbw->selectDb( "dbstats" );
-			$dbw->begin();
+			$dbw = wfGetDBExt( DB_MASTER ) ;
+
 			$status = $dbw->insert(
 				"user_login_history",
 				array(
@@ -71,11 +51,8 @@ class UserChangesHistory {
 				),
 				__METHOD__
 			);
-			if( $status ) {
+			if ( $dbw->getFlag( DBO_TRX ) ) {
 				$dbw->commit();
-			}
-			else {
-				$dbw->rollback();
 			}
 		}
 
@@ -89,7 +66,14 @@ class UserChangesHistory {
 	 * SavePreferencesHook
 	 *
 	 * Store row from user table before changes of preferences are saved.
-	 * Row is stored in external storage archive1
+	 * Called by Hook SavePreferences
+	 * Data is stored in external storage archive1
+     *
+	 * @author Krzysztof Krzyżaniak (eloy) <eloy@wikia-inc.com>
+	 * @access public
+	 * @static
+	 *
+	 * @return true		process other hooks
 	 */
 	static public function SavePreferencesHook( $preferences, $User, $msg ) {
 
@@ -102,15 +86,12 @@ class UserChangesHistory {
 			 * clusters. But we should have all user data already loaded.
 			 */
 
-			$external = new ExternalStoreDB();
-			$dbw = $external->getMaster( self::CLUSTER );
+			$dbw = wfGetDBExt( DB_MASTER ) ;
 
 			/**
 			 * so far encodeOptions is public by default but could be
 			 * private in future
 			 */
-			$dbw->selectDb( "dbstats" );
-			$dbw->begin();
 			$status = $dbw->insert(
 				"user_history",
 				array(
@@ -126,11 +107,8 @@ class UserChangesHistory {
 				),
 				__METHOD__
 			);
-			if( $status ) {
+			if ( $dbw->getFlag( DBO_TRX ) ) {
 				$dbw->commit();
-			}
-			else {
-				$dbw->rollback();
 			}
 		}
 
@@ -138,5 +116,4 @@ class UserChangesHistory {
 
 		return true;
 	}
-
-}
+};
