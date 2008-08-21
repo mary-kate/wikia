@@ -37,7 +37,7 @@ class WikiFactoryHub {
 	 *
 	 * @return object	WikiFactoryHub object
 	 */
-	public function getInstance() {
+	public static function getInstance() {
 		if( self::$mInstance === false ) {
 			self::$mInstance = new WikiFactoryHub();
 		}
