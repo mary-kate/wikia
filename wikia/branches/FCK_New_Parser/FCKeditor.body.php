@@ -114,16 +114,16 @@ class FCKeditor_MediaWiki
 				'', '', '',
 				'id="wpUpperFCKCancel"');
 
-		$wgOut->addHTML ("
-			<input type=\"hidden\" name=\"FCKmode\" id=\"FCKmode\" value=\"$FCKmode\" />
-                	<div id=\"FCKwarning\" style=\"display: none\">" . wfMsg ('fck-noscript-warning') . "</div> 
-			<textarea id=\"wpTextbox1_Backup\" name=\"wpTextbox1_Backup\" style=\"display: none;\">$old_content</textarea>
-			<div style=\"float: right; margin-top: 20px;\">
-				<a href=\"#\" id=\"wpUpperFCKSave\">" . wfMsg ('save'). "</a> | 
-				<a href=\"#\" id=\"wpUpperFCKPreview\">" . wfMsg ('preview') . "</a> |
-				$cancel
+		$wgOut->addHTML ('
+			<input type="hidden" name="FCKmode" id="FCKmode" value="' . $FCKmode . '" />
+                	<div id="FCKwarning" style="display: none">' . wfMsg ('fck-noscript-warning') . '</div> 
+			<textarea id="wpTextbox1_Backup" name="wpTextbox1_Backup" style="display: none;">' . $old_content .'</textarea>
+			<div style="float: right; margin-top: 20px;">
+				<a href="#" id="wpUpperFCKSave">' . wfMsg ('save'). '</a> | 
+				<a href="#" id="wpUpperFCKPreview">' . wfMsg ('preview') . '</a> |
+				' . $cancel . '
 			</div>
-		") ;
+		') ;
 		                  	
 		return true;
 	}
@@ -165,13 +165,13 @@ class FCKeditor_MediaWiki
 		$wgHooks['MessagesPreLoad'][]                   = array($this, 'onMessagesPreLoad');
 		$wgHooks['ParserAfterTidy'][]                   = array($this, 'onParserAfterTidy');
 		$wgHooks['EditPage::showEditForm:initial'][]    = array($this, 'onEditPageShowEditFormInitial');
-		$wgHooks['EditPage::showEditForm:fields'][]		= array($this, 'onEditPageShowEditFormFields');
+		$wgHooks['EditPage::showEditForm:fields'][]	= array($this, 'onEditPageShowEditFormFields');
 		$wgHooks['EditPageBeforePreviewText'][]         = array($this, 'onEditPageBeforePreviewText');
 		$wgHooks['EditPagePreviewTextEnd'][]            = array($this, 'onEditPagePreviewTextEnd');
 		$wgHooks['CustomEditor'][]                      = array($this, 'onCustomEditor');
 		$wgHooks['LanguageGetMagic'][]                  = array($this, "onLanguageGetMagic");
 		$wgHooks['ParserBeforeInternalParse'][]         = array($this, "onParserBeforeInternalParse");
-		$wgHooks['EditPageBeforeConflictDiff'][]		= array($this, 'onEditPageBeforeConflictDiff');
+		$wgHooks['EditPageBeforeConflictDiff'][]	= array($this, 'onEditPageBeforeConflictDiff');
 		$wgHooks['SanitizerAfterFixTagAttributes'][]	= array($this, 'onSanitizerAfterFixTagAttributes');
 
 		if ($this->debug) {
@@ -312,8 +312,8 @@ class FCKeditor_MediaWiki
 			return true;
 		}
 
-		$wgOut->addHTML ("
-			<style type=\"text/css\">
+		$wgOut->addHTML ('
+			<style type="text/css">
 				#wpTextbox1, #editform .editOptions, #editform #wpSummaryLabel {
 					display: none ;
 				}
@@ -323,13 +323,13 @@ class FCKeditor_MediaWiki
 				}
 			</style>
 			<noscript>
-			<style type=\"text/css\">
+			<style type="text/css">
 				#FCKwarning {
 				display: block !important;
 				}
 			</style>
 			</noscript>				
-		") ;
+		') ;
 
 		$options = new FCKeditorParserOptions();
 		$options->setTidy(true);
@@ -344,9 +344,9 @@ class FCKeditor_MediaWiki
 		$parsed_templates = $old_parser->parse ($parser->fck_parsed_templates, $wgTitle, $options)->getText()  ;
 
 		// insert the parsed templates into some hidden input, we will need them in a moment...
-		$wgOut->addHTML ("
-			<textarea id=\"fck_parsed_templates\" style=\"display:none;\">" . htmlspecialchars ($parsed_templates) ."</textarea>
-		") ;
+		$wgOut->addHTML ('
+			<textarea id="fck_parsed_templates" style="display:none;">' . htmlspecialchars ($parsed_templates) . '</textarea>
+		') ;
 
 		$printsheet = htmlspecialchars( "$wgStylePath/common/wikiprintable.css?$wgStyleVersion" );
 
@@ -451,7 +451,8 @@ function onLoadFCKeditor()
 			}
 		}
 
-		FCKeditor_OnComplete = function (FCKinstance) {
+		FCKeditor_OnComplete = function (FCKinstance)
+		{
 			if ('source' == document.getElementById ("FCKmode").value) {
 				FCKinstance.SwitchEditMode () ;
 			}
