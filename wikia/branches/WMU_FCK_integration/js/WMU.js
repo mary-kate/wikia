@@ -15,6 +15,7 @@ var WMU_prevScreen = null;
 var WMU_slider = null;
 var WMU_thumbSize = null;
 var WMU_orgThumbSize = null;
+var WMU_FCK = false ;
 
 /*
  * Functions/methods
@@ -45,7 +46,12 @@ function WMU_addHandler() {
 		return;
 	}
 	$('wmuLink').onclick = WMU_show;
-	btn.onclick = WMU_show;
+	if (fck) { // indicate for fck to avoid double insertion later
+		WMU_FCK = true ;
+	}
+	if (btn) {
+		btn.onclick = WMU_show;
+	}
 }
 
 function WMU_show() {
@@ -317,8 +323,11 @@ function WMU_insertImage(e, type) {
 					WMU_switchScreen('Summary');
 					$('ImageUploadBack').style.display = 'none';
 					$('ImageUpload' + WMU_curScreen).innerHTML = o.responseText;
-					insertTags($('ImageUploadTag').innerHTML, '', '');
-					insertFckTags($('ImageUploadTag').innerHTML, '', '');
+					if (WMU_FCK) {
+						insertFckTags($('ImageUploadTag').innerHTML, '', '');
+					} else {
+						insertTags($('ImageUploadTag').innerHTML, '', '');
+					}
 					break;
 				case 'existing':
 					WMU_displayDetails(o.responseText);
