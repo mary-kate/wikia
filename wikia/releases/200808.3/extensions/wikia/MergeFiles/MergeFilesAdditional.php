@@ -42,6 +42,7 @@ $MF['quartz_js']['source'] = array(
 	'common/yui_extra/tools-min.js',
 	'common/yui_extra/carousel-min.js',
 
+	'common/jiffy.js',
 	'common/urchin.js',
 	'quartz/js/main.js',
 	'quartz/js/usermenu.js',
@@ -77,6 +78,7 @@ $MF['monobook_js']['source'] = array(
 	'common/yui_2.5.2/tabview/tabview.js',
 	'common/yui_extra/tools-min.js',
 
+	'common/jiffy.js',
 	'common/urchin.js',
 	'common/wikibits.js',
 	'monobook/main.js',
@@ -102,6 +104,7 @@ $MF['monaco_loggedin_js']['source'] = array(
 	'common/yui_extra/tools-min.js',
 	'common/yui_extra/carousel-min.js',
 
+	'common/jiffy.js',
 	'common/ajax.js',
 	'common/urchin.js',
 	'common/wikibits.js',
@@ -129,6 +132,7 @@ $MF['monaco_non_loggedin_js']['source'] = array(
 	'common/yui_2.5.2/tabview/tabview.js',
 	'common/yui_extra/tools-min.js',
 
+	'common/jiffy.js',
 	'common/ajax.js',
 	'common/urchin.js',
 	'common/wikibits.js',
