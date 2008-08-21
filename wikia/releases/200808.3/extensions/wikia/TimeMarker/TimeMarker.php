@@ -65,12 +65,12 @@ class TimeMarker {
     
 	function tm_basic( &$out, $samplerate ){	
 	 //this is basic timemarker
-	   	global $wgStyleVersion, $wgUser;
+	   	global $wgStylePath, $wgStyleVersion, $wgUser;
 		
 	//+++++++build the TimeMarkers script for this skin++++//
-$txtjs=
+$txtjs= "	<script type=\"text/javascript\" src=\"$wgStylePath/common/jiffy.js?$wgStyleVersion\"></script>" .
 <<<EOT
-	<script type="text/javascript" src="/extensions/wikia/TimeMarker/js/jiffy.js"></script>
+
 	<script type="text/javascript">
 	/*<![CDATA[*/
 	 
