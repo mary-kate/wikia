@@ -179,7 +179,15 @@ class EmailContactForm {
 		$token = htmlspecialchars( $token );
 
 		$wgOut->addHTML( "
-<form id=\"emailuser\" method=\"post\" action=\"{$action}\">
+<script type=\"text/javascript\">
+function checkForm() {
+	var email = document.getElementById('wpFromAddress').value;
+	result = email.match(/^[a-z0-9._%+-]+@(?:[a-z0-9\-]+\.)+[a-z]{2,4}$/i);
+	YAHOO.util.Dom.setStyle('wpFromAddress', 'background-color', result ? '' : '#FFBBBB');
+	return result ? true : false;
+}
+</script>
+<form id=\"emailuser\" method=\"post\" action=\"{$action}\" onsubmit=\"return checkForm();\">
 <table border='0' id='mailheader'>
 <tr>
 <td align='right'>{$emr}:</td>
@@ -194,7 +202,7 @@ class EmailContactForm {
 <tr>
 <td align='right'>{$emfa}:</td>
 <td align='left'>
-<input type='text' size='60' maxlength='200' name=\"wpFromAddress\" value=\"{$encFromAddress}\" />
+<input type='text' size='60' maxlength='200' id=\"wpFromAddress\" name=\"wpFromAddress\" value=\"{$encFromAddress}\" />
 </td>
 </tr>
 <tr>

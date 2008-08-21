@@ -58,6 +58,8 @@ if ( empty( $wgFileStore['deleted']['directory'] ) ) {
 	$wgFileStore['deleted']['directory'] = "{$wgUploadDirectory}/deleted";
 }
 
+if( $wgExtensionsPath === false ) $wgExtensionsPath = "$wgScriptPath/extensions";
+
 /**
  * Initialise $wgLocalFileRepo from backwards-compatible settings
  */

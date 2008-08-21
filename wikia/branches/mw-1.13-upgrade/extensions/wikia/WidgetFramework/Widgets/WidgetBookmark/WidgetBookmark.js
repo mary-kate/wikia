@@ -1,9 +1,6 @@
 function WidgetBookmarkDo(widgetId,cmd,id) {
 
-	if ( cmd == 'add' && (!wgIsArticle || !wgArticleId) ) {
-		YAHOO.log('WidgetBookmark: not a article!');
-		return;
-	}
+	YAHOO.log(cmd + ' "' + id + '"', 'info', 'WidgetBookmark');
 
 	var callback = {
 		success : function(o) {

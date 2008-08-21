@@ -29,23 +29,35 @@ function WidgetBookmark($id) {
 
 	wfProfileIn(__METHOD__);
 
-	 // maybe user is trying to add a page
-	if ( $wgRequest->getInt('pid') && $wgRequest->getVal('rs') == 'WidgetFrameworkAjax' && $wgRequest->getVal('cmd') == 'add' ) {
-		$pages = WidgetBookmarkAddPage( $wgRequest->getInt('pid') );
+	$pages = false;
+
+	// handle AJAX request
+	if ( $wgRequest->getVal('rs') == 'WidgetFrameworkAjax' ) {
+
+		$pageId = $wgRequest->getVal('pid');
+		$cmd =  $wgRequest->getVal('cmd');
+
+		if ( !empty($pageId) ) {
+			switch ($cmd) {
+				case 'add':
+					$pages = WidgetBookmarkAddPage( $pageId );
+					break;
+
+				case 'remove':
+                			$pages = WidgetBookmarkRemovePage( $pageId );
+					break;
+			}
+        	}
 	}
-	// or maybe he wants to remove the page
-	else if ( $wgRequest->getVal('pid') && $wgRequest->getVal('rs') == 'WidgetFrameworkAjax' && $wgRequest->getVal('cmd') == 'remove' ) {
-                $pages = WidgetBookmarkRemovePage( $wgRequest->getVal('pid') );
-        }
-	else {
-		// prepare list of pages
+	
+	if ($pages == false) {
 		$pages = WidgetBookmarkGetPages();
 	}
 
 	// count pages from current wiki
 	$count = 0;
 
-	if ( is_array($pages) && count($pages) > 0 ) {
+	if ( !empty($pages) ) {
 
 		// the newest bookmarks on top
 		$pages = array_reverse($pages);	
@@ -55,8 +67,9 @@ function WidgetBookmark($id) {
 		foreach($pages as $page_id => $page) {
 			// filter the list by cityId
 			if (isset($page['city']) && $page['city'] == $wgCityId) {
-				$list .= '<li><a href="'.$page['href'].'">'.htmlspecialchars(  shortenText($page['title'], 30)  ).'</a>'.
-				'<a class="WidgetBookmarkRemove" onclick="WidgetBookmarkDo('.$id.', \'remove\', \''.$page_id.'\')">x</a></li>';
+				$list .= '<li><a href="'.$page['href'].'" title="'.htmlspecialchars($page['title']).'">'.
+					htmlspecialchars(shortenText($page['title'], 25)).'</a>'.
+					'<a class="WidgetBookmarkRemove" onclick="WidgetBookmarkDo('.$id.', \'remove\', \''.$page_id.'\')">x</a></li>';
 				$count++;
 			}
 		}
@@ -67,9 +80,10 @@ function WidgetBookmark($id) {
 		$list = wfMsg('widget-bookmark-empty');
 	}
 
-	// menu
+	// "add bookmark" icon
 	$menu = '<div class="WidgetBookmarkMenu">'.
-		'<a class="addBookmark" onclick="WidgetBookmarkDo('.$id.', \'add\', wgArticleId)" title="'.wfMsg('export-addcat').'">&nbsp;</a></div>';
+		'<a class="addBookmark" onclick="WidgetBookmarkDo('.$id.', \'add\', wgArticleId ? wgArticleId : wgPageName)" '.
+		'title="'.wfMsg('export-addcat').'">&nbsp;</a></div>';
 
 	wfProfileOut(__METHOD__);
 
@@ -84,12 +98,36 @@ function WidgetBookmarkGetPages() {
 	return $pages;
 }
 
+function WidgetBookmarkSavePages($pages) {
+
+	wfProfileIn(__METHOD__);
+
+	global $wgUser;        
+
+	$wgUser->setOption('widget_bookmark_pages', serialize($pages));
+        $wgUser->saveSettings();
+
+	// commit UPDATE query
+        $dbw = wfGetDB( DB_MASTER );
+        $dbw->commit();
+
+	wfProfileOut(__METHOD__);
+}
+
 function WidgetBookmarkAddPage($pageId) {
 
-	global $wgCityId, $wgSitename, $wgUser;
+	global $wgCityId, $wgSitename;
 
 	$key = $wgCityId . ':' . $pageId;
-	$title = Title::newFromID( $pageId );
+
+	if ( is_numeric($pageId) ) {
+		// articles, talk pages...
+		$title = Title::newFromID( $pageId );
+	}
+	else {
+		// special pages, category pages...
+		$title = Title::newFromText( $pageId );
+	}
 
 	// validate
 	if (!$title) {
@@ -102,7 +140,7 @@ function WidgetBookmarkAddPage($pageId) {
 	if ( isset($pages[$key]) ) {
 		return $pages;
 	}
-	
+
 	// add page
 	$pages[ $key ] = array(
 		'city'  => $wgCityId,
@@ -111,23 +149,15 @@ function WidgetBookmarkAddPage($pageId) {
 		'href'  => $title->getFullURL(),
 	);
 
-	// limit number of pages to 20
+	// limit number of pages to 20 (the last 20 pages)
 	$pages = array_slice($pages, -20, 20, true);
 
-	// save pages list in user profile
-	$wgUser->setOption('widget_bookmark_pages', serialize($pages));
-	$wgUser->saveSettings();
-
-	// make sure we save user settings
-	$dbw = wfGetDB( DB_MASTER );
-	$dbw->close();
+	WidgetBookmarkSavePages($pages);
 
 	return $pages;
 }
 
 function WidgetBookmarkRemovePage($pageId) {
-
-	global $wgUser;
 
 	$pages = WidgetBookmarkGetPages();
 
@@ -138,13 +168,7 @@ function WidgetBookmarkRemovePage($pageId) {
 	// remove
 	unset($pages[$pageId]);
 
-	// save pages list in user profile
-	$wgUser->setOption('widget_bookmark_pages', serialize($pages));
-	$wgUser->saveSettings();
-
-	// make sure we save user settings
-	$dbw = wfGetDB( DB_MASTER );
-	$dbw->close();
+	WidgetBookmarkSavePages($pages);
 
 	return $pages;
 }

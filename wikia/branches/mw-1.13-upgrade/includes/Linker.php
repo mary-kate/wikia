@@ -1364,7 +1364,12 @@ class Linker {
 	 * @return string HTML headline
 	 */
 	public function makeHeadline( $level, $attribs, $anchor, $text, $link ) {
-		return "<a name=\"$anchor\"></a><h$level$attribs$link <span class=\"mw-headline\">$text</span></h$level>";
+		global $abtest;
+		if ( $abtest == 3 || $abtest == 6 ) {
+			return "<a name=\"$anchor\"></a><h$level$attribs <span class=\"mw-headline\">$text</span>$link</h$level>";
+		} else {
+			return "<a name=\"$anchor\"></a><h$level$attribs$link <span class=\"mw-headline\">$text</span></h$level>";
+		}
 	}
 
 	/**
