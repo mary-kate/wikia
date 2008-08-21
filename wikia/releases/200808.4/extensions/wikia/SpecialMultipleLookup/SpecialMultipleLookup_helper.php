@@ -68,7 +68,7 @@ class MultipleLookupCore {
 		$memkey = wfForeignMemcKey( $wgSharedDB, null, "MultiLookup", "UserActivity", $username );
 		$cached = $wgMemc->get($memkey);
 		if (!is_array ($cached) || MULTILOOKUP_NO_CACHE) { 
-			$dbs =& wfGetDBStats();
+			$dbs = wfGetDBExt();
 			if (!is_null($dbs)) {
 				$query = "select ca_latest_activity from `{$wgDBStats}`.`city_ip_activity` where ca_ip_text = {$dbs->addQuotes($username)}";
 				$res = $dbs->query ($query);
@@ -95,7 +95,6 @@ class MultipleLookupCore {
 	/* fetch all contributions from that given database */
 	function fetchContribs ($database) {
 		global $wgOut, $wgRequest, $wgLang, $wgMemc, $wgSharedDB ;
-		global $wgDBStatsServer, $wgDBStats;
 		wfProfileIn( __METHOD__ );
 
 		/* todo since there are now TWO modes, we need TWO keys to rule them all */
