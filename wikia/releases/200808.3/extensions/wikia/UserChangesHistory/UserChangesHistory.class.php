@@ -27,10 +27,11 @@ CREATE TABLE `user_history` (
   `user_options` blob NOT NULL,
   `user_touched` varchar(14) character set latin1 collate latin1_bin NOT NULL default '',
   `user_token` varchar(32) character set latin1 collate latin1_bin NOT NULL default '',
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
-  KEY `user_name` (`user_name`(10))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
-
+  `uh_timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  KEY `user_name` (`user_name`(10)),
+  KEY `idx_user_history_timestamp` (`uh_timestamp`),
+  KEY `idx_user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 **/
 
 /**
@@ -59,7 +60,6 @@ class UserChangesHistory {
 
 			$dbw = wfGetDBExt( DB_MASTER ) ;
 
-			$dbw->begin();
 			$status = $dbw->insert(
 				"user_login_history",
 				array(
@@ -69,11 +69,8 @@ class UserChangesHistory {
 				),
 				__METHOD__
 			);
-			if( $status ) {
+			if ( $dbw->getFlag( DBO_TRX ) ) {
 				$dbw->commit();
-			}
-			else {
-				$dbw->rollback();
 			}
 		}
 
@@ -106,7 +103,6 @@ class UserChangesHistory {
 			 * so far encodeOptions is public by default but could be
 			 * private in future
 			 */
-			$dbw->begin();
 			$status = $dbw->insert(
 				"user_history",
 				array(
@@ -122,11 +118,8 @@ class UserChangesHistory {
 				),
 				__METHOD__
 			);
-			if( $status ) {
+			if ( $dbw->getFlag( DBO_TRX ) ) {
 				$dbw->commit();
-			}
-			else {
-				$dbw->rollback();
 			}
 		}
 
