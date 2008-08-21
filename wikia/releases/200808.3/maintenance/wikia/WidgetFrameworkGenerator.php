@@ -28,6 +28,7 @@ $wgWidgetsOrderedList = array(
 	'WidgetTopVoted',
 	'WidgetTips',
 	'WidgetWatchlist',
+	'WidgetContribs',
 	'WidgetTopContent',
 	'WidgetActiveTalkPages',
 	'WidgetReferrers',
