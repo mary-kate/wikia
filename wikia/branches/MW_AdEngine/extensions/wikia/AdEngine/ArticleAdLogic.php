@@ -128,6 +128,26 @@ class ArticleAdLogic {
 			return true;
 		}
 	}
+
+
+	public function isMainPage(){
+                global $wgTitle;
+                if (is_object($wgTitle)){ 
+                        return $wgTitle->getArticleId() == Title::newMainPage()->getArticleId();
+                } else {
+                        return false;
+                }
+	}
+
+	
+	public function isContentPage(){
+                global $wgTitle;
+                if (is_object($wgTitle)){ 
+			return in_array($wgTitle->getNamespace(), array(NS_MAIN, NS_IMAGE, NS_CATEGORY)) || $wgTitle->getNamespace() >= 100;	
+		} else {
+			return false;
+		}
+	}
+
   
 }
-
