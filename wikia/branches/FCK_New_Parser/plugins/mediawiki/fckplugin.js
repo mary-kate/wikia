@@ -814,6 +814,14 @@ FCK.UpdateImageFromAjax = function (response) {
 
 FCK.UpdateImage = function (e, realUrl) {
 	var imgType = "thumb" ;
+
+	var splitUrl = realUrl.split ("<FCK_SajaxResponse_splitter_tag/>") ;	
+	if (splitUrl [0] && splitUrl [1]) {
+		realUrl = splitUrl [0] ;
+		imageName = splitUrl [1] ;
+	} else {
+		return ;
+	}
 	
         //cut out the real url
         e.setAttribute( "_fck_mw_filename", "jpg", 0 ) ;

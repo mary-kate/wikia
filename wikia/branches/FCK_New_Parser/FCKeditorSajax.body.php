@@ -16,7 +16,7 @@ function wfSajaxGetMathUrl( $term )
 
 function wfSajaxGetImageUrl( $term )
 {
-	global $wgExtensionFunctions, $wgTitle;
+	global $wgExtensionFunctions, $wgTitle, $wgContLang ;
 
 	$options = new FCKeditorParserOptions();
 	$options->setTidy(true);
@@ -27,7 +27,9 @@ function wfSajaxGetImageUrl( $term )
 		$parser->setHook('references', array($parser, 'references'));
 	}
 	$parser->setOutputType(OT_HTML);
-	$originalLink = $parser->parse("[[Image:".$term."]]", $wgTitle, $options)->getText();
+	$lang_img = $wgContLang->getFormattedNsText( NS_IMAGE );
+
+	$originalLink = $parser->parse("[[" . $lang_img . ":".$term."]]", $wgTitle, $options)->getText() ;
 	if (false == strpos($originalLink, "src=\"")) {
 		return "";
 	}
@@ -35,7 +37,7 @@ function wfSajaxGetImageUrl( $term )
 	$srcPart = substr($originalLink, strpos($originalLink, "src=")+ 5);
 	$url = strtok($srcPart, '"');
 
-	return $url;
+	return  $url . "<FCK_SajaxResponse_splitter_tag/>" . $term ;
 }
 
 function wfSajaxSearchSpecialTagFCKeditor($empty)
