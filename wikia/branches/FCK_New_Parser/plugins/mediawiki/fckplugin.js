@@ -802,6 +802,38 @@ FCK.DataProcessor =
 	}
 })();
 
+FCK.InsertImage = function (tag) {
+	window.parent.sajax_request_type = 'GET' ;
+	window.parent.sajax_do_call( 'wfSajaxGetImageUrl', [tag], FCK.UpdateImageFromAjax ) ;	
+}
+
+FCK.UpdateImageFromAjax = function (response) {
+        oImage = FCK.CreateElement( 'IMG' ) ;
+        FCK.UpdateImage( oImage, response.responseText ) ;
+}
+
+FCK.UpdateImage = function (e, realUrl) {
+	var imgType = "thumb" ;
+	
+        //cut out the real url
+        e.setAttribute( "_fck_mw_filename", "jpg", 0 ) ;
+        e.setAttribute( "alt", "image", 0 ) ;
+        e.setAttribute( "_fck_mw_type", "thumb", 0 ) ;
+        if ( imgType == 'thumb' || imgType == 'frame' )
+        {
+                e.className = 'fck_mw_frame' ;
+        }
+
+        if ( realUrl.length == 0 )
+        {
+                e.className += ' fck_mw_notfound' ;
+                realUrl = 'about:blank' ;
+        }
+
+        e.src = realUrl ;
+        e.setAttribute( "_fcksavedurl", realUrl, 0 ) ;
+}
+
 FCKDocumentProcessor.refillTemplates = function () {
 	var text = unescape (parent.document.getElementById ('fck_parsed_templates').value) ;
 	var max = text.length ;
