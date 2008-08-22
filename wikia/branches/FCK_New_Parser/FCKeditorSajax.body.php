@@ -32,6 +32,11 @@ function wfSajaxGetImageUrl( $term )
 	// this could go either through WMU or FCK image dialog
 	if (false === strpos($term, "[[")) {
 		$term = "[[" . $lang_img . ":".$term."]]" ;
+		$tag = $term ;
+	} else {
+		$tags_text = substr ($term, strpos ($term, ":") + 1) ;
+		preg_match ("/^[^\|]+/", $tags_text, $tags) ;
+		$tag = $tags [0] ;		
 	}	
 
 	$originalLink = $parser->parse($term, $wgTitle, $options)->getText() ;
@@ -42,7 +47,7 @@ function wfSajaxGetImageUrl( $term )
 	$srcPart = substr($originalLink, strpos($originalLink, "src=")+ 5);
 	$url = strtok($srcPart, '"');
 
-	return  $url . "<FCK_SajaxResponse_splitter_tag/>" . $term ;
+	return  $url . "<FCK_SajaxResponse_splitter_tag/>" . $tag ;
 }
 
 function wfSajaxSearchSpecialTagFCKeditor($empty)

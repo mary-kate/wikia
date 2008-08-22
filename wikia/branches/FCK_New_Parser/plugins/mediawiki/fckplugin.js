@@ -824,7 +824,7 @@ FCK.UpdateImage = function (e, realUrl) {
 	}
 	
         //cut out the real url
-        e.setAttribute( "_fck_mw_filename", "jpg", 0 ) ;
+        e.setAttribute( "_fck_mw_filename", imageName, 0 ) ;
         e.setAttribute( "alt", "image", 0 ) ;
         e.setAttribute( "_fck_mw_type", "thumb", 0 ) ;
         if ( imgType == 'thumb' || imgType == 'frame' )
