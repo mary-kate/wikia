@@ -241,7 +241,7 @@ function axWFactorySaveVariable() {
 
 	if ( ! $wgUser->isAllowed('wikifactory') ) {
 		$error++;
-		$return = "You are not allowed to change variable value";
+		$return = Wikia::errormsg( "You are not allowed to change variable value" );
 	}
 	else {
 		$cv_id				= $wgRequest->getVal( 'varId' );
@@ -309,6 +309,14 @@ function axWFactorySaveVariable() {
 		if( ! WikiFactory::setVarByID( $cv_id, $city_id, $cv_value ) ) {
 			$error++;
 			$return = Wikia::errormsg( "Variable not saved because of problems with database. Try again." );
+		}
+		else {
+			$tied = WikiFactory::getTiedVariables( $cv_name );
+			if( $tied ) {
+				$return .= Wikia::successmsg(
+					" This variable is tied with others. Check: ". implode(", ", $tied )
+				);
+			}
 		}
 	}
 
