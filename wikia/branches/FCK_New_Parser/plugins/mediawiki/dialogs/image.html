@@ -145,7 +145,7 @@ function UpdateImage( e, realUrl )
 	var imgType = GetE('xType').value ;
 	var imgLocation = GetE('cmbAlign').value ;
 	var splitUrl = realUrl.split ("<FCK_SajaxResponse_splitter_tag/>") ;
-        if (splitUrl [0] && splitUrl [1]) {
+        if (2 == splitUrl.length) {
                 realUrl = splitUrl [0] ;
         } else {
                 return ;

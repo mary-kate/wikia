@@ -816,7 +816,7 @@ FCK.UpdateImage = function (e, realUrl) {
 	var imgType = "thumb" ;
 
 	var splitUrl = realUrl.split ("<FCK_SajaxResponse_splitter_tag/>") ;	
-	if (splitUrl [0] && splitUrl [1]) {
+	if (2 == splitUrl.length) {
 		realUrl = splitUrl [0] ;
 		imageName = splitUrl [1] ;
 	} else {
