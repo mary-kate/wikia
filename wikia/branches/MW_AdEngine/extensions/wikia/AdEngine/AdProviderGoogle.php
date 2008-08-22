@@ -23,16 +23,6 @@ class AdProviderGoogle implements iAdProvider {
 
 	}
 
-        public function getHeightWidthFromSize($size){
-                if (preg_match('/^([0-9]{2,4})x([0-9]{2,4})/', $size, $matches)){
-                        return array('width'=>$matches[1], 'height'=>$matches[2]);
-                } else {
-                        return false;
-                }
-        }
-
-
-
         public function getAdTag(){
                 global $AdEngine;
                 $dim=$this->getHeightWidthFromSize($this->slotInfo['size']);
