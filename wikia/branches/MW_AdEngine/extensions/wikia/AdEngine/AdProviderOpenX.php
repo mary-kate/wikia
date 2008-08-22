@@ -24,9 +24,9 @@ class AdProviderOpenX implements iAdProvider {
 								'LEFT_SKYSCRAPER_1' => 632,
 								'LEFT_SKYSCRAPER_2' => 633,
 								'FOOTER_BOXAD' => 634,
-								'LEFT_SPOTLIGHT_1' => 635,
-								'FOOTER_SPOTLIGHT_LEFT' => 636,
-								'FOOTER_SPOTLIGHT_MIDDLE' => 637,
+								'LEFT_SPOTLIGHT_1' => 638,
+								'FOOTER_SPOTLIGHT_LEFT' => 638,
+								'FOOTER_SPOTLIGHT_MIDDLE' => 638,
 								'FOOTER_SPOTLIGHT_RIGHT' => 638);
 
 	public function getAd($slotname, $slot) {
@@ -39,20 +39,27 @@ class AdProviderOpenX implements iAdProvider {
 
 		$adtag = <<<EOT
 <!-- AdProviderOpenX slot: $slotname zoneid: $zoneId  -->
-<script type='text/javascript'><!--//<![CDATA[
-   var m3_u = (location.protocol=='https:'?'https://wikia-ads.wikia.com/www/delivery/ajs.php':'http://wikia-ads.wikia.com/www/delivery/ajs.php');
-   var m3_r = Math.floor(Math.random()*99999999999);
-   if (!document.MAX_used) document.MAX_used = ',';
-   document.write ("<scr"+"ipt type='text/javascript' src='"+m3_u);
-   document.write ("?zoneid=$zoneId");
-   document.write ('&amp;cb=' + m3_r);
-   if (document.MAX_used != ',') document.write ("&amp;exclude=" + document.MAX_used);
-   document.write ("&amp;loc=" + escape(window.location));
-   if (document.referrer) document.write ("&amp;referer=" + escape(document.referrer));
-   if (document.context) document.write ("&context=" + escape(document.context));
-   if (document.mmm_fo) document.write ("&amp;mmm_fo=1");
-   document.write ("'><\/scr"+"ipt>");
-//]]>--></script>
+<script type='text/javascript'>
+   var source = Array();
+   source.push('slot=$slotname');
+   source.push('catid=' + wgCatId);
+   source.push('lang=' + wgContentLanguage);
+
+  document.write('<scr'+'ipt type="text/javascript">');
+  document.write('var base_url = "http://wikia-ads.wikia.com/www/delivery/ajs.php";');
+  document.write('base_url += "?loc=" + escape(window.location);');
+  document.write('if(typeof document.referrer != "undefined") base_url += "&referer=" + escape(document.referrer);');
+  document.write('if(typeof document.context != "undefined") base_url += "&context=" + escape(document.context);');
+  document.write('if(typeof document.mmm_fo != "undefined") base_url += "&mmm_fo=1";');
+  document.write('base_url += "&zoneid=$zoneId";');
+  document.write('base_url += "&cb=" + Math.floor(Math.random()*99999999999);');
+  document.write('if(typeof document.MAX_used != "undefined" && document.MAX_used != ",") base_url += "&exclude=" + document.MAX_used;');
+  document.write('base_url += "&source='+source.join(';')+'";');
+  document.write('base_url += "&block=1";');
+  document.write('</scr'+'ipt>');
+  document.write('<scr'+'ipt type="text/javascript" src="'+base_url+'"></scr'+'ipt>');
+
+</script>
 EOT;
 		return $adtag;
 
