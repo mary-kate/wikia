@@ -8,38 +8,56 @@ $wgExtensionCredits['other'][] = array(
 	'author' => 'Inez Korczynski'
 );
 
-$ABtests = array();
+// This is the default expiration time for cookie set by getABtest function. AB test should takes no
+// longer then 60 days, otherwise after 60 days user can get different version of test then had before
+$wgABexpirationTime = 60*60*24*60;
 
-$ABtests['exampleTest'] = array();
-$ABtests['exampleTest']['variants'] = array(1, 3, 6);
+$wgABtests = array();
+
+/* CONFIGURATION - BEGIN */
+
+// This is configuration of example test
+// 10% of user will get version 1st (getABtest return 0)
+// 30% of user will get version 2nd (getABtest return 1)
+// 60% of user will get version 3rd (getABtest return 2)
+$wgABtests['exampleTest'] = array('variants' => array(1, 3, 6));
+
+/* CONFIGURATION - END */
 
 function getABtest($name) {
-	global $ABtests;
+	global $wgABtests;
 
-	if(empty($ABtests[$name])) {
+	if(empty($wgABtests[$name])) {
 		return 0;
 	}
 
-	if(empty($ABtests[$name]['variant'])) {
-		if(empty($_COOKIE['ab'.$name])) {
-			global $wgCookiePath, $wgCookieDomain, $wgCookieSecure;
-			$limit = array_sum($ABtests[$name]['variants']);
-			$number = rand(1, $limit);
+	if(!isset($wgABtests[$name]['variant'])) {
+		global $wgRequest;
 
-			$j = 0;
-			for($i = 0; $i < count($ABtests[$name]['variants']); $i++) {
-				if($number <= $ABtests[$name]['variants'][$i] + $j) {
-					$ABtests[$name]['variant'] = $i;
-					break;
+		// try to read AB test mode from web request parameters
+		if(null == ($wgABtests[$name]['variant'] = $wgRequest->getIntOrNull('ab'.$name))) {
+
+			// if AB mode cookie is not set then randomize it
+			// using probability from configuration and save in cookie
+			if(!isset($_COOKIE['ab'.$name])) {
+
+				global $wgCookiePath, $wgCookieDomain, $wgCookieSecure, $wgABexpirationTime;
+				$limit = array_sum($wgABtests[$name]['variants']);
+				$number = rand(1, $limit);
+				$j = 0;
+				for($i = 0; $i < count($wgABtests[$name]['variants']); $i++) {
+					if($number <= $wgABtests[$name]['variants'][$i] + $j) {
+						$wgABtests[$name]['variant'] = $i;
+						break;
+					}
+					$j += $wgABtests[$name]['variants'][$i];
 				}
-				$j += $ABtests[$name]['variants'][$i];
+				$exp = time()+$wgABexpirationTime; // 60 days
+				setcookie('ab'.$name, $wgABtests[$name]['variant'], $exp, $wgCookiePath, $wgCookieDomain, $wgCookieSecure);
+			} else {
+				$wgABtests[$name]['variant'] = (int) $_COOKIE['ab'.$name];
 			}
-
-			$exp = time()+60*60*24*60; // 60 days
-			setcookie('ab'.$name, $ABtests[$name]['variant'], $exp, $wgCookiePath, $wgCookieDomain, $wgCookieSecure);
-		} else {
-			$ABtests[$name]['variant'] = (int) $_COOKIE['ab'.$name];
 		}
 	}
-	return $ABtests[$name]['variant'];
+	return $wgABtests[$name]['variant'];
 }
