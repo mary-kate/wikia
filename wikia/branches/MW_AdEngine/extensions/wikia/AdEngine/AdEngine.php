@@ -164,11 +164,17 @@ class AdEngine {
 			return;
 		}
 
-		$out = "";
+		$out = "<!-- #### BEGIN " . __CLASS__ . '::' . __METHOD__ . " ####-->\n";
 		foreach ($this->placeholders as $slotname){
 			$out .= '<div style="display:none" id="' . $slotname . '_load">' . $this->getAd($slotname) . "</div>\n";
 			// TODO : call the javascript to absolutely position the ad
 		}	
+		$out .= "<!-- #### END " . __CLASS__ . '::' . __METHOD__ . " ####-->\n";
 		return $out;
+	}
+
+
+	public function getPlaceHolders(){
+		return $this->placeholders;
 	}
 }
