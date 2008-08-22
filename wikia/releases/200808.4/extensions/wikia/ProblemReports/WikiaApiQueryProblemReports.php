@@ -717,6 +717,11 @@ class WikiaApiQueryProblemReports extends WikiaApiQuery {
 	// use SpamBlacklist extension (which should be enabled sitewide)
 	static function checkForSpam($content)
 	{
+		// empty content cannot contain spam
+		if ( empty($content) ) {
+			return false;
+		}
+
 		wfProfileIn(__METHOD__);
 		
 		$spamObj = wfSpamBlacklistObject();
