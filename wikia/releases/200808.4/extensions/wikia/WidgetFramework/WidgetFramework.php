@@ -590,7 +590,7 @@ function WidgetFrameworkWrapLinks($links) {
  */
 function WidgetFrameworkMoreLink($link) {
 	wfProfileIn(__METHOD__);
-	$out = '<div class="widgetMore"><a href="'.$link.'">'.wfMsg('moredotdotdot').'</a></div>';
+	$out = '<div class="widgetMore"><a href="'.htmlspecialchars($link).'">'.wfMsg('moredotdotdot').'</a></div>';
 	wfProfileOut( __METHOD__ );
 	return $out;
 }
