@@ -488,16 +488,6 @@ class LoginForm {
 	function processLogin() {
 		global $wgUser, $wgAuth;
 
-$hdrs = apache_request_headers();
-error_log( "Special:Userlogin http headers:" );
-foreach( $hdrs as $k=>$v ) {
-	error_log( "$k: $v" );
-}
-error_log( "POST data:" );
-foreach( $_POST as $k=>$v ) {
-	error_log( "$k: $v" );
-}
-
 		switch ($this->authenticateUserData())
 		{
 			case self::SUCCESS:
