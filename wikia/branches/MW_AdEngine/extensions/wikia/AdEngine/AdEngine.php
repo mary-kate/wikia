@@ -166,7 +166,8 @@ class AdEngine {
 
 		$out = "";
 		foreach ($this->placeholders as $slotname){
-			$out .= "<div id=\"{$slotname}_load\">" . $this->getAd($slotname) . "</div>\n";
+			$out .= '<div style="display:none" id="' . $slotname . '_load">' . $this->getAd($slotname) . "</div>\n";
+			// TODO : call the javascript to absolutely position the ad
 		}	
 		return $out;
 	}
