@@ -70,6 +70,7 @@ function onLoadFCKeditor()
                                 if (FCKinstance.EditMode == FCK_EDITMODE_SOURCE) {
                                         insertTags (tag, '', '') ;
                                 } else {
+					FCKinstance.InsertImage (tag) ;	
                                         //todo parse and construct link from this markup
                                 }
                         }
