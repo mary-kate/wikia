@@ -144,6 +144,12 @@ function UpdateImage( e, realUrl )
 {
 	var imgType = GetE('xType').value ;
 	var imgLocation = GetE('cmbAlign').value ;
+	var splitUrl = realUrl.split ("<FCK_SajaxResponse_splitter_tag/>") ;
+        if (splitUrl [0] && splitUrl [1]) {
+                realUrl = splitUrl [0] ;
+        } else {
+                return ;
+        }
 
 	SetAttribute( e, "_fck_mw_filename", GetE('txtUrl').value ) ;
 	SetAttribute( e, "alt", GetE('txtAlt').value ) ;
