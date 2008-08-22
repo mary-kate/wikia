@@ -28,8 +28,9 @@ function wfRandomSelection() {
 function renderChosen( $input, $argv, &$parser ) {
 	# Prevent caching
 	#$parser->disableCache();
-	global $wgSquidMaxage, $wgParserCacheExpireTime;
-	$wgSquidMaxage = $wgParserCacheExpireTime = 60;
+	global $wgOut, $wgParserCacheExpireTime;
+	$wgParserCacheExpireTime = 60;
+	$wgOut->setSquidMaxage( $wgParserCacheExpireTime );
 	wfDebug( "soft disable Cache (choose)\n" );
  
 	# Parse the options and calculate total weight
