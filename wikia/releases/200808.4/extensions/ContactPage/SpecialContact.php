@@ -78,6 +78,10 @@ class SpecialContact extends SpecialPage {
 				wfDebug( "$fname: captcha failed" );
 				$wgOut->addWikiText( wfMsg( 'contactpage-captcha-failed' ) ); //TODO: provide a message for this!
 				$f->showForm();
+			} else if ( !User::isValidEmailAddr($wgRequest->getVal('wpFromAddress')) ) {
+				wfDebug( "$fname: incorrect e-mail" );
+				$wgOut->addWikiText( wfMsg( 'contactpage-email-failed' ) );
+				$f->showForm();
 			} else {
 				wfDebug( "$fname: submit\n" );
 				$f->doSubmit();
