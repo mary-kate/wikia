@@ -28,7 +28,7 @@ function wfRandomSelection() {
 function renderChosen( $input, $argv, &$parser ) {
 	# Prevent caching
 	#$parser->disableCache();
-	global $wgParserCacheExpireTime;
+	global $wgSquidMaxage, $wgParserCacheExpireTime;
 	$wgSquidMaxage = $wgParserCacheExpireTime = 60;
 	wfDebug( "soft disable Cache (choose)\n" );
  
