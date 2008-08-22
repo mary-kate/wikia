@@ -63,8 +63,8 @@ class ArticleAdLogic {
 
 				// Get attributes from tag.
 				// Note, this requires well-formed html with quoted attributes. Second regexp for poor html?
-				$pattern='/\s([a-zA-Z]+)\=[\x22\x27]([^\x22\x27]+)[\x22\x27]/';
-				$attr=array();
+				$pattern = '/\s([a-zA-Z]+)\=[\x22\x27]([^\x22\x27]+)[\x22\x27]/';
+				$attr = array();
 				if (preg_match_all($pattern, $matches[0][$i][0], $attmatch)){
 					for ($j = 0; $j<sizeof($attmatch[1]); $j++){
 						$attr[$attmatch[1][$j]] = $attmatch[2][$j];
