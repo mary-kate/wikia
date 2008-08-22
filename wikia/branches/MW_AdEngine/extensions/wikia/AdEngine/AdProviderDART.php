@@ -68,10 +68,23 @@ class AdProviderDART implements iAdProvider {
 		$url .= $this->getTileKV($slotname);
 		// special "end" delimiter, this is for when we redirect ads to other places. Per Michael
 		$url .= 'endtag=$;';
-		$url .= "ord=RANDOM"; // See note above, ord MUST be last.
+		$url .= "ord="; // See note above, ord MUST be last.
 
 		$out = "<!-- " . __CLASS__ . " slot: $slotname , " . print_r($slot, true) . "-->";
-		$out .= '<script src="' . $url . '" type="text/javascript"></script>';
+
+		$out .='<script type="text/javascript">' . "\n";
+		// Only generate the random number once per page. Note we don't want to do this with PHP
+		// because it needs to be different for every user, and if it's PHP Varnish/Squid will cache it.
+		static $ordGenerated=false;
+		if (!$ordGenerated){
+			$out .= "var dartRand = Math.floor(Math.random()*99999999);\n";
+			$ordGenerated=true;
+		}
+		$out .= <<<EOT
+		document.write("<scr"+"ipt type='text/javascript' src='$url"+dartRand+"'><\/scr"+"ipt>");
+
+EOT;
+		$out .= "</script>\n";
 
 		return $out;
 	}
