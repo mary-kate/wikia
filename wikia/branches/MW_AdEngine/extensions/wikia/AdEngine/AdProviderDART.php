@@ -15,11 +15,6 @@ class AdProviderDART implements iAdProvider {
 		return self::$instance;
 	}
 
-	protected function __construct() {
-		global $wgTitle;
-		$this->isMainPage = $wgTitle->getArticleId() == Title::newMainPage()->getArticleId();
-	}
-
 	private $sites = array(	'Auto' => 'wka.auto',
 							'Creative' => 'wka.crea',
 							'Education' => 'wka.edu',
@@ -38,8 +33,6 @@ class AdProviderDART implements iAdProvider {
 							'Test Site' => 'wka.test',
 							'Toys' => 'wka.toys',
 							'Travel' => 'wka.travel');
-
-	private $isMainPage;
 
 	public function getAd($slotname, $slot){
 

@@ -1,4 +1,5 @@
 <?php
+require dirname(__FILE__) . '/ArticleAdLogic.php';
 
 $wgExtensionCredits['other'][] = array(
 	'name' => 'AdEngine',
@@ -140,9 +141,9 @@ class AdEngine {
 		if (! empty($this->slots[$slotname])){
 			if($this->slots[$slotname]['enabled'] == 'No'){
 				// if the ad is disabled, hide the div
-				$style=' style="display:none"';
+				$style = ' style="display:none"';
 			} else {
-				$dim=self::getHeightWidthFromSize($this->slots[$slotname]['size']);
+				$dim = self::getHeightWidthFromSize($this->slots[$slotname]['size']);
 				if (!empty($dim['width'])){
 					$style = " style=\"width: {$dim['width']}px; height: {$dim['height']}px\"";
 				}
@@ -154,5 +155,19 @@ class AdEngine {
 
 
 		return "<div id=\"$slotname\"$style></div>";
+	}
+
+
+	public function getDelayedLoadingCode(){
+		if (empty($this->placeholders)){
+			// No delayed ads on this page
+			return;
+		}
+
+		$out = "";
+		foreach ($this->placeholders as $slotname){
+			$out .= "<div id=\"{$slotname}_load\">" . $this->getAd($slotname) . "</div>\n";
+		}	
+		return $out;
 	}
 }
