@@ -29,7 +29,12 @@ function wfSajaxGetImageUrl( $term )
 	$parser->setOutputType(OT_HTML);
 	$lang_img = $wgContLang->getFormattedNsText( NS_IMAGE );
 
-	$originalLink = $parser->parse("[[" . $lang_img . ":".$term."]]", $wgTitle, $options)->getText() ;
+	// this could go either through WMU or FCK image dialog
+	if (false === strpos($term, "[[")) {
+		$term = "[[" . $lang_img . ":".$term."]]" ;
+	}	
+
+	$originalLink = $parser->parse($term, $wgTitle, $options)->getText() ;
 	if (false == strpos($originalLink, "src=\"")) {
 		return "";
 	}
