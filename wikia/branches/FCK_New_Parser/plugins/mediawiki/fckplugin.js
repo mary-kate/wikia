@@ -1054,6 +1054,9 @@ function FCKImage_OnDoubleClick (img) {
 		if ( img.getAttribute( '_fck_mw_special' ) || img.getAttribute( '_fck_mw_nowiki' ) || img.getAttribute( '_fck_mw_includeonly' ) || img.getAttribute( '_fck_mw_noinclude' ) || img.getAttribute( '_fck_mw_onlyinclude' ) || img.getAttribute( '_fck_mw_gallery' )) {
 	                FCKCommands.GetCommand( 'MW_Special' ).Execute() ;
 		}
+		if (!img.getAttribute( '_fckfakelement' )) { //this is a normal image
+	                FCKCommands.GetCommand( 'Image' ).Execute() ;			
+		}
 	}
 }
 
