@@ -8,6 +8,10 @@ class AdProviderDART implements iAdProvider {
 
 	protected static $instance = false;
 
+	protected function __construct(){
+		$this->isMainPage = ArticleAdLogic::isMainPage();
+	}
+
 	public static function getInstance() {
 		if(self::$instance == false) {
 			self::$instance = new AdProviderDART();
@@ -66,14 +70,10 @@ class AdProviderDART implements iAdProvider {
 		$url .= 'endtag=$;';
 		$url .= "ord=RANDOM"; // See note above, ord MUST be last.
 
-		return $url;
-
-		/* For now we are returning url. End system will return tag.
 		$out = "<!-- " . __CLASS__ . " slot: $slotname , " . print_r($slot, true) . "-->";
 		$out .= '<script src="' . $url . '" type="text/javascript"></script>';
 
 		return $out;
-		*/
 	}
 
 	/* From DART Webmaster guide:
