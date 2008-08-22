@@ -38,7 +38,7 @@ function renderPoll( $input, $argv=array() ) {
 
   #$wgParser->disableCache();
   global $wgParserCacheExpireTime;
-  $wgParserCacheExpireTime = 60;
+  $wgSquidMaxage = $wgParserCacheExpireTime = 60;
   wfDebug( "soft disable Cache (poll)\n" );
 
   if ($wgUser->mName == "") $user = $IP;
