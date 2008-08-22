@@ -21,16 +21,16 @@ $wgExtensionCredits['parserhook'][] = array(
 );
  
 function wfRandomSelection() {
-	global $wgParser;
+	global $wgParser, $wgSquidMaxage;
 	$wgParser->setHook( "choose", "renderChosen" );
+	$wgSquidMaxage = 60;
 }
  
 function renderChosen( $input, $argv, &$parser ) {
 	# Prevent caching
 	#$parser->disableCache();
-	global $wgOut, $wgParserCacheExpireTime;
+	global $wgParserCacheExpireTime;
 	$wgParserCacheExpireTime = 60;
-	$wgOut->setSquidMaxage( $wgParserCacheExpireTime );
 	wfDebug( "soft disable Cache (choose)\n" );
  
 	# Parse the options and calculate total weight
