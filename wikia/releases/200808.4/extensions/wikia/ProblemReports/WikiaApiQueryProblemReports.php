@@ -711,94 +711,24 @@ class WikiaApiQueryProblemReports extends WikiaApiQuery {
 		wfProfileOut(__METHOD__);
 		
 		return $count;
-    }	
-
-
-
-
-
+	}	
+		
 	// check whether provided problem description contains spam-like things: words, hostnames etc
-	// based on SpamBlacklist extension
+	// use SpamBlacklist extension (which should be enabled sitewide)
 	static function checkForSpam($content)
 	{
-		global $wgTitle, $IP, $wgUser, $wgParser;
-
-		// SpamBlacklist should be loaded in DefaultSettings...	
-		if ( !function_exists('wfSpamBlacklistLoader') ) {
-			// extension is not loaded! fallback - not spam...
-			wfDebug('Install SpamBlacklist extension to check for spam in problem reports!');
-			return false;
-		}
-		
-		// perform check (based on SpamBlackList::filter)
 		wfProfileIn(__METHOD__);
 		
-		// some settings stuff
-		$settings = array
-		(
-			'files' => array( 'http://meta.wikimedia.org/w/index.php?title=Spam_blacklist&action=raw&sb_ver=1' ),
-			'title' => $wgTitle,
-			'text'  => $content,
-			
-			'regexes' => false,
-			
-			'warningTime'   => 8 * 3600,	// 8h - after when try to get new version of regexps file
-			'expiryTime'    => 10 * 3600,	// 10h - how long should we keep regexps in memcache
-			'warningChance' => 100,			// posibility of HTTP request after 'warningTime' elapses
-			
-			'memcache_file'    => 'spam_blacklist_file',
-			'memcache_regexes' => 'spam_blacklist_regexes'
-		);
-		
-		// do filtering
-		$spamList = new SpamList_helper($settings);
+		$spamObj = wfSpamBlacklistObject();
+		$title = new Title();
 
-		$regexes    = $spamList->getRegexes();
-		$whitelists = $spamList->getWhitelists();
+		$result = $spamObj->filter($title, $content, 0, false);
 
-		if ( is_array( $regexes ) ) 
-		{
-			# Run parser to strip SGML comments and such out of the markup
-			# This was being used to circumvent the filter (see bug 5185)
-			$options = new ParserOptions();
-			$text = $wgParser->preSaveTransform( $content, $wgTitle, $wgUser, $options );
-			$out = $wgParser->parse( $content, $wgTitle, $options );
-			
-			$links = implode( "\n", array_keys( $out->getExternalLinks() ) );
-
-			# Strip whitelisted URLs from the match
-			if( is_array( $whitelists ) ) 
-			{
-				wfDebug( "Excluding whitelisted URLs from " . count( $whitelists ) . " regexes: " . implode( ', ', $whitelists ) . "\n" );
-				foreach( $whitelists as $regex ) 
-				{
-					$links = preg_replace( $regex, '', $links );
-				}
-			}
-
-			# Do the match
-			//wfDebug( "Checking text against " . count( $regexes ) . " regexes: " . implode( ', ', $regexes ) . "\n" );
-			wfDebug( "Checking text against " . count( $regexes ) . " regexes\n" );
-			$retVal = false;
-			foreach( $regexes as $regex ) 
-			{
-				if ( preg_match( $regex, $links, $matches ) ) 
-				{
-					wfDebug( "\n".' -- Match: "'.$matches[0].'"' );
-					$retVal = true;
-					break;
-				}
-			}
-		} 
-		else 
-		{
-			$retVal = false;
-		}
-		
-		wfDebug("\n".' -- Spam check result: ' . ($retVal ? 'spam found :(' : 'spam not found :D') ."\n");
+		wfDebug('ProblemReports: spam check result: ' . ($result ? 'spam found' : 'spam not found') ."\n");
 
 		wfProfileOut( __METHOD__ );
-		return $retVal;
+
+		return $result;
 	}
 
     
