@@ -21,9 +21,8 @@ $wgExtensionCredits['parserhook'][] = array(
 );
  
 function wfRandomSelection() {
-	global $wgParser, $wgSquidMaxage;
+	global $wgParser;
 	$wgParser->setHook( "choose", "renderChosen" );
-	$wgSquidMaxage = 60;
 }
  
 function renderChosen( $input, $argv, &$parser ) {

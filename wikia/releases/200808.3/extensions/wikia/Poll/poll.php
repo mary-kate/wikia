@@ -17,7 +17,7 @@ $wgExtensionFunctions[] = "wfPoll";
 $wgExtensionMessagesFiles['poll'] = dirname(__FILE__) . '/poll.i18n.php';
 
 function wfPoll() {
-  global $wgParser, $wgSquidMaxage;
+  global $wgParser;
 
   # register the extension with the WikiText parser
   # the first parameter is the name of the new tag.
@@ -26,7 +26,6 @@ function wfPoll() {
   # processing the text between the tags
 
   $wgParser->setHook( "poll", "renderPoll" );
-  $wgSquidMaxage = 60;
 }
 
 # The callback function for converting the input text to HTML output
