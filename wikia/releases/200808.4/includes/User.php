@@ -554,8 +554,8 @@ class User {
 		if( !wfRunHooks( 'isValidEmailAddr', array( $addr, &$result ) ) ) {
 			return $result;
 		}
-
-		return strpos( $addr, '@' ) !== false;
+		//switch again to regular expression - it can however reject rarely used TLDs like .museum - Marooned at Wikia.com
+		return preg_match('/^[a-z0-9._%+-]+@(?:[a-z0-9\-]+\.)+[a-z]{2,4}$/i', $addr) !== 0;
 	}
 
 	/**
