@@ -20,23 +20,26 @@ function getABtest($name) {
 		return 0;
 	}
 
-	if(!empty($ABtests[$name]['variant'])) {
-		return $ABtests[$name]['variant'];
-	}
+	if(empty($ABtests[$name]['variant'])) {
+		if(empty($_COOKIE['ab'.$name])) {
+			global $wgCookiePath, $wgCookieDomain, $wgCookieSecure;
+			$limit = array_sum($ABtests[$name]['variants']);
+			$number = rand(1, $limit);
 
-	$limit = array_sum($ABtests[$name]['variants']);
-	$number = rand(1, $limit);
+			$j = 0;
+			for($i = 0; $i < count($ABtests[$name]['variants']); $i++) {
+				if($number <= $ABtests[$name]['variants'][$i] + $j) {
+					$ABtests[$name]['variant'] = $i;
+					break;
+				}
+				$j += $ABtests[$name]['variants'][$i];
+			}
 
-	//echo "The number is: $number<br/>";
-
-	$j = 0;
-	for($i = 0; $i < count($ABtests[$name]['variants']); $i++) {
-		if($number <= $ABtests[$name]['variants'][$i] + $j) {
-			//echo "The variant is: $i<br/><br/>";
-			return;
+			$exp = time()+60*60*24*60; // 60 days
+			setcookie('ab'.$name, $ABtests[$name]['variant'], $exp, $wgCookiePath, $wgCookieDomain, $wgCookieSecure);
+		} else {
+			$ABtests[$name]['variant'] = (int) $_COOKIE['ab'.$name];
 		}
-		$j += $ABtests[$name]['variants'][$i];
 	}
-
-	//echo '<br/>';
+	return $ABtests[$name]['variant'];
 }
