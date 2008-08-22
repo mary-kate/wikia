@@ -249,7 +249,6 @@ function axWFactorySaveVariable() {
 		$cv_name			= $wgRequest->getVal( 'varName' );
 		$cv_value			= $wgRequest->getVal( 'varValue' );
 		$cv_variable_type	= $wgRequest->getVal( 'varType' );
-		error_log( print_r( $wgRequest->getValues(), 1) );
 
 		#--- check if variable is valid
 		switch ( $cv_variable_type ) {
@@ -307,14 +306,7 @@ function axWFactorySaveVariable() {
 				ob_end_clean(); #--- puts parse error to /dev/null
 		}
 
-		$dbw = wfGetDB( DB_MASTER );
-
-		try {
-			if ( ! empty($city_id) ) {
-				WikiFactory::setVarByID( $cv_id, $city_id, $cv_value );
-			}
-		}
-		catch ( DBQueryError $e ) {
+		if( ! WikiFactory::setVarByID( $cv_id, $city_id, $cv_value ) ) {
 			$error++;
 			$return = Wikia::errormsg( "Variable not saved because of problems with database. Try again." );
 		}
