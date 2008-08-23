@@ -929,7 +929,7 @@ class MonacoTemplate extends QuickTemplate {
 
 	function execute() {
 		wfProfileIn( __METHOD__ );
-		global $wgUser, $wgLogo, $wgStylePath, $wgRequest, $wgTitle, $wgSitename;
+		global $wgArticle, $wgUser, $wgLogo, $wgStylePath, $wgRequest, $wgTitle, $wgSitename;
 		$skin = $wgUser->getSkin();
 
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -1236,6 +1236,18 @@ if(isset($this->data['articlelinks']['right'])) {
 					<?php if($this->data['newtalk'] ) { ?><div class="usermessage"><?php $this->html('newtalk')  ?></div><?php } ?>
 					<?php if(!empty($skin->newuemsg)) { echo $skin->newuemsg; } ?>
 					<?php if($this->data['showjumplinks']) { ?><div id="jump-to-nav"><?php $this->msg('jumpto') ?> <a href="#column-one"><?php $this->msg('jumptonavigation') ?></a>, <a href="#searchInput"><?php $this->msg('jumptosearch') ?></a></div><?php } ?>
+					<?php
+						if (ArticleAdLogic::isContentPage() && !ArticleAdLogic::isShortArticle($wgArticle->getContent())) { //valid article
+							if (ArticleAdLogic::isBoxAdArticle($this->data['bodytext'])) {
+								echo AdEngine::getInstance()->getPlaceHolderDiv('TOP_RIGHT_BOXAD');
+							} else {
+								echo AdEngine::getInstance()->getPlaceHolderDiv('TOP_LEADERBOARD');
+							}
+						} else if (ArticleAdLogic::isMainPage()) { //main page
+							echo AdEngine::getInstance()->getPlaceHolderDiv('HOME_TOP_LEADERBOARD');
+							echo AdEngine::getInstance()->getPlaceHolderDiv('HOME_TOP_RIGHT_BOXAD');
+						}
+					?>
 					<!-- start content -->
 					<?php $this->html('bodytext') ?>
 					<?php if($this->data['catlinks']) { ?><div id="catlinks"><?php       $this->html('catlinks') ?></div><?php } ?>
@@ -1393,13 +1405,13 @@ if(!$custom_article_footer && $displayArticleFooter) {
 		<table>
 		<tr>
 			<td>
-				<?= AdServer::getInstance()->getAd('bb') ?>
+				<?php echo AdEngine::getInstance()->getAd('FOOTER_SPOTLIGHT_LEFT'); ?>
 			</td>
 			<td>
-				<?= AdServer::getInstance()->getAd('bb3') ?>
+				<?php echo AdEngine::getInstance()->getAd('FOOTER_SPOTLIGHT_MIDDLE'); ?>
 			</td>
 			<td>
-				<?= AdServer::getInstance()->getAd('bb5') ?>
+				<?php echo AdEngine::getInstance()->getAd('FOOTER_SPOTLIGHT_RIGHT'); ?>
 			</td>
 		</tr>
 		</table>
@@ -1582,29 +1594,31 @@ menuitem_array = new Array();var submenuitem_array = new Array();</script>';
 	}
 ?>
 			</div>
-<?php
-global $wgFASTSIDE;
-if(!empty($wgFASTSIDE) && isset($wgFASTSIDE[0])) {
-?>
-	<div style="display: none; text-align: center; margin-bottom: 10px;"><?= $wgFASTSIDE[0] ?></div>
-<?php
-}
-?>
 			<!-- /SEARCH/NAVIGATION -->
 <?php		wfProfileOut( __METHOD__ . '-navigation'); ?>
+			
+			<?php 
+				if (ArticleAdLogic::isContentPage() && ArticleAdLogic::isLongArticle($wgArticle->getContent())) { //valid article
+					echo '<div style="text-align: center; margin-bottom: 10px;">'. AdEngine::getInstance()->getAd('LEFT_SKYSCRAPER_1') .'</div>';
+				} else if (ArticleAdLogic::isMainPage()) { //main page
+					echo '<div style="text-align: center; margin-bottom: 10px;">'. AdEngine::getInstance()->getAd('HOME_LEFT_SKYSCRAPER_1') .'</div>';
+				}
+			?>
+
 <?php		wfProfileIn( __METHOD__ . '-widgets'); ?>
 
 			<div id="sidebar_1" class="sidebar">
 			<?= WidgetFramework::getInstance()->Draw(1) ?>
-<?php
-if(!empty($wgFASTSIDE) && isset($wgFASTSIDE[1])) {
-?>
-	<div style="display: none; text-align: center; margin-bottom: 10px;"><?= $wgFASTSIDE[1] ?></div>
-<?php
-}
-?>
-			</div>
+			
+			<?php
+				if (ArticleAdLogic::isContentPage() && ArticleAdLogic::isLongArticle($wgArticle->getContent())) { //valid article
+					echo '<div style="text-align: center; margin-bottom: 10px;">'. AdEngine::getInstance()->getAd('LEFT_SKYSCRAPER_2') .'</div>';
+				} else if (ArticleAdLogic::isMainPage()) { //main page
+					echo '<div style="text-align: center; margin-bottom: 10px;">'. AdEngine::getInstance()->getAd('HOME_LEFT_SKYSCRAPER_2') .'</div>';
+				}
+			?>
 
+			</div>
 		</div>
 		<!-- /WIDGETS -->
 	<!--/div-->
