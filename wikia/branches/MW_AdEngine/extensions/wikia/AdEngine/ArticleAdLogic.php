@@ -24,7 +24,8 @@ class ArticleAdLogic {
 	const longArticleThreshold = 3500; // what defines a "long" article. # of characters *after* html has been stripped.
 	const collisionRankThreshold = .15;  // what collison score constitutes a collision. 0-1
 	const firstHtmlThreshold = 1500; // Check this much of the html for collision causing tags
-	const wideObjectThreshold = 300; // what is a "wide" object that will cause a collision, in pixels
+	const pixelThreshold = 300; // how many pixels for a "wide" object that will cause a collision, in pixels
+	const percentThreshold = 50; // what % of the content is a "wide" table that will cause a collision
 
 	public static function isShortArticle($html){
 		return strlen(strip_tags($html)) < self::shortArticleThreshold;
@@ -89,18 +90,31 @@ class ArticleAdLogic {
 		switch (strtolower($tag)){
 		  // The tag itself gets a store
 		  case 'table':
-			// And it gets a higher score if has a wide width
-			if (isset($attr['width']) && $attr['width'] >= self::wideObjectThreshold){
-				return .5;
+			if (isset($attr['width'])){
+				if ( self::getPixels($attr['width']) >= self::pixelThreshold){
+					return .75;
+				} else if ( self::getPercentage($attr['width']) >= self::percentThreshold){
+					return .75;
+				} else {
+					// Seems safe, % is low and pixels are low
+					return .05;
+				}
+			} else if (isset($attr['class'])){
+				// This table has a class, which may have width defined
+				return .2;
+			} else if (isset($attr['id'])){
+				// This table has an id, which may have css styling and width defined
+				return .15;
 			} else {
-				return .1;
+				// There is a table, but it seems harmless
+				return .05;
 			}
 		    
 		  case 'img':
-			if (isset($attr['width']) && $attr['width'] >= self::wideObjectThreshold){
-				return .5;
+			if (isset($attr['width']) && $attr['width'] >= self::pixelThreshold){
+				return .75;
 			} else {
-				return .1;
+				return .05;
 			}
 
 		  default : return 0;
@@ -117,12 +131,33 @@ class ArticleAdLogic {
 	 *
 	 * Otherwise, return true.
 	 */
+
+
+	public function getPercentage($in){
+		$out = str_replace('%', '', $in);
+		if ($out != $in ){
+			return $out;
+		} else {
+			return false;
+		}
+	}
+
+	public function getPixels($in){
+		$out=preg_replace('/px$/i', '', $in);
+		if (intval($out) == $out){
+			return $out;
+		} else {
+			return false;
+		}
+
+	}
+
 	public static function isBoxAdArticle($html){
 		if (self::hasWikiaMagicWord($html, "BANNER")){
 			return false;
 		} else if (self::hasWikiaMagicWord($html, "BOXAD")){
 			return true;
-		} else if (self::getCollisionRank($html) > self::collisionRankThreshold){
+		} else if (self::getCollisionRank($html) >= self::collisionRankThreshold){
 			return false;
 		} else {
 			return true;
