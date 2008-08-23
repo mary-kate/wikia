@@ -24,10 +24,10 @@ class AdProviderOpenX implements iAdProvider {
 								'LEFT_SKYSCRAPER_1' => 632,
 								'LEFT_SKYSCRAPER_2' => 633,
 								'FOOTER_BOXAD' => 634,
-								'LEFT_SPOTLIGHT_1' => 638,
-								'FOOTER_SPOTLIGHT_LEFT' => 638,
-								'FOOTER_SPOTLIGHT_MIDDLE' => 638,
-								'FOOTER_SPOTLIGHT_RIGHT' => 638);
+								'LEFT_SPOTLIGHT_1' => 635,
+								'FOOTER_SPOTLIGHT_LEFT' => 635,
+								'FOOTER_SPOTLIGHT_MIDDLE' => 635,
+								'FOOTER_SPOTLIGHT_RIGHT' => 635);
 
 	public function getAd($slotname, $slot) {
 
