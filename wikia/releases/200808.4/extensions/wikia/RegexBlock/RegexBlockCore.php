@@ -7,6 +7,7 @@
 *
 * @author Bartek
 * @author Piotr Molski <moli@wikia.com>
+* @author Adrian 'ADi' Wieczorek <adi(at)wikia.com>
 * @copyright Copyright © 2007, Wikia Inc.
 * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License 2.0 or later
 */
@@ -33,23 +34,26 @@ CREATE TABLE `blockedby_stats` (
 */
 function wfRegexBlockCheck ($current_user) {
 	wfProfileIn( __METHOD__ );
-
-    $ip_to_check = wfGetIP();
-
-    /* First check cache */
-    $blocked = wfRegexBlockIsBlockedCheck($current_user, $ip_to_check);
-    if ($blocked) {
+	$ip_to_check = wfGetIP();
+	
+	/* First check cache */
+	$blocked = wfRegexBlockIsBlockedCheck($current_user, $ip_to_check);
+	if ($blocked) {
 		wfProfileOut( __METHOD__ );
-        return true;
-    }
-    $blockers_array = wfRegexBlockGetBlockers();
-    /* check user */
-    foreach ($blockers_array as $blocker) {
-        wfGetRegexBlocked( $blocker, $current_user, $ip_to_check );
-    }        
+		return true;
+	}
+
+	$blockers_array = wfRegexBlockGetBlockers();
+	$block_data = wfGetRegexBlockedData($current_user, $blockers_array);
+	
+	/* check user for each blocker */
+	foreach ($blockers_array as $blocker) {
+		$blocker_block_data = isset($block_data[$blocker]) ? $block_data[$blocker] : null; 
+		wfGetRegexBlocked( $blocker, $blocker_block_data, $current_user, $ip_to_check );
+	}        
     
-    wfProfileOut( __METHOD__ );
-    return true;
+	wfProfileOut( __METHOD__ );
+	return true;
 }
 
 /* 
@@ -183,65 +187,73 @@ function wfRegexIsCorrectCacheValue($cached) {
 	}
 	return $result;
 }
+
 /*
-    fetch usernames or IP addresses to run a match against
-    @param $blocker String: the admin who blocked
+    get regex block data for all blockers
     @param $user User: current user
     @return Array: an array of arrays to run a regex match against
 */
-function wfGetRegexBlockedData ($blocker, $user) {
-    global $wgSharedDB;
-    $oMemc =& wfGetCache(CACHE_MEMCACHED);
+function wfGetRegexBlockedData($user, $blockers) {
+	global $wgSharedDB;
+	$oMemc =& wfGetCache(CACHE_MEMCACHED);
 
 	wfProfileIn( __METHOD__ );
-    $names = array ("ips" => "", "exact" => "", "regex" => "");
+	$blockData = array();
 
-    /* first, check if regex strings are already stored in memcache */
-    /* we will store entire array of regex strings here */
-    if (!($user instanceof User)) {
-        wfProfileOut( __METHOD__ );
-        return $names;
-    }
+	/* first, check if regex strings are already stored in memcache */
+	/* we will store entire array of regex strings here */
+	if (!($user instanceof User)) {
+		wfProfileOut( __METHOD__ );
+		return false;
+	}
 
-    $memkey = wfForeignMemcKey( (isset($wgSharedDB)) ? $wgSharedDB : "wikicities", "", REGEXBLOCK_BLOCKERS_KEY, str_replace(" ", "_", $blocker) );
-    $cached = $oMemc->get ($memkey);
-    if ( wfRegexIsCorrectCacheValue($cached) ) {
-        /* fetch data from db, concatenate into one string, then fill cache */
-        $dbr =& wfGetDB( DB_MASTER );
+ $memkey = wfForeignMemcKey( (isset($wgSharedDB)) ? $wgSharedDB : "wikicities", "", REGEXBLOCK_BLOCKERS_KEY, "All-In-One" );
+ $cached = $oMemc->get ($memkey);
 
-        $oRes = $dbr->select(
-            wfSharedTable(REGEXBLOCK_TABLE),
-            array("blckby_id", "blckby_name", "blckby_exact"),
-            array("blckby_blocker = {$dbr->addQuotes($blocker)}"),
-            __METHOD__
-        );
-        $loop = 0;
-        while ( $oRow = $dbr->fetchObject( $oRes ) ) {
-            $key = "regex";
-	       	if ($user->isIP($oRow->blckby_name) != 0) {
-	       	    $key = "ips";
-            }
-            elseif ($oRow->blckby_exact != 0) {
-                $key = "exact";
-            }
-            $names[$key][] = $oRow->blckby_name;
-            $loop++;
-        }
-        $dbr->freeResult($oRes);
-		if ($loop > 0) {
-			$oMemc->set( $memkey, $names, REGEXBLOCK_EXPIRE );
-		}
-    } else {
-        /* take from cache */
-        $names = $cached;
-    }    
-    
-    wfProfileOut( __METHOD__ );
-    return $names;
+ if ( empty($cached) ) {
+		/* fetch data from db, concatenate into one string, then fill cache */
+		$dbr =& wfGetDB( DB_MASTER );
+
+  foreach($blockers as $blocker) {
+			$oRes = $dbr->select(
+				wfSharedTable(REGEXBLOCK_TABLE),
+				array("blckby_id", "blckby_name", "blckby_exact"),
+				array("blckby_blocker = {$dbr->addQuotes($blocker)}"),
+				__METHOD__
+			);
+
+			$loop = 0;
+			$names = array ("ips" => "", "exact" => "", "regex" => "");
+			while ( $oRow = $dbr->fetchObject( $oRes ) ) {
+				$key = "regex";
+				if ($user->isIP($oRow->blckby_name) != 0) {
+					$key = "ips";
+				}
+				elseif ($oRow->blckby_exact != 0) {
+					$key = "exact";
+				}
+				$names[$key][] = $oRow->blckby_name;
+				$loop++;
+			}
+			$dbr->freeResult($oRes);
+
+			if ($loop > 0) {
+				$blockData[$blocker] = $names;
+			}
+  }
+		
+		$oMemc->set( $memkey, $blockData, REGEXBLOCK_EXPIRE );
+ }
+ else {
+		/* take it from cache */
+		$blockData = $cached;
+ }
+ return $blockData;
 }
 
 
-/*    perform a match against all given values 
+/*    
+    perform a match against all given values 
     @param $matching Array: array of strings containing list of values
     @param $value String: a given value to run a match against
     @param $exact Boolean: whether or not perform an exact match
@@ -249,30 +261,29 @@ function wfGetRegexBlockedData ($blocker, $user) {
 */
 function wfRegexBlockPerformMatch ($matching, $value) {
 	wfProfileIn( __METHOD__ );
-    $matched = array () ;
-    
-    if (!is_array($matching)) { 
-        /* empty? begone! */
-        wfProfileOut( __METHOD__ );
-        return false ;
-    }
-    
-    /* normalise for regex */
-    $loop = 0;
-    $match = array();
-    foreach ($matching as $one) { 
-        /* the real deal */
-        $found = preg_match('/'.$one.'/i', $value, $match);
-        if ($found) {
-            if ( is_array($match) && (!empty($match[0])) ) {
-                $matched[] = $one;
-                break;
-            }
-        }
-    }
-
-    wfProfileOut( __METHOD__ );
-    return $matched ;
+	$matched = array () ;
+	if (!is_array($matching)) { 
+		/* empty? begone! */
+		wfProfileOut( __METHOD__ );
+		return false ;
+	}
+	
+	/* normalise for regex */
+	$loop = 0;
+	$match = array();
+	foreach ($matching as $one) {
+		/* the real deal */
+		$found = preg_match('/'.$one.'/i', $value, $match);
+		if ($found) {
+			if ( is_array($match) && (!empty($match[0])) ) {
+				$matched[] = $one;
+				break;
+			}
+		}
+	}
+	
+	wfProfileOut( __METHOD__ );
+	return $matched ;
 }
 
 /*
@@ -394,7 +405,7 @@ function wfRegexBlockClearExpired ($username, $blocker) {
     
     if ( $dbw->affectedRows() ) {
         /* success, remember to delete cache key  */
-        wfRegexBlockUnsetKeys( $blocker, $username );
+        wfRegexBlockUnsetKeys( $username );
         $result = true ;
     }
     
@@ -440,64 +451,69 @@ function wfRegexBlockUpdateStats ($user, $user_ip, $blocker, $match, $blckid) {
 /*     
   the actual blocking goes here, for each blocker
   @param $blocker String
+  @param $blocker_block_data Array
   @param $user User
   @param $user_ip String
 */
-function wfGetRegexBlocked ($blocker, $user, $user_ip) {
+function wfGetRegexBlocked ($blocker, $blocker_block_data, $user, $user_ip) {
 	wfProfileIn( __METHOD__ );
+
+	if($blocker_block_data == null) {
+		// no data for given blocker, aborting.. 
+		wfProfileOut( __METHOD__ );
+		return false;		
+	}
     
-    $result = wfGetRegexBlockedData( $blocker, $user );
-
-    $ips = $result["ips"];
-    $names = $result["regex"];
-    $exact = $result["exact"];
+	$ips = isset($blocker_block_data["ips"]) ? $blocker_block_data["ips"] : null;
+	$names = isset($blocker_block_data["regex"]) ? $blocker_block_data["regex"] : null;
+	$exact = isset($blocker_block_data["exact"]) ? $blocker_block_data["exact"] : null;
     
-    /* check ips */
-    if ( (!empty($ips)) && (in_array($user_ip, $ips)) ) {
-        $result["ips"]['matches'] = array($user_ip);
-        wfDebugLog('RegexBlock', "Found some ips to block: ". implode(",", $result["ips"]['matches']). "\n");
-    }
+	/* check ips */
+	if ( (!empty($ips)) && (in_array($user_ip, $ips)) ) {
+		$result["ips"]['matches'] = array($user_ip);
+		wfDebugLog('RegexBlock', "Found some ips to block: ". implode(",", $result["ips"]['matches']). "\n");
+	}
+	
+	/* check regexes */
+	if ( (!empty($result["regex"])) && (is_array($result["regex"])) ) {
+		$result["regex"]['matches'] = wfRegexBlockPerformMatch($result["regex"], $user->getName());
+		if (!empty($result["regex"]['matches'])) {
+			wfDebugLog('RegexBlock', "Found some regexes to block: ". implode(",", $result["regex"]['matches']). "\n");
+		}
+	}
+	
+	/* check names of user */
+	$exact = (is_array($exact)) ? $exact : array($exact);
+	if ( (!empty($exact)) && (in_array($user->getName(), $exact)) ) {
+		$key = array_search($user->getName(), $exact);
+		$result["exact"]['matches'] = array($exact[$key]);
+		wfDebugLog('RegexBlock', "Found some users to block: ". implode(",", $result["exact"]['matches']). "\n");
+	}
 
-    /* check regexes */
-    if ( (!empty($result["regex"])) && (is_array($result["regex"])) ) {
-        $result["regex"]['matches'] = wfRegexBlockPerformMatch($result["regex"], $user->getName());
-        if (!empty($result["regex"]['matches'])) {
-            wfDebugLog('RegexBlock', "Found some regexes to block: ". implode(",", $result["regex"]['matches']). "\n");
-        }
-    }
-
-    /* check names of user */
-   	$exact = (is_array($exact)) ? $exact : array($exact);
-    if ( (!empty($exact)) && (in_array($user->getName(), $exact)) ) {
-    	$key = array_search($user->getName(), $exact);
-        $result["exact"]['matches'] = array($exact[$key]);
-        wfDebugLog('RegexBlock', "Found some users to block: ". implode(",", $result["exact"]['matches']). "\n");
-    }
-
-    unset($ips); 
-    unset($names);
-    unset($exact);
+	unset($ips); 
+	unset($names);
+	unset($exact);
    
-    /* run expire checks for all matched values
-       this is only for determining validity of this block, so
-       a first successful match means the block is applied
-    */
-    $valid = false;
-    foreach ($result as $key => $value) {
-        $is_ip = ("ips" == $key) ? 1 : 0;
-        $is_regex = ("regex" == $key) ? 1 : 0;
-        /* check if this block hasn't expired already  */
-        if ( !empty($result[$key]['matches']) ) {
-            $valid = wfRegexBlockExpireCheck( $user, $result[$key]['matches'], $is_ip, $is_regex );
-            if ( is_array($valid) ) {
-                break;
-            }
-        }
-    }
-
-    if ( is_array ($valid) ) {
-        wfRegexBlockSetUserData($user, $user_ip, $blocker, $valid);
-    }
+	/* run expire checks for all matched values
+	   this is only for determining validity of this block, so
+	   a first successful match means the block is applied
+	*/
+	$valid = false;
+	foreach ($result as $key => $value) {
+		$is_ip = ("ips" == $key) ? 1 : 0;
+		$is_regex = ("regex" == $key) ? 1 : 0;
+		/* check if this block hasn't expired already  */
+		if ( !empty($result[$key]['matches']) ) {
+			$valid = wfRegexBlockExpireCheck( $user, $result[$key]['matches'], $is_ip, $is_regex );
+			if ( is_array($valid) ) {
+				break;
+			}
+		}
+	}
+	
+	if ( is_array ($valid) ) {
+		wfRegexBlockSetUserData($user, $user_ip, $blocker, $valid);
+	}
 
 	wfProfileOut( __METHOD__ );
 	return true;
@@ -571,13 +587,13 @@ function wfRegexBlockSetUserData(&$user, $user_ip, $blocker, $valid) {
 
 /*
    clean the memcached keys
-   @param $blocker name of blocker
    @param $username name of username
 */
-function wfRegexBlockUnsetKeys ($blocker, $username) {
+function wfRegexBlockUnsetKeys ($username) {
 	global $wgSharedDB, $wgUser;
-	$oMemc =& wfGetCache(CACHE_MEMCACHED);
 	wfProfileIn( __METHOD__ );
+
+	$oMemc =& wfGetCache(CACHE_MEMCACHED);
 	$key = wfForeignMemcKey( (isset($wgSharedDB)) ? $wgSharedDB : "wikicities", "", REGEXBLOCK_SPECIAL_KEY, REGEXBLOCK_SPECIAL_NUM_RECORD );
 	$oMemc->delete( $key );
 	/* main cache of user-block data */
@@ -585,13 +601,13 @@ function wfRegexBlockUnsetKeys ($blocker, $username) {
 	$oMemc->delete( $key );
 	/* blockers */
 	$key = wfForeignMemcKey( (isset($wgSharedDB)) ? $wgSharedDB : "wikicities", "", REGEXBLOCK_BLOCKERS_KEY );
-    $oMemc->delete( $key );
-    wfRegexBlockGetBlockers();
-    /* blocker's matches */
-	$key = wfForeignMemcKey( (isset($wgSharedDB)) ? $wgSharedDB : "wikicities", "", REGEXBLOCK_BLOCKERS_KEY, $blocker );
-    $oMemc->delete( $key );
-    wfGetRegexBlockedData ($blocker, $wgUser);
-    /* */
+	$oMemc->delete( $key );
+	$blockers_array = wfRegexBlockGetBlockers();
+	/* blocker's matches */
+	$key = wfForeignMemcKey( (isset($wgSharedDB)) ? $wgSharedDB : "wikicities", "", REGEXBLOCK_BLOCKERS_KEY, "All-In-One" );
+	$oMemc->delete( $key );
+	wfGetRegexBlockedData ($wgUser, $blockers_array);
+
 	wfProfileOut( __METHOD__ );
 }
 
