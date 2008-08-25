@@ -151,7 +151,7 @@ var Jiffy = function (){
   bool SOFT_ERRORS: In some functions we will use a try catch statement and if these are enabled they will alert with the message or the error. This is meant for ddeveloper debugging only and should left to false in a production enviroment.
   */
 Jiffy.options = {
-  USE_JIFFY:false,
+  USE_JIFFY: false,
   ISBULKLOAD: false,
   BROWSER_EVENTS: { "load":window, "DOMReady":window},
   SOFT_ERRORS: false
