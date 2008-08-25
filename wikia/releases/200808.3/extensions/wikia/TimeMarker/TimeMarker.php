@@ -39,7 +39,7 @@ $wgExtensionCredits['parserhook'][] = array(
         'version'=>'0.1'
 );
 
-DEFINE( 'TIMEMARKER_SAMPLERATE', 100 ); //samplerate to use 1= every one request to process 
+DEFINE( 'TIMEMARKER_SAMPLERATE', 1000 ); //samplerate to use 1= every one request to process 
  
 $wgHooks['BeforePageDisplay'][] = 'tm_html';
 
@@ -74,13 +74,6 @@ $txtjs= "	<script type=\"text/javascript\" src=\"$wgStylePath/common/jiffy.js?$w
 	<script type="text/javascript">
 	/*<![CDATA[*/
 	 
-	 Jiffy.options = {
-						USE_JIFFY:false,
-						ISBULKLOAD: false,
-						BROWSER_EVENTS: {"load":window,"DOMReady":window},
-						SOFT_ERRORS: false
-					};
-						
 	t = (new Date()).getTime();					
 	if( Math.floor(t/{$samplerate}) == Math.ceil(t/{$samplerate}) ){
 		
@@ -123,13 +116,6 @@ $txtjs=
 	<script type="text/javascript">
 	/*<![CDATA[*/
 	 
-	 Jiffy.options = {
-						USE_JIFFY:true,
-						ISBULKLOAD: false,
-						BROWSER_EVENTS: {"load":window,"DOMReady":window},
-						SOFT_ERRORS: false
-					  };
-	
 	{$mark_start}
 	
 	tm = function() {
