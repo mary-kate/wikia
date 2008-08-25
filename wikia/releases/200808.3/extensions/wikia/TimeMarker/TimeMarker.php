@@ -39,7 +39,7 @@ $wgExtensionCredits['parserhook'][] = array(
         'version'=>'0.1'
 );
 
-DEFINE( 'TIMEMARKER_SAMPLERATE', 1000 ); //samplerate to use 1= every one request to process 
+DEFINE( 'TIMEMARKER_SAMPLERATE', 1 ); //samplerate to use 1= every one request to process 
  
 $wgHooks['BeforePageDisplay'][] = 'tm_html';
 
@@ -68,7 +68,7 @@ class TimeMarker {
 	   	global $wgStylePath, $wgStyleVersion, $wgUser;
 		
 	//+++++++build the TimeMarkers script for this skin++++//
-$txtjs= "	<script type=\"text/javascript\" src=\"$wgStylePath/common/jiffy.js?$wgStyleVersion\"></script>" .
+$txtjs= "	<script type=\"text/javascript\" src=\"/extensions/wikia/TimeMarker/js/jiffy.js\"></script>" .
 <<<EOT
 
 	<script type="text/javascript">
