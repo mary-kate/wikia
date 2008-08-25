@@ -34,8 +34,8 @@ class AdProviderOpenX implements iAdProvider {
 		if(empty($this->zoneIds[$slotname])) {
 			// Don't throw an exception. Under no circumstances should an ad failing
 			// prevent the page from rendering.
-                        $NullAd = new NullAd("Invalid slotname ($slotname) for " . __CLASS__);
-                        return $NullAd->getAd();
+                        $NullAd = new AdProviderNullAd("Invalid slotname ($slotname) for " . __CLASS__);
+                        return $NullAd->getAd($slotname, $slot);
 		}
 
 		$zoneId = $this->zoneIds[$slotname];
