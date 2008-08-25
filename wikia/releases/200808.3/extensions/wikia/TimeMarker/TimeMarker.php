@@ -39,7 +39,7 @@ $wgExtensionCredits['parserhook'][] = array(
         'version'=>'0.1'
 );
 
-DEFINE( 'TIMEMARKER_SAMPLERATE', 1 ); //samplerate to use 1= every one request to process 
+DEFINE( 'TIMEMARKER_SAMPLERATE', 1000 ); //samplerate to use 1= every one request to process 
  
 $wgHooks['BeforePageDisplay'][] = 'tm_html';
 
@@ -65,37 +65,54 @@ class TimeMarker {
     
 	function tm_basic( &$out, $samplerate ){	
 	 //this is basic timemarker
-	   	global $wgStylePath, $wgStyleVersion, $wgUser;
+	   	global $wgStylePath, $wgStyleVersion, $wgUser, $wgExtensionsPath;
 		
 	//+++++++build the TimeMarkers script for this skin++++//
-$txtjs= "	<script type=\"text/javascript\" src=\"/extensions/wikia/TimeMarker/js/jiffy.js\"></script>" .
+$txtjs= "" . 
 <<<EOT
 
 	<script type="text/javascript">
 	/*<![CDATA[*/
 	 
-	t = (new Date()).getTime();					
+	t = (new Date()).getTime();		
+	
+	alert(Math.floor(t/{$samplerate}));
+	alert(Math.ceil(t/{$samplerate}));
+			
 	if( Math.floor(t/{$samplerate}) == Math.ceil(t/{$samplerate}) ){
-		
-	 Jiffy.options = {
-						USE_JIFFY:true,
+	 JiffyOptions = {
+						USE_JIFFY: true,
 						ISBULKLOAD: false,
 						BROWSER_EVENTS: {"load":window,"DOMReady":window},
-						SOFT_ERRORS: false
+						SOFT_ERRORS: true
 					};
-		
-		Jiffy.mark('body');	
-	}			  
+	}
+				  
 	/*]]>*/
 	</script>
 EOT;
 	//++++++++++++++++++++++++++++++++++++++++++++++++++++//
 	
-	    return $txtjs;
+$txtjs = $txtjs . "<script type=\"text/javascript\" src=\"$wgExtensionsPath/wikia/TimeMarker/js/jiffy.js\"></script>";
+	
+$txtjs= $txtjs .  
+<<<EOT
+
+	<script type="text/javascript">
+	/*<![CDATA[*/
+	 
+  if(window.JiffyOptions != undefined){Jiffy.mark('body');}		
+				  
+	/*]]>*/
+	</script>
+EOT;
+	//++++++++++++++++++++++++++++++++++++++++++++++++++++//
+
+	return $txtjs;
 	}
 	 
-	function tm_extended( &$out, $params ){	
-	 
+function tm_extended( &$out, $params ){	
+	  	global $wgStylePath, $wgStyleVersion, $wgUser, $wgExtensionsPath;
 		//this is markers start, for each element we are tracking we set marker from time 0
 		//in reality we need mark before element starts loading
 		$mark_start = '';	
@@ -109,10 +126,29 @@ EOT;
 		}
 		
 	//+++++++build the TimeMarkers script for this skin++++//
-$txtjs=
+
+$txtjs=  
+<<<EOT
+
+	<script type="text/javascript">
+	/*<![CDATA[*/
+	 
+	 JiffyOptions = {
+						USE_JIFFY: true,
+						ISBULKLOAD: false,
+						BROWSER_EVENTS: {"load":window,"DOMReady":window},
+						SOFT_ERRORS: true
+					};
+		
+	/*]]>*/
+	</script>
+EOT;
+	//++++++++++++++++++++++++++++++++++++++++++++++++++++//
+	
+$txtjs = $txtjs . "<script type=\"text/javascript\" src=\"$wgExtensionsPath/wikia/TimeMarker/js/jiffy.js\"></script>";
+$txtjs= $txtjs .  
 <<<EOT
 	<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/yahoo-dom-event/yahoo-dom-event.js"></script>
-	<script type="text/javascript" src="/extensions/wikia/TimeMarker/js/jiffy.js"></script>
 	<script type="text/javascript">
 	/*<![CDATA[*/
 	 
