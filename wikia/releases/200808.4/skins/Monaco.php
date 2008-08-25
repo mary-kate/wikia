@@ -862,7 +862,7 @@ class MonacoTemplate extends QuickTemplate {
 		if(isset($this->navmenu[$id]['children'])) {
 			$script_output .= '<script type="text/javascript">/*<![CDATA[*/';
 			if ($level) {
-				$menu_output .= '<div class="sub-menu widget" id="sub-menu' . $last_count . '"style="display:none;" >';
+				$menu_output .= '<div class="sub-menu widget" id="sub-menu' . $last_count . '" style="display:none" >';
 				$script_output .= 'submenu_array["sub-menu' . $last_count . '"] = "' . $last_count . '";';
 				$script_output .= '$("navigation_widget").onmouseout = clearMenu;';
 				$script_output .= '$("sub-menu' . $last_count . '").onmouseout = clearMenu;if($("sub-menu' . $last_count . '").captureEvents) $("sub-menu' . $last_count .'").captureEvents(Event.MOUSEOUT);';
