@@ -40,6 +40,14 @@ class AdProviderDART implements iAdProvider {
 
 	public function getAd($slotname, $slot){
 
+                if(empty($this->zoneIds[$slotname])) {
+                        // Don't throw an exception. Under no circumstances should an ad failing
+                        // prevent the page from rendering.
+                        $NullAd = new NullAd("Invalid slotname ($slotname) for " . __CLASS__, true);
+			return $NullAd->getAd();
+                }
+
+
 		/* Nick wrote: Note, be careful of the order of the key values. From Dart Webmaster guide:
 		 * 	Order of multiple key-values in DART ad tags:  For best performance, DoubleClick recommends
 		 * 	that reserved key-values be placed as the last attributes in the DART ad tags, after any custom key-
@@ -49,7 +57,8 @@ class AdProviderDART implements iAdProvider {
 		 * 	ord=value
 		 * 	The ord=value key-value must be the last attribute in the DART ad tag.
 		 *
-		 * 	Note that we also have an "endtag", which slightly contradicts the above, but apparently that's ok
+		 * 	Note that we also have an "endtag", which slightly contradicts the above, but apparently that's ok.
+		 * 	endtag=$ is for forwarding requests to other DART ad networks, ala Gamepro.
 		 */
 
 		$url = 'http://ad.doubleclick.net/';
@@ -72,14 +81,16 @@ class AdProviderDART implements iAdProvider {
 
 		$out = "<!-- " . __CLASS__ . " slot: $slotname , " . print_r($slot, true) . "-->";
 
-		$out .='<script type="text/javascript">' . "\n";
+		$out .= '<script type="text/javascript">' . "\n";
 		// Only generate the random number once per page. Note we don't want to do this with PHP
 		// because it needs to be different for every user, and if it's PHP Varnish/Squid will cache it.
-		static $ordGenerated=false;
+		static $ordGenerated = false;
 		if (!$ordGenerated){
 			$out .= "var dartRand = Math.floor(Math.random()*99999999);\n";
-			$ordGenerated=true;
+			$ordGenerated = true;
 		}
+
+		// Ug. Heredocs suck, but with all the combinations of quotes, it was the cleanest way.
 		$out .= <<<EOT
 		document.write("<scr"+"ipt type='text/javascript' src='$url"+dartRand+"'><\/scr"+"ipt>");
 
@@ -148,9 +159,9 @@ EOT;
 
 	/* See full explanation on limitations in the DART webmaster guide */
 	function sanitizeKeyName($keyname){
-		$out=preg_replace('/[^a-z0-9A-Z]/', '', $keyname); // alnum only
-		$out=preg_replace('/^[0-9]/', '', $out); // not start with a number
-		$out=substr($out, 0, 5); // limited to 5 chars
+		$out = preg_replace('/[^a-z0-9A-Z]/', '', $keyname); // alnum only
+		$out = preg_replace('/^[0-9]/', '', $out); // not start with a number
+		$out = substr($out, 0, 5); // limited to 5 chars
 
 		if ($keyname != $out){
 			trigger_error("DART key-name was invalid, changed from '$keyname' to '$out'", E_USER_NOTICE);
@@ -162,20 +173,20 @@ EOT;
 
 	/* See full explanation on limitations in the DART webmaster guide */
 	function sanitizeKeyValue($keyvalue){
-		$invalids=array('/', '#', ',', '*', '.', '(', ')', '=', '+', '<', '>', '[', ']');
-		$out=str_replace($invalids, '', $keyvalue);
-		$out=substr($out, 0, 55); // limited to 55 chars
+		$invalids = array('/', '#', ',', '*', '.', '(', ')', '=', '+', '<', '>', '[', ']');
+		$out = str_replace($invalids, '', $keyvalue);
+		$out = substr($out, 0, 55); // limited to 55 chars
 
 		// Spaces are allowed in key-values only if an escaped character %20 is used, otherwise the key-
 		// value will not be funtional.
 		// Nick wrote: Retarted. They should just use url-encoding.
-		$out=str_replace(' ', '%20 ', $out);
+		$out = str_replace(' ', '%20 ', $out);
 
-		// The value of a key-value cannot be empty (e.g., cat= or cat=” “ or cat=’ ‘), however, where there
+		// The value of a key-value cannot be empty, however, where there
 		// are instances where the value is intentionally blank, populate the value with null or some other
 		// value indicating a blank, e.g. cat=null
-		if ($out==''){
-			$out='null';
+		if ($out == ''){
+			$out = 'null';
 		}
 
 		if ($keyvalue != $out){
@@ -221,6 +232,7 @@ EOT;
 	/* If the user did a search, return the term for keyword targeting.
 	 * If no search was done, false is returned.
 	 * Note that this is raw input from the user, and should be escaped.
+	 * NOTE: We don't currently have ads on the search results pages, so this isn't used right now.
 	 */
 	public function getKeywordsKV(){
 		if(!empty($_GET['search'])){
