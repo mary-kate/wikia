@@ -75,9 +75,6 @@ $txtjs= "" .
 	/*<![CDATA[*/
 	 
 	t = (new Date()).getTime();		
-	
-	alert(Math.floor(t/{$samplerate}));
-	alert(Math.ceil(t/{$samplerate}));
 			
 	if( Math.floor(t/{$samplerate}) == Math.ceil(t/{$samplerate}) ){
 	 JiffyOptions = {
