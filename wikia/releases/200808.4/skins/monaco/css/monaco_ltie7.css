@@ -104,3 +104,7 @@ body.ltr #articleFooter ul.actions li div {
 	margin-left: 0 !important;
 	left: -50%;
 }
+
+.mask {
+	position: absolute;
+}
