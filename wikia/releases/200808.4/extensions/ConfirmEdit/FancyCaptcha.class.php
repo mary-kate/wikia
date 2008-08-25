@@ -57,8 +57,7 @@ class FancyCaptcha extends SimpleCaptcha {
 			"<p>" .
 			wfElement( 'input', array(
 				'name' => 'wpCaptchaWord',
-				'id'   => 'wpCaptchaWord',
-				'tabindex' => 1 ) ) . // tab in before the edit textarea
+				'id'   => 'wpCaptchaWord' ) ) .
 			"</p>\n";
 	}
 

@@ -13,7 +13,7 @@ class MathCaptcha extends SimpleCaptcha {
 		$index = $this->storeCaptcha( array( 'answer' => $answer ) );
 		
 		$form = '<table><tr><td>' . $this->fetchMath( $sum ) . '</td>';
-		$form .= '<td>' . wfInput( 'wpCaptchaAnswer', false, false, array( 'tabindex' => '1' ) ) . '</td></tr></table>';
+		$form .= '<td>' . wfInput( 'wpCaptchaAnswer', false, false ) . '</td></tr></table>';
 		$form .= wfHidden( 'wpCaptchaId', $index );
 		return $form;
 	}
