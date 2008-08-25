@@ -98,12 +98,12 @@ class AdEngine {
 			// Note: Don't throw an exception here. Fail gracefully for ads,
 			// don't under any circumstances fail the rendering of the page
 			$AdProviderNull=new AdProviderNull('Unrecognized Providerid', true);
-			return $AdProviderNull->getAd();
+			return $AdProviderNull->getAd($slotname, $this->slots[$slotname]);
 
 		} else if ( $wgShowAds == false ){
 
 			$AdProviderNull=new AdProviderNull('$wgShowAd set to false', false);
-			return $AdProviderNull->getAd();
+			return $AdProviderNull->getAd($slotname, $this->slots[$slotname]);
 
 		} else if ( is_object($wgUser) && $wgUser->isLoggedIn() && !$wgUser->getOption('showAds') ){
 
