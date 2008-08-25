@@ -1237,15 +1237,15 @@ if(isset($this->data['articlelinks']['right'])) {
 					<?php if(!empty($skin->newuemsg)) { echo $skin->newuemsg; } ?>
 					<?php if($this->data['showjumplinks']) { ?><div id="jump-to-nav"><?php $this->msg('jumpto') ?> <a href="#column-one"><?php $this->msg('jumptonavigation') ?></a>, <a href="#searchInput"><?php $this->msg('jumptosearch') ?></a></div><?php } ?>
 					<?php
-						if (ArticleAdLogic::isContentPage() && !ArticleAdLogic::isShortArticle($wgArticle->getContent())) { //valid article
+						if (ArticleAdLogic::isMainPage()) { //main page
+							echo AdEngine::getInstance()->getPlaceHolderDiv('HOME_TOP_LEADERBOARD');
+							echo AdEngine::getInstance()->getPlaceHolderDiv('HOME_TOP_RIGHT_BOXAD');
+						} else if (ArticleAdLogic::isContentPage() && !ArticleAdLogic::isShortArticle($wgArticle->getContent())) { //valid article
 							if (ArticleAdLogic::isBoxAdArticle($this->data['bodytext'])) {
 								echo AdEngine::getInstance()->getPlaceHolderDiv('TOP_RIGHT_BOXAD');
 							} else {
 								echo AdEngine::getInstance()->getPlaceHolderDiv('TOP_LEADERBOARD');
 							}
-						} else if (ArticleAdLogic::isMainPage()) { //main page
-							echo AdEngine::getInstance()->getPlaceHolderDiv('HOME_TOP_LEADERBOARD');
-							echo AdEngine::getInstance()->getPlaceHolderDiv('HOME_TOP_RIGHT_BOXAD');
 						}
 					?>
 					<!-- start content -->
@@ -1405,13 +1405,13 @@ if(!$custom_article_footer && $displayArticleFooter) {
 		<table>
 		<tr>
 			<td>
-				<?php echo AdEngine::getInstance()->getAd('FOOTER_SPOTLIGHT_LEFT'); ?>
+				<?php echo AdEngine::getInstance()->getPlaceHolderDiv('FOOTER_SPOTLIGHT_LEFT'); ?>
 			</td>
 			<td>
-				<?php echo AdEngine::getInstance()->getAd('FOOTER_SPOTLIGHT_MIDDLE'); ?>
+				<?php echo AdEngine::getInstance()->getPlaceHolderDiv('FOOTER_SPOTLIGHT_MIDDLE'); ?>
 			</td>
 			<td>
-				<?php echo AdEngine::getInstance()->getAd('FOOTER_SPOTLIGHT_RIGHT'); ?>
+				<?php echo AdEngine::getInstance()->getPlaceHolderDiv('FOOTER_SPOTLIGHT_RIGHT'); ?>
 			</td>
 		</tr>
 		</table>
@@ -1627,6 +1627,9 @@ wfProfileOut( __METHOD__ . '-widgets');
 
 // curse like cobranding
 $this->printCustomFooter();
+
+echo AdEngine::getInstance()->getDelayedLoadingCode();
+
 global $wgAdServingType;
 if($wgAdServingType === 1) {
 	$adsDisplayed = AdServer::getInstance()->adsDisplayed;
