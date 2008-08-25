@@ -672,18 +672,18 @@ class WikiaApiQueryProblemReports extends WikiaApiQuery {
 		$tables = array(wfSharedTable('problem_reports'));
 
 		$sql_wheres = array();
-		
+
 		// select from given city only?	
-		if (intval($params['showall']) != 1) {
+		if ( empty($params['showall']) ) {
 			$sql_wheres ['pr_city_id'] = !empty($params['wikia']) ? (int) $params['wikia'] : self::getCityID();
 		}
 		
 		// archived?
-		if ((int) $params['archived']) {
+		if ( !empty($params['archived']) ) {
 			$sql_wheres[] = 'pr_status in (1,2)';
 		}
 		// staff?
-		else if ((int) $params['staff']) {
+		else if ( !empty($params['staff']) ) {
 			$sql_wheres['pr_status'] = 3;
 		}
 		else {
@@ -713,8 +713,8 @@ class WikiaApiQueryProblemReports extends WikiaApiQuery {
 		return $count;
 	}	
 		
-	// check whether provided problem description contains spam-like things: words, hostnames etc
-	// use SpamBlacklist extension (which should be enabled sitewide)
+	// check whether provided problem description contains spam
+	// using SpamBlacklist extension (which should be enabled sitewide)
 	static function checkForSpam($content)
 	{
 		// empty content cannot contain spam
@@ -728,8 +728,6 @@ class WikiaApiQueryProblemReports extends WikiaApiQuery {
 		$title = new Title();
 
 		$result = $spamObj->filter($title, $content, 0, false);
-
-		wfDebug('ProblemReports: spam check result: ' . ($result ? 'spam found' : 'spam not found') ."\n");
 
 		wfProfileOut( __METHOD__ );
 
