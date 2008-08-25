@@ -17,17 +17,13 @@ class AdProviderGoogle implements iAdProvider {
 		return self::$instance;
 	}
 
-	public function getAd($slotname, $slot) {
-
-		return "<!-- Google Ad: $slotname, " . print_r($slot, true) . "-->";
-
-	}
 
         public function getAdTag(){
                 global $AdEngine;
-                $dim=$this->getHeightWidthFromSize($this->slotInfo['size']);
+                $dim=getHeightWidthFromSize($this->slotInfo['size']);
 
-                $out='<script type="text/javascript">
+		$out = "<!-- Google Ad: $slotname, " . print_r($slot, true) . "-->";
+                $out .= '<script type="text/javascript">
                         bannerid=\'__GO____\';
                         
                         google_ad_client = "pub-4086838842346968";

@@ -89,14 +89,32 @@ class AdEngine {
 		return true;
 	}
 
+	// For the selected provider, get an ad tag. Logic for hiding/displaying ads
+	// should be here, not in the skin.
 	public function getAd($slotname) {
-		if(!empty($this->providers[$this->slots[$slotname]['provider_id']])) {
-			$provider = $this->getAdProvider($this->slots[$slotname]['provider_id']);
-			return $provider->getAd($slotname, $this->slots[$slotname]);
-		} else {
+		global $wgShowAds, $wgUser;
+
+		if(empty($this->providers[$this->slots[$slotname]['provider_id']])) {
 			// Note: Don't throw an exception here. Fail gracefully for ads,
 			// don't under any circumstances fail the rendering of the page
-			return "<!-- Bad Ad Call -->";
+			$AdProviderNull=new AdProviderNull('Unrecognized Providerid', true);
+			return $AdProviderNull->getAd();
+
+		} else if ( $wgShowAds == false ){
+
+			$AdProviderNull=new AdProviderNull('$wgShowAd set to false', false);
+			return $AdProviderNull->getAd();
+
+		} else if ( is_object($wgUser) && $wgUser->isLoggedIn() && !$wgUser->getOption('showAds') ){
+
+			$AdProviderNull=new AdProviderNull('User is logged in', false);
+			return $AdProviderNull->getAd();
+			
+		} else {
+
+			$provider = $this->getAdProvider($this->slots[$slotname]['provider_id']);
+			return $provider->getAd($slotname, $this->slots[$slotname]);
+
 		}
 	}
 
@@ -108,7 +126,7 @@ class AdEngine {
 		} else {
 			// Note: Don't throw an exception here. Fail gracefully for ads,
 			// don't under any circumstances fail the rendering of the page
-			return AdProviderNull::getInstance();
+			return new AdProviderNull("Unrecognized provider_id ($provider_id)", true);
 		}
 	}
 
@@ -161,7 +179,7 @@ class AdEngine {
 	public function getDelayedLoadingCode(){
 		if (empty($this->placeholders)){
 			// No delayed ads on this page
-			return;
+			return '<!-- No placeholders called for ' . __METHOD__ . " -->\n";
 		}
 
 		$out = "<!-- #### BEGIN " . __CLASS__ . '::' . __METHOD__ . " ####-->\n";

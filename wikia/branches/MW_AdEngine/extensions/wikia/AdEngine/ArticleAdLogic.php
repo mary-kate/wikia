@@ -14,7 +14,6 @@ TODO/Think about:
 
 - Reporting on collisions via javascript
 - Implementing the Magic word
-- What hook should this run from?
 - Reporting on how many pages have the wikia magic words
 */
 class ArticleAdLogic {
@@ -121,16 +120,6 @@ class ArticleAdLogic {
 		}
 	}
 
-	/* Based on our collision detection logic, figure out if we are displaying
-	 * the leaderboard or the box ad. Return true for box ad, else false.
-	 *
-	 * Rules:
-	 * 1) If magic word WIKIA_BANNER appears, return false
-	 * 2) If magic word WIKIA_BOXAD appears, return true
-	 * 3) If collisionRank is higher than collisionRankThreshold, return false
-	 *
-	 * Otherwise, return true.
-	 */
 
 
 	public function getPercentage($in){
@@ -152,6 +141,16 @@ class ArticleAdLogic {
 
 	}
 
+	/* Based on our collision detection logic, figure out if we are displaying
+	 * the leaderboard or the box ad. Return true for box ad, else false.
+	 *
+	 * Rules:
+	 * 1) If magic word WIKIA_BANNER appears, return false
+	 * 2) If magic word WIKIA_BOXAD appears, return true
+	 * 3) If collisionRank is higher than collisionRankThreshold, return false
+	 *
+	 * Otherwise, return true.
+	 */
 	public static function isBoxAdArticle($html){
 		if (self::hasWikiaMagicWord($html, "BANNER")){
 			return false;
