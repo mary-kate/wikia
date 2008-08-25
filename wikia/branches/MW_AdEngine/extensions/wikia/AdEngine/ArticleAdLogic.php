@@ -9,13 +9,6 @@ $wgExtensionCredits['other'][] = array(
         'author' => 'Nick Sullivan'
 );
 
-/*
-TODO/Think about:
-
-- Reporting on collisions via javascript
-- Implementing the Magic word
-- Reporting on how many pages have the wikia magic words
-*/
 class ArticleAdLogic {
 
 	// Play with these levels, once we get more test cases.
