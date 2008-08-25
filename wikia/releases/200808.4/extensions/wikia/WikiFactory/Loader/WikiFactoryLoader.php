@@ -58,16 +58,17 @@ class WikiFactoryLoader {
 	 * @access public
 	 * @author Krzysztof Krzyżaniak <eloy@wikia.com>
 	 *
-	 * @param integer $id default null: explicite set wiki id
+	 * @param integer $id default null	explicite set wiki id
+	 * @param string $server_name default null	explicite set server name
 	 *
 	 * @return WikiFactoryLoader object
 	 */
-	public function  __construct( $id = null ) {
+	public function  __construct( $id = null, $server_name = null ) {
 		global $wgDBname, $wgSharedDB, $wgDevelEnvironment, $wgDevelDomains;
 
 		if( !is_null( $id ) ) {
 			$this->mCityID = $id;
-			$this->mServerName = null;
+			$this->mServerName = $server_name;
 		}
 		elseif( !empty($_SERVER['SERVER_NAME'])) {
 			$this->mServerName = strtolower( $_SERVER['SERVER_NAME'] );
