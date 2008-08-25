@@ -389,6 +389,8 @@ function embedYouTube_url2nvid($url)
 function embedNicovideo($input, $argv, &$parser)
 {
 	$nvid = '';
+	$width  = $width_max  = 640;
+	$height = $height_max = 480;
 
 	if (!empty($argv['nvid']))
 	{
@@ -397,10 +399,18 @@ function embedNicovideo($input, $argv, &$parser)
 	{
 		$nvid = embedYouTube_url2nvid($input);
 	}
+	if (!empty($argv['width']) && settype($argv['width'], 'integer') && ($width_max >= $argv['width']))
+	{
+		$width = $argv['width'];
+	}
+	if (!empty($argv['height']) && settype($argv['height'], 'integer') && ($height_max >= $argv['height']))
+	{
+		$height = $argv['height'];
+	}
 
 	if (!empty($nvid))
 	{
-		$url = "http://ext.nicovideo.jp/thumb_watch/{$nvid}";
+		$url = "http://ext.nicovideo.jp/thumb_watch/{$nvid}?w={$width}&amp;h={$height}";
 		return "<script type=\"text/javascript\" src=\"{$url}\"></script>";
 	}
 }
