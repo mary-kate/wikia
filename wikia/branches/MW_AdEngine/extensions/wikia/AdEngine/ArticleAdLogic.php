@@ -89,7 +89,7 @@ class ArticleAdLogic {
 		switch (strtolower($tag)){
 		  // The tag itself gets a store
 		  case 'table':
-		  	if ($attr['id']) {
+		  	if (isset($attr['id']) && $attr['id'] == 'toc') {
 				//This table is the Table of Contents and shouldn't cause a collision
 				return 0;
 			}
