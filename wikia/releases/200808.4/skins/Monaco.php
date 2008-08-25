@@ -906,7 +906,7 @@ class MonacoTemplate extends QuickTemplate {
 						$script_output .= '$("a-sub-menu-item' . $last_count . '_' .$count.'")' . $prevent_blank ;
 					}
 				}
-				$menu_output .= $this->navmenu[$child]['text'];
+				$menu_output .= htmlspecialchars($this->navmenu[$child]['text']);
 				if ( !empty( $this->navmenu[$child]['children'] ) ) {
 					//$menu_output .= '<img src="' . $wgUploadPath . '/common/new/right_arrow.gif?1"
 					$menu_output .= '<em>&rsaquo;</em>';
