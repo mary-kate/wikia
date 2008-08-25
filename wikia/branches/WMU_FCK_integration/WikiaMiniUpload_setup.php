@@ -18,12 +18,13 @@ $wgExtensionMessagesFiles['WikiaMiniUpload'] = $dir.'/WikiaMiniUpload.i18n.php';
 $wgHooks['EditPage::showEditForm:initial2'][] = 'WMUSetup';
 
 function WMUSetup($editform) {
-	global $wgOut, $wgStylePath, $wgExtensionsPath, $wgStyleVersion, $wgHooks, $wgUser;
+	global $wgOut, $wgStylePath, $wgExtensionsPath, $wgStyleVersion, $wgHooks, $wgUser, $wgTemporaryTestPath ;
 	if(get_class($wgUser->getSkin()) == 'SkinMonaco') {
 		wfLoadExtensionMessages('WikiaMiniUpload');
 		$wgHooks['ExtendJSGlobalVars'][] = 'WMUSetupVars';
 		$wgOut->addScript('<script type="text/javascript" src="'.$wgStylePath.'/common/yui_2.5.2/slider/slider-min.js?'.$wgStyleVersion.'"></script>');
-		$wgOut->addScript('<script type="text/javascript" src="'.$wgExtensionsPath.'/wikia/WikiaMiniUpload/js/WMU.js?'.$wgStyleVersion.'"></script>');
+		//TODO  this is for TESTING purposes ONLY --- REVERT before actual merge - Bartek 
+		$wgOut->addScript('<script type="text/javascript" src="'. $wgTemporaryTestPath . '/wikia/WikiaMiniUpload/js/WMU.js?'.$wgStyleVersion.'"></script>');
 		$wgOut->addScript('<link rel="stylesheet" type="text/css" href="'.$wgExtensionsPath.'/wikia/WikiaMiniUpload/css/WMU.css?'.$wgStyleVersion.'" />');
 		if (isset ($editform->ImageSeparator)) {
 			$sep = $editform->ImageSeparator ;
