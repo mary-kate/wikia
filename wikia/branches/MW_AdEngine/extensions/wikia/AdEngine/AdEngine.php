@@ -108,7 +108,7 @@ class AdEngine {
 		} else if ( is_object($wgUser) && $wgUser->isLoggedIn() && !$wgUser->getOption('showAds') ){
 
 			$AdProviderNull=new AdProviderNull('User is logged in', false);
-			return $AdProviderNull->getAd();
+			return $AdProviderNull->getAd($slotname, $this->slots[$slotname]);
 			
 		} else {
 
@@ -184,7 +184,7 @@ class AdEngine {
 
 		$out = "<!-- #### BEGIN " . __CLASS__ . '::' . __METHOD__ . " ####-->\n";
 		foreach ($this->placeholders as $slotname){
-			$out .= '<div style="display:none" id="' . $slotname . '_load">' . $this->getAd($slotname) . "</div>\n";
+			$out .= '<div id="' . $slotname . '_load">' . $this->getAd($slotname) . "</div>\n";
 			// TODO : call the javascript to absolutely position the ad
 		}	
 		$out .= "<!-- #### END " . __CLASS__ . '::' . __METHOD__ . " ####-->\n";

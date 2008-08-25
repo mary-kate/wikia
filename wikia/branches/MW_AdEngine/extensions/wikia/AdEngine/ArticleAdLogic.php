@@ -89,6 +89,10 @@ class ArticleAdLogic {
 		switch (strtolower($tag)){
 		  // The tag itself gets a store
 		  case 'table':
+		  	if ($attr['id']) {
+				//This table is the Table of Contents and shouldn't cause a collision
+				return 0;
+			}
 			if (isset($attr['width'])){
 				if ( self::getPixels($attr['width']) >= self::pixelThreshold){
 					return .75;
