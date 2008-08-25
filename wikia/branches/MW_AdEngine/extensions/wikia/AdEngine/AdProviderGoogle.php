@@ -22,7 +22,7 @@ class AdProviderGoogle implements iAdProvider {
                 global $AdEngine;
                 $dim=getHeightWidthFromSize($this->slotInfo['size']);
 
-		$out = "<!-- Google Ad: $slotname, " . print_r($slot, true) . "-->";
+                $out = "<!-- " . __CLASS__ . " slot: $slotname -->";
                 $out .= '<script type="text/javascript">
                         bannerid=\'__GO____\';
                         

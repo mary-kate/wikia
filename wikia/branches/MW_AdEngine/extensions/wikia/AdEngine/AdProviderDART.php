@@ -71,7 +71,7 @@ class AdProviderDART implements iAdProvider {
 		$url .= 'endtag=$;';
 		$url .= "ord="; // See note above, ord MUST be last.
 
-		$out = "<!-- " . __CLASS__ . " slot: $slotname , " . print_r($slot, true) . "-->";
+		$out = "<!-- " . __CLASS__ . " slot: $slotname -->";
 
 		$out .= '<script type="text/javascript">' . "\n";
 		// Only generate the random number once per page. Note we don't want to do this with PHP
