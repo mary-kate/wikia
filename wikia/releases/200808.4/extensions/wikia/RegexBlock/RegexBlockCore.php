@@ -467,7 +467,9 @@ function wfGetRegexBlocked ($blocker, $blocker_block_data, $user, $user_ip) {
 	$ips = isset($blocker_block_data["ips"]) ? $blocker_block_data["ips"] : null;
 	$names = isset($blocker_block_data["regex"]) ? $blocker_block_data["regex"] : null;
 	$exact = isset($blocker_block_data["exact"]) ? $blocker_block_data["exact"] : null;
-    
+ // backward compatibility ;)
+ $result = $blocker_block_data;
+ 
 	/* check ips */
 	if ( (!empty($ips)) && (in_array($user_ip, $ips)) ) {
 		$result["ips"]['matches'] = array($user_ip);
