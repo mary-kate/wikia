@@ -40,14 +40,6 @@ class AdProviderDART implements iAdProvider {
 
 	public function getAd($slotname, $slot){
 
-                if(empty($this->zoneIds[$slotname])) {
-                        // Don't throw an exception. Under no circumstances should an ad failing
-                        // prevent the page from rendering.
-                        $NullAd = new NullAd("Invalid slotname ($slotname) for " . __CLASS__, true);
-			return $NullAd->getAd();
-                }
-
-
 		/* Nick wrote: Note, be careful of the order of the key values. From Dart Webmaster guide:
 		 * 	Order of multiple key-values in DART ad tags:  For best performance, DoubleClick recommends
 		 * 	that reserved key-values be placed as the last attributes in the DART ad tags, after any custom key-
