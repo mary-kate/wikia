@@ -3,6 +3,7 @@
 chdir(getenv('DOCUMENT_ROOT'));
 require 'includes/WebStart.php';
 require 'extensions/wikia/AdEngine/AdEngine.php';
+$wgShowAds=true;
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
 <head>
@@ -23,7 +24,15 @@ function $() {
 	return elements;
 }
 
-
+function toggleAds(ad) {
+	if (ad == 'TOP_LEADERBOARD') {
+		document.getElementById('TOP_LEADERBOARD').style.display = 'block';
+		document.getElementById('TOP_RIGHT_BOXAD').style.display = 'none';
+	} else {
+		document.getElementById('TOP_LEADERBOARD').style.display = 'none';
+		document.getElementById('TOP_RIGHT_BOXAD').style.display = 'block';
+	}
+}
 </script>
 <style type="text/css">
 body {
@@ -84,9 +93,12 @@ body {
 	width: 206px;
 	z-index: 20;	
 }
-
+#spotlight_footer {
+	width: 100%;
+}
 #TOP_LEADERBOARD {
 	background: #333;
+	display: none;
 	margin-bottom: 10px;
 }
 #TOP_RIGHT_BOXAD {
@@ -110,21 +122,17 @@ body {
 
 <body>
 <div id="wikia_header">
-	<!--
-	<input type="button" value="FAST1" onclick="FAST(1);" />
-	<input type="button" value="FAST2" onclick="FAST(2);" />
-	-->
+	<input type="button" value="TOP_LEADERBOARD" onclick="toggleAds(this.value);" />
+	<input type="button" value="TOP_RIGHT_BOXAD" onclick="toggleAds(this.value);" />
 </div>
 <div id="background_strip"></div>
 <div class="monaco_shrinkwrap">
 	<div id="wikia_page">
 		<div id="page_bar">controls here</div>
 		<div id="article">
-			<div id="FAST1"></div>
-			<div id="FAST2"></div>
-			<?php $html=file_get_contents(dirname(__FILE__) . '/testfiles/longArticleWithImagesNoCollision.html'); echo $html;?>
 			<?php echo AdEngine::getInstance()->getPlaceHolderDiv("TOP_LEADERBOARD"); ?>
 			<?php echo AdEngine::getInstance()->getPlaceHolderDiv("TOP_RIGHT_BOXAD"); ?>
+			<?php $html=file_get_contents(dirname(__FILE__) . '/testfiles/longArticleWithImagesNoCollision.html'); echo $html;?>
 			
 		</div><!-- Closing "article" -->
 		<div id="articleFooter">
@@ -136,19 +144,23 @@ body {
 		
 			<br clear="all">
 			<hr />
-		
-			<div style="width:33%; float:right">
-			  Center spotlight: <br />
-			  <?php echo AdEngine::getInstance()->getAd("FOOTER_SPOTLIGHT_MIDDLE"); ?>
-			</div>
-			<div style="width:33%; float:right">
-			  Right spotlight: <br />
-			  <?php echo AdEngine::getInstance()->getAd("FOOTER_SPOTLIGHT_RIGHT"); ?>
-			</div>
-			<div style="width:33%; float:right">
-		  	  Left spotlight: <br />
-			  <?php echo AdEngine::getInstance()->getAd("FOOTER_SPOTLIGHT_LEFT"); ?>
-			</div>
+			
+			<table id="spotlight_footer">
+			<tr>
+				<td>
+		  	  		Left spotlight: <br />
+			  		<?php echo AdEngine::getInstance()->getAd("FOOTER_SPOTLIGHT_LEFT"); ?>
+			  	</td>
+				<td>
+			  		Right spotlight: <br />
+			  		<?php echo AdEngine::getInstance()->getAd("FOOTER_SPOTLIGHT_RIGHT"); ?>
+				</td>
+				<td>
+			  		Center spotlight: <br />
+			  		<?php echo AdEngine::getInstance()->getAd("FOOTER_SPOTLIGHT_MIDDLE"); ?>
+				</td>
+			</tr>
+			</table>
 		</div>
 	</div><!-- Closing "wikia_page" -->
 	<div id="widget_sidebar">
