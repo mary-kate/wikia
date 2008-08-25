@@ -250,7 +250,7 @@ class RegexBlockForm extends SpecialPage
         $result = RegexBlockData::blockUser($this->mRegexBlockedAddress, $expiry, $this->mRegexBlockedExact, $this->mRegexBlockedCreation, $this->mRegexBlockedReason);
 		/* clear memcache */
 		$uname = $wgUser->getName();
-		wfRegexBlockUnsetKeys($uname, $this->mRegexBlockedAddress);
+		wfRegexBlockUnsetKeys($this->mRegexBlockedAddress);
 
         wfProfileOut( __METHOD__ );
         
@@ -286,7 +286,7 @@ class RegexBlockForm extends SpecialPage
                 
             if ( $dbw->affectedRows() ) {
                 /* success, remember to delete cache key  */
-                wfRegexBlockUnsetKeys( $blocker, $ip );
+                wfRegexBlockUnsetKeys( $ip );
                 $result = true;
             }
         }
