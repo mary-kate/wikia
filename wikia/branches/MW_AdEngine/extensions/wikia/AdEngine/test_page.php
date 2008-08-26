@@ -1,8 +1,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <?php
-chdir(getenv('DOCUMENT_ROOT'));
-require 'includes/WebStart.php';
-require 'extensions/wikia/AdEngine/AdEngine.php';
+ini_set('display_errors', true);
+# Mediwiki setup.
+$IP = getenv('DOCUMENT_ROOT');
+define( 'MEDIAWIKI', true );
+require "$IP/StartProfiler.php";
+require "$IP/includes/Defines.php";
+require "$IP/LocalSettings.php";
+require "$IP/includes/Setup.php";
+class_exists('AdEngine') || require "$IP/extensions/wikia/AdEngine/AdEngine.php";
 $wgShowAds=true;
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
@@ -195,6 +201,7 @@ $html=file_get_contents(dirname(__FILE__) . '/testfiles/longArticleWithImagesNoC
 
 
 <script language="javascript">
+// Temporary div swap code, to be replaced by tie div, when it's ready.
 function swapMe(slot){
   realDiv=document.getElementById(slot);
   loadDiv=document.getElementById(slot+'_load');
