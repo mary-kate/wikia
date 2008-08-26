@@ -384,7 +384,7 @@ class FCKeditor_MediaWiki
 		//End of CSS trick
 
 
-		$wgOut->addScript ('<script type="text/javascript" src="extensions/3rdparty/FCKeditor/fckeditor/fckeditor.js?' . $wgStyleVersion . '"></script>') ;
+		$wgOut->addScript ('<script type="text/javascript" src="' . $wgFCKEditor . 'fckeditor.js?' . $wgStyleVersion . '"></script>') ;
 
 		$script = <<<HEREDOC
 <script type="text/javascript"> 
@@ -404,7 +404,7 @@ sEditorAreaCSS += ",'.implode(',', $userStyles).'";
 </script>';
 		}
 		$wgOut->addScript ($script);
-                $wgOut->addScript ('<script type="text/javascript" src="extensions/3rdparty/FCKeditor/FCKeditor_body.js?' . $wgStyleVersion . '"></script>') ;
+                $wgOut->addScript ('<script type="text/javascript" src="' . $wgFCKEditorExtDir . 'FCKeditor_body.js?' . $wgStyleVersion . '"></script>') ;
 
 /*
 $script .= <<<HEREDOC
