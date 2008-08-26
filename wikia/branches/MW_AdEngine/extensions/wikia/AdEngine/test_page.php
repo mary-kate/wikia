@@ -137,9 +137,9 @@ body {
 		</div><!-- Closing "article" -->
 		<div id="articleFooter">
 			Article controls here
-			<div style="float:right">
-			  Footer Right box ad right: <br />
-			  <?php echo AdEngine::getInstance()->getPlaceHolderDiv("FOOTER_BOXAD_RIGHT"); ?>
+			<div>
+			  Footer Right box ad: <br />
+			  <?php /* echo AdEngine::getInstance()->getPlaceHolderDiv("FOOTER_BOXAD"); */?>
 			</div>
 		
 			<br clear="all">
@@ -181,7 +181,6 @@ body {
 
 <script language="javascript">
 function swapMe(slot){
-alert(slot);
   realDiv=document.getElementById(slot);
   loadDiv=document.getElementById(slot+'_load');
   realDiv.innerHTML=loadDiv.innerHTML;
@@ -190,6 +189,7 @@ alert(slot);
 foreach (AdEngine::getInstance()->getPlaceholders() as $ph){
 	echo "swapMe('$ph');\n";
 }
+?>
 </script>
 </body>
 </html>

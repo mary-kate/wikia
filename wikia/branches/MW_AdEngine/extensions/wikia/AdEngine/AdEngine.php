@@ -94,10 +94,14 @@ class AdEngine {
 	public function getAd($slotname) {
 		global $wgShowAds, $wgUser;
 
-		if(empty($this->providers[$this->slots[$slotname]['provider_id']])) {
+		if(empty($this->slots[$slotname])) {
+			$AdProviderNull=new AdProviderNull('Unrecognized slot', true);
+			return $AdProviderNull->getAd($slotname, array());
+
+		} else  if(empty($this->providers[$this->slots[$slotname]['provider_id']])) {
 			// Note: Don't throw an exception here. Fail gracefully for ads,
 			// don't under any circumstances fail the rendering of the page
-			$AdProviderNull=new AdProviderNull('Unrecognized Providerid', true);
+			$AdProviderNull=new AdProviderNull('Unrecognized provider_id', true);
 			return $AdProviderNull->getAd($slotname, $this->slots[$slotname]);
 
 		} else if ( $wgShowAds == false ){
@@ -123,6 +127,8 @@ class AdEngine {
 			return AdProviderDART::getInstance();
 		} else if($this->providers[$provider_id] == 'OpenX') {
 			return AdProviderOpenX::getInstance();
+		} else if($this->providers[$provider_id] == 'Google') {
+			return AdProviderGoogle::getInstance();
 		} else {
 			// Note: Don't throw an exception here. Fail gracefully for ads,
 			// don't under any circumstances fail the rendering of the page
