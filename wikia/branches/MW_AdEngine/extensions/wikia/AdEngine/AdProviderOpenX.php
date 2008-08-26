@@ -92,7 +92,6 @@ EOT;
 
 	// Logic for zoneids documented here: http://staff.wikia-inc.com/wiki/Ad_Slots
 	public function getZoneId($slotname, $catid){
-		return 501; // FIXME This is the only one that is working right now, hard code for testing
 
 		if (isset($this->zoneIds[$slotname])){
 			return $this->zoneIds[$slotname];
