@@ -691,7 +691,7 @@ class CreateWikiTask extends BatchTask {
 
 			if ( $article->exists() ) {
 				$ok = $article->updateRestrictions( $restrictions, $reason, 0, $expiry );
-			else {
+			} else {
 				$ok = $title->updateTitleProtection( $titleRestrictions, $reason, $expiry );	
 			}
 
