@@ -615,7 +615,7 @@ class LoadBalancer {
 		$requestRate = 10;
 
 		global $wgMemc;
-		$times = $wgMemc->get( wfMemcKey( 'lag_times' ) );
+		$times = $wgMemc->get( 'db:lag_times' );
 		if ( $times ) {
 			# Randomly recache with probability rising over $expiry
 			$elapsed = time() - $times['timestamp'];
@@ -643,7 +643,7 @@ class LoadBalancer {
 
 		# Add a timestamp key so we know when it was cached
 		$times['timestamp'] = time();
-		$wgMemc->set( wfMemcKey( 'lag_times' ), $times, $expiry );
+		$wgMemc->set( 'db:lag_times', $times, $expiry );
 
 		# But don't give the timestamp to the caller
 		unset($times['timestamp']);
