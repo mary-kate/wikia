@@ -1618,7 +1618,7 @@ global $wgEnableAdEngineCollisionTest;
 if ($wgEnableAdEngineCollisionTest &&
     ! ArticleAdLogic::isMainPage() &&
       ArticleAdLogic::isContentPage()){
-       echo ArticleAdLogic::getCollisionCollision($this->html('bodytext'));
+        echo ArticleAdLogic::getCollisionCollision($this->data['bodytext']);
 }
 
 
