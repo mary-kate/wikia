@@ -15,30 +15,51 @@ class AdProviderOpenX implements iAdProvider {
 		return self::$instance;
 	}
 
-	private $zoneIds = array(	'HOME_TOP_LEADERBOARD' => 626,
-								'HOME_TOP_RIGHT_BOXAD' => 627,
-								'HOME_LEFT_SKYSCRAPER_1' => 628,
-								'HOME_LEFT_SKYSCRAPER_2' => 629,
-								'TOP_LEADERBOARD' => 630,
-								'TOP_RIGHT_BOXAD' => 631,
-								'LEFT_SKYSCRAPER_1' => 632,
-								'LEFT_SKYSCRAPER_2' => 633,
-								'FOOTER_BOXAD' => 634,
-								'LEFT_SPOTLIGHT_1' => 635,
-								'FOOTER_SPOTLIGHT_LEFT' => 635,
-								'FOOTER_SPOTLIGHT_MIDDLE' => 635,
-								'FOOTER_SPOTLIGHT_RIGHT' => 635);
+	// TODO, get these out of code and configurable
+	private $zoneIds = array(
+		'HOME_TOP_LEADERBOARD' => 626,
+		'HOME_TOP_RIGHT_BOXAD' => 627,
+		'HOME_LEFT_SKYSCRAPER_1' => 628,
+		'HOME_LEFT_SKYSCRAPER_2' => 629,
+		'TOP_LEADERBOARD' => 630,
+		'TOP_RIGHT_BOXAD' => 631,
+		'LEFT_SKYSCRAPER_1' => 632,
+		'LEFT_SKYSCRAPER_2' => 633,
+		'FOOTER_BOXAD' => 634
+	);
+
+	private $spotlightZones = array(
+		'LEFT_SPOTLIGHT_1', 
+		'FOOTER_SPOTLIGHT_LEFT',
+		'FOOTER_SPOTLIGHT_MIDDLE',
+		'FOOTER_SPOTLIGHT_RIGHT'
+	);
+
+	private $spotlightCategoryZones = array(
+		'2' => 635, // Gaming
+		'3' => 636, // Entertainment
+		'5' => 637, 
+		'9' => 637, 
+		'12' => 637, 
+		'15' => 637, 
+		'16' => 637, 
+		'18' => 637, 
+		'19' => 637, 
+		'default' => 638
+	);
 
 	public function getAd($slotname, $slot) {
 
-		if(empty($this->zoneIds[$slotname])) {
+
+		global $wgCatId;
+		$zoneId = $this->getZoneId($slotname, @$wgCatId);
+
+		if(empty($zoneId)){
 			// Don't throw an exception. Under no circumstances should an ad failing
 			// prevent the page from rendering.
-                        $NullAd = new AdProviderNullAd("Invalid slotname ($slotname) for " . __CLASS__);
+                        $NullAd = new AdProviderNullAd("Invalid slotname, no zoneid for $slotname in " . __CLASS__);
                         return $NullAd->getAd($slotname, $slot);
 		}
-
-		$zoneId = $this->zoneIds[$slotname];
 
 		$adtag = <<<EOT
 <!-- AdProviderOpenX slot: $slotname zoneid: $zoneId  -->
@@ -66,6 +87,27 @@ class AdProviderOpenX implements iAdProvider {
 EOT;
 		return $adtag;
 
+	}
+
+
+	// Logic for zoneids documented here: http://staff.wikia-inc.com/wiki/Ad_Slots
+	public function getZoneId($slotname, $catid){
+		return 501; // FIXME This is the only one that is working right now, hard code for testing
+
+		if (isset($this->zoneIds[$slotname])){
+			return $this->zoneIds[$slotname];
+		} else if (in_array($slotname, $this->spotlightZones)){
+
+			// For spotlights, they all have the same zoneid, determined by category.
+			if (isset($this->spotlightCategoryZones[$catid])){
+				return $this->spotlightCategoryZones[$catid];
+			} else {
+				return $this->spotlightCategoryZones['default'];
+			}
+
+		} else {
+			return null;
+		}
 	}
 
 }
