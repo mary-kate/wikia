@@ -34,7 +34,6 @@ function onLoadFCKeditor()
                 var oFCKeditor = new FCKeditor('wpTextbox1') ;
                 oFCKeditor.Domain = wgFCKEditorDomain ;
                 if (oFCKeditor.Domain != '') {
-			alert (oFCKeditor.Domain) ;
                         document.domain = oFCKeditor.Domain ;
                 }
 
