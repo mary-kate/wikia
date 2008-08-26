@@ -27,9 +27,9 @@ class ArticleAdLogic {
 		return strlen(strip_tags($html)) > self::longArticleThreshold;
 	}
 
-
+	/* Note, this comment in the html is filled in by the hook AdEngineMagicWords */
 	public static function hasWikiaMagicWord ($html, $word){
-		return strpos($html, '<!-- __WIKIA_' . strtoupper($word) . '__ -->') !== false; 
+		return strpos($html, "<!--{$word}-->") !== false; 
 	}
 
 	/* Return the likelihood that there is a collision with the Box Ad
@@ -149,9 +149,9 @@ class ArticleAdLogic {
 	 * Otherwise, return true.
 	 */
 	public static function isBoxAdArticle($html){
-		if (self::hasWikiaMagicWord($html, "BANNER")){
+		if (self::hasWikiaMagicWord($html, "__WIKIA_BANNER__")){
 			return false;
-		} else if (self::hasWikiaMagicWord($html, "BOXAD")){
+		} else if (self::hasWikiaMagicWord($html, "__WIKIA_BOXAD__")){
 			return true;
 		} else if (self::getCollisionRank($html) >= self::collisionRankThreshold){
 			return false;
