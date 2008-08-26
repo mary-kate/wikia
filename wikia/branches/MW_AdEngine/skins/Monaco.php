@@ -1621,46 +1621,17 @@ menuitem_array = new Array();var submenuitem_array = new Array();</script>';
 			</div>
 		</div>
 		<!-- /WIDGETS -->
-	<!--/div-->
+<?php
+echo '<div id="realAdsContainer">';
+echo AdEngine::getInstance()->getDelayedLoadingCode();
+echo '</div>';
+?>
+	</div>
 <?php
 wfProfileOut( __METHOD__ . '-widgets');
 
 // curse like cobranding
 $this->printCustomFooter();
-
-echo AdEngine::getInstance()->getDelayedLoadingCode();
-
-global $wgAdServingType;
-if($wgAdServingType === 1) {
-	$adsDisplayed = AdServer::getInstance()->adsDisplayed;
-	function cmpAds($a, $b) {
-		if($a[1] == 'FAST_TOP') { return 0; }
-		else if($a[1] == 'FAST_HOME1') { return 1; }
-		else if($a[1] == 'FAST_HOME2') { return 2; }
-		else if($a[1] == 'HOME_TOP_LEADERBOARD') { return 1; }
-		else if($a[1] == 'HOME_TOP_RIGHT_BOXAD') { return 2; }
-		else if($a[1] == 'FAST_BOTTOM') { return 3; }
-		else if($a[1] == 'FAST_HOME3') { return 4; }
-		else if($a[1] == 'FAST_HOME4') { return 5; }
-		else if($a[1] == 'FAST_SIDE') { return 6; }
-		else if($a[1] == 'tr_anon') { return 7; }
-		else if($a[1] == 'tr_user') { return 8; }
-		else if($a[1] == 'js_bot5') { return 9; }
-		else if($a[1] == 'js_bot4') { return 10; }
-		else { return 100; }
-	}
-	uasort($adsDisplayed, "cmpAds");
-
-	echo '<div id="realAdsContainer">';
-	echo '<script type="text/javascript">TieDivLib.init();</script>';
-	foreach($adsDisplayed as $adSpace => $ad) {
-		echo '<div id="realAd'.$adSpace.'" style="display: none">';
-		echo '<script type="text/javascript">ad_call('.$adSpace.', "'.$ad[0].'", "'.$ad[1].'");</script>';
-		echo '</div>';
-		echo '<script type="text/javascript">if(curAdSpaceId != -1) TieDivLib.tie("realAd'.$adSpace.'", "adSpace"+curAdSpaceId, "'.$ad[1].'");</script>';
-	}
-	echo '</div>';
-}
 echo '</div>';
 echo AdServer::getInstance()->getAd('js_bot2');
 echo AdServer::getInstance()->getAd('js_bot3');
