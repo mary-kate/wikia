@@ -103,7 +103,7 @@ class WikiaMiniUpload {
 	}
 
 	function insertImage() {
-		global $wgRequest, $wgUser, $IP;
+		global $wgRequest, $wgUser, $wgContLang, $IP;
 		$type = $wgRequest->getVal('type');
 		$name = $wgRequest->getVal('name');
 		$mwname = $wgRequest->getVal('mwname');
@@ -198,7 +198,9 @@ class WikiaMiniUpload {
 		$caption = $wgRequest->getVal('caption');
 		$slider = $wgRequest->getVal('slider');
 
-		$tag = '[[Image:'.$title->getDBkey();
+		$ns_img = $wgContLang->getFormattedNsText( NS_IMAGE );
+
+		$tag = '[[' . $ns_img . ':'.$title->getDBkey();
 		if($size != 'full' && ($file->getMediaType() == 'BITMAP' || $file->getMediaType() == 'DRAWING')) {
 			$tag .= '|thumb';
 			if($layout != 'right') {

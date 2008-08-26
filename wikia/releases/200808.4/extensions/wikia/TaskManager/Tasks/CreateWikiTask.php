@@ -439,8 +439,9 @@ class CreateWikiTask extends BatchTask {
 
 		/**
 		 * set user for all maintenance work on central
-		 * $wgUser = $this->mStaff;
 		 */
+		$oldUser = $wgUser;
+		$wgUser = User::newFromName( 'CreateWiki script' );
 		$this->addLog( "Creating and modifing pages on Central Wikia (as user: " . $wgUser->getName() . ")..." );
 
 		/**
@@ -568,6 +569,10 @@ class CreateWikiTask extends BatchTask {
 				return false;
 			}
 		}
+
+		#--- revert back to original User object, just in case
+		$wgUser = $oldUser;
+
 		$this->addLog( "Creating and modifing pages on Central Wikia finished." );
 		return true;
 	}
