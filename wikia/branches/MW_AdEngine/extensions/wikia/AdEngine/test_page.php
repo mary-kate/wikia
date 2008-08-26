@@ -119,7 +119,21 @@ body {
 }
 </style>
 </head>
-
+<script>
+function FASTisCollisionTop(){
+	// stub
+	return true;
+}
+</script>
+<!-- Dependency --> 
+<script src="http://yui.yahooapis.com/2.5.2/build/yahoo/yahoo-min.js"></script> 
+<!-- Used for Custom Events and event listener bindings --> 
+<script src="http://yui.yahooapis.com/2.5.2/build/event/event-min.js"></script> 
+<!-- Source file --> 
+<script src="http://yui.yahooapis.com/2.5.2/build/connection/connection-min.js"></script>
+<?php
+$html=file_get_contents(dirname(__FILE__) . '/testfiles/longArticleWithImagesNoCollision.html'); 
+?>
 <body>
 <div id="wikia_header">
 	<input type="button" value="TOP_LEADERBOARD" onclick="toggleAds(this.value);" />
@@ -132,7 +146,7 @@ body {
 		<div id="article">
 			<?php echo AdEngine::getInstance()->getPlaceHolderDiv("TOP_LEADERBOARD"); ?>
 			<?php echo AdEngine::getInstance()->getPlaceHolderDiv("TOP_RIGHT_BOXAD"); ?>
-			<?php $html=file_get_contents(dirname(__FILE__) . '/testfiles/longArticleWithImagesNoCollision.html'); echo $html;?>
+			<?php echo $html;?>
 			
 		</div><!-- Closing "article" -->
 		<div id="articleFooter">
@@ -179,6 +193,7 @@ body {
 </div><!--Closing "monaco_shrinkwrap" -->
 <?php echo AdEngine::getInstance()->getDelayedLoadingCode()?>
 
+
 <script language="javascript">
 function swapMe(slot){
   realDiv=document.getElementById(slot);
@@ -192,4 +207,5 @@ foreach (AdEngine::getInstance()->getPlaceholders() as $ph){
 ?>
 </script>
 </body>
+<?php echo ArticleAdLogic::getCollisionCollision($html); ?>
 </html>

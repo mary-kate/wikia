@@ -180,5 +180,19 @@ class ArticleAdLogic {
 		}
 	}
 
+
+	// Do reporting to compare the javascript based collision detection logic with this one
+	static public function getCollisionCollision($html) {
+		$out = "<script type='text/javascript'>";
+		if (self::isBoxAdArticle($html)){
+			$out .= "var isBoxAdArticle=true;\n";
+		} else {
+			$out .= "var isBoxAdArticle=false;\n";
+		}
+
+		$out .= "</script>";
+		$out .= "<script src='/extensions/wikia/AdEngine/collisionCollision.js' type='text/javascript'></script>\n";
+		return $out;
+	}
   
 }
