@@ -571,7 +571,7 @@ function WidgetFrameworkWrapLinks($links) {
 		$out = '<ul>';
 		foreach($links as $link) {
 			$out .= '<li>';
-			$out .= '<a href="'.$link['href'].'"'.(isset($link['title']) ? ' title="'.htmlspecialchars($link['title']).'"' : '').'>'.htmlspecialchars($link['name']).'</a>';
+			$out .= '<a href="'.htmlspecialchars($link['href']).'"'.(isset($link['title']) ? ' title="'.htmlspecialchars($link['title']).'"' : '').'>'.htmlspecialchars($link['name']).'</a>';
 			if(isset($link['desc'])) {
 				$out .= '<br/>'.$link['desc'];
 			}
@@ -589,7 +589,7 @@ function WidgetFrameworkWrapLinks($links) {
  */
 function WidgetFrameworkMoreLink($link) {
 	wfProfileIn(__METHOD__);
-	$out = '<div class="widgetMore"><a href="'.$link.'">'.wfMsg('moredotdotdot').'</a></div>';
+	$out = '<div class="widgetMore"><a href="'.htmlspecialchars($link).'">'.wfMsg('moredotdotdot').'</a></div>';
 	wfProfileOut( __METHOD__ );
 	return $out;
 }

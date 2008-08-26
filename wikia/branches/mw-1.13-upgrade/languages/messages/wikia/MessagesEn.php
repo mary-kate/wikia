@@ -440,6 +440,7 @@ Please change [[Special:Preferences#prefsection-1|your preferences]] to use this
 'contactproblemdesc' => 'Message',
 'contactmailsub' => 'Wikia Contact Mail',
 'contactmail' => 'Send',
+'contactpage-email-failed' => '<b style="color: red">Please provide a valid e-mail address.</b>',
 'yourmail' => 'Your email address',
 'contactsubmitcomplete' => 'Thank you for contacting Wikia.',
 'contactrealname' => 'Your name',

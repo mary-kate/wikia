@@ -227,6 +227,11 @@ function axWFactoryClearCache()
  * axWFactorySaveVariable
  *
  * ajax method, save variable from form
+ *
+ * @author Krzysztof Krzyżaniak (eloy) <eloy@wikia-inc.com>
+ * @access public
+ *
+ * @return string encoded in JSON format
  */
 function axWFactorySaveVariable() {
 	global $wgUser, $wgRequest;
@@ -236,7 +241,7 @@ function axWFactorySaveVariable() {
 
 	if ( ! $wgUser->isAllowed('wikifactory') ) {
 		$error++;
-		$return = "You are not allowed to change variable value";
+		$return = Wikia::errormsg( "You are not allowed to change variable value" );
 	}
 	else {
 		$cv_id				= $wgRequest->getVal( 'varId' );
@@ -244,7 +249,6 @@ function axWFactorySaveVariable() {
 		$cv_name			= $wgRequest->getVal( 'varName' );
 		$cv_value			= $wgRequest->getVal( 'varValue' );
 		$cv_variable_type	= $wgRequest->getVal( 'varType' );
-		error_log( print_r( $wgRequest->getValues(), 1) );
 
 		#--- check if variable is valid
 		switch ( $cv_variable_type ) {
@@ -273,28 +277,46 @@ function axWFactorySaveVariable() {
 			break;
 			default:
 				$tEval = "\$__var_value = $cv_value;";
-				ob_start(); #--- catch parse errors
-				if (eval($tEval) === FALSE) {
+				/**
+				 * catch parse errors
+				 */
+				ob_start();
+				if( eval( $tEval ) === FALSE ) {
 					$error++;
-					$return = Wikia::errormsg( "Syntax error, variable not saved." );
+					$return = Wikia::errormsg( "Syntax error, value is not valid PHP structure. Variable not saved." );
 				}
 				else {
-					$return = Wikia::successmsg( "Parse OK, variable saved." );
 					$cv_value = $__var_value;
+					/**
+					 * now check if it's actually array when we want array)
+					 */
+					if( in_array( $cv_variable_type, array( "array", "struct", "hash" ) ) ) {
+						if( is_array( $cv_value ) ) {
+							$return = Wikia::successmsg( "Syntax OK (array), variable saved." );
+						}
+						else {
+							$error++;
+							$return = Wikia::errormsg( "Syntax error: value is not array. Variable not saved." );
+						}
+					}
+					else {
+						$return = Wikia::successmsg( "Parse OK, variable saved." );
+					}
 				}
 				ob_end_clean(); #--- puts parse error to /dev/null
 		}
 
-		#--- master database connection
-		$dbw = wfGetDB( DB_MASTER );
-
-		try {
-			if ( ! empty($city_id) ) {
-				WikiFactory::setVarByID( $cv_id, $city_id, $cv_value );
-			}
+		if( ! WikiFactory::setVarByID( $cv_id, $city_id, $cv_value ) ) {
+			$error++;
+			$return = Wikia::errormsg( "Variable not saved because of problems with database. Try again." );
 		}
-		catch ( DBQueryError $e ) {
-			#--- nothing so far
+		else {
+			$tied = WikiFactory::getTiedVariables( $cv_name );
+			if( $tied ) {
+				$return .= Wikia::successmsg(
+					" This variable is tied with others. Check: ". implode(", ", $tied )
+				);
+			}
 		}
 	}
 

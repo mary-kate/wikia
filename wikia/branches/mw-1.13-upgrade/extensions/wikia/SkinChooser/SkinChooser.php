@@ -276,7 +276,7 @@ function WikiaGetSkin ($user) {
 		return false;
 	}
 
-	if($wgTitle->getText() == $wgHomePageName) {
+	if( $wgTitle->getText() == $wgHomePageName && $wgTitle->getNamespace() == NS_MAIN ) {
 		$user->mSkin = &Skin::newFromKey($wgHomePageSkin);
 		return false;
 	}
