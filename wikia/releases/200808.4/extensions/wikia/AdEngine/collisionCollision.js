@@ -2,7 +2,7 @@
  * vs the PHP-based collision detection logic and do reporting on it.
  */
 
-try {
+//try {
 
   // Make a request to a squid box 
   function collisionRequest (js, php){
@@ -10,7 +10,8 @@ try {
 	  url += "js=" +  js + ';';
 	  url += "php=" +  php + ';';
 	  url += "width=" + escape(document.body.clientWidth) + ';';
-	  YAHOO.util.Connect.asyncRequest('GET', url, null, null); 
+	  document.write("<img src=" + url + " style='display:none'>");
+	  //YAHOO.util.Connect.asyncRequest('GET', url, null, null) 
   }
   if (FASTisCollisionTop() == isBoxAdArticle == true ){
 	  // Yay.
@@ -27,7 +28,8 @@ try {
   } 
 
 
+/*
 } catch (e) {
 	// Silently fail to make sure we don't cause problems on the live site for this test.
 	//alert(e.message);
-}
+}*/
