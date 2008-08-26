@@ -14,6 +14,7 @@ class UserChangesHistory {
 
 	const LOGIN_AUTO = 0;
 	const LOGIN_FORM = 1;
+	const LOGIN_REGISTRATION = 2;
 
 	/**
 	 * LoginHistoryHook
@@ -68,7 +69,7 @@ class UserChangesHistory {
 	 * Store row from user table before changes of preferences are saved.
 	 * Called by Hook SavePreferences
 	 * Data is stored in external storage archive1
-     *
+	 *
 	 * @author Krzysztof Krzyżaniak (eloy) <eloy@wikia-inc.com>
 	 * @access public
 	 * @static
@@ -104,6 +105,52 @@ class UserChangesHistory {
 					"user_options"     => $User->encodeOptions(),
 					"user_touched"     => $User->mTouched,
 					"user_token"       => $User->mToken,
+				),
+				__METHOD__
+			);
+			if ( $dbw->getFlag( DBO_TRX ) ) {
+				$dbw->commit();
+			}
+		}
+
+		wfProfileOut( __METHOD__ );
+
+		return true;
+	}
+
+	/**
+	 * RegistrationWikiHook
+	 *
+	 * Store wiki on which user register his account
+	 * Called by Hook AddNewAccount
+	 * Data is stored in external storage archive1
+	 *
+	 * @author Maciej Błaszkowski (Marooned) <marooned at wikia.com>
+	 * @access public
+	 * @static
+	 *
+	 * @return true		process other hooks
+	 */
+	static public function RegistrationWikiHook( $User ) {
+		global $wgCityId;
+
+		wfProfileIn( __METHOD__ );
+
+		/**
+		 * if user id is empty it means that user object is not loaded
+		 * store information only for registered users
+		 */
+		$id = $User->getId();
+		if ( $id ) {
+
+			$dbw = wfGetDBExt( DB_MASTER ) ;
+
+			$status = $dbw->insert(
+				'user_login_history',
+				array(
+					'user_id'   => $id,
+					'city_id'   => $wgCityId,
+					'ulh_from'  => LOGIN_REGISTRATION
 				),
 				__METHOD__
 			);
