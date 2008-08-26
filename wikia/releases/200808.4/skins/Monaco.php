@@ -1613,6 +1613,15 @@ wfProfileOut( __METHOD__ . '-widgets');
 
 // curse like cobranding
 $this->printCustomFooter();
+
+global $wgEnableAdEngineCollisionTest;
+if ($wgEnableAdEngineCollisionTest &&
+    ! ArticleAdLogic::isMainPage() &&
+      ArticleAdLogic::isContentPage()){
+       echo ArticleAdLogic::getCollisionCollision($this->html('bodytext'));
+}
+
+
 global $wgAdServingType;
 if($wgAdServingType === 1) {
 	$adsDisplayed = AdServer::getInstance()->adsDisplayed;
