@@ -686,7 +686,7 @@ class CreateWikiTask extends BatchTask {
 		$wgUser->addGroup( 'staff' );
 
 		foreach ($keyPages as $pageName) {
-			$title = Title::newFromName( $pageName );
+			$title = Title::newFromText( $pageName );
 			$article = new Article( $title );
 
 			if ( $article->exists() ) {
@@ -697,7 +697,7 @@ class CreateWikiTask extends BatchTask {
 
 			if ($ok) {
 				$this->addLog("Protected key page: $pageName");
-			else {
+			} else {
 				$this->addLog("Failed while trying to protect $pageName");
 			}
 		}
