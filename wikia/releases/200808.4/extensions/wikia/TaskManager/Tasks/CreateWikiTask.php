@@ -146,7 +146,10 @@ class CreateWikiTask extends BatchTask {
 		/**
 		 * protect key pages, e.g. logo and favicon (bug: 3209)
 		 */
-		$this->protectKeyPages();
+		$cmd = sprintf("SERVER_ID={$this->mWikiID} php {$IP}/maintenance/wikia/protectKeyPages.php --conf {$wgWikiaLocalSettingsPath} --aconf {$wgWikiaAdminSettingsPath}");
+		$this->addLog( "Running {$cmd}");
+		$retval = wfShellExec( $cmd, $status );
+		$this->addLog( $retval )
 
 		/**
 		 * Move Main_Page to $wgSitename page
@@ -658,51 +661,5 @@ class CreateWikiTask extends BatchTask {
 		} else {
 			$this->addLog("Hub not found in HubCreationVariables. Skipping this step.");
 		}
-	}
-
-	/**
-	 * protectKeyPages
-	 *
-	 * @author tor@wikia-inc.com
-	 */
-	public function protectKeyPages() {
-		global $wgUser;
-
-		$keyPages = array ( 'Image:Wiki.png', 'Image:Wiki_wide.png', 'Image:Favicon.ico' );
-
-		#--- define restriction level and duration
-		$restrictions['edit'] = 'sysop';
-		$restrictions['move'] = 'sysop';
-		$titleRestrictions = 'sysop';
-		$expiry = Block::infinity();
-
-		#--- define reason msg
-		# @todo i18n
-		$reason = 'Part of the official interface';
-
-		#--- switch to user 'CreateWiki script' for protection log messages
-		$oldUser = $wgUser;
-		$wgUser = User::newFromName( 'CreateWiki script' );
-		$wgUser->addGroup( 'staff' );
-
-		foreach ($keyPages as $pageName) {
-			$title = Title::newFromText( $pageName );
-			$article = new Article( $title );
-
-			if ( $article->exists() ) {
-				$ok = $article->updateRestrictions( $restrictions, $reason, 0, $expiry );
-			} else {
-				$ok = $title->updateTitleProtection( $titleRestrictions, $reason, $expiry );	
-			}
-
-			if ($ok) {
-				$this->addLog("Protected key page: $pageName");
-			} else {
-				$this->addLog("Failed while trying to protect $pageName");
-			}
-		}
-
-		$wgUser->removeGroup( 'staff' );
-		$wgUser = $oldUser;
 	}
 }
