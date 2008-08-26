@@ -153,7 +153,7 @@ class AdEngine {
 	/* For delayed ad loading, we have a place holder div that gets placed in the content,
 	   to be loaded at the bottom of the page with an absolute position.
 	   Keep track fo the placeholders for future refence */
-	public function getPlaceHolderDiv($slotname){
+	public function getPlaceHolderDiv($slotname, $reserveSpace=true){
 		$style = "";
 
 		if (! empty($this->slots[$slotname])){
@@ -161,9 +161,11 @@ class AdEngine {
 				// if the ad is disabled, hide the div
 				$style = ' style="display:none"';
 			} else {
-				$dim = self::getHeightWidthFromSize($this->slots[$slotname]['size']);
-				if (!empty($dim['width'])){
-					$style = " style=\"width: {$dim['width']}px; height: {$dim['height']}px\"";
+				if ($reserveSpace == true ){
+					$dim = self::getHeightWidthFromSize($this->slots[$slotname]['size']);
+					if (!empty($dim['width'])){
+						$style = " style=\"width: {$dim['width']}px; height: {$dim['height']}px\"";
+					}
 				}
 
 				// We will use this at the bottom of the page for ads.
