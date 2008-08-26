@@ -165,7 +165,7 @@ body {
 	</div><!-- Closing "wikia_page" -->
 	<div id="widget_sidebar">
 		Left Skyscraper 1:
-		<?php echo AdEngine::getInstance()->getPlaceHolderDiv("LEFT_SKYSCRAPER_1"); ?>
+		<?php echo AdEngine::getInstance()->getPlaceHolderDiv("LEFT_SKYSCRAPER_1", false); ?>
 		
 		<p>
 		Left Spotlight:
@@ -173,7 +173,7 @@ body {
 
 		<p>
 		Left Skyscraper 2:
-		<?php echo AdEngine::getInstance()->getPlaceHolderDiv("LEFT_SKYSCRAPER_2"); ?>
+		<?php echo AdEngine::getInstance()->getPlaceHolderDiv("LEFT_SKYSCRAPER_2", false); ?>
 	
 	</div>
 </div><!--Closing "monaco_shrinkwrap" -->
