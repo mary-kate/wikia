@@ -94,14 +94,10 @@ class AdEngine {
 	public function getAd($slotname) {
 		global $wgShowAds, $wgUser;
 
-		if(empty($this->slots[$slotname])) {
-			$AdProviderNull=new AdProviderNull('Unrecognized slot', true);
-			return $AdProviderNull->getAd($slotname, array());
-
-		} else  if(empty($this->providers[$this->slots[$slotname]['provider_id']])) {
+		if(empty($this->providers[$this->slots[$slotname]['provider_id']])) {
 			// Note: Don't throw an exception here. Fail gracefully for ads,
 			// don't under any circumstances fail the rendering of the page
-			$AdProviderNull=new AdProviderNull('Unrecognized provider_id', true);
+			$AdProviderNull=new AdProviderNull('Unrecognized Providerid', true);
 			return $AdProviderNull->getAd($slotname, $this->slots[$slotname]);
 
 		} else if ( $wgShowAds == false ){
@@ -127,8 +123,6 @@ class AdEngine {
 			return AdProviderDART::getInstance();
 		} else if($this->providers[$provider_id] == 'OpenX') {
 			return AdProviderOpenX::getInstance();
-		} else if($this->providers[$provider_id] == 'Google') {
-			return AdProviderGoogle::getInstance();
 		} else {
 			// Note: Don't throw an exception here. Fail gracefully for ads,
 			// don't under any circumstances fail the rendering of the page
@@ -190,12 +184,103 @@ class AdEngine {
 			return '<!-- No placeholders called for ' . __METHOD__ . " -->\n";
 		}
 
-		$out = "<!-- #### BEGIN " . __CLASS__ . '::' . __METHOD__ . " ####-->\n";
+$out = <<<EOT
+<script>
+/**
+ * http://acko.net/blog/mouse-handling-and-absolute-positions-in-javascript
+ */
+function getAbsolutePosition(element){
+	var r = {
+		x:element.offsetLeft,
+		y:element.offsetTop
+	};
+	if(element.offsetParent){
+		var tmp = getAbsolutePosition(element.offsetParent);
+		r.x += tmp.x;
+		r.y += tmp.y;
+		alert(r.y);
+	}
+	return r;
+};
+
+var __isFireFox = navigator.userAgent.match(/gecko/i);
+
+
+//returns the absolute position of some element within document
+function GetElementAbsolutePos(element) {
+	var res = new Object();
+	res.x = 0; res.y = 0;
+	if (element !== null) {
+		res.x = element.offsetLeft; 
+		res.y = element.offsetTop; 
+    	
+		var offsetParent = element.offsetParent;
+		var parentNode = element.parentNode;
+
+		while (offsetParent !== null) {
+			res.x += offsetParent.offsetLeft;
+			res.y += offsetParent.offsetTop;
+
+			if (offsetParent != document.body && offsetParent != document.documentElement) {
+				res.x -= offsetParent.scrollLeft;
+				res.y -= offsetParent.scrollTop;
+			}
+			//next lines are necessary to support FireFox problem with offsetParent
+			if (__isFireFox) {
+				while (offsetParent != parentNode && parentNode !== null) {
+					res.x -= parentNode.scrollLeft;
+					res.y -= parentNode.scrollTop;
+					
+					parentNode = parentNode.parentNode;
+				}    
+			}
+			parentNode = offsetParent.parentNode;
+			offsetParent = offsetParent.offsetParent;
+		}
+	}
+    return res;
+}
+
+
+/**
+ * @author Inez Korczynski
+ */
+TieDivLibrary = new function() {
+
+	var Dom = YAHOO.util.Dom;
+
+	var items = Array();
+
+	this.tie = function(slotname) {
+		items.push([slotname]);
+	}
+
+	this.calculate = function() {
+		//var extraY = Dom.getY('monaco_shrinkwrap_main');
+		var extraY = GetElementAbsolutePos($('monaco_shrinkwrap_main')).y;
+
+		for(i = 0; i < items.length; i++) {
+			YAHOO.log("slotname: " + items[i][0]);
+			Dom.setStyle(items[i][0]+'_load', 'position', 'absolute');
+			Dom.setStyle(items[i][0]+'_load', 'zIndex', 100);
+			//alert('setting ' + items[i][0] + '_load to ' + getAbsolutePosition($(items[i][0])).y); 
+			//Dom.setY(items[i][0]+'_load', GetElementAbsolutePos($(items[i][0])).y);
+			//Dom.setStyle(items[i][0]+'_load', 'pixelTop', GetElementAbsolutePos($(items[i][0])).y + 'px');
+			//Dom.setStyle(items[i][0]+'_load', 'right', Dom.getClientWidth() - Dom.getX(items[i][0]) - $(items[i][0]).offsetWidth + 'px');
+			//Dom.setStyle(items[i][0]+'_load', 'top', parseFloat(getAbsolutePosition($(items[i][0])).y) + 'px');
+		}
+	}
+
+}
+</script>
+EOT;
+		$out .= "<!-- #### BEGIN " . __CLASS__ . '::' . __METHOD__ . " ####-->\n";
 		foreach ($this->placeholders as $slotname){
 			$out .= '<div id="' . $slotname . '_load">' . $this->getAd($slotname) . "</div>\n";
-			// TODO : call the javascript to absolutely position the ad
+			$out .= "<script>TieDivLibrary.tie('{$slotname}');</script>\n";
 		}	
 		$out .= "<!-- #### END " . __CLASS__ . '::' . __METHOD__ . " ####-->\n";
+		$out .= "<script>TieDivLibrary.calculate();</script>\n";
 		return $out;
 	}
 
