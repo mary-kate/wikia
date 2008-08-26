@@ -25,7 +25,7 @@ class AdProviderNull implements iAdProvider {
 	public function __construct($reason, $logError = false){
 		$this->reason = $reason; 
 		if ($logError){
-			error_log("AdEngine: $reason from {$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_PATH']}", E_USER_WARNING);
+			error_log("AdEngine: $reason from {$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}", E_USER_WARNING);
 		}
 	}
 
