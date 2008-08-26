@@ -411,8 +411,6 @@ class RequestWikiPage extends SpecialPage {
 		}
 		else {
 			#--- editing exisiting request
-			unset( $params['request_timestamp'] );
-
 			#---
 			# check if title is changed, if is changed mark it -
 			# then we first read request from database

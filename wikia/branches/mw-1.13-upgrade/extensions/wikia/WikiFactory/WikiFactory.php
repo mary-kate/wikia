@@ -1126,20 +1126,16 @@ class WikiFactory {
 	 *
 	 * clear the interwiki links for ALL languages in memcached.
 	 *
-	 * @author moli@wikia
+	 * @author Piotr Molski <moli@wikia.com>
 	 * @access public
 	 * @static
-	 *
-	 * @param 
-	 *
-	 * @param integer $wiki: identifier from city_list
 	 *
 	 * @return string: path to file or null if id is not a number
 	 */
 	static public function clearInterwikiCache() {
 		global $wgLocalDatabases, $wgDBname;
 		global $wgMemc;
-		
+
 		wfProfileIn( __METHOD__ );
 		if (empty($wgLocalDatabases)) {
 			$wgLocalDatabases = array();
@@ -1159,5 +1155,37 @@ class WikiFactory {
 
 		wfProfileOut( __METHOD__ );
 		return $loop;
-	}		
+	}
+
+	/**
+	 * getTiedVariables
+	 *
+	 * return variables connected somehow to given variable. Used
+	 * for displaying hints after saving variable ("you should edit these
+	 * variables as well"), Ticket #3387. So far it uses hardcoded
+	 * values.
+	 *
+	 * @todo Move hardcoded values to MediaWiki message.
+	 *
+	 * @author Krzysztof Krzyżaniak (eloy) <eloy@wikia-inc.com>
+	 * @access public
+	 * @static
+	 *
+	 * @param string	$cv_name	variable name
+	 *
+	 * @return array: names of tied variables or false if nothing matched
+	 */
+	static public function getTiedVariables( $cv_name ) {
+		$tied = array(
+			"wgExtraNamespacesLocal|wgContentNamespaces|wgNamespacesWithSubpages|wgNamespacesToBeSearchedDefault"
+		);
+		foreach( $tied as $group ) {
+			$pattern = "/\b{$cv_name}\b/";
+			if( preg_match( $pattern, $group ) ) {
+				return explode( "|", $group );
+			}
+		}
+
+		return false;
+	}
 };

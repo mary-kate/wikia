@@ -57,7 +57,7 @@ YAHOO.wikia.ProblemReportsDialog.prototype = {
 			}
 
 			// format AJAX request params
-			YAHOO.util.Connect.asyncRequest("POST", wgScriptPath + wgScript, callback, "action=ajax&rs=wfProblemReportsAjaxGetDialog&rsargs[]=" + args.ns + "&rsargs[]=" + args.title);
+			YAHOO.util.Connect.asyncRequest("POST", wgScriptPath + wgScript, callback, "action=ajax&rs=wfProblemReportsAjaxGetDialog&rsargs[]=" + args.ns + "&rsargs[]=" +   encodeURIComponent(args.title) );
 		}
 		else {
 			// yeah, we have problem reports form content - show it...

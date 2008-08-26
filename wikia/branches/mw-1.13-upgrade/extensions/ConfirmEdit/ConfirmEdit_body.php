@@ -104,8 +104,7 @@ class SimpleCaptcha {
 		return "<p><label for=\"wpCaptchaWord\">{$captcha['question']}</label> = " .
 			wfElement( 'input', array(
 				'name' => 'wpCaptchaWord',
-				'id'   => 'wpCaptchaWord',
-				'tabindex' => 1 ) ) . // tab in before the edit textarea
+				'id'   => 'wpCaptchaWord' ) ) .
 			"</p>\n" .
 			wfElement( 'input', array(
 				'type'  => 'hidden',

@@ -58,7 +58,7 @@ function WidgetContribs($id, $params) {
 	}
 
 	// 'more' link...
-	$more = Title::newFromText('Contributions', NS_SPECIAL)->getLocalURL();
+	$more = Title::newFromText('Contributions/' . $wgUser->getName(), NS_SPECIAL)->getLocalURL();
 
 	$ret .= WidgetFrameworkMoreLink($more);
 
