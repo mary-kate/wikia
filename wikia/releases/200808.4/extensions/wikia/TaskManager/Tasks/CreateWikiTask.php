@@ -149,7 +149,7 @@ class CreateWikiTask extends BatchTask {
 		$cmd = sprintf("SERVER_ID={$this->mWikiID} php {$IP}/maintenance/wikia/protectKeyPages.php --conf {$wgWikiaLocalSettingsPath} --aconf {$wgWikiaAdminSettingsPath}");
 		$this->addLog( "Running {$cmd}");
 		$retval = wfShellExec( $cmd, $status );
-		$this->addLog( $retval )
+		$this->addLog( $retval );
 
 		/**
 		 * Move Main_Page to $wgSitename page
