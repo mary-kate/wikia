@@ -977,6 +977,9 @@ class MonacoTemplate extends QuickTemplate {
 	}
 
 ?>
+	<? //TODO: Build into allinone ?>
+	<script type="text/javascript" src="/skins/common/jquery-1.2.6.min.js"></script>
+	
 	</head>
 <?php		wfProfileOut( __METHOD__ . '-head'); ?>
 <?php		wfProfileIn( __METHOD__ . '-body'); ?>
@@ -1627,8 +1630,9 @@ wfProfileOut( __METHOD__ . '-widgets');
 
 // curse like cobranding
 $this->printCustomFooter();
-
-echo AdEngine::getInstance()->getDelayedLoadingCode();
+if (! ArticleAdLogic::isMainPage() &&  ArticleAdLogic::isContentPage()){
+	echo ArticleAdLogic::getCollisionCollision($this->data['bodytext']);
+}
 
 global $wgAdServingType;
 if($wgAdServingType === 1) {
@@ -1669,6 +1673,9 @@ $this->html('bottomscripts'); /* JS call to runBodyOnloadHook */
 $this->html('reporttime');
 wfRunHooks('SpecialFooter');
 wfProfileOut( __METHOD__ . '-body');
+?>
+<?php
+	echo AdEngine::getInstance()->getDelayedLoadingCode();
 ?>
 	</body>
 </html>
