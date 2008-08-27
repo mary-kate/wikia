@@ -23,7 +23,7 @@ class AdProviderGoogle implements iAdProvider {
                 $dim=AdEngine::getHeightWidthFromSize($slot['size']);
 
                 $out = "<!-- " . __CLASS__ . " slot: $slotname -->";
-                $out .= '<script type="text/javascript">
+                $out .= '<script type="text/javascript">/*<![CDATA[*/
                         bannerid=\'__GO____\';
                         
                         google_ad_client = "pub-4086838842346968";
@@ -45,7 +45,7 @@ class AdProviderGoogle implements iAdProvider {
                         //google_page_url = "";
                         //google_ui_features = "rc:6";
                         //document.write(\'<scr\' + \'ipt type="text/javascript"  src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></scr\' + \'ipt>\');
-                        </script>
+                        /*]]>*/</script>
                         <script type="text/javascript"  src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>';
                 return $out;
         }

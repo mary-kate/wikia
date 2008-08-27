@@ -63,7 +63,7 @@ class AdProviderOpenX implements iAdProvider {
 
 		$adtag = <<<EOT
 <!-- AdProviderOpenX slot: $slotname zoneid: $zoneId  -->
-<script type='text/javascript'>
+<script type='text/javascript'>/*<![CDATA[*/
    var source = Array();
    source.push('slot=$slotname');
    source.push('catid=' + wgCatId);
@@ -83,7 +83,7 @@ class AdProviderOpenX implements iAdProvider {
   document.write('</scr'+'ipt>');
   document.write('<scr'+'ipt type="text/javascript" src="'+base_url+'"></scr'+'ipt>');
 
-</script>
+/*]]>*/</script>
 EOT;
 		return $adtag;
 
