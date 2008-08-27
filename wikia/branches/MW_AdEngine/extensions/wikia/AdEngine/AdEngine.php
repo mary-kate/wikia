@@ -194,11 +194,7 @@ class AdEngine {
 		$out .= '<script type="text/javascript" src="/extensions/wikia/TieDivLibrary/TieDivLibrary.js"></script>';
 		foreach ($this->placeholders as $slotname){
 
-			$class = '';
-
-			if ( strpos($slotname, 'SPOTLIGHT') ) {
-				$class = ' class="wikia_spotlight"';
-			}
+			$class = strpos($slotname, 'SPOTLIGHT') ? ' class="wikia_spotlight"' : ' class="wikia_ad"';
 
 			$out .= '<div id="' . $slotname . '_load"'.$class.'>' . $this->getAd($slotname) . "</div>\n";
 			$out .= '<script type="text/javascript">TieDivLibrary.tie("'. $slotname .'");</script>';
