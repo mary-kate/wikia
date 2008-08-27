@@ -3,6 +3,10 @@
  * Author: Inez Korczynski
  */
 
+# basic permissions
+$wgGroupPermissions['sysop']['setadminskin'] = true;
+$wgGroupPermissions['staff']['setadminskin'] = true;
+
 $wgHooks['SetExtraCookies'][] = 'SetSkinChooserCookies';
 function SetSkinChooserCookies($user) {
 	global $wgCookieExpiration, $wgCookiePath, $wgCookieDomain, $wgCookieSecure, $wgCookiePrefix;
@@ -35,12 +39,11 @@ function SetThemeForPreferences($pref) {
 
 $wgHooks['SavePreferencesHook'][] = 'SavePreferencesSkinChooser';
 function SavePreferencesSkinChooser($pref) {
-	global $wgUser, $wgCityId, $wgAdminSkin, $wgTitle, $wgAdminSkin;
+	global $wgUser, $wgCityId, $wgAdminSkin, $wgTitle;
 
 	# Save setting for admin skin
 	if(!empty($pref->mAdminSkin)) {
-		$ug = $wgUser->getGroups();
-		if( in_array('staff', $ug) || in_array('sysop', $ug) ) {
+		if( $wgUser->isAllowed( 'setadminskin' ) ) {
 			if($pref->mAdminSkin != $wgAdminSkin && !(empty($wgAdminSkin) && $pref->mAdminSkin == 'ds')) {
 				$log = new LogPage('var_log');
 				if($pref->mAdminSkin == 'ds') {
@@ -199,8 +202,7 @@ function WikiaSkinPreferences($pref) {
 	$wgOut->addHTML('<br/>'.$pref->getToggle('skinoverwrite'));
 
 	# Display ComboBox for admins/staff only
-	$ug = $wgUser->getGroups();
-	if(in_array('staff', $ug) || in_array('sysop', $ug)) {
+	if( $wgUser->isAllowed( 'setadminskin' ) ) {
 
 		$wgOut->addHTML("<br/><h2>".wfMsg('admin_skin')."</h2>".wfMsg('defaultskin_choose'));
 		$wgOut->addHTML('<select name="adminSkin" id="adminSkin">');
