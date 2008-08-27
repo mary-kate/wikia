@@ -89,20 +89,14 @@ TieDivLibrary = new function() {
 	var browser = Array();
 
 	this.init = function() {
-		new YAHOO.widget.LogReader(null, {width: "350px", height: "300px", draggable: true}); // setup onpage logger 
-		Dom.addClass('body', 'yui-skin-sam');
+		//new YAHOO.widget.LogReader(null, {width: "350px", height: "300px", draggable: true}); // setup onpage logger 
+		//Dom.addClass('body', 'yui-skin-sam');
 
 		this.browser = YAHOO.env.ua;
 	}
 
 	this.tie = function(slotname) {
 		items.push([slotname]);
-
-		// setup ads CSS
-		with(Dom.get(slotname + '_load').style) {
-			position = 'absolute';
-			zIndex = 100;
-		}
 	}
 
 	this.getXY = function(element) {
@@ -111,17 +105,24 @@ TieDivLibrary = new function() {
 
 		element = Dom.get(element);
 
-		// ff3+ and Opera
-		if ( (this.browser.gecko >= 1.9) || this.browser.opera) {
+		// FireFox3+ and Opera 9.51+
+		if ( (this.browser.gecko >= 1.9) || (this.browser.opera >= 9.51) ) {
 			[pos.x, pos.y] = Dom.getXY(element);
 		}
-		// older versions of ff
-		else if ( this.browser.gecko < 1.9 ) {
+		// all the rest
+		else {
 			pos = GetElementAbsolutePos(element);
 		}
-		// IE
-		else if ( this.browser.ie ) {
-			pos = GetElementAbsolutePos(element);
+
+		// offset for IE
+		if (this.browser.ie) {
+			pos.x -= 2;
+			pos.y -= 2;
+
+			// spotlights fix
+			if ( Dom.hasClass(element, 'wikia_spotlight') ) {
+				pos.y -= 1;
+			}
 		}
 
 		pos.x = Math.round(pos.x);
