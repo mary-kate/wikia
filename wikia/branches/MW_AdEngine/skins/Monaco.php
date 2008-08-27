@@ -977,9 +977,6 @@ class MonacoTemplate extends QuickTemplate {
 	}
 
 ?>
-	<? //TODO: Build into allinone ?>
-	<script type="text/javascript" src="/skins/common/jquery-1.2.6.min.js"></script>
-	
 	</head>
 <?php		wfProfileOut( __METHOD__ . '-head'); ?>
 <?php		wfProfileIn( __METHOD__ . '-body'); ?>
@@ -1630,9 +1627,8 @@ wfProfileOut( __METHOD__ . '-widgets');
 
 // curse like cobranding
 $this->printCustomFooter();
-if (! ArticleAdLogic::isMainPage() &&  ArticleAdLogic::isContentPage()){
-	echo ArticleAdLogic::getCollisionCollision($this->data['bodytext']);
-}
+
+echo AdEngine::getInstance()->getDelayedLoadingCode();
 
 global $wgAdServingType;
 if($wgAdServingType === 1) {
@@ -1655,8 +1651,6 @@ if($wgAdServingType === 1) {
 	}
 	uasort($adsDisplayed, "cmpAds");
 
-	/**
-	// macbre: removing following code to due to switch to new ads loading code
 	echo '<div id="realAdsContainer">';
 	echo '<script type="text/javascript">TieDivLib.init();</script>';
 	foreach($adsDisplayed as $adSpace => $ad) {
@@ -1666,7 +1660,6 @@ if($wgAdServingType === 1) {
 		echo '<script type="text/javascript">if(curAdSpaceId != -1) TieDivLib.tie("realAd'.$adSpace.'", "adSpace"+curAdSpaceId, "'.$ad[1].'");</script>';
 	}
 	echo '</div>';
-	**/
 }
 echo '</div>';
 echo AdServer::getInstance()->getAd('js_bot2');
@@ -1676,9 +1669,6 @@ $this->html('bottomscripts'); /* JS call to runBodyOnloadHook */
 $this->html('reporttime');
 wfRunHooks('SpecialFooter');
 wfProfileOut( __METHOD__ . '-body');
-?>
-<?php
-	echo AdEngine::getInstance()->getDelayedLoadingCode();
 ?>
 	</body>
 </html>
