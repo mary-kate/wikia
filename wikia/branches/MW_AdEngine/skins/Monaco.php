@@ -1628,6 +1628,7 @@ wfProfileOut( __METHOD__ . '-widgets');
 // curse like cobranding
 $this->printCustomFooter();
 
+/**
 echo AdEngine::getInstance()->getDelayedLoadingCode();
 
 global $wgAdServingType;
@@ -1661,6 +1662,7 @@ if($wgAdServingType === 1) {
 	}
 	echo '</div>';
 }
+**/
 echo '</div>';
 echo AdServer::getInstance()->getAd('js_bot2');
 echo AdServer::getInstance()->getAd('js_bot3');
@@ -1669,6 +1671,9 @@ $this->html('bottomscripts'); /* JS call to runBodyOnloadHook */
 $this->html('reporttime');
 wfRunHooks('SpecialFooter');
 wfProfileOut( __METHOD__ . '-body');
+?>
+<?php
+	echo AdEngine::getInstance()->getDelayedLoadingCode();
 ?>
 	</body>
 </html>
