@@ -108,6 +108,7 @@ class WikiaMiniUpload {
 		$name = $wgRequest->getVal('name');
 		$mwname = $wgRequest->getVal('mwname');
 		$extraId = $wgRequest->getVal('extraId');
+		$fck = $wgRequest->getBool ('fck') ;
 
 		if($name !== NULL) {
 			if($name == '') {
@@ -221,7 +222,11 @@ class WikiaMiniUpload {
 
 		$tmpl = new EasyTemplate(dirname(__FILE__).'/templates/');
 		$tmpl->set_vars(array('tag' => $tag));
-		return $tmpl->execute('summary');
+		if ($fck) {
+			return $tmpl->execute('fck_summary');
+		} else {
+			return $tmpl->execute('summary');
+		}
 	}
 
 	function clean() {
