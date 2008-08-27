@@ -33,7 +33,7 @@ $dbResult = $DB->Query (
 	  'SELECT city_id, city_dbname'
 	. ' FROM ' . wfSharedTable('city_list')
 	. ' WHERE city_public = 1'
-//	. ' AND city_useshared = 1'
+	. ' AND city_useshared = 1'
 	. ';'
 	, __METHOD__
 );
@@ -53,6 +53,7 @@ foreach ($wikisDB as $wikiID => $wikiDB) {
 	$dbResult = $DB->Query (
 		  'SELECT rev_user, min(rev_timestamp) AS edit_date'
 		. ' FROM revision'
+		. ' WHERE rev_user <> 0'
 		. ' GROUP BY rev_user'
 		. ';'
 		, __METHOD__
@@ -69,22 +70,28 @@ foreach ($wikisDB as $wikiID => $wikiDB) {
 //step 3 of 3: add first edit date for every user found across all wikis
 echo "Step 3 of 3: add first edit date for every user found across all wikis\n";
 
-$dbw = wfGetDBExt( DB_MASTER ) ;
-
-foreach ($usersReg as $userID => $userData) {
-	$status = $dbw->insert(
-		'user_login_history',
-		array(
-			'user_id'		=> $userID,
-			'city_id'		=> $userData['cityId'],
-			'ulh_timestamp'	=> $userData['editDate'],
-			'ulh_from'		=> 2	//LOGIN_REGISTRATION
-		),
-		__METHOD__
-	);
-}
-if ( $dbw->getFlag( DBO_TRX ) ) {
-	$dbw->commit();
+if (isset($options['dryrun'])) {
+	foreach ($usersReg as $userID => $userData) {
+		echo "INSERT INTO user_login_history (user_id, city_id, ulh_timestamp, ulh_from) VALUES ($userID, {$userData['cityId']}, {$userData['editDate']}, 2);\n";
+	}
+} else {
+	$dbw = wfGetDBExt(DB_MASTER) ;
+	foreach ($usersReg as $userID => $userData) {
+		$status = $dbw->insert(
+			'user_login_history',
+			array(
+				'user_id'		=> $userID,
+				'city_id'		=> $userData['cityId'],
+				'ulh_timestamp'	=> $userData['editDate'],
+				'ulh_from'		=> 2	//LOGIN_REGISTRATION
+			),
+			__METHOD__
+		);
+		wfWaitForSlavesExt(5);	//check for slave lag
+	}
+	if ($dbw->getFlag(DBO_TRX)) {
+		$dbw->commit();
+	}
 }
 $time = microtime(true) - $time_start;
 echo "Updated " . count($usersReg) . " users. Execution time: $time seconds\n";
