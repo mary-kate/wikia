@@ -293,7 +293,8 @@ class FCKeditorParser extends Parser
 		$dom = $this->preprocessToDom( $text );
                 $flags = 0 ;
                 $text = $frame->expand( $dom, $flags );
-
+		$templates = "" ;
+		
 		$tags = array();
 		$result = array () ;
 		$offset=0;
@@ -347,7 +348,7 @@ class FCKeditorParser extends Parser
 			$stringToParse .= substr($text, $startingPos);
 			$text = &$stringToParse;
 		}
-		
+	
        	 	return array (
 				"text" => $text ,
 				"templates" => $templates . "__NOTOC__"
