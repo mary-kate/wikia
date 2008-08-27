@@ -1655,6 +1655,8 @@ if($wgAdServingType === 1) {
 	}
 	uasort($adsDisplayed, "cmpAds");
 
+	/**
+	// macbre: removing following code to due to switch to new ads loading code
 	echo '<div id="realAdsContainer">';
 	echo '<script type="text/javascript">TieDivLib.init();</script>';
 	foreach($adsDisplayed as $adSpace => $ad) {
@@ -1664,6 +1666,7 @@ if($wgAdServingType === 1) {
 		echo '<script type="text/javascript">if(curAdSpaceId != -1) TieDivLib.tie("realAd'.$adSpace.'", "adSpace"+curAdSpaceId, "'.$ad[1].'");</script>';
 	}
 	echo '</div>';
+	**/
 }
 echo '</div>';
 echo AdServer::getInstance()->getAd('js_bot2');
