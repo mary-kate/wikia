@@ -73,7 +73,7 @@ class AdProviderDART implements iAdProvider {
 
 		$out = "<!-- " . __CLASS__ . " slot: $slotname -->";
 
-		$out .= '<script type="text/javascript">' . "\n";
+		$out .= '<script type="text/javascript">/*<![CDATA[*/' . "\n";
 		// Only generate the random number once per page. Note we don't want to do this with PHP
 		// because it needs to be different for every user, and if it's PHP Varnish/Squid will cache it.
 		static $ordGenerated = false;
@@ -87,7 +87,7 @@ class AdProviderDART implements iAdProvider {
 		document.write("<scr"+"ipt type='text/javascript' src='$url"+dartRand+"'><\/scr"+"ipt>");
 
 EOT;
-		$out .= "</script>\n";
+		$out .= "/*]]>*/</script>\n";
 
 		return $out;
 	}
