@@ -62,14 +62,10 @@ body.ltr #articleFooter ul.actions li div {
 	margin: 0 0 0 20px;
 }
 
-
-/* ads fix */
-#monaco_shrinkwrap_main,
-#navigation_widget,
-#navigation,
-#navigation .menu-item {
-	z-index: 20;
-	position: relative;
+/* spotlights fix */
+#spotlight_footer {
+	height: 1px;
+	margin-bottom: 100px;
 }
 
 /* user menu fix */
