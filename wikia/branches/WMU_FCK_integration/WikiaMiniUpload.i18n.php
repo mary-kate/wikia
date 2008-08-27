@@ -33,6 +33,7 @@ $messages['en'] = array(
 	'wmu-recent-inf' => 'Recently Uploaded Images',
 	'wmu-thiswiki2' => 'This Wiki Images ($1 results)',
 	'wmu-success' => '<h1>Success</h1>The following wikitext was successfully placed in your article:',
+	'wmu-success-fck' => '<h1>Success</h1>The image was succesfully placed inside your article.' ,
 	'wmu-return' => 'Return to Editing',
 	'wmu-back' => 'back',
 	'wmu-close' => 'close',
