@@ -977,6 +977,8 @@ class MonacoTemplate extends QuickTemplate {
 	}
 
 ?>
+	<? //TODO: Build into allinone ?> 
+	<script type="text/javascript" src="/skins/common/jquery-1.2.6.min.js"></script> 
 	</head>
 <?php		wfProfileOut( __METHOD__ . '-head'); ?>
 <?php		wfProfileIn( __METHOD__ . '-body'); ?>
@@ -1599,9 +1601,9 @@ menuitem_array = new Array();var submenuitem_array = new Array();</script>';
 			
 			<?php 
 				if (ArticleAdLogic::isContentPage() && ArticleAdLogic::isLongArticle($wgArticle->getContent())) { //valid article
-					echo '<div style="text-align: center; margin-bottom: 10px;">'. AdEngine::getInstance()->getAd('LEFT_SKYSCRAPER_1') .'</div>';
+					echo '<div style="text-align: center; margin-bottom: 10px;">'. AdEngine::getInstance()->getPlaceHolderDiv('LEFT_SKYSCRAPER_1', false) .'</div>';
 				} else if (ArticleAdLogic::isMainPage()) { //main page
-					echo '<div style="text-align: center; margin-bottom: 10px;">'. AdEngine::getInstance()->getAd('HOME_LEFT_SKYSCRAPER_1') .'</div>';
+					echo '<div style="text-align: center; margin-bottom: 10px;">'. AdEngine::getInstance()->getPlaceHolderDiv('HOME_LEFT_SKYSCRAPER_1', false) .'</div>';
 				}
 			?>
 
@@ -1612,9 +1614,9 @@ menuitem_array = new Array();var submenuitem_array = new Array();</script>';
 			
 			<?php
 				if (ArticleAdLogic::isContentPage() && ArticleAdLogic::isLongArticle($wgArticle->getContent())) { //valid article
-					echo '<div style="text-align: center; margin-bottom: 10px;">'. AdEngine::getInstance()->getAd('LEFT_SKYSCRAPER_2') .'</div>';
+					echo '<div style="text-align: center; margin-bottom: 10px;">'. AdEngine::getInstance()->getPlaceHolderDiv('LEFT_SKYSCRAPER_2', false) .'</div>';
 				} else if (ArticleAdLogic::isMainPage()) { //main page
-					echo '<div style="text-align: center; margin-bottom: 10px;">'. AdEngine::getInstance()->getAd('HOME_LEFT_SKYSCRAPER_2') .'</div>';
+					echo '<div style="text-align: center; margin-bottom: 10px;">'. AdEngine::getInstance()->getPlaceHolderDiv('HOME_LEFT_SKYSCRAPER_2', false) .'</div>';
 				}
 			?>
 
