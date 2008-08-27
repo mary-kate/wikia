@@ -93,6 +93,8 @@ TieDivLibrary = new function() {
 		//Dom.addClass('body', 'yui-skin-sam');
 
 		this.browser = YAHOO.env.ua;
+
+		//setInterval('TieDivLibrary.calculate()', 5000);
 	}
 
 	this.tie = function(slotname) {
@@ -134,8 +136,12 @@ TieDivLibrary = new function() {
 	}
 
 	this.calculate = function() {
+
+		YAHOO.log('calculate() called', 'info', 'TieDivLib');
+
 		for(i = 0; i < items.length; i++) {
 			var pos = this.getXY(items[i][0]);
+			Dom.setStyle(items[i][0]+'_load', 'position', 'absolute');
 			Dom.setStyle(items[i][0]+'_load', 'left', pos.x + 'px');
 			Dom.setStyle(items[i][0]+'_load', 'top',  pos.y + 'px');
 		}
