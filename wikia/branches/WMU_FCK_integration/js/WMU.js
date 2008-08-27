@@ -279,6 +279,11 @@ function WMU_insertImage(e, type) {
 	params.push('type='+type);
 	params.push('mwname='+$('ImageUploadMWname').value);
 
+	// fck must produce a different text
+	if (WMU_FCK) {
+		params.push('fck=true') ;
+	}
+
 	if(type == 'overwrite') {
 		params.push('name='+$('ImageUploadExistingName').value);
 	} else if(type == 'rename') {
