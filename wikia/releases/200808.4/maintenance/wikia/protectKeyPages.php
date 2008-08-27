@@ -32,6 +32,7 @@ $wgMessageCache->addMessages( array ('createwiki-protect-reason' => 'Part of the
 $reason = wfMsgForContent('createwiki-protect-reason');
 
 $wgUser->addGroup( 'staff' );
+$wgUser->addGroup( 'bot' );
 
 foreach ($wgWikiaKeyPages as $pageName) {
 	$title = Title::newFromText( $pageName );
@@ -51,4 +52,5 @@ foreach ($wgWikiaKeyPages as $pageName) {
 }
 
 $wgUser->removeGroup( 'staff' );
+$wgUser->removeGroup( 'bot' );
 print "Done protecting pages.\n";
