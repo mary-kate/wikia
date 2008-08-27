@@ -163,22 +163,23 @@ class AdEngine {
 		$style = "";
 
 		if (! empty($this->slots[$slotname])){
-			if($this->slots[$slotname]['enabled'] == 'No'){
-				// if the ad is disabled, hide the div
-				$style = ' style="display:none"';
-			} else {
-				if ($reserveSpace == true ){
-					$dim = self::getHeightWidthFromSize($this->slots[$slotname]['size']);
-					if (!empty($dim['width'])){
-						$style = " style=\"width: {$dim['width']}px; height: {$dim['height']}px\"";
-					}
-				}
-
-				// We will use this at the bottom of the page for ads.
-				$this->placeholders[] = $slotname;
+			$styles = array(); 
+			$dim = self::getHeightWidthFromSize($this->slots[$slotname]['size']);
+			if (!empty($dim['width'])){
+				array_push($styles, "width: {$dim['width']}px;");
+				array_push($styles, "height: {$dim['height']}px;");
 			}
-		}
 
+			if($this->slots[$slotname]['enabled'] == 'No' || $reserveSpace == false){
+				array_push($styles, "display: none;");
+			}
+
+			$style = ' style="'. implode(" ", $styles) .'"';
+
+			// We will use this at the bottom of the page for ads.
+			$this->placeholders[] = $slotname;
+
+		}
 
 		return "<div id=\"$slotname\"$style></div>";
 	}
@@ -197,6 +198,10 @@ class AdEngine {
 			$class = strpos($slotname, 'SPOTLIGHT') ? ' class="wikia_spotlight"' : ' class="wikia_ad"';
 
 			$out .= '<div id="' . $slotname . '_load"'.$class.'>' . $this->getAd($slotname) . "</div>\n";
+			$out .= '<script type="text/javascript">
+				//need to check innerHTML of returned ad to determine if 1x1 pixel or empty
+				YAHOO.util.Dom.setStyle("'. $slotname .'", "display", "block");
+			</script>';
 			$out .= '<script type="text/javascript">TieDivLibrary.tie("'. $slotname .'");</script>';
 		}	
 		$out .= '<script type="text/javascript">TieDivLibrary.calculate();</script>';
