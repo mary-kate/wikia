@@ -32,11 +32,6 @@ body.mainpage {
 	min-width: 990px;
 }
 .monaco_shrinkwrap {
-	/*
-	left: 50%;
-	margin-left: -485px;
-	width: 971px;
-	*/
 	position: relative;
 	width: 100%;
 }
