@@ -10,7 +10,6 @@ function getAbsolutePosition(element){
 		var tmp = getAbsolutePosition(element.offsetParent);
 		r.x += tmp.x;
 		r.y += tmp.y;
-		alert(r.y);
 	}
 	return r;
 };
@@ -20,25 +19,48 @@ var __isFireFox = navigator.userAgent.match(/gecko/i);
 
 //returns the absolute position of some element within document
 function GetElementAbsolutePos(element) {
-	var res = new Object();
-	res.x = 0; res.y = 0;
+	var res = {x:0, y:0};
+
 	if (element !== null) {
+
+		// http://www.quirksmode.org/dom/w3c_cssom.html
+		// works in IE5.5+, FF3 (almost) and Opera9.51+
+		if (document.documentElement.getBoundingClientRect) {
+			var rect = element.getBoundingClientRect();
+			res.x = rect.left;
+			res.y = Math.round(rect.top); // ff doesn't round
+
+			YAHOO.log('using getBoundingClientRect()', 'info', 'TieDivLib');
+			YAHOO.log(rect);
+
+			return res;
+		}
+
 		res.x = element.offsetLeft; 
 		res.y = element.offsetTop; 
     	
 		var offsetParent = element.offsetParent;
 		var parentNode = element.parentNode;
 
-		while (offsetParent !== null) {
+		while (offsetParent != null) {
 			res.x += offsetParent.offsetLeft;
 			res.y += offsetParent.offsetTop;
 
 			if (offsetParent != document.body && offsetParent != document.documentElement) {
 				res.x -= offsetParent.scrollLeft;
 				res.y -= offsetParent.scrollTop;
+				YAHOO.log(offsetParent.scrollLeft);
+				YAHOO.log(offsetParent.scrollTop);
 			}
 			//next lines are necessary to support FireFox problem with offsetParent
 			if (__isFireFox) {
+
+				// ff2 bug fix (ads within article content) - include #wikia_page border width
+				if (offsetParent.id && offsetParent.id == 'wikia_page') {
+					res.x += 1;
+					res.y += 1;
+				}
+
 				while (offsetParent != parentNode && parentNode !== null) {
 					res.x -= parentNode.scrollLeft;
 					res.y -= parentNode.scrollTop;
@@ -50,7 +72,8 @@ function GetElementAbsolutePos(element) {
 			offsetParent = offsetParent.offsetParent;
 		}
 	}
-    return res;
+
+	return res;
 }
 
 
@@ -63,22 +86,60 @@ TieDivLibrary = new function() {
 
 	var items = Array();
 
-	this.tie = function(slotname) {
-		items.push([slotname]);
+	var browser = Array();
+
+	this.init = function() {
+		new YAHOO.widget.LogReader(null, {width: "350px", height: "300px", draggable: true}); // setup onpage logger 
+		Dom.addClass('body', 'yui-skin-sam');
+
+		this.browser = YAHOO.env.ua;
 	}
 
-	this.calculate = function() {
-		//var extraY = Dom.getY('monaco_shrinkwrap_main');
-		var extraY = GetElementAbsolutePos(Dom.get('monaco_shrinkwrap_main')).y;
+	this.tie = function(slotname) {
+		items.push([slotname]);
 
-		for(i = 0; i < items.length; i++) {
-			YAHOO.log("slotname: " + items[i][0]);
-			Dom.setStyle(items[i][0]+'_load', 'position', 'absolute');
-			Dom.setStyle(items[i][0]+'_load', 'zIndex', 100);
-			Dom.setY(items[i][0]+'_load', GetElementAbsolutePos(Dom.get(items[i][0])).y);
-			Dom.setX(items[i][0]+'_load', GetElementAbsolutePos(Dom.get(items[i][0])).x);
+		// setup ads CSS
+		with(Dom.get(slotname + '_load').style) {
+			position = 'absolute';
+			zIndex = 100;
 		}
 	}
 
+	this.getXY = function(element) {
+
+		var pos = {x:0, y:0};
+
+		element = Dom.get(element);
+
+		// ff3+ and Opera
+		if ( (this.browser.gecko >= 1.9) || this.browser.opera) {
+			[pos.x, pos.y] = Dom.getXY(element);
+		}
+		// older versions of ff
+		else if ( this.browser.gecko < 1.9 ) {
+			pos = GetElementAbsolutePos(element);
+		}
+		// IE
+		else if ( this.browser.ie ) {
+			pos = GetElementAbsolutePos(element);
+		}
+
+		pos.x = Math.round(pos.x);
+		pos.y = Math.round(pos.y);
+
+		YAHOO.log('getXY for ' + element.id + ': (' + pos.x + ', ' + pos.y + ')', 'info', 'TieDivLib');
+		
+		return pos;
+	}
+
+	this.calculate = function() {
+		for(i = 0; i < items.length; i++) {
+			var pos = this.getXY(items[i][0]);
+			Dom.setStyle(items[i][0]+'_load', 'left', pos.x + 'px');
+			Dom.setStyle(items[i][0]+'_load', 'top',  pos.y + 'px');
+		}
+	}
+
+	this.init();
 }
 
