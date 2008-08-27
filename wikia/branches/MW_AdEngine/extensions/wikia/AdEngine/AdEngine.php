@@ -191,10 +191,12 @@ class AdEngine {
 		}
 
 		$out = "<!-- #### BEGIN " . __CLASS__ . '::' . __METHOD__ . " ####-->\n";
+		$out .= '<script type="text/javascript" src="/extensions/wikia/TieDivLibrary/TieDivLibrary.js"></script>';
 		foreach ($this->placeholders as $slotname){
 			$out .= '<div id="' . $slotname . '_load">' . $this->getAd($slotname) . "</div>\n";
-			// TODO : call the javascript to absolutely position the ad
+			$out .= '<script type="text/javascript">TieDivLibrary.tie("'. $slotname .'");</script>';
 		}	
+		$out .= '<script type="text/javascript">TieDivLibrary.calculate();</script>';
 		$out .= "<!-- #### END " . __CLASS__ . '::' . __METHOD__ . " ####-->\n";
 		return $out;
 	}
