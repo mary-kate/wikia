@@ -64,6 +64,11 @@ class SpecialSearch {
 			$this->namespaces = $this->userNamespaces( $user );
 		}
 
+		if (empty($this->namespaces))
+		{
+			$this->namespaces = $this->defaultNamespaces();
+		}
+
 		$this->searchRedirects = $request->getcheck( 'redirs' ) ? true : false;
 	}
 
@@ -252,6 +257,23 @@ class SpecialSearch {
 			if( $user->getOption( 'searchNs' . $ns ) ) {
 				$arr[] = $ns;
 			}
+		}
+		return $arr;
+	}
+
+	/**
+	 * Extract default namespaces to search from wiki config,
+	 * returning a list of index numbers.
+	 *
+	 * @return array
+	 * @private
+	 */
+	function defaultNamespaces() {
+		global $wgNamespacesToBeSearchedDefault;
+
+		$arr = array();
+		foreach( $wgNamespacesToBeSearchedDefault as $ns => $val ) {
+			$arr[] = $ns;
 		}
 		return $arr;
 	}
