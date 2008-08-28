@@ -143,16 +143,30 @@
 	font-size: 9pt;
 }
 #wikia_footer_outside {
-	margin-left: 216px;
+	border-top: 1px solid #AAA;
+	border-bottom: 1px solid #AAA;
+	margin: 0 5px 20px 216px;
+	position: relative;
+	top: -156px;
+}
+#wikia_footer_outside tr.row td {
+	border-top: 1px solid #AAA;
 }
 .wikia_footer_table {
 	width: 100%;
+}
+.wikia_footer_table_left {
+	width: 50%;
+}
+.wikia_footer_table_right {
+	border-left: 1px dashed #AAA; 
 }
 .wikia_footer_headline {
 	background-color: #F9F9F9;
 	border-top: 1px solid #AAA;
 	border-bottom: 1px solid #AAA;
 	color: #36C;
+	clear: both;
 	font-family: arial;
 	font-size: 11pt;
 	font-weight: bold;
@@ -160,7 +174,18 @@
 	text-transform: uppercase;
 }
 .wikia_footer_module {
+	border-top: 1px solid #AAA;
+	float: left;
+	width: 100%;
+}
+.wikia_footer_module_inside {
 	padding: 10px !important;
+}
+.wikia_footer_module.half {
+	width: 50%;
+}
+.wikia_footer_module.divider .wikia_footer_module_inside {
+	border-left: 1px dashed #AAA;
 }
 
 /*** ARTICLE FOOTER ***/
