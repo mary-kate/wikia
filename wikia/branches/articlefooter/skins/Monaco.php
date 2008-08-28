@@ -1186,7 +1186,7 @@ if( $custom_user_data ) {
 <?php		wfProfileIn( __METHOD__ . '-page'); ?>
 
 	<div class="monaco_shrinkwrap" id="monaco_shrinkwrap_main">
-		<div id="wikia_page">
+		<div id="wikia_page" class="clearfix">
 			<div id="page_bar" class="reset color1 clearfix">
 				<ul id="page_controls">
 <?php
