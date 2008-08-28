@@ -38,6 +38,7 @@ $wgExtensionCredits['specialpage'][] = array(
         'description' => 'This extension enables Hard Redirects (301), and implements the "Redirected From" text with javascript. The benefit is for SEO, there is only one page for each article  (minimize duplicate content)'
 );
 
+//only support for monaco at the moment
 $wgHooks['ArticleViewHeader'][]='jsRedirectedFromDiv';
 $wgHooks['BeforeRedirect'][]='hardRedirectWithCookie'; // Note this hook does not exist in core. You must add it to Wiki.php (see header)
 $wgHooks['BeforePageDisplay'][]='jsRedirectedFromText';
@@ -48,10 +49,13 @@ $wgHooks['BeforePageDisplay'][]='jsRedirectedFromText';
  * content check
  */
 function jsRedirectedFromDiv($article, $outputDone, $pcache){
-	global $wgOut, $wgEnableHardRedirectsWithJSText;
+	global $wgUser, $wgOut, $wgEnableHardRedirectsWithJSText;
 	if (! $wgEnableHardRedirectsWithJSText){
 		return true;
 	}
+	if(get_class($wgUser->getSkin()) != 'SkinMonaco') {
+		return true;
+	}	
 
 	// Set up the subtitle "Redirected From"
 	$wgOut->setSubtitle('<div id="redirectMsg" class="redirectMsg" style="display:none"></div>');
@@ -60,9 +64,12 @@ function jsRedirectedFromDiv($article, $outputDone, $pcache){
 
 // Fill in the text in the div created above. In a separate hook so the javascript is at the bottom of the page.
 function jsRedirectedFromText($out){
-	global $wgEnableHardRedirectsWithJSText, $wgCookiePrefix;
+	global $wgUser, $wgEnableHardRedirectsWithJSText, $wgCookiePrefix;
         global $wgCookiePath, $wgCookieDomain, $wgCookieSecure;
 	if (! $wgEnableHardRedirectsWithJSText){
+		return true;
+	}
+	if(get_class($wgUser->getSkin()) != 'SkinMonaco') {
 		return true;
 	}
  
@@ -94,7 +101,10 @@ function jsRedirectedFromText($out){
  */
 function hardRedirectWithCookie($wgTitle, $target){
 
-	global $wgEnableHardRedirectsWithJSText;
+	global $wgEnableHardRedirectsWithJSText, $wgUser;
+	if(get_class($wgUser->getSkin()) != 'SkinMonaco') {
+		return true;
+	}
 	if ($wgEnableHardRedirectsWithJSText){
 		global $wgOut, $wgCookiePrefix, $wgCookiePath, $wgCookieDomain,
 			$wgCookieSecure, $wgRequest;
