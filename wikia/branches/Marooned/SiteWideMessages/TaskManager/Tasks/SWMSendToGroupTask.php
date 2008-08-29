@@ -3,7 +3,7 @@
 /**
  * @package MediaWiki
  * @subpackage BatchTask
- * @author Maciej Błaszkowski <marooned@wikia.com> for Wikia.com
+ * @author Maciej Błaszkowski <marooned at wikia.com> for Wikia.com
  * @copyright (C) 2008, Wikia Inc.
  * @licence GNU General Public Licence 2.0 or later
  */
@@ -269,7 +269,7 @@ class SWMSendToGroupTask extends BatchTask {
 	 *
 	 * @return boolean: result of sending
 	 */
-	private function sendMessageToGroup($params) {echo '<pre>'; print_r (__METHOD__); echo '</pre>';
+	private function sendMessageToGroup($params) {
 		$result = true;
 
 		$DB = wfGetDB(DB_SLAVE);
@@ -308,7 +308,7 @@ class SWMSendToGroupTask extends BatchTask {
 	 *
 	 * @return boolean: result of sending
 	 */
-	private function sendMessageToWiki($params) {echo '<pre>'; print_r (__METHOD__); echo '</pre>';
+	private function sendMessageToWiki($params) {
 		$result = true;
 
 		$wikiID = null;
@@ -375,7 +375,7 @@ class SWMSendToGroupTask extends BatchTask {
 	 *
 	 * @return boolean: result of sending
 	 */
-	private function sendMessageToHub($params) {echo '<pre>'; print_r (__METHOD__); echo '</pre>';
+	private function sendMessageToHub($params) {
 		$result = true;
 
 		$DB = wfGetDB(DB_SLAVE);
@@ -416,7 +416,7 @@ class SWMSendToGroupTask extends BatchTask {
 	 *
 	 * @return boolean: result of sending
 	 */
-	private function sendMessageToGroupOnHub($params) {echo '<pre>'; print_r (__METHOD__); echo '</pre>';
+	private function sendMessageToGroupOnHub($params) {
 		$result = true;
 
 		$DB = wfGetDB(DB_SLAVE);
@@ -457,7 +457,7 @@ class SWMSendToGroupTask extends BatchTask {
 	 *
 	 * @return boolean: result of sending
 	 */
-	private function sendMessageToActive($params) {echo '<pre>'; print_r (__METHOD__); echo '</pre>';
+	private function sendMessageToActive($params) {
 		$result = true;
 
 		$DB = wfGetDB(DB_SLAVE);
@@ -496,7 +496,7 @@ class SWMSendToGroupTask extends BatchTask {
 	 *
 	 * @return boolean: result of operation
 	 */
-	private function sendMessageHelperToUsers(&$sqlValues) {echo '<pre>'; print_r (__METHOD__); echo '</pre>';
+	private function sendMessageHelperToUsers(&$sqlValues) {
 		$DB = wfGetDB(DB_MASTER);
 		$dbResult = (boolean)$DB->Query (
 			  'INSERT INTO ' . MSG_STATUS_DB
@@ -520,7 +520,7 @@ class SWMSendToGroupTask extends BatchTask {
 	 *
 	 * @return boolean: result of operation
 	 */
-	private function sendMessageHelperToActive(&$wikisDB) {echo '<pre>'; print_r (__METHOD__); echo '</pre>';
+	private function sendMessageHelperToActive(&$wikisDB) {
 		$result = true;
 		$usersSent = array();
 
@@ -569,7 +569,7 @@ class SWMSendToGroupTask extends BatchTask {
 	 *
 	 * @return boolean: result of operation
 	 */
-	private function sendMessageHelperToGroup(&$wikisDB) {echo '<pre>'; print_r (__METHOD__); echo '</pre>';
+	private function sendMessageHelperToGroup(&$wikisDB) {
 		$usersSent = array();
 
 		//step 2 of 3: look into each wiki for users that belong to a specified group
