@@ -21,24 +21,25 @@ class AdProviderDART implements iAdProvider {
 		return self::$instance;
 	}
 
-	private $sites = array(	'Auto' => 'wka.auto',
-							'Creative' => 'wka.crea',
-							'Education' => 'wka.edu',
-							'Entertainment' => 'wka.ent',
-							'Finance' => 'wka.fin',
-							'Gaming' => 'wka.gaming',
-							'Green' => 'wka.green',
-							'Humor' => 'wka.humor',
-							'Lifestyle' => 'wka.life',
-							'Music' => 'wka.music',
-							'Philosophy and Religion' => 'wka.phil',
-							'Politics and Activism' => 'wka.poli',
-							'Science and Nature' => 'wka.sci',
-							'Sports' => 'wka.sports',
-							'Technology' => 'wka.tech',
-							'Test Site' => 'wka.test',
-							'Toys' => 'wka.toys',
-							'Travel' => 'wka.travel');
+        private $sites = array( 'Auto' => 'wka.auto',
+                                                        'Creative' => 'wka.crea',
+                                                        'Education' => 'wka.edu',
+                                                        'Entertainment' => 'wka.ent',
+                                                        'Finance' => 'wka.fin',
+                                                        'Gaming' => 'wka.gaming',
+                                                        'Green' => 'wka.green',
+                                                        'Humor' => 'wka.humor',
+                                                        'Lifestyle' => 'wka.life',
+                                                        'Music' => 'wka.music',
+                                                        'Philosophy' => 'wka.phil',
+                                                        'Politics' => 'wka.poli',
+                                                        'Science' => 'wka.sci',
+                                                        'Sports' => 'wka.sports',
+                                                        'Technology' => 'wka.tech',
+                                                        'Test Site' => 'wka.test',
+                                                        'Toys' => 'wka.toys',
+                                                        'Travel' => 'wka.travel');
+
 
 	public function getAd($slotname, $slot){
 
