@@ -1,7 +1,7 @@
 <?php
 /* We need an easy way to switch back and forth between Old Monaco (AdServer) and New Monaco (AdEngine)
  * Monaco_AdServer, and the if statement below, can be removed once everyone is using $wgEnableAdEngine */
-if (isset($wgEnableAdEngine) && $wgEnableAdEngine !=true){
+if (@$wgEnableAdEngine != true){
 	// Use the old code
         require dirname(__FILE__) . '/Monaco_200808.4.php';
         return;
