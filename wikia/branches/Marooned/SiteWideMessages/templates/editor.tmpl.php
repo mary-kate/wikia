@@ -113,10 +113,10 @@
 
 						<tr>
 							<td>
-								<input name="mSendModeUsers" id="mSendModeU" type="radio" value="USER"<?= $formData['sendModeUsers'] == 'USER' ? ' checked="checked"' : ''?>/>
+								<input name="mSendModeUsers" id="mSendModeUsersU" type="radio" value="USER"<?= $formData['sendModeUsers'] == 'USER' ? ' checked="checked"' : ''?>/>
 							</td>
 							<td>
-								<label for="mSendModeU"><?= wfMsg('swm-label-mode-users-user') ?></label>
+								<label for="mSendModeUsersU"><?= wfMsg('swm-label-mode-users-user') ?></label>
 							</td>
 							<td>
 								<input name="mUserName" id="mUserName" type="text" size="48" value="<?= $formData['userName'] ?>"/>
@@ -127,18 +127,6 @@
 						</tr>
 					</table>
 				</fieldset>
-<!--
-[wikis]
-* all wikis
-* hub [select box]
-* wiki [input box]
-
-[users]
-* all users
-* active users
-* belonging to group [select box] [input box]
-* selected user [input box] (available only if all wikis selected in 'wikis' section)
--->
 			</fieldset>
 
 			<fieldset>
@@ -183,4 +171,34 @@
 		</form>
 	</fieldset>
 </div>
+
+<script type="text/javascript">
+function $(id) {
+	return document.getElementById(id);
+}
+function grayOut(e) {
+	var source = YAHOO.util.Event.getTarget(e);
+	switch (source.id) {
+		case 'mSendModeWikisH':
+		case 'mSendModeWikisW':
+			$('mSendModeUsersA').disabled = true;
+			if ($('mSendModeUsersA').checked)
+				$('mSendModeUsersC').checked = true;
+			break;
+		case 'mSendModeUsersU':
+			$('mSendModeWikisA').disabled = true;
+			$('mSendModeWikisH').disabled = true;
+			$('mSendModeWikisW').disabled = true;
+			break;
+		default:
+			if ($('mSendModeWikisA').checked)
+				$('mSendModeUsersA').disabled = false;
+			$('mSendModeWikisA').disabled = false;
+			$('mSendModeWikisH').disabled = false;
+			$('mSendModeWikisW').disabled = false;
+	}
+}
+var radio = ['mSendModeWikisA', 'mSendModeWikisH', 'mSendModeWikisW', 'mSendModeUsersA', 'mSendModeUsersC', 'mSendModeUsersG', 'mSendModeUsersU'];
+YAHOO.util.Event.addListener(radio, 'click', grayOut);
+</script>
 <!-- e:<?= __FILE__ ?> -->
