@@ -12,7 +12,7 @@ interface iAdProvider {
 
 class AdEngine {
 
-	const cacheKeyVersion = "1.5";
+	const cacheKeyVersion = "1.6";
 
 	const cacheTimeout = 1800;
 
@@ -42,7 +42,7 @@ class AdEngine {
 		$skin_name = 'monaco'; // Hard code for now.
 		global $wgMemc, $wgCityId;
 
-		$cacheKey = wfMemcKey('slots', $skin_name, self::cacheKeyVersion);
+		$cacheKey = wfMemcKey(__CLASS__ . 'slots', $skin_name, self::cacheKeyVersion);
 		$this->slots = $wgMemc->get($cacheKey);
 
 		if(is_array($this->slots)){
@@ -85,6 +85,34 @@ class AdEngine {
 
 		return true;
 	}
+
+
+        /* Category name/id is needed multiple times for multiple providers. Be gentle on our dbs by adding a thin caching layer. */
+        public function getCachedCategory(){
+                static $cat;
+                if (! empty($cat)){
+                        // This function already called
+                        return $cat;
+                }
+
+                global $wgMemc, $wgCityId;
+                $cacheKey = wfMemcKey(__CLASS__ . 'category', self::cacheKeyVersion);
+
+                $cat = $wgMemc->get($cacheKey); 
+                if (!empty($cat)){
+                        return $cat;
+                }
+                        
+                $hub = WikiFactoryHub::getInstance();
+                $cat = array(
+                        'id'=>$hub->getCategoryId($wgCityId),
+                        'name'=>$hub->getCategoryName($wgCityId)
+                );
+                
+                $wgMemc->set($cacheKey, $cat, self::cacheTimeout);
+                return $cat;
+        }
+
 
 	public function getAd($slotname) {
 		if(!empty($this->providers[$this->slots[$slotname]['provider_id']])) {
