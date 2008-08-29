@@ -1606,7 +1606,10 @@ menuitem_array = new Array();var submenuitem_array = new Array();</script>';
 <?php		wfProfileOut( __METHOD__ . '-navigation'); ?>
 			
 			<?php 
-				if (ArticleAdLogic::isContentPage() && ArticleAdLogic::isLongArticle($wgArticle->getContent())) { //valid article
+				global $wgOut;
+				if ($wgOut->isArticle() &&
+				     ArticleAdLogic::isContentPage() &&
+				     ArticleAdLogic::isLongArticle($wgArticle->getContent())) { //valid article
 					echo '<div style="text-align: center; margin-bottom: 10px;">'. AdEngine::getInstance()->getPlaceHolderDiv('LEFT_SKYSCRAPER_1', false) .'</div>';
 				} else if (ArticleAdLogic::isMainPage()) { //main page
 					echo '<div style="text-align: center; margin-bottom: 10px;">'. AdEngine::getInstance()->getPlaceHolderDiv('HOME_LEFT_SKYSCRAPER_1', false) .'</div>';
@@ -1619,7 +1622,9 @@ menuitem_array = new Array();var submenuitem_array = new Array();</script>';
 			<?= WidgetFramework::getInstance()->Draw(1) ?>
 			
 			<?php
-				if (ArticleAdLogic::isContentPage() && ArticleAdLogic::isLongArticle($wgArticle->getContent())) { //valid article
+				if ($wgOut->isArticle() &&
+                                     ArticleAdLogic::isContentPage() && 
+	                             ArticleAdLogic::isLongArticle($wgArticle->getContent())) { //valid article
 					echo '<div style="text-align: center; margin-bottom: 10px;">'. AdEngine::getInstance()->getPlaceHolderDiv('LEFT_SKYSCRAPER_2', false) .'</div>';
 				} else if (ArticleAdLogic::isMainPage()) { //main page
 					echo '<div style="text-align: center; margin-bottom: 10px;">'. AdEngine::getInstance()->getPlaceHolderDiv('HOME_LEFT_SKYSCRAPER_2', false) .'</div>';
