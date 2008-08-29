@@ -225,9 +225,8 @@ class AdEngine {
 		foreach ($this->placeholders as $slotname){
 			$class = strpos($slotname, 'SPOTLIGHT') ? ' class="wikia_spotlight"' : ' class="wikia_ad"';
 			$out .= '<div id="' . $slotname . '_load"'.$class.'>' . $this->getAd($slotname) . "</div>\n";
-			// FIXME! Probably the parameter for function indexOf should be changed, talk to Michael about it
 			$out .= '<script type="text/javascript">
-				if($("'.$slotname.'_load").innerHTML.indexOf("style=\"width: 0px; height: 0px;\" width=\"0\" height=\"0\"") == -1) {
+				if($("'.$slotname.'_load").innerHTML.indexOf("http://images2.wikia.nocookie.net/common/wikia/noad.gif") == -1) {
 					YAHOO.util.Dom.setStyle("'. $slotname .'", "display", "block");
 				}
 				</script>';
