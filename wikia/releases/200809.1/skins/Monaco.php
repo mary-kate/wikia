@@ -1242,10 +1242,13 @@ if(isset($this->data['articlelinks']['right'])) {
 					<?php if(!empty($skin->newuemsg)) { echo $skin->newuemsg; } ?>
 					<?php if($this->data['showjumplinks']) { ?><div id="jump-to-nav"><?php $this->msg('jumpto') ?> <a href="#column-one"><?php $this->msg('jumptonavigation') ?></a>, <a href="#searchInput"><?php $this->msg('jumptosearch') ?></a></div><?php } ?>
 					<?php
+						global $wgOut;
 						if (ArticleAdLogic::isMainPage()) { //main page
 							echo AdEngine::getInstance()->getPlaceHolderDiv('HOME_TOP_LEADERBOARD');
 							echo AdEngine::getInstance()->getPlaceHolderDiv('HOME_TOP_RIGHT_BOXAD');
-						} else if (ArticleAdLogic::isContentPage() && !ArticleAdLogic::isShortArticle($wgArticle->getContent())) { //valid article
+						} else if ($wgOut->isArticle() &&
+						  ArticleAdLogic::isContentPage() &&
+						  !ArticleAdLogic::isShortArticle($wgArticle->getContent())) { //valid article
 							if (ArticleAdLogic::isBoxAdArticle($this->data['bodytext'])) {
 								echo AdEngine::getInstance()->getPlaceHolderDiv('TOP_RIGHT_BOXAD');
 							} else {
