@@ -995,8 +995,8 @@ class MonacoTemplate extends QuickTemplate {
 <?php		wfProfileOut( __METHOD__ . '-head'); ?>
 <?php		wfProfileIn( __METHOD__ . '-body'); ?>
 
-<?
-	if ($wgTitle->getArticleId() == Title::newMainPage()->getArticleId()) {
+<?php 
+	if (ArticleAdLogic::isMainPage()){
 		$isMainpage = ' mainpage';
 	} else {
 		$isMainpage = null;
@@ -1250,19 +1250,22 @@ if(isset($this->data['articlelinks']['right'])) {
 					<?php if(!empty($skin->newuemsg)) { echo $skin->newuemsg; } ?>
 					<?php if($this->data['showjumplinks']) { ?><div id="jump-to-nav"><?php $this->msg('jumpto') ?> <a href="#column-one"><?php $this->msg('jumptonavigation') ?></a>, <a href="#searchInput"><?php $this->msg('jumptosearch') ?></a></div><?php } ?>
 					<?php
-						global $wgOut;
-						if (ArticleAdLogic::isMainPage()) { //main page
+					global $wgOut;
+
+					if ($wgOut->isArticle()){
+						if (ArticleAdLogic::isMainPage()){
 							echo AdEngine::getInstance()->getPlaceHolderDiv('HOME_TOP_LEADERBOARD');
 							echo AdEngine::getInstance()->getPlaceHolderDiv('HOME_TOP_RIGHT_BOXAD');
-						} else if ($wgOut->isArticle() &&
-						  ArticleAdLogic::isContentPage() &&
-						  !ArticleAdLogic::isShortArticle($wgArticle->getContent())) { //valid article
+						} else if ( ArticleAdLogic::isContentPage() &&
+							   !ArticleAdLogic::isShortArticle($wgArticle->getContent())) { //valid article
+
 							if (ArticleAdLogic::isBoxAdArticle($this->data['bodytext'])) {
 								echo AdEngine::getInstance()->getPlaceHolderDiv('TOP_RIGHT_BOXAD');
 							} else {
 								echo AdEngine::getInstance()->getPlaceHolderDiv('TOP_LEADERBOARD');
 							}
 						}
+					}
 					?>
 					<!-- start content -->
 					<?php $this->html('bodytext') ?>
@@ -1615,12 +1618,13 @@ menuitem_array = new Array();var submenuitem_array = new Array();</script>';
 			
 			<?php 
 				global $wgOut;
-				if ($wgOut->isArticle() &&
-				     ArticleAdLogic::isContentPage() &&
-				     ArticleAdLogic::isLongArticle($wgArticle->getContent())) { //valid article
-					echo '<div style="text-align: center; margin-bottom: 10px;">'. AdEngine::getInstance()->getPlaceHolderDiv('LEFT_SKYSCRAPER_1', false) .'</div>';
-				} else if (ArticleAdLogic::isMainPage()) { //main page
-					echo '<div style="text-align: center; margin-bottom: 10px;">'. AdEngine::getInstance()->getPlaceHolderDiv('HOME_LEFT_SKYSCRAPER_1', false) .'</div>';
+				if ($wgOut->isArticle() ){
+					if ( ArticleAdLogic::isContentPage() &&
+					     ArticleAdLogic::isLongArticle($wgArticle->getContent())) { //valid article
+						echo '<div style="text-align: center; margin-bottom: 10px;">'. AdEngine::getInstance()->getPlaceHolderDiv('LEFT_SKYSCRAPER_1', false) .'</div>';
+					} else if (ArticleAdLogic::isMainPage()) { //main page
+						echo '<div style="text-align: center; margin-bottom: 10px;">'. AdEngine::getInstance()->getPlaceHolderDiv('HOME_LEFT_SKYSCRAPER_1', false) .'</div>';
+					}
 				}
 			?>
 
