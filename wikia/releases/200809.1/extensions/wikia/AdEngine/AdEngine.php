@@ -194,7 +194,7 @@ class AdEngine {
 		}
 
 		$out = "<!-- #### BEGIN " . __CLASS__ . '::' . __METHOD__ . " ####-->\n";
-		$out .= '<script type="text/javascript" src="'.$wgExtensionsPath.'/wikia/TieDivLibrary/TieDivLibrary.js"></script>';
+		$out .= '<script type="text/javascript">TieDivLibrary.timer();</script>';
 		foreach ($this->placeholders as $slotname){
 			$class = strpos($slotname, 'SPOTLIGHT') ? ' class="wikia_spotlight"' : ' class="wikia_ad"';
 			$out .= '<div id="' . $slotname . '_load"'.$class.'>' . $this->getAd($slotname) . "</div>\n";
@@ -206,7 +206,6 @@ class AdEngine {
 				</script>';
 			$out .= '<script type="text/javascript">TieDivLibrary.tie("'. $slotname .'");</script>';
 		}
-		$out .= '<script type="text/javascript">TieDivLibrary.calculate();</script>';
 		$out .= "<!-- #### END " . __CLASS__ . '::' . __METHOD__ . " ####-->\n";
 		return $out;
 	}
