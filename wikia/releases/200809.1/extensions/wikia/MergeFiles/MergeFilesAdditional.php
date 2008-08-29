@@ -104,6 +104,8 @@ $MF['monaco_loggedin_js']['source'] = array(
 	'common/yui_extra/tools-min.js',
 	'common/yui_extra/carousel-min.js',
 
+	'common/jquery-1.2.6.min.js',
+
 	'common/jiffy.js',
 	'common/ajax.js',
 	'common/urchin.js',
@@ -112,7 +114,6 @@ $MF['monaco_loggedin_js']['source'] = array(
 	'common/tracker.js',
 	'common/ajaxwatch.js',
 	'monaco/js/main.js',
-	'monaco/js/ads.js',
 	'common/widgets/js/widgetsConfig.js',
 	'common/widgets/js/widgetsFramework.js',
 	'../extensions/wikia/ProblemReports/js/ProblemReports-loader.js',
@@ -132,6 +133,8 @@ $MF['monaco_non_loggedin_js']['source'] = array(
 	'common/yui_2.5.2/tabview/tabview.js',
 	'common/yui_extra/tools-min.js',
 
+	'common/jquery-1.2.6.min.js',
+
 	'common/jiffy.js',
 	'common/ajax.js',
 	'common/urchin.js',
@@ -139,7 +142,6 @@ $MF['monaco_non_loggedin_js']['source'] = array(
 	'monaco/js/tracker.js',
 	'common/tracker.js',
 	'monaco/js/main.js',
-	'monaco/js/ads.js',
 	'common/widgets/js/widgetsConfig.js',
 	'common/widgets/js/widgetsFramework.js',
 	'../extensions/wikia/AjaxLogin/AjaxLogin.js',
