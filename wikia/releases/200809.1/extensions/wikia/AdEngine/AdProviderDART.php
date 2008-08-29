@@ -100,10 +100,10 @@ EOT;
 	}
 
 	function getDartSite(){
-		global $wgCat;
-		if(!empty($wgCat['name'])) {
-			if(!empty($this->sites[$wgCat['name']])) {
-				return $this->sites[$wgCat['name']];
+		$cat=AdEngine::getCachedCategory();
+		if(!empty($cat['name'])) {
+			if(!empty($this->sites[$cat['name']])) {
+				return $this->sites[$cat['name']];
 			}
 		}
 		return 'wka.wikia';
