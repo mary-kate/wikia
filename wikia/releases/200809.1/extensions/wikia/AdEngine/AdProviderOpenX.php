@@ -49,8 +49,8 @@ class AdProviderOpenX implements iAdProvider {
 	);
 
 	public function getAd($slotname, $slot) {
-		global $wgCatId;
-		$zoneId = $this->getZoneId($slotname, @$wgCatId);
+		$cat=AdEngine::getCachedCategory();
+		$zoneId = $this->getZoneId($slotname, $cat['id']);
 
 		if(empty($zoneId)){
 			$nullAd = new AdProviderNullAd("Invalid slotname, no zoneid for $slotname in " . __CLASS__);
@@ -63,7 +63,7 @@ class AdProviderOpenX implements iAdProvider {
 
 	var source = Array();
 	source.push('slot=$slotname');
-	source.push('catid=' + wgCatId);
+	source.push('catid={$cat['id']}');
 	source.push('lang=' + wgContentLanguage);
 
 	document.write('<scr'+'ipt type="text/javascript">');
