@@ -13,7 +13,7 @@ interface iAdProvider {
 
 class AdEngine {
 
-	const cacheKeyVersion = "1.6";
+	const cacheKeyVersion = "1.9";
 	const cacheTimeout = 1800;
 	const noadgif = "http://images2.wikia.nocookie.net/common/wikia/noad.gif";
 
@@ -136,7 +136,11 @@ class AdEngine {
 		if (empty($this->slots[$slotname])) {
 			return new AdProviderNull('Unrecognized slot', true);
 
-		} else if (! ArticleAdLogic::isMandatoryAd($slotname) && empty($_GET['showads']) && $wgShowAds == false ){
+		} else if ($this->slots[$slotname]['enabled'] == 'No'){
+			return new AdProviderNull("Slot is disabled", false);
+
+		} else if (! ArticleAdLogic::isMandatoryAd($slotname) &&
+			     empty($_GET['showads']) && $wgShowAds == false ){
 			return new AdProviderNull('$wgShowAds set to false', false);
 
 		} else if (! ArticleAdLogic::isMandatoryAd($slotname) && empty($_GET['showads']) && 
