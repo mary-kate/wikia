@@ -23,10 +23,6 @@ class ArticleAdLogic {
   	 * See http://staff.wikia-inc.com/wiki/DART_Implementation#When_to_show_ads */
 	private $mandatoryAds = array(
 		'HOME_TOP_LEADERBOARD',
-		'HOME_LEFT_SKYSCRAPER_1',
-		'HOME_LEFT_SKYSCRAPER_2',
-		'LEFT_SKYSCRAPER_1',
-		'LEFT_SKYSCRAPER_2',
 		'LEFT_SPOTLIGHT_1',
 		'FOOTER_SPOTLIGHT_LEFT',
 		'FOOTER_SPOTLIGHT_MIDDLE',
