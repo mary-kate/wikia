@@ -119,7 +119,16 @@ class AdEngine {
 	// For the selected provider, get an ad tag. Logic for hiding/displaying ads
 	// should be here, not in the skin.
 	public function getAd($slotname) {
-		global $wgShowAds, $wgUser;
+		global $wgShowAds; $wgUser;
+
+		if (!empty($_GET['adDebug'])){
+			echo "<!-- Ad Debug: slotname=$slotname, slots=" . print_r($this->slots, true) . 
+				"ArticleAdLogic::isMandatoryAd=" . var_export(ArticleAdLogic::isMandatoryAd($slotname, true)) . "\n" .
+				"_GET['showads']=" . $_GET['showads'] . "\n" .
+				"wgShowAds=" . $wgShowads . "\n" . 
+				"isLoggedIn=" . var_export($wgUser->isLoggedIn(), true) . "\n" . 
+			"-->";
+		}
 
 		if(empty($this->slots[$slotname])) {
 			$AdProviderNull=new AdProviderNull('Unrecognized slot', true);
@@ -131,12 +140,13 @@ class AdEngine {
 			$AdProviderNull=new AdProviderNull('Unrecognized provider_id', true);
 			return $AdProviderNull->getAd($slotname, $this->slots[$slotname]);
 
-		} else if ( $wgShowAds == false ){
+		} else if (! ArticleAdLogic::isMandatoryAd($slotname) && empty($_GET['showads']) && $wgShowAds == false ){
 
 			$AdProviderNull=new AdProviderNull('$wgShowAd set to false', false);
 			return $AdProviderNull->getAd($slotname, $this->slots[$slotname]);
 
-		} else if ( is_object($wgUser) && $wgUser->isLoggedIn() && !$wgUser->getOption('showAds') ){
+		} else if (! ArticleAdLogic::isMandatoryAd($slotname) && empty($_GET['showads']) && 
+			   is_object($wgUser) && $wgUser->isLoggedIn() && !$wgUser->getOption('showAds') ){
 
 			$AdProviderNull=new AdProviderNull('User is logged in', false);
 			return $AdProviderNull->getAd($slotname, $this->slots[$slotname]);
@@ -147,7 +157,10 @@ class AdEngine {
 			return $provider->getAd($slotname, $this->slots[$slotname]);
 
 		}
+
+
 	}
+
 
 	private function getAdProvider($provider_id) {
 		if($this->providers[$provider_id] == 'DART') {
