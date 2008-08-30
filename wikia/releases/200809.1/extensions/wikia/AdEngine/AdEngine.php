@@ -122,10 +122,10 @@ class AdEngine {
 		global $wgShowAds, $wgUser;
 
 		if (!empty($_GET['adDebug'])){
-			echo "<!-- Ad Debug: slotname=$slotname, slots=" . print_r($this->slots, true) . 
-				"ArticleAdLogic::isMandatoryAd=" . var_export(ArticleAdLogic::isMandatoryAd($slotname, true)) . "\n" .
-				"_GET['showads']=" . $_GET['showads'] . "\n" .
-				"wgShowAds=" . $wgShowads . "\n" . 
+			echo "<!-- Ad Debug: slotname=$slotname, " .
+				"ArticleAdLogic::isMandatoryAd=" . var_export(ArticleAdLogic::isMandatoryAd($slotname), true) . "\n" .
+				"_GET['showads']=" . var_export($_GET['showads'], true) . "\n" .
+				"wgShowAds=" . var_export($wgShowads, true) . "\n" . 
 				"isLoggedIn=" . var_export($wgUser->isLoggedIn(), true) . "\n" . 
 			"-->";
 		}

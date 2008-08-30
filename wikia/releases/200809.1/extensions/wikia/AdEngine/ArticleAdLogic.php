@@ -19,17 +19,7 @@ class ArticleAdLogic {
 	const pixelThreshold = 300; // how many pixels for a "wide" object that will cause a collision, in pixels
 	const percentThreshold = 50; // what % of the content is a "wide" table that will cause a collision
 
-	/* Ads that always display, even if user is logged in, etc.
-  	 * See http://staff.wikia-inc.com/wiki/DART_Implementation#When_to_show_ads */
-	private $mandatoryAds = array(
-		'HOME_TOP_LEADERBOARD',
-		'LEFT_SPOTLIGHT_1',
-		'FOOTER_SPOTLIGHT_LEFT',
-		'FOOTER_SPOTLIGHT_MIDDLE',
-		'FOOTER_SPOTLIGHT_RIGHT'
-	);
-
-	public static function isShortArticle($html){
+		public static function isShortArticle($html){
 		return strlen(strip_tags($html)) < self::shortArticleThreshold;
 	}
 
@@ -219,8 +209,18 @@ class ArticleAdLogic {
 
 
 	public function isMandatoryAd($slotname){
+		/* Ads that always display, even if user is logged in, etc.
+  	 	* See http://staff.wikia-inc.com/wiki/DART_Implementation#When_to_show_ads */
+		$mandatoryAds = array(
+			'HOME_TOP_LEADERBOARD',
+			'LEFT_SPOTLIGHT_1',
+			'FOOTER_SPOTLIGHT_LEFT',
+			'FOOTER_SPOTLIGHT_MIDDLE',
+			'FOOTER_SPOTLIGHT_RIGHT'
+		);
+
 		// Certain ads always display
-		if (in_array($slotname, $this->mandatoryAds)){
+		if (in_array($slotname, $mandatoryAds)){
 			return true;
 		} else {
 			return false;
