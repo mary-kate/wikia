@@ -119,7 +119,7 @@ class AdEngine {
 	// For the selected provider, get an ad tag. Logic for hiding/displaying ads
 	// should be here, not in the skin.
 	public function getAd($slotname) {
-		global $wgShowAds; $wgUser;
+		global $wgShowAds, $wgUser;
 
 		if (!empty($_GET['adDebug'])){
 			echo "<!-- Ad Debug: slotname=$slotname, slots=" . print_r($this->slots, true) . 
