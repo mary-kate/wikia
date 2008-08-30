@@ -14,8 +14,8 @@ interface iAdProvider {
 class AdEngine {
 
 	const cacheKeyVersion = "1.6";
-
 	const cacheTimeout = 1800;
+	const noadgif = "http://images2.wikia.nocookie.net/common/wikia/noad.gif";
 
 	// TODO: pull these from wikicities.provider
 	private $providers = array('1' => 'DART', '2' => 'OpenX', '3' => 'Google', '-1' => 'Null');
@@ -234,16 +234,27 @@ class AdEngine {
 		}
 
 		$out = "<!-- #### BEGIN " . __CLASS__ . '::' . __METHOD__ . " ####-->\n";
-		$out .= '<script type="text/javascript">TieDivLibrary.timer();</script>';
+		$out .= '<script type="text/javascript">TieDivLibrary.timer();</script>' . "\n";
 		foreach ($this->placeholders as $slotname){
-			$class = strpos($slotname, 'SPOTLIGHT') ? ' class="wikia_spotlight"' : ' class="wikia_ad"';
+			// Hmm. Should we just use: class="wikia_$adtype"?
+			$class = self::getAdType($slotname) == 'spotlight' ? ' class="wikia_spotlight"' : ' class="wikia_ad"';
 			$out .= '<div id="' . $slotname . '_load"'.$class.'>' . $this->getAd($slotname) . "</div>\n";
+			/* This image is what will be returned if there is NO AD to be displayed.
+ 			 * If this happens, we want leave the div collapsed.
+			 * We tried for a more elegant solution, but were a bit constrained on the
+			 * code that could be returned from the ad networks we deal with.
+			 * I'd like to see a better solution for this, someday
+			 * See Christian or Nick for more info.
+			*/
 			$out .= '<script type="text/javascript">
-				if($("'.$slotname.'_load").innerHTML.indexOf("http://images2.wikia.nocookie.net/common/wikia/noad.gif") == -1) {
+				// expand the div, as long as there is an ad returned.
+				if($("'.$slotname.'_load").innerHTML.indexOf("' . self::noadgif . '") == -1) {
 					YAHOO.util.Dom.setStyle("'. $slotname .'", "display", "block");
 				}
-				</script>';
-			$out .= '<script type="text/javascript">TieDivLibrary.tie("'. $slotname .'");</script>';
+	
+				// Absolutely position the ${slotname}_load div over the top of the placeholder
+				TieDivLibrary.tie("'. $slotname .'");
+				</script>' . "\n";
 		}
 		$out .= "<!-- #### END " . __CLASS__ . '::' . __METHOD__ . " ####-->\n";
 		return $out;
@@ -252,4 +263,31 @@ class AdEngine {
 	public function getPlaceHolders(){
 		return $this->placeholders;
 	}
+
+
+        /* Sometimes there is different behavior for different types of ad. Reduce the number of
+         * hacks and hard coded slot names by providing a grouping on type of based on size.
+         * Possible return values:
+         *  "spotlight" , "leaderboard", "boxad", "skyscraper"
+         *
+         * NULL will be returned if this function is unable to determine the type of ad
+         *
+	 * Long term, this should be a column in the ad_slots table. This will happen when
+	 * we build the UI for managing those tables.
+         */
+        public function getAdType($slotname){
+                if (empty($this->slots[$slotname]['size'])){
+                        return NULL;
+                }  
+
+		switch ($this->slots[$slotname]['size']){
+			case '200x75': return 'spotlight';
+			case '728x90': return 'leaderboard';
+			case '300x250': return 'boxad';
+			case '160x600': return 'skyscraper';
+			default: return NULL;
+		}
+        }
+
+
 }
