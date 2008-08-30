@@ -116,64 +116,48 @@ class AdEngine {
 		return $cat;
 	}
 
-	// For the selected provider, get an ad tag. Logic for hiding/displaying ads
-	// should be here, not in the skin.
+	// For the provided $slotname, get an ad tag. 
 	public function getAd($slotname) {
+
+		$AdProvider = $this->getAdProvider($slotname);
+		return $AdProvider->getAd($slotname, $this->slots[$slotname]);
+
+	}
+	
+	// Logic for hiding/displaying ads should be here, not in the skin.
+	private function getAdProvider($slotname) {
 		global $wgShowAds, $wgUser;
 
-		if (!empty($_GET['adDebug'])){
-			echo "<!-- Ad Debug: slotname=$slotname, " .
-				"ArticleAdLogic::isMandatoryAd=" . var_export(ArticleAdLogic::isMandatoryAd($slotname), true) . "\n" .
-				"_GET['showads']=" . var_export($_GET['showads'], true) . "\n" .
-				"wgShowAds=" . var_export($wgShowads, true) . "\n" . 
-				"isLoggedIn=" . var_export($wgUser->isLoggedIn(), true) . "\n" . 
-			"-->";
-		}
 
-		if(empty($this->slots[$slotname])) {
-			$AdProviderNull=new AdProviderNull('Unrecognized slot', true);
-			return $AdProviderNull->getAd($slotname, array());
+		// Note: Don't throw an exception on error. Fail gracefully for ads,
+		// don't under any circumstances fail the rendering of the page.
+		// Instead, return a "AdProviderNull" object with an error message
 
-		} else  if(empty($this->providers[$this->slots[$slotname]['provider_id']])) {
-			// Note: Don't throw an exception here. Fail gracefully for ads,
-			// don't under any circumstances fail the rendering of the page
-			$AdProviderNull=new AdProviderNull('Unrecognized provider_id', true);
-			return $AdProviderNull->getAd($slotname, $this->slots[$slotname]);
+		if (empty($this->slots[$slotname])) {
+			return new AdProviderNull('Unrecognized slot', true);
 
 		} else if (! ArticleAdLogic::isMandatoryAd($slotname) && empty($_GET['showads']) && $wgShowAds == false ){
-
-			$AdProviderNull=new AdProviderNull('$wgShowAd set to false', false);
-			return $AdProviderNull->getAd($slotname, $this->slots[$slotname]);
+			return new AdProviderNull('$wgShowAds set to false', false);
 
 		} else if (! ArticleAdLogic::isMandatoryAd($slotname) && empty($_GET['showads']) && 
 			   is_object($wgUser) && $wgUser->isLoggedIn() && !$wgUser->getOption('showAds') ){
+			return new AdProviderNull('User is logged in', false);
 
-			$AdProviderNull=new AdProviderNull('User is logged in', false);
-			return $AdProviderNull->getAd($slotname, $this->slots[$slotname]);
+ 	        } else if (empty($this->providers[$this->slots[$slotname]['provider_id']])) {
 
+			return new AdProviderNull('Unrecognized provider', true);
 		} else {
 
-			$provider = $this->getAdProvider($this->slots[$slotname]['provider_id']);
-			return $provider->getAd($slotname, $this->slots[$slotname]);
-
+			// Error conditions out of the way, send back the appropriate Ad provider
+			switch ($this->providers[$this->slots[$slotname]['provider_id']]){
+				case 'DART': return AdProviderDART::getInstance();
+				case 'OpenX': return AdProviderOpenX::getInstance();
+				case 'Google': return AdProviderGoogle::getInstance();
+			}
 		}
 
-
-	}
-
-
-	private function getAdProvider($provider_id) {
-		if($this->providers[$provider_id] == 'DART') {
-			return AdProviderDART::getInstance();
-		} else if($this->providers[$provider_id] == 'OpenX') {
-			return AdProviderOpenX::getInstance();
-		} else if($this->providers[$provider_id] == 'Google') {
-			return AdProviderGoogle::getInstance();
-		} else {
-			// Note: Don't throw an exception here. Fail gracefully for ads,
-			// don't under any circumstances fail the rendering of the page
-			return new AdProviderNull("Unrecognized provider_id ($provider_id)", true);
-		}
+		// Should never happen, but be sure that an object is always returned.
+		return new AdProviderNull('Logic error in ' . __METHOD__, true);
 	}
 
 	/* Size is stored as $widthx$size character column. Split here.
@@ -236,9 +220,17 @@ class AdEngine {
 		$out = "<!-- #### BEGIN " . __CLASS__ . '::' . __METHOD__ . " ####-->\n";
 		$out .= '<script type="text/javascript">TieDivLibrary.timer();</script>' . "\n";
 		foreach ($this->placeholders as $slotname){
+			$AdProvider = $this->getAdProvider($slotname);
+
 			// Hmm. Should we just use: class="wikia_$adtype"?
 			$class = self::getAdType($slotname) == 'spotlight' ? ' class="wikia_spotlight"' : ' class="wikia_ad"';
-			$out .= '<div id="' . $slotname . '_load"'.$class.'>' . $this->getAd($slotname) . "</div>\n";
+			$out .= '<div id="' . $slotname . '_load"'.$class.'>' . $AdProvider->getAd($slotname, $this->slots[$slotname]) . "</div>\n";
+
+			// Don't bother with absolute positioning javascript if it is a NullAd.
+			if ($AdProvider instanceof AdProviderNull){
+				continue;
+			}
+
 			/* This image is what will be returned if there is NO AD to be displayed.
  			 * If this happens, we want leave the div collapsed.
 			 * We tried for a more elegant solution, but were a bit constrained on the
@@ -288,6 +280,5 @@ class AdEngine {
 			default: return NULL;
 		}
         }
-
 
 }
