@@ -184,26 +184,27 @@ class AdEngine {
 	   to be loaded at the bottom of the page with an absolute position.
 	   Keep track fo the placeholders for future refence */
 	public function getPlaceHolderDiv($slotname, $reserveSpace=true){
-		$style = "";
-
-		if (! empty($this->slots[$slotname])){
-			$styles = array();
-			$dim = self::getHeightWidthFromSize($this->slots[$slotname]['size']);
-			if (!empty($dim['width'])){
-				array_push($styles, "width: {$dim['width']}px;");
-				array_push($styles, "height: {$dim['height']}px;");
-			}
-
-			if($this->slots[$slotname]['enabled'] == 'No' || $reserveSpace == false){
-				array_push($styles, "display: none;");
-			}
-
-			$style = ' style="'. implode(" ", $styles) .'"';
-
-			// We will use this at the bottom of the page for ads.
-			$this->placeholders[] = $slotname;
-
+		$AdProvider = $this->getAdProvider($slotname);
+		// If it's a Null Ad, just return an empty comment, and don't store in place holder array.
+		if ($AdProvider instanceof AdProviderNull){
+			return "<div id=\"$slotname\"$style>'" . $AdProvider->getAd($slotname, array()) . "</div>";
 		}
+
+		$styles = array();
+		$dim = self::getHeightWidthFromSize($this->slots[$slotname]['size']);
+		if (!empty($dim['width'])){
+			array_push($styles, "width: {$dim['width']}px;");
+			array_push($styles, "height: {$dim['height']}px;");
+		}
+
+		if($this->slots[$slotname]['enabled'] == 'No' || $reserveSpace == false){
+			array_push($styles, "display: none;");
+		}
+
+		$style = ' style="'. implode(" ", $styles) .'"';
+
+		// We will use this at the bottom of the page for ads.
+		$this->placeholders[] = $slotname;
 
 		return "<div id=\"$slotname\"$style></div>";
 	}
@@ -225,11 +226,6 @@ class AdEngine {
 			// Hmm. Should we just use: class="wikia_$adtype"?
 			$class = self::getAdType($slotname) == 'spotlight' ? ' class="wikia_spotlight"' : ' class="wikia_ad"';
 			$out .= '<div id="' . $slotname . '_load"'.$class.'>' . $AdProvider->getAd($slotname, $this->slots[$slotname]) . "</div>\n";
-
-			// Don't bother with absolute positioning javascript if it is a NullAd.
-			if ($AdProvider instanceof AdProviderNull){
-				continue;
-			}
 
 			/* This image is what will be returned if there is NO AD to be displayed.
  			 * If this happens, we want leave the div collapsed.
