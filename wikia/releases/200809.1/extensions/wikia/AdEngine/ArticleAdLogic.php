@@ -213,14 +213,11 @@ class ArticleAdLogic {
   	 	* See http://staff.wikia-inc.com/wiki/DART_Implementation#When_to_show_ads */
 		$mandatoryAds = array(
 			'HOME_TOP_LEADERBOARD',
-			'LEFT_SPOTLIGHT_1',
-			'FOOTER_SPOTLIGHT_LEFT',
-			'FOOTER_SPOTLIGHT_MIDDLE',
-			'FOOTER_SPOTLIGHT_RIGHT'
 		);
 
 		// Certain ads always display
-		if (in_array($slotname, $mandatoryAds)){
+		if (AdEngine::getInstance()->getAdType($slotname) == 'spotlight' ||
+			in_array($slotname, $mandatoryAds)){
 			return true;
 		} else {
 			return false;

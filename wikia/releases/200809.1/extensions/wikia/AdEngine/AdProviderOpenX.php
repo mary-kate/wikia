@@ -28,13 +28,6 @@ class AdProviderOpenX implements iAdProvider {
 		'FOOTER_BOXAD' => 634
 	);
 
-	private $spotlightZones = array(
-		'LEFT_SPOTLIGHT_1',
-		'FOOTER_SPOTLIGHT_LEFT',
-		'FOOTER_SPOTLIGHT_MIDDLE',
-		'FOOTER_SPOTLIGHT_RIGHT'
-	);
-
 	private $spotlightCategoryZones = array(
 		'2' => 635, // Gaming
 		'3' => 636, // Entertainment
@@ -53,7 +46,7 @@ class AdProviderOpenX implements iAdProvider {
 		$zoneId = $this->getZoneId($slotname, $cat['id']);
 
 		if(empty($zoneId)){
-			$nullAd = new AdProviderNullAd("Invalid slotname, no zoneid for $slotname in " . __CLASS__);
+			$nullAd = new AdProviderNull("Invalid slotname, no zoneid for $slotname in " . __CLASS__);
 			return $nullAd->getAd($slotname, $slot);
 		}
 
@@ -90,7 +83,7 @@ EOT;
 	public function getZoneId($slotname, $catid){
 		if(isset($this->zoneIds[$slotname])){
 			return $this->zoneIds[$slotname];
-		} else if (in_array($slotname, $this->spotlightZones)){
+		} else if (AdEngine::getInstance()->getAdType($slotname) == 'spotlight'){
 			// For spotlights, they all have the same zoneid, determined by category.
 			if(isset($this->spotlightCategoryZones[$catid])){
 				return $this->spotlightCategoryZones[$catid];
