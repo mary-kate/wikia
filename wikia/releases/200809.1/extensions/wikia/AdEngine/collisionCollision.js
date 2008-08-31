@@ -19,7 +19,7 @@ function JSisCollisionTop() {
 // Make a request to a squid box 
 function collisionRequest (js, php){
 	  // var url = "/rx?collisionTest=nick;"; // Use this url because squid won't send to apache
-	  var url = "/rx?collisionTest=nick;"; // Use this url because squid won't send to apache
+	  var url = "http://nick.sullivanflock.com/rx?collisionTest=nick;"; // Use this url because squid won't send to apache
 	  url += "js=" +  js + ';';
 	  url += "php=" +  php + ';';
 	  url += "width=" + escape(document.body.clientWidth) + ';';
