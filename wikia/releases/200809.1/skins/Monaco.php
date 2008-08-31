@@ -1656,9 +1656,10 @@ wfProfileOut( __METHOD__ . '-widgets');
 // curse like cobranding
 $this->printCustomFooter();
 
-global $wgEnableAdEngineCollisionTest;
+global $wgEnableAdEngineCollisionTest, $wgArticle;
 if ($wgEnableAdEngineCollisionTest &&
     ! ArticleAdLogic::isMainPage() &&
+    ! ArticleAdLogic::isShortArticle($wgArticle->getContent()) && 
       ArticleAdLogic::isContentPage()){
         echo ArticleAdLogic::getCollisionCollision($this->data['bodytext']);
 }
