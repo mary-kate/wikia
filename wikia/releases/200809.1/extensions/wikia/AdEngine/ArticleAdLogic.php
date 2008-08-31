@@ -4,6 +4,8 @@
  * ) If it is a "long" article that can have additional ads in the left nav?
  * ) If it it an article with html that will collide with the Box Ad, so it should have a banner instead
  */
+if ( class_exists('ArticleAdLogic'))  return
+
 $wgExtensionCredits['other'][] = array(
         'name' => 'ArticleAdLogic',
         'author' => 'Nick Sullivan'
