@@ -19,7 +19,7 @@ class ArticleAdLogic {
 	const pixelThreshold = 300; // how many pixels for a "wide" object that will cause a collision, in pixels
 	const percentThreshold = 50; // what % of the content is a "wide" table that will cause a collision
 
-		public static function isShortArticle($html){
+	public static function isShortArticle($html){
 		return strlen(strip_tags($html)) < self::shortArticleThreshold;
 	}
 
