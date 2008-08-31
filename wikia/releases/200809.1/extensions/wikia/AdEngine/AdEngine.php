@@ -1,5 +1,6 @@
 <?php
-require dirname(__FILE__) . '/ArticleAdLogic.php';
+
+require_once dirname(__FILE__) . '/ArticleAdLogic.php';
 
 $wgExtensionCredits['other'][] = array(
 	'name' => 'AdEngine',

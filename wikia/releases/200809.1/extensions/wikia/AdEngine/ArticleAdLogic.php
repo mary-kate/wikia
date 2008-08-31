@@ -4,7 +4,6 @@
  * ) If it is a "long" article that can have additional ads in the left nav?
  * ) If it it an article with html that will collide with the Box Ad, so it should have a banner instead
  */
-if ( class_exists('ArticleAdLogic'))  return
 
 $wgExtensionCredits['other'][] = array(
         'name' => 'ArticleAdLogic',
@@ -199,9 +198,9 @@ class ArticleAdLogic {
 	static public function getCollisionCollision($html) {
 		$out = "<script type='text/javascript'>\n";
 		if (self::isBoxAdArticle($html)){
-			$out .= "var isBoxAdArticle=true;\n";
+			$out .= "var isPhpCollision=false;\n";
 		} else {
-			$out .= "var isBoxAdArticle=false;\n";
+			$out .= "var isPhpCollision=true;\n";
 		}
 
 		$out .= file_get_contents(dirname(__FILE__) . '/collisionCollision.js');
