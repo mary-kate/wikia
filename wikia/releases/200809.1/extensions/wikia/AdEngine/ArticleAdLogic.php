@@ -19,6 +19,7 @@ class ArticleAdLogic {
 	const firstHtmlThreshold = 1500; // Check this much of the html for collision causing tags
 	const pixelThreshold = 300; // how many pixels for a "wide" object that will cause a collision, in pixels
 	const percentThreshold = 50; // what % of the content is a "wide" table that will cause a collision
+	const columnThreshold = 3; // what # of columns is a "wide" table that will cause a collision
 
 	public static function isShortArticle($html){
 		return strlen(strip_tags($html)) < self::shortArticleThreshold;
@@ -48,26 +49,29 @@ class ArticleAdLogic {
 		$firstHtml = substr($html, 0, self::firstHtmlThreshold);
 
 		// Look for html tags that may cause collisions, and evaluate them
+		$tableFound = false;
 		if (preg_match_all('/<(table|img)[^>]+>/is', $firstHtml, $matches, PREG_OFFSET_CAPTURE)){
 
 			// PHP's preg_match_all return is a PITA to deal with	
 			for ($i = 0; $i< sizeof($matches[0]); $i++){
 				$wholetag = $matches[0][$i];
 				$tag = $matches[1][$i][0];
-
-				// Get attributes from tag.
-				// Note, this requires well-formed html with quoted attributes. Second regexp for poor html?
-				$pattern = '/\s([a-zA-Z]+)\=[\x22\x27]([^\x22\x27]+)[\x22\x27]/';
-				$attr = array();
-				if (preg_match_all($pattern, $matches[0][$i][0], $attmatch)){
-					for ($j = 0; $j<sizeof($attmatch[1]); $j++){
-						$attr[$attmatch[1][$j]] = $attmatch[2][$j];
-					}
-				}
+				if ($tag == 'table' ) $tableFound=true;
+					
+				$attr = self::getHtmlAttributes($matches[0][$i][0]);
 
 				$score += self::getTagCollisionScore($tag, $attr);
-				
-				
+			}
+		}
+
+		// For tables, check to see if we have a table that has a lot of columns.
+		if ( $tableFound ){
+			$firstRow = substr($firstHtml, 0, stripos($firstHtml, '</tr>'));
+			if (preg_match_all('/<\/[tT][HhDd]>/', $firstRow, $columnMatches)){
+				$numColumns = count($columnMatches[0]);
+				if ( $numColumns > self::columnThreshold ) {
+					$score += ($numColumns * .2);
+				}
 			}
 		}
 
@@ -92,6 +96,20 @@ class ArticleAdLogic {
 					return .75;
 				} else if ( self::getPercentage($attr['width']) >= self::percentThreshold){
 					return .75;
+				} else {
+					// Seems safe, % is low and pixels are low
+					return .05;
+				}
+			} else if (isset($attr['style'])){
+				$cssattr=self::getCssAttributes($attr['style']);
+
+				if (!empty($cssattr['width']) && self::getPixels($cssattr['width']) >= self::pixelThreshold){
+					return .75;
+				} else if (!empty($cssattr['width']) && self::getPercentage($cssattr['width']) >= self::percentThreshold){
+					return .75;
+				} else if (!empty($cssattr['width'])){
+					// Has a style with a width, but seems narrow enough
+					return .10;
 				} else {
 					// Seems safe, % is low and pixels are low
 					return .05;
@@ -225,5 +243,32 @@ class ArticleAdLogic {
 			return false;
 		}	
 	}
-  
+
+
+	public function getCssAttributes($style){
+		$pattern = '/([a-zA-Z\-0-9]+)\:([^;]+);/';
+		$attr = array();
+		$style = trim($style, '; ') . ';';
+		if (preg_match_all($pattern, $style, $attmatch)){
+			for ($j = 0; $j<sizeof($attmatch[1]); $j++){
+				$attr[$attmatch[1][$j]] = $attmatch[2][$j];
+			}
+		}
+		return $attr;
+	}	
+
+	
+	// Get attributes from html tag.
+	// Note, this requires well-formed html with quoted attributes. Second regexp for poor html?
+	public function getHtmlAttributes($tag){
+		$pattern = '/\s([a-zA-Z]+)\=[\x22\x27]([^\x22\x27]+)[\x22\x27]/';
+		$attr = array();
+		if (preg_match_all($pattern, $tag, $attmatch)){
+			for ($j = 0; $j<sizeof($attmatch[1]); $j++){
+				$attr[$attmatch[1][$j]] = $attmatch[2][$j];
+			}
+		}
+		return $attr;
+	}
+
 }
