@@ -1387,6 +1387,7 @@ if(!$custom_article_footer && $displayArticleFooter) {
 		$this->html('headscripts');
 	}
 ?>
+		<script type="text/javascript" src="http://images2.wikia.nocookie.net/common/releases_200808.4/skins/monaco/js/ads.js"></script>
 <?php		wfProfileIn( __METHOD__ . '-monacofooter'); ?>
 		<div id="monaco_footer" class="reset">
 
