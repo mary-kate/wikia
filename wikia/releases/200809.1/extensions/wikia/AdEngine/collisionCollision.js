@@ -28,16 +28,16 @@ function collisionRequest (js, php){
 
 try {
   isJsCollision = JSisCollisionTop();
-  if (isJsCollision == true && isBoxAdArticle == true ){
+  if (isJsCollision == true && isPhpCollision == true ){
 	  // Yay.
 	  collisionRequest("true", "true");
-  } else if (isJsCollision == false && isBoxAdArticle == false ){
+  } else if (isJsCollision == false && isPhpCollision == false ){
 	  // woo hoo
 	  collisionRequest("false", "false");
-  } else if (isJsCollision = true && isBoxAdArticle == false ){
+  } else if (isJsCollision = true && isPhpCollision == false ){
 	  // Uh oh, this page is ugly.
 	  collisionRequest("true", "false");
-  } else if (isJsCollision == false && isBoxAdArticle == true ){
+  } else if (isJsCollision == false && isPhpCollision == true ){
 	  // Js is more aggressive than PHP. 
 	  collisionRequest("false","true");
   } 
