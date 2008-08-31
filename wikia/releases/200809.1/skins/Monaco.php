@@ -1261,7 +1261,7 @@ if(isset($this->data['articlelinks']['right'])) {
 								echo AdEngine::getInstance()->getPlaceHolderDiv('HOME_TOP_RIGHT_BOXAD');
 							}
 						} else if ( ArticleAdLogic::isContentPage() &&
-							   !ArticleAdLogic::isShortArticle($wgArticle->getContent())) { //valid article
+							   !ArticleAdLogic::isShortArticle($this->data['bodytext'])) { //valid article
 
 							if (ArticleAdLogic::isBoxAdArticle($this->data['bodytext'])) {
 								echo AdEngine::getInstance()->getPlaceHolderDiv('TOP_RIGHT_BOXAD');
@@ -1624,7 +1624,7 @@ menuitem_array = new Array();var submenuitem_array = new Array();</script>';
 				global $wgOut;
 				if ($wgOut->isArticle() ){
 					if ( ArticleAdLogic::isContentPage() &&
-					     ArticleAdLogic::isLongArticle($wgArticle->getContent())) { //valid article
+					     ArticleAdLogic::isLongArticle($this->data['bodytext'])) { //valid article
 						echo '<div style="text-align: center; margin-bottom: 10px;">'. AdEngine::getInstance()->getPlaceHolderDiv('LEFT_SKYSCRAPER_1', false) .'</div>';
 					} else if (ArticleAdLogic::isMainPage()) { //main page
 						echo '<div style="text-align: center; margin-bottom: 10px;">'. AdEngine::getInstance()->getPlaceHolderDiv('HOME_LEFT_SKYSCRAPER_1', false) .'</div>';
@@ -1640,7 +1640,7 @@ menuitem_array = new Array();var submenuitem_array = new Array();</script>';
 			<?php
 				if ($wgOut->isArticle() &&
                                      ArticleAdLogic::isContentPage() && 
-	                             ArticleAdLogic::isLongArticle($wgArticle->getContent())) { //valid article
+	                             ArticleAdLogic::isLongArticle($this->data['bodytext'])) { //valid article
 					echo '<div style="text-align: center; margin-bottom: 10px;">'. AdEngine::getInstance()->getPlaceHolderDiv('LEFT_SKYSCRAPER_2', false) .'</div>';
 				} else if (ArticleAdLogic::isMainPage()) { //main page
 					echo '<div style="text-align: center; margin-bottom: 10px;">'. AdEngine::getInstance()->getPlaceHolderDiv('HOME_LEFT_SKYSCRAPER_2', false) .'</div>';
@@ -1660,7 +1660,7 @@ $this->printCustomFooter();
 global $wgEnableAdEngineCollisionTest, $wgArticle;
 if ($wgEnableAdEngineCollisionTest &&
     ! ArticleAdLogic::isMainPage() &&
-    ! ArticleAdLogic::isShortArticle($wgArticle->getContent()) && 
+    ! ArticleAdLogic::isShortArticle($this->data['bodytext']) && 
       ArticleAdLogic::isContentPage()){
         echo ArticleAdLogic::getCollisionCollision($this->data['bodytext']);
 }
