@@ -372,7 +372,6 @@ class FCKeditor_MediaWiki
 		$skin = $wgUser->getSkin();
 		$skin->loggedin = $wgUser->isLoggedIn();
 		$skin->mTitle =& $wgTitle;
-		//$skin->skinname = 'monobook';
 		$skin->userpage = $wgUser->getUserPage()->getPrefixedText();
 		if (method_exists($skin, "setupUserCss")) {
 			$skin->setupUserCss();
