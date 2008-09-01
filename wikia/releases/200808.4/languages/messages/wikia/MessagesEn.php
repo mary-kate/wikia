@@ -453,6 +453,11 @@ Please change [[Special:Preferences#prefsection-1|your preferences]] to use this
 
 <p>If you prefer your message to <a href=http://www.wikia.com/wiki/Wikia>Wikia</a> to be private, please use the contact form below. <i>All fields are optional</i>.</p>',
 'shared_help_info' => 'This text is stored on the Help Wikia.  [[w:c:Help:Help_talk:$1|Suggest changes here]].',
+'shared_help_edit_info' => 'The help text within the box is stored at [[w:c:Help:Help:$1|Help:$1]] on Help Wikia.
+
+Any changes that apply to \'\'all\'\' wikis should be made to the Help Wikia copy. [[w:c:Help:Help_talk:$1|Suggest changes here]].
+
+Text should be placed on this page only if you wish to explain usage, style and policy guidelines which apply only to the {{SITENAME}} wiki. Text added in this edit box will be displayed below the boxed help text.',
 'multiplefileuploadsummary' => 'Summary:',
 'uploadtext-ext' => 'A full list of allowed extensions is available on the [[{{ns:Special}}:Version|wiki version page]].',
 'save' => 'Save',
