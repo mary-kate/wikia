@@ -70,10 +70,12 @@ class ArticleAdLogic {
 			if (preg_match_all('/<\/[tT][HhDd]>/', $firstRow, $columnMatches)){
 				$numColumns = count($columnMatches[0]);
 				if ( $numColumns > self::columnThreshold ) {
+					self::adDebug("Table with more than columnThreshold columns found ($numColumns)");
 					$score += ($numColumns * .2);
 				}
 			}
 		}
+		self::adDebug("Collision Rank: $score");
 
 		// Score is between 0 and 1, so if it's over 1, reset it to 1
 		if ($score > 1) $score = 1;
@@ -87,65 +89,98 @@ class ArticleAdLogic {
 		switch (strtolower($tag)){
 		  // The tag itself gets a store
 		  case 'table':
+			self::adDebug("Table found: " . print_r($attr, true));
 		  	if (isset($attr['id']) && $attr['id'] == 'toc') {
 				//This table is the Table of Contents and shouldn't cause a collision
+				self::adDebug("Table is TOC");
 				return 0;
 			}
 			if (isset($attr['width'])){
+				self::adDebug("Table has width attribute");
 				if ( self::getPixels($attr['width']) >= self::pixelThreshold){
+					self::adDebug("Table has width over pixel threshold of " . self::pixelThreshold);
 					return .75;
 				} else if ( self::getPercentage($attr['width']) >= self::percentThreshold){
+					self::adDebug("Table has width over percent threshold of " . self::percentThreshold);
 					return .75;
 				} else {
 					// Seems safe, % is low and pixels are low
+					self::adDebug("Table has width, but seems ok");
 					return .05;
 				}
 			} else if (isset($attr['style'])){
 				$cssattr=self::getCssAttributes($attr['style']);
+				self::adDebug("Table has style attributes of: " . print_r($cssattr, true));
 
-				if (!empty($cssattr['width']) && self::getPixels($cssattr['width']) >= self::pixelThreshold){
-					return .75;
-				} else if (!empty($cssattr['width']) && self::getPercentage($cssattr['width']) >= self::percentThreshold){
-					return .75;
-				} else if (!empty($cssattr['width'])){
-					// Has a style with a width, but seems narrow enough
-					return .10;
+				if (!empty($cssattr['width'])){
+					$pixels = self::getPixels($cssattr['width']);
+					$percentage = self::getPercentage($cssattr['width']);
+
+					if ($pixels >= self::pixelThreshold){
+						self::adDebug("Table has style width over pixel threshold of " . self::pixelThreshold);
+						return .75;
+					} else if ($percentage >= self::percentThreshold){
+						self::adDebug("Table has style width over percent threshold of " . self::percentThreshold);
+						return .75;
+					} else if ($pixels === false && $percentage === false ) {
+						self::adDebug("Table has style width of an unrecognized unit");
+						return .10;
+					}
 				} else {
-					// Seems safe, % is low and pixels are low
+					// Seems safe, width is not defined via a style
+					self::adDebug("Table has style, but seems ok");
 					return .05;
 				}
 			} else if (isset($attr['class'])){
+				self::adDebug("Table has class attribute");
 				// This table has a class, which may have width defined
 				return .2;
 			} else if (isset($attr['id'])){
+				self::adDebug("Table has id attribute");
 				// This table has an id, which may have css styling and width defined
 				return .15;
 			} else {
 				// There is a table, but it seems harmless
+				self::adDebug("Table seems ok");
 				return .05;
 			}
 
 		  case 'div':
+			self::adDebug("Div found: " . print_r($attr, true));
 			if (isset($attr['style'])){
-				$cssattr=self::getCssAttributes($attr['style']);
+				$cssattr = self::getCssAttributes($attr['style']);
+				self::adDebug("Div has style attributes of: " . print_r($cssattr, true));
+				if (!empty($cssattr['width'])){
+					$pixels = self::getPixels($cssattr['width']);
+					$percentage = self::getPercentage($cssattr['width']);
 
-				if (!empty($cssattr['width']) && self::getPixels($cssattr['width']) >= self::pixelThreshold){
-					return .75;
-				} else if (!empty($cssattr['width']) && self::getPercentage($cssattr['width']) >= self::percentThreshold){
-					return .75;
-				} else if (!empty($cssattr['width'])){
-					// Has a style with a width, but seems narrow enough
-					return .10;
+					if ($pixels >= self::pixelThreshold){
+						self::adDebug("Div has style width over pixel threshold of " . self::pixelThreshold);
+						return .75;
+					} else if ($percentage >= self::percentThreshold){
+						self::adDebug("Div has style width over percent threshold of " . self::percentThreshold);
+						return .75;
+					} else if ($pixels === false && $percentage === false ) {
+						self::adDebug("Div has style width of an unrecognized unit");
+						return .10;
+					}
 				} else {
+					// Has a style with a width, but seems narrow enough
 					// Seems safe, % is low and pixels are low
-					return .05;
+					self::adDebug("Div has style, but no width defined");
+					return .025;
 				}
 			}
+			self::adDebug("Div seems harmless");
+			return 0;
 		    
 		  case 'img':
+			self::adDebug("Image found: " . print_r($attr, true));
 			if (isset($attr['width']) && $attr['width'] >= self::pixelThreshold){
+				self::adDebug("Image has width over pixel threshold of " . self::pixelThreshold);
 				return .75;
 			} else {
+				self::adDebug("Image seems ok");
 				return .05;
 			}
 
@@ -286,6 +321,17 @@ class ArticleAdLogic {
 			}
 		}
 		return $attr;
+	}
+
+	
+	public function adDebug($msg){
+		if (empty($_GET['adDebug'])){
+			return;
+		} else {
+			$backtrace = debug_backtrace();
+			echo "<font color='red'>Ad Debug from {$backtrace[1]['function']}: $msg</font><br />";
+		}
+		
 	}
 
 }
