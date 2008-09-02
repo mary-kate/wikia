@@ -189,6 +189,10 @@ function SetUrl( url )
 function Ok()
 {
 	var sUri = GetE('txtUrl').value ;
+	if (!sUri) {
+		oEditor.FCK.ExecuteNamedCommand ('Unlink') ;
+                return true ;
+	}
 	var sInnerHtml ;
 
 	// If no link is selected, create a new one (it may result in more than one link creation - #220).
@@ -198,6 +202,7 @@ function Ok()
 	var aHasSelection = ( aLinks.length > 0 ) ;
 	if ( !aHasSelection )
 	{
+		oEditor.FCK.ExecuteNamedCommand ('Unlink') ;
 		sInnerHtml = sUri;
 
 		var oLinkPathRegEx = new RegExp("//?([^?\"']+)([?].*)?$") ;
