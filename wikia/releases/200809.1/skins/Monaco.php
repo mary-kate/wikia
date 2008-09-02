@@ -944,49 +944,19 @@ class MonacoTemplate extends QuickTemplate {
 	<head>
 		<meta http-equiv="Content-Type" content="<?php $this->text('mimetype') ?>; charset=<?php $this->text('charset') ?>" />
                 <!-- Skin = <?php echo basename(__FILE__) ?> -->
+		<?php $this->html('headlinks') ?>
 		<?php /* TODO move this to allinone, and find a better spot for this code after I talk to Christian. 
 			 This is an experiment to see if moving it higher on the page makes it better */?>
 		<script type="text/javascript" src="/extensions/wikia/AdEngine/AdEngine.js"></script>
 		<?php 
-		/* Set up async calls for the analytics requests. This way users never have to
-		   wait for Google or Quantserve before seeing content. Once the analytics servers
-		   return the javascript, the analytics gif requests will be fired off.
-
-		   Note: This was placed at the top of the page intentionally, so that we
+		/* Note: This was placed at the top of the page intentionally, so that we
 		   get more accurate stats. Get Michael's permission before moving.
-		
-		   YUI connection manager would have been nice, but it's not loaded yet.
 		*/?>
-		<script type="text/javascript">
-		function getXHR(){
-			if(navigator.appName == "Microsoft Internet Explorer") {
-				return new ActiveXObject("Microsoft.XMLHTTP");
-			} else {
-				return new XMLHttpRequest();
-			}
-		}
-		XHR_GA=getXHR();
-		XHR_QS=getXHR();
-		function asyncAnalyticsCall(XHR, url, callback){
-			XHR.open("GET", url); XHR.onreadystatechange=callback; XHR.send(null);
-		}
-		asyncAnalyticsCall(XHR_GA, 
-			"http://www.google-analytics.com/urchin.js", function(){
-				if (XHR_GA.readyState == 4) {
-					eval(XHR_GA.responseText);
-					_uff=0;_uacct="UA-288915-1";_userv=1;urchinTracker();_userv=1;
-				}
-			});
-		asyncAnalyticsCall(XHR_QS,
-			"http://edge.quantserve.com/quant.js", function(){
-				if (XHR_QS.readyState == 4) {
-					eval(XHR_QS.responseText);
-					_qacct="p-8bG6eLqkH6Avk";quantserve();
-				}
-			});
-		</script>
+		<script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+		<script type="text/javascript">_uff=0;_uacct="UA-288915-1";_userv=1;urchinTracker();_userv=1;</script>
+		<script type="text/javascript" src="http://edge.quantserve.com/quant.js"></script>
+		<script type="text/javascript">_qacct="p-8bG6eLqkH6Avk";quantserve();</script>
 
-		<?php $this->html('headlinks') ?>
 		<title><?php $this->text('pagetitle') ?></title>
 		<?php print Skin::makeGlobalVariablesScript( $this->data ); ?>
 		<style type="text/css">/*<![CDATA[*/
