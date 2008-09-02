@@ -944,6 +944,9 @@ class MonacoTemplate extends QuickTemplate {
 	<head>
 		<meta http-equiv="Content-Type" content="<?php $this->text('mimetype') ?>; charset=<?php $this->text('charset') ?>" />
                 <!-- Skin = <?php echo basename(__FILE__) ?> -->
+		<?php /* TODO move this to allinone, and find a better spot for this code after I talk to Christian. 
+			 This is an experiment to see if moving it higher on the page makes it better */?>
+		<script type="text/javascript" src="/extensions/wikia/AdEngine/AdEngine.js"></script>
 		<?php $this->html('headlinks') ?>
 		<title><?php $this->text('pagetitle') ?></title>
 		<?php print Skin::makeGlobalVariablesScript( $this->data ); ?>
@@ -1277,7 +1280,7 @@ if(isset($this->data['articlelinks']['right'])) {
 
 			<!-- ARTICLE FOOTER -->
 <?php		wfProfileIn( __METHOD__ . '-articlefooter'); ?>
-<?php
+<?php 
 global $wgTitle, $wgOut;
 $displayArticleFooter = $wgTitle->exists() && $wgTitle->isContentPage() && !$wgTitle->isTalkPage() && $wgOut->isArticle();
 
@@ -1410,6 +1413,13 @@ if(!$custom_article_footer && $displayArticleFooter) {
 		}
 		$this->html('headscripts');
 	}
+
+if (in_array("TOP_RIGHT_BOXAD", AdEngine::getInstance()->getPlaceholders())){
+	// Reset elements with a "clear:none" to "clear:right" when the box ad is displayed
+        // Fixes pages like this: http://en.dcdatabaseproject.com/Fang_Zhifu_(New_Earth)
+	echo '<script type="text/javascript">AdEngine.resetCssClear("right");</script>' . "\n";
+}
+
 ?>
 <?php		wfProfileIn( __METHOD__ . '-monacofooter'); ?>
 		<div id="monaco_footer" class="reset">

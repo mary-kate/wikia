@@ -224,16 +224,7 @@ class AdEngine {
 		}
 
 		$out = "<!-- #### BEGIN " . __CLASS__ . '::' . __METHOD__ . " ####-->\n";
-		// TODO move this to allinone once it's more mature
-		$out .= '<script type="text/javascript" src="/extensions/wikia/AdEngine/AdEngine.js"></script>' . "\n";
-		$out .= '<script type="text/javascript">' . "\n";
-		if (in_array("TOP_RIGHT_BOXAD", $this->placeholders)){
-			// reset elements with a "clear:none" to "clear:right" when the box ad is displayed
-			// Fixes pages like this: http://en.dcdatabaseproject.com/Fang_Zhifu_(New_Earth)
-			$out .= 'AdEngine.resetCssClear("right");' . "\n";
-		}
-		$out .= "TieDivLibrary.timer();\n</script>\n";
-
+		$out .= '<script type="text/javascript">TieDivLibrary.timer();</script>' . "\n";
 		foreach ($this->placeholders as $slotname){
 			$AdProvider = $this->getAdProvider($slotname);
 
