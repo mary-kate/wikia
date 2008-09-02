@@ -2,6 +2,14 @@
 /* Call this file directly to run a set of tests against ArticleAdLogic.php */
 
 require dirname(__FILE__) . '/../ArticleAdLogic.php';
+if (!empty($_GET['testfile'])){
+	if (ArticleAdLogic::isBoxAdArticle(file_get_contents('./' . $_GET['testfile']))){
+		echo "{$_GET['testfile']} is NOT a collision\n";
+	} else {
+		echo "{$_GET['testfile']} IS a collision\n";
+	}
+	exit;
+}
 
 require 'PHPUnit.php';
 // Note that this is PEARs pattern of building TestCases, not necessarily ours.
@@ -49,6 +57,7 @@ class ArticleAdLogicTest extends PHPUnit_TestCase {
 		$this->assertTrue(ArticleAdLogic::isBoxAdArticle(file_get_contents('./table30Percent.html')));
 		$this->assertTrue(ArticleAdLogic::isBoxAdArticle(file_get_contents('./table200Pixels.html')));
 		$this->assertTrue(ArticleAdLogic::isBoxAdArticle(file_get_contents('./table200pxPixels.html')));
+		$this->assertTrue(ArticleAdLogic::isBoxAdArticle(file_get_contents('./wierdNoCollisionPage.html')));
 
 		// These should should display a banner ad
 		$this->assertFalse(ArticleAdLogic::isBoxAdArticle(file_get_contents('./articleWithMagicWordBanner.html')));
