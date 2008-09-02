@@ -15,7 +15,7 @@ FCKConfig.ToolbarSets['Wiki'] = [
 	['FontFormat'],
 	['Bold','Italic','Underline','StrikeThrough', 'OrderedList', 'UnorderedList'],
 	['Outdent', 'Indent'],
-	['Link'],
+	['Link'], ['Unlink'],
 ] ;
 
 // Load the extension plugins.
