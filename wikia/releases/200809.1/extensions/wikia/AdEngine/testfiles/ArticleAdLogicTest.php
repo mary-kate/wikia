@@ -61,6 +61,7 @@ class ArticleAdLogicTest extends PHPUnit_TestCase {
 		$this->assertFalse(ArticleAdLogic::isBoxAdArticle(file_get_contents('./tableWithId.html')));
 		$this->assertFalse(ArticleAdLogic::isBoxAdArticle(file_get_contents('./tableWidthStyleAndWidth.html')));
 		$this->assertFalse(ArticleAdLogic::isBoxAdArticle(file_get_contents('./wierdCollisionPage.html')));
+		$this->assertFalse(ArticleAdLogic::isBoxAdArticle(file_get_contents('./div100Percent.html')));
 	}
 }
 // header('Content-Type: text/plain');

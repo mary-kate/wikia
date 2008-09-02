@@ -50,7 +50,7 @@ class ArticleAdLogic {
 
 		// Look for html tags that may cause collisions, and evaluate them
 		$tableFound = false;
-		if (preg_match_all('/<(table|img)[^>]+>/is', $firstHtml, $matches, PREG_OFFSET_CAPTURE)){
+		if (preg_match_all('/<(table|img|div)[^>]+>/is', $firstHtml, $matches, PREG_OFFSET_CAPTURE)){
 
 			// PHP's preg_match_all return is a PITA to deal with	
 			for ($i = 0; $i< sizeof($matches[0]); $i++){
@@ -123,6 +123,23 @@ class ArticleAdLogic {
 			} else {
 				// There is a table, but it seems harmless
 				return .05;
+			}
+
+		  case 'div':
+			if (isset($attr['style'])){
+				$cssattr=self::getCssAttributes($attr['style']);
+
+				if (!empty($cssattr['width']) && self::getPixels($cssattr['width']) >= self::pixelThreshold){
+					return .75;
+				} else if (!empty($cssattr['width']) && self::getPercentage($cssattr['width']) >= self::percentThreshold){
+					return .75;
+				} else if (!empty($cssattr['width'])){
+					// Has a style with a width, but seems narrow enough
+					return .10;
+				} else {
+					// Seems safe, % is low and pixels are low
+					return .05;
+				}
 			}
 		    
 		  case 'img':
