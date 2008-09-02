@@ -22,16 +22,24 @@ class ArticleAdLogic {
 	const columnThreshold = 3; // what # of columns is a "wide" table that will cause a collision
 
 	public static function isShortArticle($html){
-		return strlen(strip_tags($html)) < self::shortArticleThreshold;
+		$length = strlen(strip_tags($html));
+		$out = $length < self::shortArticleThreshold;
+		self::adDebug("Article is $length characters. Check for short article is " . var_export($out, true));
+		return $out;
 	}
 
 	public static function isLongArticle($html){
-		return strlen(strip_tags($html)) > self::longArticleThreshold;
+		$length = strlen(strip_tags($html));
+		$out = $length > self::longArticleThreshold;
+		self::adDebug("Article is $length characters. Check for long article is " . var_export($out, true));
+		return $out;
 	}
 
 	/* Note, this comment in the html is filled in by the hook AdEngineMagicWords */
 	public static function hasWikiaMagicWord ($html, $word){
-		return strpos($html, "<!--{$word}-->") !== false; 
+		$out = strpos($html, "<!--{$word}-->") !== false; 
+		self::adDebug( "Check for $word is ". var_export($out, true));
+		return $out;	
 	}
 
 	/* Return the likelihood that there is a collision with the Box Ad
@@ -60,7 +68,9 @@ class ArticleAdLogic {
 					
 				$attr = self::getHtmlAttributes($matches[0][$i][0]);
 
-				$score += self::getTagCollisionScore($tag, $attr);
+				$tagscore = self::getTagCollisionScore($tag, $attr);
+				self::adDebug("Collision score for $tag: $tagscore");
+				$score += $tagscore;
 			}
 		}
 
@@ -75,7 +85,7 @@ class ArticleAdLogic {
 				}
 			}
 		}
-		self::adDebug("Collision Rank: $score");
+		self::adDebug("Overall Collision Rank: $score");
 
 		// Score is between 0 and 1, so if it's over 1, reset it to 1
 		if ($score > 1) $score = 1;
