@@ -17,7 +17,7 @@ class ArticleAdLogic {
 	const longArticleThreshold = 3500; // what defines a "long" article. # of characters *after* html has been stripped.
 	const collisionRankThreshold = .15;  // what collison score constitutes a collision. 0-1
 	const firstHtmlThreshold = 1500; // Check this much of the html for collision causing tags
-	const pixelThreshold = 300; // how many pixels for a "wide" object that will cause a collision, in pixels
+	const pixelThreshold = 350; // how many pixels for a "wide" object that will cause a collision, in pixels
 	const percentThreshold = 50; // what % of the content is a "wide" table that will cause a collision
 	const columnThreshold = 3; // what # of columns is a "wide" table that will cause a collision
 
