@@ -1,5 +1,4 @@
 <!-- s:<?= __FILE__ ?> -->
-<script type="text/javascript" src="/extensions/wikia/WikiaStats/js/wikiastats.js"></script>
 <script type="text/javascript">
 /*<![CDATA[*/
 // Find the search box in the DOM
@@ -53,7 +52,7 @@ YAHOO.namespace("Wikia.Statistics");
                     	ShowCompareStats(compare_stats, checked_list, (document.getElementById('showStatsNewWindowBox').checked));
 					} else {
 						StatsPageLoaderShow(0);
-                    	XLSGenerate(compare_stats, checked_list);
+                    	XLSGenerate(compare_stats, checked_list, '', '');
 					}
                 };
                 YAHOO.Wikia.Statistics.handleCancel = function() { 

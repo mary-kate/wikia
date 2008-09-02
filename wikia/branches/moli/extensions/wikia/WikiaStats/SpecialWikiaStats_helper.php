@@ -28,10 +28,12 @@ class WikiaGenericStats {
     var $mSelectedCityId = -1;
 
     const MONTHLY_STATS = 7;
-    const USE_MEMC = 1;
+    const USE_MEMC = 0;
 	const IGNORE_WIKIS = "5, 11, 6745";
 
 	var $columnMapIndex = null;
+	// show only local statistics for wikia
+	var $localStats = false;
 
     #--- constructor
     public function __construct($userid)
@@ -40,19 +42,25 @@ class WikiaGenericStats {
 
     	$this->mUserID = $userid;
         $this->mUser = User::newFromId($userid);
-        if (is_object( $this->mUser ) && !is_null( $this->mUser ))
-        {
+        if (is_object( $this->mUser ) && !is_null( $this->mUser )) {
             $this->mUser->load();
         }
 
 		#--- Add messages
 		require_once ( dirname( __FILE__ ) . '/SpecialWikiaStats.i18n.php' );
-		foreach( $wgWikiaStatsMessages as $key => $value )
-		{
+		foreach( $wgWikiaStatsMessages as $key => $value ) {
 			$wgMessageCache->addMessages( $wgWikiaStatsMessages[$key], $key );
 		}
     }
 
+	public function setLocalStats($value) {
+		$this->localStats = $value;
+	}
+	
+	public function getLocalStats() {
+		return $this->localStats;
+	}
+		
     public function getRangeColumns()
     {
 		wfProfileIn( __METHOD__ );
@@ -1221,7 +1229,7 @@ class WikiaGenericStats {
 		return substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " " . $day . $dateArr[0];
 	}
 
-	static public function setWikiMainStatisticsOutput($city_id, $data, $columns, $monthlyStats)
+	static public function setWikiMainStatisticsOutput($city_id, $data, $columns, $monthlyStats, $show_local = 0)
 	{
         global $wgUser, $wgSharedDB, $wgDBStats, $wgContLang;
         global $wgStatsExcludedNonSpecialGroup;
@@ -1268,7 +1276,6 @@ class WikiaGenericStats {
 		wfProfileOut( __METHOD__ );
         return $oTmpl->execute("main-table-stats");
 	}
-
 
 	static public function setWikiDistribStatisticsOutput($data)
 	{
@@ -1489,19 +1496,18 @@ class WikiaGenericStats {
 		#---
 		if (!is_numeric($city_id)) $result = array("code" => "-11", "text" => wfMsg('wikiastats_nostats_found'));
 		#---
-		if (!is_numeric($year_from) && !is_numeric($month_from)) {
-			$result = array("code" => "-12", "text" => wfMsg('wikiaststs_invalid_date'));
-		}
-		if (!is_numeric($year_to) && !is_numeric($month_to)) {
-			$result = array("code" => "-13", "text" => wfMsg('wikiaststs_invalid_date'));
-		}
+		if (!is_numeric($year_from) && !is_numeric($month_from)) $result = array("code" => "-12", "text" => wfMsg('wikiaststs_invalid_date'));
+		if (!is_numeric($year_to) && !is_numeric($month_to)) $result = array("code" => "-13", "text" => wfMsg('wikiaststs_invalid_date'));
 		#---
-		$memkey = md5($city_id."_".$year_from."_".$month_from."_".$year_to."_".$month_to);
+		$localStats = $this->getLocalStats();
+		$memkey = md5($city_id."_".$year_from."_".$month_from."_".$year_to."_".$month_to."_".intval($localStats));
     	$memkey = "wikiamainstatistics_".$memkey;
     	#---
 		$columns = array();
 		$wkCityMainStatistics = array();
-		if (self::USE_MEMC) $wkCityMainStatistics = $wgMemc->get($memkey);
+		if (self::USE_MEMC) {
+			$wkCityMainStatistics = $wgMemc->get($memkey);
+		}
     	if (empty($wkCityMainStatistics)) {
 			try {
 				#--- database instance - DB_SLAVE
@@ -1595,7 +1601,7 @@ class WikiaGenericStats {
 					// generate monthly increase for statistics
 					$monthlyStats = self::setWikiMonthlyStats($wkCityMainStatistics, $columns);
 					// standard HTML output
-					$output = self::setWikiMainStatisticsOutput($city_id, $wkCityMainStatistics, $columns, $monthlyStats);
+					$output = self::setWikiMainStatisticsOutput($city_id, $wkCityMainStatistics, $columns, $monthlyStats, (!empty($localStats)));
 				} else {
 			        // charts
 					// serialize data for charts

@@ -24,7 +24,7 @@ class WikiaStatsClass extends SpecialPage
     var $mPosted, $mStats, $mSkinName;
     var $userIsSpecial;
 
-    const USE_MEMC = 1;
+    const USE_MEMC = 0;
 
     #--- constructor
     public function __construct()
@@ -39,6 +39,7 @@ class WikiaStatsClass extends SpecialPage
     {
         global $wgUser, $wgOut, $wgRequest;
 		global $wgStatsExcludedNonSpecialGroup;
+		global $wgCityId, $wgDBname;
 
         if ( $wgUser->isBlocked() ) {
             $wgOut->blockedPage();
@@ -72,54 +73,57 @@ class WikiaStatsClass extends SpecialPage
             $skinname = strtolower(str_replace("Skin","", $skinname));
             $this->mSkinName = $skinname;
         }
-
-        #--- initial output
-        $this->mTitle = Title::makeTitle( NS_SPECIAL, "WikiaStats" );
-        //$wgOut->setArticleBodyOnly(true);
-        $wgOut->setPageTitle( wfMsg("wikiastats_pagetitle") );
-        if ($wgRequest->getVal("action")) 
-        {
-        	$mainPageLink = " - <a href=\"/index.php?title=Special:WikiaStats\">". wfMsg('wikiastats_back_to_mainpage')."</a>";
-        	$prevPageLink = "<a href=\"javascript:void(0);\" onClick=\"history.go(-1); return true;\"><< ".wfMsg('wikiastats_back_to_prevpage')."</a>";
-        	$wgOut->setSubtitle($prevPageLink . $mainPageLink);
-		}
-        $wgOut->setRobotpolicy( "noindex,nofollow" );
+		$this->mTitle = Title::makeTitle( NS_SPECIAL, "WikiaStats" );
+		$wgOut->setPageTitle( wfMsg("wikiastats_pagetitle") );
+		$wgOut->setRobotpolicy( "noindex,nofollow" );
 		#---
 		$wgOut->addScript("<link rel=\"stylesheet\" type=\"text/css\" href=\"/extensions/wikia/WikiaStats/css/wikiastats.css\">\n");
-        #---
-        switch ($this->mSkinName) {
-            case "monobook": 
-            case "slate"   :
-            case "quartz"  : $this->disableWidgetBarCss(); $wgOut->setArticleRelated( false ); break;
-            case "monaco"  : $this->disableWidgetBarCss(); break;
-            default        : $wgOut->setArticleRelated( false ); break;
-        }
-        if ($wgRequest->getVal("action") == "generate") {
-            $this->mPosted = true;
-        } 
-        elseif (($wgRequest->getVal("action") == "citystats") || ($wgRequest->getVal("action") == "citycharts")) 
-        {
-            $this->mainStatsForm( intval($wgRequest->getVal("city")), ($wgRequest->getVal("action") == "citycharts") );
-        } 
-        elseif ($wgRequest->getVal("action") == "compare") 
-        {
-        	if ($t == 1) {
-        		$this->mainStatsTrendsForm();
-        	} elseif ($t == 2) {
-        		$this->mainStatsCreationHistoryForm();
-			} elseif ($t > 2) { 
-				$memory_limit = ini_get("memory_limit");
-				$column = $wgRequest->getVal("table"); 
-				$cities = $wgRequest->getVal("cities"); 
-				if ( empty($this->userIsSpecial) && (is_array($wgStatsExcludedNonSpecialGroup)) && (in_array($t, $wgStatsExcludedNonSpecialGroup) )) {
-					// don't show wikians statistics
-					$this->mainSelectCityForm();
-				} else {
-					$this->mainStatsColumnHistoryForm($column, $cities); 
+		$wgOut->addScript("<script type=\"text/javascript\" src=\"/extensions/wikia/WikiaStats/js/wikiastats.js\"></script>\n");
+
+		if ($wgDBname == CENTRAL_WIKIA_ID) { // central version
+			#--- initial output
+			//$wgOut->setArticleBodyOnly(true);
+			if ($wgRequest->getVal("action")) {
+				$mainPageLink = " - <a href=\"/index.php?title=Special:WikiaStats\">". wfMsg('wikiastats_back_to_mainpage')."</a>";
+				$prevPageLink = "<a href=\"javascript:void(0);\" onClick=\"history.go(-1); return true;\"><< ".wfMsg('wikiastats_back_to_prevpage')."</a>";
+				$wgOut->setSubtitle($prevPageLink . $mainPageLink);
+			}
+			#---
+			switch ($this->mSkinName) {
+				case "monobook": 
+				case "slate"   :
+				case "quartz"  : $this->disableWidgetBarCss(); $wgOut->setArticleRelated( false ); break;
+				case "monaco"  : $this->disableWidgetBarCss(); break;
+				default        : $wgOut->setArticleRelated( false ); break;
+			}
+			if ($wgRequest->getVal("action") == "generate") {
+				$this->mPosted = true;
+			} elseif (($wgRequest->getVal("action") == "citystats") || ($wgRequest->getVal("action") == "citycharts")) {
+				// main dashboard 
+				$this->mainStatsForm( intval($wgRequest->getVal("city")), ($wgRequest->getVal("action") == "citycharts") );
+			} elseif ($wgRequest->getVal("action") == "compare") {
+				// compare statistics
+				if ($t == 1) {
+					$this->mainStatsTrendsForm();
+				} elseif ($t == 2) {
+					$this->mainStatsCreationHistoryForm();
+				} elseif ($t > 2) { 
+					$memory_limit = ini_get("memory_limit");
+					$column = $wgRequest->getVal("table"); 
+					$cities = $wgRequest->getVal("cities"); 
+					if ( empty($this->userIsSpecial) && (is_array($wgStatsExcludedNonSpecialGroup)) && (in_array($t, $wgStatsExcludedNonSpecialGroup) )) {
+						// don't show wikians statistics
+						$this->mainSelectCityForm();
+					} else {
+						$this->mainStatsColumnHistoryForm($column, $cities); 
+					}
 				}
+			} else {
+				$this->mainSelectCityForm();
 			}
 		} else {
-			$this->mainSelectCityForm();
+			// local version 
+			$this->mainStatsForm( $wgCityId, ($wgRequest->getVal("action") == "citycharts"), 1 );
 		}
     }
 
@@ -169,19 +173,22 @@ class WikiaStatsClass extends SpecialPage
     }
 
     
-    private function mainStatsForm($city, $show_charts = 0)
+    private function mainStatsForm($city, $show_charts = 0, $show_local = 0)
     {
         global $wgUser, $wgOut, $wgRequest;
         global $wgMemc;
 		global $wgStatsExcludedNonSpecialGroup;
 
 		wfProfileIn( __METHOD__ );
-		$memkey = "wikiastatsmainstatsform_".$city."_".$show_charts;
+		$memkey = "wikiastatsmainstatsform_".$city."_".$show_charts."_".$show_local;
 		$mainStats = "";
 		if (self::USE_MEMC) $mainStats = $wgMemc->get($memkey);
 
 		if (empty($mainStats)) {
 			$table_stats = "";
+			if ($show_local) {
+				$this->mStats->setLocalStats(true);
+			}			
 			if ( (is_numeric($city)) && ($city >= 0) ) {
 				$main_stats = $this->mStats->getWikiMainStatistics($city, '2004', '01', '', '', $show_charts);
 				$table_stats = $main_stats["text"];
@@ -203,7 +210,21 @@ class WikiaStatsClass extends SpecialPage
 				"main_tbl" 	=> $table_stats,
 				"show_chart"=> $show_charts,
 			));
-			$mainStats = $oTmpl->execute("main-form");
+			$mainStats = "";
+			if ($show_local) {
+				$mainStats = $oTmpl->execute("main-local-form");
+			} else {
+				$mainStats = $oTmpl->execute("main-form");
+			}
+			
+			$columns = $this->mStats->getRangeColumns();
+			$oTmpl->set_vars( array(
+				"columns" => $columns,
+				"userIsSpecial"=> $this->userIsSpecial,
+				"wgStatsExcludedNonSpecialGroup" => $wgStatsExcludedNonSpecialGroup,
+			));
+			$mainStats .= $oTmpl->execute("main-stats-definitions");
+			
 			$wgMemc->set($memkey, $mainStats, 60*60*3);
 			unset($cityList);
 			unset($table_stats);
