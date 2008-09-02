@@ -95,18 +95,20 @@ td.main2x { border:1px inset #FFF; text-align:left; font-size:8pt; margin:0px; p
 #ws-upload {text-align: left;}
 #ws-upload li {display: inline; padding-left: 2em;}
 #ws-show-stats {text-align:center; font-size:11px;}
+#ws-show-charts {text-align:center; font-size:11px;}
+#ws-export-xls {text-align:center; font-size:11px;}
 #ws-wikians-active-btn {text-align:center; font-size:11px;}
 #ws-main-table {padding:10px;}
 #ws-main-table-ctrl {overflow: scroll; width: auto; height: 350px; padding:10px;}
 #ws-main-table-stats {text-align:center; font-size:11px; width:500px; overflow:auto;}
 #ws-page-edits-count-table {text-align:center; font-size:11px; width:500px; overflow:auto;}
 #ws-page-edits-table-stats {text-align:left; font-size:11px; width:500px; overflow:auto;}
-#ws-edits-article {padding:10px; width:800px; overflow:auto; border-top: 0px inset #FFFFFF;display:none; margin:2px;}
-#ws-active-wikians {padding:10px; width:800px; overflow:auto; border-top: 1px inset #FFFFFF;display:none;margin:2px;}
-#ws-anon-wikians {padding:10px; width:800px; overflow:auto; border-top: 1px inset #FFFFFF;display:none; margin:2px;}
-#ws-article-size {padding:10px; width:800px; overflow:auto; border-top: 1px inset #FFFFFF;display:none; margin:2px;}
-#ws-namespace-count {padding:10px; width:800px; overflow:auto; border-top: 1px inset #FFFFFF;display:none; margin:2px;}
-#ws-page-edits-count {padding:10px; width:800px; overflow:auto; border-top: 1px inset #FFFFFF;display:none; margin:2px;}
+#ws-edits-article {padding:10px; width:auto; overflow:auto; border-top: 0px inset #FFFFFF;display:none; margin:2px;}
+#ws-active-wikians {padding:10px; width:auto; overflow:auto; border-top: 1px inset #FFFFFF;display:none;margin:2px;}
+#ws-anon-wikians {padding:10px; width:auto; overflow:auto; border-top: 1px inset #FFFFFF;display:none; margin:2px;}
+#ws-article-size {padding:10px; width:auto; overflow:auto; border-top: 1px inset #FFFFFF;display:none; margin:2px;}
+#ws-namespace-count {padding:10px; width:auto; overflow:auto; border-top: 1px inset #FFFFFF;display:none; margin:2px;}
+#ws-page-edits-count {padding:10px; width:auto; overflow:auto; border-top: 1px inset #FFFFFF;display:none; margin:2px;}
 #ws-progress-bar {float:none;text-align:left;width:auto;clear:both;height:10px;}
 #ws-progress-edits-bar {clear:right;text-align:left;width:auto;float:left;}
 #ws-progress-page-edits-bar {clear:right;text-align:left;width:auto;float:left;}
@@ -116,11 +118,11 @@ td.main2x { border:1px inset #FFF; text-align:left; font-size:8pt; margin:0px; p
 #ws-title {margin: 1em; padding: 1em;}
 #ws-upload {text-align: left;}
 #ws-main-table-headers {width:500px;float:left;height:20px;}
-#wk-stats-legend {font-size: 8pt; font-family:Trebuchet MS,arial,verdana;padding:5px 0px 0px 0px;}
-#wk-column-group {font-weight: bold; padding: 4px 0px 2px 0px;}
+#wk-stats-legend {font-size: 8pt; font-family:Trebuchet MS,arial,verdana;padding:0px;}
+#wk-column-group {font-weight: bold; padding: 10px 0px 2px 0px;}
 #wk-stats-legend-values {padding: 1px 7px 1px 7px;}
 #wk-stats-legend-columns {padding: 10px 0px 10px 2px;}
 .ws-input {border-bottom:1px inset #2F6FAB; border-left:1px outset #2F6FAB; border-right:1px inset #2F6FAB;border-top: 1px outset #2F6FAB;width:240px;padding:1px 2px; margin:2px; font-size:8.5pt;}
 div#widget_sidebar { display: none !important; }
-div#wikia_page { margin-left: 5px; z-index:50 !important; }
+div#wikia_page { margin-left: 5px; }
 div#sidebar { display: none !important; }
