@@ -512,6 +512,9 @@ class Sanitizer {
 					$newparams = Sanitizer::fixTagAttributes( $params, $t );
 					$rest = str_replace( '>', '&gt;', $rest );
 					$text .= "<$slash$t$newparams$brace$rest";
+					if (!$slash) {
+						wfCountWikiElement("html: $t");
+					}
 				} else {
 					$text .= '&lt;' . str_replace( '>', '&gt;', $x);
 				}
