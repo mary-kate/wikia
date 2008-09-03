@@ -28,7 +28,7 @@ class WikiaGenericStats {
     var $mSelectedCityId = -1;
 
     const MONTHLY_STATS = 7;
-    const USE_MEMC = 1;
+    const USE_MEMC = 0;
 	const IGNORE_WIKIS = "5, 11, 6745";
 
 	var $columnMapIndex = null;
@@ -494,31 +494,31 @@ class WikiaGenericStats {
 					}
 				}
 				#---
-				$db_fields[] = (empty($all)) ? "cw_wikians_total as A" : "sum(cw_wikians_total) as A";
-				$db_fields[] = (empty($all)) ? "cw_wikians_total_inc as B" : "sum(cw_wikians_total_inc) as B";
-				$db_fields[] = (empty($all)) ? "cw_wikians_edits_5 as C" : "sum(cw_wikians_edits_5) as C";
-				$db_fields[] = (empty($all)) ? "cw_wikians_edits_100 as D" : "sum(cw_wikians_edits_100) as D";
-				$db_fields[] = (empty($all)) ? "cw_article_count_link as E" : "sum(cw_article_count_link) as E";
-				$db_fields[] = (empty($all)) ? "cw_article_count_200_link as F" : "sum(cw_article_count_200_link) as F";
-				$db_fields[] = (empty($all)) ? "cw_article_new_per_day as G" : "sum(cw_article_new_per_day) as G";
-				$db_fields[] = (empty($all)) ? "cw_article_mean_nbr_revision as H" : "avg(cw_article_mean_nbr_revision) as H";
-				$db_fields[] = (empty($all)) ? "cw_article_mean_size as I" : "avg(cw_article_mean_size) as I";
-				$db_fields[] = (empty($all)) ? "cw_article_perc_0_5_size as J" : "avg(cw_article_perc_0_5_size) as J";
-				$db_fields[] = (empty($all)) ? "cw_article_perc_2_0_size as K" : "avg(cw_article_perc_2_0_size) as K";
-				$db_fields[] = (empty($all)) ? "cw_db_edits as L" : "sum(cw_db_edits) as L";
-				$db_fields[] = (empty($all)) ? "cw_db_size as M" : "sum(cw_db_size) as M";
-				$db_fields[] = (empty($all)) ? "cw_db_words as N" : "sum(cw_db_words) as N";
-				$db_fields[] = (empty($all)) ? "cw_links_internal as O" : "sum(cw_links_internal) as O";
-				$db_fields[] = (empty($all)) ? "cw_links_interwiki as P" : "sum(cw_links_interwiki) as P";
-				$db_fields[] = (empty($all)) ? "cw_links_image as Q" : "sum(cw_links_image) as Q";
-				$db_fields[] = (empty($all)) ? "cw_links_external as R" : "sum(cw_links_external) as R";
-				$db_fields[] = (empty($all)) ? "cw_links_redirects as S" : "sum(cw_links_redirects) as S";
-				$db_fields[] = (empty($all)) ? "cw_images_uploaded as T" : "sum(cw_images_uploaded) as T";
-				$db_fields[] = (empty($all)) ? "cw_images_linked as U" : "sum(cw_images_linked) as U";
-				$db_fields[] = (empty($all)) ? "cw_users_all_reg as V" : "sum(cw_users_all_reg) as V";
-				$db_fields[] = (empty($all)) ? "cw_users_all_reg_main_ns as W" : "sum(cw_users_all_reg_main_ns) as W";
-				$db_fields[] = (empty($all)) ? "cw_users_all_reg_user_ns as X" : "sum(cw_users_all_reg_user_ns) as X";
-				$db_fields[] = (empty($all)) ? "cw_users_all_reg_image_ns as Y" : "sum(cw_users_all_reg_image_ns) as Y";
+				$db_fields[] = (empty($all)) ? "cw_users_all_reg as A" : "sum(cw_users_all_reg) as A";
+				$db_fields[] = (empty($all)) ? "cw_wikians_total as B" : "sum(cw_wikians_total) as B";
+				$db_fields[] = (empty($all)) ? "cw_wikians_total_inc as C" : "sum(cw_wikians_total_inc) as C";
+				$db_fields[] = (empty($all)) ? "cw_users_all_reg_main_ns as D" : "sum(cw_users_all_reg_main_ns) as D";
+				$db_fields[] = (empty($all)) ? "cw_wikians_edits_5 as E" : "sum(cw_wikians_edits_5) as E";
+				$db_fields[] = (empty($all)) ? "cw_wikians_edits_100 as F" : "sum(cw_wikians_edits_100) as F";
+				$db_fields[] = (empty($all)) ? "cw_users_all_reg_user_ns as G" : "sum(cw_users_all_reg_user_ns) as G";
+				$db_fields[] = (empty($all)) ? "cw_users_all_reg_image_ns as H" : "sum(cw_users_all_reg_image_ns) as H";
+				$db_fields[] = (empty($all)) ? "cw_article_count_link as I" : "sum(cw_article_count_link) as I";
+				$db_fields[] = (empty($all)) ? "cw_article_count_200_link as J" : "sum(cw_article_count_200_link) as J";
+				$db_fields[] = (empty($all)) ? "cw_article_new_per_day as K" : "sum(cw_article_new_per_day) as K";
+				$db_fields[] = (empty($all)) ? "cw_article_mean_nbr_revision as L" : "avg(cw_article_mean_nbr_revision) as L";
+				$db_fields[] = (empty($all)) ? "cw_article_mean_size as M" : "avg(cw_article_mean_size) as M";
+				$db_fields[] = (empty($all)) ? "cw_article_perc_0_5_size as N" : "avg(cw_article_perc_0_5_size) as N";
+				$db_fields[] = (empty($all)) ? "cw_article_perc_2_0_size as O" : "avg(cw_article_perc_2_0_size) as O";
+				$db_fields[] = (empty($all)) ? "cw_db_edits as P" : "sum(cw_db_edits) as P";
+				$db_fields[] = (empty($all)) ? "cw_db_size as Q" : "sum(cw_db_size) as Q";
+				$db_fields[] = (empty($all)) ? "cw_db_words as R" : "sum(cw_db_words) as R";
+				$db_fields[] = (empty($all)) ? "cw_links_internal as S" : "sum(cw_links_internal) as S";
+				$db_fields[] = (empty($all)) ? "cw_links_interwiki as T" : "sum(cw_links_interwiki) as T";
+				$db_fields[] = (empty($all)) ? "cw_links_image as U" : "sum(cw_links_image) as U";
+				$db_fields[] = (empty($all)) ? "cw_links_external as V" : "sum(cw_links_external) as V";
+				$db_fields[] = (empty($all)) ? "cw_links_redirects as W" : "sum(cw_links_redirects) as W";
+				$db_fields[] = (empty($all)) ? "cw_images_uploaded as X" : "sum(cw_images_uploaded) as X";
+				$db_fields[] = (empty($all)) ? "cw_images_linked as Y" : "sum(cw_images_linked) as Y";
 
 				if (!empty($all))
 				{
@@ -1517,31 +1517,31 @@ class WikiaGenericStats {
 				}
 
 				$db_fields = array("date_format(cw_stats_date, '%Y-%m') as date");
-				$db_fields[] = (!empty($city_id)) ? "cw_wikians_total as A" : "sum(cw_wikians_total) as A";
-				$db_fields[] = (!empty($city_id)) ? "cw_wikians_total_inc as B" : "sum(cw_wikians_total_inc) as B";
-				$db_fields[] = (!empty($city_id)) ? "cw_wikians_edits_5 as C" : "sum(cw_wikians_edits_5) as C";
-				$db_fields[] = (!empty($city_id)) ? "cw_wikians_edits_100 as D" : "sum(cw_wikians_edits_100) as D";
-				$db_fields[] = (!empty($city_id)) ? "cw_article_count_link as E" : "sum(cw_article_count_link) as E";
-				$db_fields[] = (!empty($city_id)) ? "cw_article_count_200_link as F" : "sum(cw_article_count_200_link) as F";
-				$db_fields[] = (!empty($city_id)) ? "cw_article_new_per_day as G" : "sum(cw_article_new_per_day) as G";
-				$db_fields[] = (!empty($city_id)) ? "cw_article_mean_nbr_revision as H" : "avg(cw_article_mean_nbr_revision) as H";
-				$db_fields[] = (!empty($city_id)) ? "cw_article_mean_size as I" : "avg(cw_article_mean_size) as I";
-				$db_fields[] = (!empty($city_id)) ? "cw_article_perc_0_5_size as J" : "avg(cw_article_perc_0_5_size) as J";
-				$db_fields[] = (!empty($city_id)) ? "cw_article_perc_2_0_size as K" : "avg(cw_article_perc_2_0_size) as K";
-				$db_fields[] = (!empty($city_id)) ? "cw_db_edits as L" : "sum(cw_db_edits) as L";
-				$db_fields[] = (!empty($city_id)) ? "cw_db_size as M" : "sum(cw_db_size) as M";
-				$db_fields[] = (!empty($city_id)) ? "cw_db_words as N" : "sum(cw_db_words) as N";
-				$db_fields[] = (!empty($city_id)) ? "cw_links_internal as O" : "sum(cw_links_internal) as O";
-				$db_fields[] = (!empty($city_id)) ? "cw_links_interwiki as P" : "sum(cw_links_interwiki) as P";
-				$db_fields[] = (!empty($city_id)) ? "cw_links_image as Q" : "sum(cw_links_image) as Q";
-				$db_fields[] = (!empty($city_id)) ? "cw_links_external as R" : "sum(cw_links_external) as R";
-				$db_fields[] = (!empty($city_id)) ? "cw_links_redirects as S" : "sum(cw_links_redirects) as S";
-				$db_fields[] = (!empty($city_id)) ? "cw_images_uploaded as T" : "sum(cw_images_uploaded) as T";
-				$db_fields[] = (!empty($city_id)) ? "cw_images_linked as U" : "sum(cw_images_linked) as U";
-				$db_fields[] = (!empty($city_id)) ? "cw_users_all_reg as V" : "sum(cw_users_all_reg) as V";
-				$db_fields[] = (!empty($city_id)) ? "cw_users_all_reg_main_ns as W" : "sum(cw_users_all_reg_main_ns) as W";
-				$db_fields[] = (!empty($city_id)) ? "cw_users_all_reg_user_ns as X" : "sum(cw_users_all_reg_user_ns) as X";
-				$db_fields[] = (!empty($city_id)) ? "cw_users_all_reg_image_ns as Y" : "sum(cw_users_all_reg_image_ns) as Y";
+				$db_fields[] = (empty($all)) ? "cw_users_all_reg as A" : "sum(cw_users_all_reg) as A";
+				$db_fields[] = (empty($all)) ? "cw_wikians_total as B" : "sum(cw_wikians_total) as B";
+				$db_fields[] = (empty($all)) ? "cw_wikians_total_inc as C" : "sum(cw_wikians_total_inc) as C";
+				$db_fields[] = (empty($all)) ? "cw_users_all_reg_main_ns as D" : "sum(cw_users_all_reg_main_ns) as D";
+				$db_fields[] = (empty($all)) ? "cw_wikians_edits_5 as E" : "sum(cw_wikians_edits_5) as E";
+				$db_fields[] = (empty($all)) ? "cw_wikians_edits_100 as F" : "sum(cw_wikians_edits_100) as F";
+				$db_fields[] = (empty($all)) ? "cw_users_all_reg_user_ns as G" : "sum(cw_users_all_reg_user_ns) as G";
+				$db_fields[] = (empty($all)) ? "cw_users_all_reg_image_ns as H" : "sum(cw_users_all_reg_image_ns) as H";
+				$db_fields[] = (empty($all)) ? "cw_article_count_link as I" : "sum(cw_article_count_link) as I";
+				$db_fields[] = (empty($all)) ? "cw_article_count_200_link as J" : "sum(cw_article_count_200_link) as J";
+				$db_fields[] = (empty($all)) ? "cw_article_new_per_day as K" : "sum(cw_article_new_per_day) as K";
+				$db_fields[] = (empty($all)) ? "cw_article_mean_nbr_revision as L" : "avg(cw_article_mean_nbr_revision) as L";
+				$db_fields[] = (empty($all)) ? "cw_article_mean_size as M" : "avg(cw_article_mean_size) as M";
+				$db_fields[] = (empty($all)) ? "cw_article_perc_0_5_size as N" : "avg(cw_article_perc_0_5_size) as N";
+				$db_fields[] = (empty($all)) ? "cw_article_perc_2_0_size as O" : "avg(cw_article_perc_2_0_size) as O";
+				$db_fields[] = (empty($all)) ? "cw_db_edits as P" : "sum(cw_db_edits) as P";
+				$db_fields[] = (empty($all)) ? "cw_db_size as Q" : "sum(cw_db_size) as Q";
+				$db_fields[] = (empty($all)) ? "cw_db_words as R" : "sum(cw_db_words) as R";
+				$db_fields[] = (empty($all)) ? "cw_links_internal as S" : "sum(cw_links_internal) as S";
+				$db_fields[] = (empty($all)) ? "cw_links_interwiki as T" : "sum(cw_links_interwiki) as T";
+				$db_fields[] = (empty($all)) ? "cw_links_image as U" : "sum(cw_links_image) as U";
+				$db_fields[] = (empty($all)) ? "cw_links_external as V" : "sum(cw_links_external) as V";
+				$db_fields[] = (empty($all)) ? "cw_links_redirects as W" : "sum(cw_links_redirects) as W";
+				$db_fields[] = (empty($all)) ? "cw_images_uploaded as X" : "sum(cw_images_uploaded) as X";
+				$db_fields[] = (empty($all)) ? "cw_images_linked as Y" : "sum(cw_images_linked) as Y";
 				#---
 				$where = (!empty($city_id)) ? "cw_city_id = '".intval($city_id)."'" : "cw_city_id not in ('".implode("','", self::getNoPublicCities()) ."')";
 				#---

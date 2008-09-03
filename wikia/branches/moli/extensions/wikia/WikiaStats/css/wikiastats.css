@@ -13,10 +13,10 @@ div.hide {float:right; padding:0px 2px 1px 10px; width:8px;}
 .normal {padding:1px 0px 1px 0px; font-size:12px;}
 .big {padding:1px 0px 1px 0px; font-size:12pt;}
 .cityinfo {font-size:9pt; padding:1px 8px 1px 8px; font-family: verdana,arial,sans-serif,helvetica;}
-td.cb { border:1px inset #FFFFFF; text-align:center; font-size:12px; padding-left:1px; padding-right:1px;}
+td.cb { border:1px inset #FFFFFF; text-align:center; font-size:8.5pt; padding-left:1px; padding-right:1px;}
 td.cb_small {height:3px; border:1px inset #FFFFFF; font-size:1px;}
-td.db { border:1px inset #FFFFFF; text-align:right; font-size:12px; padding-left:1px; padding-right:1px;}
-td.cb_header { border:1px inset #FFFFFF; text-align:center; font-size:12px; padding-left:1px; padding-right:1px;}
+td.db { border:1px inset #FFFFFF; text-align:right; font-size:8.5pt; padding-left:1px; padding-right:1px;}
+td.cb_header { border:1px inset #FFFFFF; text-align:center; font-size:8.5pt; padding-left:1px; padding-right:1px;}
 td.eb { border:1px inset #FFFFFF; text-align:right; font-size:8pt; padding-left:1px; padding-right:1px; font-family: verdana,arial,sans-serif,helvetica;}
 td.ebl { border:1px inset #FFFFFF; text-align:left; font-size:8pt; padding-left:1px; padding-right:1px; font-family: verdana,arial,sans-serif,helvetica;}
 td.rb { border:1px inset #FFFFFF; text-align:right; font-size:8pt; padding-left:1px; padding-right:1px;}
@@ -123,6 +123,6 @@ td.main2x { border:1px inset #FFF; text-align:left; font-size:8pt; margin:0px; p
 #wk-stats-legend-values {padding: 1px 7px 1px 7px;}
 #wk-stats-legend-columns {padding: 10px 0px 10px 2px;}
 .ws-input {border-bottom:1px inset #2F6FAB; border-left:1px outset #2F6FAB; border-right:1px inset #2F6FAB;border-top: 1px outset #2F6FAB;width:240px;padding:1px 2px; margin:2px; font-size:8.5pt;}
-div#widget_sidebar { display: none !important; }
-div#wikia_page { margin-left: 5px; }
-div#sidebar { display: none !important; }
+#div#widget_sidebar { display: none !important; }
+#div#wikia_page { margin-left: 5px; }
+#div#sidebar { display: none !important; }
