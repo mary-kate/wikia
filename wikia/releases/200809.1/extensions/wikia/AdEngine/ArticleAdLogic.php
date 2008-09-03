@@ -257,15 +257,29 @@ class ArticleAdLogic {
 	 * Otherwise, return true.
 	 */
 	public static function isBoxAdArticle($html){
-		if (self::hasWikiaMagicWord($html, "__WIKIA_BANNER__")){
-			return false;
-		} else if (self::hasWikiaMagicWord($html, "__WIKIA_BOXAD__")){
-			return true;
-		} else if (self::getCollisionRank($html) >= self::collisionRankThreshold){
-			return false;
-		} else {
-			return true;
+		static $lastMd5, $lastResult;
+
+		$currentMd5 = md5($html);
+		if ($currentMd5 == $lastMd5 ){
+			// function was called again with the same html as last time.
+			return $lastResult;
 		}
+
+	
+		if (self::hasWikiaMagicWord($html, "__WIKIA_BANNER__")){
+			$result = false;
+		} else if (self::hasWikiaMagicWord($html, "__WIKIA_BOXAD__")){
+			$result = true;
+		} else if (self::getCollisionRank($html) >= self::collisionRankThreshold){
+			$result = false;
+		} else {
+			$result = true;
+		}
+		
+		
+		$lastMd5 = $currentMd5;
+		$lastResult = $result;
+		return $result;
 	}
 
 
