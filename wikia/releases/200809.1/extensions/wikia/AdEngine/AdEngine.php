@@ -14,7 +14,7 @@ interface iAdProvider {
 
 class AdEngine {
 
-	const cacheKeyVersion = "1.9";
+	const cacheKeyVersion = "1.9a";
 	const cacheTimeout = 1800;
 	const noadgif = "http://images2.wikia.nocookie.net/common/wikia/noad.gif";
 
