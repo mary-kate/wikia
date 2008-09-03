@@ -104,7 +104,7 @@ class ArticleAdLogic {
 		  	if (isset($attr['id']) && $attr['id'] == 'toc') {
 				//This table is the Table of Contents and shouldn't cause a collision
 				self::adDebug("Table is TOC");
-				return 0;
+				return 0.02;
 			}
 			if (isset($attr['width'])){
 				self::adDebug("Table has width attribute");
@@ -145,10 +145,12 @@ class ArticleAdLogic {
 			} else if (isset($attr['class'])){
 				self::adDebug("Table has class attribute");
 				// This table has a class, which may have width defined
+				// TOO Strict?
 				return .2;
 			} else if (isset($attr['id'])){
 				self::adDebug("Table has id attribute");
 				// This table has an id, which may have css styling and width defined
+				// TOO Strict?
 				return .15;
 			} else {
 				// There is a table, but it seems harmless
@@ -193,9 +195,9 @@ class ArticleAdLogic {
 			} else if (isset($attr['width'])){
 				// Return a value proportional to the size of the image, where a $pixelThreshold wide
 				$eachpixel = self::collisionRankThreshold/self::pixelThreshold;
-				$out = round($eachpixel * $attr['width'], 3);
+				$out = round(($eachpixel * $attr['width'])/2, 3) ;
 				self::adDebug("Image is {$attr['width']} pixels, $out");
-				return round($eachpixel * $attr['width'], 3);
+				return $out;
 			} else {
 				self::adDebug("No width set on image, .1");
 				return .1;
