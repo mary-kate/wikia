@@ -55,12 +55,15 @@ class AdEngine {
 		}
 
 		$db = wfGetDB(DB_SLAVE);
+		$ad_slot_table = wfSharedTable('ad_slot');
+		$ad_slot_override_table = wfSharedTable('ad_slot_override');
+		$ad_provider_value_table = wfSharedTable('ad_provider_value');
 
 		$sql = "SELECT ad_slot.as_id, ad_slot.slot, ad_slot.size,
 				COALESCE(adso.provider_id, ad_slot.default_provider_id) AS provider_id,
 				COALESCE(adso.enabled, ad_slot.default_enabled) AS enabled
-				FROM wikicities.ad_slot
-				LEFT OUTER JOIN wikicities.ad_slot_override AS adso
+				FROM $ad_slot_table
+				LEFT OUTER JOIN $ad_slot_override_table AS adso
 				  ON ad_slot.as_id = adso.as_id AND city_id=".intval($wgCityId)."
 				WHERE skin='".$db->strencode($skin_name)."'";
 
@@ -75,7 +78,7 @@ class AdEngine {
 			);
 		}
 
-		$sql = "SELECT * FROM wikicities.ad_provider_value WHERE
+		$sql = "SELECT * FROM $ad_provider_value_table_value WHERE
 			 (city_id = ".intval($wgCityId)." OR city_id IS NULL) ORDER by city_id";
 		$res = $db->query($sql);
 		while($row = $db->fetchObject($res)) {
