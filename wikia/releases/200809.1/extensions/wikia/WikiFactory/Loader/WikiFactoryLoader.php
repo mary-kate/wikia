@@ -14,7 +14,6 @@ ini_set( "cgi.fix_pathinfo", 1);
 require_once( "$IP/includes/Defines.php" );
 require_once( "$IP/includes/DefaultSettings.php" );
 require_once( "$IP/includes/GlobalFunctions.php" );
-require_once( "$IP/includes/wikia/GlobalFunctions.php" );
 require_once( "$IP/includes/Exception.php" );
 require_once( "$IP/includes/Database.php" );
 require_once( "$IP/includes/BagOStuff.php" );
@@ -331,31 +330,29 @@ class WikiFactoryLoader {
 		 * if $this->mCityURL different from city_url we redirect to city_url
 		 * (as main server)
 		 */
-		$url = false;
 		if( !empty($this->mCityHost) &&
 			!empty($this->mServerName) &&
 			strtolower( $this->mCityHost ) != strtolower( $this->mServerName ) &&
-#			empty($wgDevelEnvironment) &&
-			$this->mNoRedirect === false )
-		{
-            $url = wfGetCurrentUrl();
-			$host = $this->mCityHost;
+			empty($wgDevelEnvironment) &&
+			$this->mNoRedirect === false ) {
 			/**
-			 * dofus exception
+			 * build url for redirecton, (so far we don't have https)
 			 */
-			$dofus =  array( 602, 1982, 4533, 1177, 1630, 1112, 7491, 4763, 2278, 1922, 1809, 2791, 2788, 7645 );
-			if( in_array( $this->mWikiID, $dofus ) ) {
-				/**
-				 * replace /wiki/ with /dofus/ in obsoleted links
-				 * $this->mCityHost in dofus has http://ln.wikia.com/dofus schema
-				 */
-				$part = explode( "/", $this->mCityHost );
-				$host = $part[ 0 ];
-				$url[ "path" ] = str_replace( "/wiki", "/dofus", $url[ "path" ] );
+			$uri = $_SERVER["REQUEST_URI"];
+			$match = preg_match("/^http:\/\//", $uri );
+			if( $match ) {
+				$target = str_replace( $this->mServerName, $this->mCityHost, $uri );
 			}
-			$target = $url[ "scheme" ] . "://" . $host . $url[ "path" ];
-			$target = isset( $url[ "query" ] ) ? $target . "?" . $url[ "query" ] : $target;
-
+			else {
+				/**
+				 * dofus exception
+				 */
+				$dofus =  array( 602, 1982, 4533, 1177, 1630, 1112, 7491, 4763, 2278, 1922, 1809, 2791, 2788, 7645 );
+				if( in_array( $this->mWikiID, $dofus ) ) {
+					$uri = str_replace( "wiki/", "", $uri );
+				}
+				$target = "http://{$this->mCityHost}{$uri}";
+			}
 			wfDebug("wikifactory: redirected to {$target}", true);
 			if( !empty( self::$mDebug ) ) {
 				error_log( "wikifactory: redirected to {$target}" );
