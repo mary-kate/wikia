@@ -13,6 +13,7 @@ if(!defined('MEDIAWIKI')) {
 
 $wgHooks['OutputPageBeforeHTML'][] = 'SharedHelpHook';
 $wgHooks['EditPage::showEditForm:initial'][] = 'SharedHelpEditPageHook';
+$wgHooks['SearchBeforeResults'][] = 'SharedHelpSearchHook';
 
 function SharedHelpHook(&$out, &$text) {
 	global $wgTitle, $wgMemc, $wgSharedDB, $wgDBname;
@@ -102,5 +103,14 @@ function SharedHelpEditPageHook(&$editpage) {
 
 	$editpage->editFormPageTop .= $msg;
 
+	return true;
+}
+
+function SharedHelpSearchHook(&$searchPage, &$term) {
+	global $wgOut;
+
+	$msg = '<div style="border: solid 1px; padding: 10px; margin: 5px" class="sharedHelpSearchInfo plainlinks">'.wfMsgExt('shared_help_search_info', 'parseinline', urlencode($term)).'</div>';
+
+	$wgOut->addHTML($msg);
 	return true;
 }
