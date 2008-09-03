@@ -53,7 +53,7 @@ function WidgetLastWikis($id, $params) {
 	if ( !$found ) {
 
 		if ( count($urls) == 5) {
-			array_shift ( $urls );
+			array_pop ( $urls );
 		}
 
 		array_unshift ( $urls, array( 'url' => $server, 'name' => $wgSitename ) );		
