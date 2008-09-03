@@ -58,6 +58,7 @@ class ArticleAdLogicTest extends PHPUnit_TestCase {
 		$this->assertTrue(ArticleAdLogic::isBoxAdArticle(file_get_contents('./table200Pixels.html')));
 		$this->assertTrue(ArticleAdLogic::isBoxAdArticle(file_get_contents('./table200pxPixels.html')));
 		$this->assertTrue(ArticleAdLogic::isBoxAdArticle(file_get_contents('./wierdNoCollisionPage.html')));
+		$this->assertTrue(ArticleAdLogic::isBoxAdArticle(file_get_contents('./div22emboxad.html')));
 
 		// These should should display a banner ad
 		$this->assertFalse(ArticleAdLogic::isBoxAdArticle(file_get_contents('./articleWithMagicWordBanner.html')));

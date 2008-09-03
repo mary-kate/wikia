@@ -85,12 +85,13 @@ class ArticleAdLogic {
 				}
 			}
 		}
-		self::adDebug("Overall Collision Rank: $score");
 
 		// Score is between 0 and 1, so if it's over 1, reset it to 1
 		if ($score > 1) $score = 1;
-
+		$score = round($score, 2);
+		self::adDebug("Overall Collision Rank: $score");
 		return $score;
+
 	}
 
 	
@@ -187,11 +188,17 @@ class ArticleAdLogic {
 		  case 'img':
 			self::adDebug("Image found: " . print_r($attr, true));
 			if (isset($attr['width']) && $attr['width'] >= self::pixelThreshold){
-				self::adDebug("Image has width over pixel threshold of " . self::pixelThreshold);
+				self::adDebug("Image has width over pixel threshold of " . self::pixelThreshold . ", .75");
 				return .75;
+			} else if (isset($attr['width'])){
+				// Return a value proportional to the size of the image, where a $pixelThreshold wide
+				$eachpixel = self::collisionRankThreshold/self::pixelThreshold;
+				$out = round($eachpixel * $attr['width'], 3);
+				self::adDebug("Image is {$attr['width']} pixels, $out");
+				return round($eachpixel * $attr['width'], 3);
 			} else {
-				self::adDebug("Image seems ok");
-				return .05;
+				self::adDebug("No width set on image, .1");
+				return .1;
 			}
 
 		  default : return 0;
@@ -209,7 +216,27 @@ class ArticleAdLogic {
 		}
 	}
 
+	/* Normalize the pixels. Possible values for 200 pixels include:
+	 * 200
+	 * 200px
+ 	 * 20em (yeah, not exact, but close enough)
+ 	 *
+ 	 * For any of the values 
+ 	 */
 	public function getPixels($in){
+		$in=trim($in);
+		if (preg_match('/^[0-9]{1,4}$/', $in)){
+			// Nothing bug numbers. 
+			return $in;
+		} else if (preg_match('/^([0-9]{1,4})px/i', $in, $match)){
+			// NNNpx
+			return $match[1];
+		} else if (preg_match('/^([0-9]{1,4})em/i', $in, $match)){
+			return $match[1] * 10;
+		} else {
+			return false;
+		}
+
 		$out=preg_replace('/px$/i', '', $in);
 		if (intval($out) == $out){
 			return $out;
