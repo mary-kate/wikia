@@ -74,8 +74,6 @@ function jsRedirectedFromText($out){
                 return true;
         }
 		
-		echo 'final' .md5( $wgTitle->getText() );
-
 		//the RedirectedFrom suffix set as MD5 of target on previous page
         $out->addInlineScript('
           var jsrdCookie="' . addslashes($wgCookiePrefix) . 'RedirectedFrom_' . md5( $wgTitle->getText() ) . '";
