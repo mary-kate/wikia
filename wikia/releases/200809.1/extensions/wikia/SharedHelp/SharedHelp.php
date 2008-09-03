@@ -13,8 +13,9 @@ if(!defined('MEDIAWIKI')) {
 
 $wgExtensionCredits['other'][] = array(
         'name' => 'SharedHelp',
+	'version' => 0.1,
         'description' => 'Takes pages from [[w:c:Help|Help Wikia]] and inserts them into Help namespace on this wiki',
-        'author' => 'Maciej Brencz, Inez Korczyński'
+        'author' => array('Maciej Brencz, Inez Korczyński')
 );
 
 $wgHooks['OutputPageBeforeHTML'][] = 'SharedHelpHook';
