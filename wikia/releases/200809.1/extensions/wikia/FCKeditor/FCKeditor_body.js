@@ -70,7 +70,6 @@ function onLoadFCKeditor()
                                         insertTags (tag, '', '') ;
                                 } else {
 					FCKinstance.InsertImage (tag) ;	
-                                        //todo parse and construct link from this markup
                                 }
                         }
 
