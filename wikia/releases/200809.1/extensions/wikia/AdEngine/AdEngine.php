@@ -73,26 +73,7 @@ class AdEngine {
 				'provider_id' => $row->provider_id,
 				'enabled' => $row->enabled
 			);
-
 		}
-
-		// HACK: Language level overrides.
-		// Long term, override this with the UI to manage config settings
-		// Disabling these for now, will point straight to Google when 
-		// I get that working.
-		global $wgContentLanguage;
-		if ($wgContentLanguage != 'en'){
-			$this->slots['HOME_TOP_LEADERBOARD']['enabled'] = 'No';
-			$this->slots['HOME_TOP_RIGHT_BOXAD']['enabled'] = 'No';
-			$this->slots['HOME_LEFT_SKYSCRAPER_1']['enabled'] = 'No';
-			$this->slots['HOME_LEFT_SKYSCRAPER_2']['enabled'] = 'No';
-			$this->slots['TOP_LEADERBOARD']['enabled'] = 'No';
-			$this->slots['TOP_RIGHT_BOXAD']['enabled'] = 'No';
-			$this->slots['LEFT_SKYSCRAPER_1']['enabled'] = 'No';
-			$this->slots['LEFT_SKYSCRAPER_2']['enabled'] = 'No';
-		}
-		 
-		
 
 		$sql = "SELECT * FROM wikicities.ad_provider_value WHERE
 			 (city_id = ".intval($wgCityId)." OR city_id IS NULL) ORDER by city_id";
