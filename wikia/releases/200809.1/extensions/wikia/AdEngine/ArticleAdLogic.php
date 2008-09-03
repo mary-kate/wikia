@@ -13,7 +13,7 @@ $wgExtensionCredits['other'][] = array(
 class ArticleAdLogic {
 
 	// Play with these levels, once we get more test cases.
-	const shortArticleThreshold = 1000; // what defines a "short" article. # of characters *after* html has been stripped.
+	const shortArticleThreshold = 750; // what defines a "short" article. # of characters *after* html has been stripped.
 	const longArticleThreshold = 3500; // what defines a "long" article. # of characters *after* html has been stripped.
 	const collisionRankThreshold = .15;  // what collison score constitutes a collision. 0-1
 	const firstHtmlThreshold = 1500; // Check this much of the html for collision causing tags
