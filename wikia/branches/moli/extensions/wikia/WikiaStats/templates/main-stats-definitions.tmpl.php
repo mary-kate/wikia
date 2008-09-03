@@ -18,29 +18,23 @@ foreach ($columns as $column) {
 ?>		
 <span id="wk-column-group"><?= wfMsg("wikiastats_wikians") ?><a name="wikians"></a>&nbsp;<b><a href="#mainstats" class="big">&uarr;</a></b></span><br />
 <?		
-	} elseif ($i == 4) {
+	} elseif ($i == 8) {
 ?>		
 <span id="wk-column-group"><?= wfMsg("wikiastats_articles") ?><a name="articles"></a>&nbsp;<b><a href="#mainstats" class="big">&uarr;</a></b></span><br />
 <?		
-	} elseif ($i == 11) {
+	} elseif ($i == 15) {
 ?>		
 <span id="wk-column-group"><?= wfMsg("wikiastats_database") ?><a name="database"></a>&nbsp;<b><a href="#mainstats" class="big">&uarr;</a></b></span><br />
 <?		
-	} elseif ($i == 14) {
+	} elseif ($i == 18) {
 ?>		
 <span id="wk-column-group"><?= wfMsg("wikiastats_links") ?><a name="links"></a>&nbsp;<b><a href="#mainstats" class="big">&uarr;</a></b></span><br />
 <?	
-	} elseif ($i == 19) {
+	} elseif ($i == 23) {
 ?>
 <span id="wk-column-group"><?= wfMsg("wikiastats_images") ?><a name="images"></a>&nbsp;<b><a href="#mainstats" class="big">&uarr;</a></b></span><br />
 <?
-	} elseif ($i == 21) {
-		if (!empty($userIsSpecial)) { 
-?>		
-<span id="wk-column-group"><?= wfMsg("wikiastats_reg_users") ?><a name="reg_users"></a>&nbsp;<b><a href="#mainstats" class="big">&uarr;</a></b></span><br />
-<?
-		}
-	}
+	} 
 	$i++;
 	if ( empty($userIsSpecial) && (is_array($wgStatsExcludedNonSpecialGroup)) && (in_array($loop, $wgStatsExcludedNonSpecialGroup) )) continue;
 ?>

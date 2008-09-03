@@ -24,7 +24,7 @@ class WikiaStatsClass extends SpecialPage
     var $mPosted, $mStats, $mSkinName;
     var $userIsSpecial;
 
-    const USE_MEMC = 1;
+    const USE_MEMC = 0;
 
     #--- constructor
     public function __construct()
@@ -89,13 +89,13 @@ class WikiaStatsClass extends SpecialPage
 				$wgOut->setSubtitle($prevPageLink . $mainPageLink);
 			}
 			#---
-			switch ($this->mSkinName) {
+			/*switch ($this->mSkinName) {
 				case "monobook": 
 				case "slate"   :
 				case "quartz"  : $this->disableWidgetBarCss(); $wgOut->setArticleRelated( false ); break;
 				case "monaco"  : $this->disableWidgetBarCss(); break;
 				default        : $wgOut->setArticleRelated( false ); break;
-			}
+			}*/
 			if ($wgRequest->getVal("action") == "generate") {
 				$this->mPosted = true;
 			} elseif (($wgRequest->getVal("action") == "citystats") || ($wgRequest->getVal("action") == "citycharts")) {
