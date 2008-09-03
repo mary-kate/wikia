@@ -4,7 +4,7 @@ if (!defined('MEDIAWIKI')) die();
  * Dialog design and hooks for ProblemReports extension
  *
  * @package MediaWiki
-po* @subpackage Extensions
+ * @subpackage Extensions
  *
  * @author Maciej Brencz <macbre@wikia.com>
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License 2.0 or later
