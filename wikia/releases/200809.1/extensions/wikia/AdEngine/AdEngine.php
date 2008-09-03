@@ -78,7 +78,7 @@ class AdEngine {
 			);
 		}
 
-		$sql = "SELECT * FROM $ad_provider_value_table_value WHERE
+		$sql = "SELECT * FROM $ad_provider_value_table WHERE
 			 (city_id = ".intval($wgCityId)." OR city_id IS NULL) ORDER by city_id";
 		$res = $db->query($sql);
 		while($row = $db->fetchObject($res)) {
