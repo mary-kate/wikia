@@ -127,7 +127,7 @@ class AdEngine {
 	
 	// Logic for hiding/displaying ads should be here, not in the skin.
 	private function getAdProvider($slotname) {
-		global $wgShowAds, $wgUser;
+		global $wgShowAds, $wgUser, $wgLanguageCode;
 
 
 		// Note: Don't throw an exception on error. Fail gracefully for ads,
@@ -151,8 +151,15 @@ class AdEngine {
  	        } else if (empty($this->providers[$this->slots[$slotname]['provider_id']])) {
 
 			return new AdProviderNull('Unrecognized provider', true);
+ 	        } else if ($wgLanguageCode != 'en' ){
+			// Different settings for non english wikis.
+			if ( AdEngine::getInstance()->getAdType($slotname) == 'spotlight' ){
+				return AdProviderOpenX::getInstance();
+			} else {
+				return new AdProviderNull('Non English wiki', false);
+			}
 		} else {
-
+			
 			// Error conditions out of the way, send back the appropriate Ad provider
 			switch ($this->providers[$this->slots[$slotname]['provider_id']]){
 				case 'DART': return AdProviderDART::getInstance();
