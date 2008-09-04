@@ -166,9 +166,9 @@ FCK.DataProcessor =
 	//		1 : Suffix
 	//		2 : Ignore children
 	_BasicElements : {
-		body	: [ ],
+		body		: [ ],
 		b		: [ "'''", "'''" ],
-		strong	: [ "'''", "'''" ],
+		strong		: [ "'''", "'''" ],
 		i		: [ "''", "''" ],
 		em		: [ "''", "''" ],
 		p		: [ '\n', '\n' ],
