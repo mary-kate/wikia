@@ -47,7 +47,7 @@ function WidgetNewPages($id, $params) {
 
 	$items = array();
 
-	while (($row = $dbr->fetchObject($res))) {
+	while ($row = $dbr->fetchObject($res)) {
 		$title = Title::makeTitleSafe(NS_MAIN, $row->rc_title);
 		if(is_object($title)) {
 			$items[] = array('href' => $title->getLocalUrl(), 'name' => $title->getPrefixedText());
