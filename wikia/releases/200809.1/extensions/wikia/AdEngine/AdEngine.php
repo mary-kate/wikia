@@ -159,7 +159,7 @@ class AdEngine {
 			if ( AdEngine::getInstance()->getAdType($slotname) == 'spotlight' ){
 				return AdProviderOpenX::getInstance();
 			} else {
-				return new AdProviderNull('Non English wiki', false);
+				return AdProviderGoogle::getInstance();
 			}
 		} else {
 			if (!empty($_GET['forceProviderid'])){
