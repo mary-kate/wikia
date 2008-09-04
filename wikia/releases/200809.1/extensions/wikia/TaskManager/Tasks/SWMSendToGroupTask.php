@@ -294,7 +294,7 @@ class SWMSendToGroupTask extends BatchTask {
 		}
 		$DB->FreeResult($dbResult);
 
-		$result = $this->sendMessageHelperToGroup($DB, $wikisDB);
+		$result = $this->sendMessageHelperToGroup($DB, $wikisDB, $params);
 
 		return $result;
 	}
@@ -402,7 +402,7 @@ class SWMSendToGroupTask extends BatchTask {
 		}
 		$DB->FreeResult($dbResult);
 
-		$result = $this->sendMessageHelperToActive($DB, $wikisDB);
+		$result = $this->sendMessageHelperToActive($DB, $wikisDB, $params);
 
 		return $result;
 	}
@@ -443,7 +443,7 @@ class SWMSendToGroupTask extends BatchTask {
 		}
 		$DB->FreeResult($dbResult);
 
-		$result = $this->sendMessageHelperToGroup($DB, $wikisDB);
+		$result = $this->sendMessageHelperToGroup($DB, $wikisDB, $params);
 
 		return $result;
 	}
@@ -482,7 +482,7 @@ class SWMSendToGroupTask extends BatchTask {
 		}
 		$DB->FreeResult($dbResult);
 
-		$result = $this->sendMessageHelperToActive($DB, $wikisDB);
+		$result = $this->sendMessageHelperToActive($DB, $wikisDB, $params);
 
 		return $result;
 	}
@@ -523,7 +523,7 @@ class SWMSendToGroupTask extends BatchTask {
 	 *
 	 * @return boolean: result of operation
 	 */
-	private function sendMessageHelperToActive(&$DB, &$wikisDB) {
+	private function sendMessageHelperToActive(&$DB, &$wikisDB, &$params) {
 		$result = true;
 		$usersSent = array();
 
@@ -572,7 +572,7 @@ class SWMSendToGroupTask extends BatchTask {
 	 *
 	 * @return boolean: result of operation
 	 */
-	private function sendMessageHelperToGroup(&$DB, &$wikisDB) {
+	private function sendMessageHelperToGroup(&$DB, &$wikisDB, &$params) {
 		$usersSent = array();
 
 		//step 2 of 3: look into each wiki for users that belong to a specified group
