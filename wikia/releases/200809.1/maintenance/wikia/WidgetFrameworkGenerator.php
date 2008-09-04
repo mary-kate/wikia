@@ -35,6 +35,7 @@ $wgWidgetsOrderedList = array(
 	'WidgetAncientPages',
 	'WidgetShoutBox',
 	'WidgetWikiPage',
+	'WidgetNewPages'
 );
 
 global $wgWidgets;
