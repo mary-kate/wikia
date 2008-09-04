@@ -71,7 +71,7 @@ class SiteWideMessages extends SpecialPage {
 		$dbResult = $DB->Query (
 			  'SELECT cat_id, cat_name'
 			. ' FROM ' . wfSharedTable('city_cats')
-			. ' ORDER BY cat_id'
+			. ' ORDER BY cat_name'
 			. ';'
 			, __METHOD__
 		);
@@ -181,7 +181,7 @@ class SiteWideMessages extends SpecialPage {
 
 			case 'sent':
 				$mId = $wgRequest->getText('id');
-				$mText = $mId ? $this->getMessageText($mId) : null;
+				$mText = $mId ? $this->getMessageText($mId, true) : null;
 
 				if ($mId && !is_null($mText)) {
 					$formData['messageContent'] = $wgOut->parse($mText);
@@ -483,8 +483,8 @@ class SiteWideMessages extends SpecialPage {
 
 	/**
 	 */
-	private function getMessageText($mId) {
-		$DB = wfGetDB(DB_SLAVE);
+	private function getMessageText($mId, $master = false) {
+		$DB = wfGetDB($master ? DB_MASTER : DB_SLAVE);
 
 		$dbResult = $DB->Query (
 			  'SELECT msg_text'
