@@ -14,7 +14,6 @@ ini_set( "cgi.fix_pathinfo", 1);
 require_once( "$IP/includes/Defines.php" );
 require_once( "$IP/includes/DefaultSettings.php" );
 require_once( "$IP/includes/GlobalFunctions.php" );
-require_once( "$IP/includes/wikia/GlobalFunctions.php" );
 require_once( "$IP/includes/Exception.php" );
 require_once( "$IP/includes/Database.php" );
 require_once( "$IP/includes/BagOStuff.php" );
@@ -68,13 +67,8 @@ class WikiFactoryLoader {
 		global $wgDBname, $wgSharedDB, $wgDevelEnvironment, $wgDevelDomains;
 
 		if( !is_null( $id ) ) {
-			/**
-			 * central / dofus / memory-alpha case
-			 */
 			$this->mCityID = $id;
-			$this->mServerName = is_null( $server_name )
-				? $server_name
-				: strtolower( $_SERVER['SERVER_NAME'] );
+			$this->mServerName = $server_name;
 		}
 		elseif( !empty($_SERVER['SERVER_NAME'])) {
 			$this->mServerName = strtolower( $_SERVER['SERVER_NAME'] );
@@ -335,36 +329,33 @@ class WikiFactoryLoader {
 		/**
 		 * if $this->mCityURL different from city_url we redirect to city_url
 		 * (as main server)
-		 *
-		 * mCityHost may contain path after url (memory-alpha, dofus)
 		 */
-		$part = explode( "/", $this->mCityHost, 2 );
-		$host = strtolower( $part[ 0 ] );
-
-		if( !empty( $host ) && !empty( $this->mServerName ) && $host != $this->mServerName
-			&& empty($wgDevelEnvironment) && $this->mNoRedirect === false )
-		{
-			$url = wfGetCurrentUrl();
-
+		if( !empty($this->mCityHost) &&
+			!empty($this->mServerName) &&
+			strtolower( $this->mCityHost ) != strtolower( $this->mServerName ) &&
+			empty($wgDevelEnvironment) &&
+			$this->mNoRedirect === false ) {
 			/**
-			 * dofus exception
+			 * build url for redirecton, (so far we don't have https)
 			 */
-			$dofus =  array( 602, 1982, 4533, 1177, 1630, 1112, 7491, 4763, 2278, 1922, 1809, 2791, 2788, 7645 );
-			if( in_array( $this->mWikiID, $dofus ) ) {
-				/**
-				 * replace /wiki/ with /dofus/ in obsoleted links
-				 * $this->mCityHost in dofus used to have
-				 * http://<language>.dofus.wikia.com/wiki
-				 * now it have http://<language>.wikia.com/dofus
-				 */
-				$url[ "path" ] = str_replace( "/wiki", "/dofus", $url[ "path" ] );
+			$uri = $_SERVER["REQUEST_URI"];
+			$match = preg_match("/^http:\/\//", $uri );
+			if( $match ) {
+				$target = str_replace( $this->mServerName, $this->mCityHost, $uri );
 			}
-			$target = $url[ "scheme" ] . "://" . $host . $url[ "path" ];
-			$target = isset( $url[ "query" ] ) ? $target . "?" . $url[ "query" ] : $target;
-
-			wfDebug("wikifactory: redirected from {$url[ "url" ]} to {$target}", true);
+			else {
+				/**
+				 * dofus exception
+				 */
+				$dofus =  array( 602, 1982, 4533, 1177, 1630, 1112, 7491, 4763, 2278, 1922, 1809, 2791, 2788, 7645 );
+				if( in_array( $this->mWikiID, $dofus ) ) {
+					$uri = str_replace( "wiki/", "", $uri );
+				}
+				$target = "http://{$this->mCityHost}{$uri}";
+			}
+			wfDebug("wikifactory: redirected to {$target}", true);
 			if( !empty( self::$mDebug ) ) {
-				error_log( "wikifactory: redirected from {$url[ "url" ]} to {$target}" );
+				error_log( "wikifactory: redirected to {$target}" );
 			}
 			header( "Location: {$target}", true, 301 );
 			wfProfileOut( __METHOD__ );
