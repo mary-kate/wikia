@@ -6,7 +6,7 @@
  * A SiteWideMessages extension for MediaWiki
  * Provides an interface for sending messages seen on all wikis
  *
- * @author Maciej Błaszkowski (Marooned) <marooned@wikia.com>
+ * @author Maciej Błaszkowski (Marooned) <marooned at wikia-inc.com>
  * @date 2008-01-09
  * @copyright Copyright (C) 2008 Maciej Błaszkowski, Wikia Inc.
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License 2.0 or later
@@ -71,7 +71,7 @@ class SiteWideMessages extends SpecialPage {
 		$dbResult = $DB->Query (
 			  'SELECT cat_id, cat_name'
 			. ' FROM ' . wfSharedTable('city_cats')
-			. ' ORDER BY cat_id'
+			. ' ORDER BY cat_name'
 			. ';'
 			, __METHOD__
 		);
@@ -181,7 +181,7 @@ class SiteWideMessages extends SpecialPage {
 
 			case 'sent':
 				$mId = $wgRequest->getText('id');
-				$mText = $mId ? $this->getMessageText($mId) : null;
+				$mText = $mId ? $this->getMessageText($mId, true) : null;
 
 				if ($mId && !is_null($mText)) {
 					$formData['messageContent'] = $wgOut->parse($mText);
@@ -483,8 +483,8 @@ class SiteWideMessages extends SpecialPage {
 
 	/**
 	 */
-	private function getMessageText($mId) {
-		$DB = wfGetDB(DB_SLAVE);
+	private function getMessageText($mId, $master = false) {
+		$DB = wfGetDB($master ? DB_MASTER : DB_SLAVE);
 
 		$dbResult = $DB->Query (
 			  'SELECT msg_text'
@@ -842,7 +842,7 @@ class SiteWideMessagesPager extends TablePager {
 				break;
 
 			case 'msg_recipient_name':
-				$sRetval = $value ? htmlspecialchars($value) : ('<i>' . wfMsg('swm-label-mode-all') . '</i>');
+				$sRetval = $value ? htmlspecialchars($value) : ('<i>' . wfMsg('swm-label-mode-users-all') . '</i>');
 				break;
 
 			case 'msg_text':
