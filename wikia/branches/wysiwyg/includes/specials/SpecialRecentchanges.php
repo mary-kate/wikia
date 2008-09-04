@@ -62,7 +62,17 @@ class SpecialRecentChanges extends SpecialPage {
 				$wgUser->saveSettings();
 			}
 		} else {
-			$wgUser->setOption( 'usenewrc', !$opts['hideenhanced'] );
+			if($wgRequest->getVal('hideenhanced', null) != null) {
+				if($hideenhanced_default != $opts['hideenhanced']) {
+					$hideenhanced_value = !$opts['hideenhanced'];
+					$wgUser->setOption( 'usenewrc', !$opts['hideenhanced'] );
+				} else {
+					$hideenhanced_value = null;
+				}
+				setcookie( $wgCookiePrefix.'_usenewrc', $hideenhanced_value, time() + $wgCookieExpiration, $wgCookiePath, $wgCookieDomain, $wgCookieSecure );
+			} else if(isset($_COOKIE[$wgCookiePrefix.'_usenewrc'])) {
+				$wgUser->setOption( 'usenewrc', $_COOKIE[$wgCookiePrefix.'_usenewrc'] );
+			}
 		}
 
 		// Give precedence to subpage syntax
