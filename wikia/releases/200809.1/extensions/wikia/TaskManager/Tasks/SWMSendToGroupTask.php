@@ -18,6 +18,8 @@ if (!defined('MSG_STATUS_DB')) {
 }
 if (!defined('MSG_STATUS_UNSEEN')) {
 	define('MSG_STATUS_UNSEEN', '0');
+if (!defined('MSG_STATUS_DISMISSED')) {
+	define('MSG_STATUS_DISMISSED', '2');
 }
 
 #--- messages file
@@ -352,7 +354,7 @@ class SWMSendToGroupTask extends BatchTask {
 
 		$sqlValues = array();
 		while ($row = $DB->FetchObject($dbResult)) {
-			$sqlValues[] = "($wikiID, {$row->ug_user}, {$params['messageId']}, " . MSG_STATUS_UNSEEN . ')';
+			$sqlValues[] = "($wikiID, {$row->ug_user}, {$params['messageId']}, " . MSG_STATUS_DISMISSED . ')';
 		}
 		$DB->FreeResult($dbResult);
 		$this->addLog("Add records about new message to right users [wiki_id = $wikiID, wiki_db = $wikiDB, number of users = " . count($sqlValues) . "]");
@@ -542,7 +544,7 @@ class SWMSendToGroupTask extends BatchTask {
 			$sqlValues = array();
 			while ($row = $DB->FetchObject($dbResult)) {
 				if (empty($usersSent[$row->user_id])) {
-					$sqlValues[] = "($wikiID, {$row->user_id}, {$params['messageId']}, " . MSG_STATUS_UNSEEN . ')';
+					$sqlValues[] = "($wikiID, {$row->user_id}, {$params['messageId']}, " . MSG_STATUS_DISMISSED . ')';
 					$usersSent[$row->user_id] = true;
 				}
 			}
@@ -595,7 +597,7 @@ class SWMSendToGroupTask extends BatchTask {
 			$sqlValues = array();
 			while ($row = $DB->FetchObject($dbResult)) {
 				if (empty($usersSent[$row->ug_user])) {
-					$sqlValues[] = "($wikiID, {$row->ug_user}, {$params['messageId']}, " . MSG_STATUS_UNSEEN . ')';
+					$sqlValues[] = "($wikiID, {$row->ug_user}, {$params['messageId']}, " . MSG_STATUS_DISMISSED . ')';
 					$usersSent[$row->ug_user] = true;
 				}
 			}
