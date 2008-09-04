@@ -15,7 +15,7 @@ $useByte = 0;
 /* get max value */
 foreach ($data as $date => $out) {
 	//percent
-	if ( in_array($column, array('J', 'K')) ) {
+	if ( in_array($column, array('N', 'O')) ) {
 		$_tmp = $out * 100;
 	} else {
 		$_tmp = $out;
@@ -52,11 +52,11 @@ foreach ($data as $date => $out) {
 		elseif (intval($out) > $K) $value = sprintf("%0.1f k", intval($out)/$K);
 		else $value = sprintf("%0d", intval($out));
 	} */
-	if (in_array($column, array('J', 'K'))) {
+	if (in_array($column, array('N', 'O'))) {
 		$value = sprintf("%0d", $out * 100);
 		$out = $out * 100;
 		$suffix = "%";
-	} elseif (in_array($column, array('M'))) {
+	} elseif (in_array($column, array('Q'))) {
 		$value = sprintf("%0.0f", intval($out));
 		if (intval($iMax) > $GB) {
 			$value = sprintf("%0.1f", intval($out)/$GB);
@@ -119,26 +119,23 @@ $td_width = $chartSettings['barwidth'] . $chartSettings['barunit'];
 
 $tableStyle = "ws_charts"; 
 
-$active = ($column >= 'A' && $column < 'E') ? "wikians"  : "";
-$active = ($column >= 'E' && $column < 'L') ? "articles" : $active;
-$active = ($column >= 'L' && $column < 'N') ? "database" : $active;
-$active = ($column >= 'N' && $column < 'T') ? "links" 	 : $active;
-$active = ($column >= 'T' && $column < 'X') ? "unique_wikians" : $active;
+$active = ($column >= 'A' && $column < 'I') ? "wikians"  : "";
+$active = ($column >= 'I' && $column < 'P') ? "articles" : $active;
+$active = ($column >= 'P' && $column < 'S') ? "database" : $active;
+$active = ($column >= 'S' && $column < 'X') ? "links" 	 : $active;
 $active = ($column >= 'X') ? "images" : $active;
 
-$barColor = ($column >= 'A' && $column < 'E') ? "orange" : "";
-$barColor = ($column >= 'E' && $column < 'L') ? "blue" : $barColor;
-$barColor = ($column >= 'L' && $column < 'N') ? "red" : $barColor;
-$barColor = ($column >= 'N' && $column < 'T') ? "green" : $barColor;
-$barColor = ($column >= 'T' && $column < 'X') ? "purple" : $barColor;
+$barColor = ($column >= 'A' && $column < 'I') ? "orange" : "";
+$barColor = ($column >= 'I' && $column < 'P') ? "blue" : $barColor;
+$barColor = ($column >= 'P' && $column < 'S') ? "red" : $barColor;
+$barColor = ($column >= 'S' && $column < 'X') ? "green" : $barColor;
 $barColor = ($column >= 'X') ? "yellow" : $barColor;
 
 $title = "<div class=\"wk-stats-legend\"><a name=\"".strtolower($active)."\">";
-$title .= "<a href=\"#wikians\" style=\"" . (($column >= 'A' && $column < 'E') ? "color:#A52A2A;font-weight:bold" : "color: #6495ED") . "\">".wfMsg("wikiastats_wikians")."</a> - ";
-$title .= "<a href=\"#articles\" style=\"" . (($column >= 'E' && $column < 'L') ? "color:#A52A2A;font-weight:bold" : "color: #6495ED") . "\">".wfMsg("wikiastats_articles")."</a> - ";
-$title .= "<a href=\"#database\" style=\"" . (($column >= 'L' && $column < 'N') ? "color:#A52A2A;font-weight:bold" : "color: #6495ED") . "\">".wfMsg("wikiastats_database")."</a> - ";
-$title .= "<a href=\"#links\" style=\"" . (($column >= 'N' && $column < 'T') ? "color:#A52A2A;font-weight:bold" : "color: #6495ED") . "\">".wfMsg("wikiastats_links")."</a> - ";
-$title .= "<a href=\"#unique_wikians\" style=\"" . (($column >= 'T' && $column < 'W') ? "color:#A52A2A;font-weight:bold" : "color: #6495ED") . "\">".wfMsg("wikiastats_reg_users")."</a> - ";
+$title .= "<a href=\"#wikians\" style=\"" . (($column >= 'A' && $column < 'I') ? "color:#A52A2A;font-weight:bold" : "color: #6495ED") . "\">".wfMsg("wikiastats_wikians")."</a> - ";
+$title .= "<a href=\"#articles\" style=\"" . (($column >= 'I' && $column < 'P') ? "color:#A52A2A;font-weight:bold" : "color: #6495ED") . "\">".wfMsg("wikiastats_articles")."</a> - ";
+$title .= "<a href=\"#database\" style=\"" . (($column >= 'P' && $column < 'S') ? "color:#A52A2A;font-weight:bold" : "color: #6495ED") . "\">".wfMsg("wikiastats_database")."</a> - ";
+$title .= "<a href=\"#links\" style=\"" . (($column >= 'S' && $column < 'X') ? "color:#A52A2A;font-weight:bold" : "color: #6495ED") . "\">".wfMsg("wikiastats_links")."</a> - ";
 $title .= "<a href=\"#images\" style=\"" . (($column >= 'X') ? "color:#A52A2A;font-weight:bold" : "color: #6495ED") . "\">".wfMsg("wikiastats_images")."</a>";
 $title .= "</div>";
 $columnsBar = "";
@@ -147,7 +144,7 @@ $i = 0;
 $max_div_height = 0;
 foreach ($data as $date => $out) {
 	
-	if ( in_array($column, array('J', 'K')) ) //percent
+	if ( in_array($column, array('N', 'O')) ) //percent
 		$_tmp = $out * 100;
 	else
 		$_tmp = $out;		

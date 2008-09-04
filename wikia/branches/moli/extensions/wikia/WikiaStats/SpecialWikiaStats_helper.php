@@ -1606,19 +1606,14 @@ class WikiaGenericStats {
 			        // charts
 					// serialize data for charts
 					$charts = array();
-					foreach ($wkCityMainStatistics as $date => $columns)
-					{
-						foreach ($columns as $column => $value)
-						{
-							if ($column != 'date')
-							{
-								if (!array_key_exists($column, $charts))
-								{
+					foreach ($wkCityMainStatistics as $date => $columns) {
+						foreach ($columns as $column => $value) {
+							if ($column != 'date') {
+								if (!array_key_exists($column, $charts)) {
 									$charts[$column] = array();
 								}
 								#---
 								$charts[$column][$date] = $value;
-
 							}
 						}
 					}
@@ -1633,10 +1628,9 @@ class WikiaGenericStats {
 						#if ($i > 0) continue;
 						#---
 						if ($i == 0) $main_title = wfMsg("wikiastats_wikians");
-						elseif ($i == 4) $main_title = wfMsg("wikiastats_articles");
-						elseif ($i == 11) $main_title = wfMsg("wikiastats_database");
-						elseif ($i == 14) $main_title = wfMsg("wikiastats_links");
-						elseif ($i == 19) $main_title = wfMsg("wikiastats_reg_users");
+						elseif ($i == 8) $main_title = wfMsg("wikiastats_articles");
+						elseif ($i == 15) $main_title = wfMsg("wikiastats_database");
+						elseif ($i == 18) $main_title = wfMsg("wikiastats_links");
 						elseif ($i == 23) $main_title = wfMsg("wikiastats_images");
 
 						#---
@@ -1682,7 +1676,6 @@ class WikiaGenericStats {
         #---
 		wfProfileOut( __METHOD__ );
         return $res;
-
 	}
 
 	static public function getWikiDistribStatistics($city_id, $xls = 0)

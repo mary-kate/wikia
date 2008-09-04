@@ -14,20 +14,26 @@ function visible_wikians(rows, col, v)
 	var cels = rows[0].getElementsByTagName('td');
 	cels[col].style.display = v;
 	
-	cels = rows[rows.length-3].getElementsByTagName('td');
-	cels[col].style.display = v;
-
 	cels = rows[1].getElementsByTagName('td');
-	for (y = 1; y <= 3; y++) { cels[y].style.display = v; }
+	for (y = 1; y <= 2; y++) { cels[y].style.display = v; }
 	
 	cels = rows[2].getElementsByTagName('td');
-	for (y = 0; y <= 1; y++) { cels[y].style.display = v; }
+	for (y = 0; y <= 4; y++) { cels[y].style.display = v; }
+
+	cels = rows[3].getElementsByTagName('td');
+	for (y = 0; y <= 5; y++) { cels[y].style.display = v; }
+
+	cels = rows[rows.length-4].getElementsByTagName('td');
+	cels[col].style.display = v; 
+
+	cels = rows[rows.length-3].getElementsByTagName('td');
+	for (y = 1; y <= 2; y++) { cels[y].style.display = v; }
 
 	cels = rows[rows.length-2].getElementsByTagName('td');
-	for (y = 1; y <= 3; y++) { cels[y].style.display = v; }
+	for (y = 0; y <= 4; y++) { cels[y].style.display = v; }
 	
 	cels = rows[rows.length-1].getElementsByTagName('td');
-	for (y = 0; y <= 1; y++) { cels[y].style.display = v; }
+	for (y = 0; y <= 5; y++) { cels[y].style.display = v; }
 }
 
 function visible_articles(rows, col, v)
@@ -35,21 +41,21 @@ function visible_articles(rows, col, v)
 	var cels = rows[0].getElementsByTagName('td');
 	cels[2].style.display = v;
 	
-	cels = rows[rows.length-3].getElementsByTagName('td');
+	cels = rows[rows.length-4].getElementsByTagName('td');
 	cels[2].style.display = v;
 
 	cels = rows[1].getElementsByTagName('td');
-	for (y = 4; y <= 7; y++) { cels[y].style.display = v; }
+	for (y = 3; y <= 6; y++) { cels[y].style.display = v; }
 	
-	cels = rows[2].getElementsByTagName('td');
-	for (y = 2; y <= 7; y++) { cels[y].style.display = v; }
+	cels = rows[3].getElementsByTagName('td');
+	for (y = 6; y <= 11; y++) { cels[y].style.display = v; }
 	
 	// footers
-	cels = rows[rows.length-2].getElementsByTagName('td');
-	for (y = 4; y <= 7; y++) { cels[y].style.display = v; }
+	cels = rows[rows.length-3].getElementsByTagName('td');
+	for (y = 3; y <= 6; y++) { cels[y].style.display = v; }
 	
 	cels = rows[rows.length-1].getElementsByTagName('td');
-	for (y = 2; y <= 7; y++) { cels[y].style.display = v; }
+	for (y = 6; y <= 11; y++) { cels[y].style.display = v; }
 }
 
 function visible_database(rows, col, v)
@@ -58,15 +64,15 @@ function visible_database(rows, col, v)
 	var cels = rows[0].getElementsByTagName('td');
 	cels[3].style.display = v;
 	
-	cels = rows[rows.length-3].getElementsByTagName('td');
+	cels = rows[rows.length-4].getElementsByTagName('td');
 	cels[3].style.display = v;
 
 	cels = rows[1].getElementsByTagName('td');
-	for (y = 8; y <= 10; y++) { cels[y].style.display = v; }
+	for (y = 7; y <= 9; y++) { cels[y].style.display = v; }
 	
 	// footers
-	cels = rows[rows.length-2].getElementsByTagName('td');
-	for (y = 8; y <= 10; y++) { cels[y].style.display = v; }
+	cels = rows[rows.length-3].getElementsByTagName('td');
+	for (y = 7; y <= 9; y++) { cels[y].style.display = v; }
 }
 
 function visible_links(rows, col, v)
@@ -75,15 +81,15 @@ function visible_links(rows, col, v)
 	var cels = rows[0].getElementsByTagName('td');
 	cels[4].style.display = v;
 	
-	cels = rows[rows.length-3].getElementsByTagName('td');
+	cels = rows[rows.length-4].getElementsByTagName('td');
 	cels[4].style.display = v;
 
 	cels = rows[1].getElementsByTagName('td');
-	for (y = 11; y <= 15; y++) { cels[y].style.display = v; }
+	for (y = 10; y <= 14; y++) { cels[y].style.display = v; }
 	
 	// footers
-	cels = rows[rows.length-2].getElementsByTagName('td');
-	for (y = 11; y <= 15; y++) { cels[y].style.display = v; }
+	cels = rows[rows.length-3].getElementsByTagName('td');
+	for (y = 10; y <= 14; y++) { cels[y].style.display = v; }
 	//
 }
 
@@ -93,39 +99,16 @@ function visible_image(rows, col, v)
 	var cels = rows[0].getElementsByTagName('td');
 	cels[5].style.display = v;
 	
-	cels = rows[rows.length-3].getElementsByTagName('td');
+	cels = rows[rows.length-4].getElementsByTagName('td');
 	cels[5].style.display = v;
 
 	cels = rows[1].getElementsByTagName('td');
-	for (y = 16; y <= 17; y++) { cels[y].style.display = v; }
+	for (y = 15; y <= 16; y++) { cels[y].style.display = v; }
 	
 	// footers
-	cels = rows[rows.length-2].getElementsByTagName('td');
-	for (y = 16; y <= 17; y++) { cels[y].style.display = v; }
-	//
-}
-
-function visible_daily_usage(rows, col, v)
-{
-	//--- main header and footer
-	var cels = rows[0].getElementsByTagName('td');
-	cels[6].style.display = v;
-	
 	cels = rows[rows.length-3].getElementsByTagName('td');
-	cels[6].style.display = v;
-
-	cels = rows[1].getElementsByTagName('td');
-	for (y = 18; y <= 19; y++) { cels[y].style.display = v; }
-
-	cels = rows[2].getElementsByTagName('td');
-	for (y = 8; y <= 10; y++) { cels[y].style.display = v; }
-		
-	// footers
-	cels = rows[rows.length-2].getElementsByTagName('td');
-	for (y = 18; y <= 19; y++) { cels[y].style.display = v; }
+	for (y = 15; y <= 16; y++) { cels[y].style.display = v; }
 	//
-	cels = rows[rows.length-1].getElementsByTagName('td');
-	for (y = 8; y <= 10; y++) { cels[y].style.display = v; }
 }
 
 function visible_column(col, col_to, show, text, div_hide) 
@@ -134,8 +117,8 @@ function visible_column(col, col_to, show, text, div_hide)
 	var v = (show) ? '' : 'none';
 	var rows = tableStats.getElementsByTagName('tr');
 
-	var rowStart = 3;
-	var rowEnd = rows.length-3;
+	var rowStart = 4;
+	var rowEnd = rows.length-4;
 	
 	if (show == 1) {
 		for (i = rowStart; i < rowEnd; i++) {
@@ -168,18 +151,19 @@ function visible_column(col, col_to, show, text, div_hide)
 	}
 
 	var table_hidden = document.getElementById('ws-hide-table');
-	for (i = 1; i < 7; i++) {
+	var colText = "<?= wfMsg('wikiastats_stats') ?>";
+	for (i = 1; i < 6; i++) {
 		var div_hidden = document.getElementById('ws-hide-div' + i);
 		if (show == 0) {
 			if (!div_hidden) {
-				table_hidden.innerHTML += "<span id=\"ws-hide-div"+i+"\" style=\"float:left; padding:4px; margin:2px; width:auto;\"><a href=\"javascript:void(0)\" onClick=\"javascript:visible_column("+col+","+col_to+",1,'"+ text +"',"+i+");\"><?= wfMsg('wikiastats_show') ?> " + text + "</a></span>";
+				table_hidden.innerHTML += "<span id=\"ws-hide-div"+i+"\" style=\"float:left; padding:4px; margin:2px; width:auto;\"><a href=\"javascript:void(0)\" onClick=\"javascript:visible_column("+col+","+col_to+",1,'"+ text +"',"+i+");\">" + colText.replace("%s", text) + "</a></span>";
 				div_hidden = document.getElementById('ws-hide-div' + i);
 				div_hidden.style.background = "#ffdead";
 				div_hidden.style.clear = 'none';
 				break;
 			} else if ((div_hidden) && (div_hidden.innerHTML == "")) {
 				div_hidden.style.background = "#ffdead";
-				div_hidden.innerHTML = "<a href=\"javascript:void(0)\" onClick=\"javascript:visible_column("+col+","+col_to+",1,'"+ text +"',"+i+");\"><?= wfMsg('wikiastats_show') ?> " + text + "</a>";
+				div_hidden.innerHTML = "<a href=\"javascript:void(0)\" onClick=\"javascript:visible_column("+col+","+col_to+",1,'"+ text +"',"+i+");\">" + colText.replace("%s", text) + "</a>";
 				div_hidden.style.margin = "2px";
 				div_hidden.style.padding = "4px";
 				div_hidden.style.clear = 'none';
@@ -225,14 +209,17 @@ YAHOO.util.Event.onDOMReady(function () {
 			//YD.get("ws-progress-bar").innerHTML = "&nbsp;";
 			if (resCode > 0) {
 				if ( (document.getElementById( "wk-stats-city-id" )) && (document.getElementById( "wk-stats-city-id" ).value > 0) ) {
-					document.getElementById( "ws-edits-article" ).style.display = "block";
-					document.getElementById( "ws-active-wikians" ).style.display = "block";
-					document.getElementById( "wk-select-month-wikians-div" ).style.display = "none";
-					document.getElementById( "ws-anon-wikians" ).style.display = "block";
-					document.getElementById( "ws-article-size" ).style.display = "block";
-					document.getElementById( "ws-namespace-count" ).style.display = "block";
-					document.getElementById( "ws-page-edits-count" ).style.display = "block";
-					document.getElementById( "ws-other-stats-panel" ).style.display = "block";
+					var _otherStats = document.getElementById('ws-other-stats-panel');
+					if (_otherStats.style.display == 'block') {
+						document.getElementById( "ws-edits-article" ).style.display = "block";
+						document.getElementById( "ws-active-wikians" ).style.display = "block";
+						document.getElementById( "wk-select-month-wikians-div" ).style.display = "none";
+						document.getElementById( "ws-anon-wikians" ).style.display = "block";
+						document.getElementById( "ws-article-size" ).style.display = "block";
+						document.getElementById( "ws-namespace-count" ).style.display = "block";
+						document.getElementById( "ws-page-edits-count" ).style.display = "block";
+						document.getElementById( "ws-other-stats-panel" ).style.display = "block";
+					}
 				} else {
 					document.getElementById( "ws-edits-article" ).style.display = "none";
 					document.getElementById( "ws-active-wikians" ).style.display = "none";
@@ -268,8 +255,23 @@ YAHOO.util.Event.onDOMReady(function () {
 		params 	+= "&rsargs[3]=" + document.getElementById( "ws-date-year-to" ).value;
 		params 	+= "&rsargs[4]=" + document.getElementById( "ws-date-month-to" ).value;
 		
+		var _legend = document.getElementById('wk-stats-legend');
+		var _otherStats = document.getElementById('ws-other-stats-panel');
 		if (this.id == "ws-show-charts") {
 			params += "&rsargs[5]=1";
+			if (_legend) {
+				_legend.style.display = "none";
+			}
+			if (_otherStats) {
+				_otherStats.style.display = "none";
+			}
+		} else {
+			if (_legend) {
+				_legend.style.display = "block";
+			}
+			if (_otherStats) {
+				_otherStats.style.display = "block";
+			}
 		}
 		//---
 		YE.preventDefault(e);
@@ -609,8 +611,7 @@ while ($minYear <= $maxYear) {
 </div>
 <div id="ws-main-table">
 <?
-if (!empty($main_tbl))
-{
+if (!empty($main_tbl)) {
 	echo $main_tbl;
 }
 ?>
