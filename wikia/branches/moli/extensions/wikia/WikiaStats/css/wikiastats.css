@@ -1,7 +1,7 @@
 #articleWrapper { padding-right: 10px !important; }
 #xlsmenu_h {font-size:12pt;}
 .input_button {font-size: 9.5pt; font-family: Trebuchet MS,arial,sans-serif,helvetica;}
-fieldset {font-size: 9pt; font-family: Trebuchet MS,arial,sans-serif,helvetica;}
+fieldset {font-size: 9pt; font-family: Trebuchet MS,arial,sans-serif,helvetica; margin:0px -9px;}
 div.hide {float:right; padding:0px 2px 1px 10px; width:8px;}
 .panel {text-align:center;font-size:10px;height:12px;}
 .panel-top {text-align:center;padding:5px; border-top:1px inset #FFFFFF;font-weight: bold}
@@ -13,10 +13,10 @@ div.hide {float:right; padding:0px 2px 1px 10px; width:8px;}
 .normal {padding:1px 0px 1px 0px; font-size:12px;}
 .big {padding:1px 0px 1px 0px; font-size:12pt;}
 .cityinfo {font-size:9pt; padding:1px 8px 1px 8px; font-family: verdana,arial,sans-serif,helvetica;}
-td.cb { border:1px inset #FFFFFF; text-align:center; font-size:8.5pt; padding-left:1px; padding-right:1px;}
+td.cb { border:1px inset #FFFFFF; text-align:center; font-size:8.2pt; padding-left:1px; padding-right:1px;}
 td.cb_small {height:3px; border:1px inset #FFFFFF; font-size:1px;}
-td.db { border:1px inset #FFFFFF; text-align:right; font-size:8.5pt; padding-left:1px; padding-right:1px;}
-td.cb_header { border:1px inset #FFFFFF; text-align:center; font-size:8.5pt; padding-left:1px; padding-right:1px;}
+td.db { border:1px inset #FFFFFF; text-align:right; font-size:8.2pt; padding-left:1px; padding-right:1px;}
+td.cb_header { border:1px inset #FFFFFF; text-align:center; font-size:8.2pt; padding-left:1px; padding-right:1px;}
 td.eb { border:1px inset #FFFFFF; text-align:right; font-size:8pt; padding-left:1px; padding-right:1px; font-family: verdana,arial,sans-serif,helvetica;}
 td.ebl { border:1px inset #FFFFFF; text-align:left; font-size:8pt; padding-left:1px; padding-right:1px; font-family: verdana,arial,sans-serif,helvetica;}
 td.rb { border:1px inset #FFFFFF; text-align:right; font-size:8pt; padding-left:1px; padding-right:1px;}

@@ -1,4 +1,13 @@
 <!-- s:<?= __FILE__ ?> -->
+<script type="text/javascript">
+/*<![CDATA[*/
+YAHOO.util.Event.onDOMReady(function () {
+	visible_column(19,23,0,'<?= wfMsg('wikiastats_links') ?>');
+	visible_column(24,25,0,'<?= wfMsg('wikiastats_images') ?>');
+});
+/*]]>*/
+</script>
+
 <?php
 $outDate = "";
 $created = (is_object($cityInfo)) ? $cityInfo->city_created : null;
@@ -30,6 +39,9 @@ $cityUrl = (is_object($cityInfo) && $cityId > 0) ? "<a target=\"new\" href=\"".$
 	<td align="left"><strong><?= wfMsg('wikiastats_wikicategory') ?></strong> <?= $catName ?></td>
 	<td align="left"><strong><?= wfMsg('wikiastats_wikicreated') ?></strong> <?= (!empty($outDate)) ? $outDate : " - " ?></td>
 </tr>
+</table>
+<br />
+<table cellspacing="0" cellpadding="1" border="0" style="font-size:8.5pt;font-family: Trebuchet MS,arial,sans-serif,helvetica;">
 <tr>
 	<td align="left" colspan="2"><strong><?= wfMsg('wikiastats_see_MW_stats') ?></strong> <a href="http://wikistats.wikia.com/EN/TablesWikia<?=(is_object($cityInfo)) ? strtoupper($cityInfo->city_dbname) : "ZZ"?>.htm" target="new">http://wikistats.wikia.com/EN/TablesWikia<?=(is_object($cityInfo)) ? strtoupper($cityInfo->city_dbname) : "ZZ"?>.htm</a> </td>
 </tr>
@@ -38,12 +50,12 @@ $cityUrl = (is_object($cityInfo) && $cityId > 0) ? "<a target=\"new\" href=\"".$
 </tr>
 </table>
 
-<table cellspacing="1" cellpadding="0" border="0" width="500">
-<tr><td id="ws-hide-table" class="panel" width="100%">&nbsp;</td></tr>
+<table cellspacing="1" cellpadding="0" border="0" width="700">
+<tr><td id="ws-hide-table" class="panel" nowrap>&nbsp;</td></tr>
 </table>
 <!-- MAIN STATISTICS TABLE -->
 <input type="hidden" id="wk-stats-city-id" value="<?=$cityId?>">
-<div id="ws-main-table-stats" style="width:100%";>
+<div id="ws-main-table-stats" style="width:100%;overflow:auto;margin:0px -225px 0px 0px;">
 <a name="mainstats"></a>
 <table cellspacing="0" cellpadding="0" border="1" id="table_stats" style="font-family: Trebuchet MS,arial,sans-serif,helvetica; font-size:9pt;background-color:#ffffdd;">
 <tr bgcolor="#ffdead">

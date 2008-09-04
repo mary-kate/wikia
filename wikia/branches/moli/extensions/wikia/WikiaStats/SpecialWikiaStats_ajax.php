@@ -37,8 +37,7 @@ function axWStatisticsGenerate($city_id, $year_from, $month_from, $year_to, $mon
 	}
 
 	require_once ( dirname( __FILE__ ) . '/SpecialWikiaStats.i18n.php' );
-	foreach( $wgWikiaStatsMessages as $key => $value ) 
-	{
+	foreach( $wgWikiaStatsMessages as $key => $value ) {
 		$wgMessageCache->addMessages( $wgWikiaStatsMessages[$key], $key );
 	}
 
@@ -371,7 +370,6 @@ function axWStatisticsXLS($city_id, $param, $others = "", $date_from = "", $date
 				list($year_to, $month_to) = explode("-", $date_to);
 				$month_to = sprintf("%02d", $month_to);
 			}
-			error_log("getWikiMainStatistics($city_id, $year_from, $month_from, $year_to, $month_to, 0, $xls);", 3, "/tmp/moli.log");
 			$obj_stats = new WikiaGenericStats($wgUser->getID());
 			$obj_stats->getWikiMainStatistics($city_id, $year_from, $month_from, $year_to, $month_to, 0, $xls);
 			break;
