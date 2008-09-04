@@ -91,4 +91,12 @@ class AdProviderGoogle implements iAdProvider {
 		return $channel;
 	}
 
+
+	
+	// https://www.google.com/adsense/support/bin/answer.py?hl=en&answer=9727
+	public function getSupportedLanguages(){
+		return array('ar', 'bg', 'zh', 'hr', 'cs', 'da', 'nl', 'en', 'fi', 'fr', 'de', 'el', 'he',
+			     'hu', 'it', 'ja', 'ko', 'no', 'pl', 'pt', 'ro', 'ru', 'sr', 'sk', 'es', 'sv', 'tr');
+	}
+
 }

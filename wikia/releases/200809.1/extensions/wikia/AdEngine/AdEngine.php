@@ -159,7 +159,12 @@ class AdEngine {
 			if ( AdEngine::getInstance()->getAdType($slotname) == 'spotlight' ){
 				return AdProviderOpenX::getInstance();
 			} else {
-				return AdProviderGoogle::getInstance();
+				// Google's TOS prevents serving ads for some languages
+				if (in_array($wgLanguageCode, AdProviderGoogle::getSupportedLanguages())){
+					return AdProviderGoogle::getInstance();
+				} else {
+					return new AdProviderNull("Unsupported language for Google Adsense ($wgLanguageCode)", false);
+				}
 			}
 		} else {
 			if (!empty($_GET['forceProviderid'])){
