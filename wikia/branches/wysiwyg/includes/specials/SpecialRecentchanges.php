@@ -16,8 +16,6 @@ class SpecialRecentChanges extends SpecialPage {
 	 * @return FormOptions
 	 */
 	public function getDefaultOptions() {
-		global $wgUser;
-
 		$opts = new FormOptions();
 
 		$opts->add( 'days',  (int)User::getDefaultOption( 'rcdays' ) );
@@ -30,7 +28,6 @@ class SpecialRecentChanges extends SpecialPage {
 		$opts->add( 'hideliu',       false );
 		$opts->add( 'hidepatrolled', false );
 		$opts->add( 'hidemyself',    false );
-		$opts->add( 'hideenhanced',  !$wgUser->getOption('usenewrc') );
 
 		$opts->add( 'namespace', '', FormOptions::INTNULL );
 		$opts->add( 'invert', false );
@@ -54,18 +51,6 @@ class SpecialRecentChanges extends SpecialPage {
 		$opts['limit'] = (int)$wgUser->getOption( 'rclimit', $opts['limit'] );
 		$opts['hideminor'] = $wgUser->getOption( 'hideminor', $opts['hideminor'] );
 		$opts->fetchValuesFromRequest( $wgRequest );
-
-		/* Wikia - Inez */
-		$userUsenewrc = (bool) $wgUser->getOption( 'usenewrc' );
-		if($userUsenewrc == $opts['hideenhanced']) {
-			$wgUser->setOption( 'usenewrc', !$opts['hideenhanced'] );
-			$wgUser->saveSettings();
-			if(!$wgUser->isLoggedIn()) {
-				global $wgCookieExpiration, $wgCookiePath, $wgCookieDomain, $wgCookieSecure;
-				$exp = time() + $wgCookieExpiration;
-				setcookie($wgCookiePrefix.'_usenewrc', !$opts['hideenhanced'] ? 'yes' : 'no', $exp, $wgCookiePath, $wgCookieDomain, $wgCookieSecure );
-			}
-		}
 
 		// Give precedence to subpage syntax
 		if ( $parameters !== null ) {
@@ -95,13 +80,6 @@ class SpecialRecentChanges extends SpecialPage {
 	 * @param $parameters string
 	 */
 	public function execute( $parameters ) {
-		/* Wikia - Inez */
-		global $wgUser, $wgCookiePrefix;
-		if(!$wgUser->isLoggedIn()) {
-			$wgUser->setOption('usenewrc', (isset($_COOKIE[$wgCookiePrefix . '_usenewrc']) && $_COOKIE[$wgCookiePrefix . '_usenewrc'] == 'yes') ? true : false);
-			$wgUser->saveSettings();
-		}
-
 		global $wgRequest, $wgOut;
 		$feedFormat = $wgRequest->getVal( 'feed' );
 
@@ -145,7 +123,7 @@ class SpecialRecentChanges extends SpecialPage {
 			$batch->execute();
 			$this->webOutput( $rows, $opts );
 		}
-  	
+
 	}
 
 	/**
@@ -675,8 +653,6 @@ class SpecialRecentChanges extends SpecialPage {
 		// show from this onward link
 		$now = $wgLang->timeanddate( wfTimestampNow(), true );
 		$tl =  $this->makeOptionsLink( $now, array( 'from' => wfTimestampNow()), $nondefaults );
-		$enhancedLink = $this->makeOptionsLink( $showhide[1-$options['hideenhanced']],
-		array( 'hideenhanced' => 1-$options['hideenhanced'] ), $nondefaults);
 
 		$rclinks = wfMsgExt( 'rclinks', array( 'parseinline', 'replaceafter'),
 			$cl, $dl, $hl );
