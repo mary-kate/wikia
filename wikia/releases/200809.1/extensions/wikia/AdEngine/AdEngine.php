@@ -152,8 +152,8 @@ class AdEngine {
 			return new AdProviderNull('User is logged in', false);
 
  	        } else if (empty($this->providers[$this->slots[$slotname]['provider_id']])) {
+			return new AdProviderNull('Empty provider id', true);
 
-			return new AdProviderNull('Unrecognized provider', true);
  	        } else if ($wgLanguageCode != 'en' ){
 			// Different settings for non english wikis.
 			if ( AdEngine::getInstance()->getAdType($slotname) == 'spotlight' ){
@@ -162,9 +162,14 @@ class AdEngine {
 				return new AdProviderNull('Non English wiki', false);
 			}
 		} else {
+			if (!empty($_GET['forceProviderid'])){
+				$provider_id = $_GET['forceProviderid'];
+			} else {
+				$provider_id = $this->slots[$slotname]['provider_id'];
+			}
 			
 			// Error conditions out of the way, send back the appropriate Ad provider
-			switch ($this->providers[$this->slots[$slotname]['provider_id']]){
+			switch ($this->providers[$provider_id]){
 				case 'DART': return AdProviderDART::getInstance();
 				case 'OpenX': return AdProviderOpenX::getInstance();
 				case 'Google': return AdProviderGoogle::getInstance();
