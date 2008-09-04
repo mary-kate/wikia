@@ -35,7 +35,7 @@ function WidgetLastWikis($id, $params) {
 	// first, prepare the existing rank
 	$items  = array();
 
-	if ( count($urls) > 0 ) {
+	if ( is_array($urls) && count($urls) > 0 ) {
 	    for ( $index = 0; $index < 6; $index++ ) {
 		$url  = isset($urls[$index]['url']) ? $urls[$index]['url'] : '';
 		$name = isset($urls[$index]['name']) ? $urls[$index]['name'] : '';
