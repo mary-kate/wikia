@@ -36,7 +36,7 @@ $wgWidgets['WidgetNewPages'] = array(
 function WidgetNewPages($id, $params) {
 	wfProfileIn(__METHOD__);
 
-	$dbr =& wfGetDB( DB_SLAVE );
+	$dbr = wfGetDB(DB_SLAVE);
 
 	$res = $dbr->select('recentchanges',						// table name
 		array('rc_title'),										// fields to get
@@ -58,5 +58,5 @@ function WidgetNewPages($id, $params) {
 
 	wfProfileOut(__METHOD__);
 
-	return (count($items) > 0 ? WidgetFrameworkWrapLinks($items) . WidgetFrameworkMoreLink(Title::newFromText('Newpages', NS_SPECIAL)->getLocalURL()) : '(the list is empty)');
+	return (count($items) > 0 ? WidgetFrameworkWrapLinks($items) . WidgetFrameworkMoreLink(Title::newFromText('Newpages', NS_SPECIAL)->getLocalURL()) : wfMsg('widget-empty-list'));
 }
