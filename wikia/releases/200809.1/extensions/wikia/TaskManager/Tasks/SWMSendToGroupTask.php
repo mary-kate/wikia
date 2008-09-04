@@ -18,6 +18,7 @@ if (!defined('MSG_STATUS_DB')) {
 }
 if (!defined('MSG_STATUS_UNSEEN')) {
 	define('MSG_STATUS_UNSEEN', '0');
+}
 if (!defined('MSG_STATUS_DISMISSED')) {
 	define('MSG_STATUS_DISMISSED', '2');
 }
