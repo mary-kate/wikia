@@ -91,9 +91,9 @@ FCKToolbarButton.prototype.Click = function()
 	var oToolbarButton = this._ToolbarButton || this ;
 	
 	var CMode = false ;
-	if ( oToolbarButton.SourceView && (FCK_EDITMODE_SOURCE == FCK.EditMode) )
+	if ( oToolbarButton.SourceView && ( FCK_EDITMODE_SOURCE == FCK.EditMode ) )
 	{
-		switch (oToolbarButton.CommandName) 
+		switch ( oToolbarButton.CommandName ) 
 		{
 			case 'Bold' 		: window.parent.insertTags ('\'\'\'', '\'\'\'', 'Bold text') ; CMode = true ; break ;
 			case 'Italic' 		: window.parent.insertTags ('\'\'', '\'\'', 'Italic text') ; CMode = true ; break ;
@@ -792,7 +792,7 @@ FCK.DataProcessor =
 
 (function()
 {
-	FCK.isInedible = function (value) {
+	FCK.isInedible = function( value ) {
         if ( FCK.EditMode != FCK_EDITMODE_SOURCE ) {
 		if (FCK.EditorDocument.body.innerHTML.indexOf ("{{") >= 0 ) {
 			return true ;
@@ -802,12 +802,12 @@ FCK.DataProcessor =
 	}
 })();
 
-FCK.InsertImage = function (tag) {
+FCK.InsertImage = function( tag ) {
 	window.parent.sajax_request_type = 'GET' ;
 	window.parent.sajax_do_call( 'wfSajaxGetImageUrl', [tag], FCK.UpdateImageFromAjax ) ;	
 }
 
-FCK.UpdateImageFromAjax = function (response) {
+FCK.UpdateImageFromAjax = function( response ) {
         oImage = FCK.CreateElement( 'IMG' ) ;
         FCK.UpdateImage( oImage, response.responseText ) ;
 }
@@ -842,7 +842,7 @@ FCK.UpdateImage = function (e, realUrl) {
         e.setAttribute( "_fcksavedurl", realUrl, 0 ) ;
 }
 
-FCKDocumentProcessor.refillTemplates = function () {
+FCKDocumentProcessor.refillTemplates = function() {
 	var text = unescape (parent.document.getElementById ('fck_parsed_templates').value) ;
 	var max = text.length ;
 	var pos = 0 ;
@@ -890,7 +890,7 @@ var FCKDocumentProcessor_CreateFakeElem = function( fakeClass, realElement, cont
 }
 
 //similar to placeholder plugin
-function FCK_SetupTemplatesForGecko () {
+function FCK_SetupTemplatesForGecko() {
         FCK_TemplatesClickListener = function( e ) {
 		var our_target = e.target ;
                 if (our_target.tagName == 'DIV' && our_target.getAttribute ('_fck_mw_template')) {
@@ -987,7 +987,7 @@ FCKDocumentProcessor.AppendNew().ProcessDocument = function( document )
 }
 
 /* patch for 2.6.1 */
-if (window.parent.FCKeditor.prototype.VersionBuild > 18219) 
+if ( window.parent.FCKeditor.prototype.VersionBuild > 18219 ) 
 {
 	FCKToolbarSet.prototype.RefreshModeState = function( editorInstance )
 	{
@@ -1045,7 +1045,7 @@ FCKContextMenu.prototype.SetMouseClickWindow = function( mouseClickWindow )
         }
 }
 
-function FCKImage_OnDoubleClick (img) {
+function FCKImage_OnDoubleClick( img ) {
         if ( img.tagName == 'IMG') {
 		if (img.getAttribute ('_fck_mw_template') ) {
 	                FCKCommands.GetCommand( 'MW_Template' ).Execute() ;
@@ -1068,7 +1068,7 @@ function FCKImage_OnDoubleClick (img) {
 	}
 }
 
-function FCKDiv_OnDoubleClick (span) {
+function FCKDiv_OnDoubleClick( span ) {
 	if (span.tagName == 'DIV') {
 		if (span.getAttribute ('_fck_mw_template') ) {
 			FCKCommands.GetCommand( 'MW_Template' ).Execute() ;
@@ -1076,7 +1076,7 @@ function FCKDiv_OnDoubleClick (span) {
 	}
 }
 
-function FCK_VisibleTemplatesCheck () {
+function FCK_VisibleTemplatesCheck() {
 	// this will disallow for template content selection under Firefox
 	// more of a placeholder for now
         var sel = FCKSelection.GetSelection() ;
