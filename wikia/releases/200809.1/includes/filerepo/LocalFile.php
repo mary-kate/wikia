@@ -547,7 +547,8 @@ class LocalFile extends File
 		$this->purgeThumbnails();
 
 		// Purge squid cache for this file
-		wfPurgeSquidServers( array( $this->getURL() ) );
+		// emil: we don't have squids in front of image server so don't waste our time on purge
+		//wfPurgeSquidServers( array( $this->getURL() ) );
 	}
 
 	/**
@@ -571,7 +572,8 @@ class LocalFile extends File
 
 		// Purge the squid
 		if ( $wgUseSquid ) {
-			wfPurgeSquidServers( $urls );
+			// we don't have squids in front of image server so don't waste our time on purge
+			//wfPurgeSquidServers( $urls );
 		}
 	}
 
@@ -735,7 +737,8 @@ class LocalFile extends File
 		// Delete thumbnails and refresh the metadata cache
 		$this->purgeThumbnails();
 		$this->saveToCache();
-		wfPurgeSquidServers( array( $this->getURL() ) );
+		// emil: we don't have squids in front of image server so don't waste our time on purge
+		//wfPurgeSquidServers( array( $this->getURL() ) );
 
 		// Fail now if the file isn't there
 		if ( !$this->fileExists ) {
