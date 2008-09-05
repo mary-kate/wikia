@@ -136,12 +136,20 @@ class AdEngine {
 		// Note: Don't throw an exception on error. Fail gracefully for ads,
 		// don't under any circumstances fail the rendering of the page.
 		// Instead, return a "AdProviderNull" object with an error message
+		
 
+		// FIXME This code to go complicated! Refactor.
 		if (empty($this->slots[$slotname])) {
 			return new AdProviderNull('Unrecognized slot', true);
 
 		} else if ($this->slots[$slotname]['enabled'] == 'No'){
 			return new AdProviderNull("Slot is disabled", false);
+
+/* Commented out until I better understand what to do.
+		} else if (!in_array($wgLanguageCode, self::getAdLanguages())){
+			// https://trac.wikia-inc.com/trac/comteam/ticket/200
+			return new AdProviderNull("We don't display ads for this language ($wgLanguageCode) ", false);
+*/
 
 		} else if (! ArticleAdLogic::isMandatoryAd($slotname) &&
 			     empty($_GET['showads']) && $wgShowAds == false ){
@@ -250,7 +258,7 @@ class AdEngine {
 
 			// Hmm. Should we just use: class="wikia_$adtype"?
 			$class = self::getAdType($slotname) == 'spotlight' ? ' class="wikia_spotlight"' : ' class="wikia_ad"';
-			$out .= '<div id="' . $slotname . '_load"'.$class.'>' . $AdProvider->getAd($slotname, $this->slots[$slotname]) . "</div>\n";
+			$out .= '<div id="' . $slotname . '_load" style="display: none; position: absolute;"'.$class.'>' . $AdProvider->getAd($slotname, $this->slots[$slotname]) . "</div>\n";
 
 			/* This image is what will be returned if there is NO AD to be displayed.
  			 * If this happens, we want leave the div collapsed.
