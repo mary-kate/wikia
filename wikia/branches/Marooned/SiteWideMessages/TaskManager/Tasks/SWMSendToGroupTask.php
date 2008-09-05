@@ -570,6 +570,7 @@ class SWMSendToGroupTask extends BatchTask {
 	 * @return boolean: result of operation
 	 */
 	private function sendMessageHelperToGroup(&$DB, &$wikisDB, &$params) {
+		$result = true;
 		$usersSent = array();
 
 		//step 2 of 3: look into each wiki for users that belong to a specified group
