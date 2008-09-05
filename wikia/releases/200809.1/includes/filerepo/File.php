@@ -537,7 +537,8 @@ abstract class File {
 			}
 
 			if ( $wgUseSquid ) {
-				wfPurgeSquidServers( array( $thumbUrl ) );
+				// emil: we don't have squids in front of image server so don't waste our time on purge
+				//wfPurgeSquidServers( array( $thumbUrl ) );
 			}
 		} while (false);
 
