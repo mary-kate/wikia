@@ -12,9 +12,9 @@ class WikiaStatsXLS {
 	function __construct() {
 		//
 	}
-	
+
 	private function setXLSFileBegin() {
-		echo pack("ssssss", 0x809, 0x8, 0x0, 0x10, 0x0, 0x0);  
+		echo pack("ssssss", 0x809, 0x8, 0x0, 0x10, 0x0, 0x0);
 		return;
 	}
 
@@ -29,8 +29,10 @@ class WikiaStatsXLS {
 	}
 
 	private function writeXLSNumber($row, $col, $value) {
-		echo pack("sssss", 0x203, 14, $row, $col, 0x0);
-		echo pack("d", $value);
+		if ($value != 0) {
+			echo pack("sssss", 0x203, 14, $row, $col, 0x0);
+			echo pack("d", $value);
+		}
 		return;
 	}
 
@@ -49,10 +51,10 @@ class WikiaStatsXLS {
 		header("Content-Type: application/force-download");
 		header("Content-Type: application/octet-stream");
 		header("Content-Type: application/download");;
-		header("Content-Disposition: attachment;filename=".str_replace(" ", "_", $dbname).".xls "); 
+		header("Content-Disposition: attachment;filename=".str_replace(" ", "_", $dbname).".xls ");
 		header("Content-Transfer-Encoding: binary ");
 	}
-	
+
 	public function getXLSCityDBName($city_id) {
 		$dbname = WikiFactory::IDtoDB($city_id);
 		if (empty($dbname)) {
@@ -61,7 +63,7 @@ class WikiaStatsXLS {
 		#---
 		return $dbname;
 	}
-	
+
 	public function generateEmptyFile()	{
 		$dbname = sprintf(DEFAULT_WIKIA_XLS_FILENAME, intval($cityId));
 		$this->setXLSHeader($dbname);
@@ -80,7 +82,7 @@ class WikiaStatsXLS {
 		#----
 		$this->setXLSFileBegin();
 		$this->writeXLSLabel(1,1,ucfirst($dbname). " - " .wfMsg('wikiastats_pagetitle'));
-		$this->mergeXLSColsRows(1, 0, 1, count($columns));
+		$this->mergeXLSColsRows(1, 1, 1, count($columns));
 		/*
 		 * table header
 		 */
@@ -187,7 +189,7 @@ class WikiaStatsXLS {
 					if ( in_array($column, array('date')) ) continue;
 					#---
 					$out = $columnsData[$column];
-					if (empty($columnsData[$column]) || ($columnsData[$column] == 0)) {
+					if (empty($columnsData[$column]) || ($columnsData[$column] == 0) || ($columnsData[$column] >= 100)) {
 						$out = "";
 					}
 					if ($out != "") {
