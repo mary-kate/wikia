@@ -106,68 +106,68 @@ class WikiaStatsXLS {
 		// date
 		$this->writeXLSLabel(4, $col_date, '');
 		// wikians
-		$this->writeXLSLabel(4,1,wfMsg('wikiastats_lifetime_editors'));
-		$this->mergeXLSColsRows(4, 1, 4, 2);
-		$this->writeXLSLabel(4,3,wfMsg('wikiastats_months_edits'));
-		$this->mergeXLSColsRows(4, 3, 4, 7);
-		$this->writeXLSLabel(5,1,wfMsg('wikiastats_total'));
-		$this->mergeXLSColsRows(5, 1, 6, 1);
-		$this->writeXLSLabel(5,2,wfMsg('wikiastats_main_namespace'));
-		$this->mergeXLSColsRows(5, 2, 5, 2);
-		$this->writeXLSLabel(5,3,wfMsg('wikiastats_total'));
-		$this->mergeXLSColsRows(5, 3, 6, 3);
-		$this->writeXLSLabel(5,4,wfMsg('wikiastats_main_namespace'));
-		$this->mergeXLSColsRows(5, 4, 5, 5);
-		$this->writeXLSLabel(5,5,wfMsg('wikiastats_other_namespace'));
-		$this->mergeXLSColsRows(5, 6, 5, 7);
-		$this->writeXLSLabel(6,2,">10");
+		$this->writeXLSLabel(4,2,wfMsg('wikiastats_lifetime_editors'));
+		$this->mergeXLSColsRows(4, 2, 4, 3);
+		$this->writeXLSLabel(4,4,wfMsg('wikiastats_months_edits'));
+		$this->mergeXLSColsRows(4, 4, 4, 8);
+		$this->writeXLSLabel(5,2,wfMsg('wikiastats_total'));
+		$this->mergeXLSColsRows(5, 2, 6, 2);
+		$this->writeXLSLabel(5,3,wfMsg('wikiastats_main_namespace'));
+		$this->mergeXLSColsRows(5, 3, 5, 3);
+		$this->writeXLSLabel(5,4,wfMsg('wikiastats_total'));
+		$this->mergeXLSColsRows(5, 4, 6, 4);
+		$this->writeXLSLabel(5, 5,str_replace("<br/>", "", wfMsg('wikiastats_main_namespace')));
+		$this->mergeXLSColsRows(5, 5, 5, 6);
+		$this->writeXLSLabel(5,7,str_replace("<br/>", "", wfMsg('wikiastats_other_namespace')));
+		$this->mergeXLSColsRows(5, 7, 5, 8);
+		$this->writeXLSLabel(6,3,">10");
 		#$this->writeXLSLabel(6,3,"new");
-		$this->writeXLSLabel(6,4,">5");
-		$this->writeXLSLabel(6,5,">100");
-		$this->writeXLSLabel(6,6,wfMsg('wikistats_user_namespace'));
-		$this->writeXLSLabel(6,7,wfMsg('wikistats_image_namespace'));
+		$this->writeXLSLabel(6,5,">5");
+		$this->writeXLSLabel(6,6,">100");
+		$this->writeXLSLabel(6,7,wfMsg('wikistats_user_namespace'));
+		$this->writeXLSLabel(6,8,wfMsg('wikistats_image_namespace'));
 
 		// articles
-		$this->writeXLSLabel(4,8,wfMsg('wikiastats_count'));
-		$this->mergeXLSColsRows(4, 8, 5, 9);
-		$this->writeXLSLabel(6,8,wfMsg('wikiastats_official'));
-		$this->writeXLSLabel(6,9,wfMsg('wikiastats_more_200_ch'));
+		$this->writeXLSLabel(4,9,wfMsg('wikiastats_count'));
+		$this->mergeXLSColsRows(4, 10, 5, 11);
+		$this->writeXLSLabel(6,12,wfMsg('wikiastats_official'));
+		$this->writeXLSLabel(6,13,wfMsg('wikiastats_more_200_ch'));
 		//
-		$this->writeXLSLabel(4,10,wfMsg('wikiastats_new_per_day'));
-		$this->mergeXLSColsRows(4, 10, 6, 10);
+		$this->writeXLSLabel(4,11,wfMsg('wikiastats_new_per_day'));
+		$this->mergeXLSColsRows(4, 11, 6, 11);
 		//
-		$this->writeXLSLabel(4,11,wfMsg('wikiastats_mean'));
-		$this->mergeXLSColsRows(4, 11, 5, 12);
-		$this->writeXLSLabel(6,11,wfMsg('wikiastats_edits'));
-		$this->writeXLSLabel(6,12,wfMsg('wikiastats_bytes'));
+		$this->writeXLSLabel(4,12,wfMsg('wikiastats_mean'));
+		$this->mergeXLSColsRows(4, 12, 5, 13);
+		$this->writeXLSLabel(6,12,wfMsg('wikiastats_edits'));
+		$this->writeXLSLabel(6,13,wfMsg('wikiastats_bytes'));
 		//
-		$this->writeXLSLabel(4,13,wfMsg('wikiastats_larger_than'));
-		$this->mergeXLSColsRows(4, 13, 5, 14);
-		$this->writeXLSLabel(6,13,'0.5Kb');
-		$this->writeXLSLabel(6,14,'2.0Kb');
+		$this->writeXLSLabel(4,14,wfMsg('wikiastats_larger_than'));
+		$this->mergeXLSColsRows(4, 14, 5, 15);
+		$this->writeXLSLabel(6,14,'0.5Kb');
+		$this->writeXLSLabel(6,15,'2.0Kb');
 		// database
-		$this->writeXLSLabel(4,15,wfMsg('wikiastats_edits'));
-		$this->mergeXLSColsRows(4, 15, 6, 15);
-		$this->writeXLSLabel(4,16,wfMsg('wikiastats_size'));
-		$this->mergeXLSColsRows(4, 16, 6, 16);
-		$this->writeXLSLabel(4,17,wfMsg('wikiastats_words'));
+		$this->writeXLSLabel(4,16,wfMsg('wikiastats_edits'));
+		$this->mergeXLSColsRows(4, 16, 6, 17);
+		$this->writeXLSLabel(4,17,wfMsg('wikiastats_size'));
 		$this->mergeXLSColsRows(4, 17, 6, 17);
-		// links
-		$this->writeXLSLabel(4,18,wfMsg('wikiastats_internal'));
+		$this->writeXLSLabel(4,18,wfMsg('wikiastats_words'));
 		$this->mergeXLSColsRows(4, 18, 6, 18);
-		$this->writeXLSLabel(4,19,wfMsg('wikiastats_interwiki'));
+		// links
+		$this->writeXLSLabel(4,19,wfMsg('wikiastats_internal'));
 		$this->mergeXLSColsRows(4, 19, 6, 19);
-		$this->writeXLSLabel(4,20,wfMsg('wikiastats_image'));
+		$this->writeXLSLabel(4,20,wfMsg('wikiastats_interwiki'));
 		$this->mergeXLSColsRows(4, 20, 6, 20);
-		$this->writeXLSLabel(4,21,wfMsg('wikiastats_external'));
+		$this->writeXLSLabel(4,21,wfMsg('wikiastats_image'));
 		$this->mergeXLSColsRows(4, 21, 6, 21);
-		$this->writeXLSLabel(4,18,wfMsg('wikiastats_redirects'));
+		$this->writeXLSLabel(4,22,wfMsg('wikiastats_external'));
 		$this->mergeXLSColsRows(4, 22, 6, 22);
-		// images
-		$this->writeXLSLabel(4,23,wfMsg('wikiastats_uploaded_images'));
+		$this->writeXLSLabel(4,19,wfMsg('wikiastats_redirects'));
 		$this->mergeXLSColsRows(4, 23, 6, 23);
-		$this->writeXLSLabel(4,24,wfMsg('wikiastats_with_links'));
+		// images
+		$this->writeXLSLabel(4,24,wfMsg('wikiastats_uploaded_images'));
 		$this->mergeXLSColsRows(4, 24, 6, 24);
+		$this->writeXLSLabel(4,25,wfMsg('wikiastats_with_links'));
+		$this->mergeXLSColsRows(4, 25, 6, 25);
 
 		// monthly stats
 		$row = 7;
