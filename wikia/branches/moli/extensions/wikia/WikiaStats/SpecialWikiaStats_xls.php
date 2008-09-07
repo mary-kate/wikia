@@ -179,9 +179,9 @@ class WikiaStatsXLS {
 				$stamp = mktime(0,0,0,$dateArr[1],1,$dateArr[0]);
 				$outDate = substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " " . $dateArr[0];
 				// output date in correct format
-				$this->writeXLSLabel($row, 0, $outDate);
+				$this->writeXLSLabel($row, $col_date, $outDate);
 				//----
-				$col = 1;
+				$col = $col_date;
 				foreach ($columns as $column)
 				{
 					if ( in_array($column, array('date')) ) continue;
@@ -727,7 +727,7 @@ class WikiaStatsXLS {
 		$meanInfo .= "(" . implode(" + ", $meanArray[0]) . ") / Y1 \n" . wfMsg('wikiastats_trend_where_text') . " \n";
 		$meanInfo .= implode(",\n", $meanArray[1]).",\n";
 		$meanInfo .= "Y1 = ".implode(" + ", $meanArray[2])." = ". $sum ;
-		
+
 		$this->writeXLSLabel($row1,$col1,$meanInfo);
 		$this->mergeXLSColsRows($row1, $col1, $row2, $col2);
 		
