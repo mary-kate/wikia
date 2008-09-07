@@ -195,7 +195,7 @@ $wgWikiaStatsMessages["en"] = array(
 	"wikiastats_trend_mean_info" => "Mean = average counts over shown months",
 	"wikiastats_trend_growth_info" => "Growth = average monthly growth over shown months",
 	"wikiastats_trend_value" => "value",
-	"wikiastats_trend_formula" => "Formula",	
+	"wikiastats_trend_formula" => "Formula",
 	"wikiastats_trend_ordered" => "All wiki are ordered by numbers of articles. <br /> Select part of those stats: ",
 	"wikiastats_trend_where_text" => "where:",
 	"wikiastats_trend_all_wikia_text" => "All wikis",
@@ -237,7 +237,7 @@ $wgWikiaStatsMessages["en"] = array(
 	"wikiastats_show_nbr_wikis_check" => "Max. number of Wikis to mark: $1",
 	"wikiastats_lifetime_editors" => "\"lifetime\" editors",
 	"wikiastats_months_edits" => "Editors this month",
-	"wikiastats_main_namespace" => "main namespace",
-	"wikiastats_other_namespace" => "other namespaces",
+	"wikiastats_main_namespace" => "main<br/>namespace",
+	"wikiastats_other_namespace" => "other<br/>namespaces",
 );
 ?>
