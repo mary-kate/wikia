@@ -12,40 +12,40 @@ function visible_wikians(rows, col, v)
 	//--- main header and footer
 	var cels = rows[0].getElementsByTagName('td');
 	cels[col].style.display = v;
-	
+
 	cels = rows[1].getElementsByTagName('td');
 	for (y = 1; y <= 2; y++) { cels[y].style.display = v; }
-	
+
 	cels = rows[2].getElementsByTagName('td');
 	for (y = 0; y <= 4; y++) { cels[y].style.display = v; }
 
 	cels = rows[3].getElementsByTagName('td');
-	for (y = 0; y <= 5; y++) { cels[y].style.display = v; }
+	for (y = 0; y <= 4; y++) { cels[y].style.display = v; }
 
 	cels = rows[rows.length-4].getElementsByTagName('td');
-	cels[col].style.display = v; 
+	cels[col].style.display = v;
 
 	cels = rows[rows.length-3].getElementsByTagName('td');
 	for (y = 1; y <= 2; y++) { cels[y].style.display = v; }
 
 	cels = rows[rows.length-2].getElementsByTagName('td');
 	for (y = 0; y <= 4; y++) { cels[y].style.display = v; }
-	
+
 	cels = rows[rows.length-1].getElementsByTagName('td');
-	for (y = 0; y <= 5; y++) { cels[y].style.display = v; }
+	for (y = 0; y <= 4; y++) { cels[y].style.display = v; }
 }
 
 function visible_articles(rows, col, v)
 {
 	var cels = rows[0].getElementsByTagName('td');
 	cels[2].style.display = v;
-	
+
 	cels = rows[rows.length-4].getElementsByTagName('td');
 	cels[2].style.display = v;
 
 	cels = rows[1].getElementsByTagName('td');
 	for (y = 3; y <= 6; y++) { cels[y].style.display = v; }
-	
+
 	cels = rows[3].getElementsByTagName('td');
 	for (y = 6; y <= 11; y++) { cels[y].style.display = v; }
 	
