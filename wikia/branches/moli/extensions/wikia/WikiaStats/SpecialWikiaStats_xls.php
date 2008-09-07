@@ -187,14 +187,12 @@ class WikiaStatsXLS {
 					if ( in_array($column, array('date')) ) continue;
 					#---
 					$out = $columnsData[$column];
-					$class = "rb";
-					/*if ( (in_array($column, array('B','H','I','J','K'))) ||
-						 (empty($columnsData[$column]) || ($columnsData[$column] == 0)) ||
-						 ($columnsData[$column] >= 100) ) { $out = ""; }*/
-					// output value
+					if (empty($columnsData[$column]) || ($columnsData[$column] == 0)) {
+						$out = "";
+					}
 					if ($out != "") {
-						$out = sprintf("%0.0f%%", $out);
-						$this->writeXLSNumber($row, $col, $out);
+							$out = sprintf("%0.0f%%", $out);
+							$this->writeXLSNumber($row, $col, $out);
 					}
 					$col++;
 				}
