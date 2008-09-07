@@ -13,10 +13,10 @@ function visible_wikians(rows, col, v)
 	//--- main header and footer
 	var cels = rows[0].getElementsByTagName('td');
 	cels[col].style.display = v;
-	
+
 	cels = rows[1].getElementsByTagName('td');
 	for (y = 1; y <= 2; y++) { cels[y].style.display = v; }
-	
+
 	cels = rows[2].getElementsByTagName('td');
 	for (y = 0; y <= 4; y++) { cels[y].style.display = v; }
 
@@ -104,14 +104,14 @@ function visible_image(rows, col, v)
 
 	cels = rows[1].getElementsByTagName('td');
 	for (y = 15; y <= 16; y++) { cels[y].style.display = v; }
-	
+
 	// footers
 	cels = rows[rows.length-3].getElementsByTagName('td');
 	for (y = 15; y <= 16; y++) { cels[y].style.display = v; }
 	//
 }
 
-function visible_column(col, col_to, show, text, div_hide) 
+function visible_column(col, col_to, show, text, div_hide)
 {
 	var tableStats  = document.getElementById("table_stats");
 	var v = (show) ? '' : 'none';
@@ -119,7 +119,7 @@ function visible_column(col, col_to, show, text, div_hide)
 
 	var rowStart = 4;
 	var rowEnd = rows.length-4;
-	
+
 	if (show == 1) {
 		for (i = rowStart; i < rowEnd; i++) {
 			var cels = rows[i].getElementsByTagName('td');
@@ -128,16 +128,16 @@ function visible_column(col, col_to, show, text, div_hide)
 			}
 		}
 	}
-	
+
 	if (col == 1) { //wikians headers and footer
 		visible_wikians(rows, col, v);
-	} else if (col == 9) { //article headers and footer
+	} else if (col == 8) { //article headers and footer
 		visible_articles(rows, col, v);
-	} else if (col == 16) { //database headers and footer
+	} else if (col == 15) { //database headers and footer
 		visible_database(rows, col, v);
-	} else if (col == 19) { //links headers and footer
+	} else if (col == 18) { //links headers and footer
 		visible_links(rows, col, v);
-	} else if (col == 24) { //daily headers and footer
+	} else if (col == 23) { //daily headers and footer
 		visible_image(rows, col, v);
 	}
 
@@ -197,7 +197,7 @@ YAHOO.util.Event.onDOMReady(function () {
 		success: function( oResponse ) {
 			var resCode = 0;
 			if (oResponse.responseText != "") {
-				resCode = 1;    		
+				resCode = 1;
 				YD.get("ws-main-table").innerHTML = oResponse.responseText;
 				YD.get("ws-progress-bar").innerHTML = "&nbsp;";
 			} else {
@@ -372,7 +372,7 @@ YAHOO.util.Event.onDOMReady(function () {
 		}
 	};
 
-	YAHOO.Wikia.Statistics.DistribArticleEditsStats = function(e) 
+	YAHOO.Wikia.Statistics.DistribArticleEditsStats = function(e)
 	{
 		var city 	= document.getElementById( "wk-stats-city-id" );
 		var params 	= "&rsargs[0]=" + city.value;
