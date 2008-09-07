@@ -17,7 +17,7 @@ define ("STATS_TREND_CITY_NBR", 20);
 define ("STATS_COLUMN_CITY_NBR", 59);
 define ("MIN_STATS_DATE", '2001-01');
 define ("STATS_COLUMN_PREFIX", "m_");
-define ("MIN_STATS_YEAR", '2004');
+define ("MIN_STATS_YEAR", '2008');
 define ("MIN_STATS_MONTH", '01');
 define ("RANGE_STATS_MIN", 'A');
 define ("RANGE_STATS_MAX", 'Y');
@@ -46,7 +46,7 @@ require_once( dirname(__FILE__) . '/SpecialWikiaStats_helper.php' );
 #--- ajax's method file
 require_once( dirname(__FILE__) . '/SpecialWikiaStats_ajax.php' );
 
-#--- xls method file 
+#--- xls method file
 require_once( dirname(__FILE__) . '/SpecialWikiaStats_xls.php' );
 
 #--- register special page (MW 1.10 way)
