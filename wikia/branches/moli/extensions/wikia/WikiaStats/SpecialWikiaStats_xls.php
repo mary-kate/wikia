@@ -181,7 +181,7 @@ class WikiaStatsXLS {
 				// output date in correct format
 				$this->writeXLSLabel($row, $col_date, $outDate);
 				//----
-				$col = $col_date;
+				$col = $col_date + 1;
 				foreach ($columns as $column)
 				{
 					if ( in_array($column, array('date')) ) continue;
