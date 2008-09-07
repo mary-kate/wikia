@@ -34,16 +34,16 @@ $wgExtensionCredits['specialpage'][] = array(
     "author" => "Piotr Molski (moli) <moli@wikia.com>"
 );
 
-$wgStatsExcludedNonSpecialGroup = array(22, 23, 24, 25);
+$wgStatsExcludedNonSpecialGroup = array();
 $wgStatsSpecialGroupUser = false;
 
 #--- messages file
 require_once( dirname(__FILE__) . '/SpecialWikiaStats.i18n.php' );
 
-#--- helper file 
+#--- helper file
 require_once( dirname(__FILE__) . '/SpecialWikiaStats_helper.php' );
 
-#--- ajax's method file 
+#--- ajax's method file
 require_once( dirname(__FILE__) . '/SpecialWikiaStats_ajax.php' );
 
 #--- xls method file 
