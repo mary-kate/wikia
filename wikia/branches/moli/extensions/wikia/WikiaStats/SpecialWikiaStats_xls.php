@@ -78,7 +78,7 @@ class WikiaStatsXLS {
 		#----
 		$dbname = $this->getXLSCityDBName($city_id);
 		#----
-		$this->setXLSHeader($dbname);
+		$this->setXLSHeader(wfMsg('wikiastats_filename_mainstats', $dbname));
 		#----
 		$this->setXLSFileBegin();
 		$this->writeXLSLabel(1,1,ucfirst($dbname). " - " .wfMsg('wikiastats_pagetitle'));
@@ -269,7 +269,7 @@ class WikiaStatsXLS {
 		#----
 		$dbname = $this->getXLSCityDBName($city_id);
 		#----
-		$this->setXLSHeader($dbname . "_distrib");
+		$this->setXLSHeader(wfMsg('wikiastats_filename_other1', $dbname));
 		#----
 		$this->setXLSFileBegin();
 		$this->writeXLSLabel(1,1,ucfirst($dbname). " - " .wfMsg('wikiastats_distrib_article'));
@@ -311,7 +311,7 @@ class WikiaStatsXLS {
 		$dbname = $this->getXLSCityDBName($city_id);
 		$cur_month = 1;
 		#----
-		$this->setXLSHeader($dbname . "_active");
+		$this->setXLSHeader(wfMsg('wikiastats_filename_other2', $dbname));
 		#----
 		$this->setXLSFileBegin();
 		$this->writeXLSLabel(1,0,ucfirst($dbname). " - " .wfMsg('wikiastats_active_absent_wikians'));
@@ -452,7 +452,7 @@ class WikiaStatsXLS {
 		$dbname = $this->getXLSCityDBName($city_id);
 		$cur_month = 1;
 		#----
-		$this->setXLSHeader($dbname . "_anon");
+		$this->setXLSHeader(wfMsg('wikiastats_filename_other3', $dbname));
 		#----
 		$this->setXLSFileBegin();
 		$this->writeXLSLabel(1,0,ucfirst($dbname). " - " .wfMsg('wikiastats_anon_wikians'));
@@ -511,7 +511,7 @@ class WikiaStatsXLS {
 		$dbname = $this->getXLSCityDBName($city_id);
 		$cur_month = 1;
 		#----
-		$this->setXLSHeader($dbname . "_onelink");
+		$this->setXLSHeader(wfMsg('wikiastats_filename_other4', $dbname));
 		#----
 		$this->setXLSFileBegin();
 		$this->writeXLSLabel(1,0,ucfirst($dbname). " - " .wfMsg('wikiastats_article_one_link'));
@@ -570,7 +570,7 @@ class WikiaStatsXLS {
 		$dbname = $this->getXLSCityDBName($city_id);
 		$cur_month = 1;
 		#----
-		$this->setXLSHeader($dbname . "_dbnspaces");
+		$this->setXLSHeader(wfMsg('wikiastats_filename_other5', $dbname));
 		#----
 		$this->setXLSFileBegin();
 		$this->writeXLSLabel(1,0,ucfirst($dbname). " - " .wfMsg('wikiastats_namespace_records'));
@@ -634,7 +634,7 @@ class WikiaStatsXLS {
 		$dbname = $this->getXLSCityDBName($city_id);
 		$cur_month = 1;
 		#----
-		$this->setXLSHeader($dbname . "_mostedit");
+		$this->setXLSHeader(wfMsg('wikiastats_filename_other6', $dbname));
 		#----
 		$this->setXLSFileBegin();
 		$this->writeXLSLabel(1,0,ucfirst($dbname). " - " .str_replace("&gt;", ">", wfMsg('wikiastats_page_edits')) );
@@ -788,7 +788,7 @@ class WikiaStatsXLS {
 		$MB = 1024 * 1024;
 		$KB = 1024;	
 		
-		$this->setXLSHeader(wfMsg('wikiastats_comparisons_table_1')."_".date('Ymd'));
+		$this->setXLSHeader(wfMsg('wikiastats_filename_trend', date('Ymd')));
 		#----
 		$this->setXLSFileBegin();
 		$col = 0;
@@ -945,7 +945,7 @@ class WikiaStatsXLS {
 	
 	public function makeCreationStats($cityList, &$arr_wikians, &$dWikians, &$arr_article, &$dArticles)
 	{
-		$this->setXLSHeader(wfMsg('wikiastats_creation_wikia_filename')."_".date('Ymd'));
+		$this->setXLSHeader(wfMsg('wikiastats_filename_creation', date('Ymd')));
 		#----
 		$max_wikians = (is_array($arr_wikians)) ? $arr_wikians[1] : 1;
 		$max_articles = (is_array($arr_article)) ? $arr_article[1] : 1;
@@ -1025,8 +1025,7 @@ class WikiaStatsXLS {
 	public function makeColumnStats($column,&$cityList,$nbrCities,&$splitCityList,&$columnHistory,&$columnRange)
 	{
 		$columnLetter = $columnRange[$column-3];
-		$filename = wfMsg("wikiastats_mainstats_short_column_" . $columnLetter);
-		$this->setXLSHeader($filename);
+		$this->setXLSHeader(wfMsg("wikiastats_filename_column_" . $columnLetter));
 		#----
 		$this->setXLSFileBegin();
 		$col = 1;
