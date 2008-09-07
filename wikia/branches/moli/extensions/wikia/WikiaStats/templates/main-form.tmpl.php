@@ -48,7 +48,7 @@ function visible_articles(rows, col, v)
 
 	cels = rows[3].getElementsByTagName('td');
 	for (y = 6; y <= 11; y++) { cels[y].style.display = v; }
-	
+
 	// footers
 	cels = rows[rows.length-3].getElementsByTagName('td');
 	for (y = 3; y <= 6; y++) { cels[y].style.display = v; }
@@ -130,13 +130,13 @@ function visible_column(col, col_to, show, text, div_hide)
 	
 	if (col == 1) { //wikians headers and footer
 		visible_wikians(rows, col, v);
-	} else if (col == 9) { //article headers and footer
+	} else if (col == 8) { //article headers and footer
 		visible_articles(rows, col, v);
-	} else if (col == 16) { //database headers and footer
+	} else if (col == 15) { //database headers and footer
 		visible_database(rows, col, v);
-	} else if (col == 19) { //links headers and footer
+	} else if (col == 18) { //links headers and footer
 		visible_links(rows, col, v);
-	} else if (col == 24) { //daily headers and footer
+	} else if (col == 23) { //daily headers and footer
 		visible_image(rows, col, v);
 	}
 
