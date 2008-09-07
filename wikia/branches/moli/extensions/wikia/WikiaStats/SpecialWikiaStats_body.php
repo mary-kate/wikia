@@ -127,7 +127,7 @@ class WikiaStatsClass extends SpecialPage
 		}
     }
 
-    private function displayRestrictionErrorExt {
+    private function displayRestrictionErrorExt() {
 		$res = wfMsg("wikiastats_restricted_page");
 		if (empty($res)) {
 			$this->displayRestrictionError();
