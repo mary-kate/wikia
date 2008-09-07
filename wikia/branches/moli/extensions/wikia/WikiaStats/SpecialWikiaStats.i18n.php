@@ -10,6 +10,7 @@ $wgWikiaStatsMessages["en"] = array(
 	"wikiastats_xls_generate_info" => "You can select maximum $1 Wikis from the list",
 	"wikiastats_comparision" => "Comparisons",
 	"wikiastats_showstats_btn" => "Show statistics",
+	"wikiastast_refresh_data" => "Refresh data",
 	"wikiastats_showcharts" => "Show charts",
 	"wikiastats_export_xls" => "Export to XLS",
 	"wikiastats_panel_close_btn" => "Close",

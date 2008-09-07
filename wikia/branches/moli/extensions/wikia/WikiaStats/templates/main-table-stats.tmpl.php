@@ -210,13 +210,13 @@ foreach ($statsData as $date => $columnsData) {
 			}
 			elseif ($column == 'B')
 				$out = sprintf("%0d", $columnsData[$column]);
-			elseif ($column == 'L')
+			elseif ($column == 'K')
 				$out = sprintf("%0.1f", $columnsData[$column]);
-			elseif ($column == 'M')
+			elseif ($column == 'L')
 				$out = sprintf("%0.0f", $columnsData[$column]);
-			elseif (($column == 'N') || ($column == 'O'))
+			elseif (($column == 'M') || ($column == 'N'))
 				$out = sprintf("%0d%%", $columnsData[$column] * 100);
-			elseif ($column == 'Q') {
+			elseif ($column == 'P') {
 				if (intval($columnsData[$column]) > $GB)
 					$out = sprintf("%0.1f GB", intval($columnsData[$column])/$GB);
 				elseif (intval($columnsData[$column]) > $MB)
