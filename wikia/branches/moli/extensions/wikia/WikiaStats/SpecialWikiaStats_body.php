@@ -188,13 +188,13 @@ class WikiaStatsClass extends SpecialPage
 			$table_stats = "";
 			if ($show_local) {
 				$this->mStats->setLocalStats(true);
-			}			
+			}
 			if ( (is_numeric($city)) && ($city >= 0) ) {
-				$main_stats = $this->mStats->getWikiMainStatistics($city, '2004', '01', '', '', $show_charts);
+				$main_stats = $this->mStats->getWikiMainStatistics($city, MIN_STATS_YEAR, '01', '', '', $show_charts);
 				$table_stats = $main_stats["text"];
 				unset($main_stats);
 			}
-			
+
 			$cityList = $this->mStats->getWikiaCityList();
 			$dateRange = $this->mStats->getRangeDateStatistics();
 
@@ -348,7 +348,7 @@ class WikiaStatsClass extends SpecialPage
 		
 		$citiesList = array();
 		if (!empty($cities)) {
-			$citiesList = split(";", $cities, 30);			
+			$citiesList = split(";", $cities, 30);
 		}
 
 		$columnStats = $this->mStats->getWikiCompareColumnsStats($column, $citiesList, $select);
