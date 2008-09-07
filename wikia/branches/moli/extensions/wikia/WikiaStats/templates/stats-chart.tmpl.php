@@ -132,11 +132,11 @@ $barColor = ($column >= 'S' && $column < 'X') ? "green" : $barColor;
 $barColor = ($column >= 'X') ? "yellow" : $barColor;
 
 $title = "<div class=\"wk-stats-legend\"><a name=\"".strtolower($active)."\">";
-$title .= "<a href=\"#wikians\" style=\"" . (($column >= 'A' && $column < 'I') ? "color:#A52A2A;font-weight:bold" : "color: #6495ED") . "\">".wfMsg("wikiastats_wikians")."</a> - ";
-$title .= "<a href=\"#articles\" style=\"" . (($column >= 'I' && $column < 'P') ? "color:#A52A2A;font-weight:bold" : "color: #6495ED") . "\">".wfMsg("wikiastats_articles")."</a> - ";
-$title .= "<a href=\"#database\" style=\"" . (($column >= 'P' && $column < 'S') ? "color:#A52A2A;font-weight:bold" : "color: #6495ED") . "\">".wfMsg("wikiastats_database")."</a> - ";
-$title .= "<a href=\"#links\" style=\"" . (($column >= 'S' && $column < 'X') ? "color:#A52A2A;font-weight:bold" : "color: #6495ED") . "\">".wfMsg("wikiastats_links")."</a> - ";
-$title .= "<a href=\"#images\" style=\"" . (($column >= 'X') ? "color:#A52A2A;font-weight:bold" : "color: #6495ED") . "\">".wfMsg("wikiastats_images")."</a>";
+$title .= "<a href=\"#wikians\" style=\"" . (($column >= 'A' && $column < 'I') ? "color:#000000;font-weight:bold" : "color: #6495ED") . "\">".wfMsg("wikiastats_wikians")."</a> - ";
+$title .= "<a href=\"#articles\" style=\"" . (($column >= 'I' && $column < 'P') ? "color:#000000;font-weight:bold" : "color: #6495ED") . "\">".wfMsg("wikiastats_articles")."</a> - ";
+$title .= "<a href=\"#database\" style=\"" . (($column >= 'P' && $column < 'S') ? "color:#000000;font-weight:bold" : "color: #6495ED") . "\">".wfMsg("wikiastats_database")."</a> - ";
+$title .= "<a href=\"#links\" style=\"" . (($column >= 'S' && $column < 'X') ? "color:#000000;font-weight:bold" : "color: #6495ED") . "\">".wfMsg("wikiastats_links")."</a> - ";
+$title .= "<a href=\"#images\" style=\"" . (($column >= 'X') ? "color:#000000;font-weight:bold" : "color: #6495ED") . "\">".wfMsg("wikiastats_images")."</a>";
 $title .= "</div>";
 $columnsBar = "";
 if (empty($sum)) $sum = 1;

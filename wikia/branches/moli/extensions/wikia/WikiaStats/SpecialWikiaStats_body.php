@@ -19,7 +19,7 @@ foreach( $wgWikiaStatsMessages as $key => $value ) {
 	$wgMessageCache->addMessages( $wgWikiaStatsMessages[$key], $key );
 }
 
-class WikiaStatsClass extends SpecialPage 
+class WikiaStatsClass extends SpecialPage
 {
     var $mPosted, $mStats, $mSkinName;
     var $userIsSpecial;
@@ -50,7 +50,7 @@ class WikiaStatsClass extends SpecialPage
             return;
         }
         if ( !$wgUser->isLoggedIn() ) {
-            $this->displayRestrictionError();
+            $this->displayRestrictionErrorExt();
             return;
         }
 
@@ -126,6 +126,17 @@ class WikiaStatsClass extends SpecialPage
 			$this->mainStatsForm( $wgCityId, ($wgRequest->getVal("action") == "citycharts"), 1 );
 		}
     }
+
+    private function displayRestrictionErrorExt {
+		$res = wfMsg("wikiastats_restricted_page");
+		if (empty($res)) {
+			$this->displayRestrictionError();
+		} else {
+			global $wgOut;
+			$wgOut->permissionRequired( $res );
+		}
+		return;
+  	}
 
     private function mainSelectCityForm()
     {
@@ -216,7 +227,7 @@ class WikiaStatsClass extends SpecialPage
 			} else {
 				$mainStats = $oTmpl->execute("main-form");
 			}
-			
+
 			if (empty($show_charts)) {
 				$columns = $this->mStats->getRangeColumns();
 				$oTmpl->set_vars( array(
@@ -226,17 +237,17 @@ class WikiaStatsClass extends SpecialPage
 				));
 				$mainStats .= $oTmpl->execute("main-stats-definitions");
 			}
-			
+
 			$wgMemc->set($memkey, $mainStats, 60*60*3);
 			unset($cityList);
 			unset($table_stats);
 			unset($dateRange);
 		}
-        
-        $wgOut->addHTML( $mainStats ); 
+
+        $wgOut->addHTML( $mainStats );
 		wfProfileOut( __METHOD__ );
     }    
-    
+
     private function mainStatsTrendsForm ()
     {
         global $wgUser, $wgOut, $wgRequest;

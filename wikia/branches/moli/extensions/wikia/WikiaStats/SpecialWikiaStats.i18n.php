@@ -240,5 +240,6 @@ $wgWikiaStatsMessages["en"] = array(
 	"wikiastats_months_edits" => "Editors this month",
 	"wikiastats_main_namespace" => "main<br/>namespace",
 	"wikiastats_other_namespace" => "other<br/>namespaces",
+	"wikiastats_restricted_page" => "Restricted Page.<br />You must be logged in to see Wikia Stats. Please [[create an account]] or [[Special:Userlogin|log in]] if you already have one.",
 );
 ?>
