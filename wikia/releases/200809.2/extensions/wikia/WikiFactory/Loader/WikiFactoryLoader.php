@@ -339,7 +339,7 @@ class WikiFactoryLoader {
 		 * mCityHost may contain path after url (memory-alpha, dofus), we just
 		 * split this for comparing hosts.
 		 */
-		list( $host, $path ) = explode( "/", $this->mCityHost, 2 );
+		list( $host, $path ) = array_pad( explode( "/", $this->mCityHost, 2 ), 2, false );
 
 		if( !empty( $host ) && !empty( $this->mServerName )
 			&& strtolower( $host ) != $this->mServerName
