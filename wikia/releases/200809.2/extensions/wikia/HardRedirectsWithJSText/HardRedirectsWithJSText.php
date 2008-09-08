@@ -119,7 +119,7 @@ function hardRedirectWithCookie($wgTitle, $target){
                         $wgCookieSecure, $wgRequest;
                 if ($wgRequest->getVal('redirect')!='no'){
                 	
-					    if (($target !== false) && ($target instanceof Title)) {
+					    if (($wgTitle !== false) && ($wgTitle instanceof Title)) {
 		                 // Only set the cookie if they are not on a 'redirect=no' page.
                          setcookie( $wgCookiePrefix . 'RedirectedFrom_' . md5( $target->getText() ),
                                 $wgTitle->getLocalUrl() . '|' . $wgTitle->getText(),
