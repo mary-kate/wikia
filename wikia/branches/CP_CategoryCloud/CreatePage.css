@@ -339,8 +339,11 @@ legend {
 	display: none ;
 }
 
-#wpCategoryAdd {
-	width: 300px ;
+#wpCategoryInput, #wpCategoryButton {
 	margin: 4px 2px 0 2px ;
+}
+
+#wpCategoryInput {
+	width: 450px ;
 }
 
