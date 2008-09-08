@@ -690,7 +690,7 @@ function cloudAdd(category, num) {
         if (category_text.value == '') {
                 category_text.value += unescape (category) ;
         } else {
-                category_text.value += ',' + unescape (category) ;
+                category_text.value += '|' + unescape (category) ;
         }
         this_button = document.getElementById('cloud' + num);
         this_button.onclick = function() {
