@@ -329,7 +329,7 @@ YWC.CheckCategoryCloud = function () {
 		}		
 	}
 
-        categories = categories.split (",") ;
+        categories = categories.split ("|") ;
         for (i=0;i<categories.length;i++) {
                 text_categories [i] =  categories[i] ;
         }
@@ -694,7 +694,7 @@ function cloudAdd(category, num) {
         }
         this_button = document.getElementById('cloud' + num);
         this_button.onclick = function() {
-                eval("cloudRemove('" + category + "', " + num + ")");
+                eval("cloudRemove('" + category + "'|" + num + ")");
                 return false;
         }
         this_button.style["color"] = "#419636";
@@ -709,7 +709,7 @@ function cloudRemove(category, num) {
         }
         this_button = document.getElementById('cloud' + num);
         this_button.onclick = function() {
-                eval("cloudAdd('" + category + "', " + num + ")");
+                eval("cloudAdd('" + category + "'|" + num + ")");
                 return false
         };
         this_button.style["color"] = "";
@@ -719,7 +719,7 @@ function cloudRemove(category, num) {
 function cloudBuild(o) {
         var categories = o.value;
         new_text = '';
-        categories = categories.split(",");
+        categories = categories.split("|");
         for (i=0; i < categories.length; i++) {
                 if (categories[i]!='') {
                         new_text += '[[Category:' + categories[i] + ']]';
