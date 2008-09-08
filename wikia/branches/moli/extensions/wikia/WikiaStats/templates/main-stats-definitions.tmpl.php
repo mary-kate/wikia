@@ -4,7 +4,7 @@
 <legend class="legend-subtitle"><?=wfMsg('wikiastats_statistics_legend')?></legend>
 <?= wfMsg('wikiastats_note_mainstats') ?><br />
 <span id="wk-stats-legend-values"><font color="#800000"><?= wfMsg('wikiastats_history_mainstats_value1'); ?></font></span>
-<span id="wk-stats-legend-values"><font color="#000000"><?= wfMsg('wikiastats_history_mainstats_value2'); ?></font></span>
+<span id="wk-stats-legend-values"><font color="#555555"><?= wfMsg('wikiastats_history_mainstats_value2'); ?></font></span>
 <span id="wk-stats-legend-values"><font color="#008000"><?= wfMsg('wikiastats_history_mainstats_value3'); ?></font></span>
 <span id="wk-stats-legend-values"><font color="#008000"><u><?= wfMsg('wikiastats_history_mainstats_value4'); ?></u></font></span>
 <br />

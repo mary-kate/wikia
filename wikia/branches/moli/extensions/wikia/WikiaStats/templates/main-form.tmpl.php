@@ -6,6 +6,7 @@
 var YC = YAHOO.util.Connect;
 var YD = YAHOO.util.Dom;
 var YE = YAHOO.util.Event;
+var previous_page = 0;
 
 function visible_wikians(rows, col, v)
 {
@@ -187,6 +188,29 @@ function selectArticleSize(id)
 	var backColor = YAHOO.util.Dom.getStyle('article-size-' + id, 'background-color');
 	var new_backColor = (backColor == 'transparent') ? '#ADFF2F' : 'transparent';
 	YAHOO.util.Dom.setStyle('article-size-' + id, 'background-color', new_backColor);
+}
+
+function wk_show_page_edited_details(page_id)
+{
+	div_previous = document.getElementById('wk-page-edited-row-' + previous_page);
+	if (div_previous)
+	{
+		div_previous.style.background = "#ffffdd";		
+	}
+
+	previous_page = page_id;
+	div_hidden = document.getElementById('wk-page-edited-row-' + page_id);
+	div_hidden.style.background = "#ADFF2F";
+	
+	var city 	= document.getElementById( "wk-stats-city-id" );
+	var params 	= "&rsargs[0]=" + city.value + "&rsargs[1]=" + page_id;
+	//---
+	document.getElementById( "wk-page-edits-stats-page-id" ).value = page_id;
+	//---
+	YD.get("ws-progress-page-edits-bar").innerHTML="&nbsp;<img src=\"/extensions/wikia/WikiaStats/images/ajax_loader.gif\" />";
+	//---
+	var baseurl = "/index.php?action=ajax&rs=axWStatisticsPageEditsDetails" + params;
+	YAHOO.util.Connect.asyncRequest( "GET", baseurl, YAHOO.Wikia.Statistics.PageEditsDetailsStatisticCallback);
 }
 
 YAHOO.util.Event.onDOMReady(function () {
@@ -476,31 +500,6 @@ YAHOO.util.Event.onDOMReady(function () {
 			YD.get("ws-progress-page-edits-bar").innerHTML = "&nbsp;";
 		}
 	};
-
-	var previous_page = 0;
-
-	function wk_show_page_edited_details(page_id)
-	{
-		div_previous = document.getElementById('wk-page-edited-row-' + previous_page);
-		if (div_previous)
-		{
-			div_previous.style.background = "#ffffdd";		
-		}
-
-		previous_page = page_id;
-		div_hidden = document.getElementById('wk-page-edited-row-' + page_id);
-		div_hidden.style.background = "#ADFF2F";
-		
-		var city 	= document.getElementById( "wk-stats-city-id" );
-		var params 	= "&rsargs[0]=" + city.value + "&rsargs[1]=" + page_id;
-		//---
-		document.getElementById( "wk-page-edits-stats-page-id" ).value = page_id;
-		//---
-		YD.get("ws-progress-page-edits-bar").innerHTML="&nbsp;<img src=\"/extensions/wikia/WikiaStats/images/ajax_loader.gif\" />";
-		//---
-		var baseurl = "/index.php?action=ajax&rs=axWStatisticsPageEditsDetails" + params;
-		YAHOO.util.Connect.asyncRequest( "GET", baseurl, YAHOO.Wikia.Statistics.PageEditsDetailsStatisticCallback);
-	}
 
 	YAHOO.Wikia.Statistics.GenerateXLSStats = function(e) 
 	{

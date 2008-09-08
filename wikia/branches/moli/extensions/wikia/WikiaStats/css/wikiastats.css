@@ -1,5 +1,22 @@
 #articleWrapper { padding-right: 10px !important; }
 #xlsmenu_h {font-size:12pt;}
+#table_stats {color:#000000;}
+#table_stats a {color:#0000FF;}
+#ws-hide-table a {color:#0000FF;}
+#table_article_size_stats {color:#000000;}
+#table_active_wikians_stats {color:#000000;}
+#table_active_wikians_stats a {color:#0000FF;}
+#table_absent_wikians_stats {color:#000000;}
+#table_absent_wikians_stats a {color:#0000FF;}
+#table_anon_wikians_stats {color:#000000;}
+#table_anon_wikians_stats a {color:#0000FF;}
+#table_namespace_stats {color:#000000;}
+#table_namespace_stats a {color:#0000FF;}
+#table_distrib_stats {color:#000000;}
+#table_page_edited_stats {color:#000000;}
+#table_page_edited_stats a {color:#0000FF;}
+#table_page_edited_stats_details {color:#000000;}
+#table_page_edited_stats_details a {color:#0000FF;}
 .input_button {font-size: 9.5pt; font-family: Trebuchet MS,arial,sans-serif,helvetica;}
 fieldset {font-size: 9pt; font-family: Trebuchet MS,arial,sans-serif,helvetica; margin:0px -9px;}
 div.hide {float:right; padding:0px 2px 1px 10px; width:8px;}
@@ -21,7 +38,7 @@ td.eb { border:1px inset #FFFFFF; text-align:right; font-size:8pt; padding-left:
 td.ebl { border:1px inset #FFFFFF; text-align:left; font-size:8pt; padding-left:1px; padding-right:1px; font-family: verdana,arial,sans-serif,helvetica;}
 td.rb { border:1px inset #FFFFFF; text-align:right; font-size:8pt; padding-left:1px; padding-right:1px;}
 td.eb-trend { border:1px outset #FFFFFF; text-align:right; padding:2px 1px 2px 1px}
-td.eb-trend-trend { border:1px outset #FFFFFF; text-align:left; padding:2px 1px 2px 4px}
+td.eb-trend-trend { border:1px outset #FFFFFF; text-align:left; padding:2px 1px 2px 4px}		
 td.wktdr { border:1px outset #FFFFFF; text-align:right; padding:0px 4px;}
 td.wktd { border:1px outset #FFFFFF;width:100%; padding:0px 2px;}
 td.db_month { border-bottom:3px inset #FFFFFF; border-left:1px inset #FFFFFF; border-top:1px inset #FFFFFF; text-align:right; font-size:11px;}
@@ -101,8 +118,8 @@ td.main2x { border:1px inset #FFF; text-align:left; font-size:8pt; margin:0px; p
 #ws-main-table {padding:10px;}
 #ws-main-table-ctrl {overflow: scroll; width: auto; height: 350px; padding:10px;}
 #ws-main-table-stats {text-align:center; font-size:11px; width:500px; overflow:auto;}
-#ws-page-edits-count-table {text-align:center; font-size:11px; width:500px; overflow:auto;}
-#ws-page-edits-table-stats {text-align:left; font-size:11px; width:500px; overflow:auto;}
+#ws-page-edits-count-table {text-align:center; font-size:11px; width:100%; overflow:auto;}
+#ws-page-edits-table-stats {text-align:left; font-size:11px; width:100%; overflow:auto;}
 #ws-edits-article {padding:10px; width:auto; overflow:auto; border-top: 0px inset #FFFFFF;display:none; margin:2px;}
 #ws-active-wikians {padding:10px; width:auto; overflow:auto; border-top: 1px inset #FFFFFF;display:none;margin:2px;}
 #ws-anon-wikians {padding:10px; width:auto; overflow:auto; border-top: 1px inset #FFFFFF;display:none; margin:2px;}
