@@ -15,7 +15,7 @@ $useByte = 0;
 /* get max value */
 foreach ($data as $date => $out) {
 	//percent
-	if ( in_array($column, array('N', 'O')) ) {
+	if ( in_array($column, array('M', 'N')) ) {
 		$_tmp = $out * 100;
 	} else {
 		$_tmp = $out;
@@ -52,11 +52,11 @@ foreach ($data as $date => $out) {
 		elseif (intval($out) > $K) $value = sprintf("%0.1f k", intval($out)/$K);
 		else $value = sprintf("%0d", intval($out));
 	} */
-	if (in_array($column, array('N', 'O'))) {
+	if (in_array($column, array('M', 'N'))) {
 		$value = sprintf("%0d", $out * 100);
 		$out = $out * 100;
 		$suffix = "%";
-	} elseif (in_array($column, array('Q'))) {
+	} elseif (in_array($column, array('P'))) {
 		$value = sprintf("%0.0f", intval($out));
 		if (intval($iMax) > $GB) {
 			$value = sprintf("%0.1f", intval($out)/$GB);
@@ -119,24 +119,24 @@ $td_width = $chartSettings['barwidth'] . $chartSettings['barunit'];
 
 $tableStyle = "ws_charts"; 
 
-$active = ($column >= 'A' && $column < 'I') ? "wikians"  : "";
-$active = ($column >= 'I' && $column < 'P') ? "articles" : $active;
-$active = ($column >= 'P' && $column < 'S') ? "database" : $active;
-$active = ($column >= 'S' && $column < 'X') ? "links" 	 : $active;
-$active = ($column >= 'X') ? "images" : $active;
+$active = ($column >= 'A' && $column < 'H') ? "wikians"  : "";
+$active = ($column >= 'H' && $column < 'O') ? "articles" : $active;
+$active = ($column >= 'O' && $column < 'R') ? "database" : $active;
+$active = ($column >= 'R' && $column < 'W') ? "links" 	 : $active;
+$active = ($column >= 'W') ? "images" : $active;
 
-$barColor = ($column >= 'A' && $column < 'I') ? "orange" : "";
-$barColor = ($column >= 'I' && $column < 'P') ? "blue" : $barColor;
-$barColor = ($column >= 'P' && $column < 'S') ? "red" : $barColor;
-$barColor = ($column >= 'S' && $column < 'X') ? "green" : $barColor;
-$barColor = ($column >= 'X') ? "yellow" : $barColor;
+$barColor = ($column >= 'A' && $column < 'H') ? "orange" : "";
+$barColor = ($column >= 'H' && $column < 'O') ? "blue" : $barColor;
+$barColor = ($column >= 'O' && $column < 'R') ? "red" : $barColor;
+$barColor = ($column >= 'R' && $column < 'W') ? "green" : $barColor;
+$barColor = ($column >= 'W') ? "yellow" : $barColor;
 
 $title = "<div class=\"wk-stats-legend\"><a name=\"".strtolower($active)."\">";
-$title .= "<a href=\"#wikians\" style=\"" . (($column >= 'A' && $column < 'I') ? "color:#000000;font-weight:bold" : "color: #6495ED") . "\">".wfMsg("wikiastats_wikians")."</a> - ";
-$title .= "<a href=\"#articles\" style=\"" . (($column >= 'I' && $column < 'P') ? "color:#000000;font-weight:bold" : "color: #6495ED") . "\">".wfMsg("wikiastats_articles")."</a> - ";
-$title .= "<a href=\"#database\" style=\"" . (($column >= 'P' && $column < 'S') ? "color:#000000;font-weight:bold" : "color: #6495ED") . "\">".wfMsg("wikiastats_database")."</a> - ";
-$title .= "<a href=\"#links\" style=\"" . (($column >= 'S' && $column < 'X') ? "color:#000000;font-weight:bold" : "color: #6495ED") . "\">".wfMsg("wikiastats_links")."</a> - ";
-$title .= "<a href=\"#images\" style=\"" . (($column >= 'X') ? "color:#000000;font-weight:bold" : "color: #6495ED") . "\">".wfMsg("wikiastats_images")."</a>";
+$title .= "<a href=\"#wikians\" style=\"" . (($column >= 'A' && $column < 'H') ? "color:#000000;font-weight:bold" : "color: #6495ED") . "\">".wfMsg("wikiastats_wikians")."</a> - ";
+$title .= "<a href=\"#articles\" style=\"" . (($column >= 'H' && $column < 'O') ? "color:#000000;font-weight:bold" : "color: #6495ED") . "\">".wfMsg("wikiastats_articles")."</a> - ";
+$title .= "<a href=\"#database\" style=\"" . (($column >= 'O' && $column < 'R') ? "color:#000000;font-weight:bold" : "color: #6495ED") . "\">".wfMsg("wikiastats_database")."</a> - ";
+$title .= "<a href=\"#links\" style=\"" . (($column >= 'R' && $column < 'W') ? "color:#000000;font-weight:bold" : "color: #6495ED") . "\">".wfMsg("wikiastats_links")."</a> - ";
+$title .= "<a href=\"#images\" style=\"" . (($column >= 'W') ? "color:#000000;font-weight:bold" : "color: #6495ED") . "\">".wfMsg("wikiastats_images")."</a>";
 $title .= "</div>";
 $columnsBar = "";
 if (empty($sum)) $sum = 1;
@@ -144,7 +144,7 @@ $i = 0;
 $max_div_height = 0;
 foreach ($data as $date => $out) {
 	
-	if ( in_array($column, array('N', 'O')) ) //percent
+	if ( in_array($column, array('M', 'N')) ) //percent
 		$_tmp = $out * 100;
 	else
 		$_tmp = $out;		

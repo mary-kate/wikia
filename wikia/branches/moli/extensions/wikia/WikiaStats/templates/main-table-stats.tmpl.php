@@ -8,45 +8,6 @@ YAHOO.util.Event.onDOMReady(function () {
 /*]]>*/
 </script>
 
-<?php
-$outDate = "";
-$created = (is_object($cityInfo)) ? $cityInfo->city_created : null;
-if (!empty($created) && ($created != "0000-00-00 00:00:00")) {
-	$dateTime = explode(" ", $created);
-	#---
-	$dateArr = explode("-", $dateTime[0]);
-	#---
-	$stamp = mktime(0,0,0,$dateArr[1],$dateArr[2],$dateArr[0]);
-	$outDate = substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " " . $dateArr[2] .", ". $dateArr[0]. " ".$dateTime[1];
-}
-$langName = (is_object($cityInfo)) ? $wgContLang->getLanguageName( $cityInfo->city_lang ) : " - ";
-$catName = (is_object($cityInfo) && !empty($cats) && array_key_exists($cityId, $cats)) ? $cats[$cityId]['name'] : " - ";
-$cityTitle = (is_object($cityInfo) && $cityId > 0) ? ucfirst($cityInfo->city_title) : (($cityId == 0) ? wfMsg("wikiastats_trend_all_wikia_text") : " - ");
-$cityUrl = (is_object($cityInfo) && $cityId > 0) ? "<a target=\"new\" href=\"".$cityInfo->city_url."\">".$cityInfo->city_url."</a>" : " - ";
-?>
-<!-- s:<?= __FILE__ ?> -->
-<!-- WIKI's INFORMATION -->
-<table cellspacing="0" cellpadding="1" border="0" style="font-size:8.5pt;font-family: Trebuchet MS,arial,sans-serif,helvetica;">
-<tr>
-	<td align="left"><strong><?= wfMsg('wikiastats_wikiid')?></strong> <?= (!empty($cityId)) ? $cityId : " - " ?></td>
-	<td align="left"><strong><?= wfMsg('wikiastats_wikiname') ?></strong> <?= $cityTitle ?></td>
-</tr>
-<tr>
-	<td align="left"><strong><?= wfMsg('wikiastats_wikilang') ?></strong> <?= (!empty($langName)) ? $langName : $cityInfo->city_lang ?></td>
-	<td align="left"><strong><?= wfMsg('wikiastats_wikiurl') ?></strong> <?= $cityUrl ?></td></tr>
-</tr>
-<tr>
-	<td align="left"><strong><?= wfMsg('wikiastats_wikicategory') ?></strong> <?= $catName ?></td>
-	<td align="left"><strong><?= wfMsg('wikiastats_wikicreated') ?></strong> <?= (!empty($outDate)) ? $outDate : " - " ?></td>
-</tr>
-</table>
-<br />
-<table cellspacing="0" cellpadding="1" border="0" style="font-size:8.5pt;font-family: Trebuchet MS,arial,sans-serif,helvetica;">
-<tr>
-	<td align="left" colspan="2"><strong><?= wfMsg('wikiastats_see_wikia_wide_stats') ?></strong> <a href="http://www.wikia.com/wiki/Special:WikiaStats" target="new">http://www.wikia.com/wiki/Special:WikiaStats</a> </td>
-</tr>
-</table>
-
 <table cellspacing="1" cellpadding="0" border="0" width="700">
 <tr><td id="ws-hide-table" class="panel" nowrap>&nbsp;</td></tr>
 </table>
@@ -100,12 +61,12 @@ $cityUrl = (is_object($cityInfo) && $cityId > 0) ? "<a target=\"new\" href=\"".$
 <tr bgcolor="#ffeecc">
 	<td class="cb" rowspan="2"><?=wfMsg('wikiastats_total')?></td>
 	<td class="cb"><?=wfMsg('wikiastats_main_namespace')?></td>
-	<td class="cb" rowspan="2"><?=wfMsg('wikiastats_total')?></td>
-	<td colspan="2" class="cb"><?=wfMsg('wikiastats_main_namespace')?></td>
+	<td colspan="3" class="cb"><?=wfMsg('wikiastats_main_namespace')?></td>
 	<td colspan="2" class="cb"><?=wfMsg('wikiastats_other_namespace')?></td>
 </tr>
 <tr bgcolor="#ffeecc">
 	<td class="cb">&gt;10</td>
+	<td class="cb"><?=wfMsg('wikiastats_total')?></td>
 	<td class="cb">&gt;5</td>
 	<td class="cb">&gt;100</td>
 	<td class="cb" nowrap><?=wfMsg('wikistats_user_namespace')?></td>
@@ -301,12 +262,12 @@ foreach ($statsData as $date => $columnsData) {
 <tr bgcolor="#ffeecc">
 	<td class="cb" rowspan="2"><?=wfMsg('wikiastats_total')?></td>
 	<td class="cb"><?=wfMsg('wikiastats_main_namespace')?></td>
-	<td class="cb" rowspan="2"><?=wfMsg('wikiastats_total')?></td>
-	<td colspan="2" class="cb"><?=wfMsg('wikiastats_main_namespace')?></td>
+	<td colspan="3" class="cb"><?=wfMsg('wikiastats_main_namespace')?></td>
 	<td colspan="2" class="cb"><?=wfMsg('wikiastats_other_namespace')?></td>
 </tr>
 <tr bgcolor="#ffeecc">
 	<td class="cb">&gt;10</td>
+	<td class="cb"><?=wfMsg('wikiastats_total')?></td>
 	<td class="cb">&gt;5</td>
 	<td class="cb">&gt;100</td>
 	<td class="cb" nowrap><?=wfMsg('wikistats_user_namespace')?></td>

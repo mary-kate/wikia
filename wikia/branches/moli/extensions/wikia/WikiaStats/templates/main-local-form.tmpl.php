@@ -8,6 +8,7 @@ var YD = YAHOO.util.Dom;
 var YE = YAHOO.util.Event;
 var wk_stats_city_id = 0;
 
+
 function visible_wikians(rows, col, v)
 {
 	//--- main header and footer
@@ -18,20 +19,20 @@ function visible_wikians(rows, col, v)
 	for (y = 1; y <= 2; y++) { cels[y].style.display = v; }
 
 	cels = rows[2].getElementsByTagName('td');
-	for (y = 0; y <= 4; y++) { cels[y].style.display = v; }
+	for (y = 0; y <= 3; y++) { cels[y].style.display = v; }
 
 	cels = rows[3].getElementsByTagName('td');
 	for (y = 0; y <= 5; y++) { cels[y].style.display = v; }
 
 	cels = rows[rows.length-4].getElementsByTagName('td');
-	cels[col].style.display = v; 
+	cels[col].style.display = v;
 
 	cels = rows[rows.length-3].getElementsByTagName('td');
 	for (y = 1; y <= 2; y++) { cels[y].style.display = v; }
 
 	cels = rows[rows.length-2].getElementsByTagName('td');
-	for (y = 0; y <= 4; y++) { cels[y].style.display = v; }
-	
+	for (y = 0; y <= 3; y++) { cels[y].style.display = v; }
+
 	cels = rows[rows.length-1].getElementsByTagName('td');
 	for (y = 0; y <= 5; y++) { cels[y].style.display = v; }
 }

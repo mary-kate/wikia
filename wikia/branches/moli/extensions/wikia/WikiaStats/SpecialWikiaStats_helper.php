@@ -1229,6 +1229,40 @@ class WikiaGenericStats {
 		return substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " " . $day . $dateArr[0];
 	}
 
+	static public function getWikiaInfoOutput($city_id)
+	{
+        global $wgUser, $wgSharedDB, $wgDBStats, $wgContLang;
+		wfProfileIn( __METHOD__ );
+		#---
+		$cityInfo = array();
+		$stats_date = time();
+		if ($city_id > 0) {
+			#---
+			$cityInfo = WikiFactory::getWikiByID( $city_id );
+			$stats_date = self::getDateStatisticGenerate($city_id);
+		}
+
+		$cats = array();
+		if (!empty($city_id)) {
+			$cats = self::getCategoryForCityFromDB($city_id);
+		}
+
+		#---
+        $oTmpl = new EasyTemplate( dirname( __FILE__ ) . "/templates/" );
+        $oTmpl->set_vars( array(
+            "today" 		=> sprintf("%s-%s", date("Y"), date("m")),
+            "today_day"     => $stats_date,
+            "user"			=> $wgUser,
+            "cityInfo"		=> $cityInfo,
+            "cityId"		=> $city_id,
+			"wgContLang" 	=> $wgContLang,
+			"cats"		 	=> $cats,
+        ));
+        #---
+		wfProfileOut( __METHOD__ );
+        return $oTmpl->execute("stats-wikia-info");
+	}
+
 	static public function setWikiMainStatisticsOutput($city_id, $data, $columns, $monthlyStats, $show_local = 0)
 	{
         global $wgUser, $wgSharedDB, $wgDBStats, $wgContLang;
@@ -1596,12 +1630,13 @@ class WikiaGenericStats {
 			    #---
 				$result = array("code" => 1, "text" => wfMsg("wikiastats_nostats_found"));
 			} else {
+				$output = self::getWikiaInfoOutput($city_id);
 				$monthlyStats = array();
 				if (empty($charts)) { // --- no charts - html or xls
 					// generate monthly increase for statistics
 					$monthlyStats = self::setWikiMonthlyStats($wkCityMainStatistics, $columns);
 					// standard HTML output
-					$output = self::setWikiMainStatisticsOutput($city_id, $wkCityMainStatistics, $columns, $monthlyStats, (!empty($localStats)));
+					$output .= self::setWikiMainStatisticsOutput($city_id, $wkCityMainStatistics, $columns, $monthlyStats, (!empty($localStats)));
 				} else {
 			        // charts
 					// serialize data for charts
@@ -1621,17 +1656,16 @@ class WikiaGenericStats {
 
 					// generate charts
 					$i = 0;
-					$output="";
 					foreach ($charts as $column => $data) {
 						$main_title = "";
 						$dataSort = $data;
 						#if ($i > 0) continue;
 						#---
 						if ($i == 0) $main_title = wfMsg("wikiastats_wikians");
-						elseif ($i == 8) $main_title = wfMsg("wikiastats_articles");
-						elseif ($i == 15) $main_title = wfMsg("wikiastats_database");
-						elseif ($i == 18) $main_title = wfMsg("wikiastats_links");
-						elseif ($i == 23) $main_title = wfMsg("wikiastats_images");
+						elseif ($i == 7) $main_title = wfMsg("wikiastats_articles");
+						elseif ($i == 14) $main_title = wfMsg("wikiastats_database");
+						elseif ($i == 17) $main_title = wfMsg("wikiastats_links");
+						elseif ($i == 22) $main_title = wfMsg("wikiastats_images");
 
 						#---
 						ksort($dataSort);
