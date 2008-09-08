@@ -109,7 +109,7 @@ class WikiContacts
 		$wll = WindowsLiveLogin::initFromXml($wgLiveAPIApplicationKey);
 		$token = $wll->processConsentToken($cookie);
 	}
-	if ($token && !$token->isValid()) {
+	if (!is_object($token) || !$token->isValid()) {
 		return false;
 	}
 	
