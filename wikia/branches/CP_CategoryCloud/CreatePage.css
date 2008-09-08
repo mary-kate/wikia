@@ -338,3 +338,9 @@ legend {
 #wpCategoryTextarea {
 	display: none ;
 }
+
+#wpCategoryAdd {
+	width: 300px ;
+	margin: 4px 2px 0 2px ;
+}
+

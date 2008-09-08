@@ -25,6 +25,7 @@ $xnum++;
 ?>
 </div>
 <textarea accesskey="," name="wpCategoryTextarea" id="wpCategoryTextarea" rows='3' cols='<?=$cols?>'<?$ew?>><?=$text_category?></textarea>
+<input type="text" name="wpCategoryAdd" id="wpCategoryAdd" value="" />
 </div>
 <script type="text/javascript">
 /*<![CDATA[*/
