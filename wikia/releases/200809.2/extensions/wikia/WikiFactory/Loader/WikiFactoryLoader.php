@@ -73,8 +73,8 @@ class WikiFactoryLoader {
 			 */
 			$this->mCityID = $id;
 			$this->mServerName = is_null( $server_name )
-				? $server_name
-				: strtolower( $_SERVER['SERVER_NAME'] );
+				? strtolower( $_SERVER['SERVER_NAME'] )
+				: $server_name;
 		}
 		elseif( !empty($_SERVER['SERVER_NAME'])) {
 			$this->mServerName = strtolower( $_SERVER['SERVER_NAME'] );
