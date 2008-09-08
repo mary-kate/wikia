@@ -106,7 +106,7 @@ foreach ($monthlyStats as $date => $columnsData) {
 				if ($columnsData[$column] < 0) {
 					$out = "<font color=\"#800000\">".sprintf("%0.0f%%", $columnsData[$column])."</font>";
 				} elseif (($columnsData[$column] > 0) && ($columnsData[$column] < 25)) {
-					$out = "<font color=\"#000000\">".sprintf("+%0.0f%%", $columnsData[$column])."</font>";
+					$out = "<font color=\"#555555\">".sprintf("+%0.0f%%", $columnsData[$column])."</font>";
 				} elseif (($columnsData[$column] > 25) && ($columnsData[$column] < 75)) {
 					$out = "<font color=\"#008000\">".sprintf("+%0.0f%%", $columnsData[$column])."</font>";
 				} elseif (($columnsData[$column] > 75) && ($columnsData[$column] < 100)) {

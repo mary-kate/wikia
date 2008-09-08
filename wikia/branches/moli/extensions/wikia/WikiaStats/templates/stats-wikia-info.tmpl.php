@@ -16,7 +16,7 @@ $cityUrl = (is_object($cityInfo) && $cityId > 0) ? "<a target=\"new\" href=\"".$
 ?>
 <!-- s:<?= __FILE__ ?> -->
 <!-- WIKI's INFORMATION -->
-<table cellspacing="2" cellpadding="2" border="0" style="font-size:8.5pt;font-family: Trebuchet MS,arial,sans-serif,helvetica;">
+<table cellspacing="2" cellpadding="2" border="0" style="font-size:8.5pt;font-family:Trebuchet MS,arial,sans-serif,helvetica;padding-bottom:4px;">
 <tr>
 	<td align="left"><strong><?= wfMsg('wikiastats_wikiid')?></strong> <?= (!empty($cityId)) ? $cityId : " - " ?></td>
 	<td align="left"><strong><?= wfMsg('wikiastats_wikiname') ?></strong> <?= $cityTitle ?></td>
@@ -36,4 +36,3 @@ $cityUrl = (is_object($cityInfo) && $cityId > 0) ? "<a target=\"new\" href=\"".$
 	<td align="left" colspan="2"><strong><?= wfMsg('wikiastats_see_wikia_wide_stats') ?></strong> <a href="http://www.wikia.com/wiki/Special:WikiaStats" target="new">http://www.wikia.com/wiki/Special:WikiaStats</a> </td>
 </tr>
 </table>
-<br />

@@ -175,7 +175,7 @@ function sortWikiaPanelList(method) {
 			<div class="wk-stats-main-panel" id="wk-stats-info-panel" class="ws-input" style="margin-top:6pt;margin-bottom:2pt;float:left;clear:right;width:271px;height:150px;"></div>
 			<div class="wk-select-class-main">
 				<span style="padding-left: 10px;"><input type="button" class="input_button" id="ws-show-charts" value="<?= wfMsg("wikiastats_showcharts") ?>" name="ws-show-charts" onClick="redirectToStats(1)"></span>
-				<span style="padding-left: 10px;"><input type="button" class="input_button" name="ws-show-stats" value="<?= wfMsg("wikiastats_showstats_btn") ?>" onClick="redirectToStats(0)"></span>
+				<span style="padding-left: 10px;"><input type="button" class="input_button" id="ws-show-stats" name="ws-show-stats" value="<?= wfMsg("wikiastats_showstats_btn") ?>" onClick="redirectToStats(0)"></span>
 				<div style="padding:15px 21px 0px 120px;"><a href="javascript:void(0);" onClick="redirectTooldStats();"><?=wfMsg('wikiastats_see_old_statistics_page')?></a></div>
 			</div>
 		</fieldset>
