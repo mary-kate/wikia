@@ -687,6 +687,7 @@ YE.addListener( "Createtitle", "focus", YWC.clearTitleMessage );
 
 function cloudAdd(category, num) {
 	category_text = YD.get ('wpCategoryTextarea') ;
+	
         if (category_text.value == '') {
                 category_text.value += unescape (category) ;
         } else {
@@ -700,6 +701,20 @@ function cloudAdd(category, num) {
         this_button.style["color"] = "#419636";
         return false;
 };
+
+function cloudInputAdd () {
+	category_input = YD.get ('wpCategoryInput') ;
+	category_text = YD.get ('wpCategoryTextarea') ;
+	var category = 	category_input.value ;
+	if ('' != category_input.value) {
+		if (category_text.value == '') {
+			category_text.value += unescape (category) ;
+		} else {
+			category_text.value += '|' + unescape (category) ;
+		}
+        	category_input.value = '' ;
+	}	
+}
 
 function cloudRemove(category, num) {
 	category_text = YD.get ('wpCategoryTextarea') ;
