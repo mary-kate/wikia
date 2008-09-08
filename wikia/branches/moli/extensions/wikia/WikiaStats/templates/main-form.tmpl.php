@@ -17,10 +17,10 @@ function visible_wikians(rows, col, v)
 	for (y = 1; y <= 2; y++) { cels[y].style.display = v; }
 
 	cels = rows[2].getElementsByTagName('td');
-	for (y = 0; y <= 4; y++) { cels[y].style.display = v; }
+	for (y = 0; y <= 3; y++) { cels[y].style.display = v; }
 
 	cels = rows[3].getElementsByTagName('td');
-	for (y = 0; y <= 4; y++) { cels[y].style.display = v; }
+	for (y = 0; y <= 5; y++) { cels[y].style.display = v; }
 
 	cels = rows[rows.length-4].getElementsByTagName('td');
 	cels[col].style.display = v;
@@ -29,10 +29,10 @@ function visible_wikians(rows, col, v)
 	for (y = 1; y <= 2; y++) { cels[y].style.display = v; }
 
 	cels = rows[rows.length-2].getElementsByTagName('td');
-	for (y = 0; y <= 4; y++) { cels[y].style.display = v; }
+	for (y = 0; y <= 3; y++) { cels[y].style.display = v; }
 
 	cels = rows[rows.length-1].getElementsByTagName('td');
-	for (y = 0; y <= 4; y++) { cels[y].style.display = v; }
+	for (y = 0; y <= 5; y++) { cels[y].style.display = v; }
 }
 
 function visible_articles(rows, col, v)

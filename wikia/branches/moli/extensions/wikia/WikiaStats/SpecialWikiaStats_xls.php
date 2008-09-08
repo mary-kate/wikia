@@ -114,16 +114,15 @@ class WikiaStatsXLS {
 		$this->mergeXLSColsRows(4, 4, 4, 8);
 		$this->writeXLSLabel(5,2,wfMsg('wikiastats_total'));
 		$this->mergeXLSColsRows(5, 2, 6, 2);
-		$this->writeXLSLabel(5,3,wfMsg('wikiastats_main_namespace'));
+		$this->writeXLSLabel(5,3,str_replace("<br/>", " ", wfMsg('wikiastats_main_namespace')));
 		$this->mergeXLSColsRows(5, 3, 5, 3);
-		$this->writeXLSLabel(5,4,wfMsg('wikiastats_total'));
-		$this->mergeXLSColsRows(5, 4, 6, 4);
-		$this->writeXLSLabel(5, 5,str_replace("<br/>", "", wfMsg('wikiastats_main_namespace')));
-		$this->mergeXLSColsRows(5, 5, 5, 6);
-		$this->writeXLSLabel(5,7,str_replace("<br/>", "", wfMsg('wikiastats_other_namespace')));
+		$this->writeXLSLabel(5, 4,str_replace("<br/>", " ", wfMsg('wikiastats_main_namespace')));
+		$this->mergeXLSColsRows(5, 4, 5, 6);
+		$this->writeXLSLabel(5,7,str_replace("<br/>", " ", wfMsg('wikiastats_other_namespace')));
 		$this->mergeXLSColsRows(5, 7, 5, 8);
 		$this->writeXLSLabel(6,3,">10");
 		#$this->writeXLSLabel(6,3,"new");
+		$this->writeXLSLabel(6,4,wfMsg('wikiastats_total'));
 		$this->writeXLSLabel(6,5,">5");
 		$this->writeXLSLabel(6,6,">100");
 		$this->writeXLSLabel(6,7,wfMsg('wikistats_user_namespace'));
@@ -131,11 +130,11 @@ class WikiaStatsXLS {
 
 		// articles
 		$this->writeXLSLabel(4,9,wfMsg('wikiastats_count'));
-		$this->mergeXLSColsRows(4, 10, 5, 11);
-		$this->writeXLSLabel(6,12,wfMsg('wikiastats_official'));
-		$this->writeXLSLabel(6,13,wfMsg('wikiastats_more_200_ch'));
+		$this->mergeXLSColsRows(4, 9, 5, 10);
+		$this->writeXLSLabel(6,9,wfMsg('wikiastats_official'));
+		$this->writeXLSLabel(6,10,wfMsg('wikiastats_more_200_ch'));
 		//
-		$this->writeXLSLabel(4,11,wfMsg('wikiastats_new_per_day'));
+		$this->writeXLSLabel(4,11,str_replace("<br/>", " ", wfMsg('wikiastats_new_per_day')));
 		$this->mergeXLSColsRows(4, 11, 6, 11);
 		//
 		$this->writeXLSLabel(4,12,wfMsg('wikiastats_mean'));
@@ -149,7 +148,7 @@ class WikiaStatsXLS {
 		$this->writeXLSLabel(6,15,'2.0Kb');
 		// database
 		$this->writeXLSLabel(4,16,wfMsg('wikiastats_edits'));
-		$this->mergeXLSColsRows(4, 16, 6, 17);
+		$this->mergeXLSColsRows(4, 16, 6, 16);
 		$this->writeXLSLabel(4,17,wfMsg('wikiastats_size'));
 		$this->mergeXLSColsRows(4, 17, 6, 17);
 		$this->writeXLSLabel(4,18,wfMsg('wikiastats_words'));
@@ -163,7 +162,7 @@ class WikiaStatsXLS {
 		$this->mergeXLSColsRows(4, 21, 6, 21);
 		$this->writeXLSLabel(4,22,wfMsg('wikiastats_external'));
 		$this->mergeXLSColsRows(4, 22, 6, 22);
-		$this->writeXLSLabel(4,19,wfMsg('wikiastats_redirects'));
+		$this->writeXLSLabel(4,23,wfMsg('wikiastats_redirects'));
 		$this->mergeXLSColsRows(4, 23, 6, 23);
 		// images
 		$this->writeXLSLabel(4,24,wfMsg('wikiastats_uploaded_images'));
