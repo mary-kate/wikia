@@ -10,7 +10,7 @@ class WysiwygParser extends Parser {
 		$content = StringUtils::delimiterReplace( '<nowiki>', '</nowiki>', '$1', $text, 'i' );
 
 		$attribs = Sanitizer::validateTagAttributes( $attribs, 'pre' );
-		$attribs['washtml'] = 1;
+		$attribs['wasHtml'] = 1;
 		return wfOpenElement( 'pre', $attribs ) .
 			Xml::escapeTagsOnly( $content ) .
 			'</pre>';
@@ -50,12 +50,7 @@ class WysiwygInterface extends SpecialPage {
 			$out = $parser->parse($wikitext, $wgTitle, $options, false)->getText();
 			$out = htmlspecialchars($out);
 
-			$pre = new Preprocessor_DOM($parser);
-			print_pre($pre->preprocessToObj("<!---haha--->'''123'''"));
-			exit();
-
 			$wgOut->addHTML('<br />'.$out);
-			//$wgOut->addHTML('<br /><hr /><pre>'.print_r($parser->getElementsInfo(), true).'</pre>');
 		}
 
 }

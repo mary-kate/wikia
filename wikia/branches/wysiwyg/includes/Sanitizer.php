@@ -486,7 +486,8 @@ class Sanitizer {
 					if ( ! $badtag ) {
 						$rest = str_replace( '>', '&gt;', $rest );
 						$close = ( $brace == '/>' && !$slash ) ? ' /' : '';
-						$text .= "<$slash$t$newparams$close>$rest";
+						$wasHtml = !$slash ? ' wasHtml=1' : '';
+						$text .= "<$slash$t$wasHtml$newparams$close>$rest";
 						continue;
 					}
 				}
@@ -509,7 +510,8 @@ class Sanitizer {
 					}
 					$newparams = Sanitizer::fixTagAttributes( $params, $t );
 					$rest = str_replace( '>', '&gt;', $rest );
-					$text .= "<$slash$t$newparams$brace$rest";
+					$wasHtml = !$slash ? ' wasHtml=1' : '';
+					$text .= "<$slash$t$wasHtml$newparams$brace$rest";
 				} else {
 					$text .= '&lt;' . str_replace( '>', '&gt;', $x);
 				}
