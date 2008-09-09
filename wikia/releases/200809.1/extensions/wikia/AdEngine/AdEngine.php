@@ -173,8 +173,8 @@ class AdEngine {
 			  case 'en': return $this->getProviderFromId($this->slots[$slotname]['provider_id']);
 			  case 'de': return $this->getProviderFromId($this->slots[$slotname]['provider_id']);
 			  default: 
-				if (! ArticleAdLogic::isMandatoryAd($slotname) ){
-					return new AdProviderNull("We don't display ads for this language ($wgLanguageCode) ", false);
+				if (! in_array($slotname, array('LEFT_SKYSCRAPER_2', 'HOME_LEFT_SKYSCRAPER_2'))){
+					return new AdProviderNull("We only lower skyscraper ads for this language ($wgLanguageCode) ", false);
 				
 				} else {
 					// Google's TOS prevents serving ads for some languages
