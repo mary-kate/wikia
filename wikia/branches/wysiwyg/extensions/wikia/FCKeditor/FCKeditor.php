@@ -36,6 +36,7 @@ if (version_compare("1.13alpha", $wgVersion, "<=")) {
     require_once $IP . "/includes/parser/Preprocessor.php";
     require_once $IP . "/includes/parser/Preprocessor_DOM.php";
     require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . "FCKeditorParser.body.php";
+    require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . "FCKeditorPreprocessor.php";
 }
 else if (version_compare("1.12", $wgVersion, "<")) {
     require_once $IP . "/includes/ParserOptions.php";
