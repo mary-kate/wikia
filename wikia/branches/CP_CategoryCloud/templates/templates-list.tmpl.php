@@ -722,7 +722,7 @@ function cloudInputAdd () {
 				var actual_cloud = YWC.foundCategories[j] ;
 				var cl_num = j ;
 
-				this_button.onclick = YWC.onclickCategoryFn (text_categories[i],j) ;
+				this_button.onclick = YWC.onclickCategoryFn (core_cat,j) ;
 				this_button.style.color = "#419636" ;
 				c_found = true ;
 				break ;
