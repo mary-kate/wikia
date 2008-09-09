@@ -26,7 +26,7 @@ class WysiwygInterface extends SpecialPage {
 		}
 
 		function execute( $par ) {
-			global $wgRequest, $wgOut, $wgTitle;
+			global $wgRequest, $wgOut, $wgTitle, $IP;
 			$this->setHeaders();
 
 			if(empty($par)) {
@@ -48,9 +48,28 @@ class WysiwygInterface extends SpecialPage {
 			$parser = new WysiwygParser();
 			$parser->setOutputType(OT_HTML);
 			$out = $parser->parse($wikitext, $wgTitle, $options)->getText();
-			$out = htmlspecialchars($out);
 
-			$wgOut->addHTML('<br />'.$out);
+			// macbre: return nicely colored & tabbed code
+			require($IP. '/lib/geshi/geshi.php');
+
+			// clear whitespaces between tags
+			$out = preg_replace('/>(\s+)</', '><', $out);	// between tags
+			$out = preg_replace('/(\s+)<\//', '</', $out);	// before closing tag
+		
+			$dom = new DOMDocument();
+			$dom->loadHTML($out);
+			$dom->formatOutput = true;
+			$dom->preserveWhiteSpace = false;
+
+		 	// only show content inside <body> tag
+			$body = $dom->getElementsByTagName('body')->item(0);
+			$out = $dom->saveXML($body);
+
+			$out = '  ' . trim(substr($out, 6, -7));
+
+			$geshi = new geshi($out, 'html4strict');
+			
+			$wgOut->addHTML($geshi->parse_code());
 		}
 
 }
