@@ -617,7 +617,7 @@ while ($minYear <= $maxYear)
 	</select></span>
 	<br />
 	<span class="wk-select-class">
-		<span style="padding:5px 2px;"><input type="button" id="ws-show-stats" name="ws-show-stats" value="<?= wfMsg("wikiastast_refresh_data") ?>"></span>
+		<span style="padding:5px 2px;"><input type="button" id="ws-show-stats" name="ws-show-stats" value="<?= wfMsg("wikiastats_showstats_btn") ?>"></span>
 		<span style="padding:5px 2px;"><input type="button" id="ws-show-charts" value="<?= wfMsg("wikiastats_showcharts") ?>" name="ws-show-charts"></span>
 		<span style="padding:5px 2px;"><input type="button" id="ws-export-xls" value="<?= wfMsg("wikiastats_export_xls") ?>" name="ws-export-xls"></span>
 	</span>

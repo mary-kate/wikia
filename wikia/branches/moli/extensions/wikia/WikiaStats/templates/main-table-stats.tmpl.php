@@ -8,11 +8,12 @@ YAHOO.util.Event.onDOMReady(function () {
 /*]]>*/
 </script>
 
-<table cellspacing="1" cellpadding="0" border="0" width="700">
+<table cellspacing="1" cellpadding="0" border="0">
 <tr><td id="ws-hide-table" class="panel" nowrap>&nbsp;</td></tr>
 </table>
 <!-- MAIN STATISTICS TABLE -->
 <input type="hidden" id="wk-stats-city-id" value="<?=$cityId?>">
+<div class="clear" style="font-size:7.7pt;height:9.5pt;"><a href="#wikians"><?=wfMsg("wikiastats_see_definitions")?></a></div>
 <div id="ws-main-table-stats" style="width:100%;overflow:auto;margin:0px -225px 0px 0px;">
 <a name="mainstats"></a>
 <table cellspacing="0" cellpadding="0" border="1" id="table_stats" style="font-family: Trebuchet MS,arial,sans-serif,helvetica; font-size:9pt;background-color:#ffffdd;">
@@ -280,7 +281,11 @@ foreach ($statsData as $date => $columnsData) {
 	</td>
 </tr>
 </table>
-<div style="font-size:7.5pt; font-family:Trebuchet MS,verdana, arial;float:left;padding-bottom:10px;"><?=wfMsg("wikiastats_date_of_generate", wfMsg(strtolower(date("l",$today_day))) . " " . substr(wfMsg(strtolower(date("F",$today_day))), 0, 3) . " " . date("d", $today_day) . ", " . date("Y", $today_day))?></div>
+<div style="font-size:7.7pt; font-family:Trebuchet MS,verdana, arial;float:left;padding-bottom:10px;">
+	<?=wfMsg("wikiastats_date_of_generate", wfMsg(strtolower(date("l",$today_day))) . " " . substr(wfMsg(strtolower(date("F",$today_day))), 0, 3) . " " . date("d", $today_day) . ", " . date("Y", $today_day))?>
+	<strong>&nbsp;&#183;&nbsp;</strong>
+	<a href="#wikians"><?=wfMsg("wikiastats_see_definitions")?></a>
+</div>
 </div>
 <!-- END OF MAIN STATISTICS TABLE -->
 <!-- e:<?= __FILE__ ?> -->

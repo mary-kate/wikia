@@ -29,6 +29,7 @@ class WikiaGenericStats {
 
     const MONTHLY_STATS = 7;
     const USE_MEMC = 0;
+    const USE_OLD_DB = 1;
 	const IGNORE_WIKIS = "5, 11, 6745";
 
 	var $columnMapIndex = null;
@@ -176,7 +177,11 @@ class WikiaGenericStats {
    		if (self::USE_MEMC) $wkCityOrderStats = $wgMemc->get($memckey);
     	if (empty($wkCityOrderStats))
     	{
-			$dbs =& wfGetDBStats();
+    		if (self::USE_OLD_DB == 1) {
+				$dbs =& wfGetDBStats();
+			} else {
+				$dbs =& wfGetDBExt();
+			}
 			#---
 			$column = "avg(c1.cw_wikians_total) as cnt";
 			$order_by = "cnt";
@@ -225,7 +230,11 @@ class WikiaGenericStats {
    		if (self::USE_MEMC) $wkCreationWikiansList = $wgMemc->get('wikiacreationwikiansstats');
     	if (empty($wkCreationWikiansList))
     	{
-			$dbs =& wfGetDBStats();
+    		if (self::USE_OLD_DB == 1) {
+				$dbs =& wfGetDBStats();
+			} else {
+				$dbs =& wfGetDBExt();
+			}
 			#---
 			$whereCity = " c1.cw_city_id > 0 ";
 			$noactive_citylist = self::getNoPublicCities();
@@ -275,7 +284,11 @@ class WikiaGenericStats {
    		if (self::USE_MEMC) $wkCreationArticleList = $wgMemc->get('wikiacreationarticlestats');
     	if (empty($wkCreationWikiansList))
     	{
-			$dbs =& wfGetDBStats();
+    		if (self::USE_OLD_DB == 1) {
+				$dbs =& wfGetDBStats();
+			} else {
+				$dbs =& wfGetDBExt();
+			}
 			#---
 			$whereCity = " c1.cw_city_id > 0 ";
 			$noactive_citylist = self::getNoPublicCities();
@@ -324,7 +337,11 @@ class WikiaGenericStats {
    		if (self::USE_MEMC) $wkStatsColumnNames = $wgMemc->get('wikiastatscolumnnames');
     	if (empty($wkStatsColumnNames))
     	{
-			$dbs =& wfGetDBStats();
+    		if (self::USE_OLD_DB == 1) {
+				$dbs =& wfGetDBStats();
+			} else {
+				$dbs =& wfGetDBExt();
+			}
 			#---
 			$sql = "show fields from `{$wgDBStats}`.`city_stats_full`";
 			//echo $sql."<br><br>";
@@ -427,7 +444,11 @@ class WikiaGenericStats {
 		if (self::USE_MEMC) $wikiacityedits = $wgMemc->get($memkey);
 		if (empty($wikiacityedits)) {
 			if (!empty($cityDBName)) {
-				$dbs =& wfGetDBStats();
+				if (self::USE_OLD_DB == 1) {
+					$dbs =& wfGetDBStats();
+				} else {
+					$dbs =& wfGetDBExt();
+				}
 				#---
 				$sql = "select count(wf_user) as cnt, sum(s) as s from ";
 				$sql .= "(select wf_user,sum(wf_contributed) as s from `wikiastats`.`{$cityDBName}_wikians_full` where ";
@@ -483,7 +504,11 @@ class WikiaGenericStats {
 			try
 			{
 				#--- database instance - DB_SLAVE
-				$dbs =& wfGetDBStats();
+				if (self::USE_OLD_DB == 1) {
+					$dbs =& wfGetDBStats();
+				} else {
+					$dbs =& wfGetDBExt();
+				}
 				if ( is_null($dbs) ) {
 					throw new DBConnectionError($db, wfMsg("wikiastats_connection_error"));
 				}
@@ -582,7 +607,11 @@ class WikiaGenericStats {
 		
 		if (empty($result)) {
 			if (!empty($cityDBName)) {
-				$dbs =& wfGetDBStats();
+				if (self::USE_OLD_DB == 1) {
+					$dbs =& wfGetDBStats();
+				} else {
+					$dbs =& wfGetDBExt();
+				}
 				#---
 				$where = " wf_user > 0 ";
 				if (empty($namespace))
@@ -638,7 +667,11 @@ class WikiaGenericStats {
 
 		if (empty($result)) {
 			if (!empty($cityDBName)) {
-				$dbs =& wfGetDBStats();
+				if (self::USE_OLD_DB == 1) {
+					$dbs =& wfGetDBStats();
+				} else {
+					$dbs =& wfGetDBExt();
+				}
 				#---
 				$where = "af_int_link_article > 0";
 				if (empty($namespace))
@@ -678,7 +711,11 @@ class WikiaGenericStats {
 
 		if (empty($result)) {
 			if (!empty($cityDBName)) {
-				$dbs =& wfGetDBStats();
+				if (self::USE_OLD_DB == 1) {
+					$dbs =& wfGetDBStats();
+				} else {
+					$dbs =& wfGetDBExt();
+				}
 				#---
 				$where = "1=1";
 				if (!empty($namespace))
@@ -719,7 +756,11 @@ class WikiaGenericStats {
     	$no_ip = array();
 		if (empty($result)) {
 			if (!empty($cityDBName)) {
-				$dbs =& wfGetDBStats();
+				if (self::USE_OLD_DB == 1) {
+					$dbs =& wfGetDBStats();
+				} else {
+					$dbs =& wfGetDBExt();
+				}
 				#---
 				$where = " wf_user = 0 ";
 				if (empty($namespace))
@@ -781,7 +822,11 @@ class WikiaGenericStats {
     	$no_ip = array();
 		if (empty($result)) {
 			if (!empty($cityDBName)) {
-				$dbs =& wfGetDBStats();
+				if (self::USE_OLD_DB == 1) {
+					$dbs =& wfGetDBStats();
+				} else {
+					$dbs =& wfGetDBExt();
+				}
 				#---
 				$where = " ";
 				if (empty($reg_users))
@@ -838,7 +883,11 @@ class WikiaGenericStats {
 		{
 			if (!empty($cityDBName))
 			{
-				$dbs =& wfGetDBStats();
+				if (self::USE_OLD_DB == 1) {
+					$dbs =& wfGetDBStats();
+				} else {
+					$dbs =& wfGetDBExt();
+				}
 				#---
 				$where = " ef_page_id = '".intval($page_id)."' ";
 				if (empty($reg_users))
@@ -894,7 +943,11 @@ class WikiaGenericStats {
 			$lStatsRangeTime = array("months" => $monthsArray, "minYear" => "2002", "maxYear" => date('Y'));
 			try {
 				#--- database instance - DB_SLAVE
-				$dbs =& wfGetDBStats();
+				if (self::USE_OLD_DB == 1) {
+					$dbs =& wfGetDBStats();
+				} else {
+					$dbs =& wfGetDBExt();
+				}
 
 				if ( is_null($dbs) ) {
 					throw new DBConnectionError($db, wfMsg("wikiastats_connection_error"));
@@ -1019,7 +1072,11 @@ class WikiaGenericStats {
 		#---
 		if (self::USE_MEMC) $stats_date = $wgMemc->get($memkey);
 		if (empty($stats_date)) {
-			$dbs =& wfGetDBStats();
+			if (self::USE_OLD_DB == 1) {
+				$dbs =& wfGetDBStats();
+			} else {
+				$dbs =& wfGetDBExt();
+			}
 			#---
 			if ( !is_null($dbs) ) {
 				$sql = "SELECT max(unix_timestamp(cw_timestamp)) as date FROM `{$wgDBStats}`.`city_stats_full` WHERE cw_city_id = '".$city_id."'";
@@ -1070,7 +1127,11 @@ class WikiaGenericStats {
 			try
 			{
 				#--- database instance - DB_SLAVE
-				$dbs =& wfGetDBStats();
+				if (self::USE_OLD_DB == 1) {
+					$dbs =& wfGetDBStats();
+				} else {
+					$dbs =& wfGetDBExt();
+				}
 				if ( is_null($dbs) ) {
 					throw new DBConnectionError($db, wfMsg("wikiastats_connection_error"));
 				}
@@ -1545,7 +1606,11 @@ class WikiaGenericStats {
     	if (empty($wkCityMainStatistics)) {
 			try {
 				#--- database instance - DB_SLAVE
-				$dbs =& wfGetDBStats();
+				if (self::USE_OLD_DB == 1) {
+					$dbs =& wfGetDBStats();
+				} else {
+					$dbs =& wfGetDBExt();
+				}
 				if ( is_null($dbs) ) {
 					throw new DBConnectionError($db, wfMsg("wikiastats_connection_error"));
 				}
