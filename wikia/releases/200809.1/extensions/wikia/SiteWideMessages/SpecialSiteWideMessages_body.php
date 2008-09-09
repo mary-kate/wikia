@@ -803,7 +803,7 @@ class SiteWideMessagesPager extends TablePager {
 				break;
 
 			case 'msg_recipient_name':
-				$sRetval = $value ? htmlspecialchars($value) : ('<i>' . wfMsg('swm-label-mode-users-all') . '</i>');
+				$sRetval = $value ? htmlspecialchars($value) : ('<i>' . wfMsg('swm-label-mode-all') . '</i>');
 				break;
 
 			case 'msg_text':
