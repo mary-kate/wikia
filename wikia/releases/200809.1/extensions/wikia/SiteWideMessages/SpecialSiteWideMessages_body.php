@@ -271,6 +271,7 @@ class SiteWideMessages extends SpecialPage {
 				}
 				$sendToAll = false;
 				$mHubId = null;
+				break;
 			case 'HUB':
 				$mWikiName = '';
 				$mRecipientName = '';
@@ -802,7 +803,7 @@ class SiteWideMessagesPager extends TablePager {
 				break;
 
 			case 'msg_recipient_name':
-				$sRetval = $value ? htmlspecialchars($value) : ('<i>' . wfMsg('swm-label-mode-all') . '</i>');
+				$sRetval = $value ? htmlspecialchars($value) : ('<i>' . wfMsg('swm-label-mode-users-all') . '</i>');
 				break;
 
 			case 'msg_text':
