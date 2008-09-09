@@ -266,6 +266,14 @@ YWC.buildWarningLoginPanel = function(e) {
         YE.addListener( "wpCreatepageWarningNo", "click", YWC.hideWarningLoginPanel ) ;
 }
 
+YWC.onclickCategoryFn = function (cat, id) {
+	return function () {
+		cloudRemove (escape(cat), id) ;
+		return false ;
+	}
+}
+
+YWC.extraCategories = 100 ;
 
 YWC.clearTitleMessage = function (e) {
         YE.preventDefault (e) ;
@@ -305,6 +313,8 @@ YWC.TextareaAddToolbar = function (el) {
 	
 }
 
+YWC.foundCategories = [] ;
+
 YWC.CheckCategoryCloud = function () {
 	var cat_textarea = YD.get ('wpCategoryTextarea') ;
 	if (!cat_textarea) {
@@ -319,13 +329,12 @@ YWC.CheckCategoryCloud = function () {
 
 	var cloud_num = (cat_full_section.childNodes.length - 1) / 2 ;
 	var n_cat_count = cloud_num ;
-	var cloud_categories = new Array () ;
 	var text_categories = new Array () ;	
 	for (i=0;i<cloud_num;i++) {
 		var cloud_id = 'cloud' + i ;
 		var found_category = YD.get (cloud_id).innerHTML ;
 		if (found_category) {
-			cloud_categories[i] = found_category ;
+			YWC.foundCategories[i] = found_category ;
 		}		
 	}
 
@@ -334,23 +343,16 @@ YWC.CheckCategoryCloud = function () {
                 text_categories [i] =  categories[i] ;
         }
 
-	var onclick_cat_fn = function (cat, id) {
-		return function () {
-			cloudRemove (escape(cat), id) ;
-			return false ;
-		}
-	}
-
 	for (i=0; i<text_categories.length;i++) {
 		var c_found = false ;
-		for (j in cloud_categories) {
+		for (j in YWC.foundCategories) {
 			var core_cat = text_categories[i].replace (/\|.*/,'') ;
-			if (cloud_categories[j] == core_cat) {
+			if (YWC.found_categories[j] == core_cat) {
 				this_button = YD.get ('cloud'+ j) ;
-				var actual_cloud = cloud_categories[j] ;
+				var actual_cloud = YWC.foundCategories[j] ;
 				var cl_num = j ;
 
-				this_button.onclick = onclick_cat_fn (text_categories[i],j) ;
+				this_button.onclick = YWC.onclickCategoryFn (text_categories[i],j) ;
 				this_button.style.color = "#419636" ;
 				c_found = true ;
 				break ;
@@ -363,7 +365,7 @@ YWC.CheckCategoryCloud = function () {
 			var cat_num = n_cat_count - 1 ;
 			n_cat.setAttribute ('id','cloud' + cat_num) ;
 			n_cat.setAttribute ('href','#') ;
-			n_cat.onclick = onclick_cat_fn (text_categories[i], cat_num) ;
+			n_cat.onclick = YWC.onclickCategoryFn (text_categories[i], cat_num) ;
 			n_cat.style.color = '#419636' ;
 			n_cat.style.fontSize = '10pt' ;
 			s_cat.setAttribute ('id','tag' + n_cat_count) ;
