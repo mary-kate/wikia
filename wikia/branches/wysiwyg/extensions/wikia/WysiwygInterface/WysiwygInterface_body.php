@@ -55,6 +55,8 @@ class WysiwygInterface extends SpecialPage {
 			// clear whitespaces between tags
 			$out = preg_replace('/>(\s+)</', '><', $out);	// between tags
 			$out = preg_replace('/(\s+)<\//', '</', $out);	// before closing tag
+
+			$out = mb_convert_encoding($out, 'HTML-ENTITIES', "UTF-8"); 
 		
 			$dom = new DOMDocument();
 			$dom->loadHTML($out);
