@@ -494,14 +494,14 @@ class WikiaGenericStats {
 					}
 				}
 				#---
-				$db_fields[] = (empty($all)) ? "cw_users_all_reg as A" : "sum(cw_users_all_reg) as A";
-				$db_fields[] = (empty($all)) ? "cw_wikians_total as B" : "sum(cw_wikians_total) as B";
+				$db_fields[] = (empty($all)) ? "cw_users_all_reg_main_ns as A" : "sum(cw_users_all_reg_main_ns) as A";
+				$db_fields[] = (empty($all)) ? "cw_wikians_edits_5 as B" : "sum(cw_wikians_edits_5) as B";
+				$db_fields[] = (empty($all)) ? "cw_wikians_edits_100 as C" : "sum(cw_wikians_edits_100) as C";
+				$db_fields[] = (empty($all)) ? "cw_users_all_reg_user_ns as D" : "sum(cw_users_all_reg_user_ns) as D";
+				$db_fields[] = (empty($all)) ? "cw_users_all_reg_image_ns as E" : "sum(cw_users_all_reg_image_ns) as E";
+				$db_fields[] = (empty($all)) ? "cw_users_all_reg as F" : "sum(cw_users_all_reg) as F";
+				$db_fields[] = (empty($all)) ? "cw_wikians_total as G" : "sum(cw_wikians_total) as G";
 				//$db_fields[] = (empty($all)) ? "cw_wikians_total_inc as C" : "sum(cw_wikians_total_inc) as C";
-				$db_fields[] = (empty($all)) ? "cw_users_all_reg_main_ns as C" : "sum(cw_users_all_reg_main_ns) as C";
-				$db_fields[] = (empty($all)) ? "cw_wikians_edits_5 as D" : "sum(cw_wikians_edits_5) as D";
-				$db_fields[] = (empty($all)) ? "cw_wikians_edits_100 as E" : "sum(cw_wikians_edits_100) as E";
-				$db_fields[] = (empty($all)) ? "cw_users_all_reg_user_ns as F" : "sum(cw_users_all_reg_user_ns) as F";
-				$db_fields[] = (empty($all)) ? "cw_users_all_reg_image_ns as G" : "sum(cw_users_all_reg_image_ns) as G";
 				$db_fields[] = (empty($all)) ? "cw_article_count_link as H" : "sum(cw_article_count_link) as H";
 				$db_fields[] = (empty($all)) ? "cw_article_count_200_link as I" : "sum(cw_article_count_200_link) as I";
 				$db_fields[] = (empty($all)) ? "cw_article_new_per_day as J" : "sum(cw_article_new_per_day) as J";
@@ -1551,14 +1551,14 @@ class WikiaGenericStats {
 				}
 
 				$db_fields = array("date_format(cw_stats_date, '%Y-%m') as date");
-				$db_fields[] = (empty($all)) ? "cw_users_all_reg as A" : "sum(cw_users_all_reg) as A";
-				$db_fields[] = (empty($all)) ? "cw_wikians_total as B" : "sum(cw_wikians_total) as B";
+				$db_fields[] = (empty($all)) ? "cw_users_all_reg_main_ns as A" : "sum(cw_users_all_reg_main_ns) as A";
+				$db_fields[] = (empty($all)) ? "cw_wikians_edits_5 as B" : "sum(cw_wikians_edits_5) as B";
+				$db_fields[] = (empty($all)) ? "cw_wikians_edits_100 as C" : "sum(cw_wikians_edits_100) as C";
+				$db_fields[] = (empty($all)) ? "cw_users_all_reg_user_ns as D" : "sum(cw_users_all_reg_user_ns) as D";
+				$db_fields[] = (empty($all)) ? "cw_users_all_reg_image_ns as E" : "sum(cw_users_all_reg_image_ns) as E";
+				$db_fields[] = (empty($all)) ? "cw_users_all_reg as F" : "sum(cw_users_all_reg) as F";
+				$db_fields[] = (empty($all)) ? "cw_wikians_total as G" : "sum(cw_wikians_total) as G";
 				//$db_fields[] = (empty($all)) ? "cw_wikians_total_inc as C" : "sum(cw_wikians_total_inc) as C";
-				$db_fields[] = (empty($all)) ? "cw_users_all_reg_main_ns as C" : "sum(cw_users_all_reg_main_ns) as C";
-				$db_fields[] = (empty($all)) ? "cw_wikians_edits_5 as D" : "sum(cw_wikians_edits_5) as D";
-				$db_fields[] = (empty($all)) ? "cw_wikians_edits_100 as E" : "sum(cw_wikians_edits_100) as E";
-				$db_fields[] = (empty($all)) ? "cw_users_all_reg_user_ns as F" : "sum(cw_users_all_reg_user_ns) as F";
-				$db_fields[] = (empty($all)) ? "cw_users_all_reg_image_ns as G" : "sum(cw_users_all_reg_image_ns) as G";
 				$db_fields[] = (empty($all)) ? "cw_article_count_link as H" : "sum(cw_article_count_link) as H";
 				$db_fields[] = (empty($all)) ? "cw_article_count_200_link as I" : "sum(cw_article_count_200_link) as I";
 				$db_fields[] = (empty($all)) ? "cw_article_new_per_day as J" : "sum(cw_article_new_per_day) as J";

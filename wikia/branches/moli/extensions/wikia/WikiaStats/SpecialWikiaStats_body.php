@@ -32,6 +32,7 @@ class WikiaStatsClass extends SpecialPage
 		#---
         $this->mPosted = false;
         $this->mSkinName = "monobook";
+		wfLoadExtensionMessages("WikiaStats");
         parent::__construct( "WikiaStats", "staff",  ""/*class*/); #--- restriction - user have to be logged
     }
 
@@ -40,6 +41,8 @@ class WikiaStatsClass extends SpecialPage
         global $wgUser, $wgOut, $wgRequest;
 		global $wgStatsExcludedNonSpecialGroup;
 		global $wgCityId, $wgDBname;
+
+		wfLoadExtensionMessages("WikiaStats");
 
         if ( $wgUser->isBlocked() ) {
             $wgOut->blockedPage();
@@ -133,7 +136,13 @@ class WikiaStatsClass extends SpecialPage
 			$this->displayRestrictionError();
 		} else {
 			global $wgOut;
-			$wgOut->permissionRequired( $res );
+			$wgOut->setPageTitle( wfMsg( 'badaccess' ) );
+			$wgOut->setHTMLTitle( wfMsg( 'errorpagetitle' ) );
+			$wgOut->setRobotpolicy( 'noindex,nofollow' );
+			$wgOut->setArticleRelated( false );
+			$wgOut->mBodytext = '';
+			$wgOut->addWikiText( $res );
+			$wgOut->returnToMain( false );			
 		}
 		return;
   	}
