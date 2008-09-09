@@ -47,7 +47,7 @@ class WysiwygInterface extends SpecialPage {
 
 			$parser = new WysiwygParser();
 			$parser->setOutputType(OT_HTML);
-			$out = $parser->parse($wikitext, $wgTitle, $options, false)->getText();
+			$out = $parser->parse($wikitext, $wgTitle, $options)->getText();
 			$out = htmlspecialchars($out);
 
 			$wgOut->addHTML('<br />'.$out);
