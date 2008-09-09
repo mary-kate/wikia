@@ -714,7 +714,44 @@ function cloudInputAdd () {
 		} else {
 			category_text.value += '|' + unescape (category) ;
 		}
-        	category_input.value = '' ;
+		category_input.value = '' ;
+		var c_found = false ;
+		YAHOO.log (category) ;
+		var core_cat = category.replace (/\|.*/,'') ;			
+		YAHOO.log (core_cat) ;
+		for (j in YWC.foundCategories) {
+			if (YWC.found_categories[j] == core_cat) {
+				this_button = YD.get ('cloud'+ j) ;
+				var actual_cloud = YWC.foundCategories[j] ;
+				var cl_num = j ;
+
+				this_button.onclick = YWC.onclickCategoryFn (text_categories[i],j) ;
+				this_button.style.color = "#419636" ;
+				c_found = true ;
+				break ;
+			}
+		}
+		if (!c_found) {
+			var n_cat = document.createElement ('a') ;
+			var s_cat = document.createElement ('span') ;
+			var cat_full_section = YD.get ('createpage_cloud_section') ;
+			var n_cat_count = 100 ;
+			n_cat_count++ ;
+			var cat_num = n_cat_count - 1 ;
+			n_cat.setAttribute ('id','cloud' + cat_num) ;
+			n_cat.setAttribute ('href','#') ;
+			n_cat.onclick = YWC.onclickCategoryFn (core_cat, cat_num) ;
+			n_cat.style.color = '#419636' ;
+			n_cat.style.fontSize = '10pt' ;
+			s_cat.setAttribute ('id','tag' + cat_num) ;
+			YAHOO.log (core_cat) ;
+			t_cat = document.createTextNode (core_cat) ;
+			space = document.createTextNode (' ') ;
+			n_cat.appendChild (t_cat) ;
+			s_cat.appendChild (n_cat) ;
+			s_cat.appendChild (space) ;
+			cat_full_section.appendChild (s_cat) ;
+		}
 	}	
 }
 
