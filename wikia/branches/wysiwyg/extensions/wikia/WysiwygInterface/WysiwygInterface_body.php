@@ -68,6 +68,7 @@ class WysiwygInterface extends SpecialPage {
 			$out = '  ' . trim(substr($out, 6, -7));
 
 			$geshi = new geshi($out, 'html4strict');
+			$geshi->enable_keyword_links(false);
 			
 			$wgOut->addHTML($geshi->parse_code());
 		}
