@@ -41,8 +41,8 @@ YAHOO.util.Event.onDOMReady(function () {
 </tr>
 <tr bgcolor="#ffeecc">
 	<td class="cb" rowspan="3">&nbsp;</td>
-	<td valign="top" colspan="2" class="cb"><?=wfMsg('wikiastats_lifetime_editors')?></td>
 	<td colspan="5" class="cb"><?=wfMsg('wikiastats_months_edits')?></td>
+	<td valign="top" colspan="2" class="cb"><?=wfMsg('wikiastats_lifetime_editors')?></td>
 	<td colspan="2" rowspan="2" class="cb"><?=wfMsg('wikiastats_count')?></td>
 	<td valign="top" rowspan="3" class="cb"><?=wfMsg('wikiastats_new_per_day')?></td>
 	<td colspan="2" class="cb" rowspan="2" ><?=wfMsg('wikiastats_mean')?></td>
@@ -59,18 +59,18 @@ YAHOO.util.Event.onDOMReady(function () {
 	<td rowspan="3" class="cb"><?=wfMsg('wikiastats_with_links')?></td>
 </tr>
 <tr bgcolor="#ffeecc">
-	<td class="cb" rowspan="2"><?=wfMsg('wikiastats_total')?></td>
-	<td class="cb"><?=wfMsg('wikiastats_main_namespace')?></td>
 	<td colspan="3" class="cb"><?=wfMsg('wikiastats_main_namespace')?></td>
 	<td colspan="2" class="cb"><?=wfMsg('wikiastats_other_namespace')?></td>
+	<td class="cb" rowspan="2"><?=wfMsg('wikiastats_total')?></td>
+	<td class="cb"><?=wfMsg('wikiastats_main_namespace')?></td>
 </tr>
 <tr bgcolor="#ffeecc">
-	<td class="cb">&gt;10</td>
 	<td class="cb"><?=wfMsg('wikiastats_total')?></td>
 	<td class="cb">&gt;5</td>
 	<td class="cb">&gt;100</td>
 	<td class="cb" nowrap><?=wfMsg('wikistats_user_namespace')?></td>
 	<td class="cb" nowrap><?=wfMsg('wikistats_image_namespace')?></td>
+	<td class="cb">&gt;10</td>
 	<td class="cb"><?=wfMsg('wikiastats_official')?></td>
 	<td class="cb" nowrap>&gt;200 ch</td>
 	<td class="cb"><?=wfMsg('wikiastats_edits')?></td>
@@ -169,7 +169,7 @@ foreach ($statsData as $date => $columnsData) {
 					$out = substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " " . date("d", $stamp) . ", " . date("Y", $stamp);
 				}
 			}
-			elseif ($column == 'B')
+			elseif ($column == 'G')
 				$out = sprintf("%0d", $columnsData[$column]);
 			elseif ($column == 'K')
 				$out = sprintf("%0.1f", $columnsData[$column]);
@@ -222,6 +222,45 @@ foreach ($statsData as $date => $columnsData) {
 }
 ?>
 </tr>
+<tr bgcolor="#ffeecc">
+	<td class="cb" rowspan="3">&nbsp;</td>
+	<td class="cb"><?=wfMsg('wikiastats_total')?></td>
+	<td class="cb">&gt;5</td>
+	<td class="cb">&gt;100</td>
+	<td class="cb" nowrap><?=wfMsg('wikistats_user_namespace')?></td>
+	<td class="cb" nowrap><?=wfMsg('wikistats_image_namespace')?></td>
+	<td class="cb" rowspan="2"><?=wfMsg('wikiastats_total')?></td>
+	<td class="cb">&gt;10</td>
+	<td class="cb"><?=wfMsg('wikiastats_official')?></td>
+	<td class="cb" nowrap>&gt;200 ch</td>
+	<td valign="top" rowspan="3" class="cb"><?=wfMsg('wikiastats_new_per_day')?></td>
+	<td class="cb"><?=wfMsg('wikiastats_edits')?></td>
+	<td class="cb"><?=wfMsg('wikiastats_bytes')?></td>
+	<td class="cb" nowrap>0.5 Kb</td>
+	<td class="cb" nowrap>2 Kb</td>
+	<td rowspan="3" class="cb"><?=wfMsg('wikiastats_edits')?></td>
+	<td rowspan="3" class="cb"><?=wfMsg('wikiastats_size')?></td>
+	<td rowspan="3" class="cb"><?=wfMsg('wikiastats_words')?></td>
+	<td rowspan="3" class="cb"><?=wfMsg('wikiastats_internal')?></td>
+	<td rowspan="3" class="cb"><?=wfMsg('wikiastats_interwiki')?></td>
+	<td rowspan="3" class="cb"><?=wfMsg('wikiastats_image')?></td>
+	<td rowspan="3" class="cb"><?=wfMsg('wikiastats_external')?></td>
+	<td rowspan="3" class="cb"><?=wfMsg('wikiastats_redirects')?></td>
+	<td rowspan="3" class="cb"><?=wfMsg('wikiastats_uploaded_images')?></td>
+	<td rowspan="3" class="cb"><?=wfMsg('wikiastats_with_links')?></td>
+</tr>
+<tr bgcolor="#ffeecc">
+	<td colspan="3" class="cb"><?=wfMsg('wikiastats_main_namespace')?></td>
+	<td colspan="2" class="cb"><?=wfMsg('wikiastats_other_namespace')?></td>
+	<td class="cb"><?=wfMsg('wikiastats_main_namespace')?></td>
+	<td colspan="2" rowspan="2" class="cb"><?=wfMsg('wikiastats_count')?></td>
+	<td colspan="2" class="cb" rowspan="2" ><?=wfMsg('wikiastats_mean')?></td>
+	<td colspan="2" class="cb" rowspan="2" ><?=wfMsg('wikiastats_largerthan')?></td>
+</tr>
+<tr bgcolor="#ffeecc">
+	<td colspan="5" class="cb"><?=wfMsg('wikiastats_months_edits')?></td>
+	<td valign="top" colspan="2" class="cb"><?=wfMsg('wikiastats_lifetime_editors')?></td>
+</tr>
 <tr bgcolor="#ffdead">
 	<td class="cb"><b><?= ucfirst(wfMsg('wikiastats_date')) ?></b></td>
 	<td colspan="7" class="cb">
@@ -239,45 +278,6 @@ foreach ($statsData as $date => $columnsData) {
 	<td colspan="2" class="cb">
 		<b><a href="#images"><?= wfMsg('wikiastats_images') ?></a></b>
 	</td>
-</tr>
-<tr bgcolor="#ffeecc">
-	<td class="cb" rowspan="3">&nbsp;</td>
-	<td valign="top" colspan="2" class="cb"><?=wfMsg('wikiastats_lifetime_editors')?></td>
-	<td colspan="5" class="cb"><?=wfMsg('wikiastats_months_edits')?></td>
-	<td colspan="2" rowspan="2" class="cb"><?=wfMsg('wikiastats_count')?></td>
-	<td valign="top" rowspan="3" class="cb"><?=wfMsg('wikiastats_new_per_day')?></td>
-	<td colspan="2" class="cb" rowspan="2" ><?=wfMsg('wikiastats_mean')?></td>
-	<td colspan="2" class="cb" rowspan="2" ><?=wfMsg('wikiastats_largerthan')?></td>
-	<td rowspan="3" class="cb"><?=wfMsg('wikiastats_edits')?></td>
-	<td rowspan="3" class="cb"><?=wfMsg('wikiastats_size')?></td>
-	<td rowspan="3" class="cb"><?=wfMsg('wikiastats_words')?></td>
-	<td rowspan="3" class="cb"><?=wfMsg('wikiastats_internal')?></td>
-	<td rowspan="3" class="cb"><?=wfMsg('wikiastats_interwiki')?></td>
-	<td rowspan="3" class="cb"><?=wfMsg('wikiastats_image')?></td>
-	<td rowspan="3" class="cb"><?=wfMsg('wikiastats_external')?></td>
-	<td rowspan="3" class="cb"><?=wfMsg('wikiastats_redirects')?></td>
-	<td rowspan="3" class="cb"><?=wfMsg('wikiastats_uploaded_images')?></td>
-	<td rowspan="3" class="cb"><?=wfMsg('wikiastats_with_links')?></td>
-</tr>
-<tr bgcolor="#ffeecc">
-	<td class="cb" rowspan="2"><?=wfMsg('wikiastats_total')?></td>
-	<td class="cb"><?=wfMsg('wikiastats_main_namespace')?></td>
-	<td colspan="3" class="cb"><?=wfMsg('wikiastats_main_namespace')?></td>
-	<td colspan="2" class="cb"><?=wfMsg('wikiastats_other_namespace')?></td>
-</tr>
-<tr bgcolor="#ffeecc">
-	<td class="cb">&gt;10</td>
-	<td class="cb"><?=wfMsg('wikiastats_total')?></td>
-	<td class="cb">&gt;5</td>
-	<td class="cb">&gt;100</td>
-	<td class="cb" nowrap><?=wfMsg('wikistats_user_namespace')?></td>
-	<td class="cb" nowrap><?=wfMsg('wikistats_image_namespace')?></td>
-	<td class="cb"><?=wfMsg('wikiastats_official')?></td>
-	<td class="cb" nowrap>&gt;200 ch</td>
-	<td class="cb"><?=wfMsg('wikiastats_edits')?></td>
-	<td class="cb"><?=wfMsg('wikiastats_bytes')?></td>
-	<td class="cb" nowrap>0.5 Kb</td>
-	<td class="cb" nowrap>2 Kb</td>
 </tr>
 </table>
 <div style="font-size:7.5pt; font-family:Trebuchet MS,verdana, arial;float:left;padding-bottom:10px;"><?=wfMsg("wikiastats_date_of_generate", wfMsg(strtolower(date("l",$today_day))) . " " . substr(wfMsg(strtolower(date("F",$today_day))), 0, 3) . " " . date("d", $today_day) . ", " . date("Y", $today_day))?></div>

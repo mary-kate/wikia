@@ -24,25 +24,22 @@ function visible_wikians(rows, col, v)
 	cels = rows[3].getElementsByTagName('td');
 	for (y = 0; y <= 5; y++) { cels[y].style.display = v; }
 
-	cels = rows[rows.length-4].getElementsByTagName('td');
+	cels = rows[rows.length-1].getElementsByTagName('td');
 	cels[col].style.display = v;
 
-	cels = rows[rows.length-3].getElementsByTagName('td');
-	for (y = 1; y <= 2; y++) { cels[y].style.display = v; }
-
 	cels = rows[rows.length-2].getElementsByTagName('td');
-	for (y = 0; y <= 3; y++) { cels[y].style.display = v; }
+	for (y = 0; y <= 1; y++) { cels[y].style.display = v; }
 
-	cels = rows[rows.length-1].getElementsByTagName('td');
-	for (y = 0; y <= 5; y++) { cels[y].style.display = v; }
+	cels = rows[rows.length-3].getElementsByTagName('td');
+	for (y = 0; y <= 2; y++) { cels[y].style.display = v; }
+
+	cels = rows[rows.length-4].getElementsByTagName('td');
+	for (y = 1; y <= 7; y++) { cels[y].style.display = v; }
 }
 
 function visible_articles(rows, col, v)
 {
 	var cels = rows[0].getElementsByTagName('td');
-	cels[2].style.display = v;
-	
-	cels = rows[rows.length-4].getElementsByTagName('td');
 	cels[2].style.display = v;
 
 	cels = rows[1].getElementsByTagName('td');
@@ -52,11 +49,14 @@ function visible_articles(rows, col, v)
 	for (y = 6; y <= 11; y++) { cels[y].style.display = v; }
 	
 	// footers
-	cels = rows[rows.length-3].getElementsByTagName('td');
-	for (y = 3; y <= 6; y++) { cels[y].style.display = v; }
-	
 	cels = rows[rows.length-1].getElementsByTagName('td');
-	for (y = 6; y <= 11; y++) { cels[y].style.display = v; }
+	cels[2].style.display = v;
+
+	cels = rows[rows.length-3].getElementsByTagName('td');
+	for (y = 3; y <= 5; y++) { cels[y].style.display = v; }
+
+	cels = rows[rows.length-4].getElementsByTagName('td');
+	for (y = 8; y <= 14; y++) { cels[y].style.display = v; }
 }
 
 function visible_database(rows, col, v)
@@ -65,15 +65,15 @@ function visible_database(rows, col, v)
 	var cels = rows[0].getElementsByTagName('td');
 	cels[3].style.display = v;
 	
-	cels = rows[rows.length-4].getElementsByTagName('td');
-	cels[3].style.display = v;
-
 	cels = rows[1].getElementsByTagName('td');
 	for (y = 7; y <= 9; y++) { cels[y].style.display = v; }
 	
 	// footers
-	cels = rows[rows.length-3].getElementsByTagName('td');
-	for (y = 7; y <= 9; y++) { cels[y].style.display = v; }
+	cels = rows[rows.length-1].getElementsByTagName('td');
+	cels[3].style.display = v;
+
+	cels = rows[rows.length-4].getElementsByTagName('td');
+	for (y = 15; y <= 17; y++) { cels[y].style.display = v; }
 }
 
 function visible_links(rows, col, v)
@@ -82,15 +82,15 @@ function visible_links(rows, col, v)
 	var cels = rows[0].getElementsByTagName('td');
 	cels[4].style.display = v;
 	
-	cels = rows[rows.length-4].getElementsByTagName('td');
-	cels[4].style.display = v;
-
 	cels = rows[1].getElementsByTagName('td');
 	for (y = 10; y <= 14; y++) { cels[y].style.display = v; }
 	
 	// footers
-	cels = rows[rows.length-3].getElementsByTagName('td');
-	for (y = 10; y <= 14; y++) { cels[y].style.display = v; }
+	cels = rows[rows.length-1].getElementsByTagName('td');
+	cels[4].style.display = v;
+
+	cels = rows[rows.length-4].getElementsByTagName('td');
+	for (y = 18; y <= 22; y++) { cels[y].style.display = v; }
 	//
 }
 
@@ -100,15 +100,15 @@ function visible_image(rows, col, v)
 	var cels = rows[0].getElementsByTagName('td');
 	cels[5].style.display = v;
 	
-	cels = rows[rows.length-4].getElementsByTagName('td');
-	cels[5].style.display = v;
-
 	cels = rows[1].getElementsByTagName('td');
 	for (y = 15; y <= 16; y++) { cels[y].style.display = v; }
 
 	// footers
-	cels = rows[rows.length-3].getElementsByTagName('td');
-	for (y = 15; y <= 16; y++) { cels[y].style.display = v; }
+	cels = rows[rows.length-1].getElementsByTagName('td');
+	cels[5].style.display = v;
+
+	cels = rows[rows.length-4].getElementsByTagName('td');
+	for (y = 23; y <= 24; y++) { cels[y].style.display = v; }
 	//
 }
 

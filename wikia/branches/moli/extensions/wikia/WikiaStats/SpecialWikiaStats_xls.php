@@ -108,25 +108,26 @@ class WikiaStatsXLS {
 		// date
 		$this->writeXLSLabel(4, $col_date, '');
 		// wikians
-		$this->writeXLSLabel(4,2,wfMsg('wikiastats_lifetime_editors'));
-		$this->mergeXLSColsRows(4, 2, 4, 3);
-		$this->writeXLSLabel(4,4,wfMsg('wikiastats_months_edits'));
-		$this->mergeXLSColsRows(4, 4, 4, 8);
-		$this->writeXLSLabel(5,2,wfMsg('wikiastats_total'));
-		$this->mergeXLSColsRows(5, 2, 6, 2);
-		$this->writeXLSLabel(5,3,str_replace("<br/>", " ", wfMsg('wikiastats_main_namespace')));
-		$this->mergeXLSColsRows(5, 3, 5, 3);
-		$this->writeXLSLabel(5, 4,str_replace("<br/>", " ", wfMsg('wikiastats_main_namespace')));
-		$this->mergeXLSColsRows(5, 4, 5, 6);
-		$this->writeXLSLabel(5,7,str_replace("<br/>", " ", wfMsg('wikiastats_other_namespace')));
-		$this->mergeXLSColsRows(5, 7, 5, 8);
-		$this->writeXLSLabel(6,3,">10");
+		$this->writeXLSLabel(4,2,wfMsg('wikiastats_months_edits'));
+		$this->mergeXLSColsRows(4, 2, 4, 6);
+		$this->writeXLSLabel(4,7,wfMsg('wikiastats_lifetime_editors'));
+		$this->mergeXLSColsRows(4, 7, 4, 8);
+		$this->writeXLSLabel(5,2,str_replace("<br/>", " ", wfMsg('wikiastats_main_namespace')));
+		$this->mergeXLSColsRows(5, 2, 5, 4);
+		$this->writeXLSLabel(5,5,str_replace("<br/>", " ", wfMsg('wikiastats_other_namespace')));
+		$this->mergeXLSColsRows(5, 5, 5, 6);
+		$this->writeXLSLabel(5,7,wfMsg('wikiastats_total'));
+		$this->mergeXLSColsRows(5, 7, 6, 7);
+		$this->writeXLSLabel(5, 8,str_replace("<br/>", " ", wfMsg('wikiastats_main_namespace')));
+		$this->mergeXLSColsRows(5, 8, 5, 8);
+
+		$this->writeXLSLabel(6,2,wfMsg('wikiastats_total'));
+		$this->writeXLSLabel(6,3,">5");
+		$this->writeXLSLabel(6,4,">100");
+		$this->writeXLSLabel(6,5,wfMsg('wikistats_user_namespace'));
+		$this->writeXLSLabel(6,6,wfMsg('wikistats_image_namespace'));
+		$this->writeXLSLabel(6,8,">10");
 		#$this->writeXLSLabel(6,3,"new");
-		$this->writeXLSLabel(6,4,wfMsg('wikiastats_total'));
-		$this->writeXLSLabel(6,5,">5");
-		$this->writeXLSLabel(6,6,">100");
-		$this->writeXLSLabel(6,7,wfMsg('wikistats_user_namespace'));
-		$this->writeXLSLabel(6,8,wfMsg('wikistats_image_namespace'));
 
 		// articles
 		$this->writeXLSLabel(4,9,wfMsg('wikiastats_count'));

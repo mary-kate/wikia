@@ -38,7 +38,7 @@ $wgStatsExcludedNonSpecialGroup = array();
 $wgStatsSpecialGroupUser = false;
 
 #--- messages file
-require_once( dirname(__FILE__) . '/SpecialWikiaStats.i18n.php' );
+$wgExtensionMessagesFiles["WikiaStats"] = dirname(__FILE__) . '/SpecialWikiaStats.i18n.php';
 
 #--- helper file
 require_once( dirname(__FILE__) . '/SpecialWikiaStats_helper.php' );
