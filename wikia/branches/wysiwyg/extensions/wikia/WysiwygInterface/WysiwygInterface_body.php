@@ -47,7 +47,7 @@ class WysiwygInterface extends SpecialPage {
 
 			$parser = new WysiwygParser();
 			$parser->setOutputType(OT_HTML);
-			$out = $parser->parse($wikitext, $wgTitle, $options)->getText();
+			$out = $html = $parser->parse($wikitext, $wgTitle, $options)->getText();
 
 			// macbre: return nicely colored & tabbed code
 			require($IP. '/lib/geshi/geshi.php');
@@ -71,8 +71,26 @@ class WysiwygInterface extends SpecialPage {
 
 			$geshi = new geshi($out, 'html4strict');
 			$geshi->enable_keyword_links(false);
-			
+
+			// macbre: call ReverseParser to parse HTML back to wikimarkup
+			require(dirname(__FILE__).'/ReverseParser.php');
+			$reverseParser = new ReverseParser();
+
+			$wikitext_parsed = $reverseParser->parse($html);
+
+			// output
+			// 1. wikimarkup
+			// 2. parsed HTML
+			// 3. parsed wikimarkup
+			$wgOut->addHTML('<h3>Wikimarkup</h3>');
+			$wgOut->addHTML('<pre>' . htmlspecialchars($wikitext) . '</pre>');
+
+			$wgOut->addHTML('<h3>HTML</h3>');
 			$wgOut->addHTML($geshi->parse_code());
+
+			$wgOut->addHTML('<h3>Back to wikimarkup</h3>');
+			$wgOut->addHTML('<pre>' . htmlspecialchars($wikitext_parsed) . '</pre>');
+		
 		}
 
 }
