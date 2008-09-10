@@ -173,43 +173,6 @@ class WikiaStatsXLS {
 
 		// monthly stats
 		$row = 7;
-		foreach ($monthlyStats as $date => $columnsData)
-		{
-			#---
-			if ($columnsData['visible'] === 1) {
-				$dateArr = explode("-", $date);
-				$stamp = mktime(0,0,0,$dateArr[1],1,$dateArr[0]);
-				$outDate = substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " " . $dateArr[0];
-				// output date in correct format
-				$this->writeXLSLabel($row, $col_date, $outDate);
-				//----
-				$col = $col_date + 1;
-				foreach ($columns as $column)
-				{
-					if ( in_array($column, array('date')) ) continue;
-					#---
-					$out = $columnsData[$column];
-					if (empty($columnsData[$column]) || ($columnsData[$column] == 0) || ($columnsData[$column] >= 100)) {
-						$out = "";
-					}
-					if ($out != "") {
-							$out = sprintf("%0.0f%%", $out);
-							$this->writeXLSNumber($row, $col, $out);
-					}
-					$col++;
-				}
-				$row++;
-			}
-		}
-
-		// column's names -> A, B, C ...
-		$col = $col_date;
-		foreach ($columns as $column)
-		{
-			if ($column == "date") $column = "";
-			$this->writeXLSLabel($row,$col,$column);
-			$col++;
-		}
 		// statistics
 		foreach ($data as $date => $columnsData)
 		{
@@ -256,6 +219,46 @@ class WikiaStatsXLS {
 						$this->writeXLSNumber($row, $col, $out);
 				}
 				$col++;
+			}
+		}
+
+		$row++;
+		// column's names -> A, B, C ...
+		$col = $col_date;
+		foreach ($columns as $column)
+		{
+			if ($column == "date") $column = "";
+			$this->writeXLSLabel($row,$col,$column);
+			$col++;
+		}
+
+		$row++;	
+		foreach ($monthlyStats as $date => $columnsData)
+		{
+			#---
+			if ($columnsData['visible'] === 1) {
+				$dateArr = explode("-", $date);
+				$stamp = mktime(0,0,0,$dateArr[1],1,$dateArr[0]);
+				$outDate = substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " " . $dateArr[0];
+				// output date in correct format
+				$this->writeXLSLabel($row, $col_date, $outDate);
+				//----
+				$col = $col_date + 1;
+				foreach ($columns as $column)
+				{
+					if ( in_array($column, array('date')) ) continue;
+					#---
+					$out = $columnsData[$column];
+					if (empty($columnsData[$column]) || ($columnsData[$column] == 0) || ($columnsData[$column] >= 100)) {
+						$out = "";
+					}
+					if ($out != "") {
+							$out = sprintf("%0.0f%%", $out);
+							$this->writeXLSNumber($row, $col, $out);
+					}
+					$col++;
+				}
+				$row++;
 			}
 		}
 
