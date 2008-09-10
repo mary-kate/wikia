@@ -247,7 +247,7 @@ class ReverseParser
 		$tagParent = $node->parentNode;
 
 		// remove span automagically added inside <hx>
-		if ( $tagParent->nodeName{0} == 'h' ) {
+		if ( is_object($tagParent) && $tagParent->nodeName{0} == 'h' ) {
 			return trim($node->textContent, ' ');
 		}
 	}
@@ -264,7 +264,7 @@ class ReverseParser
 		$tagParent = $node->parentNode;
 
 		// remove anchor automagically added before <hx>
-		if ( $tagAfter->nodeName{0} == 'h' ) {
+		if ( is_object($tagAfter) && $tagAfter->nodeName{0} == 'h' ) {
 			return '';
 		}
 
