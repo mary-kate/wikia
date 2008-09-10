@@ -111,31 +111,31 @@ class ReverseParser
 							break;
 
 						case 'p':
-							$output = "\n{$content}\n";
+							$output = "\n{$content}";
 							break;
 
 						case 'h1':
-							$output = "\n={$content} =\n";
+							$output = "={$content} =\n";
 							break;
 
 						case 'h2':
-							$output = "\n=={$content} ==\n";
+							$output = "=={$content} ==\n";
 							break;
 
 						case 'h3':
-							$output = "\n==={$content} ===\n";
+							$output = "==={$content} ===\n";
 							break;
 		
 						case 'h4':
-							$output = "\n===={$content} ====\n";
+							$output = "===={$content} ====\n";
 							break;
 
 						case 'h5':
-							$output = "\n====={$content} =====\n";
+							$output = "====={$content} =====\n";
 							break;
 
 						case 'h6':
-							$output = "\n======{$content} ======\n";
+							$output = "======{$content} ======\n";
 							break;
 
 						case 'br':
@@ -148,7 +148,7 @@ class ReverseParser
 
 						case 'pre':
 							$content = trim(str_replace("\n", "\n ", $content));	// add white space before each line
-							$output = "\n {$content}\n";
+							$output = "\n\n {$content}\n";
 							break;
 
 						// tables
