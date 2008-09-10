@@ -90,6 +90,9 @@ class WysiwygInterface extends SpecialPage {
 
 			$wysiwigable = $failsafeFallback->checkWikitext( $wikitext );
 		
+			// parse
+			$parsedOld = $parser->parse($wikitext, $wgTitle, $options)->getText();
+			$parsedNew = $parser->parse($wikitext_parsed, $wgTitle, $options)->getText();
 
 			// output
 			// 1. wikimarkup
@@ -97,6 +100,7 @@ class WysiwygInterface extends SpecialPage {
 			// 2. parsed HTML
 			// 3. parsed wikimarkup
 			// 4. diff between 1 and 3
+			// 5. parsed old and new wikimarkup
 			$wgOut->addHTML('<h3>Wikimarkup</h3>');
 			$wgOut->addHTML('<pre>' . htmlspecialchars($wikitext) . '</pre>');
 
@@ -113,5 +117,8 @@ class WysiwygInterface extends SpecialPage {
 
 			$wgOut->addHTML('<h3>Back to wikimarkup</h3>');
 			$wgOut->addHTML('<pre>' . htmlspecialchars($wikitext_parsed) . '</pre>');
+
+			$wgOut->addHTML('<h3>Visual comparison</h3>');
+			$wgOut->addHTML('<table><tr><th>Wikitext</th><th>Parsed from HTML</th></tr><tr><td>'.$parsedOld.'</td><td>'.$parsedOld.'</td></table>');
 		}
 }
