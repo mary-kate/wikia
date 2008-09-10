@@ -8,7 +8,10 @@
 class ReverseParser
 {
 	// DOMdocument object used to parse HTML
-	var $dom;
+	private $dom;
+
+	// used by nested lists parser
+	public static $listLevel = 0;
 
 	function __construct() {
 		$this->dom = new DOMdocument();
@@ -23,6 +26,9 @@ class ReverseParser
 
 		// load HTML into DOMdocument
 		$this->dom->loadHTML($html);
+
+		// cleanup
+		self::$listLevel = 0;
 
 		// let's begin with <body> node
 		$body = $this->dom->getElementsByTagName('body')->item(0);
@@ -64,8 +70,20 @@ class ReverseParser
 
 			$childOutput = '';
 
+			// handle nested lists
+			$isListNode = in_array($node->nodeName, array('ul', 'ol'));
+
+			if ($isListNode) {
+				self::$listLevel++;
+			}
+
+
 			for ($n=0; $n < $nodes->length; $n++) {
 				$childOutput .= $this->parseNode($nodes->item($n), $level);
+			}
+
+			if ($isListNode) {
+				self::$listLevel--;
 			}
 		}
 
@@ -135,16 +153,16 @@ class ReverseParser
 
 						// lists
 						// TODO: handle nested lists
-						case 'ul';
+						case 'ul':
 						case 'ol':
-						case 'dl':
-							$output = $childOutput;
+							$output = $content . (self::$listLevel == 0 ? "\n" : '');
 							break;
-
+	
+						case 'dl':
 						case 'li':
 						case 'dd':
 						case 'dt':
-							$output = self::handleList($node);
+							$output = self::handleListItem($node, $content);
 							break;
 
 						// handle more complicated tags
@@ -155,9 +173,15 @@ class ReverseParser
 						case 'span':
 							$output = self::handleSpan($node);
 							break;
+
+
+						// debug only!
+						default:
+							$output = "<!-- {$node->nodeName}: {$content} -->";
 					}
 				}
 				break;
+
 			case XML_TEXT_NODE:
 				$output = $node->textContent;
 				break;
@@ -230,20 +254,18 @@ class ReverseParser
 	 * Returns wikimarkup for (un)ordered / definition lists
 	 */
 
-	static function handleList($node) {
+	static function handleListItem($node, $content) {
 
 		switch($node->nodeName) {
-			case 'li':	
-				$bullet = ($node->parentNode->nodeName == 'ul') ? '#' : '*';
-				return $bullet . $node->textContent;
+			case 'li':
+				$bullet = ($node->parentNode->nodeName == 'ul') ? '*' : '#';
+				return str_repeat($bullet, self::$listLevel) . $content;
 
 			case 'dt':
 				return ':' . $node->textContent;
-				break;
 
 			case 'dd':
 				return ';' . $node->textContent;
-				break;
 		}
 	}
 }
