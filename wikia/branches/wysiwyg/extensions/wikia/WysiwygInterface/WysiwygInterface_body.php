@@ -84,20 +84,24 @@ class WysiwygInterface extends SpecialPage {
 
 			$wikitext_parsed = $reverseParser->parse($html);
 
+			// check wysiwigability ;)
+			require(dirname(__FILE__).'/FailsafeFallback.php');
+			$failsafeFallback = new FailsafeFallback();
+
+			$wysiwigable = $failsafeFallback->checkWikitext( $wikitext );
+		
+
 			// output
 			// 1. wikimarkup
 			// 1a was this Wysiwigable?
 			// 2. parsed HTML
 			// 3. parsed wikimarkup
+			// 4. diff between 1 and 3
 			$wgOut->addHTML('<h3>Wikimarkup</h3>');
 			$wgOut->addHTML('<pre>' . htmlspecialchars($wikitext) . '</pre>');
 
 			$wgOut->addHTML ('<h4>Wysiwygable</h4>') ;
-
-			require(dirname(__FILE__).'/FailsafeFallback.php');
-			$failsafeFallback = new FailsafeFallback();
-
-			if( $failsafeFallback->checkWikitext( $wikitext ) ) {
+			if( $wysiwigable ) {
 				$wgOut->addHTML( 'Article was deemed "appropriate" for Wysiwyg editing.' ) ;
 			} else {
 				$wgOut->addHTML( 'Article was deemed "inapropriate" for Wysiwyg editing.' ) ;
@@ -109,7 +113,5 @@ class WysiwygInterface extends SpecialPage {
 
 			$wgOut->addHTML('<h3>Back to wikimarkup</h3>');
 			$wgOut->addHTML('<pre>' . htmlspecialchars($wikitext_parsed) . '</pre>');
-		
 		}
-
 }

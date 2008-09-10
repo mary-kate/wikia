@@ -267,6 +267,10 @@ class ReverseParser
 		if ( $tagAfter->nodeName{0} == 'h' ) {
 			return '';
 		}
+
+		// handle links
+		// TODO: really handle links
+		return "[[{$node->textContent}]]";
 	}
 
 	/**
