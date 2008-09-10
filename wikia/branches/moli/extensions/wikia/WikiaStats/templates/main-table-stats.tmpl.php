@@ -79,66 +79,6 @@ YAHOO.util.Event.onDOMReady(function () {
 	<td class="cb" nowrap>2 Kb</td>
 </tr>
 <?php
-foreach ($monthlyStats as $date => $columnsData) {
-	#---
-	if ($columnsData['visible'] === 1) {
-		$dateArr = explode("-", $date);
-		$stamp = mktime(0,0,0,$dateArr[1],1,$dateArr[0]);
-		$outDate = substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " " . $dateArr[0];
-
-?>
-<tr>
-	<td class="db" nowrap><?= $outDate ?></td>
-<?
-		$loop = 0;
-		foreach ($columns as $column) {
-			if ( in_array($column, array('date')) ) continue;
-			$loop++;
-			#---
-			$out = $columnsData[$column];
-			$class = "rb";
-			/*if ( in_array($column, array('B','H','I','J','K')) ) {
-				$out = "&nbsp;";
-			} else*/
-			if (empty($columnsData[$column]) || ($columnsData[$column] == 0)) {
-				$out = "&nbsp;";
-			} else {
-				if ($columnsData[$column] < 0) {
-					$out = "<font color=\"#800000\">".sprintf("%0.0f%%", $columnsData[$column])."</font>";
-				} elseif (($columnsData[$column] > 0) && ($columnsData[$column] < 25)) {
-					$out = "<font color=\"#555555\">".sprintf("+%0.0f%%", $columnsData[$column])."</font>";
-				} elseif (($columnsData[$column] > 25) && ($columnsData[$column] < 75)) {
-					$out = "<font color=\"#008000\">".sprintf("+%0.0f%%", $columnsData[$column])."</font>";
-				} elseif (($columnsData[$column] > 75) && ($columnsData[$column] < 100)) {
-					$out = "<font color=\"#008000\"><u>".sprintf("+%0.0f%%", $columnsData[$column])."</u></font>";
-				} elseif ($columnsData[$column] >= 100) {
-					$out = "&nbsp;";
-				}
-			}
-?>
-	<td class="rb"><?= $out ?></td>
-<?php
-		}
-?>
-</tr>
-<?php
-	}
-}
-?>
-</tr>
-<tr bgcolor="#ffeecc">
-<?php
-$loop = 0;
-foreach ($columns as $column) {
-	if ($column == "date") $column = "&nbsp;";
-	$loop++;
-	if ( empty($userIsSpecial) && (is_array($wgStatsExcludedNonSpecialGroup)) && (in_array($loop, $wgStatsExcludedNonSpecialGroup) )) continue;
-?>
-	<td class="cb" title="<?= wfMsg("wikiastats_mainstats_column_".$column) ?>"><?= $column ?></td>
-<?
-}
-?>
-<?php
 foreach ($statsData as $date => $columnsData) {
 ?>
 <tr>
@@ -219,6 +159,64 @@ foreach ($statsData as $date => $columnsData) {
 ?>
 </tr>
 <?
+}
+?>
+</tr>
+<tr bgcolor="#ffeecc">
+<?php
+$loop = 0;
+foreach ($columns as $column) {
+	if ($column == "date") $column = "&nbsp;";
+	$loop++;
+	if ( empty($userIsSpecial) && (is_array($wgStatsExcludedNonSpecialGroup)) && (in_array($loop, $wgStatsExcludedNonSpecialGroup) )) continue;
+?>
+	<td class="cb" title="<?= wfMsg("wikiastats_mainstats_column_".$column) ?>"><?= $column ?></td>
+<?
+}
+foreach ($monthlyStats as $date => $columnsData) {
+	#---
+	if ($columnsData['visible'] === 1) {
+		$dateArr = explode("-", $date);
+		$stamp = mktime(0,0,0,$dateArr[1],1,$dateArr[0]);
+		$outDate = substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " " . $dateArr[0];
+
+?>
+<tr>
+	<td class="db" nowrap><?= $outDate ?></td>
+<?
+		$loop = 0;
+		foreach ($columns as $column) {
+			if ( in_array($column, array('date')) ) continue;
+			$loop++;
+			#---
+			$out = $columnsData[$column];
+			$class = "rb";
+			/*if ( in_array($column, array('B','H','I','J','K')) ) {
+				$out = "&nbsp;";
+			} else*/
+			if (empty($columnsData[$column]) || ($columnsData[$column] == 0)) {
+				$out = "&nbsp;";
+			} else {
+				if ($columnsData[$column] < 0) {
+					$out = "<font color=\"#800000\">".sprintf("%0.0f%%", $columnsData[$column])."</font>";
+				} elseif (($columnsData[$column] > 0) && ($columnsData[$column] < 25)) {
+					$out = "<font color=\"#555555\">".sprintf("+%0.0f%%", $columnsData[$column])."</font>";
+				} elseif (($columnsData[$column] > 25) && ($columnsData[$column] < 75)) {
+					$out = "<font color=\"#008000\">".sprintf("+%0.0f%%", $columnsData[$column])."</font>";
+				} elseif (($columnsData[$column] > 75) && ($columnsData[$column] < 100)) {
+					$out = "<font color=\"#008000\"><u>".sprintf("+%0.0f%%", $columnsData[$column])."</u></font>";
+				} elseif ($columnsData[$column] >= 100) {
+					$out = "&nbsp;";
+				}
+			}
+?>
+	<td class="rb"><?= $out ?></td>
+<?php
+		}
+?>
+</tr>
+<?php
+	}
 }
 ?>
 </tr>
