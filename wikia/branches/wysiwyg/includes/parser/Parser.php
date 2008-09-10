@@ -1493,7 +1493,7 @@ class Parser
 	 * @private
 	 */
 	function replaceInternalLinks( $s ) {
-		global $wgContLang, $FCKmetaData;
+		global $wgContLang, $FCKmetaData, $FCKparseEnable;
 		static $fname = 'Parser::replaceInternalLinks' ;
 
 		wfProfileIn( $fname );
@@ -1796,16 +1796,18 @@ class Parser
 					continue;
 				}
 			}
-			$tmpDescription = $wasblank ? '' : $text;
-			$refId = count($FCKmetaData);
-			$text .= "\x1$refId\x1";
-			$s .= $this->makeLinkHolder( $nt, $text, '', $trail, $prefix );
-			list( $tmpInside, $tmpTrail ) = Linker::splitTrail( $trail );
-			$tmpLink = $nt->mPrefixedText;
-			if (ctype_alpha($tmpLink{0})) {
-				$tmpLink{0} = $nt->mUserCaseDBKey{0};
+			if ($FCKparseEnable) {
+				$tmpDescription = $wasblank ? '' : $text;
+				$refId = count($FCKmetaData);
+				$text .= "\x1$refId\x1";
+				list( $tmpInside, $tmpTrail ) = Linker::splitTrail( $trail );
+				$tmpLink = $nt->mPrefixedText;
+				if (ctype_alpha($tmpLink{0})) {
+					$tmpLink{0} = $nt->mUserCaseDBKey{0};
+				}
+				$FCKmetaData[$refId] = array('type' => 'internal link', 'href' => $tmpLink, 'description' => $tmpDescription, 'trial' => $tmpInside);
 			}
-			$FCKmetaData[$refId] = array('type' => 'internal link', 'href' => $tmpLink, 'description' => $tmpDescription, 'trial' => $tmpInside);
+			$s .= $this->makeLinkHolder( $nt, $text, '', $trail, $prefix );
 		}
 		wfProfileOut( $fname );
 		return $s;
