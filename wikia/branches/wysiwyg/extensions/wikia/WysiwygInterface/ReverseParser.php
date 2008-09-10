@@ -151,14 +151,33 @@ class ReverseParser
 							$output = "\n {$content}\n";
 							break;
 
+						// tables
+						// @see http://en.wikipedia.org/wiki/Help:Table
+						case 'table':
+							$attStr = self::getAttributesStr($node);
+							$output = "\n{|{$attStr}\n{$content}|}\n";
+							break;
+
+						case 'tr':
+							$output = "|-\n{$content}";
+							break;
+	
+						case 'th':
+							$output = "!{$content}";
+							break;
+					     
+						case 'td':
+							$output = "|{$content}";
+							break;
+
 						// lists
 						// TODO: handle nested lists
 						case 'ul':
 						case 'ol':
+						case 'dl':
 							$output = $content . (self::$listLevel == 0 ? "\n" : '');
 							break;
 	
-						case 'dl':
 						case 'li':
 						case 'dd':
 						case 'dt':
