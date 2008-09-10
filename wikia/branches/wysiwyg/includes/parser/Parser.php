@@ -419,6 +419,10 @@ class Parser
 			wfRunHooks( 'ParserLimitReport', array( $this, &$limitReport ) );
 			$text .= "\n<!-- \n$limitReport-->\n";
 		}
+		global $FCKparseEnable, $FCKmetaData;
+		if (!empty($FCKparseEnable)) {
+			$text .= "FCKdata:begin\n" . print_r($FCKmetaData, true) . "\nFCKdata:end";	//TODO: here we can add JSON in <script> tag so FCK can use it
+		}
 		$this->mOutput->setText( $text );
 		$this->mRevisionId = $oldRevisionId;
 		$this->mRevisionTimestamp = $oldRevisionTimestamp;
@@ -1472,7 +1476,7 @@ class Parser
 		$imagesexception = !empty($imagesfrom);
 		$text = false;
 		if ( $this->mOptions->getAllowExternalImages()
-		     || ( $imagesexception && strpos( $url, $imagesfrom ) === 0 ) 
+		     || ( $imagesexception && strpos( $url, $imagesfrom ) === 0 )
 			 || ( !empty($wgAllowExternalWhitelistImages) && wfRunHooks('outputMakeExternalImage', array(&$url)) )
 	    ) {
 			if ( preg_match( self::EXT_IMAGE_REGEX, $url ) ) {
@@ -1489,7 +1493,7 @@ class Parser
 	 * @private
 	 */
 	function replaceInternalLinks( $s ) {
-		global $wgContLang;
+		global $wgContLang, $FCKmetaData;
 		static $fname = 'Parser::replaceInternalLinks' ;
 
 		wfProfileIn( $fname );
@@ -1755,6 +1759,7 @@ class Parser
 			if( $nt->getFragment() === '' ) {
 				if( in_array( $nt->getPrefixedText(), $selflink, true ) ) {
 					$s .= $prefix . $sk->makeSelfLinkObj( $nt, $text, '', $trail );
+					$FCKmetaData[count($FCKmetaData)] = array('type' => 'self link', 'description' => $wasblank ? '' : $text, 'trail' => $trail);
 					continue;
 				}
 			}
@@ -1791,7 +1796,16 @@ class Parser
 					continue;
 				}
 			}
+			$tmpDescription = $wasblank ? '' : $text;
+			$refId = count($FCKmetaData);
+			$text .= "\x1$refId\x1";
 			$s .= $this->makeLinkHolder( $nt, $text, '', $trail, $prefix );
+			list( $tmpInside, $tmpTrail ) = Linker::splitTrail( $trail );
+			$tmpLink = $nt->mPrefixedText;
+			if (ctype_alpha($tmpLink{0})) {
+				$tmpLink{0} = $nt->mUserCaseDBKey{0};
+			}
+			$FCKmetaData[$refId] = array('type' => 'internal link', 'href' => $tmpLink, 'description' => $tmpDescription, 'trial' => $tmpInside);
 		}
 		wfProfileOut( $fname );
 		return $s;
@@ -2654,7 +2668,7 @@ class Parser
 	 *  self::OT_HTML: all templates and extension tags
 	 *
 	 * @param string $tex The text to transform
-	 * @param PPFrame $frame Object describing the arguments passed to the template. 
+	 * @param PPFrame $frame Object describing the arguments passed to the template.
 	 *        Arguments may also be provided as an associative array, as was the usual case before MW1.12.
 	 *        Providing arguments this way may be useful for extensions wishing to perform variable replacement explicitly.
 	 * @param bool $argsOnly Only do argument (triple-brace) expansion, not double-brace expansion
@@ -2721,7 +2735,7 @@ class Parser
 	function limitationWarn( $limitationType, $current=null, $max=null) {
 		$msgName = $limitationType . '-warning';
 		//does no harm if $current and $max are present but are unnecessary for the message
-		$warning = wfMsg( $msgName, $current, $max); 
+		$warning = wfMsg( $msgName, $current, $max);
 		$this->mOutput->addWarning( $warning );
 		$cat = Title::makeTitleSafe( NS_CATEGORY, wfMsgForContent( $limitationType . '-category' ) );
 		if ( $cat ) {
@@ -2864,7 +2878,7 @@ class Parser
 					$found = true;
 					$noparse = true;
 					$preprocessFlags = 0;
-					
+
 					if ( is_array( $result ) ) {
 						if ( isset( $result[0] ) ) {
 							$text = $result[0];
@@ -3974,23 +3988,23 @@ class Parser
 	 * @param integer $flags a combination of the following flags:
 	 *     SFH_NO_HASH   No leading hash, i.e. {{plural:...}} instead of {{#if:...}}
 	 *
-	 *     SFH_OBJECT_ARGS   Pass the template arguments as PPNode objects instead of text. This 
+	 *     SFH_OBJECT_ARGS   Pass the template arguments as PPNode objects instead of text. This
 	 *     allows for conditional expansion of the parse tree, allowing you to eliminate dead
-	 *     branches and thus speed up parsing. It is also possible to analyse the parse tree of 
+	 *     branches and thus speed up parsing. It is also possible to analyse the parse tree of
 	 *     the arguments, and to control the way they are expanded.
 	 *
 	 *     The $frame parameter is a PPFrame. This can be used to produce expanded text from the
 	 *     arguments, for instance:
 	 *         $text = isset( $args[0] ) ? $frame->expand( $args[0] ) : '';
 	 *
-	 *     For technical reasons, $args[0] is pre-expanded and will be a string. This may change in 
+	 *     For technical reasons, $args[0] is pre-expanded and will be a string. This may change in
 	 *     future versions. Please call $frame->expand() on it anyway so that your code keeps
 	 *     working if/when this is changed.
 	 *
 	 *     If you want whitespace to be trimmed from $args, you need to do it yourself, post-
 	 *     expansion.
 	 *
-	 *     Please read the documentation in includes/parser/Preprocessor.php for more information 
+	 *     Please read the documentation in includes/parser/Preprocessor.php for more information
 	 *     about the methods available in PPFrame and PPNode.
 	 *
 	 * @return The old callback function for this name, if any
@@ -4400,7 +4414,7 @@ class Parser
 			if ( count( $matches ) == 0 ) {
 				continue;
 			}
-			
+
 			if ( strpos( $matches[0], '%' ) !== false )
 				$matches[1] = urldecode( $matches[1] );
 			$tp = Title::newFromText( $matches[1] );
