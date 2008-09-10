@@ -10,11 +10,13 @@
 class FailsafeFallback
 {
 
-	public function checkArticle( $article ) {
+	public function checkWikitext( $wikitext ) {
 		wfProfileIn(__METHOD__);
 
 		/* basically, run through wikimarkup and decide, if it's 'easy' or not */
 
 		wfProfileOut(__METHOD__);
+
+		return true ; // as a default, let's assume it's good
 	}
 }

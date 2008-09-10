@@ -86,10 +86,22 @@ class WysiwygInterface extends SpecialPage {
 
 			// output
 			// 1. wikimarkup
+			// 1a was this Wysiwigable?
 			// 2. parsed HTML
 			// 3. parsed wikimarkup
 			$wgOut->addHTML('<h3>Wikimarkup</h3>');
 			$wgOut->addHTML('<pre>' . htmlspecialchars($wikitext) . '</pre>');
+
+			$wgOut->addHTML ('<h4>Wysiwygable</h4>') ;
+
+			require(dirname(__FILE__).'/FailsafeFallback.php');
+			$failsafeFallback = new FailsafeFallback();
+
+			if( $failsafeFallback->checkWikitext( $wikitext ) ) {
+				$wgOut->addHTML( 'Article was deemed "appropriate" for Wysiwyg editing.' ) ;
+			} else {
+				$wgOut->addHTML( 'Article was deemed "inapropriate" for Wysiwyg editing.' ) ;
+			}
 
 			$wgOut->addHTML('<h3>HTML</h3>');
 			$wgOut->addHTML($geshi->parse_code());
