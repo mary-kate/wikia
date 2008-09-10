@@ -47,7 +47,10 @@ class WysiwygInterface extends SpecialPage {
 
 			$parser = new WysiwygParser();
 			$parser->setOutputType(OT_HTML);
+			global $FCKparseEnable;
+			$FCKparseEnable = true;
 			$out = $parser->parse($wikitext, $wgTitle, $options)->getText();
+			$FCKparseEnable = false;
 
 			// fix UTF issue
 			$out = mb_convert_encoding($out, 'HTML-ENTITIES', "UTF-8");

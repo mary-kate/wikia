@@ -380,6 +380,7 @@ class Linker {
 	 */
 	function makeBrokenLinkObj( $title, $text = '', $query = '', $trail = '', $prefix = '' ) {
 		wfProfileIn( __METHOD__ );
+		global $FCKparseEnable;
 
 		if ( !$title instanceof Title ) {
 			# Fail gracefully
@@ -406,8 +407,14 @@ class Linker {
 		$style = $this->getInternalLinkAttributesObj( $nt, $text, 'new', $titleAttr );
 		list( $inside, $trail ) = Linker::splitTrail( $trail );
 
+		$refId = '';
+		if ($FCKparseEnable) {
+			preg_match("#\x1([^\x1]+)#", $text, $m);
+			$refId = empty($m[1]) ? '' : " refId=\"{$m[1]}\"";
+			$text = preg_replace("#\x1[^\x1]+\x1#", '', $text);
+		}
 		wfRunHooks( 'BrokenLink', array( &$this, $nt, $query, &$u, &$style, &$prefix, &$text, &$inside, &$trail ) );
-		$s = "<a href=\"{$u}\"{$style}>{$prefix}{$text}{$inside}</a>{$trail}";
+		$s = "<a href=\"{$u}\"{$style}{$refId}>{$prefix}{$text}{$inside}</a>{$trail}";
 
 		wfProfileOut( __METHOD__ );
 		return $s;
