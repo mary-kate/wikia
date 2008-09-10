@@ -143,7 +143,7 @@ class ReverseParser
 							break;
 
 						case 'hr':
-							$output = "\n---\n";
+							$output = "\n----\n";
 							break;
 
 						case 'pre':
@@ -171,13 +171,15 @@ class ReverseParser
 							break;
 
 						// lists
-						// TODO: handle nested lists
 						case 'ul':
 						case 'ol':
-						case 'dl':
 							$output = $content . (self::$listLevel == 0 ? "\n" : '');
 							break;
-	
+
+						case 'dl':
+							$output = $content;
+							break;
+
 						case 'li':
 						case 'dd':
 						case 'dt':
@@ -285,10 +287,10 @@ class ReverseParser
 				return str_repeat($bullet, self::$listLevel) . $content;
 
 			case 'dt':
-				return ':' . $node->textContent;
+				return ";{$node->textContent}";
 
 			case 'dd':
-				return ';' . $node->textContent;
+				return ":{$node->textContent}";
 		}
 	}
 }
