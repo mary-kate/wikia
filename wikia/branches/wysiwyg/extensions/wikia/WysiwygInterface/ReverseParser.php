@@ -178,6 +178,11 @@ class ReverseParser
 
 						case 'dl':
 							$output = $content;
+
+							// make space before next <dl> list
+							if ($node->nextSibling && $node->nextSibling->nodeName == 'dl') {
+								$output .= "\n";
+							}
 							break;
 
 						case 'li':
