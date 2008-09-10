@@ -119,6 +119,7 @@ class WysiwygInterface extends SpecialPage {
 			$wgOut->addHTML('<pre>' . htmlspecialchars($wikitext_parsed) . '</pre>');
 
 			$wgOut->addHTML('<h3>Visual comparison</h3>');
-			$wgOut->addHTML('<table><tr><th>Wikitext</th><th>Parsed from HTML</th></tr><tr><td>'.$parsedOld.'</td><td>'.$parsedOld.'</td></table>');
+			$wgOut->addHTML('<table><tr><th>Wikitext</th><th>Parsed from HTML</th></tr>');
+			$wgOut->addHTML('<tr><td style="vertical-align:top">'.$parsedOld.'</td><td style="vertical-align:top">'.$parsedNew.'</td></table>');
 		}
 }
