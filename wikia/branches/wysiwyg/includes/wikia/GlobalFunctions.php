@@ -570,3 +570,45 @@ function wfGetCurrentUrl() {
 
 	return $arr;
 }
+
+/**
+ * wfFCKSetRefId
+ *
+ * Adding reference ID to the $text variable
+ *
+ * @author Maciej Błaszkowski <marooned at wikia-inc.com>
+ * @access public
+ *
+ * @return nothing
+ */
+function wfFCKSetRefId($type, &$text, $link, $trail, $wasblank) {
+	global $FCKparseEnable, $FCKmetaData;
+	if ($FCKparseEnable) {
+		$tmpDescription = $wasblank ? '' : $text;
+		$refId = count($FCKmetaData);
+		$text .= "\x1$refId\x1";
+		list( $tmpInside, $tmpTrail ) = Linker::splitTrail($trail);
+		$FCKmetaData[$refId] = array('type' => $type, 'href' => $link, 'description' => $tmpDescription, 'trial' => $tmpInside);
+	}
+}
+
+/**
+ * wfFCKGetRefId
+ *
+ * Getting and removing reference ID from the $text variable
+ *
+ * @author Maciej Błaszkowski <marooned at wikia-inc.com>
+ * @access public
+ *
+ * @return string
+ */
+function wfFCKGetRefId(&$text) {
+	global $FCKparseEnable;
+	if ($FCKparseEnable) {
+		preg_match("#\x1([^\x1]+)#", $text, $m);
+		$refId = isset($m[1]) ? " refId=\"{$m[1]}\"" : '';
+		$text = preg_replace("#\x1[^\x1]+\x1#", '', $text);
+		return $refId;
+	}
+	return '';
+}

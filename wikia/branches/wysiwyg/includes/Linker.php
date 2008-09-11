@@ -278,7 +278,8 @@ class Linker {
 					$trail = $m[2];
 				}
 			}
-			$t = "<a href=\"{$u}\"{$style}>{$text}{$inside}</a>";
+			$refId = wfFCKGetRefId($text);
+			$t = "<a href=\"{$u}\"{$style}{$refId}>{$text}{$inside}</a>";
 
 			wfProfileOut( __METHOD__ );
 			return $t;
@@ -363,7 +364,8 @@ class Linker {
 		if ( $aprops !== '' ) $aprops = ' ' . $aprops;
 
 		list( $inside, $trail ) = Linker::splitTrail( $trail );
-		$r = "<a href=\"{$u}\"{$style}{$aprops}>{$prefix}{$text}{$inside}</a>{$trail}";
+		$refId = wfFCKGetRefId($text);
+		$r = "<a href=\"{$u}\"{$style}{$aprops}{$refId}>{$prefix}{$text}{$inside}</a>{$trail}";
 		wfProfileOut( __METHOD__ );
 		return $r;
 	}
@@ -407,12 +409,7 @@ class Linker {
 		$style = $this->getInternalLinkAttributesObj( $nt, $text, 'new', $titleAttr );
 		list( $inside, $trail ) = Linker::splitTrail( $trail );
 
-		$refId = '';
-		if ($FCKparseEnable) {
-			preg_match("#\x1([^\x1]+)#", $text, $m);
-			$refId = empty($m[1]) ? '' : " refId=\"{$m[1]}\"";
-			$text = preg_replace("#\x1[^\x1]+\x1#", '', $text);
-		}
+		$refId = wfFCKGetRefId($text);
 		wfRunHooks( 'BrokenLink', array( &$this, $nt, $query, &$u, &$style, &$prefix, &$text, &$inside, &$trail ) );
 		$s = "<a href=\"{$u}\"{$style}{$refId}>{$prefix}{$text}{$inside}</a>{$trail}";
 
@@ -697,7 +694,7 @@ class Linker {
 		if ( '' != $fp['align'] ) {
 			$s = "<div class=\"float{$fp['align']}\"><span>{$s}</span></div>";
 		}
-		return str_replace("\n", ' ',$prefix.$s.$postfix);
+		return str_replace("\n", ' ',"<!-- how to add this refId={$fp['refId']} to the tag? hmm -->".$prefix.$s.$postfix);
 	}
 
 	/**
@@ -776,7 +773,7 @@ class Linker {
 
 		$more = htmlspecialchars( wfMsg( 'thumbnail-more' ) );
 
-		$s = "<div class=\"thumb t{$fp['align']}\"><div class=\"thumbinner\" style=\"width:{$outerWidth}px;\">";
+		$s = "<div class=\"thumb t{$fp['align']}\"{$fp['refId']}><div class=\"thumbinner\" style=\"width:{$outerWidth}px;\">";
 		if( !$exists ) {
 			$s .= $this->makeBrokenImageLinkObj( $title, '', '', '', '', $time==true );
 			$zoomicon = '';
@@ -831,9 +828,10 @@ class Linker {
 					$q .= '&' . $query;
 				list( $inside, $trail ) = self::splitTrail( $trail );
 				$style = $this->getInternalLinkAttributesObj( $title, $text, 'new' );
+				$refId = wfFCKGetRefId($text);
 				wfProfileOut( __METHOD__ );
 				return '<a href="' . $upload->escapeLocalUrl( $q ) . '"'
-					. $style . '>' . $prefix . $text . $inside . '</a>' . $trail;
+					. $style . $refId . '>' . $prefix . $text . $inside . '</a>' . $trail;
 			} else {
 				wfProfileOut( __METHOD__ );
 				return $this->makeKnownLinkObj( $title, $text, $query, $trail, $prefix );
@@ -861,6 +859,7 @@ class Linker {
 	 * @todo Handle invalid or missing images better.
 	 */
 	function makeMediaLinkObj( $title, $text = '', $time = false ) {
+		$refId = wfFCKGetRefId($text);
 		if( is_null( $title ) ) {
 			### HOTFIX. Instead of breaking, return empty string.
 			return $text;
@@ -879,7 +878,7 @@ class Linker {
 				$text = $alt;
 			}
 			$u = htmlspecialchars( $url );
-			return "<a href=\"{$u}\" class=\"$class\" title=\"{$alt}\">{$text}</a>";
+			return "<a href=\"{$u}\" class=\"$class\" title=\"{$alt}\"{$refId}>{$text}</a>";
 		}
 	}
 
@@ -895,6 +894,7 @@ class Linker {
 
 	/** @todo document */
 	function makeExternalLink( $url, $text, $escape = true, $linktype = '', $ns = null ) {
+		$refId = wfFCKGetRefId($text);
 		$style = $this->getExternalLinkAttributes( $url, $text, 'external ' . $linktype );
 		global $wgNoFollowLinks, $wgNoFollowNsExceptions;
 		if( $wgNoFollowLinks && !(isset($ns) && in_array($ns, $wgNoFollowNsExceptions)) ) {
@@ -910,7 +910,7 @@ class Linker {
 			wfDebug("Hook LinkerMakeExternalLink changed the output of link with url {$url} and text {$text} to {$link}", true);
 			return $link;
 		}
-		return '<a href="'.$url.'"'.$style.'>'.$text.'</a>';
+		return '<a href="'.$url.'"'.$style.$refId.'>'.$text.'</a>';
 	}
 
 	/**
