@@ -28,7 +28,7 @@ class WikiaGenericStats {
     var $mSelectedCityId = -1;
 
     const MONTHLY_STATS = 7;
-    const USE_MEMC = 0;
+    const USE_MEMC = 1;
     const USE_OLD_DB = 0;
 	const IGNORE_WIKIS = "5, 11, 6745";
 
@@ -1071,6 +1071,7 @@ class WikiaGenericStats {
 				$row = $dbs->fetchObject( $res );
 				$stats_date = $row->date;
 				$dbs->freeResult( $res );
+				
 			}
 			if (empty($stats_date)) {
 				$stats_date = time();
@@ -1648,7 +1649,7 @@ class WikiaGenericStats {
 					}
 				}
 				$dbs->freeResult( $res );
-
+				
 				#---
 				if (self::USE_MEMC) $wgMemc->set($memkey, $wkCityMainStatistics, 60*60*3);
 			} catch (DBConnectionError $e) {
@@ -2374,7 +2375,6 @@ class WikiaGenericStats {
 		wfProfileOut( __METHOD__ );
         return $file_size ; 
     }
-
     
 
 	public function getStatisticsPager($total, $page, $link, $order="", $offset, $only_next=0)
