@@ -1802,10 +1802,10 @@ class Parser
 				$text .= "\x1$refId\x1";
 				list( $tmpInside, $tmpTrail ) = Linker::splitTrail( $trail );
 				$tmpLink = $nt->mTextform;
-				if (ctype_alpha($tmpLink{0})) {
+				if ($tmpLink != '' && ctype_alpha($tmpLink{0})) {
 					$tmpLink{0} = $nt->mUserCaseDBKey{0};
 				}
-				$FCKmetaData[$refId] = array('type' => 'internal link', 'href' => $tmpLink, 'description' => $tmpDescription, 'trial' => $tmpInside);
+				$FCKmetaData[$refId] = array('type' => 'internal link', 'href' => $tmpLink, 'description' => $tmpDescription, 'trial' => $tmpInside, 'anchor' => $nt->mFragment);
 			}
 			$s .= $this->makeLinkHolder( $nt, $text, '', $trail, $prefix );
 		}
