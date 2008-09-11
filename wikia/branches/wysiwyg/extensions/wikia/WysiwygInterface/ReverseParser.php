@@ -25,7 +25,13 @@ class ReverseParser
 		$output = '';
 
 		// load HTML into DOMdocument
-		$this->dom->loadHTML($html);
+		wfSuppressWarnings();
+		$valid = $this->dom->loadHTML($html);
+		wfRestoreWarnings();
+
+		if (!$valid) {
+			return false;
+		}
 
 		// cleanup
 		self::$listLevel = 0;
