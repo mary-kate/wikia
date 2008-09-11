@@ -16,6 +16,14 @@ class WysiwygParser extends Parser {
 			'</pre>';
 	}
 
+	function formatHeadings( $text, $isMain=true ) {
+		return $text;
+	}
+
+	function doMagicLinks( $text ) {
+		return $text;
+	}
+
 }
 
 class WysiwygInterface extends SpecialPage {
@@ -65,14 +73,14 @@ class WysiwygInterface extends SpecialPage {
 			$out = preg_replace('/>(\s+)</', '><', $out);	// between tags
 			$out = preg_replace('/(\s+)<\//', '</', $out);	// before closing tag
 
-			$out = mb_convert_encoding($out, 'HTML-ENTITIES', "UTF-8"); 
-		
+			$out = mb_convert_encoding($out, 'HTML-ENTITIES', "UTF-8");
+
 			$dom = new DOMDocument();
-		
+
 			wfSuppressWarnings();
 			$dom->loadHTML($out);
 			wfRestoreWarnings();
-		
+
 			$dom->formatOutput = true;
 			$dom->preserveWhiteSpace = false;
 
@@ -96,7 +104,7 @@ class WysiwygInterface extends SpecialPage {
 			$failsafeFallback = new FailsafeFallback();
 
 			$wysiwigable = $failsafeFallback->checkWikitext( $wikitext );
-		
+
 			// parse
 			$parsedOld = $parser->parse($wikitext, $wgTitle, $options)->getText();
 			$parsedNew = $parser->parse("__NOTOC__\n".$wikitext_parsed, $wgTitle, $options)->getText();
