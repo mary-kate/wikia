@@ -192,6 +192,11 @@ class ReverseParser
 						case 'td':
 							$output = "|{$content}";
 							break;
+						
+						// ignore tbody tag
+						case 'tbody':
+							$output = $content;
+							break;
 
 						// lists
 						case 'ul':
