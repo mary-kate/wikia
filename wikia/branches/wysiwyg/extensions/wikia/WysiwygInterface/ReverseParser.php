@@ -13,8 +13,8 @@ class ReverseParser
 	// used by nested lists parser
 	public static $listLevel = 0;
 
-	// array of refId data
-	private static $refIds = array();
+	// refIds data from JSON array
+	private static $fckData = array();
 
 	function __construct() {
 		$this->dom = new DOMdocument();
@@ -23,19 +23,21 @@ class ReverseParser
 	/**
          * Parse HTML provided into wikimarkup
          */
-	public function parse($html) {
+	public function parse($html, $fckData = array()) {
 		wfProfileIn(__METHOD__);
 		$output = '';
 
-		// initialize refIds (make fckData parameter of parse?)
-		self::$refIds = array();
+		// refIds
+		self::$fckData = $fckData;
 
+		/*
 		$idx = strpos($html, 'FCKdata:begin');
 
 		if ($idx !== false) {
 			$fckData = substr($html, $idx+13, -11);
 			$html = substr($html, 0, $idx);
 		}
+		*/
 
 		// load HTML into DOMdocument
 		wfSuppressWarnings();
@@ -268,14 +270,16 @@ class ReverseParser
 	static function handleSpan($node) {
 
 		// tag context
-		$tagBefore = $node->previousSibling;
-		$tagAfter = $node->nextSibling;
+		//$tagBefore = $node->previousSibling;
+		//$tagAfter = $node->nextSibling;
 		$tagParent = $node->parentNode;
 
 		// remove span automagically added inside <hx>
 		if ( is_object($tagParent) && $tagParent->nodeName{0} == 'h' ) {
 			return trim($node->textContent, ' ');
 		}
+
+		// TODO: handle templates
 	}
 
 	/**
@@ -285,9 +289,9 @@ class ReverseParser
 	static function handleAnchor($node) {
 
 		// tag context
-		$tagBefore = $node->previousSibling;
+		//$tagBefore = $node->previousSibling;
 		$tagAfter = $node->nextSibling;
-		$tagParent = $node->parentNode;
+		//$tagParent = $node->parentNode;
 
 		// remove anchor automagically added before <hx>
 		if ( is_object($tagAfter) && $tagAfter->nodeName{0} == 'h' ) {
@@ -297,8 +301,8 @@ class ReverseParser
 		// handle links with refId attribute
 		$refId = intval($node->getAttribute('refid'));
 
-		if ( ($refId > 0) && isset(self::$refIds[$refId]) ) {
-			$refData = self::$refIds[$refId];
+		if ( ($refId > 0) && isset(self::$fckData[$refId]) ) {
+			$refData = self::$fckData[$refId];
 
 			// handle various type of links
 			switch($refData['type']) {
