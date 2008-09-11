@@ -350,7 +350,7 @@ class ReverseParser
 	static function cleanupTextContent($text) {
 
 		// 1.wrap repeating apostrophes using <nowiki>
-		$text = preg_replace("/(\\'+)/", '<nowiki>$1</nowiki>', $text);
+		$text = preg_replace("/('{2,})/", '<nowiki>$1</nowiki>', $text);
 
 		return $text;
 	}
