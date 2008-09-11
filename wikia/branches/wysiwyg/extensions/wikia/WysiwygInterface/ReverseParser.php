@@ -124,10 +124,12 @@ class ReverseParser
 					switch ($node->nodeName) {
 						// basic formatting
 						case 'b':
+						case 'strong':
 							$output = "'''{$content}'''";
 							break;
 
 						case 'i':
+						case 'em':
 							$output = "''{$content}''";
 							break;
 
