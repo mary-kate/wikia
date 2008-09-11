@@ -1801,7 +1801,7 @@ class Parser
 				$refId = count($FCKmetaData);
 				$text .= "\x1$refId\x1";
 				list( $tmpInside, $tmpTrail ) = Linker::splitTrail( $trail );
-				$tmpLink = $nt->mPrefixedText;
+				$tmpLink = $nt->mTextform;
 				if (ctype_alpha($tmpLink{0})) {
 					$tmpLink{0} = $nt->mUserCaseDBKey{0};
 				}
