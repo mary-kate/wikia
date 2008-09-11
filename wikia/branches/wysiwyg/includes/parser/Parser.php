@@ -419,9 +419,10 @@ class Parser
 			wfRunHooks( 'ParserLimitReport', array( $this, &$limitReport ) );
 			$text .= "\n<!-- \n$limitReport-->\n";
 		}
-		global $FCKparseEnable, $FCKmetaData;
+		global $FCKparseEnable;
 		if (!empty($FCKparseEnable)) {
-			$text .= "FCKdata:begin\n" . print_r($FCKmetaData, true) . "\nFCKdata:end";	//TODO: here we can add JSON in <script> tag so FCK can use it
+			global $wgOut, $FCKmetaData;
+			$wgOut->addInlineScript('var FCKdata = ' . Wikia::json_encode($FCKmetaData));
 		}
 		$this->mOutput->setText( $text );
 		$this->mRevisionId = $oldRevisionId;
