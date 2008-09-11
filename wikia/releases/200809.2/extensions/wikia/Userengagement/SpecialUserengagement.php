@@ -167,7 +167,7 @@ global $ue_events, $wgUser, $wgEnableUserengagementExt, $wgCookiePath, $wgCookie
 		}
 
 
-    	  //set cookie back to a browser
+    	 //set cookie back to a browser
     	 if( isset($_REQUEST['action'] ) && ( $_REQUEST['action'] == "purge" ) ) {
     	  setcookie( 'wgWikiaUserEngagement', '0', time() + ( 30 * 24 * 60 * 60 ), $wgCookiePath, $wgCookieDomain, $wgCookieSecure );
     	 }else{

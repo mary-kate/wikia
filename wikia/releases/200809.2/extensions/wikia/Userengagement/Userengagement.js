@@ -30,6 +30,6 @@ YAHOO.util.Event.onDOMReady(function() {
 
 	var oData = parseInt(dacookie.charAt(0)) + 1;
 	if((!isNaN(oData)) && (oData < 9)){
-		YAHOO.util.Connect.asyncRequest('GET', wgScriptPath + '/index.php?action=ajax&rs=UserengagementAjax&m='+oData, callback);
+		YAHOO.util.Connect.asyncRequest('POST', wgScriptPath + '/index.php?action=ajax&rs=UserengagementAjax&m='+oData, callback);
 	}
 });
