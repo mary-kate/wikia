@@ -134,7 +134,7 @@ class ReverseParser
 							break;
 
 						case 'p':
-							$output = "\n{$content}";
+							$output = "{$content}\n";
 							break;
 
 						case 'h1':
@@ -201,7 +201,7 @@ class ReverseParser
 						// lists
 						case 'ul':
 						case 'ol':
-							$output = $content . (self::$listLevel == 0 ? "\n" : '');
+							$output = trim($content, "\n ") . (self::$listLevel == 0 ? "\n" : '');
 							break;
 
 						case 'dl':
