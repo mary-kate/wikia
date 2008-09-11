@@ -672,22 +672,6 @@ class CreateWikiForm extends SpecialPage {
 			"{$IP}/maintenance/wikia-additional-tables.sql",
 			"{$IP}/maintenance/wikia/gifts.sql"
 		);
-/*
-		$sqlfiles = array(
-			"{$IP}/maintenance/tables.sql",
-			"{$IP}/maintenance/interwiki.sql",
-			"{$IP}/extensions/OAI/update_table.sql",
-			"{$IP}/extensions/AntiSpoof/sql/patch-antispoof.mysql.sql",
-			"{$IP}/extensions/CheckUser/cu_changes.sql",
-			"{$IP}/extensions/CheckUser/cu_log.sql",
-			"{$IP}/extensions/TitleKey/titlekey.sql",
-			"{$IP}/extensions/Oversight/hidden.sql",
-			"{$IP}/maintenance/wikia/default_userrights.sql",
-			"{$IP}/maintenance/wikia/city_interwiki_links.sql",
-			"{$IP}/maintenance/wikia-additional-tables.sql",
-			"{$IP}/maintenance/wikia/gifts.sql"
-		);
-*/
 
 		$wgSharedDB = $aWiki["dbname"];
 		foreach ($sqlfiles as $file) {
