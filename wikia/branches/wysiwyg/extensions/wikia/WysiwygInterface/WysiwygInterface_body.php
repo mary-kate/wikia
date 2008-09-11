@@ -68,7 +68,11 @@ class WysiwygInterface extends SpecialPage {
 			$out = mb_convert_encoding($out, 'HTML-ENTITIES', "UTF-8"); 
 		
 			$dom = new DOMDocument();
+		
+			wfSuppressWarnings();
 			$dom->loadHTML($out);
+			wfRestoreWarnings();
+		
 			$dom->formatOutput = true;
 			$dom->preserveWhiteSpace = false;
 
@@ -115,14 +119,15 @@ class WysiwygInterface extends SpecialPage {
 			}
 
 			$wgOut->addHTML('<h3>HTML</h3>');
-			$wgOut->addHTML($geshi->parse_code());
-			//$wgOut->addHTML('<pre>' . htmlspecialchars($html) . '</pre>');
+			//$wgOut->addHTML($geshi->parse_code());
+			$wgOut->addHTML('<pre>' . htmlspecialchars($html) . '</pre>');
 
 			$wgOut->addHTML('<h3>Back to wikimarkup</h3>');
 			$wgOut->addHTML('<pre>' . htmlspecialchars($wikitext_parsed) . '</pre>');
 
 			$wgOut->addHTML('<h3>Visual comparison</h3>');
-			$wgOut->addHTML('<table><tr><th>Wikitext</th><th>Parsed from HTML</th></tr>');
+			$wgOut->addHTML('<table style="width:100%"><colgroup><col width="50%" /><col width="50%" /></colgroup>');
+			$wgOut->addHTML('<tr><th>Wikitext</th><th>Parsed from HTML</th></tr>');
 			$wgOut->addHTML('<tr><td style="vertical-align:top">'.$parsedOld.'</td><td style="vertical-align:top">'.$parsedNew.'</td></table>');
 		}
 }
