@@ -46,13 +46,11 @@ class CreateWikiTask extends BatchTask {
 	 */
 	function execute( $params = null ) {
 		global $IP, $wgDevelEnvironment;
-		global $wgWikiaLocalSettingsPath, $wgWikiaAdminSettingsPath, $wgExtensionMessagesFiles;
+		global $wgWikiaLocalSettingsPath, $wgWikiaAdminSettingsPath;
 
 		if( !isset( $wgWikiaAdminSettingsPath ) ) {
 			$wgWikiaAdminSettingsPath = dirname( $wgWikiaLocalSettingsPath ) . "/../AdminSettings.php";
 		}
-		
-		$wgExtensionMessagesFiles["CreateWikiTask"] = dirname(__FILE__) . '/CreateWikiTask/CreateWikiTask.i18n.php';
 		wfLoadExtensionMessages( "CreateWikiTask" );
 
 		$this->mData = $params;
