@@ -13,6 +13,9 @@ class ReverseParser
 	// used by nested lists parser
 	public static $listLevel = 0;
 
+	// array of refId data
+	private static $refIds = array();
+
 	function __construct() {
 		$this->dom = new DOMdocument();
 	}
@@ -23,6 +26,16 @@ class ReverseParser
 	public function parse($html) {
 		wfProfileIn(__METHOD__);
 		$output = '';
+
+		// initialize refIds (make fckData parameter of parse?)
+		self::$refIds = array();
+
+		$idx = strpos($html, 'FCKdata:begin');
+
+		if ($idx !== false) {
+			$fckData = substr($html, $idx+13, -11);
+			$html = substr($html, 0, $idx);
+		}
 
 		// load HTML into DOMdocument
 		wfSuppressWarnings();
@@ -281,9 +294,24 @@ class ReverseParser
 			return '';
 		}
 
-		// handle links
-		// TODO: really handle links
-		return "[[{$node->textContent}]]";
+		// handle links with refId attribute
+		$refId = intval($node->getAttribute('refid'));
+
+		if ( ($refId > 0) && isset(self::$refIds[$refId]) ) {
+			$refData = self::$refIds[$refId];
+
+			// handle various type of links
+			switch($refData['type']) {
+				case 'internal link':
+					$pipe = !empty($refData['description']) ? '|'.$refData['description'] : '';
+					return "[[{$refData['href']}{$pipe}]]{$refData['trial']}";
+			}
+		}
+		else {
+			// really needed?
+		}
+
+		return '<!-- unsupported anchor tag! -->';
 	}
 
 	/**
