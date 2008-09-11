@@ -97,7 +97,7 @@ class ReverseParser
 			case XML_ELEMENT_NODE:
 				$wasHTML = $node->getAttribute('washtml');
 
-				$content = isset($childOutput) ? $childOutput : $node->textContent;
+				$content = isset($childOutput) ? $childOutput : self::cleanupTextContent($node->textContent);
 
 				// parse it back to HTML tag
 				if (!empty($wasHTML)) {
@@ -215,7 +215,7 @@ class ReverseParser
 				break;
 
 			case XML_TEXT_NODE:
-				$output = $node->textContent;
+				$output = self::cleanupTextContent($node->textContent);
 				break;
 		}
 
@@ -303,5 +303,16 @@ class ReverseParser
 			case 'dd':
 				return ":{$node->textContent}";
 		}
+	}
+
+	/**
+	 * Clean up node text content
+	 */
+	static function cleanupTextContent($text) {
+
+		// 1.wrap repeating apostrophes using <nowiki>
+		$text = preg_replace("/(\\'+)/", '<nowiki>$1</nowiki>', $text);
+
+		return $text;
 	}
 }
