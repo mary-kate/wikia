@@ -223,10 +223,10 @@ class ReverseParser
 							$output = self::handleSpan($node);
 							break;
 
-
-						// debug only!
+						// HTML tags
 						default:
-							$output = "<!-- {$node->nodeName}: {$content} -->";
+							$attr = self::getAttributesStr($node);
+							$output = "<{$node->nodeName}{$attr}>{$content}</{$node->nodeName}>";
 					}
 				}
 				break;
