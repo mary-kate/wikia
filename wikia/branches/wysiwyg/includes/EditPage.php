@@ -80,10 +80,10 @@ class EditPage {
 	public $editFormTextAfterWarn;
 	public $editFormTextAfterTools;
 	public $editFormTextBottom;
-	
+
 	/* $didSave should be set to true whenever an article was succesfully altered. */
 	public $didSave = false;
-	
+
 	public $suppressIntro = false;
 
 	/**
@@ -385,7 +385,7 @@ class EditPage {
 			wfProfileOut( __METHOD__ );
 			return;
 		}
-		
+
 		$wgOut->addScriptFile( 'edit.js' );
 
 		if( wfReadOnly() ) {
@@ -395,7 +395,7 @@ class EditPage {
 		}
 
 		$permErrors = $this->mTitle->getUserPermissionsErrors('edit', $wgUser);
-		
+
 		if( !$this->mTitle->exists() ) {
 			$permErrors = array_merge( $permErrors,
 				wfArrayDiff2( $this->mTitle->getUserPermissionsErrors('create', $wgUser), $permErrors ) );
@@ -421,7 +421,7 @@ class EditPage {
 			}
 		}
 		$permErrors = wfArrayDiff2( $permErrors, $remove );
-		
+
 		if ( $permErrors ) {
 			wfDebug( __METHOD__.": User can't edit\n" );
 			$this->readOnlyPage( $this->getContent(), true, $permErrors, 'edit' );
@@ -686,7 +686,7 @@ class EditPage {
 			$ip = User::isIP( $username );
 
 			if ( $id == 0 && !$ip ) {
-				$wgOut->wrapWikiMsg( '<div class="mw-userpage-userdoesnotexist error">$1</div>', 
+				$wgOut->wrapWikiMsg( '<div class="mw-userpage-userdoesnotexist error">$1</div>',
 					array( 'userpage-userdoesnotexist', $username ) );
 			}
 		}
@@ -729,6 +729,14 @@ class EditPage {
 	function internalAttemptSave( &$result, $bot = false ) {
 		global $wgSpamRegex, $wgFilterCallback, $wgUser, $wgOut, $wgParser;
 		global $wgMaxArticleSize;
+		global $wgCOOLWysiwygEnabled;
+
+		if(!empty($wgCOOLWysiwygEnabled)) {
+			require("extensions/wikia/WysiwygInterface/WysiwygInterface_body.php") ;
+			require("extensions/wikia/WysiwygInterface/ReverseParser.php");
+			$reverseParser = new ReverseParser();
+			$this->textbox1 = $reverseParser->parse($this->textbox1);
+		}
 
 		$fname = 'EditPage::attemptSave';
 		wfProfileIn( $fname );
@@ -858,7 +866,7 @@ class EditPage {
 			}
 
 			$isComment = ( $this->section == 'new' );
-			
+
 			$this->mArticle->insertNewArticle( $this->textbox1, $this->summary,
 				$this->minoredit, $this->watchthis, false, $isComment, $bot);
 
@@ -941,8 +949,8 @@ class EditPage {
 		}
 
 		# Handle the user preference to force summaries here, but not for null edits
-		if( $this->section != 'new' && !$this->allowBlankSummary &&  $wgUser->getOption( 'forceeditsummary') && 
-			0 != strcmp($oldtext, $text) && 
+		if( $this->section != 'new' && !$this->allowBlankSummary &&  $wgUser->getOption( 'forceeditsummary') &&
+			0 != strcmp($oldtext, $text) &&
 			!is_object( Title::newFromRedirect( $text ) ) # check if it's not a redirect
 		) {
 
@@ -1117,13 +1125,13 @@ class EditPage {
 			}
 			if ( isset( $this->mArticle ) && isset( $this->mArticle->mRevision ) ) {
 			// Let sysop know that this will make private content public if saved
-				
+
 				if( !$this->mArticle->mRevision->userCan( Revision::DELETED_TEXT ) ) {
 					$wgOut->addWikiMsg( 'rev-deleted-text-permission' );
 				} else if( $this->mArticle->mRevision->isDeleted( Revision::DELETED_TEXT ) ) {
 					$wgOut->addWikiMsg( 'rev-deleted-text-view' );
 				}
-				
+
 				if( !$this->mArticle->mRevision->isCurrent() ) {
 					$this->mArticle->setOldSubtitle( $this->mArticle->mRevision->getId() );
 					$wgOut->addWikiMsg( 'editingold' );
@@ -1216,11 +1224,11 @@ class EditPage {
 
 		global $wgRightsText;
 		if ( $wgRightsText ) {
-			$copywarnMsg = array( 'copyrightwarning', 
+			$copywarnMsg = array( 'copyrightwarning',
 				'[[' . wfMsgForContent( 'copyrightpage' ) . ']]',
 				$wgRightsText );
 		} else {
-			$copywarnMsg = array( 'copyrightwarning2', 
+			$copywarnMsg = array( 'copyrightwarning2',
 				'[[' . wfMsgForContent( 'copyrightpage' ) . ']]' );
 		}
 
@@ -1262,7 +1270,7 @@ class EditPage {
 				$this->showDiff();
 			}
 		}
-		
+
 		wfRunHooks( 'EditPage::showEditForm:initial2', array( &$this ) ) ;
 
 		$wgOut->addHTML( $this->editFormTextTop );
@@ -1347,7 +1355,7 @@ class EditPage {
 
 		// maybe... just maybe... somebody would want the toolbar not in the default place?
 		// by Bartek for Wikia
-		wfRunHooks ('EditPage::showEditForm:toolbar', array (&$this, &$wgOut, &$toolbar)) ;	
+		wfRunHooks ('EditPage::showEditForm:toolbar', array (&$this, &$wgOut, &$toolbar)) ;
 
 		$wgOut->addHTML( <<<END
 <form id="editform" name="editform" method="post" action="$action" enctype="multipart/form-data">
@@ -1359,7 +1367,7 @@ END
 		}
 
 		$wgOut->addHTML($toolbar);
-	
+
 		wfRunHooks( 'EditPage::showEditForm:fields', array( &$this, &$wgOut ) );
 
 		// Put these up at the top to ensure they aren't lost on early form submission
@@ -1380,7 +1388,32 @@ END
 		}
 
 		wfRunHooks ('EditForm:BeforeDisplayingTextbox', array (&$this, &$hidden) ) ;
-		$wgOut->addHTML( <<<END
+
+		global $wgCOOLWysiwygEnabled;
+
+		if(!empty($wgCOOLWysiwygEnabled)) {
+			require("extensions/wikia/WysiwygInterface/fckeditor/fckeditor.php") ;
+			require("extensions/wikia/WysiwygInterface/WysiwygInterface_body.php") ;
+
+			$options = new ParserOptions();
+			$options->setTidy(true);
+
+			$parser = new WysiwygParser();
+			$parser->setOutputType(OT_HTML);
+			global $FCKparseEnable;
+			$FCKparseEnable = true;
+			$out = $parser->parse($this->getContent(), $wgTitle, $options)->getText();
+			$out = mb_convert_encoding($out, 'HTML-ENTITIES', "UTF-8");
+			$FCKparseEnable = false;
+
+
+			$oFCKeditor = new FCKeditor('wpTextbox1') ;
+			$oFCKeditor->BasePath = 'extensions/wikia/WysiwygInterface/fckeditor/' ;
+			$oFCKeditor->Value = $out;
+			$oFCKeditor->Height = 500;
+			$wgOut->addHTML( $oFCKeditor->CreateHtml() );
+		} else {
+			$wgOut->addHTML( <<<END
 $recreate
 {$commentsubject}
 {$subjectpreview}
@@ -1389,6 +1422,7 @@ $recreate
 cols='{$cols}'{$ew} $hidden>{$encodedtext}</textarea>
 END
 );
+		}
 
 		wfRunHooks( 'EditForm::MultiEdit:Form', array( $rows, $cols, $ew, htmlspecialchars( $this->safeUnicodeOutput( $this->textbox1 ) ) ) );
 
@@ -1638,7 +1672,7 @@ END
 			if( ( $dt = $parserOutput->getDisplayTitle() ) !== false ) {
 				$wgOut->setPageTitle( wfMsg( 'editing', $dt ) );
 			} else {
-				$wgOut->setPageTitle( wfMsg( 'editing', $wgTitle->getPrefixedText() ) );			
+				$wgOut->setPageTitle( wfMsg( 'editing', $wgTitle->getPrefixedText() ) );
 			}
 
 			foreach ( $parserOutput->getTemplates() as $ns => $template)
@@ -1837,7 +1871,7 @@ END
 	 * Shows a bulletin board style toolbar for common editing functions.
 	 * It can be disabled in the user preferences.
 	 * The necessary JavaScript code can be found in skins/common/edit.js.
-	 * 
+	 *
 	 * @return string
 	 */
 	static function getEditToolbar() {
@@ -1974,7 +2008,7 @@ END
 				$sample = $tool['sample'],
 				$cssId = $tool['id'],
 			);
-			
+
 			$paramList = implode( ',',
 				array_map( array( 'Xml', 'encodeJsVar' ), $params ) );
 			$toolbar.="addButton($paramList);\n";
@@ -2107,7 +2141,7 @@ END
 			'title'     => wfMsg( 'tooltip-diff' ).' ['.wfMsg( 'accesskey-diff' ).']'
 		);
 		$buttons['diff'] = Xml::element('input', $temp, '');
-		
+
 		wfRunHooks( 'EditPageBeforeEditButtons', array( &$this, &$buttons ) );
 		return $buttons;
 	}
@@ -2322,7 +2356,7 @@ END
 
 		$resultDetails = false;
 		$value = $this->internalAttemptSave( $resultDetails, $wgUser->isAllowed('bot') && $wgRequest->getBool('bot', true) );
-		
+
 		if( $value == self::AS_SUCCESS_UPDATE || $value == self::AS_SUCCESS_NEW_ARTICLE ) {
 			$this->didSave = true;
 		}
@@ -2372,7 +2406,7 @@ END
 		 	case self::AS_NO_CREATE_PERMISSION;
 		 		$this->noCreatePermission();
 		 		return;
-		 	
+
 			case self::AS_BLANK_ARTICLE:
 		 		$wgOut->redirect( $wgTitle->getFullURL() );
 		 		return false;
@@ -2382,7 +2416,7 @@ END
 				return false;
 		}
 	}
-	
+
 	function getBaseRevision() {
 		if ($this->mBaseRevision == false) {
 			$db = wfGetDB( DB_MASTER );
