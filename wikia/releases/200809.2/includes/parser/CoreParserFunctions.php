@@ -270,12 +270,12 @@ class CoreParserFunctions {
 			$length = $cache[$page];
 		} elseif( $parser->incrementExpensiveFunctionCount() ) {
 			$length = $cache[$page] = $title->getLength();
-	
+
 			// Register dependency in templatelinks
 			$id = $title->getArticleId();
 			$revid = Revision::newFromTitle($title);
 			$parser->mOutput->addTemplate($title, $id, $revid);
-		}	
+		}
 		return self::formatRaw( $length, $raw );
 	}
 
