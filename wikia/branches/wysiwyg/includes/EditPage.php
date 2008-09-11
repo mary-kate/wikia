@@ -1389,11 +1389,11 @@ END
 
 		wfRunHooks ('EditForm:BeforeDisplayingTextbox', array (&$this, &$hidden) ) ;
 
-		global $wgCOOLWysiwygEnabled;
+		global $wgCOOLWysiwygEnabled, $wgExtensionsPath, $IP;
 
 		if(!empty($wgCOOLWysiwygEnabled)) {
-			require("extensions/wikia/WysiwygInterface/fckeditor/fckeditor.php") ;
-			require("extensions/wikia/WysiwygInterface/WysiwygInterface_body.php") ;
+			require("$IP/extensions/wikia/WysiwygInterface/fckeditor/fckeditor.php") ;
+			require("$IP/extensions/wikia/WysiwygInterface/WysiwygInterface_body.php") ;
 
 			$options = new ParserOptions();
 			$options->setTidy(true);
@@ -1408,7 +1408,7 @@ END
 
 
 			$oFCKeditor = new FCKeditor('wpTextbox1') ;
-			$oFCKeditor->BasePath = 'extensions/wikia/WysiwygInterface/fckeditor/' ;
+			$oFCKeditor->BasePath = $wgExtensionsPath.'/wikia/WysiwygInterface/fckeditor/' ;
 			$oFCKeditor->Value = $out;
 			$oFCKeditor->Height = 500;
 			$wgOut->addHTML( $oFCKeditor->CreateHtml() );
