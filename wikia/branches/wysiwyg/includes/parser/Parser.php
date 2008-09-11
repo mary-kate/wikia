@@ -1493,7 +1493,7 @@ class Parser
 	 * @private
 	 */
 	function replaceInternalLinks( $s ) {
-		global $wgContLang, $FCKmetaData, $FCKparseEnable;
+		global $wgContLang;
 		static $fname = 'Parser::replaceInternalLinks' ;
 
 		wfProfileIn( $fname );
@@ -1715,7 +1715,7 @@ class Parser
 						# but it might be hard to fix that, and it doesn't matter ATM
 						$text = $this->replaceExternalLinks($text);
 						$text = $this->replaceInternalLinks($text);
-
+						wfFCKSetRefId('image', &$text, $link, $trail, $wasblank);
 						# cloak any absolute URLs inside the image markup, so replaceExternalLinks() won't touch them
 						$s .= $prefix . $this->armorLinks( $this->makeImage( $nt, $text ) ) . $trail;
 						$this->mOutput->addImage( $nt->getDBkey() );
@@ -1723,6 +1723,7 @@ class Parser
 						wfProfileOut( "$fname-image" );
 						continue;
 					} else {
+						wfFCKSetRefId('image', &$text, $link, $trail, $wasblank);
 						# We still need to record the image's presence on the page
 						$this->mOutput->addImage( $nt->getDBkey() );
 					}
@@ -1759,7 +1760,7 @@ class Parser
 			if( $nt->getFragment() === '' ) {
 				if( in_array( $nt->getPrefixedText(), $selflink, true ) ) {
 					$s .= $prefix . $sk->makeSelfLinkObj( $nt, $text, '', $trail );
-					$FCKmetaData[count($FCKmetaData)] = array('type' => 'self link', 'description' => $wasblank ? '' : $text, 'trail' => $trail);
+					wfFCKSetRefId('self link', &$text, $link, $trail, $wasblank);
 					continue;
 				}
 			}
@@ -1777,8 +1778,10 @@ class Parser
 				# Cloak with NOPARSE to avoid replacement in replaceExternalLinks
 				$s .= $prefix . $this->armorLinks( $link ) . $trail;
 				$this->mOutput->addImage( $nt->getDBkey() );
+				wfFCKSetRefId('internal link: media', &$text, $link, $trail, $wasblank);
 				continue;
 			} elseif( $ns == NS_SPECIAL ) {
+				wfFCKSetRefId('internal link: special page', &$text, $link, $trail, $wasblank);
 				if( SpecialPage::exists( $nt->getDBkey() ) ) {
 					$s .= $this->makeKnownLinkHolder( $nt, $text, '', $trail, $prefix );
 				} else {
@@ -1793,20 +1796,11 @@ class Parser
 					// auto-generated page.
 					$s .= $this->makeKnownLinkHolder( $nt, $text, '', $trail, $prefix );
 					$this->mOutput->addLink( $nt );
+					wfFCKSetRefId('internal link: file', &$text, $link, $trail, $wasblank);
 					continue;
 				}
 			}
-			if ($FCKparseEnable) {
-				$tmpDescription = $wasblank ? '' : $text;
-				$refId = count($FCKmetaData);
-				$text .= "\x1$refId\x1";
-				list( $tmpInside, $tmpTrail ) = Linker::splitTrail( $trail );
-				$tmpLink = $nt->mTextform;
-				if ($tmpLink != '' && ctype_alpha($tmpLink{0})) {
-					$tmpLink{0} = $nt->mUserCaseDBKey{0};
-				}
-				$FCKmetaData[$refId] = array('type' => 'internal link', 'href' => $tmpLink, 'description' => $tmpDescription, 'trial' => $tmpInside, 'anchor' => $nt->mFragment);
-			}
+			wfFCKSetRefId('internal link', &$text, $link, $trail, $wasblank);
 			$s .= $this->makeLinkHolder( $nt, $text, '', $trail, $prefix );
 		}
 		wfProfileOut( $fname );
@@ -4509,6 +4503,8 @@ class Parser
 		#  * bottom
 		#  * text-bottom
 
+		$refId = wfFCKGetRefId($options);
+
 		$parts = array_map( 'trim', explode( '|', $options) );
 		$sk = $this->mOptions->getSkin();
 
@@ -4606,6 +4602,7 @@ class Parser
 
 		$params['frame']['alt'] = $alt;
 		$params['frame']['caption'] = $caption;
+		$params['frame']['refId'] = $refId;
 
 		wfRunHooks( 'ParserMakeImageParams', array( $title, $file, &$params ) );
 
