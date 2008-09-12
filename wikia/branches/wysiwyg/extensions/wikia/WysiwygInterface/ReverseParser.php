@@ -297,7 +297,20 @@ class ReverseParser
 			return trim($node->textContent, ' ');
 		}
 
-		// TODO: handle templates
+		// handle spans with refId attribute: images, templates etc.
+		$refId = $node->getAttribute('refid');
+
+		if ( is_numeric($refId) && isset(self::$fckData[$refId]) ) {
+			$refData = self::$fckData[$refId];
+
+			switch($refData['type']) {
+				case 'image':
+					$pipe = !empty($refData['description']) ? '|'.$refData['description'] : '';
+					return "[[{$refData['href']}{$pipe}]]";
+			}
+		}
+
+		return '<!-- unsupported span tag! -->';
 	}
 
 	/**
@@ -331,9 +344,6 @@ class ReverseParser
 					$pipe = !empty($refData['description']) ? '|'.$refData['description'] : '';
 					return "[[{$refData['href']}{$pipe}]]{$refData['trial']}";
 			}
-		}
-		else {
-			// really needed?
 		}
 
 		return '<!-- unsupported anchor tag! -->';
