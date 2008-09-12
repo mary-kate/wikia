@@ -1717,7 +1717,7 @@ class Parser
 						$text = $this->replaceExternalLinks($text);
 						$text = $this->replaceInternalLinks($text);
 						if ($FCKparseEnable) {
-							wfFCKSetRefId('image', &$text, $link, $trail, $wasblank);
+							wfFCKSetRefId('image', &$text, $link, $trail, $wasblank, $noforce);
 							$refId = wfFCKGetRefId($text);
 							$s .= $prefix . "<span$refId>[[$link|$text]]</span>" . $trail;
 						} else {	//original action
@@ -1729,7 +1729,7 @@ class Parser
 						continue;
 					} else {
 						if ($FCKparseEnable) {
-							wfFCKSetRefId('image', &$text, $link, $trail, $wasblank);
+							wfFCKSetRefId('image', &$text, $link, $trail, $wasblank, $noforce);
 							$refId = wfFCKGetRefId($text);
 							$s .= $prefix . "<span$refId>[[$link|$text]]</span>" . $trail;
 						} else {	//original action
@@ -1770,7 +1770,7 @@ class Parser
 			if( $nt->getFragment() === '' ) {
 				if( in_array( $nt->getPrefixedText(), $selflink, true ) ) {
 					$s .= $prefix . $sk->makeSelfLinkObj( $nt, $text, '', $trail );
-					wfFCKSetRefId('self link', &$text, $link, $trail, $wasblank);
+					wfFCKSetRefId('self link', &$text, $link, $trail, $wasblank, $noforce);
 					continue;
 				}
 			}
@@ -1778,7 +1778,7 @@ class Parser
 			# Special and Media are pseudo-namespaces; no pages actually exist in them
 			if( $ns == NS_MEDIA ) {
 				if ($FCKparseEnable) {
-					wfFCKSetRefId('internal link: media', &$text, ($noforce ? '' : ':') . $link, $trail, $wasblank);
+					wfFCKSetRefId('internal link: media', &$text, $link, $trail, $wasblank, $noforce);
 					$refId = wfFCKGetRefId($text);
 					$s .= $prefix . "<span$refId>[[" . ($noforce ? '' : ':') . "$link|$text]]</span>" . $trail;
 				} else {	//original action
@@ -1796,7 +1796,7 @@ class Parser
 				}
 				continue;
 			} elseif( $ns == NS_SPECIAL ) {
-				wfFCKSetRefId('internal link: special page', &$text, $link, $trail, $wasblank);
+				wfFCKSetRefId('internal link: special page', &$text, $link, $trail, $wasblank, $noforce);
 				if( SpecialPage::exists( $nt->getDBkey() ) ) {
 					$s .= $this->makeKnownLinkHolder( $nt, $text, '', $trail, $prefix );
 				} else {
@@ -1809,13 +1809,13 @@ class Parser
 					// Force a blue link if the file exists; may be a remote
 					// upload on the shared repository, and we want to see its
 					// auto-generated page.
-					wfFCKSetRefId('internal link: file', &$text, $link, $trail, $wasblank);
+					wfFCKSetRefId('internal link: file', &$text, $link, $trail, $wasblank, $noforce);
 					$s .= $this->makeKnownLinkHolder( $nt, $text, '', $trail, $prefix );
 					$this->mOutput->addLink( $nt );
 					continue;
 				}
 			}
-			wfFCKSetRefId('internal link', &$text, ($noforce ? '' : ':') . $link, $trail, $wasblank);
+			wfFCKSetRefId('internal link', &$text, $link, $trail, $wasblank, $noforce);
 			$s .= $this->makeLinkHolder( $nt, $text, '', $trail, $prefix );
 		}
 		wfProfileOut( $fname );
