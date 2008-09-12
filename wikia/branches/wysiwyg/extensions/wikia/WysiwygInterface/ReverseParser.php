@@ -163,7 +163,7 @@ class ReverseParser
 							break;
 
 						case 'br':
-							$output = "\n";
+							$output = '<br />';
 							break;
 
 						case 'hr':
