@@ -581,14 +581,14 @@ function wfGetCurrentUrl() {
  *
  * @return nothing
  */
-function wfFCKSetRefId($type, &$text, $link, $trail, $wasblank) {
+function wfFCKSetRefId($type, &$text, $link, $trail, $wasblank, $noforce) {
 	global $FCKparseEnable, $FCKmetaData;
 	if ($FCKparseEnable) {
 		$tmpDescription = $wasblank ? '' : $text;
 		$refId = count($FCKmetaData);
 		$text .= "\x1$refId\x1";
 		list( $tmpInside, $tmpTrail ) = Linker::splitTrail($trail);
-		$FCKmetaData[$refId] = array('type' => $type, 'href' => $link, 'description' => $tmpDescription, 'trial' => $tmpInside);
+		$FCKmetaData[$refId] = array('type' => $type, 'href' => ($noforce ? '' : ':') . $link, 'description' => $tmpDescription, 'trial' => $tmpInside);
 	}
 }
 
