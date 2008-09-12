@@ -137,7 +137,7 @@ class WysiwygInterface extends SpecialPage {
 			*/
 
 			$wgOut->addHTML('<h3>HTML</h3>');
-			$wgOut->addHTML('<pre>' . htmlspecialchars($html) . '</pre>');
+			$wgOut->addHTML('<pre>' . $html . '</pre>');
 
 			$wgOut->addHTML('<h3>Back to wikimarkup</h3>');
 			$wgOut->addHTML('<pre>' . htmlspecialchars($wikitext_parsed) . '</pre>');
