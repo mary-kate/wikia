@@ -1716,17 +1716,27 @@ class Parser
 						# but it might be hard to fix that, and it doesn't matter ATM
 						$text = $this->replaceExternalLinks($text);
 						$text = $this->replaceInternalLinks($text);
-						wfFCKSetRefId('image', &$text, $link, $trail, $wasblank);
-						# cloak any absolute URLs inside the image markup, so replaceExternalLinks() won't touch them
-						$s .= $prefix . $this->armorLinks( $this->makeImage( $nt, $text ) ) . $trail;
-						$this->mOutput->addImage( $nt->getDBkey() );
-
+						global $FCKparseEnable;
+						if ($FCKparseEnable) {
+							wfFCKSetRefId('image', &$text, $link, $trail, $wasblank);
+							$refId = wfFCKGetRefId($text);
+							$s .= $prefix . "<span$refId>[[$link|$text]]</span>" . $trail;
+						} else {	//original action
+							# cloak any absolute URLs inside the image markup, so replaceExternalLinks() won't touch them
+							$s .= $prefix . $this->armorLinks( $this->makeImage( $nt, $text ) ) . $trail;
+							$this->mOutput->addImage( $nt->getDBkey() );
+						}
 						wfProfileOut( "$fname-image" );
 						continue;
 					} else {
-						wfFCKSetRefId('image', &$text, $link, $trail, $wasblank);
-						# We still need to record the image's presence on the page
-						$this->mOutput->addImage( $nt->getDBkey() );
+						if ($FCKparseEnable) {
+							wfFCKSetRefId('image', &$text, $link, $trail, $wasblank);
+							$refId = wfFCKGetRefId($text);
+							$s .= $prefix . "<span$refId>[[$link|$text]]</span>" . $trail;
+						} else {	//original action
+							# We still need to record the image's presence on the page
+							$this->mOutput->addImage( $nt->getDBkey() );
+						}
 					}
 					wfProfileOut( "$fname-image" );
 
@@ -1768,18 +1778,23 @@ class Parser
 
 			# Special and Media are pseudo-namespaces; no pages actually exist in them
 			if( $ns == NS_MEDIA ) {
-				# Give extensions a chance to select the file revision for us
-				$skip = $time = false;
-				wfRunHooks( 'BeforeParserMakeImageLinkObj', array( &$this, &$nt, &$skip, &$time ) );
-				if ( $skip ) {
-					$link = $sk->makeLinkObj( $nt );
-				} else {
-					$link = $sk->makeMediaLinkObj( $nt, $text, $time );
+				if ($FCKparseEnable) {
+					wfFCKSetRefId('internal link: media', &$text, $link, $trail, $wasblank);
+					$refId = wfFCKGetRefId($text);
+					$s .= $prefix . "<span$refId>[[" . ($noforce ? '' : ':') . "$link|$text]]</span>" . $trail;
+				} else {	//original action
+					# Give extensions a chance to select the file revision for us
+					$skip = $time = false;
+					wfRunHooks( 'BeforeParserMakeImageLinkObj', array( &$this, &$nt, &$skip, &$time ) );
+					if ( $skip ) {
+						$link = $sk->makeLinkObj( $nt );
+					} else {
+						$link = $sk->makeMediaLinkObj( $nt, $text, $time );
+					}
+					# Cloak with NOPARSE to avoid replacement in replaceExternalLinks
+					$s .= $prefix . $this->armorLinks( $link ) . $trail;
+					$this->mOutput->addImage( $nt->getDBkey() );
 				}
-				# Cloak with NOPARSE to avoid replacement in replaceExternalLinks
-				$s .= $prefix . $this->armorLinks( $link ) . $trail;
-				$this->mOutput->addImage( $nt->getDBkey() );
-				wfFCKSetRefId('internal link: media', &$text, $link, $trail, $wasblank);
 				continue;
 			} elseif( $ns == NS_SPECIAL ) {
 				wfFCKSetRefId('internal link: special page', &$text, $link, $trail, $wasblank);
@@ -4504,8 +4519,6 @@ class Parser
 		#  * bottom
 		#  * text-bottom
 
-		$refId = wfFCKGetRefId($options);
-
 		$parts = array_map( 'trim', explode( '|', $options) );
 		$sk = $this->mOptions->getSkin();
 
@@ -4603,7 +4616,6 @@ class Parser
 
 		$params['frame']['alt'] = $alt;
 		$params['frame']['caption'] = $caption;
-		$params['frame']['refId'] = $refId;
 
 		wfRunHooks( 'ParserMakeImageParams', array( $title, $file, &$params ) );
 

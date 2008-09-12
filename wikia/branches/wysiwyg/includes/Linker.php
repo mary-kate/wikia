@@ -694,7 +694,7 @@ class Linker {
 		if ( '' != $fp['align'] ) {
 			$s = "<div class=\"float{$fp['align']}\"><span>{$s}</span></div>";
 		}
-		return str_replace("\n", ' ',"<!-- how to add this refId={$fp['refId']} to the tag? hmm -->".$prefix.$s.$postfix);
+		return str_replace("\n", ' ', $prefix.$s.$postfix);
 	}
 
 	/**
@@ -773,7 +773,7 @@ class Linker {
 
 		$more = htmlspecialchars( wfMsg( 'thumbnail-more' ) );
 
-		$s = "<div class=\"thumb t{$fp['align']}\"{$fp['refId']}><div class=\"thumbinner\" style=\"width:{$outerWidth}px;\">";
+		$s = "<div class=\"thumb t{$fp['align']}\"><div class=\"thumbinner\" style=\"width:{$outerWidth}px;\">";
 		if( !$exists ) {
 			$s .= $this->makeBrokenImageLinkObj( $title, '', '', '', '', $time==true );
 			$zoomicon = '';
