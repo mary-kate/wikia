@@ -336,20 +336,18 @@ class ReverseParser
 			$refData = self::$fckData[$refId];
 
 			// allow formatting of anchor description
-			$refData['description'] = !empty($refData['description']) ? $content : '';
+			//$refData['description'] = ($refData['description'] != '') ? $content : '';
 
 			// description after pipe
-			$pipe = !empty($refData['description']) ? '|'.$refData['description'] : '';
+			$pipe = ($refData['description'] != '') ? '|'.$refData['description'] : '';
 
 			// handle various type of links
 			switch($refData['type']) {
 				// [[foo|bar]]s
 				case 'internal link':
-					return "[[{$refData['href']}{$pipe}]]{$refData['trial']}";
-
 				// [[:Image:Jimbo.jpg]]
 				case 'internal link: file':
-					return "[[:{$refData['href']}{$pipe}]]{$refData['trial']}";
+					return "[[{$refData['href']}{$pipe}]]{$refData['trial']}";
 			}
 		}
 
