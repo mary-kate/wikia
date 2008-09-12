@@ -81,7 +81,7 @@ class ReverseParser
 		$output = '';
 		$level++;
 
-		wfDebug(__METHOD__. str_repeat(':', $level) . "{$node->nodeName} ({$node->nodeType})\n");
+		//wfDebug(__METHOD__. str_repeat(':', $level) . "{$node->nodeName} ({$node->nodeType})\n");
 
 		// recursively parse child nodes
 		if ( $node->hasChildNodes() ) {
@@ -94,6 +94,7 @@ class ReverseParser
 
 			if ($isListNode) {
 				self::$listLevel++;
+				// build bullets stack
 				self::$listBullets .= ($node->nodeName == 'ul') ? '*' : '#';
 			}
 
@@ -351,8 +352,16 @@ class ReverseParser
 	 */
 	static function cleanupTextContent($text) {
 
-		// 1.wrap repeating apostrophes using <nowiki>
+		// 1. wrap repeating apostrophes using <nowiki>
 		$text = preg_replace("/('{2,})/", '<nowiki>$1</nowiki>', $text);
+
+		// 2. semicolon at the beginning of the line
+		if ($text{0} == ':') {
+			$text = '<nowiki>:</nowiki>' . substr($text, 1);
+		}
+
+		// 3. wrap magic words {{ }} using <nowiki>
+		$text = str_replace( array('{{', '}}'), array('<nowiki>{{</nowiki>', '<nowiki>}}</nowiki>'), $text);
 
 		return $text;
 	}
