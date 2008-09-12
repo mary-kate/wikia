@@ -1809,9 +1809,9 @@ class Parser
 					// Force a blue link if the file exists; may be a remote
 					// upload on the shared repository, and we want to see its
 					// auto-generated page.
+					wfFCKSetRefId('internal link: file', &$text, $link, $trail, $wasblank);
 					$s .= $this->makeKnownLinkHolder( $nt, $text, '', $trail, $prefix );
 					$this->mOutput->addLink( $nt );
-					wfFCKSetRefId('internal link: file', &$text, $link, $trail, $wasblank);
 					continue;
 				}
 			}
