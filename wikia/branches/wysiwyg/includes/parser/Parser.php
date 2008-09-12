@@ -1494,7 +1494,7 @@ class Parser
 	 * @private
 	 */
 	function replaceInternalLinks( $s ) {
-		global $wgContLang;
+		global $wgContLang, $FCKparseEnable;
 		static $fname = 'Parser::replaceInternalLinks' ;
 
 		wfProfileIn( $fname );
@@ -1716,7 +1716,6 @@ class Parser
 						# but it might be hard to fix that, and it doesn't matter ATM
 						$text = $this->replaceExternalLinks($text);
 						$text = $this->replaceInternalLinks($text);
-						global $FCKparseEnable;
 						if ($FCKparseEnable) {
 							wfFCKSetRefId('image', &$text, $link, $trail, $wasblank);
 							$refId = wfFCKGetRefId($text);
