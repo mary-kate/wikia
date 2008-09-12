@@ -170,7 +170,7 @@ abstract class File {
 		if ( !isset( $this->url ) ) {
 			$this->url = $this->repo->getZoneUrl( 'public' ) . '/' . $this->getUrlRel();
 		}
-		return $this->url;
+		return wfReplaceImageServer( $this->url );
 	}
 
 	/**
