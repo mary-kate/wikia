@@ -94,9 +94,6 @@ class WysiwygInterface extends SpecialPage {
 
 				$geshi = new geshi($out, 'html4strict');
 				$geshi->enable_keyword_links(false);
-				
-				//$html = $geshi->parse_code();
-				$html = htmlspecialchars($out);
 			}
 			else {
 				$html = '';
@@ -136,7 +133,7 @@ class WysiwygInterface extends SpecialPage {
 			}
 
 			$wgOut->addHTML('<h3>HTML</h3>');
-			$wgOut->addHTML('<pre>' . $html . '</pre>');
+			$wgOut->addHTML('<pre>' . htmlspecialchars($html) . '</pre>');
 
 			$wgOut->addHTML('<h3>Back to wikimarkup</h3>');
 			$wgOut->addHTML('<pre>' . htmlspecialchars($wikitext_parsed) . '</pre>');
