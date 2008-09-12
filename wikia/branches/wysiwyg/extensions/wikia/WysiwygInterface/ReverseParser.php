@@ -34,6 +34,7 @@ class ReverseParser
 		self::$fckData = $fckData;
 
 		wfDebug(__METHOD__.": HTML\n\n{$html}\n\n");
+		wfDebug(__METHOD__.": fckData\n\n".print_r($fckData, true)."\n");
 
 		// load HTML into DOMdocument
 		wfSuppressWarnings();

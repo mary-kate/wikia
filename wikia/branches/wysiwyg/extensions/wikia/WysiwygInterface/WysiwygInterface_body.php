@@ -77,21 +77,29 @@ class WysiwygInterface extends SpecialPage {
 
 			$dom = new DOMDocument();
 
-			wfSuppressWarnings();
-			$dom->loadHTML($out);
-			wfRestoreWarnings();
+			if (!empty($out)) {
 
-			$dom->formatOutput = true;
-			$dom->preserveWhiteSpace = false;
+				wfSuppressWarnings();
+				$dom->loadHTML($out);
+				wfRestoreWarnings();
 
-		 	// only show content inside <body> tag
-			$body = $dom->getElementsByTagName('body')->item(0);
-			$out = $dom->saveXML($body);
+				$dom->formatOutput = true;
+				$dom->preserveWhiteSpace = false;
 
-			$out = '  ' . trim(substr($out, 6, -7));
+			 	// only show content inside <body> tag
+				$body = $dom->getElementsByTagName('body')->item(0);
+				$out = $dom->saveXML($body);
 
-			$geshi = new geshi($out, 'html4strict');
-			$geshi->enable_keyword_links(false);
+				$out = '  ' . trim(substr($out, 6, -7));
+
+				$geshi = new geshi($out, 'html4strict');
+				$geshi->enable_keyword_links(false);
+				
+				$html = $geshi->parse_code();
+			}
+			else {
+				$html = '';
+			}
 
 			// macbre: call ReverseParser to parse HTML back to wikimarkup
 			require(dirname(__FILE__).'/ReverseParser.php');
@@ -127,7 +135,6 @@ class WysiwygInterface extends SpecialPage {
 			}
 
 			$wgOut->addHTML('<h3>HTML</h3>');
-			//$wgOut->addHTML($geshi->parse_code());
 			$wgOut->addHTML('<pre>' . htmlspecialchars($html) . '</pre>');
 
 			$wgOut->addHTML('<h3>Back to wikimarkup</h3>');
