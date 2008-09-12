@@ -51,7 +51,7 @@ class WysiwygInterface extends SpecialPage {
 			}
 
 			$options = new ParserOptions();
-			$options->setTidy(true);
+			///$options->setTidy(true);
 
 			$parser = new WysiwygParser();
 			$parser->setOutputType(OT_HTML);
@@ -94,8 +94,9 @@ class WysiwygInterface extends SpecialPage {
 
 				$geshi = new geshi($out, 'html4strict');
 				$geshi->enable_keyword_links(false);
-
-				$html = $geshi->parse_code();
+				
+				//$html = $geshi->parse_code();
+				$html = htmlspecialchars($out);
 			}
 			else {
 				$html = '';
@@ -127,14 +128,12 @@ class WysiwygInterface extends SpecialPage {
 			$wgOut->addHTML('<h3>Wikimarkup</h3>');
 			$wgOut->addHTML('<pre>' . htmlspecialchars($wikitext) . '</pre>');
 
-			/*
 			$wgOut->addHTML ('<h4>Wysiwygable</h4>') ;
 			if( $wysiwigable ) {
 				$wgOut->addHTML( 'Article was deemed "appropriate" for Wysiwyg editing.' ) ;
 			} else {
 				$wgOut->addHTML( 'Article was deemed "inapropriate" for Wysiwyg editing.' ) ;
 			}
-			*/
 
 			$wgOut->addHTML('<h3>HTML</h3>');
 			$wgOut->addHTML('<pre>' . $html . '</pre>');
