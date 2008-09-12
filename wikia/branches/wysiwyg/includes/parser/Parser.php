@@ -1778,7 +1778,7 @@ class Parser
 			# Special and Media are pseudo-namespaces; no pages actually exist in them
 			if( $ns == NS_MEDIA ) {
 				if ($FCKparseEnable) {
-					wfFCKSetRefId('internal link: media', &$text, $link, $trail, $wasblank);
+					wfFCKSetRefId('internal link: media', &$text, ($noforce ? '' : ':') . $link, $trail, $wasblank);
 					$refId = wfFCKGetRefId($text);
 					$s .= $prefix . "<span$refId>[[" . ($noforce ? '' : ':') . "$link|$text]]</span>" . $trail;
 				} else {	//original action
@@ -1815,7 +1815,7 @@ class Parser
 					continue;
 				}
 			}
-			wfFCKSetRefId('internal link', &$text, $link, $trail, $wasblank);
+			wfFCKSetRefId('internal link', &$text, ($noforce ? '' : ':') . $link, $trail, $wasblank);
 			$s .= $this->makeLinkHolder( $nt, $text, '', $trail, $prefix );
 		}
 		wfProfileOut( $fname );
