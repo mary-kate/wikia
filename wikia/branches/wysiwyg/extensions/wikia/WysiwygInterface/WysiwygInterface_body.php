@@ -34,7 +34,7 @@ class WysiwygInterface extends SpecialPage {
 		}
 
 		function execute( $par ) {
-			global $wgRequest, $wgOut, $wgTitle, $IP;
+			global $wgRequest, $wgOut, $wgTitle, $IP, $FCKmetaData;
 			$this->setHeaders();
 
 			if(empty($par)) {
@@ -103,7 +103,10 @@ class WysiwygInterface extends SpecialPage {
 			require(dirname(__FILE__).'/ReverseParser.php');
 			$reverseParser = new ReverseParser();
 
-			$wikitext_parsed = $reverseParser->parse($html);
+			$wgOut->addHtml('$FCKmetaData: <br />');
+			$wgOut->addHtml('<pre>'.print_r($FCKmetaData, true).'</pre>');
+
+			$wikitext_parsed = $reverseParser->parse($html, $FCKmetaData);
 
 			// check wysiwigability ;)
 			require(dirname(__FILE__).'/FailsafeFallback.php');
@@ -125,12 +128,14 @@ class WysiwygInterface extends SpecialPage {
 			$wgOut->addHTML('<h3>Wikimarkup</h3>');
 			$wgOut->addHTML('<pre>' . htmlspecialchars($wikitext) . '</pre>');
 
+			/*
 			$wgOut->addHTML ('<h4>Wysiwygable</h4>') ;
 			if( $wysiwigable ) {
 				$wgOut->addHTML( 'Article was deemed "appropriate" for Wysiwyg editing.' ) ;
 			} else {
 				$wgOut->addHTML( 'Article was deemed "inapropriate" for Wysiwyg editing.' ) ;
 			}
+			*/
 
 			$wgOut->addHTML('<h3>HTML</h3>');
 			$wgOut->addHTML('<pre>' . htmlspecialchars($html) . '</pre>');
