@@ -317,9 +317,9 @@ class ReverseParser
 		}
 
 		// handle links with refId attribute
-		$refId = intval($node->getAttribute('refid'));
+		$refId = $node->getAttribute('refid');
 
-		if ( ($refId > 0) && isset(self::$fckData[$refId]) ) {
+		if ( is_numeric($refId) && isset(self::$fckData[$refId]) ) {
 			$refData = self::$fckData[$refId];
 
 			// handle various type of links
