@@ -117,8 +117,17 @@ class ReverseParser
 
 				// parse it back to HTML tag
 				if (!empty($wasHTML)) {
+
 					$attStr = self::getAttributesStr($node);
-					$output = "<{$node->nodeName}{$attStr}>{$content}</{$node->nodeName}>";
+
+					switch ($node->nodeName) {
+						case 'br':
+							$output = "<br{$attStr} />";
+							break;
+
+						default:
+							$output = "<{$node->nodeName}{$attStr}>{$content}</{$node->nodeName}>";
+					}
 				}
 				// convert HTML back to wikimarkup
 				else {
