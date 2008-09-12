@@ -82,7 +82,7 @@ class ReverseParser
 		$output = '';
 		$level++;
 
-		//wfDebug(__METHOD__. str_repeat(':', $level) . "{$node->nodeName} ({$node->nodeType})\n");
+		wfDebug(__METHOD__. str_repeat(':', $level) . "{$node->nodeName} ({$node->nodeType})\n");
 
 		// recursively parse child nodes
 		if ( $node->hasChildNodes() ) {
@@ -232,7 +232,7 @@ class ReverseParser
 
 						// handle more complicated tags
 						case 'a':
-							$output = self::handleAnchor($node);
+							$output = self::handleAnchor($node, $content);
 							break;
 
 						case 'span':
@@ -304,7 +304,7 @@ class ReverseParser
 	 * Returns wikimarkup for <a> tag
 	 */
 
-	static function handleAnchor($node) {
+	static function handleAnchor($node, $content) {
 
 		// tag context
 		//$tagBefore = $node->previousSibling;
@@ -321,6 +321,9 @@ class ReverseParser
 
 		if ( is_numeric($refId) && isset(self::$fckData[$refId]) ) {
 			$refData = self::$fckData[$refId];
+
+			// allow formatting of anchor description
+			$refData['description'] = !empty($refData['description']) ? $content : '';
 
 			// handle various type of links
 			switch($refData['type']) {
