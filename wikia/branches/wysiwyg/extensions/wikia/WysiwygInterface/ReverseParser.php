@@ -11,7 +11,10 @@ class ReverseParser
 	private $dom;
 
 	// used by nested lists parser
-	public static $listLevel = 0;
+	private static $listLevel = 0;
+
+	// bullets stack for nested lists
+	private static $listBullets = '';
 
 	// refIds data from JSON array
 	private static $fckData = array();
@@ -30,14 +33,7 @@ class ReverseParser
 		// refIds
 		self::$fckData = $fckData;
 
-		/*
-		$idx = strpos($html, 'FCKdata:begin');
-
-		if ($idx !== false) {
-			$fckData = substr($html, $idx+13, -11);
-			$html = substr($html, 0, $idx);
-		}
-		*/
+		wfDebug(__METHOD__.": HTML\n\n{$html}\n\n");
 
 		// load HTML into DOMdocument
 		wfSuppressWarnings();
@@ -65,6 +61,8 @@ class ReverseParser
 		for ($n=0; $n < $nodes->length; $n++) {
 			$output .= $this->parseNode($nodes->item($n));
 		}
+
+		wfDebug(__METHOD__.": wiki\n\n{$output}\n\n");
 
 		wfProfileOut(__METHOD__);
 
@@ -96,6 +94,7 @@ class ReverseParser
 
 			if ($isListNode) {
 				self::$listLevel++;
+				self::$listBullets .= ($node->nodeName == 'ul') ? '*' : '#';
 			}
 
 
@@ -105,6 +104,7 @@ class ReverseParser
 
 			if ($isListNode) {
 				self::$listLevel--;
+				self::$listBullets = substr(self::$listBullets, 0, -1);
 			}
 		}
 
@@ -201,7 +201,7 @@ class ReverseParser
 						// lists
 						case 'ul':
 						case 'ol':
-							$output = trim($content, "\n ") . (self::$listLevel == 0 ? "\n" : '');
+							$output = trim($content) . (self::$listLevel == 0 ? "\n" : '');
 							break;
 
 						case 'dl':
@@ -334,7 +334,9 @@ class ReverseParser
 		switch($node->nodeName) {
 			case 'li':
 				$bullet = ($node->parentNode->nodeName == 'ul') ? '*' : '#';
-				return str_repeat($bullet, self::$listLevel) . $content;
+				$content = ' ' . ltrim($content, ' ');
+				//return str_repeat($bullet, self::$listLevel) . $content;
+				return self::$listBullets . $content;
 
 			case 'dt':
 				return ";{$node->textContent}";
