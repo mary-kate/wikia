@@ -735,7 +735,8 @@ class EditPage {
 			require("extensions/wikia/WysiwygInterface/WysiwygInterface_body.php") ;
 			require("extensions/wikia/WysiwygInterface/ReverseParser.php");
 			$reverseParser = new ReverseParser();
-			$this->textbox1 = $reverseParser->parse($this->textbox1);
+			eval("\$wysiwygData = \$_POST['wysiwygData'];");
+			$this->textbox1 = $reverseParser->parse($this->textbox1, $wysiwygData);
 		}
 
 		$fname = 'EditPage::attemptSave';
@@ -1410,8 +1411,19 @@ END
 			$oFCKeditor = new FCKeditor('wpTextbox1') ;
 			$oFCKeditor->BasePath = $wgExtensionsPath.'/wikia/WysiwygInterface/fckeditor/' ;
 			$oFCKeditor->Value = $out;
-			$oFCKeditor->Height = 500;
+			$oFCKeditor->Height = 400;
 			$wgOut->addHTML( $oFCKeditor->CreateHtml() );
+
+			global $FCKmetaData;
+			$wysiwygData = print_r($FCKmetaData, true);
+			$wysiwygData = print_r($wgOut->mTemplateIds, true);
+
+			$wgOut->addHTML( <<<END
+<br /><br /><b>WysiwygData (do not touch):</b><br />
+<textarea name="wysiwygData" id="wysiwygData" style="width: 800px; height: 200px;">{$wysiwygData}</textarea>
+END
+);
+
 		} else {
 			$wgOut->addHTML( <<<END
 $recreate
