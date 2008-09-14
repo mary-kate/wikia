@@ -96,6 +96,7 @@ function axWFactoryDomainCRUD($type="add") {
                         "city_domain" => strtolower($sDomain)
                     )
                 );
+					 $dbw->commit();
                 $sInfo .= "Success: Domain <em>{$sDomain}</em> added.";
             }
             break;
