@@ -116,7 +116,7 @@ class WysiwygInterface extends SpecialPage {
 
 			// parse
 			$parsedOld = $parser->parse($wikitext, $wgTitle, $options)->getText();
-			$parsedNew = $parser->parse("__NOTOC__\n".$wikitext_parsed, $wgTitle, $options)->getText();
+			$parsedNew = $parser->parse($wikitext_parsed, $wgTitle, $options)->getText();
 
 			// output
 			// 1. wikimarkup
