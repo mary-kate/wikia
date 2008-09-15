@@ -295,6 +295,7 @@ class ReverseParser
 
 			switch($refData['type']) {
 				case 'image':
+				case 'internal link: media':
 					$pipe = !empty($refData['description']) ? '|'.$refData['description'] : '';
 					return "[[{$refData['href']}{$pipe}]]";
 			}
@@ -326,7 +327,7 @@ class ReverseParser
 			$refData = self::$fckData[$refId];
 
 			// allow formatting of anchor description
-			//$refData['description'] = ($refData['description'] != '') ? $content : '';
+			$refData['description'] = ($refData['description'] != '') ? $content : '';
 
 			// description after pipe
 			$pipe = ($refData['description'] != '') ? '|'.$refData['description'] : '';
