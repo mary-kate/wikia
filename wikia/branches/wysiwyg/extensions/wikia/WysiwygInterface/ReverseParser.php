@@ -346,6 +346,14 @@ class ReverseParser
 					return "[[{$refData['href']}{$pipe}]]{$refData['trial']}";
 			}
 		}
+		// handle HTML links <a href="http://foo.net">bar</a>
+		// TODO: handle local links
+		else {
+			$href = $node->getAttribute('href');
+			$desc = $node->textContent;
+
+			return "[{$href} {$desc}]";
+		}
 
 		return '<!-- unsupported anchor tag! -->';
 	}
