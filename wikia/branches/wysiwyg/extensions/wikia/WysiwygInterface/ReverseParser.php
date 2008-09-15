@@ -82,7 +82,7 @@ class ReverseParser
 		$output = '';
 		$level++;
 
-		wfDebug(__METHOD__. str_repeat(':', $level) . "{$node->nodeName} ({$node->nodeType})\n");
+		//wfDebug(__METHOD__. str_repeat(':', $level) . "{$node->nodeName} ({$node->nodeType})\n");
 
 		// recursively parse child nodes
 		if ( $node->hasChildNodes() ) {
@@ -149,27 +149,27 @@ class ReverseParser
 							break;
 
 						case 'h1':
-							$output = "={$content} =\n";
+							$output = "= {$content} =\n";
 							break;
 
 						case 'h2':
-							$output = "=={$content} ==\n";
+							$output = "== {$content} ==\n";
 							break;
 
 						case 'h3':
-							$output = "==={$content} ===\n";
+							$output = "=== {$content} ===\n";
 							break;
 		
 						case 'h4':
-							$output = "===={$content} ====\n";
+							$output = "==== {$content} ====\n";
 							break;
 
 						case 'h5':
-							$output = "====={$content} =====\n";
+							$output = "===== {$content} =====\n";
 							break;
 
 						case 'h6':
-							$output = "======{$content} ======\n";
+							$output = "====== {$content} ======\n";
 							break;
 
 						case 'br':
@@ -286,16 +286,6 @@ class ReverseParser
 	 */
 
 	static function handleSpan($node) {
-
-		// tag context
-		//$tagBefore = $node->previousSibling;
-		//$tagAfter = $node->nextSibling;
-		$tagParent = $node->parentNode;
-
-		// remove span automagically added inside <hx>
-		if ( is_object($tagParent) && $tagParent->nodeName{0} == 'h' ) {
-			return trim($node->textContent, ' ');
-		}
 
 		// handle spans with refId attribute: images, templates etc.
 		$refId = $node->getAttribute('refid');
