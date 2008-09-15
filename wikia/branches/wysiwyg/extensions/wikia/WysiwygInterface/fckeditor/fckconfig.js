@@ -26,8 +26,8 @@
 
 FCKConfig.CustomConfigurationsPath = '' ;
 
-FCKConfig.EditorAreaCSS = FCKConfig.BasePath + 'css/fck_editorarea.css' ;
-FCKConfig.EditorAreaStyles = '' ;
+FCKConfig.EditorAreaCSS = FCKConfig.BasePath + 'css/fck_editorarea.css?' + window.parent.wgStyleVersion;
+FCKConfig.EditorAreaStyles = window.parent.stylepath + '/monobook/main.css?' + window.parent.wgStyleVersion;
 FCKConfig.ToolbarComboPreviewCSS = '' ;
 
 FCKConfig.DocType = '' ;
