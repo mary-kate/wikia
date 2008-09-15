@@ -579,17 +579,24 @@ function wfGetCurrentUrl() {
  * @author Maciej Błaszkowski <marooned at wikia-inc.com>
  * @access public
  *
- * @return nothing
+ * @return string refId
  */
-function wfFCKSetRefId($type, &$text, $link, $trail, $wasblank, $noforce) {
+function wfFCKSetRefId($type, &$text, $link, $trail, $wasblank, $noforce, $returnOnly = false) {
 	global $FCKparseEnable, $FCKmetaData;
 	if ($FCKparseEnable) {
 		$tmpDescription = $wasblank ? '' : $text;
 		$refId = count($FCKmetaData);
-		$text .= "\x1$refId\x1";
-		list( $tmpInside, $tmpTrail ) = Linker::splitTrail($trail);
+		if (!$returnOnly) {
+			$text .= "\x1$refId\x1";
+		}
+		$tmpInside = '';
+		if ($trail != '') {
+			list($tmpInside, $tmpTrail) = Linker::splitTrail($trail);
+		}
 		$FCKmetaData[$refId] = array('type' => $type, 'href' => ($noforce ? '' : ':') . $link, 'description' => $tmpDescription, 'trial' => $tmpInside);
+		return $refId;
 	}
+	return '';
 }
 
 /**
@@ -600,7 +607,7 @@ function wfFCKSetRefId($type, &$text, $link, $trail, $wasblank, $noforce) {
  * @author Maciej Błaszkowski <marooned at wikia-inc.com>
  * @access public
  *
- * @return string
+ * @return string refId
  */
 function wfFCKGetRefId(&$text) {
 	global $FCKparseEnable;

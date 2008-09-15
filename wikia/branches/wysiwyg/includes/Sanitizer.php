@@ -486,7 +486,7 @@ class Sanitizer {
 					if ( ! $badtag ) {
 						$rest = str_replace( '>', '&gt;', $rest );
 						$close = ( $brace == '/>' && !$slash ) ? ' /' : '';
-						$wasHtml = !$slash ? ' wasHtml=1' : '';
+						$wasHtml = !$slash ? ' wasHtml="1"' : '';
 						$text .= "<$slash$t$wasHtml$newparams$close>$rest";
 						continue;
 					}
