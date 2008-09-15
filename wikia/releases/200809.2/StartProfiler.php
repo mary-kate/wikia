@@ -7,7 +7,7 @@ if ( @$_SERVER['REQUEST_URI'] == '/index.php?title=Anakin_Skywalker&action=submi
 	require_once( dirname(__FILE__).'/includes/ProfilerSimpleUDP.php' );
 	$wgProfiler = new ProfilerSimpleUDP;
 	$wgProfiler->setProfileID( 'bigpage' );
-} elseif (@defined($_REQUEST['forceprofile'])) {
+} elseif (!empty($_GET['forceprofile'])) {
 	require_once( dirname(__FILE__).'/includes/ProfilerSimpleText.php' );
 	$wgProfiler = new ProfilerSimpleText;
 	$wgProfiler->setProfileID( 'forced' );
@@ -27,8 +27,7 @@ if ( @$_SERVER['REQUEST_URI'] == '/index.php?title=Anakin_Skywalker&action=submi
 	}
 	#$wgProfiler->setProfileID( 'all' );
 	#$wgProfiler->setMinimum(5 /* seconds */);
-}
-elseif ( defined( 'MW_FORCE_PROFILE' ) ) {
+} elseif ( defined( 'MW_FORCE_PROFILE' ) ) {
 	require_once( dirname(__FILE__).'/includes/Profiler.php' );
 	$wgProfiler = new Profiler;
 } else {
