@@ -40,7 +40,6 @@ $wgMultiEditPageSimpleTags = array('lbl', 'categories', 'pagetitle', 'imageuploa
 //restore what we temporarily encoded
 function wfCreatePageUnescapeKnownMarkupTags (&$text) {
 	$text = str_replace ('<!---pipe--->', '|', $text) ;
-	$text = str_replace ('<!---imageupload--->', '|', $text) ;
 }
 
 class CreateMultiPage
@@ -51,7 +50,7 @@ class CreateMultiPage
 
 	static public function unescapeBlankMarker ($text) {
 		$text = str_replace ("\n<!---blanktemplate--->\n", '', $text) ;
-
+		$text = str_replace ('<!---imageupload--->', '', $text) ;
 		return $text ;
 	}
 
