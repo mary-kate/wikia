@@ -232,7 +232,7 @@ class ReverseParser
 
 						// handle more complicated tags
 						case 'a':
-							$output = self::handleAnchor($node, $content);
+							$output = self::handleLink($node, $content);
 							break;
 
 						case 'span':
@@ -308,7 +308,7 @@ class ReverseParser
 	 * Returns wikimarkup for <a> tag
 	 */
 
-	static function handleAnchor($node, $content) {
+	static function handleLink($node, $content) {
 
 		// tag context
 		//$tagBefore = $node->previousSibling;
@@ -326,11 +326,24 @@ class ReverseParser
 		if ( is_numeric($refId) && isset(self::$fckData[$refId]) ) {
 			$refData = self::$fckData[$refId];
 
-			// allow formatting of anchor description
-			$refData['description'] = ($refData['description'] != '') ? $content : '';
+			// allow formatting of link description
+			if ($refData['description'] != '') {
 
-			// description after pipe
-			$pipe = ($refData['description'] != '') ? '|'.$refData['description'] : '';
+				// $content contains parsed link description (wikitext)
+				if ($refData['trial'] != '' ) {
+					// $trial (if not empty) is at the end of $content - remove it
+					$refData['description'] = substr($content, 0, -strlen($refData['trial']));
+				}
+				else {
+					$refData['description'] = $content;
+				}
+
+				// description after pipe
+				$pipe = '|'.$refData['description'];
+			}
+			else {
+				$pipe = '';
+			}
 
 			// handle various type of links
 			switch($refData['type']) {
