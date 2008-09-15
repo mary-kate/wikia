@@ -294,9 +294,11 @@ class ReverseParser
 			$refData = self::$fckData[$refId];
 
 			switch($refData['type']) {
+				// [[Image:foo.jpg]]
 				case 'image':
+				// [[Media:foo.jpg]]
 				case 'internal link: media':
-					$pipe = !empty($refData['description']) ? '|'.$refData['description'] : '';
+					$pipe = ($refData['description'] != '') ? '|'.$refData['description'] : '';
 					return "[[{$refData['href']}{$pipe}]]";
 			}
 		}
@@ -309,16 +311,6 @@ class ReverseParser
 	 */
 
 	static function handleLink($node, $content) {
-
-		// tag context
-		//$tagBefore = $node->previousSibling;
-		$tagAfter = $node->nextSibling;
-		//$tagParent = $node->parentNode;
-
-		// remove anchor automagically added before <hx>
-		if ( is_object($tagAfter) && $tagAfter->nodeName{0} == 'h' ) {
-			return '';
-		}
 
 		// handle links with refId attribute
 		$refId = $node->getAttribute('refid');
