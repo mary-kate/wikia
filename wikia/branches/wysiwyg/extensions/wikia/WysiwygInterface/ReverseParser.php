@@ -405,3 +405,4 @@ class ReverseParser
 		return $text;
 	}
 }
+
