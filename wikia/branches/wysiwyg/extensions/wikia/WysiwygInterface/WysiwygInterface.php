@@ -15,7 +15,7 @@ $wgSpecialPages['WysiwygInterface'] = 'WysiwygInterface';
 $wgAjaxExportList[] = 'wfDirectParserAjax';
 $wgAjaxExportList[] = 'wfReverseParserAjax';
 
-function wfDirectParserAjax($wikitext) {
+function wfDirectParserAjax($wikitext, $appendData = false) {
 
 	$options = new ParserOptions();
 	$title = new Title();
@@ -28,6 +28,13 @@ function wfDirectParserAjax($wikitext) {
 	$FCKparseEnable = true;
 	$out = $parser->parse($wikitext, $title, $options)->getText();
 	$FCKparseEnable = false;
+
+	if ( $appendData != false) {
+		global $FCKmetaData;
+		$jsonData = json_encode($FCKmetaData);
+
+		$out .= 'FCKdata:::separator' . $jsonData;
+	}
 
         $response = new AjaxResponse( $out );
         $response->setContentType('text/plain; charset=utf-8');
@@ -44,6 +51,8 @@ function wfReverseParserAjax($html, $data = array()) {
         else {
                 $FCKmetaData = array();
         }
+
+	$html = urldecode($html);
 
         // call ReverseParser to parse HTML back to wikimarkup
         require(dirname(__FILE__).'/ReverseParser.php');
