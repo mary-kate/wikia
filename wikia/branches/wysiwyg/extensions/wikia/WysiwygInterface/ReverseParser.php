@@ -291,7 +291,7 @@ class ReverseParser
 		$refId = $node->getAttribute('refid');
 
 		if ( is_numeric($refId) && isset(self::$fckData[$refId]) ) {
-			$refData = self::$fckData[$refId];
+			$refData = (array) self::$fckData[$refId];
 
 			switch($refData['type']) {
 				// [[Image:foo.jpg]]
@@ -324,7 +324,7 @@ class ReverseParser
 		$refId = $node->getAttribute('refid');
 
 		if ( is_numeric($refId) && isset(self::$fckData[$refId]) ) {
-			$refData = self::$fckData[$refId];
+			$refData = (array) self::$fckData[$refId];
 
 			// allow formatting of link description
 			if ($refData['description'] != '') {
