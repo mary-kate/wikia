@@ -304,6 +304,10 @@ class ReverseParser
 				// <gallery></gallery>
 				case 'gallery':
 					return $node->textContent;
+
+				// <nowiki></nowiki>
+				case 'nowiki':
+					return "<nowiki>{$node->textContent}</nowiki>";
 			}
 		}
 
@@ -372,7 +376,6 @@ class ReverseParser
 			case 'li':
 				$bullet = ($node->parentNode->nodeName == 'ul') ? '*' : '#';
 				$content = ' ' . ltrim($content, ' ');
-				//return str_repeat($bullet, self::$listLevel) . $content;
 				return self::$listBullets . $content;
 
 			case 'dt':
@@ -405,13 +408,13 @@ class ReverseParser
 
 		// 4. space at the beginning of the line
 		if ($text{0} == ' ') {
-			$text = '<nowiki> </nowiki>' . substr($text, 1);
+			$text = '&nbsp;' . substr($text, 1);
 		}
 
 		// 5. wrap magic words {{ }} using <nowiki>
 		$text = preg_replace("/{{([^}]+)}}/", '<nowiki>{{$1}}</nowiki>', $text);
 
-		// 6. wrap magic words [[ ]] using <nowiki>
+		// 6. wrap [[foo]] using <nowiki>
 		$text = preg_replace("/(\[+)([^}]+)(\]+)/", '<nowiki>$1$2$3</nowiki>', $text);
 
 		return $text;
