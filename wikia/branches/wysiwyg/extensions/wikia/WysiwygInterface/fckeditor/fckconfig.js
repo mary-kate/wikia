@@ -27,7 +27,7 @@
 FCKConfig.CustomConfigurationsPath = '' ;
 
 FCKConfig.EditorAreaCSS = FCKConfig.BasePath + 'css/fck_editorarea.css?' + window.parent.wgStyleVersion;
-FCKConfig.EditorAreaStyles = window.parent.stylepath + '/monobook/main.css?' + window.parent.wgStyleVersion;
+FCKConfig.EditorAreaStyles = [window.parent.stylepath + '/monobook/main.css?' + window.parent.wgStyleVersion, 'body {padding: 0 5px}'];
 FCKConfig.ToolbarComboPreviewCSS = '' ;
 
 FCKConfig.DocType = '' ;
@@ -186,7 +186,7 @@ FCKConfig.FlashDlgHideAdvanced	= false ;
 FCKConfig.ProtectedTags = '' ;
 
 // This will be applied to the body element of the editor
-FCKConfig.BodyId = '' ;
+FCKConfig.BodyId = 'fckEditor' ;
 FCKConfig.BodyClass = '' ;
 
 FCKConfig.DefaultStyleLabel = '' ;
