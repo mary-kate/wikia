@@ -300,6 +300,10 @@ class ReverseParser
 				case 'internal link: media':
 					$pipe = ($refData['description'] != '') ? '|'.$refData['description'] : '';
 					return "[[{$refData['href']}{$pipe}]]";
+
+				// <gallery></gallery>
+				case 'gallery':
+					return $node->textContent;
 			}
 		}
 
