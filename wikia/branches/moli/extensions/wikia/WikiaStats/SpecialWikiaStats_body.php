@@ -25,7 +25,7 @@ class WikiaStatsClass extends SpecialPage
     var $userIsSpecial;
     var $fromDate, $toDate;
 
-    const USE_MEMC = 1;
+    const USE_MEMC = 0;
 
     #--- constructor
     public function __construct()

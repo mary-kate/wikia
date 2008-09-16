@@ -28,7 +28,7 @@ class WikiaGenericStats {
     var $mSelectedCityId = -1;
 
     const MONTHLY_STATS = 7;
-    const USE_MEMC = 1;
+    const USE_MEMC = 0;
     const USE_OLD_DB = 0;
 	const IGNORE_WIKIS = "5, 11, 6745";
 
@@ -1867,10 +1867,10 @@ class WikiaGenericStats {
 							'last_edit_ago' => sprintf("%0.0f", (time() - $rankInfo["max"])/(60*60*24)),
 						);
 					} else { 
-					    $rank = (array_key_exists($user_id, $rankUsersPrev)) ? intval($rankUsersPrev[$user_id]["rank"]) : 0;
+					    $rank = (array_key_exists($user_id, $rankUsersPrev)) ? intval($rankUsersPrev[$user_id]["rank"]) : 50;
 					    $cnt_ns = (array_key_exists($user_id, $rankUsersNamespace)) ? $rankUsersNamespace[$user_id]["cnt"] : 0;
-					    $prev_cnt_ns = (array_key_exists($user_id, $rankUsersPrevNamespace)) ? $rankUsersPrevNamespace[$user_id]["cnt"] : 0;
-					    $cnt = (array_key_exists($user_id, $rankUsersPrev)) ? intval($rankUsersPrev[$user_id]["cnt"]) : 0;
+					    $prev_cnt_ns = (array_key_exists($user_id, $rankUsersPrevNamespace)) ? $rankUsersPrevNamespace[$user_id]["cnt"] : intval($cnt_ns);
+					    $cnt = (array_key_exists($user_id, $rankUsersPrev)) ? intval($rankUsersPrev[$user_id]["cnt"]) : intval($rankInfo["cnt"]);
 						$wikians_active[$rankInfo["rank"]] = array(
 							'user_id' => $rankInfo["user_id"],
 							'user_name' => $rankInfo["user_name"],
