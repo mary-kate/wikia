@@ -182,7 +182,7 @@ class ReverseParser
 
 						case 'pre':
 							$content = trim(str_replace("\n", "\n ", $content));	// add white space before each line
-							$output = "\n\n {$content}\n";
+							$output = " {$content}\n";
 							break;
 
 						// tables
