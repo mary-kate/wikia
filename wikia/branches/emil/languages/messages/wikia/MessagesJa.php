@@ -1,6 +1,123 @@
 <?php
 
 $messages = array_merge( $messages, array(
+'contris' => '投稿記録',
+'wikicitieshome' => 'メインページ',
+'wikicitieshome-url' => 'http://ja.wikia.com/',
+'wikicitieshome-url/fr' => 'http://fr.wikia.com/',
+'irc' => 'IRCによるヘルプ',
+'irc-url' => 'http://irc.wikia.com/',
+'shared-problemreport' => '問題を報告する',
+'shared-problemreport-url' => 'http://www.wikia.com/wiki/Report_a_problem',
+'wikicities-nav' => 'wikia',
+'createwiki' => '新しいウィキを申請する',
+'createwikipagetitle' => '新しいウィキを申請する',
+'createwikitext' => 'このページで新しいウィキの申請ができます。以下の入力欄を埋めてください。',
+'createwikititle' => 'ウィキのタイトル',
+'createwikiname' => 'ウィキの名前(URL)',
+'createwikinamevstitle' => 'ウィキの名前は、ウィキのタイトルとは異なります。名前は、デフォルトのURLを決めるのに使われます。例えば、「starwars」という名前なら、http://starwars.wikia.com/ にアクセスすることになります。ウィキのタイトルは空白を含んでも構いませんが、ウィキの名前は、数字とアルファベットだけにしてください。',
+'createwikidesc' => 'ウィキの説明',
+'createwikiaddtnl' => 'その他の情報',
+'createwikimailsub' => '新しいウィキを申請する',
+'requestcreatewiki' => 'リクエストを送信する',
+'createwikisubmitcomplete' => '送信完了しました。メールアドレスを設定してない場合は、新しいウィキそのものを参照してください。{{SITENAME}}を申請していただいてありがとうございます。',
+'createwikilang' => 'このウィキに設定する言語',
+'contact' => 'ウィキアに連絡する',
+'contactpagetitle' => 'ウィキアに連絡する',
+'contactproblem' => '件名',
+'contactproblemdesc' => '内容',
+'contactmailsub' => 'ウィキアの連絡用メール',
+'contactmail' => '送信',
+'yourmail' => 'あなたのメールアドレス(返信先)',
+'contactsubmitcomplete' => 'ウィキアへの連絡、ありがとうございます。',
+'contactrealname' => 'お名前',
+'contactwikiname' => 'ウィキの名前',
+'contactintro' => '詳しくは、<a href=http://www.wikia.com/wiki/Report_a_problem>問題の報告</a>のページをお読みの上、連絡用フォームをお使いになって報告をお願いします。また、ウィキアのコミュニティへは、<a href=http://www.wikia.com/wiki/Community_portal>Community portal</a>からコンタクトをとれます。ソフトウェアのバグに関しては、<a href=http://bugs.wikia.com>bugs.wikia.com</a>にお願いします。<p>もし、<a href=http://ja.wikia.com/wiki/Wikia>ウィキア</a>に個人的なメッセージを送りたいのであれば、下記連絡用フォームを使ってください。<i>全ての入力欄は、必須ではありません。</i>',
+'save' => '保存する',
+'wysiwygcaption' => 'グラフィカルに編集する',
+'insertimage' => '画像を挿入する',
+'edit-summary' => '編集内容の要約',
+'right_now' => 'さあ、いますぐ<br />こんな人達がいます',
+'other_people' => '他の人は、こんなことを探しています',
+'whats_new' => '新着',
+'featured' => 'お薦めウィキ',
+'hubs' => 'ポータル',
+'all_the_wikia' => 'ウィキアの全て',
+'its_easy' => '簡単、無料',
+'or_learn' => 'ウィキアを知るには',
+'login_greeting' => '[[User:$1|$1]]さん、ようこそ!',
+'create_an_account' => 'アカウントを作成する',
+'login_as_another' => '他のユーザーとしてログインする',
+'not_you' => '違う場合、',
+'this_wiki' => 'このウィキについて',
+'home' => 'メインページ',
+'forum' => 'フォーラム',
+'helpfaq' => 'ヘルプ & FAQ',
+'createpage' => '新規記事を作成',
+'joinnow' => 'いますぐ会員になろう',
+'most_popular_articles' => '人気の記事',
+'messagebar_mess' => '<a href="$1">このページを編集したり</a>、<a href="$2">新しい記事を作ったり</a>することが可能です。どうすればいいかは、<a href="$3">ここから検索してみてください</a>。',
+'edit_this_page' => '<a href="$1">この記事を編集する</a>',
+'expert_tools' => 'エクスポートツール',
+'this_article' => 'この記事',
+'this_page' => 'このページ',
+'this_user' => 'この利用者',
+'this_project' => 'このプロジェクト',
+'this_image' => 'この画像',
+'this_message' => 'このメッセージ',
+'this_template' => 'このテンプレート',
+'this_help' => 'このヘルプ',
+'this_category' => 'このカテゴリ',
+'this_forum' => 'このフォーラム',
+'this_special' => '特別ページ',
+'edit_contribute' => '編集 / 投稿',
+'discuss' => 'このページについて話し合う',
+'return_to_article' => '記事に戻る',
+'return_to_talk' => 'ノートページに戻る',
+'return_to_user' => '利用者ページに戻る',
+'return_to_user_talk' => '議論のページに戻る',
+'return_to_project' => 'プロジェクトページに戻る',
+'return_to_project_talk' => '議論のページに戻る',
+'return_to_image' => '画像ページに戻る',
+'return_to_image_talk' => '議論のページに戻る',
+'return_to_mediawiki' => 'メッセージのページに戻る',
+'return_to_mediawiki_talk' => '議論のページに戻る',
+'return_to_template' => 'テンプレートページに戻る',
+'return_to_template_talk' => '議論のページに戻る',
+'return_to_help' => 'ヘルプページに戻る',
+'return_to_help_talk' => '議論のページに戻る',
+'return_to_category' => 'カテゴリページに戻る',
+'return_to_category_talk' => '議論のページに戻る',
+'return_to_forum' => 'フォーラムページに戻る',
+'return_to_forum_talk' => '議論のページに戻る',
+'return_to_special' => '特別ページに戻る',
+'add_comment' => 'コメントを追加する',
+'share_it' => '共有ツール:',
+'my_stuff' => 'my stuff',
+'choose_reason' => '理由を選択する',
+'top_five' => 'トップファイブ',
+'most_popular' => '人気順',
+'most_visited' => '閲覧順',
+'newly_changed' => '更新された記事',
+'highest_ratings' => '評価の高い記事',
+'most_emailed' => 'メールの使われた記事',
+'users' => '利用者',
+'community' => 'コミュニティ',
+'rate_it' => '評価する:',
+'unrate_it' => '評価を取り消す',
+'use_old_formatting' => 'monobookの外装に変更する',
+'use_new_formatting' => '新しい外装を試す',
+'review_reason_1' => 'Review reason 1',
+'review_reason_2' => 'Review reason 2',
+'review_reason_3' => 'Review reason 3',
+'review_reason_4' => 'Review reason 4',
+'review_reason_5' => 'Review reason 5',
+'contris_s' => '投稿記録',
+'watchlist_s' => 'ウォッチリスト',
+'preferences_s' => 'オプション',
+'searchsuggest' => '検索補間',
+'tog-searchsuggest' => '補間つき検索機能を使う',
+'see_more' => '更に詳しくは',
 'activeusers' => '登録利用者の一覧',
 'activeusersempty' => 'このウィキアには、登録された利用者による編集がまだありません。',
 'activeusersintro' => 'このページは、このウィキアでページを編集したことのある利用者の一覧を表示しています。',
@@ -8,7 +125,6 @@ $messages = array_merge( $messages, array(
 'activeusersnext' => '次 $1 >>',
 'activeusersswitch' => 'モードの変更',
 'activeuserstitle' => '登録利用者',
-'add_comment' => 'コメントを追加する',
 'addimagetag' => 'この画像にタグを付ける',
 'addingtag' => 'タグを追加しています...',
 'addresswarnings' => '再度アップロードする前に、警告された問題を解消してください。',
@@ -68,8 +184,6 @@ $messages = array_merge( $messages, array(
 'cite_error_7' => 'バックリンクラベルが使用できる個数を超えました。"\'\'cite_references_link_many_format_backlink_labels\'\'"',
 'confirmemail_loggedin' => 'あなたのメールアドレスを確認しました。',
 'confirmemail_success' => 'あなたのメールアドレスを確認しました。ログインしてウィキを利用できます。',
-'contact' => 'ウィキアに連絡する',
-'contactmailsub' => 'ウィキアの連絡用メール',
 'copyrightwarning' => '{| style="width:100%; padding: 5px; font-size: 95%;"
 |- valign="top" 
 |
@@ -84,8 +198,6 @@ $messages = array_merge( $messages, array(
  <div><small>\'\'[[MediaWiki:Copyrightwarning|このテンプレートを編集する]]\'\'</small></div>
 |}',
 'createarticle' => '新規記事を作成',
-'createpage' => '新規記事を作成',
-'createpage_about_info' => 'シンプルなエディタです。詳細は、ウィキアのヘルプをどうぞ。',
 'createpage_alternate_creation' => '従来のエディタを使うには、 $1 をクリックしてください',
 'createpage_button' => '新規記事を作成',
 'createpage_button_caption' => '作成する',
@@ -142,16 +254,430 @@ $messages = array_merge( $messages, array(
 'dpl2_debug_8' => 'エラー: \'ordermethod=[...,]$1\'を使うときだけ\'$0\'を使うことができます。',
 'dpl2_debug_9' => 'エラー:主要なセクションのインデックスは、1からincludepageの引数の数(この場合は$0)に収める必要があります。',
 'dynamicpagelistsp' => 'ダイナミック・ページ・リスト(DPL)',
-'eauthentsent' => 'このアカウントが有効なものであるか確認するため、指定されたメールアドレスにアドレス確認のためのメールを送信しました。メールにあるURLをクリックすることで、メールアドレスの指定が有効になります。',
 'edit' => '編集',
-'editSimilar-Categories' => '* スタブ
-* 要加筆
-* 編集中',
 'editcount' => '編集回数のカウント',
 'editcount_submit' => '実行',
 'editcount_total' => '合計',
 'editcount_username' => '利用者名:',
 'editedrecently' => '最近の編集:',
+'editors-pick' => 'おすすめ記事',
+'export-addcat' => '追加',
+'export-addcattext' => 'カテゴリ内のページを対象に加える。 Category:',
+'file-info-size' => '($1 × $2 ピクセル、ファイルサイズ: $3、 MIME type: $4)',
+'file-info' => 'ファイルサイズ: $1, MIME type: $2',
+'file-nohires' => '<small>高精細度の画像はありません。</small>',
+'filetype-badmime' => 'MIME タイプ "$1" のファイルのアップロードは許可されていません。',
+'filetype-badtype' => '\'\'\'".$1\'\'\'"は許可されないファイルタイプです。 
+: 許可されているファイルタイプは以下の通りです。: $2',
+'filetype-missing' => 'ファイルに拡張子 (".jpg" など）がありません。',
+'findspam-ip' => 'IPアドレス',
+'findspam' => 'スパムチェック',
+'flickr4' => '{| class="toccolours" style="width:100%" cellpadding="2"
+! style="background:#8da5cc; text-align:right; vertical-align:middle; padding-right:0.5em; width:15%;" | 説明
+| \'\'この画像は、特別ページの[[Special:ImportFreeImages|ImportFreeImages]]からアップロードされました。詳細はFlickrを御覧ください。必要な場合は、手動で情報を追加してください。\'\'
+|-
+! style="background:#8da5cc; text-align:right; vertical-align:middle; padding-right:0.5em; white-space:nowrap;" | 日付
+| \'\'詳細は、Flickrを御覧ください。必要ならば、作成日を手動で追加してください。\'\'
+|-
+! style="background:#8da5cc; text-align:right; vertical-align:middle; padding-right:0.5em;" | 作者
+| [http://flickr.com/people/{{{3}}}/ {{{3}}}]
+|-
+! style="background:#8da5cc; text-align:right; vertical-align:middle; padding-right:0.5em;" | 引用元
+| [http://flickr.com/photos/{{{2}}}/{{{1}}}/ このファイルは、\'\'\'flickr.com\'\'\'にあります。]
+|-
+! style="background:#8da5cc; text-align:right; vertical-align:middle; padding-right:0.5em;" | ライセンス
+| \'\'\'CC-by-2.0\'\'\' – \'\'[[Media:{{PAGENAME}}|このファイルは、]] [[Wikipedia:ja:クリエイティブ・コモンズ|クリエイティブ・コモンズ]] [http://creativecommons.org/licenses/by/2.0/ Attribution 2.0]でライセンスされています。\'\'
+|}',
+'flickr5' => '{| class="toccolours" style="width:100%" cellpadding="2"
+! style="background:#8da5cc; text-align:right; vertical-align:middle; padding-right:0.5em; width:15%;" | 説明
+| \'\'この画像は、特別ページの[[Special:ImportFreeImages|ImportFreeImages]]からアップロードされました。詳細はFlickrを御覧ください。必要な場合は、手動で情報を追加してください。\'\'
+|-
+! style="background:#8da5cc; text-align:right; vertical-align:middle; padding-right:0.5em; white-space:nowrap;" | 日付
+| \'\'詳細は、Flickrを御覧ください。必要ならば、作成日を手動で追加してください。\'\'
+|-
+! style="background:#8da5cc; text-align:right; vertical-align:middle; padding-right:0.5em;" | 作者
+| [http://flickr.com/people/{{{3}}}/ {{{3}}}]
+|-
+! style="background:#8da5cc; text-align:right; vertical-align:middle; padding-right:0.5em;" | 引用元
+| [http://flickr.com/photos/{{{2}}}/{{{1}}}/ このファイルは、\'\'\'flickr.com\'\'\'にあります。]
+|-
+! style="background:#8da5cc; text-align:right; vertical-align:middle; padding-right:0.5em;" | ライセンス
+| \'\'\'CC-by-sa-2.0\'\'\' – \'\'[[Media:{{PAGENAME}}|このファイルは、]] [[Wikipedia:ja:クリエイティブ・コモンズ|クリエイティブ・コモンズ]] [http://creativecommons.org/licenses/by-sa/2.0/ Attribution ShareAlike 2.0]でライセンスされています。\'\'
+|}',
+'footer_1.5' => '編集してみましょう',
+'footer_1' => '$1のこの記事を',
+'footer_10' => 'ソーシャルブックマーク:',
+'footer_2' => 'このページに関する議論ページ',
+'footer_5' => '最終編集:$2 $1',
+'footer_6' => 'おまかせ表示',
+'footer_7' => 'このページをメールで知らせる',
+'footer_8' => 'ソーシャルブックマーク:',
+'footer_9' => 'この記事のランク:',
+'footer_About_Wikia' => '[http://ja.wikia.com/wiki/%E3%82%A6%E3%82%A3%E3%82%AD%E3%82%A2%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6 ウィキアについて]',
+'footer_Advertise_on_Wikia' => '[http://ja.wikia.com/wiki/%E5%BA%83%E5%91%8A 広告について]',
+'footer_Contact_Wikia' => '[http://ja.wikia.com/wiki/連絡先 連絡先]',
+'footer_License' => '[http://www.gnu.org/copyleft/fdl.html GFDL] - [http://www.opensource.jp/fdl/fdl.ja.html.euc-jp 日本語参考訳]',
+'footer_MediaWiki' => '[http://www.mediawiki.org/wiki/MediaWiki/ja メディアウィキ]',
+'footer_Terms_of_use' => '[http://ja.wikia.com/wiki/利用規約 利用規約]',
+'forum_by' => '投稿:',
+'forum_edited' => '最後の編集:',
+'forum_never' => '投稿無し',
+'forum_toofew' => 'DPL フォーラム: カテゴリが少な過ぎます',
+'forum_toomany' => 'DPL フォーラム: カテゴリが多すぎます',
+'giverollback-change' => 'ステータスの変更:',
+'giverollback-comment' => 'コメント:',
+'giverollback-grant' => '付与',
+'giverollback-granted' => '[[User:$1|$1]]はロールバック権限を持っています',
+'giverollback-hasrb' => '[[User:$1|$1]]はロールバック権限を持っています',
+'giverollback-header' => '\'\'\'ビューロクラットなら、ここで他の利用者に[[Help:ロールバック|ロールバック権限]]の付与を行うことができます。\'\'\' <br />これにより、管理者でない人でも簡単に荒しを戻すことができます。運用方針に則って利用するようお願いいたします。',
+'giverollback-logentrygrant' => '[[$1]]にロールバック権限を付与しました',
+'giverollback-logentryrevoke' => '[[$1]]からロールバック権限を外しました',
+'giverollback-logpage' => 'ロールバック権限のログ',
+'giverollback-logpagetext' => 'これは、管理者でない人による[[Help:Rollback|ロールバック]]権限の操作ログです。',
+'giverollback-norb' => '[[User:$1|$1]]はロールバック権限を持っていません',
+'giverollback-revoke' => '剥奪',
+'giverollback-revoked' => '[[User:$1|$1]]はロールバック権限を持っていません。',
+'giverollback-search' => '検索',
+'giverollback-sysop' => '[[User:$1|$1]]は管理者です。既にロールバックの権限は持っています。',
+'giverollback-toonew' => '[[User:$1|$1]]はまだ参加から時間が経っておらず、ロールバック権限をあたえることはできません。',
+'giverollback-username' => '利用者名:',
+'giverollback' => 'ロールバック権限の付与または剥奪',
+'ignoreallwarnings' => '<b>警告は全て</b>無視して、ファイルの保存を強制的に行う。',
+'ignorewarning' => '警告を無視し、ファイルの保存を強制的に行う',
+'imagemap_desc_types' => '右上、右下、左下、左上、無し',
+'imagemap_description' => 'この画像について',
+'imagemap_invalid_coord' => '&lt;画像マップ&gt;:　$1行目の座標が不正です。数字を用いてください。',
+'imagemap_invalid_desc' => '&lt;画像マップ&gt;:説明文が不正です。<tt>$1</tt>のうちのひとつです。',
+'imagemap_invalid_image' => '&lt;画像マップ&gt;:画像が存在しないか、不正なものです。',
+'imagemap_invalid_title' => '&lt;画像マップ&gt;:$1行目のリンクのタイトルが不正です。',
+'imagemap_missing_coord' => '&lt;画像マップ&gt;: $1行目の座標が画像に対して十分ではありません。',
+'imagemap_no_areas' => '&lt;画像マップ&gt;: 最低ひとつのエリアが特定されていなければなりません。',
+'imagemap_no_image' => '&lt;画像マップ&gt;: 最初の行で、画像を特定する必要があります。',
+'imagemap_no_link' => '&lt;画像マップ&gt;: $1行目の最後に適切なリンクが見付かりませんでした。',
+'imagemap_unrecognised_shape' => '&lt;画像マップ&gt;: $1行目の形が認識できません。各行は、最初に次の語のひとつをとらなければなりません。:default, rect, circle, poly',
+'images' => '画像',
+'imagetag_seemoreimages' => '更に&#8220;$1&#8221関連の画像を見る:($2)',
+'import-interwiki-namespace' => '次の名前空間に取り込む:',
+'importfreeimages' => 'フリーライセンスの画像を取り込む',
+'importfreeimages_description' => 'このページでは、適切なライセンスを持つ画像をFlickrから検索し、このウィキに取り込むことができます。
+<br />カンマ区切りでタグを複数個あわせて検索します。',
+'importfreeimages_filefromflickr' => 'Flickrから、利用者<b>[$2]</b>による$1。元URL',
+'importfreeimages_importthis' => 'この画像を取り込む',
+'importfreeimages_next' => '次の$1件',
+'importfreeimages_noapikey' => 'FlickrのAPIキーが設定されていません。設定するために、[http://www.flickr.com/services/api/misc.api_keys.html ここ]からAPIキーを取得して、 ImportFreeImages.phpのwgFlickrAPIKeyを設定してください。',
+'importfreeimages_nophotosfound' => '検索語「$1」では画像が見付かりませんでした。再度検索しなおしてください。',
+'importfreeimages_owner' => '作者',
+'importfreeimages_promptuserforfilename' => 'ファイル名を入力してください:',
+'insertimagelink' => '画像のリンクを挿入する',
+'insertimagetitle' => '画像をアップロードして文中に入れる',
+'invitespecialpage' => '友人を招待する',
+'ipboptions' => '15分:15 minutes,30分:30 minutes,2時間:2 hours,1日:1 day,3日:3 days,1週間:1 week,2週間:2 weeks,1ヶ月:1 month,3ヶ月:3 months,6ヶ月:6 months,1年:1 year,無期限:infinite',
+'length' => '長さ: $1',
+'linksearch-ns' => '名前空間:',
+'linksearch-ok' => '検索',
+'linksearch-pat' => '検索パターン:',
+'log_in' => 'ログイン',
+'lookupcontribs' => '全体の投稿履歴を見る',
+'manage_widgets' => 'ウィジェットの設定',
+'monaco-articles-on' => '総記事数:$1',
+'monaco-category-list' => '*w:c:ja|ウィキア
+**w:c:ja.game|ゲーム情報ウィキ
+**w:c:ja.anime|Anipedia',
+'monaco-edit-this-menu' => 'このメニューの編集',
+'monaco-footer-wikia-links' => '*http://ja.wikia.com/wiki/%E3%82%A6%E3%82%A3%E3%82%AD%E3%82%A2%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6|ウィキアについて
+*http://ja.wikia.com/wiki/%E9%80%A3%E7%B5%A1%E5%85%88|連絡先
+*http://ja.wikia.com/wiki/%E5%88%A9%E7%94%A8%E8%A6%8F%E7%B4%84|利用規約
+*http://www.mediawiki.org/wiki/MediaWiki/ja|メディアウィキ
+*http://www.gnu.org/copyleft/fdl.html|GFDL 
+*http://www.opensource.jp/fdl/fdl.ja.html.euc-jp|GFDL日本語訳
+*http://ja.wikia.com/wiki/%E5%BA%83%E5%91%8A|広告について',
+'monaco-latest' => '最近の活動',
+'monaco-related-communities' => '*w:c:ja|ウィキア|セントラル・ウィキアの日本語版
+*w:Wikia|ウィキア(英語版)|セントラル・ウィキアの英語版
+*w:c:ja.game|ゲーム情報ウィキ|ゲーム情報のポータルウィキ
+*w:c:ja.anime|Anipedia|アニメ情報のポータルウィキ
+*w:c:ja:Wikia:プロジェクトポータル|プロジェクト一覧|その他のウィキアのプロジェクト一覧',
+'monaco-sidebar' => '*mainpage|{{SITENAME}}
+*mainpage|コンテンツ
+**#popular#|お薦め記事
+**#visited#|most_visited
+**#voted#|レートの高い記事
+**#newlychanged#|recentchanges
+*portal-url|Community
+**#topusers#|活発な利用者
+**portal-url|portal
+**Forum:Index|forum
+*#category1#
+*#category2#',
+'monaco-toolbox' => '* whatlinkshere|whatlinkshere
+* upload-url|upload
+* specialpages-url|specialpages
+* recentchanges-url|recentchanges
+* randompage-url|randompage
+* helppage|help
+* Special:MultipleUpload|multipleupload',
+'monaco-welcome-back' => '<b>$1さん</b><br />',
+'monaco-whos-online' => 'いまこのウィキにいる人',
+'monaco-widgets' => 'ウィジェット',
+'monobook.js' => '/* このページの利用は中止してください。代わりに、[[MediaWiki:common.js]]を御利用下さい。 */',
+'multiplefileuploadsummary' => 'ファイルの概要:',
+'multipleupload-addresswarnings' => '再アップロードする前に、警告の内容をご確認ください。',
+'multipleupload-ignoreallwarnings' => '全ての警告を無視してファイルを保存する',
+'multipleupload-page' => '{{ns:project}}:方針',
+'multipleupload-saveallfiles' => 'ファイルを保存',
+'multipleupload-text' => '複数のファイルを一度にアップロードできます。
+
+「Browse」というボタンを押し、アップロードするファイルを選択してください。一度に$1個までアップロードできます。
+
+「掲載するファイル名」や、ファイルの説明文を入れる「ファイルの概要」をここで入力することもできます。
+
+不適切な画像は、削除されることがあります。プロジェクトの[[{{MediaWiki:Multipleupload-page}}|ファイル削除の方針]]をご確認ください。',
+'multipleupload' => '複数ファイルのアップロード',
+'multiupload-fileuploaded' => 'ファイルをアップロードしました',
+'multiupload-toolbox' => '複数ファイルのアップロード',
+'multiupload' => 'アップロード(高機能版)',
+'multiuploadtext' => '複数のファイルをここでアップロードできます。 <br/><br/>
+				「Browse」を押してアップロードしたいファイルを選択してください。一度に最高5つまでアップロードすることができます。 <br/><br/>
+				また、オプションとして、<b>掲載するファイル名</b>や<b>ファイルの概要</b>を入力することができます。<br/><br/>
+				<br/>
+				不適切な画像は削除されることがあります。詳しくは[[Project:画像削除の方針|画像削除の方針]]をご覧ください。<br/><br/>',
+'new_article' => '記事を作成',
+'new_wiki' => 'ウィキの申請',
+'newarticletext' => 'このページにはまだ内容がありません。新規記事を書くには下記欄に書き込んでください(編集方法については、[[:Category:Help|ヘルプページ]]を御覧ください)。もし間違いなら、ブラウザの「戻る」のボタンを押して戻ってください。',
+'noarticletext' => '\'\'\'{{SITENAME}}には、この名前の{{NAMESPACE}}ページはありません。
+*\'\'\'<span class="plainlinks">[{{fullurl:{{FULLPAGENAMEE}}|action=edit}} このリンク]\'\'\'をクリックすると、記事の編集を行うことができます</span>。また、\'\'\'<span class="plainlinks">[{{fullurl:Special:Search|search={{PAGENAMEE}}}} ここをクリックすると]\'\'\'、ウィキ内での記事の検索が行えます</span>。
+*以前に記事が存在したと思われる場合は、\'\'\'<span class="plainlinks">[{{fullurl:Special:Log/delete|page={{FULLPAGENAMEE}}}} 削除ログ]\'\'\'</span>をご確認ください。',
+'nocontributors' => 'このページの履歴は見付かりませんでした。',
+'nontabbedsearch' => '検索でタブを使わない',
+'nontabbedsearchold' => '検索でタブを使わない(古いタイプの表示を利用する)',
+'old_skins' => '旧式の外装',
+'pr_describe_problem' => '詳細',
+'pr_empty_email' => 'メールアドレスを入力してください',
+'pr_empty_summary' => '問題の詳細を入力してください',
+'pr_introductory_text' => 'このウィキのほとんどのページは編集可能です。もし間違いがあったら、是非とも編集して、間違いを直してしまってください。編集の仕方がわからない場合は、[[Help:編集の仕方|ヘルプページ]]などをご覧ください。
+
+スタッフと連絡をとったり、著作権上の問題を報告する場合は、[[w:c:ja:連絡先|ウィキアの連絡用ページ]]をご覧ください。
+
+ソフトウェアのバグは、[[w:c:ja:Forum:不具合・要望|フォーラム]]で報告できます。ウィキに報告された各種問題は、[[Special:ProblemReports|こちら]]で見ることができます。',
+'pr_thank_you' => '報告ありがとうございます!
+
+[[Special:ProblemReports/$1|こちらから修正の確認を行えます]]',
+'pr_thank_you_error' => 'エラーが発生して、問題の送信が出来ませんでした。あとでもう一度お願いいたします。',
+'pr_what_page' => 'ページ名',
+'pr_what_problem' => '問題の種類',
+'pr_what_problem_incorrect_content' => '内容に誤りがあります',
+'pr_what_problem_incorrect_content_short' => '内容の誤り',
+'pr_what_problem_other' => 'その他',
+'pr_what_problem_other_short' => 'その他',
+'pr_what_problem_select' => '問題の種類を教えてください',
+'pr_what_problem_software_bug' => 'ソフトウェアにバグがあります',
+'pr_what_problem_software_bug_short' => 'バグ',
+'pr_what_problem_spam' => '宣伝リンクがあります',
+'pr_what_problem_spam_short' => 'スパム',
+'pr_what_problem_vandalised' => 'ページが荒されています',
+'pr_what_problem_vandalised_short' => '荒し',
+'prefs-help-realname' => '* 本名 (任意): 本名を入力すると、ページ・クレジットに利用者名（アカウント名）の代わりに本名が表示されます。',
+'prlogtext' => '問題を報告する',
+'problemreports' => '報告された問題のリスト',
+'profile' => 'プロファイル',
+'rcnote' => '以下は $3 までの <strong>$2</strong> 日間に編集された <strong>$1</strong> ページです（<strong>{{int:newpageletter}}</strong>=新規項目、<strong>{{int:minoreditletter}}</strong>=細部の編集、<strong>{{int:boteditletter}}</strong>=ボットの編集、日時はオプションで未設定ならUTC）',
+'recentchanges_combined' => '最近更新したページ(結合型)',
+'recentchangestext' => '<span style="float:right;"><small>\'\'[[MediaWiki:Recentchangestext|このテンプレートを編集する]]\'\'</small></span>
+このページで、最近更新されたページを確認できます。
+
+{| class="plainlinks" style="background: transparent; margin-left:0.5em; margin-bottom:0.5em;" cellpadding="1" cellspacing="0"
+|-valign="top"
+|align="right"|\'\'\'ログ:\'\'\'
+|align="left" |[[Special:Newpages|新しいページ]] - [[Special:Newimages|新着画像ギャラリー]] - [[Special:Log/delete|削除記録]] - [[Special:Log/move|移動記録]] - [[Special:Log/upload|アップロード記録]] - [[Special:Log/block|投稿ブロック記録]] - [[Special:Log|その他のログ]]
+|-valign="top"
+|align="right"|\'\'\'特別ページ:\'\'\'
+|align="left" |[[Special:Wantedpages|投稿が望まれているページ]] - [[Special:Longpages|長いページ]] - [[Special:Uncategorizedimages|カテゴリ未導入の画像]] - [[Special:Uncategorizedpages|カテゴリ未導入のページ]] - [[Special:Specialpages|その他の特別ページ]]
+|}',
+'reportproblem' => '問題の報告',
+'seemoredotdotdot' => 'その他',
+'sitestatstext' => '__NOTOC__
+{| class="plainlinks" align="top" width="100%"
+| valign="top" width="50%" | 
+===サイトに関する統計===
+{{SITENAME}}には\'\'\'$1 [[Special:Allpages|ページ]]\'\'\'のコンテンツがあります ([[Special:Newpages|新規ページ]]含む)
+
+*\'\'\'記事数とみなせるページは$2ページあります。これには、以下のものがあります。\'\'\'
+**[[Special:Allpages|標準名前空間]]のページ
+**最低ひとつの内部リンクを含む
+**[[Special:Shortpages|短いページ]] or [[Special:Longpages|長いページ]]
+**[[Special:Disambiguations|曖昧さ回避]]のページ
+**[[Special:Lonelypages|孤立しているページ]]
+
+*他、記事数にならないページには、以下のページがあります。
+**標準名前空間以外のページ<br />(テンプレート、ノートページなど)
+**[[Special:Listredirects|リダイレクト]]([[Special:BrokenRedirects|迷子のリダイレクト]]/[[Special:DoubleRedirects|二重リダイレクト]]など)
+
+| valign="top" width="50%" |
+
+===その他の統計===
+*\'\'\'$8個の[[Special:Imagelist|ファイル]]\'\'\' ([[Special:Newimages|新着画像ギャラリー]])
+*全編集回数\'\'\'$4\'\'\'を\'\'\'$1\'\'\'ページで割ると、1ページあたりの平均編集回数は\'\'\'$5\'\'\'になります([[Special:Mostrevisions|版の多い項目]]のページも参照してください)。
+
+=== Job queue ===
+* [http://meta.wikimedia.org/wiki/Help:Job_queue job queue] の長さは \'\'\'$7\'\'\' です。
+
+=== その他 ===
+* [[Special:Specialpages|特別]]ページ
+* [[Special:Allmessages|MediaWiki]]メッセージ
+
+さらに詳細な情報に関しては、Central Wikiaの\'\'\'[[w:Wikia:Statistics|統計ページ]]\'\'\'からのリンクでたどれます。
+
+|}',
+'sitewidemessages' => 'サイト横断メッセージ',
+'sourcefilename' => 'ファイル名',
+'sp-contributions-footer-anon' => '{| id="anontalktext" class="plainlinks noeditsection" style="font-size:90%; border: 1px solid #B8B8B8; margin:1em 1em 0em 1em; padding:0.25em 1em 0.25em 1em; clear: both;" 
+| \'\'\'これは、アカウントを取得していないか、または利用していない匿名利用者のための投稿履歴ページです。この利用者は、[[wikipedia:ja:IPアドレス|IPアドレス]]により識別されます。\'\'\'
+
+IPアドレスは、時折変更されることもあり、複数人で共有されます。もし、まだ匿名で利用しているなら、混乱を避けるため是非とも[[{{ns:Special}}:Userlogin|アカウントの作成、またはログイン]]することをお勧めします。登録することで、IPアドレスを隠すことができます。[[w:c:ja:Help:アカウントを作る理由|Help:アカウントを作る理由]]をご覧の上、[[w:c:ja:Help:アカウントを作成する|Help:アカウントを作成する]]というページを参考にアカウントをお作りください。
+
+\'\'\'IP info:\'\'\' [http://samspade.org/whois?query=$1 WHOIS] • [http://openrbl.org/query?$1 RDNS] • [http://www.robtex.com/rbls/$1.html RBLs] • [http://www.dnsstuff.com/tools/tracert.ch?ip=$1 Traceroute] • [http://www.as3344.net/is-tor/?args=$1 TOR check] &mdash; [[wikipedia:Regional Internet registry|RIR]]s: [http://ws.arin.net/whois/?queryinput=$1 America] &bull; [http://www.ripe.net/fcgi-bin/whois?searchtext=$1 Europe] · [http://www.afrinic.net/cgi-bin/whois?query=$1 Africa] · [http://www.apnic.net/apnic-bin/whois.pl?searchtext=$1 Asia-Pacific] · [http://www.lacnic.net/cgi-bin/lacnic/whois?lg=EN&query=$1 Latin America/Caribbean]
+|}',
+'stf_abuse' => 'このメールは、ウィキアからの送信によるものです。もし、何らかの間違いであったら、 support@wikia.com までお知らせください。',
+'stf_add_emails' => '追加のメールアドレス:',
+'stf_after_reg' => '友達をウィキアに招待してみましょう! [[Special:InviteSpecialPage|こちら]]をクリックしてください。',
+'stf_back_to_article' => '記事に戻る',
+'stf_button' => 'この記事を友達に送ります',
+'stf_confirm' => 'メッセージを送りました! 他の人も招待しますか?',
+'stf_ctx_check' => 'アドレス帳を確認',
+'stf_ctx_empty' => 'このアカウントにアドレス帳がありません',
+'stf_ctx_invalid' => 'アカウント名、またはパスワードが違います。もう一度確認してみてください。',
+'stf_ctx_invite' => '一人以上の場合は、カンマ(,)で区切ってください。制限は$1人までです。',
+'stf_email_label' => 'メールアドレス',
+'stf_email_sent' => '送信の確認',
+'stf_error' => 'メールの送信に失敗しました。',
+'stf_error_from' => 'メールアドレスが入力されていません。',
+'stf_error_name' => 'お名前が入力されていません',
+'stf_error_to' => '送信先が入力されていません',
+'stf_frm1' => '自分のメールアドレス:',
+'stf_frm2' => 'メールアドレス(ひとつ以上の場合はカンマ(,)で区切ってください)',
+'stf_frm3_invite' => 'こんにちは!
+
+ウィキアの $1 のウィキサイトに参加しました。
+
+是非ともチェックしてみてください。',
+'stf_frm3_send' => 'こんにちは!
+
+ウィキアのこのページのがお薦めです。
+
+$2
+
+是非ともチェックしてみてください。',
+'stf_frm4_cancel' => 'キャンセル',
+'stf_frm4_invite' => '招待状を送りましょう!',
+'stf_frm4_send' => '送信',
+'stf_frm5' => '(このページのURLはメールに自動で含まれます)',
+'stf_frm6' => 'ウィンドウを閉じる',
+'stf_instructions' => '1. 友達を選択|2. "$1"をクリックする',
+'stf_message' => 'メッセージ',
+'stf_most_emailed' => '$1で今日一番メールで送られた記事:',
+'stf_most_popular' => '$1の人気の記事:',
+'stf_msg_label' => '送信されたメッセージ',
+'stf_multiemail' => '二人以上に送りますか?',
+'stf_name_label' => '名前',
+'stf_need_approval' => '承認が無いため、メールが送られませんでした。',
+'stf_select_all' => '全て選択',
+'stf_select_friends' => '友達を選択:',
+'stf_sending' => '少しお待ちください',
+'stf_subject' => '$1さんから記事が送られてきました',
+'stf_throttle' => 'セキュリティ上の理由により、一日に$1回までしか送信できません。',
+'stf_we_dont_keep' => 'メールアドレス、パスワードは保存しません',
+'stf_your_address' => 'メールアドレス',
+'stf_your_email' => '利用しているメールサービス',
+'stf_your_friends' => '友達のメールアドレス',
+'stf_your_login' => 'アカウント名',
+'stf_your_name' => '名前',
+'stf_your_password' => 'パスワード',
+'subcategorycount' => 'このカテゴリには $1 のサブカテゴリがあります。',
+'swm-button-new' => '[ 新規メッセージ ]',
+'swm-button-preview' => '[ プレビュー ]',
+'swm-button-save' => '[ 保存 ]',
+'swm-button-send' => '[ 送信 ]',
+'swm-days' => '期限なし,日,日',
+'swm-dismiss-content' => '<p>メッセージが存在しませんでした。</p><p>%s</p>',
+'swm-error-empty-group' => 'グループ名を入力してください。',
+'swm-error-empty-message' => 'メッセージを入力してください。',
+'swm-error-no-such-user' => '指定された利用者が存在していません。',
+'swm-error-no-such-wiki' => 'そのようなウィキは存在しません。',
+'swm-expire-info' => 'このメッセージは$1に期限が切れます。',
+'swm-label-comment' => 'コメント',
+'swm-label-content' => '内容',
+'swm-label-edit' => '編集',
+'swm-label-expiration' => '期限',
+'swm-label-list' => 'リスト',
+'swm-label-mode-all' => '全利用者',
+'swm-label-mode-group-hint' => '<i>注意:このオプションは、TaskManagerのキューに入れて作業するため、時間がかかります</i>',
+'swm-label-mode-group' => 'このグループに所属する利用者',
+'swm-label-mode-user' => '選択した利用者',
+'swm-label-mode-wiki' => 'このウィキの活発な利用者',
+'swm-label-preview' => 'プレビュー',
+'swm-label-recipient' => '宛先',
+'swm-label-remove' => '削除',
+'swm-label-sent' => '送信しました',
+'swm-link-dismiss' => 'メッセージを隠す',
+'swm-list-table-content' => '内容',
+'swm-list-table-date' => '送信日付',
+'swm-list-table-expire' => '期限',
+'swm-list-table-group' => 'グループ',
+'swm-list-table-recipient' => '宛先',
+'swm-list-table-removed' => '削除済',
+'swm-list-table-sender' => '送信者',
+'swm-list-table-tools' => '作業',
+'swm-list-table-wiki' => 'ウィキ',
+'swm-msg-sent-err' => '<h3>このメッセージはまだ送信されていません。</h3>詳しくはエラーログをお読みください。',
+'swm-msg-sent-ok' => '<h3>メッセージが送信されました。</h3>',
+'swm-page-title-editor' => 'サイト横断メッセージ:編集',
+'swm-page-title-list' => 'サイト横断メッセージ:リスト',
+'swm-page-title-preview' => 'サイト横断メッセージ:プレビュー',
+'swm-page-title-send' => 'サイト横断メッセージ:送信',
+'swm-page-title-sent' => 'サイト横断メッセージ:送信済',
+'talkpagetext' => '<div style="margin: 0 0 1em; padding: .5em 1em; vertical-align: middle; border: solid #999 1px;">\'\'\'このページは、ノートまたは会話ページです。書き込みの際には、チルダ4つ (<code><nowiki>~~~~</nowiki></code>)を使って署名するようにしてください。\'\'\'</div>',
+'this_discussion' => 'このノートページ',
+'timezonetext' => 'UTCとあなたの地域の標準時間との差を入力してください（日本国内は9:00）。',
+'tog-editsectiononrightclick' => 'セクションタイトルの右クリックでセクション編集を行えるようにする (JavaScript)',
+'tog-fancysig' => '署名を自動的に利用者ページへリンクさせない',
+'tog-htmlemails' => 'HTMLフォーマットでメールを送る',
+'tog-skinoverwrite' => '<b>外装のカスタマイズを有効にする</b>(推奨)<br>上のチェックボックスにチェックをいれると、管理者がウィキに施したカスタマイズが有効になります。',
+'ue-EditArticle' => 'これはue_EditSimilar eventです。 <a href="http://www.example.co.uk/files/map.pdf" onClick="javascript:urchinTracker(\'some value\'); ">こちらをクリックしてください</a>',
+'ue-NewToWikia' => 'これは、ue_NewToWikia Eventです。 <a href="http://www.example.co.uk/files/map.pdf" onClick="javascript:urchinTracker(\'some value\'); ">こちらをクリックしてください</a>。',
+'ue-VisitN1' => 'ウィキアへようこそ! <a href="http://ja.wikia.com/index.php?title=Special:Userlogin&type=signup" id="ue-Visit1_1">ウィキアでは、無料で簡単にアカウントを作成できます!</a>',
+'ue-VisitN10' => '編集してページの追跡を行うためには、<a href="http://www.wikia.com/index.php?title=Special:Userlogin&type=signup" onClick="javascript:urchinTracker(\'/reg/ue-Visit10_10\'); ">是非ともアカウントを作成してください(無償)</a>。',
+'ue-VisitN2' => 'ウィキアへようこそ! <a href="http://www.wikia.com/index.php?title=Special:Userlogin&type=signup" onClick="javascript:urchinTracker(\'/reg/ue-Visit2_2\'); "アカウントを作成すると"/a>ページの更新通知を受け取ることができます。',
+'ue-VisitN3' => 'ウィキアへようこそ! <a href="http://www.wikia.com/index.php?title=Special:Userlogin&type=signup" onClick="javascript:urchinTracker(\'/reg/ue-Visit3_3\'); ">アカウントを作成する</a>ことで、ページの更新通知を受け取ることができます。',
+'ue-VisitN4' => 'ウィキアへようこそ! ページの更新を確認するために、ぜひとも<a href="http://www.wikia.com/index.php?title=Special:Userlogin&type=signup" onClick="javascript:urchinTracker(\'/reg/ue-Visit4_4\'); ">アカウントを作ってみましょう!</a>',
+'ue-VisitN5' => 'ウィキアへようこそ! 編集したページを追跡するなら、ぜひとも<a href="http://www.wikia.com/index.php?title=Special:Userlogin&type=signup" onClick="javascript:urchinTracker(\'/reg/ue-Visit5_5\'); ">アカウントを作成(無償)してみてください</a>',
+'ue-VisitN6' => 'アカウントを作ると、このページが更新されたときに通知を受け取れます。<a href="http://www.wikia.com/index.php?title=Special:Userlogin&type=signup" onClick="javascript:urchinTracker(\'/reg/ue-Visit6_6\'); ">是非ともアカウントを作ってみましょう!</a>',
+'ue-VisitN7' => 'ウィキアのID作成してみよう! <a href="http://www.wikia.com/index.php?title=Special:Userlogin&type=signup" onClick="javascript:urchinTracker(\'/reg/ue-Visit7_7\'); ">無償で作成できます!</a>',
+'ue-VisitN8' => 'ウィキアのアカウントは無償で利用できます。<a href="http://www.wikia.com/index.php?title=Special:Userlogin&type=signup" onClick="javascript:urchinTracker(\'/reg/ue-Visit8_8\'); ">是非とも作ってみましょう!</a>',
+'ue-VisitN9' => 'ウィキアへようこそ! まずは、<a href="http://www.wikia.com/index.php?title=Special:Userlogin&type=signup" onClick="javascript:urchinTracker(\'/reg/ue-Visit9_9\'); ">アカウントを作成(無償)してみましょう!</a>',
+'userstatstext' => ';ウィキア全体の総アカウント数:$1 人 (このウィキアにおける利用者数は[[%E7%89%B9%E5%88%A5:Listusers]]を参照してください)
+;このウィキアにおける$5数:$2 人 (全利用者のうち$4%)
+
+詳しいことは$3を参照してください。',
+'welcomecreation' => '== $1 さん、ようこそ! ==
+あなたのアカウントができました。まずは、[[Special:Preferences|オプション]]の設定を行なってみましょう!',
+'widget_description' => '説明',
+'widget_name' => '名前',
+'widgetdashboard' => 'ウィジェットダッシュボード',
+'widgets' => 'ウィジェットリスト',
+'wikia_messages' => 'ウィキアからのお知らせ',
+'wikipedia' => 'ウィキペディア',
+'wikipedia_skin' => 'ウィキペディアの外装',
+'wt_click_to_close' => 'ツールチップを閉じるには、クリックしてください。',
+'wt_countdown_give_date' => '日時については、YYYY-MM-DD HH:MM:SS (例: 2007-03-28 13:56:00)か、YYYY-MM-DD (2007-02-17)、または HH:MM:SS (17:01:00)の形式にしてください。',
+'wt_countdown_show_seconds' => '秒を表示する',
+'wt_help_cockpit' => '|ウィジェット設定||ウィジェットのサムネイルをドラッグして、サイドバーに追加してください',
+'wt_help_sidebar' => '|ウィジェットサイドバー||「編集を」を押して、ウィジェットの設定を変更できます。ウィジェットを閉じるには、X印を押してください。',
+'wt_help_startup' => '|ウィジェットについては御存じですか?||自分の名前のあるメニューから、「ウィジェットの設定」をクリックしてください。',
+'createpage_about_info' => 'シンプルなエディタです。詳細は、ウィキアのヘルプをどうぞ。',
+'eauthentsent' => 'このアカウントが有効なものであるか確認するため、指定されたメールアドレスにアドレス確認のためのメールを送信しました。メールにあるURLをクリックすることで、メールアドレスの指定が有効になります。',
+'editSimilar-Categories' => '* スタブ
+* 要加筆
+* 編集中',
 'editingTips' => '=テキストの装飾 =
 wiki文法をつかうか、HTMLで装飾できます。
 <br />
@@ -258,7 +784,6 @@ wiki文法をつかうか、HTMLで装飾できます。
 'editingtips_exit_widescreen' => '編集画面を元に戻す',
 'editingtips_hide' => 'ヘルプを隠す',
 'editingtips_show' => 'ヘルプを表示する',
-'editors-pick' => 'おすすめ記事',
 'editsimilar-link-disable' => 'この機能の設定を行なう',
 'editsimilar-thanks-notsimilar-singleresult' => 'ご参加ありがとうございます! $1 などといった記事も是非とも編集してみてください!',
 'editsimilar-thanks-notsimilar' => 'ご参加ありがとうございます! $1 などといった記事も是非とも編集してみてください!',
@@ -290,212 +815,20 @@ $NEWPAGE
 
 ヘルプは以下にあります:
 {{fullurl:Help:目次}}',
-'export-addcat' => '追加',
-'export-addcattext' => 'カテゴリ内のページを対象に加える。 Category:',
 'fast-adv' => '広告',
-'featured' => 'お薦めウィキ',
-'file-info-size' => '($1 × $2 ピクセル、ファイルサイズ: $3、 MIME type: $4)',
-'file-info' => 'ファイルサイズ: $1, MIME type: $2',
-'file-nohires' => '<small>高精細度の画像はありません。</small>',
 'file-thumbnail-no' => 'ファイル名が <strong><tt>$1</tt></strong> から始まっており、サムネイル（縮小版画像）である可能性が高いです。
 より高精細な画像をお持ちの場合は、フルサイズ版をアップロードしてください。そうでない場合はファイル名を変更してください。',
-'filetype-badmime' => 'MIME タイプ "$1" のファイルのアップロードは許可されていません。',
-'filetype-badtype' => '\'\'\'".$1\'\'\'"は許可されないファイルタイプです。 
-: 許可されているファイルタイプは以下の通りです。: $2',
-'filetype-missing' => 'ファイルに拡張子 (".jpg" など）がありません。',
-'findspam-ip' => 'IPアドレス',
-'findspam' => 'スパムチェック',
-'flickr4' => '{| class="toccolours" style="width:100%" cellpadding="2"
-! style="background:#8da5cc; text-align:right; vertical-align:middle; padding-right:0.5em; width:15%;" | 説明
-| \'\'この画像は、特別ページの[[Special:ImportFreeImages|ImportFreeImages]]からアップロードされました。詳細はFlickrを御覧ください。必要な場合は、手動で情報を追加してください。\'\'
-|-
-! style="background:#8da5cc; text-align:right; vertical-align:middle; padding-right:0.5em; white-space:nowrap;" | 日付
-| \'\'詳細は、Flickrを御覧ください。必要ならば、作成日を手動で追加してください。\'\'
-|-
-! style="background:#8da5cc; text-align:right; vertical-align:middle; padding-right:0.5em;" | 作者
-| [http://flickr.com/people/{{{3}}}/ {{{3}}}]
-|-
-! style="background:#8da5cc; text-align:right; vertical-align:middle; padding-right:0.5em;" | 引用元
-| [http://flickr.com/photos/{{{2}}}/{{{1}}}/ このファイルは、\'\'\'flickr.com\'\'\'にあります。]
-|-
-! style="background:#8da5cc; text-align:right; vertical-align:middle; padding-right:0.5em;" | ライセンス
-| \'\'\'CC-by-2.0\'\'\' – \'\'[[Media:{{PAGENAME}}|このファイルは、]] [[Wikipedia:ja:クリエイティブ・コモンズ|クリエイティブ・コモンズ]] [http://creativecommons.org/licenses/by/2.0/ Attribution 2.0]でライセンスされています。\'\'
-|}',
-'flickr5' => '{| class="toccolours" style="width:100%" cellpadding="2"
-! style="background:#8da5cc; text-align:right; vertical-align:middle; padding-right:0.5em; width:15%;" | 説明
-| \'\'この画像は、特別ページの[[Special:ImportFreeImages|ImportFreeImages]]からアップロードされました。詳細はFlickrを御覧ください。必要な場合は、手動で情報を追加してください。\'\'
-|-
-! style="background:#8da5cc; text-align:right; vertical-align:middle; padding-right:0.5em; white-space:nowrap;" | 日付
-| \'\'詳細は、Flickrを御覧ください。必要ならば、作成日を手動で追加してください。\'\'
-|-
-! style="background:#8da5cc; text-align:right; vertical-align:middle; padding-right:0.5em;" | 作者
-| [http://flickr.com/people/{{{3}}}/ {{{3}}}]
-|-
-! style="background:#8da5cc; text-align:right; vertical-align:middle; padding-right:0.5em;" | 引用元
-| [http://flickr.com/photos/{{{2}}}/{{{1}}}/ このファイルは、\'\'\'flickr.com\'\'\'にあります。]
-|-
-! style="background:#8da5cc; text-align:right; vertical-align:middle; padding-right:0.5em;" | ライセンス
-| \'\'\'CC-by-sa-2.0\'\'\' – \'\'[[Media:{{PAGENAME}}|このファイルは、]] [[Wikipedia:ja:クリエイティブ・コモンズ|クリエイティブ・コモンズ]] [http://creativecommons.org/licenses/by-sa/2.0/ Attribution ShareAlike 2.0]でライセンスされています。\'\'
-|}',
-'footer_1.5' => '編集してみましょう',
-'footer_1' => '$1のこの記事を',
-'footer_10' => 'ソーシャルブックマーク:',
-'footer_2' => 'このページに関する議論ページ',
-'footer_5' => '最終編集:$2 $1',
-'footer_6' => 'おまかせ表示',
-'footer_7' => 'このページをメールで知らせる',
-'footer_8' => 'ソーシャルブックマーク:',
-'footer_9' => 'この記事のランク:',
-'footer_About_Wikia' => '[http://ja.wikia.com/wiki/%E3%82%A6%E3%82%A3%E3%82%AD%E3%82%A2%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6 ウィキアについて]',
-'footer_Advertise_on_Wikia' => '[http://ja.wikia.com/wiki/%E5%BA%83%E5%91%8A 広告について]',
-'footer_Contact_Wikia' => '[http://ja.wikia.com/wiki/連絡先 連絡先]',
-'footer_License' => '[http://www.gnu.org/copyleft/fdl.html GFDL] - [http://www.opensource.jp/fdl/fdl.ja.html.euc-jp 日本語参考訳]',
-'footer_MediaWiki' => '[http://www.mediawiki.org/wiki/MediaWiki/ja メディアウィキ]',
-'footer_Terms_of_use' => '[http://ja.wikia.com/wiki/利用規約 利用規約]',
-'forum_by' => '投稿:',
-'forum_edited' => '最後の編集:',
-'forum_never' => '投稿無し',
-'forum_toofew' => 'DPL フォーラム: カテゴリが少な過ぎます',
-'forum_toomany' => 'DPL フォーラム: カテゴリが多すぎます',
-'giverollback-change' => 'ステータスの変更:',
-'giverollback-comment' => 'コメント:',
-'giverollback-grant' => '付与',
-'giverollback-granted' => '[[User:$1|$1]]はロールバック権限を持っています',
-'giverollback-hasrb' => '[[User:$1|$1]]はロールバック権限を持っています',
-'giverollback-header' => '\'\'\'ビューロクラットなら、ここで他の利用者に[[Help:ロールバック|ロールバック権限]]の付与を行うことができます。\'\'\' <br />これにより、管理者でない人でも簡単に荒しを戻すことができます。運用方針に則って利用するようお願いいたします。',
-'giverollback-logentrygrant' => '[[$1]]にロールバック権限を付与しました',
-'giverollback-logentryrevoke' => '[[$1]]からロールバック権限を外しました',
-'giverollback-logpage' => 'ロールバック権限のログ',
-'giverollback-logpagetext' => 'これは、管理者でない人による[[Help:Rollback|ロールバック]]権限の操作ログです。',
-'giverollback-norb' => '[[User:$1|$1]]はロールバック権限を持っていません',
-'giverollback-revoke' => '剥奪',
-'giverollback-revoked' => '[[User:$1|$1]]はロールバック権限を持っていません。',
-'giverollback-search' => '検索',
-'giverollback-sysop' => '[[User:$1|$1]]は管理者です。既にロールバックの権限は持っています。',
-'giverollback-toonew' => '[[User:$1|$1]]はまだ参加から時間が経っておらず、ロールバック権限をあたえることはできません。',
-'giverollback-username' => '利用者名:',
-'giverollback' => 'ロールバック権限の付与または剥奪',
-'ignoreallwarnings' => '<b>警告は全て</b>無視して、ファイルの保存を強制的に行う。',
-'ignorewarning' => '警告を無視し、ファイルの保存を強制的に行う',
-'imagemap_desc_types' => '右上、右下、左下、左上、無し',
-'imagemap_description' => 'この画像について',
-'imagemap_invalid_coord' => '&lt;画像マップ&gt;:　$1行目の座標が不正です。数字を用いてください。',
-'imagemap_invalid_desc' => '&lt;画像マップ&gt;:説明文が不正です。<tt>$1</tt>のうちのひとつです。',
-'imagemap_invalid_image' => '&lt;画像マップ&gt;:画像が存在しないか、不正なものです。',
-'imagemap_invalid_title' => '&lt;画像マップ&gt;:$1行目のリンクのタイトルが不正です。',
-'imagemap_missing_coord' => '&lt;画像マップ&gt;: $1行目の座標が画像に対して十分ではありません。',
-'imagemap_no_areas' => '&lt;画像マップ&gt;: 最低ひとつのエリアが特定されていなければなりません。',
-'imagemap_no_image' => '&lt;画像マップ&gt;: 最初の行で、画像を特定する必要があります。',
-'imagemap_no_link' => '&lt;画像マップ&gt;: $1行目の最後に適切なリンクが見付かりませんでした。',
-'imagemap_unrecognised_shape' => '&lt;画像マップ&gt;: $1行目の形が認識できません。各行は、最初に次の語のひとつをとらなければなりません。:default, rect, circle, poly',
-'images' => '画像',
-'imagetag_seemoreimages' => '更に&#8220;$1&#8221関連の画像を見る:($2)',
-'import-interwiki-namespace' => '次の名前空間に取り込む:',
 'importfreeimages-desc' => '[http://www.flickr.com flickr]から[[Special:ImportFreeImages|フリーなライセンスの写真を取り込む]]機能を提供します。',
 'importfreeimages-searchtype-all' => '全タグ',
 'importfreeimages-searchtype-any' => '全タグ',
 'importfreeimages-searchtype-name' => '検索対象:',
-'importfreeimages' => 'フリーライセンスの画像を取り込む',
-'importfreeimages_description' => 'このページでは、適切なライセンスを持つ画像をFlickrから検索し、このウィキに取り込むことができます。
-<br />カンマ区切りでタグを複数個あわせて検索します。',
-'importfreeimages_filefromflickr' => 'Flickrから、利用者<b>[$2]</b>による$1。元URL',
-'importfreeimages_importthis' => 'この画像を取り込む',
-'importfreeimages_next' => '次の$1件',
-'importfreeimages_noapikey' => 'FlickrのAPIキーが設定されていません。設定するために、[http://www.flickr.com/services/api/misc.api_keys.html ここ]からAPIキーを取得して、 ImportFreeImages.phpのwgFlickrAPIKeyを設定してください。',
-'importfreeimages_nophotosfound' => '検索語「$1」では画像が見付かりませんでした。再度検索しなおしてください。',
-'importfreeimages_owner' => '作者',
-'importfreeimages_promptuserforfilename' => 'ファイル名を入力してください:',
-'insertimagelink' => '画像のリンクを挿入する',
-'insertimagetitle' => '画像をアップロードして文中に入れる',
-'invitespecialpage' => '友人を招待する',
-'ipboptions' => '15分:15 minutes,30分:30 minutes,2時間:2 hours,1日:1 day,3日:3 days,1週間:1 week,2週間:2 weeks,1ヶ月:1 month,3ヶ月:3 months,6ヶ月:6 months,1年:1 year,無期限:infinite',
-'irc' => 'IRCによるヘルプ',
-'length' => '長さ: $1',
-'linksearch-ns' => '名前空間:',
-'linksearch-ok' => '検索',
-'linksearch-pat' => '検索パターン:',
-'log_in' => 'ログイン',
-'lookupcontribs' => '全体の投稿履歴を見る',
 'makebureaucratok' => '<b>利用者 "$1" をビューロクラットにしました。</b>',
 'makesysop-see-userrights' => '更に細かくは、[[Special:Userrights|利用者権限の管理]]をご覧ください。',
 'makesysoptext' => 'このフォームは通常の利用者を管理者にするために使用します。管理者にする利用者名を入力し、この利用者を管理者にするボタンを押してください。',
 'makesysoptitle' => '利用者を管理者にする',
-'manage_widgets' => 'ウィジェットの設定',
 'miniupload' => 'ミニアップロード',
-'monaco-articles-on' => '総記事数:$1',
-'monaco-category-list' => '*w:c:ja|ウィキア
-**w:c:ja.game|ゲーム情報ウィキ
-**w:c:ja.anime|Anipedia',
-'monaco-edit-this-menu' => 'このメニューの編集',
-'monaco-footer-wikia-links' => '*http://ja.wikia.com/wiki/%E3%82%A6%E3%82%A3%E3%82%AD%E3%82%A2%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6|ウィキアについて
-*http://ja.wikia.com/wiki/%E9%80%A3%E7%B5%A1%E5%85%88|連絡先
-*http://ja.wikia.com/wiki/%E5%88%A9%E7%94%A8%E8%A6%8F%E7%B4%84|利用規約
-*http://www.mediawiki.org/wiki/MediaWiki/ja|メディアウィキ
-*http://www.gnu.org/copyleft/fdl.html|GFDL 
-*http://www.opensource.jp/fdl/fdl.ja.html.euc-jp|GFDL日本語訳
-*http://ja.wikia.com/wiki/%E5%BA%83%E5%91%8A|広告について',
-'monaco-latest' => '最近の活動',
-'monaco-related-communities' => '*w:c:ja|ウィキア|セントラル・ウィキアの日本語版
-*w:Wikia|ウィキア(英語版)|セントラル・ウィキアの英語版
-*w:c:ja.game|ゲーム情報ウィキ|ゲーム情報のポータルウィキ
-*w:c:ja.anime|Anipedia|アニメ情報のポータルウィキ
-*w:c:ja:Wikia:プロジェクトポータル|プロジェクト一覧|その他のウィキアのプロジェクト一覧',
-'monaco-sidebar' => '*mainpage|{{SITENAME}}
-*mainpage|コンテンツ
-**#popular#|お薦め記事
-**#visited#|most_visited
-**#voted#|レートの高い記事
-**#newlychanged#|recentchanges
-*portal-url|Community
-**#topusers#|活発な利用者
-**portal-url|portal
-**Forum:Index|forum
-*#category1#
-*#category2#',
-'monaco-toolbox' => '* whatlinkshere|whatlinkshere
-* upload-url|upload
-* specialpages-url|specialpages
-* recentchanges-url|recentchanges
-* randompage-url|randompage
-* helppage|help
-* Special:MultipleUpload|multipleupload',
-'monaco-welcome-back' => '<b>$1さん</b><br />',
-'monaco-whos-online' => 'いまこのウィキにいる人',
-'monaco-widgets' => 'ウィジェット',
-'monobook.js' => '/* このページの利用は中止してください。代わりに、[[MediaWiki:common.js]]を御利用下さい。 */',
 'mu_login' => 'ファイルをアップロードするには、ログインする必要があります。',
 'mu_size_your_image' => '画像のサイズ',
-'multiplefileuploadsummary' => 'ファイルの概要:',
-'multipleupload-addresswarnings' => '再アップロードする前に、警告の内容をご確認ください。',
-'multipleupload-ignoreallwarnings' => '全ての警告を無視してファイルを保存する',
-'multipleupload-page' => '{{ns:project}}:方針',
-'multipleupload-saveallfiles' => 'ファイルを保存',
-'multipleupload-text' => '複数のファイルを一度にアップロードできます。
-
-「Browse」というボタンを押し、アップロードするファイルを選択してください。一度に$1個までアップロードできます。
-
-「掲載するファイル名」や、ファイルの説明文を入れる「ファイルの概要」をここで入力することもできます。
-
-不適切な画像は、削除されることがあります。プロジェクトの[[{{MediaWiki:Multipleupload-page}}|ファイル削除の方針]]をご確認ください。',
-'multipleupload' => '複数ファイルのアップロード',
-'multiupload-fileuploaded' => 'ファイルをアップロードしました',
-'multiupload-toolbox' => '複数ファイルのアップロード',
-'multiupload' => 'アップロード(高機能版)',
-'multiuploadtext' => '複数のファイルをここでアップロードできます。 <br/><br/>
-				「Browse」を押してアップロードしたいファイルを選択してください。一度に最高5つまでアップロードすることができます。 <br/><br/>
-				また、オプションとして、<b>掲載するファイル名</b>や<b>ファイルの概要</b>を入力することができます。<br/><br/>
-				<br/>
-				不適切な画像は削除されることがあります。詳しくは[[Project:画像削除の方針|画像削除の方針]]をご覧ください。<br/><br/>',
-'new_article' => '記事を作成',
-'new_wiki' => 'ウィキの申請',
-'newarticletext' => 'このページにはまだ内容がありません。新規記事を書くには下記欄に書き込んでください(編集方法については、[[:Category:Help|ヘルプページ]]を御覧ください)。もし間違いなら、ブラウザの「戻る」のボタンを押して戻ってください。',
-'noarticletext' => '\'\'\'{{SITENAME}}には、この名前の{{NAMESPACE}}ページはありません。
-*\'\'\'<span class="plainlinks">[{{fullurl:{{FULLPAGENAMEE}}|action=edit}} このリンク]\'\'\'をクリックすると、記事の編集を行うことができます</span>。また、\'\'\'<span class="plainlinks">[{{fullurl:Special:Search|search={{PAGENAMEE}}}} ここをクリックすると]\'\'\'、ウィキ内での記事の検索が行えます</span>。
-*以前に記事が存在したと思われる場合は、\'\'\'<span class="plainlinks">[{{fullurl:Special:Log/delete|page={{FULLPAGENAMEE}}}} 削除ログ]\'\'\'</span>をご確認ください。',
-'nocontributors' => 'このページの履歴は見付かりませんでした。',
-'nontabbedsearch' => '検索でタブを使わない',
-'nontabbedsearchold' => '検索でタブを使わない(古いタイプの表示を利用する)',
-'old_skins' => '旧式の外装',
 'pollNoVote' => 'さあ、投票しよう!',
 'pollPercentVotes' => '全体の$1%',
 'pollSubmitting' => '投票を処理しています。少しお待ちください。',
@@ -503,222 +836,19 @@ $NEWPAGE
 'pollVoteError' => '問題が発生しました。少ししてから再度投票してください。',
 'pollVoteUpdate' => '投票を更新しました。',
 'pollYourVote' => '$2について、$1に投票しています。以下の回答をクリックすると、投票を変更できます。',
-'pr_describe_problem' => '詳細',
-'pr_empty_email' => 'メールアドレスを入力してください',
-'pr_empty_summary' => '問題の詳細を入力してください',
-'pr_introductory_text' => 'このウィキのほとんどのページは編集可能です。もし間違いがあったら、是非とも編集して、間違いを直してしまってください。編集の仕方がわからない場合は、[[Help:編集の仕方|ヘルプページ]]などをご覧ください。
-
-スタッフと連絡をとったり、著作権上の問題を報告する場合は、[[w:c:ja:連絡先|ウィキアの連絡用ページ]]をご覧ください。
-
-ソフトウェアのバグは、[[w:c:ja:Forum:不具合・要望|フォーラム]]で報告できます。ウィキに報告された各種問題は、[[Special:ProblemReports|こちら]]で見ることができます。',
-'pr_thank_you' => '報告ありがとうございます!
-
-[[Special:ProblemReports/$1|こちらから修正の確認を行えます]]',
-'pr_thank_you_error' => 'エラーが発生して、問題の送信が出来ませんでした。あとでもう一度お願いいたします。',
-'pr_what_page' => 'ページ名',
-'pr_what_problem' => '問題の種類',
-'pr_what_problem_incorrect_content' => '内容に誤りがあります',
-'pr_what_problem_incorrect_content_short' => '内容の誤り',
-'pr_what_problem_other' => 'その他',
-'pr_what_problem_other_short' => 'その他',
-'pr_what_problem_select' => '問題の種類を教えてください',
-'pr_what_problem_software_bug' => 'ソフトウェアにバグがあります',
-'pr_what_problem_software_bug_short' => 'バグ',
-'pr_what_problem_spam' => '宣伝リンクがあります',
-'pr_what_problem_spam_short' => 'スパム',
 'pr_what_problem_unselect' => '全て',
-'pr_what_problem_vandalised' => 'ページが荒されています',
-'pr_what_problem_vandalised_short' => '荒し',
-'prefs-help-realname' => '* 本名 (任意): 本名を入力すると、ページ・クレジットに利用者名（アカウント名）の代わりに本名が表示されます。',
-'prlogtext' => '問題を報告する',
-'problemreports' => '報告された問題のリスト',
-'profile' => 'プロファイル',
-'rcnote' => '以下は $3 までの <strong>$2</strong> 日間に編集された <strong>$1</strong> ページです（<strong>{{int:newpageletter}}</strong>=新規項目、<strong>{{int:minoreditletter}}</strong>=細部の編集、<strong>{{int:boteditletter}}</strong>=ボットの編集、日時はオプションで未設定ならUTC）',
-'recentchanges_combined' => '最近更新したページ(結合型)',
-'recentchangestext' => '<span style="float:right;"><small>\'\'[[MediaWiki:Recentchangestext|このテンプレートを編集する]]\'\'</small></span>
-このページで、最近更新されたページを確認できます。
-
-{| class="plainlinks" style="background: transparent; margin-left:0.5em; margin-bottom:0.5em;" cellpadding="1" cellspacing="0"
-|-valign="top"
-|align="right"|\'\'\'ログ:\'\'\'
-|align="left" |[[Special:Newpages|新しいページ]] - [[Special:Newimages|新着画像ギャラリー]] - [[Special:Log/delete|削除記録]] - [[Special:Log/move|移動記録]] - [[Special:Log/upload|アップロード記録]] - [[Special:Log/block|投稿ブロック記録]] - [[Special:Log|その他のログ]]
-|-valign="top"
-|align="right"|\'\'\'特別ページ:\'\'\'
-|align="left" |[[Special:Wantedpages|投稿が望まれているページ]] - [[Special:Longpages|長いページ]] - [[Special:Uncategorizedimages|カテゴリ未導入の画像]] - [[Special:Uncategorizedpages|カテゴリ未導入のページ]] - [[Special:Specialpages|その他の特別ページ]]
-|}',
-'reportproblem' => '問題の報告',
 'right-skipcaptcha' => 'キャプチャのある動作をパスして活動できる',
-'seemoredotdotdot' => 'その他',
-'sitestatstext' => '__NOTOC__
-{| class="plainlinks" align="top" width="100%"
-| valign="top" width="50%" | 
-===サイトに関する統計===
-{{SITENAME}}には\'\'\'$1 [[Special:Allpages|ページ]]\'\'\'のコンテンツがあります ([[Special:Newpages|新規ページ]]含む)
-
-*\'\'\'記事数とみなせるページは$2ページあります。これには、以下のものがあります。\'\'\'
-**[[Special:Allpages|標準名前空間]]のページ
-**最低ひとつの内部リンクを含む
-**[[Special:Shortpages|短いページ]] or [[Special:Longpages|長いページ]]
-**[[Special:Disambiguations|曖昧さ回避]]のページ
-**[[Special:Lonelypages|孤立しているページ]]
-
-*他、記事数にならないページには、以下のページがあります。
-**標準名前空間以外のページ<br />(テンプレート、ノートページなど)
-**[[Special:Listredirects|リダイレクト]]([[Special:BrokenRedirects|迷子のリダイレクト]]/[[Special:DoubleRedirects|二重リダイレクト]]など)
-
-| valign="top" width="50%" |
-
-===その他の統計===
-*\'\'\'$8個の[[Special:Imagelist|ファイル]]\'\'\' ([[Special:Newimages|新着画像ギャラリー]])
-*全編集回数\'\'\'$4\'\'\'を\'\'\'$1\'\'\'ページで割ると、1ページあたりの平均編集回数は\'\'\'$5\'\'\'になります([[Special:Mostrevisions|版の多い項目]]のページも参照してください)。
-
-=== Job queue ===
-* [http://meta.wikimedia.org/wiki/Help:Job_queue job queue] の長さは \'\'\'$7\'\'\' です。
-
-=== その他 ===
-* [[Special:Specialpages|特別]]ページ
-* [[Special:Allmessages|MediaWiki]]メッセージ
-
-さらに詳細な情報に関しては、Central Wikiaの\'\'\'[[w:Wikia:Statistics|統計ページ]]\'\'\'からのリンクでたどれます。
-
-|}',
-'sitewidemessages' => 'サイト横断メッセージ',
 'skinchooser-customcss' => 'テーマを自分たちで作成する場合は、上記メニューで「Custom」を設定し、[[MediaWiki:Monaco.css]]でCSSを作成してください。',
-'sourcefilename' => 'ファイル名',
-'sp-contributions-footer-anon' => '{| id="anontalktext" class="plainlinks noeditsection" style="font-size:90%; border: 1px solid #B8B8B8; margin:1em 1em 0em 1em; padding:0.25em 1em 0.25em 1em; clear: both;" 
-| \'\'\'これは、アカウントを取得していないか、または利用していない匿名利用者のための投稿履歴ページです。この利用者は、[[wikipedia:ja:IPアドレス|IPアドレス]]により識別されます。\'\'\'
-
-IPアドレスは、時折変更されることもあり、複数人で共有されます。もし、まだ匿名で利用しているなら、混乱を避けるため是非とも[[{{ns:Special}}:Userlogin|アカウントの作成、またはログイン]]することをお勧めします。登録することで、IPアドレスを隠すことができます。[[w:c:ja:Help:アカウントを作る理由|Help:アカウントを作る理由]]をご覧の上、[[w:c:ja:Help:アカウントを作成する|Help:アカウントを作成する]]というページを参考にアカウントをお作りください。
-
-\'\'\'IP info:\'\'\' [http://samspade.org/whois?query=$1 WHOIS] • [http://openrbl.org/query?$1 RDNS] • [http://www.robtex.com/rbls/$1.html RBLs] • [http://www.dnsstuff.com/tools/tracert.ch?ip=$1 Traceroute] • [http://www.as3344.net/is-tor/?args=$1 TOR check] &mdash; [[wikipedia:Regional Internet registry|RIR]]s: [http://ws.arin.net/whois/?queryinput=$1 America] &bull; [http://www.ripe.net/fcgi-bin/whois?searchtext=$1 Europe] · [http://www.afrinic.net/cgi-bin/whois?query=$1 Africa] · [http://www.apnic.net/apnic-bin/whois.pl?searchtext=$1 Asia-Pacific] · [http://www.lacnic.net/cgi-bin/lacnic/whois?lg=EN&query=$1 Latin America/Caribbean]
-|}',
-'stf_abuse' => 'このメールは、ウィキアからの送信によるものです。もし、何らかの間違いであったら、 support@wikia.com までお知らせください。',
-'stf_add_emails' => '追加のメールアドレス:',
-'stf_after_reg' => '友達をウィキアに招待してみましょう! [[Special:InviteSpecialPage|こちら]]をクリックしてください。',
-'stf_back_to_article' => '記事に戻る',
-'stf_button' => 'この記事を友達に送ります',
 'stf_choose_from_existing' => '下から、使っているサービスを選んでください:',
-'stf_confirm' => 'メッセージを送りました! 他の人も招待しますか?',
-'stf_ctx_check' => 'アドレス帳を確認',
-'stf_ctx_empty' => 'このアカウントにアドレス帳がありません',
-'stf_ctx_invalid' => 'アカウント名、またはパスワードが違います。もう一度確認してみてください。',
-'stf_ctx_invite' => '一人以上の場合は、カンマ(,)で区切ってください。制限は$1人までです。',
-'stf_email_label' => 'メールアドレス',
-'stf_email_sent' => '送信の確認',
-'stf_error' => 'メールの送信に失敗しました。',
-'stf_error_from' => 'メールアドレスが入力されていません。',
-'stf_error_name' => 'お名前が入力されていません',
-'stf_error_to' => '送信先が入力されていません',
-'stf_frm1' => '自分のメールアドレス:',
-'stf_frm2' => 'メールアドレス(ひとつ以上の場合はカンマ(,)で区切ってください)',
-'stf_frm3_invite' => 'こんにちは!
-
-ウィキアの $1 のウィキサイトに参加しました。
-
-是非ともチェックしてみてください。',
-'stf_frm3_send' => 'こんにちは!
-
-ウィキアのこのページのがお薦めです。
-
-$2
-
-是非ともチェックしてみてください。',
-'stf_frm4_cancel' => 'キャンセル',
-'stf_frm4_invite' => '招待状を送りましょう!',
-'stf_frm4_send' => '送信',
-'stf_frm5' => '(このページのURLはメールに自動で含まれます)',
-'stf_frm6' => 'ウィンドウを閉じる',
-'stf_instructions' => '1. 友達を選択|2. "$1"をクリックする',
-'stf_message' => 'メッセージ',
-'stf_most_emailed' => '$1で今日一番メールで送られた記事:',
-'stf_most_popular' => '$1の人気の記事:',
-'stf_msg_label' => '送信されたメッセージ',
-'stf_multiemail' => '二人以上に送りますか?',
-'stf_name_label' => '名前',
-'stf_need_approval' => '承認が無いため、メールが送られませんでした。',
-'stf_select_all' => '全て選択',
-'stf_select_friends' => '友達を選択:',
-'stf_sending' => '少しお待ちください',
-'stf_subject' => '$1さんから記事が送られてきました',
-'stf_throttle' => 'セキュリティ上の理由により、一日に$1回までしか送信できません。',
-'stf_we_dont_keep' => 'メールアドレス、パスワードは保存しません',
-'stf_your_address' => 'メールアドレス',
-'stf_your_email' => '利用しているメールサービス',
-'stf_your_friends' => '友達のメールアドレス',
-'stf_your_login' => 'アカウント名',
-'stf_your_name' => '名前',
-'stf_your_password' => 'パスワード',
-'subcategorycount' => 'このカテゴリには $1 のサブカテゴリがあります。',
-'swm-button-new' => '[ 新規メッセージ ]',
-'swm-button-preview' => '[ プレビュー ]',
-'swm-button-save' => '[ 保存 ]',
-'swm-button-send' => '[ 送信 ]',
-'swm-days' => '期限なし,日,日',
-'swm-dismiss-content' => '<p>メッセージが存在しませんでした。</p><p>%s</p>',
-'swm-error-empty-group' => 'グループ名を入力してください。',
-'swm-error-empty-message' => 'メッセージを入力してください。',
-'swm-error-no-such-user' => '指定された利用者が存在していません。',
-'swm-error-no-such-wiki' => 'そのようなウィキは存在しません。',
-'swm-expire-info' => 'このメッセージは$1に期限が切れます。',
-'swm-label-comment' => 'コメント',
-'swm-label-content' => '内容',
-'swm-label-edit' => '編集',
-'swm-label-expiration' => '期限',
-'swm-label-list' => 'リスト',
-'swm-label-mode-all' => '全利用者',
-'swm-label-mode-group-hint' => '<i>注意:このオプションは、TaskManagerのキューに入れて作業するため、時間がかかります</i>',
-'swm-label-mode-group' => 'このグループに所属する利用者',
 'swm-label-mode-hub-hint' => '<i>注意:このオプションは、TaskManagerのキューに入れて作業するため、時間がかかります</i>',
 'swm-label-mode-hub' => 'このカテゴリの人の利用者',
-'swm-label-mode-user' => '選択した利用者',
-'swm-label-mode-wiki' => 'このウィキの活発な利用者',
-'swm-label-preview' => 'プレビュー',
-'swm-label-recipient' => '宛先',
-'swm-label-remove' => '削除',
-'swm-label-sent' => '送信しました',
-'swm-link-dismiss' => 'メッセージを隠す',
 'swm-list-no-messages' => 'メッセージがありません',
-'swm-list-table-content' => '内容',
-'swm-list-table-date' => '送信日付',
-'swm-list-table-expire' => '期限',
-'swm-list-table-group' => 'グループ',
-'swm-list-table-recipient' => '宛先',
-'swm-list-table-removed' => '削除済',
-'swm-list-table-sender' => '送信者',
-'swm-list-table-tools' => '作業',
-'swm-list-table-wiki' => 'ウィキ',
 'swm-msg-remove' => 'このメッセージの送信をやめますか? この作業は取り消せません!',
-'swm-msg-sent-err' => '<h3>このメッセージはまだ送信されていません。</h3>詳しくはエラーログをお読みください。',
-'swm-msg-sent-ok' => '<h3>メッセージが送信されました。</h3>',
-'swm-page-title-editor' => 'サイト横断メッセージ:編集',
-'swm-page-title-list' => 'サイト横断メッセージ:リスト',
-'swm-page-title-preview' => 'サイト横断メッセージ:プレビュー',
-'swm-page-title-send' => 'サイト横断メッセージ:送信',
-'swm-page-title-sent' => 'サイト横断メッセージ:送信済',
-'talkpagetext' => '<div style="margin: 0 0 1em; padding: .5em 1em; vertical-align: middle; border: solid #999 1px;">\'\'\'このページは、ノートまたは会話ページです。書き込みの際には、チルダ4つ (<code><nowiki>~~~~</nowiki></code>)を使って署名するようにしてください。\'\'\'</div>',
-'this_discussion' => 'このノートページ',
-'timezonetext' => 'UTCとあなたの地域の標準時間との差を入力してください（日本国内は9:00）。',
 'tog-disableeditingtips' => '編集時のヘルプを表示しない',
 'tog-disablelinksuggest' => '編集時のリンク補完を使わない',
 'tog-edit-similar' => '関連記事の提案を有効にする',
-'tog-editsectiononrightclick' => 'セクションタイトルの右クリックでセクション編集を行えるようにする (JavaScript)',
-'tog-fancysig' => '署名を自動的に利用者ページへリンクさせない',
-'tog-htmlemails' => 'HTMLフォーマットでメールを送る',
 'tog-showAds' => '<b>広告を全て表示する</b><br />ログインしてない利用者と同じように広告を表示するには、このオプションを選択してください。<br /><br />',
-'tog-skinoverwrite' => '<b>外装のカスタマイズを有効にする</b>(推奨)<br>上のチェックボックスにチェックをいれると、管理者がウィキに施したカスタマイズが有効になります。',
 'top_users' => '有力な参加者',
-'ue-EditArticle' => 'これはue_EditSimilar eventです。 <a href="http://www.example.co.uk/files/map.pdf" onClick="javascript:urchinTracker(\'some value\'); ">こちらをクリックしてください</a>',
-'ue-NewToWikia' => 'これは、ue_NewToWikia Eventです。 <a href="http://www.example.co.uk/files/map.pdf" onClick="javascript:urchinTracker(\'some value\'); ">こちらをクリックしてください</a>。',
-'ue-VisitN1' => 'ウィキアへようこそ! <a href="http://ja.wikia.com/index.php?title=Special:Userlogin&type=signup" id="ue-Visit1_1">ウィキアでは、無料で簡単にアカウントを作成できます!</a>',
-'ue-VisitN10' => '編集してページの追跡を行うためには、<a href="http://www.wikia.com/index.php?title=Special:Userlogin&type=signup" onClick="javascript:urchinTracker(\'/reg/ue-Visit10_10\'); ">是非ともアカウントを作成してください(無償)</a>。',
-'ue-VisitN2' => 'ウィキアへようこそ! <a href="http://www.wikia.com/index.php?title=Special:Userlogin&type=signup" onClick="javascript:urchinTracker(\'/reg/ue-Visit2_2\'); "アカウントを作成すると"/a>ページの更新通知を受け取ることができます。',
-'ue-VisitN3' => 'ウィキアへようこそ! <a href="http://www.wikia.com/index.php?title=Special:Userlogin&type=signup" onClick="javascript:urchinTracker(\'/reg/ue-Visit3_3\'); ">アカウントを作成する</a>ことで、ページの更新通知を受け取ることができます。',
-'ue-VisitN4' => 'ウィキアへようこそ! ページの更新を確認するために、ぜひとも<a href="http://www.wikia.com/index.php?title=Special:Userlogin&type=signup" onClick="javascript:urchinTracker(\'/reg/ue-Visit4_4\'); ">アカウントを作ってみましょう!</a>',
-'ue-VisitN5' => 'ウィキアへようこそ! 編集したページを追跡するなら、ぜひとも<a href="http://www.wikia.com/index.php?title=Special:Userlogin&type=signup" onClick="javascript:urchinTracker(\'/reg/ue-Visit5_5\'); ">アカウントを作成(無償)してみてください</a>',
-'ue-VisitN6' => 'アカウントを作ると、このページが更新されたときに通知を受け取れます。<a href="http://www.wikia.com/index.php?title=Special:Userlogin&type=signup" onClick="javascript:urchinTracker(\'/reg/ue-Visit6_6\'); ">是非ともアカウントを作ってみましょう!</a>',
-'ue-VisitN7' => 'ウィキアのID作成してみよう! <a href="http://www.wikia.com/index.php?title=Special:Userlogin&type=signup" onClick="javascript:urchinTracker(\'/reg/ue-Visit7_7\'); ">無償で作成できます!</a>',
-'ue-VisitN8' => 'ウィキアのアカウントは無償で利用できます。<a href="http://www.wikia.com/index.php?title=Special:Userlogin&type=signup" onClick="javascript:urchinTracker(\'/reg/ue-Visit8_8\'); ">是非とも作ってみましょう!</a>',
-'ue-VisitN9' => 'ウィキアへようこそ! まずは、<a href="http://www.wikia.com/index.php?title=Special:Userlogin&type=signup" onClick="javascript:urchinTracker(\'/reg/ue-Visit9_9\'); ">アカウントを作成(無償)してみましょう!</a>',
 'unable-block-edit' => 'このページの編集は許可されておりません。後で編集してください。',
 'uploadtext-ext' => '[[{{ns:Special}}:Version|バージョン情報]]のページで、利用できる拡張子を確認できます。',
 'userlogin-bad-birthday' => '正しい日付を選んでください。',
@@ -728,17 +858,6 @@ $2
 'userlogin-choose-year' => '年',
 'userlogin-unable-info' => '申し訳ありません、現在登録が出来ません。',
 'userlogin-unable-title' => 'アカウントの登録が出来ません',
-'userstatstext' => ';ウィキア全体の総アカウント数:$1 人 (このウィキアにおける利用者数は[[%E7%89%B9%E5%88%A5:Listusers]]を参照してください)
-;このウィキアにおける$5数:$2 人 (全利用者のうち$4%)
-
-詳しいことは$3を参照してください。',
-'welcomecreation' => '== $1 さん、ようこそ! ==
-あなたのアカウントができました。まずは、[[Special:Preferences|オプション]]の設定を行なってみましょう!',
-'widget_description' => '説明',
-'widget_name' => '名前',
-'widgetdashboard' => 'ウィジェットダッシュボード',
-'widgets' => 'ウィジェットリスト',
-'wikia_messages' => 'ウィキアからのお知らせ',
 'wikiastats_active_absent_wikians' => '投稿数順の活発/不活発なウィキアン(ウィキア利用者)',
 'wikiastats_active_month' => 'ヶ月',
 'wikiastats_active_months' => 'ヶ月',
@@ -865,8 +984,6 @@ $2
 'wikiastats_xls_press_uncheck' => '全てのウィキのチェックを外すには、このボタンを押してください。',
 'wikiastats_xls_uncheck_list' => 'チェックを外す',
 'wikiaststs_invalid_date' => '日付の指定が間違っています',
-'wikipedia' => 'ウィキペディア',
-'wikipedia_skin' => 'ウィキペディアの外装',
 'wmu-back' => '戻る',
 'wmu-caption' => '説明文',
 'wmu-close' => '閉じる',
@@ -933,12 +1050,6 @@ $2
 'ws.step1.i.1' => 'このツールは、テンプレートや外部リンクを取り込まずに、ウィキペディアから記事をインポートする事の出来るものです。<br />リンクのある関連する記事を含める事も出来ます。<br />まずは、ブラウザのアドレスバーにあるウィキペディアのページのURLを下に貼付けてください。',
 'ws.step2.i.1' => '下記のページが見つかりました。<br />取り込むページ名をご確認ください。同じ名前がある場合は、インポートする際に上書きしてしまいますので、ご注意ください。',
 'ws.step2.i.2' => 'ページの関連するページを取り込むことができます',
-'wt_click_to_close' => 'ツールチップを閉じるには、クリックしてください。',
-'wt_countdown_give_date' => '日時については、YYYY-MM-DD HH:MM:SS (例: 2007-03-28 13:56:00)か、YYYY-MM-DD (2007-02-17)、または HH:MM:SS (17:01:00)の形式にしてください。',
-'wt_countdown_show_seconds' => '秒を表示する',
-'wt_help_cockpit' => '|ウィジェット設定||ウィジェットのサムネイルをドラッグして、サイドバーに追加してください',
-'wt_help_sidebar' => '|ウィジェットサイドバー||「編集を」を押して、ウィジェットの設定を変更できます。ウィジェットを閉じるには、X印を押してください。',
-'wt_help_startup' => '|ウィジェットについては御存じですか?||自分の名前のあるメニューから、「ウィジェットの設定」をクリックしてください。',
 'wt_lastwikis_noresults' => '表示するウィキの訪問履歴がありません。是非とも[[w:c:ja:Wikia:プロジェクトポータル|ウィキの一覧ページ]]をご覧になって、他のウィキを訪れてみてください。',
 'wt_referers_empty_list' => 'このウィキで参照するだけのデータがまだ用意できておりません。後ほど、お尋ねください。',
 'wt_shoutbox_initial_message' => 'さあ、チャットの開始です!',
