@@ -735,7 +735,8 @@ class EditPage {
 			require("extensions/wikia/WysiwygInterface/WysiwygInterface_body.php") ;
 			require("extensions/wikia/WysiwygInterface/ReverseParser.php");
 			$reverseParser = new ReverseParser();
-			eval("\$wysiwygData = \$_POST['wysiwygData'];");
+			//eval("\$wysiwygData = \$_POST['wysiwygData'];");
+			$wysiwygData = Wikia::json_decode($_POST['wysiwygData'], true);
 			$this->textbox1 = $reverseParser->parse($this->textbox1, $wysiwygData);
 		}
 
@@ -1415,8 +1416,9 @@ END
 			$wgOut->addHTML( $oFCKeditor->CreateHtml() );
 
 			global $FCKmetaData;
-			$wysiwygData = print_r($FCKmetaData, true);
-			$wysiwygData = print_r($wgOut->mTemplateIds, true);
+			//$wysiwygData = print_r($FCKmetaData, true);
+			//$wysiwygData = print_r($wgOut->mTemplateIds, true);
+			$wysiwygData = Wikia::json_encode($FCKmetaData, true);
 
 			$wgOut->addHTML( <<<END
 <br /><br /><b>WysiwygData (do not touch):</b><br />
