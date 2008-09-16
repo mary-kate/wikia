@@ -30,6 +30,7 @@ $messages = array_merge( $messages, array(
 'cannotundelete' => '恢復失敗；可能先前已經被人恢復。',
 'cantcreateaccounttitle' => '不能創建帳户',
 'cantrollback' => '無法恢復編輯；最後的參與者是本文的唯一作者。',
+'captcha-create' => '請輸入以下數學算式的答案([[Special:Captcha/help|更多資訊]])：',
 'captcha-createaccount-fail' => '驗證碼錯誤或丢失',
 'captcha-createaccount' => '為了防止程序自動添加垃圾鏈接。你需要輸入以下圖片中顯示的文字才能注册帳户：<br />([[Special:Captcha/help|這是什麽？]])',
 'captchahelp-text' => '象本站一様，對公衆開放編輯的站點經常被垃圾鏈接騷擾。那些人使用自動化垃圾程序將他們的鏈接張貼到很多站點。雖然這些鏈接可以被清除，但是這些東西確實令人十分討厭。
@@ -129,7 +130,20 @@ $1',
 'createarticle' => '創建新條目',
 'created' => '已被創建',
 'createpage' => '新增文章',
+'createpage_alternate_creation' => '原始編輯模式請點選 $1',
+'createpage_button_caption' => '發布！',
+'createpage_caption' => '分類：',
+'createpage_categories' => '分類：',
+'createpage_categories_help' => '將文章加註分類，可加強這個站上的文章的組織。你可以在下方挑選一個適當的分類，或是直接輸入一個新的分類。',
+'createpage_enter_text' => '輸入文字',
+'createpage_here' => '這裡',
+'createpage_hide_cloud' => '[隱藏分類雲]',
 'createpage_loading_mesg' => '下載中......請稍後。',
+'createpage_show_cloud' => '[顯示分類雲]',
+'createpage_title' => '發表新文章',
+'createpage_title_caption' => '文章標題',
+'createwiki' => '申請wiki',
+'createwikipagetitle' => '申請wiki',
 'creditspage' => '頁面作者',
 'currentevents-url' => 'Portal:新聞動態',
 'currentrevisionlink' => '查看當前版本',
@@ -168,7 +182,108 @@ MySQL返回錯誤“$3: $4”。',
 'edit' => '編輯',
 'editcomment' => '編輯的評論為：“<i>$1</i>”。',
 'editcount' => '編輯統計',
+'editingTips' => '= 如何改變字體格式 =
+你可以利用mediawiki的語法改變字體格式，或是利用HTML
+
+<nowiki>\'\'斜體\'\'</nowiki> => \'\'斜體\'\'
+
+<nowiki>\'\'\'粗體\'\'\'</nowiki> => \'\'\'粗體\'\'\'
+
+<nowiki>\'\'\'\'\'粗體和斜體\'\'\'\'\'</nowiki> => \'\'\'\'\'粗體和斜體\'\'\'\'\'　
+
+-----
+<nowiki><s>刪去</s></nowiki> => <s>刪去</s>
+
+<br />
+<nowiki><u>底線</u></nowiki> => <u>底線</u>
+
+<br />
+<nowiki><span style="color:red;">紅字</span></nowiki> => <span style="color:red;">紅字</span>
+
+= 連結 =
+利用兩個或是一個中括號，可產生連結的效果
+
+<br />
+\'\'\'基本內部鏈結:\'\'\'<br />
+<nowiki>[[文章名]]</nowiki>
+
+<br />
+\'\'\'改變鏈結字樣:\'\'\'<br />
+<nowiki>[[文章名|你喜歡的字樣]]</nowiki>
+
+<br />
+----
+
+<br />
+\'\'\'連到外部網頁:\'\'\'<br />
+<nowiki>[http://www.example.com]</nowiki>
+
+<br />
+\'\'\'改變外部鏈結字樣:\'\'\'
+
+<nowiki>[http://www.example.com 你喜歡的字樣]</nowiki> 
+
+= 如何增加標題 =
+使用 =(等號)就可以幫你建立次標題和三級標題。前後一個等號的標題等級和頁面名稱等級相同。
+
+<nowiki>==二級標題==</nowiki>
+
+<nowiki>===三級標題===</nowiki>
+
+<nowiki>====四級標題====</nowiki>
+
+
+= 如何把內容分項顯示 =
+
+在句子的開頭使用\'\'\':\'\'\'就可以達到開頭縮排書寫的效果。
+
+
+<nowiki>:一個縮排</nowiki><br>
+<nowiki>:一個縮排</nowiki><br>
+<nowiki>:: 兩個縮排</nowiki><br />
+<nowiki>::: 更多縮排</nowiki>
+
+
+<nowiki>*第一項</nowiki><br>
+<nowiki>*第二項</nowiki><br>
+<nowiki>**第二項的再分項</nowiki><br>
+<nowiki>*第三項</nowiki><br>
+
+
+<nowiki>#第一點</nowiki><br>
+<nowiki>#第二點</nowiki><br>
+<nowiki>##2.1點</nowiki><br>
+<nowiki>#第三點</nowiki><br>
+
+
+= 如何加入圖片 =
+如入圖片的方法和加入鏈結的方法相似。
+
+<br />
+<nowiki>[[Image:圖片名.jpg]]</nowiki>
+
+<br />
+\'\'\'背景說明(滑鼠移到圖片上時顯示)\'\'\'<br />
+<nowiki>[[Image:Name.jpg|說明文字]]</nowiki>
+
+<br />
+\'\'\'加入圖片註解\'\'\'<br />
+<nowiki>[[Image:Name.jpg|thumb|]]</nowiki>
+
+<br />
+\'\'\'改變圖片大小\'\'\'<br />
+<nowiki>[[Image:Name.jpg|200px|]]</nowiki>
+
+<br />
+\'\'\'改變圖片位置\'\'\'<br />
+<nowiki>[[Image:Name.jpg|right|]]</nowiki>
+
+<br />
+你可以用 "|" 結合上述功能，別忘了，在最後一個 "|" 後面是加註文字。',
 'editinginterface' => '\'\'\'警告：\'\'\'你正在編輯的頁面將用于軟件的界面顯示。更改本頁面將影響其他用户的界面顯示。',
+'editingtips_enter_widescreen' => '放大編輯',
+'editingtips_exit_widescreen' => '退出放大編輯',
+'editingtips_hide' => '隱藏編輯小技巧',
 'edittools' => '<!-- Text here will be shown below edit and upload forms. -->
 <div style="margin-top: 2em; margin-bottom:1em;">以下為幾個常用的符號，點選你想要的符號後，它會立即出現在編輯框中你所指定的位置。</div>
 
@@ -543,6 +658,8 @@ $NEWPAGE
 'externaldberror' => '可能發生外部授權數據庫失敗或您没有權力更新您的外部帳號.',
 'extlink_sample' => 'http://www.example.com 鏈接標題',
 'extlink_tip' => '外部鏈接(記得加入http:// 前綴)',
+'fancycaptcha-badlogin' => '請輸入認證碼([[Special:Captcha/help|更多資訊]])：',
+'fancycaptcha-createaccount' => '請輸入認證碼([[Special:Captcha/help|更多資訊]])：',
 'footer_1.5' => '快來編修本頁',
 'footer_1' => '覺得 $1 不夠好嗎?',
 'footer_10' => '與$1分享',
@@ -559,6 +676,14 @@ $NEWPAGE
 'invitespecialpage' => '邀請朋友加入Wikia',
 'listredirects' => '重定向頁面列表',
 'monaco-edit-this-menu' => '編輯此選單',
+'monaco-toolbox' => '* Special:Search|進階搜尋
+* upload-url|上傳圖片
+* Special:MultipleUpload|大量上傳
+* specialpages-url|特殊頁面
+* recentchanges-url|最近更改
+* randompage-url|隨機頁面
+* whatlinkshere|鏈入頁面
+* helppage|說明手冊',
 'monaco-welcome-back' => '歡迎回來， <b>$1</b><br />',
 'monaco-whos-online' => '誰在線上？',
 'monaco-widgets' => '小工具',
@@ -566,6 +691,9 @@ $NEWPAGE
 'mostlinked' => '最多被連接頁面',
 'mostlinkedcategories' => '最多被使用的分類',
 'mostrevisions' => '最多修訂的文章',
+'multipleupload-text' => '大量上傳檔案！
+
+使用\'\'\'瀏覽\'\'\'按鈕選擇要上傳檔案的位置。可同時上傳1至$1個檔案。 你可以選擇輸入\'\'\'目標檔案名\'\'\'和\'\'\'檔案描述\'\'\'來簡述此檔案。不當的檔案將可能被刪除，詳見[[{{MediaWiki:Multipleupload-page}}|檔案刪除政策]]。',
 'multipleupload' => '上傳檔案',
 'multiuploadtext' => '上傳檔案。 <br/><br/> 點選\'\'\'瀏覽\'\'\'，選擇欲上傳的檔案，可同時上傳1至5個檔案。 <br/><br/> <b>檔案描述</b>欄位中可填入檔案說明，描述圖片內容。<br/><br/> <br/> 不當的圖片將會被刪除，請見[[Project:Image Deletion Policy|圖像刪除規定]]。<br/><br/>',
 'newarticletext' => '<div style="float:right;"><small>\'\'[[MediaWiki:Newarticletext|檢視此模板]]\'\'</small></div>
@@ -576,6 +704,14 @@ $NEWPAGE
 'noarticletext' => '\'\'\'喔喔！ {{SITENAME}}還沒有以{{NAMESPACE}}為題的文章。\'\'\'
 * \'\'\'<span class="plainlinks">[{{fullurl:{{FULLPAGENAMEE}}|action=edit}} 點此]開始編輯這個頁面</span>\'\'\'或\'\'\'<span class="plainlinks">[{{fullurl:Special:Search|search={{PAGENAMEE}}}} 點此]在此Wiki中搜尋此詞彙</span>\'\'\'.
 * 如果以此為題的文章曾經存在，請查尋\'\'\'<span class="plainlinks">[{{fullurl:Special:Log/delete|page={{FULLPAGENAMEE}}}} 刪除記錄]</span>\'\'\'.',
+'pr_mailer_notice' => '您在個人資料中所留下的電子郵件，將會自動顯示在「發信人」的欄位中，所以收件人能直接回覆您的信件。',
+'pr_table_problem_id' => '問題編號',
+'pr_table_problem_type' => '問題類型',
+'pr_table_reporter_name' => '回報人',
+'pr_table_status' => '狀態',
+'pr_total_number' => '回報總數',
+'pr_view_all' => '顯示所有回報',
+'pr_what_problem_change' => '更改問題類型',
 'prefixindex' => '前缀索引',
 'problemreports' => '問題回報列表',
 'protectedpages' => '被保護的頁面',
@@ -638,6 +774,7 @@ $NEWPAGE
 'uncategorizedimages' => '待分類圖像',
 'uncategorizedpages' => '待分類頁面',
 'unusedcategories' => '未使用的分類',
+'uploadtext-ext' => 'Wikia支援的所有延申套件請見[[{{ns:Special}}:Version|版本頁]]。',
 'version' => '版本',
 'wantedcategories' => '需要的分類',
 'whosonline' => '誰在線上？',

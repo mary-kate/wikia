@@ -1,10 +1,13 @@
 <?php
 
 $messages = array_merge( $messages, array(
+'activeusers' => '活跃用户',
 'add_comment' => '留言',
 'addsection' => '留言',
 'admin_skin' => '管理员功能',
 'ajaxLogin2' => '这动作可能会使你跳离编辑页面，可能会损失编辑结果。确定要离开吗？',
+'captcha-badlogin' => '请输入以下数学算式的答案([[Special:Captcha/help|更多资讯]])：',
+'captcha-create' => '请输入以下数学算式的答案([[Special:Captcha/help|更多资讯]])：',
 'community' => '社区',
 'copyrightwarning' => '{| style="width:100%; padding: 5px; font-size: 95%;"
 |- valign="top"
@@ -20,9 +23,26 @@ $messages = array_merge( $messages, array(
 * 如果您想测试Wiki的功能，可以前往沙盒进行测试。\'\'\'
 <div><small>\'\'[[MediaWiki:Copyrightwarning|检视此模板]]\'\'</small></div>
 |}',
+'createpage' => '新增文章',
+'createpage_alternate_creation' => '原始编辑模式请点选 $1',
+'createpage_button_caption' => '发布！',
+'createpage_caption' => '分类：',
+'createpage_categories' => '分类：',
+'createpage_categories_help' => '将文章加註分类，可加強这个站上的文章的组织。你可以在下方挑选一个适当的分类，或是直接输入一个新的分类。',
+'createpage_enter_text' => '输入文字',
+'createpage_here' => '这里',
+'createpage_hide_cloud' => '[隐藏分类云]',
 'createpage_loading_mesg' => '下载中......请稍後。',
+'createpage_show_cloud' => '[显示分类云]',
+'createpage_title' => '发表新文章',
+'createpage_title_caption' => '文章标题',
+'createwiki' => '申请wiki',
+'createwikipagetitle' => '申请wiki',
 'defaultskin_choose' => '设定此站预设皮肤:',
 'edit' => '编辑',
+'editingtips_enter_widescreen' => '放大编辑',
+'editingtips_exit_widescreen' => '退出放大编辑',
+'editingtips_hide' => '隐藏编辑小技巧',
 'edittools' => '<!-- Text here will be shown below edit and upload forms. -->
 <div style="margin-top: 2em; margin-bottom:1em;">以下为几个常用的符号，点选你想要的符号后，它会立即出现在编辑框中你所指定的位置。</div>
 
@@ -122,6 +142,23 @@ $messages = array_merge( $messages, array(
 -->
 </small></div>
 <span style="float:right;"><small>\'\'[[MediaWiki:Edittools|检视此模板]]\'\'</small></span>',
+'fancycaptcha-badlogin' => '请输入认证码([[Special:Captcha/help|更多资讯]])：',
+'fancycaptcha-createaccount' => '请输入认证码([[Special:Captcha/help|更多资讯]])：',
+'footer_1.5' => '快来编修本页',
+'footer_1' => '想改善$1？',
+'footer_2' => '回应此文',
+'monaco-latest' => '最近动态',
+'monaco-toolbox' => '* Special:Search|进階搜寻
+* upload-url|上传图片
+* Special:MultipleUpload|大量上传
+* specialpages-url|特殊页面
+* recentchanges-url|最近更改
+* randompage-url|随机页面
+* whatlinkshere|链入页面
+* helppage|说明手册',
+'multipleupload-text' => '大量上传档案！
+
+使用\'\'\'浏览\'\'\'按钮选择要上传档案的位置。可同时上传1至$1个档案。 你可以选择输入\'\'\'目标档案名\'\'\'和\'\'\'档案描述\'\'\'来简述此档案。不当的档案将可能被刪除，详见[[{{MediaWiki:Multipleupload-page}}|档案刪除政策]]。',
 'multiuploadtext' => '上传档案。 <br/><br/> 点选\'\'\'浏览\'\'\'，选择欲上传的档案，可同时上传1至5件档案。 <br/><br/> <b>档案描述</b>栏位中可填入档案说明，描述图片內容。<br/><br/> <br/> 不当的图片将会被刪除，请见[[Project:Image Deletion Policy|圖像刪除規定]]。<br/><br/>',
 'newarticletext' => '<div style="float:right;"><small>\'\'[[MediaWiki:Newarticletext|检视此模板]]\'\'</small></div>
 \'\'\'您正準备开始撰写一个新页面\'\'\'
@@ -130,6 +167,13 @@ $messages = array_merge( $messages, array(
 'noarticletext' => '\'\'\'喔喔！ {{SITENAME}}还沒有以{{NAMESPACE}}为题的文章。\'\'\'
 * \'\'\'<span class="plainlinks">[{{fullurl:{{FULLPAGENAMEE}}|action=edit}} 鲇此]开始编辑这个页面</span>\'\'\'或\'\'\'<span class="plainlinks">[{{fullurl:Special:Search|search={{PAGENAMEE}}}} 鲇此]在此Wiki中搜寻此词汇</span>\'\'\'.
 * 如果以此为题的文章曾经存在，请查寻\'\'\'<span class="plainlinks">[{{fullurl:Special:Log/delete|page={{FULLPAGENAMEE}}}} 刪除记錄]</span>\'\'\'.',
+'pr_mailer_notice' => '您在个人资料中所留下的电子邮件，将会自动显示在「发信人」的栏位中，所以收件人能直接回覆您的信件。',
+'pr_table_problem_id' => '问题编号',
+'pr_table_reporter_name' => '回报人',
+'pr_table_status' => '状态',
+'pr_total_number' => '回报总数',
+'pr_view_all' => '显示所有回报',
+'pr_what_problem_change' => '更改问题类型',
 'problemreports' => '问题回报列表',
 'rcnote' => '以下是在$3，最近\'\'\'$2\'\'\'天内的\'\'\'$1\'\'\'次最近更改记录:',
 'rcshowhideenhanced' => '$1 折页式显示模式',

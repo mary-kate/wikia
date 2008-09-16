@@ -1,10 +1,13 @@
 <?php
 
 $messages = array_merge( $messages, array(
+'activeusers' => '活躍用戶',
 'add_comment' => '留言',
 'addsection' => '留言',
 'admin_skin' => '管理員功能',
 'ajaxLogin2' => '這動作可能會使你跳離編輯頁面，可能會損失編輯結果。確定要離開嗎？',
+'captcha-badlogin' => '請輸入以下數學算式的答案([[Special:Captcha/help|更多資訊]])：',
+'captcha-create' => '請輸入以下數學算式的答案([[Special:Captcha/help|更多資訊]])：',
 'community' => '社群',
 'copyrightwarning' => '{| style="width:100%; padding: 5px; font-size: 95%;"
 |- valign="top"
@@ -20,9 +23,26 @@ $messages = array_merge( $messages, array(
 * 如果您想測試Wiki的功能，可以前往沙盒進行測試。\'\'\'
 <div><small>\'\'[[MediaWiki:Copyrightwarning|檢視此模板]]\'\'</small></div>
 |}',
+'createpage' => '新增文章',
+'createpage_alternate_creation' => '原始編輯模式請點選 $1',
+'createpage_button_caption' => '發布！',
+'createpage_caption' => '分類：',
+'createpage_categories' => '分類：',
+'createpage_categories_help' => '將文章加註分類，可加強這個站上的文章的組織。你可以在下方挑選一個適當的分類，或是直接輸入一個新的分類。',
+'createpage_enter_text' => '輸入文字',
+'createpage_here' => '這裡',
+'createpage_hide_cloud' => '[隱藏分類雲]',
 'createpage_loading_mesg' => '下載中......請稍後。',
+'createpage_show_cloud' => '[顯示分類雲]',
+'createpage_title' => '發表新文章',
+'createpage_title_caption' => '文章標題',
+'createwiki' => '申請wiki',
+'createwikipagetitle' => '申請wiki',
 'defaultskin_choose' => '設定此站預設面板:',
 'edit' => '編輯',
+'editingtips_enter_widescreen' => '放大編輯',
+'editingtips_exit_widescreen' => '退出放大編輯',
+'editingtips_hide' => '隱藏編輯小技巧',
 'edittools' => '<!-- Text here will be shown below edit and upload forms. -->
 <div style="margin-top: 2em; margin-bottom:1em;">以下為幾個常用的符號，點選你想要的符號後，它會立即出現在編輯框中你所指定的位置。</div>
 
@@ -122,9 +142,30 @@ $messages = array_merge( $messages, array(
 -->
 </small></div>
 <span style="float:right;"><small>\'\'[[MediaWiki:Edittools|檢視此模板]]\'\'</small></span>',
+'fancycaptcha-badlogin' => '請輸入認證碼([[Special:Captcha/help|更多資訊]])：',
+'fancycaptcha-createaccount' => '請輸入認證碼([[Special:Captcha/help|更多資訊]])：',
+'footer_1.5' => '快來編輯此頁！',
 'footer_1' => '覺得 $1 不夠好嗎?',
+'footer_2' => '回應此文',
+'footer_5' => '修改:$1 - $2',
+'footer_6' => '檢視隨機頁面',
+'footer_7' => '轉寄此文',
+'footer_8' => '分享到網路書籤',
 'footer_9' => '打分數',
+'monaco-articles-on' => '站上共有 $1 篇文章<br />',
+'monaco-latest' => '最新動態',
+'monaco-toolbox' => '* Special:Search|進階搜尋
+* upload-url|上傳圖片
+* Special:MultipleUpload|大量上傳
+* specialpages-url|特殊頁面
+* recentchanges-url|最近更改
+* randompage-url|隨機頁面
+* whatlinkshere|鏈入頁面
+* helppage|說明手冊',
 'monaco-welcome-back' => '歡迎回來， <b>$1</b><br />',
+'multipleupload-text' => '大量上傳檔案！
+
+使用\'\'\'瀏覽\'\'\'按鈕選擇要上傳檔案的位置。可同時上傳1至$1個檔案。 你可以選擇輸入\'\'\'目標檔案名\'\'\'和\'\'\'檔案描述\'\'\'來簡述此檔案。不當的檔案將可能被刪除，詳見[[{{MediaWiki:Multipleupload-page}}|檔案刪除政策]]。',
 'multipleupload' => '上傳檔案',
 'multiuploadtext' => '上傳檔案。 <br/><br/> 點選\'\'\'瀏覽\'\'\'，選擇欲上傳的檔案，可同時上傳1至5個檔案。 <br/><br/> <b>檔案描述</b>欄位中可填入檔案說明，描述圖片內容。<br/><br/> <br/> 不當的圖片將會被刪除，請見[[Project:Image Deletion Policy|圖像刪除規定]]。<br/><br/>',
 'newarticletext' => '<div style="float:right;"><small>\'\'[[MediaWiki:Newarticletext|檢視此模板]]\'\'</small></div>
@@ -134,6 +175,14 @@ $messages = array_merge( $messages, array(
 'noarticletext' => '\'\'\'喔喔！ {{SITENAME}}還沒有以{{NAMESPACE}}為題的文章。\'\'\'
 * \'\'\'<span class="plainlinks">[{{fullurl:{{FULLPAGENAMEE}}|action=edit}} 點此]開始編輯這個頁面</span>\'\'\'或\'\'\'<span class="plainlinks">[{{fullurl:Special:Search|search={{PAGENAMEE}}}} 點此]在此Wiki中搜尋此詞彙</span>\'\'\'.
 * 如果以此為題的文章曾經存在，請查尋\'\'\'<span class="plainlinks">[{{fullurl:Special:Log/delete|page={{FULLPAGENAMEE}}}} 刪除記錄]</span>\'\'\'.',
+'pr_mailer_notice' => '您在個人資料中所留下的電子郵件，將會自動顯示在「發信人」的欄位中，所以收件人能直接回覆您的信件。',
+'pr_table_problem_id' => '問題編號',
+'pr_table_problem_type' => '问题类型',
+'pr_table_reporter_name' => '回報人',
+'pr_table_status' => '狀態',
+'pr_total_number' => '回報總數',
+'pr_view_all' => '顯示所有回報',
+'pr_what_problem_change' => '更改問題類型',
 'problemreports' => '問題回報列表',
 'rcnote' => '以下是在$3，最近\'\'\'$2\'\'\'天內的\'\'\'$1\'\'\'次最近更改記錄:',
 'rcshowhideenhanced' => '$1 折頁式顯示模式',
@@ -189,6 +238,7 @@ $messages = array_merge( $messages, array(
 'talkpagetext' => '<div style="margin: 0 0 1em; padding: .5em 1em; vertical-align: middle; border: solid #999 1px;">\'\'\'這是一個討論頁。請在您的留言後面加上四個波折號簽名。 (<code><nowiki>~~~~</nowiki></code>).\'\'\'</div>',
 'this_user' => '此用戶',
 'tog-htmlemails' => '以HTML格式發送郵件',
+'uploadtext-ext' => 'Wikia支援的所有延申套件請見[[{{ns:Special}}:Version|版本頁]]。',
 'whosonline' => '誰在線上？',
 'widgets' => 'Widgets列表',
 ) );
