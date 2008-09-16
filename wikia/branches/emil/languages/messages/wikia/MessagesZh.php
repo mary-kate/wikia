@@ -41,8 +41,6 @@ $messages = array_merge( $messages, array(
 'cannotundelete' => '恢复失败；可能先前已经被人恢复。',
 'cantcreateaccounttitle' => '不能创建帐户',
 'cantrollback' => '无法恢复编辑；最后的参与者是本文的唯一作者。',
-'captcha-badlogin' => '請輸入以下數學算式的答案([[Special:Captcha/help|更多資訊]])：',
-'captcha-create' => '請輸入以下數學算式的答案([[Special:Captcha/help|更多資訊]])：',
 'captcha-createaccount-fail' => '验证码错误或丢失',
 'captcha-createaccount' => '为了防止程序自动添加垃圾链接。你需要输入以下图片中显示的文字才能注册帐户：<br />([[Special:Captcha/help|这是什么？]])',
 'captchahelp-text' => '象本站一样，对公众开放编辑的站点经常被垃圾链接骚扰。那些人使用自动化垃圾程序将他们的链接张贴到很多站点。虽然这些链接可以被清除，但是这些东西确实令人十分讨厌。
@@ -144,29 +142,7 @@ $1',
 'createarticle' => '创建新条目',
 'created' => '已被创建',
 'createpage' => '新增文章',
-'createpage_alternate_creation' => '原始編輯模式請點選 $1',
 'createpage_button' => '新增文章',
-'createpage_button_caption' => '發布！',
-'createpage_caption' => '分類：',
-'createpage_categories' => '分類：',
-'createpage_categories_help' => '將文章加註分類，可加強這個站上的文章的組織。你可以在下方挑選一個適當的分類，或是直接輸入一個新的分類。',
-'createpage_enter_text' => '輸入文字',
-'createpage_here' => '這裡',
-'createpage_hide_cloud' => '[隱藏分類雲]',
-'createpage_show_cloud' => '[顯示分類雲]',
-'createpage_title' => '發表新文章',
-'createpage_title_caption' => '文章標題',
-'createwiki' => '申請wiki',
-'createwiki_welcomebody' => '嗨 $2, 
-
-歡迎加入Wikia社群。相信很快能看到你對此站的貢獻。
-
-如果您在使用上有任何問題，可先查閱說明頁面<http://help.wikia.com> (英文)，或是查看中文的[[w:c:zh:Category:中文說明|使用說明]]
-
-祝您使用快
-
-Wikia 社群團隊',
-'createwikipagetitle' => '申请wiki',
 'creditspage' => '页面作者',
 'currentevents-url' => 'Portal:新聞動態',
 'currentrevisionlink' => '查看当前版本',
@@ -206,108 +182,7 @@ MySQL返回错误“$3: $4”。',
 'edit' => '编辑',
 'editcomment' => '编辑的评论为：“<i>$1</i>”。',
 'editcount' => '編輯統計',
-'editingTips' => '= 如何改變字體格式 =
-你可以利用mediawiki的語法改變字體格式，或是利用HTML
-
-<nowiki>\'\'斜體\'\'</nowiki> => \'\'斜體\'\'
-
-<nowiki>\'\'\'粗體\'\'\'</nowiki> => \'\'\'粗體\'\'\'
-
-<nowiki>\'\'\'\'\'粗體和斜體\'\'\'\'\'</nowiki> => \'\'\'\'\'粗體和斜體\'\'\'\'\'　
-
------
-<nowiki><s>刪去</s></nowiki> => <s>刪去</s>
-
-<br />
-<nowiki><u>底線</u></nowiki> => <u>底線</u>
-
-<br />
-<nowiki><span style="color:red;">紅字</span></nowiki> => <span style="color:red;">紅字</span>
-
-= 連結 =
-利用兩個或是一個中括號，可產生連結的效果
-
-<br />
-\'\'\'基本內部鏈結:\'\'\'<br />
-<nowiki>[[文章名]]</nowiki>
-
-<br />
-\'\'\'改變鏈結字樣:\'\'\'<br />
-<nowiki>[[文章名|你喜歡的字樣]]</nowiki>
-
-<br />
-----
-
-<br />
-\'\'\'連到外部網頁:\'\'\'<br />
-<nowiki>[http://www.example.com]</nowiki>
-
-<br />
-\'\'\'改變外部鏈結字樣:\'\'\'
-
-<nowiki>[http://www.example.com 你喜歡的字樣]</nowiki> 
-
-= 如何增加標題 =
-使用 =(等號)就可以幫你建立次標題和三級標題。前後一個等號的標題等級和頁面名稱等級相同。
-
-<nowiki>==二級標題==</nowiki>
-
-<nowiki>===三級標題===</nowiki>
-
-<nowiki>====四級標題====</nowiki>
-
-
-= 如何把內容分項顯示 =
-
-在句子的開頭使用\'\'\':\'\'\'就可以達到開頭縮排書寫的效果。
-
-
-<nowiki>:一個縮排</nowiki><br>
-<nowiki>:一個縮排</nowiki><br>
-<nowiki>:: 兩個縮排</nowiki><br />
-<nowiki>::: 更多縮排</nowiki>
-
-
-<nowiki>*第一項</nowiki><br>
-<nowiki>*第二項</nowiki><br>
-<nowiki>**第二項的再分項</nowiki><br>
-<nowiki>*第三項</nowiki><br>
-
-
-<nowiki>#第一點</nowiki><br>
-<nowiki>#第二點</nowiki><br>
-<nowiki>##2.1點</nowiki><br>
-<nowiki>#第三點</nowiki><br>
-
-
-= 如何加入圖片 =
-如入圖片的方法和加入鏈結的方法相似。
-
-<br />
-<nowiki>[[Image:圖片名.jpg]]</nowiki>
-
-<br />
-\'\'\'背景說明(滑鼠移到圖片上時顯示)\'\'\'<br />
-<nowiki>[[Image:Name.jpg|說明文字]]</nowiki>
-
-<br />
-\'\'\'加入圖片註解\'\'\'<br />
-<nowiki>[[Image:Name.jpg|thumb|]]</nowiki>
-
-<br />
-\'\'\'改變圖片大小\'\'\'<br />
-<nowiki>[[Image:Name.jpg|200px|]]</nowiki>
-
-<br />
-\'\'\'改變圖片位置\'\'\'<br />
-<nowiki>[[Image:Name.jpg|right|]]</nowiki>
-
-<br />
-你可以用 "|" 結合上述功能，別忘了，在最後一個 "|" 後面是加註文字。',
 'editinginterface' => '\'\'\'警告：\'\'\'你正在编辑的页面将用于软件的界面显示。更改本页面将影响其他用户的界面显示。',
-'editingtips_enter_widescreen' => '放大編輯',
-'editingtips_exit_widescreen' => '退出放大編輯',
-'editingtips_hide' => '隱藏編輯小技巧',
 'edittools' => '<!-- Text here will be shown below edit and upload forms. -->
 <div style="margin-top: 2em; margin-bottom:1em;">以下為幾個常用的符號，點選你想要的符號後，它會立即出現在編輯框中你所指定的位置。</div>
 
@@ -527,8 +402,6 @@ $NEWPAGE
 'exif-gpsimgdirection' => '图像方位',
 'exif-gpsimgdirectionref' => '图像方位参照',
 'export' => '導出頁面',
-'fancycaptcha-badlogin' => '請輸入認證碼([[Special:Captcha/help|更多資訊]])：',
-'fancycaptcha-createaccount' => '請輸入認證碼([[Special:Captcha/help|更多資訊]])：',
 'filedesc' => '简述',
 'footer_1.5' => '快来编修本页',
 'footer_1' => '想改善 $1 ?',
@@ -566,9 +439,6 @@ $NEWPAGE
 'mostlinkedcategories' => '最多被使用的分類',
 'mostrevisions' => '最多修訂的文章',
 'move' => '移動',
-'multipleupload-text' => '大量上傳檔案！
-
-使用\'\'\'瀏覽\'\'\'按鈕選擇要上傳檔案的位置。可同時上傳1至$1個檔案。 你可以選擇輸入\'\'\'目標檔案名\'\'\'和\'\'\'檔案描述\'\'\'來簡述此檔案。不當的檔案將可能被刪除，詳見[[{{MediaWiki:Multipleupload-page}}|檔案刪除政策]]。',
 'my_profile' => '个人档案',
 'mypreferences' => '用戶设定',
 'myprofile' => '个人档案',
@@ -584,20 +454,6 @@ $NEWPAGE
 * 如果以此為題的文章曾經存在，請查尋\'\'\'<span class="plainlinks">[{{fullurl:Special:Log/delete|page={{FULLPAGENAMEE}}}} 刪除記錄]</span>\'\'\'.',
 'nstab-main' => '正文',
 'permalink' => '固定链结',
-'pollNoVote' => '請於下方投票',
-'pollPercentVotes' => '$1%',
-'pollSubmitting' => '正在處理您的投票，請稍候。',
-'pollVoteAdd' => '您的投票已計入',
-'pollVoteError' => '投票過程發生問題，請再試一次',
-'pollVoteUpdate' => '你的投票已更新',
-'pr_mailer_notice' => '您在個人資料中所留下的電子郵件，將會自動顯示在「發信人」的欄位中，所以收件人能直接回覆您的信件。',
-'pr_table_problem_id' => '問題編號',
-'pr_table_problem_type' => '問題類型',
-'pr_table_reporter_name' => '回報人',
-'pr_table_status' => '狀態',
-'pr_total_number' => '回報總數',
-'pr_view_all' => '顯示所有回報',
-'pr_what_problem_change' => '更改問題類型',
 'prefixindex' => '前缀索引',
 'prefs-help-email' => '*<strong>电子邮件</strong>（可选）：让他人通过网站在不知道您的电子邮件地址的情况下通过电子邮件与您联络，以及通过电子邮件取得遗忘的密码。',
 'protectedpages' => '被保護的頁面',
@@ -663,6 +519,150 @@ $NEWPAGE
 'uncategorizedpages' => '待分類頁面',
 'unwatch' => '取消監視',
 'uploadbtn' => '上传档案',
-'uploadtext-ext' => 'Wikia支援的所有延申套件請見[[{{ns:Special}}:Version|版本頁]]。',
 'widgets' => 'Widgets列表',
+'captcha-badlogin' => '請輸入以下數學算式的答案([[Special:Captcha/help|更多資訊]])：',
+'captcha-create' => '請輸入以下數學算式的答案([[Special:Captcha/help|更多資訊]])：',
+'createpage_alternate_creation' => '原始編輯模式請點選 $1',
+'createpage_button_caption' => '發布！',
+'createpage_caption' => '分類：',
+'createpage_categories' => '分類：',
+'createpage_categories_help' => '將文章加註分類，可加強這個站上的文章的組織。你可以在下方挑選一個適當的分類，或是直接輸入一個新的分類。',
+'createpage_enter_text' => '輸入文字',
+'createpage_here' => '這裡',
+'createpage_hide_cloud' => '[隱藏分類雲]',
+'createpage_show_cloud' => '[顯示分類雲]',
+'createpage_title' => '發表新文章',
+'createpage_title_caption' => '文章標題',
+'createwiki' => '申請wiki',
+'createwiki_welcomebody' => '嗨 $2, 
+
+歡迎加入Wikia社群。相信很快能看到你對此站的貢獻。
+
+如果您在使用上有任何問題，可先查閱說明頁面<http://help.wikia.com> (英文)，或是查看中文的[[w:c:zh:Category:中文說明|使用說明]]
+
+祝您使用快
+
+Wikia 社群團隊',
+'createwikipagetitle' => '申请wiki',
+'editingTips' => '= 如何改變字體格式 =
+你可以利用mediawiki的語法改變字體格式，或是利用HTML
+
+<nowiki>\'\'斜體\'\'</nowiki> => \'\'斜體\'\'
+
+<nowiki>\'\'\'粗體\'\'\'</nowiki> => \'\'\'粗體\'\'\'
+
+<nowiki>\'\'\'\'\'粗體和斜體\'\'\'\'\'</nowiki> => \'\'\'\'\'粗體和斜體\'\'\'\'\'　
+
+-----
+<nowiki><s>刪去</s></nowiki> => <s>刪去</s>
+
+<br />
+<nowiki><u>底線</u></nowiki> => <u>底線</u>
+
+<br />
+<nowiki><span style="color:red;">紅字</span></nowiki> => <span style="color:red;">紅字</span>
+
+= 連結 =
+利用兩個或是一個中括號，可產生連結的效果
+
+<br />
+\'\'\'基本內部鏈結:\'\'\'<br />
+<nowiki>[[文章名]]</nowiki>
+
+<br />
+\'\'\'改變鏈結字樣:\'\'\'<br />
+<nowiki>[[文章名|你喜歡的字樣]]</nowiki>
+
+<br />
+----
+
+<br />
+\'\'\'連到外部網頁:\'\'\'<br />
+<nowiki>[http://www.example.com]</nowiki>
+
+<br />
+\'\'\'改變外部鏈結字樣:\'\'\'
+
+<nowiki>[http://www.example.com 你喜歡的字樣]</nowiki> 
+
+= 如何增加標題 =
+使用 =(等號)就可以幫你建立次標題和三級標題。前後一個等號的標題等級和頁面名稱等級相同。
+
+<nowiki>==二級標題==</nowiki>
+
+<nowiki>===三級標題===</nowiki>
+
+<nowiki>====四級標題====</nowiki>
+
+
+= 如何把內容分項顯示 =
+
+在句子的開頭使用\'\'\':\'\'\'就可以達到開頭縮排書寫的效果。
+
+
+<nowiki>:一個縮排</nowiki><br>
+<nowiki>:一個縮排</nowiki><br>
+<nowiki>:: 兩個縮排</nowiki><br />
+<nowiki>::: 更多縮排</nowiki>
+
+
+<nowiki>*第一項</nowiki><br>
+<nowiki>*第二項</nowiki><br>
+<nowiki>**第二項的再分項</nowiki><br>
+<nowiki>*第三項</nowiki><br>
+
+
+<nowiki>#第一點</nowiki><br>
+<nowiki>#第二點</nowiki><br>
+<nowiki>##2.1點</nowiki><br>
+<nowiki>#第三點</nowiki><br>
+
+
+= 如何加入圖片 =
+如入圖片的方法和加入鏈結的方法相似。
+
+<br />
+<nowiki>[[Image:圖片名.jpg]]</nowiki>
+
+<br />
+\'\'\'背景說明(滑鼠移到圖片上時顯示)\'\'\'<br />
+<nowiki>[[Image:Name.jpg|說明文字]]</nowiki>
+
+<br />
+\'\'\'加入圖片註解\'\'\'<br />
+<nowiki>[[Image:Name.jpg|thumb|]]</nowiki>
+
+<br />
+\'\'\'改變圖片大小\'\'\'<br />
+<nowiki>[[Image:Name.jpg|200px|]]</nowiki>
+
+<br />
+\'\'\'改變圖片位置\'\'\'<br />
+<nowiki>[[Image:Name.jpg|right|]]</nowiki>
+
+<br />
+你可以用 "|" 結合上述功能，別忘了，在最後一個 "|" 後面是加註文字。',
+'editingtips_enter_widescreen' => '放大編輯',
+'editingtips_exit_widescreen' => '退出放大編輯',
+'editingtips_hide' => '隱藏編輯小技巧',
+'fancycaptcha-badlogin' => '請輸入認證碼([[Special:Captcha/help|更多資訊]])：',
+'fancycaptcha-createaccount' => '請輸入認證碼([[Special:Captcha/help|更多資訊]])：',
+'multipleupload-text' => '大量上傳檔案！
+
+使用\'\'\'瀏覽\'\'\'按鈕選擇要上傳檔案的位置。可同時上傳1至$1個檔案。 你可以選擇輸入\'\'\'目標檔案名\'\'\'和\'\'\'檔案描述\'\'\'來簡述此檔案。不當的檔案將可能被刪除，詳見[[{{MediaWiki:Multipleupload-page}}|檔案刪除政策]]。',
+'pollNoVote' => '請於下方投票',
+'pollPercentVotes' => '$1%',
+'pollSubmitting' => '正在處理您的投票，請稍候。',
+'pollVoteAdd' => '您的投票已計入',
+'pollVoteError' => '投票過程發生問題，請再試一次',
+'pollVoteUpdate' => '你的投票已更新',
+'pr_mailer_notice' => '您在個人資料中所留下的電子郵件，將會自動顯示在「發信人」的欄位中，所以收件人能直接回覆您的信件。',
+'pr_table_problem_id' => '問題編號',
+'pr_table_problem_type' => '問題類型',
+'pr_table_reporter_name' => '回報人',
+'pr_table_status' => '狀態',
+'pr_total_number' => '回報總數',
+'pr_view_all' => '顯示所有回報',
+'pr_what_problem_change' => '更改問題類型',
+'uploadtext-ext' => 'Wikia支援的所有延申套件請見[[{{ns:Special}}:Version|版本頁]]。',
 ) );

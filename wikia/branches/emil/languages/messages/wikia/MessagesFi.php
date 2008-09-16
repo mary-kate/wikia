@@ -1,6 +1,41 @@
 <?php
 
 $messages = array_merge( $messages, array(
+'login_greeting' => 'Tervetuloa {{GRAMMAR:illative|{{SITENAME}}}}, [[User:$1|$1]]!',
+'create_an_account' => 'Luo tunnus',
+'login_as_another' => 'Kirjaudu sisään toisena käyttäjänä',
+'not_you' => 'Eikö tämä ole tunnuksesi?',
+'this_wiki' => 'Tämä wiki',
+'home' => 'Etusivu',
+'forum' => 'Foorumi',
+'helpfaq' => 'Ohje ja UKK',
+'createpage' => 'Luo uusi artikkeli',
+'joinnow' => 'Liity nyt',
+'most_popular_articles' => 'Kaikkein suosituimmat artikkelit',
+'expert_tools' => 'experttien työkalut',
+'this_article' => 'Tämä artikkeli',
+'this_page' => 'Tämä sivu',
+'edit_contribute' => 'Muokkaa / Lisää tietoa',
+'discuss' => 'Keskustele',
+'share_it' => 'Jaa:',
+'my_stuff' => 'Omat jutut',
+'choose_reason' => 'Valitse syy',
+'top_five' => 'Viisi parhainta',
+'most_popular' => 'Suosituimmat artikkelit',
+'most_visited' => 'Käydyimmät',
+'newly_changed' => 'Äskettäin muutetut',
+'highest_ratings' => 'Korkeimmat arvosanat',
+'most_emailed' => 'Eniten lähetetyt',
+'rate_it' => 'Arvostele:',
+'unrate_it' => 'Poista arvosteluni',
+'use_old_formatting' => 'Vaihda Monobook-ulkoasuun',
+'use_new_formatting' => 'Kokeile uutta ulkoasua',
+'review_reason_1' => 'Arvostelun syy 1',
+'review_reason_2' => 'Arvostelun syy 2',
+'review_reason_3' => 'Arvostelun syy 3',
+'review_reason_4' => 'Arvostelun syy 4',
+'review_reason_5' => 'Arvostelun syy 5',
+'preferences' => 'Asetukset',
 'activeusers' => 'Aktiivisten käyttäjien lista',
 'add_comment' => 'Jätä viesti',
 'addresswarnings' => 'Ole hyvä ja ota huomioon kaikki varoitukset ennen kuin uudelleenlataat tiedostoja.',
@@ -118,7 +153,6 @@ Paina selaimesi \'takaisin\'-nappia palataksesi sivunmuokkaustilaan.',
 'contris' => 'Muokkaukset',
 'contris_s' => 'Muokkaukset',
 'createarticle' => 'Luo sivu',
-'createpage' => 'Luo uusi artikkeli',
 'createpage_alternate_creation' => 'tai paina $1 käyttääksesi alkuperäistä editoria',
 'createpage_button' => 'Luo uusi artikkeli',
 'createpage_button_caption' => 'Luo artikkeli',
@@ -145,110 +179,6 @@ Paina selaimesi \'takaisin\'-nappia palataksesi sivunmuokkaustilaan.',
 'editcount_submit' => 'Lähetä',
 'editcount_total' => 'Yhteensä',
 'editcount_username' => 'Käyttäjä:',
-'editingTips' => '=Kuinka muotoilla tekstiä=
-Voit muotoilla tekstiä \'wikikielellä\' tai HTML:n avulla.
-
-<br />
-<span style="font-family: courier"><nowiki>\'\'kursivoitu\'\'</nowiki></span> => \'\'kursivoitu\'\'
-
-<br />
-<span style="font-family: courier"><nowiki>\'\'\'lihavoitu\'\'\'</nowiki></span> => \'\'\'lihavoitu\'\'\'
-
-<br />
-<span style="font-family: courier"><nowiki>\'\'\'\'\'kursivoitu ja lihavoitu\'\'\'\'\'</nowiki></span> => \'\'\'\'\'kursivoitu ja lihavoitu\'\'\'\'\'
-
-----
-
-<br />
-<nowiki><s>yliviivattu</s></nowiki> => <s>yliviivattu</s>
-
-<br />
-<nowiki><u>alleviivattu</u></nowiki> => <u>alleviivattu</u>
-
-<br />
-<nowiki><span style="color:red;">punaista tekstiä</span></nowiki> => <span style="color:red;">punaista tekstiä</span>
-
-=Kuinka tehdä linkkejä=
-Linkkejä luodaan yhden tai kahden hakasulkuparin avulla.
-
-<br />
-\'\'\'Yksinkertainen sisäinen linkki:\'\'\'<br />
-<nowiki>[[Artikkelin nimi]]</nowiki>
-
-<br />
-\'\'\'Sisäinen linkki linkkitekstin kera:\'\'\'<br />
-<nowiki>[[Artikkelin nimi|teksti, jonka haluat]]</nowiki>
-
-<br />
-----
-
-<br />
-\'\'\'Numeroitu ulkoinen linkki:\'\'\'<br />
-<nowiki>[http://www.esimerkki.com]</nowiki>
-
-<br />
-\'\'\'Ulkoinen linkki linkkitekstin kera:\'\'\'
-
-<nowiki>[http://www.esimerkki.com linkin teksti]</nowiki>
-
-=Kuinka lisätä otsikoita=
-Otsikot käyttävät yhtäsuuruusmerkkejä.  Mitä enemmän "="-merkkejä, sitä pienempi otsikko.
-Tason 1 otsikko on varattu sivun otsikolle.
-
-<br />
-<span style="font-size: 1.6em"><nowiki>==Otsikko 2==</nowiki></span>
-
-<br />
-<span style="font-size: 1.3em"><nowiki>===Otsikko 3===</nowiki></span>
-
-<br />
-<nowiki>====Otsikko 4====</nowiki>
-
-=Kuinka sisentää tekstiä=
-Sisennykset voivat olla yksinkertaisia, asteriskein varustettuja tai numeroituja.
-
-<br />
-<nowiki>: sisennys</nowiki><br />
-<nowiki>: sisennys</nowiki><br />
-<nowiki>:: lisää sisennystä</nowiki><br />
-<nowiki>::: vieläkin enemmän sisennystä</nowiki>
-
-<br />
-<nowiki>* asteriski</nowiki><br />
-<nowiki>* asteriski</nowiki><br />
-<nowiki>** ala-asteriski</nowiki><br />
-<nowiki>* asteriski</nowiki>
-
-<br />
-<nowiki># numeroitu lista</nowiki><br />
-<nowiki># numeroitu lista</nowiki><br />
-<nowiki>## ala-lista</nowiki><br />
-<nowiki># numeroitu lista</nowiki>
-
-=Kuinka lisätä kuvia=
-Kuvia lisätään ja muotoillaan samaan tapaan kuin linkkejäkin.
-
-<br />
-<nowiki>[[Kuva:Nimi.jpg]]</nowiki>
-
-<br />
-\'\'\'Lisätäksesi kuvatekstiä\'\'\'<br />
-<nowiki>[[Kuva:Nimi.jpg|kuvateksti]]</nowiki>
-
-<br />
-\'\'\'Tehdäksesi pienoiskuvan\'\'\'<br />
-<nowiki>[[Kuva:Nimi.jpg|thumb|]]</nowiki>
-
-<br />
-\'\'\'Määritelläksesi kuvan koon\'\'\'<br />
-<nowiki>[[Kuva:Nimi.jpg|200px|]]</nowiki>
-
-<br />
-\'\'\'Sijoitellaksesi kuvan\'\'\'<br />
-<nowiki>[[Kuva:Nimi.jpg|right|]]</nowiki>
-
-<br />
-Voit yhdistää näitä määritteitä lisäämällä pystyviivan "|" niiden väliin. Muista, että kaikki viimeisen pystyviivan jälkeen on tekstiä.',
 'footer_1.5' => 'muokkaamalla tätä sivua',
 'footer_1' => 'Paranna Wikiaa',
 'footer_2' => 'Keskustele tästä artikkelista',
@@ -317,7 +247,6 @@ Voit yhdistää näitä määritteitä lisäämällä pystyviivan "|" niiden vä
 'linksearch-ns' => 'Nimiavaruus:',
 'linksearch-ok' => 'Hae',
 'linksearch-pat' => 'Hakukaava:',
-'login_greeting' => 'Tervetuloa {{GRAMMAR:illative|{{SITENAME}}}}, [[User:$1|$1]]!',
 'makebureaucratok' => '<b>Käyttäjä "$1" on nyt byrokraatti</b>',
 'manage_widgets' => 'Hallinnoi vekottimia',
 'messagebar_mess' => 'Tiesitkö, että voit <a href="$1">muokata tätä sivua</a> tai <a href="$2">luoda uuden</a>? <a href="$3">Ota selvää</a> miten tämä toimii.',
@@ -495,4 +424,108 @@ Ohjelmistobugeista voi raportoida foorumeilla. Tämän lomakkeen kautta tehdyt r
 'wt_shoutbox_initial_message' => 'Hei... tervetuloa chattiin!',
 'wysiwygcaption' => 'Visuaalinen muokkaaminen',
 'yourmail' => 'Sähköpostiosoitteesi',
+'editingTips' => '=Kuinka muotoilla tekstiä=
+Voit muotoilla tekstiä \'wikikielellä\' tai HTML:n avulla.
+
+<br />
+<span style="font-family: courier"><nowiki>\'\'kursivoitu\'\'</nowiki></span> => \'\'kursivoitu\'\'
+
+<br />
+<span style="font-family: courier"><nowiki>\'\'\'lihavoitu\'\'\'</nowiki></span> => \'\'\'lihavoitu\'\'\'
+
+<br />
+<span style="font-family: courier"><nowiki>\'\'\'\'\'kursivoitu ja lihavoitu\'\'\'\'\'</nowiki></span> => \'\'\'\'\'kursivoitu ja lihavoitu\'\'\'\'\'
+
+----
+
+<br />
+<nowiki><s>yliviivattu</s></nowiki> => <s>yliviivattu</s>
+
+<br />
+<nowiki><u>alleviivattu</u></nowiki> => <u>alleviivattu</u>
+
+<br />
+<nowiki><span style="color:red;">punaista tekstiä</span></nowiki> => <span style="color:red;">punaista tekstiä</span>
+
+=Kuinka tehdä linkkejä=
+Linkkejä luodaan yhden tai kahden hakasulkuparin avulla.
+
+<br />
+\'\'\'Yksinkertainen sisäinen linkki:\'\'\'<br />
+<nowiki>[[Artikkelin nimi]]</nowiki>
+
+<br />
+\'\'\'Sisäinen linkki linkkitekstin kera:\'\'\'<br />
+<nowiki>[[Artikkelin nimi|teksti, jonka haluat]]</nowiki>
+
+<br />
+----
+
+<br />
+\'\'\'Numeroitu ulkoinen linkki:\'\'\'<br />
+<nowiki>[http://www.esimerkki.com]</nowiki>
+
+<br />
+\'\'\'Ulkoinen linkki linkkitekstin kera:\'\'\'
+
+<nowiki>[http://www.esimerkki.com linkin teksti]</nowiki>
+
+=Kuinka lisätä otsikoita=
+Otsikot käyttävät yhtäsuuruusmerkkejä.  Mitä enemmän "="-merkkejä, sitä pienempi otsikko.
+Tason 1 otsikko on varattu sivun otsikolle.
+
+<br />
+<span style="font-size: 1.6em"><nowiki>==Otsikko 2==</nowiki></span>
+
+<br />
+<span style="font-size: 1.3em"><nowiki>===Otsikko 3===</nowiki></span>
+
+<br />
+<nowiki>====Otsikko 4====</nowiki>
+
+=Kuinka sisentää tekstiä=
+Sisennykset voivat olla yksinkertaisia, asteriskein varustettuja tai numeroituja.
+
+<br />
+<nowiki>: sisennys</nowiki><br />
+<nowiki>: sisennys</nowiki><br />
+<nowiki>:: lisää sisennystä</nowiki><br />
+<nowiki>::: vieläkin enemmän sisennystä</nowiki>
+
+<br />
+<nowiki>* asteriski</nowiki><br />
+<nowiki>* asteriski</nowiki><br />
+<nowiki>** ala-asteriski</nowiki><br />
+<nowiki>* asteriski</nowiki>
+
+<br />
+<nowiki># numeroitu lista</nowiki><br />
+<nowiki># numeroitu lista</nowiki><br />
+<nowiki>## ala-lista</nowiki><br />
+<nowiki># numeroitu lista</nowiki>
+
+=Kuinka lisätä kuvia=
+Kuvia lisätään ja muotoillaan samaan tapaan kuin linkkejäkin.
+
+<br />
+<nowiki>[[Kuva:Nimi.jpg]]</nowiki>
+
+<br />
+\'\'\'Lisätäksesi kuvatekstiä\'\'\'<br />
+<nowiki>[[Kuva:Nimi.jpg|kuvateksti]]</nowiki>
+
+<br />
+\'\'\'Tehdäksesi pienoiskuvan\'\'\'<br />
+<nowiki>[[Kuva:Nimi.jpg|thumb|]]</nowiki>
+
+<br />
+\'\'\'Määritelläksesi kuvan koon\'\'\'<br />
+<nowiki>[[Kuva:Nimi.jpg|200px|]]</nowiki>
+
+<br />
+\'\'\'Sijoitellaksesi kuvan\'\'\'<br />
+<nowiki>[[Kuva:Nimi.jpg|right|]]</nowiki>
+
+<br />
+Voit yhdistää näitä määritteitä lisäämällä pystyviivan "|" niiden väliin. Muista, että kaikki viimeisen pystyviivan jälkeen on tekstiä.',
 ) );

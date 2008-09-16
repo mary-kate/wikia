@@ -1,6 +1,7 @@
 <?php
 
 $messages = array_merge( $messages, array(
+'login_greeting' => 'Vítejte ve Wikii, [[User:$1|$1]]!',
 'editingTips' => '=Jak formátovat text=
 Text můžete formátovat pomocí \'wikiznaček\' nebo HTML.
 

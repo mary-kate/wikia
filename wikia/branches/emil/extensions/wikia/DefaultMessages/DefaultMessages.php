@@ -11,7 +11,7 @@ if( $wgDefaultMessagesDB == $wgDBname ) {
 }
 
 class DefaultMessages {
-	const maxRevId	= 7420;
+	const maxRevId	= 7428;
 	const expire	= 3600;
 
 	private static function memcKey() {
