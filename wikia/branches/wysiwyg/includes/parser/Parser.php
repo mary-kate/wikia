@@ -1742,7 +1742,9 @@ class Parser
 				if ( $ns == NS_CATEGORY ) {
 					wfProfileIn( "$fname-category" );
 					$s = rtrim($s . "\n"); # bug 87
-
+					if ($FCKparseEnable) {
+						$refId = wfFCKSetRefId('category', $text, $link, '', $wasblank, $noforce);
+					}
 					if ( $wasblank ) {
 						$sortkey = $this->getDefaultSort();
 					} else {
@@ -1757,7 +1759,11 @@ class Parser
 					 * Strip the whitespace Category links produce, see bug 87
 					 * @todo We might want to use trim($tmp, "\n") here.
 					 */
-					$s .= trim($prefix . $trail, "\n") == '' ? '': $prefix . $trail;
+					if ($FCKparseEnable) {
+						$s .= $prefix . "<span refId=\"$refId\"></span>" . $trail;
+					} else {
+						$s .= trim($prefix . $trail, "\n") == '' ? '': $prefix . $trail;
+					}
 
 					wfProfileOut( "$fname-category" );
 					continue;
