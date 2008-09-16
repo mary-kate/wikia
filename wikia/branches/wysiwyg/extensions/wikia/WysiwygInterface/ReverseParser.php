@@ -403,8 +403,16 @@ class ReverseParser
 			$text = '<nowiki>:</nowiki>' . substr($text, 1);
 		}
 
-		// 4. wrap magic words {{ }} using <nowiki>
+		// 4. space at the beginning of the line
+		if ($text{0} == ' ') {
+			$text = '<nowiki> </nowiki>' . substr($text, 1);
+		}
+
+		// 5. wrap magic words {{ }} using <nowiki>
 		$text = preg_replace("/{{([^}]+)}}/", '<nowiki>{{$1}}</nowiki>', $text);
+
+		// 6. wrap magic words [[ ]] using <nowiki>
+		$text = preg_replace("/(\[+)([^}]+)(\]+)/", '<nowiki>$1$2$3</nowiki>', $text);
 
 		return $text;
 	}
