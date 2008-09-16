@@ -308,6 +308,11 @@ class ReverseParser
 				// <nowiki></nowiki>
 				case 'nowiki':
 					return "<nowiki>{$node->textContent}</nowiki>";
+
+				// [[Category:foo]]
+				case 'category':
+					$pipe = ($refData['description'] != '') ? '|'.$refData['description'] : '';
+					return "\n[[{$refData['href']}{$pipe}]]{$refData['trial']}";
 			}
 		}
 
