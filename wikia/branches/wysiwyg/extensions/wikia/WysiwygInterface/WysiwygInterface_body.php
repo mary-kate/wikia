@@ -24,6 +24,14 @@ class WysiwygParser extends Parser {
 		return $text;
 	}
 
+	function __construct( $conf = array() ) {
+		parent::__construct($conf);
+
+		// load hooks from $wgparser
+		global $wgParser;
+		$this->mTagHooks = & $wgParser->mTagHooks;
+	}
+
 }
 
 class WysiwygInterface extends SpecialPage {
