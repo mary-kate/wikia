@@ -27,9 +27,10 @@ class WysiwygParser extends Parser {
 	function __construct( $conf = array() ) {
 		parent::__construct($conf);
 
-		// load hooks from $wgparser
+		// load hooks from $wgParser
 		global $wgParser;
 		$this->mTagHooks = & $wgParser->mTagHooks;
+		$this->mStripList = & $wgParser->mStripList;
 	}
 
 }
