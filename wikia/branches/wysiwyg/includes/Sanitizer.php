@@ -486,7 +486,7 @@ class Sanitizer {
 					if ( ! $badtag ) {
 						$rest = str_replace( '>', '&gt;', $rest );
 						$close = ( $brace == '/>' && !$slash ) ? ' /' : '';
-						$wasHtml = !$slash ? ' wasHtml="1"' : '';
+						$wasHtml = !$slash && strpos($newparams, ' refid="') === false ? ' wasHtml="1"' : '';
 						$text .= "<$slash$t$wasHtml$newparams$close>$rest";
 						continue;
 					}
@@ -1138,7 +1138,7 @@ class Sanitizer {
 			# 7.5.4
 			'div'        => $block,
 			'center'     => $common, # deprecated
-			'span'       => $block, # ??
+			'span'       => array_merge( $block, array( 'refid' ) ),	//$block, # ??
 
 			# 7.5.5
 			'h1'         => $block,
