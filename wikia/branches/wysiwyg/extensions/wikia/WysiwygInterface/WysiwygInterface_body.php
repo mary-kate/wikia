@@ -111,7 +111,7 @@ class WysiwygInterface extends SpecialPage {
 			require(dirname(__FILE__).'/ReverseParser.php');
 			$reverseParser = new ReverseParser();
 
-			$wgOut->addHtml('$FCKmetaData: <br />');
+			$wgOut->addHtml('<h5>$FCKmetaData</h5>');
 			$wgOut->addHtml('<pre>'.print_r($FCKmetaData, true).'</pre>');
 
 			$wikitext_parsed = $reverseParser->parse($html, $FCKmetaData);
@@ -125,6 +125,17 @@ class WysiwygInterface extends SpecialPage {
 			// parse
 			$parsedOld = $parser->parse($wikitext, $wgTitle, $options)->getText();
 			$parsedNew = $parser->parse($wikitext_parsed, $wgTitle, $options)->getText();
+
+			// diff
+			if ($wikitext == $wikitext_parsed) {
+				$diff = '&lt;empty&gt;';
+			}
+			else {
+				$diffEngine = new DifferenceEngine;
+				$diffEngine->showDiffStyle();
+				$diffBody = $diffEngine->generateDiffBody( $wikitext, $wikitext_parsed );
+				$diff = DifferenceEngine::addHeader( $diffBody, "<strong>Wikitext</strong>", "<strong>Parsed from HTML</strong>" );
+			}
 
 			// output
 			// 1. wikimarkup
@@ -150,6 +161,9 @@ class WysiwygInterface extends SpecialPage {
 
 			$wgOut->addHTML('<h3>Back to wikimarkup</h3>');
 			$wgOut->addHTML('<pre>' . htmlspecialchars($wikitext_parsed) . '</pre>');
+
+			$wgOut->addHTML('<h3>Wikitext diff</h3>');
+			$wgOut->addHTML( $diff );	
 
 			$wgOut->addHTML('<h3>Visual comparison</h3>');
 			$wgOut->addHTML('<table style="width:100%"><colgroup><col width="50%" /><col width="50%" /></colgroup>');
