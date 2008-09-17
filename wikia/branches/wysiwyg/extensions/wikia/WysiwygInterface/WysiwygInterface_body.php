@@ -115,6 +115,34 @@ class WysiwygInterface extends SpecialPage {
 			$wgOut->addHtml('<h5>$FCKmetaData</h5>');
 			$wgOut->addHtml('<pre>'.print_r($FCKmetaData, true).'</pre>');
 
+			$html = 
+"<ul>
+<li>a
+<ol>
+<li>b</li>
+<li>c</li>
+<li>d</li>
+</ol>
+<ul>
+<li>e</li>
+</ul>
+</li>
+<li>dfasdfsf</li>
+</ul>
+<ol>
+<li>2323123</li>
+<li>1423</li>
+<li>1</li>
+</ol>
+<ul>
+<li>3123 end</li>
+</ul>
+<p>test</p>
+<ul>
+<li>asdasd</li>
+<li>asda</li>
+</ul>";
+
 			$wikitext_parsed = $reverseParser->parse($html, $FCKmetaData);
 
 			// check wysiwigability ;)
