@@ -3341,7 +3341,9 @@ class Parser
 						if ($FCKparseEnable) {
 							$tmp = '';
 							$refId = wfFCKSetRefId('hook', $tmp, '', '', false, true, true);
-							$output = "<span refId=\"$refId\">&lt;{$name}{$attrText}&gt;{$content}&lt;/{$name}&gt;</span>";
+							$output = ($content != '' 
+								? "<span refId=\"$refId\">&lt;{$name}{$attrText}&gt;{$content}&lt;/{$name}&gt;</span>"
+								: "<span refId=\"$refId\">&lt;{$name}{$attrText}/&gt;</span>");
 						} else {
 							$output = call_user_func_array( $this->mTagHooks[$name],
 								array( $content, $attributes, $this ) );
