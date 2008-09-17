@@ -19,7 +19,7 @@
 }
 
 #wpTableMultiEdit div div .createpage_input_file label input,
-#cp-infobox div .createpage_input_file label input{
+#cp-infobox div .createpage_input_file label input {
         position:relative !important;
         font-size:9pt !important;
         line-height:12px !important;
@@ -305,6 +305,10 @@ YWC.TextareaAddToolbar = function (el) {
         YWC.multiEditButtons [el_id] = [] ;
         YWC.multiEditCustomButtons [el_id] = [] ;
         YE.addListener (el.id, 'focus', YWC.showThisBox, {'toolbarId' : el_id }) ;
+	
+        YE.addListener( 'wpTextIncrease' + el_id, 'click', YWC.resizeThisTextarea, {'textareaId' : el_id, 'numRows' : 1 } ) ;
+        YE.addListener( 'wpTextDecrease' + el_id, 'click', YWC.resizeThisTextarea, {'textareaId' : el_id, 'numRows' : -1 } ) ;
+
 	for (var i=0; i < YWC.ToolbarButtons.length; i++) {
 		YWC.addMultiEditButton (YWC.ToolbarButtons[i]['image'], YWC.ToolbarButtons[i]['tip'], YWC.ToolbarButtons[i]['open'], YWC.ToolbarButtons[i]['close'], YWC.ToolbarButtons[i]['sample'], YWC.ToolbarButtons[i]['id'] + el_id, el_id) ;	
 	}	
@@ -398,6 +402,15 @@ YWC.showThisBox = function (e, o) {
 	YD.get ('toolbar' + o.toolbarId).style.display = '' ;
 	YWC.hideOtherBoxes (o.toolbarId) ;
 }
+
+YWC.resizeThisTextarea = function( e, o ) {
+	YE.preventDefault (e) ;
+	var r_textarea = YD.get( 'wpTextboxes' + o.textareaId );
+	if ( !( ( r_textarea.rows < 4 ) && ( o.numRows < 0 ) ) && !( ( r_textarea.rows > 10 ) && ( o.numRows > 0 ) ) ) {
+		r_textarea.rows = r_textarea.rows + o.numRows ;		
+	}
+}
+
 
 YWC.hideOtherBoxes = function (box_id) {
 	for (var i = 0; i < YWC.multiEditTextboxes.length; i++) {
