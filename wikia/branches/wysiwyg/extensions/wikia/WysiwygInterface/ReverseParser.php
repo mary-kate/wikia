@@ -104,6 +104,14 @@ class ReverseParser
 			}
 
 			if ($isListNode) {
+				// fix for different list types on the same level of nesting
+				if ( $node->previousSibling && in_array($node->previousSibling->nodeName, array('ol', 'ul')) && self::$listLevel > 1 ) {
+					$childOutput = "\n" . trim($childOutput);
+				}
+				else {
+					$childOutput = trim($childOutput);
+				}
+
 				self::$listLevel--;
 				self::$listBullets = substr(self::$listBullets, 0, -1);
 			}
@@ -211,7 +219,7 @@ class ReverseParser
 						// lists
 						case 'ul':
 						case 'ol':
-							$output = trim($content) . (self::$listLevel == 0 ? "\n" : '');
+							$output = $content . (self::$listLevel == 0 ? "\n" : '');
 							break;
 
 						case 'dl':
