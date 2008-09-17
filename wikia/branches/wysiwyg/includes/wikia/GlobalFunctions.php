@@ -594,7 +594,7 @@ function wfFCKSetRefId($type, &$text, $link, $trail, $wasblank, $noforce, $retur
 			list($tmpInside, $tmpTrail) = Linker::splitTrail($trail);
 		}
 		$FCKmetaData[$refId] = array('type' => $type, 'href' => ($noforce ? '' : ':') . $link, 'description' => $tmpDescription, 'trial' => $tmpInside);
-		return $refId;
+		return " refid=\"$refId\"";
 	}
 	return '';
 }
@@ -613,7 +613,7 @@ function wfFCKGetRefId(&$text) {
 	global $FCKparseEnable;
 	if ($FCKparseEnable) {
 		preg_match("#\x1([^\x1]+)#", $text, $m);
-		$refId = isset($m[1]) ? " refId=\"{$m[1]}\"" : '';
+		$refId = isset($m[1]) ? " refid=\"{$m[1]}\"" : '';
 		$text = preg_replace("#\x1[^\x1]+\x1#", '', $text);
 		return $refId;
 	}
