@@ -3338,8 +3338,14 @@ class Parser
 						if ( !is_callable( $this->mTagHooks[$name] ) ) {
 							throw new MWException( "Tag hook for $name is not callable\n" );
 						}
-						$output = call_user_func_array( $this->mTagHooks[$name],
-							array( $content, $attributes, $this ) );
+						if ($FCKparseEnable) {
+							$tmp = '';
+							$refId = wfFCKSetRefId('hook', $tmp, '', '', false, true, true);
+							$output = "<span refId=\"$refId\">&lt;{$name}{$attrText}&gt;{$content}&lt;/{$name}&gt;</span>";
+						} else {
+							$output = call_user_func_array( $this->mTagHooks[$name],
+								array( $content, $attributes, $this ) );
+						}
 					} else {
 						$output = '<span class="error">Invalid tag extension name: ' .
 							htmlspecialchars( $name ) . '</span>';
