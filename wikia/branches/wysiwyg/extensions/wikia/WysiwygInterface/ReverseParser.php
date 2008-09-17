@@ -315,7 +315,6 @@ class ReverseParser
 					return "\n[[{$refData['href']}{$pipe}]]{$refData['trial']}";
 
 				// parser hooks
-				// TODO: handle empty hook tags (like <staff/>)
 				case 'hook':
 					return $node->textContent;
 			}
