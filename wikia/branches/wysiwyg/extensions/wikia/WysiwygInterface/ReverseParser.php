@@ -67,7 +67,7 @@ class ReverseParser
 
 		wfProfileOut(__METHOD__);
 
-		return $output;
+		return rtrim($output);
 	}
 
 	/**
@@ -98,7 +98,6 @@ class ReverseParser
 				// build bullets stack
 				self::$listBullets .= ($node->nodeName == 'ul') ? '*' : '#';
 			}
-
 
 			for ($n=0; $n < $nodes->length; $n++) {
 				$childOutput .= $this->parseNode($nodes->item($n), $level);
@@ -317,6 +316,10 @@ class ReverseParser
 				// parser hooks
 				case 'hook':
 					return $node->textContent;
+
+				// {{template}}
+				case 'curly brackets':
+					return $refData['description'];
 			}
 		}
 
@@ -383,7 +386,6 @@ class ReverseParser
 
 		switch($node->nodeName) {
 			case 'li':
-				$bullet = ($node->parentNode->nodeName == 'ul') ? '*' : '#';
 				$content = ' ' . ltrim($content, ' ');
 				return self::$listBullets . $content;
 
@@ -408,7 +410,7 @@ class ReverseParser
 		$text = preg_replace("/('{2,})/", '<nowiki>$1</nowiki>', $text);
 
 		// 2. wrap list bullets using <nowiki>
-		$text = preg_replace("/([#*]+)/", '<nowiki>$1</nowiki>', $text);
+		$text = preg_replace("/^([#*]+)/", '<nowiki>$1</nowiki>', $text);
 
 		// 3. semicolon at the beginning of the line
 		if ($text{0} == ':') {
