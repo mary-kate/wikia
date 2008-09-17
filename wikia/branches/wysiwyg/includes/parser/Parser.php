@@ -3414,6 +3414,7 @@ class Parser
 	 * Fills $this->mDoubleUnderscores, returns the modified text
 	 */
 	function doDoubleUnderscore( $text ) {
+		global $FCKparseEnable;
 		// The position of __TOC__ needs to be recorded
 		$mw = MagicWord::get( 'toc' );
 		if( $mw->match( $text ) ) {
@@ -3421,7 +3422,13 @@ class Parser
 			$this->mForceTocPosition = true;
 
 			// Set a placeholder. At the end we'll fill it in with the TOC.
-			$text = $mw->replace( '<!--MWTOC-->', $text, 1 );
+			if ($FCKparseEnable) {
+				$tmp = '';
+				$refId = wfFCKSetRefId('double underscore', $tmp, '', '', false, true, true);
+				$text = $mw->replace( "<span$refId><!--MWTOC--></span>", $text, 1 );	//TODO: replace <!--MWTOC--> with user text - can have different case, eg: __ToC__
+			} else {
+				$text = $mw->replace( '<!--MWTOC-->', $text, 1 );
+			}
 
 			// Only keep the first one.
 			$text = $mw->replace( '', $text );
