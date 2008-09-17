@@ -1760,7 +1760,7 @@ class Parser
 					 * @todo We might want to use trim($tmp, "\n") here.
 					 */
 					if ($FCKparseEnable) {
-						$s .= $prefix . "<span refId=\"$refId\"></span>" . $trail;
+						$s .= $prefix . "<span refid=\"$refId\"></span>" . $trail;
 					} else {
 						$s .= trim($prefix . $trail, "\n") == '' ? '': $prefix . $trail;
 					}
@@ -2807,7 +2807,7 @@ class Parser
 			}
 			$templateText = implode('', $frame->virtualBracketedImplode('{{', '|', '}}', $titleWithSpaces, $textArgs));
 			$refId = wfFCKSetRefId('curly brackets', $templateText, '', '', false, true, true);
-			$text = "<span refId=\"$refId\">" . $templateText . '</span>';
+			$text = "<span refid=\"$refId\">" . $templateText . '</span>';
 			$found = true;
 		}
 
@@ -3314,7 +3314,7 @@ class Parser
 					$output = Xml::escapeTagsOnly( $content );
 					if ($FCKparseEnable) {
 						$refId = wfFCKSetRefId('nowiki', $output, '', '', false, true, true);
-						$output = "<span refId=\"$refId\">$output</span>";
+						$output = "<span refid=\"$refId\">$output</span>";
 					}
 					break;
 				/*
@@ -3327,7 +3327,7 @@ class Parser
 					if ($FCKparseEnable) {
 						$tmp = '';
 						$refId = wfFCKSetRefId('gallery', $tmp, '', '', false, true, true);
-						$output = "<span refId=\"$refId\">&lt;gallery$attrText&gt;$content&lt;/gallery&gt;</span>";
+						$output = "<span refid=\"$refId\">&lt;gallery$attrText&gt;$content&lt;/gallery&gt;</span>";
 					} else {
 						$output = $this->renderImageGallery( $content, $attributes );
 					}
@@ -3342,8 +3342,8 @@ class Parser
 							$tmp = '';
 							$refId = wfFCKSetRefId('hook', $tmp, '', '', false, true, true);
 							$output = ($content != '' 
-								? "<span refId=\"$refId\">&lt;{$name}{$attrText}&gt;{$content}&lt;/{$name}&gt;</span>"
-								: "<span refId=\"$refId\">&lt;{$name}{$attrText}/&gt;</span>");
+								? "<span refid=\"$refId\">&lt;{$name}{$attrText}&gt;{$content}&lt;/{$name}&gt;</span>"
+								: "<span refid=\"$refId\">&lt;{$name}{$attrText}/&gt;</span>");
 						} else {
 							$output = call_user_func_array( $this->mTagHooks[$name],
 								array( $content, $attributes, $this ) );
