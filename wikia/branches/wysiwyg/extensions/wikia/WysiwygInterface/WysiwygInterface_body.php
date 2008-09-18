@@ -113,7 +113,7 @@ class WysiwygInterface extends SpecialPage {
 			$reverseParser = new ReverseParser();
 
 			$wgOut->addHtml('<h5>$FCKmetaData</h5>');
-			$wgOut->addHtml('<pre>'.print_r($FCKmetaData, true).'</pre>');
+			$wgOut->addHtml('<pre>'.htmlspecialchars(print_r($FCKmetaData, true)).'</pre>');
 
 			$wikitext_parsed = $reverseParser->parse($html, $FCKmetaData);
 
