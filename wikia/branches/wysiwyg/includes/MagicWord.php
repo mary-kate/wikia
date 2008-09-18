@@ -660,10 +660,9 @@ class MagicWordArray {
 				list( $name, $param ) = $this->parseMatch( $m );
 				$found[$name] = $param;
 			}
-			if ($FCKparseEnable) {
+			if ($FCKparseEnable && preg_match( $regex, $text, $keyword )) {
 				$tmp = '';
 				$refId = wfFCKSetRefId('double underscore', $tmp, '', '', false, true, true);
-				preg_match( $regex, $text, $keyword );
 				$text = preg_replace( $regex, "<span$refId>{$keyword[0]}</span>", $text );
 			} else {	//oryginal code
 				$text = preg_replace( $regex, '', $text );
