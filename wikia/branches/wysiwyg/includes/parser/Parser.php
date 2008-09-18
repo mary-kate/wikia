@@ -1743,7 +1743,7 @@ class Parser
 					wfProfileIn( "$fname-category" );
 					$s = rtrim($s . "\n"); # bug 87
 					if ($FCKparseEnable) {
-						$refId = wfFCKSetRefId('category', $text, $link, '', $wasblank, $noforce);
+						$refId = wfFCKSetRefId('category', $text, $link, '', $wasblank, $noforce, true);
 					}
 					if ( $wasblank ) {
 						$sortkey = $this->getDefaultSort();
@@ -1760,7 +1760,7 @@ class Parser
 					 * @todo We might want to use trim($tmp, "\n") here.
 					 */
 					if ($FCKparseEnable) {
-						$s .= $prefix . "<span$refId></span>" . $trail;
+						$s .= $prefix . "<span$refId>[[$link" . ($wasblank ? '' : "|$text") . "]]</span>" . $trail;
 					} else {
 						$s .= trim($prefix . $trail, "\n") == '' ? '': $prefix . $trail;
 					}
