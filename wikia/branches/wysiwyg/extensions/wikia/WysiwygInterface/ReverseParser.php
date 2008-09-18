@@ -116,12 +116,15 @@ class ReverseParser
 				self::$listBullets = substr(self::$listBullets, 0, -1);
 			}
 		}
+		else {
+			$childOutput = false;
+		}
 
 		switch( $node->nodeType ) {
 			case XML_ELEMENT_NODE:
 				$wasHTML = $node->getAttribute('washtml');
 
-				$content = isset($childOutput) ? $childOutput : self::cleanupTextContent($node->textContent);
+				$content = ($childOutput !== false) ? $childOutput : self::cleanupTextContent($node->textContent);
 
 				// parse it back to HTML tag
 				if (!empty($wasHTML)) {
@@ -134,6 +137,9 @@ class ReverseParser
 							break;
 
 						default:
+							if ($node->hasChildNodes() && $node->childNodes->item(0)->nodeType != XML_TEXT_NODE) {
+								$content = "\n{$content}\n";
+							}
 							$output = "<{$node->nodeName}{$attStr}>{$content}</{$node->nodeName}>";
 					}
 				}
