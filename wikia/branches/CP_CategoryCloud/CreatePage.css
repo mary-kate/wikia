@@ -1,7 +1,8 @@
 /* common formatting for fields */
 
 #wpTableMultiEdit ,
-#cp-multiedit {
+#cp-multiedit,
+.createpage-clear {
 	clear: both ;
 }
 
@@ -12,7 +13,7 @@
 }
 
 #createpageform textarea {
-	width: 99% ;
+	width: 92% ;
 }
 
 #createpageoverlay {
@@ -30,6 +31,11 @@
 	margin-top: -12 px;
 	padding:4px 8px;
 	text-align:right;
+}
+
+* html #createpagepreview .actionBar ,
+* html #createpageform .actionBar {
+	height: 1%;
 }
 
 #createpageform #createpageinfo {	
@@ -350,3 +356,25 @@ legend {
 .createpage-separator {
 	height: 10pt;
 } 
+
+.createpage-controller {
+	float: right;
+	margin-right: 24px; 
+}
+
+.createpage-lower {
+	margin-top: 5px;
+}
+
+.createpage-textarea {
+	float: left;
+}
+
+/* macbre: IE6 fixes */
+* html .createpage-clear {
+	position: relative;
+}
+
+* html .createpage-lower {
+	position: relative;
+}
