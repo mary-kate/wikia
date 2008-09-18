@@ -350,7 +350,7 @@ class ReverseParser
 
 				// <nowiki></nowiki>
 				case 'nowiki':
-					return "<nowiki>{$refData['description']}</nowiki>";
+					return "<nowiki>{$node->textContent}</nowiki>";
 
 				// [[Category:foo]]
 				case 'category':
@@ -486,15 +486,15 @@ class ReverseParser
 		$text = preg_replace("/^([#*]+)/", '<nowiki>$1</nowiki>', $text);
 
 		// 3. semicolon at the beginning of the line
-		if ($text{0} == ':') {
-			$text = '<nowiki>:</nowiki>' . substr($text, 1);
+		if ( in_array($text{0}, array(':', ';')) ) {
+			$text = '<nowiki>' . $text{0} . '</nowiki>' . substr($text, 1);
 		}
 
 		// 4. wrap magic words {{ }} using <nowiki>
-		$text = preg_replace("/{{([^}]+)}}/", '<nowiki>{{$1}}</nowiki>', $text);
+		$text = preg_replace("/({{2,3})([^}]+)(}{2,3})/", '<nowiki>$1$2$3</nowiki>', $text);
 
 		// 5. wrap [[foo]] using <nowiki>
-		$text = preg_replace("/(\[+)([^}]+)(\]+)/", '<nowiki>$1$2$3</nowiki>', $text);
+		$text = preg_replace("/(\[+)([^\]]+)(\]+)/", '<nowiki>$1$2$3</nowiki>', $text);
 
 		return $text;
 	}
