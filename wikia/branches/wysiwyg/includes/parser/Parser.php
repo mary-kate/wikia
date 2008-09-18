@@ -3325,9 +3325,9 @@ class Parser
 				*/
 				case 'gallery':
 					if ($FCKparseEnable) {
-						$tmp = '';
-						$refId = wfFCKSetRefId('gallery', $tmp, '', '', false, true, true);
-						$output = "<span$refId>&lt;gallery$attrText&gt;$content&lt;/gallery&gt;</span>";
+						$content = "<gallery$attrText>$content</gallery>";
+						$refId = wfFCKSetRefId('gallery', $content, '', '', false, true, true);
+						$output = "<span$refId>".htmlspecialchars($content).'</span>';
 					} else {
 						$output = $this->renderImageGallery( $content, $attributes );
 					}
@@ -3339,11 +3339,11 @@ class Parser
 							throw new MWException( "Tag hook for $name is not callable\n" );
 						}
 						if ($FCKparseEnable) {
-							$tmp = '';
+							$tmp = ($content != '' 
+								? "<{$name}{$attrText}>{$content}</{$name}>"
+								: "<{$name}{$attrText}/>");
 							$refId = wfFCKSetRefId('hook', $tmp, '', '', false, true, true);
-							$output = ($content != '' 
-								? "<span$refId>&lt;{$name}{$attrText}&gt;{$content}&lt;/{$name}&gt;</span>"
-								: "<span$refId>&lt;{$name}{$attrText}/&gt;</span>");
+							$output = "<span$refId>".htmlspecialchars($tmp).'</span>';
 						} else {
 							$output = call_user_func_array( $this->mTagHooks[$name],
 								array( $content, $attributes, $this ) );

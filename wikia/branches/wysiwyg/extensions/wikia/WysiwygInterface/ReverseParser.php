@@ -346,11 +346,11 @@ class ReverseParser
 
 				// <gallery></gallery>
 				case 'gallery':
-					return $node->textContent;
+					return $refData['description'];
 
 				// <nowiki></nowiki>
 				case 'nowiki':
-					return "<nowiki>{$node->textContent}</nowiki>";
+					return "<nowiki>{$refData['description']}</nowiki>";
 
 				// [[Category:foo]]
 				case 'category':
@@ -359,7 +359,7 @@ class ReverseParser
 
 				// parser hooks
 				case 'hook':
-					return $node->textContent;
+					return $refData['description'];
 
 				// {{template}}
 				case 'curly brackets':
