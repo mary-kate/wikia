@@ -137,10 +137,15 @@ class ReverseParser
 							break;
 
 						default:
+							// nice formatting of nested HTML in wikimarkup
 							if ($node->hasChildNodes() && $node->childNodes->item(0)->nodeType != XML_TEXT_NODE) {
-								$content = "\n{$content}\n";
+								$content = "\n".trim($content)."\n";
+								$trial = "\n";
 							}
-							$output = "<{$node->nodeName}{$attStr}>{$content}</{$node->nodeName}>";
+							else {
+								$trial = '';
+							}
+							$output = "<{$node->nodeName}{$attStr}>{$content}</{$node->nodeName}>{$trial}";
 					}
 				}
 				// convert HTML back to wikimarkup
