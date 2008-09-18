@@ -3425,7 +3425,7 @@ class Parser
 			if ($FCKparseEnable) {
 				$tmp = '';
 				$refId = wfFCKSetRefId('double underscore', $tmp, '', '', false, true, true);
-				$text = $mw->replace( "<span$refId><!--MWTOC--></span>", $text, 1 );	//TODO: replace <!--MWTOC--> with user text - can have different case, eg: __ToC__
+				$text = $mw->replace( "<span$refId><!--MWTOC--></span>", $text, 1 );
 			} else {
 				$text = $mw->replace( '<!--MWTOC-->', $text, 1 );
 			}
@@ -3453,6 +3453,9 @@ class Parser
 			} else {
 				wfDebug( __METHOD__.": [[MediaWiki:hidden-category-category]] is not a valid title!\n" );
 			}
+		}
+		if ($FCKparseEnable) {
+			$text = str_replace("<span$refId><!--MWTOC--></span>", "<span$refId>__TOC__</span>", $text);
 		}
 		return $text;
 	}
