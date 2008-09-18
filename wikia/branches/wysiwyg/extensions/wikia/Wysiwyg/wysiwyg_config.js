@@ -8,3 +8,5 @@ FCKConfig.ToolbarSets["Default"] = [
 FCKConfig.EditorAreaCSS = FCKConfig.BasePath + 'css/fck_editorarea.css?' + window.parent.wgStyleVersion;
 FCKConfig.EditorAreaStyles = [window.parent.stylepath + '/monobook/main.css?' + window.parent.wgStyleVersion, 'body {padding: 0 5px}'];
 FCKConfig.BodyId = 'fckEditor';
+
+FCKConfig.Plugins.Add('wikitext');
