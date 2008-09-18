@@ -91,12 +91,23 @@ class ReverseParser
 			$childOutput = '';
 
 			// handle nested lists
-			$isListNode = in_array($node->nodeName, array('ul', 'ol'));
+			$isListNode = in_array($node->nodeName, array('ul', 'ol', 'dl'));
 
 			if ($isListNode) {
 				self::$listLevel++;
 				// build bullets stack
-				self::$listBullets .= ($node->nodeName == 'ul') ? '*' : '#';
+				switch ($node->nodeName) {
+					case 'ul':
+						$bullet = '*';
+						break;
+					case 'ol':
+						$bullet = '#';
+						break;
+					case 'dl':
+						$bullet = ':';
+						break;
+				}
+				self::$listBullets .= $bullet;
 			}
 
 			for ($n=0; $n < $nodes->length; $n++) {
@@ -163,7 +174,15 @@ class ReverseParser
 							break;
 
 						case 'p':
-							$output = "{$content}\n";
+							// handle indentations
+							$indentation = self::getIndentationLevel($node);
+							if ($indentation !== false) {
+								$prefix = str_repeat(':', $indentation);
+							}
+							else {
+								$prefix = '';
+							}
+							$output = "{$prefix}{$content}\n";
 							break;
 
 						case 'h1':
@@ -230,16 +249,22 @@ class ReverseParser
 						// lists
 						case 'ul':
 						case 'ol':
-							$output = $content . (self::$listLevel == 0 ? "\n" : '');
-							break;
-
 						case 'dl':
-							$output = $content;
-
-							// make space before next <dl> list
-							if ($node->nextSibling && $node->nextSibling->nodeName == 'dl') {
-								$output .= "\n";
+							// handle indentations
+							if ($node->nodeName == 'dl') {
+								$indentation = self::getIndentationLevel($node);
+								$prefix = '';
+								if ($indentation !== false) {
+									$prefix = str_repeat(':', $indentation);
+								}
+								if (self::$listLevel > 0) {
+									$prefix = "\n{$prefix}";
+								}
 							}
+							else {
+								$prefix = '';
+							}
+							$output = $prefix . $content . (self::$listLevel == 0 ? "\n" : '');
 							break;
 
 						case 'li':
@@ -413,11 +438,36 @@ class ReverseParser
 				return self::$listBullets . $content;
 
 			case 'dt':
-				return ";{$node->textContent}";
+				return substr(self::$listBullets, 0, -1) . ";{$node->textContent}\n";
 
 			case 'dd':
-				return ":{$node->textContent}";
+				// hack for :::::foo markup used for indentation
+				if ($node->hasChildNodes() && $node->childNodes->item(0)->nodeName == 'dl') {
+					return $content . "\n";
+				}
+				else {
+					return self::$listBullets . $content . "\n";
+				}
+			}
+	}
+
+	/**
+	 * Returns value of margin-left CSS property (FALSE if none)
+	 */
+
+	static function getIndentationLevel($node) {
+		if ( !$node->hasAttributes() ) {
+			return false;
 		}
+
+		$cssStyle = $node->getAttribute('style');
+		
+		if (!empty($cssStyle)) {
+			$margin = (substr($cssStyle, 0, 11) == 'margin-left') ? intval(substr($cssStyle, 12)) : 0;
+			return intval($margin/40);
+		}
+		
+		return false;
 	}
 
 	/**
