@@ -52,6 +52,7 @@ FCKConfig.PluginsPath = FCKConfig.BasePath + 'plugins/' ;
 
 // FCKConfig.Plugins.Add( 'autogrow' ) ;
 // FCKConfig.Plugins.Add( 'dragresizetable' );
+FCKConfig.Plugins.Add( 'wikisyntax' );
 FCKConfig.AutoGrowMax = 400 ;
 
 // FCKConfig.ProtectedSource.Add( /<%[\s\S]*?%>/g ) ;	// ASP style server side code <%...%>

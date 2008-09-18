@@ -24,8 +24,8 @@ class ReverseParser
 	}
 
 	/**
-         * Parse HTML provided into wikimarkup
-         */
+	 * Parse HTML provided into wikimarkup
+	 */
 	public function parse($html, $fckData = array()) {
 		wfProfileIn(__METHOD__);
 		$output = '';
@@ -78,7 +78,7 @@ class ReverseParser
 
 	private function parseNode($node, $level = 0) {
 		wfProfileIn(__METHOD__);
-		
+
 		$output = '';
 		$level++;
 
@@ -166,7 +166,7 @@ class ReverseParser
 						case 'h3':
 							$output = "=== {$content} ===\n";
 							break;
-		
+
 						case 'h4':
 							$output = "==== {$content} ====\n";
 							break;
@@ -202,15 +202,15 @@ class ReverseParser
 						case 'tr':
 							$output = "|-\n{$content}";
 							break;
-	
+
 						case 'th':
 							$output = "!{$content}";
 							break;
-					     
+
 						case 'td':
 							$output = "|{$content}";
 							break;
-						
+
 						// ignore tbody tag
 						case 'tbody':
 							$output = $content;
