@@ -20,7 +20,7 @@ FCKToolbarItems.RegisterItem( 'Source', new FCKToolbarButton( 'Source', 'Wikitex
 
 		if ( FCK.EditMode == FCK_EDITMODE_SOURCE ) {
 			window.parent.sajax_request_type = 'POST';
-			window.parent.sajax_do_call( 'wfWikisyntaxToHtml', [FCK.EditingArea.Textarea.value, $('wysiwygData').value], loadWikisyntaxToHtml) ;
+			window.parent.sajax_do_call( 'wfWikisyntaxToHtml', [FCK.EditingArea.Textarea.value], loadWikisyntaxToHtml) ;
 		} else {
 			original.apply( FCK, args );
 			window.parent.sajax_request_type = 'POST';
