@@ -116,7 +116,7 @@ class ReverseParser
 
 			if ($isListNode) {
 				// fix for different list types on the same level of nesting
-				if ( $node->previousSibling && in_array($node->previousSibling->nodeName, array('ol', 'ul')) && self::$listLevel > 1 ) {
+				if ( $node->previousSibling && in_array($node->previousSibling->nodeName, array('ol', 'ul', 'dl')) && self::$listLevel > 1 ) {
 					$childOutput = "\n" . trim($childOutput);
 				}
 				else {
@@ -256,9 +256,6 @@ class ReverseParser
 								$prefix = '';
 								if ($indentation !== false) {
 									$prefix = str_repeat(':', $indentation);
-								}
-								if (self::$listLevel > 0) {
-									$prefix = "\n{$prefix}";
 								}
 							}
 							else {
