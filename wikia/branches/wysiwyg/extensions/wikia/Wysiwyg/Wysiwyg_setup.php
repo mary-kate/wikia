@@ -24,6 +24,8 @@ function initEditor() {
 	}
 	var oFCKeditor = new FCKeditor("wpTextbox1");
 	oFCKeditor.BasePath = "$wgExtensionsPath/wikia/Wysiwyg/fckeditor/";
+	oFCKeditor.Config["CustomConfigurationsPath"] = "$wgExtensionsPath/wikia/Wysiwyg/wysiwyg_config.js";
+	oFCKeditor.ready = true;
 	oFCKeditor.Height = '450px';
 	oFCKeditor.ReplaceTextarea();
 }
