@@ -202,7 +202,7 @@ class ReverseParser
 						// @see http://en.wikipedia.org/wiki/Help:Table
 						case 'table':
 							$attStr = self::getAttributesStr($node);
-							$output = "\n{|{$attStr}\n{$content}|}\n";
+							$output = "{|{$attStr}\n{$content}|}\n";
 							break;
 
 						case 'tr':
@@ -337,7 +337,7 @@ class ReverseParser
 
 				// __TOC__
 				case 'double underscore':
-					return $node->textContent;					
+					return $node->textContent;
 			}
 		}
 
