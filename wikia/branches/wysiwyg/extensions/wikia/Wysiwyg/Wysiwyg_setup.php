@@ -21,6 +21,7 @@ function WysiwygInitial($form) {
 function initEditor() {
 	var oFCKeditor = new FCKeditor("wpTextbox1");
 	oFCKeditor.BasePath = "$wgExtensionsPath/wikia/Wysiwyg/fckeditor/";
+	oFCKeditor.Height = '450px';
 	oFCKeditor.ReplaceTextarea();
 }
 addOnloadHook(initEditor);
