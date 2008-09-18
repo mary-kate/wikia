@@ -3454,7 +3454,7 @@ class Parser
 				wfDebug( __METHOD__.": [[MediaWiki:hidden-category-category]] is not a valid title!\n" );
 			}
 		}
-		if ($FCKparseEnable) {
+		if ($FCKparseEnable && isset($refId)) {
 			$text = str_replace("<span$refId><!--MWTOC--></span>", "<span$refId>__TOC__</span>", $text);
 		}
 		return $text;
