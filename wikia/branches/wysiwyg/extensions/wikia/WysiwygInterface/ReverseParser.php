@@ -328,6 +328,10 @@ class ReverseParser
 				// {{template}}
 				case 'curly brackets':
 					return $refData['description'];
+
+				// __TOC__
+				case 'double underscore':
+					return $node->textContent;					
 			}
 		}
 
