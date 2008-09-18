@@ -66,3 +66,25 @@ function wfReverseParserAjax($html, $data = array()) {
         return $response;
 }
 
+$wgAjaxExportList[] = 'wfWikisyntaxToHtml';
+function wfWikisyntaxToHtml($wikitext, $wysiwygData) {
+	require(dirname(__FILE__).'/WysiwygInterface_body.php');
+	$options = new ParserOptions();
+	$title = new Title();
+
+	$parser = new WysiwygParser();
+	$parser->setOutputType(OT_HTML);
+	global $FCKparseEnable;
+	$FCKparseEnable = true;
+	return $parser->parse($wikitext, $title, $options)->getText();
+}
+
+$wgAjaxExportList[] = 'wfHtmlToWikisyntax';
+function wfHtmlToWikisyntax($html) {
+	$FCKmetaData = array();
+	// call ReverseParser to parse HTML back to wikimarkup
+	require(dirname(__FILE__).'/ReverseParser.php');
+	$reverseParser = new ReverseParser();
+	$result = $reverseParser->parse($html, $FCKmetaData);
+	return $result;
+}
