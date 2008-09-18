@@ -19,6 +19,9 @@ function WysiwygInitial($form) {
 			$script .= <<<EOT
 <script type="text/javascript">
 function initEditor() {
+	if($('wmuLink')) {
+		$('wmuLink').parentNode.style.display = 'none';
+	}
 	var oFCKeditor = new FCKeditor("wpTextbox1");
 	oFCKeditor.BasePath = "$wgExtensionsPath/wikia/Wysiwyg/fckeditor/";
 	oFCKeditor.Height = '450px';
