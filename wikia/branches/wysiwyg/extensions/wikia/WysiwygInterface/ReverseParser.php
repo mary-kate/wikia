@@ -347,7 +347,7 @@ class ReverseParser
 
 				// <nowiki></nowiki>
 				case 'nowiki':
-					return "<nowiki>{$node->textContent}</nowiki>";
+					return "<nowiki>{$refData['description']}</nowiki>";
 
 				// [[Category:foo]]
 				case 'category':
