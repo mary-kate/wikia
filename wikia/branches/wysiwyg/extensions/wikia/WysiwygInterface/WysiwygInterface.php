@@ -67,7 +67,7 @@ function wfReverseParserAjax($html, $data = array()) {
 }
 
 $wgAjaxExportList[] = 'wfWikisyntaxToHtml';
-function wfWikisyntaxToHtml($wikitext, $wysiwygData) {
+function wfWikisyntaxToHtml($wikitext, $wysiwygData = null) {
 	require(dirname(__FILE__).'/WysiwygInterface_body.php');
 	$options = new ParserOptions();
 	$title = new Title();
