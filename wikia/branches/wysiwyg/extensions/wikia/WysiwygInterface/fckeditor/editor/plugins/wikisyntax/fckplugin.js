@@ -10,7 +10,9 @@ FCKToolbarItems.RegisterItem( 'Source', new FCKToolbarButton( 'Source', 'Wikitex
 		var args = arguments;
 
 		var loadWikisyntaxToHtml = function( result ) {
-			FCK.EditingArea.Textarea.value = result.responseText;
+			var res = result.responseText.split('--||--');
+			FCK.EditingArea.Textarea.value = res[0];
+			window.parent.document.getElementById('wysiwygData').value = res[1];
 			original.apply( FCK, args );
 		}
 
@@ -24,7 +26,7 @@ FCKToolbarItems.RegisterItem( 'Source', new FCKToolbarButton( 'Source', 'Wikitex
 		} else {
 			original.apply( FCK, args );
 			window.parent.sajax_request_type = 'POST';
-			window.parent.sajax_do_call( 'wfHtmlToWikisyntax', [FCK.EditingArea.Textarea.value], loadHtmlToWikisyntax) ;
+			window.parent.sajax_do_call( 'wfHtmlToWikisyntax', [FCK.EditingArea.Textarea.value, window.parent.document.getElementById('wysiwygData').value], loadHtmlToWikisyntax) ;
 		}
 	}
 })() ;
