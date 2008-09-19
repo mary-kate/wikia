@@ -42,7 +42,7 @@ class ReverseParser
 		wfRestoreWarnings();
 
 		if (!$valid) {
-			return false;
+			return '';
 		}
 
 		// cleanup
@@ -53,7 +53,7 @@ class ReverseParser
 
 		// nothing inside body?
 		if ( !$body->hasChildNodes() ) {
-			return false;
+			return '';
 		}
 
 		// go through body tag children
@@ -182,6 +182,9 @@ class ReverseParser
 							else {
 								$prefix = '';
 							}
+							if($node->previousSibling && $node->previousSibling->previousSibling && $node->previousSibling->previousSibling->nodeName == 'p') {
+								$prefix = "\n{$prefix}";
+							}
 							$output = "{$prefix}{$content}\n";
 							break;
 
@@ -214,7 +217,7 @@ class ReverseParser
 							break;
 
 						case 'hr':
-							$output = "\n----\n";
+							$output = "----\n";
 							break;
 
 						case 'pre':
@@ -288,7 +291,11 @@ class ReverseParser
 				break;
 
 			case XML_TEXT_NODE:
-				$output = self::cleanupTextContent($node->textContent);
+				if(trim($node->textContent) == '') {
+					$output = '';
+				} else {
+					$output = self::cleanupTextContent($node->textContent);
+				}
 				break;
 		}
 
@@ -431,7 +438,7 @@ class ReverseParser
 
 		switch($node->nodeName) {
 			case 'li':
-				$content = ' ' . ltrim($content, ' ');
+				$content = ' ' . ltrim($content, ' ') . "\n";
 				return self::$listBullets . $content;
 
 			case 'dt':
@@ -458,12 +465,12 @@ class ReverseParser
 		}
 
 		$cssStyle = $node->getAttribute('style');
-		
+
 		if (!empty($cssStyle)) {
 			$margin = (substr($cssStyle, 0, 11) == 'margin-left') ? intval(substr($cssStyle, 12)) : 0;
 			return intval($margin/40);
 		}
-		
+
 		return false;
 	}
 

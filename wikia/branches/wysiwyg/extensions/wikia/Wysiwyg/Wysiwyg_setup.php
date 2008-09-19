@@ -32,35 +32,23 @@ addOnloadHook(initEditor);
 EOT;
 			$wgOut->addScript($script);
 
-			/* temporary code begin */
-			require("$IP/extensions/wikia/WysiwygInterface/WysiwygInterface_body.php");
-			$options = new ParserOptions();
-			$options->setTidy(true);
-
-			$parser = new WysiwygParser();
-			$parser->setOutputType(OT_HTML);
-			global $FCKmetaData, $FCKparseEnable, $wgTitle;
-			$FCKparseEnable = true;
-			$form->textbox1 = $parser->parse($form->textbox1, $wgTitle, $options)->getText();
-			$FCKparseEnable = false;
-			$form->textbox1 = mb_convert_encoding($form->textbox1, 'HTML-ENTITIES', "UTF-8");
-			if(!is_array($FCKmetaData)) {
-				$FCKmetaData = array();
-			}
-			$wgOut->addHTML('<input type="hidden" id="wysiwygData" name="wysiwygData" value="'.Wikia::json_encode($FCKmetaData, true).'" />');
-			/* temporary code end */
-
+			list($form->textbox1, $wysiwygData) = wfWysiwygWiki2Html($form->textbox1, -1, true);
+			$wgOut->addHTML('<input type="hidden" id="wysiwygData" name="wysiwygData" value="'.$wysiwygData.'" />');
 		}
 	}
 	return true;
 }
 
 $wgAjaxExportList[] = 'wfWysywigAjax';
-function wfWysywigAjax($type, $input = false, $wysiwygData = false) {
+function wfWysywigAjax($type, $input = false, $wysiwygData = false, $articleId = -1) {
 	switch ($type) {
 		case 'html2wiki':
-			return wfWysiwygHtml2Wiki($input, $wysiwygData, true);
-			break;
+			return new AjaxResponse(wfWysiwygHtml2Wiki($input, $wysiwygData, true));
+		case 'wiki2html':
+			$separator = Parser::getRandomString();
+			header('X-sep: ' . $separator);
+			return new AjaxResponse(join(wfWysiwygWiki2Html($input, $articleId, true), "--{$separator}--"));
+
 	}
 	return false;
 }
@@ -74,4 +62,39 @@ function wfWysiwygHtml2Wiki($html, $wysiwygData, $decode = false) {
 	}
 
 	return $reverseParser->parse($html, $wysiwygData);
+}
+
+function wfWysiwygWiki2Html($wikitext, $articleId = -1, $encode = false) {
+	global $IP, $FCKmetaData, $FCKparseEnable, $wgTitle;
+	require("$IP/extensions/wikia/WysiwygInterface/WysiwygInterface_body.php");
+
+	if($articleId == -1) {
+		$title = $wgTitle;
+	} else {
+		$title = Title::newFromID($articleId);
+	}
+
+	$options = new ParserOptions();
+	$options->setTidy(true);
+
+	$parser = new WysiwygParser();
+	$parser->setOutputType(OT_HTML);
+
+	$FCKparseEnable = true;
+	$html = $parser->parse($wikitext, $wgTitle, $options)->getText();
+	$FCKparseEnable = false;
+
+	$html = mb_convert_encoding($html, 'HTML-ENTITIES', "UTF-8");
+
+	$wysiwygData = $FCKmetaData;
+
+	if(!is_array($wysiwygData)) {
+		$wysiwygData = array();
+	}
+
+	if($encode) {
+		$wysiwygData = Wikia::json_encode($wysiwygData, true);
+	}
+
+	return array($html, $wysiwygData);
 }
