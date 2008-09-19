@@ -41,6 +41,8 @@ class ReverseParser
 		// fix stupid UTF-8 bug
 		$html = mb_convert_encoding($html, 'HTML-ENTITIES', "UTF-8");
 
+		$html = str_replace("<!--\x7f_1--> ", "\n", $html);
+
 		wfDebug(__METHOD__.": HTML\n\n{$html}\n\n");
 		wfDebug(__METHOD__.": fckData\n\n".print_r($fckData, true)."\n");
 
@@ -169,6 +171,11 @@ class ReverseParser
 				}
 				// convert HTML back to wikimarkup
 				else {
+
+					if(trim($content) == '') {
+						return '';
+					}
+
 					switch ($node->nodeName) {
 						// basic formatting
 						case 'b':
@@ -186,11 +193,10 @@ class ReverseParser
 							$indentation = self::getIndentationLevel($node);
 							if ($indentation !== false) {
 								$prefix = str_repeat(':', $indentation);
-							}
-							else {
+							} else {
 								$prefix = '';
 							}
-							if($node->previousSibling && $node->previousSibling->previousSibling && $node->previousSibling->previousSibling->nodeName == 'p') {
+							if($node->previousSibling) {
 								$prefix = "\n{$prefix}";
 							}
 							$output = "{$prefix}{$content}\n";
@@ -221,7 +227,7 @@ class ReverseParser
 							break;
 
 						case 'br':
-							$output = '<br/>';
+							$output = "\n";
 							break;
 
 						case 'hr':
@@ -306,11 +312,6 @@ class ReverseParser
 				}
 				break;
 
-			case XML_COMMENT_NODE:
-				// line breaks in wikitext are replaced with comments by our hacked parser
-				// TODO: detect comment type
-				$output = "\n";
-				break;
 		}
 
 		wfProfileOut(__METHOD__);
