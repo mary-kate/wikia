@@ -28,10 +28,18 @@ class ReverseParser
 	 */
 	public function parse($html, $fckData = array()) {
 		wfProfileIn(__METHOD__);
+
+		if (!is_string($html) || $html == '') {
+			return false;
+		}
+
 		$output = '';
 
 		// refIds
 		self::$fckData = $fckData;
+
+		// fix stupid UTF-8 bug
+		$html = mb_convert_encoding($html, 'HTML-ENTITIES', "UTF-8");
 
 		wfDebug(__METHOD__.": HTML\n\n{$html}\n\n");
 		wfDebug(__METHOD__.": fckData\n\n".print_r($fckData, true)."\n");
