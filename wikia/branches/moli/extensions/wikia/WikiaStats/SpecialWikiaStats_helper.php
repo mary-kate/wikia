@@ -28,8 +28,8 @@ class WikiaGenericStats {
     var $mSelectedCityId = -1;
 
     const MONTHLY_STATS = 7;
-    const USE_MEMC = 1;
-    const USE_OLD_DB = 0;
+    const USE_MEMC = 0;
+    const USE_OLD_DB = 1;
 	const IGNORE_WIKIS = "5, 11, 6745";
 
 	var $columnMapIndex = null;
@@ -330,31 +330,32 @@ class WikiaGenericStats {
     	#---
 		wfProfileIn( __METHOD__ );
 
-   		$wkStatsColumnNames = "";
-   		if (self::USE_MEMC) $wkStatsColumnNames = $wgMemc->get('wikiastatscolumnnames');
-    	if (empty($wkStatsColumnNames))
-    	{
-    		if (self::USE_OLD_DB == 1) {
-				$dbs =& wfGetDBStats();
-			} else {
-				$dbs =& wfGetDBExt();
-			}
-			#---
-			$sql = "show fields from `{$wgDBStats}`.`city_stats_full`";
-			//echo $sql."<br><br>";
-			#---
-			$res = $dbs->query($sql);
-			$loop = 0;
-			$wkStatsColumnNames = array(); // for &Sigma;
-			while ( $row = $dbs->fetchRow( $res ) )
-			{
-				$wkStatsColumnNames[$loop] = $row['Field'];
-				$loop++;
-			}
-			$dbs->freeResult( $res );
-			#---
-			if (self::USE_MEMC) $wgMemc->set("wikiastatscolumnnames", $wkStatsColumnNames, 60*60*3);
-		}
+		$wkStatsColumnNames = array(
+			3 => "cw_users_all_reg_main_ns",
+			4 => "cw_wikians_edits_5",
+			5 => "cw_wikians_edits_100",
+			6 => "cw_users_all_reg_user_ns",
+			7 => "cw_users_all_reg_image_ns",
+			8 => "cw_users_all_reg",
+			9 => "cw_wikians_total",
+			10 => "cw_article_count_link",
+			11 => "cw_article_count_200_link",
+			12 => "cw_article_new_per_day",
+			13 => "cw_article_mean_nbr_revision",
+			14 => "cw_article_mean_size",
+			15 => "cw_article_perc_0_5_size",
+			16 => "cw_article_perc_2_0_size",
+			17 => "cw_db_edits",
+			18 => "cw_db_size",
+			19 => "cw_db_words",
+			20 => "cw_links_internal",
+			21 => "cw_links_interwiki",
+			22 => "cw_links_image",
+			23 => "cw_links_external",
+			24 => "cw_links_redirects",
+			25 => "cw_images_uploaded",
+			26 => "cw_images_linked",
+		);
 
 		$columnName = "";
 		if (isset($index) && !empty($wkStatsColumnNames)) {
