@@ -39,7 +39,7 @@ body
 
 td.childrenHidden
 {
-	background-color: #666;
+	background: #efefde url('images/progress.gif') no-repeat 50% 50%;
 }
 
 td.childrenHidden textarea, td.childrenHidden iframe
