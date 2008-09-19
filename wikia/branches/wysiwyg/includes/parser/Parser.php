@@ -3423,7 +3423,7 @@ class Parser
 
 			// Set a placeholder. At the end we'll fill it in with the TOC.
 			if ($FCKparseEnable) {
-				$tmp = '';
+				$tmp = '__TOC__';
 				$refId = wfFCKSetRefId('double underscore', $tmp, '', '', false, true, true);
 				$text = $mw->replace( "<span$refId><!--MWTOC--></span>", $text, 1 );
 			} else {
