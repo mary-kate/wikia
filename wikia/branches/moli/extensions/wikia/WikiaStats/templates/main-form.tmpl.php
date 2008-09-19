@@ -6,6 +6,7 @@
 var YC = YAHOO.util.Connect;
 var YD = YAHOO.util.Dom;
 var YE = YAHOO.util.Event;
+var wk_stats_city_id = 0;
 var previous_page = 0;
 
 function visible_wikians(rows, col, v)
@@ -264,7 +265,7 @@ YAHOO.util.Event.onDOMReady(function () {
 
 	YAHOO.Wikia.Statistics.ShowStats = function(e) 
 	{
-		var city = document.getElementById( "wk-stats-city-id" );
+		var city = document.getElementById( "ws-domain" );
 		document.getElementById( "ws-edits-article-table" ).innerHTML = "";
 		document.getElementById( "ws-wikians-active-absent-table" ).innerHTML = "";
 		document.getElementById( "ws-anon-wikians-table" ).innerHTML = "";
@@ -278,7 +279,9 @@ YAHOO.util.Event.onDOMReady(function () {
 		//--- to
 		params 	+= "&rsargs[3]=" + document.getElementById( "ws-date-year-to" ).value;
 		params 	+= "&rsargs[4]=" + document.getElementById( "ws-date-month-to" ).value;
-		
+
+		var _legend = document.getElementById('wk-stats-legend');
+		var _otherStats = document.getElementById('ws-other-stats-panel');
 		if (this.id == "ws-show-charts") {
 			params += "&rsargs[5]=1";
 			if (_legend) {
@@ -517,6 +520,7 @@ YAHOO.util.Event.onDOMReady(function () {
 			}
 			default : {
 				var id = this.id;
+				wk_stats_city_id = parseInt(document.getElementById("wk-stats-city-id").value); 
 				id = id.replace("ws-xls-", "");
 				XLSGenerate(id, '', '', ''); 
 			}
@@ -558,7 +562,7 @@ foreach ($cityList as $domain => $city_id)
 <legend class="legend-subtitle"><?=wfMsg('wikiastats_main_statistics_legend')?></legend>
 <div id="ws-upload">
 	<div id="ws-progress-bar"></div>
-	<div style="text-align:right; float:right;">
+	<div style="text-align:right; float:right;margin:0px 0px 0px 20px;">
 	<?= wfMsg("wikiastats_info") ?>
 	<br />
 	<span class="wk-select-class"><select name="ws-domain" id="ws-domain" style="text-align:left; font-size:11px;"><?=$select_stats?></select></span>
@@ -633,8 +637,7 @@ while ($minYear <= $maxYear)
 </div>
 <div id="ws-main-table">
 <?
-if (!empty($main_tbl))
-{
+if (!empty($main_tbl)) {
 	echo $main_tbl;
 }
 ?>

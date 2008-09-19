@@ -54,8 +54,10 @@ function showXLSCompareDialog(statistics, showHtml) {
 		document.getElementById('showStatsNewWindow').style.display = "none";
 	}
 	//----
-	if ((statistics == 9) && (showHtml == false)) {StatsPageLoaderShow(0); wk_stats_city_id = 0; XLSGenerate(statistics, ''); }
-	else if ((statistics == 2) && (showHtml == true)) { StatsPageLoaderShow(1); ShowCompareStats(statistics, "", false); }
+	//if ((statistics == 8) && (showHtml == false)) {StatsPageLoaderShow(0); wk_stats_city_id = 0; XLSGenerate(statistics, '', '', ''); }
+	if ((statistics == 9) && (showHtml == false)) {StatsPageLoaderShow(0); wk_stats_city_id = 0; XLSGenerate(statistics, '', '', ''); }
+	else if ((statistics == 8) && (showHtml == true)) { StatsPageLoaderShow(1); ShowCompareStats(statistics-7, "", false); }
+	else if ((statistics == 9) && (showHtml == true)) { StatsPageLoaderShow(1); ShowCompareStats(statistics-7, "", false); }
 	else {
 		CitiesListCallback = { 
 			success: function( oResponse ) { //YD.get("ws-div-scroll").innerHTML = oResponse.responseText; 
@@ -91,7 +93,7 @@ function showXLSCompareDialog(statistics, showHtml) {
 		}
 	}
 }
-function XLSStats(id) { StatsPageLoaderShow(0); wk_stats_city_id = parseInt(document.getElementById("ws-city-list").value); XLSGenerate(id, ''); }
+function XLSStats(id, date_from, date_to) { StatsPageLoaderShow(0); wk_stats_city_id = parseInt(document.getElementById("ws-city-list").value); XLSGenerate(id, '', date_from, date_to); }
 function ShowCompareStats(id, cityList, openNewWindow) { 
 	if (openNewWindow) { window.open("/index.php?title=Special:WikiaStats&action=compare&table=" + id + "&cities=" + cityList , "compareStatsWindow"); } 
 	else { StatsPageLoaderShow(1); document.location.href = "/index.php?title=Special:WikiaStats&action=compare&table=" + id + "&cities=" + cityList; }

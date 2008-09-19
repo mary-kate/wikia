@@ -25,7 +25,7 @@ class WikiaStatsClass extends SpecialPage
     var $userIsSpecial;
     var $fromDate, $toDate;
 
-    const USE_MEMC = 1;
+    const USE_MEMC = 0;
 
     #--- constructor
     public function __construct()
@@ -121,12 +121,7 @@ class WikiaStatsClass extends SpecialPage
 					$memory_limit = ini_get("memory_limit");
 					$column = $wgRequest->getVal("table"); 
 					$cities = $wgRequest->getVal("cities"); 
-					if ( empty($this->userIsSpecial) && (is_array($wgStatsExcludedNonSpecialGroup)) && (in_array($t, $wgStatsExcludedNonSpecialGroup) )) {
-						// don't show wikians statistics
-						$this->mainSelectCityForm();
-					} else {
-						$this->mainStatsColumnHistoryForm($column, $cities); 
-					}
+					$this->mainStatsColumnHistoryForm($column, $cities); 
 				}
 			} else {
 				$this->mainSelectCityForm();
@@ -186,6 +181,7 @@ class WikiaStatsClass extends SpecialPage
 				"dateRange" => $dateRange,
 				"MAX_NBR"	=> STATS_COLUMN_CITY_NBR,
 				"userIsSpecial"=> $this->userIsSpecial,
+				"DEF_DATE"	=> MIN_STATS_DATE,
 				"wgStatsExcludedNonSpecialGroup" => $wgStatsExcludedNonSpecialGroup,
 			));
 			
