@@ -307,9 +307,6 @@ class ReverseParser
 				break;
 		}
 
-		// fix <br/>
-		$output = str_replace("<br />\n", "\n", $output);
-
 		wfProfileOut(__METHOD__);
 
 		return $output;
