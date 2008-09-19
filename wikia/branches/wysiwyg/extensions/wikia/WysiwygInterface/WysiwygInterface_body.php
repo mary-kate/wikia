@@ -60,7 +60,7 @@ class WysiwygInterface extends SpecialPage {
 			}
 
 			$options = new ParserOptions();
-			///$options->setTidy(true);
+			//$options->setTidy(true);
 
 			$parser = new WysiwygParser();
 			$parser->setOutputType(OT_HTML);
@@ -109,7 +109,7 @@ class WysiwygInterface extends SpecialPage {
 			}
 
 			// macbre: call ReverseParser to parse HTML back to wikimarkup
-			require(dirname(__FILE__).'/ReverseParser.php');
+			require(dirname(__FILE__).'/../Wysiwyg/ReverseParser.php');
 			$reverseParser = new ReverseParser();
 
 			$wgOut->addHtml('<h5>$FCKmetaData</h5>');
