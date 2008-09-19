@@ -9,7 +9,16 @@ FCKToolbarItems.RegisterItem( 'Source', new FCKToolbarButton( 'Source', 'Wikitex
 		var args = arguments;
 
 		if(FCK.EditMode == FCK_EDITMODE_SOURCE) {
-			original.apply(FCK, args);
+
+			FCK.EditingArea.TargetElement.className = 'childrenHidden';
+
+			window.parent.sajax_request_type = 'POST';
+			window.parent.sajax_do_call('wfWysywigAjax', ['wiki2html', FCK.EditingArea.Textarea.value], function(res) {
+				FCK.EditingArea.Textarea.value = res.responseText;
+				FCK.EditingArea.TargetElement.className = '';
+				original.apply(FCK, args);
+			});
+
 		} else if(FCK.EditMode == FCK_EDITMODE_WYSIWYG) {
 			original.apply(FCK, args);
 		}
