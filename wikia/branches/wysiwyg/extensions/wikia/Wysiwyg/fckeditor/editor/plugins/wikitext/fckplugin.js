@@ -44,7 +44,6 @@ FCK.DataProcessor.ConvertToDataFormat = function(rootNode, excludeRoot, ignoreIf
 	FCK.EditingArea.TargetElement.className = 'childrenHidden';
 
 	var html = FCKDataProcessor.prototype.ConvertToDataFormat.call(this, rootNode, excludeRoot, ignoreIfEmptyParagraph, format);
-	alert(html);
 	var wysiwygData = window.parent.document.getElementById('wysiwygData').value;
 
 	window.parent.sajax_request_type = 'POST';
