@@ -486,18 +486,21 @@ class ReverseParser
 		// 1. wrap repeating apostrophes using <nowiki>
 		$text = preg_replace("/('{2,})/", '<nowiki>$1</nowiki>', $text);
 
-		// 2. wrap list bullets using <nowiki>
+		// 2. wrap = using <nowiki>
+		$text = preg_replace("/([=]+)/", '<nowiki>$1</nowiki>', $text);
+
+		// 3. wrap list bullets using <nowiki>
 		$text = preg_replace("/^([#*]+)/", '<nowiki>$1</nowiki>', $text);
 
-		// 3. semicolon at the beginning of the line
+		// 4. semicolon at the beginning of the line
 		if ( in_array($text{0}, array(':', ';')) ) {
 			$text = '<nowiki>' . $text{0} . '</nowiki>' . substr($text, 1);
 		}
 
-		// 4. wrap magic words {{ }} using <nowiki>
+		// 5. wrap magic words {{ }} using <nowiki>
 		$text = preg_replace("/({{2,3})([^}]+)(}{2,3})/", '<nowiki>$1$2$3</nowiki>', $text);
 
-		// 5. wrap [[foo]] using <nowiki>
+		// 6. wrap [[foo]] using <nowiki>
 		$text = preg_replace("/(\[+)([^\]]+)(\]+)/", '<nowiki>$1$2$3</nowiki>', $text);
 
 		return $text;
