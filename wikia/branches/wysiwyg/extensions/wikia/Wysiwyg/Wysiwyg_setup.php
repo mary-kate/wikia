@@ -80,9 +80,13 @@ function wfWysiwygWiki2Html($wikitext, $articleId = -1, $encode = false) {
 	$parser = new WysiwygParser();
 	$parser->setOutputType(OT_HTML);
 
+	$wikitext = preg_replace('/(?<!\n)\n(?!\n)/', "\x7f_new_line_\x7f", $wikitext);
+
 	$FCKparseEnable = true;
 	$html = $parser->parse($wikitext, $wgTitle, $options)->getText();
 	$FCKparseEnable = false;
+
+	$html = str_replace("\x7f_new_line_\x7f", '<!--new_line-->', $html);
 
 	$html = mb_convert_encoding($html, 'HTML-ENTITIES', "UTF-8");
 
