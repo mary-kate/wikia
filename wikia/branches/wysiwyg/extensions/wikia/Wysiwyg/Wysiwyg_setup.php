@@ -14,8 +14,8 @@ function WysiwygInitial($form) {
 		// if article wikitext does not contain '<!-', '{{{' and '}}}'
 		if(!strpos($form->textbox1, '<!-') && !strpos($form->textbox1, '{{{') && !strpos($form->textbox1, '}}}')) {
 
-			global $wgExtensionsPath, $wgOut;
-			$script = '<script type="text/javascript" src="'.$wgExtensionsPath.'/wikia/Wysiwyg/fckeditor/fckeditor.js"></script>';
+			global $wgExtensionsPath, $wgStyleVersion, $wgOut;
+			$script = '<script type="text/javascript" src="'.$wgExtensionsPath.'/wikia/Wysiwyg/fckeditor/fckeditor.js?'.$wgStyleVersion.'"></script>';
 			$script .= <<<EOT
 <script type="text/javascript">
 function initEditor() {
