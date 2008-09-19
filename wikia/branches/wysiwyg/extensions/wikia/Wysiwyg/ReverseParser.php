@@ -305,6 +305,12 @@ class ReverseParser
 					$output = self::cleanupTextContent($node->textContent);
 				}
 				break;
+
+			case XML_COMMENT_NODE:
+				// line breaks in wikitext are replaced with comments by our hacked parser
+				// TODO: detect comment type
+				$output = "\n";
+				break;
 		}
 
 		wfProfileOut(__METHOD__);
