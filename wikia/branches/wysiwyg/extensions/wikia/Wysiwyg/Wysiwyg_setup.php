@@ -56,7 +56,22 @@ EOT;
 }
 
 $wgAjaxExportList[] = 'wfWysywigAjax';
-function wfWysywigAjax($type) {
-	return "$type: test";
+function wfWysywigAjax($type, $input = false, $wysiwygData = false) {
+	switch ($type) {
+		case 'html2wiki':
+			return wfWysiwygHtml2Wiki($input, $wysiwygData, true);
+			break;
+	}
+	return false;
 }
 
+function wfWysiwygHtml2Wiki($html, $wysiwygData, $decode = false) {
+	require(dirname(__FILE__).'/ReverseParser.php');
+	$reverseParser = new ReverseParser();
+
+	if ($decode) {
+		$wysiwygData = Wikia::json_decode($wysiwygData, true);
+	}
+
+	return $reverseParser->parse($html, $wysiwygData);
+}
