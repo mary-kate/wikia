@@ -41,6 +41,9 @@ class ReverseParser
 		// fix stupid UTF-8 bug
 		$html = mb_convert_encoding($html, 'HTML-ENTITIES', "UTF-8");
 
+		// clean-up line breaks
+		$html = str_replace("<br />\n", "\n", $html);
+
 		wfDebug(__METHOD__.": HTML\n\n{$html}\n\n");
 		wfDebug(__METHOD__.": fckData\n\n".print_r($fckData, true)."\n");
 
@@ -221,7 +224,7 @@ class ReverseParser
 							break;
 
 						case 'br':
-							$output = '<br />';
+							$output = '<br/>';
 							break;
 
 						case 'hr':
@@ -249,7 +252,7 @@ class ReverseParser
 							break;
 
 						case 'td':
-							$output = "|{$content}";
+							$output = "|{$content}\n";
 							break;
 
 						// ignore tbody tag
@@ -306,6 +309,9 @@ class ReverseParser
 				}
 				break;
 		}
+
+		// fix <br/>
+		$output = str_replace("<br />\n", "\n", $output);
 
 		wfProfileOut(__METHOD__);
 
@@ -379,7 +385,7 @@ class ReverseParser
 
 				// __TOC__
 				case 'double underscore':
-					return $node->textContent;
+					return $refData['description'];
 			}
 		}
 
