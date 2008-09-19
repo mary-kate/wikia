@@ -37,6 +37,16 @@ body
     border: #696969 1px solid;
 }
 
+td.childrenHidden
+{
+	background-color: #666;
+}
+
+td.childrenHidden textarea, td.childrenHidden iframe
+{
+    visibility: hidden;
+}
+
 .SourceField
 {
     padding: 5px;

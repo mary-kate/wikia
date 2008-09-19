@@ -5,7 +5,6 @@ $wgExtensionCredits['other'][] = array(
 );
 
 $wgHooks['EditPage::showEditForm:initial'][] = 'WysiwygInitial';
-
 function WysiwygInitial($form) {
 	// only if edited article is in main or image namespace and article wikitext does not contain '<!-', '{{{' and '}}}'
 	if(($form->mTitle->mNamespace == NS_MAIN || $form->mTitle->mNamespace == NS_IMAGE) && !strpos($form->textbox1, '<!-') && !strpos($form->textbox1, '{{{') && !strpos($form->textbox1, '}}}')) {
@@ -32,7 +31,32 @@ addOnloadHook(initEditor);
 </script>
 EOT;
 			$wgOut->addScript($script);
+
+			/* temporary code begin */
+			require("$IP/extensions/wikia/WysiwygInterface/WysiwygInterface_body.php");
+			$options = new ParserOptions();
+			$options->setTidy(true);
+
+			$parser = new WysiwygParser();
+			$parser->setOutputType(OT_HTML);
+			global $FCKmetaData, $FCKparseEnable, $wgTitle;
+			$FCKparseEnable = true;
+			$form->textbox1 = $parser->parse($form->textbox1, $wgTitle, $options)->getText();
+			$FCKparseEnable = false;
+			$form->textbox1 = mb_convert_encoding($form->textbox1, 'HTML-ENTITIES', "UTF-8");
+			if(!is_array($FCKmetaData)) {
+				$FCKmetaData = array();
+			}
+			$wgOut->addHTML('<input type="hidden" id="wysiwygData" name="wysiwygData" value="'.Wikia::json_encode($FCKmetaData, true).'" />');
+			/* temporary code end */
+
 		}
 	}
 	return true;
 }
+
+$wgAjaxExportList[] = 'wfWysywigAjax';
+function wfWysywigAjax($type) {
+	return "$type: test";
+}
+
