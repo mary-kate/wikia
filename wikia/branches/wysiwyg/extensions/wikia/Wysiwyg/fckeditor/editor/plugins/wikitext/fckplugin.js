@@ -57,3 +57,22 @@ FCK.DataProcessor.ConvertToDataFormat = function(rootNode, excludeRoot, ignoreIf
 
 	return '';
 };
+
+FCK.Events.AttachEvent( 'OnAfterSetHTML', function() {
+	if(FCK.EditMode == FCK_EDITMODE_WYSIWYG) {
+		var spans = FCK.EditingArea.Document.body.getElementsByTagName('span');
+		for(var i = 0; i < spans.length; i++) {
+			var refid = spans[i].getAttribute('refid');
+			if(refid != null) {
+				spans[i].style.backgroundColor = '#ffff00';
+				spans[i].style.color = '#000000';
+				spans[i].contentEditable = false;
+			}
+		}
+		FCK.EditorDocument.addEventListener( 'click', function(e) {
+			if(e.target.tagName == 'SPAN' && e.target.getAttribute('refid') != null) {
+				FCKSelection.SelectNode(e.target);
+			}
+		}, true);
+	}
+});
