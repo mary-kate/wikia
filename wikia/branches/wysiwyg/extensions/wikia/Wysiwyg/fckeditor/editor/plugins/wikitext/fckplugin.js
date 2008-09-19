@@ -3,7 +3,7 @@ FCKToolbarItems.RegisterItem( 'Source', new FCKToolbarButton( 'Source', 'Wikitex
 
 (function() {
 
-	var original = FCK.SwitchEditMode ;
+	var originalSwitchEditMode = FCK.SwitchEditMode;
 
 	FCK.SwitchEditMode = function() {
 
@@ -25,7 +25,7 @@ FCKToolbarItems.RegisterItem( 'Source', new FCKToolbarButton( 'Source', 'Wikitex
 				window.parent.document.getElementById('wysiwygData').value = res_array[1];
 				FCK.EditingArea.Textarea.value = res_array[0];
 				FCK.EditingArea.TargetElement.className = '';
-				original.apply(FCK, args);
+				originalSwitchEditMode.apply(FCK, args);
 				FCK.ToolbarSet.Items[0].Enable();
 				FCK.ToolbarSet.Items[0].RefreshState();
 			});
@@ -33,31 +33,32 @@ FCKToolbarItems.RegisterItem( 'Source', new FCKToolbarButton( 'Source', 'Wikitex
 		} else if(FCK.EditMode == FCK_EDITMODE_WYSIWYG) {
 			FCK.ToolbarSet.Items[0].Disable();
 			FCK.ToolbarSet.Items[0].RefreshState();
-			original.apply(FCK, args);
+			FCK.EditingArea.TargetElement.className = 'childrenHidden';
+			originalSwitchEditMode.apply(FCK, args);
 		}
 
 	}
+
 })();
 
+FCK.Events.AttachEvent( 'OnAfterSetHTML', function() {
+	if(FCK.EditingArea.TargetElement.className == 'childrenHidden') {
+		var html = FCK.GetData();
+		var wysiwygData = window.parent.document.getElementById('wysiwygData').value;
 
-FCK.DataProcessor.ConvertToDataFormat = function(rootNode, excludeRoot, ignoreIfEmptyParagraph, format) {
-	FCK.EditingArea.TargetElement.className = 'childrenHidden';
+		window.parent.sajax_request_type = 'POST';
+		window.parent.sajax_do_call('wfWysywigAjax', ['html2wiki', html, wysiwygData], function(res) {
+			window.parent.document.getElementById('wysiwygData').value = '';
+			FCK.EditingArea.Textarea.value = res.responseText;
+			FCK.EditingArea.TargetElement.className = '';
+			FCK.ToolbarSet.Items[0].Enable();
+			FCK.ToolbarSet.Items[0].RefreshState();
+		});
 
-	var html = FCKDataProcessor.prototype.ConvertToDataFormat.call(this, rootNode, excludeRoot, ignoreIfEmptyParagraph, format);
-	var wysiwygData = window.parent.document.getElementById('wysiwygData').value;
+	}
+});
 
-	window.parent.sajax_request_type = 'POST';
-	window.parent.sajax_do_call('wfWysywigAjax', ['html2wiki', html, wysiwygData], function(res) {
-		window.parent.document.getElementById('wysiwygData').value = '';
-		FCK.EditingArea.Textarea.value = res.responseText;
-		FCK.EditingArea.TargetElement.className = '';
-		FCK.ToolbarSet.Items[0].Enable();
-		FCK.ToolbarSet.Items[0].RefreshState();
-	});
-
-	return '';
-};
-
+/*
 FCK.Events.AttachEvent( 'OnAfterSetHTML', function() {
 	if(FCK.EditMode == FCK_EDITMODE_WYSIWYG) {
 		FCK.wysiwygData = eval("{"+window.parent.document.getElementById('wysiwygData').value+"}");
@@ -81,3 +82,4 @@ FCK.Events.AttachEvent( 'OnAfterSetHTML', function() {
 
 	}
 });
+*/
