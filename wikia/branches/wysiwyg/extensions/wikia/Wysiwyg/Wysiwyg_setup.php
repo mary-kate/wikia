@@ -1,7 +1,9 @@
 <?php
 $wgExtensionCredits['other'][] = array(
 	'name' => 'Wysiwyg',
-	'description' => 'FCKeditor integration for MediaWiki'
+	'description' => 'FCKeditor integration for MediaWiki',
+	'version' => 0.01,
+	'author' => array('Inez Korczyński', 'Maciej Brencz', 'Maciej Błaszkowski (Marooned)', 'Łukasz \'TOR\' Garczewski')
 );
 
 $wgHooks['EditPage::showEditForm:initial'][] = 'WysiwygInitial';
