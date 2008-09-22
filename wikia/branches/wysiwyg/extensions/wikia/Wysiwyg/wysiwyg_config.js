@@ -11,3 +11,8 @@ FCKConfig.EditorAreaStyles = window.parent.stylepath + '/monobook/main.css?' + F
 
 FCKConfig.BodyId = 'fckEditor';
 FCKConfig.Plugins.Add('wikitext');
+
+FCKConfig.FillEmptyBlocks = false;
+FCKConfig.IgnoreEmptyParagraphValue = true;
+FCKConfig.FormatSource = false;
+FCKConfig.FormatOutput = false;
