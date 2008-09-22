@@ -4,9 +4,10 @@
  * transformation into wikimarkup
  *
  * @author Maciej 'macbre' Brencz <macbre(at)wikia-inc.com>
+ * @author Inez Korczynski <inez(at)wikia-inc.com>
  */
-class ReverseParser
-{
+class ReverseParser {
+
 	// DOMdocument object used to parse HTML
 	private $dom;
 
@@ -19,18 +20,21 @@ class ReverseParser
 	// refIds data from JSON array
 	private static $fckData = array();
 
+	// level => nodeName
+	private static $lastNodeName = array();
+
 	function __construct() {
 		$this->dom = new DOMdocument();
 	}
 
 	/**
-	 * Parse HTML provided into wikimarkup
+	 * Parse provided HTML into wikimarkup
 	 */
 	public function parse($html, $fckData = array()) {
 		wfProfileIn(__METHOD__);
 
 		if (!is_string($html) || $html == '') {
-			return false;
+			return '';
 		}
 
 		$output = '';
@@ -38,13 +42,8 @@ class ReverseParser
 		// refIds
 		self::$fckData = $fckData;
 
-		// fix stupid UTF-8 bug
-		$html = mb_convert_encoding($html, 'HTML-ENTITIES', "UTF-8");
-
-		$html = str_replace("<!--\x7f_1--> ", "\n", $html);
-
-		wfDebug(__METHOD__.": HTML\n\n{$html}\n\n");
-		wfDebug(__METHOD__.": fckData\n\n".print_r($fckData, true)."\n");
+		// fix UTF-8 bug
+		$html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
 
 		// load HTML into DOMdocument
 		wfSuppressWarnings();
@@ -55,6 +54,8 @@ class ReverseParser
 			return '';
 		}
 
+		wfDebug("WYSIWYG ReverseParser parse for:\n{$html}\n");
+
 		// cleanup
 		self::$listLevel = 0;
 
@@ -62,7 +63,7 @@ class ReverseParser
 		$body = $this->dom->getElementsByTagName('body')->item(0);
 
 		// nothing inside body?
-		if ( !$body->hasChildNodes() ) {
+		if (!$body->hasChildNodes()) {
 			return '';
 		}
 
@@ -72,8 +73,6 @@ class ReverseParser
 		for ($n=0; $n < $nodes->length; $n++) {
 			$output .= $this->parseNode($nodes->item($n));
 		}
-
-		wfDebug(__METHOD__.": wiki\n\n{$output}\n\n");
 
 		wfProfileOut(__METHOD__);
 
@@ -92,10 +91,10 @@ class ReverseParser
 		$output = '';
 		$level++;
 
-		//wfDebug(__METHOD__. str_repeat(':', $level) . "{$node->nodeName} ({$node->nodeType})\n");
+		wfDebug("WYSIWYG ReverseParser parseNode for nodeName: {$node->nodeName} on level: {$level}\n");
 
 		// recursively parse child nodes
-		if ( $node->hasChildNodes() ) {
+		if ($node->hasChildNodes()) {
 			$nodes = $node->childNodes;
 
 			$childOutput = '';
@@ -126,22 +125,20 @@ class ReverseParser
 
 			if ($isListNode) {
 				// fix for different list types on the same level of nesting
-				if ( $node->previousSibling && in_array($node->previousSibling->nodeName, array('ol', 'ul', 'dl')) && self::$listLevel > 1 ) {
+				if ($node->previousSibling && in_array($node->previousSibling->nodeName, array('ol', 'ul', 'dl')) && self::$listLevel > 1) {
 					$childOutput = "\n" . trim($childOutput);
-				}
-				else {
+				} else {
 					$childOutput = trim($childOutput);
 				}
 
 				self::$listLevel--;
 				self::$listBullets = substr(self::$listBullets, 0, -1);
 			}
-		}
-		else {
+		} else {
 			$childOutput = false;
 		}
 
-		switch( $node->nodeType ) {
+		switch ($node->nodeType) {
 			case XML_ELEMENT_NODE:
 				$wasHTML = $node->getAttribute('washtml');
 
@@ -171,11 +168,6 @@ class ReverseParser
 				}
 				// convert HTML back to wikimarkup
 				else {
-
-					if(trim($content) == '') {
-						return '';
-					}
-
 					switch ($node->nodeName) {
 						// basic formatting
 						case 'b':
@@ -196,7 +188,7 @@ class ReverseParser
 							} else {
 								$prefix = '';
 							}
-							if($node->previousSibling) {
+							if($node->previousSibling && $node->previousSibling->previousSibling && $node->previousSibling->previousSibling->nodeName == 'p') {
 								$prefix = "\n{$prefix}";
 							}
 							$output = "{$prefix}{$content}\n";
@@ -227,7 +219,7 @@ class ReverseParser
 							break;
 
 						case 'br':
-							$output = "\n";
+							$output = "<br />";
 							break;
 
 						case 'hr':
@@ -274,28 +266,26 @@ class ReverseParser
 								if ($indentation !== false) {
 									$prefix = str_repeat(':', $indentation);
 								}
-							}
-							else {
+							} else {
 								$prefix = '';
+							}
+							if($node->previousSibling) {
+								$prefix = "\n".$prefix;
 							}
 							$output = $prefix . $content . (self::$listLevel == 0 ? "\n" : '');
 							break;
-
 						case 'li':
 						case 'dd':
 						case 'dt':
 							$output = self::handleListItem($node, $content);
 							break;
-
 						// handle more complicated tags
 						case 'a':
 							$output = self::handleLink($node, $content);
 							break;
-
 						case 'span':
 							$output = self::handleSpan($node);
 							break;
-
 						// HTML tags
 						default:
 							$attr = self::getAttributesStr($node);
@@ -324,14 +314,13 @@ class ReverseParser
 	 */
 	static function getAttributesStr($node) {
 
-		if ( !$node->hasAttributes() ) {
+		if (!$node->hasAttributes()) {
 			return '';
 		}
 
 		$attStr = '';
-
 		foreach ($node->attributes as $attrName => $attrNode) {
-			if( $attrName == 'washtml') {
+			if ($attrName == 'washtml') {
 				continue;
 			}
 			$attStr .= ' ' . $attrName . '="' . $attrNode->nodeValue  . '"';
@@ -346,7 +335,6 @@ class ReverseParser
 	 *
 	 * Span is used to wrap various elements like templates etc.
 	 */
-
 	static function handleSpan($node) {
 
 		// handle spans with refId attribute: images, templates etc.
@@ -396,7 +384,6 @@ class ReverseParser
 	/**
 	 * Returns wikimarkup for <a> tag
 	 */
-
 	static function handleLink($node, $content) {
 
 		// handle links with refId attribute
@@ -446,25 +433,21 @@ class ReverseParser
 	}
 
 	/**
-	 * Returns wikimarkup for (un)ordered / definition lists
+	 * Returns wikimarkup for ordered, unordered and definition lists
 	 */
-
 	static function handleListItem($node, $content) {
-
 		switch($node->nodeName) {
 			case 'li':
 				$content = ' ' . ltrim($content, ' ') . "\n";
 				return self::$listBullets . $content;
-
 			case 'dt':
 				return substr(self::$listBullets, 0, -1) . ";{$node->textContent}\n";
-
 			case 'dd':
 				// hack for :::::foo markup used for indentation
+				// TODO: explain this hack
 				if ($node->hasChildNodes() && $node->childNodes->item(0)->nodeName == 'dl') {
 					return $content . "\n";
-				}
-				else {
+				} else {
 					return self::$listBullets . $content . "\n";
 				}
 			}
@@ -473,7 +456,6 @@ class ReverseParser
 	/**
 	 * Returns value of margin-left CSS property (FALSE if none)
 	 */
-
 	static function getIndentationLevel($node) {
 		if ( !$node->hasAttributes() ) {
 			return false;
@@ -495,8 +477,10 @@ class ReverseParser
 	static function cleanupTextContent($text) {
 
 		if (empty($text)) {
-			return $text;
+			return '';
 		}
+
+		wfDebug("WYSIWYG ReverseParser cleanupTextContent for: {$text}\n");
 
 		// 1. wrap repeating apostrophes using <nowiki>
 		$text = preg_replace("/('{2,})/", '<nowiki>$1</nowiki>', $text);
@@ -508,7 +492,7 @@ class ReverseParser
 		$text = preg_replace("/^([#*]+)/", '<nowiki>$1</nowiki>', $text);
 
 		// 4. semicolon at the beginning of the line
-		if ( in_array($text{0}, array(':', ';')) ) {
+		if (in_array($text{0}, array(':', ';'))) {
 			$text = '<nowiki>' . $text{0} . '</nowiki>' . substr($text, 1);
 		}
 
@@ -521,4 +505,3 @@ class ReverseParser
 		return $text;
 	}
 }
-
