@@ -276,5 +276,7 @@ $wgWikiaStatsMessages["en"] = array(
 	"wikiastats_filename_column_V" => "redirects",
 	"wikiastats_filename_column_W" => "uploaded_images",
 	"wikiastats_filename_column_X" => "images_with_links",
+	"wikiastats_code_version" => "Code version:",
+	"wikiastats_mediawiki_stats" => "MediaWiki statistics:",	
 );
 ?>
