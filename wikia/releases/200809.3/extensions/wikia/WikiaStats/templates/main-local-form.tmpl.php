@@ -550,7 +550,7 @@ YAHOO.util.Event.onDOMReady(function () {
 <legend class="legend-subtitle"><?=wfMsg('wikiastats_main_statistics_legend')?></legend>
 <div id="ws-upload">
 	<div id="ws-progress-bar"></div>
-	<div style="text-align:right; float:right;">
+	<div style="text-align:right; float:right; margin:0px 0px 0px 20px;">
 	<span class="wk-select-class" valign="middle"><?= wfMsg('wikiastats_daterange_from') ?> 
 	<select name="ws-date-month-from" id="ws-date-month-from" style="text-align:left; font-size:11px;">
 <?php
