@@ -23,7 +23,7 @@ $wgExtensionCredits['specialpage'][] = array(
    'name' => 'CreatePage',
    'author' => 'Bartek Łapiński, Lucas \'TOR\' Garczewski, Przemek Piotrowski'  ,
    'url' => 'http://help.wikia.com/wiki/Help:CreatePage' ,
-   'version' => '3.59' ,
+   'version' => '3.60' ,
    'description' => 'easy to use interface for creating new articles'
 );
 
@@ -48,6 +48,7 @@ if ($wgCreatePageCoverRedLinks) {
 
 /* special page init */
 $wgSpecialPages ['createpage'] = array('SpecialPage', 'Createpage', 'createpage', true, 'wfCreatePageSpecial', false) ;
+$wgSpecialPageGroups['Createpage'] = 'pagetools';
 
 // when AdvancedEdit button is used, the existing content is preloaded
 function wfCreatePagePreloadContent ($editpage) {
