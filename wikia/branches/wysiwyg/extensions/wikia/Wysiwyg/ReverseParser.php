@@ -360,6 +360,13 @@ class ReverseParser {
 				break;
 		}
 
+		if ($node->nodeType == XML_TEXT_NODE) {
+			// handle two empty lines at the beginning of wikitext
+			if ($parentNode == 'p' && $currentNodeIndex == 1 && $previousNode == 'br') {
+				$output = substr($output, 1); // remove space for the beginning
+			} 
+		}
+
 		$output = $prefix . $output . $suffix;
 
 		wfProfileOut(__METHOD__);
