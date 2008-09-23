@@ -12,16 +12,16 @@ class ReverseParser {
 	private $dom;
 
 	// used by nested lists parser
-	private static $listLevel = 0;
+	private $listLevel = 0;
 
 	// bullets stack for nested lists
-	private static $listBullets = '';
+	private $listBullets = '';
 
 	// refIds data from JSON array
-	private static $fckData = array();
+	private $fckData = array();
 
 	// level => nodeName
-	private static $lastNodeName = array();
+	private $lastNodeName = array();
 
 	function __construct() {
 		$this->dom = new DOMdocument();
@@ -40,7 +40,7 @@ class ReverseParser {
 		$output = '';
 
 		// refIds
-		self::$fckData = $fckData;
+		$this->fckData = $fckData;
 
 		// fix UTF-8 bug
 		$html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
@@ -57,7 +57,7 @@ class ReverseParser {
 		wfDebug("WYSIWYG ReverseParser parse for:\n{$html}\n");
 
 		// cleanup
-		self::$listLevel = 0;
+		$this->listLevel = 0;
 
 		// let's begin with <body> node
 		$body = $this->dom->getElementsByTagName('body')->item(0);
@@ -103,7 +103,7 @@ class ReverseParser {
 			$isListNode = in_array($node->nodeName, array('ul', 'ol', 'dl'));
 
 			if ($isListNode) {
-				self::$listLevel++;
+				$this->listLevel++;
 				// build bullets stack
 				switch ($node->nodeName) {
 					case 'ul':
@@ -116,7 +116,7 @@ class ReverseParser {
 						$bullet = ':';
 						break;
 				}
-				self::$listBullets .= $bullet;
+				$this->listBullets .= $bullet;
 			}
 
 			for ($n=0; $n < $nodes->length; $n++) {
@@ -125,14 +125,14 @@ class ReverseParser {
 
 			if ($isListNode) {
 				// fix for different list types on the same level of nesting
-				if ($node->previousSibling && in_array($node->previousSibling->nodeName, array('ol', 'ul', 'dl')) && self::$listLevel > 1) {
+				if ($node->previousSibling && in_array($node->previousSibling->nodeName, array('ol', 'ul', 'dl')) && $this->listLevel > 1) {
 					$childOutput = "\n" . trim($childOutput);
 				} else {
 					$childOutput = trim($childOutput);
 				}
 
-				self::$listLevel--;
-				self::$listBullets = substr(self::$listBullets, 0, -1);
+				$this->listLevel--;
+				$this->listBullets = substr($this->listBullets, 0, -1);
 			}
 		} else {
 			$childOutput = false;
@@ -142,12 +142,12 @@ class ReverseParser {
 			case XML_ELEMENT_NODE:
 
 				$wasHTML = $node->getAttribute('washtml');
-				$content = ($childOutput !== false) ? $childOutput : self::cleanupTextContent($node->textContent);
+				$content = ($childOutput !== false) ? $childOutput : $this->cleanupTextContent($node->textContent);
 
 				// if originally specified tag was an html then save it back as html
 				if (!empty($wasHTML)) {
 
-					$attStr = self::getAttributesStr($node);
+					$attStr = $this->getAttributesStr($node);
 
 					switch ($node->nodeName) {
 						case 'br':
@@ -191,7 +191,7 @@ class ReverseParser {
 
 						case 'p':
 							// handle indentations
-							$indentation = self::getIndentationLevel($node);
+							$indentation = $this->getIndentationLevel($node);
 							if ($indentation !== false) {
 								$prefix = str_repeat(':', $indentation);
 							} else {
@@ -235,7 +235,7 @@ class ReverseParser {
 						// tables
 						// @see http://en.wikipedia.org/wiki/Help:Table
 						case 'table':
-							$attStr = self::getAttributesStr($node);
+							$attStr = $this->getAttributesStr($node);
 							$output = "{|{$attStr}\n{$content}|}\n";
 							break;
 
@@ -262,7 +262,7 @@ class ReverseParser {
 						case 'dl':
 							// handle indentations
 							if ($node->nodeName == 'dl') {
-								$indentation = self::getIndentationLevel($node);
+								$indentation = $this->getIndentationLevel($node);
 								$prefix = '';
 								if ($indentation !== false) {
 									$prefix = str_repeat(':', $indentation);
@@ -273,23 +273,23 @@ class ReverseParser {
 							if($node->previousSibling) {
 								$prefix = "\n".$prefix;
 							}
-							$output = $prefix . $content . (self::$listLevel == 0 ? "\n" : '');
+							$output = $prefix . $content . ($this->listLevel == 0 ? "\n" : '');
 							break;
 						case 'li':
 						case 'dd':
 						case 'dt':
-							$output = self::handleListItem($node, $content);
+							$output = $this->handleListItem($node, $content);
 							break;
 						// handle more complicated tags
 						case 'a':
-							$output = self::handleLink($node, $content);
+							$output = $this->handleLink($node, $content);
 							break;
 						case 'span':
-							$output = self::handleSpan($node);
+							$output = $this->handleSpan($node);
 							break;
 						// HTML tags
 						default:
-							$attr = self::getAttributesStr($node);
+							$attr = $this->getAttributesStr($node);
 							$output = "<{$node->nodeName}{$attr}>{$content}</{$node->nodeName}>";
 					}
 				}
@@ -299,7 +299,7 @@ class ReverseParser {
 				if(trim($node->textContent) == '') {
 					$output = '';
 				} else {
-					$output = self::cleanupTextContent($node->textContent);
+					$output = $this->cleanupTextContent($node->textContent);
 				}
 				break;
 
@@ -313,7 +313,7 @@ class ReverseParser {
 	/**
 	 * Returns HTML string containing node arguments
 	 */
-	static function getAttributesStr($node) {
+	private function getAttributesStr($node) {
 
 		if (!$node->hasAttributes()) {
 			return '';
@@ -336,13 +336,13 @@ class ReverseParser {
 	 *
 	 * Span is used to wrap various elements like templates etc.
 	 */
-	static function handleSpan($node) {
+	private function handleSpan($node) {
 
 		// handle spans with refId attribute: images, templates etc.
 		$refId = $node->getAttribute('refid');
 
-		if ( is_numeric($refId) && isset(self::$fckData[$refId]) ) {
-			$refData = (array) self::$fckData[$refId];
+		if ( is_numeric($refId) && isset($this->fckData[$refId]) ) {
+			$refData = (array) $this->fckData[$refId];
 
 			switch($refData['type']) {
 				// [[Image:foo.jpg]]
@@ -385,13 +385,13 @@ class ReverseParser {
 	/**
 	 * Returns wikimarkup for <a> tag
 	 */
-	static function handleLink($node, $content) {
+	private function handleLink($node, $content) {
 
 		// handle links with refId attribute
 		$refId = $node->getAttribute('refid');
 
-		if ( is_numeric($refId) && isset(self::$fckData[$refId]) ) {
-			$refData = (array) self::$fckData[$refId];
+		if ( is_numeric($refId) && isset($this->fckData[$refId]) ) {
+			$refData = (array) $this->fckData[$refId];
 
 			// allow formatting of link description
 			if ($refData['description'] != '') {
@@ -436,20 +436,20 @@ class ReverseParser {
 	/**
 	 * Returns wikimarkup for ordered, unordered and definition lists
 	 */
-	static function handleListItem($node, $content) {
+	private function handleListItem($node, $content) {
 		switch($node->nodeName) {
 			case 'li':
 				$content = ' ' . ltrim($content, ' ') . "\n";
-				return self::$listBullets . $content;
+				return $this->listBullets . $content;
 			case 'dt':
-				return substr(self::$listBullets, 0, -1) . ";{$node->textContent}\n";
+				return substr($this->listBullets, 0, -1) . ";{$node->textContent}\n";
 			case 'dd':
 				// hack for :::::foo markup used for indentation
 				// TODO: explain this hack
 				if ($node->hasChildNodes() && $node->childNodes->item(0)->nodeName == 'dl') {
 					return $content . "\n";
 				} else {
-					return self::$listBullets . $content . "\n";
+					return $this->listBullets . $content . "\n";
 				}
 			}
 	}
@@ -457,7 +457,7 @@ class ReverseParser {
 	/**
 	 * Returns value of margin-left CSS property (FALSE if none)
 	 */
-	static function getIndentationLevel($node) {
+	private function getIndentationLevel($node) {
 		if ( !$node->hasAttributes() ) {
 			return false;
 		}
@@ -475,7 +475,7 @@ class ReverseParser {
 	/**
 	 * Clean up node text content
 	 */
-	static function cleanupTextContent($text) {
+	private function cleanupTextContent($text) {
 
 		if (empty($text)) {
 			return '';
