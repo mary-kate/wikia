@@ -102,6 +102,9 @@ class ReverseParser {
 		if ($node->nodeType == XML_ELEMENT_NODE) {
 			$this->nodesTree[$level][] = $node->nodeName;
 		}
+		else {
+			$this->nodesTree[$level][] = '#text';
+		}
 
 		$level++;
 
