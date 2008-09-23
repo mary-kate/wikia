@@ -198,7 +198,7 @@ class ReverseParser {
 							break;
 
 						case 'br':
-							$output = "<br />";
+							$output = '';
 							// TODO: there should be usually \n after br tag, but it does not work always
 							// e.g. in all types of lists
 							break;
@@ -326,7 +326,7 @@ class ReverseParser {
 		$currentNodeIndex = count($this->nodesTree[$level-1]) - 1;
 
 		$previousNode = ($currentNodeIndex > 0) ? $this->nodesTree[$level-1][$currentNodeIndex - 1] : false;
-		$parentNode = ($level > 0) ? end($this->nodesTree[$level-1]) : false;
+		$parentNode = ($level > 1) ? end($this->nodesTree[$level-2]) : false;
 
 		$prefix = $suffix = '';
 
@@ -339,6 +339,20 @@ class ReverseParser {
 				// paragraph after paragraph
 				else if ($previousNode == 'p') {
 					$prefix = "\n\n";
+				}
+				// fix for empty paragraphs
+				if ($output == '') {
+					$output = "\n";
+				}
+				break;
+
+			case 'br':
+				//var_dump($this->nodesTree); var_dump($parentNode); var_dump($currentNodeIndex);
+				if ($parentNode == 'p' && $currentNodeIndex == 0) {
+					$output = "\n";
+				} 
+				else {
+					$output = '<br />';
 				}
 				break;
 		}
