@@ -210,7 +210,7 @@ function wk_show_page_edited_details(page_id)
 	//---
 	YD.get("ws-progress-page-edits-bar").innerHTML="&nbsp;<img src=\"/extensions/wikia/WikiaStats/images/ajax_loader.gif\" />";
 	//---
-	var baseurl = "/index.php?action=ajax&rs=axWStatisticsPageEditsDetails" + params;
+	var baseurl = wgScript + "?action=ajax&rs=axWStatisticsPageEditsDetails" + params;
 	YAHOO.util.Connect.asyncRequest( "GET", baseurl, YAHOO.Wikia.Statistics.PageEditsDetailsStatisticCallback);
 }
 
@@ -302,7 +302,7 @@ YAHOO.util.Event.onDOMReady(function () {
 		YE.preventDefault(e);
 		YD.get("ws-progress-bar").innerHTML="&nbsp;<img src=\"/extensions/wikia/WikiaStats/images/progressbar.gif\" />";
 		//---
-		var baseurl = "/index.php?action=ajax&rs=axWStatisticsGenerate" + params;
+		var baseurl = wgScript + "?action=ajax&rs=axWStatisticsGenerate" + params;
 		YAHOO.util.Connect.asyncRequest( "GET", baseurl, YAHOO.Wikia.Statistics.MainStatisticCallback);
 	};
 
@@ -405,7 +405,7 @@ YAHOO.util.Event.onDOMReady(function () {
 		YE.preventDefault(e);
 		YD.get("ws-progress-edits-bar").innerHTML="&nbsp;<img src=\"/extensions/wikia/WikiaStats/images/ajax_loader.gif\" />";
 		//---
-		var baseurl = "/index.php?action=ajax&rs=axWStatisticsDistribEditsGenerate" + params;
+		var baseurl = wgScript + "?action=ajax&rs=axWStatisticsDistribEditsGenerate" + params;
 		YAHOO.util.Connect.asyncRequest( "GET", baseurl, YAHOO.Wikia.Statistics.DistribEditsStatisticCallback);
 	};
 
@@ -419,7 +419,7 @@ YAHOO.util.Event.onDOMReady(function () {
 		YE.preventDefault(e);
 		YD.get("ws-progress-wikians-bar").innerHTML="&nbsp;<img src=\"/extensions/wikia/WikiaStats/images/ajax_loader.gif\" />";
 		//---
-		var baseurl = "/index.php?action=ajax&rs=axWStatisticsWikiansRank" + params;
+		var baseurl = wgScript + "?action=ajax&rs=axWStatisticsWikiansRank" + params;
 		YAHOO.util.Connect.asyncRequest( "GET", baseurl, YAHOO.Wikia.Statistics.WikiansRankStatisticCallback);
 	};
 
@@ -432,7 +432,7 @@ YAHOO.util.Event.onDOMReady(function () {
 		YE.preventDefault(e);
 		YD.get("ws-progress-anon-bar").innerHTML="&nbsp;<img src=\"/extensions/wikia/WikiaStats/images/ajax_loader.gif\" />";
 		//---
-		var baseurl = "/index.php?action=ajax&rs=axWStatisticsAnonUsers" + params;
+		var baseurl = wgScript + "?action=ajax&rs=axWStatisticsAnonUsers" + params;
 		YAHOO.util.Connect.asyncRequest( "GET", baseurl, YAHOO.Wikia.Statistics.UserAnonStatisticCallback);
 	};
 
@@ -456,7 +456,7 @@ YAHOO.util.Event.onDOMReady(function () {
 		YE.preventDefault(e);
 		YD.get("ws-progress-article-bar").innerHTML="&nbsp;<img src=\"/extensions/wikia/WikiaStats/images/ajax_loader.gif\" />";
 		//---
-		var baseurl = "/index.php?action=ajax&rs=axWStatisticsArticleSize" + params;
+		var baseurl = wgScript + "?action=ajax&rs=axWStatisticsArticleSize" + params;
 		YAHOO.util.Connect.asyncRequest( "GET", baseurl, YAHOO.Wikia.Statistics.UserArticlesStatisticCallback);
 	};
 
@@ -470,7 +470,7 @@ YAHOO.util.Event.onDOMReady(function () {
 		YE.preventDefault(e);
 		YD.get("ws-progress-namespace-bar").innerHTML="&nbsp;<img src=\"/extensions/wikia/WikiaStats/images/ajax_loader.gif\" />";
 		//---
-		var baseurl = "/index.php?action=ajax&rs=axWStatisticsNamespaceCount" + params;
+		var baseurl = wgScript + "?action=ajax&rs=axWStatisticsNamespaceCount" + params;
 		YAHOO.util.Connect.asyncRequest( "GET", baseurl, YAHOO.Wikia.Statistics.NamespaceStatisticCallback);
 	};
 
@@ -483,7 +483,7 @@ YAHOO.util.Event.onDOMReady(function () {
 		YE.preventDefault(e);
 		YD.get("ws-progress-page-edits-bar").innerHTML="&nbsp;<img src=\"/extensions/wikia/WikiaStats/images/ajax_loader.gif\" />";
 		//---
-		var baseurl = "/index.php?action=ajax&rs=axWStatisticsPageEdits" + params;
+		var baseurl = wgScript + "?action=ajax&rs=axWStatisticsPageEdits" + params;
 		YAHOO.util.Connect.asyncRequest( "GET", baseurl, YAHOO.Wikia.Statistics.PageEditsStatisticCallback);
 	};
 
@@ -698,7 +698,7 @@ for ($i = 1; $i <= 6; $i++)
 			<a href="javascript:void(0)" id="ws-anon-users-show"><?= wfMsg('wikiastats_anon_wikians'); ?></a>
 			<span style="padding:5px 2px;"><input type="image" id="ws-xls-4" value="<?= wfMsg("wikiastats_export_xls") ?>" src="/extensions/wikia/WikiaStats/images/xls.gif"></span>
 		</div>	
-		<span class="small"><?= wfMsg('wikiastats_active_wikians_subtitle') ?></span>
+		<span class="small"><?= wfMsg('wikiastats_anon_wikians_subtitle') ?></span>
 	</div>
 	<div id="ws-progress-anon-bar"></div>
 	<div class="clear">&nbsp;</div>

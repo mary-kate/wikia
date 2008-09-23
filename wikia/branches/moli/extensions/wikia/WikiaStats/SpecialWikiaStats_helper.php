@@ -29,7 +29,7 @@ class WikiaGenericStats {
 
     const MONTHLY_STATS = 7;
     const USE_MEMC = 0;
-    const USE_OLD_DB = 0;
+    const USE_OLD_DB = 1;
 	const IGNORE_WIKIS = "5, 11, 6745";
 
 	var $columnMapIndex = null;
@@ -72,7 +72,7 @@ class WikiaGenericStats {
 
     public function getWikiaCityList()
     {
-    	global $wgMemc, $wgSharedDB;
+    	global $wgMemc;
     	#---
 		wfProfileIn( __METHOD__ );
 
@@ -115,7 +115,7 @@ class WikiaGenericStats {
 
     public function getWikiaAllCityList($keys = array())
     {
-    	global $wgMemc, $wgSharedDB;
+    	global $wgMemc;
     	#---
 		wfProfileIn( __METHOD__ );
 
@@ -386,7 +386,7 @@ class WikiaGenericStats {
 
 	static private function getWikiaDBCityListById($city_id)
 	{
-    	global $wgSharedDB,$wgMemc;
+    	global $wgMemc;
     	#---
 		wfProfileIn( __METHOD__ );
 		$memkey = 'wikiastatsdbnamebyid_' . $city_id;
@@ -403,7 +403,7 @@ class WikiaGenericStats {
 	
 	static private function getWikiaCityUrlById($city_id)
 	{
-    	global $wgSharedDB,$wgMemc;
+    	global $wgMemc;
     	#---
 		wfProfileIn( __METHOD__ );
 		$wkStatsUrl = "";
@@ -414,10 +414,9 @@ class WikiaGenericStats {
    		if (empty($wkStatsUrl)) {
 			$dbr =& wfGetDB( DB_SLAVE );
 			#---
-			$sql = "SELECT city_url from {$wgSharedDB}.city_list where city_id = {$city_id} and city_id not in (".self::IGNORE_WIKIS.")";
+			$sql = "SELECT city_url from ".wfSharedTable("city_list")." where city_id = {$city_id} and city_id not in (".self::IGNORE_WIKIS.")";
 			$res = $dbr->query($sql);
-			if ( $row = $dbr->fetchRow( $res ) )
-			{
+			if ( $row = $dbr->fetchRow( $res ) ) {
 				$wkStatsUrl = substr($row["city_url"], 0, -1);
 			}
 			$dbr->freeResult( $res );
@@ -430,7 +429,7 @@ class WikiaGenericStats {
 
 	static private function getUserEditCountFromDB($cityDBName, $value)
 	{
-    	global $wgMemc, $wgSharedDB;
+    	global $wgMemc;
     	#---
 		wfProfileIn( __METHOD__ );
 		$result = array('count' => 0, 'sum' => 0);
@@ -471,7 +470,7 @@ class WikiaGenericStats {
 
 	static private function getWikiaTrendsFromDB(&$months, $keys, $all = 0)
 	{
-    	global $wgSharedDB, $wgMemc;
+    	global $wgMemc;
     	global $wgDBStats;
     	#---
 		wfProfileIn( __METHOD__ );
@@ -583,7 +582,7 @@ class WikiaGenericStats {
 
 	static private function getWikiansListStatsFromDB($cityDBName, $namespace=0, $limit=50, $stats_date=0, $userlist=array())
 	{
-    	global $wgMemc, $wgSharedDB;
+    	global $wgMemc;
     	#---
 		wfProfileIn( __METHOD__ );
 		#---
@@ -651,7 +650,7 @@ class WikiaGenericStats {
 
 	static private function getArticlesCountsFromDB($cityDBName, $size = 0, $namespace=0)
 	{
-    	global $wgMemc, $wgSharedDB;
+    	global $wgMemc;
     	#---
 		wfProfileIn( __METHOD__ );
 		$result = array();
@@ -694,7 +693,7 @@ class WikiaGenericStats {
 
 	static private function getNamespaceStatFromDB($cityDBName, $namespace = array())
 	{
-    	global $wgMemc, $wgSharedDB;
+    	global $wgMemc;
     	#---
 		wfProfileIn( __METHOD__ );
 		$result = array();
@@ -734,7 +733,7 @@ class WikiaGenericStats {
 
 	static private function getAnonUserStatisticsFromDB($cityDBName, $namespace=0, $limit=50)
 	{
-    	global $wgMemc, $wgSharedDB;
+    	global $wgMemc;
     	#---
 		wfProfileIn( __METHOD__ );
 		#---
@@ -799,7 +798,7 @@ class WikiaGenericStats {
 
 	static private function getPageEdistFromDB($cityDBName, $namespace = 0, $reg_users = 0, $limit=50)
 	{
-    	global $wgMemc, $wgSharedDB;
+    	global $wgMemc;
     	#---
 		wfProfileIn( __METHOD__ );
 		#---
@@ -860,7 +859,7 @@ class WikiaGenericStats {
 
 	static private function getPageEdistDetailsFromDB($cityDBName, $page_id, $reg_users = 0, $limit=30)
 	{
-    	global $wgMemc, $wgSharedDB;
+    	global $wgMemc;
     	#---
 		wfProfileIn( __METHOD__ );
 		#---
@@ -961,6 +960,7 @@ class WikiaGenericStats {
 				$result = array("code" => -3, "text" => $e->getLogMessage());
 			}
 		}
+		$lStatsRangeTime["months"] = $monthsArray;
 
 		wfProfileOut( __METHOD__ );
 		#----
@@ -970,7 +970,7 @@ class WikiaGenericStats {
 
 	static public function getCategoryForCityFromDB($city)
 	{
-    	global $wgMemc, $wgSharedDB;
+    	global $wgMemc;
     	#---
 		wfProfileIn( __METHOD__ );
 		$result = array();
@@ -1008,7 +1008,7 @@ class WikiaGenericStats {
 
 	static public function getWikisListByValue($value)
 	{
-    	global $wgMemc, $wgSharedDB;
+    	global $wgMemc;
     	#---
 		wfProfileIn( __METHOD__ );
 		$result = array();
@@ -1086,7 +1086,7 @@ class WikiaGenericStats {
 	
 	public function getColumnStats($column, $all = 0, $keys = '')
 	{
-    	global $wgSharedDB, $wgMemc, $wgDBStats;
+    	global $wgMemc, $wgDBStats;
     	#---
 		wfProfileIn( __METHOD__ );
 		$wkStatsDBName = "";
@@ -1280,7 +1280,7 @@ class WikiaGenericStats {
 
 	static public function getWikiaInfoOutput($city_id)
 	{
-        global $wgUser, $wgSharedDB, $wgDBStats, $wgContLang;
+        global $wgUser, $wgDBStats, $wgContLang;
 		wfProfileIn( __METHOD__ );
 		#---
 		$cityInfo = array();
@@ -1314,7 +1314,7 @@ class WikiaGenericStats {
 
 	static public function setWikiMainStatisticsOutput($city_id, $data, $columns, $monthlyStats, $show_local = 0)
 	{
-        global $wgUser, $wgSharedDB, $wgDBStats, $wgContLang;
+        global $wgUser, $wgDBStats, $wgContLang;
         global $wgStatsExcludedNonSpecialGroup;
 		wfProfileIn( __METHOD__ );
 		#---
@@ -1534,7 +1534,7 @@ class WikiaGenericStats {
 
 	static public function getNoPublicCities()
 	{
-    	global $wgMemc, $wgSharedDB;
+    	global $wgMemc;
     	#---
 		wfProfileIn( __METHOD__ );
 
