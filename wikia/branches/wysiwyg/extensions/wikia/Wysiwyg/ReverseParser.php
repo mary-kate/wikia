@@ -344,7 +344,7 @@ class ReverseParser {
 					$prefix = "\n\n";
 				}
 				// fix for empty paragraphs
-				if ($output == '') {
+				else if ($output == '') {
 					$output = "\n";
 				}
 				break;
