@@ -140,11 +140,11 @@ class ReverseParser {
 
 		switch ($node->nodeType) {
 			case XML_ELEMENT_NODE:
-				$wasHTML = $node->getAttribute('washtml');
 
+				$wasHTML = $node->getAttribute('washtml');
 				$content = ($childOutput !== false) ? $childOutput : self::cleanupTextContent($node->textContent);
 
-				// parse it back to HTML tag
+				// if originally specified tag was an html then save it back as html
 				if (!empty($wasHTML)) {
 
 					$attStr = self::getAttributesStr($node);
@@ -159,17 +159,16 @@ class ReverseParser {
 							if ($node->hasChildNodes() && $node->childNodes->item(0)->nodeType != XML_TEXT_NODE) {
 								$content = "\n".trim($content)."\n";
 								$trial = "\n";
-							}
-							else {
+							} else {
 								$trial = '';
 							}
 							$output = "<{$node->nodeName}{$attStr}>{$content}</{$node->nodeName}>{$trial}";
 					}
-				}
+				} else {
 				// convert HTML back to wikimarkup
-				else {
 					switch ($node->nodeName) {
-						// basic formatting
+
+						// basic inline formatting
 						case 'b':
 						case 'strong':
 							$output = "'''{$content}'''";
@@ -180,6 +179,16 @@ class ReverseParser {
 							$output = "''{$content}''";
 							break;
 
+						case 'br':
+							$output = "<br />";
+							// TODO: there should be usually \n after br tag, but it does not work always
+							// e.g. in all types of lists
+							break;
+
+						case 'hr':
+							$output = "----\n";
+							break;
+
 						case 'p':
 							// handle indentations
 							$indentation = self::getIndentationLevel($node);
@@ -188,7 +197,7 @@ class ReverseParser {
 							} else {
 								$prefix = '';
 							}
-							if($node->previousSibling && $node->previousSibling->previousSibling && $node->previousSibling->previousSibling->nodeName == 'p') {
+							if ($node->previousSibling && $node->previousSibling->previousSibling && $node->previousSibling->previousSibling->nodeName == 'p') {
 								$prefix = "\n{$prefix}";
 							}
 							$output = "{$prefix}{$content}\n";
@@ -216,14 +225,6 @@ class ReverseParser {
 
 						case 'h6':
 							$output = "====== {$content} ======\n";
-							break;
-
-						case 'br':
-							$output = "<br />";
-							break;
-
-						case 'hr':
-							$output = "----\n";
 							break;
 
 						case 'pre':
