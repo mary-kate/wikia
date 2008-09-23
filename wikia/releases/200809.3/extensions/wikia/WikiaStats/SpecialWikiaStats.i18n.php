@@ -200,6 +200,7 @@ $wgWikiaStatsMessages["en"] = array(
 	"wikiastats_trend_ordered" => "All wiki are ordered by numbers of articles. <br /> Select part of those stats: ",
 	"wikiastats_trend_where_text" => "where:",
 	"wikiastats_trend_all_wikia_text" => "All wikis",
+	"wikiastats_always_selected" => "(always selected)",
 	"wikiastats_creation_wikia_text" => "Creation history / Accomplishments",
 	"wikiastats_creation_wikia_filename" => "Creation_history",
 	"wikiastats_creation_panel_header" => "\"Creation history\" statistic is generated",
