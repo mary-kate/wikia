@@ -165,7 +165,7 @@ class ReverseParser {
 							$output = "<{$node->nodeName}{$attStr}>{$content}</{$node->nodeName}>{$trial}";
 					}
 				} else {
-				// convert HTML back to wikimarkup
+					// if tag wasn't an html before then parse it to wikitext
 					switch ($node->nodeName) {
 
 						// basic inline formatting
