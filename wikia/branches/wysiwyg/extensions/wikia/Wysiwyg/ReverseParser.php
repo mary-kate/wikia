@@ -74,8 +74,6 @@ class ReverseParser {
 		// go through body tag children
 		$nodes = $body->childNodes;
 
-		$this->childNodes[0] = array();
-
 		for ($n=0; $n < $nodes->length; $n++) {
 			$output .= $this->parseNode($nodes->item($n));
 		}
