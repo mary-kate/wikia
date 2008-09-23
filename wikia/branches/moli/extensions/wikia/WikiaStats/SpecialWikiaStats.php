@@ -14,6 +14,7 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 
 define ("STATS_TREND_MONTH", 5);
 define ("STATS_TREND_CITY_NBR", 20);
+define ("STATS_WIKIANS_RANK_NBR", 100);
 define ("STATS_COLUMN_CITY_NBR", 59);
 define ("MIN_STATS_DATE", '2001-01');
 define ("STATS_COLUMN_PREFIX", "m_");
@@ -26,7 +27,7 @@ define ("DEFAULT_WIKIA_XLS_FILENAME", "wikia_xls_%d");
 define ("MAX_CHART_HEIGHT", '180');
 define ("CHART_BAR_WIDTH", '14');
 define ("CHART_BAR_WIDTH_UNIT", 'px');
-define ("CENTRAL_WIKIA_ID", 'wikicities');
+define ("CENTRAL_WIKIA_ID", 'none');
 
 $wgExtensionCredits['specialpage'][] = array(
     "name" => "WikiaStats",
