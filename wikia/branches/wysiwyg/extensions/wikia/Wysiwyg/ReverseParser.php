@@ -23,6 +23,9 @@ class ReverseParser {
 	// level => nodeName
 	private $lastNodeName = array();
 
+	// nodes tree
+	private $nodesTree = array();
+
 	function __construct() {
 		$this->dom = new DOMdocument();
 	}
@@ -58,6 +61,7 @@ class ReverseParser {
 
 		// cleanup
 		$this->listLevel = 0;
+		$this->nodesTree = array();
 
 		// let's begin with <body> node
 		$body = $this->dom->getElementsByTagName('body')->item(0);
@@ -70,9 +74,13 @@ class ReverseParser {
 		// go through body tag children
 		$nodes = $body->childNodes;
 
+		$this->childNodes[0] = array();
+
 		for ($n=0; $n < $nodes->length; $n++) {
 			$output .= $this->parseNode($nodes->item($n));
 		}
+
+		$this->nodesTree = array();
 
 		wfProfileOut(__METHOD__);
 
@@ -89,9 +97,15 @@ class ReverseParser {
 		wfProfileIn(__METHOD__);
 
 		$output = '';
-		$level++;
 
 		wfDebug("WYSIWYG ReverseParser parseNode for nodeName: {$node->nodeName} on level: {$level}\n");
+
+		// build nodes tree
+		if ($node->nodeType == XML_ELEMENT_NODE) {
+			$this->nodesTree[$level][] = $node->nodeName;
+		}
+
+		$level++;
 
 		// recursively parse child nodes
 		if ($node->hasChildNodes()) {
@@ -119,9 +133,14 @@ class ReverseParser {
 				$this->listBullets .= $bullet;
 			}
 
+			// parse child nodes
+			$this->nodesTree[$level] = array();
+
 			for ($n=0; $n < $nodes->length; $n++) {
 				$childOutput .= $this->parseNode($nodes->item($n), $level);
 			}
+
+			unset($this->nodesTree[$level]);
 
 			if ($isListNode) {
 				// fix for different list types on the same level of nesting
@@ -157,6 +176,7 @@ class ReverseParser {
 						default:
 							// nice formatting of nested HTML in wikimarkup
 							if ($node->hasChildNodes() && $node->childNodes->item(0)->nodeType != XML_TEXT_NODE) {
+								// node with child nodes
 								$content = "\n".trim($content)."\n";
 								$trial = "\n";
 							} else {
@@ -197,39 +217,36 @@ class ReverseParser {
 							} else {
 								$prefix = '';
 							}
-							if ($node->previousSibling && $node->previousSibling->previousSibling && $node->previousSibling->previousSibling->nodeName == 'p') {
-								$prefix = "\n{$prefix}";
-							}
-							$output = "{$prefix}{$content}\n";
+							$output = $prefix . $content;
 							break;
 
 						case 'h1':
-							$output = "= {$content} =\n";
+							$output = "= {$content} =";
 							break;
 
 						case 'h2':
-							$output = "== {$content} ==\n";
+							$output = "== {$content} ==";
 							break;
 
 						case 'h3':
-							$output = "=== {$content} ===\n";
+							$output = "=== {$content} ===";
 							break;
 
 						case 'h4':
-							$output = "==== {$content} ====\n";
+							$output = "==== {$content} ====";
 							break;
 
 						case 'h5':
-							$output = "===== {$content} =====\n";
+							$output = "===== {$content} =====";
 							break;
 
 						case 'h6':
-							$output = "====== {$content} ======\n";
+							$output = "====== {$content} ======";
 							break;
 
 						case 'pre':
 							$content = trim(str_replace("\n", "\n ", $content));	// add white space before each line
-							$output = " {$content}\n";
+							$output = " {$content}";
 							break;
 
 						// tables
@@ -304,6 +321,31 @@ class ReverseParser {
 				break;
 
 		}
+
+		//newline adding logic based on node context
+		//var_dump($this->nodesTree);
+
+		$currentNodeIndex = count($this->nodesTree[$level-1]) - 1;
+
+		$previousNode = ($currentNodeIndex > 0) ? $this->nodesTree[$level-1][$currentNodeIndex - 1] : false;
+		$parentNode = ($level > 0) ? end($this->nodesTree[$level-1]) : false;
+
+		$prefix = $suffix = '';
+
+		switch($node->nodeName) {
+			case 'p':
+				// header before paragraph
+				if ($previousNode !== false && $previousNode{0} == 'h' && is_numeric($previousNode{1})) {
+					$prefix = "\n";
+				}
+				// paragraph after paragraph
+				else if ($previousNode == 'p') {
+					$prefix = "\n\n";
+				}
+				break;
+		}
+
+		$output = $prefix . $output . $suffix;
 
 		wfProfileOut(__METHOD__);
 
