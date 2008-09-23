@@ -218,7 +218,6 @@ class WikiaStatsClass extends SpecialPage
 
 		wfProfileIn( __METHOD__ );
 		$memkey = "wikiastatsmainstatsform_".$city."_".$show_charts."_".$show_local."_".$fromY.$fromM."_".$toY.$toM;
-		error_log(" memkey = $memkey \n\n\n", 3, "/tmp/moli.log");
 		$mainStats = "";
 		if (self::USE_MEMC) $mainStats = $wgMemc->get($memkey);
 
@@ -288,8 +287,15 @@ class WikiaStatsClass extends SpecialPage
 		#---
 		$cityList = $this->mStats->getWikiaAllCityList();
 		#---
+
+		$cityOrderList = array(); 
+		$cities = $wgRequest->getVal("cities"); 
+		$citiesList = array();
+		if (!empty($cities)) {
+			$citiesList = split(";", $cities, 30);
+		}
 		
-		$cityOrderList = $this->mStats->getWikiaOrderStatsList();
+		$cityOrderList = $this->mStats->getWikiaOrderStatsList('', $citiesList);
 		#--- split table to get list of id of cities 
 		$array_sli = array_slice($cityOrderList, $select, STATS_TREND_CITY_NBR);
 		$splitCityList = array_merge(array(0 => 0) /* all stats */, (is_array($array_sli)) ? $array_sli : array());
