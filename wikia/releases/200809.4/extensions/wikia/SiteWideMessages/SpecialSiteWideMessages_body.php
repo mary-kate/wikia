@@ -758,6 +758,8 @@ class SiteWideMessages extends SpecialPage {
 				, __METHOD__
 			);
 
+			$DB->commit();
+
 			//purge the cache
 			$key = 'wikia:talk_messages:' . $userID . ':' . str_replace(' ', '_', $wgUser->getName());
 			$wgMemc->delete($key);
@@ -766,6 +768,17 @@ class SiteWideMessages extends SpecialPage {
 			return $dbResult;
 		}
 		return false;
+	}
+
+	static function deleteMessagesOnWiki($city_id) {
+		$DB = wfGetDB(DB_MASTER);
+		$dbResult = (boolean)$DB->Query (
+			  'DELETE FROM ' . MSG_STATUS_DB
+			. ' WHERE msg_wiki_id = ' . $DB->AddQuotes($city_id)
+			. ';'
+			, __METHOD__
+		);
+		return $dbResult;
 	}
 }
 
