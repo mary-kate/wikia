@@ -16,6 +16,8 @@ class ReverseParser {
 		if(is_string($html) && $html != '') {
 			$html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
 
+			wfProfileIn(__METHOD__."-cleanup");
+
 			// HTML cleanup - remove whitespaces between tags
 			$html = preg_replace("/>([\s]+)<p>/", '><p>', $html); // before <p> tag
 			$html = preg_replace("/<\/p>([\s]+)</", '</p><', $html); // after </p> tag
@@ -23,6 +25,8 @@ class ReverseParser {
 
 			// remove whitespace after <br /> and decode &nbsp;
 			$html = str_replace(array('<br /> ', '&nbsp;'), array('<br />', ' '), $html);
+
+			wfProfileOut(__METHOD__."-cleanup");
 
 			wfSuppressWarnings();
 			if($this->dom->loadHTML($html)) {
@@ -39,6 +43,7 @@ class ReverseParser {
 	}
 
 	private function parseNode($node, $level = 0) {
+		wfProfileIn(__METHOD__);
 
 		$childOut = '';
 
@@ -124,6 +129,7 @@ class ReverseParser {
 
 		}
 
+		wfProfileOut(__METHOD__);
 		return $out;
 	}
 
