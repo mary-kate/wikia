@@ -76,7 +76,11 @@ class ReverseParser {
 						break;
 					case 'br':
 						if($node->parentNode && $node->parentNode->nodeName == 'p' && $node->parentNode->hasChildNodes() && $node->parentNode->childNodes->item(0)->isSameNode($node)) {
-							$out = "\n\n";
+							if($node->parentNode->previousSibling->nodeName == 'p') {
+								$out = "\n";
+							} else {
+								$out = "\n\n";
+							}
 						} else {
 							$out = '<br />';
 						}
@@ -90,7 +94,7 @@ class ReverseParser {
 							// paragraph after paragraph
 							$out = "\n\n{$out}";
 
-						} else if(($node->previousSibling && $this->isHeading($node->previousSibling)) || ($node->previousSibling && $node->previousSibling->previousSibling && $this->isHeading($node->previousSibling->previousSibling))) {
+						} else if($node->previousSibling && $node->nodeName{0} == 'h' && is_numeric($node->nodeName{1})) {
 
 							// header before paragraph
 							$out = "\n{$out}";
@@ -142,10 +146,6 @@ class ReverseParser {
 
 	private function cleanupTextContent($text) {
 		return $text;
-	}
-
-	private function isHeading($node) {
-		return $node->nodeName{0} == 'h' && is_numeric($node->nodeName{1});
 	}
 
 }
