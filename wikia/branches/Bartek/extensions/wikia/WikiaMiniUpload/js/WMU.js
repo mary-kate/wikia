@@ -231,10 +231,32 @@ function WMU_upload(e) {
 		alert(wmu_warn2);
 		return false;
 	} else {
-		WMU_track('upload/defined'); // tracking
-		WMU_indicator(1, true);
-		return true;
+		if (WMU_initialCheck( $('ImageUploadFile').value )) {
+			WMU_track('upload/defined'); // tracking
+			WMU_indicator(1, true);
+			return true;
+		} else {
+			return false;
+		}
 	}
+}
+
+function WMU_splitExtensions( filename ) {
+	bits = filename.split( '.' );
+	basename = bits.shift();
+	return new Array( basename, bits );
+}
+
+function WMU_initialCheck( checkedName ) {
+	list_array = WMU_splitExtensions( checkedName );
+	partname = list_array[0];
+	ext = list_array[1];
+
+	if (partname.lenght < 1) {
+		return false;
+	}
+
+	return true;
 }
 
 function WMU_displayDetails(responseText) {
