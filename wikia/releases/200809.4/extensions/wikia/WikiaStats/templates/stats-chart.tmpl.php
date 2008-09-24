@@ -217,8 +217,9 @@ foreach ($data as $date => $out) {
 			}
 			$prev_year = $dateArr[1];
 		}
+		$selMonth = ($date == date("Y-m", $stats_date)) ? ($dateArr[0] . " " . date("d",$stats_date)) : $dateArr[0]
 ?>	
-	<td valign='middle' align='center' class="ws_chart_xaxis_months" style="<?=$addStyle?>"><?= $dateArr[0] ?></td>
+	<td valign='middle' align='center' class="ws_chart_xaxis_months" style="<?=$addStyle?>"><?= $selMonth ?></td>
 <?
 	}
 ?>	
@@ -228,7 +229,8 @@ foreach ($data as $date => $out) {
 <td valign="middle" align="right" class="ws_chart_yaxis"><div style="padding:0px 3px 0px 0px;"><?=wfMsg('wikiastats_active_year')?></div></td>
 <?
 	$loop_y = 0;
-	foreach ($dateYear as $year => $cnt) { $style = ($loop_y == 0) ? "border-left:0px" : ""; $loop_y++;
+	foreach ($dateYear as $year => $cnt) { 
+		$style = ($loop_y == 0) ? "border-left:0px" : ""; $loop_y++;
 ?>
 	<td align='center' colspan="<?=$cnt?>" class="ws_chart_xaxis_year" style="<?=$style?>"><?= $year ?></td>
 <?
