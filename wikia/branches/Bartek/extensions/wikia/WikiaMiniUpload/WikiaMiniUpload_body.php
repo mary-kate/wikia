@@ -95,7 +95,13 @@ class WikiaMiniUpload {
 		if( trim( $mSrcName ) == '' || empty( $mFileSize ) ) {
                         return UploadForm::EMPTY_FILE;
                 }
-		
+	
+		//illegal filename
+		$nt = Title::makeTitleSafe( NS_IMAGE, $filtered );
+                if( is_null( $nt ) ) {
+                        return self::ILLEGAL_FILENAME;
+                }
+	
 		// extensions check
 		list( $partname, $ext ) = $form->splitExtensions( $filtered );
 
@@ -104,6 +110,16 @@ class WikiaMiniUpload {
                 } else {
                         $finalExt = '';
                 }
+
+		// for more than one "extension"
+		if( count( $ext ) > 1 ) {
+			for( $i = 0; $i < count( $ext ) - 1; $i++ )
+				$partname .= '.' . $ext[$i];
+		}
+
+		if( strlen( $partname ) < 1 ) {
+			return self::MIN_LENGHT_PARTNAME;
+		}
 
                 global $wgCheckFileExtensions, $wgStrictFileExtensions;
                 global $wgFileExtensions, $wgFileBlacklist;
