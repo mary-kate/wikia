@@ -5,9 +5,13 @@
 
 class WikiaMiniUpload {
 
-	function loadMain() {
+	function loadMain( $error = false ) {
 		$tmpl = new EasyTemplate(dirname(__FILE__).'/templates/');
-		$tmpl->set_vars(array('result' => $this->recentlyUploaded()));
+		$tmpl->set_vars(array(
+				'result' => $this->recentlyUploaded(),
+				'error'  => $error
+				)
+		);
 		return $tmpl->execute("main");
 	}
 
@@ -99,7 +103,7 @@ class WikiaMiniUpload {
 		//illegal filename
 		$nt = Title::makeTitleSafe( NS_IMAGE, $filtered );
                 if( is_null( $nt ) ) {
-                        return self::ILLEGAL_FILENAME;
+                        return UploadForm::ILLEGAL_FILENAME;
                 }
 	
 		// extensions check
@@ -118,7 +122,7 @@ class WikiaMiniUpload {
 		}
 
 		if( strlen( $partname ) < 1 ) {
-			return self::MIN_LENGHT_PARTNAME;
+			return UploadForm::MIN_LENGHT_PARTNAME;
 		}
 
                 global $wgCheckFileExtensions, $wgStrictFileExtensions;
@@ -135,6 +139,25 @@ class WikiaMiniUpload {
 		return UploadForm::SUCCESS;			
 	}
 
+	function translateError ( $error ) {
+		switch( $error ) {
+			case UploadForm::SUCCESS:
+				return false;
+			case UploadForm::EMPTY_FILE:
+				return wfMsgHtml( 'emptyfile' );
+			case UploadForm::MIN_LENGHT_PARTNAME:
+				return wfMsgHtml( 'minlength1' );
+			case UploadForm::ILLEGAL_FILENAME:
+				return wfMsgHtml( 'illegalfilename' );
+			case UploadForm::FILETYPE_MISSING:
+				return wfMsgHtml( 'filetype-missing' );
+			case UploadForm::FILETYPE_BADTYPE:
+				return wfMsgHtml( 'filetype-banned-type' );
+			default:
+				return false;
+		}
+	}
+
 	function uploadImage() {
 		global $IP, $wgRequest, $wgUser;
 
@@ -149,8 +172,8 @@ class WikiaMiniUpload {
 			$props['mwname'] = $tempname;
 			$props['upload'] = true;
 			return $this->detailsPage($props);
-		} else {
-			return "Bad file!";
+		} else {			
+			return $this->loadMain( $this->translateError( $check_result ) );
 		}
 	}
 
