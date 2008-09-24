@@ -75,7 +75,11 @@ class ReverseParser {
 						$out = $textContent;
 						break;
 					case 'br':
-						$out = '<br />';
+						if($node->parentNode && $node->parentNode->nodeName == 'p' && $node->parentNode->hasChildNodes() && $node->parentNode->childNodes->item(0)->isSameNode($node)) {
+							$out = "\n\n";
+						} else {
+							$out = '<br />';
+						}
 						break;
 					case 'p':
 						$out = $textContent;
