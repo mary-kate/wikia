@@ -84,6 +84,8 @@ class ReverseParser {
 						} else {
 							$out = '<br />';
 						}
+
+						$out = '<br />';
 						break;
 					case 'p':
 						$out = $textContent;
@@ -94,7 +96,7 @@ class ReverseParser {
 							// paragraph after paragraph
 							$out = "\n\n{$out}";
 
-						} else if($node->previousSibling && $node->nodeName{0} == 'h' && is_numeric($node->nodeName{1})) {
+						} else if($node->previousSibling && $node->previousSibling->nodeName{0} == 'h' && is_numeric($node->previousSibling->nodeName{1})) {
 
 							// header before paragraph
 							$out = "\n{$out}";
