@@ -124,7 +124,7 @@ class ReverseParser {
 
 			wfDebug("ReverseParser XML_TEXT_NODE\n");
 
-			if(trim($node->textContent) == '') {
+			if(trim($node->textContent, "\n") == '') {
 				$out = '';
 			} else {
 				$out = $this->cleanupTextContent($node->textContent);
