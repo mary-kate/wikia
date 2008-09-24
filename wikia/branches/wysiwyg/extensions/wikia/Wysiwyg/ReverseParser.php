@@ -38,10 +38,19 @@ class ReverseParser {
 
 			}
 			wfRestoreWarnings();
+
+			// final cleanup
+			$out = rtrim($out);
+
+			if ($out{0} == "\n" && $out{1} != "\n") {
+				// remove ONE empty line from the beginning of wikitext
+				$out = substr($out, 1);
+			}
 		}
 
+
 		wfProfileOut(__METHOD__);
-		return rtrim($out);
+		return $out;
 	}
 
 	private function parseNode($node, $level = 0) {
