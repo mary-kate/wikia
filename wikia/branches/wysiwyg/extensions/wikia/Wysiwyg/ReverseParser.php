@@ -16,6 +16,14 @@ class ReverseParser {
 		if(is_string($html) && $html != '') {
 			$html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
 
+			// HTML cleanup - remove whitespaces between tags
+			$html = preg_replace("/>([\s]+)<p>/", '><p>', $html); // before <p> tag
+			$html = preg_replace("/<\/p>([\s]+)</", '</p><', $html); // after </p> tag
+			$html = preg_replace("/p>([\s]+)<br/", 'p><br', $html); // between <p> and <br /> tag
+
+			// remove whitespace after <br /> and decode &nbsp;
+			$html = str_replace(array('<br /> ', '&nbsp;'), array('<br />', ' '), $html);
+
 			wfSuppressWarnings();
 			if($this->dom->loadHTML($html)) {
 
@@ -65,24 +73,21 @@ class ReverseParser {
 
 					$out = '<br />';
 
-					/*
-					// new line logic
-					if($node->parentNode && $node->parentNode->nodeName == 'p') {
-						$out = "{$out}\n";
-					}
-					*/
-
 				} else if($node->nodeName == 'p') {
 
 					$out = $textContent;
 
 					// new line logic
 					if($node->previousSibling && $node->previousSibling->nodeName == 'p') {
+
 						// paragraph after paragraph
 						$out = "\n\n{$out}";
+
 					} else if(($node->previousSibling && $this->isHeading($node->previousSibling)) || ($node->previousSibling && $node->previousSibling->previousSibling && $this->isHeading($node->previousSibling->previousSibling))) {
+
 						// header before paragraph
 						$out = "\n{$out}";
+
 					}
 
 				} else if($this->isHeading($node)) {
@@ -116,13 +121,6 @@ class ReverseParser {
 			} else {
 				$out = $this->cleanupTextContent($node->textContent);
 			}
-
-			/*
-
-						if($node->previousSibling && $node->previousSibling->nodeName == 'br' && $out{0} == ' ') {
-				$out = substr($out, 1);
-			}
-			*/
 
 		}
 
