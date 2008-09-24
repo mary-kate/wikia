@@ -70,48 +70,51 @@ class ReverseParser {
 
 				wfDebug("ReverseParser nodeName: {$node->nodeName}\n");
 
-				if($node->nodeName == 'body') {
+				switch($node->nodeName) {
+					case 'body':
+						$out = $textContent;
+						break;
+					case 'br':
+						$out = '<br />';
+						break;
+					case 'p':
+						$out = $textContent;
 
-					$out = $textContent;
+						// new line logic
+						if($node->previousSibling && $node->previousSibling->nodeName == 'p') {
 
-				} else if($node->nodeName == 'br') {
+							// paragraph after paragraph
+							$out = "\n\n{$out}";
 
-					$out = '<br />';
+						} else if(($node->previousSibling && $this->isHeading($node->previousSibling)) || ($node->previousSibling && $node->previousSibling->previousSibling && $this->isHeading($node->previousSibling->previousSibling))) {
 
-				} else if($node->nodeName == 'p') {
+							// header before paragraph
+							$out = "\n{$out}";
 
-					$out = $textContent;
+						}
+						break;
+					case 'h1':
+					case 'h2':
+					case 'h3':
+					case 'h4':
+					case 'h5':
+					case 'h6':
+						$head = str_repeat("=", $node->nodeName{1});
+						$out = "{$head} {$textContent} {$head}";
 
-					// new line logic
-					if($node->previousSibling && $node->previousSibling->nodeName == 'p') {
-
-						// paragraph after paragraph
-						$out = "\n\n{$out}";
-
-					} else if(($node->previousSibling && $this->isHeading($node->previousSibling)) || ($node->previousSibling && $node->previousSibling->previousSibling && $this->isHeading($node->previousSibling->previousSibling))) {
-
-						// header before paragraph
-						$out = "\n{$out}";
-
-					}
-
-				} else if($this->isHeading($node)) {
-
-					$head = str_repeat("=", $node->nodeName{1});
-					$out = "{$head} {$textContent} {$head}";
-
-					// new line logic
-					if($node->previousSibling) {
-						$out = "\n{$out}";
-					}
-
-				} else if($node->nodeName == 'i' || $node->nodeName == 'em') {
-
-					$out = "''{$textContent}''";
-
-				} else if($node->nodeName == 'b' || $node->nodeName == 'strong') {
-
-					$out = "''''{$textContent}''";
+						// new line logic
+						if($node->previousSibling) {
+							$out = "\n{$out}";
+						}
+						break;
+					case 'i':
+					case 'em':
+						$out = "''{$textContent}''";
+						break;
+					case 'b':
+					case 'strong':
+						$out = "'''{$textContent}'''";
+						break;
 
 				}
 
