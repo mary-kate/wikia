@@ -252,6 +252,19 @@ function WMU_initialCheck( checkedName ) {
 	partname = list_array[0];
 	ext = list_array[1];
 
+	if (ext.lenght > 0) {
+		finalExt = ext[ext.lenght - 1];
+	} else {
+		finalExt = '';
+	}
+
+	if (ext.lenght > 1) {
+		for (i=0; i< ext.lenght; i++ ) {
+			partname += '.' + ext[i];
+		}
+	}
+	
+
 	if (partname.lenght < 1) {
 		return false;
 	}
