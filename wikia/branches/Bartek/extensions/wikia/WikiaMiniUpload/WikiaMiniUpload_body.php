@@ -144,15 +144,15 @@ class WikiaMiniUpload {
 			case UploadForm::SUCCESS:
 				return false;
 			case UploadForm::EMPTY_FILE:
-				return wfMsgHtml( 'emptyfile' );
+				return wfMsg( 'emptyfile' );
 			case UploadForm::MIN_LENGHT_PARTNAME:
-				return wfMsgHtml( 'minlength1' );
+				return wfMsg( 'minlength1' );
 			case UploadForm::ILLEGAL_FILENAME:
-				return wfMsgHtml( 'illegalfilename' );
+				return wfMsg( 'illegalfilename' );
 			case UploadForm::FILETYPE_MISSING:
-				return wfMsgHtml( 'filetype-missing' );
+				return wfMsg( 'filetype-missing' );
 			case UploadForm::FILETYPE_BADTYPE:
-				return wfMsgHtml( 'filetype-banned-type' );
+				return wfMsg( 'filetype-banned-type' );
 			default:
 				return false;
 		}
