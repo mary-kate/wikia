@@ -64,6 +64,8 @@ class ReverseParser {
 				} else if($node->nodeName == 'br') {
 
 					$out = '<br />';
+
+					// new line logic
 					if($node->parentNode && $node->parentNode->nodeName == 'p') {
 						$out = "{$out}\n";
 					}
@@ -72,9 +74,12 @@ class ReverseParser {
 
 					$out = $textContent;
 
+					// new line logic
 					if($node->previousSibling && $node->previousSibling->nodeName == 'p') {
+						// paragraph after paragraph
 						$out = "\n\n{$out}";
 					} else if(($node->previousSibling && $this->isHeading($node->previousSibling)) || ($node->previousSibling && $node->previousSibling->previousSibling && $this->isHeading($node->previousSibling->previousSibling))) {
+						// header before paragraph
 						$out = "\n{$out}";
 					}
 
@@ -82,6 +87,8 @@ class ReverseParser {
 
 					$head = str_repeat("=", $node->nodeName{1});
 					$out = "{$head} {$textContent} {$head}";
+
+					// new line logic
 					if($node->previousSibling) {
 						$out = "\n{$out}";
 					}
