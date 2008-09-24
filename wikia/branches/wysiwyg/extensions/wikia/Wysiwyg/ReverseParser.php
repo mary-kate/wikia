@@ -78,11 +78,7 @@ class ReverseParser {
 						break;
 					case 'br':
 						if($node->parentNode && $node->parentNode->nodeName == 'p' && $node->parentNode->hasChildNodes() && $node->parentNode->childNodes->item(0)->isSameNode($node)) {
-							if($node->parentNode->previousSibling->nodeName == 'p') {
-								$out = "\n";
-							} else {
-								$out = "\n\n";
-							}
+							$out = "\n";
 						} else {
 							$out = '<br />';
 						}
@@ -101,6 +97,10 @@ class ReverseParser {
 						} else if($node->previousSibling && $node->previousSibling->nodeName{0} == 'h' && is_numeric($node->previousSibling->nodeName{1})) {
 
 							// header before paragraph
+							$out = "\n{$out}";
+
+						} else {
+
 							$out = "\n{$out}";
 
 						}
