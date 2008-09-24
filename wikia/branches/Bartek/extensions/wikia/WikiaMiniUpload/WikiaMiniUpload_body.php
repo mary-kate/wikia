@@ -83,17 +83,51 @@ class WikiaMiniUpload {
 		return $this->detailsPage($props);
 	}
 
+	function checkImage() {
+		global $wgRequest;
+	
+		$mFileSize = $wgRequest->getFileSize( 'wpUploadFile' );
+		$mSrcName = $wgRequest->getFileName( 'wpUploadFile' );
+		$filtered = wfStripIllegalFilenameChars( $mSrcName );
+		$form = new UploadForm( $wgRequest );
+	
+		list( $partname, $ext ) = $form->splitExtensions( $filtered );
+
+                if( count( $ext ) ) {
+                        $finalExt = $ext[count( $ext ) - 1];
+                } else {
+                        $finalExt = '';
+                }
+
+                global $wgCheckFileExtensions, $wgStrictFileExtensions;
+                global $wgFileExtensions, $wgFileBlacklist;
+                if ($finalExt == '') {
+                        return false;
+                } elseif ( $form->checkFileExtensionList( $ext, $wgFileBlacklist ) ||
+                                ($wgCheckFileExtensions && $wgStrictFileExtensions &&
+                                        !$form->checkFileExtension( $finalExt, $wgFileExtensions ) ) ) {
+                        $resultDetails = array( 'finalExt' => $finalExt );
+                        return false;
+                }
+
+		return true;			
+	}
+
 	function uploadImage() {
 		global $wgRequest, $wgUser;
-		$tempname = 'Temp_file_'.$wgUser->getID().'_'.rand(0, 1000);
-		$file = new FakeLocalFile(Title::newFromText($tempname, 6), RepoGroup::singleton()->getLocalRepo());
-		$file->upload($wgRequest->getFileTempName('wpUploadFile'), '', '');
-		$props = array();
-		$props['file'] = $file;
-		$props['name'] = $wgRequest->getFileName('wpUploadFile');
-		$props['mwname'] = $tempname;
-		$props['upload'] = true;
-		return $this->detailsPage($props);
+		if ($this->checkImage()) {
+			$tempname = 'Temp_file_'.$wgUser->getID().'_'.rand(0, 1000);
+			$file = new FakeLocalFile(Title::newFromText($tempname, 6), RepoGroup::singleton()->getLocalRepo());
+			$file->upload($wgRequest->getFileTempName('wpUploadFile'), '', '');
+			$props = array();
+			$props['file'] = $file;
+			$props['name'] = $wgRequest->getFileName('wpUploadFile');
+			$props['mwname'] = $tempname;
+			$props['upload'] = true;
+			return $this->detailsPage($props);
+		} else {
+			return "Bad file!";
+		}
 	}
 
 	function detailsPage($props) {
