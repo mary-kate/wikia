@@ -76,8 +76,10 @@ function wfWysiwygWiki2Html($wikitext, $articleId = -1, $encode = false) {
 		$title = Title::newFromID($articleId);
 	}
 
+	wfDebug("wfWysiwygWiki2Html wikitext: {$wikitext}\n");
+
 	$options = new ParserOptions();
-	$options->setTidy(true);
+	//$options->setTidy(true);
 
 	$parser = new WysiwygParser();
 	$parser->setOutputType(OT_HTML);
@@ -85,12 +87,14 @@ function wfWysiwygWiki2Html($wikitext, $articleId = -1, $encode = false) {
 	//$wikitext = preg_replace('/(?<!\n)\n(?!\n)/', "\n\x7f\n", $wikitext);
 
 	$FCKparseEnable = true;
-	$html = $parser->parse($wikitext, $wgTitle, $options)->getText();
+	$html = $parser->parse($wikitext, $title, $options)->getText();
 	$FCKparseEnable = false;
 
 	//$html = str_replace("\x7f\n", "<!--\x7f-->", $html);
 
 	$html = mb_convert_encoding($html, 'HTML-ENTITIES', "UTF-8");
+
+	wfDebug("wfWysiwygWiki2Html html: {$html}\n");
 
 	$wysiwygData = $FCKmetaData;
 
