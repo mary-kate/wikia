@@ -19,10 +19,19 @@ var WMU_orgThumbSize = null;
 /*
  * Functions/methods
  */
+if(mwCustomEditButtons) {
+	mwCustomEditButtons[mwCustomEditButtons.length] = {
+		"imageFile": stylepath + '/../extensions/wikia/WikiaMiniUpload/images/button_wmu.png',
+		"speedTip": wmu_imagebutton,
+		"tagOpen": "",
+		"tagClose": "",
+		"sampleText": "",
+		"imageId": "mw-editbutton-wmu"};
+}
+
 if(skin == 'monaco') {
 	addOnloadHook(function () {
 		if(document.forms.editform) {
-			addButton(stylepath + '/../extensions/wikia/WikiaMiniUpload/images/button_wmu.png', wmu_imagebutton, '', '', '', 'mw-editbutton-wmu');
 			WMU_addHandler();
 		}
 	});
@@ -31,15 +40,23 @@ if(skin == 'monaco') {
 function WMU_addHandler() {
 	var btn = $('mw-editbutton-wmu');
 	if(btn == null) {
-		setTimeout('WMU_addHandler()', 250);
-		return;
-	}
-	$('wmuLink').onclick = WMU_show;
-	btn.onclick = WMU_show;
+ 		setTimeout('WMU_addHandler()', 250);
+  		return;
+  	}
+  	YAHOO.util.Event.addListener(['wmuLink', 'wmuHelpLink', btn], 'click',  WMU_show);
 }
 
-function WMU_show() {
-	WMU_track('open'); // tracking
+function WMU_show(e) {
+	var el = YAHOO.util.Event.getTarget(e);
+	if (el.id == 'wmuLink') {
+		WMU_track('open/fromLinkAboveToolbar'); //tracking
+	} else if (el.id == 'wmuHelpLink') {
+		WMU_track('open/fromEditTips'); //tracking
+	} else if (el.id == 'mw-editbutton-wmu') {
+		WMU_track('open/fromToolbar'); //tracking
+	} else {
+		WMU_track('open');
+	}
 
 	YAHOO.util.Dom.setStyle('header_ad', 'display', 'none');
 	if(WMU_panel != null) {
@@ -48,47 +65,45 @@ function WMU_show() {
 		return;
 	}
 
-	//YAHOO.util.Get.css(stylepath + '/../extensions/wikia/WikiaMiniUpload/css/WMU.css', { onSuccess: function() {
-		var html = '';
-		html += '<div class="reset" id="ImageUpload">';
-		html += '	<div id="ImageUploadBorder"></div>';
-		html += '	<div id="ImageUploadProgress1" class="ImageUploadProgress"></div>';
-		html += '	<div id="ImageUploadBack"><div></div><a href="#">' + wmu_back + '</a></div>';
-		html += '	<div id="ImageUploadClose"><div></div><a href="#">' + wmu_close + '</a></div>';
-		html += '	<div id="ImageUploadBody">';
-		html += '		<div id="ImageUploadError"></div>';
-		html += '		<div id="ImageUploadMain"></div>';
-		html += '		<div id="ImageUploadDetails" style="display: none;"></div>';
-		html += '		<div id="ImageUploadConflict" style="display: none;"></div>';
-		html += '		<div id="ImageUploadSummary" style="display: none;"></div>';
-		html += '	</div>';
-		html += '</div>';
+	var html = '';
+	html += '<div class="reset" id="ImageUpload">';
+	html += '	<div id="ImageUploadBorder"></div>';
+	html += '	<div id="ImageUploadProgress1" class="ImageUploadProgress"></div>';
+	html += '	<div id="ImageUploadBack"><div></div><a href="#">' + wmu_back + '</a></div>';
+	html += '	<div id="ImageUploadClose"><div></div><a href="#">' + wmu_close + '</a></div>';
+	html += '	<div id="ImageUploadBody">';
+	html += '		<div id="ImageUploadError"></div>';
+	html += '		<div id="ImageUploadMain"></div>';
+	html += '		<div id="ImageUploadDetails" style="display: none;"></div>';
+	html += '		<div id="ImageUploadConflict" style="display: none;"></div>';
+	html += '		<div id="ImageUploadSummary" style="display: none;"></div>';
+	html += '	</div>';
+	html += '</div>';
 
-		var element = document.createElement('div');
-		element.id = 'WMU_div';
-		element.style.width = '722px';
-		element.style.height = '437px';
-		element.innerHTML = html;
+	var element = document.createElement('div');
+	element.id = 'WMU_div';
+	element.style.width = '722px';
+	element.style.height = '437px';
+	element.innerHTML = html;
 
-		document.body.appendChild(element);
+	document.body.appendChild(element);
 
-		WMU_panel = new YAHOO.widget.Panel('WMU_div', {
-			modal: true,
-			constraintoviewport: true,
-			draggable: false,
-			close: false,
-			fixedcenter: true,
-			underlay: "none",
-			visible: false,
-			zIndex: 1500
-		});
-		WMU_panel.render();
-		WMU_panel.show();
-		WMU_loadMain();
+	WMU_panel = new YAHOO.widget.Panel('WMU_div', {
+		modal: true,
+		constraintoviewport: true,
+		draggable: false,
+		close: false,
+		fixedcenter: true,
+		underlay: "none",
+		visible: false,
+		zIndex: 1500
+	});
+	WMU_panel.render();
+	WMU_panel.show();
+	WMU_loadMain();
 
-		YAHOO.util.Event.addListener('ImageUploadBack', 'click', WMU_back);
-		YAHOO.util.Event.addListener('ImageUploadClose', 'click', WMU_close);
-	//}});
+	YAHOO.util.Event.addListener('ImageUploadBack', 'click', WMU_back);
+	YAHOO.util.Event.addListener('ImageUploadClose', 'click', WMU_close);
 }
 
 function WMU_loadMain() {
@@ -96,7 +111,7 @@ function WMU_loadMain() {
 		success: function(o) {
 			$('ImageUploadMain').innerHTML = o.responseText;
 			WMU_indicator(1, false);
-			if($('ImageQuery')) $('ImageQuery').focus();
+			if($('ImageQuery') && WMU_panel.element.style.visibility == 'visible') $('ImageQuery').focus();
 		}
 	}
 	WMU_indicator(1, true);
