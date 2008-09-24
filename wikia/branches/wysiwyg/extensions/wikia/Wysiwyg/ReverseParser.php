@@ -83,7 +83,6 @@ class ReverseParser {
 							$out = '<br />';
 						}
 
-						$out = '<br />';
 						break;
 					case 'p':
 						$out = $textContent;
