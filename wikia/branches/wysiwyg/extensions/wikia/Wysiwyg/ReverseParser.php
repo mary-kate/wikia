@@ -65,10 +65,12 @@ class ReverseParser {
 
 					$out = '<br />';
 
+					/*
 					// new line logic
 					if($node->parentNode && $node->parentNode->nodeName == 'p') {
 						$out = "{$out}\n";
 					}
+					*/
 
 				} else if($node->nodeName == 'p') {
 
@@ -115,9 +117,11 @@ class ReverseParser {
 				$out = $this->cleanupTextContent($node->textContent);
 			}
 
+			/*
 			if($node->previousSibling && $node->previousSibling->nodeName == 'br' && $out{0} == ' ') {
 				$out = substr($out, 1);
 			}
+			*/
 
 		}
 
