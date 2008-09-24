@@ -84,13 +84,19 @@ class WikiaMiniUpload {
 	}
 
 	function checkImage() {
-		global $wgRequest;
+		global $IP, $wgRequest;
 	
 		$mFileSize = $wgRequest->getFileSize( 'wpUploadFile' );
 		$mSrcName = $wgRequest->getFileName( 'wpUploadFile' );
 		$filtered = wfStripIllegalFilenameChars( $mSrcName );
 		$form = new UploadForm( $wgRequest );
-	
+
+		// no filename or zero size	
+		if( trim( $mSrcName ) == '' || empty( $mFileSize ) ) {
+                        return UploadForm::EMPTY_FILE;
+                }
+		
+		// extensions check
 		list( $partname, $ext ) = $form->splitExtensions( $filtered );
 
                 if( count( $ext ) ) {
@@ -102,20 +108,22 @@ class WikiaMiniUpload {
                 global $wgCheckFileExtensions, $wgStrictFileExtensions;
                 global $wgFileExtensions, $wgFileBlacklist;
                 if ($finalExt == '') {
-                        return false;
+                        return UploadForm::FILETYPE_MISSING;
                 } elseif ( $form->checkFileExtensionList( $ext, $wgFileBlacklist ) ||
                                 ($wgCheckFileExtensions && $wgStrictFileExtensions &&
                                         !$form->checkFileExtension( $finalExt, $wgFileExtensions ) ) ) {
                         $resultDetails = array( 'finalExt' => $finalExt );
-                        return false;
+                        return UploadForm::FILETYPE_BADTYPE;
                 }
 
-		return true;			
+		return UploadForm::SUCCESS;			
 	}
 
 	function uploadImage() {
-		global $wgRequest, $wgUser;
-		if ($this->checkImage()) {
+		global $IP, $wgRequest, $wgUser;
+
+		$check_result = $this->checkImage() ;
+		if (UploadForm::SUCCESS == $check_result) {
 			$tempname = 'Temp_file_'.$wgUser->getID().'_'.rand(0, 1000);
 			$file = new FakeLocalFile(Title::newFromText($tempname, 6), RepoGroup::singleton()->getLocalRepo());
 			$file->upload($wgRequest->getFileTempName('wpUploadFile'), '', '');
