@@ -26,6 +26,8 @@ class ReverseParser {
 			// remove whitespace after <br /> and decode &nbsp;
 			$html = str_replace(array('<br /> ', '&nbsp;'), array('<br />', ' '), $html);
 
+			wfDebug("ReverseParser HTML: {$html}\n");
+
 			wfProfileOut(__METHOD__."-cleanup");
 
 			wfSuppressWarnings();
