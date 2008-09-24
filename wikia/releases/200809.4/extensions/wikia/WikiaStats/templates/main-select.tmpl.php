@@ -37,11 +37,11 @@ YAHOO.namespace("Wikia.Statistics");
     YAHOO.Wikia.Statistics = 
     {
 	    init: function() {
-            YD.get("compareStatsDialog").style.display = "block";
+            YAHOO.util.Dom.get("compareStatsDialog").style.display = "block";
             if (!YAHOO.Wikia.Statistics.compareStatsDialog) { 
                 YAHOO.Wikia.Statistics.handleSubmit = function() {
                     XLSCancel(); 
-                    YD.get("compareStatsDialog_c").style.display = "none";
+                    YAHOO.util.Dom.get("compareStatsDialog_c").style.display = "none";
                     this.cancel(); 
                     var checklist = document.XLSCompareForm.wscid;
                     var is_checked = 0; var checked_list = "";
@@ -57,19 +57,19 @@ YAHOO.namespace("Wikia.Statistics");
                 };
                 YAHOO.Wikia.Statistics.handleCancel = function() { 
                     XLSCancel(); 
-                    YD.get("compareStatsDialog_c").style.display = "none";
+                    YAHOO.util.Dom.get("compareStatsDialog_c").style.display = "none";
                     StatsPageLoaderHide(0);
                     this.cancel(); 
                 };
                 // Instantiate the Dialog
                 YAHOO.Wikia.Statistics.compareStatsDialog = new YAHOO.widget.Dialog("compareStatsDialog", {
-                    width:"500px",height:"530px", fixedcenter:true,visible:false,draggable:true,zindex:9000,constraintoviewport:true,close:false,
+                    width:"500px",height:"570px", fixedcenter:true,visible:false,draggable:true,zindex:9000,constraintoviewport:true,close:false,
                     buttons : [ { text:"<?=wfMsg('wikiastats_xls_generate')?>", handler:YAHOO.Wikia.Statistics.handleSubmit, isDefault:true },
                                 { text:"<?=wfMsg('wikiastats_panel_close_btn')?>", handler:YAHOO.Wikia.Statistics.handleCancel } ]
                 });
                 // Render the Dialog
                 YAHOO.Wikia.Statistics.compareStatsDialog.render(document.body);
-				YD.get("compareStatsDialog_c").style.display = "none";
+				YAHOO.util.Dom.get("compareStatsDialog_c").style.display = "none";
             }
             XLSShowMenu('<?=intval($wgCityId)?>');
             WikiaStatsGetInfo('wk-stats-info-panel', '<?=intval($wgCityId)?>');
@@ -89,26 +89,6 @@ YAHOO.namespace("Wikia.Statistics");
 }
 )();
 
-function setActiveSelectTab() {
-	var tab_active = document.getElementById("ws_main_wikia_select_td");
-	var tab_hid = document.getElementById("ws_main_wikia_compare_td");
-	tab_active.style.display = "block";
-	tab_hid.style.display = "none";
-	document.getElementById("ws-wikia-select-id").className="selected";
-	document.getElementById("ws-wikia-compare-id").className="";
-}
-
-function setActiveCompareTab() {
-	var tab_active = document.getElementById("ws_main_wikia_compare_td");
-	var tab_hid = document.getElementById("ws_main_wikia_select_td");
-	tab_active.style.display = "block";
-	tab_hid.style.display = "none";
-	tab_active.class="";
-	tab_hid.class="selected";
-	document.getElementById("ws-wikia-compare-id").className="selected";
-	document.getElementById("ws-wikia-select-id").className="";
-}
-
 function WSCountCheckboxes(checked, reset) {
 	var nbrToCheck = <?=$MAX_NBR?>;
 	if (reset != 1) {
@@ -119,7 +99,7 @@ function WSCountCheckboxes(checked, reset) {
 	var _tmp = parseInt(nbrToCheck) + parseInt(countWikis);
 	var txt = new String("<?=wfMsg('wikiastats_show_nbr_wikis_check', '<strong style=\"color:#8B0000\">_NBR_</strong>')?>");
 	txt = txt.replace("_NBR_", _tmp);
-	YD.get('ws-wikis-check').innerHTML = txt;
+	YAHOO.util.Dom.get('ws-wikis-check').innerHTML = txt;
 }
 
 function sortWikiaList(method) {
@@ -136,7 +116,7 @@ function sortWikiaList(method) {
 }
 
 function sortWikiaPanelList(method) {
-	YD.get("ws-div-scroll").innerHTML = "<div style=\"height:auto\"><center><img src=\"/extensions/wikia/WikiaStats/images/ajax_indicators.gif\" border=\"0\"></center></div>";
+	YAHOO.util.Dom.get("ws-div-scroll").innerHTML = "<div style=\"height:auto\"><center><img src=\"/extensions/wikia/WikiaStats/images/ajax_indicators.gif\" border=\"0\"></center></div>";
 	var sort_div = document.getElementById( "ws-sort-panel" );
 	var text = "<?=addslashes(wfMsg('wikiastats_sort_list_alphabet'))?>";
 	var sort = (method == 1) ? 0 : 1;
@@ -163,6 +143,9 @@ pageLoaderInit('<?=addslashes(wfMsg('wikiastats_generate_stats_msg'))?>', '<?=ad
 		<fieldset class="ws-frame-border">
 		<legend class="normal"><?= wfMsg('wikiastats_mainstats_info') ?></legend>
 			<div style="float:left;padding:3px 0px 1px 0px;" id="ws-wikis-check"><?=wfMsg('wikiastats_show_nbr_wikis_check', "<strong style=\"color:#8B0000\">".($MAX_NBR)."</strong>")?></div>
+			<div style="float:left;padding:3px 0px 1px 0px;clear:both;" id="ws-search-panel">
+				<?=wfMsg('wikiastats_search_text')?> <input type="text" name="ws-search-input-panel" id="ws-search-input-panel" autocomplete="off">
+			</div>
 			<div style="float:right;padding:3px 0px 1px 0px;clear:right;" id="ws-sort-panel"><a href="javascript:void(0);" onClick="sortWikiaPanelList(1)"><?=addslashes(wfMsg('wikiastats_sort_list_alphabet'))?></a></div>
 			<div class="ws-div-scroll" id="ws-div-scroll"></div>
 			<div class="clear"></div>
@@ -176,7 +159,7 @@ pageLoaderInit('<?=addslashes(wfMsg('wikiastats_generate_stats_msg'))?>', '<?=ad
 	</div>
 	</form>
 </div>
-<div class="bd" id="showStatsNewWindow" style="padding:5px 0px 0px 0px;float:left;display:table !important;">
+<div class="bd" id="showStatsNewWindow" style="padding:5px 0px 0px 0px;float:left;display:table !important;width:250px;">
 <table width="100%" class="100%">
 <tr>
 	<td style="padding:2px;"><input type="checkbox" checked id="showStatsNewWindowBox"></td>
@@ -273,10 +256,14 @@ for ($i=1; $i<=26; $i++) {
 </div>
 <script type="text/javascript">
 /*<![CDATA[*/
-var wsElement = document.getElementById('ws-city-name');
-if (wsElement) { wsElement.onkeyup = function(){ WikiaStatsGetWikis(this, this.value); }; }
-if (document.getElementById("ws_main_wikia_select_td") && document.getElementById("ws_main_wikia_compare_td")) {
-	setActiveSelectTab();
-}
+YAHOO.util.Event.onDOMReady(function () {
+	var wsElement = document.getElementById('ws-city-name');
+	if (wsElement) { wsElement.onkeyup = function(){ WikiaStatsGetWikis(this, this.value); }; }
+	var wsCompareElement = document.getElementById('ws-search-input-panel');
+	if (wsCompareElement) { wsCompareElement.onkeyup = function(){ WikiaStatsCompareGetWikis(this, this.value); }; }
+	if (document.getElementById("ws_main_wikia_select_td") && document.getElementById("ws_main_wikia_compare_td")) {
+		setActiveSelectTab();
+	}
+});
 </script>
 <!-- e:<?= __FILE__ ?> -->

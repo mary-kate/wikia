@@ -94,7 +94,7 @@ td.main2x { border:1px inset #FFF; text-align:left; font-size:8pt; margin:0px; p
 .wsnv {display: none;}
 .ws-frame-border { border: 1px solid #DCDCDC; margin: 5px 2px;}
 .ws-btn-panel { border: 1px solid #DCDCDC; margin: 5px 0px; padding: 5px; vertical-align:middle;}
-.ws-div-scroll {height: 330px; width: 460px; overflow-y: scroll; border: 1px solid #DCDCDC; clear:both;}
+.ws-div-scroll {height: 330px; width: 455px; overflow-y: scroll; border: 1px solid #DCDCDC; clear:both;}
 .ws-div-scroll-table {height: 390px; width: 466px; overflow: auto; border: 0px solid #DCDCDC; position:relative; }
 .ws_label { display:block; float:left; width:auto; clear:left; padding: 2px 5px;}
 .ws_check { clear:right; margin: 2px 5px;}
@@ -107,7 +107,7 @@ td.main2x { border:1px inset #FFF; text-align:left; font-size:8pt; margin:0px; p
 .button-group button {color:#000000; font-size:93%; line-height:2; min-height:2em; padding:0pt 10px; background-color:transparent; cursor:pointer; border:1px outset grey; margin:2pt; text-align:center;}
 .button-group button:hover, .button-group button.hover { background-color:#FEC423; border:1px outset #DCDCDC; }
 #compareStatsDialog {display: none;font-size:12px;width:1px;}
-.yui-dialog .ft, .yui-simple-dialog .ft {float: right;}
+.yui-dialog .ft, .yui-simple-dialog .ft {width:230px;}
 
 #ws-title {margin: 1em; padding: 1em;}
 #ws-upload {text-align: left;}
