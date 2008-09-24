@@ -14,8 +14,8 @@ class WikiaMiniUpload {
 	function recentlyUploaded() {
 		global $IP, $wmu;
 		require_once($IP . '/includes/SpecialPage.php');
-		require_once($IP . '/includes/SpecialNewimages.php');
-		$isp = new IncludableSpecialPage('Newimages', '', 1, 'wfSpecialNewimages', $IP . '/includes/SpecialNewimages.php');
+		require_once($IP . '/includes/specials/SpecialNewimages.php');
+		$isp = new IncludableSpecialPage('Newimages', '', 1, 'wfSpecialNewimages', $IP . '/includes/specials/SpecialNewimages.php');
 		wfSpecialNewimages(8, $isp);
 		$tmpl = new EasyTemplate(dirname(__FILE__).'/templates/');
 		$tmpl->set_vars(array('data' => $wmu));
@@ -103,7 +103,7 @@ class WikiaMiniUpload {
 	}
 
 	function insertImage() {
-		global $wgRequest, $wgUser, $IP;
+		global $wgRequest, $wgUser, $wgContLang, $IP;
 		$type = $wgRequest->getVal('type');
 		$name = $wgRequest->getVal('name');
 		$mwname = $wgRequest->getVal('mwname');
@@ -178,7 +178,7 @@ class WikiaMiniUpload {
 				}
 				$wgUser->addWatch($title);
 				$db =& wfGetDB(DB_MASTER);
-				$db->close();
+				$db->commit();
 			}
 		} else {
 			$title = Title::newFromText($mwname, 6);
@@ -198,7 +198,9 @@ class WikiaMiniUpload {
 		$caption = $wgRequest->getVal('caption');
 		$slider = $wgRequest->getVal('slider');
 
-		$tag = '[[Image:'.$title->getDBkey();
+		$ns_img = $wgContLang->getFormattedNsText( NS_IMAGE );
+
+		$tag = '[[' . $ns_img . ':'.$title->getDBkey();
 		if($size != 'full' && ($file->getMediaType() == 'BITMAP' || $file->getMediaType() == 'DRAWING')) {
 			$tag .= '|thumb';
 			if($layout != 'right') {
