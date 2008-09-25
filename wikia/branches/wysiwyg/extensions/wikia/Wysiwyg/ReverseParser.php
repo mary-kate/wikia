@@ -205,6 +205,36 @@ class ReverseParser {
 						$out = "{$open}{$textContent}{$close}";
 						break;
 
+					// tables
+					// @see http://en.wikipedia.org/wiki/Help:Table
+					case 'table':
+						$attStr = $this->getAttributesStr($node);
+						$out = "{|{$attStr}\n{$textContent}|}\n";
+
+						// there's somthing before the table - add line break
+						if ($node->previousSibling) {
+							$out = "\n{$out}";
+						}
+						break;
+
+					case 'tr':
+						$out = "|-\n{$textContent}";
+						break;
+
+					case 'th':
+						$out = "!{$textContent}";
+						break;
+
+					case 'td':
+						$out = "|{$textContent}\n";
+						break;
+
+					// ignore tbody tag - just pass it through
+					case 'tbody':
+						$out = $textContent;
+						break;
+
+
 					// lists
 					case 'ul':
 					case 'ol':
