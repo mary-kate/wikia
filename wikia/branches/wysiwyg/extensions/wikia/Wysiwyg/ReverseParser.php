@@ -28,6 +28,7 @@ class ReverseParser {
 			$html = preg_replace("/>([\s]+)<p>/", '><p>', $html); // before <p> tag
 			$html = preg_replace("/<\/p>([\s]+)</", '</p><', $html); // after </p> tag
 			$html = preg_replace("/p>([\s]+)<br/", 'p><br', $html); // between <p> and <br /> tag
+			$html = str_replace('</dl> </dd>', '</dl></dd>', $html); // between </dl> and </dd> tag
 
 			// remove whitespace after <br /> and decode &nbsp;
 			$html = str_replace(array('<br /> ', '&nbsp;'), array('<br />', ' '), $html);
@@ -138,6 +139,12 @@ class ReverseParser {
 					case 'p':
 						$out = $textContent;
 
+						// handle indentations
+						$indentation = $this->getIndentationLevel($node);
+						if ($indentation !== false) {
+							$out = str_repeat(':', $indentation) . $out;
+						}
+	
 						// new line logic
 						if($node->previousSibling && $node->previousSibling->nodeName == 'p') {
 
@@ -203,22 +210,24 @@ class ReverseParser {
 					case 'ul':
 					case 'ol':
 					case 'dl':
+						$prefix = $suffix = '';
 						// handle indentations created using definition lists
 						if ($node->nodeName == 'dl') {
 							$indentation = $this->getIndentationLevel($node);
-							$prefix = '';
 							if ($indentation !== false) {
 								$prefix = str_repeat(':', $indentation);
 							}
-						} else {
-							$prefix = '';
+							// paragraph is following this <dl> list
+							if ($node->nextSibling && $node->nextSibling->nodeName == 'p') {
+								$suffix = ($node->nextSibling->textContent != '') ? "\n" : "\n\n";;
+							}
 						}
 						if($node->previousSibling) {
 							// first item of nested list
 							$prefix = "\n".$prefix;
 						}
 						// rtrim used to remove \n added by the last list item
-						$out = $prefix . rtrim($textContent, "\n");
+						$out = $prefix . rtrim($textContent, " \n") . $suffix;
 						break;
 
 					// lists elements
@@ -264,7 +273,7 @@ class ReverseParser {
 				// ::
 				// ::: ...
 				if ($node->hasChildNodes() && $node->childNodes->item(0)->nodeName == 'dl') {
-					return $content . "\n";
+					return rtrim($content, ' ') . "\n";
 				} else {
 					return $this->listBullets . $content . "\n";
 				}
