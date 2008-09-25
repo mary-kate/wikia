@@ -57,34 +57,10 @@
  * $val = $mc->get('key');
  *
  * @author  Ryan T. Dean <rtdean@cytherianage.net>
- * @package memcached-client
  * @version 0.1.2
  */
 
 // {{{ requirements
-// }}}
-
-// {{{ constants
-// {{{ flags
-
-/**
- * Flag: indicates data is serialized
- */
-define("MEMCACHE_SERIALIZED", 1<<0);
-
-/**
- * Flag: indicates data is compressed
- */
-if( !defined( "MEMCACHE_COMPRESSED" ) ) {
-    define("MEMCACHE_COMPRESSED", 1<<1);
-}
-// }}}
-
-/**
- * Minimum savings to store data compressed
- */
-define("COMPRESSION_SAVINGS", 0.20);
-
 // }}}
 
 // {{{ class memcached
@@ -92,12 +68,35 @@ define("COMPRESSION_SAVINGS", 0.20);
  * memcached client class implemented using (p)fsockopen()
  *
  * @author  Ryan T. Dean <rtdean@cytherianage.net>
- * @addtogroup Cache
+ * @ingroup Cache
  */
 class memcached
 {
    // {{{ properties
    // {{{ public
+
+		// {{{ constants
+		// {{{ flags
+
+		/**
+		 * Flag: indicates data is serialized
+		 */
+		const SERIALIZED = 1;
+
+		/**
+		 * Flag: indicates data is compressed
+		 */
+		const COMPRESSED = 2;
+
+		// }}}
+
+		/**
+		 * Minimum savings to store data compressed
+		 */
+		const COMPRESSION_SAVINGS = 0.20;
+
+		// }}}
+
 
    /**
     * Command statistics
@@ -232,6 +231,13 @@ class memcached
     */
    var $_connect_attempts;
 
+   /**
+    * host currently in use
+    *
+    * @access  private
+    */
+   var $_memc_host;
+
    // }}}
    // }}}
    // {{{ methods
@@ -264,6 +270,8 @@ class memcached
 
       $this->_connect_timeout = 0.01;
       $this->_connect_attempts = 3;
+
+      $this->_memc_host = '';
    }
 
    // }}}
@@ -402,6 +410,10 @@ class memcached
       $fname = 'memcached::get';
       wfProfileIn( $fname );
 
+      if ( $this->_debug ) {
+         $this->_debugprint( "get($key)\n" );
+      }
+
       if (!$this->_active) {
 	 wfProfileOut( $fname );
          return false;
@@ -496,7 +508,7 @@ class memcached
 
       if ($this->_debug)
          foreach ($val as $k => $v)
-            $this->_debugprint(sprintf("MemCache: got %s => %s\r\n", $k, $v));
+            $this->_debugprint(sprintf("MemCache: got %s\n", $k));
 
       return $val;
    }
@@ -764,7 +776,6 @@ class memcached
     */
    function get_sock ($key)
    {
-global $memc_host;
       if (!$this->_active)
          return false;
 
@@ -796,7 +807,7 @@ global $memc_host;
       for ($tries = 0; $tries<20; $tries++)
       {
          $host = $this->_buckets[$hv % $this->_bucketcount];
-$memc_host = $host;
+         $this->_memc_host = $host;
          $sock = $this->sock_to_host($host);
          if (is_resource($sock)) {
             $this->_flush_read_buffer($sock);
@@ -875,7 +886,6 @@ $memc_host = $host;
     */
    function _load_items ($sock, &$ret, $key='')
    {
-      global $memc_host;
       while (1)
       {
          $decl = fgets($sock);
@@ -911,12 +921,12 @@ $memc_host = $host;
                return false;
             }
 
-            if ($this->_have_zlib && $flags & MEMCACHE_COMPRESSED)
+            if ($this->_have_zlib && $flags & memcached::COMPRESSED)
                $ret[$rkey] = gzuncompress($ret[$rkey]);
 
             $ret[$rkey] = rtrim($ret[$rkey]);
 
-            if ($flags & MEMCACHE_SERIALIZED)
+            if ($flags & memcached::SERIALIZED)
                $ret[$rkey] = unserialize($ret[$rkey]);
 
          } else
@@ -924,9 +934,9 @@ $memc_host = $host;
             if ($this->_debug)
                $this->_debugprint("Error parsing memcached response\n");
             if( !empty( $key ) )
-	        error_log( "memcached ($memc_host) - Error parsing memcached response. The key was: $key. And we got: $decl" );
+	        error_log( "memcached ({$this->_memc_host}) - Error parsing memcached response. The key was: $key. And we got: $decl" );
             else
-	        error_log( "memcached ($memc_host) - Error parsing memcached response. We got: $decl" );
+	        error_log( "memcached ({$this->_memc_host}) - Error parsing memcached response. We got: $decl" );
             return 0;
          }
       }
@@ -962,7 +972,7 @@ $memc_host = $host;
       if (!is_scalar($val))
       {
          $val = serialize($val);
-         $flags |= MEMCACHE_SERIALIZED;
+         $flags |= memcached::SERIALIZED;
          if ($this->_debug)
             $this->_debugprint(sprintf("client: serializing data as it is not scalar\n"));
       }
@@ -975,13 +985,13 @@ $memc_host = $host;
          $c_val = gzcompress($val, 9);
          $c_len = strlen($c_val);
 
-         if ($c_len < $len*(1 - COMPRESSION_SAVINGS))
+         if ($c_len < $len*(1 - memcached::COMPRESSION_SAVINGS))
          {
             if ($this->_debug)
                $this->_debugprint(sprintf("client: compressing data; was %d bytes is now %d bytes\n", $len, $c_len));
             $val = $c_val;
             $len = $c_len;
-            $flags |= MEMCACHE_COMPRESSED;
+            $flags |= memcached::COMPRESSED;
          }
       }
       if (!$this->_safe_fwrite($sock, "$cmd $key $flags $exp $len\r\n$val\r\n"))
@@ -991,9 +1001,7 @@ $memc_host = $host;
 
       if ($this->_debug)
       {
-         if ($flags & MEMCACHE_COMPRESSED)
-            $val = 'compressed data';
-         $this->_debugprint(sprintf("MemCache: %s %s => %s (%s)\n", $cmd, $key, $val, $line));
+         $this->_debugprint(sprintf("%s %s (%s)\n", $cmd, $key, $line));
       }
       if ($line == "STORED")
          return true;

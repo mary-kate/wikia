@@ -8,7 +8,8 @@ if ( !defined( 'MEDIAWIKI' ) ) {
  * Global functions used everywhere for Wikia purposes.
  */
 
-require_once( "$IP/extensions/wikia/AdServer.php" );
+require( "$IP/extensions/wikia/AdServer.php" );
+require_once( "$IP/extensions/wikia/AdEngine/AdEngine.php" );
 require_once( "$IP/extensions/wikia/MergeFiles/MergeFiles.php" );
 
 /**
@@ -460,3 +461,112 @@ if (!function_exists('wfGetDBStats')) {
 	}
 }
 
+/**
+ * @author emil@wikia.com
+ * @return default external cluster
+ */
+function wfGetDefaultExternalCluster() {
+	global $wgDefaultExternalStore;
+	if( $wgDefaultExternalStore ) {
+		if( is_array( $wgDefaultExternalStore ) ) {
+			$store = $wgDefaultExternalStore[0];
+		} else {
+			$store = $wgDefaultExternalStore;
+		}
+		list( $proto, $cluster ) = explode( '://', $store, 2 );
+		return $cluster;
+	} else {
+		throw new MWException( __METHOD__.'$wgDefaultExternalStore should be defined' );
+	}
+}
+
+/**
+ * @author MoLi <moli@wikia.com>
+ * @return db's handle for external storage
+ */
+function wfGetDBExt($db = DB_MASTER, $cluster = null) {
+	if( !$cluster ) {
+		$cluster = wfGetDefaultExternalCluster();
+	}
+	return wfGetLBFactory()->getExternalLB( $cluster )->getConnection( $db );
+}
+
+/**
+ * Sleep until the worst slave's replication lag is less than or equal to
+ * $maxLag, in seconds.  Use this when updating very large numbers of rows, as
+ * in maintenance scripts, to avoid causing too much lag.  Of course, this is
+ * a no-op if there are no slaves.
+ *
+ * Every time the function has to wait for a slave, it will print a message to
+ * that effect (and then sleep for a little while), so it's probably not best
+ * to use this outside maintenance scripts in its present form.
+ *
+ * This function is copy of wfWaitForSlaves to work with external storage
+ *
+ * @author Maciej Błaszkowski (Marooned) <marooned at wikia.com> (changes from original)
+ * @param int $maxLag
+ * @return null
+ */
+function wfWaitForSlavesExt( $maxLag, $cluster = null ) {
+	if( $maxLag ) {
+		if( !$cluster ) {
+			$cluster = wfGetDefaultExternalCluster();
+		}
+		$lb = wfGetLBFactory()->getExternalLB( $cluster );
+		list( $host, $lag ) = $lb->getMaxLag();
+		while( $lag > $maxLag ) {
+			$name = @gethostbyaddr( $host );
+			if( $name !== false ) {
+				$host = $name;
+			}
+			print "Waiting for $host (lagged $lag seconds)...\n";
+			sleep($maxLag);
+			list( $host, $lag ) = $lb->getMaxLag();
+		}
+	}
+}
+
+/**
+ * wfGetCurrentUrl
+ *
+ * Get full url for request, used when $wgTitle is not available yet
+ * based on code from marco panichi
+ *
+ * @author Krzysztof Krzyżaniak <eloy@wikia-inc.com>
+ * @access public
+ *
+ * @return array	parts of current url
+ */
+function wfGetCurrentUrl() {
+	$arr = array();
+	$uri = $_SERVER['REQUEST_URI'];
+
+	/**
+	 * sometimes $uri contain whole url, not only last part
+	 */
+    if( !preg_match( '!^https?://!', $uri ) ) {
+        $uri = isset( $_SERVER[ "SERVER_NAME" ] )
+			? "http://" . $_SERVER[ "SERVER_NAME" ] . $uri
+			: "http://localhost" . $uri;
+    }
+    $arr = parse_url( $uri );
+
+	/**
+	 * host
+	 */
+	$arr[ "host" ] = $_SERVER['SERVER_NAME'];
+
+	/**
+	 * scheme
+	 */
+	$server_prt = explode( '/', $_SERVER['SERVER_PROTOCOL'] );
+	$arr[ "scheme" ] = strtolower( $server_prt[0] );
+
+	/**
+	 * full url
+	 */
+	$arr[ "url" ] = $arr[ "scheme" ] . '://' . $arr[ "host" ] . $arr[ "path" ];
+	$arr[ "url" ] = isset( $arr[ "query" ] ) ? $arr[ "url" ] . "?" . $arr[ "query" ] : $arr[ "url" ];
+
+	return $arr;
+}
