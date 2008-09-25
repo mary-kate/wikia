@@ -332,6 +332,10 @@ function WMU_displayDetails(responseText) {
 			WMU_slider.setValue(125, true);
 		}
 	}
+	if ($( 'WMU_error_box' )) {
+		alert( $( 'WMU_error_box' ).innerHTML );
+	}
+
 	WMU_indicator(1, false);
 }
 
