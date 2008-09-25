@@ -123,32 +123,7 @@ class ReverseParser {
 
 			$textContent = ($childOut != '') ? $childOut : $this->cleanupTextContent($node->textContent);
 
-			if(!empty($washtml)) {
-
-				$attStr = $this->getAttributesStr($node);
-
-				switch ($node->nodeName) {
-					case 'br':
-					case 'hr':
-						$out = "<{$node->nodeName}{$attStr} />";
-						break;
-
-					default:
-						// nice formatting of nested HTML in wikimarkup
-						if($node->hasChildNodes() && $node->childNodes->item(0)->nodeType != XML_TEXT_NODE) {
-							// node with child nodes
-							$textContent = "\n".trim($textContent)."\n";
-							$trial = "\n";
-						} else {
-							$trial = '';
-						}
-						$out = "<{$node->nodeName}{$attStr}>{$textContent}</{$node->nodeName}>{$trial}";
-				}
-
-			} else {
-
-				wfDebug("ReverseParser nodeName: {$node->nodeName}\n");
-
+			if(empty($washtml)) {
 				switch($node->nodeName) {
 					case 'body':
 						$out = $textContent;
@@ -257,10 +232,38 @@ class ReverseParser {
 						$out = $this->handleListItem($node, $textContent);
 						break;
 
+					// ignore tbody tag
+					case 'tbody':
+						$out = $textContent;
+						break;
+
 					// HTML tags
 					default:
-						$out = "<{$node->nodeName}{$this->getAttributesStr($node)}>{$textContent}</{$node->nodeName}>";
+						$washtml = true;
 						break;
+				}
+			}
+
+			if(!empty($washtml)) {
+
+				$attStr = $this->getAttributesStr($node);
+
+				switch ($node->nodeName) {
+					case 'br':
+					case 'hr':
+						$out = "<{$node->nodeName}{$attStr} />";
+						break;
+
+					default:
+						// nice formatting of nested HTML in wikimarkup
+						if($node->hasChildNodes() && $node->childNodes->item(0)->nodeType != XML_TEXT_NODE) {
+							// node with child nodes
+							$textContent = "\n".trim($textContent)."\n";
+							$trial = "\n";
+						} else {
+							$trial = '';
+						}
+						$out = "<{$node->nodeName}{$attStr}>{$textContent}</{$node->nodeName}>{$trial}";
 				}
 
 			}
