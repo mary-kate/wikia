@@ -92,6 +92,7 @@ class WikiaMiniUpload {
 	
 		$mFileSize = $wgRequest->getFileSize( 'wpUploadFile' );
 		$mSrcName = $wgRequest->getFileName( 'wpUploadFile' );
+//		$mTempPath = $wgRequest->get
 		$filtered = wfStripIllegalFilenameChars( $mSrcName );
 		$form = new UploadForm( $wgRequest );
 
@@ -125,6 +126,15 @@ class WikiaMiniUpload {
 			return UploadForm::MIN_LENGHT_PARTNAME;
 		}
 
+		$form->mFileProps = File::getPropsFromPath( $form->mTempPath, $finalExt );
+		$form->checkMacBinary();
+		$veri = $form->verify( $form->mTempPath, $finalExt );
+
+		if( $veri !== true ) { //it's a wiki error...
+//			$resultDetails = array( 'veri' => $veri );
+			return UploadForm::VERIFICATION_ERROR;
+		}
+
                 global $wgCheckFileExtensions, $wgStrictFileExtensions;
                 global $wgFileExtensions, $wgFileBlacklist;
                 if ($finalExt == '') {
@@ -152,6 +162,8 @@ class WikiaMiniUpload {
 				return wfMsg( 'filetype-missing' );
 			case UploadForm::FILETYPE_BADTYPE:
 				return wfMsg( 'filetype-bad-extension' );
+			case UploadForm::VERIFICATION_ERROR:
+				return "File type verification error!" ;
 			default:
 				return false;
 		}
