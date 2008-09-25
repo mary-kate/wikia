@@ -269,6 +269,11 @@ function WMU_initialCheck( checkedName ) {
 		return false;
 	}
 
+	if (finalExt == '') {
+		alert (filetype_missing) ;
+		return false;
+	}
+
 	return true;
 }
 
