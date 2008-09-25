@@ -35,6 +35,7 @@ class ReverseParser {
 			$html = preg_replace("/<\/p>([\s]+)</", '</p><', $html); // after </p> tag
 			$html = preg_replace("/p>([\s]+)<br/", 'p><br', $html); // between <p> and <br /> tag
 			$html = str_replace('</dl> </dd>', '</dl></dd>', $html); // between </dl> and </dd> tag
+			$html = str_replace('</li> <li', '</li><li', $html); // between li tags defined as html
 
 			// remove whitespace after <br /> and decode &nbsp;
 			$html = str_replace(array('<br /> ', '&nbsp;'), array('<br />', ' '), $html);
@@ -264,16 +265,21 @@ class ReverseParser {
 							// add \n only when node is HTML block element
 							if ($this->isInlineElement($node)) {
 								$textContent = trim($textContent);
-								$trail = '';
+								$trial = '';
 							}
 							else {
 								$textContent = "\n".trim($textContent)."\n";
 								$trial = "\n";
 							}
 						} else {
-							$trial = '';
+							$trial = $this->isInlineElement($node) ? '' : "\n";
 						}
 						$out = "<{$node->nodeName}{$attStr}>{$textContent}</{$node->nodeName}>{$trial}";
+
+						// add \n after previous non-wasHTML tag
+						if ($node->previousSibling && !$node->previousSibling->getAttribute('washtml')) {
+							$out = "\n{$out}";
+						}
 				}
 
 			}
