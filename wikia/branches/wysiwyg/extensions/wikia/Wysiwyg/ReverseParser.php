@@ -266,22 +266,18 @@ class ReverseParser {
 							if ($this->isInlineElement($node)) {
 								$textContent = trim($textContent);
 								$trial = '';
+								$prefix = '';
 							}
 							else {
 								$textContent = "\n".trim($textContent)."\n";
-								$trial = "\n";
+								$trial = '';
+								$prefix = "\n";
 							}
 						} else {
 							$trial = $this->isInlineElement($node) ? '' : "\n";
 						}
-						$out = "<{$node->nodeName}{$attStr}>{$textContent}</{$node->nodeName}>{$trial}";
-
-						// add \n after previous non-wasHTML tag
-						if ($node->previousSibling && !$node->previousSibling->getAttribute('washtml')) {
-							$out = "\n{$out}";
-						}
+						$out = "{$prefix}<{$node->nodeName}{$attStr}>{$textContent}</{$node->nodeName}>{$trial}";
 				}
-
 			}
 
 		} else if($node->nodeType == XML_TEXT_NODE) {
