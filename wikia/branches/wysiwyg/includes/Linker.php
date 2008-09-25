@@ -689,7 +689,8 @@ class Linker {
 				'desc-query' => $query,
 				'alt' => $fp['alt'],
 				'valign' => isset( $fp['valign'] ) ? $fp['valign'] : false ,
-				'img-class' => isset( $fp['border'] ) ? 'thumbborder' : false ) );
+				'img-class' => isset( $fp['border'] ) ? 'thumbborder' : false,
+				'refid' => $fp['refid'] ) );
 		}
 		if ( '' != $fp['align'] ) {
 			$s = "<div class=\"float{$fp['align']}\"><span>{$s}</span></div>";
@@ -714,7 +715,7 @@ class Linker {
 	}
 
 	function makeThumbLink2( Title $title, $file, $frameParams = array(), $handlerParams = array(), $time = false, $query = "" ) {
-		global $wgStylePath, $wgContLang;
+		global $wgStylePath, $wgContLang, $FCKparseEnable;
 		$exists = $file && $file->exists();
 
 		# Shortcuts
@@ -773,7 +774,11 @@ class Linker {
 
 		$more = htmlspecialchars( wfMsg( 'thumbnail-more' ) );
 
-		$s = "<div class=\"thumb t{$fp['align']}\"><div class=\"thumbinner\" style=\"width:{$outerWidth}px;\">";
+		$refId = '';
+		if ($FCKparseEnable && isset($fp['refid'])) {
+			$refId = " refid=\"{$fp['refid']}\"";
+		}
+		$s = "<div$refId class=\"thumb t{$fp['align']}\"><div class=\"thumbinner\" style=\"width:{$outerWidth}px;\">";
 		if( !$exists ) {
 			$s .= $this->makeBrokenImageLinkObj( $title, '', '', '', '', $time==true );
 			$zoomicon = '';
