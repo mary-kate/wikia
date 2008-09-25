@@ -10,6 +10,9 @@ class ReverseParser {
 
 	private $dom;
 
+	// FCK meta data
+	private $fckData = array();
+
 	// used by nested lists parser
 	private $listLevel = 0;
 
@@ -42,6 +45,7 @@ class ReverseParser {
 
 			$this->listLevel = 0;
 			$this->listBullets = '';
+			$this->fckData = $wysiwygData;
 
 			wfDebug("ReverseParser HTML: {$html}\n");
 
@@ -211,7 +215,7 @@ class ReverseParser {
 						$attStr = $this->getAttributesStr($node);
 						$out = "{|{$attStr}\n{$textContent}|}\n";
 
-						// there's somthing before the table - add line break
+						// there's something before the table - add line break
 						if ($node->previousSibling) {
 							$out = "\n{$out}";
 						}
@@ -264,6 +268,14 @@ class ReverseParser {
 					case 'dd':
 					case 'dt':
 						$out = $this->handleListItem($node, $textContent);
+						break;
+
+					// handle more complicated tags
+					case 'a':
+						$out = $this->handleLink($node, $textContent);
+						break;
+					case 'span':
+						$out = $this->handleSpan($node);
 						break;
 
 					// ignore tbody tag
@@ -411,6 +423,109 @@ class ReverseParser {
 
 		wfProfileOut(__METHOD__);
 		return $text;
+	}
+
+	
+	/**
+	 * Returns wikimarkup for <span> tag
+	 *
+	 * Span is used to wrap various elements like templates etc.
+	 */
+	private function handleSpan($node) {
+
+		// handle spans with refId attribute: images, templates etc.
+		$refId = $node->getAttribute('refid');
+
+		if ( is_numeric($refId) && isset($this->fckData[$refId]) ) {
+			$refData = (array) $this->fckData[$refId];
+
+			switch($refData['type']) {
+				// [[Image:foo.jpg]]
+				case 'image':
+				// [[Media:foo.jpg]]
+				case 'internal link: media':
+					$pipe = ($refData['description'] != '') ? '|'.$refData['description'] : '';
+					return "[[{$refData['href']}{$pipe}]]";
+
+				// <gallery></gallery>
+				case 'gallery':
+					return $refData['description'];
+
+				// <nowiki></nowiki>
+				case 'nowiki':
+					return "<nowiki>{$refData['description']}</nowiki>";
+
+				// [[Category:foo]]
+				case 'category':
+					$pipe = ($refData['description'] != '') ? '|'.$refData['description'] : '';
+					return "\n[[{$refData['href']}{$pipe}]]{$refData['trial']}";
+
+				// parser hooks
+				case 'hook':
+					return $refData['description'];
+
+				// {{template}}
+				case 'curly brackets':
+					return $refData['description'];
+
+				// __TOC__
+				case 'double underscore':
+					return $refData['description'];
+			}
+		}
+
+		return '<!-- unsupported span tag! -->';
+	}
+
+	/**
+	 * Returns wikimarkup for <a> tag
+	 */
+	private function handleLink($node, $content) {
+
+		// handle links with refId attribute
+		$refId = $node->getAttribute('refid');
+
+		if ( is_numeric($refId) && isset($this->fckData[$refId]) ) {
+			$refData = (array) $this->fckData[$refId];
+
+			// allow formatting of link description
+			if ($refData['description'] != '') {
+
+				// $content contains parsed link description (wikitext)
+				if ($refData['trial'] != '' ) {
+					// $trial (if not empty) is at the end of $content - remove it
+					$refData['description'] = substr($content, 0, -strlen($refData['trial']));
+				}
+				else {
+					$refData['description'] = $content;
+				}
+
+				// description after pipe
+				$pipe = '|'.$refData['description'];
+			}
+			else {
+				$pipe = '';
+			}
+
+			// handle various type of links
+			switch($refData['type']) {
+				// [[foo|bar]]s
+				case 'internal link':
+				// [[:Image:Jimbo.jpg]]
+				case 'internal link: file':
+					return "[[{$refData['href']}{$pipe}]]{$refData['trial']}";
+			}
+		}
+		// handle HTML links <a href="http://foo.net">bar</a>
+		// TODO: handle local links
+		else {
+			$href = $node->getAttribute('href');
+			$desc = $node->textContent;
+
+			return "[{$href} {$desc}]";
+		}
+
+		return '<!-- unsupported anchor tag! -->';
 	}
 
 	/**
