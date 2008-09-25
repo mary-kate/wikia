@@ -609,11 +609,11 @@ function wfFCKSetRefId($type, &$text, $link, $trail, $wasblank, $noforce, $retur
  *
  * @return string refId
  */
-function wfFCKGetRefId(&$text) {
+function wfFCKGetRefId(&$text, $returnIDonly = false) {
 	global $FCKparseEnable;
 	if ($FCKparseEnable) {
 		preg_match("#\x1([^\x1]+)#", $text, $m);
-		$refId = isset($m[1]) ? " refid=\"{$m[1]}\"" : '';
+		$refId = isset($m[1]) ? ($returnIDonly ? $m[1] : " refid=\"{$m[1]}\"") : '';
 		$text = preg_replace("#\x1[^\x1]+\x1#", '', $text);
 		return $refId;
 	}

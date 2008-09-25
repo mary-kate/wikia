@@ -1717,23 +1717,25 @@ class Parser
 						$text = $this->replaceExternalLinks($text);
 						$text = $this->replaceInternalLinks($text);
 						if ($FCKparseEnable) {
-							$refId = wfFCKSetRefId('image', $text, $link, $trail, $wasblank, $noforce, true);
-							$s .= $prefix . "<span$refId>[[$link|$text]]</span>" . $trail;
-						} else {	//original action
+//							$refId = wfFCKSetRefId('image', $text, $link, $trail, $wasblank, $noforce, true);
+//							$s .= $prefix . "<span$refId>[[$link|$text]]</span>" . $trail;
+							wfFCKSetRefId('image', $text, $link, $trail, $wasblank, $noforce);
+						}
+//						} else {	//original action
 							# cloak any absolute URLs inside the image markup, so replaceExternalLinks() won't touch them
 							$s .= $prefix . $this->armorLinks( $this->makeImage( $nt, $text ) ) . $trail;
 							$this->mOutput->addImage( $nt->getDBkey() );
-						}
+//						}
 						wfProfileOut( "$fname-image" );
 						continue;
 					} else {
-						if ($FCKparseEnable) {
-							$refId = wfFCKSetRefId('image', $text, $link, $trail, $wasblank, $noforce, true);
-							$s .= $prefix . "<span$refId>[[$link|$text]]</span>" . $trail;
-						} else {	//original action
+//						if ($FCKparseEnable) {
+//							$refId = wfFCKSetRefId('image', $text, $link, $trail, $wasblank, $noforce, true);
+//							$s .= $prefix . "<span$refId>[[$link|$text]]</span>" . $trail;
+//						} else {	//original action
 							# We still need to record the image's presence on the page
 							$this->mOutput->addImage( $nt->getDBkey() );
-						}
+//						}
 					}
 					wfProfileOut( "$fname-image" );
 
@@ -3339,7 +3341,7 @@ class Parser
 							throw new MWException( "Tag hook for $name is not callable\n" );
 						}
 						if ($FCKparseEnable) {
-							$tmp = ($content != '' 
+							$tmp = ($content != ''
 								? "<{$name}{$attrText}>{$content}</{$name}>"
 								: "<{$name}{$attrText}/>");
 							$refId = wfFCKSetRefId('hook', $tmp, '', '', false, true, true);
@@ -4539,6 +4541,7 @@ class Parser
 	 * Parse image options text and use it to make an image
 	 */
 	function makeImage( $title, $options ) {
+		global $FCKparseEnable;
 		# Check if the options text is of the form "options|alt text"
 		# Options are:
 		#  * thumbnail       	make a thumbnail with enlarge-icon and caption, alignment depends on lang
@@ -4560,6 +4563,10 @@ class Parser
 		#  * middle
 		#  * bottom
 		#  * text-bottom
+
+		if ($FCKparseEnable) {
+			$refId = wfFCKGetRefId($options, true);
+		}
 
 		$parts = array_map( 'trim', explode( '|', $options) );
 		$sk = $this->mOptions->getSkin();
@@ -4658,6 +4665,10 @@ class Parser
 
 		$params['frame']['alt'] = $alt;
 		$params['frame']['caption'] = $caption;
+
+		if ($FCKparseEnable) {
+			$params['frame']['refid'] = $refId;
+		}
 
 		wfRunHooks( 'ParserMakeImageParams', array( $title, $file, &$params ) );
 
