@@ -184,7 +184,7 @@ pageLoaderInit('<?=addslashes(wfMsg('wikiastats_generate_stats_msg'))?>', '<?=ad
  <tr>
     <td align="left" valign="top" id="tdMenu" valign="top" height="100%">
     	<div id="ws_main_wikia_select_td">
-			<fieldset style="margin:2px 0pt;height:250px;width:550px;">
+			<fieldset style="margin:2px 0pt;height:auto;width:550px;">
 				<div style="width:250px;padding:0px 1px;float:left;clear:left;margin-top:5pt;margin-bottom:2pt;margin-left:auto;margin-right:auto;">
 				  <?=$wikia_rows?>
 				  <div id="ws-sort-link" style="float:right; padding:0px 10px;"><a href="javascript:void(0);" onClick="sortWikiaList(1)"><?=wfMsg('wikiastats_sort_list_alphabet')?></a></div>
@@ -238,9 +238,9 @@ for ($i=1; $i<=26; $i++) {
 	<fieldset>
 	<legend style="font-size:10pt;"><strong><?= $linkText[$i] ?></strong></legend>
 <?  } ?>
-	<div style="width:530px">
-		<div style="width:450px; float: left;"><?= wfMsg("wikiastats_comparisons_table_$i") ?></div>
-		<div style="width:80px; float: right;">
+	<div style="width:680px">
+		<div style="width:580px; float: left;"><?= wfMsg("wikiastats_comparisons_table_$i") ?></div>
+		<div style="width:auto; float: right;">
 			<a href="javascript:void(0);" onClick="showXLSCompareDialog('<?=$l?>', false);"><?= wfMsg('wikiastats_xls_files_stats') ?></a>&nbsp;-&nbsp;
 			<a href="javascript:void(0);" onClick="showXLSCompareDialog('<?=$l?>', true);"><?= wfMsg('wikiastats_tables') ?></a>
 		</div>	
