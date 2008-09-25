@@ -87,7 +87,7 @@ class WikiaStatsClass extends SpecialPage
 		$wgOut->setPageTitle( wfMsg("wikiastats_pagetitle") );
 		$wgOut->setRobotpolicy( "noindex,nofollow" );
 		#---
-		$wgOut->addScript("<link rel=\"stylesheet\" type=\"text/css\" href=\"/extensions/wikia/WikiaStats/css/wikiastats.css\">\n");
+		$wgOut->addScript("<link rel=\"stylesheet\" type=\"text/css\" href=\"/extensions/wikia/WikiaStats/css/wikiastats.css\" />\n");
 		$wgOut->addScript("<script type=\"text/javascript\" src=\"/extensions/wikia/WikiaStats/js/wikiastats.js\"></script>\n");
 
 		if ($wgDBname == CENTRAL_WIKIA_ID) { // central version

@@ -11,7 +11,7 @@ var countWikis = 0;
 $xlsMenuHeader = addslashes(wfMsg("wikiastats_select_statistics"));
 #---
 $loop = 0;
-$wikia_rows = "<div style=\"width:240px;font-weight:bold;font-size:9pt;\">".wfMsg('wikiastats_search_text')." <input type=\"text\" name=\"ws-city-name\" autocomplete=\"off\" id=\"ws-city-name\" class=\"ws-input\" style=\"width:auto\"></div>
+$wikia_rows = "<div style=\"width:240px;font-weight:bold;font-size:9pt;\">".wfMsg('wikiastats_search_text')." <input type=\"text\" name=\"ws-city-name\" autocomplete=\"off\" id=\"ws-city-name\" class=\"ws-input\" style=\"width:auto\" /></div>
 <div id=\"ws-select-cities\">
 <select name=\"ws-city-list\" width=\"250\" id=\"ws-city-list\" class=\"ws-input\" size=\"14\" onChange=\"XLSShowMenu(this.value); WikiaStatsGetInfo('wk-stats-info-panel', this.value);\">";
 $y = 0;
@@ -19,7 +19,7 @@ foreach ($cityStats as $id => $cityId) {
 	#if ($loop >= 100) break;
 	if (!empty($cityList[$cityId])) { 
 		$loop++;
-		$selected = ($wgCityId == $cityId) ? "selected" : "";
+		$selected = ($wgCityId == $cityId) ? " selected=\"selected\" " : "";
 		$wikia_rows .= "<option value=\"{$cityId}\" $selected>".( ($cityId != 0) ? ucfirst($cityList[$cityId]['urlshort']): wfMsg('wikiastats_trend_all_wikia_text')) ."</option>";
 	}
 }
@@ -138,20 +138,20 @@ pageLoaderInit('<?=addslashes(wfMsg('wikiastats_generate_stats_msg'))?>', '<?=ad
 <div class="hd" id="ws-stats-dialog-hd"><?=wfMsg('wikiastats_comparision')?></div>
 <div class="bd">
 	<form name="XLSCompareForm" action="/" method="post">
-	<input type="hidden" name="showXLS" id="showXLS" value="0">
+	<input type="hidden" name="showXLS" id="showXLS" value="0" />
 	<div id="wk-select-cities-panel">
 		<fieldset class="ws-frame-border">
 		<legend class="normal"><?= wfMsg('wikiastats_mainstats_info') ?></legend>
 			<div style="float:left;padding:3px 0px 1px 0px;" id="ws-wikis-check"><?=wfMsg('wikiastats_show_nbr_wikis_check', "<strong style=\"color:#8B0000\">".($MAX_NBR)."</strong>")?></div>
 			<div style="float:left;padding:3px 0px 1px 0px;clear:both;" id="ws-search-panel">
-				<?=wfMsg('wikiastats_search_text')?> <input type="text" name="ws-search-input-panel" id="ws-search-input-panel" autocomplete="off">
+				<?=wfMsg('wikiastats_search_text')?> <input type="text" name="ws-search-input-panel" id="ws-search-input-panel" autocomplete="off" />
 			</div>
 			<div style="float:right;padding:3px 0px 1px 0px;clear:right;" id="ws-sort-panel"><a href="javascript:void(0);" onClick="sortWikiaPanelList(1)"><?=addslashes(wfMsg('wikiastats_sort_list_alphabet'))?></a></div>
 			<div class="ws-div-scroll" id="ws-div-scroll"></div>
 			<div class="clear"></div>
 			<div class="ws-btn-panel">
 				<span class="button-group">
-					<input type="button" name="ws-check-cities" id="ws-check-cities" style="font-size:8pt;" value="<?=wfMsg('wikiastats_xls_uncheck_list')?>">
+					<input type="button" name="ws-check-cities" id="ws-check-cities" style="font-size:8pt;" value="<?=wfMsg('wikiastats_xls_uncheck_list')?>" />
 					<?=wfMsg('wikiastats_xls_press_uncheck')?>
 				</span>
 			</div>
@@ -162,7 +162,7 @@ pageLoaderInit('<?=addslashes(wfMsg('wikiastats_generate_stats_msg'))?>', '<?=ad
 <div class="bd" id="showStatsNewWindow" style="padding:5px 0px 0px 0px;float:left;display:table !important;width:250px;">
 <table width="100%" class="100%">
 <tr>
-	<td style="padding:2px;"><input type="checkbox" checked id="showStatsNewWindowBox"></td>
+	<td style="padding:2px;"><input type="checkbox" checked id="showStatsNewWindowBox" /></td>
 	<td style="padding:2px"><?=wfMsg('wikiastats_show_new_window')?></td>
 </tr>
 </table>
@@ -191,8 +191,8 @@ pageLoaderInit('<?=addslashes(wfMsg('wikiastats_generate_stats_msg'))?>', '<?=ad
 				</div>  
 				<div class="wk-stats-main-panel" id="wk-stats-info-panel" class="ws-input" style="margin-top:6pt;margin-bottom:2pt;float:left;clear:right;width:271px;height:150px;"></div>
 				<div class="wk-select-class-main">
-					<span style="padding-left: 10px;"><input type="button" class="input_button" id="ws-show-charts" value="<?= wfMsg("wikiastats_showcharts") ?>" name="ws-show-charts" onClick="redirectToStats(1)"></span>
-					<span style="padding-left: 10px;"><input type="button" class="input_button" id="ws-show-stats" name="ws-show-stats" value="<?= wfMsg("wikiastats_showstats_btn") ?>" onClick="redirectToStats(0)"></span>
+					<span style="padding-left: 10px;"><input type="button" class="input_button" id="ws-show-charts" value="<?= wfMsg("wikiastats_showcharts") ?>" name="ws-show-charts" onClick="redirectToStats(1)" /></span>
+					<span style="padding-left: 10px;"><input type="button" class="input_button" id="ws-show-stats" name="ws-show-stats" value="<?= wfMsg("wikiastats_showstats_btn") ?>" onClick="redirectToStats(0)" /></span>
 					<div style="padding:15px 21px 0px 120px;"><a href="javascript:void(0);" onClick="redirectTooldStats();"><?=wfMsg('wikiastats_see_old_statistics_page')?></a></div>
 				</div>
 			</fieldset>
@@ -216,7 +216,7 @@ pageLoaderInit('<?=addslashes(wfMsg('wikiastats_generate_stats_msg'))?>', '<?=ad
 			</div>
     	</div>
     </td>
-    <td nowrap align="left" valign="top">
+    <td align="left" valign="top">
 		<table style="width:auto;line-height:11pt" cellpadding="0" cellspacing="0" id="ws_main_wikia_compare_td" valign="top">
 		<tr><td>
 <? 
@@ -238,9 +238,9 @@ for ($i=1; $i<=26; $i++) {
 	<fieldset>
 	<legend style="font-size:10pt;"><strong><?= $linkText[$i] ?></strong></legend>
 <?  } ?>
-	<div style="width:520px">
+	<div style="width:530px">
 		<div style="width:450px; float: left;"><?= wfMsg("wikiastats_comparisons_table_$i") ?></div>
-		<div style="width:70px; float: right;">
+		<div style="width:80px; float: right;">
 			<a href="javascript:void(0);" onClick="showXLSCompareDialog('<?=$l?>', false);"><?= wfMsg('wikiastats_xls_files_stats') ?></a>&nbsp;-&nbsp;
 			<a href="javascript:void(0);" onClick="showXLSCompareDialog('<?=$l?>', true);"><?= wfMsg('wikiastats_tables') ?></a>
 		</div>	
