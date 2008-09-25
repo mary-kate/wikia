@@ -35,7 +35,7 @@ EOT;
 			$wgOut->addScript($script);
 
 			list($form->textbox1, $wysiwygData) = wfWysiwygWiki2Html($form->textbox1, -1, true);
-			$wgOut->addHTML('<input type="hidden" id="wysiwygData" name="wysiwygData" value="'.$wysiwygData.'" />');
+			$wgOut->addHTML('<input type="hidden" id="wysiwygData" name="wysiwygData" value="'.htmlspecialchars($wysiwygData).'" />');
 		}
 	}
 	return true;
