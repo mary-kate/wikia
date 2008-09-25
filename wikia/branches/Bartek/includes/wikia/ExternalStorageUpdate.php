@@ -16,6 +16,7 @@ CREATE TABLE `blobs` (
   `rev_user_text` varchar(255) character set latin1 collate latin1_bin NOT NULL default '',
   `rev_timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
   `blob_text` mediumtext NOT NULL,
+  `rev_flags` tinyblob default NULL
   PRIMARY KEY  (`blob_id`),
   KEY `rev_page_id` (`rev_wikia_id`,`rev_page_id`,`rev_id`),
   KEY `rev_namespace` (`rev_wikia_id`,`rev_page_id`,`rev_namespace`),
@@ -35,16 +36,16 @@ CREATE TABLE `pages` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 **/
 
-$wgHooks[ "RevisionInsertOnAfter" ][] = array( "ExternalStorageUpdate::addDeferredUpdate" ) ;
+$wgHooks[ "RevisionInsertComplete" ][] = "ExternalStorageUpdate::addDeferredUpdate";
 
 class ExternalStorageUpdate {
 
-	private $mId, $mUrl, $mPageId, $mRevision;
+	private $mId, $mUrl, $mPageId, $mRevision, $mFlags;
 
-	public function __construct( $url, $revision ) {
+	public function __construct( $url, $revision, $flags ) {
 		$this->mUrl = $url;
 		$this->mRevision = $revision;
-		$this->mPageId = $revision->getPage();
+		$this->mFlags = $flags;
 	}
 
 	/**
@@ -66,82 +67,91 @@ class ExternalStorageUpdate {
 		$cluster  = $path[2];
 		$id	      = $path[3];
 
-		$Title    = Title::newFromID( $this->mPageId );
+		wfProfileIn( __METHOD__ );
+		if( $this->mRevision instanceof Revision ) {
+			$this->mPageId = $this->mRevision->getPage();
+			$Title = Title::newFromID( $this->mPageId );
+			if( ! $Title  ) {
+				wfDebug( __METHOD__.": title is null, page id = {$this->mPageId}" );
+				wfProfileOut( __METHOD__ );
+				return false;
+			}
 
-		/**
-		 * we should not call this directly, we'll use new loadbalancer factory
-		 * when 1.13 will be alive
-		 */
-		$external = new ExternalStoreDB();
-		$dbw = $external->getMaster( $cluster );
+			$dbw = wfGetDBExt( DB_MASTER, $cluster );
 
-		/**
-		 * explicite transaction
-		 */
-		$dbw->begin();
-		$ret = $dbw->update(
-			"blobs",
-			array(
-				"rev_id"        => $this->mRevision->getId(),
-				"rev_user"      => $this->mRevision->getUser(),
-				"rev_page_id"   => $this->mPageId,
-				"rev_wikia_id"  => $wgCityId,
-				"rev_namespace" => $Title->getNamespace(),
-				"rev_user_text" => $this->mRevision->getUserText(),
-			),
-			array( "blob_id" => $id ),
-			__METHOD__
-		);
-
-		if( $ret ) {
-			/**
-			 * insert or update
-			 */
-			$Row = $dbw->selectRow(
-				"pages",
-				array( "page_id" ),
-				array( "page_id" => $this->mPageId ),
+			$ret = $dbw->update(
+				"blobs",
+				array(
+					"rev_id"        => $this->mRevision->getId(),
+					"rev_user"      => $this->mRevision->getUser(),
+					"rev_page_id"   => $this->mPageId,
+					"rev_wikia_id"  => $wgCityId,
+					"rev_namespace" => $Title->getNamespace(),
+					"rev_user_text" => $this->mRevision->getUserText(),
+					"rev_flags"     => $this->mFlags,
+					"rev_timestamp" => wfTimestamp( TS_DB, $this->mRevision->mTimestamp )
+				),
+				array( "blob_id" => $id ),
 				__METHOD__
 			);
-			if( isset( $Row->page_id ) && !empty( $Row->page_id ) ) {
+
+			if( $ret ) {
 				/**
-				 * update
+				 * insert or update
 				 */
-				$dbw->update(
+				$Row = $dbw->selectRow(
 					"pages",
-					array(
-						"page_wikia_id"  => $wgCityId,
-						"page_namespace" => $Title->getNamespace(),
-						"page_title"     => $Title->getText(),
-					),
-					array(
-						"page_id"        => $this->mPageId,
-					),
+					array( "page_id" ),
+					array( "page_id" => $this->mPageId ),
 					__METHOD__
 				);
-			}
-			else {
+				if( isset( $Row->page_id ) && !empty( $Row->page_id ) ) {
+					/**
+					 * update
+					 */
+					$dbw->update(
+						"pages",
+						array(
+							"page_wikia_id"  => $wgCityId,
+							"page_namespace" => $Title->getNamespace(),
+							"page_title"     => $Title->getText(),
+						),
+						array(
+							"page_id"        => $this->mPageId,
+						),
+						__METHOD__
+					);
+				}
+				else {
+					/**
+					 * insert
+					 */
+					$dbw->insert(
+						"pages",
+						array(
+							"page_wikia_id"  => $wgCityId,
+							"page_id"        => $this->mPageId,
+							"page_namespace" => $Title->getNamespace(),
+							"page_title"     => $Title->getText(),
+							"page_counter"   => 0,
+							"page_edits"     => 0,
+						),
+						__METHOD__
+					);
+				}
 				/**
-				 * insert
+				 * be sure that data is written
 				 */
-				$dbw->insert(
-					"pages",
-					array(
-						"page_wikia_id"  => $wgCityId,
-						"page_id"        => $this->mPageId,
-						"page_namespace" => $Title->getNamespace(),
-						"page_title"     => $Title->getText(),
-						"page_counter"   => 0,
-						"page_edits"     => 0,
-					),
-					__METHOD_
-				);
+				if( $dbw->getFlag( DBO_TRX ) ) {
+					$dbw->commit();
+				}
 			}
-			$dbw->commit();
 		}
 		else {
-			$dbw->rollback();
+			wfDebug( __METHOD__.": revision object is not Revision instance\n" );
 		}
+		wfProfileOut( __METHOD__ );
+		return true;
 	}
 
 	/**
@@ -163,7 +173,7 @@ class ExternalStorageUpdate {
 		global $wgDeferredUpdateList;
 
 		if( strpos( $flags, "external" ) !== false ) {
-			$u = new ExternalStorageUpdate( $url, $revision );
+			$u = new ExternalStorageUpdate( $url, $revision, $flags );
 			array_push( $wgDeferredUpdateList, $u );
 		}
 		return true;

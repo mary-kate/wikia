@@ -27,9 +27,9 @@ if( !defined( 'MEDIAWIKI' ) ) {
  * Use revision number
  */
 
-$wgStyleVersion         = '295';
-$wgMergeStyleVersionJS  = '129';
-$wgMergeStyleVersionCSS = '295';
+$wgStyleVersion         = '2050';
+$wgMergeStyleVersionJS  = '1595';
+$wgMergeStyleVersionCSS = '2050';
 
 /**
  * @name $wgCityId
@@ -38,6 +38,109 @@ $wgMergeStyleVersionCSS = '295';
  * contains null!
  */
 $wgCityId = null;
+
+
+/**
+ * includes common for all wikis
+ */
+require_once ( $IP."/includes/wikia/Defines.php" );
+require_once ( $IP."/includes/wikia/GlobalFunctions.php" );
+
+global $wgDBname, $wgKennisnet;
+if($wgDBname != 'uncyclo' && !$wgKennisnet) {
+	include_once( "$IP/extensions/wikia/SkinChooser/SkinChooser.php" );
+}
+
+/**
+ * autoload classes
+ */
+global $wgAutoloadClasses;
+
+/**
+ * custom wikia classes
+ */
+$wgAutoloadClasses["EasyTemplate"]  =  $GLOBALS["IP"]."/includes/wikia/EasyTemplate.php";
+$wgAutoloadClasses["Wikia"] = "includes/wikia/Wikia.php";
+$wgAutoloadClasses["WikiFactory"] = $GLOBALS["IP"]."/extensions/wikia/WikiFactory/WikiFactory.php";
+$wgAutoloadClasses["WikiMover"] = $GLOBALS["IP"]."/extensions/wikia/WikiFactory/Mover/WikiMover.php";
+$wgAutoloadClasses["WikiFactoryHub"] = $GLOBALS["IP"]."/extensions/wikia/WikiFactory/Hubs/WikiFactoryHub.php";;
+
+/**
+ * API classes
+ */
+
+$wgAutoloadClasses["WikiaApiQuery"] = "extensions/wikia/WikiaApi/WikiaApiQuery.php";
+$wgAutoloadClasses["WikiaApiQueryConfGroups"] = "extensions/wikia/WikiaApi/WikiaApiQueryConfGroups.php";
+$wgAutoloadClasses["WikiaApiQueryDomains"] = "extensions/wikia/WikiaApi/WikiaApiQueryDomains.php";
+$wgAutoloadClasses["WikiaApiQueryPopularPages"]  = "extensions/wikia/WikiaApi/WikiaApiQueryPopularPages.php";
+$wgAutoloadClasses["WikiaApiFormatTemplate"]  = "extensions/wikia/WikiaApi/WikiaApiFormatTemplate.php";
+$wgAutoloadClasses["WikiaApiQueryVoteArticle"] = "extensions/wikia/WikiaApi/WikiaApiQueryVoteArticle.php";
+$wgAutoloadClasses["WikiaApiQueryWrite"] = "extensions/wikia/WikiaApi/WikiaApiQueryWrite.php";
+$wgAutoloadClasses["WikiaApiQueryMostAccessPages"] = "extensions/wikia/WikiaApi/WikiaApiQueryMostAccessPages.php";
+$wgAutoloadClasses["WikiaApiQueryLastEditPages"] = "extensions/wikia/WikiaApi/WikiaApiQueryLastEditPages.php";
+$wgAutoloadClasses["WikiaApiQueryTopEditUsers"] = "extensions/wikia/WikiaApi/WikiaApiQueryTopEditUsers.php";
+$wgAutoloadClasses["WikiaApiQueryMostVisitedPages"] = "extensions/wikia/WikiaApi/WikiaApiQueryMostVisitedPages.php";
+$wgAutoloadClasses["WikiaApiQueryReferers"] = "extensions/wikia/WikiaApi/WikiaApiQueryReferers.php";
+$wgAutoloadClasses["ApiFeaturedContent"] = "extensions/wikia/FeaturedContent/ApiFeaturedContent.php";
+$wgAutoloadClasses["ApiPartnerWikiConfig"] = "extensions/wikia/FeaturedContent/ApiPartnerWikiConfig.php";
+$wgAutoloadClasses["WikiaApiAjaxLogin"] = "extensions/wikia/WikiaApi/WikiaApiAjaxLogin.php";
+$wgAutoloadClasses["ApiImageThumb"] = $GLOBALS["IP"]."/extensions/wikia/Our404Handler/ApiImageThumb.php";
+//$wgAutoloadClasses["ApiRecentChangesCombined"] = "extensions/wikia/RecentChangesCombined/ApiRecentChangesCombined.php";
+$wgAutoloadClasses["WikiaApiQuerySiteInfo"] = "extensions/wikia/WikiaApi/WikiaApiQuerySiteinfo.php";
+
+
+/**
+ * registered API methods
+ */
+global $wgApiQueryListModules;
+$wgApiQueryListModules["wkconfgroups"] = "WikiaApiQueryConfGroups";
+$wgApiQueryListModules["wkdomains"] = "WikiaApiQueryDomains";
+$wgApiQueryListModules["wkpoppages"] = "WikiaApiQueryPopularPages";
+$wgApiQueryListModules["wkvoteart"] = "WikiaApiQueryVoteArticle";
+$wgApiQueryListModules["wkaccessart"] = "WikiaApiQueryMostAccessPages";
+$wgApiQueryListModules["wkeditpage"] = "WikiaApiQueryLastEditPages";
+$wgApiQueryListModules["wkedituser"] = "WikiaApiQueryTopEditUsers";
+$wgApiQueryListModules["wkmostvisit"] = "WikiaApiQueryMostVisitedPages";
+$wgApiQueryListModules["wkreferer"] = "WikiaApiQueryReferers";
+
+/**
+ * registered API methods
+ */
+$wgApiQueryMetaModules["siteinfo"] = "WikiaApiQuerySiteInfo";
+
+/**
+ * registered Ajax methods
+ */
+global $wgAjaxExportList;
+
+
+/**
+ * registered Format names
+ */
+global $wgApiMainListFormats;
+$wgApiMainListFormats["wktemplate"] = "WikiaApiFormatTemplate";
+
+/*
+ * reqistered API modules
+ */
+global $wgAPIModules;
+$wgAPIModules["insert"] = "WikiaApiQueryWrite";
+$wgAPIModules["update"] = "WikiaApiQueryWrite";
+$wgAPIModules["delete"] = "WikiaApiQueryWrite";
+//$wgAPIModules["recentchangescombined"] = "ApiRecentChangesCombined";
+$wgAPIModules["featuredcontent"] = "ApiFeaturedContent";
+$wgAPIModules["partnerwikiconfig"] = "ApiPartnerWikiConfig";
+$wgAPIModules["ajaxlogin"] = "WikiaApiAjaxLogin";
+$wgAPIModules["imagethumb"] = "ApiImageThumb";
+
+/*
+ * Widget FrameWork declarations
+ */
+global $wgWidgetFrameWork;
+if ( $wgWidgetFrameWork) {
+    require_once ( 'widgetFrameWork/lib/widgetConfig.php' );
+}
+
 
 /**
  * Wikia custom extensions, enabled sitewide. Pre-required by some skins
@@ -104,7 +207,7 @@ $wgSkipSkins = array(
  * release number is used for building links
  */
 $HeadURL = split('/', '$HeadURL$');
-$wgReleaseNumber = $HeadURL[5];
+$wgReleaseNumber = ($HeadURL[4] === "trunk" ) ? "trunk" : $HeadURL[5];
 
 /**
  * Enable FAST extension for this branch only
@@ -120,3 +223,15 @@ $wgLogHeaders['var_log'] = 'var_logheader';
 $wgLogNames['var_log'] = 'var_logtext';
 $wgLogNames['var_set'] = 'var_set';
 $wgLogActions['var_log/var_set'] = 'var_set';
+
+/**
+ * @name $wgBiggestCategoriesBlacklist
+ * Lists phrases that disqualify a category from appearing in
+ * the biggest category list (Monaco sidebar)
+ */
+$wgBiggestCategoriesBlacklist = array();
+
+/**
+ * extensions path as seen by users
+ */
+$wgExtensionsPath = false; /// defaults to "{$wgScriptPath}/extensions"
