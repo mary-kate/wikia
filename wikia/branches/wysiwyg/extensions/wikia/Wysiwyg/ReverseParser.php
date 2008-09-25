@@ -32,7 +32,15 @@ class ReverseParser {
 			$html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
 
 			// remove whitespace after <br /> and decode &nbsp;
-			$html = str_replace(array('<br /> ', '&nbsp;'), array('<br />', ' '), $html);
+			$replacements = array(
+				'<br /> ' => '<br />',
+				'&nbsp;' => ' ',
+				' <ol' => '<ol',
+				' <ul' => '<ul',
+				' <li' => '<li',
+			);
+
+			$html = str_replace(array_keys($replacements), array_values($replacements), $html);
 
 			$this->listLevel = 0;
 			$this->listBullets = '';
