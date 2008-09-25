@@ -247,6 +247,28 @@ function WMU_splitExtensions( filename ) {
 	return new Array( basename, bits );
 }
 
+function WMU_in_array( elem, a_array ) {
+	for (elem in a_array) {
+		if (elem == a_array[el]) {
+			return true;
+		}
+	}
+	return false;
+}
+
+function WMU_checkFileExtension( ext, list) {
+	return WMU_in_array( ext.toLowerCase(), list );
+}
+
+function WMU_checkFileExtensionList( ext, list ) {
+	for ( elem in ext ) {
+		if ( WMU_in_array( elem.toLowerCase(), list )) {
+			return true;
+		}
+	}
+	return false;
+}
+
 function WMU_initialCheck( checkedName ) {
 	list_array = WMU_splitExtensions( checkedName );
 	partname = list_array[0];
@@ -264,8 +286,8 @@ function WMU_initialCheck( checkedName ) {
 		}
 	}
 	
-
 	if (partname.lenght < 1) {
+		alert (minlength1);
 		return false;
 	}
 
@@ -273,7 +295,11 @@ function WMU_initialCheck( checkedName ) {
 		alert (filetype_missing) ;
 		return false;
 	}
-
+	/*  else if () {		
+		alert ();	
+		return false;
+	}
+	*/
 	return true;
 }
 
