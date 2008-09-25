@@ -643,10 +643,10 @@ if (!empty($main_tbl)) {
 ?>
 </div>
 </fieldset>
-<? if ( !empty($main_tbl) && (empty($show_chart)) ) { if ($selCity > 0) { ?>
-<fieldset id="ws-other-stats-panel">
-<legend class="legend-subtitle"><?=wfMsg('wikiastats_other_statistics_legend')?></legend>
+<? $block_div = "none"; if ( !empty($main_tbl) && (empty($show_chart)) ) { if ($selCity > 0) { $block_div = "block"; ?>
 <? } } ?>
+<fieldset id="ws-other-stats-panel" style="display:<?=$block_div?>;">
+<legend class="legend-subtitle"><?=wfMsg('wikiastats_other_statistics_legend')?></legend>
 <!-- DISTRIBUTION OF ARTICLE EDITS OVER WIKIANS -->
 <div id="ws-edits-article">
 	<div id="ws-edits-article-title" style="clear:left;width:auto;float:left">
@@ -758,11 +758,7 @@ for ($i = 1; $i <= 6; $i++)
 	<div class="clear">&nbsp;</div>
 	<div id="ws-page-edits-count-table"></div>
 </div>
-<? if ( !empty($main_tbl) && (empty($show_chart)) ) { if ($selCity > 0) { ?>
-</fieldset>
-<? 
-} } 
-if ( !empty($main_tbl) && (empty($show_chart)) )
+<? if ( !empty($main_tbl) && (empty($show_chart)) )
 {
 	if ($selCity > 0)
 	{
