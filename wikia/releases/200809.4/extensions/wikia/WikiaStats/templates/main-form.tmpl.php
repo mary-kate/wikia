@@ -758,6 +758,7 @@ for ($i = 1; $i <= 6; $i++)
 	<div class="clear">&nbsp;</div>
 	<div id="ws-page-edits-count-table"></div>
 </div>
+</fieldset>
 <? if ( !empty($main_tbl) && (empty($show_chart)) )
 {
 	if ($selCity > 0)
