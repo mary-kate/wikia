@@ -1,12 +1,18 @@
 <?php
-
+/**
+ * PHP Reverse Parser - Processes html and provides a one-way
+ * transformation into wikimarkup
+ *
+ * @author Maciej 'macbre' Brencz <macbre(at)wikia-inc.com>
+ * @author Inez Korczynski <inez(at)wikia-inc.com>
+ */
 class ReverseParser {
 
 	private $dom;
 
 	// used by nested lists parser
 	private $listLevel = 0;
-	
+
 	// bullets stack for nested lists
 	private $listBullets = '';
 
@@ -58,7 +64,6 @@ class ReverseParser {
 			}
 		}
 
-
 		wfProfileOut(__METHOD__);
 		return $out;
 	}
@@ -75,7 +80,7 @@ class ReverseParser {
 			// handle lists
 			$isListNode = in_array($node->nodeName, array('ul', 'ol', 'dl'));
 
-			if ($isListNode) {
+			if($isListNode) {
 				$this->listLevel++;
 				// build bullets stack
 				switch ($node->nodeName) {
@@ -97,9 +102,9 @@ class ReverseParser {
 			}
 
 			// handle lists
-			if ($isListNode) {
+			if($isListNode) {
 				// fix for different list types on the same level of nesting
-				if ($node->previousSibling && in_array($node->previousSibling->nodeName, array('ol', 'ul', 'dl')) && $this->listLevel > 1) {
+				if($node->previousSibling && in_array($node->previousSibling->nodeName, array('ol', 'ul', 'dl')) && $this->listLevel > 1) {
 					$childOutput = "\n" . trim($childOutput);
 				} else {
 					$childOutput = trim($childOutput);
@@ -128,6 +133,7 @@ class ReverseParser {
 					case 'body':
 						$out = $textContent;
 						break;
+
 					case 'br':
 						if($node->parentNode && $node->parentNode->nodeName == 'p' && $node->parentNode->hasChildNodes() && $node->parentNode->childNodes->item(0)->isSameNode($node)) {
 							$out = "\n";
@@ -136,6 +142,7 @@ class ReverseParser {
 						}
 
 						break;
+
 					case 'p':
 						$out = $textContent;
 
@@ -144,22 +151,13 @@ class ReverseParser {
 						if ($indentation !== false) {
 							$out = str_repeat(':', $indentation) . $out;
 						}
-	
+
 						// new line logic
 						if($node->previousSibling && $node->previousSibling->nodeName == 'p') {
-
 							// paragraph after paragraph
 							$out = "\n\n{$out}";
-
-						} else if($node->previousSibling && $node->previousSibling->nodeName{0} == 'h' && is_numeric($node->previousSibling->nodeName{1})) {
-
-							// header before paragraph
-							$out = "\n{$out}";
-
 						} else {
-
 							$out = "\n{$out}";
-
 						}
 						break;
 
@@ -182,11 +180,10 @@ class ReverseParser {
 					// text formatting
 					case 'i':
 					case 'em':
-						if ( in_array($node->parentNode->nodeName, array('b', 'strong')) ) {
+						if(in_array($node->parentNode->nodeName, array('b', 'strong'))) {
 							$open = '<em>';
 							$close = '</em>';
-						}
-						else {
+						} else {
 							$open = $close = "''";
 						}
 
@@ -195,11 +192,10 @@ class ReverseParser {
 
 					case 'b':
 					case 'strong':
-						if ( in_array($node->parentNode->nodeName, array('i', 'em')) ) {
+						if(in_array($node->parentNode->nodeName, array('i', 'em'))) {
 							$open = '<strong>';
 							$close = '</strong>';
-						}
-						else {
+						} else {
 							$open = $close = "'''";
 						}
 
@@ -212,14 +208,14 @@ class ReverseParser {
 					case 'dl':
 						$prefix = $suffix = '';
 						// handle indentations created using definition lists
-						if ($node->nodeName == 'dl') {
+						if($node->nodeName == 'dl') {
 							$indentation = $this->getIndentationLevel($node);
-							if ($indentation !== false) {
+							if($indentation !== false) {
 								$prefix = str_repeat(':', $indentation);
 							}
 							// paragraph is following this <dl> list
-							if ($node->nextSibling && $node->nextSibling->nodeName == 'p') {
-								$suffix = ($node->nextSibling->textContent != '') ? "\n" : "\n\n";;
+							if($node->nextSibling && $node->nextSibling->nodeName == 'p') {
+								$suffix = ($node->nextSibling->textContent != '') ? "\n" : "\n\n";
 							}
 						}
 						if($node->previousSibling) {
@@ -264,33 +260,35 @@ class ReverseParser {
 			case 'li':
 				$content = ' ' . ltrim($content, ' ') . "\n";
 				return $this->listBullets . $content;
+
 			case 'dt':
 				return substr($this->listBullets, 0, -1) . ";{$node->textContent}\n";
+
 			case 'dd':
 				// hack for :::::foo markup used for indentation
 				// <dl><dl>...</dl></dl> (produced by MW markup) would generate wikimarkup like the one below:
 				// :
 				// ::
 				// ::: ...
-				if ($node->hasChildNodes() && $node->childNodes->item(0)->nodeName == 'dl') {
+				if($node->hasChildNodes() && $node->childNodes->item(0)->nodeName == 'dl') {
 					return rtrim($content, ' ') . "\n";
 				} else {
 					return $this->listBullets . $content . "\n";
 				}
-			}
+		}
 	}
 
 	/**
 	 * Returns level of indentation from value of margin-left CSS property
 	 */
 	private function getIndentationLevel($node) {
-		if ( !$node->hasAttributes() ) {
+		if(!$node->hasAttributes()) {
 			return false;
 		}
 
 		$cssStyle = $node->getAttribute('style');
 
-		if (!empty($cssStyle)) {
+		if(!empty($cssStyle)) {
 			$margin = (substr($cssStyle, 0, 11) == 'margin-left') ? intval(substr($cssStyle, 12)) : 0;
 			return intval($margin/40);
 		}
@@ -303,7 +301,7 @@ class ReverseParser {
 	 */
 	private function cleanupTextContent($text) {
 
-		if (empty($text)) {
+		if(empty($text)) {
 			return '';
 		}
 
@@ -319,12 +317,12 @@ class ReverseParser {
 		$text = preg_replace("/^([#*]+)/", '<nowiki>$1</nowiki>', $text);
 
 		// 4. semicolon at the beginning of the line
-		if (in_array($text{0}, array(':', ';'))) {
+		if(in_array($text{0}, array(':', ';'))) {
 			$text = '<nowiki>' . $text{0} . '</nowiki>' . substr($text, 1);
 		}
 
 		// 5. space at the beginning of the line
-		if ($text{0} == ' ') {
+		if($text{0} == ' ') {
 			$text = '<nowiki> </nowiki>' . substr($text, 1);
 		}
 
