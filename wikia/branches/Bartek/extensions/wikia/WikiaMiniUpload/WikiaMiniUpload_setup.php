@@ -39,6 +39,8 @@ function WMUSetup($editform) {
 }
 
 function WMUSetupVars($vars) {	
+	global $wgFileBlacklist, $wgCheckFileExtensions, $wgStrictFileExtensions, $wgFileExtensions;
+
 	$vars['wmu_back'] = wfMsg('wmu-back');
 	$vars['wmu_imagebutton'] = wfMsg('wmu-imagebutton') ;
 	$vars['wmu_close'] = wfMsg('wmu-close');
@@ -46,6 +48,11 @@ function WMUSetupVars($vars) {
 	$vars['wmu_warn2'] = wfMsg('wmu-warn2');
 	$vars['wmu_bad_extension'] = wfMsg('wmu-bad-extension');
 	$vars['filetype_missing'] = wfMsg('filetype-missing');
+	$vars['file_extensions'] = $wgFileExtensions;
+	$vars['file_blacklist'] = $wgFileBlacklist;
+	$vars['check_file_extensions'] = $wgCheckFileExtensions;
+	$vars['strict_file_extensions'] = $wgStrictFileExtensions;
+
 	return true;
 }
 
