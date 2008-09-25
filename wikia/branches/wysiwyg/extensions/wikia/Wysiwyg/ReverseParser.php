@@ -123,7 +123,27 @@ class ReverseParser {
 
 			$textContent = ($childOut != '') ? $childOut : $this->cleanupTextContent($node->textContent);
 
-			if(!empty($wasHTML)) {
+			if(!empty($washtml)) {
+
+				$attStr = $this->getAttributesStr($node);
+
+				switch ($node->nodeName) {
+					case 'br':
+					case 'hr':
+						$out = "<{$node->nodeName}{$attStr} />";
+						break;
+
+					default:
+						// nice formatting of nested HTML in wikimarkup
+						if($node->hasChildNodes() && $node->childNodes->item(0)->nodeType != XML_TEXT_NODE) {
+							// node with child nodes
+							$textContent = "\n".trim($textContent)."\n";
+							$trial = "\n";
+						} else {
+							$trial = '';
+						}
+						$out = "<{$node->nodeName}{$attStr}>{$textContent}</{$node->nodeName}>{$trial}";
+				}
 
 			} else {
 
@@ -236,6 +256,11 @@ class ReverseParser {
 					case 'dt':
 						$out = $this->handleListItem($node, $textContent);
 						break;
+
+					// HTML tags
+					default:
+						$out = "<{$node->nodeName}{$this->getAttributesStr($node)}>{$textContent}</{$node->nodeName}>";
+						break;
 				}
 
 			}
@@ -336,5 +361,24 @@ class ReverseParser {
 		wfProfileOut(__METHOD__);
 		return $text;
 	}
+
+	/**
+	 * Returns HTML string containing node arguments
+	 */
+	 private function getAttributesStr($node) {
+		if(!$node->hasAttributes()) {
+			return '';
+		}
+
+		$attStr = '';
+
+		foreach ($node->attributes as $attrName => $attrNode) {
+			if ($attrName == 'washtml') {
+				continue;
+			}
+			$attStr .= ' ' . $attrName . '="' . $attrNode->nodeValue  . '"';
+		}
+		return $attStr;
+	 }
 
 }
