@@ -132,7 +132,6 @@ class WikiaMiniUpload {
                 } elseif ( $form->checkFileExtensionList( $ext, $wgFileBlacklist ) ||
                                 ($wgCheckFileExtensions && $wgStrictFileExtensions &&
                                         !$form->checkFileExtension( $finalExt, $wgFileExtensions ) ) ) {
-                        $resultDetails = array( 'finalExt' => $finalExt );
                         return UploadForm::FILETYPE_BADTYPE;
                 }
 
@@ -152,7 +151,7 @@ class WikiaMiniUpload {
 			case UploadForm::FILETYPE_MISSING:
 				return wfMsg( 'filetype-missing' );
 			case UploadForm::FILETYPE_BADTYPE:
-				return wfMsg( 'filetype-banned-type' );
+				return wfMsg( 'filetype-bad-extension' );
 			default:
 				return false;
 		}
