@@ -304,8 +304,10 @@ class ReverseParser {
 	 * Clean up node text content
 	 */
 	private function cleanupTextContent($text) {
+		wfProfileIn(__METHOD__);
 
 		if(empty($text)) {
+			wfProfileOut(__METHOD__);
 			return '';
 		}
 
@@ -331,6 +333,7 @@ class ReverseParser {
 		// 6. wrap [[foo]] using <nowiki>
 		$text = preg_replace("/(\[+)([^\]]+)(\]+)/", '<nowiki>$1$2$3</nowiki>', $text);
 
+		wfProfileOut(__METHOD__);
 		return $text;
 	}
 
