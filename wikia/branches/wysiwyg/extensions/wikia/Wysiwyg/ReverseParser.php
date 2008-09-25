@@ -62,6 +62,9 @@ class ReverseParser {
 				// remove ONE empty line from the beginning of wikitext
 				$out = substr($out, 1);
 			}
+
+			wfDebug("ReverseParser wikitext: {$out}\n");
+
 		}
 
 		wfProfileOut(__METHOD__);
@@ -258,8 +261,15 @@ class ReverseParser {
 						// nice formatting of nested HTML in wikimarkup
 						if($node->hasChildNodes() && $node->childNodes->item(0)->nodeType != XML_TEXT_NODE) {
 							// node with child nodes
-							$textContent = "\n".trim($textContent)."\n";
-							$trial = "\n";
+							// add \n only when node is HTML block element
+							if ($this->isInlineElement($node)) {
+								$textContent = trim($textContent);
+								$trail = '';
+							}
+							else {
+								$textContent = "\n".trim($textContent)."\n";
+								$trial = "\n";
+							}
 						} else {
 							$trial = '';
 						}
@@ -389,5 +399,12 @@ class ReverseParser {
 		}
 		return $attStr;
 	 }
+
+	/**
+	 * Return true if given node is inline HTNL element
+	 */
+	private function isInlineElement($node) {
+		return in_array($node->nodeName, array('u', 'b', 'strong', 'i', 'em'));
+	}
 
 }
