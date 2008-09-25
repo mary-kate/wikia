@@ -24,9 +24,9 @@ $wgHooks['SearchBeforeResults'][] = 'SharedHelpSearchHook';
 $wgHooks['ParserReplaceLinkHolders'][] = 'SharedHelpReplaceLinkHolders';
 
 function SharedHelpHook(&$out, &$text) {
-	global $wgTitle, $wgMemc, $wgSharedDB, $wgDBname, $wgCityId;
+	global $wgTitle, $wgMemc, $wgSharedDB, $wgDBname, $wgCityId, $wgHelpWikiId;
 
-	if($wgCityId == 3322) { # Do not process for help.wikia.com
+	if($wgCityId == $wgHelpWikiId) { # Do not process for help.wikia.com
 		return true;
 	}
 
@@ -105,10 +105,10 @@ function SharedHelpHook(&$out, &$text) {
 }
 
 function SharedHelpEditPageHook(&$editpage) {
-	global $wgTitle, $wgCityId;
+	global $wgTitle, $wgCityId, $wgHelpWikiId;
 
 	// do not show this message on help.wikia.com
-	if ($wgCityId == 3322) {
+	if ($wgCityId == $wgHelpWikiId) {
 		return true;
 	}
 
@@ -125,10 +125,10 @@ function SharedHelpEditPageHook(&$editpage) {
 }
 
 function SharedHelpSearchHook(&$searchPage, &$term) {
-	global $wgOut, $wgCityId;
+	global $wgOut, $wgCityId, $wgHelpWikiId;
 
 	// do not show this message on help.wikia.com
-	if ($wgCityId == 3322) {
+	if ($wgCityId == $wgHelpWikiId) {
 		return true;
 	}
 
