@@ -31,15 +31,6 @@ class ReverseParser {
 		if(is_string($html) && $html != '') {
 			$html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
 
-			wfProfileIn(__METHOD__."-cleanup");
-
-			// HTML cleanup - remove whitespaces between tags
-			$html = preg_replace("/>([\s]+)<p>/", '><p>', $html); // before <p> tag
-			$html = preg_replace("/<\/p>([\s]+)</", '</p><', $html); // after </p> tag
-			$html = preg_replace("/p>([\s]+)<br/", 'p><br', $html); // between <p> and <br /> tag
-			$html = str_replace('</dl> </dd>', '</dl></dd>', $html); // between </dl> and </dd> tag
-			$html = str_replace('</li> <li', '</li><li', $html); // between li tags defined as html
-
 			// remove whitespace after <br /> and decode &nbsp;
 			$html = str_replace(array('<br /> ', '&nbsp;'), array('<br />', ' '), $html);
 
@@ -48,8 +39,6 @@ class ReverseParser {
 			$this->fckData = $wysiwygData;
 
 			wfDebug("ReverseParser HTML: {$html}\n");
-
-			wfProfileOut(__METHOD__."-cleanup");
 
 			wfSuppressWarnings();
 			if($this->dom->loadHTML($html)) {
@@ -326,9 +315,11 @@ class ReverseParser {
 
 			wfDebug("ReverseParser XML_TEXT_NODE\n");
 
-			if(trim($node->textContent, "\n") == '') {
+			if ( trim($node->textContent) == '' && $node->parentNode && !$this->isInlineElement($node->parentNode) && $node->parentNode->nodeName != 'p' ) {
+				// get rid of whitespaces between tags we don't need
 				$out = '';
-			} else {
+			}
+			else {
 				$out = $this->cleanupTextContent($node->textContent);
 			}
 
