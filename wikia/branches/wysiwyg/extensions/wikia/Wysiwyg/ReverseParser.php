@@ -550,7 +550,7 @@ class ReverseParser {
 	 * Return true if given node is inline HTNL element
 	 */
 	private function isInlineElement($node) {
-		return in_array($node->nodeName, array('u', 'b', 'strong', 'i', 'em'));
+		return in_array($node->nodeName, array('u', 'b', 'strong', 'i', 'em', 'strike'));
 	}
 
 }
