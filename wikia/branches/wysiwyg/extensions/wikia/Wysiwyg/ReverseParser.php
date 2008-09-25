@@ -290,8 +290,14 @@ class ReverseParser {
 	private function handleListItem($node, $content) {
 		switch($node->nodeName) {
 			case 'li':
-				$content = ' ' . ltrim($content, ' ') . "\n";
-				return $this->listBullets . $content;
+				if( $node->hasChildNodes() && in_array($node->childNodes->item(0)->nodeName, array('ul', 'ol')) ) {
+					// nested lists like
+					// *** foo
+					// *** bar
+					return $content . "\n";
+				} else {
+					return $this->listBullets . ' ' . ltrim($content) . "\n";
+				}
 
 			case 'dt':
 				return substr($this->listBullets, 0, -1) . ";{$node->textContent}\n";
