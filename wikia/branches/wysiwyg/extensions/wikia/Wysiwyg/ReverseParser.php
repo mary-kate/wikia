@@ -306,7 +306,7 @@ class ReverseParser {
 	private function cleanupTextContent($text) {
 		wfProfileIn(__METHOD__);
 
-		if(empty($text)) {
+		if($text == '') {
 			wfProfileOut(__METHOD__);
 			return '';
 		}
