@@ -21,18 +21,18 @@ $cityUrl = (is_object($cityInfo) && $cityId > 0) ? "<a target=\"new\" href=\"".$
 <table border="0" style="font-size:8.5pt;font-family:Trebuchet MS,arial,sans-serif,helvetica;width:100%">
 <tr>
 	<td align="left" valign="top" width="40%"><strong><?= wfMsg('wikiastats_wikiid')?></strong> <?= (!empty($cityId)) ? $cityId : " - " ?></td>
-	<td align="left" valign="top" width="60%" style="padding-left:10px;" nowrap><strong><?= wfMsg('wikiastats_wikiname') ?></strong> <?= $cityTitle ?></td>
+	<td align="left" valign="top" width="60%" style="padding-left:10px; white-space:nowrap;"><strong><?= wfMsg('wikiastats_wikiname') ?></strong> <?= $cityTitle ?></td>
 </tr>
 <tr>
 	<td align="left" valign="top"><strong><?= wfMsg('wikiastats_wikilang') ?></strong> <?= (!empty($langName)) ? $langName : $cityInfo->city_lang ?></td>
-	<td align="left" valign="top" style="padding-left:10px;"><strong><?= wfMsg('wikiastats_wikiurl') ?></strong> <?= $cityUrl ?></td></tr>
+	<td align="left" valign="top" style="padding-left:10px;"><strong><?= wfMsg('wikiastats_wikiurl') ?></strong> <?= $cityUrl ?></td>
 </tr>
 <tr>
-	<td align="left" valign="top" nowrap><strong><?= wfMsg('wikiastats_wikicategory') ?></strong> <?= $catName ?></td>
+	<td align="left" valign="top" style="white-space:nowrap;"><strong><?= wfMsg('wikiastats_wikicategory') ?></strong> <?= $catName ?></td>
 	<td align="left" valign="top" style="padding-left:10px;"><strong><?= wfMsg('wikiastats_wikicreated') ?></strong> <?= (!empty($outDate)) ? $outDate : " - " ?></td>
 </tr>
 <tr>
-	<td align="left" valign="top" nowrap><strong><?= wfMsg('wikiastats_code_version') ?></strong> <a href="<?=Title::newFromText("Version", NS_SPECIAL)->getLocalURL();?>">Special:Version</a></td>
+	<td align="left" valign="top" style="white-space:nowrap;"><strong><?= wfMsg('wikiastats_code_version') ?></strong> <a href="<?=Title::newFromText("Version", NS_SPECIAL)->getLocalURL();?>">Special:Version</a></td>
 	<td align="left" valign="top" style="padding-left:10px;"><strong><?= wfMsg('wikiastats_mediawiki_stats') ?></strong> <a href="<?=Title::newFromText("Statistics", NS_SPECIAL)->getLocalURL();?>">Special:Statistics</a></td>
 </tr>
 </table>

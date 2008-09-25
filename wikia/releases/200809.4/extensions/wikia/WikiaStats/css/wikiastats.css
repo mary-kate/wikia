@@ -108,6 +108,8 @@ td.main2x { border:1px inset #FFF; text-align:left; font-size:8pt; margin:0px; p
 .button-group button:hover, .button-group button.hover { background-color:#FEC423; border:1px outset #DCDCDC; }
 #compareStatsDialog {display: none;font-size:12px;width:1px;}
 .yui-dialog .ft, .yui-simple-dialog .ft {width:230px;}
+.wk-stats-legend-values {padding: 1px 7px 1px 7px;}
+.wk-column-group {font-weight: bold; padding: 10px 0px 2px 0px;}
 
 #ws-title {margin: 1em; padding: 1em;}
 #ws-upload {text-align: left;}
@@ -137,7 +139,5 @@ td.main2x { border:1px inset #FFF; text-align:left; font-size:8pt; margin:0px; p
 #ws-upload {text-align: left;}
 #ws-main-table-headers {width:500px;float:left;height:20px;}
 #wk-stats-legend {font-size: 8pt; font-family:Trebuchet MS,arial,verdana;padding:0px;}
-#wk-column-group {font-weight: bold; padding: 10px 0px 2px 0px;}
-#wk-stats-legend-values {padding: 1px 7px 1px 7px;}
 #wk-stats-legend-columns {padding: 10px 0px 10px 2px;}
 .ws-input {border-bottom:1px inset #2F6FAB; border-left:1px outset #2F6FAB; border-right:1px inset #2F6FAB;border-top: 1px outset #2F6FAB;width:240px;padding:1px 2px; margin:2px; font-size:8.5pt;}

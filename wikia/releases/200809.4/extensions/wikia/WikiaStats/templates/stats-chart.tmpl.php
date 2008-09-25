@@ -4,7 +4,7 @@
 <div class="ws_chart_table" style="clear:both;padding:5px;">
 <? $G = 1000 * 1000 * 1000; $M = 1000 * 1000; $K = 1000; $S = 100; $T = 10; $GB = 1024 * 1024 * 1024; $MB = 1024 * 1024; $KB = 1024; ?>	
 <? if (!empty($city_id)) { ?>
-<input type="hidden" id="wk-stats-city-id" value="<?=$city_id?>">
+<input type="hidden" id="wk-stats-city-id" value="<?=$city_id?>" />
 <? } 
 
 // calculation
