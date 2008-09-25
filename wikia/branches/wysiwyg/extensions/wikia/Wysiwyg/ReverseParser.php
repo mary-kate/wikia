@@ -144,6 +144,10 @@ class ReverseParser {
 						break;
 
 					case 'p':
+						if($textContent{0} == ' ') {
+							$textContent = '<nowiki> </nowiki>' . substr($textContent, 1);
+						}
+
 						$out = $textContent;
 
 						// handle indentations
@@ -321,15 +325,10 @@ class ReverseParser {
 			$text = '<nowiki>' . $text{0} . '</nowiki>' . substr($text, 1);
 		}
 
-		// 5. space at the beginning of the line
-		if($text{0} == ' ') {
-			$text = '<nowiki> </nowiki>' . substr($text, 1);
-		}
-
-		// 6. wrap magic words {{ }} using <nowiki>
+		// 5. wrap magic words {{ }} using <nowiki>
 		$text = preg_replace("/({{2,3})([^}]+)(}{2,3})/", '<nowiki>$1$2$3</nowiki>', $text);
 
-		// 7. wrap [[foo]] using <nowiki>
+		// 6. wrap [[foo]] using <nowiki>
 		$text = preg_replace("/(\[+)([^\]]+)(\]+)/", '<nowiki>$1$2$3</nowiki>', $text);
 
 		return $text;
