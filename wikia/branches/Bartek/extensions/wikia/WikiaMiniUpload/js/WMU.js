@@ -248,8 +248,8 @@ function WMU_splitExtensions( filename ) {
 }
 
 function WMU_in_array( elem, a_array ) {
-	for (elem in a_array) {
-		if (elem == a_array[el]) {
+	for ( key in a_array ) {
+		if ( elem == a_array[key] ) {
 			return true;
 		}
 	}
@@ -262,7 +262,7 @@ function WMU_checkFileExtension( ext, list) {
 
 function WMU_checkFileExtensionList( ext, list ) {
 	for ( elem in ext ) {
-		if ( WMU_in_array( elem.toLowerCase(), list )) {
+		if ( WMU_in_array( ext[elem].toLowerCase(), list )) {
 			return true;
 		}
 	}
@@ -273,15 +273,14 @@ function WMU_initialCheck( checkedName ) {
 	list_array = WMU_splitExtensions( checkedName );
 	partname = list_array[0];
 	ext = list_array[1];
-
-	if (ext.lenght > 0) {
-		finalExt = ext[ext.lenght - 1];
+	if (ext.length > 0) {
+		finalExt = ext[ext.length -1];
 	} else {
 		finalExt = '';
 	}
 
 	if (ext.lenght > 1) {
-		for (i=0; i< ext.lenght; i++ ) {
+		for (i=0; i< ext.length; i++ ) {
 			partname += '.' + ext[i];
 		}
 	}
@@ -290,16 +289,15 @@ function WMU_initialCheck( checkedName ) {
 		alert (minlength1);
 		return false;
 	}
-
 	if (finalExt == '') {
 		alert (filetype_missing) ;
 		return false;
+	} else if (WMU_checkFileExtensionList( ext, file_blacklist ) || ( check_file_extensions 
+			&& strict_file_extensions && !WMU_checkFileExtension( finalExt, file_extensions ) )  ) {		
+			alert (wmu_bad_extension);	
+			return false;
 	}
-	/*  else if () {		
-		alert ();	
-		return false;
-	}
-	*/
+	
 	return true;
 }
 
