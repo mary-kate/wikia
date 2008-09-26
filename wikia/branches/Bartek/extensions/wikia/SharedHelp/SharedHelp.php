@@ -25,7 +25,15 @@ $wgHooks['ParserReplaceLinkHolders'][] = 'SharedHelpReplaceLinkHolders';
 
 class SharedHttp extends Http {
 
-	static function request() {
+        static function get( $url, $timeout = 'default' ) {
+                return self::request( "GET", $url, $timeout );
+        }
+
+        static function post( $url, $timeout = 'default' ) {
+                return self::request( "POST", $url, $timeout );
+        }
+
+        static function request( $method, $url, $timeout = 'default' ) {
 		global $wgHTTPTimeout, $wgHTTPProxy, $wgVersion, $wgTitle;
 
 		wfDebug( __METHOD__ . ": $method $url\n" );
@@ -65,7 +73,11 @@ class SharedHttp extends Http {
 
                         # Don't return the text of error messages, return false on error
                         if ( curl_getinfo( $c, CURLINFO_HTTP_CODE ) != 200 ) {
-                                $text = false;
+                                if ( curl_getinfo( $c, CURLINFO_HTTP_CODE ) != 301 ) {
+                                        $text = false;
+                                } else {
+                                        $text = "Redirect Test";
+                                }
                         }
 
                         # Don't return truncated output
