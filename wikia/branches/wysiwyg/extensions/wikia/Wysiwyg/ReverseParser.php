@@ -517,6 +517,10 @@ class ReverseParser {
 				// [[:Image:Jimbo.jpg]]
 				case 'internal link: file':
 					return "[[{$refData['href']}{$pipe}]]{$refData['trial']}";
+				// [http://www.wikia.com]
+				case 'external link':
+					$desc = ($refData['description'] != '') ? " {$refData['description']}" : '';
+					return "[{$refData['href']}{$desc}]{$refData['trial']}";
 			}
 		}
 		// handle HTML links <a href="http://foo.net">bar</a>
