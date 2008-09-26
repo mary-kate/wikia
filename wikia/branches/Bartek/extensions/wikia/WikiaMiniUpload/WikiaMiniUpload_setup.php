@@ -9,7 +9,7 @@ if(!defined('MEDIAWIKI')) {
 
 $wgExtensionCredits['other'][] = array(
         'name' => 'WikiaMiniUpload',
-        'author' => 'Inez Korczyński',
+        'author' => 'Inez Korczyński, Bartek Łapiński',
 );
 
 $dir = dirname(__FILE__).'/';
