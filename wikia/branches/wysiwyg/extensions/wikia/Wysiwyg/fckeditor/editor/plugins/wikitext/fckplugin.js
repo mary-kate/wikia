@@ -1,6 +1,3 @@
-// Rename the "Source" button to "Wikitext".
-FCKToolbarItems.RegisterItem( 'Source', new FCKToolbarButton( 'Source', 'Source', null, FCK_TOOLBARITEM_ICONTEXT, true, true, 1 ) ) ;
-
 (function() {
 
 	var originalSwitchEditMode = FCK.SwitchEditMode;
