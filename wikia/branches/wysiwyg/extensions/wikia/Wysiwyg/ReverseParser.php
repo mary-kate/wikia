@@ -418,13 +418,17 @@ class ReverseParser {
 		$text = preg_replace("/({{2,3})([^}]+)(}{2,3})/", '<nowiki>$1$2$3</nowiki>', $text);
 
 		// 6. wrap [[foo]] using <nowiki>
-		$text = preg_replace("/(\[+)([^\]]+)(\]+)/", '<nowiki>$1$2$3</nowiki>', $text);
+		$text = preg_replace("/(\[{2,})([^]]+)(\]{2,})/", '<nowiki>$1$2$3</nowiki>', $text);
+
+		// 7. wrap [<url protocol>...] using <nowiki>
+		$protocols = wfUrlProtocols();
+		$text = preg_replace("/\[(?=$protocols)([^\]]+)\]/", '<nowiki>[$1]</nowiki>', $text);
 
 		wfProfileOut(__METHOD__);
 		return $text;
 	}
 
-	
+
 	/**
 	 * Returns wikimarkup for <span> tag
 	 *
