@@ -187,9 +187,14 @@ class ReverseParser {
 						$out = " {$textContent}";
 
 						// new line logic
-						if ($node->previousSibling || ($node->parentNode && $node->parentNode->nodeName == 'td')) {
+						if ($node->previousSibling) {
+							// separate <pre> tags
+							$out = ($node->previusSibling->nodeName == 'pre') ? "\n{$out}" : "\n\n{$out}";
+						}
+						else if ($node->parentNode && $node->parentNode->nodeName == 'td') {
 							$out = "\n{$out}";
 						}
+						
 						break;
 
 					// text formatting
