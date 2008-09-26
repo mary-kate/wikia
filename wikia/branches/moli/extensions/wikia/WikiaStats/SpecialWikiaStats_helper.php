@@ -29,9 +29,9 @@ class WikiaGenericStats {
 
     const MONTHLY_STATS = 7;
     const USE_MEMC = 0;
-    const USE_OLD_DB = 1;
+    const USE_OLD_DB = 0;
 	const IGNORE_WIKIS = "5, 11, 6745";
-
+   	
 	var $columnMapIndex = null;
 	// show only local statistics for wikia
 	var $localStats = false;
