@@ -602,7 +602,7 @@ class Linker {
 			return $res;
 		}
 
-		global $wgContLang, $wgUser, $wgThumbLimits, $wgThumbUpright;
+		global $wgContLang, $wgUser, $wgThumbLimits, $wgThumbUpright, $FCKparseEnable;
 		if ( $file && !$file->allowInlineDisplay() ) {
 			wfDebug( __METHOD__.': '.$title->getPrefixedDBkey()." does not allow inline display\n" );
 			return $this->makeKnownLinkObj( $title );
@@ -684,16 +684,25 @@ class Linker {
 		if ( !$thumb ) {
 			$s = $this->makeBrokenImageLinkObj( $title, '', '', '', '', $time==true );
 		} else {
-			$s = $thumb->toHtml( array(
+			$attrArr = array(
 				'desc-link' => true,
 				'desc-query' => $query,
 				'alt' => $fp['alt'],
 				'valign' => isset( $fp['valign'] ) ? $fp['valign'] : false ,
-				'img-class' => isset( $fp['border'] ) ? 'thumbborder' : false,
-				'refid' => $fp['refid'] ) );
+				'img-class' => isset( $fp['border'] ) ? 'thumbborder' : false
+			);
+			$refId = '';
+			if ($FCKparseEnable && isset($fp['refid'])) {
+				if ($fp['align'] == '') {
+					$attrArr['refid'] = $fp['refid'];
+				} else {
+					$refId = " refid=\"{$fp['refid']}\"";
+				}
+			}
+			$s = $thumb->toHtml( $attrArr );
 		}
 		if ( '' != $fp['align'] ) {
-			$s = "<div class=\"float{$fp['align']}\"><span>{$s}</span></div>";
+			$s = "<div$refId class=\"float{$fp['align']}\"><span>{$s}</span></div>";
 		}
 		return str_replace("\n", ' ', $prefix.$s.$postfix);
 	}
