@@ -254,7 +254,11 @@ class ReverseParser {
 						}
 						if($node->previousSibling) {
 							// first item of nested list
-							$prefix = "\n".$prefix;
+							$prefix = "\n{$prefix}";
+						}
+						// lists inside table cell
+						if ($node->parentNode && $node->parentNode->nodeName == 'td') {
+							$prefix = "\n{$prefix}";
 						}
 						// rtrim used to remove \n added by the last list item
 						$out = $prefix . rtrim($textContent, " \n") . $suffix;
