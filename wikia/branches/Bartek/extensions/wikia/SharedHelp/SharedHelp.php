@@ -67,6 +67,7 @@ class SharedHttp extends Http {
                         if ( curl_getinfo( $c, CURLINFO_HTTP_CODE ) != 200 ) {
                                 $text = false;
                         }
+
                         # Don't return truncated output
                         if ( curl_errno( $c ) != CURLE_OK ) {
                                 $text = false;
@@ -170,9 +171,9 @@ function SharedHelpHook(&$out, &$text) {
 		$info = '<div class="sharedHelpInfo" style="text-align: right; font-size: smaller;padding: 5px">' . wfMsgExt('shared_help_info', 'parseinline', $wgTitle->getDBkey()) . '</div>';
 
 		if(strpos($text, '"noarticletext"') > 0) {
-			$text = '<div style="border: solid 1px; padding: 10px; margin: 5px" class="sharedHelp">' . $info . $content . '</div>';
+			$text = '<div style="border: solid 1px; padding: 10px; margin: 5px" class="sharedHelp">' . $info . $content . '<div style="clear:both"></div></div>';
 		} else {
-			$text = '<div style="border: solid 1px; padding: 10px; margin: 5px" class="sharedHelp">' . $info . $content . '</div><br/>' . $text;
+			$text = '<div style="border: solid 1px; padding: 10px; margin: 5px" class="sharedHelp">' . $info . $content . '<div style="clear:both"></div></div><br/>' . $text;
 		}
 	}
 	return true;
