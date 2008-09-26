@@ -33,7 +33,9 @@ function wfFunnel(){
   $params = array();
 
   parse_str( $_SERVER['QUERY_STRING'], $params );  
-
+  
+  if( isset($_REQUEST['action']) ) return true; //don't redirect on action=edit and the like
+  
   if( ( $_SERVER['REQUEST_METHOD'] == 'GET' ) && ( $_SERVER['PHP_SELF'] == '/index.php' ) && ( trim( $params['title'] ) != '' ) && ( $isContent ) ){ 
 		
 		$page = $params['title'];
@@ -46,7 +48,7 @@ function wfFunnel(){
 			$query = '?' . http_build_query( $params );
 		}
 		
-		$url = 'http://'.$_SERVER['SERVER_NAME'].$prefix.$page.$query;
+		$url = 'http://'.$_SERVER['SERVER_NAME'].$prefix.$page.urldecode($query);
 	  	header( "Location: {$url}", true, 301);
 		exit(0);
 		
