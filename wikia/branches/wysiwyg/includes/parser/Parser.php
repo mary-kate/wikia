@@ -1308,6 +1308,7 @@ class Parser
 			# Set linktype for CSS - if URL==text, link is essentially free
 			$linktype = ($text == $url) ? 'free' : 'text';
 
+			$wasblank = $text == '';
 			# No link text, e.g. [http://domain.tld/some.link]
 			if ( $text == '' ) {
 				# Autonumber if allowed. See bug #5918
@@ -1332,6 +1333,8 @@ class Parser
 			# Process the trail (i.e. everything after this link up until start of the next link),
 			# replacing any non-bracketed links
 			$trail = $this->replaceFreeExternalLinks( $trail );
+
+			wfFCKSetRefId('external link', $text, $url, '', $wasblank, true);
 
 			# Use the encoded URL
 			# This means that users can paste URLs directly into the text
