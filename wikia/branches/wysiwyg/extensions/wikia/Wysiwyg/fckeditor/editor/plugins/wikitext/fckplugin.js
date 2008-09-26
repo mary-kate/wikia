@@ -1,3 +1,7 @@
+// Rewrite the link command to use our link.html
+FCKCommands.RegisterCommand('Link', new FCKDialogCommand('Link', FCKLang.DlgLnkWindowTitle, FCKConfig.PluginsPath + 'wikitext/dialogs/link.html', 400, 250));
+
+
 (function() {
 
 	var originalSwitchEditMode = FCK.SwitchEditMode;
