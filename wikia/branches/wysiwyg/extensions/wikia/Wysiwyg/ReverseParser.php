@@ -176,7 +176,18 @@ class ReverseParser {
 						$out = "{$head} {$textContent} {$head}";
 
 						// new line logic
-						if($node->previousSibling) {
+						if ($node->previousSibling || ($node->parentNode && $node->parentNode->nodeName == 'td')) {
+							$out = "\n{$out}";
+						}
+						break;
+
+					// preformatted text
+					case 'pre':
+						$textContent = trim(str_replace("\n", "\n ", $textContent)); // add white space before each line
+						$out = " {$textContent}";
+
+						// new line logic
+						if ($node->previousSibling || ($node->parentNode && $node->parentNode->nodeName == 'td')) {
 							$out = "\n{$out}";
 						}
 						break;
