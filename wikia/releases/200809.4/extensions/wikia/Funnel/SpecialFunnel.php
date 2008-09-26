@@ -44,11 +44,9 @@ function wfFunnel(){
 		
 		$query = '';
 		
-		if( count($params) > 0 ){
-			$query = '?' . http_build_query( $params );
-		}
+		if( count($params) > 0 ) return true; // we only care to rewrite content not its permutation
 		
-		$url = 'http://'.$_SERVER['SERVER_NAME'].$prefix.$page.urldecode($query);
+		$url = 'http://'.$_SERVER['SERVER_NAME'].$prefix.$page;
 	  	header( "Location: {$url}", true, 301);
 		exit(0);
 		
