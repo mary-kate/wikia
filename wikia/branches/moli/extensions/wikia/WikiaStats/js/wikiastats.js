@@ -128,7 +128,7 @@ function showWSSearchResult(value) {
 	hideSortUrl("ws-sort-link", "visible");
 
 	if (value == "") {
-		res = "<select name=\"ws-city-list\" id=\"ws-city-list\" class=\"ws-input\" size=\"14\" onChange=\"XLSShowMenu(this.value); WikiaStatsGetInfo('wk-stats-info-panel', this.value);\">";
+		res = "<select name=\"ws-city-list\" id=\"ws-city-list\" class=\"ws-input\" size=\"27\" width=\"200\" onChange=\"XLSShowMenu(this.value); WikiaStatsGetInfo('wk-stats-info-panel', this.value);\">";
 		var _tmpList = new Array();
 		for (i in selectWSWikisList) {
 			_tmpList[i] = new Array(selectWSWikisList[i][0], selectWSWikisList[i][1]);
@@ -154,7 +154,7 @@ function showWSSearchResult(value) {
 	SearchWSCallback = { 
 		success: function( oResponse ) { 
 			var resData = eval('(' + oResponse.responseText + ')');
-			res = "<select name=\"ws-city-list\" id=\"ws-city-list\" class=\"ws-input\" size=\"14\" onChange=\"XLSShowMenu(this.value); WikiaStatsGetInfo('wk-stats-info-panel', this.value);\">";
+			res = "<select name=\"ws-city-list\" id=\"ws-city-list\" class=\"ws-input\" size=\"27\" width=\"200\" onChange=\"XLSShowMenu(this.value); WikiaStatsGetInfo('wk-stats-info-panel', this.value);\">";
 			for (k in resData) {
 				res += "<option value=\"" + k + "\">" + resData[k] + "</option>";
 			}
@@ -162,7 +162,7 @@ function showWSSearchResult(value) {
 			search_div.innerHTML = res;
 		},
 		failure: function( oResponse ) { 
-			search_div.innerHTML = "<select name=\"ws-city-list\" id=\"ws-city-list\" class=\"ws-input\" size=\"14\" onChange=\"XLSShowMenu(this.value); WikiaStatsGetInfo('wk-stats-info-panel', this.value);\"></search>";
+			search_div.innerHTML = "<select name=\"ws-city-list\" id=\"ws-city-list\" class=\"ws-input\" size=\"27\" width=\"200\" onChange=\"XLSShowMenu(this.value); WikiaStatsGetInfo('wk-stats-info-panel', this.value);\"></search>";
 		}
 	};
 
@@ -239,8 +239,6 @@ function WikiaStatsCompareGetWikis(element, value) {
 }
 
 function showWSSearchCompareResult(value) {
-	var search_div = document.getElementById( "ws-div-scroll" );
-
 	if (value != "") {
 		hideSortUrl("ws-sort-panel", "hidden");
 		if (selectWSWikisDialogList.length > 0) {

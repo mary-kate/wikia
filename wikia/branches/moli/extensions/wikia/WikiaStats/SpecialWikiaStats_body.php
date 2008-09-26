@@ -256,15 +256,14 @@ class WikiaStatsClass extends SpecialPage
 				$mainStats = $oTmpl->execute("main-form");
 			}
 
-			if (empty($show_charts)) {
-				$columns = $this->mStats->getRangeColumns();
-				$oTmpl->set_vars( array(
-					"columns" => $columns,
-					"userIsSpecial"=> $this->userIsSpecial,
-					"wgStatsExcludedNonSpecialGroup" => $wgStatsExcludedNonSpecialGroup,
-				));
-				$mainStats .= $oTmpl->execute("main-stats-definitions");
-			}
+			$columns = $this->mStats->getRangeColumns();
+			$oTmpl->set_vars( array(
+				"columns" => $columns,
+				"userIsSpecial"=> $this->userIsSpecial,
+				"wgStatsExcludedNonSpecialGroup" => $wgStatsExcludedNonSpecialGroup,
+				"show_charts" => $show_charts
+			));
+			$mainStats .= $oTmpl->execute("main-stats-definitions");
 
 			$wgMemc->set($memkey, $mainStats, 60*60*3);
 			unset($cityList);
