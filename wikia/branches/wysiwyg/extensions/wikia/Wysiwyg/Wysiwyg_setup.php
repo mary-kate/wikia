@@ -8,6 +8,10 @@ $wgExtensionCredits['other'][] = array(
 
 $wgHooks['EditPage::showEditForm:initial'][] = 'WysiwygInitial';
 function WysiwygInitial($form) {
+	global $wgDisableWysiwygExt;
+	if (!empty($wgDisableWysiwygExt)) {
+		return true;
+	}
 	// only if edited article is in main or image namespace and article wikitext does not contain '<!-', '{{{' and '}}}'
 	if(($form->mTitle->mNamespace == NS_MAIN || $form->mTitle->mNamespace == NS_IMAGE) && !strpos($form->textbox1, '<!-') && !strpos($form->textbox1, '{{{') && !strpos($form->textbox1, '}}}')) {
 		global $IP;
