@@ -38,6 +38,7 @@ class ReverseParser {
 				' <ol' => '<ol',
 				' <ul' => '<ul',
 				' <li' => '<li',
+				' <pre>' => '<pre>'
 			);
 
 			$html = str_replace(array_keys($replacements), array_values($replacements), $html);
@@ -122,7 +123,7 @@ class ReverseParser {
 
 		if($node->nodeType == XML_ELEMENT_NODE) {
 
-			wfDebug("ReverseParser XML_ELEMENT_NODE\n");
+			wfDebug("ReverseParser XML_ELEMENT_NODE {$node->nodeName}\n");
 
 			$washtml = $node->getAttribute('washtml');
 
@@ -189,7 +190,7 @@ class ReverseParser {
 						// new line logic
 						if ($node->previousSibling) {
 							// separate <pre> tags
-							$out = ($node->previusSibling->nodeName == 'pre') ? "\n{$out}" : "\n\n{$out}";
+							$out = ($node->previousSibling->nodeName == 'pre') ? "\n\n{$out}" : "\n{$out}";
 						}
 						else if ($node->parentNode && $node->parentNode->nodeName == 'td') {
 							$out = "\n{$out}";
