@@ -1418,8 +1418,10 @@ class Parser
 				# Is this an external image?
 				$text = $this->maybeMakeExternalImage( $url );
 				if ( $text === false ) {
+					$description = $wgContLang->markNoConversion($url);
+					wfFCKSetRefId('external link: raw', $description, $url, '', true, true);
 					# Not an image, make a link
-					$text = $sk->makeExternalLink( $url, $wgContLang->markNoConversion($url), true, 'free', $this->mTitle->getNamespace() );
+					$text = $sk->makeExternalLink( $url, $description, true, 'free', $this->mTitle->getNamespace() );
 					# Register it in the output object...
 					# Replace unnecessary URL escape codes with their equivalent characters
 					$pasteurized = Parser::replaceUnusualEscapes( $url );
