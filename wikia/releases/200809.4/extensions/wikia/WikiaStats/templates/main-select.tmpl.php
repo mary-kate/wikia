@@ -194,8 +194,8 @@ pageLoaderInit('<?=addslashes(wfMsg('wikiastats_generate_stats_msg'))?>', '<?=ad
 						<div id="wk-stats-info-panel" class="wk-stats-info-panel"></div>
 					</fieldset>
 					<div class="wk-select-class-main">
-						<input type="button" class="input_button" id="ws-show-charts" value="<?= wfMsg("wikiastats_showcharts") ?>" name="ws-show-charts" onClick="redirectToStats(1)" />
 						<input type="button" class="input_button" id="ws-show-stats" name="ws-show-stats" value="<?= wfMsg("wikiastats_showstats_btn") ?>" onClick="redirectToStats(0)" />
+						<input type="button" class="input_button" id="ws-show-charts" value="<?= wfMsg("wikiastats_showcharts") ?>" name="ws-show-charts" onClick="redirectToStats(1)" />
 					</div>
 					<div style="clear:both;" id="ws-main-xls-stats">
 					<fieldset style="margin:0px">
