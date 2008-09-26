@@ -212,8 +212,8 @@ class ReverseParser {
 						$attStr = $this->getAttributesStr($node);
 						$out = "{|{$attStr}\n{$textContent}|}\n";
 
-						// there's something before the table - add line break
-						if ($node->previousSibling) {
+						// there's something before the table or this is nested table - add line break
+						if ($node->previousSibling || ($node->parentNode && $node->parentNode->nodeName == 'td')) {
 							$out = "\n{$out}";
 						}
 						break;
