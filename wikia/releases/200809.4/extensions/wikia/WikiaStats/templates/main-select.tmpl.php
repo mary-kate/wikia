@@ -11,9 +11,8 @@ var countWikis = 0;
 $xlsMenuHeader = addslashes(wfMsg("wikiastats_select_statistics"));
 #---
 $loop = 0;
-$wikia_rows = "<div style=\"width:240px;font-weight:bold;font-size:9pt;\">".wfMsg('wikiastats_search_text')." <input type=\"text\" name=\"ws-city-name\" autocomplete=\"off\" id=\"ws-city-name\" class=\"ws-input\" style=\"width:auto\" /></div>
-<div id=\"ws-select-cities\">
-<select name=\"ws-city-list\" width=\"250\" id=\"ws-city-list\" class=\"ws-input\" size=\"14\" onChange=\"XLSShowMenu(this.value); WikiaStatsGetInfo('wk-stats-info-panel', this.value);\">";
+$wikia_rows = "<div id=\"ws-select-cities\">
+<select name=\"ws-city-list\" width=\"200\" id=\"ws-city-list\" class=\"ws-input\" size=\"27\" onChange=\"XLSShowMenu(this.value); WikiaStatsGetInfo('wk-stats-info-panel', this.value);\">";
 $y = 0;
 foreach ($cityStats as $id => $cityId) {
 	#if ($loop >= 100) break;
@@ -172,52 +171,64 @@ pageLoaderInit('<?=addslashes(wfMsg('wikiastats_generate_stats_msg'))?>', '<?=ad
 <div id="ws-xls-div"></div>
 <div id="ws-main-table" style="height:100%">
 <!-- WIKI's INFORMATION -->
-<div id="page_bar" class="reset color1 clearfix">
-<ul id="page_tabs" style="float:left">
-	<li class="selected" id="ws-wikia-select-id"><?=wfMsg('wikiastats_pagetitle')?></li>
-	<li class="" id="ws-wikia-compare-id"><?=wfMsg('wikiastats_comparision')?></li>
-</ul>
-</div>
-<br />
-<table style="width:auto; font-family:Trebuchet MS,Arial,Helvetica,sans-serif;" height="100%" valign="top" border="0">
-<!-- main tables -->
- <tr>
-    <td align="left" valign="top" id="tdMenu" valign="top" height="100%">
-    	<div id="ws_main_wikia_select_td">
-			<fieldset style="margin:2px 0pt;height:auto;width:550px;">
-				<div style="width:250px;padding:0px 1px;float:left;clear:left;margin-top:5pt;margin-bottom:2pt;margin-left:auto;margin-right:auto;">
-				  <?=$wikia_rows?>
-				  <div id="ws-sort-link" style="float:right; padding:0px 10px;"><a href="javascript:void(0);" onClick="sortWikiaList(1)"><?=wfMsg('wikiastats_sort_list_alphabet')?></a></div>
-				</div>  
-				<div class="wk-stats-main-panel" id="wk-stats-info-panel" class="ws-input" style="margin-top:6pt;margin-bottom:2pt;float:left;clear:right;width:271px;height:150px;"></div>
-				<div class="wk-select-class-main">
-					<span style="padding-left: 10px;"><input type="button" class="input_button" id="ws-show-charts" value="<?= wfMsg("wikiastats_showcharts") ?>" name="ws-show-charts" onClick="redirectToStats(1)" /></span>
-					<span style="padding-left: 10px;"><input type="button" class="input_button" id="ws-show-stats" name="ws-show-stats" value="<?= wfMsg("wikiastats_showstats_btn") ?>" onClick="redirectToStats(0)" /></span>
-					<div style="padding:15px 21px 0px 120px;"><a href="javascript:void(0);" onClick="redirectTooldStats();"><?=wfMsg('wikiastats_see_old_statistics_page')?></a></div>
-				</div>
-			</fieldset>
-			<div style="float:left; width:100%; padding: 0px 1px;clear:both;" id="ws-main-xls-stats">
-			<fieldset style="margin:0px">
-				<legend><?=wfMsg('wikiastats_generate_XLS_file_title')?></legend>
-				<div class="wk-stats-main-panel" id="wk-stats-main-panel">
-					<ul><li id="wk-xls-pagetitle"><a href="javascript:void(0);" onClick="XLSStats('1', '<?=$DEF_DATE?>', '<?=date('Y-m')?>');"><?=wfMsg("wikiastats_pagetitle")?></a></li></ul>
-				</div>
-				<div class="wk-stats-main-panel" id="wk-stats-panel">
-					<ul>
-					<li><a href="javascript:void(0);" onClick="XLSStats('2', '<?=$DEF_DATE?>', '<?=date('Y-m')?>');"><?=wfMsg("wikiastats_distrib_article")?></a></li>
-					<li><a href="javascript:void(0);" onClick="XLSStats('3', '<?=$DEF_DATE?>', '<?=date('Y-m')?>');"><?=wfMsg("wikiastats_active_absent_wikians")?></a></li>
-					<li><a href="javascript:void(0);" onClick="XLSStats('4', '<?=$DEF_DATE?>', '<?=date('Y-m')?>');"><?=wfMsg("wikiastats_anon_wikians")?></a></li>
-					<li><a href="javascript:void(0);" onClick="XLSStats('5', '<?=$DEF_DATE?>', '<?=date('Y-m')?>');"><?=wfMsg("wikiastats_article_one_link")?></a></li>
-					<li><a href="javascript:void(0);" onClick="XLSStats('6', '<?=$DEF_DATE?>', '<?=date('Y-m')?>');"><?=wfMsg("wikiastats_namespace_records")?></a></li>
-					<li><a href="javascript:void(0);" onClick="XLSStats('7', '<?=$DEF_DATE?>', '<?=date('Y-m')?>');"><?=wfMsg("wikiastats_page_edits")?></a></li>
-					</ul>
-				</div>
-			</fieldset>
-			</div>
-    	</div>
+	<div id="page_bar" class="reset color1 clearfix">
+	<ul id="page_tabs" style="float:left">
+		<li class="selected" id="ws-wikia-select-id"><?=wfMsg('wikiastats_pagetitle')?></li>
+		<li class="" id="ws-wikia-compare-id"><?=wfMsg('wikiastats_comparision')?></li>
+	</ul>
+	</div>
+	<br />
+	<table style="width:650px" height="100%" valign="top" border="0">
+	<!-- main tables -->
+ 	<tr>
+	<td id="tdMenu" valign="top">
+		<table valign="top" id="ws_main_wikia_select_td" style="border:1px solid #2F6FAB; padding:3px;">
+		    <tr>
+				<td align="left" valign="middle">
+					<?=wfMsg('wikiastats_search_text')?> <input type="text" name="ws-city-name" autocomplete="off" id="ws-city-name" class="ws-input" style="width:auto" />	
+				</td>
+				<td align="left" valign="top" height="100%" rowspan="2" style="padding: 2px 10px">
+					<div style="float:right;clear:both;font-size:8pt;height:12px;"><a href="javascript:void(0);" onClick="redirectTooldStats();"><?=wfMsg('wikiastats_see_old_statistics_page')?></a></div>
+					<fieldset style="width:360px;">
+						<legend><?=wfMsg('wikiastats_wikia_information')?></legend>
+						<div id="wk-stats-info-panel" class="wk-stats-info-panel"></div>
+					</fieldset>
+					<div class="wk-select-class-main">
+						<input type="button" class="input_button" id="ws-show-charts" value="<?= wfMsg("wikiastats_showcharts") ?>" name="ws-show-charts" onClick="redirectToStats(1)" />
+						<input type="button" class="input_button" id="ws-show-stats" name="ws-show-stats" value="<?= wfMsg("wikiastats_showstats_btn") ?>" onClick="redirectToStats(0)" />
+					</div>
+					<div style="clear:both;" id="ws-main-xls-stats">
+					<fieldset style="margin:0px">
+						<legend><?=wfMsg('wikiastats_generate_XLS_file_title')?></legend>
+						<div class="wk-stats-main-panel" id="wk-stats-main-panel">
+							<ul><li id="wk-xls-pagetitle"><a href="javascript:void(0);" onClick="XLSStats('1', '<?=$DEF_DATE?>', '<?=date('Y-m')?>');"><?=wfMsg("wikiastats_pagetitle")?></a></li></ul>
+						</div>
+						<div class="wk-stats-main-panel" id="wk-stats-panel">
+							<ul>
+							<li><a href="javascript:void(0);" onClick="XLSStats('2', '<?=$DEF_DATE?>', '<?=date('Y-m')?>');"><?=wfMsg("wikiastats_distrib_article")?></a></li>
+							<li><a href="javascript:void(0);" onClick="XLSStats('3', '<?=$DEF_DATE?>', '<?=date('Y-m')?>');"><?=wfMsg("wikiastats_active_absent_wikians")?></a></li>
+							<li><a href="javascript:void(0);" onClick="XLSStats('4', '<?=$DEF_DATE?>', '<?=date('Y-m')?>');"><?=wfMsg("wikiastats_anon_wikians")?></a></li>
+							<li><a href="javascript:void(0);" onClick="XLSStats('5', '<?=$DEF_DATE?>', '<?=date('Y-m')?>');"><?=wfMsg("wikiastats_article_one_link")?></a></li>
+							<li><a href="javascript:void(0);" onClick="XLSStats('6', '<?=$DEF_DATE?>', '<?=date('Y-m')?>');"><?=wfMsg("wikiastats_namespace_records")?></a></li>
+							<li><a href="javascript:void(0);" onClick="XLSStats('7', '<?=$DEF_DATE?>', '<?=date('Y-m')?>');"><?=wfMsg("wikiastats_page_edits")?></a></li>
+							</ul>
+						</div>
+					</fieldset>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td align="left" valign="top">
+					<?=$wikia_rows?>
+					<div id="ws-sort-link" style="float:right; clear:both; font-size:8pt;">
+						<a href="javascript:void(0);" onClick="sortWikiaList(1)"><?=wfMsg('wikiastats_sort_list_alphabet')?></a>
+					</div>
+				</td>
+			</tr>	
+		</table>
     </td>
     <td align="left" valign="top">
-		<table style="width:auto;line-height:11pt" cellpadding="0" cellspacing="0" id="ws_main_wikia_compare_td" valign="top">
+		<table style="width:auto;line-height:11pt;display:none;" cellpadding="0" cellspacing="0" id="ws_main_wikia_compare_td" valign="top">
 		<tr><td>
 <? 
 $k = 7; 
