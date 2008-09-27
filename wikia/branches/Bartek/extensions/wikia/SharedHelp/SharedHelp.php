@@ -13,7 +13,7 @@ if(!defined('MEDIAWIKI')) {
 
 $wgExtensionCredits['other'][] = array(
         'name' => 'SharedHelp',
-	'version' => 0.12,
+	'version' => 0.13,
         'description' => 'Takes pages from [[w:c:Help|Help Wikia]] and inserts them into Help namespace on this wiki',
         'author' => array('Maciej Brencz, Inez Korczyński')
 );
