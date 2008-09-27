@@ -190,7 +190,9 @@ function SharedHelpHook(&$out, &$text) {
 		}
 
 		$content = preg_replace("|<span class=\"editsection\">\[<a href=\"(.*?)\" title=\"(.*?)\">(.*?)<\/a>\]<\/span>|", "", $content);
-		$content = str_replace("http://help.wikia.com/wiki/Help:", "/wiki/Help:", $content);
+		$content = str_replace("http://help.wikia.com/wiki", "/wiki", $content);
+		$content = str_replace("/wiki/Category", "/wikia.com/wiki/Category:", $content);
+
 
 		// "this text is stored..."
 		$info = '<div class="sharedHelpInfo" style="text-align: right; font-size: smaller;padding: 5px">' . wfMsgExt('shared_help_info', 'parseinline', $wgTitle->getDBkey()) . '</div>';
