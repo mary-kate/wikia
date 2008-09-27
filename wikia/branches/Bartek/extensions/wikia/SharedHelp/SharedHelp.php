@@ -50,6 +50,10 @@ class SharedHttp extends Http {
 				$timeout = $wgHTTPTimeout;
 			}
 			curl_setopt( $c, CURLOPT_TIMEOUT, $timeout );
+	
+			curl_setopt( $c, CURLOPT_HEADER, true );
+			curl_setopt( $c, CURLOPT_FOLLOWLOCATION, false );
+			
 			curl_setopt( $c, CURLOPT_USERAGENT, "MediaWiki/$wgVersion" );
 			if ( $method == 'POST' )
 				curl_setopt( $c, CURLOPT_POST, true );
@@ -149,17 +153,18 @@ function SharedHelpHook(&$out, &$text) {
 		}
 		# If getting content from memcache failed (invalidate) then just download it via HTTP
 		if(empty($content)) {
-			global $wgDevelEnvironment;
+	/*		global $wgDevelEnvironment;
+			$wgDevelEnvironment = null;
 			if (empty($wgDevelEnvironment)) {
+	*/
 				$urlTemplate = "http://help.wikia.com/index.php?title=Help:%s&action=render";
-			}
+	/*		}
 			else {
 				$urlTemplate = "http://help.macbre.dev.poz.wikia-inc.com/index.php?title=Help:%s&action=render"; // for testing purposes
 			}
-
+	*/
 			$articleUrl = sprintf($urlTemplate, $wgTitle->getDBkey());
 			$content = SharedHttp::get($articleUrl);
-
 			if(strpos($content, '"noarticletext"') > 0) {
 				$sharedArticle = array('exists' => 0, 'timestamp' => wfTimestamp());
 				$wgMemc->set($sharedArticleKey, $sharedArticle);
