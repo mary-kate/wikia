@@ -74,13 +74,20 @@ class SharedHttp extends Http {
 			$text = ob_get_contents();
 			ob_end_clean();
 
+			# strip header and save it somewhere
 
+			preg_match( '/HTTP.*GMT/s', $text, $headers);
+			if (false !== $header_end) {
+				$text = substr( $text, strpos( $text, $headers[0] ) + strlen( $headers[0] ) );
+			} else {
+//				$text = false;
+			}
                         # Don't return the text of error messages, return false on error
                         if ( curl_getinfo( $c, CURLINFO_HTTP_CODE ) != 200 ) {
                                 if ( curl_getinfo( $c, CURLINFO_HTTP_CODE ) != 301 ) {
                                         $text = false;
                                 } else {
-                                        $text = "Redirect Test";
+                                        
                                 }
                         }
 
@@ -152,9 +159,10 @@ function SharedHelpHook(&$out, &$text) {
 			}
 		}
 		# If getting content from memcache failed (invalidate) then just download it via HTTP
+		// TODO remove until production!
+		$content = "" ;
 		if(empty($content)) {
 	/*		global $wgDevelEnvironment;
-			$wgDevelEnvironment = null;
 			if (empty($wgDevelEnvironment)) {
 	*/
 				$urlTemplate = "http://help.wikia.com/index.php?title=Help:%s&action=render";
