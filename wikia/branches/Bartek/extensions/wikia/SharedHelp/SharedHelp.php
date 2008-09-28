@@ -74,20 +74,10 @@ class SharedHttp extends Http {
 			$text = ob_get_contents();
 			ob_end_clean();
 
-			# strip header and save it somewhere
-
-			preg_match( '/HTTP.*GMT/s', $text, $matched_headers);
                         # Don't return the text of error messages, return false on error
-                        if ( curl_getinfo( $c, CURLINFO_HTTP_CODE ) != 200 ) {
-                                if ( curl_getinfo( $c, CURLINFO_HTTP_CODE ) != 301 ) {
-                                        $text = false;
-                                } else {
-                                        preg_match( '/Location:\s[^\s]+/', $matched_headers[0], $matched_loc);
-					$redir_target = substr( $matched_loc[0], 9  );
-					$text = trim( $redir_target );
-                                }
-                        }
-			$text = substr( $text, strpos( $text, $matched_headers[0] ) + strlen( $matched_headers[0] ) );
+                        if ( ( curl_getinfo( $c, CURLINFO_HTTP_CODE ) != 200 ) && ( curl_getinfo( $c, CURLINFO_HTTP_CODE ) != 301 ) ) {
+                        	$text = false;
+			}
                         # Don't return truncated output
                         if ( curl_errno( $c ) != CURLE_OK ) {
                                 $text = false;
@@ -170,6 +160,19 @@ function SharedHelpHook(&$out, &$text) {
 	*/
 			$articleUrl = sprintf($urlTemplate, $wgTitle->getDBkey());
 			$content = SharedHttp::get($articleUrl);
+
+			# strip header and save it somewhere
+			// TODO refine regex a bit...
+			preg_match( '/HTTP.*GMT/s', $content, $matched_headers);
+
+			if (preg_match( '/Location:\s[^\s]+/', $matched_headers[0], $matched_loc)) {
+				$redir_target = substr( $matched_loc[0], 9  );
+				global $wgServer;
+				$out->redirect( trim( $redir_target ) );
+			} else {
+				$content = substr( $content, strpos( $content, $matched_headers[0] ) + strlen( $matched_headers[0] ) );
+			}
+
 			if(strpos($content, '"noarticletext"') > 0) {
 				$sharedArticle = array('exists' => 0, 'timestamp' => wfTimestamp());
 				$wgMemc->set($sharedArticleKey, $sharedArticle);
