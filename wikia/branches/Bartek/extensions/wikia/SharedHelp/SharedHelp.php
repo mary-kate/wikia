@@ -77,11 +77,6 @@ class SharedHttp extends Http {
 			# strip header and save it somewhere
 
 			preg_match( '/HTTP.*GMT/s', $text, $headers);
-			if (false !== $header_end) {
-				$text = substr( $text, strpos( $text, $headers[0] ) + strlen( $headers[0] ) );
-			} else {
-//				$text = false;
-			}
                         # Don't return the text of error messages, return false on error
                         if ( curl_getinfo( $c, CURLINFO_HTTP_CODE ) != 200 ) {
                                 if ( curl_getinfo( $c, CURLINFO_HTTP_CODE ) != 301 ) {
