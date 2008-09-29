@@ -288,6 +288,11 @@ class ReverseParser {
 						$out = $this->handleListItem($node, $textContent);
 						break;
 
+					// images
+					case 'img':
+						$out = $this->handleImage($node);
+						break;
+
 					// handle more complicated tags
 					case 'a':
 						$out = $this->handleLink($node, $textContent);
@@ -547,17 +552,44 @@ class ReverseParser {
 					return $refData['href'];
 			}
 		}
-		// handle HTML links <a href="http://foo.net">bar</a>
-		// TODO: handle local links
 		else {
-			$href = $node->getAttribute('href');
-			$desc = $node->textContent;
+			// handle image properly - they're wrapped using <a> tag
+			if ($node->hasChildNodes() && $node->childNodes->item(0)->nodeName == 'img') {
+				return $content;
+			}
+			// plain HTML links <a href="http://foo.pl/bar.html">foo</a>
+			else {
+				$desc = ($content != '') ? " $content" : '';
+				$href = $node->getAttribute('href');
 
-			return "[{$href} {$desc}]";
+				return "[{$href}{$desc}]";
+			}
 		}
 
 		return '<!-- unsupported anchor tag! -->';
 	}
+
+	/**
+	 * Returns wikimarkup for <img> tag
+	 */
+	private function handleImage($node) {
+
+		// handle links with refId attribute
+		$refId = $node->getAttribute('refid');
+
+		if ( is_numeric($refId) && isset($this->fckData[$refId]) ) {
+			$refData = (array) $this->fckData[$refId];
+
+			$pipe = ($refData['description'] != '') ? "|{$refData['description']}" : '';
+
+			return "[[{$refData['href']}{$pipe}]]";
+		}
+
+		return '<!-- unsupported anchor tag! -->';
+	}
+
+
+
 
 	/**
 	 * Returns HTML string containing node arguments
