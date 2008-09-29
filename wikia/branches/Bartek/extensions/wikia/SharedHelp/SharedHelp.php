@@ -153,7 +153,7 @@ function SharedHelpHook(&$out, &$text) {
 			if(isset($destinationUrl)) {
 				$out->redirect( $destinationUrl );
 			} else {
-				$tmp = split("\n\n", $content, 2);
+				$tmp = split("\r\n\r\n", $content, 2);
 				$content = $tmp[1];
 			}
 			if(strpos($content, '"noarticletext"') > 0) {
