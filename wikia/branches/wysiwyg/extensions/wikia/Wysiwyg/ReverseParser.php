@@ -341,6 +341,7 @@ class ReverseParser {
 							}
 						} else {
 							$trial = $this->isInlineElement($node) ? '' : "\n";
+							$prefix = '';
 						}
 						$out = "{$prefix}<{$node->nodeName}{$attStr}>{$textContent}</{$node->nodeName}>{$trial}";
 				}
@@ -531,7 +532,7 @@ class ReverseParser {
 				}
 
 				// description after pipe
-				$pipe = '|'.$refData['description'];
+				$pipe = '|'.rtrim($refData['description'], "\n");
 			}
 			else {
 				$pipe = '';
@@ -615,7 +616,7 @@ class ReverseParser {
 	 * Return true if given node is inline HTNL element
 	 */
 	private function isInlineElement($node) {
-		return in_array($node->nodeName, array('u', 'b', 'strong', 'i', 'em', 'strike', 'a'));
+		return in_array($node->nodeName, array('u', 'b', 'strong', 'i', 'em', 'strike', 's', 'a'));
 	}
 
 }
