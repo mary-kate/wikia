@@ -104,7 +104,7 @@ class ReverseParser {
 			}
 
 			for($i = 0; $i < $nodes->length; $i++) {
-				$childOut .= $this->parseNode($nodes->item($i));
+				$childOut .= $this->parseNode($nodes->item($i), $level+1);
 			}
 
 			// handle lists
@@ -123,7 +123,7 @@ class ReverseParser {
 
 		if($node->nodeType == XML_ELEMENT_NODE) {
 
-			wfDebug("ReverseParser XML_ELEMENT_NODE {$node->nodeName}\n");
+			wfDebug("ReverseParser XML_ELEMENT_NODE " . str_repeat('-', $level) . " {$node->nodeName}\n");
 
 			$washtml = $node->getAttribute('washtml');
 
@@ -291,7 +291,7 @@ class ReverseParser {
 					// images
 					case 'img':
 					case 'div': // [[Image:foo.jpg|thumb]]
-						$out = $this->handleImage($node, $content);
+						$out = $this->handleImage($node, $textContent);
 						break;
 
 					// handle more complicated tags
@@ -351,7 +351,7 @@ class ReverseParser {
 
 			wfDebug("ReverseParser XML_TEXT_NODE\n");
 
-			if ( trim($node->textContent) == '' && $node->parentNode && !$this->isInlineElement($node->parentNode) && $node->parentNode->nodeName != 'p' ) {
+			if ( trim($node->textContent) == '' && $node->parentNode && !$this->isInlineElement($node->parentNode) ) {
 				// get rid of whitespaces between tags we don't need
 				$out = '';
 			}
@@ -582,6 +582,21 @@ class ReverseParser {
 		if ( is_numeric($refId) && isset($this->fckData[$refId]) ) {
 			$refData = (array) $this->fckData[$refId];
 
+			// try to get unparsed wikitext from $content
+			if ($content != '') {
+				$lastPipe = strrpos($refData['description'], '|');
+
+				if ($lastPipe !== false) {
+					// replace part of the description after the last pipe with $content
+					// [[Image:Jimbo.jpg|thumb|caption|'''test''']]
+					$refData['description'] = substr($refData['description'], 0, $lastPipe) . '|'. ltrim($content);
+				}
+			}
+			else {
+				// HTML is stripped by MW parser from syntax like: [[Image:Metallica.jpg|'''test''']]
+				$refData['description'] = strip_tags($refData['description']);
+			}
+
 			$pipe = ($refData['description'] != '') ? "|{$refData['description']}" : '';
 
 			return "[[{$refData['href']}{$pipe}]]";
@@ -613,10 +628,10 @@ class ReverseParser {
 	 }
 
 	/**
-	 * Return true if given node is inline HTNL element
+	 * Return true if given node is inline HTNL element or can contain inline elements (p / div)
 	 */
 	private function isInlineElement($node) {
-		return in_array($node->nodeName, array('u', 'b', 'strong', 'i', 'em', 'strike', 's', 'a'));
+		return in_array($node->nodeName, array('u', 'b', 'strong', 'i', 'em', 'strike', 's', 'a', 'p', 'div'));
 	}
 
 }
