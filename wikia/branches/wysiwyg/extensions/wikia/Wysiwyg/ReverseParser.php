@@ -576,7 +576,7 @@ class ReverseParser {
 	 */
 	private function handleImage($node, $content) {
 
-		// handle links with refId attribute
+		// handle images with refId attribute
 		$refId = $node->getAttribute('refid');
 
 		if ( is_numeric($refId) && isset($this->fckData[$refId]) ) {
@@ -589,7 +589,7 @@ class ReverseParser {
 				if ($lastPipe !== false) {
 					// replace part of the description after the last pipe with $content
 					// [[Image:Jimbo.jpg|thumb|caption|'''test''']]
-					$refData['description'] = substr($refData['description'], 0, $lastPipe) . '|'. ltrim($content);
+					$refData['description'] = substr($refData['description'], 0, $lastPipe) . '|'. ltrim($content, ' ');
 				}
 			}
 			else {
