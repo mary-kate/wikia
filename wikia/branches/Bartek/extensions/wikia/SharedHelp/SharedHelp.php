@@ -13,7 +13,7 @@ if(!defined('MEDIAWIKI')) {
 
 $wgExtensionCredits['other'][] = array(
         'name' => 'SharedHelp',
-	'version' => 0.15,
+	'version' => 0.16,
         'description' => 'Takes pages from [[w:c:Help|Help Wikia]] and inserts them into Help namespace on this wiki',
         'author' => array('Maciej Brencz, Inez Korczyński')
 );
@@ -127,8 +127,6 @@ function SharedHelpHook(&$out, &$text) {
 			}
 		}
 		# If getting content from memcache failed (invalidate) then just download it via HTTP
-		// TODO remove until production!
-		$content = "" ;
 		if(empty($content)) {
 	/*		global $wgDevelEnvironment;
 			if (empty($wgDevelEnvironment)) {
@@ -150,7 +148,7 @@ function SharedHelpHook(&$out, &$text) {
 			}
 			if(isset($destinationUrl)) {
 				global $wgServer, $wgArticlePath ;
-				$destinationPage = str_replace("http://help.wikia.com/wiki/", "", $destinationUrl );
+				$destinationPage = substr( $destinationUrl, strpos( $destinationUrl, 'Help:') );
 				$out->redirect( $wgServer . str_replace( "$1", $destinationPage, $wgArticlePath ) );
 			} else {
 				$tmp = split("\r\n\r\n", $content, 2);
