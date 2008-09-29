@@ -82,10 +82,9 @@ class SharedHttp extends Http {
                         if ( curl_errno( $c ) != CURLE_OK ) {
                                 $text = false;
                         }
-                        curl_close( $c );
                 } else {
                 }
-                return $text;
+                return array( $text, $c );
 	}
 
 }
@@ -141,7 +140,9 @@ function SharedHelpHook(&$out, &$text) {
 			}
 	*/
 			$articleUrl = sprintf($urlTemplate, $wgTitle->getDBkey());
-			$content = SharedHttp::get($articleUrl);
+			$content_array = SharedHttp::get($articleUrl);
+			$content = $content_array[0];
+			$c = $content_array[1];
 
 			# strip header and save it somewhere
 			// TODO refine regex a bit...
@@ -170,6 +171,7 @@ function SharedHelpHook(&$out, &$text) {
 				$wgMemc->set($sharedArticleKey, $sharedArticle);
 				wfDebug("SharedHelp: using parser cache {$sharedArticle['cachekey']}\n");
 			}
+                        curl_close( $c );
 		}
 
 		$content = preg_replace("|<span class=\"editsection\">\[<a href=\"(.*?)\" title=\"(.*?)\">(.*?)<\/a>\]<\/span>|", "", $content);
