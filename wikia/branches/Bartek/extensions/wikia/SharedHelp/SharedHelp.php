@@ -149,7 +149,9 @@ function SharedHelpHook(&$out, &$text) {
 				}
 			}
 			if(isset($destinationUrl)) {
-				$out->redirect( $destinationUrl );
+				global $wgServer, $wgArticlePath ;
+				$destinationPage = str_replace("http://help.wikia.com/wiki/", "", $destinationUrl );
+				$out->redirect( $wgServer . str_replace( "$1", $destinationPage, $wgArticlePath ) );
 			} else {
 				$tmp = split("\r\n\r\n", $content, 2);
 				$content = $tmp[1];
