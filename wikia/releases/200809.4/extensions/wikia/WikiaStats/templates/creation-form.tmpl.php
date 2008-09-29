@@ -25,7 +25,7 @@ foreach ($dWikians as $id => $date)
 	$dateArr = explode("-", $date);
 	#---
 	$stamp = mktime(0,0,0,$dateArr[1],1,$dateArr[0]);
-	$outDate = substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " ".$dateArr[0];
+	$outDate = wfMsg(strtolower(date("M",$stamp))) . " ".$dateArr[0];
 #	$style1 = "border:1px solid #808080; border-bottom: 0px; border-right:0px;";
 #	$style1 = ($loop == (count($dWikians) - 1)) ? "border:1px solid #808080; border-right:0px;" : $style1;
 
@@ -82,7 +82,7 @@ foreach ($dArticles as $id => $date)
 	$dateArr = explode("-", $date);
 	#---
 	$stamp = mktime(0,0,0,$dateArr[1],1,$dateArr[0]);
-	$outDate = substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " ".$dateArr[0];
+	$outDate = wfMsg(strtolower(date("M",$stamp))) . " ".$dateArr[0];
 ?>
 <tr>
 	<td class="ws-td-rb"><?=$outDate?></div>
