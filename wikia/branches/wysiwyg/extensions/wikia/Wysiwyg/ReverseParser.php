@@ -542,6 +542,9 @@ class ReverseParser {
 				case 'external link':
 					$desc = ($refData['description'] != '') ? " {$refData['description']}" : '';
 					return "[{$refData['href']}{$desc}]{$refData['trial']}";
+				// http://www.wikia.com/
+				case 'external link: raw':
+					return $refData['href'];
 			}
 		}
 		// handle HTML links <a href="http://foo.net">bar</a>
