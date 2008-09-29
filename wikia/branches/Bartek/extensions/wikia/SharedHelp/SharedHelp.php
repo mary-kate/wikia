@@ -84,24 +84,6 @@ class SharedHttp extends Http {
                         }
                         curl_close( $c );
                 } else {
-                        # Otherwise use file_get_contents...
-                        # This may take 3 minutes to time out, and doesn't have local fetch capabilities
-
-                        global $wgVersion;
-                        $headers = array( "User-Agent: MediaWiki/$wgVersion" );
-                        if( strcasecmp( $method, 'post' ) == 0 ) {
-                                // Required for HTTP 1.0 POSTs
-                                $headers[] = "Content-Length: 0";
-                        }
-                        $opts = array(
-                                'http' => array(
-                                        'method' => $method,
-                                        'header' => implode( "\r\n", $headers ) ) );
-                        $ctx = stream_context_create($opts);
-
-                        $url_fopen = ini_set( 'allow_url_fopen', 1 );
-                        $text = file_get_contents( $url, false, $ctx );
-                        ini_set( 'allow_url_fopen', $url_fopen );
                 }
                 return $text;
 	}
@@ -167,7 +149,9 @@ function SharedHelpHook(&$out, &$text) {
 
 			if (preg_match( '/Location:\s[^\s]+/', $matched_headers[0], $matched_loc)) {
 				$redir_target = substr( $matched_loc[0], 9  );
+				var_dump ($redir_target) ;
 				$out->redirect( trim( $redir_target ) );
+
 			} else {
 				$content = substr( $content, strpos( $content, $matched_headers[0] ) + strlen( $matched_headers[0] ) );
 			}
