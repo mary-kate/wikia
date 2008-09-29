@@ -104,10 +104,10 @@ foreach ($statsData as $date => $columnsData) {
 				$class = "db";
 				$dateArr = explode("-",$columnsData[$column]);
 				$stamp = mktime(0,0,0,$dateArr[1],1,$dateArr[0]);
-				$out = substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " " . $dateArr[0];
+				$out = wfMsg(strtolower(date("M",$stamp))) . " " . $dateArr[0];
 				if ($columnsData[$column] == $today) {
 				    $stamp = (!empty($today_day)) ? $today_day : $stamp;
-					$out = substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " " . date("d", $stamp) . ", " . date("Y", $stamp);
+					$out = wfMsg(strtolower(date("M",$stamp))) . " " . date("d", $stamp) . ", " . date("Y", $stamp);
 				}
 			}
 			elseif ($column == 'G')
@@ -178,7 +178,7 @@ foreach ($monthlyStats as $date => $columnsData) {
 	if ($columnsData['visible'] === 1) {
 		$dateArr = explode("-", $date);
 		$stamp = mktime(0,0,0,$dateArr[1],1,$dateArr[0]);
-		$outDate = substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " " . $dateArr[0];
+		$outDate = wfMsg(strtolower(date("M",$stamp))) . " " . $dateArr[0];
 
 ?>
 <tr>
@@ -279,7 +279,7 @@ foreach ($monthlyStats as $date => $columnsData) {
 </table>
 </div>
 <!--<div class="clear" style="font-size:7.7pt;height:15px;">
-        <?=wfMsg("wikiastats_date_of_generate", wfMsg(strtolower(date("l",$today_day))) . " " . substr(wfMsg(strtolower(date("F",$today_day))), 0, 3) . " " . date("d", $today_day) . ", " . date("Y", $today_day))?>
+        <?=wfMsg("wikiastats_date_of_generate", wfMsg(strtolower(date("l",$today_day))) . " " . wfMsg(strtolower(date("M",$today_day))) . " " . date("d", $today_day) . ", " . date("Y", $today_day))?>
         <strong>&nbsp;&#183;&nbsp;</strong>
         <a href="#definitions"><?=wfMsg("wikiastats_see_definitions")?></a>
 </div>-->

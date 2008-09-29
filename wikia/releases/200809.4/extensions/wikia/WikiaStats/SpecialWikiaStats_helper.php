@@ -1274,7 +1274,7 @@ class WikiaGenericStats {
 		$day = ($today) ? date("d") . ", " : "";
 		#---
 		wfProfileOut( __METHOD__ );
-		return substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " " . $day . $dateArr[0];
+		return wfMsg(strtolower(date("M",$stamp))) . " " . $day . $dateArr[0];
 	}
 
 	static public function getWikiaInfoOutput($city_id)

@@ -197,11 +197,11 @@ class WikiaStatsXLS {
 					if ($column == 'date') {
 						$dateArr = explode("-",$columnsData[$column]);
 						$stamp = mktime(0,0,0,$dateArr[1],1,$dateArr[0]);
-						$out = substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " " . $dateArr[0];
+						$out = wfMsg(strtolower(date("M",$stamp))) . " " . $dateArr[0];
 						$today = sprintf("%s-%s", date("Y"), date("m"));
 						if ( $columnsData[$column] == $today)
 						{
-							$out = substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " " . date("d") . ", " . $dateArr[0];
+							$out = wfMsg(strtolower(date("M",$stamp))) . " " . date("d") . ", " . $dateArr[0];
 						}
 						$out = addslashes($out);
 					}
@@ -242,7 +242,7 @@ class WikiaStatsXLS {
 			if ($columnsData['visible'] === 1) {
 				$dateArr = explode("-", $date);
 				$stamp = mktime(0,0,0,$dateArr[1],1,$dateArr[0]);
-				$outDate = substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " " . $dateArr[0];
+				$outDate = wfMsg(strtolower(date("M",$stamp))) . " " . $dateArr[0];
 				// output date in correct format
 				$this->writeXLSLabel($row, $col_date, $outDate);
 				//----
@@ -377,9 +377,9 @@ class WikiaStatsXLS {
 					$rank_change = "...";
 				}	
 				#---
-				$outFirstEdit = substr(wfMsg(strtolower(date("F",$data['first_edit']))), 0, 3) . " " . date("d",$data['first_edit']) .", ".date("Y",$data['first_edit']);
+				$outFirstEdit = wfMsg(strtolower(date("M",$data['first_edit']))) . " " . date("d",$data['first_edit']) .", ".date("Y",$data['first_edit']);
 				#---
-				$outLastEdit = substr(wfMsg(strtolower(date("F",$data['last_edit']))), 0, 3) . " " . date("d",$data['last_edit']) .", ".date("Y",$data['last_edit']);
+				$outLastEdit = wfMsg(strtolower(date("M",$data['last_edit']))) . " " . date("d",$data['last_edit']) .", ".date("Y",$data['last_edit']);
 
 				// write data
 				$col = 0;
@@ -431,9 +431,9 @@ class WikiaStatsXLS {
 			$row++;
 			foreach ($absent as $rank => $data) {
 				#---
-				$outFirstEdit = substr(wfMsg(strtolower(date("F",$data['first_edit']))), 0, 3) . " " . date("d",$data['first_edit']) .", ".date("Y",$data['first_edit']);
+				$outFirstEdit = wfMsg(strtolower(date("M",$data['first_edit']))) . " " . date("d",$data['first_edit']) .", ".date("Y",$data['first_edit']);
 				#---
-				$outLastEdit = substr(wfMsg(strtolower(date("F",$data['last_edit']))), 0, 3) . " " . date("d",$data['last_edit']) .", ".date("Y",$data['last_edit']);
+				$outLastEdit = wfMsg(strtolower(date("M",$data['last_edit']))) . " " . date("d",$data['last_edit']) .", ".date("Y",$data['last_edit']);
 				#---
 				$col = 0;
 				$this->writeXLSLabel($row,$col,$data['user_name']); $col++;
@@ -490,9 +490,9 @@ class WikiaStatsXLS {
 			foreach ($anonData as $id => $data) {
 				$rank++;
 				#---
-				$outFirstEdit = substr(wfMsg(strtolower(date("F",$data['min']))), 0, 3) . " " . date("d",$data['min']) .", ".date("Y",$data['min']);
+				$outFirstEdit = wfMsg(strtolower(date("M",$data['min']))) . " " . date("d",$data['min']) .", ".date("Y",$data['min']);
 				#---
-				$outLastEdit = substr(wfMsg(strtolower(date("F",$data['max']))), 0, 3) . " " . date("d",$data['max']) .", ".date("Y",$data['max']);
+				$outLastEdit = wfMsg(strtolower(date("M",$data['max'])))  . " " . date("d",$data['max']) .", ".date("Y",$data['max']);
 				#---
 				$col = 0;
 				$this->writeXLSLabel($row,$col,$data['user_name']); $col++;
@@ -547,9 +547,9 @@ class WikiaStatsXLS {
 			#---
 			$dateArr = explode("-",$date);
 			$stamp = mktime(0,0,0,$dateArr[1],1,$dateArr[0]);
-			$out = substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " " . $dateArr[0];
+			$out = wfMsg(strtolower(date("M",$stamp))) . " " . $dateArr[0];
 			if ($date == sprintf("%s-%s", date("Y"), date("m"))) {
-				$out = substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " " . date("d") . ", " . $dateArr[0];
+				$out = wfMsg(strtolower(date("M",$stamp))) . " " . date("d") . ", " . $dateArr[0];
 			}
 			#---
 			$this->writeXLSLabel($row,$col,$out);
@@ -608,9 +608,9 @@ class WikiaStatsXLS {
 			$col = 0;
 			$dateArr = explode("-",$date);
 			$stamp = mktime(0,0,0,$dateArr[1],1,$dateArr[0]);
-			$out = substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " " . $dateArr[0];
+			$out = wfMsg(strtolower(date("M",$stamp))) . " " . $dateArr[0];
 			if ($date == sprintf("%s-%s", date("Y"), date("m"))) {
-				$out = substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " " . date("d") . ", " . $dateArr[0];
+				$out = wfMsg(strtolower(date("M",$stamp))) . " " . date("d") . ", " . $dateArr[0];
 			}
 			#---
 			$this->writeXLSLabel($row,$col,$out);
@@ -722,7 +722,7 @@ class WikiaStatsXLS {
 			#---
 			$day = ($i == STATS_TREND_MONTH) ? date("d") : date("d", $cur_date);
 			$sum += $day;
-			$month = substr(wfMsg(strtolower(date("F",$cur_date))), 0, 3);
+			$month = wfMsg(strtolower(date("M",$cur_date)));
 			#---
 			$variable = "X" . $i;
 			$meanArray[0][] = $variable;
@@ -752,8 +752,8 @@ class WikiaStatsXLS {
 			#---
 			$day = ($i == STATS_TREND_MONTH) ? date("d") : date("d", $next_date);
 			#---
-			$month = substr(wfMsg(strtolower(date("F",$cur_date))), 0, 3);
-			$next_month = substr(wfMsg(strtolower(date("F",$next_date))), 0, 3);
+			$month = wfMsg(strtolower(date("M",$cur_date)));
+			$next_month = wfMsg(strtolower(date("M",$next_date)));
 			#---
 			if ($i < STATS_TREND_MONTH) {
 				$sum += $day;
@@ -867,20 +867,20 @@ class WikiaStatsXLS {
 					$dateArr = explode("-", date("Y-m-d"));
 					#---
 					$stamp = mktime(0,0,0,$dateArr[1],$dateArr[2],$dateArr[0]);
-					$outDate = substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " " . $dateArr[2] .", ". $dateArr[0];
+					$outDate = wfMsg(strtolower(date("M",$stamp))) . " " . $dateArr[2] .", ". $dateArr[0];
 				} else {
 					if (!in_array($date, array('trend', 'mean', 'growth'))) {
 						$dateArr = explode("-", $date);
 						#---
 						$stamp = mktime(0,0,0,$dateArr[1],1,$dateArr[0]);
-						$outDate = substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " ".$dateArr[0];
+						$outDate = wfMsg(strtolower(date("M",$stamp))) . " ".$dateArr[0];
 					} else {
 						if ($date == 'trend') {
 							$trend = 1;
 							$dateArr = explode("-", date("Y-m-f"));
 							#---
 							$stamp = mktime(0,0,0,$dateArr[1],1,$dateArr[0]);
-							$outDate = substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " ".$dateArr[0];
+							$outDate = wfMsg(strtolower(date("M",$stamp))) . " ".$dateArr[0];
 						} else {
 							$outDate = ucfirst($date);
 							$growth = ($date == 'growth') ? 1 : 0;
@@ -983,7 +983,7 @@ class WikiaStatsXLS {
 				$dateArr = explode("-", $date);
 				#---
 				$stamp = mktime(0,0,0,$dateArr[1],1,$dateArr[0]);
-				$outDate = substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " ".$dateArr[0];
+				$outDate = wfMsg(strtolower(date("M",$stamp))) . " ".$dateArr[0];
 
 				$this->writeXLSLabel($row, $col, $outDate); 
 				#---
@@ -1010,7 +1010,7 @@ class WikiaStatsXLS {
 				$dateArr = explode("-", $date);
 				#---
 				$stamp = mktime(0,0,0,$dateArr[1],1,$dateArr[0]);
-				$outDate = substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " ".$dateArr[0];
+				$outDate = wfMsg(strtolower(date("M",$stamp))) . " ".$dateArr[0];
 				#---
 				$this->writeXLSLabel($row, $col, $outDate); 
 				#---

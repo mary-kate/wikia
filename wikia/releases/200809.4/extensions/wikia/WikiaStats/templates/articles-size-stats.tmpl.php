@@ -32,10 +32,10 @@ foreach ($articleCount as $date => $monthStats)
 	#---
 	$dateArr = explode("-",$date);
 	$stamp = mktime(0,0,0,$dateArr[1],1,$dateArr[0]);
-	$out = substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " " . $dateArr[0];
+	$out = wfMsg(strtolower(date("M",$stamp))) . " " . $dateArr[0];
 	if ($date == sprintf("%s-%s", date("Y"), date("m")))
 	{
-		$out = substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " " . date("d") . ", " . $dateArr[0];
+		$out = wfMsg(strtolower(date("M",$stamp))) . " " . date("d") . ", " . $dateArr[0];
 	}
 
 ?>

@@ -32,7 +32,7 @@ foreach ($data as $date => $out) {
 	#---
 	$dateArr = explode("-",$date);
 	$stamp = mktime(0,0,0,$dateArr[1],1,$dateArr[0]);
-	$new_date = substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " " . $dateArr[0];
+	$new_date = wfMsg(strtolower(date("M",$stamp))) . " " . $dateArr[0];
 	#---
 /*	if ($column == 'H') $value = sprintf("%0.1f", $out);
 	elseif ($column == 'I') $value = sprintf("%0.0f", $out);

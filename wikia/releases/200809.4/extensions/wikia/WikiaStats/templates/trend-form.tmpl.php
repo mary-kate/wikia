@@ -45,7 +45,7 @@ $KB = 1024;
 		#---
 		$day = ($i == $nbr_month) ? date("d") : date("d", $cur_date);
 		$sum += $day;
-		$month = substr(wfMsg(strtolower(date("F",$cur_date))), 0, 3);
+		$month = wfMsg(strtolower(date("M",$cur_date))); 
 		#---
 		$variable = "<strong style=\"font-color:#00008B\">X" . $i . "</strong>";
 		$meanArray[0][] = $variable;
@@ -74,8 +74,8 @@ $KB = 1024;
 		#---
 		$day = ($i == $nbr_month) ? date("d") : date("d", $next_date);
 		#---
-		$month = substr(wfMsg(strtolower(date("F",$cur_date))), 0, 3);
-		$next_month = substr(wfMsg(strtolower(date("F",$next_date))), 0, 3);
+		$month = wfMsg(strtolower(date("M",$cur_date)));
+		$next_month = wfMsg(strtolower(date("M",$next_date)));
 		#---
 		if ($i < $nbr_month)
 		{
@@ -194,7 +194,7 @@ foreach ($dateValues as $date => $cities)
 		$dateArr = explode("-", date("Y-m-d"));
 		#---
 		$stamp = mktime(0,0,0,$dateArr[1],$dateArr[2],$dateArr[0]);
-		$outDate = substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " " . $dateArr[2] .", ". $dateArr[0];
+		$outDate = wfMsg(strtolower(date("M",$stamp))) . " " . $dateArr[2] .", ". $dateArr[0];
 	}
 	else
 	{
@@ -203,7 +203,7 @@ foreach ($dateValues as $date => $cities)
 			$dateArr = explode("-", $date);
 			#---
 			$stamp = mktime(0,0,0,$dateArr[1],1,$dateArr[0]);
-			$outDate = substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " ".$dateArr[0];
+			$outDate = wfMsg(strtolower(date("M",$stamp))) . " ".$dateArr[0];
 		}
 		else
 		{
@@ -213,7 +213,7 @@ foreach ($dateValues as $date => $cities)
 				$dateArr = explode("-", date("Y-m-f"));
 				#---
 				$stamp = mktime(0,0,0,$dateArr[1],1,$dateArr[0]);
-				$outDate = substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " ".$dateArr[0];
+				$outDate = wfMsg(strtolower(date("M",$stamp))) . " ".$dateArr[0];
 			}
 			else
 			{
