@@ -140,9 +140,7 @@ function SharedHelpHook(&$out, &$text) {
 			}
 	*/
 			$articleUrl = sprintf($urlTemplate, $wgTitle->getDBkey());
-			$content_array = SharedHttp::get($articleUrl);
-			$content = $content_array[0];
-			$c = $content_array[1];
+			list($content, $c) = SharedHttp::get($articleUrl);
 
 			# if we had redirect, then store it somewhere 
 			if(curl_getinfo($c, CURLINFO_HTTP_CODE) == 301) {
