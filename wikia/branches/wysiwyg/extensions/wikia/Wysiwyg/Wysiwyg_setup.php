@@ -35,6 +35,9 @@ function initEditor() {
 }
 addOnloadHook(initEditor);
 </script>
+<style type="text/css">/*<![CDATA[*/
+	.mw-editTools {display: none}
+/*]]>*/</style>
 EOT;
 			$wgOut->addScript($script);
 
