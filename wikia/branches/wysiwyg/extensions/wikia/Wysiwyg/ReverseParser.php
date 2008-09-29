@@ -290,7 +290,8 @@ class ReverseParser {
 
 					// images
 					case 'img':
-						$out = $this->handleImage($node);
+					case 'div': // [[Image:foo.jpg|thumb]]
+						$out = $this->handleImage($node, $content);
 						break;
 
 					// handle more complicated tags
@@ -572,7 +573,7 @@ class ReverseParser {
 	/**
 	 * Returns wikimarkup for <img> tag
 	 */
-	private function handleImage($node) {
+	private function handleImage($node, $content) {
 
 		// handle links with refId attribute
 		$refId = $node->getAttribute('refid');
@@ -585,7 +586,7 @@ class ReverseParser {
 			return "[[{$refData['href']}{$pipe}]]";
 		}
 
-		return '<!-- unsupported anchor tag! -->';
+		return $content;
 	}
 
 
@@ -614,7 +615,7 @@ class ReverseParser {
 	 * Return true if given node is inline HTNL element
 	 */
 	private function isInlineElement($node) {
-		return in_array($node->nodeName, array('u', 'b', 'strong', 'i', 'em', 'strike'));
+		return in_array($node->nodeName, array('u', 'b', 'strong', 'i', 'em', 'strike', 'a'));
 	}
 
 }
