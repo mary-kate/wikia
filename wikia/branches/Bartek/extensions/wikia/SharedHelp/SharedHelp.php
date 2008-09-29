@@ -13,7 +13,7 @@ if(!defined('MEDIAWIKI')) {
 
 $wgExtensionCredits['other'][] = array(
         'name' => 'SharedHelp',
-	'version' => 0.13,
+	'version' => 0.15,
         'description' => 'Takes pages from [[w:c:Help|Help Wikia]] and inserts them into Help namespace on this wiki',
         'author' => array('Maciej Brencz, Inez Korczyński')
 );
@@ -167,7 +167,6 @@ function SharedHelpHook(&$out, &$text) {
 
 			if (preg_match( '/Location:\s[^\s]+/', $matched_headers[0], $matched_loc)) {
 				$redir_target = substr( $matched_loc[0], 9  );
-				global $wgServer;
 				$out->redirect( trim( $redir_target ) );
 			} else {
 				$content = substr( $content, strpos( $content, $matched_headers[0] ) + strlen( $matched_headers[0] ) );
