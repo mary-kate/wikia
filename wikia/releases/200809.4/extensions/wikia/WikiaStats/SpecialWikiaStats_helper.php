@@ -28,7 +28,7 @@ class WikiaGenericStats {
     var $mSelectedCityId = -1;
 
     const MONTHLY_STATS = 7;
-    const USE_MEMC = 1;
+    const USE_MEMC = 0;
     const USE_OLD_DB = 0;
 	const IGNORE_WIKIS = "5, 11, 6745";
    	
@@ -412,14 +412,7 @@ class WikiaGenericStats {
    		if (self::USE_MEMC) $wkStatsUrl = $wgMemc->get($memkey);
 		#---
    		if (empty($wkStatsUrl)) {
-			$dbr =& wfGetDB( DB_SLAVE );
-			#---
-			$sql = "SELECT city_url from ".wfSharedTable("city_list")." where city_id = {$city_id} and city_id not in (".self::IGNORE_WIKIS.")";
-			$res = $dbr->query($sql);
-			if ( $row = $dbr->fetchRow( $res ) ) {
-				$wkStatsUrl = substr($row["city_url"], 0, -1);
-			}
-			$dbr->freeResult( $res );
+			$wkStatsUrl = WikiFactory::getVarValueByName('wgServer', $city_id);
 			if (self::USE_MEMC) $wgMemc->set($memkey, $wkStatsUrl, 60*60*3);
 		}
 
@@ -429,7 +422,7 @@ class WikiaGenericStats {
 
 	static private function getUserEditCountFromDB($cityDBName, $value)
 	{
-    	global $wgMemc;
+    	global $wgMemc, $wgContentNamespaces;
     	#---
 		wfProfileIn( __METHOD__ );
 		$result = array('count' => 0, 'sum' => 0);
@@ -448,7 +441,7 @@ class WikiaGenericStats {
 				#---
 				$sql = "select count(wf_user) as cnt, sum(s) as s from ";
 				$sql .= "(select wf_user,sum(wf_contributed) as s from `wikiastats`.`{$cityDBName}_wikians_full` where ";
-				$sql .= "wf_user > 0 and wf_namespace = 0 group by wf_user having (sum(wf_contributed) >= {$value})) as query";
+				$sql .= "wf_user > 0 and wf_namespace in (".implode(",", $wgContentNamespaces).") group by wf_user having (sum(wf_contributed) >= {$value})) as query";
 				$res = $dbs->query($sql);
 				if ( $row = $dbs->fetchRow( $res ) )
 				{
@@ -582,15 +575,15 @@ class WikiaGenericStats {
 
 	static private function getWikiansListStatsFromDB($cityDBName, $namespace=0, $limit=STATS_WIKIANS_RANK_NBR, $stats_date=0, $userlist=array())
 	{
-    	global $wgMemc;
+    	global $wgMemc, $wgContentNamespaces;
     	#---
 		wfProfileIn( __METHOD__ );
 		#---
 		$namespace = intval($namespace);
+		$namespaceList = implode(",", $wgContentNamespaces);
 		#---
 		$whereUserList = "";
-		if (!empty($userlist))
-		{
+		if (!empty($userlist)) {
 			$whereUserList = "'".implode("','", $userlist)."'";
 		}
 
@@ -608,10 +601,12 @@ class WikiaGenericStats {
 				}
 				#---
 				$where = " wf_user > 0 ";
-				if (empty($namespace))
-					$where .= " and wf_namespace = {$namespace}	";
-				else
-					$where .= " and wf_namespace != 0 ";
+				if (empty($namespace)) {
+					$where .= " and wf_namespace in (".$namespaceList.") ";
+				}
+				else {
+					$where .= " and wf_namespace not in (".$namespaceList.") ";
+				}
 				#---
 				if (!empty($whereUserList))
 					$where .= " and wf_user in (".$whereUserList.") ";
@@ -650,11 +645,12 @@ class WikiaGenericStats {
 
 	static private function getArticlesCountsFromDB($cityDBName, $size = 0, $namespace=0)
 	{
-    	global $wgMemc;
+    	global $wgMemc, $wgContentNamespaces;
     	#---
 		wfProfileIn( __METHOD__ );
 		$result = array();
 		$memkey = 'wikiacitystatsarticlecount_'.$cityDBName.'_'.$size.'_'.$namespace;
+		$namespaceList = implode(",", $wgContentNamespaces);
 		#---
 		if (self::USE_MEMC) $result = $wgMemc->get($memkey);
 
@@ -667,10 +663,10 @@ class WikiaGenericStats {
 				}
 				#---
 				$where = "af_int_link_article > 0";
-				if (empty($namespace))
-					$where .= " and af_namespace = {$namespace}	";
+				if (empty($namespace)) 
+					$where .= " and af_namespace in (".$namespaceList.") ";
 				else
-					$where .= " and af_namespace != 0 ";
+					$where .= " and af_namespace not in (".$namespaceList.") ";
 				#---
 				if (!empty($size)) $where .= " and af_mean_size_article < {$size} ";
 				#---
@@ -733,11 +729,12 @@ class WikiaGenericStats {
 
 	static private function getAnonUserStatisticsFromDB($cityDBName, $namespace=0, $limit=50)
 	{
-    	global $wgMemc;
+    	global $wgMemc, $wgContentNamespaces;
     	#---
 		wfProfileIn( __METHOD__ );
 		#---
 		$namespace = intval($namespace);
+		$namespaceList = implode(",", $wgContentNamespaces);
 		$result = array();
 		#---
 		$memkey = 'wikiacitystatsusersanon_'.md5($cityDBName.'_'.$namespace.'_'.$limit);
@@ -754,10 +751,10 @@ class WikiaGenericStats {
 				}
 				#---
 				$where = " wf_user = 0 ";
-				if (empty($namespace))
-					$where .= " and wf_namespace = {$namespace}	";
+				if (empty($namespace)) 
+					$where .= " and wf_namespace in (".$namespaceList.") ";
 				else
-					$where .= " and wf_namespace != 0 ";
+					$where .= " and wf_namespace not in (".$namespaceList.") ";
 
 				#---
 				$sql = "select min(unix_timestamp(wf_first_day_edit)) as wf_min, max(unix_timestamp(wf_last_day_edit)) as wf_max, sum(wf_contributed) as wf_cnt, wf_user_text, wf_user ";
@@ -803,6 +800,8 @@ class WikiaGenericStats {
 		wfProfileIn( __METHOD__ );
 		#---
 		$namespace = intval($namespace);
+		$namespaceList = implode(",", $wgContentNamespaces);
+		
 		$result = array();
 		#---
 		$memkey = 'wikiacitystatseditpages_'.md5($cityDBName.'_'.$namespace.'_'.$reg_users.'_'.$limit);
@@ -825,9 +824,9 @@ class WikiaGenericStats {
 					$where .= " ef_user > 0 ";
 
 				if (empty($namespace))
-					$where .= " and ef_page_namespace = 0 ";
+					$where .= " and ef_page_namespace in (".$namespaceList.") ";
 				else
-					$where .= " and ef_page_namespace >= 0 ";
+					$where .= " and ef_page_namespace not in (".$namespaceList.") ";
 
 				#---
 				$sql = "select ef_page_id, ef_page_title, sum(ef_number_edits) as sum, count(ef_page_id) as cnt, sum(ef_archived) as archived, ef_page_namespace ";
@@ -2001,7 +2000,6 @@ class WikiaGenericStats {
 		#---
 		$data = array("code" => 0, "text" => "");
 		$allowedNamespace = array(0,2,3,4,6,8,10,12,14);
-
 		#---
 		$namespaces = $wgCanonicalNamespaceNames;
 		if (empty($namespaces[0])) {
