@@ -144,19 +144,18 @@ function SharedHelpHook(&$out, &$text) {
 			$content = $content_array[0];
 			$c = $content_array[1];
 
-			# strip header and save it somewhere
-			// TODO refine regex a bit...
-			preg_match( '/HTTP.*GMT/s', $content, $matched_headers);
-
-			if (preg_match( '/Location:\s[^\s]+/', $matched_headers[0], $matched_loc)) {
-				$redir_target = substr( $matched_loc[0], 9  );
-				var_dump ($redir_target) ;
-				$out->redirect( trim( $redir_target ) );
-
-			} else {
-				$content = substr( $content, strpos( $content, $matched_headers[0] ) + strlen( $matched_headers[0] ) );
+			# if we had redirect, then store it somewhere 
+			if(curl_getinfo($c, CURLINFO_HTTP_CODE) == 301) {
+				if(preg_match("/^Location: ([^\n]+)/m", $content, $dest_url)) {
+					$destinationUrl = $dest_url[1];
+				}
 			}
-
+			if(isset($destinationUrl)) {
+				$out->redirect( $destinationUrl );
+			} else {
+				$tmp = split("\n\n", $content, 2);
+				$content = $tmp[1];
+			}
 			if(strpos($content, '"noarticletext"') > 0) {
 				$sharedArticle = array('exists' => 0, 'timestamp' => wfTimestamp());
 				$wgMemc->set($sharedArticleKey, $sharedArticle);
