@@ -6,8 +6,7 @@
  * @author Maciej 'macbre' Brencz <macbre(at)wikia-inc.com>
  * @author Inez Korczynski <inez(at)wikia-inc.com>
  *
- * @see http://meta.wikimedia.org/wiki/Help:Wikitext_examples
- * @see http://meta.wikimedia.org/wiki/Help:Advanced_editing
+ * @see http://meta.wikimedia.org/wiki/Help:Editing
  */
 class ReverseParser {
 
