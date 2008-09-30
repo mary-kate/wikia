@@ -90,7 +90,6 @@ class ReverseParser {
 			$isListNode = in_array($node->nodeName, array('ul', 'ol', 'dl'));
 
 			if($isListNode) {
-				$this->listLevel++;
 				// build bullets stack
 				switch ($node->nodeName) {
 					case 'ul':
@@ -103,7 +102,10 @@ class ReverseParser {
 						$bullet = ':';
 						break;
 				}
-				$this->listBullets .= $bullet;
+				if (!$node->getAttribute('washtml')) {
+					$this->listLevel++;
+					$this->listBullets .= $bullet;
+				}
 			}
 
 			for($i = 0; $i < $nodes->length; $i++) {
@@ -119,8 +121,10 @@ class ReverseParser {
 					$childOutput = trim($childOutput);
 				}
 
-				$this->listLevel--;
-				$this->listBullets = substr($this->listBullets, 0, -1);
+				if (!$node->getAttribute('washtml')) {
+					$this->listLevel--;
+					$this->listBullets = substr($this->listBullets, 0, -1);
+				}
 			}
 		}
 
