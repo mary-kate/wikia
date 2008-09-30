@@ -13,7 +13,7 @@ if(!defined('MEDIAWIKI')) {
 
 $wgExtensionCredits['other'][] = array(
         'name' => 'SharedHelp',
-	'version' => 0.16,
+	'version' => 0.17,
         'description' => 'Takes pages from [[w:c:Help|Help Wikia]] and inserts them into Help namespace on this wiki',
         'author' => array('Maciej Brencz, Inez Korczyński')
 );
@@ -230,6 +230,7 @@ function SharedHelpBrokenLink( $linker, $nt, $query, $u, $style, $prefix, $text,
 	if ($nt->getNamespace() == 12) {
 		//not red, blue
 		$style = $linker->getInternalLinkAttributesObj( $nt, $text, '', $titleAttr );
+		$u = str_replace( "&amp;action=edit&amp;redlink=1", "", $u );
 	}
 	return true;
 }
