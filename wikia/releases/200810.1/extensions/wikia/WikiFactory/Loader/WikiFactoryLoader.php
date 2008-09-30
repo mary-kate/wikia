@@ -646,7 +646,6 @@ class WikiFactoryLoader {
 			 * only 3 parts counts
 			 */
 			if ( count( $parts ) != 3 ) {
-				$this->debug( __METHOD__." not 3 parts." ) ;
 				continue;
 			}
 			$wgGroupPermissions[trim($parts[0])][trim($parts[1])] = (bool)trim($parts[2]);
