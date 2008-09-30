@@ -236,6 +236,10 @@ class ReverseParser {
 						}
 						break;
 
+					case 'caption':
+						$out = "|+{$textContent}\n";
+						break;
+
 					case 'tr':
 						$out = "|-\n{$textContent}";
 						break;
@@ -637,6 +641,6 @@ class ReverseParser {
 	 * Return true if given node is table cell (td/th)
 	 */
 	private function isTableCell($node) {
-		return in_array($node->nodeName, array('td', 'th'));
+		return in_array($node->nodeName, array('td', 'th', 'caption'));
 	}
 }
