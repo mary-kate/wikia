@@ -250,7 +250,7 @@ class ReverseParser {
 						break;
 
 					case 'caption':
-						$attStr = ltrim($this->getAttributesStr($node));
+						$attStr = $this->getAttributesStr($node);
 						if ($attStr != '') {
 							$attStr = ltrim("{$attStr}|");
 						}
