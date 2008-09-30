@@ -381,7 +381,7 @@ class ReverseParser {
 
 		} else if($node->nodeType == XML_TEXT_NODE) {
 
-			wfDebug("ReverseParser XML_TEXT_NODE\n");
+			wfDebug("ReverseParser XML_TEXT_NODE    " . str_repeat('-', $level) . " #text\n");
 
 			if ( trim($node->textContent) == '' && $node->parentNode && !$this->isInlineElement($node->parentNode) ) {
 				// get rid of whitespaces between tags we don't need
