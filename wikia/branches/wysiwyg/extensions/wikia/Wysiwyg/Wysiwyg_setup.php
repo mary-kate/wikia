@@ -19,7 +19,7 @@ function WysiwygInitial($form) {
 		'/^regex$/' => 'msg-key',
 		);
 	foreach($edgecasesRegex as $regexp => $msgkey) {
-		if (preg_match($regexp, form->textbox1)) {
+		if (preg_match($regexp, $form->textbox1)) {
 			$edgecasesFound[] = $msgkey;
 		}
 	}
