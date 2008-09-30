@@ -307,6 +307,11 @@ class ReverseParser {
 						if($node->previousSibling) {
 							// first item of nested list
 							$prefix = "\n{$prefix}";
+
+							// add space after previous list, so we won't break numbers
+							if ($this->isList($node->previousSibling)) {
+								$prefix = "\n{$prefix}";
+							}
 						}
 						// lists inside table cell
 						if ($node->parentNode && $this->isTableCell($node->parentNode)) {
@@ -651,5 +656,12 @@ class ReverseParser {
 	 */
 	private function isTableCell($node) {
 		return in_array($node->nodeName, array('td', 'th', 'caption'));
+	}
+
+	/**
+	 * Return true if given node is list container
+	 */
+	private function isList($node) {
+		return in_array($node->nodeName, array('ol', 'ul', 'dl'));
 	}
 }
