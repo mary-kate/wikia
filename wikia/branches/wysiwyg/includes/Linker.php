@@ -512,6 +512,8 @@ class Linker {
 
 	/** @todo document */
 	function makeExternalImage( $url, $alt = '' ) {
+		global $FCKparseEnable;
+		$refId = wfFCKGetRefId($url, true);
 		if ( '' == $alt ) {
 			$alt = $this->fnamePart( $url );
 		}
@@ -521,10 +523,13 @@ class Linker {
 			wfDebug("Hook LinkerMakeExternalImage changed the output of external image with url {$url} and alt text {$alt} to {$img}", true);
 			return $img;
 		}
-		return Xml::element( 'img',
-			array(
-				'src' => $url,
-				'alt' => $alt ) );
+		$params = array(
+			'src' => $url,
+			'alt' => $alt );
+		if ($FCKparseEnable) {
+			$params['refid'] = $refId;
+		}
+		return Xml::element( 'img', $params);
 	}
 
 	/**

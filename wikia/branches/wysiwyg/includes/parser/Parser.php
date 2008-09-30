@@ -1487,6 +1487,7 @@ class Parser
 	    ) {
 			if ( preg_match( self::EXT_IMAGE_REGEX, $url ) ) {
 				# Image found
+				wfFCKSetRefId('external link: raw image', $url, $url, '', true, true);
 				$text = $sk->makeExternalImage( $url );
 			}
 		}
@@ -1722,25 +1723,23 @@ class Parser
 						$text = $this->replaceExternalLinks($text);
 						$text = $this->replaceInternalLinks($text);
 						if ($FCKparseEnable) {
-//							$refId = wfFCKSetRefId('image', $text, $link, $trail, $wasblank, $noforce, true);
-//							$s .= $prefix . "<span$refId>[[$link|$text]]</span>" . $trail;
-							wfFCKSetRefId('image', $text, $link, $trail, $wasblank, $noforce);
-						}
-//						} else {	//original action
+							$refId = wfFCKSetRefId('image', $text, $link, $trail, $wasblank, $noforce, true);
+							$s .= $prefix . $this->armorLinks("<span$refId>[[$link|$text]]</span>") . $trail;
+						} else {	//original action
 							# cloak any absolute URLs inside the image markup, so replaceExternalLinks() won't touch them
 							$s .= $prefix . $this->armorLinks( $this->makeImage( $nt, $text ) ) . $trail;
 							$this->mOutput->addImage( $nt->getDBkey() );
-//						}
+						}
 						wfProfileOut( "$fname-image" );
 						continue;
 					} else {
-//						if ($FCKparseEnable) {
-//							$refId = wfFCKSetRefId('image', $text, $link, $trail, $wasblank, $noforce, true);
-//							$s .= $prefix . "<span$refId>[[$link|$text]]</span>" . $trail;
-//						} else {	//original action
+						if ($FCKparseEnable) {
+							$refId = wfFCKSetRefId('image', $text, $link, $trail, $wasblank, $noforce, true);
+							$s .= $prefix . "<span$refId>[[$link|$text]]</span>" . $trail;
+						} else {	//original action
 							# We still need to record the image's presence on the page
 							$this->mOutput->addImage( $nt->getDBkey() );
-//						}
+						}
 					}
 					wfProfileOut( "$fname-image" );
 
