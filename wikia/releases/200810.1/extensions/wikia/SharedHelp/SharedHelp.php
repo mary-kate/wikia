@@ -21,8 +21,6 @@ $wgExtensionCredits['other'][] = array(
 $wgHooks['OutputPageBeforeHTML'][] = 'SharedHelpHook';
 $wgHooks['EditPage::showEditForm:initial'][] = 'SharedHelpEditPageHook';
 $wgHooks['SearchBeforeResults'][] = 'SharedHelpSearchHook';
-$wgHooks['ParserReplaceLinkHolders'][] = 'SharedHelpReplaceLinkHolders';
-
 $wgHooks['BrokenLink'][] = 'SharedHelpBrokenLink';
 
 class SharedHttp extends Http {
@@ -229,7 +227,7 @@ function SharedHelpSearchHook(&$searchPage, &$term) {
 function SharedHelpBrokenLink( $linker, $nt, $query, $u, $style, $prefix, $text, $inside, $trail  ) {
 	if ($nt->getNamespace() == 12) {
 		//not red, blue
-		$style = $linker->getInternalLinkAttributesObj( $nt, $text, '', $titleAttr );
+		$style = $linker->getInternalLinkAttributesObj( $nt, $text, '' );
 		$u = str_replace( "&amp;action=edit&amp;redlink=1", "", $u );
 		$u = str_replace( "?action=edit&amp;redlink=1&amp;", "?", $u );
 		$u = str_replace( "?action=edit&amp;redlink=1", "", $u );	
@@ -237,12 +235,3 @@ function SharedHelpBrokenLink( $linker, $nt, $query, $u, $style, $prefix, $text,
 	return true;
 }
 
-function SharedHelpReplaceLinkHolders($title, $colours, $key) {
-	if ($title->getNamespace() == 12) {
-		$dbr = wfGetDB( DB_SLAVE );
-		$table = 'help.'.$dbr->tableName('page');
-		$page_title = $dbr->selectField($table, 'page_title', array('page_namespace' => 12, 'page_title' => $title->getDBkey()), __METHOD__);
-		$colours[$key] = $page_title !== false ? '' : 'new';
-	}
-	return true;
-}
