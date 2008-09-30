@@ -136,6 +136,7 @@ class ReverseParser {
 						break;
 
 					case 'br':
+						// <br /> as first child of <p> will be parsed as line break
 						if($node->parentNode && $node->parentNode->nodeName == 'p' && $node->parentNode->hasChildNodes() && $node->parentNode->childNodes->item(0)->isSameNode($node)) {
 							$out = "\n";
 						} else {
@@ -177,7 +178,7 @@ class ReverseParser {
 						$out = "{$head} {$textContent} {$head}";
 
 						// new line logic
-						if ($node->previousSibling || ($node->parentNode && $node->parentNode->nodeName == 'td')) {
+						if ($node->previousSibling || ($node->parentNode && $this->isTableCell($node->parentNode))) {
 							$out = "\n{$out}";
 						}
 						break;
@@ -192,7 +193,7 @@ class ReverseParser {
 							// separate <pre> tags
 							$out = ($node->previousSibling->nodeName == 'pre') ? "\n\n{$out}" : "\n{$out}";
 						}
-						else if ($node->parentNode && $node->parentNode->nodeName == 'td') {
+						else if ($node->parentNode && $this->isTableCell($node->parentNode)) {
 							$out = "\n{$out}";
 						}
 						
@@ -230,7 +231,7 @@ class ReverseParser {
 						$out = "{|{$attStr}\n{$textContent}|}\n";
 
 						// there's something before the table or this is nested table - add line break
-						if ($node->previousSibling || ($node->parentNode && $node->parentNode->nodeName == 'td')) {
+						if ($node->previousSibling || ($node->parentNode && $this->isTableCell($node->parentNode))) {
 							$out = "\n{$out}";
 						}
 						break;
@@ -274,7 +275,7 @@ class ReverseParser {
 							$prefix = "\n{$prefix}";
 						}
 						// lists inside table cell
-						if ($node->parentNode && $node->parentNode->nodeName == 'td') {
+						if ($node->parentNode && $this->isTableCell($node->parentNode)) {
 							$prefix = "\n{$prefix}";
 						}
 						// rtrim used to remove \n added by the last list item
@@ -632,4 +633,10 @@ class ReverseParser {
 		return in_array($node->nodeName, array('u', 'b', 'strong', 'i', 'em', 'strike', 's', 'a', 'p', 'div'));
 	}
 
+	/**
+	 * Return true if given node is table cell (td/th)
+	 */
+	private function isTableCell($node) {
+		return in_array($node->nodeName, array('td', 'th'));
+	}
 }
