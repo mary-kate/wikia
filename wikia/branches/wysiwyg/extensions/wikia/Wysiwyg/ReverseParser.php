@@ -241,15 +241,25 @@ class ReverseParser {
 						break;
 
 					case 'tr':
-						$out = "|-\n{$textContent}";
+						$attStr = ltrim($this->getAttributesStr($node));
+						$out = "|-{$attStr}\n{$textContent}";
 						break;
 
 					case 'th':
-						$out = "!{$textContent}\n";
+						$attStr = $this->getAttributesStr($node);
+						if ($attStr != '') {
+							$attStr = ltrim("{$attStr}|");
+						}
+						$out = "!{$attStr}{$textContent}\n";
 						break;
 
 					case 'td':
-						$out = "|{$textContent}\n";
+						$attStr = $this->getAttributesStr($node);
+						if ($attStr != '') {
+							$attStr = ltrim("{$attStr}|");
+						}
+						$textContent = rtrim($textContent);
+						$out = "|{$attStr}{$textContent}\n";
 						break;
 
 					// ignore tbody tag - just pass it through
