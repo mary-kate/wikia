@@ -628,14 +628,13 @@ class WikiFactoryLoader {
 	 * users|move|0
 	 *
 	 * @author eloy@wikia
-	 * @access public
-	 * @static
+	 * @access private
 	 *
 	 * @param string $local: string with permissions
 	 *
 	 * @return array with permissions
 	 */
-	static public function LocalToGlobalPermissions( $local ) {
+	private function LocalToGlobalPermissions( $local ) {
 		global $wgGroupPermissions;
 
 		wfProfileIn( __METHOD__ );
@@ -663,14 +662,13 @@ class WikiFactoryLoader {
 	 *
 	 *
 	 * @author eloy@wikia-inc.com
-	 * @access public
-	 * @static
+	 * @access private
 	 *
 	 * @param array $local: array with local values
 	 * @param array $target: array with global values; by reference - local is appended here
 	 * @param bool  $ignore_keys: treat $local as a hash (false) or as an array (true)
 	 */
-	static public function LocalToGlobalArray( $local, &$target, $ignore_keys = false ) {
+	private function LocalToGlobalArray( $local, &$target, $ignore_keys = false ) {
 		if( is_array( $local ) && count($local) ) {
 			#--- target may not be initialised yet
 			if( !is_array( $target ) ) {
