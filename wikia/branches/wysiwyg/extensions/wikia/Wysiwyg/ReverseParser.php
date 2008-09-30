@@ -331,7 +331,7 @@ class ReverseParser {
 						$out = $this->handleLink($node, $textContent);
 						break;
 					case 'span':
-						$out = $this->handleSpan($node);
+						$out = $this->handleSpan($node, $textContent);
 						break;
 
 					// ignore tbody tag
@@ -494,7 +494,7 @@ class ReverseParser {
 	 *
 	 * Span is used to wrap various elements like templates etc.
 	 */
-	private function handleSpan($node) {
+	private function handleSpan($node, $content) {
 
 		// handle spans with refId attribute: images, templates etc.
 		$refId = $node->getAttribute('refid');
@@ -532,6 +532,22 @@ class ReverseParser {
 				// __TOC__
 				case 'double underscore':
 					return $refData['description'];
+
+				// [[Image:Jimbo.jpg]]
+				case 'image':
+					if ($refData['description'] != '') {
+						// more complicated: [[Image:Jimbo.jpg|thumb|caption|'''test'''[http://www.wikia.com][Article]]]
+						// $refData['description'] is parsed to HTML, use $content instead
+						if ( substr($content, 0, 8) == '<nowiki>' ) {
+							// $content can be inside <nowiki></nowiki> - remove it
+							$content = substr($content, 8, -9);
+						}
+						return $content;
+					}
+					else {
+						// simple markup: [[Image:Jimbo.jpg]]
+						return "[[{$refData['href']}]]";
+					}
 			}
 		}
 
@@ -600,43 +616,6 @@ class ReverseParser {
 
 		return '<!-- unsupported anchor tag! -->';
 	}
-
-	/**
-	 * Returns wikimarkup for <img> tag
-	 */
-	private function handleImage($node, $content) {
-
-		// handle images with refId attribute
-		$refId = $node->getAttribute('refid');
-
-		if ( is_numeric($refId) && isset($this->fckData[$refId]) ) {
-			$refData = (array) $this->fckData[$refId];
-
-			// try to get unparsed wikitext from $content
-			if ($content != '') {
-				$lastPipe = strrpos($refData['description'], '|');
-
-				if ($lastPipe !== false) {
-					// replace part of the description after the last pipe with $content
-					// [[Image:Jimbo.jpg|thumb|caption|'''test''']]
-					$refData['description'] = substr($refData['description'], 0, $lastPipe) . '|'. ltrim($content, ' ');
-				}
-			}
-			else {
-				// HTML is stripped by MW parser from syntax like: [[Image:Metallica.jpg|'''test''']]
-				$refData['description'] = strip_tags($refData['description']);
-			}
-
-			$pipe = ($refData['description'] != '') ? "|{$refData['description']}" : '';
-
-			return "[[{$refData['href']}{$pipe}]]";
-		}
-
-		return $content;
-	}
-
-
-
 
 	/**
 	 * Returns HTML string containing node arguments
