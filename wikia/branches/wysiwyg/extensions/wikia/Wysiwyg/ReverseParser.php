@@ -167,6 +167,16 @@ class ReverseParser {
 						}
 						break;
 
+					// horizontal line
+					case 'hr':
+						if ($node->previousSibling || ($node->parentNode && $this->isTableCell($node->parentNode))) {
+							$out = "\n----";
+						}
+						else {
+							$out = "----";
+						}
+						break;
+
 					// headings
 					case 'h1':
 					case 'h2':
