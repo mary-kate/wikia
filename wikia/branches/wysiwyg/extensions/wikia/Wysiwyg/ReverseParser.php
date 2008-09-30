@@ -304,14 +304,6 @@ class ReverseParser {
 							if($node->nextSibling && $node->nextSibling->nodeName == 'p') {
 								$suffix = ($node->nextSibling->textContent != '') ? "\n" : "\n\n";
 							}
-							// don't add extra ':' if we're wraping another list
-							// @see http://meta.wikimedia.org/wiki/Help:List#Extra_indentation_of_lists
-							// TODO: simplify this check
-							if ($node->parentNode->nodeName == 'body' &&
-							 $node->hasChildNodes() && $node->childNodes->item(0)->hasChildNodes() && 
-							 in_array($node->childNodes->item(0)->childNodes->item(0)->nodeName, array('dl', 'ul', 'ol'))) {
-								$textContent = substr($textContent, 1);
-							}
 						}
 						if($node->previousSibling) {
 							// first item of nested list
