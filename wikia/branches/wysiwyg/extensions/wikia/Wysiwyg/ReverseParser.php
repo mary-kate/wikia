@@ -240,7 +240,7 @@ class ReverseParser {
 						break;
 
 					case 'th':
-						$out = "!{$textContent}";
+						$out = "!{$textContent}\n";
 						break;
 
 					case 'td':
