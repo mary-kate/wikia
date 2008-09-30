@@ -226,9 +226,12 @@ function SharedHelpSearchHook(&$searchPage, &$term) {
 }
 
 
-function SharedHelpBrokenLink( $this, $nt, $query, $u, $style, $prefix, $text, $inside, $trail  ) {
+function SharedHelpBrokenLink( $linker, $nt, $query, $u, $style, $prefix, $text, $inside, $trail  ) {
+	if ($nt->getNamespace() == 12) {
+		//not red, blue
+		$style = $linker->getInternalLinkAttributesObj( $nt, $text, '', $titleAttr );
+	}
 	return true;
-
 }
 
 function SharedHelpReplaceLinkHolders($title, $colours, $key) {
