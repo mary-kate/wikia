@@ -23,6 +23,8 @@ $wgHooks['EditPage::showEditForm:initial'][] = 'SharedHelpEditPageHook';
 $wgHooks['SearchBeforeResults'][] = 'SharedHelpSearchHook';
 $wgHooks['ParserReplaceLinkHolders'][] = 'SharedHelpReplaceLinkHolders';
 
+$wgHooks['BrokenLink'][] = 'SharedHelpBrokenLink';
+
 class SharedHttp extends Http {
 
         static function get( $url, $timeout = 'default' ) {
@@ -223,6 +225,11 @@ function SharedHelpSearchHook(&$searchPage, &$term) {
 	return true;
 }
 
+
+function SharedHelpBrokenLink( $this, $nt, $query, $u, $style, $prefix, $text, $inside, $trail  ) {
+	return true;
+
+}
 
 function SharedHelpReplaceLinkHolders($title, $colours, $key) {
 	if ($title->getNamespace() == 12) {
