@@ -471,8 +471,6 @@ class ReverseParser {
 			$refData = (array) $this->fckData[$refId];
 
 			switch($refData['type']) {
-				// [[Image:foo.jpg]]
-				case 'image':
 				// [[Media:foo.jpg]]
 				case 'internal link: media':
 					$pipe = ($refData['description'] != '') ? '|'.$refData['description'] : '';
