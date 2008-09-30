@@ -240,7 +240,7 @@ class ReverseParser {
 					// tables
 					// @see http://en.wikipedia.org/wiki/Help:Table
 					case 'table':
-						$attStr = $this->getAttributesStr($node);
+						$attStr = ltrim($this->getAttributesStr($node));
 						$out = "{|{$attStr}\n{$textContent}|}\n";
 
 						// there's something before the table or this is nested table - add line break
