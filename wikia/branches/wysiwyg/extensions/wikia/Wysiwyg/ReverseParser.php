@@ -237,7 +237,11 @@ class ReverseParser {
 						break;
 
 					case 'caption':
-						$out = "|+{$textContent}\n";
+						$attStr = ltrim($this->getAttributesStr($node));
+						if ($attStr != '') {
+							$attStr = ltrim("{$attStr}|");
+						}
+						$out = "|+{$attStr}{$textContent}\n";
 						break;
 
 					case 'tr':
