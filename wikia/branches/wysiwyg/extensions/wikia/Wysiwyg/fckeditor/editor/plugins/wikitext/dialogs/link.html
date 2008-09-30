@@ -25,19 +25,67 @@ if(oLink) {
 }
 
 window.onload = function() {
+console.dir(FCK.Selection.GetSelection());
 	// Translate the dialog box texts.
 	oEditor.FCKLanguageManager.TranslatePage(document) ;
 
 	// Load the selected link/text information
 	if(oLink) {
 		GetE('txtTitle').value = oLink.innerHTML;
+		if(oLink.getAttribute('refid')) {
+			GetE('txtUrl').value = 'refid: ' + oLink.getAttribute('refid');
+		} else {
+			GetE('txtUrl').value = oLink.getAttribute('href', 2);
+		}
 	} else {
 		GetE('txtTitle').value = FCK.Selection.GetSelection();
 	}
 
 	// Activate the "OK" button.
-	window.parent.SetOkButton( true ) ;
-	window.parent.SetAutoSize( true ) ;
+	window.parent.SetOkButton(true) ;
+	window.parent.SetAutoSize(true) ;
+}
+
+function Ok() {
+	var sUri = GetE('txtUrl').value;
+	var sInnerHtml = GetE('txtTitle').value;
+	if(sInnerHtml == '') {
+		sInnerHtml = sUri;
+	}
+
+	// If no link is selected, create a new one (it may result in more than one link creation - #220).
+	var aLinks = oLink ? [oLink] : oEditor.FCK.CreateLink(sUri) ;
+
+	// If no selection, no links are created, so use the uri as the link text (by dom, 2006-05-26)
+	var aHasSelection = (aLinks.length > 0);
+	if(!aHasSelection) {
+		var oLinkPathRegEx = new RegExp("//?([^?\"']+)([?].*)?$") ;
+		var asLinkPath = oLinkPathRegEx.exec( sUri ) ;
+		if(asLinkPath != null) {
+			sInnerHtml = asLinkPath[1]; // use matched path
+		}
+
+		// Create a new (empty) anchor.
+		aLinks = [oEditor.FCK.InsertElement('a')];
+	}
+
+	oEditor.FCKUndo.SaveUndoStep() ;
+
+	for(var i = 0 ; i < aLinks.length ; i++) {
+		oLink = aLinks[i];
+
+		if(aHasSelection) {
+			sInnerHtml = oLink.innerHTML; // Save the innerHTML (IE changes it if it is like an URL).
+		}
+
+		oLink.href = sUri ;
+		oLink.innerHTML = sInnerHtml; // Set (or restore) the innerHTML
+	}
+
+	// Select the (first) link.
+	oEditor.FCKSelection.SelectNode(aLinks[0]);
+
+	return true ;
 }
 
 
