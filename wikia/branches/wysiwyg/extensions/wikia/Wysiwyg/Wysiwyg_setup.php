@@ -6,10 +6,29 @@ $wgExtensionCredits['other'][] = array(
 	'author' => array('Inez Korczyński', 'Maciej Brencz', 'Maciej Błaszkowski (Marooned)', 'Łukasz \'TOR\' Garczewski')
 );
 
+// user preferences
+$wgHooks['UserToggles'][] = 'wfWysiwygToggle';
+$wgHooks['getEditingPreferencesTab'][] = 'wfWysiwygToggle';
+function wfWysiwygToggle($toggles, $default_array = false) {
+	if(is_array($default_array)) {
+		$default_array[] = 'disablewysiwyg';
+        } else {
+		$toggles[] = 'disablewysiwyg';
+	}
+	return true;
+}
+
+
 $wgHooks['EditPage::showEditForm:initial'][] = 'WysiwygInitial';
 function WysiwygInitial($form) {
 	global $wgDisableWysiwygExt;
 	if (!empty($wgDisableWysiwygExt)) {
+		return true;
+	}
+
+	// check user option
+	global $wgUser;
+	if($wgUser->getOption('disablewysiwyg') == true){
 		return true;
 	}
 
