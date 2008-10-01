@@ -57,6 +57,9 @@ FCK.Events.AttachEvent( 'OnAfterSetHTML', function() {
 	}
 });
 
+// initialize wysiwygData
+FCK.wysiwygData = (typeof window.parent.FCKdata != 'undefined') ? window.parent.FCKdata : [];
+
 /*
 FCK.Events.AttachEvent( 'OnAfterSetHTML', function() {
 	if(FCK.EditMode == FCK_EDITMODE_WYSIWYG) {
