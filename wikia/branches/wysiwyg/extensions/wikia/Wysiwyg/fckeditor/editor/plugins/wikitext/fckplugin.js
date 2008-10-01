@@ -23,7 +23,7 @@ FCKCommands.RegisterCommand('Link', new FCKDialogCommand('Link', FCKLang.DlgLnkW
 					separator = res.getResponseHeader('X-Sep');
 				}
 				var res_array = res.responseText.split('--'+separator+'--');
-				window.parent.document.getElementById('wysiwygData').value = res_array[1];
+				FCK.wysiwygData = eval("{"+res_array[1]+"}");
 				FCK.EditingArea.Textarea.value = res_array[0];
 				FCK.EditingArea.TargetElement.className = '';
 				originalSwitchEditMode.apply(FCK, args);
@@ -45,10 +45,9 @@ FCKCommands.RegisterCommand('Link', new FCKDialogCommand('Link', FCKLang.DlgLnkW
 FCK.Events.AttachEvent( 'OnAfterSetHTML', function() {
 	if(FCK.EditingArea.TargetElement.className == 'childrenHidden') {
 		var html = FCK.GetData();
-		var wysiwygData = window.parent.document.getElementById('wysiwygData').value;
 
 		window.parent.sajax_request_type = 'POST';
-		window.parent.sajax_do_call('wfWysywigAjax', ['html2wiki', html, wysiwygData], function(res) {
+		window.parent.sajax_do_call('wfWysywigAjax', ['html2wiki', html, window.parent.YAHOO.Tools.JSONEncode(FCK.wysiwygData)], function(res) {
 			window.parent.document.getElementById('wysiwygData').value = '';
 			FCK.EditingArea.Textarea.value = res.responseText;
 			FCK.EditingArea.TargetElement.className = '';
