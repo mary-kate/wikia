@@ -60,28 +60,11 @@ FCK.Events.AttachEvent( 'OnAfterSetHTML', function() {
 // initialize wysiwygData
 FCK.wysiwygData = (typeof window.parent.FCKdata != 'undefined') ? window.parent.FCKdata : [];
 
-/*
-FCK.Events.AttachEvent( 'OnAfterSetHTML', function() {
-	if(FCK.EditMode == FCK_EDITMODE_WYSIWYG) {
-		FCK.wysiwygData = eval("{"+window.parent.document.getElementById('wysiwygData').value+"}");
+// setup wikimarkup placeholders
+FCK.RegisterDoubleClickHandler( function(placeholder) {
 
-		var spans = FCK.EditingArea.Document.body.getElementsByTagName('span');
-		for(var i = 0; i < spans.length; i++) {
-			var refid = spans[i].getAttribute('refid');
-			if(refid != null) {
-				spans[i].style.backgroundColor = '#ffff00';
-				spans[i].style.color = '#000000';
-				spans[i].contentEditable = false;
-				spans[i].innerHTML = "|-" + FCK.wysiwygData[refid].type + "-|";
-			}
-		}
+	refId = placeholder.getAttribute('refid');
 
-		FCK.EditorDocument.addEventListener( 'click', function(e) {
-			if(e.target.tagName == 'SPAN' && e.target.getAttribute('refid') != null) {
-				FCKSelection.SelectNode(e.target);
-			}
-		}, true);
+	alert('id ' + refId);
 
-	}
-});
-*/
+}, 'INPUT' );
