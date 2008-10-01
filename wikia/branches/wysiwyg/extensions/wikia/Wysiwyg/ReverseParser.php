@@ -339,6 +339,7 @@ class ReverseParser {
 						$out = $this->handleLink($node, $textContent);
 						break;
 					case 'span':
+					case 'input':
 						$out = $this->handleSpan($node, $textContent);
 						break;
 
