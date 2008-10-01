@@ -1313,7 +1313,12 @@ class Parser
 			if ( $text == '' ) {
 				# Autonumber if allowed. See bug #5918
 				if ( strpos( wfUrlProtocols(), substr($protocol, 0, strpos($protocol, ':')) ) !== false ) {
-					$text = '[' . ++$this->mAutonumber . ']';
+					global $FCKparseEnable;
+					if (!empty($FCKparseEnable)) {
+						$text = '[link]';
+					} else {
+						$text = '[' . ++$this->mAutonumber . ']';
+					}
 					$linktype = 'autonumber';
 				} else {
 					# Otherwise just use the URL
