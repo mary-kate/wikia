@@ -640,6 +640,7 @@ function wfFCKTestEdgeCases($text) {
 		),
 		'regexp' => array(
 			'/\[\[[^|]+\|.*?(?:(?:' . wfUrlProtocols() . ')|{{).*?]]/' => 'wysiwyg-edgecase-complex-description',	//external url or template found in the description of a link
+			'/{{[^[]+\[[^}]+}}/' => 'wysiwyg-edgecase-template-with-link'	//template with link as a parameter
 		)
 	);
 	foreach($edgecases['regular'] as $str => $msgkey) {
