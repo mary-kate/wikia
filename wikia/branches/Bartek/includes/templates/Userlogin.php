@@ -219,7 +219,7 @@ class UsercreateTemplate extends QuickTemplate {
 				</select>
 				<span id="wpBirtherror" class="inputError"><?= wfMsg('userlogin-bad-birthday') ?></span>
 				<div class="prefsectiontip">
-                                        <a href="#"><?php $this->msgWiki('prefs-help-birthday'); ?></a>
+                                        <a href="#" id="prefsHelpBirthday"><?php $this->msgWiki('prefs-help-birthday'); ?></a>
 	                        </div>
 			</td>
 		</tr>
