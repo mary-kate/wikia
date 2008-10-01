@@ -218,6 +218,9 @@ class UsercreateTemplate extends QuickTemplate {
 					?>
 				</select>
 				<span id="wpBirtherror" class="inputError"><?= wfMsg('userlogin-bad-birthday') ?></span>
+				<div class="prefsectiontip">
+                                        <a href="#"><?php $this->msgWiki('prefs-help-birthday'); ?></a>
+	                        </div>
 			</td>
 		</tr>
 		<tr>
@@ -225,9 +228,9 @@ class UsercreateTemplate extends QuickTemplate {
 			<td class="mw-label"><label for='wpEmail'><?php $this->msg('youremail') ?></label></td>
 			<td class="mw-input" id="wpEmailTD">
 				<input type='text' class='loginText' name="wpEmail" id="wpEmail" value="<?php $this->text('email') ?>" size='20' />
-					<div class="prefsectiontip">
+				<div class="prefsectiontip">
                                         <?php $this->msgWiki('prefs-help-email'); ?>
-                                </div>
+	                        </div>
 			</td>
 			<?php } ?>
 		</tr>
