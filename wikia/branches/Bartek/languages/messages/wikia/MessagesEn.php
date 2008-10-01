@@ -951,9 +951,9 @@ To contact staff or to report copyright problems, please see [[w:contact us|Wiki
 Reports made on this wiki will be displayed on [[Special:ProblemReports]].',
 'pr_view_staff' => 'Show reports that need staff help',
 'pr_what_problem_software_bug' => 'there is a bug in the wiki software',
-'prefs-help-realname' => '(optional)',
+'prefs-help-realname' => 'optional',
 'prefs-help-email' => 'We loathe spam even more than you do. We will NOT sell your email address.',
-'prefs-help-terms' => 'By clicking the button above, you agree to the [[w:Terms of Use| Terms of Use]]',
+'prefs-help-terms' => 'By clicking the button above, you agree to the [[w:Terms of Use| Wikia\'s Terms of Use]]',
 'prefs-help-birthday' => 'Why do I need to provide this?',
 'prefs-help-birthmesg' => 'Why do I need to provide my birthday?<br/>
 Wikia requires all users to provide their real date of birth as both a safety precaution and as a means of preserving the integrity of the site while complying with federal regulations.',
