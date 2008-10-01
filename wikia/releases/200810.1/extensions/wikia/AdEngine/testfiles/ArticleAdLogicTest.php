@@ -29,10 +29,10 @@ class ArticleAdLogicTest extends PHPUnit_TestCase {
 		// These should fail the short test. Note that medium should fail too, because it's not short nor long.
 		$this->assertFalse(ArticleAdLogic::isShortArticle(file_get_contents('./longArticleWithImagesNoCollision.html')));
 		$this->assertFalse(ArticleAdLogic::isShortArticle(file_get_contents('./tableWithWideImages.html')));
-		$this->assertFalse(ArticleAdLogic::isShortArticle(file_get_contents('./mediumArticlePlainText.html')));
 
 		// These are the true short articles
 		$this->assertTrue(ArticleAdLogic::isShortArticle(file_get_contents('./shortArticleWithImagesNoCollision.html')));
+		$this->assertTrue(ArticleAdLogic::isShortArticle(file_get_contents('./mediumArticlePlainText.html')));
 		$this->assertTrue(ArticleAdLogic::isShortArticle(file_get_contents('./shortArticle.html')));
 	}
 
@@ -45,6 +45,16 @@ class ArticleAdLogicTest extends PHPUnit_TestCase {
 		$this->assertFalse(ArticleAdLogic::isLongArticle(file_get_contents('./mediumArticlePlainText.html')));
 		$this->assertFalse(ArticleAdLogic::isLongArticle(file_get_contents('./shortArticleWithImagesNoCollision.html')));
 		$this->assertFalse(ArticleAdLogic::isLongArticle(file_get_contents('./shortArticle.html')));
+	}
+
+	function testIsSuperLong() {
+		// These are the very long articles
+		$this->assertTrue(ArticleAdLogic::isSuperLongArticle(file_get_contents('./longArticleWithImagesNoCollision.html')));
+		$this->assertTrue(ArticleAdLogic::isSuperLongArticle(file_get_contents('./superlongArticleWMediumText.html')));
+
+		// These should fail the long test, including the medium, because it's not long enough
+		$this->assertFalse(ArticleAdLogic::isSuperLongArticle(file_get_contents('./mediumArticlePlainText.html')));
+		$this->assertFalse(ArticleAdLogic::isSuperLongArticle(file_get_contents('./shortArticle.html')));
 	}
 
 	function testIsBoxAd(){
@@ -78,6 +88,7 @@ class ArticleAdLogicTest extends PHPUnit_TestCase {
 $suite = new PHPUnit_TestSuite();
 $suite->addTest(new ArticleAdLogicTest('testIsShort'));
 $suite->addTest(new ArticleAdLogicTest('testIsLong'));
+$suite->addTest(new ArticleAdLogicTest('testIsSuperLong'));
 $suite->addTest(new ArticleAdLogicTest('testIsBoxAd'));
 $result = PHPUnit::run($suite);
 echo $result->toHTML();
