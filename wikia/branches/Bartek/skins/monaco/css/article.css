@@ -3,11 +3,9 @@
 	border: 1px solid #AAA;
 	height: 1%;
 	margin: 0 5px 0 216px;
-	/*margin: -36px 5px 10px 22em;*/
 	position: relative;
+	overflow: visible;
 	top: -176px;
-	z-index: 5;
-	overflow: hidden;
 }
 
 #page_bar {
@@ -130,6 +128,7 @@
 	min-height: 200px;
 	padding: 10px;
 	position: relative;
+	overflow: visible;
 }
 
 /*** ARTICLE FOOTER ***/
@@ -285,63 +284,6 @@
 	display: block;
 }
 
-/* ProblemReports stuff - most copied from /skins/wikia/Monobook.css */
-#reportProblemForm
-{
-    background-color: #fff;
-    color: #000000;
-    border: solid 1px #aaaaaa;
-    font-size: 9pt;
-    visibility: hidden;
-    position: absolute;
-    margin-top: -250px;
-    left: -200px;
-    padding: 8px 12px 0px 8px;
-}
-
-#reportProblemForm
-{
-	width: 580px !important;
-	left: -300px;
-}
-
-#reportProblemForm form
-{
-    padding: 5px 12px 12px 5px;
-}
-
-#reportProblemForm input[type="text"],
-#reportProblemForm textarea,
-#reportProblemForm select,
-.monotype
-{
-  width: 100%;
-  border: solid 1px #87888C;
-  background-color: #fff;
-  padding: 2px;
-}
-
-#reportProblem .boxHeader
-{
-	font-size: 1.3em;
-	margin: -11px -22px 10px -11px;
-	padding: 7px;
-}
-
-#reportProblemForm .container-close {top: 2px; right: 2px}
-
-#reportProblemForm_c .underlay,
-#reportProblemForm .hd,
-#reportProblemForm .ft
-{
-  display: none !important;
-}
-
-#reportProblemForm_mask {z-index: 1500 !important}
-#reportProblemForm_c {z-index: 1750 !important}
-#wikiaDialogInfo_c {z-index: 2000 !important}
-
-
 /* macbre: standard button CSS */
 .button {
 	border: 4px double #FFFFFF;
@@ -359,7 +301,9 @@
 	width: 200px;
 	margin-top: -20px
 }
-.editingTips #widget_sidebar {
+.editingTips #widget_sidebar,
+.editingTips #background_strip .monaco_shrinkwrap,
+.editingTips #headerButtonHub {
 	display: none
 }
 .editingTips #wikia_page {
