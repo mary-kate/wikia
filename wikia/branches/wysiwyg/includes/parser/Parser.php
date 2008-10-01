@@ -1724,7 +1724,7 @@ class Parser
 						$text = $this->replaceInternalLinks($text);
 						if ($FCKparseEnable) {
 							$refId = wfFCKSetRefId('image', $text, $link, $trail, $wasblank, $noforce, true);
-							$s .= $prefix . $this->armorLinks("<span$refId>[[$link|$text]]</span>") . $trail;
+							$s .= $prefix . $this->armorLinks("<span$refId>[[$link" . ($wasblank ? '' : "|$text") . "]]</span>") . $trail;
 						} else {	//original action
 							# cloak any absolute URLs inside the image markup, so replaceExternalLinks() won't touch them
 							$s .= $prefix . $this->armorLinks( $this->makeImage( $nt, $text ) ) . $trail;
@@ -1735,7 +1735,8 @@ class Parser
 					} else {
 						if ($FCKparseEnable) {
 							$refId = wfFCKSetRefId('image', $text, $link, $trail, $wasblank, $noforce, true);
-							$s .= $prefix . "<span$refId>[[$link|$text]]</span>" . $trail;
+							$s .= $prefix . $this->armorLinks("<span$refId>[[$link" . ($wasblank ? '' : "|$text") . "]]</span>") . $trail;
+							continue;	//this continue is added to prevent adding additional link by parser as it's used above
 						} else {	//original action
 							# We still need to record the image's presence on the page
 							$this->mOutput->addImage( $nt->getDBkey() );
@@ -1779,9 +1780,12 @@ class Parser
 			# Self-link checking
 			if( $nt->getFragment() === '' ) {
 				if( in_array( $nt->getPrefixedText(), $selflink, true ) ) {
-					$s .= $prefix . $sk->makeSelfLinkObj( $nt, $text, '', $trail );
-					wfFCKSetRefId('self link', $text, $link, $trail, $wasblank, $noforce);
-					continue;
+//					wfFCKSetRefId('self link', $text, $link, $trail, $wasblank, $noforce);
+					if (!$FCKparseEnable) {
+						//do not use 'continue' so we can handle self link as a regular link
+						$s .= $prefix . $sk->makeSelfLinkObj( $nt, $text, '', $trail );
+						continue;
+					}
 				}
 			}
 
@@ -1789,7 +1793,7 @@ class Parser
 			if( $ns == NS_MEDIA ) {
 				if ($FCKparseEnable) {
 					$refId = wfFCKSetRefId('internal link: media', $text, $link, $trail, $wasblank, $noforce, true);
-					$s .= $prefix . "<span$refId>[[" . ($noforce ? '' : ':') . "$link|$text]]</span>" . $trail;
+					$s .= $prefix . "<span$refId>[[" . ($noforce ? '' : ':') . "$link" . ($wasblank ? '' : "|$text") . "]]</span>" . $trail;
 				} else {	//original action
 					# Give extensions a chance to select the file revision for us
 					$skip = $time = false;
