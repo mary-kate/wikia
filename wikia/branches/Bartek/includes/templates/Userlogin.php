@@ -225,6 +225,9 @@ class UsercreateTemplate extends QuickTemplate {
 			<td class="mw-label"><label for='wpEmail'><?php $this->msg('youremail') ?></label></td>
 			<td class="mw-input" id="wpEmailTD">
 				<input type='text' class='loginText' name="wpEmail" id="wpEmail" value="<?php $this->text('email') ?>" size='20' />
+					<div class="prefsectiontip">
+                                        <?php $this->msgWiki('prefs-help-email'); ?>
+                                </div>
 			</td>
 			<?php } ?>
 		</tr>
