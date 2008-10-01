@@ -623,7 +623,7 @@ function wfFCKGetRefId(&$text, $returnIDonly = false) {
 /**
  * wfFCKTestEdgeCases
  *
- * 	Search for not handled edge cases in FCK editor
+ * Search for not handled edge cases in FCK editor
  *
  * @author Maciej Błaszkowski <marooned at wikia-inc.com>
  * @access public
@@ -634,12 +634,12 @@ function wfFCKTestEdgeCases($text) {
 	$edgecasesFound = array();
 	$edgecases = array(
 		'regular' => array(
-			'<!--' => 'fck-edgecase-comment',			//HTML comments
-			'{{{' => 'fck-edgecase-triplecurls',		//template parameters
-			'__NOWYSIWYG__' => 'fck-edgecase-nowysiwyg',//new magic word to disable FCK for current article
+			'<!--' => 'wysiwyg-edgecase-comment',			//HTML comments
+			'{{{' => 'wysiwyg-edgecase-triplecurls',		//template parameters
+			'__NOWYSIWYG__' => 'wysiwyg-edgecase-nowysiwyg',//new magic word to disable FCK for current article
 		),
 		'regexp' => array(
-			'/\[\[[^|]+\|.*?(?:(?:' . wfUrlProtocols() . ')|{{).*?]]/' => 'fck-edgecase-complex-description',	//external url or template found in the description of a link
+			'/\[\[[^|]+\|.*?(?:(?:' . wfUrlProtocols() . ')|{{).*?]]/' => 'wysiwyg-edgecase-complex-description',	//external url or template found in the description of a link
 		)
 	);
 	foreach($edgecases['regular'] as $str => $msgkey) {
