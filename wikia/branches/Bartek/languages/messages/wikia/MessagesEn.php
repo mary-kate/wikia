@@ -951,7 +951,7 @@ To contact staff or to report copyright problems, please see [[w:contact us|Wiki
 Reports made on this wiki will be displayed on [[Special:ProblemReports]].',
 'pr_view_staff' => 'Show reports that need staff help',
 'pr_what_problem_software_bug' => 'there is a bug in the wiki software',
-'prefs-help-realname' => 'Real name is optional and, if you choose to provide it, will be used for giving you attribution for your work.  This field must be filled in to use Wikia Search.',
+'prefs-help-realname' => '(optional)',
 'protect-unchain' => 'Unlock move permissions selection box.',
 'rcnote' => 'Below {{PLURAL:$1|is \'\'\'1\'\'\' change|are the last \'\'\'$1\'\'\' changes}} in the last {{PLURAL:$2|day|\'\'\'$2\'\'\' days}}, as of $3.',
 'revertpage' => 'Reverted edits by [[Special:Contributions/$2|$2]] ([[User talk:$2|talk]]) to last version by [[User:$1|$1]]',
