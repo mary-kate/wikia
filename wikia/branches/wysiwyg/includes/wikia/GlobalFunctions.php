@@ -619,3 +619,38 @@ function wfFCKGetRefId(&$text, $returnIDonly = false) {
 	}
 	return '';
 }
+
+/**
+ * wfFCKTestEdgeCases
+ *
+ * 	Search for not handled edge cases in FCK editor
+ *
+ * @author Maciej Błaszkowski <marooned at wikia-inc.com>
+ * @access public
+ *
+ * @return array messages keys for use with wfMsg for every found edge case
+ */
+function wfFCKTestEdgeCases($text) {
+	$edgecasesFound = array();
+	$edgecases = array(
+		'regular' => array(
+			'<!--' => 'fck-edgecase-comment',			//HTML comments
+			'{{{' => 'fck-edgecase-triplecurls',		//template parameters
+			'__NOWYSIWYG__' => 'fck-edgecase-nowysiwyg',//new magic word to disable FCK for current article
+		),
+		'regexp' => array(
+			'/\[\[[^|]+\|.*?(?:(?:' . wfUrlProtocols() . ')|{{).*?]]/' => 'fck-edgecase-complex-description',	//external url or template found in the description of a link
+		)
+	);
+	foreach($edgecases['regular'] as $str => $msgkey) {
+		if (strpos($text, $str) !== false) {
+			$edgecasesFound[] = $msgkey;
+		}
+	}
+	foreach($edgecases['regexp'] as $regexp => $msgkey) {
+		if (preg_match($regexp, $text)) {
+			$edgecasesFound[] = $msgkey;
+		}
+	}
+	return $edgecasesFound;
+}
