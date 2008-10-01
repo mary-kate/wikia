@@ -21,6 +21,7 @@ $messages = array_merge( $messages, array(
 'wt_show_period' => 'Wybierz okres statystyk',
 'widget-wikipage-title' => 'Tytuł widżeta',
 'widget-wikipage-source' => 'Strona źródłowa',
+'widget-bookmark-empty' => 'Dodawaj swoje ulubione artykuły klikając na powyższą ikonkę',
 'widgets' => 'Lista widgetów',
 'widgets-specialpage-info' => 'Widżety działają najlepiej w jednej z najnowszych skórek, np. [{{SERVER}}/index.php?title=Special:Widgets&useskin=monaco Monaco].
 
@@ -66,4 +67,10 @@ Zmień [[Special:Preferences#prefsection-1|swoje preferencje]], aby używać wid
 'see_more' => 'Więcej...',
 'addsection' => 'Dodaj wiadomość',
 'tog-disablelinksuggest' => 'Nie pokazuj sugestii linków',
+'community' => 'Społeczność',
+'edit' => 'edytuj tę stronę',
+'skinchooser-customcss' => 'Aby włączyć spersonalizowany temat graficzny, wybierz opcję "custom" w powyższym menu i dodaj własny CSS w artykule [[MediaWiki:Monaco.css]].',
+'throttled-mailpassword' => 'Przypomnienie hasła zostało już wysłane w ciągu {{PLURAL:$1|ostatniej godziny|ostatnich $1 godzin}}.
+W celu powstrzymania nadużyć możliwość wysyłania przypomnień została ograniczona na {{PLURAL:$1|godzinę|liczbę godzin: $1}}.',
+'top_users' => 'Najaktywniejsi użytkownicy',
 ) );
