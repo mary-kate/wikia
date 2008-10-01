@@ -67,7 +67,11 @@ function Ok() {
 		// If no selection, no links are created, so use the uri as the link text (by dom, 2006-05-26)
 		var aHasSelection = (aLinks.length > 0);
 		if(!aHasSelection) {
-			sInnerHtml = sUri;
+			if(/^(((http|https|ftp|news):\/\/)|mailto:)/gi.exec(sUri)) {
+				sInnerHtml = '[link]';
+			} else {
+				sInnerHtml = sUri;
+			}
 			aLinks = [oEditor.FCK.InsertElement('a')];
 		}
 		for(var i = 0; i < aLinks.length; i++) {

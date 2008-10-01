@@ -212,7 +212,7 @@ class ReverseParser {
 						else if ($node->parentNode && $this->isTableCell($node->parentNode)) {
 							$out = "\n{$out}";
 						}
-						
+
 						break;
 
 					// text formatting
@@ -567,62 +567,86 @@ class ReverseParser {
 	 */
 	private function handleLink($node, $content) {
 
-		// handle links with refId attribute
-		$refId = $node->getAttribute('refid');
+		$refid = $node->getAttribute('refid'); // handle links with refId attribute
 
-		if ( is_numeric($refId) && isset($this->fckData[$refId]) ) {
-			$refData = (array) $this->fckData[$refId];
+		if(is_numeric($refid) && isset($this->fckData[$refid])) {
 
-			// allow formatting of link description
-			if ($refData['description'] != '') {
+			// existing link
 
-				// $content contains parsed link description (wikitext)
-				if ($refData['trial'] != '' ) {
-					// $trial (if not empty) is at the end of $content - remove it
-					$refData['description'] = substr($content, 0, -strlen($refData['trial']));
+			$data = $this->fckData[$refid];
+
+			if(!empty($data['href_new'])) {
+
+				// link edited in FCK
+
+				if(preg_match('%^(?:' . wfUrlProtocols() . ')%im', $data['href_new'])) {
+					if($data['type'] != 'external link') {
+						$data['type'] = 'external link: raw';
+					}
+				} else {
+					$data['type'] = 'internal link';
 				}
-				else {
-					$refData['description'] = $content;
-				}
-
-				// description after pipe
-				$pipe = '|'.rtrim($refData['description'], "\n");
-			}
-			else {
-				$pipe = '';
+				$data['href'] = $data['href_new'];
 			}
 
-			// handle various type of links
-			switch($refData['type']) {
-				// [[foo|bar]]s
+			switch($data['type']) {
 				case 'internal link':
-				// [[:Image:Jimbo.jpg]]
 				case 'internal link: file':
-					return "[[{$refData['href']}{$pipe}]]{$refData['trial']}";
-				// [http://www.wikia.com]
+					$tag =  "[[{$data['href']}";
+					if(!empty($data['description'])) {
+						$tag .=  "|{$data['description']}]]";
+					} else {
+						$tag .=  "]]";
+					}
+					if(!empty($data['trial'])) {
+						$tag .= $data['trial'];
+					}
+					return $tag;
 				case 'external link':
-					$desc = ($refData['description'] != '') ? " {$refData['description']}" : '';
-					return "[{$refData['href']}{$desc}]{$refData['trial']}";
-				// http://www.wikia.com/
+					if($content == '[link]') {
+						return "[{$data['href']}]";
+					} else {
+						return "[{$data['href']} {$content}]";
+					}
 				case 'external link: raw':
-					return $refData['href'];
+					if($content == $data['href']) {
+						return $data['href'];
+					} else {
+						return "[{$data['href']} {$content}]";
+					}
 			}
-		}
-		else {
-			// handle image properly - they're wrapped using <a> tag
-			if ($node->hasChildNodes() && $node->childNodes->item(0)->nodeName == 'img') {
-				return $content;
-			}
-			// plain HTML links <a href="http://foo.pl/bar.html">foo</a>
-			else {
-				$desc = ($content != '') ? " $content" : '';
-				$href = $node->getAttribute('href');
 
-				return "[{$href}{$desc}]";
+		} else {
+
+			// new link (added in FCK)
+
+			$href = $node->getAttribute('href');
+			if(preg_match('%^(?:' . wfUrlProtocols() . ')%im', $href)) {
+				// external
+				if($href == $content) {
+					return $href;
+				} else if($content == '[link]') {
+					return "[{$href}]";
+				} else {
+					return "[{$href} {$content}]";
+				}
+			} else {
+				//internal
+				if($href == $content) {
+					$tag = "[[{$href}]]";
+				} else if(strpos($content, $href) === 0) {
+					$tag = "[[{$href}]]".substr($content, strlen($href));
+				} else {
+					$tag = "[[{$href}|{$content}]]";
+				}
+				if(substr(strtolower($tag), 0, 8) == '[[image:' || substr(strtolower($tag), 0, 8) == '[[media:' || substr(strtolower($tag), 0, 11) == '[[category:') {
+					$tag = '[[:' . substr($tag, 2);
+				}
+				return $tag;
 			}
+
 		}
 
-		return '<!-- unsupported anchor tag! -->';
 	}
 
 	/**
