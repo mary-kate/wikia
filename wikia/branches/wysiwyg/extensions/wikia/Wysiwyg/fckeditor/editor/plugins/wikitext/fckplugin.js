@@ -48,7 +48,6 @@ FCK.Events.AttachEvent( 'OnAfterSetHTML', function() {
 
 		window.parent.sajax_request_type = 'POST';
 		window.parent.sajax_do_call('wfWysywigAjax', ['html2wiki', html, window.parent.YAHOO.Tools.JSONEncode(FCK.wysiwygData)], function(res) {
-			window.parent.document.getElementById('wysiwygData').value = '';
 			FCK.EditingArea.Textarea.value = res.responseText;
 			FCK.EditingArea.TargetElement.className = '';
 			FCK.ToolbarSet.Items[0].Enable();
