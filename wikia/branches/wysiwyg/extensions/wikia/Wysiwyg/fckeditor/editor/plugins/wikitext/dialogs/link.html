@@ -24,6 +24,7 @@ if(oLink) {
 	FCK.Selection.SelectNode(oLink);
 }
 var refid = (oLink) ? oLink.getAttribute('refid') : false;
+var updateCaption;
 
 
 window.onload = function() {
@@ -41,8 +42,14 @@ window.onload = function() {
 		} else {
 			GetE('txtTarget').value = oLink.getAttribute('href', 2);
 		}
+		if(oLink.innerHTML == GetE('txtTarget').value) {
+			updateCaption = true;
+		} else {
+			updateCaption = false;
+		}
 	} else {
 		GetE('txtTarget').value = FCK.Selection.GetSelection();
+		updateCaption = false;
 	}
 
 	GetE('txtTarget').focus();
@@ -60,6 +67,9 @@ function Ok() {
 
 	if(refid) {
 		FCK.wysiwygData[refid].href_new = sUri;
+		if(updateCaption) {
+			oLink.innerHTML = sUri;
+		}
 	} else {
 		// If no link is selected, create a new one (it may result in more than one link creation - #220).
 		var aLinks = oLink ? [oLink] : oEditor.FCK.CreateLink(sUri, true);
@@ -81,6 +91,10 @@ function Ok() {
 			}
 			oLink.href = sUri;
 			oLink.innerHTML = sInnerHtml; // Set (or restore) the innerHTML
+
+			if(updateCaption) {
+				oLink.innerHTML = sUri;
+			}
 		}
 		// Select the (first) link.
 		oEditor.FCKSelection.SelectNode(aLinks[0]);
