@@ -57,6 +57,15 @@ a[href]
 	text-decoration: -moz-anchor-decoration;	/* For Firefox 3, otherwise no underline will be used */
 }
 
+input.wysiwygDisabled
+{
+	border: solid 1px #666;
+	color: #666;
+	background-color: #EFEFDE;
+	font-size: 1em;
+	padding: 1px;
+}
+
 /**
  * Just uncomment the following block if you want to avoid spaces between
  * paragraphs. Remember to apply the same style in your output front end page.
