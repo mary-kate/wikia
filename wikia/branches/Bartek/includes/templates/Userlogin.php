@@ -190,40 +190,6 @@ class UsercreateTemplate extends QuickTemplate {
 			</td>
 		</tr>
 		<tr>
-			<td class="mw-label"><label for='wpBirthYear'><?php $this->msg('yourbirthdate') ?></label></td>
-			<td class="mw-input" id="wpBirthDateTD">
-				<select name="wpBirthYear" id="wpBirthYear">
-					<option value="-1"><?php $this->msg('userlogin-choose-year') ?></option>
-					<?php
-					$maxYear = date('Y');
-					for($year=$maxYear; $year>=1900; $year--) {
-						echo "\t\t\t\t\t<option value=\"$year\">$year</option>";
-					}
-					?>
-				</select>
-				<select name="wpBirthMonth" id="wpBirthMonth">
-					<option value="-1"><?php $this->msg('userlogin-choose-month') ?></option>
-					<?php
-					for($month=1; $month<=12; $month++) {
-						echo "\t\t\t\t\t<option value=\"$month\">$month</option>";
-					}
-					?>
-				</select>
-				<select name="wpBirthDay" id="wpBirthDay">
-					<option value="-1"><?php $this->msg('userlogin-choose-day') ?></option>
-					<?php
-					for($day=1; $day<=31; $day++) {
-						echo "\t\t\t\t\t<option value=\"$day\">$day</option>";
-					}
-					?>
-				</select>
-				<span id="wpBirtherror" class="inputError"><?= wfMsg('userlogin-bad-birthday') ?></span>
-				<div>
-                                        <a href="#" id="prefsHelpBirthday"><?php $this->msgWiki('prefs-help-birthday'); ?></a>
-	                        </div>
-			</td>
-		</tr>
-		<tr>
 			<?php if( $this->data['useemail'] ) { ?>
 			<td class="mw-label"><label for='wpEmail'><?php $this->msg('youremail') ?></label></td>
 			<td class="mw-input" id="wpEmailTD">
@@ -272,6 +238,41 @@ class UsercreateTemplate extends QuickTemplate {
 			</td>
 			<?php } ?>
 		</tr>
+		<tr>
+			<td class="mw-label"><label for='wpBirthYear'><?php $this->msg('yourbirthdate') ?></label></td>
+			<td class="mw-input" id="wpBirthDateTD">
+				<select name="wpBirthYear" id="wpBirthYear">
+					<option value="-1"><?php $this->msg('userlogin-choose-year') ?></option>
+					<?php
+					$maxYear = date('Y');
+					for($year=$maxYear; $year>=1900; $year--) {
+						echo "\t\t\t\t\t<option value=\"$year\">$year</option>";
+					}
+					?>
+				</select>
+				<select name="wpBirthMonth" id="wpBirthMonth">
+					<option value="-1"><?php $this->msg('userlogin-choose-month') ?></option>
+					<?php
+					for($month=1; $month<=12; $month++) {
+						echo "\t\t\t\t\t<option value=\"$month\">$month</option>";
+					}
+					?>
+				</select>
+				<select name="wpBirthDay" id="wpBirthDay">
+					<option value="-1"><?php $this->msg('userlogin-choose-day') ?></option>
+					<?php
+					for($day=1; $day<=31; $day++) {
+						echo "\t\t\t\t\t<option value=\"$day\">$day</option>";
+					}
+					?>
+				</select>
+				<span id="wpBirtherror" class="inputError"><?= wfMsg('userlogin-bad-birthday') ?></span>
+				<div>
+                                        <a href="#" id="prefsHelpBirthday"><?php $this->msgWiki('prefs-help-birthday'); ?></a>
+	                        </div>
+			</td>
+		</tr>
+
 	<?php if($this->haveData('captcha')) { ?>
 		<tr>
 			<td class="mw-label" id="wpCaptchaWordLabel"><label for='wpCaptchaWord'><?php $this->msg('userlogin-captcha-label') ?></label></td>
