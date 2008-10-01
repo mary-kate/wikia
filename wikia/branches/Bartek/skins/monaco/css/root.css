@@ -23,6 +23,7 @@ body {
 .mask {
 	background: #000;
 	opacity: .6;
+	position: fixed;
 }
 .right {
 	text-align: right;
@@ -32,11 +33,6 @@ body.mainpage {
 	min-width: 990px;
 }
 .monaco_shrinkwrap {
-	/*
-	left: 50%;
-	margin-left: -485px;
-	width: 971px;
-	*/
 	position: relative;
 	width: 100%;
 }
@@ -55,14 +51,16 @@ body.mainpage {
 	width: 50%;
 	z-index: 2;
 }
-body.mainpage .FAST_HOME1 {
+body.mainpage .HOME_TOP_LEADERBOARD, body.mainpage .FAST_HOME1 {
 	height: 90px;
 	margin-bottom: 10px;
 }
-body.mainpage .FAST_HOME2 {
+body.mainpage .HOME_TOP_RIGHT_BOXAD, body.mainpage .FAST_HOME2 {
 	float: right;
 	min-height: 250px;
+	position: relative;
 	width: 300px;
+	z-index: 2;
 }
 .clearfix:after {
     content: ".";
@@ -78,3 +76,53 @@ body.mainpage .FAST_HOME2 {
 * html .clearfix {height: 1%;}
 .clearfix {display: block;}
 /* End hide from IE-mac */
+
+
+/*** SLOTS STYLES ***/
+#HOME_TOP_LEADERBOARD {
+	margin-bottom: 10px;
+	margin-left: auto;
+}
+#HOME_TOP_RIGHT_BOXAD {
+	float: right;
+	margin-bottom: 10px;
+}
+#HOME_LEFT_SKYSCRAPER_1 {
+	margin: 0 auto 10px auto;
+}
+#HOME_LEFT_SKYSCRAPER_2 {
+	margin: 0 auto;
+}
+
+#LEFT_SKYSCRAPER_1 {
+	margin: 0 auto 10px auto;
+}
+#LEFT_SKYSCRAPER_2 {
+	margin: 0 auto;
+}
+#TOP_LEADERBOARD {
+	margin-bottom: 10px;
+	margin-left: auto;
+}
+#TOP_RIGHT_BOXAD {
+	float: right;
+	margin-left: 10px;
+	margin-bottom: 10px;
+}
+#FOOTER_SPOTLIGHT_LEFT, #FOOTER_SPOTLIGHT_MIDDLE, #FOOTER_SPOTLIGHT_RIGHT {
+	margin: 0 auto;
+}
+
+/* general ads/spotlights styling */
+.wikia_ad {
+	z-index: 15;
+	display: none;
+	position: absolute;
+}
+.wikia_spotlight {
+	display: none;
+	position: absolute;
+}
+#HOME_LEFT_SKYSCRAPER_1_load, #HOME_LEFT_SKYSCRAPER_2_load, #LEFT_SKYSCRAPER_1_load, #LEFT_SKYSCRAPER_2_load, #LEFT_SPOTLIGHT_1_load {
+	z-index: 20;
+}

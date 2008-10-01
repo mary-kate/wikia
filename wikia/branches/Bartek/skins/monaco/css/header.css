@@ -250,6 +250,9 @@ a.bigButton small {
 	padding: 3px;
 	font-size: 0.9em;
 }
+#request_wiki {
+	text-decoration: underline;
+}
 #request_wiki.loggedin {
 	position: absolute;
 	top: 10px;
@@ -446,6 +449,11 @@ div.widget_cockpit_controls {
 	background-image: url(../../common/widgets/icons/widget_related_communities.png);
 }
 .WidgetBookmarkThumb div {
-        background-image: url(../../common/widgets/icons/widget_bookmark.png);
+	background-image: url(../../common/widgets/icons/widget_bookmark.png);
 }
-
+.WidgetContribsThumb div {
+	background-image: url(../../common/widgets/icons/widget_contribs.png);
+}
+.WidgetNewPagesThumb div {
+	background-image: url(../../common/widgets/icons/widget_new_pages.png);
+}

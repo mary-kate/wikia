@@ -62,20 +62,16 @@ body.ltr #articleFooter ul.actions li div {
 	margin: 0 0 0 20px;
 }
 
-
-/* ads fix */
-#monaco_shrinkwrap_main,
-#navigation_widget,
-#navigation,
-#navigation .menu-item {
-	z-index: 20;
-	position: relative;
+/* spotlights fix */
+#spotlight_footer {
+	height: 1px;
+	margin-bottom: 100px;
 }
 
 /* user menu fix */
 #monaco_shrinkwrap_main,
 #wikia_page {
-	z-index: 1 !important;
+	z-index: 10 !important;
 }
 
 /* widget dashboard (#2397) */
@@ -85,56 +81,32 @@ body.ltr #articleFooter ul.actions li div {
 	position: relative;
 }
 
-#widgetsSpecialPageList dl
-{
-        margin: 8px 5px;
-        width: 400px;
-        float: left;
+/* Special:Widgets */
+#widgetsSpecialPageList dl {
 	position: relative;
 }
 
-#widgetsSpecialPageList dt
-{
-        float: left;
-        position: relative;
+.ImageMapWrapper {
+	clear: both;
 }
 
-#widgetsSpecialPageList dd
-{
-        margin-left: 70px
+/* edit page */
+#wpTextbox1 {
+	width: 99% !important;
 }
 
-#widgetsSpecialPageList dd h4
-{
-        padding: 4px 0 0 0;
+/* #3433 */
+#wikia_header #headerButtonHub {
+	margin-left: 0 !important;
+	left: -50%;
 }
 
-#widgetsSpecialPageCopyrights
-{
-        margin: 50px 0px 30px 0px;
-        color: #666666;
-        font-size: 0.8em;
-        text-align: center;
-        clear: left;
+/* ads */
+#FOOTER_SPOTLIGHT_LEFT, #FOOTER_SPOTLIGHT_MIDDLE, #FOOTER_SPOTLIGHT_RIGHT {
+	visibility: hidden;
 }
 
-#widgetsSpecialPageList dl dt .widgetsThumb
-{
-        height: 50px;
-        width: 50px;
+#spotlight_footer {
+	height: 1px;
+	margin-bottom: 100px;
 }
-
-#widgetsSpecialPageList div.add
-{
-        background-image: url(http://images.wikia.com/skins/monaco/images/sprite.png);
-        clip: rect(0px 272px 16px 256px);
-        cursor: pointer;
-        display: block;
-        height: 16px;
-        position: absolute;
-        right: -55px;
-        top: 42px;
-        width: 320px;
-        z-index: 100;
-}
-
