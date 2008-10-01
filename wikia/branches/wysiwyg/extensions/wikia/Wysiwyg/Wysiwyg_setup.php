@@ -54,7 +54,6 @@ EOT;
 			$wgOut->addScript($script);
 
 			list($form->textbox1, $wysiwygData) = wfWysiwygWiki2Html($form->textbox1, -1, true);
-			$wgOut->addHTML('<input type="hidden" id="wysiwygData" name="wysiwygData" value="'.htmlspecialchars($wysiwygData).'" />');
 		}
 	}
 	return true;
@@ -98,18 +97,13 @@ function wfWysiwygWiki2Html($wikitext, $articleId = -1, $encode = false) {
 	wfDebug("wfWysiwygWiki2Html wikitext: {$wikitext}\n");
 
 	$options = new ParserOptions();
-	//$options->setTidy(true);
 
 	$parser = new WysiwygParser();
 	$parser->setOutputType(OT_HTML);
 
-	//$wikitext = preg_replace('/(?<!\n)\n(?!\n)/', "\n\x7f\n", $wikitext);
-
 	$FCKparseEnable = true;
 	$html = $parser->parse($wikitext, $title, $options)->getText();
 	$FCKparseEnable = false;
-
-	//$html = str_replace("\x7f\n", "<!--\x7f-->", $html);
 
 	$html = mb_convert_encoding($html, 'HTML-ENTITIES', "UTF-8");
 
