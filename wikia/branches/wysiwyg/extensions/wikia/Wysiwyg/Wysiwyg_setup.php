@@ -13,19 +13,14 @@ function WysiwygInitial($form) {
 		return true;
 	}
 
-	//search for not handled edge-cases
-	$edgecasesFound = array();
-	$edgecasesRegex = array(
-		'/^regex$/' => 'msg-key',
-		);
-	foreach($edgecasesRegex as $regexp => $msgkey) {
-		if (preg_match($regexp, $form->textbox1)) {
-			$edgecasesFound[] = $msgkey;
+	// only if edited article is in main or image namespace
+	if(($form->mTitle->mNamespace == NS_MAIN || $form->mTitle->mNamespace == NS_IMAGE)) {
+		//search for not handled edge-cases
+		$edgecasesFound = wfFCKTestEdgeCases($form->textbox1);
+		if (count($edgecasesFound) != 0) {
+			//TODO: print messages from array $edgecasesFound to the user why we don't load FCK
+			return true;
 		}
-	}
-
-	// only if edited article is in main or image namespace and article wikitext does not contain '<!-', '{{{' and '}}}'
-	if(($form->mTitle->mNamespace == NS_MAIN || $form->mTitle->mNamespace == NS_IMAGE) && count($edgecasesFound) == 0 && !strpos($form->textbox1, '<!-') && !strpos($form->textbox1, '{{{') && !strpos($form->textbox1, '}}}')) {
 		global $IP;
 		require("$IP/extensions/wikia/Wysiwyg/fckeditor/fckeditor_php5.php");
 		// only if user browser is compatible with FCK
