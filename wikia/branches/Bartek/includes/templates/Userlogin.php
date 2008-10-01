@@ -346,7 +346,7 @@ class UsercreateTemplate extends QuickTemplate {
 			<td></td>
 			<td class="mw-input" id="wpEmailTD">
 				<div class="prefsectiontip">
-					<?php $this->msgWiki('prefs-help-email'); ?>
+					<?php $this->msgWiki('prefs-help-terms'); ?>
 				</div>
 			</td>
 		</tr>
