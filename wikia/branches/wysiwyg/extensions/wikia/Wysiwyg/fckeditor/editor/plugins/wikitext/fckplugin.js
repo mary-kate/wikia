@@ -62,9 +62,6 @@ FCK.wysiwygData = (typeof window.parent.FCKdata != 'undefined') ? window.parent.
 
 // setup wikimarkup placeholders
 FCK.RegisterDoubleClickHandler( function(placeholder) {
-
 	refId = placeholder.getAttribute('refid');
-
-	alert('id ' + refId);
-
+	alert(placeholder.value);
 }, 'INPUT' );
