@@ -138,3 +138,88 @@ function wfWysiwygWiki2Html($wikitext, $articleId = -1, $encode = false) {
 
 	return array($html, $wysiwygData);
 }
+
+/**
+ * wfFCKSetRefId
+ *
+ * Adding reference ID to the $text variable
+ *
+ * @author Maciej Błaszkowski <marooned at wikia-inc.com>
+ * @access public
+ *
+ * @return string refId
+ */
+function wfFCKSetRefId($type, &$text, $link, $trail, $wasblank, $noforce, $returnOnly = false) {
+	global $FCKparseEnable, $FCKmetaData;
+	if ($FCKparseEnable) {
+		$tmpDescription = $wasblank ? '' : $text;
+		$refId = count($FCKmetaData);
+		if (!$returnOnly) {
+			$text .= "\x1$refId\x1";
+		}
+		$tmpInside = '';
+		if ($trail != '') {
+			list($tmpInside, $tmpTrail) = Linker::splitTrail($trail);
+		}
+		$FCKmetaData[$refId] = array('type' => $type, 'href' => ($noforce ? '' : ':') . $link, 'description' => $tmpDescription, 'trial' => $tmpInside);
+		return " refid=\"$refId\"";
+	}
+	return '';
+}
+
+/**
+ * wfFCKGetRefId
+ *
+ * Getting and removing reference ID from the $text variable
+ *
+ * @author Maciej Błaszkowski <marooned at wikia-inc.com>
+ * @access public
+ *
+ * @return string refId
+ */
+function wfFCKGetRefId(&$text, $returnIDonly = false) {
+	global $FCKparseEnable;
+	if ($FCKparseEnable) {
+		preg_match("#\x1([^\x1]+)#", $text, $m);
+		$refId = isset($m[1]) ? ($returnIDonly ? $m[1] : " refid=\"{$m[1]}\"") : '';
+		$text = preg_replace("#\x1[^\x1]+\x1#", '', $text);
+		return $refId;
+	}
+	return '';
+}
+
+/**
+ * wfFCKTestEdgeCases
+ *
+ * Search for not handled edge cases in FCK editor
+ *
+ * @author Maciej Błaszkowski <marooned at wikia-inc.com>
+ * @access public
+ *
+ * @return array messages keys for use with wfMsg for every found edge case
+ */
+function wfFCKTestEdgeCases($text) {
+	$edgecasesFound = array();
+	$edgecases = array(
+		'regular' => array(
+			'<!--' => 'wysiwyg-edgecase-comment',			//HTML comments
+			'{{{' => 'wysiwyg-edgecase-triplecurls',		//template parameters
+			'__NOWYSIWYG__' => 'wysiwyg-edgecase-nowysiwyg',//new magic word to disable FCK for current article
+		),
+		'regexp' => array(
+			'/\[\[[^|]+\|.*?(?:(?:' . wfUrlProtocols() . ')|{{).*?]]/' => 'wysiwyg-edgecase-complex-description',	//external url or template found in the description of a link
+			'/{{[^[]+\[[^}]+}}/' => 'wysiwyg-edgecase-template-with-link'	//template with link as a parameter
+		)
+	);
+	foreach($edgecases['regular'] as $str => $msgkey) {
+		if (strpos($text, $str) !== false) {
+			$edgecasesFound[] = $msgkey;
+		}
+	}
+	foreach($edgecases['regexp'] as $regexp => $msgkey) {
+		if (preg_match($regexp, $text)) {
+			$edgecasesFound[] = $msgkey;
+		}
+	}
+	return $edgecasesFound;
+}
