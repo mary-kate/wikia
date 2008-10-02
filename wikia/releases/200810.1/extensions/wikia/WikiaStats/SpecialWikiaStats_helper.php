@@ -430,6 +430,8 @@ class WikiaGenericStats {
 		$memkey = 'wikiacitystatseditcount_'.$cityDBName.'_'.$value;
 		$wikiacityedits = "";
 		#---
+		$namespaces = array_merge(array(0), $wgContentNamespaces);
+		
 		if (self::USE_MEMC) $wikiacityedits = $wgMemc->get($memkey);
 		if (empty($wikiacityedits)) {
 			if (!empty($cityDBName)) {
@@ -441,7 +443,7 @@ class WikiaGenericStats {
 				#---
 				$sql = "select count(wf_user) as cnt, sum(s) as s from ";
 				$sql .= "(select wf_user,sum(wf_contributed) as s from `wikiastats`.`{$cityDBName}_wikians_full` where ";
-				$sql .= "wf_user > 0 and wf_namespace in (".implode(",", $wgContentNamespaces).") group by wf_user having (sum(wf_contributed) >= {$value})) as query";
+				$sql .= "wf_user > 0 and wf_namespace in (".implode(",", $namespaces).") group by wf_user having (sum(wf_contributed) >= {$value})) as query";
 				$res = $dbs->query($sql);
 				if ( $row = $dbs->fetchRow( $res ) )
 				{
@@ -580,7 +582,8 @@ class WikiaGenericStats {
 		wfProfileIn( __METHOD__ );
 		#---
 		$namespace = intval($namespace);
-		$namespaceList = implode(",", $wgContentNamespaces);
+		$namespaces = array_merge(array(0), $wgContentNamespaces);
+		$namespaceList = implode(",", $namespaces);
 		#---
 		$whereUserList = "";
 		if (!empty($userlist)) {
@@ -650,7 +653,8 @@ class WikiaGenericStats {
 		wfProfileIn( __METHOD__ );
 		$result = array();
 		$memkey = 'wikiacitystatsarticlecount_'.$cityDBName.'_'.$size.'_'.$namespace;
-		$namespaceList = implode(",", $wgContentNamespaces);
+		$namespaces = array_merge(array(0), $wgContentNamespaces);
+		$namespaceList = implode(",", $namespaces);
 		#---
 		if (self::USE_MEMC) $result = $wgMemc->get($memkey);
 
@@ -734,7 +738,8 @@ class WikiaGenericStats {
 		wfProfileIn( __METHOD__ );
 		#---
 		$namespace = intval($namespace);
-		$namespaceList = implode(",", $wgContentNamespaces);
+		$namespaces = array_merge(array(0), $wgContentNamespaces);
+		$namespaceList = implode(",", $namespaces);
 		$result = array();
 		#---
 		$memkey = 'wikiacitystatsusersanon_'.md5($cityDBName.'_'.$namespace.'_'.$limit);
@@ -795,11 +800,12 @@ class WikiaGenericStats {
 
 	static private function getPageEdistFromDB($cityDBName, $namespace = 0, $reg_users = 0, $limit=50)
 	{
-    	global $wgMemc;
+    	global $wgMemc, $wgContentNamespaces;
     	#---
 		wfProfileIn( __METHOD__ );
 		#---
 		$namespace = intval($namespace);
+		$namespaces = array_merge(array(0), $wgContentNamespaces);
 		$namespaceList = implode(",", $wgContentNamespaces);
 		
 		$result = array();
