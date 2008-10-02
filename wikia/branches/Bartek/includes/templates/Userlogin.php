@@ -178,20 +178,19 @@ class UsercreateTemplate extends QuickTemplate {
 	</script>
 	<table width="100%">
 		<colgroup>
-			<col width="120" />
 			<col width="*" />
 		</colgroup>
 		<tr>
-			<td class="mw-label"><label for='wpName2'><?php $this->msg('yourname') ?></label></td>
 			<td class="mw-input" id="wpNameTD">
+				<label for='wpName2'><?php $this->msg('yourname') ?></label><br/>
 				<input type='text' class='loginText' name="wpName" id="wpName2"	value="<?php $this->text('name') ?>" size='20' />
 				<span id="wpName2error" class="inputError"><?= wfMsg('noname') ?></span>
 			</td>
 		</tr>
 		<tr>
 			<?php if( $this->data['useemail'] ) { ?>
-			<td class="mw-label"><label for='wpEmail'><?php $this->msg('youremail') ?></label></td>
 			<td class="mw-input" id="wpEmailTD">
+				<label for='wpEmail'><?php $this->msg('youremail') ?></label><br/>
 				<input type='text' class='loginText' name="wpEmail" id="wpEmail" value="<?php $this->text('email') ?>" size='20' />
 				<div>
                                         <?php $this->msgWiki('prefs-help-email'); ?>
@@ -200,8 +199,8 @@ class UsercreateTemplate extends QuickTemplate {
 			<?php } ?>
 		</tr>
 		<tr>
-			<td class="mw-label"><label for='wpPassword2'><?php $this->msg('yourpassword') ?></label></td>
 			<td class="mw-input" id="wpPasswordTD">
+				<label for='wpPassword2'><?php $this->msg('yourpassword') ?></label><br/>
 				<input type='password' class='loginPassword' name="wpPassword" id="wpPassword2" value="" size='20' />
 			</td>
 		</tr>
@@ -212,8 +211,8 @@ class UsercreateTemplate extends QuickTemplate {
 		}
 	?>
 		<tr>
-			<td class="mw-label"><?php $this->msg( 'yourdomainname' ) ?></td>
 			<td class="mw-input">
+				<?php $this->msg( 'yourdomainname' ) ?><br/>	
 				<select name="wpDomain" value="<?php $this->text( 'domain' ) ?>">
 					<?php echo $doms ?>
 				</select>
@@ -221,15 +220,15 @@ class UsercreateTemplate extends QuickTemplate {
 		</tr>
 	<?php } ?>
 		<tr>
-			<td class="mw-label"><label for='wpRetype'><?php $this->msg('yourpasswordagain') ?></label></td>
 			<td class="mw-input" id="wpRetypeTD">
+				<label for='wpRetype'><?php $this->msg('yourpasswordagain') ?></label><br/>
 				<input type='password' class='loginPassword' name="wpRetype" id="wpRetype" value="" size='20' />
 			</td>
 		</tr>
 		<tr>
 			<?php if( $this->data['userealname'] ) { ?>
-			<td class="mw-label"><label for='wpRealName'><?php $this->msg('yourrealname') ?></label></td>
 			<td class="mw-input">
+				<label for='wpRealName'><?php $this->msg('yourrealname') ?></label><br/>	
 				<input type='text' class='loginText' name="wpRealName" id="wpRealName" value="<?php $this->text('realname') ?>" size='20' />
 				<div>
 					<?php $this->msgWiki('prefs-help-realname'); ?>
@@ -238,8 +237,8 @@ class UsercreateTemplate extends QuickTemplate {
 			<?php } ?>
 		</tr>
 		<tr>
-			<td class="mw-label"><label for='wpBirthYear'><?php $this->msg('yourbirthdate') ?></label></td>
 			<td class="mw-input" id="wpBirthDateTD">
+				<label for='wpBirthYear'><?php $this->msg('yourbirthdate') ?></label><br/>
 				<select name="wpBirthYear" id="wpBirthYear">
 					<option value="-1"><?php $this->msg('userlogin-choose-year') ?></option>
 					<?php
@@ -280,7 +279,6 @@ class UsercreateTemplate extends QuickTemplate {
 		</tr>
 	<?php } ?>
 		<tr>
-			<td></td>
 			<td class="mw-input">
 				<input type='checkbox' name="wpRemember" value="1" id="wpRemember" <?php if( $this->data['remember'] ) { ?>checked="checked"<?php } ?>/>
 				<label for="wpRemember"><?php $this->msg('remembermypassword') ?></label>
@@ -291,16 +289,14 @@ class UsercreateTemplate extends QuickTemplate {
 		if ( isset( $this->data['extraInput'] ) && is_array( $this->data['extraInput'] ) ) {
 			foreach ( $this->data['extraInput'] as $inputItem ) { ?>
 		<tr>
+			<td class="mw-input">
 			<?php 
 				if ( !empty( $inputItem['msg'] ) && $inputItem['type'] != 'checkbox' ) {
-					?><td class="mw-label"><label for="<?php 
+					?><label for="<?php 
 					echo htmlspecialchars( $inputItem['name'] ); ?>"><?php
 					$this->msgWiki( $inputItem['msg'] ) ?></label><?php
-				} else {
-					?><td><?php
 				}
-			?></td>
-			<td class="mw-input">
+			?><br/>
 				<input type="<?php echo htmlspecialchars( $inputItem['type'] ) ?>" name="<?php
 				echo htmlspecialchars( $inputItem['name'] ); ?>"
 					tabindex="<?php echo $tabIndex++; ?>"
@@ -329,7 +325,6 @@ class UsercreateTemplate extends QuickTemplate {
 		}
 ?>
 		<tr>
-			<td></td>
 			<td class="mw-submit">
 				<input type='submit' name="wpCreateaccount" id="wpCreateaccount"
 					tabindex="<?php echo $tabIndex++; ?>"
@@ -345,7 +340,6 @@ class UsercreateTemplate extends QuickTemplate {
 		</tr>
 		<?php if( $this->data['useemail'] ) { ?>
 		<tr>
-			<td></td>
 			<td class="mw-input" id="wpEmailTD">
 				<div>
 					<?php $this->msgWiki('prefs-help-terms'); ?>
