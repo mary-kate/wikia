@@ -121,7 +121,6 @@ class UsercreateTemplate extends QuickTemplate {
 <?php } ?>
 <div id="userlogin<?php if ($this->data['ajax']) { ?>Ajax<?php } ?>">
 <form name="userlogin2" id="userlogin2" method="post" action="<?php $this->text('action') ?>" onsubmit="return checkForm();">
-	<h2><?php $this->msg('createaccount') ?></h2>
 <?php		if( $this->data['message'] && $this->data['ajax'] ) { ?>
 	<div class="<?php $this->text('messagetype') ?>box" style="margin:0px">
 		<?php if ( $this->data['messagetype'] == 'error' ) { ?>
