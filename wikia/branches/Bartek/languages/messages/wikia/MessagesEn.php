@@ -957,6 +957,7 @@ Reports made on this wiki will be displayed on [[Special:ProblemReports]].',
 'prefs-help-birthday' => 'Why do I need to provide this?',
 'prefs-help-birthmesg' => 'Why do I need to provide my birthday?<br/>
 Wikia requires all users to provide their real date of birth as both a safety precaution and as a means of preserving the integrity of the site while complying with federal regulations.',
+'remembermypassword' => 'Remember me',
 'protect-unchain' => 'Unlock move permissions selection box.',
 'rcnote' => 'Below {{PLURAL:$1|is \'\'\'1\'\'\' change|are the last \'\'\'$1\'\'\' changes}} in the last {{PLURAL:$2|day|\'\'\'$2\'\'\' days}}, as of $3.',
 'revertpage' => 'Reverted edits by [[Special:Contributions/$2|$2]] ([[User talk:$2|talk]]) to last version by [[User:$1|$1]]',
