@@ -178,7 +178,8 @@ FCKeditor.prototype._GetIFrameHtml = function()
 	html = '<iframe id="' + this.InstanceName +
 		'___Frame" src="' + sLink +
 		'" width="' + this.Width +
-		'" height="' + this.Height ;
+		'" height="' + this.Height +
+		'" name="FCK' + this.InstanceName ;
 
 	if ( this.TabIndex )
 		html += '" tabindex="' + this.TabIndex ;
