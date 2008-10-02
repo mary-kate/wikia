@@ -178,7 +178,7 @@ class UsercreateTemplate extends QuickTemplate {
 	</script>
 	<table width="100%">
 		<colgroup>
-			<col width="220" />
+			<col width="120" />
 			<col width="*" />
 		</colgroup>
 		<tr>
