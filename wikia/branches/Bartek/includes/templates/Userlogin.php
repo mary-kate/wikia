@@ -25,6 +25,7 @@ class UserloginTemplate extends QuickTemplate {
 
 <div id="userloginForm">
 <form name="userlogin" method="post" action="<?php $this->text('action') ?>">
+	<h2><?php $this->msg('login') ?></h2>
 	<p id="userloginlink"><?php $this->html('link') ?></p>
 	<?php $this->html('header'); /* pre-table point for form plugins... */ ?>
 	<div id="userloginprompt"><?php  $this->msgWiki('loginprompt') ?></div>
