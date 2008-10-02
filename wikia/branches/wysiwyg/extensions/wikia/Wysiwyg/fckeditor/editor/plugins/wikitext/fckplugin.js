@@ -34,6 +34,7 @@ FCK.SwitchEditMode = function() {
 			FCK.EditingArea.TargetElement.className = '';
 			originalSwitchEditMode.apply(FCK, args);
 			setTimeout(function() {FCK.InProgress = false;}, 100);
+			FCK.EditingArea.Focus(); // macbre: moved here from fck.js
 		});
 
 	}
@@ -51,6 +52,7 @@ FCK.Events.AttachEvent( 'OnAfterSetHTML', function() {
 			FCK.EditingArea.Textarea.value = res.responseText;
 			FCK.EditingArea.TargetElement.className = '';
 			setTimeout(function() {FCK.InProgress = false;}, 100);
+			FCK.EditingArea.Focus(); // macbre: moved here from fck.js
 		});
 
 	}
