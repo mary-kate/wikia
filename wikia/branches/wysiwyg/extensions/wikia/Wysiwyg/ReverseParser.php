@@ -309,12 +309,12 @@ class ReverseParser {
 							$prefix = "\n{$prefix}";
 
 							// add space after previous list, so we won't break numbers
-							if ($this->isList($node->previousSibling)) {
+							if ($this->listLevel == 0 && $this->isList($node->previousSibling)) {
 								$prefix = "\n{$prefix}";
 							}
 						}
 						// lists inside table cell
-						if ($node->parentNode && $this->isTableCell($node->parentNode)) {
+						else if ($node->parentNode && $this->isTableCell($node->parentNode)) {
 							$prefix = "\n{$prefix}";
 						}
 						// rtrim used to remove \n added by the last list item
