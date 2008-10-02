@@ -715,7 +715,15 @@ div#userlogin form#userlogin2 {
 	clear: both;
 	color: #000;
 	margin: 0 3em 1em 0;
-	padding: 1.5em 2em;
+}
+
+div#userlogin form#userlogin2 label {
+	font-size: 115%;
+	font-weight: bold;
+}
+
+div#userlogin form#userlogin2 input {
+	margin-bottom: 4px;
 }
 
 /* 3338 */
