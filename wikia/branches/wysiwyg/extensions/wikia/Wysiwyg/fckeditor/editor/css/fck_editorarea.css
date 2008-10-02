@@ -59,8 +59,7 @@ a[href]
 
 input.wysiwygDisabled
 {
-	border: solid 1px #666;
-	color: #666;
+	border: solid 1px #EFEFDE;
 	background-color: #EFEFDE;
 	font-size: 1em;
 	padding: 1px;

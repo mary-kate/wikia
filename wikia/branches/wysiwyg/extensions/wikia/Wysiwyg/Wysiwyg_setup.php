@@ -68,6 +68,7 @@ EOT;
 			$wgOut->addScript($script);
 
 			list($form->textbox1, $wysiwygData) = wfWysiwygWiki2Html($form->textbox1, -1, true);
+			$wgOut->addHTML('<input type="hidden" id="wysiwygData" name="wysiwygData" value="'.htmlspecialchars($wysiwygData).'" />');
 		}
 	}
 	return true;
@@ -121,7 +122,7 @@ function wfWysiwygWiki2Html($wikitext, $articleId = -1, $encode = false) {
 
 	$html = mb_convert_encoding($html, 'HTML-ENTITIES', "UTF-8");
 
-	$html = preg_replace('%<span refid="(\\d+)">(.*?)</span>%i', '<input type="textbox" refid="\\1" value="\\2" title="\\2" readonly="readonly" class="wysiwygDisabled" />', $html);
+	$html = preg_replace('%<span refid="(\\d+)">(.*?)</span>%i', '<input type="button" refid="\\1" value="\\2" title="\\2" class="wysiwygDisabled" />', $html);
 
 	wfDebug("wfWysiwygWiki2Html html: {$html}\n");
 
