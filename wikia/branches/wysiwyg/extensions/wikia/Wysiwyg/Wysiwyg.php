@@ -18,10 +18,38 @@ function wfWysiwygToggle($toggles, $default_array = false) {
 	return true;
 }
 
+$wgHooks['AlternateEdit'][] = 'WysiwygAlternateEdit';
+function WysiwygAlternateEdit($form) {
+	global $wgRequest;
+	if(isset($wgRequest->data['wpTextbox1'])) {
+		if(isset($wgRequest->data['wysiwygData'])) {
+			if($wgRequest->data['wysiwygData'] != '') {
+				$wgRequest->data['wpTextbox1'] = wfWysiwygHtml2Wiki($wgRequest->data['wpTextbox1'], $wgRequest->data['wysiwygData'], true);
+			}
+		}
+	}
+	return true;
+}
+
+$wgHooks['EditForm:BeforeDisplayingTextbox'][] = 'WysiwygBeforeDisplayingTextbox';
+function WysiwygBeforeDisplayingTextbox($a, $b) {
+	global $wgOut, $wgWysiwygData;
+	$wgOut->addHTML('<input type="hidden" id="wysiwygData" name="wysiwygData" value="'.htmlspecialchars($wgWysiwygData).'" />');
+	return true;
+}
+
+$wgHooks['EditPage::showEditForm:initial2'][] = 'WysiwygInitial2';
+function WysiwygInitial2($form) {
+	global $wgWysiwygData, $wgWysiwygGo;
+	if(!empty($wgWysiwygGo)) {
+		list($form->textbox1, $wgWysiwygData) = wfWysiwygWiki2Html($form->textbox1, -1, true);
+	}
+	return true;
+}
 
 $wgHooks['EditPage::showEditForm:initial'][] = 'WysiwygInitial';
 function WysiwygInitial($form) {
-	global $wgDisableWysiwygExt;
+	global $wgDisableWysiwygExt, $wgWysiwygGo;
 	if (!empty($wgDisableWysiwygExt)) {
 		return true;
 	}
@@ -75,9 +103,7 @@ addOnloadHook(initEditor);
 /*]]>*/</style>
 EOT;
 			$wgOut->addScript($script);
-
-			list($form->textbox1, $wysiwygData) = wfWysiwygWiki2Html($form->textbox1, -1, true);
-			$wgOut->addHTML('<input type="hidden" id="wysiwygData" name="wysiwygData" value="'.htmlspecialchars($wysiwygData).'" />');
+			$wgWysiwygGo = true;
 		}
 	}
 	return true;

@@ -68,5 +68,3 @@ FCK.Events.AttachEvent( 'OnAfterSetHTML', function() {
 		}, true);
 	}
 });
-
-
