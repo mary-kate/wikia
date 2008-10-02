@@ -48,6 +48,15 @@ function WysiwygInitial($form) {
 			$script = '<script type="text/javascript" src="'.$wgExtensionsPath.'/wikia/Wysiwyg/fckeditor/fckeditor.js?'.$wgStyleVersion.'"></script>';
 			$script .= <<<EOT
 <script type="text/javascript">
+function FCKeditor_OnComplete(editorInstance) {
+	editorInstance.LinkedField.form.onsubmit = function() {
+		if(editorInstance.EditMode == FCK_EDITMODE_SOURCE) {
+			YAHOO.util.Dom.get('wysiwygData').value = '';
+		} else {
+			YAHOO.util.Dom.get('wysiwygData').value = YAHOO.Tools.JSONEncode(editorInstance.wysiwygData);
+		}
+	}
+}
 function initEditor() {
 	if($('wmuLink')) {
 		$('wmuLink').parentNode.style.display = 'none';
