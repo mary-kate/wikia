@@ -338,7 +338,7 @@ class ReverseParser {
 					case 'a':
 						$out = $this->handleLink($node, $textContent);
 						break;
-					case 'span':
+					//case 'span':
 					case 'input':
 						$out = $this->handleSpan($node, $textContent);
 						break;
@@ -512,6 +512,8 @@ class ReverseParser {
 			$refData = (array) $this->fckData[$refId];
 
 			switch($refData['type']) {
+				// [[Image:Jimbo.jpg|thumb]]
+				case 'image':
 				// [[Media:foo.jpg]]
 				case 'internal link: media':
 					$pipe = ($refData['description'] != '') ? '|'.$refData['description'] : '';
@@ -541,22 +543,6 @@ class ReverseParser {
 				// __TOC__
 				case 'double underscore':
 					return $refData['description'];
-
-				// [[Image:Jimbo.jpg]]
-				case 'image':
-					if ($refData['description'] != '') {
-						// more complicated: [[Image:Jimbo.jpg|thumb|caption|'''test'''[http://www.wikia.com][Article]]]
-						// $refData['description'] is parsed to HTML, use $content instead
-						if ( substr($content, 0, 8) == '<nowiki>' ) {
-							// $content can be inside <nowiki></nowiki> - remove it
-							$content = substr($content, 8, -9);
-						}
-						return $content;
-					}
-					else {
-						// simple markup: [[Image:Jimbo.jpg]]
-						return "[[{$refData['href']}]]";
-					}
 			}
 		}
 
