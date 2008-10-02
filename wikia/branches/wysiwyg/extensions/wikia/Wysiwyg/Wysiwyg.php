@@ -94,6 +94,7 @@ function initEditor() {
 	oFCKeditor.Config["CustomConfigurationsPath"] = "$wgExtensionsPath/wikia/Wysiwyg/wysiwyg_config.js";
 	oFCKeditor.ready = true;
 	oFCKeditor.Height = '450px';
+	oFCKeditor.Width = document.all ? '99%' : '100%'; // IE fix
 	oFCKeditor.ReplaceTextarea();
 }
 addOnloadHook(initEditor);
