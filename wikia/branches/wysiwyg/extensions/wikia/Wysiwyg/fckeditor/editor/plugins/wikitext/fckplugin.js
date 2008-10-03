@@ -34,9 +34,16 @@ FCK.SwitchEditMode = function() {
 				for (i=0; i<edgecases.length; i++) {
 					messages += edgecases[i] + '<br/>';
 				}
-				//TODO: messages can be put inside div with some CSS class and appended to the contentSub
+				// macbre: insert div after contentSub
 				contentSub = window.parent.document.getElementById('contentSub');
-				contentSub.innerHTML = messages;
+				messagesDiv = window.parent.document.getElementById('FCKEdgeCaseMessages');
+				if (!messagesDiv) {
+					messagesDiv = window.parent.document.createElement('div');
+					contentSub.parentNode.insertBefore(messagesDiv, contentSub.nextSibling);
+					messagesDiv.className = 'usermessage';
+					messagesDiv.id = 'FCKEdgeCaseMessages';
+				}
+				messagesDiv.innerHTML = messages;
 			} else {
 				var separator = res.getResponseHeader('X-sep');
 				if(typeof separator == "undefined") separator = res.getResponseHeader('X-Sep');
