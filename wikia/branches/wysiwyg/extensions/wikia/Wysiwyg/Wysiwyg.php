@@ -118,6 +118,11 @@ function wfWysywigAjax($type, $input = false, $wysiwygData = false, $articleId =
 		case 'wiki2html':
 			$separator = Parser::getRandomString();
 			header('X-sep: ' . $separator);
+			$edgecases = wfFCKTestEdgeCases($input);
+			if (count($edgecases)) {
+				header('X-edgecases: 1');
+				return new AjaxResponse(Wikia::json_encode($edgecases));
+			}
 			return new AjaxResponse(join(wfWysiwygWiki2Html($input, $articleId, true), "--{$separator}--"));
 
 	}
@@ -244,18 +249,22 @@ function wfFCKTestEdgeCases($text) {
 		),
 		'regexp' => array(
 			'/\[\[[^|]+\|.*?(?:(?:' . wfUrlProtocols() . ')|{{).*?]]/' => 'wysiwyg-edgecase-complex-description',	//external url or template found in the description of a link
-			'/{{[^[]+\[[^}]+}}/' => 'wysiwyg-edgecase-template-with-link'	//template with link as a parameter
+			'/{{[^}]*(?<=\[)[^}]*}}/' => 'wysiwyg-edgecase-template-with-link'	//template with link as a parameter
 		)
 	);
 	foreach($edgecases['regular'] as $str => $msgkey) {
 		if (strpos($text, $str) !== false) {
-			$edgecasesFound[] = $msgkey;
+			$edgecasesFound[] = wfMsg($msgkey);
 		}
 	}
 	foreach($edgecases['regexp'] as $regexp => $msgkey) {
 		if (preg_match($regexp, $text)) {
-			$edgecasesFound[] = $msgkey;
+			$edgecasesFound[] = wfMsg($msgkey);
 		}
+	}
+	//if edge case was found add main information about edge cases, like "Edge cases found:"
+	if (count($edgecasesFound)) {
+		array_unshift($edgecasesFound, wfMsg('wysiwyg-edgecase-info'));
 	}
 	return $edgecasesFound;
 }

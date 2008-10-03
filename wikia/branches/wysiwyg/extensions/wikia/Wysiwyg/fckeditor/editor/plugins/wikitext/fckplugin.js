@@ -26,13 +26,26 @@ FCK.SwitchEditMode = function() {
 
 		window.parent.sajax_request_type = 'POST';
 		window.parent.sajax_do_call('wfWysywigAjax', ['wiki2html', FCK.EditingArea.Textarea.value, false, window.parent.wgArticleId], function(res) {
-			var separator = res.getResponseHeader('X-sep');
-			if(typeof separator == "undefined") separator = res.getResponseHeader('X-Sep');
-			var res_array = res.responseText.split('--'+separator+'--');
-			FCK.wysiwygData = eval("{"+res_array[1]+"}");
-			FCK.EditingArea.Textarea.value = res_array[0];
+			var edgecases = res.getResponseHeader('X-edgecases');
+			if(typeof edgecases == "undefined") edgecases = res.getResponseHeader('X-Edgecases');
+			if (edgecases == '1') {
+				edgecases = eval(res.responseText);
+				messages = '';
+				for (i=0; i<edgecases.length; i++) {
+					messages += edgecases[i] + '<br/>';
+				}
+				//TODO: messages can be put inside div with some CSS class and appended to the contentSub
+				contentSub = window.parent.document.getElementById('contentSub');
+				contentSub.innerHTML = messages;
+			} else {
+				var separator = res.getResponseHeader('X-sep');
+				if(typeof separator == "undefined") separator = res.getResponseHeader('X-Sep');
+				var res_array = res.responseText.split('--'+separator+'--');
+				FCK.wysiwygData = eval("{"+res_array[1]+"}");
+				FCK.EditingArea.Textarea.value = res_array[0];
+				originalSwitchEditMode.apply(FCK, args);
+			}
 			FCK.EditingArea.TargetElement.className = '';
-			originalSwitchEditMode.apply(FCK, args);
 			setTimeout(function() {FCK.InProgress = false;}, 100);
 			FCK.EditingArea.Focus(); // macbre: moved here from fck.js
 		});
