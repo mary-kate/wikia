@@ -338,7 +338,7 @@ class ReverseParser {
 					case 'a':
 						$out = $this->handleLink($node, $textContent);
 						break;
-					//case 'span':
+					case 'span':
 					case 'input':
 						$out = $this->handleSpan($node, $textContent);
 						break;
@@ -542,6 +542,10 @@ class ReverseParser {
 
 				// __TOC__
 				case 'double underscore':
+					return $refData['description'];
+
+				// <gallery> parser hook tag
+				case 'gallery':
 					return $refData['description'];
 			}
 		}
