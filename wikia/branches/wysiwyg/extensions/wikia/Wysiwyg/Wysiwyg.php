@@ -6,6 +6,9 @@ $wgExtensionCredits['other'][] = array(
 	'author' => array('Inez Korczyński', 'Maciej Brencz', 'Maciej Błaszkowski (Marooned)', 'Łukasz \'TOR\' Garczewski')
 );
 
+$dir = dirname(__FILE__) . '/';
+$wgExtensionMessagesFiles['Wysiwyg'] = $dir . 'Wysiwyg.i18n.php';
+
 // user preferences
 $wgHooks['UserToggles'][] = 'wfWysiwygToggle';
 $wgHooks['getEditingPreferencesTab'][] = 'wfWysiwygToggle';
@@ -240,6 +243,7 @@ function wfFCKGetRefId(&$text, $returnIDonly = false) {
  * @return array messages keys for use with wfMsg for every found edge case
  */
 function wfFCKTestEdgeCases($text) {
+	wfLoadExtensionMessages('Wysiwyg');
 	$edgecasesFound = array();
 	$edgecases = array(
 		'regular' => array(
