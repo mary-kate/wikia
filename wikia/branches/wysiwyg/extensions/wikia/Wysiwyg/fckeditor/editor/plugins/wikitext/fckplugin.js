@@ -30,10 +30,11 @@ FCK.SwitchEditMode = function() {
 			if(typeof edgecases == "undefined") edgecases = res.getResponseHeader('X-Edgecases');
 			if (edgecases == '1') {
 				edgecases = eval(res.responseText);
-				messages = '';
+				messages = edgecases.shift() + ' ';
 				for (i=0; i<edgecases.length; i++) {
-					messages += edgecases[i] + '<br/>';
+					messages += edgecases[i] + ', ';
 				}
+				messages = messages.substr(0, messages.length-2);
 				// macbre: insert div after contentSub
 				contentSub = window.parent.document.getElementById('contentSub');
 				messagesDiv = window.parent.document.getElementById('FCKEdgeCaseMessages');
