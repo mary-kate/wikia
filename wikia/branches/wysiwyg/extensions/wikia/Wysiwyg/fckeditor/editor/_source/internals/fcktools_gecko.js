@@ -43,7 +43,7 @@ FCKTools._AppendStyleSheet = function( documentElement, cssFileUrl )
 	var e = documentElement.createElement( 'LINK' ) ;
 	e.rel	= 'stylesheet' ;
 	e.type	= 'text/css' ;
-	e.href	= cssFileUrl ;
+	e.href	= cssFileUrl + '?' + FCKConfig.StyleVersion ;
 	documentElement.getElementsByTagName("HEAD")[0].appendChild( e ) ;
 	return e ;
 }
