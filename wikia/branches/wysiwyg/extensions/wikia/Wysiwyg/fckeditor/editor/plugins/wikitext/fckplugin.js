@@ -46,6 +46,11 @@ FCK.SwitchEditMode = function() {
 				}
 				messagesDiv.innerHTML = messages;
 			} else {
+				messagesDiv = window.parent.document.getElementById('FCKEdgeCaseMessages');
+				if (messagesDiv) {
+					messagesDiv.parentNode.removeChild(messagesDiv);
+				}
+
 				var separator = res.getResponseHeader('X-sep');
 				if(typeof separator == "undefined") separator = res.getResponseHeader('X-Sep');
 				var res_array = res.responseText.split('--'+separator+'--');
