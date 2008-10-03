@@ -480,7 +480,7 @@ class UsercreateTemplate extends QuickTemplate {
 <?php if( @$this->haveData( 'uselang' ) ) { ?><input type="hidden" name="uselang" value="<?php $this->text( 'uselang' ); ?>" /><?php } ?>
 </form>
 </div>
-<div id="signupWhyProvide"><?php $this->msgWiki( 'prefs-help-birthmesg' ); ?>
+<div id="signupWhyProvide"><?php $this->msgWiki( 'prefs-help-birthmesg' ); ?></div>
 <div id="signupend" style="clear: both;"><?php $this->msgWiki( 'signupend' ); ?></div>
 <?php
 
