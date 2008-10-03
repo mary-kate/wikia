@@ -166,7 +166,7 @@ function wfWysiwygWiki2Html($wikitext, $articleId = -1, $encode = false) {
 
 	$html = mb_convert_encoding($html, 'HTML-ENTITIES', "UTF-8");
 
-	$html = preg_replace('%<span refid="(\\d+)">(.*?)</span>%i', '<input type="button" refid="\\1" value="\\2" title="\\2" class="wysiwygDisabled" />', $html);
+	$html = preg_replace('%<span refid="(\\d+)">(.*?)</span>%si', '<input type="button" refid="\\1" value="\\2" title="\\2" class="wysiwygDisabled" />', $html);
 
 	wfDebug("wfWysiwygWiki2Html html: {$html}\n");
 
