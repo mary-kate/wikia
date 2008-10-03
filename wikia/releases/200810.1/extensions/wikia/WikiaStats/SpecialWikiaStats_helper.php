@@ -28,7 +28,7 @@ class WikiaGenericStats {
     var $mSelectedCityId = -1;
 
     const MONTHLY_STATS = 7;
-    const USE_MEMC = 0;
+    const USE_MEMC = 1;
     const USE_OLD_DB = 0;
 	const IGNORE_WIKIS = "5, 11, 6745";
    	
@@ -430,7 +430,7 @@ class WikiaGenericStats {
 		$memkey = 'wikiacitystatseditcount_'.$cityDBName.'_'.$value;
 		$wikiacityedits = "";
 		#---
-		$namespaces = array_merge(array(0), $wgContentNamespaces);
+		$namespaces = array_merge(array(NS_MAIN), $wgContentNamespaces);
 		
 		if (self::USE_MEMC) $wikiacityedits = $wgMemc->get($memkey);
 		if (empty($wikiacityedits)) {
@@ -582,7 +582,7 @@ class WikiaGenericStats {
 		wfProfileIn( __METHOD__ );
 		#---
 		$namespace = intval($namespace);
-		$namespaces = array_merge(array(0), $wgContentNamespaces);
+		$namespaces = array_merge(array(NS_MAIN), $wgContentNamespaces);
 		$namespaceList = implode(",", $namespaces);
 		#---
 		$whereUserList = "";
@@ -653,7 +653,7 @@ class WikiaGenericStats {
 		wfProfileIn( __METHOD__ );
 		$result = array();
 		$memkey = 'wikiacitystatsarticlecount_'.$cityDBName.'_'.$size.'_'.$namespace;
-		$namespaces = array_merge(array(0), $wgContentNamespaces);
+		$namespaces = array_merge(array(NS_MAIN), $wgContentNamespaces);
 		$namespaceList = implode(",", $namespaces);
 		#---
 		if (self::USE_MEMC) $result = $wgMemc->get($memkey);
@@ -738,7 +738,7 @@ class WikiaGenericStats {
 		wfProfileIn( __METHOD__ );
 		#---
 		$namespace = intval($namespace);
-		$namespaces = array_merge(array(0), $wgContentNamespaces);
+		$namespaces = array_merge(array(NS_MAIN), $wgContentNamespaces);
 		$namespaceList = implode(",", $namespaces);
 		$result = array();
 		#---
@@ -805,7 +805,7 @@ class WikiaGenericStats {
 		wfProfileIn( __METHOD__ );
 		#---
 		$namespace = intval($namespace);
-		$namespaces = array_merge(array(0), $wgContentNamespaces);
+		$namespaces = array_merge(array(NS_MAIN), $wgContentNamespaces);
 		$namespaceList = implode(",", $wgContentNamespaces);
 		
 		$result = array();
