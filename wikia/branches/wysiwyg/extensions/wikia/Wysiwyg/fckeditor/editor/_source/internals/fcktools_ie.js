@@ -29,7 +29,7 @@ FCKTools.CancelEvent = function( e )
 // Appends one or more CSS files to a document.
 FCKTools._AppendStyleSheet = function( documentElement, cssFileUrl )
 {
-	return documentElement.createStyleSheet( cssFileUrl cssFileUrl + '?' + FCKConfig.StyleVersion ).owningElement ;
+	return documentElement.createStyleSheet( cssFileUrl + '?' + FCKConfig.StyleVersion ).owningElement ;
 }
 
 // Appends a CSS style string to a document.
