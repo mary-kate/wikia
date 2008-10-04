@@ -16,3 +16,6 @@ FCKConfig.FillEmptyBlocks = false;
 FCKConfig.IgnoreEmptyParagraphValue = true;
 FCKConfig.FormatSource = false;
 FCKConfig.FormatOutput = false;
+
+FCKConfig.AutoDetectLanguage = false;
+FCKConfig.DefaultLanguage = window.parent.wgUserLanguage;
