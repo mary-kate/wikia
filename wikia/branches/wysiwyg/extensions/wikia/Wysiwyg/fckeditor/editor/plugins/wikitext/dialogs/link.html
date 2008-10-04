@@ -48,7 +48,8 @@ window.onload = function() {
 			updateCaption = false;
 		}
 	} else {
-		GetE('txtTarget').value = FCK.Selection.GetSelection();
+		var selection = FCK.Selection.GetSelection();
+		GetE('txtTarget').value = selection.type ? selection.createRange().text : selection.toString();
 		updateCaption = false;
 	}
 
