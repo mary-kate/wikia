@@ -2,7 +2,7 @@ FCKConfig.FormatIndentator = '';
 FCKConfig.FontFormats = 'p;h2;h3;pre' ;
 
 FCKConfig.ToolbarSets["Default"] = [
-	['Source','-','Cut','Copy','Paste','PasteText','Undo','Redo','-','Find','Replace','-','Bold','Italic','Underline','StrikeThrough','OrderedList','UnorderedList','Outdent','Indent','Link','Unlink','Table','Rule','-','FontFormat']
+	['Source','-','Undo','Redo','-','Bold','Italic','Underline','StrikeThrough','Link','Unlink','-','FontFormat','-','OrderedList','UnorderedList','Outdent','Indent','Table','Rule','-','Find','Replace','-','Cut','Copy','Paste','PasteText']
 ];
 
 FCKConfig.StyleVersion = window.parent.wgStyleVersion;
