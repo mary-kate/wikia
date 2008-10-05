@@ -103,7 +103,10 @@ function initEditor() {
 addOnloadHook(initEditor);
 </script>
 <style type="text/css">/*<![CDATA[*/
-	.mw-editTools {display: none}
+	.mw-editTools,
+	#editform #toolbar {
+		display: none
+	}
 /*]]>*/</style>
 EOT;
 			$wgOut->addScript($script);
