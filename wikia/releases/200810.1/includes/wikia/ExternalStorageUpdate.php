@@ -39,7 +39,7 @@ class ExternalStorageUpdate {
 		wfProfileIn( __METHOD__ );
 		if( $this->mRevision instanceof Revision ) {
 			$this->mPageId = $this->mRevision->getPage();
-			$Title = Title::newFromID( $this->mPageId );
+			$Title = Title::newFromID( $this->mPageId, GAID_FOR_UPDATE );
 			if( ! $Title  ) {
 				global $wgDBname;
 				wfDebug( __METHOD__.": title is null, page_id={$this->mPageId}; city_id={$wgCityId}, dbname={$wgDBname}" );
