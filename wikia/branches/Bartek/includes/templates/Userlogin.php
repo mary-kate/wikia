@@ -362,11 +362,32 @@ class UsercreateTemplate extends QuickTemplate {
 			init: function() {
 		        	YE.addListener('prefsHelpBirthday', 'click', YAHOO.Wikia.UserRegistration.showHintPanel);
       			},
+			buildHintPanel: function() {
+			        var signupWhy = YD.get( 'signupWhyProvide' );
+			        var signupWhy_copy = document.createElement ('div') ;
+			        signupWhy.id = 'signupWhyProvide_copy' ;
+			        signupWhy_copy.innerHTML  = signupWhy.innerHTML ;
+			        document.body.appendChild (signupWhy_copy) ;
+			        YAHOO.Wikia.UserRegistration.hintPanel = new YAHOO.widget.Panel('signupWhyProvide_copy', {
+			                width: "250px" ,
+			                modal: true ,
+			                constraintoviewport: true ,
+			                draggable: false ,
+			                fixedcenter: true ,
+			                underlay: "none"
+			        } );
+		        YAHOO.Wikia.UserRegistration.hintPanel.cfg.setProperty("zIndex", 1000) ;
+		        YAHOO.Wikia.UserRegistration.hintPanel.render (document.body) ;
+			},
 			showHintPanel: function(e) {
                         	// Prevent the default action for clicked element (probably A)
                         	if(e) {
                                 	YAHOO.util.Event.preventDefault(e);
                         	}
+				if (!YAHOO.Wikia.UserRegistration.hintPanel) {
+		                        YAHOO.Wikia.UserRegistration.buildHintPanel () ;
+                		}
+		                YAHOO.Wikia.UserRegistration.hintPanel.show () ;
 			}
 		}
 
