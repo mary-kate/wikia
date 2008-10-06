@@ -29,20 +29,16 @@ FCK.SwitchEditMode = function() {
 			var edgecases = res.getResponseHeader('X-edgecases');
 			if(typeof edgecases == "undefined") edgecases = res.getResponseHeader('X-Edgecases');
 			if (edgecases == '1') {
-				edgecases = eval(res.responseText);
-				messages = edgecases.shift() + ' ';
-				for (i=0; i<edgecases.length; i++) {
-					messages += edgecases[i] + ', ';
-				}
-				messages = messages.substr(0, messages.length-2);
-				// macbre: insert div after contentSub
+				messages = res.responseText;
+				//macbre: insert div after contentSub
+				//marooned: move the div into the contentSub like it's when we fallback on editing article with edgecases inside it
 				contentSub = window.parent.document.getElementById('contentSub');
 				messagesDiv = window.parent.document.getElementById('FCKEdgeCaseMessages');
 				if (!messagesDiv) {
 					messagesDiv = window.parent.document.createElement('div');
-					contentSub.parentNode.insertBefore(messagesDiv, contentSub.nextSibling);
 					messagesDiv.className = 'usermessage';
 					messagesDiv.id = 'FCKEdgeCaseMessages';
+					contentSub.appendChild(messagesDiv);
 				}
 				messagesDiv.innerHTML = messages;
 			} else {
