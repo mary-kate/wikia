@@ -349,6 +349,30 @@ class UsercreateTemplate extends QuickTemplate {
 		<?php } ?>
 	</table>
 	<script type="text/javascript">
+		YAHOO.namespace("Wikia.UserRegistration");
+
+		 (function() {
+		 var YC = YAHOO.util.Connect;
+		 var YD = YAHOO.util.Dom;
+		 var YWUR = YAHOO.Wikia.UserRegistration;
+		 var YE = YAHOO.util.Event;
+		 var YT = YAHOO.Tools;
+
+		 YAHOO.Wikia.UserRegistration = {
+			init: function() {
+		        	YE.addListener('prefsHelpBirthday', 'click', YAHOO.Wikia.UserRegistration.showHintPanel);
+      			},
+			showHintPanel: function(e) {
+                        	// Prevent the default action for clicked element (probably A)
+                        	if(e) {
+                                	YAHOO.util.Event.preventDefault(e);
+                        	}
+			}
+		}
+
+		YE.onDOMReady(YAHOO.Wikia.UserRegistration.init, YAHOO.Wikia.UserRegistration, true);
+		})();
+
 		function checkEmail() {
 			var email_elem = document.getElementById('wpEmail') ;
 			if (email_elem) {
