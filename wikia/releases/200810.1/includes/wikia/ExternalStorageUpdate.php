@@ -41,8 +41,9 @@ class ExternalStorageUpdate {
 			$this->mPageId = $this->mRevision->getPage();
 			$Title = Title::newFromID( $this->mPageId );
 			if( ! $Title  ) {
-				wfDebug( __METHOD__.": title is null, page_id={$this->mPageId}; city_id={$wgCityId}" );
-				error_log( __METHOD__.": title is null, page_id={$this->mPageId}; city_id={$wgCityId}" );
+				global $wgDBname;
+				wfDebug( __METHOD__.": title is null, page_id={$this->mPageId}; city_id={$wgCityId}, dbname={$wgDBname}" );
+				error_log( __METHOD__.": title is null, page_id={$this->mPageId}; city_id={$wgCityId}, dbname={$wgDBname}" );
 				wfProfileOut( __METHOD__ );
 				return false;
 			}
