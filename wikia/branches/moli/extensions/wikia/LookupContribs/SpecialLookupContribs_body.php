@@ -104,7 +104,7 @@ class LookupContribsPage extends SpecialPage {
 		$this->numResults = 0;
 		$wikiList = $this->mCore->getWikiList();
 		/* check user activity */
-		$userActivity = $this->mCore->checkUserActivity($this->mUsername);
+		/*$userActivity = $this->mCore->checkUserActivity($this->mUsername);
 		$userActivityWikiaList = array();
 		$userActivityWikiaListByCnt = array();
 		if (!empty($userActivity)) {
@@ -119,7 +119,7 @@ class LookupContribsPage extends SpecialPage {
 					}
 				}
 			}
-			/* sort array */
+			// sort array 
 			unset($userActivityWikiaList);
 			$userActivityWikiaList = array();
 			krsort($userActivityWikiaListByCnt);
@@ -135,7 +135,9 @@ class LookupContribsPage extends SpecialPage {
 				}
 			}
 			//sort(&$userActivityWikiaList);
-		}
+		} */
+		
+		$userActivity = $this->mCore->checkUserActivityExternal($this->mUsername);
 				
         $oTmpl = new EasyTemplate( dirname( __FILE__ ) . "/templates/" );
         $oTmpl->set_vars( array(

@@ -178,10 +178,9 @@ function wkLCshowDetails(dbname, limit, offset)
 <td align="center"><b><?=wfMsg('lookupcontribscontribslink')?></b></td>
 <td align="center">&nbsp;</td>
 </tr>
-<? foreach ($userActivity as $id => $dbname) {
-	$dbname = trim($dbname);
-	if ( (!empty($dbname)) && (!empty($wikiList[$dbname])) ) {
-		$wikiname = $wikiList[$dbname];
+<? foreach ($userActivity as $id => $city_id) {
+	if ( (!empty($city_id)) && (!empty($wikiList[$city_id])) ) {
+		$wikiname = $wikiList[$city_id];
 ?>
 <tr bgcolor="#FFFFDF">
 	<td><a href="<?=$wikiname->city_url?>" target="new"><?=$wikiname->city_url?></a></td>
