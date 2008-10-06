@@ -749,9 +749,12 @@ div#userlogin .captcha,
 	background-color: white;
 }
 
-
 #userloginprompt, #languagelinks {
 	font-size: 85%;
+}
+
+#signupWhyProvide {
+	display: none;
 }
 
 #login-sectiontip {
