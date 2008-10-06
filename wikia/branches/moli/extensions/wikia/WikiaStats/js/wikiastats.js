@@ -2,7 +2,7 @@ function StatsPageLoaderShow(show) { if (show == 1) YAHOO.pageloader.container.w
 function StatsPageLoaderHide(hide) { if (hide == 1) YAHOO.pageloader.container.wait.hide(); };
 function XLSPanelClose() { XLSCancel(); }
 function XLSClearCitiesList() { var checklist = document.XLSCompareForm.wscid; var is_checked = 0; var checked_list = ""; for (i = 1; i < checklist.length; i++) checklist[i].checked = false; WSCountCheckboxes(true, 1);}
-function XLSIframeStatusChanged() { if (window.frames['ws_frame_xls_'+wk_stats_city_id].document.readyState == 'complete') { /*StatsPageLoaderHide(); */ } else { setTimeout("XLSIframeStatusChanged()", 500) } }
+//function XLSIframeStatusChanged() { if (window.frames['ws_frame_xls_'+wk_stats_city_id].document.readyState == 'complete') { /*StatsPageLoaderHide(); */ } else { setTimeout("XLSIframeStatusChanged()", 500) } }
 function XLSIframeLoaded(panel, statistics) { StatsPageLoaderHide(0); }
 function XLSIframeLoadedReady() { StatsPageLoaderHide(0); }
 function XLSGenerate(statistics, others, date_from, date_to) { 
@@ -19,10 +19,10 @@ function XLSGenerate(statistics, others, date_from, date_to) {
 	}
 	
 	YAHOO.util.Dom.get("ws-xls-div").innerHTML = "<iframe name=\"ws_frame_xls_"+wk_stats_city_id+"\" id=\"ws_frame_xls_"+wk_stats_city_id+"\" src=\""+baseurl+"\" onload=\"XLSIframeLoaded('ws-xls-div'," + statistics + ");\" style=\"width:0px;height:0px\" frameborder=\"0\"></iframe>";
-	if (/MSIE (\d+\.\d+);/.test(navigator.userAgent)) {
+	/*if (/MSIE (\d+\.\d+);/.test(navigator.userAgent)) {
 		var f = document.getElementById("ws_frame_xls_"+wk_stats_city_id);
 		f.onreadystatechange = XLSIframeStatusChanged();
-	}
+	}*/
 }
 function XLSCancel() { YAHOO.util.Dom.get("ws-xls-div").innerHTML = ""; }
 function XLSShowMenu(city) { YAHOO.util.Dom.get("wk-stats-panel").style.display = (city == 0) ? "none" : "block"; YAHOO.util.Dom.get("ws-main-xls-stats").style.display = "block"; }
@@ -230,17 +230,18 @@ function setActiveCompareTab() {
 	YAHOO.util.Dom.get("ws-wikia-select-id").className="";
 }
 function WikiaStatsCompareGetWikis(element, value) {
-	var func = function() { showWSSearchCompareResult(value) };
-
+	var func = function() { 
+		showWSSearchCompareResult(element, value);
+	};
+	
 	if ( element.zid ) {
 		clearTimeout(element.zid);
 	}
 	element.zid = setTimeout(func,800);
 }
 
-function showWSSearchCompareResult(value) {
-	if (value != "") {
-		hideSortUrl("ws-sort-panel", "hidden");
+function showWSSearchCompareResult(element, value) {
+	var searchText = function() {
 		if (selectWSWikisDialogList.length > 0) {
 			for (k in selectWSWikisDialogList) {
 				YAHOO.util.Dom.get("row_wikis_" + k).style.display = 'block';
@@ -252,11 +253,22 @@ function showWSSearchCompareResult(value) {
 				}
 			}
 		}
-	} else {
+		YAHOO.util.Dom.get("ws-search-input-panel-btn").innerHTML = "";
+	}
+	
+	var unsearchText = function() {
 		for (k in selectWSWikisDialogList) {
 			YAHOO.util.Dom.get("row_wikis_" + k).style.display = 'block';
 		}
-		hideSortUrl("ws-sort-panel", "visible");
+		YAHOO.util.Dom.get("ws-search-input-panel-btn").innerHTML = "";
 	}
 	
+	YAHOO.util.Dom.get("ws-search-input-panel-btn").innerHTML = "<img src=\"/extensions/wikia/WikiaStats/images/ajax-loader-small.gif\" /></div>";
+	if (value != "") {
+		hideSortUrl("ws-sort-panel", "hidden");
+		setTimeout(searchText,100);
+	} else {
+		hideSortUrl("ws-sort-panel", "visible");
+		setTimeout(unsearchText,100);
+	}
 }
