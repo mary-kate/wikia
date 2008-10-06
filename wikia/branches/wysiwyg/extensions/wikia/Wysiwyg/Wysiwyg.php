@@ -67,8 +67,9 @@ function WysiwygInitial($form) {
 	if(($form->mTitle->mNamespace == NS_MAIN || $form->mTitle->mNamespace == NS_IMAGE)) {
 		//search for not handled edge-cases
 		$edgecasesFound = wfFCKTestEdgeCases($form->textbox1);
-		if (count($edgecasesFound) != 0) {
-			//TODO: print messages from array $edgecasesFound to the user why we don't load FCK
+		if ($edgecasesFound != '') {
+			global $wgOut;
+			$wgOut->setSubtitle('<div id="FCKEdgeCaseMessages" class="usermessage">' . $edgecasesFound . '</div>');
 			return true;
 		}
 		global $IP;
@@ -122,15 +123,15 @@ function wfWysywigAjax($type, $input = false, $wysiwygData = false, $articleId =
 		case 'html2wiki':
 			return new AjaxResponse(wfWysiwygHtml2Wiki($input, $wysiwygData, true));
 		case 'wiki2html':
-			$separator = Parser::getRandomString();
-			header('X-sep: ' . $separator);
 			$edgecases = wfFCKTestEdgeCases($input);
-			if (count($edgecases)) {
+			if ($edgecases != '') {
 				header('X-edgecases: 1');
-				return new AjaxResponse(Wikia::json_encode($edgecases));
+				return $edgecases;
+			} else {
+				$separator = Parser::getRandomString();
+				header('X-sep: ' . $separator);
+				return new AjaxResponse(join(wfWysiwygWiki2Html($input, $articleId, true), "--{$separator}--"));
 			}
-			return new AjaxResponse(join(wfWysiwygWiki2Html($input, $articleId, true), "--{$separator}--"));
-
 	}
 	return false;
 }
@@ -247,6 +248,7 @@ function wfFCKGetRefId(&$text, $returnIDonly = false) {
  */
 function wfFCKTestEdgeCases($text) {
 	wfLoadExtensionMessages('Wysiwyg');
+	$resultMsg = '';
 	$edgecasesFound = array();
 	$edgecases = array(
 		'regular' => array(
@@ -271,7 +273,8 @@ function wfFCKTestEdgeCases($text) {
 	}
 	//if edge case was found add main information about edge cases, like "Edge cases found:"
 	if (count($edgecasesFound)) {
-		array_unshift($edgecasesFound, wfMsg('wysiwyg-edgecase-info'));
+//		array_unshift($edgecasesFound, wfMsg('wysiwyg-edgecase-info'));
+		$resultMsg = wfMsg('wysiwyg-edgecase-info') . ' ' . implode(', ', $edgecasesFound);
 	}
-	return $edgecasesFound;
+	return $resultMsg;
 }
