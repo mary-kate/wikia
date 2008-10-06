@@ -369,13 +369,15 @@ class UsercreateTemplate extends QuickTemplate {
 			        signupWhy_copy.innerHTML  = signupWhy.innerHTML ;
 			        document.body.appendChild (signupWhy_copy) ;
 			        YAHOO.Wikia.UserRegistration.hintPanel = new YAHOO.widget.Panel('signupWhyProvide_copy', {
-			                width: "250px" ,
+			                width: "350px" ,
 			                modal: true ,
 			                constraintoviewport: true ,
 			                draggable: false ,
 			                fixedcenter: true ,
 			                underlay: "none"
 			        } );
+			YAHOO.Wikia.UserRegistration.hintPanel.setHeader(prefs_help_birthmesg);
+			YAHOO.Wikia.UserRegistration.hintPanel.setBody(prefs_help_birthinfo);
 		        YAHOO.Wikia.UserRegistration.hintPanel.cfg.setProperty("zIndex", 1000) ;
 		        YAHOO.Wikia.UserRegistration.hintPanel.render (document.body) ;
 			},
@@ -525,7 +527,7 @@ class UsercreateTemplate extends QuickTemplate {
 <?php if( @$this->haveData( 'uselang' ) ) { ?><input type="hidden" name="uselang" value="<?php $this->text( 'uselang' ); ?>" /><?php } ?>
 </form>
 </div>
-<div id="signupWhyProvide"><?php $this->msgWiki( 'prefs-help-birthmesg' ); ?></div>
+<div id="signupWhyProvide"></div>
 <div id="signupend" style="clear: both;"><?php $this->msgWiki( 'signupend' ); ?></div>
 <?php
 
