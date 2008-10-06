@@ -143,7 +143,9 @@ pageLoaderInit('<?=addslashes(wfMsg('wikiastats_generate_stats_msg'))?>', '<?=ad
 		<legend class="normal"><?= wfMsg('wikiastats_mainstats_info') ?></legend>
 			<div style="float:left;padding:3px 0px 1px 0px;" id="ws-wikis-check"><?=wfMsg('wikiastats_show_nbr_wikis_check', "<strong style=\"color:#8B0000\">".($MAX_NBR)."</strong>")?></div>
 			<div style="float:left;padding:3px 0px 1px 0px;clear:both;" id="ws-search-panel">
-				<?=wfMsg('wikiastats_search_text')?> <input type="text" name="ws-search-input-panel" id="ws-search-input-panel" autocomplete="off" />
+				<table><tr><td><?=wfMsg('wikiastats_search_text')?></td><td><input type="text" name="ws-search-input-panel" id="ws-search-input-panel" autocomplete="off" /></td>
+				<td><div id="ws-search-input-panel-btn"></div></td>
+				</tr></table>		
 			</div>
 			<div style="float:right;padding:3px 0px 1px 0px;clear:right;" id="ws-sort-panel"><a href="javascript:void(0);" onClick="sortWikiaPanelList(1)"><?=addslashes(wfMsg('wikiastats_sort_list_alphabet'))?></a></div>
 			<div class="ws-div-scroll" id="ws-div-scroll"></div>
@@ -188,14 +190,14 @@ pageLoaderInit('<?=addslashes(wfMsg('wikiastats_generate_stats_msg'))?>', '<?=ad
 					<?=wfMsg('wikiastats_search_text')?> <input type="text" name="ws-city-name" autocomplete="off" id="ws-city-name" class="ws-input" style="width:auto" />	
 				</td>
 				<td align="left" valign="top" height="100%" rowspan="2" style="padding: 2px 10px">
-					<div style="float:right;clear:both;font-size:8pt;height:12px;"><a href="javascript:void(0);" onClick="redirectTooldStats();"><?=wfMsg('wikiastats_see_old_statistics_page')?></a></div>
+					<div style="float:right;clear:both;font-size:8pt;height:12px;"><a href="http://help.wikia.com/wiki/Help:WikiaStats" target="_new"><?=wfMsg('wikiastats_see_old_statistics_page')?></a></div>
 					<fieldset style="width:360px;">
 						<legend><?=wfMsg('wikiastats_wikia_information')?></legend>
 						<div id="wk-stats-info-panel" class="wk-stats-info-panel"></div>
 					</fieldset>
 					<div class="wk-select-class-main">
-						<input type="button" class="input_button" id="ws-show-charts" value="<?= wfMsg("wikiastats_showcharts") ?>" name="ws-show-charts" onClick="redirectToStats(1)" />
 						<input type="button" class="input_button" id="ws-show-stats" name="ws-show-stats" value="<?= wfMsg("wikiastats_showstats_btn") ?>" onClick="redirectToStats(0)" />
+						<input type="button" class="input_button" id="ws-show-charts" value="<?= wfMsg("wikiastats_showcharts") ?>" name="ws-show-charts" onClick="redirectToStats(1)" />
 					</div>
 					<div style="clear:both;" id="ws-main-xls-stats">
 					<fieldset style="margin:0px">
@@ -271,7 +273,11 @@ YAHOO.util.Event.onDOMReady(function () {
 	var wsElement = document.getElementById('ws-city-name');
 	if (wsElement) { wsElement.onkeyup = function(){ WikiaStatsGetWikis(this, this.value); }; }
 	var wsCompareElement = document.getElementById('ws-search-input-panel');
-	if (wsCompareElement) { wsCompareElement.onkeyup = function(){ WikiaStatsCompareGetWikis(this, this.value); }; }
+	if (wsCompareElement) { wsCompareElement.onkeyup = 
+		function(){ 
+			WikiaStatsCompareGetWikis(this, this.value); 
+		}; 
+	}
 	if (document.getElementById("ws_main_wikia_select_td") && document.getElementById("ws_main_wikia_compare_td")) {
 		setActiveSelectTab();
 	}
