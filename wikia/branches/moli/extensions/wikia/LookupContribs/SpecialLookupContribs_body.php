@@ -105,7 +105,7 @@ class LookupContribsPage extends SpecialPage {
 		$this->numResults = 0;
 		$wikiList = $this->mCore->getWikiList();
 		/* check user activity */
-		if (USE_EXTERNAL_DB == 0) {
+		if (self::USE_EXTERNAL_DB == 0) {
 			$userActivity = $this->mCore->checkUserActivity($this->mUsername);
 			$userActivityWikiaList = array();
 			$userActivityWikiaListByCnt = array();
