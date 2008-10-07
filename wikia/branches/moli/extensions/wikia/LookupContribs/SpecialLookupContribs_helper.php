@@ -133,8 +133,9 @@ class LookupContribsCore {
 		$cached = $wgMemc->get($memkey);
 		if (!is_array ($cached) || LOOKUPCONTRIBS_NO_CACHE) { 
 			$dbext =& wfGetDBExt();
-			if (!is_null($dbs)) {
-				$query = "select rev_wikia_id, max(date_format(rev_timestamp) as max_activity, unix_timestamp(rev_timestamp) as max_timestamp from `dataware`.`blobs` where rev_user_text = '{$dbext->addQuotes($username)}' and rev_wikia_id > 0 group by rev_wikia_id";
+			if (!is_null($dbext)) {
+				$query = "select rev_wikia_id, max(rev_timestamp) as max_activity, unix_timestamp(rev_timestamp) as max_timestamp ";
+				$query .= "from `dataware`.`blobs` where rev_user_text = ".$dbext->addQuotes($username)." and rev_wikia_id > 0 group by rev_wikia_id";
 				$res = $dbext->query ($query);
 				while ($row = $dbext->fetchObject($res)) {
 					$userActivity[$row->max_timestamp] = $row->rev_wikia_id;
