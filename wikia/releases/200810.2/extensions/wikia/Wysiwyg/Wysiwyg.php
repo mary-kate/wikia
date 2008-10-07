@@ -64,7 +64,7 @@ function WysiwygInitial($form) {
 	}
 
 	// only if edited article is in main or image namespace
-	if(($form->mTitle->mNamespace == NS_MAIN || $form->mTitle->mNamespace == NS_IMAGE)) {
+	if(($form->mTitle->mNamespace == NS_MAIN || $form->mTitle->mNamespace == NS_IMAGE || $form->mTitle->mNamespace == NS_USER)) {
 		//search for not handled edge-cases
 		$edgecasesFound = wfFCKTestEdgeCases($form->textbox1);
 		if ($edgecasesFound != '') {
