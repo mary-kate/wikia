@@ -273,7 +273,7 @@ class UsercreateTemplate extends QuickTemplate {
 
 	<?php if($this->haveData('captcha')) { ?>
 		<tr>
-			<td class="mw-input" colspan="2">
+			<td class="mw-input">
 				<?php $this->html('captcha'); ?>
 			</td>
 		</tr>
