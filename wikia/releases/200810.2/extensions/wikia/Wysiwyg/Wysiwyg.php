@@ -246,14 +246,22 @@ function wfFCKTestEdgeCases($text) {
 	$edgecasesFound = array();
 	$edgecases = array(
 		'regular' => array(
-			'<!--' => 'wysiwyg-edgecase-comment',			//HTML comments
-			'{{{' => 'wysiwyg-edgecase-triplecurls',		//template parameters
-			'__NOWYSIWYG__' => 'wysiwyg-edgecase-nowysiwyg',//new magic word to disable FCK for current article
-			'<span refid=' => 'wysiwyg-edgecase-syntax',//TODO
+			//HTML comments
+			'<!--' => 'wysiwyg-edgecase-comment',
+			//template parameters
+			'{{{' => 'wysiwyg-edgecase-triplecurls',
+			//new magic word to disable FCK for current article
+			'__NOWYSIWYG__' => 'wysiwyg-edgecase-nowysiwyg',
+			//span with fck metadata - shouldn't be used by user
+			'<span refid=' => 'wysiwyg-edgecase-syntax',
 		),
 		'regexp' => array(
-			'/\[\[[^|]+\|.*?(?:(?:' . wfUrlProtocols() . ')|{{).*?]]/' => 'wysiwyg-edgecase-complex-description',	//external url or template found in the description of a link
-			'/{{[^}]*(?<=\[)[^}]*}}/' => 'wysiwyg-edgecase-template-with-link'	//template with link as a parameter
+			//external url or template found in the description of a link
+			'/\[\[[^|]+\|.*?(?:(?:' . wfUrlProtocols() . ')|{{).*?]]/' => 'wysiwyg-edgecase-complex-description',
+			//template with link as a parameter
+			'/{{[^}]*(?<=\[)[^}]*}}/' => 'wysiwyg-edgecase-template-with-link',
+			//template with link as a parameter
+			'/\[\[(?:image|media)[^]|]+\|[^]]+(?:\[\[|(?:' . wfUrlProtocols() . '))(?:[^]]+])?[^]]+]]/si' => 'wysiwyg-edgecase-image-with-link',
 		)
 	);
 	foreach($edgecases['regular'] as $str => $msgkey) {
@@ -268,7 +276,6 @@ function wfFCKTestEdgeCases($text) {
 	}
 	//if edge case was found add main information about edge cases, like "Edge cases found:"
 	if (count($edgecasesFound)) {
-//		array_unshift($edgecasesFound, wfMsg('wysiwyg-edgecase-info'));
 		$resultMsg = wfMsg('wysiwyg-edgecase-info') . ' ' . implode(', ', $edgecasesFound);
 	}
 	return $resultMsg;
