@@ -137,19 +137,19 @@ class LookupContribsPage extends SpecialPage {
 			//sort(&$userActivityWikiaList);
 		} */
 		
-		$userActivity = $this->mCore->checkUserActivityExternal($this->mUsername);
+		$userActivityWikiaList = $this->mCore->checkUserActivityExternal($this->mUsername);
 				
-        $oTmpl = new EasyTemplate( dirname( __FILE__ ) . "/templates/" );
-        $oTmpl->set_vars( array(
-            "action"		=> $action,
-            "username"  	=> $this->mUsername,
-            "mode"     		=> $this->mMode,
-            "view"    		=> $this->mView,
-            "userActivity" 	=> $userActivityWikiaList,
-            "wikiList"		=> $wikiList
-        ));
-        $wgOut->addHTML( $oTmpl->execute("user-activity") );
-        wfProfileOut( __METHOD__ );
+		$oTmpl = new EasyTemplate( dirname( __FILE__ ) . "/templates/" );
+		$oTmpl->set_vars( array(
+			"action"		=> $action,
+			"username"  	=> $this->mUsername,
+			"mode"     		=> $this->mMode,
+			"view"    		=> $this->mView,
+			"userActivity" 	=> $userActivityWikiaList,
+			"wikiList"		=> $wikiList
+		));
+		$wgOut->addHTML( $oTmpl->execute("user-activity") );
+		wfProfileOut( __METHOD__ );
 	}
 	
 	function getResults() {
