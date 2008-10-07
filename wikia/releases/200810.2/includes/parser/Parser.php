@@ -1498,8 +1498,9 @@ class Parser
 				global $FCKparseEnable;
 				if (!empty($FCKparseEnable)) {
 					wfFCKSetRefId('external link: raw image', $url, $url, '', true, true);
+				} else {
+					$text = $sk->makeExternalImage( $url );
 				}
-				$text = $sk->makeExternalImage( $url );
 			}
 		}
 		return $text;
