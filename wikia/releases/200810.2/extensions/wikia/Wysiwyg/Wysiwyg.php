@@ -95,6 +95,7 @@ function initEditor() {
 		$('wmuLink').parentNode.style.display = 'none';
 	}
 	var oFCKeditor = new FCKeditor("wpTextbox1");
+	oFCKeditor.wgStyleVersion = wgStyleVersion;
 	oFCKeditor.BasePath = "$wgExtensionsPath/wikia/Wysiwyg/fckeditor/";
 	oFCKeditor.Config["CustomConfigurationsPath"] = "$wgExtensionsPath/wikia/Wysiwyg/wysiwyg_config.js";
 	oFCKeditor.ready = true;
