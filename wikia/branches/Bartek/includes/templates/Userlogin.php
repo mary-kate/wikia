@@ -433,14 +433,16 @@ class UsercreateTemplate extends QuickTemplate {
 		function checkUsernamePass() {
 			var pass = document.getElementById('wpPassword2').value;
 			var name = document.getElementById('wpName2').value;
-			if (pass == name) {
-				YAHOO.util.Dom.addClass('wpPasswordTD', 'mw-input-error');
-				YAHOO.util.Dom.removeClass('wpPasswordTD', 'mw-input-ok');
-				errorPass = true;
-			} else {
-				YAHOO.util.Dom.removeClass('wpPasswordTD', 'mw-input-error');
-				YAHOO.util.Dom.addClass('wpPasswordTD', 'mw-input-ok');
-				errorPass = false;
+			if (pass != '') {
+				if (pass == name) {
+					YAHOO.util.Dom.addClass('wpPasswordTD', 'mw-input-error');
+					YAHOO.util.Dom.removeClass('wpPasswordTD', 'mw-input-ok');
+					errorPass = true;
+				} else {
+					YAHOO.util.Dom.removeClass('wpPasswordTD', 'mw-input-error');
+					YAHOO.util.Dom.addClass('wpPasswordTD', 'mw-input-ok');
+					errorPass = false;
+				}
 			}
 		}
 		function checkRetype() {
