@@ -80,7 +80,9 @@ class SiteWideMessages extends SpecialPage {
 		while ($row = $DB->FetchObject($dbResult)) {
 			$hubList[$row->cat_id] = $row->cat_name;
 		}
-		$DB->FreeResult($dbResult);
+		if ($dbResult !== false) {
+			$DB->FreeResult($dbResult);
+		}
 
 		$formData['hubNames'] = $hubList;
 
@@ -98,7 +100,9 @@ class SiteWideMessages extends SpecialPage {
 		while ($row = $DB->FetchObject($dbResult)) {
 			$groupList[] = $row->ug_group;
 		}
-		$DB->FreeResult($dbResult);
+		if ($dbResult !== false) {
+			$DB->FreeResult($dbResult);
+		}
 
 		$formData['groupNames'] = $groupList;
 
@@ -151,14 +155,21 @@ class SiteWideMessages extends SpecialPage {
 				break;
 
 			case 'save':
-				$mText = $wgRequest->getText('mContent');
-				$editMsgId = isset($_POST['editMsgId']) ? $_POST['editMsgId'] : 0;
-				if ($editMsgId) {	//editing?
-					$result = $this->saveMessage($editMsgId, $mText);
+				if (wfReadOnly()) {
+					$wgOut->SetPageTitle(wfMsg('readonly'));
+					$reason = wfReadOnlyReason();
+					$formData['messageContent'] = $wgRequest->getText('mContent');
+					$formData['errMsg'] = wfMsg('readonlytext', $reason);
+				} else {
+					$mText = $wgRequest->getText('mContent');
+					$editMsgId = isset($_POST['editMsgId']) ? $_POST['editMsgId'] : 0;
+					if ($editMsgId) {	//editing?
+						$result = $this->saveMessage($editMsgId, $mText);
+					}
+					$redirect = $wgTitle->getLocalUrl('action=list');
+					$wgOut->redirect($redirect, 200);
+					return;
 				}
-				$redirect = $wgTitle->getLocalUrl('action=list');
-				$wgOut->redirect($redirect, 200);
-				return;
 				break;
 
 			case 'send':
@@ -196,9 +207,16 @@ class SiteWideMessages extends SpecialPage {
 				break;
 
 			case 'remove':
-				$mId = $wgRequest->getText('id');
-				if ($mId) {
-					$this->removeMessage($mId);
+				if (wfReadOnly()) {
+					$wgOut->SetPageTitle(wfMsg('readonly'));
+					$reason = wfReadOnlyReason();
+					$formData['messageContent'] = $wgRequest->getText('mContent');
+					$formData['errMsg'] = wfMsg('readonlytext', $reason);
+				} else {
+					$mId = $wgRequest->getText('id');
+					if ($mId) {
+						$this->removeMessage($mId);
+					}
 				}
 				//no break - go to 'list'
 
@@ -282,15 +300,16 @@ class SiteWideMessages extends SpecialPage {
 			}
 		}
 
-		if ($mText == '') {
+		if (wfReadOnly()) {
+			$reason = wfReadOnlyReason();
+			$result['errMsg'] = wfMsg('readonlytext', $reason);
+		} elseif ($mText == '') {
 			$result['errMsg'] = wfMsg('swm-error-empty-message');
 		} elseif ($mSendModeWikis == 'WIKI' && is_null($mWikiId)) {
 			//this wiki doesn't exist
 			$result['errMsg'] = wfMsg('swm-error-no-such-wiki');
 		} elseif ($mSendModeUsers == 'USER' && !User::idFromName($mRecipientName)) {
 			$result['errMsg'] = wfMsg('swm-error-no-such-user');
-//		} elseif ($mSendModeUsers == 'GROUP' && $mGroupName == '') {
-//			$result['errMsg'] = wfMsg('swm-error-empty-group');
 		} else {
 			global $wgParser, $wgUser;
 			$title = Title::newFromText(uniqid('tmp'));
@@ -412,7 +431,9 @@ class SiteWideMessages extends SpecialPage {
 									while ($oMsg = $DB->FetchObject($dbResult)) {
 										$activeUsers[] = $oMsg->user_id;
 									}
-									$DB->FreeResult($dbResult);
+									if ($dbResult !== false) {
+										$DB->FreeResult($dbResult);
+									}
 
 									$DB = wfGetDB(DB_MASTER);
 									$sqlValues = array();
@@ -499,7 +520,9 @@ class SiteWideMessages extends SpecialPage {
 		if ($oMsg = $DB->FetchObject($dbResult)) {
 			$result = $oMsg->msg_text;
 		}
-		$DB->FreeResult($dbResult);
+		if ($dbResult !== false) {
+			$DB->FreeResult($dbResult);
+		}
 		return $result;
 	}
 
@@ -529,7 +552,9 @@ class SiteWideMessages extends SpecialPage {
 			$messages[$i]['msg_wiki_name'] = $oMsg->msg_wiki_name;
 			$i++;
 		}
-		$DB->FreeResult($dbResult);
+		if ($dbResult !== false) {
+			$DB->FreeResult($dbResult);
+		}
 		return $messages;
 	}
 
@@ -570,7 +595,9 @@ class SiteWideMessages extends SpecialPage {
 		while ($oMsg = $DB->FetchObject($dbResult)) {
 			$tmpMsg[$oMsg->id] = array('wiki_id' => null);
 		}
-		$DB->FreeResult($dbResult);
+		if ($dbResult !== false) {
+			$DB->FreeResult($dbResult);
+		}
 
 		if (count($tmpMsg)) {
 			//step 2 of 3: remove dismissed and seen messages
@@ -587,7 +614,9 @@ class SiteWideMessages extends SpecialPage {
 			while ($oMsg = $DB->FetchObject($dbResult)) {
 				unset($tmpMsg[$oMsg->id]);
 			}
-			$DB->FreeResult($dbResult);
+			if ($dbResult !== false) {
+				$DB->FreeResult($dbResult);
+			}
 		}
 		//step 3 of 3: add unseen messages sent to *this* user (on *all* wikis or *this* wiki)
 		$dbResult = $DB->Query (
@@ -606,12 +635,13 @@ class SiteWideMessages extends SpecialPage {
 		while ($oMsg = $DB->FetchObject($dbResult)) {
 			$tmpMsg[$oMsg->id] = array('wiki_id' => $oMsg->msg_wiki_id);
 		}
-		$DB->FreeResult($dbResult);
+		if ($dbResult !== false) {
+			$DB->FreeResult($dbResult);
+		}
 		//sort from newer to older
 		krsort($tmpMsg);
 
 		$messages = array();
-		$language = Language::factory($wgLanguageCode);
 		$IDs = array();
 		foreach ($tmpMsg as $tmpMsgId => $tmpMsgData) {
 			$IDs['id'][] = $tmpMsgId;
@@ -643,7 +673,9 @@ class SiteWideMessages extends SpecialPage {
 		while ($oMsg = $DB->FetchObject($dbResult)) {
 			$tmpMsg[$oMsg->id] = array('wiki_id' => null, 'text' => $oMsg->text, 'expire' => $oMsg->expire);
 		}
-		$DB->FreeResult($dbResult);
+		if ($dbResult !== false) {
+			$DB->FreeResult($dbResult);
+		}
 
 		if (count($tmpMsg)) {
 			//step 2 of 3: remove dismissed messages
@@ -660,7 +692,9 @@ class SiteWideMessages extends SpecialPage {
 			while ($oMsg = $DB->FetchObject($dbResult)) {
 				unset($tmpMsg[$oMsg->id]);
 			}
-			$DB->FreeResult($dbResult);
+			if ($dbResult !== false) {
+				$DB->FreeResult($dbResult);
+			}
 		}
 		//step 3 of 3: add not dismissed messages sent to *this* user (on *all* wikis or *this* wiki)
 		$dbResult = $DB->Query (
@@ -680,8 +714,9 @@ class SiteWideMessages extends SpecialPage {
 		while ($oMsg = $DB->FetchObject($dbResult)) {
 			$tmpMsg[$oMsg->id] = array('wiki_id' => $oMsg->msg_wiki_id, 'text' => $oMsg->text, 'expire' => $oMsg->expire);
 		}
-		$DB->FreeResult($dbResult);
-
+		if ($dbResult !== false) {
+			$DB->FreeResult($dbResult);
+		}
 		//sort from newer to older
 		krsort($tmpMsg);
 
@@ -699,7 +734,7 @@ class SiteWideMessages extends SpecialPage {
 		}
 
 		//once the messages are displayed, they must be marked as "seen" so user will not see "you have new messages" from now on
-		if (count($tmpMsg)) {
+		if (count($tmpMsg) && !wfReadOnly()) {
 			$userID = $user->GetID();
 
 			$DB = wfGetDB(DB_MASTER);
@@ -743,7 +778,9 @@ class SiteWideMessages extends SpecialPage {
 	static function dismissMessage($messageID) {
 		global $wgUser, $wgMemc;
 		$userID = $wgUser->GetID();
-		if ($userID) {
+		if (wfReadOnly()) {
+			return wfMsg('readonly');
+		} elseif ($userID) {
 			$DB = wfGetDB(DB_MASTER);
 
 			$dbResult = $DB->Query (
@@ -760,7 +797,9 @@ class SiteWideMessages extends SpecialPage {
 			if ($oMsg = $DB->FetchObject($dbResult)) {
 				$mWikiId = $oMsg->msg_wiki_id;
 			}
-			$DB->FreeResult($dbResult);
+			if ($dbResult !== false) {
+				$DB->FreeResult($dbResult);
+			}
 
 			$dbResult = (boolean)$DB->Query (
 				  'REPLACE INTO ' . MSG_STATUS_DB
@@ -774,16 +813,27 @@ class SiteWideMessages extends SpecialPage {
 				, __METHOD__
 			);
 
-			$DB->close();
+			$DB->commit();
 
 			//purge the cache
 			$key = 'wikia:talk_messages:' . $userID . ':' . str_replace(' ', '_', $wgUser->getName());
 			$wgMemc->delete($key);
 
 			wfDebug(basename(__FILE__) . ' || ' . __METHOD__ . " || WikiId=$mWikiId, messageID=$messageID, result=" . ($dbResult ? 'true':'false') . "\n");
-			return $dbResult;
+			return (bool)$dbResult;
 		}
 		return false;
+	}
+
+	static function deleteMessagesOnWiki($city_id) {
+		$DB = wfGetDB(DB_MASTER);
+		$dbResult = (boolean)$DB->Query (
+			  'DELETE FROM ' . MSG_STATUS_DB
+			. ' WHERE msg_wiki_id = ' . $DB->AddQuotes($city_id)
+			. ';'
+			, __METHOD__
+		);
+		return $dbResult;
 	}
 }
 
