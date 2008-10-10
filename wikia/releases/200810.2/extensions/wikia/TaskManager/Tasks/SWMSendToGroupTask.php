@@ -3,7 +3,7 @@
 /**
  * @package MediaWiki
  * @subpackage BatchTask
- * @author Maciej Błaszkowski <marooned at wikia.com> for Wikia.com
+ * @author Maciej Błaszkowski <marooned at wikia-inc.com> for Wikia.com
  * @copyright (C) 2008, Wikia Inc.
  * @licence GNU General Public Licence 2.0 or later
  */
@@ -352,7 +352,7 @@ class SWMSendToGroupTask extends BatchTask {
 
 		$sqlValues = array();
 		while ($row = $DB->FetchObject($dbResult)) {
-			$sqlValues[] = "($wikiID, {$row->ug_user}, {$params['messageId']}, " . '2' . ')';
+			$sqlValues[] = "($wikiID, {$row->ug_user}, {$params['messageId']}, " . MSG_STATUS_UNSEEN . ')';
 		}
 		$DB->FreeResult($dbResult);
 		$this->addLog("Add records about new message to right users [wiki_id = $wikiID, wiki_db = $wikiDB, number of users = " . count($sqlValues) . "]");
@@ -542,7 +542,7 @@ class SWMSendToGroupTask extends BatchTask {
 			$sqlValues = array();
 			while ($row = $DB->FetchObject($dbResult)) {
 				if (empty($usersSent[$row->user_id])) {
-					$sqlValues[] = "($wikiID, {$row->user_id}, {$params['messageId']}, " . '2' . ')';
+					$sqlValues[] = "($wikiID, {$row->user_id}, {$params['messageId']}, " . MSG_STATUS_UNSEEN . ')';
 					$usersSent[$row->user_id] = true;
 				}
 			}
@@ -596,7 +596,7 @@ class SWMSendToGroupTask extends BatchTask {
 			$sqlValues = array();
 			while ($row = $DB->FetchObject($dbResult)) {
 				if (empty($usersSent[$row->ug_user])) {
-					$sqlValues[] = "($wikiID, {$row->ug_user}, {$params['messageId']}, " . '2' . ')';
+					$sqlValues[] = "($wikiID, {$row->ug_user}, {$params['messageId']}, " . MSG_STATUS_UNSEEN . ')';
 					$usersSent[$row->ug_user] = true;
 				}
 			}

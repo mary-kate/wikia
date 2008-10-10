@@ -351,7 +351,7 @@ class SiteWideMessages extends SpecialPage {
 							. $DB->AddQuotes($mWikiId). ', '
 							. $DB->AddQuotes($mRecipientId) . ', '
 							. $DB->AddQuotes($result['msgId']) . ', '
-							. '2'
+							. MSG_STATUS_UNSEEN
 							. ');'
 							, __METHOD__
 						);
@@ -438,7 +438,7 @@ class SiteWideMessages extends SpecialPage {
 									$DB = wfGetDB(DB_MASTER);
 									$sqlValues = array();
 									foreach($activeUsers as $activeUser) {
-										$sqlValues[] = "($mWikiId, $activeUser, {$result['msgId']}, " . '2' . ')';
+										$sqlValues[] = "($mWikiId, $activeUser, {$result['msgId']}, " . MSG_STATUS_UNSEEN . ')';
 									}
 									if (count($sqlValues)) {
 										$dbResult = (boolean)$DB->Query (
@@ -968,4 +968,3 @@ class SiteWideMessagesPager extends TablePager {
 		return "<tr><td colspan=\"$colspan\">$msgEmpty</td></tr>\n";
 	}
 }
-?>
