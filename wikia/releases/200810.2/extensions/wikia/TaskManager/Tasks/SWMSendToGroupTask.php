@@ -61,11 +61,11 @@ class SWMSendToGroupTask extends BatchTask {
 			case 'ALL':
 				switch ($args['sendModeUsers']) {
 					case 'ACTIVE':
-						$this->sendMessageToActive($args);
+						$result = $this->sendMessageToActive($args);
 						break;
 
 					case 'GROUP':
-						$this->sendMessageToGroup($args);
+						$result = $this->sendMessageToGroup($args);
 						break;
 				}
 				break;
@@ -74,11 +74,11 @@ class SWMSendToGroupTask extends BatchTask {
 				switch ($args['sendModeUsers']) {
 					case 'ALL':
 					case 'ACTIVE':
-						$this->sendMessageToHub($args);
+						$result = $this->sendMessageToHub($args);
 						break;
 
 					case 'GROUP':
-						$this->sendMessageToGroupOnHub($args);
+						$result = $this->sendMessageToGroupOnHub($args);
 						break;
 				}
 				break;
@@ -608,5 +608,6 @@ class SWMSendToGroupTask extends BatchTask {
 			}
 			unset($sqlValues);
 		}
+		return $result;
 	}
 }
