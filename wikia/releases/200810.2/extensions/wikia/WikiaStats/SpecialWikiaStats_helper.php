@@ -1602,6 +1602,8 @@ class WikiaGenericStats {
 			$stats_date = self::getDateStatisticGenerate($city_id);
 		}
 		
+		$all = (!empty($city_id)) ? 0 : 1;
+		
 		$localStats = $this->getLocalStats();
 		$memkey = md5($city_id."_".$year_from."_".$month_from."_".$year_to."_".$month_to."_".intval($localStats));
     	$memkey = "wikiamainstatistics_".$memkey;
