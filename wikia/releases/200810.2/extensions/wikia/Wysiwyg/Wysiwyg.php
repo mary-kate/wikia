@@ -80,7 +80,7 @@ function WysiwygInitial($form) {
 			$script = '<script type="text/javascript" src="'.$wgExtensionsPath.'/wikia/Wysiwyg/fckeditor/fckeditor.js?'.$wgStyleVersion.'"></script>';
 			$script .= <<<EOT
 <script type="text/javascript">
-document.domain = 'wikia.com';
+//document.domain = 'wikia.com';
 function FCKeditor_OnComplete(editorInstance) {
 	editorInstance.LinkedField.form.onsubmit = function() {
 		if(editorInstance.EditMode == FCK_EDITMODE_SOURCE) {
@@ -199,7 +199,7 @@ function wfWysiwygWiki2Html($wikitext, $articleId = -1, $encode = false) {
  *
  * @return string refId
  */
-function wfFCKSetRefId($type, &$text, $link, $trail, $wasblank, $noforce, $returnOnly = false) {
+function wfFCKSetRefId($type, &$text, $link, $trail, $wasblank, $noforce, $returnOnly = false, $lineStart = false) {
 	global $FCKmetaData;
 	$tmpDescription = $wasblank ? '' : $text;
 	$refId = count($FCKmetaData);
@@ -211,6 +211,9 @@ function wfFCKSetRefId($type, &$text, $link, $trail, $wasblank, $noforce, $retur
 		list($tmpInside, $tmpTrail) = Linker::splitTrail($trail);
 	}
 	$FCKmetaData[$refId] = array('type' => $type, 'href' => ($noforce ? '' : ':') . $link, 'description' => $tmpDescription, 'trial' => $tmpInside);
+	if($lineStart) {
+		$FCKmetaData[$refId]['lineStart'] = true;
+	}
 	return " refid=\"$refId\"";
 }
 
