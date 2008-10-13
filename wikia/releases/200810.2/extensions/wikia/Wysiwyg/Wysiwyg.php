@@ -174,6 +174,9 @@ function wfWysiwygWiki2Html($wikitext, $articleId = -1, $encode = false) {
 
 	$html = preg_replace('%<span refid="(\\d+)">(.*?)</span>%sie', '"<input type=\"button\" refid=\"\\1\" value=\"" . htmlspecialchars("\\2") . "\" title=\"" . htmlspecialchars("\\2") . "\" class=\"wysiwygDisabled\" />"', $html);
 
+	// macbre: quick for whitespaces added before <input>
+	$html = str_replace("\n<input", '<input', $html);
+
 	wfDebug("wfWysiwygWiki2Html html: {$html}\n");
 
 	$wysiwygData = $FCKmetaData;
