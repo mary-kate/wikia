@@ -538,6 +538,11 @@ class ReverseParser {
 
 				// {{template}}
 				case 'curly brackets':
+					if(!empty($refData['lineStart'])) {
+						if(!$node->isSameNode($node->parentNode->firstChild)) {
+							return "\n".$refData['description'];
+						}
+					}
 					return $refData['description'];
 
 				// __TOC__
