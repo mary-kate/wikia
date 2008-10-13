@@ -40,6 +40,8 @@ class ReverseParser {
 				' <ol' => '<ol',
 				' <ul' => '<ul',
 				' <li' => '<li',
+				' </dd>' => '</dd>',
+				' </dt>' => '</dt>',
 				' <pre>' => '<pre>'
 			);
 
@@ -444,6 +446,8 @@ class ReverseParser {
 				// ::: ...
 				if($node->hasChildNodes() && $node->childNodes->item(0)->nodeName == 'dl') {
 					return rtrim($content, ' ') . "\n";
+				} else if ($this->hasListInside($node)) {
+					return $content . "\n";
 				} else {
 					return $this->listBullets . $content . "\n";
 				}
@@ -702,4 +706,17 @@ class ReverseParser {
 	private function isList($node) {
 		return in_array($node->nodeName, array('ol', 'ul', 'dl'));
 	}
+
+	/**
+	 * Return true if given node has list element as one of his nested child
+	 */
+	private function hasListInside($node, $lists) {
+		while($node->hasChildNodes()) {
+			$node = $node->firstChild;
+			if ( in_array($node->nodeName, array('ol', 'ul')) ) {
+				return true;
+			}
+		}
+		return false;
+ 	}
 }
