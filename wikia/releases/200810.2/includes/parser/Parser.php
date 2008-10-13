@@ -2834,7 +2834,7 @@ class Parser
 				$textArgs[] = $args->node->item($i)->textContent;
 			}
 			$templateText = implode('', $frame->virtualBracketedImplode('{{', '|', '}}', $titleWithSpaces, $textArgs));
-			$refId = wfFCKSetRefId('curly brackets', $templateText, '', '', false, true, true);
+			$refId = wfFCKSetRefId('curly brackets', $templateText, '', '', false, true, true, $piece['lineStart']);
 			$text = "<span$refId>" . $templateText . '</span>';
 			$found = true;
 		}
@@ -4198,7 +4198,7 @@ class Parser
 						} else {
 							$query .= ', ';
 						}
-	
+
 						$query .= $dbr->addQuotes( $this->mLinkHolders['dbkeys'][$key] );
 					}
 				}
