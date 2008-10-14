@@ -619,6 +619,7 @@ class ReverseParser {
 			switch($data['type']) {
 				case 'internal link':
 				case 'internal link: file':
+				case 'internal link: special page':
 					$tag =  "[[{$data['href']}";
 
 					if($content != $data['href'] . $data['trial'] && $content != $data['description'] . $data['trial']) {
