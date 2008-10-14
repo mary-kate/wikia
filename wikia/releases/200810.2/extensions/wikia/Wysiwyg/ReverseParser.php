@@ -388,7 +388,7 @@ class ReverseParser {
 						if($node->hasChildNodes() && $node->childNodes->item(0)->nodeType != XML_TEXT_NODE) {
 							// node with child nodes
 							// add \n only when node is HTML block element
-							if ($this->isFormattingElement($node)) {
+							if ($this->isInlineElement($node)) {
 								$textContent = trim($textContent);
 								$trial = '';
 								$prefix = '';
