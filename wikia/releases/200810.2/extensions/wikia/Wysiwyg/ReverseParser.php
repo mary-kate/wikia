@@ -147,6 +147,10 @@ class ReverseParser {
 						// <br /> as first child of <p> will be parsed as line break
 						if($node->parentNode && $node->parentNode->nodeName == 'p' && $node->parentNode->hasChildNodes() && $node->parentNode->childNodes->item(0)->isSameNode($node)) {
 							$out = "\n";
+						}
+						// remove <br /> when it's the last child of parent being inline element
+						else if ($node->parentNode && $this->isFormattingElement($node->parentNode) && $node->isSameNode($node->parentNode->lastChild) ) {
+							$out = '';
 						} else {
 							$out = '<br />';
 						}
@@ -384,7 +388,7 @@ class ReverseParser {
 						if($node->hasChildNodes() && $node->childNodes->item(0)->nodeType != XML_TEXT_NODE) {
 							// node with child nodes
 							// add \n only when node is HTML block element
-							if ($this->isInlineElement($node) && !in_array($node->nodeName, array('p', 'div'))) {
+							if ($this->isFormattingElement($node)) {
 								$textContent = trim($textContent);
 								$trial = '';
 								$prefix = '';
@@ -685,6 +689,14 @@ class ReverseParser {
 		}
 		return $attStr;
 	 }
+
+	/**
+	 * Return true if given node is inline formatting element
+	 */
+
+	private function isFormattingElement($node) {
+		return in_array($node->nodeName, array('u', 'b', 'strong', 'i', 'em', 'strike', 's'));
+	}
 
 	/**
 	 * Return true if given node is inline HTNL element or can contain inline elements (p / div)
