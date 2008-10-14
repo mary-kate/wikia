@@ -70,7 +70,8 @@ class AdProviderDART implements iAdProvider {
 		$url .= $this->getProviderValues($slot);
 		$url .= $this->getArticleKV();
 		$url .= $this->getDomainKV($_SERVER['HTTP_HOST']);
-		$url .= 'wkabkt=@@WIKIABUCKET@@;'; // To be filled in from AdEngine.bucket via javascript
+		$url .= 'AQ=@@WIKIA_AQ@@;'; // To be filled in from AdEngine.bucket via javascript
+		$url .= 'wkabkt=@@WIKIA_BUCKET@@;'; // To be filled in from AdEngine.bucket via javascript
 		$url .= 'pos=' . $slotname . ';';
 		$url .= $this->getKeywordsKV();
 		$url .= $this->getDcoptKV($slotname);
@@ -78,14 +79,16 @@ class AdProviderDART implements iAdProvider {
 		$url .= $this->getTileKV($slotname);
 		// special "end" delimiter, this is for when we redirect ads to other places. Per Michael
 		$url .= 'endtag=$;';
-		$url .= "ord="; // See note above, ord MUST be last.
+		$url .= "ord=@@WIKIA_RANDOM@@?"; // See note above, ord MUST be last. Also note that DART told us to put the ? at the end
 
 		$out = "<!-- " . __CLASS__ . " slot: $slotname -->";
 		$out .= '<script type="text/javascript">/*<![CDATA[*/' . "\n";
 		// Ug. Heredocs suck, but with all the combinations of quotes, it was the cleanest way.
 		$out .= <<<EOT
-		dartUrl = '$url' + AdsCB;
-		dartUrl = dartUrl.replace(/@@WIKIABUCKET@@/, AdEngine.bucketid);
+		dartUrl = "$url";
+		dartUrl = dartUrl.replace(/@@WIKIA_BUCKET@@/, AdEngine.bucketid);
+		dartUrl = dartUrl.replace(/@@WIKIA_AQ@@/, AdEngine.getMinuteTargeting());
+		dartUrl = dartUrl.replace(/@@WIKIA_RANDOM@@/, AdsCB);
 		document.write("<scr"+"ipt type='text/javascript' src='"+ dartUrl +"'><\/scr"+"ipt>");
 EOT;
 		$out .= "/*]]>*/</script>\n";
@@ -143,8 +146,8 @@ EOT;
 		}
 
 		$out='';
-		foreach ($slot['provider_values'] as $keyname => $keyvalue){
-			$out .= $this->sanitizeKeyName($keyname) . '=' . $this->sanitizeKeyValue($keyvalue) . ';';
+		foreach ($slot['provider_values'] as $kvpair){
+			$out .= $this->sanitizeKeyName($kvpair['keyname']) . '=' . $this->sanitizeKeyValue($kvpair['keyvalue']) . ';';
 		}
 		return $out;
 	}
@@ -173,7 +176,8 @@ EOT;
 		// Spaces are allowed in key-values only if an escaped character %20 is used, otherwise the key-
 		// value will not be funtional.
 		// Nick wrote: Retarted. They should just use url-encoding.
-		$out = str_replace(' ', '%20 ', $out);
+		// UPDATE: Michael says that even though this is valid in the spec, it causes problems in the UI
+		$out = str_replace(' ', '', $out);
 
 		// The value of a key-value cannot be empty, however, where there
 		// are instances where the value is intentionally blank, populate the value with null or some other
@@ -196,14 +200,14 @@ EOT;
 		 * tile=1 is a parameter that, in conjunction with other sequential tile values on a page, will enable the competitive categories and roadblock features to work. Tile values should match the amount of ads on a given page, but they do not necessarily need to match the order in which the ads appear.													*/
 		// Nick wrote: Chose to hard code this for now based on slot, for simplicity
 		switch($slotname) {
-			case 'TOP_LEADERBOARD': return 'tile=1;';
-			case 'TOP_RIGHT_BOXAD': return 'tile=2;';
+			case 'TOP_RIGHT_BOXAD': return 'tile=1;';
+			case 'TOP_LEADERBOARD': return 'tile=2;';
 			case 'LEFT_SKYSCRAPER_1': return 'tile=3;';
 			case 'LEFT_SKYSCRAPER_2': return 'tile=3;'; // same so both skyscrapers don't show. Note: This isn't working.
 			case 'LEFT_SKYSCRAPER_3': return 'tile=6;'; 
 			case 'FOOTER_BOXAD': return 'tile=5;';
-			case 'HOME_TOP_LEADERBOARD': return 'tile=1;';
-			case 'HOME_TOP_RIGHT_BOXAD': return 'tile=2;';
+			case 'HOME_TOP_RIGHT_BOXAD': return 'tile=1;';
+			case 'HOME_TOP_LEADERBOARD': return 'tile=2;';
 			case 'HOME_LEFT_SKYSCRAPER_1': return 'tile=3;';
 			case 'HOME_LEFT_SKYSCRAPER_2': return 'tile=3;';
 			default: return '';
