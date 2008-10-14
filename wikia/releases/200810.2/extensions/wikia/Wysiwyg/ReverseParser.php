@@ -135,7 +135,7 @@ class ReverseParser {
 
 			$washtml = $node->getAttribute('washtml');
 
-			$textContent = ($childOut != '') ? $childOut : $this->cleanupTextContent($node->textContent);
+			$textContent = ($childOut != '') ? $childOut : $this->cleanupTextContent($node);
 
 			if(empty($washtml)) {
 				switch($node->nodeName) {
@@ -415,7 +415,7 @@ class ReverseParser {
 				$out = '';
 			}
 			else {
-				$out = $this->cleanupTextContent($node->textContent);
+				$out = $this->cleanupTextContent($node);
 			}
 
 		}
@@ -479,13 +479,18 @@ class ReverseParser {
 	/**
 	 * Clean up node text content
 	 */
-	private function cleanupTextContent($text) {
+	private function cleanupTextContent($node) {
 		wfProfileIn(__METHOD__);
+
+		$text = $node->textContent;
 
 		if($text == '') {
 			wfProfileOut(__METHOD__);
 			return '';
 		}
+
+		// is text node the first child of parent node?
+		$isFirstChild = $node->isSameNode($node->parentNode->firstChild);
 
 		wfDebug("WYSIWYG ReverseParser cleanupTextContent for: {$text}\n");
 
@@ -495,16 +500,22 @@ class ReverseParser {
 		// 2. wrap = using <nowiki>
 		$text = preg_replace("/^(=+)/m", '<nowiki>$1</nowiki>', $text);
 
-		// 3. wrap list bullets using <nowiki>
-		$text = preg_replace("/^([#*]+)/", '<nowiki>$1</nowiki>', $text);
-
-		// 4. semicolon at the beginning of the line
-		if(in_array($text{0}, array(':', ';'))) {
-			$text = '<nowiki>' . $text{0} . '</nowiki>' . substr($text, 1);
+		// 3. wrap wikimarkup special characters (only when they're at the beginning of the p/td...)
+		if ($isFirstChild) {
+			// 3a. wrap list bullets using <nowiki>
+			$text = preg_replace("/^([#*]+)/", '<nowiki>$1</nowiki>', $text);
+	
+			// 3b. semicolon at the beginning of the line
+			if(in_array($text{0}, array(':', ';'))) {
+				$text = '<nowiki>' . $text{0} . '</nowiki>' . substr($text, 1);
+			}
 		}
 
-		// 5. wrap magic words {{ }} using <nowiki>
+		// 4. wrap curly brackets {{ }} using <nowiki>
 		$text = preg_replace("/({{2,3})([^}]+)(}{2,3})/", '<nowiki>$1$2$3</nowiki>', $text);
+
+		// 5. wrap magic words __ __ using <nowiki>
+		$text = preg_replace("/__([\d\D]+)__/", '<nowiki>__$1__</nowiki>', $text);
 
 		// 6. wrap [[foo]] using <nowiki>
 		$text = preg_replace("/(\[{2,})([^]]+)(\]{2,})/", '<nowiki>$1$2$3</nowiki>', $text);
