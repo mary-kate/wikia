@@ -87,16 +87,27 @@ FCKIndentCommand.prototype =
 		var startContainer = FCKSelection.GetBoundaryParentElement( true ) ;
 		var endContainer = FCKSelection.GetBoundaryParentElement( false ) ;
 		var listNode = FCKDomTools.GetCommonParentNode( startContainer, endContainer, ['ul','ol'] ) ;
+		var headerNode = FCKDomTools.GetCommonParentNode( startContainer, endContainer, ['h1','h2','h3','h4','h5','h6'] ) ;
 
+		// Wikia: allow indenting of lists and disallow indenting of headers
 		if ( listNode )
 		{
+			return FCK_TRISTATE_OFF;
+			/*
 			if ( this.Name.IEquals( 'outdent' ) )
 				return FCK_TRISTATE_OFF ;
 			var firstItem = FCKTools.GetElementAscensor( startContainer, 'li' ) ;
 			if ( !firstItem || !firstItem.previousSibling )
 				return FCK_TRISTATE_DISABLED ;
 			return FCK_TRISTATE_OFF ;
+			*/
 		}
+
+		if ( headerNode )
+		{
+			return FCK_TRISTATE_DISABLED;
+		}
+
 		if ( ! FCKIndentCommand._UseIndentClasses && this.Name.IEquals( 'indent' ) )
 			return FCK_TRISTATE_OFF;
 
