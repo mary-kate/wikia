@@ -227,6 +227,26 @@ FCKIndentCommand.prototype =
 		if ( itemsToMove.length < 1 )
 			return ;
 
+		// Wikia: handle whole list indentation (do not touch nested lists!)
+		if ( (startContainer == listNode.firstChild) && (endContainer == listNode.lastChild) && !listNode.parentNode.nodeName.IEquals('li') ) {
+			// Offset distance is assumed to be in pixels for now.
+			var CSSmargin = parseInt( listNode.style[this.IndentCSSProperty], 10 ) ;
+			if ( isNaN( CSSmargin ) )
+				CSSmargin = 0 ;
+			currentOffset = CSSmargin + this.Offset ;
+			currentOffset = Math.max( currentOffset, 0 ) ;
+			currentOffset = Math.ceil( currentOffset / this.Offset ) * this.Offset ;
+			listNode.style[this.IndentCSSProperty] = currentOffset ? currentOffset + FCKConfig.IndentUnit : '' ;
+			if ( listNode.getAttribute( 'style' ) == '' )
+				listNode.removeAttribute( 'style' ) ;
+		
+			// keep indentation or ...
+			if ( (this.Offset > 0) || (CSSmargin > 0) ) {
+				return ;
+			}
+			// ... remove the list ...
+		}
+
 		// Do indent or outdent operations on the array model of the list, not the list's DOM tree itself.
 		// The array model demands that it knows as much as possible about the surrounding lists, we need
 		// to feed it the further ancestor node that is still a list.
