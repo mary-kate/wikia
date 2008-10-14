@@ -21,6 +21,25 @@ function wfWysiwygToggle($toggles, $default_array = false) {
 	return true;
 }
 
+// register __NOWYSIWYG__ magic word
+$wgHooks['MagicWordwgVariableIDs'][] = 'wfWysiwygRegisterMagicWordID';
+$wgHooks['LanguageGetMagic'][] = 'wfWysiwygGetMagicWord';
+$wgHooks['ParserAfterStrip'][] = 'wfWysiwygAfterStrip';
+function wfWysiwygRegisterMagicWordID(&$magicWords) {
+	$magicWords[] = 'MAG_NOWYSIWYG';
+	return true;
+}
+
+function wfWysiwygGetMagicWord(&$magicWords, $langCode) {
+	$magicWords['MAG_NOWYSIWYG'] = array(0, '__NOWYSIWYG__');
+	return true;
+}
+
+function wfWysiwygAfterStrip(&$parser, &$text, &$strip_state) {
+	MagicWord::get('MAG_NOWYSIWYG')->matchAndRemove($text);
+	return true;
+}
+
 $wgHooks['AlternateEdit'][] = 'WysiwygAlternateEdit';
 function WysiwygAlternateEdit($form) {
 	global $wgRequest;
