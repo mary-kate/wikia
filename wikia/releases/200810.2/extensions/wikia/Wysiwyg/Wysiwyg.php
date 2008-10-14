@@ -8,7 +8,7 @@ $wgExtensionCredits['other'][] = array(
 
 $dir = dirname(__FILE__).'/';
 $wgExtensionMessagesFiles['Wysiwyg'] = $dir.'Wysiwyg.i18n.php';
-$wgAjaxExportList[] = 'wfWysywigAjax';
+$wgAjaxExportList[] = 'Wysywig_Ajax';
 
 $wgHooks['AlternateEdit'][] = 'Wysiwyg_AlternateEdit';
 $wgHooks['EditPage::showEditForm:initial'][] = 'Wysiwyg_Initial';
@@ -42,7 +42,7 @@ function Wysiwyg_Toggle($toggles, $default_array = false) {
 	return true;
 }
 
-function wfWysywigAjax($type, $input = false, $wysiwygData = false, $articleId = -1) {
+function Wysywig_Ajax($type, $input = false, $wysiwygData = false, $articleId = -1) {
 	if($type == 'html2wiki') {
 
 		return new AjaxResponse(Wysiwyg_HtmlToWikiText($input, $wysiwygData, true));
@@ -120,12 +120,12 @@ addOnloadHook(initEditor);
 #editform #toolbar {
 	display: none
 }
-	#wpTextbox1 {
-		visibility: hidden;
-	}
-	#editform {
-		background: transparent url('$wgExtensionsPath/wikia/Wysiwyg/fckeditor/editor/skins/default/images/progress_transparent.gif') no-repeat 50% 35%;
-	}
+#wpTextbox1 {
+	visibility: hidden;
+}
+#editform {
+	background: transparent url('$wgExtensionsPath/wikia/Wysiwyg/fckeditor/editor/skins/default/images/progress_transparent.gif') no-repeat 50% 35%;
+}
 /*]]>*/</style>
 EOT;
 	$wgOut->addScript($script);
