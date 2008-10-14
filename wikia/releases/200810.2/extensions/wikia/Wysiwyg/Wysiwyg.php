@@ -129,6 +129,12 @@ addOnloadHook(initEditor);
 	#editform #toolbar {
 		display: none
 	}
+	#wpTextbox1 {
+		visibility: hidden;
+	}
+	#editform {
+		background: transparent url('$wgExtensionsPath/wikia/Wysiwyg/fckeditor/editor/skins/default/images/progress_transparent.gif') no-repeat 50% 35%;
+	}
 /*]]>*/</style>
 EOT;
 			$wgOut->addScript($script);
