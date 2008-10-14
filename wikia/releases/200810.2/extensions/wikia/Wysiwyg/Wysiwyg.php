@@ -145,7 +145,7 @@ function Wysiwyg_AlternateEdit($form) {
 	if(isset($wgRequest->data['wpTextbox1'])) {
 		if(isset($wgRequest->data['wysiwygData'])) {
 			if($wgRequest->data['wysiwygData'] != '') {
-				$wgRequest->data['wpTextbox1'] = wfWysiwygHtml2Wiki($wgRequest->data['wpTextbox1'], $wgRequest->data['wysiwygData'], true);
+				$wgRequest->data['wpTextbox1'] = Wysiwyg_HtmlToWikiText($wgRequest->data['wpTextbox1'], $wgRequest->data['wysiwygData'], true);
 			}
 		}
 	}
