@@ -1458,15 +1458,27 @@ class WikiaGenericStats {
 	static private function setWikiEditPagesOutput($city_id, $statsCount, $mSourceMetaSpace)
 	{
         global $wgUser, $wgCanonicalNamespaceNames, $wgLang;
+        global $wgDBname, $wgScript;
 		wfProfileIn( __METHOD__ );
+		
+		$aNamespaces = WikiFactory::getVarValueByName('wgExtraNamespacesLocal', $city_id);
+		$_wgScript = ($wgDBname != CENTRAL_WIKIA_ID) ? $wgScript : WikiFactory::getVarValueByName('wgScript', $city_id) ;
+		if ( is_array($aNamespaces) ) {
+			$aNamespaces = array_merge($wgCanonicalNamespaceNames, $aNamespaces);
+		} else {
+			$aNamespaces = $wgCanonicalNamespaceNames;
+		}
+		
 		#---
         $oTmpl = new EasyTemplate( dirname( __FILE__ ) . "/templates/" );
         $oTmpl->set_vars( array(
             "city_url"		=> self::getWikiaCityUrlById($city_id),
             "statsCount" 	=> $statsCount,
             "projectNamespace" => $mSourceMetaSpace,
-            "canonicalNamespace" => $wgCanonicalNamespaceNames,
+            "canonicalNamespace" => $aNamespaces,
+            "centralVersion" => ($wgDBname == CENTRAL_WIKIA_ID),
             "wgLang" => $wgLang,
+            "_wgScript" => $_wgScript
         ));
         #---
         $res = $oTmpl->execute("page-counts-stats");
