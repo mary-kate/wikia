@@ -59,14 +59,7 @@ class CreatePageMultiEditor extends CreatePageEditor {
 		// check for already submitted values - for a preview, for example
 		('' != $wgRequest->getVal ('wpSummary')) ? $summaryval = $wgRequest->getVal ('wpSummary') : $summaryval = '' ;		
 		if ($this->mInitial) {
-			if( $wgUser->getOption( 'watchdefault' ) ) {
-                                $watchthischeck = 'checked="checked"' ;
-                        } elseif( $wgUser->getOption( 'watchcreations' ) && !$title->exists() ) {
-                                $watchthischeck = 'checked="checked"' ;
-                        } else {
-                                $watchthischeck = '' ;
-                        }
-
+                        $watchthischeck = 'checked="checked"' ;
                         if( $wgUser->getOption( 'minordefault' ) ) {
 				$minoreditcheck = 'checked="checked"' ;
 			} else {
@@ -109,17 +102,20 @@ class CreatePageMultiEditor extends CreatePageEditor {
 
 	// take given categories and glue them together
 	function GlueCategories ($checkboxes_array, $categories) {
+		global $wgContLang;
+
 		$text = '' ;
-		// todo insert Category: in different languages
+		$ns_cat = $wgContLang->getFormattedNsText( NS_CATEGORY );
+
 		foreach ($checkboxes_array as $category) {
-			$text .= "\n[[Category:" . $category . "]]" ;
+			$text .= "\n[[" . $ns_cat . ":" . $category . "]]" ;
 		} 
 
 		// parse the textarea
-        	$categories_array = preg_split ("/,/", $categories, -1) ;
+        	$categories_array = preg_split ("/\|/", $categories, -1) ;
 		foreach ($categories_array as $category) {
 			if (!empty ($category)) {
-				$text .= "\n[[Category:" . $category . "]]" ;
+				$text .= "\n[[" . $ns_cat . ":" . $category . "]]" ;
 			}
 		} 
 		

@@ -9,6 +9,7 @@ $messages['en'] = array(
 	'me_edit_muli_editor' => 'Multi-edit Editor' ,
 	'me_upload' => 'Upload image' ,
 	'me_hide' => 'Hide' ,
+	'me_show' => 'Show' ,
         'createpage_title' => 'Create a new article' ,
 	'createpage_title_additional' => "You've followed a link to a page that doesn't exist yet. To create the page, start typing in the box below" ,
         'createpage_title_caption' => 'Article Title' ,
@@ -18,7 +19,7 @@ $messages['en'] = array(
         'createpage_article_title' => 'Article Title Here' ,
         'createpage_give_title' => 'Please specify a title' ,
         'createpage_title_invalid' => 'Please specify a valid title' ,
-        'createpage_article_exists' => 'This article already exists. Edit ' ,
+        'createpage_article_exists' => 'This article already exists. Edit' ,
 	'createpage_article_exists2' => ' or specify another title.' ,
 	'createpage_article_do_edit' => 'Edit this article' ,
 	'createpage_advanced_warning' => 'Switching editing modes may break page formatting, do you want to continue?' ,
@@ -48,10 +49,10 @@ $messages['en'] = array(
 	'createpage_please_wait' => 'Please wait...' ,
 	'createpage_upload_directory_read_only' => 'The upload directory is not writable by the webserver' ,
 	'headline_tip_3' => 'Level 3 headline' ,
-	'createpage_about_info' => 'This is the simplified editor. To find out more go to [[w:c:inside:CreatePage|Inside Wikia]].' ,
+	'createpage_about_info' => 'This is the simplified editor. To find out more go to [[w:c:help:Help:CreatePage|Wikia Help]].' ,
 	'createpage_advanced_text' => 'You can also use the $1.' ,
 	'createpage_advanced_edit' => 'advanced editor' ,
-	'tog-createpage-redlinks' => 'Use <a href="http://www.inside.wikia.com/wiki/CreatePage">CreatePage</a> when following broken links' ,	
+	'tog-createpage-redlinks' => 'Use <a href="http://help.wikia.com/wiki/Help:CreatePage">CreatePage</a> when following broken links' ,	
 );
 
 $messages['pl'] = array(
@@ -98,8 +99,8 @@ $messages['pl'] = array(
 	'createpage_please_wait' => 'Proszę czekać...' ,
 	'createpage_upload_directory_read_only' => 'Katalog ładowania obrazków nie jest zapisywalny przez serwer' ,
 	'headline_tip_3' => 'Nagłówek poziom 3' ,
-	'createpage_about_info' => 'Jesteś w uproszczonym edytorze. Więcej informacji o nim znajdziesz na [[w:c:inside:CreatePage|Inside Wikia]].' ,
+	'createpage_about_info' => 'Jesteś w uproszczonym edytorze. Więcej informacji o nim znajdziesz na [[w:c:help:Help:CreatePage|Wikia Help]].' ,
 	'createpage_advanced_text' => 'Możesz też użyć $1' ,
 	'createpage_advanced_edit' => 'zaawansowanego edytora' ,
-	'tog-createpage-redlinks' => 'Otwórz <a href="http://www.inside.wikia.com/wiki/CreatePage">CreatePage\'a</a> po przejściu do nieistniejącej strony'
+	'tog-createpage-redlinks' => 'Otwórz <a href="http://help.wikia.com/wiki/Help:CreatePage">CreatePage\'a</a> po przejściu do nieistniejącej strony'
 );
