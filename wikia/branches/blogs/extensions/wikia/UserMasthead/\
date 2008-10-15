@@ -1,0 +1,51 @@
+<?php
+$wgHooks['MonacoBeforePageBar'][] = 'userMasthead';
+
+function userMasthead() {
+	global $wgTitle, $wgUser, $userMasthead;
+	$namespace = $wgTitle->getNamespace();
+	if ($namespace == NS_USER || $namespace == NS_USER_TALK || $wgTitle == 'Special:Watchlist') {
+		$userMasthead = true; //hides article/talk tabs in Monaco.php
+		if ($namespace == NS_USER) {
+
+/*
+echo "<xmp>";
+foreach($GLOBALS as $varname => $varvalue){
+       if (strstr($varname, 'wg')){
+               if (is_object($varvalue)){
+                       echo "Methods for object $varname:";
+                       print_r(get_class_methods($varvalue));
+               } else {
+                       echo "$varname="; print_r($varvalue);
+               }
+               echo "\n";
+       }
+}
+echo "</xmp>";	
+*/
+			$user = $wgTitle;
+			echo $wgUser->getName();
+			echo $wgTitle;
+		}
+		$out = array();
+		if ( $wgUser->isLoggedIn() ) {
+			$out['nav_links'] = array (
+				array('text' => wfMsg('nstab-user'), 'href' => $wgTitle),
+				array('text' => wfMsg('talk'), 'href' => 'http://www.framezero.com')
+			);
+		} else {
+			$out['nav_links'] = array (
+				array('text' => 'not logged in', 'href' => $wgTitle)
+			);
+		}
+		
+		$tmpl = new EasyTemplate(dirname( __FILE__ ));
+		$tmpl->set_vars( array(
+			'data' => $out
+		));
+		echo $tmpl->execute('UserMasthead');
+	}
+	return true;
+}
+
+?>
