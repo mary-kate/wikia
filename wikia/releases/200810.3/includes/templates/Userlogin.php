@@ -333,11 +333,9 @@ class UsercreateTemplate extends QuickTemplate {
 		<tr>
 			<td class="mw-submit">
 				<input type='submit' name="wpCreateaccount" id="wpCreateaccount"
-					tabindex="<?php echo $tabIndex++; ?>"
 					value="<?php $this->msg('createaccount') ?>" />
 				<?php if( $this->data['createemail'] ) { ?>
 				<input type='submit' name="wpCreateaccountMail" id="wpCreateaccountMail"
-					tabindex="<?php echo $tabIndex++; ?>"
 					value="<?php $this->msg('createaccountmail') ?>" />
 				<?php } ?>
 				<span id="wpFormerror" class="inputError"><?= wfMsg('userlogin-form-error') ?></span>
@@ -435,13 +433,35 @@ class UsercreateTemplate extends QuickTemplate {
 				errorPass = true;
 			}
 		}
+		function checkUsernamePass() {
+			var pass = document.getElementById('wpPassword2').value;
+			var name = document.getElementById('wpName2').value;
+			if (pass != '') {
+				if (pass == name) {
+					YAHOO.util.Dom.addClass('wpPasswordTD', 'mw-input-error');
+					YAHOO.util.Dom.removeClass('wpPasswordTD', 'mw-input-ok');
+					errorPass = true;
+				} else {
+					YAHOO.util.Dom.removeClass('wpPasswordTD', 'mw-input-error');
+					YAHOO.util.Dom.addClass('wpPasswordTD', 'mw-input-ok');
+					errorPass = false;
+				}
+			}
+		}
 		function checkRetype() {
 			var pass = document.getElementById('wpPassword2').value;
 			var pass2= document.getElementById('wpRetype').value;
 			if (pass == pass2) {
-				YAHOO.util.Dom.removeClass('wpRetypeTD', 'mw-input-error');
-				YAHOO.util.Dom.addClass('wpRetypeTD', 'mw-input-ok');
-				errorRetype = false;
+				if ('' == pass2) {
+					YAHOO.util.Dom.addClass('wpRetypeTD', 'mw-input-error');
+					YAHOO.util.Dom.removeClass('wpRetypeTD', 'mw-input-ok');
+					errorRetype = true;
+				} else {
+					YAHOO.util.Dom.removeClass('wpRetypeTD', 'mw-input-error');
+					YAHOO.util.Dom.addClass('wpRetypeTD', 'mw-input-ok');
+					errorRetype = false;
+				}
+				
 			} else {
 				YAHOO.util.Dom.addClass('wpRetypeTD', 'mw-input-error');
 				YAHOO.util.Dom.removeClass('wpRetypeTD', 'mw-input-ok');
@@ -489,7 +509,7 @@ class UsercreateTemplate extends QuickTemplate {
 		document.getElementById('wpBirthYear').onchange = checkDate;
 		document.getElementById('wpBirthMonth').onchange = checkDate;
 		document.getElementById('wpBirthDay').onchange = checkDate;
-		document.getElementById('wpPassword2').onblur = checkPass;
+		document.getElementById('wpPassword2').onblur = function(){checkPass(); checkRetype(); checkUsernamePass()};
 		document.getElementById('wpRetype').onblur = checkRetype;
 	</script>
 	<?php
@@ -519,6 +539,7 @@ class UsercreateTemplate extends QuickTemplate {
 			YAHOO.util.Dom.removeClass('wpNameTD', 'mw-input-ok');
 			YAHOO.util.Dom.removeClass('wpNameTD', 'mw-input-error');
 			YAHOO.util.Dom.addClass('wpNameTD', 'mw-progress');
+			checkUsernamePass();
 			sajax_do_call('cxValidateUserName', Array (this.value), login_formhandler);
 		}
 
