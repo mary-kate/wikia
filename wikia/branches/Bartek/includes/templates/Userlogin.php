@@ -137,6 +137,7 @@ class UsercreateTemplate extends QuickTemplate {
 		var errorNick = false;	//nick checking can be disabled
 		var errorEmail = errorPass = errorRetype = errorDate = true;
 		var dateAccessed = 0;
+		var retypeAccessed = 0;
 
 		function checkForm() {
 			dateAccessed = 2;	//check date on submit
@@ -455,7 +456,10 @@ class UsercreateTemplate extends QuickTemplate {
 		}
 		function checkRetype() {
 			var pass = document.getElementById('wpPassword2').value;
-			var pass2= document.getElementById('wpRetype').value;
+			var pass2= document.getElementById('wpRetype').value;			
+			if (!retypeAccessed) {
+				return;
+			}
 			if (pass == pass2) {
 				if ('' == pass2) {
 					YAHOO.util.Dom.addClass('wpRetypeTD', 'mw-input-error');
@@ -502,7 +506,7 @@ class UsercreateTemplate extends QuickTemplate {
 			document.getElementById('wpEmail').onblur = checkEmail;
 		}
 		document.getElementById('wpPassword2').onfocus = function(){if (dateAccessed == 1) {dateAccessed = 2; checkDate();}};
-		document.getElementById('wpRetype').onfocus = function(){if (dateAccessed == 1) {dateAccessed = 2; checkDate();}};
+		document.getElementById('wpRetype').onfocus = function(){if (dateAccessed == 1) {dateAccessed = 2; checkDate();} retypeAccessed = 1;};
 		document.getElementById('wpRealName').onfocus = function(){if (dateAccessed == 1) {dateAccessed = 2; checkDate();}};
 
 		document.getElementById('wpName2').onkeyup = function(){
