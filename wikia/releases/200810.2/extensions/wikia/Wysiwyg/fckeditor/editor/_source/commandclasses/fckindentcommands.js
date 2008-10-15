@@ -228,11 +228,12 @@ FCKIndentCommand.prototype =
 			return ;
 
 		// Wikia: handle whole list indentation (do not touch nested lists!)
+		//
 		if ( (startContainer == listNode.firstChild) && (endContainer == listNode.lastChild) && !listNode.parentNode.nodeName.IEquals('li') ) {
-			// Offset distance is assumed to be in pixels for now.
 			var CSSmargin = parseInt( listNode.style[this.IndentCSSProperty], 10 ) ;
 			if ( isNaN( CSSmargin ) )
 				CSSmargin = 0 ;
+
 			currentOffset = CSSmargin + this.Offset ;
 			currentOffset = Math.max( currentOffset, 0 ) ;
 			currentOffset = Math.ceil( currentOffset / this.Offset ) * this.Offset ;
@@ -304,8 +305,13 @@ FCKIndentCommand.prototype =
 		// Convert the array back to a DOM forest (yes we might have a few subtrees now).
 		// And replace the old list with the new forest.
 		var newList = FCKDomTools.ArrayToList( listArray ) ;
-		if ( newList )
+		if ( newList ) {
+			// Wikia: reset CSS of indented nested list
+			indentedList = newList.listNode.firstChild.getElementsByTagName(newList.listNode.firstChild.nodeName)[0];
+			indentedList.style[this.IndentCSSProperty] = '';
+
 			listNode.parentNode.replaceChild( newList.listNode, listNode ) ;
+		}
 
 		// Clean up the markers.
 		FCKDomTools.ClearAllMarkers( markerObj ) ;
