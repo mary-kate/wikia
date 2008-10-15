@@ -365,6 +365,11 @@ class UsercreateTemplate extends QuickTemplate {
 		 YAHOO.Wikia.UserRegistration = {
 			init: function() {
 		        	YE.addListener('prefsHelpBirthday', 'click', YAHOO.Wikia.UserRegistration.showHintPanel);
+				// initial check
+				YAHOO.util.Dom.addClass('wpNameTD', 'mw-progress');
+				sajax_do_call('cxValidateUserName', Array (YD.get( 'wpName2' ).value), login_formhandler);
+				checkEmail();
+
       			},
 			buildHintPanel: function() {
 			        var signupWhy = YD.get( 'signupWhyProvide' );
