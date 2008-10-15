@@ -57,11 +57,11 @@ foreach ($statsCount as $cnt => $stats)
 			}
 		}
 		$title = ($naName) ? $naName . ":" . $stats['page_title'] : $stats['page_title'];
-		$url = "/index.php?title=$title";
+		$url = $city_url . $_wgScript . "?title=$title";
 	} else {
 		$t = Title::newFromText($stats['page_title'], $stats['namespace']);
 		$title = $t->getPrefixedDBKey();
-		$url = $t->getLocalURL();
+		$url = $t->getFullURL();
 	}
 ?>
 <tr id="wk-page-edited-row-<?=$stats['page_id']?>">
@@ -70,7 +70,7 @@ foreach ($statsCount as $cnt => $stats)
 	<td class="eb" style="white-space:nowrap;"><?= $reg_edits ?></td>
 	<td class="eb" style="white-space:nowrap;"><?= $stats['reg_users'] ?></td>
 	<td class="eb" style="white-space:nowrap;"><?= $stats['unreg_users'] ?></td>
-	<td class="ebl" style="white-space:nowrap;"><a href="<?= $city_url ?><?=$url?>" target="new"><?= $title ?></a></td>
+	<td class="ebl" style="white-space:nowrap;"><a href="<?= $url ?>" target="new"><?= $title ?></a></td>
 	<td class="eb" style="white-space:nowrap;"><?= $size ?></td>
 	<td class="ebl" style="white-space:nowrap;"><span onClick="wk_show_page_edited_details('<?=$stats['page_id']?>');" style="cursor:pointer; padding: 2px;" id="wk-page-edited-details-<?=$stats['page_id']?>"><?= wfMsg('wikiastats_more_txt') ?></span></td>
 </tr>	
