@@ -105,7 +105,7 @@ class WikiaGenericStats {
 
 			$wkCityDomains["&Sigma;"] = 0;
 			#---
-			ksort(&$wkCityDomains, SORT_STRING);
+			ksort($wkCityDomains, SORT_STRING);
 			#---
 			if (self::USE_MEMC) $wgMemc->set("wikiacitystatslist", $wkCityDomains, 60*60*3);
 		}
@@ -211,7 +211,6 @@ class WikiaGenericStats {
 			}
 			$dbs->freeResult( $res );
 			#---
-			//ksort(&$wkCityOrderStats, SORT_NUMERIC);
 			#---
 			if (self::USE_MEMC) $wgMemc->set($memckey, $wkCityOrderStats, 60*60*3);
 		}
@@ -1459,14 +1458,24 @@ class WikiaGenericStats {
 	static private function setWikiEditPagesOutput($city_id, $statsCount, $mSourceMetaSpace)
 	{
         global $wgUser, $wgCanonicalNamespaceNames, $wgLang;
+        global $wgDBname;
 		wfProfileIn( __METHOD__ );
+		
+		$aNamespaces = WikiFactory::getVarValueByName('wgExtraNamespacesLocal', $city_id);
+		if ( is_array($aNamespaces) ) {
+			$aNamespaces = array_merge($wgCanonicalNamespaceNames, $aNamespaces);
+		} else {
+			$aNamespaces = $wgCanonicalNamespaceNames;
+		}
+		
 		#---
         $oTmpl = new EasyTemplate( dirname( __FILE__ ) . "/templates/" );
         $oTmpl->set_vars( array(
             "city_url"		=> self::getWikiaCityUrlById($city_id),
             "statsCount" 	=> $statsCount,
             "projectNamespace" => $mSourceMetaSpace,
-            "canonicalNamespace" => $wgCanonicalNamespaceNames,
+            "canonicalNamespace" => $aNamespaces,
+            "centralVersion" => ($wgDBname == CENTRAL_WIKIA_ID),
             "wgLang" => $wgLang,
         ));
         #---
@@ -1542,7 +1551,7 @@ class WikiaGenericStats {
 		}
 
 		#---
-		krsort(&$mothlyStatsArray);
+		krsort($mothlyStatsArray);
 		wfProfileOut( __METHOD__ );
 		return $mothlyStatsArray;
 	}
@@ -1601,6 +1610,8 @@ class WikiaGenericStats {
 		if ($city_id > 0) {
 			$stats_date = self::getDateStatisticGenerate($city_id);
 		}
+		
+		$all = (!empty($city_id)) ? 0 : 1;
 		
 		$localStats = $this->getLocalStats();
 		$memkey = md5($city_id."_".$year_from."_".$month_from."_".$year_to."_".$month_to."_".intval($localStats));
