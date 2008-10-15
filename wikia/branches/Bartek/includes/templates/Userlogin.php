@@ -242,25 +242,31 @@ class UsercreateTemplate extends QuickTemplate {
 				<select name="wpBirthYear" id="wpBirthYear">
 					<option value="-1"><?php $this->msg('userlogin-choose-year') ?></option>
 					<?php
+					$setYear = $this->data['birthyear'];
 					$maxYear = date('Y');
 					for($year=$maxYear; $year>=1900; $year--) {
-						echo "\t\t\t\t\t<option value=\"$year\">$year</option>";
+						$selected = $setYear == $year ? ' selected="selected"' : '';
+						echo "\t\t\t\t\t<option value=\"$year\"$selected>$year</option>";
 					}
 					?>
 				</select>
 				<select name="wpBirthMonth" id="wpBirthMonth">
 					<option value="-1"><?php $this->msg('userlogin-choose-month') ?></option>
 					<?php
+					$setMonth = $this->data['birthmonth'];
 					for($month=1; $month<=12; $month++) {
-						echo "\t\t\t\t\t<option value=\"$month\">$month</option>";
+						$selected = $setMonth == $month ? ' selected="selected"' : '';
+						echo "\t\t\t\t\t<option value=\"$month\"$selected>$month</option>";
 					}
 					?>
 				</select>
 				<select name="wpBirthDay" id="wpBirthDay">
 					<option value="-1"><?php $this->msg('userlogin-choose-day') ?></option>
 					<?php
+					$setDay = $this->data['birthday'];
 					for($day=1; $day<=31; $day++) {
-						echo "\t\t\t\t\t<option value=\"$day\">$day</option>";
+						$selected = $setDay == $day ? ' selected="selected"' : '';
+						echo "\t\t\t\t\t<option value=\"$day\"$selected>$day</option>";
 					}
 					?>
 				</select>
@@ -327,11 +333,9 @@ class UsercreateTemplate extends QuickTemplate {
 		<tr>
 			<td class="mw-submit">
 				<input type='submit' name="wpCreateaccount" id="wpCreateaccount"
-					tabindex="<?php echo $tabIndex++; ?>"
 					value="<?php $this->msg('createaccount') ?>" />
 				<?php if( $this->data['createemail'] ) { ?>
 				<input type='submit' name="wpCreateaccountMail" id="wpCreateaccountMail"
-					tabindex="<?php echo $tabIndex++; ?>"
 					value="<?php $this->msg('createaccountmail') ?>" />
 				<?php } ?>
 				<span id="wpFormerror" class="inputError"><?= wfMsg('userlogin-form-error') ?></span>
@@ -448,9 +452,16 @@ class UsercreateTemplate extends QuickTemplate {
 			var pass = document.getElementById('wpPassword2').value;
 			var pass2= document.getElementById('wpRetype').value;
 			if (pass == pass2) {
-				YAHOO.util.Dom.removeClass('wpRetypeTD', 'mw-input-error');
-				YAHOO.util.Dom.addClass('wpRetypeTD', 'mw-input-ok');
-				errorRetype = false;
+				if ('' == pass2) {
+					YAHOO.util.Dom.addClass('wpRetypeTD', 'mw-input-error');
+					YAHOO.util.Dom.removeClass('wpRetypeTD', 'mw-input-ok');
+					errorRetype = true;
+				} else {
+					YAHOO.util.Dom.removeClass('wpRetypeTD', 'mw-input-error');
+					YAHOO.util.Dom.addClass('wpRetypeTD', 'mw-input-ok');
+					errorRetype = false;
+				}
+				
 			} else {
 				YAHOO.util.Dom.addClass('wpRetypeTD', 'mw-input-error');
 				YAHOO.util.Dom.removeClass('wpRetypeTD', 'mw-input-ok');
@@ -498,7 +509,7 @@ class UsercreateTemplate extends QuickTemplate {
 		document.getElementById('wpBirthYear').onchange = checkDate;
 		document.getElementById('wpBirthMonth').onchange = checkDate;
 		document.getElementById('wpBirthDay').onchange = checkDate;
-		document.getElementById('wpPassword2').onblur = function(){checkPass(); checkUsernamePass()};
+		document.getElementById('wpPassword2').onblur = function(){checkPass(); checkRetype(); checkUsernamePass()};
 		document.getElementById('wpRetype').onblur = checkRetype;
 	</script>
 	<?php
