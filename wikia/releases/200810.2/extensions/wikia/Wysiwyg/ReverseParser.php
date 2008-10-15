@@ -354,11 +354,12 @@ class ReverseParser {
 						break;
 
 					// images
+					/*
 					case 'img':
 					case 'div': // [[Image:foo.jpg|thumb]]
 						$out = $this->handleImage($node, $textContent);
 						break;
-
+					*/
 					// handle more complicated tags
 					case 'a':
 						$out = $this->handleLink($node, $textContent);
