@@ -23,7 +23,7 @@ $wgExtensionCredits['specialpage'][] = array(
    'name' => 'CreatePage',
    'author' => 'Bartek Łapiński, Lucas \'TOR\' Garczewski, Przemek Piotrowski'  ,
    'url' => 'http://help.wikia.com/wiki/Help:CreatePage' ,
-   'version' => '3.55' ,
+   'version' => '3.60' ,
    'description' => 'easy to use interface for creating new articles'
 );
 
@@ -48,6 +48,7 @@ if ($wgCreatePageCoverRedLinks) {
 
 /* special page init */
 $wgSpecialPages ['createpage'] = array('SpecialPage', 'Createpage', 'createpage', true, 'wfCreatePageSpecial', false) ;
+$wgSpecialPageGroups['Createpage'] = 'pagetools';
 
 // when AdvancedEdit button is used, the existing content is preloaded
 function wfCreatePagePreloadContent ($editpage) {
@@ -307,8 +308,7 @@ class CreatePageCreateplateForm {
 	}
 
         // produce a list of radio buttons from the given createplate array
-	function produceRadioList($createplates)
-	{
+	function produceRadioList($createplates) {
 		global $wgOut, $wgRequest, $wgServer, $wgScript ;
 
 		// this checks radio buttons when we have no javascript...
@@ -347,7 +347,7 @@ class CreatePageCreateplateForm {
 
 	// existing article check, returns different stuff for ajax and non-ajax versions
 	function checkArticleExists ($given, $ajax = false) {
-		global $wgOut ;
+		global $wgOut, $wgUser ;
 
 		if ($ajax) {
 			$wgOut->setArticleBodyOnly( true );
@@ -362,12 +362,16 @@ class CreatePageCreateplateForm {
 			$page = $title->getText () ;
 			$page = str_replace( ' ', '_', $page ) ;
 			$dbr =& wfGetDB (DB_SLAVE);
-			$exists = $dbr->selectField ('page', 'page_title', array ('page_title' => $page)) ;
+			$exists = $dbr->selectField ('page', 'page_title', array ('page_title' => $page, 'page_namespace' => $title->getNamespace() )) ;
 			if ($exists != '') {
 				if ($ajax) {
 					$wgOut->addHTML('pagetitleexists');
 				} else {
-					return wfMsg ('createpage_article_exists') ;
+					$sk = $wgUser->getSkin();
+					# Mimick the way AJAX version displays things and use the same two messages. 2 are needed for full i18n support.
+					return wfMsg ('createpage_article_exists') . " " 
+						. $sk->makeKnownLinkObj( $title, '', 'action=edit' )
+						. wfMsg ('createpage_article_exists2');
 				}
 			}
 			if (!$ajax) return false ;		
@@ -395,7 +399,6 @@ class CreatePageCreateplateForm {
 				return false ;
 			}
 			if ($wgRequest->getCheck ('wpSave') ) {
-				//apply the textbox into the object, then voila
 				$editor = new CreatePageMultiEditor ($this->mCreateplate) ;
 				$rtitle = Title::newFromText ($wgRequest->getVal ('Createtitle')) ;
 				$rarticle = new Article ($rtitle, $rtitle->getArticleID ()) ;
@@ -420,7 +423,7 @@ class CreatePageCreateplateForm {
 				return false ;
 			} else if ($wgRequest->getCheck ('wpAdvancedEdit')) {
                                 $editor = new CreatePageMultiEditor ($this->mCreateplate) ;
-                                $content = $editor->GlueArticle () ;
+                                $content = CreateMultiPage::unescapeBlankMarker ($editor->GlueArticle ()) ;
 				wfCreatePageUnescapeKnownMarkupTags ($content) ;				
 				$_SESSION ['article_content'] = $content ;
 				$wgOut->redirect ($wgServer . $wgScript . "?title=" . $wgRequest->getVal ('Createtitle') . "&action=edit&createpage=true") ;

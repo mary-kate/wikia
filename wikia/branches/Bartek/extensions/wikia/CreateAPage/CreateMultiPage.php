@@ -27,6 +27,7 @@ define ("SIMPLE_TAG_PARSE", '/\<!---(.*?)---\>/is');
 define ("CATEGORY_TAG_PARSE", '/\[\[Category:(.*?)\]\]/');
 define ("CATEGORY_TAG_SPECIFIC", '/\<!---categories---\>/is') ;
 define ("IMAGEUPLOAD_TAG_SPECIFIC", '/\<!---imageupload---\>/is') ;
+define ("INFOBOX_SEPARATOR", '/\<!---separator---\>/is');
 define ("ISBLANK_TAG_SPECIFIC", '<!---blanktemplate--->') ;
 define ("TEMPLATE_INFOBOX_FORMAT", '/\{\{[^\{\}]*Infobox.*\}\}/is') ;
 define ("TEMPLATE_OPENING", '/\{\{[^\{\}]*Infobox[^\|]*/i') ;
@@ -49,7 +50,7 @@ class CreateMultiPage
 
 	static public function unescapeBlankMarker ($text) {
 		$text = str_replace ("\n<!---blanktemplate--->\n", '', $text) ;
-
+		$text = str_replace ('<!---imageupload--->', '', $text) ;
 		return $text ;
 	}
 
@@ -174,6 +175,7 @@ class CreateMultiPage
 		global $wgTitle;
 		global $wgMultiEditTag;
 		global $wgMultiEditPageSimpleTags, $wgMultiEditPageTags;
+		global $wgExtensionsPath;
 
 		$me_content = '' ;
 		$found_categories = array () ;
@@ -512,6 +514,7 @@ class CreateMultiPage
 				'ew' => $ew,
 				'is_section' => $is_section,
 				'title' => $wgTitle,
+				'imgpath' => $wgExtensionsPath . '/wikia/CreateAPage/images/'
 			)
 		);
 		#---

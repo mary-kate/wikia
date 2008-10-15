@@ -1,7 +1,7 @@
 <?php
 
 global $IP ;
-require_once ("$IP/includes/SpecialUpload.php") ;
+require_once ("$IP/includes/specials/SpecialUpload.php") ;
 
 class CreatePageImageUploadForm extends UploadForm {
     var $mParameterExt, $mStoredDestName, $mLastTimestamp, $mReturnedTimestamp ;
