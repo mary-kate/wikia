@@ -590,10 +590,14 @@ class ReverseParser {
 				// <gallery> parser hook tag
 				case 'gallery':
 					return $refData['description'];
+
+				// fallback
+				default:
+					return '<!-- unsupported span tag! -->';
 			}
 		}
-
-		return '<!-- unsupported span tag! -->';
+		// sometimes FCK adds empty spans with "display: none"
+		return '';
 	}
 
 	/**
