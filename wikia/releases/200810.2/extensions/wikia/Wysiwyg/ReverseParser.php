@@ -104,6 +104,13 @@ class ReverseParser {
 						break;
 				}
 				if (!$node->getAttribute('washtml')) {
+					// handle (un)ordered lists indentation done by FCK (margin-left/right CSS property)
+					if (in_array($node->nodeName, array('ol','ul'))) {
+						$indentation = $this->getIndentationLevel($node);
+						if ($indentation !== false) {
+							$this->listBullets = str_repeat(':', $indentation);
+						}
+					}
 					$this->listLevel++;
 					$this->listBullets .= $bullet;
 				}
