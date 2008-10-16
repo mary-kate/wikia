@@ -21,7 +21,7 @@ $wgExtensionCredits['specialpage'][] = array(
 );
 
 function wfChangesXml( $rc ) {
-	global $wgEnableSpecialChangesXmlToFeedUrl, $wgContLang;
+	global $wgEnableSpecialChangesXmlToFeedUrl, $wgContLang, $wgUser, $wgServer, $wgArticlePath;
 
 	//get old/new sizes
 	extract( $rc->mExtra );
@@ -44,28 +44,36 @@ function wfChangesXml( $rc ) {
 	$title = $titleObj->getText();
 	$title = str_replace( array( "\n", "\r", '_' ), array( "", "","" ), $title );
 	$url = $titleObj->getFullURL();
-	$base = parse_url( $url );
-
-	$wiki_url = 'http://' . $base['host'] . '/';
-	$wiki_atom = $wiki_url . 'index.php?title=Special:RecentChanges&amp;feed=atom';	
-
+	$wiki_atom = str_replace('$1', 'Special:Atom', $wgServer.$wgArticlePath);	
 	$categories = $titleObj->getParentCategories();
 	$category_string = $wgContLang->getNSText( NS_CATEGORY ) . ':';
+	
+	//see if user anon or not by ip
+	
+	$ut = explode('.',$rc_user_text);
+
+	if ( count($ut) == 4 ) {		//ip;
+	
+		//ip;
+		$uurl = '';
+	} else {
+		//username;
+		$uurl = '<uri>' . str_replace('$1' , 'User:'. $rc_user_text, $wgServer.$wgArticlePath) . '</uri>';
+	} 
 
 	//PUT feed
 	if( !empty( $wgEnableSpecialChangesXmlToFeedUrl ) ) {
 		$a_data =  '<feed xmlns="http://www.w3.org/2005/Atom" >' . "\n";
 		$a_data .= '  <title type="text">'. $title .'</title>' . "\n";
-		$a_data .= '  <link href="' . $wiki_url .'" />' . "\n";
+		$a_data .= '  <link href="' . $wiki_url .'/" />' . "\n";
 		$a_data .= '  <link rel="self" type="application/atom+xml" href="' . $wiki_atom .'" />' . "\n" ;
-		$a_data .= "  <author><name>" . $rc_user_text . "</name></author>" . "\n";
 		$a_data .= "  <entry>" . "\n";
 		$a_data .= "    <title>" . $title . "</title>" . "\n";
 		$a_data .= '    <link href="' . $url . '" />' . "\n";
 		$a_data .= "    <published>" . date( DATE_ATOM ) . "</published>" . "\n";
 		$a_data .= "    <updated>" . date( DATE_ATOM ) . "</updated>" . "\n";
-		$a_data .= '      <content type="html">' . "\n";
-		$a_data .= "      </content>" . "\n";
+		$a_data .= "  	<author><name>" . $rc_user_text . "</name>".$uurl."</author>" . "\n";
+			
 		foreach( $categories as $key=>$value ) {
 			$a_data .= '    <category term="' . str_replace( '_', ' ', str_replace( $category_string, '', $key) ) . '" />' . "\n";
 		}
@@ -77,8 +85,7 @@ function wfChangesXml( $rc ) {
 		curl_setopt( $ch, CURLOPT_URL, $wgEnableSpecialChangesXmlToFeedUrl );
 		curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, "PUT" );
 		curl_setopt( $ch, CURLOPT_HTTPHEADER, array( "Content-Length: " . strlen( $a_data ) ) );
-		curl_setopt( $ch, CURLOPT_POSTFIELDS, $a_data );
-		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+		curl_setopt( $ch, CURLOPT_POSTFIELDS, $a_data);
 		$r = curl_exec( $ch );
 
 	}
