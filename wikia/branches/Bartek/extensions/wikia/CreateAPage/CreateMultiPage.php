@@ -312,7 +312,7 @@ class CreateMultiPage
 			}
 			if (!empty($section_name))
 			{
-				$boxes[] = array("type" => "", "value" => "<b>".$section_wout_tags."</b>", "display" => 1);
+				$boxes[] = array("type" => "section_display", "value" => "<b>".$section_wout_tags."</b>", "display" => 1);
 				$boxes[] = array("type" => "text", "value" => addslashes($section_name), "display" => 0);
 			} else {
 				$boxes[] = array("type" => "", "value" => "<b>".wfMsg ('createpage_top_of_page') ."</b>", "display" => 1);
