@@ -351,7 +351,7 @@ class CreateMultiPage
 								{
 									$special_tags[$_tag] = $me_tags[3][$id];
 									if ($_tag != 'category') {				
-										$format_tag_text = ($_tag == 'title') ?  "<b><small>%s</small></b>" : "<small>%s</small>";
+										$format_tag_text = ($_tag == 'title') ?  "<b>%s</b>" : "<small>%s</small>";
 									} else {
 										$format_tag_text = "%s" ;
 									}
