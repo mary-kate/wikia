@@ -360,11 +360,12 @@ class CreateMultiPage
 										$format_tag_text = "<br />".$format_tag_text;
 									}
 									if ($_tag != 'category') {
+										($_tag == 'title') ? $type = "title" : $type = "";
 #--- remove special tags
 										$text = str_replace( "<!---{$_tag}={$brt}".$special_tags[$_tag]."{$brt}--->", "", $text );
 										$text = trim( $text );  // strip unneeded newlines
 #--- add to display
-										$boxes[] = array("type" => "", "value" => sprintf($format_tag_text, $special_tags[$_tag]), "display" => 1);
+										$boxes[] = array("type" => $type, "value" => sprintf($format_tag_text, $special_tags[$_tag]), "display" => 1);
 										$main_tags .= "<!---{$_tag}={$correct_brt}".$special_tags[$_tag]."{$correct_brt}--->\n";
 									} else {
 										$text = str_replace( "<!---{$_tag}={$brt}".$special_tags[$_tag]."{$brt}--->", "[[Category:" . sprintf ($format_tag_text, $special_tags[$_tag]) . "]]", $text );
