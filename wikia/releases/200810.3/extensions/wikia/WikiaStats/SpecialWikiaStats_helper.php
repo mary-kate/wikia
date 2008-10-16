@@ -2206,8 +2206,8 @@ class WikiaGenericStats {
 			#---
 			$sortData = array();
 			if (!empty($cityDBName)) {
-				$regCount = self::getPageEdistFromDB($cityDBName, 1, 1, 50);
-				$unregCount = self::getPageEdistFromDB($cityDBName, 1, 0, 50);
+				$regCount = self::getPageEdistFromDB($cityDBName, 0, 0, 50);
+				$unregCount = self::getPageEdistFromDB($cityDBName, 0, 1, 50);
 				#---
 				$setRegPages = array();
 				foreach ($regCount as $page_id => $values) {
