@@ -355,10 +355,6 @@ class CreateMultiPage
 									} else {
 										$format_tag_text = "%s" ;
 									}
-									if (!empty($section_name) && ($_tag == 'title'))
-									{
-										$format_tag_text = "<br />".$format_tag_text;
-									}
 									if ($_tag != 'category') {
 										($_tag == 'title') ? $type = "title" : $type = "";
 #--- remove special tags
