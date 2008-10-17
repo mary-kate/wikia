@@ -79,7 +79,7 @@ foreach ($statsCount as $cnt => $stats)
 ?>
 </table>
 </div>
-<div id="wk-page-count-details-stats" style="padding-left: 10px;">
+<div id="<?=($otherNspaces==0)?'wk-page-count-details-stats':'wk-othernpaces-count-details-stats'?>" style="padding-left: 10px;">
 </div>
 <?
 }
