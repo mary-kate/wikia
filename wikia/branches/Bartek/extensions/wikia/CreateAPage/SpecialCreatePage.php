@@ -23,7 +23,7 @@ $wgExtensionCredits['specialpage'][] = array(
    'name' => 'CreatePage',
    'author' => 'Bartek Łapiński, Lucas \'TOR\' Garczewski, Przemek Piotrowski'  ,
    'url' => 'http://help.wikia.com/wiki/Help:CreatePage' ,
-   'version' => '3.62' ,
+   'version' => '3.63' ,
    'description' => 'easy to use interface for creating new articles'
 );
 
@@ -79,6 +79,9 @@ function wfCreatePageRedLinks ($article, $user) {
 	if ($article->getTitle()->exists() || ('nomulti' == $wgRequest->getVal ('editmode'))) {	
 		return true ;
 	} else {
+                if ($wgRequest->getCheck ('wpPreview')) {
+                        return true;
+                }	
 		wfLoadExtensionMessages ('CreateAPage') ;
 		$mainform = new CreatePageCreateplateForm () ;
 		$mainform->mTitle = $wgRequest->getVal ('title') ;		
