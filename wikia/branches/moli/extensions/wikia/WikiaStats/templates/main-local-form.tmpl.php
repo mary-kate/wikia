@@ -190,11 +190,9 @@ function selectArticleSize(id) {
 	YAHOO.util.Dom.setStyle('article-size-' + id, 'background-color', new_backColor);
 }
 
-function wk_show_page_edited_details(page_id)
-{
+function wk_show_page_edited_details(page_id, ns) {
 	div_previous = document.getElementById('wk-page-edited-row-' + previous_page);
-	if (div_previous)
-	{
+	if (div_previous) {
 		div_previous.style.background = "#ffffdd";		
 	}
 
@@ -207,10 +205,18 @@ function wk_show_page_edited_details(page_id)
 	//---
 	document.getElementById( "wk-page-edits-stats-page-id" ).value = page_id;
 	//---
-	YD.get("ws-progress-page-edits-bar").innerHTML="&nbsp;<img src=\"/extensions/wikia/WikiaStats/images/ajax_loader.gif\" />";
+	if (ns == 0) {
+		YD.get("ws-progress-page-edits-bar").innerHTML="&nbsp;<img src=\"/extensions/wikia/WikiaStats/images/ajax_loader.gif\" />";
+	} else {
+		YD.get("ws-progress-othernpaces-edits-bar").innerHTML="&nbsp;<img src=\"/extensions/wikia/WikiaStats/images/ajax_loader.gif\" />";
+	}
 	//---
 	var baseurl = wgScript + "?action=ajax&rs=axWStatisticsPageEditsDetails" + params;
-	YAHOO.util.Connect.asyncRequest( "GET", baseurl, YAHOO.Wikia.Statistics.PageEditsDetailsStatisticCallback);
+	if (ns == 0) {
+		YAHOO.util.Connect.asyncRequest( "GET", baseurl, YAHOO.Wikia.Statistics.PageEditsDetailsStatisticCallback );
+	} else {
+		YAHOO.util.Connect.asyncRequest( "GET", baseurl, YAHOO.Wikia.Statistics.PageOtherNpacesEditsDetailsStatisticCallback );
+	}
 }
 
 YAHOO.util.Event.onDOMReady(function () {
@@ -539,13 +545,13 @@ YAHOO.util.Event.onDOMReady(function () {
 		success: function( oResponse ) 
 		{
 			var resData = YAHOO.Tools.JSONParse(oResponse.responseText);
-			var page_id = document.getElementById( "wk-othernpaces-edits-stats-page-id" ).value;
+			var page_id = document.getElementById( "wk-page-edits-stats-page-id" ).value;
 			YD.get("wk-othernpaces-count-details-stats").innerHTML = resData['text'];
 			YD.get("ws-progress-othernpaces-edits-bar").innerHTML = "&nbsp;";
 		},
 		failure: function( oResponse ) 
 		{
-			var page_id = document.getElementById( "wk-othernpaces-edits-stats-page-id" ).value;
+			var page_id = document.getElementById( "wk-page-edits-stats-page-id" ).value;
 			YD.get("wk-othernpaces-count-details-stats").innerHTML = "<?= wfMsg("wikiastats_nostats_found") ?>";
 			YD.get("ws-progress-othernpaces-edits-bar").innerHTML = "&nbsp;";
 		}
