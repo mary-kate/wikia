@@ -72,14 +72,14 @@ foreach ($statsCount as $cnt => $stats)
 	<td class="eb" style="white-space:nowrap;"><?= $stats['unreg_users'] ?></td>
 	<td class="ebl" style="white-space:nowrap;"><a href="<?= $url ?>" target="new"><?= $title ?></a></td>
 	<td class="eb" style="white-space:nowrap;"><?= $size ?></td>
-	<td class="ebl" style="white-space:nowrap;"><span onClick="wk_show_page_edited_details('<?=$stats['page_id']?>');" style="cursor:pointer; padding: 2px;" id="wk-page-edited-details-<?=$stats['page_id']?>"><?= wfMsg('wikiastats_more_txt') ?></span></td>
+	<td class="ebl" style="white-space:nowrap;"><span onClick="wk_show_page_edited_details('<?=$stats['page_id']?>','<?=$otherNspaces?>');" style="cursor:pointer; padding: 2px;" id="wk-page-edited-details-<?=$stats['page_id']?>"><?= wfMsg('wikiastats_more_txt') ?></span></td>
 </tr>	
 <?php
 }
 ?>
 </table>
 </div>
-<div id="wk-page-count-details-stats" style="padding-left: 10px;">
+<div id="<?=($otherNspaces==0)?'wk-page-count-details-stats':'wk-othernpaces-count-details-stats'?>" style="padding-left: 10px;">
 </div>
 <?
 }
