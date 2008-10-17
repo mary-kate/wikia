@@ -243,6 +243,7 @@ YAHOO.util.Event.onDOMReady(function () {
 						document.getElementById( "ws-article-size" ).style.display = "block";
 						document.getElementById( "ws-namespace-count" ).style.display = "block";
 						document.getElementById( "ws-page-edits-count" ).style.display = "block";
+						document.getElementById( "ws-othernpaces-edits-count" ).style.display = "block";
 						document.getElementById( "ws-other-stats-panel" ).style.display = "block";
 					}
 				} else {
@@ -253,6 +254,7 @@ YAHOO.util.Event.onDOMReady(function () {
 					document.getElementById( "ws-article-size" ).style.display = "none";
 					document.getElementById( "ws-namespace-count" ).style.display = "none";
 					document.getElementById( "ws-page-edits-count" ).style.display = "none";
+					document.getElementById( "ws-othernpaces-edits-count" ).style.display = "block";
 					document.getElementById( "ws-other-stats-panel" ).style.display = "none";
 				}
 			}
@@ -272,6 +274,7 @@ YAHOO.util.Event.onDOMReady(function () {
 		document.getElementById( "ws-articles-size-table" ).innerHTML = "";
 		document.getElementById( "ws-namespace-count-table" ).innerHTML = "";
 		document.getElementById( "ws-page-edits-count-table" ).innerHTML = "";
+		document.getElementById( "ws-othernpaces-edits-count-table" ).innerHTML = "";
 		var params 	= "&rsargs[0]=" + city.value;
 		//--- from
 		params 	+= "&rsargs[1]=" + document.getElementById( "ws-date-year-from" ).value;
@@ -397,6 +400,21 @@ YAHOO.util.Event.onDOMReady(function () {
 		}
 	};
 
+	YAHOO.Wikia.Statistics.PageOtherNspacesEditsStatisticCallback = 
+	{
+		success: function( oResponse ) 
+		{
+			var resData = YAHOO.Tools.JSONParse(oResponse.responseText);
+			YD.get("ws-othernpaces-edits-count-table").innerHTML = resData['text'];
+			YD.get("ws-progress-othernpaces-edits-bar").innerHTML = "&nbsp;";
+		},
+		failure: function( oResponse ) 
+		{
+			YD.get("ws-othernpaces-edits-count-table").innerHTML = "<?= wfMsg("wikiastats_nostats_found") ?>";
+			YD.get("ws-progress-othernpaces-edits-bar").innerHTML = "&nbsp;";
+		}
+	};
+
 	YAHOO.Wikia.Statistics.DistribArticleEditsStats = function(e) 
 	{
 		var city 	= document.getElementById( "wk-stats-city-id" );
@@ -504,6 +522,36 @@ YAHOO.util.Event.onDOMReady(function () {
 		}
 	};
 
+	YAHOO.Wikia.Statistics.OtherNpacesEditsStats = function(e) 
+	{
+		var city 	= document.getElementById( "wk-stats-city-id" );
+		document.getElementById( "ws-othernpaces-edits-count-table" ).innerHTML = "";
+		var params 	= "&rsargs[0]=" + city.value;
+		//---
+		YE.preventDefault(e);
+		YD.get("ws-progress-othernpaces-edits-bar").innerHTML="&nbsp;<img src=\"/extensions/wikia/WikiaStats/images/ajax_loader.gif\" />";
+		//---
+		var baseurl = wgScript + "?action=ajax&rs=axWStatisticsOtherNpacesPageEdits" + params;
+		YAHOO.util.Connect.asyncRequest( "GET", baseurl, YAHOO.Wikia.Statistics.PageOtherNspacesEditsStatisticCallback);
+	};
+
+	YAHOO.Wikia.Statistics.PageOtherNpacesEditsDetailsStatisticCallback = 
+	{
+		success: function( oResponse ) 
+		{
+			var resData = YAHOO.Tools.JSONParse(oResponse.responseText);
+			var page_id = document.getElementById( "wk-othernpaces-edits-stats-page-id" ).value;
+			YD.get("wk-othernpaces-count-details-stats").innerHTML = resData['text'];
+			YD.get("ws-progress-othernpaces-edits-bar").innerHTML = "&nbsp;";
+		},
+		failure: function( oResponse ) 
+		{
+			var page_id = document.getElementById( "wk-othernpaces-edits-stats-page-id" ).value;
+			YD.get("wk-othernpaces-count-details-stats").innerHTML = "<?= wfMsg("wikiastats_nostats_found") ?>";
+			YD.get("ws-progress-othernpaces-edits-bar").innerHTML = "&nbsp;";
+		}
+	};
+
 	YAHOO.Wikia.Statistics.GenerateXLSStats = function(e) 
 	{
 		var id = 0;
@@ -538,8 +586,10 @@ YAHOO.util.Event.onDOMReady(function () {
 	YE.addListener("ws-namespace-count-show", "click", YAHOO.Wikia.Statistics.NamespaceStats); 
 	YE.addListener("ws-page-edits-count-show", "click", YAHOO.Wikia.Statistics.PageEditsStats);
 	YE.addListener("ws-page-edits-details-show", "click", YAHOO.Wikia.Statistics.PageEditsStats);
+	YE.addListener("ws-othernspaces-edits-count-show", "click", YAHOO.Wikia.Statistics.OtherNpacesEditsStats);
+	YE.addListener("ws-page-edits-details-show", "click", YAHOO.Wikia.Statistics.OtherNpacesEditsStats);
 
-	for (k=2; k<8; k++) {
+	for (k=2; k<9; k++) {
 		YE.addListener("ws-xls-" + k, "click", YAHOO.Wikia.Statistics.GenerateXLSStats);
 	}	
 });
@@ -760,6 +810,17 @@ for ($i = 1; $i <= 6; $i++)
 	<div class="clear">&nbsp;</div>
 	<div id="ws-page-edits-count-table"></div>
 </div>
+<div id="ws-othernpaces-edits-count">
+	<div id="ws-othernpaces-edits-count-title" style="clear:left;width:auto;float:left">
+		<div valign="middle">
+			<a href="javascript:void(0)" id="ws-othernspaces-edits-count-show"><?= wfMsg('wikiastats_other_nspaces_edits'); ?></a>
+			<span style="padding:5px 2px;"><input type="image" id="ws-xls-8" value="<?= wfMsg("wikiastats_export_xls") ?>" src="/extensions/wikia/WikiaStats/images/xls.gif" /></span>
+		</div>	
+	</div>
+	<div id="ws-progress-othernpaces-edits-bar"></div>
+	<div class="clear">&nbsp;</div>
+	<div id="ws-othernpaces-edits-count-table"></div>
+</div>
 </fieldset>
 <? if ( !empty($main_tbl) && (empty($show_chart)) )
 {
@@ -774,6 +835,7 @@ document.getElementById( "ws-anon-wikians" ).style.display = "block";
 document.getElementById( "ws-article-size" ).style.display = "block";
 document.getElementById( "ws-namespace-count" ).style.display = "block";
 document.getElementById( "ws-page-edits-count" ).style.display = "block";
+document.getElementById( "ws-othernpaces-edits-count" ).style.display = "block";
 </script>
 <?	
 	}

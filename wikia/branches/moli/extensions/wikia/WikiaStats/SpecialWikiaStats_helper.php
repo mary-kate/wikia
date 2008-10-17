@@ -2193,7 +2193,7 @@ class WikiaGenericStats {
         return $array;
     }
 
-	static public function getWikiPageEditsCount($city_id, $xls = 0)
+	static public function getWikiPageEditsCount($city_id, $xls = 0, $otherNspaces = 0)
 	{
 		global $wgDBStats;
 		#---
@@ -2206,8 +2206,8 @@ class WikiaGenericStats {
 			#---
 			$sortData = array();
 			if (!empty($cityDBName)) {
-				$regCount = self::getPageEdistFromDB($cityDBName, 0, 0, 50);
-				$unregCount = self::getPageEdistFromDB($cityDBName, 0, 1, 50);
+				$regCount = self::getPageEdistFromDB($cityDBName, $otherNspaces, 0, 50);
+				$unregCount = self::getPageEdistFromDB($cityDBName, $otherNspaces, 1, 50);
 				#---
 				$setRegPages = array();
 				foreach ($regCount as $page_id => $values) {
@@ -2604,6 +2604,14 @@ class WikiaGenericStats {
 		#---
 		$XLSObj = new WikiaStatsXLS();
 		$XLSObj->makeMostEditPagesStats($city_id, $sortData, $mSourceMetaSpace);
+		return;
+	}
+
+	static private function makeWikiaMostEditOtherNspacesPagesXLS($city_id, $sortData, $mSourceMetaSpace)
+	{
+		#---
+		$XLSObj = new WikiaStatsXLS();
+		$XLSObj->makeMostEditOtherNspacesStats($city_id, $sortData, $mSourceMetaSpace);
 		return;
 	}
 
