@@ -230,7 +230,6 @@ class CreatePageMultiEditor extends CreatePageEditor {
 				$uploadform->mFileSize       = $wgRequest->getFileSize( 'wpAllUploadFile' . $postfix );
 				$uploadform->mSrcName        = $wgRequest->getFileName( 'wpAllUploadFile' . $postfix );
 				$uploadform->CurlError       = $wgRequest->getUploadError( 'wpAllUploadFile' . $postfix );
-				//$uploadform->mDesiredDestName = $wgRequest->getText( 'wpAllDestFile' . $postfix );
 
 				// required by latest functions
 				if ($uploadform->mSrcName) {
