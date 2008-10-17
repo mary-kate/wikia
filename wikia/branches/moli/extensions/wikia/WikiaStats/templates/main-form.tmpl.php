@@ -9,8 +9,7 @@ var YE = YAHOO.util.Event;
 var wk_stats_city_id = 0;
 var previous_page = 0;
 
-function visible_wikians(rows, col, v)
-{
+function visible_wikians(rows, col, v) {
 	//--- main header and footer
 	var cels = rows[0].getElementsByTagName('td');
 	cels[col].style.display = v;
@@ -37,8 +36,7 @@ function visible_wikians(rows, col, v)
 	for (y = 1; y <= 7; y++) { cels[y].style.display = v; }
 }
 
-function visible_articles(rows, col, v)
-{
+function visible_articles(rows, col, v) {
 	var cels = rows[0].getElementsByTagName('td');
 	cels[2].style.display = v;
 
@@ -59,8 +57,7 @@ function visible_articles(rows, col, v)
 	for (y = 8; y <= 14; y++) { cels[y].style.display = v; }
 }
 
-function visible_database(rows, col, v)
-{
+function visible_database(rows, col, v) {
 	//--- main header and footer
 	var cels = rows[0].getElementsByTagName('td');
 	cels[3].style.display = v;
@@ -76,8 +73,7 @@ function visible_database(rows, col, v)
 	for (y = 15; y <= 17; y++) { cels[y].style.display = v; }
 }
 
-function visible_links(rows, col, v)
-{
+function visible_links(rows, col, v) {
 	//--- main header and footer
 	var cels = rows[0].getElementsByTagName('td');
 	cels[4].style.display = v;
@@ -94,8 +90,7 @@ function visible_links(rows, col, v)
 	//
 }
 
-function visible_image(rows, col, v)
-{
+function visible_image(rows, col, v) {
 	//--- main header and footer
 	var cels = rows[0].getElementsByTagName('td');
 	cels[5].style.display = v;
@@ -112,8 +107,7 @@ function visible_image(rows, col, v)
 	//
 }
 
-function visible_column(col, col_to, show, text, div_hide) 
-{
+function visible_column(col, col_to, show, text, div_hide) {
 	var tableStats  = document.getElementById("table_stats");
 	var v = (show) ? '' : 'none';
 	var rows = tableStats.getElementsByTagName('tr');
@@ -184,18 +178,15 @@ function visible_column(col, col_to, show, text, div_hide)
 	return true;
 }
 
-function selectArticleSize(id)
-{
+function selectArticleSize(id) {
 	var backColor = YAHOO.util.Dom.getStyle('article-size-' + id, 'background-color');
 	var new_backColor = (backColor == 'transparent') ? '#ADFF2F' : 'transparent';
 	YAHOO.util.Dom.setStyle('article-size-' + id, 'background-color', new_backColor);
 }
 
-function wk_show_page_edited_details(page_id)
-{
+function wk_show_page_edited_details(page_id, ns) {
 	div_previous = document.getElementById('wk-page-edited-row-' + previous_page);
-	if (div_previous)
-	{
+	if (div_previous) {
 		div_previous.style.background = "#ffffdd";		
 	}
 
@@ -208,10 +199,18 @@ function wk_show_page_edited_details(page_id)
 	//---
 	document.getElementById( "wk-page-edits-stats-page-id" ).value = page_id;
 	//---
-	YD.get("ws-progress-page-edits-bar").innerHTML="&nbsp;<img src=\"/extensions/wikia/WikiaStats/images/ajax_loader.gif\" />";
+	if (ns == 0) {
+		YD.get("ws-progress-page-edits-bar").innerHTML="&nbsp;<img src=\"/extensions/wikia/WikiaStats/images/ajax_loader.gif\" />";
+	} else {
+		YD.get("ws-progress-othernpaces-edits-bar").innerHTML="&nbsp;<img src=\"/extensions/wikia/WikiaStats/images/ajax_loader.gif\" />";
+	}
 	//---
 	var baseurl = wgScript + "?action=ajax&rs=axWStatisticsPageEditsDetails" + params;
-	YAHOO.util.Connect.asyncRequest( "GET", baseurl, YAHOO.Wikia.Statistics.PageEditsDetailsStatisticCallback);
+	if (ns == 0) {
+		YAHOO.util.Connect.asyncRequest( "GET", baseurl, YAHOO.Wikia.Statistics.PageEditsDetailsStatisticCallback );
+	} else {
+		YAHOO.util.Connect.asyncRequest( "GET", baseurl, YAHOO.Wikia.Statistics.PageOtherNpacesEditsDetailsStatisticCallback );
+	}
 }
 
 YAHOO.util.Event.onDOMReady(function () {

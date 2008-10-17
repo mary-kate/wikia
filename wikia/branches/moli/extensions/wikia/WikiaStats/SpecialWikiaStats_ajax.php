@@ -444,7 +444,7 @@ function axWStatisticsXLS($city_id, $param, $others = "", $date_from = "", $date
 			break;
 		}
 		case "8": { // Most edited articles (> 25 edits)
-			WikiaGenericStats::getWikiOtherNspaceEditsCount($city_id, $xls);
+			WikiaGenericStats::getWikiPageEditsCount($city_id, $xls, 1);
 			break;
 		}
 		// comparisions
