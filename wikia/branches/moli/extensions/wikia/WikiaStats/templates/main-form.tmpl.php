@@ -197,11 +197,7 @@ function wk_show_page_edited_details(page_id, ns) {
 	var city 	= document.getElementById( "wk-stats-city-id" );
 	var params 	= "&rsargs[0]=" + city.value + "&rsargs[1]=" + page_id;
 	//---
-	if (ns == 0) {
-		document.getElementById( "wk-page-edits-stats-page-id" ).value = page_id;
-	} else {
-		document.getElementById( "wk-othernpaces-edits-stats-page-id" ).value = page_id;
-	}
+	document.getElementById( "wk-page-edits-stats-page-id" ).value = page_id;
 	//---
 	if (ns == 0) {
 		YD.get("ws-progress-page-edits-bar").innerHTML="&nbsp;<img src=\"/extensions/wikia/WikiaStats/images/ajax_loader.gif\" />";
@@ -543,13 +539,13 @@ YAHOO.util.Event.onDOMReady(function () {
 		success: function( oResponse ) 
 		{
 			var resData = YAHOO.Tools.JSONParse(oResponse.responseText);
-			var page_id = document.getElementById( "wk-othernpaces-edits-stats-page-id" ).value;
+			var page_id = document.getElementById( "wk-page-edits-stats-page-id" ).value;
 			YD.get("wk-othernpaces-count-details-stats").innerHTML = resData['text'];
 			YD.get("ws-progress-othernpaces-edits-bar").innerHTML = "&nbsp;";
 		},
 		failure: function( oResponse ) 
 		{
-			var page_id = document.getElementById( "wk-othernpaces-edits-stats-page-id" ).value;
+			var page_id = document.getElementById( "wk-page-edits-stats-page-id" ).value;
 			YD.get("wk-othernpaces-count-details-stats").innerHTML = "<?= wfMsg("wikiastats_nostats_found") ?>";
 			YD.get("ws-progress-othernpaces-edits-bar").innerHTML = "&nbsp;";
 		}
