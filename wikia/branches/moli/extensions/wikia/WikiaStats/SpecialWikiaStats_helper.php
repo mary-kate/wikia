@@ -1455,7 +1455,7 @@ class WikiaGenericStats {
         return $res;
 	}
 
-	static private function setWikiEditPagesOutput($city_id, $statsCount, $mSourceMetaSpace)
+	static private function setWikiEditPagesOutput($city_id, $statsCount, $mSourceMetaSpace, $otherNspaces)
 	{
         global $wgUser, $wgCanonicalNamespaceNames, $wgLang;
         global $wgDBname, $wgScript;
@@ -1477,6 +1477,7 @@ class WikiaGenericStats {
             "projectNamespace" => $mSourceMetaSpace,
             "canonicalNamespace" => $aNamespaces,
             "centralVersion" => ($wgDBname == CENTRAL_WIKIA_ID),
+            "otherNspaces" => $otherNspaces,
             "wgLang" => $wgLang,
             "_wgScript" => $_wgScript
         ));
@@ -2267,11 +2268,15 @@ class WikiaGenericStats {
 				}
 				#---
 				if (empty($xls)) {
-					$text = self::setWikiEditPagesOutput($city_id, $sortData, $mSourceMetaSpace);
+					$text = self::setWikiEditPagesOutput($city_id, $sortData, $mSourceMetaSpace, $otherNspaces);
 					$data = array("code" => 1, "text" => $text);
 				} else {
 					wfProfileOut( __METHOD__ );
-					self::makeWikiaMostEditPagesXLS($city_id, $sortData, $mSourceMetaSpace);
+					if ($otherNspaces == 1) {
+						self::makeWikiaMostEditOtherNspacesPagesXLS($city_id, $sortData, $mSourceMetaSpace);
+					} else {
+						self::makeWikiaMostEditPagesXLS($city_id, $sortData, $mSourceMetaSpace);
+					}
 				}
 			}
 		}
