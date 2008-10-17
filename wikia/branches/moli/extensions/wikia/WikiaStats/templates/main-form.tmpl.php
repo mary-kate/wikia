@@ -197,7 +197,11 @@ function wk_show_page_edited_details(page_id, ns) {
 	var city 	= document.getElementById( "wk-stats-city-id" );
 	var params 	= "&rsargs[0]=" + city.value + "&rsargs[1]=" + page_id;
 	//---
-	document.getElementById( "wk-page-edits-stats-page-id" ).value = page_id;
+	if (ns == 0) {
+		document.getElementById( "wk-page-edits-stats-page-id" ).value = page_id;
+	} else {
+		document.getElementById( "wk-othernpaces-edits-stats-page-id" ).value = page_id;
+	}
 	//---
 	if (ns == 0) {
 		YD.get("ws-progress-page-edits-bar").innerHTML="&nbsp;<img src=\"/extensions/wikia/WikiaStats/images/ajax_loader.gif\" />";
