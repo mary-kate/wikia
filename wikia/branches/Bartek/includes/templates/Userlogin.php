@@ -137,7 +137,6 @@ class UsercreateTemplate extends QuickTemplate {
 		var errorNick = false;	//nick checking can be disabled
 		var errorEmail = errorPass = errorRetype = errorDate = true;
 		var dateAccessed = 0;
-		var retypeAccessed = 0;
 
 		function checkForm() {
 			dateAccessed = 2;	//check date on submit
@@ -366,12 +365,16 @@ class UsercreateTemplate extends QuickTemplate {
 		 YAHOO.Wikia.UserRegistration = {
 			init: function() {
 		        	YE.addListener('prefsHelpBirthday', 'click', YAHOO.Wikia.UserRegistration.showHintPanel);
-				// initial check
-				YAHOO.util.Dom.addClass('wpNameTD', 'mw-progress');
-				sajax_do_call('cxValidateUserName', Array (YD.get( 'wpName2' ).value), login_formhandler);
-				checkEmail();
+				// initial check, if not empty...
+				if ('' != YD.get( 'wpName2' ).value) {
+					YAHOO.util.Dom.addClass('wpNameTD', 'mw-progress');
+					sajax_do_call('cxValidateUserName', Array (YD.get( 'wpName2' ).value), login_formhandler);
+				}
+				if ('' != YD.get( 'wpEmail' ).value) {
+					checkEmail();
+				}
+			},
 
-      			},
 			buildHintPanel: function() {
 			        var signupWhy = YD.get( 'signupWhyProvide' );
 			        var signupWhy_copy = document.createElement ('div') ;
@@ -456,10 +459,7 @@ class UsercreateTemplate extends QuickTemplate {
 		}
 		function checkRetype() {
 			var pass = document.getElementById('wpPassword2').value;
-			var pass2= document.getElementById('wpRetype').value;			
-			if (!retypeAccessed) {
-				return;
-			}
+			var pass2= document.getElementById('wpRetype').value;
 			if (pass == pass2) {
 				if ('' == pass2) {
 					YAHOO.util.Dom.addClass('wpRetypeTD', 'mw-input-error');
@@ -506,7 +506,7 @@ class UsercreateTemplate extends QuickTemplate {
 			document.getElementById('wpEmail').onblur = checkEmail;
 		}
 		document.getElementById('wpPassword2').onfocus = function(){if (dateAccessed == 1) {dateAccessed = 2; checkDate();}};
-		document.getElementById('wpRetype').onfocus = function(){if (dateAccessed == 1) {dateAccessed = 2; checkDate();} retypeAccessed = 1;};
+		document.getElementById('wpRetype').onfocus = function(){if (dateAccessed == 1) {dateAccessed = 2; checkDate();}};
 		document.getElementById('wpRealName').onfocus = function(){if (dateAccessed == 1) {dateAccessed = 2; checkDate();}};
 
 		document.getElementById('wpName2').onkeyup = function(){

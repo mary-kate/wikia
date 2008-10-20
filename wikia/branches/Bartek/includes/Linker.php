@@ -235,7 +235,7 @@ class Linker {
 	 * @param $prefix String: optional prefix. As trail, only before instead of after.
 	 */
 	function makeLinkObj( $nt, $text= '', $query = '', $trail = '', $prefix = '' ) {
-		global $wgUser;
+		global $wgUser, $wgWysiwygParserEnabled;
 		wfProfileIn( __METHOD__ );
 
 		if ( !$nt instanceof Title ) {
@@ -278,7 +278,11 @@ class Linker {
 					$trail = $m[2];
 				}
 			}
-			$t = "<a href=\"{$u}\"{$style}>{$text}{$inside}</a>";
+			$refId = '';
+			if (!empty($wgWysiwygParserEnabled)) {
+				$refId = Wysiwyg_GetRefId($text);
+			}
+			$t = "<a href=\"{$u}\"{$style}{$refId}>{$text}{$inside}</a>";
 
 			wfProfileOut( __METHOD__ );
 			return $t;
@@ -333,6 +337,7 @@ class Linker {
 	 * @return the a-element
 	 */
 	function makeKnownLinkObj( $title, $text = '', $query = '', $trail = '', $prefix = '' , $aprops = '', $style = '' ) {
+		global $wgWysiwygParserEnabled;
 		wfProfileIn( __METHOD__ );
 
 		if ( !$title instanceof Title ) {
@@ -363,7 +368,11 @@ class Linker {
 		if ( $aprops !== '' ) $aprops = ' ' . $aprops;
 
 		list( $inside, $trail ) = Linker::splitTrail( $trail );
-		$r = "<a href=\"{$u}\"{$style}{$aprops}>{$prefix}{$text}{$inside}</a>{$trail}";
+		$refId = '';
+		if (!empty($wgWysiwygParserEnabled)) {
+			$refId = Wysiwyg_GetRefId($text);
+		}
+		$r = "<a href=\"{$u}\"{$style}{$aprops}{$refId}>{$prefix}{$text}{$inside}</a>{$trail}";
 		wfProfileOut( __METHOD__ );
 		return $r;
 	}
@@ -380,6 +389,7 @@ class Linker {
 	 */
 	function makeBrokenLinkObj( $title, $text = '', $query = '', $trail = '', $prefix = '' ) {
 		wfProfileIn( __METHOD__ );
+		global $wgWysiwygParserEnabled;
 
 		if ( !$title instanceof Title ) {
 			# Fail gracefully
@@ -406,8 +416,12 @@ class Linker {
 		$style = $this->getInternalLinkAttributesObj( $nt, $text, 'new', $titleAttr );
 		list( $inside, $trail ) = Linker::splitTrail( $trail );
 
+		$refId = '';
+		if (!empty($wgWysiwygParserEnabled)) {
+			$refId = Wysiwyg_GetRefId($text);
+		}
 		wfRunHooks( 'BrokenLink', array( &$this, $nt, $query, &$u, &$style, &$prefix, &$text, &$inside, &$trail ) );
-		$s = "<a href=\"{$u}\"{$style}>{$prefix}{$text}{$inside}</a>{$trail}";
+		$s = "<a href=\"{$u}\"{$style}{$refId}>{$prefix}{$text}{$inside}</a>{$trail}";
 
 		wfProfileOut( __METHOD__ );
 		return $s;
@@ -508,6 +522,10 @@ class Linker {
 
 	/** @todo document */
 	function makeExternalImage( $url, $alt = '' ) {
+		global $wgWysiwygParserEnabled;
+		if (!empty($wgWysiwygParserEnabled)) {
+			$refId = Wysiwyg_GetRefId($url, true);
+		}
 		if ( '' == $alt ) {
 			$alt = $this->fnamePart( $url );
 		}
@@ -517,10 +535,13 @@ class Linker {
 			wfDebug("Hook LinkerMakeExternalImage changed the output of external image with url {$url} and alt text {$alt} to {$img}", true);
 			return $img;
 		}
-		return Xml::element( 'img',
-			array(
-				'src' => $url,
-				'alt' => $alt ) );
+		$params = array(
+			'src' => $url,
+			'alt' => $alt );
+		if ($wgWysiwygParserEnabled) {
+			$params['refid'] = $refId;
+		}
+		return Xml::element( 'img', $params);
 	}
 
 	/**
@@ -598,7 +619,7 @@ class Linker {
 			return $res;
 		}
 
-		global $wgContLang, $wgUser, $wgThumbLimits, $wgThumbUpright;
+		global $wgContLang, $wgUser, $wgThumbLimits, $wgThumbUpright, $wgWysiwygParserEnabled;
 		if ( $file && !$file->allowInlineDisplay() ) {
 			wfDebug( __METHOD__.': '.$title->getPrefixedDBkey()." does not allow inline display\n" );
 			return $this->makeKnownLinkObj( $title );
@@ -680,17 +701,27 @@ class Linker {
 		if ( !$thumb ) {
 			$s = $this->makeBrokenImageLinkObj( $title, '', '', '', '', $time==true );
 		} else {
-			$s = $thumb->toHtml( array(
+			$attrArr = array(
 				'desc-link' => true,
 				'desc-query' => $query,
 				'alt' => $fp['alt'],
 				'valign' => isset( $fp['valign'] ) ? $fp['valign'] : false ,
-				'img-class' => isset( $fp['border'] ) ? 'thumbborder' : false ) );
+				'img-class' => isset( $fp['border'] ) ? 'thumbborder' : false
+			);
+			$refId = '';
+			if (!empty($wgWysiwygParserEnabled) && isset($fp['refid'])) {
+				if ($fp['align'] == '') {
+					$attrArr['refid'] = $fp['refid'];
+				} else {
+					$refId = " refid=\"{$fp['refid']}\"";
+				}
+			}
+			$s = $thumb->toHtml( $attrArr );
 		}
 		if ( '' != $fp['align'] ) {
-			$s = "<div class=\"float{$fp['align']}\"><span>{$s}</span></div>";
+			$s = "<div$refId class=\"float{$fp['align']}\"><span>{$s}</span></div>";
 		}
-		return str_replace("\n", ' ',$prefix.$s.$postfix);
+		return str_replace("\n", ' ', $prefix.$s.$postfix);
 	}
 
 	/**
@@ -710,7 +741,7 @@ class Linker {
 	}
 
 	function makeThumbLink2( Title $title, $file, $frameParams = array(), $handlerParams = array(), $time = false, $query = "" ) {
-		global $wgStylePath, $wgContLang;
+		global $wgStylePath, $wgContLang, $wgWysiwygParserEnabled;
 		$exists = $file && $file->exists();
 
 		# Shortcuts
@@ -769,7 +800,11 @@ class Linker {
 
 		$more = htmlspecialchars( wfMsg( 'thumbnail-more' ) );
 
-		$s = "<div class=\"thumb t{$fp['align']}\"><div class=\"thumbinner\" style=\"width:{$outerWidth}px;\">";
+		$refId = '';
+		if (!empty($wgWysiwygParserEnabled) && isset($fp['refid'])) {
+			$refId = " refid=\"{$fp['refid']}\"";
+		}
+		$s = "<div$refId class=\"thumb t{$fp['align']}\"><div class=\"thumbinner\" style=\"width:{$outerWidth}px;\">";
 		if( !$exists ) {
 			$s .= $this->makeBrokenImageLinkObj( $title, '', '', '', '', $time==true );
 			$zoomicon = '';
@@ -807,7 +842,7 @@ class Linker {
 	 * @return string
 	 */
 	public function makeBrokenImageLinkObj( $title, $text = '', $query = '', $trail = '', $prefix = '', $time = false ) {
-		global $wgEnableUploads;
+		global $wgEnableUploads, $wgWysiwygParserEnabled;
 		if( $title instanceof Title ) {
 			wfProfileIn( __METHOD__ );
 			$currentExists = $time ? ( wfFindFile( $title ) != false ) : false;
@@ -824,9 +859,13 @@ class Linker {
 					$q .= '&' . $query;
 				list( $inside, $trail ) = self::splitTrail( $trail );
 				$style = $this->getInternalLinkAttributesObj( $title, $text, 'new' );
+				$refId = '';
+				if (!empty($wgWysiwygParserEnabled)) {
+					$refId = Wysiwyg_GetRefId($text);
+				}
 				wfProfileOut( __METHOD__ );
 				return '<a href="' . $upload->escapeLocalUrl( $q ) . '"'
-					. $style . '>' . $prefix . $text . $inside . '</a>' . $trail;
+					. $style . $refId . '>' . $prefix . $text . $inside . '</a>' . $trail;
 			} else {
 				wfProfileOut( __METHOD__ );
 				return $this->makeKnownLinkObj( $title, $text, $query, $trail, $prefix );
@@ -854,6 +893,11 @@ class Linker {
 	 * @todo Handle invalid or missing images better.
 	 */
 	function makeMediaLinkObj( $title, $text = '', $time = false ) {
+		global $wgWysiwygParserEnabled;
+		$refId = '';
+		if (!empty($wgWysiwygParserEnabled)) {
+			$refId = Wysiwyg_GetRefId($text);
+		}
 		if( is_null( $title ) ) {
 			### HOTFIX. Instead of breaking, return empty string.
 			return $text;
@@ -872,7 +916,7 @@ class Linker {
 				$text = $alt;
 			}
 			$u = htmlspecialchars( $url );
-			return "<a href=\"{$u}\" class=\"$class\" title=\"{$alt}\">{$text}</a>";
+			return "<a href=\"{$u}\" class=\"$class\" title=\"{$alt}\"{$refId}>{$text}</a>";
 		}
 	}
 
@@ -888,6 +932,11 @@ class Linker {
 
 	/** @todo document */
 	function makeExternalLink( $url, $text, $escape = true, $linktype = '', $ns = null ) {
+		global $wgWysiwygParserEnabled;
+		$refId = '';
+		if (!empty($wgWysiwygParserEnabled)) {
+			$refId = Wysiwyg_GetRefId($text);
+		}
 		$style = $this->getExternalLinkAttributes( $url, $text, 'external ' . $linktype );
 		global $wgNoFollowLinks, $wgNoFollowNsExceptions;
 		if( $wgNoFollowLinks && !(isset($ns) && in_array($ns, $wgNoFollowNsExceptions)) ) {
@@ -903,7 +952,7 @@ class Linker {
 			wfDebug("Hook LinkerMakeExternalLink changed the output of link with url {$url} and text {$text} to {$link}", true);
 			return $link;
 		}
-		return '<a href="'.$url.'"'.$style.'>'.$text.'</a>';
+		return '<a href="'.$url.'"'.$style.$refId.'>'.$text.'</a>';
 	}
 
 	/**
@@ -1279,13 +1328,15 @@ class Linker {
 		 # no trailing newline, script should not be wrapped in a
 		 # paragraph
 		 . "</ul>\n</td></tr></table>"
+		 // macbre: fixes #2643 and #3730
 		 . '<script type="' . $wgJsMimeType . '">'
-		 . ' window.onload = function() {'
+		 . 'if (!window.onloadFuncts) {	var onloadFuncts = [];}'
+		 . 'onloadFuncts[onloadFuncts.length] = function() {'
 		 . ' if (window.showTocToggle) {'
 		 . '  window.tocShowText = "' . wfEscapeJsString( wfMsg('showtoc') ) . '";'
 		 . '  window.tocHideText = "' . wfEscapeJsString( wfMsg('hidetoc') ) . '";'
 		 . '  showTocToggle();'
-		 . ' }};'
+		 . '}};'
 		 . "</script>\n";
 	}
 
