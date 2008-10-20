@@ -27,8 +27,8 @@ function wfLinkSuggestToggle($toggles, $default_array = false) {
 	return true;
 }
 
-$wgHooks['EditForm::AfterEdit:Form'][] = 'AddLinkSuggest';
-function AddLinkSuggest($editPage) {
+$wgHooks['EditForm::MultiEdit:Form'][] = 'AddLinkSuggest';
+function AddLinkSuggest($a, $b, $c, $d) {
 	global $wgOut, $wgExtensionsPath, $wgStyleVersion, $wgUser;
 	if($wgUser->getOption('disablelinksuggest') != true) {
 		$wgOut->addHTML('<div id="wpTextbox1_container" class="yui-ac-container"></div>');
@@ -64,7 +64,7 @@ function getLinkSuggest() {
 		$results = array();
 		$pageIds = array();
 
-		$db =& wfGetDB(DB_SLAVE);
+		$db =& wfGetDB(DB_SLAVE, 'search');
 
 		$sql = "SELECT /* LinkSuggest query 1 */ DISTINCT page_id, page_title, page_namespace FROM page, querycache WHERE qc_type = 'Mostlinked' AND page_title = qc_title AND page_namespace = qc_namespace AND LOWER(qc_title) LIKE '{$query}%' AND qc_namespace = {$namespace} ORDER BY qc_value DESC LIMIT 10";
 		$res = $db->query($sql);
