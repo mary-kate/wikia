@@ -165,7 +165,7 @@ YAHOO.lang.extend(YAHOO.example.AutoCompleteTextArea, YAHOO.widget.AutoComplete,
 		var caret = this.getCaret(this._elTextbox);
 
 		for(var i = caret; i >= 0; i--) {
-			if(text.charAt(i - 1) == "[") {
+			if( ( text.charAt( i - 1 ) == "[" ) || ( text.charAt( i - 1 ) == "{" ) ) {
 				break;
 			}
 		}
@@ -194,7 +194,13 @@ YAHOO.lang.extend(YAHOO.example.AutoCompleteTextArea, YAHOO.widget.AutoComplete,
 			if((c == "[") && (text.charAt(i - 1) == "[")) {
 				break ;			
 			}
+			if((c == "{") && (text.charAt(i - 1) == "{") && (text.charAt(i - 2) != "{") ) {
+				break ;			
+			}
 			if((c == "]") && (text.charAt(i - 1) == "]")) {
+				return ;			
+			}
+			if((c == "}") && (text.charAt(i - 1) == "}")) {
 				return ;			
 			}
 		}
@@ -208,6 +214,11 @@ YAHOO.lang.extend(YAHOO.example.AutoCompleteTextArea, YAHOO.widget.AutoComplete,
 				return;
 			}
 			if((c == "[") && (text.charAt(i - 1) == "[")) {
+				sQueryReal = text.substr(i + 1, (caret - i - 1));
+				sQueryStartAt = i;
+				break;
+			}
+			if((c == "{") && (text.charAt(i - 1) == "{")) {
 				sQueryReal = text.substr(i + 1, (caret - i - 1));
 				sQueryStartAt = i;
 				break;
