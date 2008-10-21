@@ -171,7 +171,8 @@ YAHOO.lang.extend(YAHOO.example.AutoCompleteTextArea, YAHOO.widget.AutoComplete,
 		}
 
 		var textBefore = text.substr(0, i);
-		var newVal = textBefore + oItem._oResultData[1] + "]]" + text.substr(i + this._sCurQuery.length);
+		var postfix = "]]";
+		var newVal = textBefore + oItem._oResultData[1] + postfix + text.substr(i + this._sCurQuery.length);
 		this._elTextbox.value = newVal;
 
 		if(YAHOO.env.ua.ie > 0) {
