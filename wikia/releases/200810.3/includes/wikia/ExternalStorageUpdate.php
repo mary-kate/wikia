@@ -50,7 +50,7 @@ class ExternalStorageUpdate {
 
 			$dbw = wfGetDBExt( DB_MASTER, $cluster );
 			$ip = ip2long(wfGetIP());
-			
+
 			$ret = $dbw->update(
 				"blobs",
 				array(
@@ -91,6 +91,7 @@ class ExternalStorageUpdate {
 						),
 						array(
 							"page_id"        => $this->mPageId,
+							"page_wikia_id" => $wgCityId
 						),
 						__METHOD__
 					);
