@@ -6,12 +6,12 @@ $wgExtensionFunctions[] = 'wfSpecialIFrameUpload';
 function wfSpecialIFrameUpload(){
   global $wgUser,$IP;
   include_once("includes/SpecialPage.php");
-include_once("includes/SpecialUpload.php");
-include_once("includes/Parser.php");
+include_once("includes/specials/SpecialUpload.php");
+include_once("includes/parser/Parser.php");
 class IFrameUpload extends UnlistedSpecialPage {
 
-	 
-	
+
+
   function IFrameUpload(){
     UnlistedSpecialPage::UnlistedSpecialPage("IFrameUpload");
   }
@@ -34,15 +34,15 @@ class IFrameUpload extends UnlistedSpecialPage {
 
 ");
 	$form->execute();
- 	
+
 	// This line removes the navigation and everything else from the
  	// page, if you don't set it, you get what looks like a regular wiki
  	// page, with the body you defined above.
  	$wgOut->setArticleBodyOnly(true);
 
   }
-  
-  
+
+
 
 
 }
@@ -50,7 +50,7 @@ class IFrameUpload extends UnlistedSpecialPage {
  SpecialPage::addPage( new IFrameUpload );
  global $wgMessageCache,$wgOut;
  //$wgMessageCache->addMessage( 'commenteaction', 'comment action' );
- 
+
 
 Class UploadFormCustom extends UploadForm {
 
@@ -72,9 +72,9 @@ Class UploadFormCustom extends UploadForm {
 
 		if ( '' != $msg ) {
 			$this->uploadError($msg);
-			return ""; 
+			return "";
 		}
-	
+
 		$sk = $wgUser->getSkin();
 
 
@@ -108,7 +108,7 @@ Class UploadFormCustom extends UploadForm {
 				margin:0px;
 				background-color:#ffffff;
 			}
-			
+
 			.uploadLabel {
 				font-size:13px;
 				margin:0px 0px 3px 0px;
@@ -118,7 +118,7 @@ Class UploadFormCustom extends UploadForm {
 			function resizeIframe(id) {
 
 					parent.document.getElementById(id).style.height=\"60px\"
-				
+
 			}
 			</script>
 		</head>
@@ -130,13 +130,13 @@ Class UploadFormCustom extends UploadForm {
 				<input tabindex='1' class='createbox' type='file' name='wpUploadFile' id='wpUploadFile' " . ($this->mDestFile?"":"onchange='fillDestFilename()' ") . "size='40' />
 			</td>
 		</tr>" );
-		
+
 		//<tr>
 			//<td class='uploadLabel'><label for='wpUploadFile'>
 				//{$sourcefilename}</label>
 			//</td>
 		//</tr>
-		
+
 		//<tr>
 			//<td align='right' class='uploadLabel'><label for='wpDestFile'>{$destfilename}:</label></td>
 			//<td align='left'>
@@ -173,7 +173,7 @@ Class UploadFormCustom extends UploadForm {
 			$copystatus =  htmlspecialchars( $this->mUploadCopyStatus );
 			$filesource = wfMsgHtml ( 'filesource' );
 			$uploadsource = htmlspecialchars( $this->mUploadSource );
-			
+
 			$wgOut->addHTML( "
 			        <td align='right' nowrap='nowrap' class='uploadLabel'><label for='wpUploadCopyStatus'>$filestatus:</label></td>
 			        <td><input tabindex='5' type='text' name='wpUploadCopyStatus' id='wpUploadCopyStatus' value=\"$copystatus\" size='40' /></td>
@@ -182,13 +182,13 @@ Class UploadFormCustom extends UploadForm {
 		        	<td align='right'><label for='wpUploadCopyStatus' class='uploadLabel'>$filesource:</label></td>
 			        <td><input tabindex='6' type='text' name='wpUploadSource' id='wpUploadCopyStatus' value=\"$uploadsource\" size='40' /></td>
 			</tr>
-		 
+
 		");
 		}
 
 
 		$wgOut->addHtml( "
-		 
+
 	<tr>
 
 	</tr>
@@ -200,7 +200,7 @@ Class UploadFormCustom extends UploadForm {
 	</table>
 	</form></body></html>" );
 	}
-	
+
 		/* -------------------------------------------------------------- */
 
 	/**
@@ -210,11 +210,11 @@ Class UploadFormCustom extends UploadForm {
 	function showSuccess() {
 		global $wgUser, $wgOut, $wgContLang, $wgTitle;
 		//$wgOut->addHTML( "<span style='font-family:Arial;font-size:18px;font-weight:800'>" . $this->mUploadSaveName . "</span><br><br>");
-		
-	
+
+
 		$img = Image::newFromName($this->mUploadSaveName);
 		$img_tag = '<img src="' . $img->getURL() . '" alt="" width="75"/>';
-		
+
 		$wgOut->addHTML( '
 		<html>
 		<head>
@@ -224,18 +224,18 @@ Class UploadFormCustom extends UploadForm {
 				margin:0px;
 				padding:0px;
 			}
-			
+
 			a {
 				font-size:10px;
 				text-decoration:none;
 			}
-			
+
 			.uploaded-image img {
 				padding:3px;
 				margin:10px 10px 0px 0px;
 				border:1px solid #dcdcdc;
 			}
-			
+
 			td.uploaded-link {
 				margin:5px 0px 0px 0px;
 			}
@@ -244,7 +244,7 @@ Class UploadFormCustom extends UploadForm {
 			function resizeIframe(id) {
 
 					parent.document.getElementById(id).style.height=(5+ document.body.scrollHeight  )+ "px"
-				
+
 			}
 			</script>
 		</head>
@@ -267,7 +267,7 @@ Class UploadFormCustom extends UploadForm {
 		echo $wgOut->getHTML();
 		exit();
 	}
-	
+
 	/**
 	 * There's something wrong with this file, not enough to reject it
 	 * totally but we require manual intervention to save it for real.
@@ -277,10 +277,10 @@ Class UploadFormCustom extends UploadForm {
 	 * @access private
 	 */
 	function uploadWarning( $warning ) {
-	 
+
 		global $wgOut;
 		global $wgUseCopyrightUpload;
-		
+
 		$this->mSessionKey = $this->stashSession();
 		if( !$this->mSessionKey ) {
 			# Couldn't save file; an error has been displayed so let's go.
@@ -295,20 +295,20 @@ $wgOut->addHTML( '
 				margin:0px;
 				padding:0px;
 			}
-			
+
 
 		</style>
 			<script type="text/javascript">
 			function resizeIframe(id) {
 
 					parent.document.getElementById(id).style.height=(5+ document.body.scrollHeight  )+ "px"
-				
+
 			}
 			</script>
 		</head>
 		<body style="text-align:left;"  onload="resizeIframe(\'uploading\')">');
 		$wgOut->addHTML( "<span style=\"font-size:12px;font-weight:800;>" . wfMsgHtml( 'uploadwarning' ) . "</span>\n" );
-		
+
 		$wgOut->addHTML( "<ul style=\"font-size:12px;font-weight:800;\">{$warning}</ul><br />\n" );
 
 		$save = wfMsg( 'savefile' );
@@ -354,7 +354,7 @@ $wgOut->addHTML( '
 		</tr>
 	</table></form></body></html>\n" );
 	}
-	
+
 	function uploadError( $error ) {
 		global $wgOut;
 		//$wgOut->addHTML( "<h2>" . wfMsgHtml( 'uploadwarning' ) . "</h2>\n" );
@@ -367,23 +367,23 @@ $wgOut->addHTML( '
 				margin:0px;
 				padding:0px;
 			}
-	
+
 		</style>
 			<script type="text/javascript">
 			function resizeIframe(id) {
 
 					parent.document.getElementById(id).style.height=(5+ document.body.scrollHeight  )+ "px"
-				
+
 			}
 			</script>
 		</head>
 		<body style="text-align:left;"  onload="resizeIframe(\'uploading\')">');
-		
+
 		$wgOut->addHTML( "<span style=\"font-size:11px;color:red;font-weight:800;\">{$error}</span>\n" );
 		$wgOut->addHTML( "<br/><input type=\"button\" class=\"site-button\" value=\"Re-try Upload\" onclick=\"window.location='index.php?title=Special:IFrameUpload'\"></body></html>\n" );
 	}
-	
-	
+
+
 }
 
 }
