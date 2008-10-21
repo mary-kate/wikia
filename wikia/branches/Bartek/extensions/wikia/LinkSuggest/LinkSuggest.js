@@ -163,15 +163,18 @@ YAHOO.lang.extend(YAHOO.example.AutoCompleteTextArea, YAHOO.widget.AutoComplete,
 		var scrollTop = this._elTextbox.scrollTop;
 		var text = this._elTextbox.value.replace(/\r/g, "");
 		var caret = this.getCaret(this._elTextbox);
-
+		var postfix = "]]";
+			
 		for(var i = caret; i >= 0; i--) {
-			if( ( text.charAt( i - 1 ) == "[" ) || ( text.charAt( i - 1 ) == "{" ) ) {
+			if( text.charAt( i - 1 ) == "[" ) {
+				break;
+			} else if ( text.charAt( i - 1 ) == "{" ) {
+				var postfix = "}}";
 				break;
 			}
 		}
 
 		var textBefore = text.substr(0, i);
-		var postfix = "]]";
 		var newVal = textBefore + oItem._oResultData[1] + postfix + text.substr(i + this._sCurQuery.length);
 		this._elTextbox.value = newVal;
 
