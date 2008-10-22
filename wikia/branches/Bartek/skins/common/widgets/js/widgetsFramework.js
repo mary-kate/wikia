@@ -221,6 +221,12 @@ YAHOO.extend(YAHOO.wikia.ddObject, YAHOO.util.DDProxy, {
 
 	startDrag: function(x, y) {
 		var clickEl = this.getEl();
+
+		if(YAHOO.util.Dom.hasClass(clickEl, 'WidgetAdvertiser')) {
+			var adSpaceId = clickEl.childNodes[1].childNodes[0].id;
+			$(adSpaceId + '_load').style.visibility = 'hidden';
+		}
+
 		if (this.isThumb == false) {
 			Dom.setStyle(clickEl, 'visibility', 'hidden');
 		}
@@ -255,6 +261,12 @@ YAHOO.extend(YAHOO.wikia.ddObject, YAHOO.util.DDProxy, {
 		a.onComplete.subscribe(function() {
 			Dom.setStyle(proxyid, 'visibility', 'hidden');
 			Dom.setStyle(thisid, 'visibility', '');
+
+			if(YAHOO.util.Dom.hasClass(srcEl, 'WidgetAdvertiser')) {
+				var adSpaceId = srcEl.childNodes[1].childNodes[0].id;
+				$(adSpaceId + '_load').style.visibility = 'visible';
+			}
+
 		});
 		a.animate();
 
@@ -327,6 +339,7 @@ YAHOO.extend(YAHOO.wikia.ddObject, YAHOO.util.DDProxy, {
 	},
 
 	onDrag: function(e) {
+		TieDivLibrary.calculate();
 		var y = Event.getPageY(e);
 		if(y < this.lastY) {
 			this.goingUp = true;
@@ -340,6 +353,9 @@ YAHOO.extend(YAHOO.wikia.ddObject, YAHOO.util.DDProxy, {
 
 function hideCarousel(e) {
 	Event.preventDefault(e);
+
+	carouselShown = false;
+
 	if(skin == 'quartz') {
 		Dom.setStyle('widget_cockpit', 'display', 'none');
 	} else {
@@ -353,13 +369,16 @@ var carouselObj = null;
 var carouselLoaded = false;
 var carouselLength = 0;
 var carouselVisible = null;
+var carouselShown = false;
 
 function showCarousel(e) {
 	if (Dom.get("headerMenuUser")) {
-		Dom.get("headerMenuUser").style.visibility = 'hidden';	
+		Dom.get("headerMenuUser").style.visibility = 'hidden';
 	}
 	Event.preventDefault(e);
-	
+
+	carouselShown = true;
+
 	// macbre: scroll to top of the page
 	window.scrollTo(0,0);
 
@@ -441,7 +460,10 @@ function showCarousel(e) {
 			}
 		}
 
-		Event.addListener(window, 'resize', getNumberForCarousel); 
+		Event.addListener(window, 'resize', getNumberForCarousel);
+	}
+	if (TieDivLibrary != 'undefined') {
+		TieDivLibrary.loop(3);	
 	}
 }
 
@@ -462,10 +484,9 @@ function getNumberForCarousel() {
 		Dom.setStyle(carousel, 'width', carouselSize + 'px');
 	}
 
-	YAHOO.log('getNumberForCarousel(): ' + carouselVisible);
-
-	// and do config update (#3179)
-	if (carouselObj) {
+	// and do config update (#3179) only when carousel is shown (IE6 is veeeery strange)
+	if (carouselObj && carouselShown) {
+		YAHOO.log('getNumberForCarousel(): ' + carouselVisible);
 		carouselObj.setProperty('scrollInc',  carouselVisible);
 		carouselObj.setProperty('numVisible', carouselVisible);
 	}

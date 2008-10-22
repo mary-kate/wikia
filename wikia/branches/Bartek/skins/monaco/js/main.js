@@ -9,36 +9,51 @@ var DDM = YAHOO.util.DragDropMgr;
 var value = null;
 Event.onDOMReady(function() {
 	searchField = Dom.get('search_field');
+
+	defaultValue = searchField.title;
+	doBlur = true;
+
 	if (searchField.value == '') {
-		value = searchField.value = searchField.title;
+		searchField.value = searchField.title;
 	}
 	else if (searchField.value != searchField.title) {
-		value = searchField.title;
-		searchField.style.color = 'black';
+		Dom.addClass(searchField, 'field_active');
+		doBlur = false; // allow user to continue typing after page is loaded
 	}
-	else {
-		value = searchField.title;
-	}
-	Event.addListener('search_field', 'click', function() {
-		if(value == null || value == Dom.get('search_field').value) {
-			Dom.get('search_field').value = '';
-			Dom.get('search_field').style.color = 'black';
+	Event.addListener(searchField, 'click', function() {
+		if(defaultValue == null || defaultValue == searchField.value) {
+			searchField.value = '';
+			Dom.addClass(searchField, 'field_active');
 		}
-		Dom.get('search_field').focus();
+		searchField.focus();
 	});
-	Event.addListener('search_field', 'blur', function() {
-		if(Dom.get('search_field').value == '') {
-			Dom.get('search_field').value = value;
-			Dom.get('search_field').style.color = 'gray';
+	// solves strange issue described in #3083
+	Event.addListener(searchField, 'keypress', function() {
+		if(defaultValue == null || defaultValue == searchField.value) {
+			searchField.value = '';
+			Dom.addClass(searchField, 'field_active');
+		}
+	});
+
+	Event.addListener(searchField, 'blur', function() {
+		if(searchField.value == '') {
+			searchField.value = defaultValue;
+			Dom.removeClass(searchField, 'field_active');
 		}
 	});
 	Event.addListener('search_button', 'click', function() {
-		if (Dom.get('search_field').value == value) {
-			Dom.get('search_field').value = '';
+		if (searchField.value == defaultValue) {
+			searchField.value = '';
 		}
 
 		Dom.get('searchform').submit();
 	});
+
+	// #3083: blur() is buggy in IE
+	if (doBlur) {
+		searchField.disabled = true;
+		searchField.disabled = false;
+	}
 
 	var submitAutoComplete_callback = {
 		success: function(o) {
@@ -91,10 +106,6 @@ Event.onContentReady("background_strip", function() {
 			var headerY = parseInt(Dom.getY('wikia_header'));
 			Dom.setStyle(menuId, 'top', headerY + (menuId == 'headerMenuHub' ? 50 : 32) + 'px');
 
-			if (Dom.get('headerMenuHub') && Dom.get('headerMenuUser')) {
-				Dom.setStyle(['headerMenuUser', 'headerMenuHub'], 'visibility', 'hidden');
-			}
-			
 			// #3108
 			if (Dom.hasClass('body', 'rtl')) {
 				if(menuId == 'headerMenuUser') {
@@ -117,11 +128,20 @@ Event.onContentReady("background_strip", function() {
 				Dom.setStyle(menuId, 'visibility', 'visible');
 			}
 		});
-		var headerMenuTimer;
+		var headerMenuTimer, headerButtonTimer;
+		Event.addListener(buttonId, 'mouseout', function() {
+			headerButtonTimer = setTimeout("YAHOO.util.Dom.get('"+menuId+"').style.visibility = 'hidden';", 1500);
+		});
 		Event.addListener(menuId, 'mouseout', function() {
 			headerMenuTimer = setTimeout("YAHOO.util.Dom.get('"+menuId+"').style.visibility = 'hidden';", 300);
 		});
+		// #3374
+		Event.addListener(buttonId, 'mouseover', function() {
+			clearTimeout(headerButtonTimer);
+			clearTimeout(headerMenuTimer);
+		});
 		Event.addListener(menuId, 'mouseover', function() {
+			clearTimeout(headerButtonTimer);
 			clearTimeout(headerMenuTimer);
 		});
 	}
@@ -147,13 +167,15 @@ Event.onDOMReady(function() {
 		Event.preventDefault(e);
 		YAHOO.util.Connect.asyncRequest('GET', wgScriptPath+'/api.php?action=delete&list=wkvoteart&format=json&wkpage='+wgArticleId, callback);
 		YAHOO.util.Dom.addClass('star-rating', 'star-rating-progress');
-		 Dom.setStyle('unrateLink', 'display', 'none');
+		Dom.setStyle('unrateLink', 'display', 'none');
+		YAHOO.Wikia.Tracker.trackByStr(e, 'ArticleFooter/vote/unrate');
 	});
 	Event.addListener(['star1','star2','star3','star4','star5'], 'click', function(e) {
 		Event.preventDefault(e);
 		var rating = this.id.substr(4,1);
 		YAHOO.util.Connect.asyncRequest('GET', wgScriptPath+'/api.php?action=insert&list=wkvoteart&format=json&wkvote='+rating+'&wkpage='+wgArticleId, callback);
 		YAHOO.util.Dom.addClass('star-rating', 'star-rating-progress');
+		YAHOO.Wikia.Tracker.trackByStr(e, 'ArticleFooter/vote/' + rating);
 	});
 
 	// fix for IE6(#1843)
@@ -352,398 +374,4 @@ function doClearAll() {
 		YAHOO.util.Dom.removeClass(the_last_displayed.source, "navigation-hover");
 	}
 	last_displayed = '';
-}
-/**
- * Automatic color detection for Google AdSense
- * @author Inez Korczynski
- */
-var HCHARS = "0123456789ABCDEF";
-
-function dec2hex(n) {
-	n = parseInt(n, 10);
-	n = (YAHOO.lang.isNumber(n)) ? n : 0;
-	n = (n > 255 || n < 0) ? 0 : n;
-	return HCHARS.charAt((n - n % 16) / 16) + HCHARS.charAt(n % 16);
-}
-
-function rgb2hex(r, g, b) {
-	if (YAHOO.lang.isArray(r)) {
-		return rgb2hex(r[0], r[1], r[2]);
-	}
-	return dec2hex(r) + dec2hex(g) + dec2hex(b);
-}
-
-function getHEX(color) {
-	if(color == 'transparent') {
-		return color;
-	}
-
-	if(color.match("^\#")) {
-		return color.substring(1);
-	}
-
-	return rgb2hex(color.substring(4).substr(0, color.length-5).split(', '));
-}
-
-function AdGetColor(type) {
-
-	if(typeof adColorsContent == 'undefined') {
-		adColorsContent = new Array();
-	}
-
-	if(typeof themename == 'string') {
-		if(typeof adColorsContent[themename] == 'object') {
-			if(typeof adColorsContent[themename][type] == 'string') {
-				return adColorsContent[themename][type];
-			}
-		}
-	}
-
-	if(typeof adColorsContent[type] == 'string') {
-		return adColorsContent[type];
-	}
-
-	if(type == 'text') {
-		adColorsContent[type] = getHEX(YAHOO.util.Dom.getStyle('article', 'color'));
-		YAHOO.log("Detected - text: " + adColorsContent[type]);
-		return adColorsContent[type];
-	}
-
-	if(type == 'link' || type == 'url') {
-		var link;
-
-		var editSections = YAHOO.util.Dom.getElementsByClassName('editsection', 'span', 'article');
-		if(editSections.length > 0) {
-			link = editSections[0].getElementsByTagName('a')[0];
-		}
-
-		if(link == null) {
-			var links = $('bodyContent').getElementsByTagName('a');
-			for(i = 0; i < links.length; i++) {
-				if(!YAHOO.util.Dom.hasClass(links[i], 'new')) {
-					link = links[i];
-					break;
-				}
-			}
-			if(link == null) {
-				link = links[0];
-			}
-		}
-
-		adColorsContent[type] = getHEX(YAHOO.util.Dom.getStyle(link, 'color'));
-		YAHOO.log("Detected - text: " + adColorsContent[type]);
-		return adColorsContent[type];
-	}
-
-	if(type == 'bg') {
-        var color = getHEX(YAHOO.util.Dom.getStyle('article', 'background-color'));
-
-        if(color == 'transparent' || color == AdGetColor('text')) {
-	        color = getHEX(YAHOO.util.Dom.getStyle('wikia_page', 'background-color'));
-        }
-
-        if(color == 'transparent' || color == '000000') {
-            color = getHEX(YAHOO.util.Dom.getStyle(document.body, 'background-color'));
-        }
-
-		adColorsContent[type] = color;
-		YAHOO.log("Detected - text: " + adColorsContent[type]);
-		return adColorsContent[type];
-	}
-
-}
-
-/**
- * Tricky code delay ad loading
- * @author Inez Korczynski
- */
-var curAdSpaceId = 0;
-var writeLine;
-var inScript = false;
-var inIframe = false;
-var writeBuffer = '';
-function writeFake(s) {
-	writeLine = false;
-	writeProcess(s);
-}
-function writelnFake(s) {
-	writeLine = true;
-	writeProcess(s);
-}
-function writeProcess(content) {
-	while(content != '') {
-		var contentLower = content.toLowerCase();
-		var openIndex = contentLower.indexOf('<script');
-		var closeIndex = contentLower.indexOf('</script');
-
-		var openIframeIndex = contentLower.indexOf('<iframe');
-		var closeIframeIndex = contentLower.indexOf('</iframe');
-
-		var documentWrite = false;
-
-		if(openIframeIndex > -1) {
-			documentWrite = contentLower.substring(openIframeIndex-18, openIframeIndex-2) == 'document.writeln';
-			if(!documentWrite) {
-				documentWrite = contentLower.substring(openIframeIndex-16, openIframeIndex-2) == 'document.write';
-			}
-			if(documentWrite) {
-				if(closeIframeIndex > -1) {
-					if(closeIframeIndex > openIframeIndex) {
-						closeIframeIndex = -1;
-					}
-				}
-				openIframeIndex = -1;
-			}
-		}
-
-		if(!inScript && openIframeIndex > -1) {
-			if(openIframeIndex > 0) {
-				realWrite(content.substring(0,openIframeIndex));
-			}
-			inIframe = true;
-			if(closeIframeIndex > -1) {
-				inIframe = false;
-				realAppend(content.substring(openIframeIndex, closeIframeIndex+9));
-				content = content.substring(closeIframeIndex+9);
-			} else {
-				realAppend(content.substring(openIframeIndex, content.length));
-				content = '';
-			}
-		} else if(!inScript && closeIframeIndex > -1) {
-			inIframe = false;
-			realAppend(content.substring(0,closeIframeIndex+9));
-			content = content.substring(closeIframeIndex+9, content.length);
-		} else if(openIndex > -1) {
-			if(openIndex > 0) {
-				if(inScript) {
-					realWrite(content.substring(0,openIndex));
-				} else {
-					realAppend(content.substring(0,openIndex));
-				}
-			}
-			inScript = true;
-			if(closeIndex > -1) {
-				inScript = false;
-				realWrite(content.substring(openIndex, closeIndex+9));
-				content = content.substring(closeIndex+9);
-			} else {
-				realWrite(content.substring(openIndex, content.length));
-				content = '';
-			}
-		} else if(closeIndex > -1) {
-			inScript = false;
-			realWrite(content.substring(0,closeIndex+9));
-			content = content.substring(closeIndex+9, content.length);
-		} else {
-			if(inScript) {
-				realWrite(content);
-			} else {
-				realAppend(content);
-			}
-			content = '';
-		}
-	}
-}
-function realWrite(s) {
-	if(inIframe) {
-		if(writeLine) {
-			realAppend(s + "\n");
-		} else {
-			realAppend(s);
-		}
-		return;
-	}
-	if(writeLine) {
-		document.writelnOrg(s);
-	} else {
-		document.writeOrg(s);
-	}
-}
-var buffer = '';
-var lastTag = '';
-var tagDeep = 0;
-var startOpening = false;
-var startClosing = false;
-var inBr = false;
-var inImg = false;
-var inComment = false;
-var inParam = false;
-function realAppend(text) {
-	while(text != '') {
-		var textL = text.toLowerCase();
-		var idx = new Array;
-		idx['open'] = textL.indexOf('<'); // open index
-		idx['close'] = textL.indexOf('>'); // close index
-		idx['img'] = textL.indexOf('<img'); // open img index
-		idx['br'] = textL.indexOf('<br'); // open br index
-		idx['tclose'] = textL.indexOf('/>'); // total close index
-		if(idx['open'] > -1 && (idx['close'] == -1 || idx['open'] < idx['close']) && (idx['img'] == -1 || idx['open'] < idx['img']) && (idx['tclose'] == -1 || idx['open'] < idx['tclose']) && (idx['br'] == -1 || idx['open'] < idx['br'])) {
-			buffer += text.substring(0, idx['open'] + 1);
-			text = text.substring(idx['open'] + 1);
-			if(text.substring(0, 1) == '!') {
-				inComment = true;
-			}
-			if(text.toLowerCase().substring(0, 5) == 'param') {
-				inParam = true;
-			}
-			if(text.substring(0, 1) == '/') {
-				startClosing = true;
-			} else {
-				startOpening = true;
-			}
-			lastTag = 'open';
-		} else if(idx['tclose'] > -1 && (idx['open'] == -1 || idx['tclose'] <= idx['open']) && (idx['close'] == -1 || idx['tclose'] < idx['close']) && (idx['img'] == -1 || idx['tclose'] < idx['img']) && (idx['br'] == -1 || idx['tclose'] < idx['br'])) {
-			buffer += text.substring(0, idx['tclose'] + 2);
-			text = text.substring(idx['tclose'] + 2);
-			if(lastTag == 'img') {
-				inImg = false;
-			} else if(lastTag == 'br') {
-				inBr = false;
-			}
-			lastTag = 'tclose';
-		} else if(idx['close'] > -1 && (idx['open'] == -1 || idx['close'] < idx['open']) && (idx['img'] == -1 || idx['close'] < idx['img']) && (idx['tclose'] == -1 || idx['close'] < idx['tclose']) && (idx['br'] == -1 || idx['close'] < idx['br'])) {
-			buffer += text.substring(0, idx['close'] + 1);
-			text = text.substring(idx['close'] + 1);
-
-			if(inParam == true) {
-				inParam  = false;
-				startOpening = false;
-			} else if(inComment == true) {
-				inComment = false;
-			} else if(lastTag == 'img') {
-				inImg = false;
-			} else if(lastTag == 'br') {
-				inBr = false;
-			} else {
-				if(startOpening) {
-					tagDeep++;
-					startOpening = false;
-				} else if(startClosing) {
-					tagDeep--;
-					startClosing = false;
-				}
-			}
-			lastTag = 'close';
-		} else if(idx['img'] > -1 && (idx['open'] == -1 || idx['img'] <= idx['open']) && (idx['close'] == -1 || idx['img'] < idx['close']) && (idx['tclose'] == -1 || idx['img'] < idx['tclose']) && (idx['br'] == -1 || idx['img'] < idx['br'])) {
-			buffer += '<img';
-			text = text.substring(idx['img'] + 4);
-			lastTag = 'img';
-			inImg = true;
-		} else if(idx['br'] > -1 && (idx['open'] == -1 || idx['br'] <= idx['open']) && (idx['close'] == -1 || idx['br'] < idx['close']) && (idx['tclose'] == -1 || idx['br'] < idx['tclose']) && (idx['img'] == -1 || idx['br'] < idx['img'])) {
-			buffer += '<br';
-			text = text.substring(idx['br'] + 3);
-			lastTag = 'br';
-			inBr = true;
-		} else if(idx['open'] == -1 && idx['close'] == -1 && idx['img'] == -1 && idx['tclose'] == -1 && idx['br'] == -1) {
-			buffer += text;
-			text = '';
-		} else {
-			text = '';
-		}
-		if(tagDeep == 0 && startOpening == false && startClosing == false && inImg == false && inBr == false) {
-			realRealAppend(buffer);
-			buffer = '';
-		}
-	}
-}
-function realRealAppend(text) {
-		var el = document.createElement('span');
-		el.innerHTML = text;
-		document.getElementById('adSpace'+curAdSpaceId).appendChild(el);
-}
-function enableWikiaWriter(adSpaceId) {
-	curAdSpaceId = adSpaceId
-	document.writeOrg = document.write;
-	document.writelnOrg = document.writeln;
-	document.write = writeFake;
-	document.writeln = writelnFake;
-}
-function disableWikiaWriter() {
-	writeBuffer = '';
-	buffer = '';
-	lastTag = '';
-	tagDeep = 0;
-	startOpening = false;
-	startClosing = false;
-	inImg = false;
-	inBr = false;
-	inComment = false;
-	inParam = false;
-	document.write = document.writeOrg;
-	document.writeln = document.writelnOrg;
-}
-
-/**
- * @author Inez Korczynski
- */
-if(Math.round(Math.random() * 1000) == 1 && wgIsArticle && (YAHOO.env.ua.gecko > 0 || YAHOO.env.ua.ie > 0)) {
-
-	function generateGuid()	{
-		var result, i, j;
-		result = '';
-		for(j=0; j<32; j++) {
-			if( j == 8 || j == 12|| j == 16|| j == 20)
-				result = result + '-';
-			i = Math.floor(Math.random()*16).toString(16).toUpperCase();
-			result = result + i;
-		}
-		return result
-	}
-
-	function VISIBILITY_STATS() {
-		YAHOO.util.Event.removeListener(window, 'resize', VISIBILITY_STATS);
-		YAHOO.util.Event.removeListener(window, 'scroll', VISIBILITY_STATS);
-		VISIBILITY_STATS_CALL('type=2&a=' + guid);
-	}
-
-	function VISIBILITY_STATS_CALL(param) {
-		YAHOO.log("PARAM: " + param);
-		var image = document.createElement('img');
-		image.style.display = 'none';
-		image.src = 'http://wikia-ads.wikia.com/log.php' + '?' + param;
-		$('article').appendChild(image);
-	}
-
-	var guid = generateGuid();
-
-	var visibleImages = 0;
-	var inVisibleImages = 0;
-	var viewportHeight = YAHOO.util.Dom.getViewportHeight();
-	var images = $('article').getElementsByTagName('img');
-
-	for(var i = 0; i < images.length; i++) {
-		if(images[i].src.indexOf('http://wikia-ads.wikia.com') == -1) {
-			if(YAHOO.util.Dom.getY(images[i]) > viewportHeight) {
-				inVisibleImages++;
-			} else {
-				visibleImages++;
-			}
-		}
-	}
-
-	YAHOO.util.Event.addListener(window, 'resize', VISIBILITY_STATS);
-	YAHOO.util.Event.addListener(window, 'scroll', VISIBILITY_STATS);
-
-	VISIBILITY_STATS_CALL('type=1&a=' + visibleImages + '&b=' + inVisibleImages + '&c=' + wgNamespaceNumber + '&d=' + wgCityId + '&e=' + guid);
-
-	YAHOO.util.Event.onContentReady('spotlight_footer', function() {
-		var params = 'type=3&a=' + guid;
-
-		if(YAHOO.util.Dom.getY('spotlight_footer') > viewportHeight) {
-			params += '&b=false';
-		} else {
-			params += '&b=true';
-		}
-
-		if(YAHOO.util.Dom.getElementsByClassName('WidgetAdvertiser').length > 0) {
-			if(YAHOO.util.Dom.getY(YAHOO.util.Dom.getElementsByClassName('WidgetAdvertiser')[0]) > viewportHeight) {
-				params += '&c=false';
-			} else {
-				params += '&c=true';
-			}
-		}
-
-		VISIBILITY_STATS_CALL(params);
-	});
-
 }
