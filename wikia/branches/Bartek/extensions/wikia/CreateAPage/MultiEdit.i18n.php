@@ -60,7 +60,6 @@ $messages['pl'] = array(
 	'me_edit_muli_editor' => 'Multi-edit Edytor' ,
 	'me_upload' => 'Załaduj obrazek' ,
 	'me_hide' => 'Ukryj' ,
-         // teksty dla createpage'a
         'createpage_title' => 'Stwórz Stronę' ,
         'createpage_title_caption' => 'Tytuł' ,
         'createpage_choose_createplate' => 'Wybierz typ strony' ,

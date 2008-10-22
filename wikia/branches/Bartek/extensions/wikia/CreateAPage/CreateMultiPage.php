@@ -35,7 +35,7 @@ define ("TEMPLATE_CLOSING", '/\}\}/') ;
 
 global $wgMultiEditPageTags, $wgMultiEditPageSimpleTags;
 $wgMultiEditPageTags = array('title', 'descr', 'category');
-$wgMultiEditPageSimpleTags = array('lbl', 'categories', 'pagetitle', 'imageupload');
+$wgMultiEditPageSimpleTags = array('lbl', 'categories', 'pagetitle', 'imageupload', 'optional');
 
 //restore what we temporarily encoded
 function wfCreatePageUnescapeKnownMarkupTags (&$text) {
@@ -406,6 +406,10 @@ class CreateMultiPage
 						#---
 						break;
 					}
+					case "optional" : {
+						//todo fill and create a hidden section, plus add a control at the lowest part
+						break;
+					}		
 					case "imageupload" : { //<!---imageupload---> tag support
 						// do a match here, and for each do the thing, yeah
                         			preg_match_all (IMAGEUPLOAD_TAG_SPECIFIC, $text, $image_tags) ;						
