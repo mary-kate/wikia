@@ -85,7 +85,6 @@ class ExternalStorageUpdate {
 					$dbw->update(
 						"pages",
 						array(
-							"page_wikia_id"  => $wgCityId,
 							"page_namespace" => $Title->getNamespace(),
 							"page_title"     => $Title->getText(),
 						),
