@@ -408,7 +408,10 @@ class CreateMultiPage
 					}
 					case "optional" : {
 						//todo fill and create a hidden section, plus add a control at the lowest part
-						break;
+						$text_html = str_replace( $other_tags[0], "", $text );  // strip the tag
+						$text_html = trim( $text_html );
+						$boxes[] = array("type" => "textarea", "value" => $text_html, "toolbar" => '',  "display" => 0);
+						$boxes[] = array("type" => "", "value" => $text_html, "display" => 1);											     break;
 					}		
 					case "imageupload" : { //<!---imageupload---> tag support
 						// do a match here, and for each do the thing, yeah
@@ -423,7 +426,7 @@ class CreateMultiPage
 							$cur_img_count++ ;						
                                                 }
 
-						$text = str_replace("<!---imageupload--->", "", $text);
+						$text = str_replace($other_tags[0], "", $text);
 
 						// get the toolbar
 						$toolbarid = count ($boxes) ;
