@@ -23,6 +23,11 @@ YAHOO.Wikia.Tracker = {
 			this.trackByStr(null, 'view');
 		}
 
+		// Edit page
+		if(wgArticleId != 0 && wgAction == 'edit') {
+			this.trackByStr(null, 'editpage/view');
+		}
+
 		// EditSimilar extension - result links (Bartek)
 		Event.addListener('editsimilar_links', 'click', function(e) {
 			var el = Event.getTarget(e);
@@ -49,6 +54,29 @@ YAHOO.Wikia.Tracker = {
 			Event.addListener($('userloginlink').getElementsByTagName('a')[0], 'click', YAHOO.Wikia.Tracker.trackByStr, 'loginActions/goToSignup');
 		}
 
+		// Special:Search (Macbre)
+		if ( wgCanonicalSpecialPageName && wgCanonicalSpecialPageName == 'Search' ) {
+			lists = Dom.get('bodyContent').getElementsByClassName('mw-search-results');
+
+			if (lists && lists.length > 0) {
+
+				listNames = ['title', 'text'];
+
+				// parse URL to get offset value
+				re = (/\&offset\=(\d+)/).exec(document.location);
+				offset = re ? (parseInt(re[1]) + 1) : 1;
+
+				for (m=0; m < lists.length; m++) {
+					anchors = lists[m].getElementsByTagName('a');
+					for (a=0; a < anchors.length; a++) {
+						Event.addListener(anchors[a], 'click', YAHOO.Wikia.Tracker.trackByStr, 'search/searchResults/' + listNames[m] + 'Match/' + (offset + a));
+					}
+				}
+
+				// #3439
+				this.trackByStr(null, 'search/searchResults/view');
+			}
+		}
 	},
 
 	trackByStr: function(e, str) {

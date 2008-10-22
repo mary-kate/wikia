@@ -11,6 +11,19 @@ var initTracker = function() {
 	var Event = YAHOO.util.Event;
 	var lang = YAHOO.lang;
 
+	if(wgID == 2428) {
+		Event.addListener(['realAd0','realAd1'], 'click', function(e) {
+			var el = Event.getTarget(e);
+			if(el.innerHTML == 'Close ad') {
+				if(wgIsMainpage) {
+					Tracker.trackByStr(e, 'CloseAd/MainPage');
+				} else {
+					Tracker.trackByStr(e, 'CloseAd/ArticlePage');
+				}
+			}
+		});
+	}
+
 	// Request Wiki
 	Event.addListener('request_wiki', 'click', function(e) {
 		Tracker.trackByStr(e, 'RequestWiki/initiate_click');
@@ -135,6 +148,24 @@ var initTracker = function() {
 		}
 	});
 
+	// Article footer
+	Event.addListener(['articleFooterActions', 'articleFooterActions2'], 'click', function(e) {
+		var el = Event.getTarget(e);
+		if(el.nodeName == 'IMG') {
+			el = el.parentNode;
+		}
+		if(el.nodeName == 'A') {
+			Tracker.trackByStr(e, 'ArticleFooter/' + el.id.split('_')[1]);
+		}
+	});
+
+	Event.addListener('share', 'click', function(e) {
+		var el = Event.getTarget(e);
+		if(el.nodeName == 'A') {
+			Tracker.trackByStr(e, 'ArticleFooter/share/' + el.id.substring(5,el.id.length-2));
+		}
+	});
+
 	// Footer links
 	Event.addListener('wikia_footer', 'click', function(e) {
 		var el = Event.getTarget(e);
@@ -160,5 +191,30 @@ var initTracker = function() {
 	Event.addListener('search_button', 'click', function(e) {
 		Tracker.trackByStr(e, 'search/submit/click/' +  escape(Dom.get('search_field').value.replace(/ /g, '_')));
 	});
+
+	// Spotlights
+	footerSpotlights = Dom.get('spotlight_footer').getElementsByTagName('div');
+	sidebarSpotlight = Dom.get('102_content');
+
+	// Advertiser Widget
+	if (sidebarSpotlight) {
+		sidebarSpotlight = sidebarSpotlight.getElementsByTagName('div');
+	}
+
+	if (footerSpotlights && footerSpotlights.length > 0) {
+		for (s=0; s < footerSpotlights.length; s++) {
+			var id = parseInt(footerSpotlights[s].id.substr( footerSpotlights[s].id.length - 1 ));
+			Event.addListener('realAd' + id, 'click', function(e, id) {
+				Tracker.trackByStr(e, 'spotlights/footer' + (id+1));
+			}, s);
+		}
+	}
+
+	if (sidebarSpotlight && sidebarSpotlight.length > 0) {
+		var id = sidebarSpotlight[0].id.substr( sidebarSpotlight[0].id.length - 1 );
+		Event.addListener('realAd' + id, 'click', function(e) {
+			Tracker.trackByStr(e, 'spotlights/sidebar1');
+		});
+	}
 
 };

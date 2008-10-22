@@ -45,6 +45,9 @@ class SkinMonaco extends SkinTemplate {
 		$this->stylename = 'monaco';
 		$this->template  = 'MonacoTemplate';
 
+		// extra CSS file for RTL (MW1.13)
+		$this->cssfiles[] = 'rtl';
+
 		// Get category information (id, name, url)
 		$cats = wfGetBreadCrumb();
 		$idx = count($cats)-2;
@@ -160,8 +163,7 @@ class SkinMonaco extends SkinTemplate {
 			}
 		}
 
-		$ug = $wgUser->getGroups();
-		if(in_array('staff', $ug) || in_array('sysop', $ug)) {
+		if( $wgUser->isAllowed( 'editinterface' ) ) {
 			if(isset($data_array['sidebarmenu'])) {
 				$monacoSidebarUrl = Title::makeTitle(NS_MEDIAWIKI, 'Monaco-sidebar')->getLocalUrl('action=edit');
 				foreach($data_array['sidebarmenu'] as $nodeKey => $nodeVal) {
@@ -394,8 +396,7 @@ class SkinMonaco extends SkinTemplate {
 			$results = DataProvider::$extraWords[strtolower($node['org'])][1]();
 			$results[] = array('url' => Title::makeTitle(NS_SPECIAL, 'Top/'.$extraWords[strtolower($node['org'])][0])->getLocalURL(), 'text' => strtolower(wfMsg('moredotdotdot')), /*'class' => 'yuimenuitemmore'*/);
 			global $wgUser;
-			$ug = $wgUser->getGroups();
-			if(in_array('staff', $ug) || in_array('sysop', $ug)) {
+			if( $wgUser->isAllowed( 'editinterface' ) ) {
 				if(strtolower($node['org']) == '#popular#') {
 					$results[] = array('url' => Title::makeTitle(NS_MEDIAWIKI, 'Most popular articles')->getLocalUrl(), 'text' => wfMsg('monaco-edit-this-menu'), /*'class' => 'yuimenuitemedit2'*/);
 				}
@@ -529,7 +530,7 @@ class SkinMonaco extends SkinTemplate {
 	 */
 	private function getBiggestCategory($index) {
 		wfProfileIn( __METHOD__ );
-		global $wgMemc;
+		global $wgMemc, $wgBiggestCategoriesBlacklist;
 
 		$limit = max($index, 15);
 
@@ -537,9 +538,8 @@ class SkinMonaco extends SkinTemplate {
 			$key = wfMemcKey('biggest', $limit);
 			$data = $wgMemc->get($key);
 			if(empty($data)) {
-				$filterWords = array('Image', 'images', 'Stub', 'stubs', 'Screenshot', 'screenshots', 'Screencap','screencaps', 'Article', 'articles', 'Copy_edit', 'Fair_use', 'File', 'files', 'Panel', 'panels', 'Redirect', 'redirects', 'Template', 'templates', 'Delete', 'deletion', 'TagSynced');
 				$filterWordsA = array();
-				foreach($filterWords as $word) {
+				foreach($wgBiggestCategoriesBlacklist as $word) {
 					$filterWordsA[] = '(cl_to not like "%'.$word.'%")';
 				}
 				$dbr =& wfGetDB( DB_SLAVE );
@@ -614,12 +614,12 @@ class SkinMonaco extends SkinTemplate {
 	private function getReferencesLinks(&$tpl) {
 		wfProfileIn( __METHOD__ );
 		global $wgStylePath, $wgStyleVersion, $wgMergeStyleVersionCSS, $wgExtensionsPath, $wgContLang;
-		$js = $css = $cssstyle= array();
+		$js = $css = $cssstyle = $allinoneCSS = array();
 
 		// CSS - begin
 		$cssTemp = GetReferences('monaco_css', true);
 		foreach($cssTemp as $cssFile) {
-			$css[] = array('url' => $wgStylePath.'/'.$cssFile.'?'.$wgMergeStyleVersionCSS);
+			$allinoneCSS[] = array('url' => $wgStylePath.'/'.$cssFile.'?'.$wgMergeStyleVersionCSS);
 		}
 
 		if(isset($this->themename)) {
@@ -662,7 +662,7 @@ class SkinMonaco extends SkinTemplate {
 		// JS - end
 
 		wfProfileOut( __METHOD__ );
-		return array('js' => $js, 'css' => $css, 'cssstyle' => $cssstyle);
+		return array('js' => $js, 'css' => $css, 'cssstyle' => $cssstyle, 'allinone_css' => $allinoneCSS);
 	}
 
 	/**
@@ -714,8 +714,7 @@ class SkinMonaco extends SkinTemplate {
 			$results = DataProvider::$extraWords[strtolower($node['org'])][1]();
 			$results[] = array('url' => Title::makeTitle(NS_SPECIAL, 'Top/'.$extraWords[strtolower($node['org'])][0])->getLocalURL(), 'text' => strtolower(wfMsg('moredotdotdot')), 'class' => 'yuimenuitemmore');
 			global $wgUser;
-			$ug = $wgUser->getGroups();
-			if(in_array('staff', $ug) || in_array('sysop', $ug)) {
+			if( $wgUser->isAllowed( 'editinterface' ) ) {
 				if(strtolower($node['org']) == '#popular#') {
 					$results[] = array('url' => Title::makeTitle(NS_MEDIAWIKI, 'Most popular articles')->getLocalUrl(), 'text' => wfMsg('monaco-edit-this-menu'), 'class' => 'yuimenuitemedit2');
 				}
@@ -862,22 +861,19 @@ class MonacoTemplate extends QuickTemplate {
 		if(isset($this->navmenu[$id]['children'])) {
 			$script_output .= '<script type="text/javascript">/*<![CDATA[*/';
 			if ($level) {
-				$menu_output .= '<div class="sub-menu widget" id="sub-menu' . $last_count . '"style="display:none;" >';
+				$menu_output .= '<div class="sub-menu widget" id="sub-menu' . $last_count . '" style="display:none" >';
 				$script_output .= 'submenu_array["sub-menu' . $last_count . '"] = "' . $last_count . '";';
 				$script_output .= '$("navigation_widget").onmouseout = clearMenu;';
 				$script_output .= '$("sub-menu' . $last_count . '").onmouseout = clearMenu;if($("sub-menu' . $last_count . '").captureEvents) $("sub-menu' . $last_count .'").captureEvents(Event.MOUSEOUT);';
 			}
-			$extraAttributes = '';
-			if ($wgCityId == 177) {	//ticket #2942 - rel="nofollow" for central - Marooned
-				$extraAttributes = ' rel="nofollow"';
-			}
+			$extraAttributes = ' rel="nofollow"';
 			foreach($this->navmenu[$id]['children'] as $child) {
 				//$mouseover = ' onmouseover="' . ($level ? 'sub_' : '') . 'menuItemAction(\'' .
 				($level ? $last_count . '_' : '_') .$count . '\');"';
 				//$mouseout = ' onmouseout="clearBackground(\'_' . $count . '\')"';
 				$menu_output .='<div class="menu-item' .
-				(($count==sizeof($this->navmenu[$id]['children'])) ? ' border-fix' : '') . '"id="' . ($level ? 'sub-' : '') . 'menu-item' . ($level ? $last_count . '_' :'_') .$count . '">';
-				$menu_output .= '<a id="' . ($level ? 'a-sub-' : 'a-') . 'menu-item' . ($level ? $last_count . '_' : '_') .$count . '"href="'.(!empty($this->navmenu[$child]['href']) ? htmlspecialchars($this->navmenu[$child]['href']) : '#').'"' . $extraAttributes . '>';
+				(($count==sizeof($this->navmenu[$id]['children'])) ? ' border-fix' : '') . '" id="' . ($level ? 'sub-' : '') . 'menu-item' . ($level ? $last_count . '_' :'_') .$count . '">';
+				$menu_output .= '<a id="' . ($level ? 'a-sub-' : 'a-') . 'menu-item' . ($level ? $last_count . '_' : '_') .$count . '" href="'.(!empty($this->navmenu[$child]['href']) ? htmlspecialchars($this->navmenu[$child]['href']) : '#').'"' . $extraAttributes . '>';
 
 				if (($fixed_art_path) == $this->navmenu[$child]['href']) {
 					$prevent_blank = '.onclick = YAHOO.util.Event.preventDefault ; ' ;
@@ -906,7 +902,7 @@ class MonacoTemplate extends QuickTemplate {
 						$script_output .= '$("a-sub-menu-item' . $last_count . '_' .$count.'")' . $prevent_blank ;
 					}
 				}
-				$menu_output .= $this->navmenu[$child]['text'];
+				$menu_output .= htmlspecialchars($this->navmenu[$child]['text']);
 				if ( !empty( $this->navmenu[$child]['children'] ) ) {
 					//$menu_output .= '<img src="' . $wgUploadPath . '/common/new/right_arrow.gif?1"
 					$menu_output .= '<em>&rsaquo;</em>';
@@ -933,7 +929,7 @@ class MonacoTemplate extends QuickTemplate {
 
 	function execute() {
 		wfProfileIn( __METHOD__ );
-		global $wgUser, $wgLogo, $wgStylePath, $wgRequest, $wgTitle, $wgSitename;
+		global $wgArticle, $wgUser, $wgLogo, $wgStylePath, $wgRequest, $wgTitle, $wgSitename, $wgEnableFAST_HOME2, $wgExtensionsPath;
 		$skin = $wgUser->getSkin();
 
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -944,17 +940,42 @@ class MonacoTemplate extends QuickTemplate {
 <?php		wfProfileIn( __METHOD__ . '-head'); ?>
 	<head>
 		<meta http-equiv="Content-Type" content="<?php $this->text('mimetype') ?>; charset=<?php $this->text('charset') ?>" />
+                <!-- Skin = <?php echo basename(__FILE__) ?> -->
 		<?php $this->html('headlinks') ?>
+				<?php
+		/* Note: These analytics calls were placed at the top of the page intentionally, so that we
+		   get more accurate stats. Get Michael's permission before moving.
+		*/?>
+		<script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+		<script type="text/javascript">_uff=0;_uacct="UA-288915-1";_userv=1;urchinTracker();_userv=1;</script>
+		<script type="text/javascript" src="http://edge.quantserve.com/quant.js"></script>
+		<script type="text/javascript">_qacct="p-8bG6eLqkH6Avk";quantserve();</script>
+		<noscript>
+		<a href="http://www.quantcast.com/p-8bG6eLqkH6Avk" target="_blank"><img src="http://pixel.quantserve.com/pixel/p-8bG6eLqkH6Avk.gif" style="display: none;" border="0" height="1" width="1" alt="Quantcast"/></a>
+		</noscript>
+
 		<title><?php $this->text('pagetitle') ?></title>
 		<?php print Skin::makeGlobalVariablesScript( $this->data ); ?>
+		<style type="text/css">/*<![CDATA[*/
+<?php
+	/* macbre: #3432 */
+	foreach($this->data['references']['allinone_css'] as $css) {
+?>
+			@import "<?= $css['url'] ?>";
+<?php
+	}
+?>
+		/*]]>*/</style>
 <?php
 	foreach($this->data['references']['css'] as $css) {
 ?>
-		<?= isset($css['cond']) ? '<!--['.$css['cond'].']>' : '' ?><link rel="stylesheet" type="text/css" <?= isset($css['param']) ? $css['param'] : '' ?>href="<?= $css['url'] ?>" /><?= isset($css['cond']) ? '<![endif]-->' : '' ?>
+		<?= isset($css['cond']) ? '<!--['.$css['cond'].']>' : '' ?><link rel="stylesheet" type="text/css" <?= isset($css['param']) ? $css['param'] : '' ?>href="<?= htmlspecialchars($css['url']) ?>" /><?= isset($css['cond']) ? '<![endif]-->' : '' ?>
 
 <?php
 	}
-	echo '<noscript><link rel="stylesheet" type="text/css" href="'.$wgStylePath.'/monaco/css/noscript.css" /></noscript>';
+?>
+		<noscript><link rel="stylesheet" type="text/css" href="<?= $wgStylePath ?>/monaco/css/noscript.css" /></noscript>
+<?php
 	foreach($this->data['references']['cssstyle'] as $cssstyle) {
 ?>
 		<style type="text/css"><?= $cssstyle['content'] ?></style>
@@ -964,28 +985,34 @@ class MonacoTemplate extends QuickTemplate {
 		echo $wgUser->isLoggedIn() ? GetReferences("monaco_loggedin_js") : GetReferences("monaco_non_loggedin_js");
 		foreach($this->data['references']['js'] as $script) {
 ?>
-		<script type="<?= $script['mime'] ?>" src="<?= $script['url'] ?>"></script>
+		<script type="<?= $script['mime'] ?>" src="<?= htmlspecialchars($script['url']) ?>"></script>
 <?php
 		}
 		$this->html('headscripts');
 	}
 
-echo '<link rel="apple-touch-icon" href="'. $wgLogo .'" />';
 ?>
 	</head>
 <?php		wfProfileOut( __METHOD__ . '-head'); ?>
 <?php		wfProfileIn( __METHOD__ . '-body'); ?>
 
-<?
-	if ($wgTitle->getArticleId() == Title::newMainPage()->getArticleId()) {
+<?php
+	if (ArticleAdLogic::isMainPage()){
 		$isMainpage = ' mainpage';
 	} else {
 		$isMainpage = null;
 	}
 ?>
 
-	<body <?php if($this->data['body_onload'    ]) { ?>onload="<?php     $this->text('body_onload')     ?>"<?php } ?>
+	<body<?php if($this->data['body_onload'    ]) { ?> onload="<?php     $this->text('body_onload')     ?>"<?php } ?>
  class="mediawiki <?php $this->text('nsclass') ?> <?php $this->text('dir') ?> <?php $this->text('pageclass') ?><?php if(!empty($this->data['printable']) ) { ?> printable<?php } ?><?php if (!$wgUser->isLoggedIn()) { ?> loggedout<?php } ?> color2 wikiaSkinMonaco<?=$isMainpage?>" id="body">
+
+ <?php
+   if(!empty($skin->timemarker)) {
+	echo $skin->timemarker;
+   }
+ ?>
+
 			<div id="widget_cockpit" class="color1">
 				<div id="carousel-prev" class="widget_cockpit_controls">&laquo;</div>
 				<div id="carousel-next" class="widget_cockpit_controls"><div id="cockpit1_close"></div>&raquo;</div>
@@ -996,11 +1023,10 @@ echo '<link rel="apple-touch-icon" href="'. $wgLogo .'" />';
 			<div id="ghost"></div>
 
 <?php
-echo AdServer::getInstance()->getAd('js_bot1');
 wfRunHooks('GetHTMLAfterBody', array ($this));
 ?>
 
-		<div style="display: none;">
+		<div style="font-size: 1px; position: absolute;">
 			<a href="/wiki/Special:Recentchanges" accesskey="r">Recent changes</a>
 			<a href="/wiki/Special:Random" accesskey="x">Random page</a>
 		</div>
@@ -1201,17 +1227,47 @@ if(isset($this->data['articlelinks']['right'])) {
 			</div>
 
 			<!-- ARTICLE -->
+<?php
+echo AdEngine::getInstance()->getSetupHtml();
+global $wgOut;
+$topAdCode = '';
+$topAdCodeDisplayed = false;
+if ($wgOut->isArticle()){
+	if (ArticleAdLogic::isMainPage()){
+		$topAdCode .= AdEngine::getInstance()->getPlaceHolderDiv('HOME_TOP_LEADERBOARD');
+		if ($wgEnableFAST_HOME2) {
+			$topAdCode .= AdEngine::getInstance()->getPlaceHolderDiv('HOME_TOP_RIGHT_BOXAD');
+		}
+	} else if ( ArticleAdLogic::isContentPage() &&
+		   !ArticleAdLogic::isStubArticle($this->data['bodytext'])) { //valid article
+
+		if (ArticleAdLogic::isShortArticle($this->data['bodytext'])){
+			$topAdCode = AdEngine::getInstance()->getPlaceHolderDiv('TOP_LEADERBOARD');
+		} elseif (ArticleAdLogic::isBoxAdArticle($this->data['bodytext'])) {
+			$topAdCode = AdEngine::getInstance()->getPlaceHolderDiv('TOP_RIGHT_BOXAD');
+		} else {
+			// Long article, but a collision
+			$topAdCode = AdEngine::getInstance()->getPlaceHolderDiv('TOP_LEADERBOARD');
+		}
+	}
+}
+?>
 <?php		wfProfileIn( __METHOD__ . '-article'); ?>
 			<div id="article" <?php if($this->data['body_ondblclick']) { ?>ondblclick="<?php $this->text('body_ondblclick') ?>"<?php } ?>>
-
+				<?php 
+				// Testing putting the leader board above the title 
+				if (! ArticleAdLogic::isMainPage() && AdEngine::getInstance()->getBucketName() == 'lp_at'){
+					// Bucket test to put the ad ad the top 
+					echo $topAdCode;
+					$topAdCodeDisplayed = true;
+				}
+				?>
 				<a name="top" id="top"></a>
 				<?php if($this->data['sitenotice']) { ?><div id="siteNotice"><?php $this->html('sitenotice') ?></div><?php } ?>
 				<?php
 				global $wgSupressPageTitle;
 				if( empty( $wgSupressPageTitle ) ){ ?><h1 class="firstHeading"><?php $this->data['displaytitle']!=""?$this->html('title'):$this->text('title') ?></h1><?php } ?>
 
-				<!--contextual_targeting_start-->
-				<!--google_ad_section_start-->
 				<?php
 				if ($wgRequest->getVal('action') == 'edit') {
 					//echo '<br /><a href="#" id="editTipsLink" onclick="editTips(); return false;">Show Editing Tips</a>';
@@ -1224,9 +1280,15 @@ if(isset($this->data['articlelinks']['right'])) {
 					<?php if($this->data['newtalk'] ) { ?><div class="usermessage"><?php $this->html('newtalk')  ?></div><?php } ?>
 					<?php if(!empty($skin->newuemsg)) { echo $skin->newuemsg; } ?>
 					<?php if($this->data['showjumplinks']) { ?><div id="jump-to-nav"><?php $this->msg('jumpto') ?> <a href="#column-one"><?php $this->msg('jumptonavigation') ?></a>, <a href="#searchInput"><?php $this->msg('jumptosearch') ?></a></div><?php } ?>
+					<?php
+					// Print out call to top leaderboard or box ad, if it's a main page, or not in the bucket test
+					if (ArticleAdLogic::isMainPage() || !$topAdCodeDisplayed){
+						echo $topAdCode;
+					}
+					?>
 					<!-- start content -->
 					<?php $this->html('bodytext') ?>
-					<?php if($this->data['catlinks']) { ?><div id="catlinks"><?php       $this->html('catlinks') ?></div><?php } ?>
+					<?php if($this->data['catlinks']) { $this->html('catlinks'); } ?>
 					<!-- end content -->
 					<div class="visualClear"></div>
 				</div>
@@ -1236,7 +1298,19 @@ if(isset($this->data['articlelinks']['right'])) {
 
 			</div>
 			<!-- /ARTICLE -->
-<?php		wfProfileOut( __METHOD__ . '-article'); ?>
+			<?php // Check to see if it is a super long article, if so, show bottom left nav skyscraper
+			global $wgContLang;
+			if ($wgOut->isArticle() &&
+			    !$wgContLang->isRTL() && // Since this is in the left nav, not suitable for right-to-left languages
+		            !ArticleAdLogic::isMainPage() && 
+			     ArticleAdLogic::isContentPage() && 
+			     ArticleAdLogic::isSuperLongArticle($this->data['bodytext'])) { 
+				echo '<div style="position: absolute; height: 600px; width: 160px; margin-top: -600px; left: -190px;">' .
+					AdEngine::getInstance()->getPlaceHolderDiv('LEFT_SKYSCRAPER_3', true) .
+				     '</div>' . "\n";
+			}
+					
+		wfProfileOut( __METHOD__ . '-article'); ?>
 
 			<!-- ARTICLE FOOTER -->
 <?php		wfProfileIn( __METHOD__ . '-articlefooter'); ?>
@@ -1257,11 +1331,10 @@ if(!$custom_article_footer && $displayArticleFooter) {
 				<table cellspacing="0">
 					<tr>
 						<td class="col1">
-							<ul class="actions">
-								<li><a rel="nofollow" id="fe_edit_icon" href="<?= $wgTitle->getEditURL() ?>"><img src="<?= $wgStylePath ?>/monobook/blank.gif" id="fe_edit_icon" class="sprite" alt="<?= wfMsg('edit') ?>" /></a> <div><?= wfMsg('footer_1', $wgSitename) ?> <a rel="nofollow" href="<?= $wgTitle->getEditURL() ?>"><?= wfMsg('footer_1.5') ?></a></div></li>
-								<li id="fe_talk"><a rel="nofollow" id="fe_talk_icon" href="<?= $this->data['content_actions']['history']['href'] ?>"><img src="<?= $wgStylePath ?>/monobook/blank.gif" id="fe_talk_icon" class="sprite" alt="<?= wfMsg('history_short') ?>" /></a> <div><a rel="nofollow" href="<?=$this->data['content_actions']['history']['href']?>"><?=$this->data['content_actions']['history']['text']?></a></div></li>
-								<!--<li id="fe_permalink"><a rel="nofollow" id="fe_permalink_icon" href="<?= $this->data['nav_urls']['permalink']['href'] ?>"><img src="<?= $wgStylePath ?>/monobook/blank.gif" id="fe_permalink_icon" class="sprite" alt="<?= wfMsg('permalink') ?>" /></a> <div><a rel="nofollow" href="<?=$this->data['nav_urls']['permalink']['href']?>"><?=$this->data['nav_urls']['permalink']['text']?></a></div></li>-->
-
+							<ul class="actions" id="articleFooterActions">
+								<li><a rel="nofollow" id="fe_edit_icon" href="<?= htmlspecialchars($wgTitle->getEditURL()) ?>"><img src="<?= $wgStylePath ?>/monobook/blank.gif" id="fe_edit_icon" class="sprite" alt="<?= wfMsg('edit') ?>" /></a> <div><?= wfMsg('footer_1', $wgSitename) ?> <a id="fe_edit_link" rel="nofollow" href="<?= htmlspecialchars($wgTitle->getEditURL()) ?>"><?= wfMsg('footer_1.5') ?></a></div></li>
+								<li id="fe_talk"><a rel="nofollow" id="fe_talk_icon" href="<?= htmlspecialchars($this->data['content_actions']['history']['href']) ?>"><img src="<?= $wgStylePath ?>/monobook/blank.gif" id="fe_talk_icon" class="sprite" alt="<?= wfMsg('history_short') ?>" /></a> <div><a id="fe_talk_link" rel="nofollow" href="<?=htmlspecialchars($this->data['content_actions']['history']['href'])?>"><?=$this->data['content_actions']['history']['text']?></a></div></li>
+								<li id="fe_permalink"><a rel="nofollow" id="fe_permalink_icon" href="<?= htmlspecialchars($this->data['nav_urls']['permalink']['href']) ?>"><img src="<?= $wgStylePath ?>/monobook/blank.gif" id="fe_permalink_icon" class="sprite" alt="<?= wfMsg('permalink') ?>" /></a> <div><a id="fe_permalink_link" rel="nofollow" href="<?=htmlspecialchars($this->data['nav_urls']['permalink']['href'])?>"><?=$this->data['nav_urls']['permalink']['text']?></a></div></li>
 <?php
 	$timestamp = $wgArticle->getTimestamp();
 	$lastUpdate = $wgLang->date($timestamp);
@@ -1313,7 +1386,7 @@ if(!$custom_article_footer && $displayArticleFooter) {
 							</div>
 						</td>
 						<td class="col2">
-							<ul class="actions">
+							<ul class="actions" id="articleFooterActions2">
 								<li><a rel="nofollow" id="fe_random_icon" href="<?= Skin::makeSpecialUrl( 'Randompage' ) ?>"><img src="<?= $wgStylePath ?>/monobook/blank.gif" id="fe_random_icon" class="sprite" alt="<?= wfMsg('randompage') ?>" /></a> <div><a rel="nofollow" id="fe_random_link" href="<?= Skin::makeSpecialUrl( 'Randompage' ) ?>"><?= wfMsg('footer_6') ?></a></div></li>
 <?php
 	global $wgProblemReportsEnable;
@@ -1339,19 +1412,16 @@ if(!$custom_article_footer && $displayArticleFooter) {
 							<div id="share">
 							<dl id="shareDelicious" class="share">
 								<dt>del.icio.us</dt>
-								<dd><a rel="nofollow" href="http://del.icio.us/post?v=4&noui&jump=close&url=<?=$url?>&title=<?=$title?>" id="shareDelicious_a"></a></dd>
+								<dd><a rel="nofollow" href="http://del.icio.us/post?v=4&amp;noui&amp;jump=close&amp;url=<?=$url?>&amp;title=<?=$title?>" id="shareDelicious_a"></a></dd>
 							</dl>
-							</a>
 							<dl id="shareStumble" class="share">
 								<dt>StumbleUpon</dt>
-								<dd><a rel="nofollow" href="http://www.stumbleupon.com/submit?url=<?=$url?>&title=<?=$title?>" id="shareStumble_a"></a></dd>
+								<dd><a rel="nofollow" href="http://www.stumbleupon.com/submit?url=<?=$url?>&amp;title=<?=$title?>" id="shareStumble_a"></a></dd>
 							</dl>
-							</a>
 							<dl id="shareDigg" class="share">
 								<dt>Digg</dt>
-								<dd><a rel="nofollow" href="http://digg.com/submit?phase=2&url=<?=$url?>&title=<?=$title?>" id="shareDigg_a"></a></dd>
+								<dd><a rel="nofollow" href="http://digg.com/submit?phase=2&amp;url=<?=$url?>&amp;title=<?=$title?>" id="shareDigg_a"></a></dd>
 							</dl>
-							</a>
 							</div>
 						</td>
 					</tr>
@@ -1372,11 +1442,18 @@ if(!$custom_article_footer && $displayArticleFooter) {
 		echo $wgUser->isLoggedIn() ? GetReferences("monaco_loggedin_js") : GetReferences("monaco_non_loggedin_js");
 		foreach($this->data['references']['js'] as $script) {
 ?>
-		<script type="<?= $script['mime'] ?>" src="<?= $script['url'] ?>"></script>
+		<script type="<?= $script['mime'] ?>" src="<?= htmlspecialchars($script['url']) ?>"></script>
 <?php
 		}
 		$this->html('headscripts');
 	}
+
+if (in_array("TOP_RIGHT_BOXAD", AdEngine::getInstance()->getPlaceholders())){
+	// Reset elements with a "clear:none" to "clear:right" when the box ad is displayed
+        // Fixes pages like this: http://en.dcdatabaseproject.com/Fang_Zhifu_(New_Earth)
+	echo '<script type="text/javascript">AdEngine.resetCssClear("right");</script>' . "\n";
+}
+
 ?>
 <?php		wfProfileIn( __METHOD__ . '-monacofooter'); ?>
 		<div id="monaco_footer" class="reset">
@@ -1385,13 +1462,13 @@ if(!$custom_article_footer && $displayArticleFooter) {
 		<table>
 		<tr>
 			<td>
-				<?= $wgUser->isLoggedIn() ? AdServer::getInstance()->getAd('b') : AdServer::getInstance()->getAd('bb') ?>
+				<?php echo AdEngine::getInstance()->getPlaceHolderDiv('FOOTER_SPOTLIGHT_LEFT'); ?>
 			</td>
 			<td>
-				<?= $wgUser->isLoggedIn() ? AdServer::getInstance()->getAd('bb2') : AdServer::getInstance()->getAd('bb3') ?>
+				<?php echo AdEngine::getInstance()->getPlaceHolderDiv('FOOTER_SPOTLIGHT_MIDDLE'); ?>
 			</td>
 			<td>
-				<?= $wgUser->isLoggedIn() ? AdServer::getInstance()->getAd('bb4') : AdServer::getInstance()->getAd('bb5') ?>
+				<?php echo AdEngine::getInstance()->getPlaceHolderDiv('FOOTER_SPOTLIGHT_RIGHT'); ?>
 			</td>
 		</tr>
 		</table>
@@ -1574,113 +1651,110 @@ menuitem_array = new Array();var submenuitem_array = new Array();</script>';
 	}
 ?>
 			</div>
-<?php
-global $wgFASTSIDE;
-if(!empty($wgFASTSIDE) && isset($wgFASTSIDE[0])) {
-?>
-	<div style="display: none; text-align: center; margin-bottom: 10px;"><?= $wgFASTSIDE[0] ?></div>
-<?php
-}
-?>
 			<!-- /SEARCH/NAVIGATION -->
 <?php		wfProfileOut( __METHOD__ . '-navigation'); ?>
+
+			<?php
+				// Logic for skyscrapers defined here: http://staff.wikia-inc.com/wiki/DART_Implementation/Skyscrapers
+				global $wgOut;
+				if ($wgOut->isArticle() ){
+					if (ArticleAdLogic::isMainPage()) { //main page
+						echo '<div style="text-align: center; margin-bottom: 10px;">'. AdEngine::getInstance()->getPlaceHolderDiv('HOME_LEFT_SKYSCRAPER_1', false) .'</div>';
+					} else if ( ArticleAdLogic::isContentPage() &&
+					     	   !ArticleAdLogic::isShortArticle($this->data['bodytext'])) { //valid article
+						echo '<div style="text-align: center; margin-bottom: 10px;">'. AdEngine::getInstance()->getPlaceHolderDiv('LEFT_SKYSCRAPER_1', false) .'</div>';
+					}
+				}
+			?>
+
 <?php		wfProfileIn( __METHOD__ . '-widgets'); ?>
 
 			<div id="sidebar_1" class="sidebar">
 			<?= WidgetFramework::getInstance()->Draw(1) ?>
-<?php
-if(!empty($wgFASTSIDE) && isset($wgFASTSIDE[1])) {
-?>
-	<div style="display: none; text-align: center; margin-bottom: 10px;"><?= $wgFASTSIDE[1] ?></div>
-<?php
-}
-?>
-			</div>
 
+			<?php
+				if ($wgOut->isArticle() ){
+					if (ArticleAdLogic::isMainPage()) { //main page
+						echo '<div style="text-align: center; margin-bottom: 10px;">'. AdEngine::getInstance()->getPlaceHolderDiv('HOME_LEFT_SKYSCRAPER_2', false) .'</div>';
+					} else if ( ArticleAdLogic::isContentPage() &&
+					     	   !ArticleAdLogic::isShortArticle($this->data['bodytext'])) { //valid article
+						echo '<div style="text-align: center; margin-bottom: 10px;">'. AdEngine::getInstance()->getPlaceHolderDiv('LEFT_SKYSCRAPER_2', false) .'</div>';
+					}
+				}
+			?>
+
+			</div>
 		</div>
 		<!-- /WIDGETS -->
-	</div>
+	<!--/div-->
 <?php
 wfProfileOut( __METHOD__ . '-widgets');
 
 // curse like cobranding
 $this->printCustomFooter();
-global $wgAdServingType;
-if($wgAdServingType === 1) {
-	$adsDisplayed = AdServer::getInstance()->adsDisplayed;
-	function cmpAds($a, $b) {
-		if($a[1] == 'FAST_TOP') { return 0; }
-		else if($a[1] == 'FAST_HOME1') { return 1; }
-		else if($a[1] == 'FAST_HOME2') { return 2; }
-		else if($a[1] == 'FAST_BOTTOM') { return 3; }
-		else if($a[1] == 'FAST_HOME3') { return 4; }
-		else if($a[1] == 'FAST_HOME4') { return 5; }
-		else if($a[1] == 'FAST_SIDE') { return 6; }
-		else if($a[1] == 'tr_anon') { return 7; }
-		else if($a[1] == 'tr_user') { return 8; }
-		else if($a[1] == 'js_bot5') { return 9; }
-		else if($a[1] == 'js_bot4') { return 10; }
-		else { return 100; }
-	}
-	uasort($adsDisplayed, "cmpAds");
-	foreach($adsDisplayed as $adSpace => $ad) {
-?>
-<script type="text/javascript">
-<!--//<![CDATA[
-if(document.getElementById('adSpace<?=$adSpace?>')<?=(substr($ad[1], 0, 4) == 'FAST' ? ' && FASTisValid("'.$ad[1].'")' : '') ?>) {
-	var adSpace<?=$adSpace?> = true;
-	document.write('<scr'+'ipt type="text/javascript">enableWikiaWriter(<?=$adSpace?>);</scr'+'ipt>');
-	document.write('<scr'+'ipt type="text/javascript">');
-	document.write('var base_url = "http://wikia-ads.wikia.com/www/delivery/ajs.php";');
-	document.write('base_url += "?loc=" + escape(window.location);');
-	document.write('if(typeof document.referrer != "undefined") base_url += "&referer=" + escape(document.referrer);');
-	document.write('if(typeof document.context != "undefined") base_url += "&context=" + escape(document.context);');
-	document.write('if(typeof document.mmm_fo != "undefined") base_url += "&mmm_fo=1";');
-	document.write('base_url += "&zoneid=<?=$ad[0]?>";');
-	document.write('base_url += "&cb=" + Math.floor(Math.random()*99999999999);');
-	document.write('if(typeof document.MAX_used != "undefined" && document.MAX_used != ",") base_url += "&exclude=" + document.MAX_used;');
-<?php
-/**
- * Parameters description
- * 1 - collision
- * 2 - no-collision
- * 3 - logged in
- * 4 - not logged in
- */
-if($ad[1] == 'FAST_BOTTOM') {
-?>
-	document.write('if(FASTisCollisionBottom()) base_url += "&source=1";');
-<?php
-} else if($ad[1] == 'FAST_TOP') {
-?>
-	document.write('if(FASTisCollisionTop()) base_url += "&source=14"; else base_url += "&source=24";');
-<?php
+
+global $wgEnableAdEngineCollisionTest, $wgArticle;
+if ($wgEnableAdEngineCollisionTest &&
+    ! ArticleAdLogic::isMainPage() &&
+    ! ArticleAdLogic::isShortArticle($this->data['bodytext']) &&
+      ArticleAdLogic::isContentPage() &&
+      empty($_GET['action'])){
+        echo ArticleAdLogic::getCollisionCollision($this->data['bodytext']);
 }
-?>
-	document.write('</scr'+'ipt>');
-	document.write('<scr'+'ipt type="text/javascript" src="'+base_url+'"></scr'+'ipt>');
-}
-//]]>--></script>
-<script type="text/javascript">
-<!--//<![CDATA[
-if(typeof adSpace<?=$adSpace?> != 'undefined') {
-	document.write('<scr'+'ipt type="text/javascript">disableWikiaWriter();</scr'+'ipt>');
-}
-//]]>--></script>
-<?php
-	}
-}
-echo AdServer::getInstance()->getAd('js_bot2');
-echo AdServer::getInstance()->getAd('js_bot3');
-echo AdServer::getInstance()->getAd('js_bot4');
+
+echo '</div>';
 $this->html('bottomscripts'); /* JS call to runBodyOnloadHook */
-if(!empty($skin->newuemsgjs)) {
-	echo $skin->newuemsgjs;
-}
 $this->html('reporttime');
 wfRunHooks('SpecialFooter');
 wfProfileOut( __METHOD__ . '-body');
 ?>
+<?php
+	echo AdEngine::getInstance()->getDelayedLoadingCode();
+
+/* Analytics calls. Pre AdEngine, these were delivered with js_bot2 via the ad server */
+?>
+<script type='text/javascript'>
+if (typeof urchinTracker == "undefined") {
+	document.write('<scr'+'ipt src="http://www.google-analytics.com/urchin.js" type="text/javascript"></scr'+'ipt>');
+}
+var Key;
+if (typeof wgDB == 'undefined') {
+	Key="/missing/"+location.hostname;
+} else {
+	Key="/"+wgDB;
+}
+_uff=0;_uacct="UA-288915-2";urchinTracker(Key);
+
+if ((typeof wgIsMainpage != 'undefined') && (wgIsMainpage)) {
+	_uff=0;_uacct="UA-288915-6";urchinTracker();
+}
+
+if (typeof wgID == 'number'){
+	var cid_ua = new Array();
+	cid_ua.push(
+	    304,"UA-288915-3", 831,"UA-288915-4", 2965,"UA-288915-5", 147,"UA-288915-7", 462,"UA-288915-8",
+	    410,"UA-288915-9", 530,"UA-288915-10", 324,"UA-288915-11", 602,"UA-288915-12", 2973,"UA-288915-13",
+	    690,"UA-288915-14", 3085,"UA-288915-16", 125,"UA-288915-17", 634,"UA-288915-18", 5711,"UA-288915-19",
+	    528,"UA-288915-20", 3814,"UA-288915-21", 351,"UA-288915-22", 411,"UA-288915-23", 2719,"UA-288915-24",
+	   3355,"UA-288915-26", 534,"UA-288915-28", 1766,"UA-288915-29", 2205,"UA-288915-30", 2962,"UA-288915-31",
+	   2871,"UA-288915-32", 5329,"UA-288915-33", 6966,"UA-288915-34", 51,"UA-2697185-4", 1657,"UA-784542-1",
+	     59,"UA-363124-1", 38,"UA-89493-2", 1323,"UA-89493-2", 769,"UA-992722-1", 1107,"UA-265325-1",
+	    549,"UA-89493-1", 1167,"UA-89493-3", 1870,"UA-346766-6", 1448,"UA-550357-1", 989,"UA-371419-1",
+	    706,"UA-444393-1", 816,"UA-84972-5",  383,"UA-921254-1", 2161,"UA-921115-1", 3616,"UA-145089-1",
+	   3756,"UA-145089-1", 2233,"UA-145089-1", 2234,"UA-145089-1", 2235,"UA-145089-1", 2236,"UA-145089-1",
+	   2237,"UA-145089-4", 2020,"UA-87586-8", 171,"UA-978350-1", 1928,"UA-657201-1", 1864,"UA-855317-1",
+	   1404,"UA-722649-1", 702,"UA-680784-1", 909,"UA-968098-1", 999,"UA-818628-1", 1981,"UA-776391-1",
+	   1916,"UA-1153537-1", 1778,"UA-1068008-1", 2307,"UA-1276867-1", 2166,"UA-1291238-2", 133,"UA-1362746-1",
+	   2342,"UA-1368221-1", 645,"UA-1368532-1", 2193,"UA-1368560-1", 667,"UA-1377241-1", 2195,"UA-1263121-1",
+	   3236,"UA-2100028-5", 193,"UA-1946686-3", 2165,"UA-1946686-2");
+	
+	for (i = 0;i<cid_ua.length;i=i+2) {
+		if (wgID==cid_ua[i]) {
+			_uff=0;_uacct=cid_ua[i+1];urchinTracker();
+		}
+	}
+}
+</script>
 	</body>
 </html>
 <?php

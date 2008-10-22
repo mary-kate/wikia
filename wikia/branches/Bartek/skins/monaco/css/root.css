@@ -12,7 +12,7 @@ body {
 }
 
 .shadow {
-	background-image: url(../images/shadow.png);
+	background-image: url(http://images.wikia.com/common/skins/monaco/images/shadow.png);
 	background-position: bottom left;
 	background-repeat: repeat-x;
 }
@@ -123,6 +123,14 @@ body.mainpage .HOME_TOP_RIGHT_BOXAD, body.mainpage .FAST_HOME2 {
 	display: none;
 	position: absolute;
 }
-#HOME_LEFT_SKYSCRAPER_1_load, #HOME_LEFT_SKYSCRAPER_2_load, #LEFT_SKYSCRAPER_1_load, #LEFT_SKYSCRAPER_2_load, #LEFT_SPOTLIGHT_1_load {
+#HOME_LEFT_SKYSCRAPER_1_load, #HOME_LEFT_SKYSCRAPER_2_load, #LEFT_SKYSCRAPER_1_load, #LEFT_SKYSCRAPER_2_load, #LEFT_SKYSCRAPER_3_load, #LEFT_SPOTLIGHT_1_load {
 	z-index: 20;
+}
+#LEFT_SKYSCRAPER_1_load, #LEFT_SKYSCRAPER_2_load, #LEFT_SKYSCRAPER_3_load, #HOME_LEFT_SKYSCRAPER_1_load, #HOME_LEFT_SKYSCRAPER_2_load {
+	height: 600px;
+	width: 160px;
+}
+#TOP_LEADERBOARD_load, #HOME_TOP_LEADERBOARD_load {
+	height: 90px;
+	width: 728px;
 }
