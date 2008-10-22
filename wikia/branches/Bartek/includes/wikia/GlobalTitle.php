@@ -27,6 +27,7 @@ class GlobalTitle {
 	 */
 	private $mServer = false;
 	private $mContLang = false;
+	private $mLang = false;
 	private $mArticlePath = false;
 	private $mNamespaceNames = false;
 
@@ -39,7 +40,7 @@ class GlobalTitle {
 		$title = new GlobalTitle();
 
 		$title->mText = $filteredText;
-		$title->mUrlform = $filteredText;
+		$title->mUrlform = wfUrlencode( str_replace( ' ', '_', $filteredText ) );
 		$title->mTextform = str_replace( '_', ' ', $title->mText );
 		$title->mNamespace = $namespace;
 		$title->mCityId = $city_id;
@@ -54,10 +55,14 @@ class GlobalTitle {
 	 *  for that kind of things
 	 */
 	private function loadAll() {
+		$old = $this->loadFromCache();
 		$this->loadServer();
 		$this->loadArticlePath();
 		$this->loadContLang();
 		$this->loadNamespaceNames();
+		if( ! $old ) {
+			$this->storeInCache();
+		}
 	}
 
 	public function getNamespace() {
@@ -100,7 +105,7 @@ class GlobalTitle {
 		$this->loadAll();
 		$namespace = wfUrlencode( $this->getNsText() );
 
-		if( $this->mNamespace !== NS_MAIN ) {
+		if( !empty( $this->mNamespace ) ) {
 			$namespace .= ":";
 		}
 		/**
@@ -118,7 +123,7 @@ class GlobalTitle {
 	 *
 	 * @param string $query an optional query string
 	 * @param string $variant language variant of url (for sr, zh..)
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getLocalURL( $query = '', $variant = false ) {
@@ -227,12 +232,23 @@ class GlobalTitle {
 			return $this->mContLang;
 		}
 
-		$lang = WikiFactory::getVarValueByName( "wgLanguageCode", $this->mCityId );
-		if( !$lang ) {
+		/**
+		 * maybe value from cache
+		 */
+		if( $this->mLang ) {
+			$lang = $this->mLang;
+		}
+		else {
 			/**
-			 * default language is english
+			 * so maybe value from database?
 			 */
-			$lang = "en";
+			$lang = WikiFactory::getVarValueByName( "wgLanguageCode", $this->mCityId );
+			if( !$lang ) {
+				/**
+				 * nope, only default language which is english
+				 */
+				$lang = "en";
+			}
 		}
 		$this->mContLang = Language::factory( $lang );
 
@@ -240,7 +256,7 @@ class GlobalTitle {
 	}
 
 	/**
-	 * loadContLang
+	 * loadNamespaceNames
 	 *
 	 * Determine $wgCanonicalNamespaceNames value from WikiFactory variables
 	 *
@@ -270,5 +286,62 @@ class GlobalTitle {
 			$this->mNamespaceNames = $wgCanonicalNamespaceNames;
 		}
 		return $this->mNamespaceNames;
+	}
+
+	/**
+	 * memcKey
+	 *
+	 * combine/prepare cache keys
+	 *
+	 * @return string
+	 */
+	private function memcKey() {
+		global $wgSharedDB;
+
+		return implode(":", array( $wgSharedDB, "globaltitle", $this->mCityId ) );
+	}
+
+	/**
+	 * loadFromCache
+	 *
+	 * load from cache values used widely
+	 *
+	 * @return boolean
+	 */
+	private function loadFromCache() {
+		global $wgMemc;
+
+		$values = $wgMemc->get( $this->memcKey() );
+		if( is_array( $values ) ) {
+			$this->mLang = isset( $value[ "lang" ] ) ? $value[ "lang" ] : false;
+			$this->mServer = isset( $values[ "server" ] ) ? $values[ "server" ] : false;
+			$this->mArticlePath = isset( $values[ "path" ] ) ? $values[ "path" ] : false;
+			$this->mNamespaceNames = isset( $value[ "namespaces" ] ) ? $value[ "namespaces" ] : false;
+
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * storeInCache
+	 *
+	 * store in cache values used widely
+	 *
+	 * @return boolean
+	 */
+	private function storeInCache() {
+		global $wgMemc;
+
+		return $wgMemc->set(
+			$this->memcKey(),
+			array(
+				"path" => $this->mArticlePath,
+				"lang" => $this->mLang,
+				"server" => $this->mServer,
+				"namespaces" => $this->mNamespaceNames,
+			),
+			3600
+		);
 	}
 }
