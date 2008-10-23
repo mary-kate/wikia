@@ -153,8 +153,7 @@ YAHOO.lang.extend(YAHOO.example.AutoCompleteTextArea, YAHOO.widget.AutoComplete,
 		}
 	},
 
-	if (window.YAHOO && YAHOO.example && YAHOO.example.AutoCompleteTextArea) {
-	YAHOO.example.AutoCompleteTextArea.prototype._localisations = [
+/*	_localisations: array
 		['Talk','Discusión'],
 		['User','Usuario'],
 		['User talk','Usuario Discusión'],
@@ -171,8 +170,9 @@ YAHOO.lang.extend(YAHOO.example.AutoCompleteTextArea, YAHOO.widget.AutoComplete,
 		['Category','Categoría'],
 		['Category talk','Categoría Discusión']
 	];
+*/
 
-	YAHOO.example.AutoCompleteTextArea.prototype._localize = function(sItem, bEngToLang){
+	_localize: function(sItem, bEngToLang){
 		if (!sItem || !sItem.length || !this._localisations || !this._localisations.length) return sItem;
 		for (var i=0; i<this._localisations.length; i++){
 			var sIn = this._localisations[i][(bEngToLang?0:1)].toString()+':';
