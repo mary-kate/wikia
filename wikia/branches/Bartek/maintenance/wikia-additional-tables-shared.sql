@@ -56,7 +56,7 @@ create table if not exists send_queue (
 CREATE TABLE IF NOT EXISTS `city_list` (
   `city_id` int(9) NOT NULL auto_increment,
   `city_path` varchar(255) NOT NULL default '/home/wikicities/cities/notreal',
-  `city_dbname` varchar(31) NOT NULL default 'notreal',
+  `city_dbname` varchar(64) NOT NULL default 'notreal',
   `city_sitename` varchar(255) NOT NULL default 'wikicities',
   `city_url` varchar(255) NOT NULL default 'http://notreal.wikicities.com/',
   `city_created` datetime default NULL,
@@ -215,13 +215,15 @@ CREATE TABLE IF NOT EXISTS `wikia_tasks_log` (
 
 CREATE TABLE IF NOT EXISTS `shout_box_messages` (
   `id` int(11) NOT NULL auto_increment,
+  `city` int(9) default NULL,
   `wikia` varchar(200) default NULL,
   `user` int(11) default NULL,
   `time` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `message` text,
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY  (`id`),
+  KEY `wikia_idx` (`wikia`),
+  KEY `city_idx` (`city`)
 ) ENGINE=InnoDB;
-
 
 # default widgets scheme for all wikias
 
@@ -472,4 +474,17 @@ CREATE TABLE IF NOT EXISTS `online` (
 	PRIMARY KEY USING HASH (`userid`, `username`),
 	INDEX USING BTREE (`timestamp`)
 ) TYPE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `city_list_log` (
+  `cl_city_id` int(10) unsigned NOT NULL,
+  `cl_timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  `cl_user_id` int(5) unsigned default NULL,
+  `cl_type` int(5) NOT NULL,
+  `cl_text` mediumtext NOT NULL,
+  KEY `cl_city_id_idx` (`cl_city_id`),
+  KEY `cl_type_idx` (`cl_type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- user wikicities aint got enough rights to do views! ops need to be asked to run this query
+--CREATE OR REPLACE VIEW city_cats_view AS SELECT city_id AS cc_city_id, cat_name AS cc_name FROM city_cats, city_cat_mapping WHERE city_cats.cat_id = city_cat_mapping.cat_id;
 
