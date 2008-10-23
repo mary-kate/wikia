@@ -183,7 +183,7 @@ YAHOO.lang.extend(YAHOO.example.AutoCompleteTextArea, YAHOO.widget.AutoComplete,
 			}
 		}
 		return sItem;
-	};
+	},
 
 	_updateValue: function(oItem) {
 
