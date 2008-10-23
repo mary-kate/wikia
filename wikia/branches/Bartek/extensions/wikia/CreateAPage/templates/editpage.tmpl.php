@@ -35,6 +35,7 @@ foreach ($boxes as $id => $box) {
 			}			
 			if ($title_found) {
 				$display = 'none';
+				$clear = "";
 			}
 			$value = $box['value'];
 			break;
@@ -67,6 +68,26 @@ foreach ($boxes as $id => $box) {
 <div style="display:<?=$display?>"<?=$clear?>><?=$value?></div>
 <?
 }
+
+if( !empty ($optionals) ) {
 ?>
+	<div id="createpage_optionals"><br/><?= $optional_text ?>
+<?
+	foreach( $optionals as $opt ) {
+?>
+	<input type="checkbox" id="wpOptional<?= $opt ?>"/><span id="wpOptionalDesc<?= $opt ?>"></span>
+<?
+	}
+?>
+	</div>
+<?
+}
+
+
+?>
+
+
+
+
 </div>
 <!-- e:<?= __FILE__ ?> -->
