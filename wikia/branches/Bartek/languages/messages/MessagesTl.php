@@ -1,13 +1,12 @@
 <?php
 /** Tagalog (Tagalog)
  *
- * @addtogroup Language
+ * @ingroup Language
+ * @file
  *
- * @author Sky Harbor
- * @author Gangleri
- * @author Siebrand
- * @author לערי ריינהארט
  * @author Felipe Aira
+ * @author Sky Harbor
+ * @author לערי ריינהארט
  */
 
 $messages = array(
@@ -48,6 +47,7 @@ $messages = array(
 'tog-watchlisthidebots'       => 'Itago ang mga pagbabago ng mga bot mula sa bantayan',
 'tog-watchlisthideminor'      => 'Itago ang mga maliliit na pagbabago mula sa bantayan',
 'tog-ccmeonemails'            => 'Padalahan ako ng mga kopya ng mga ipinadala kong e-liham sa ibang mga manggagamit',
+'tog-showhiddencats'          => 'Ipakita ang mga nakatago na kategorya',
 
 'underline-always'  => 'Palagi',
 'underline-never'   => 'Hindi magpakailanman',
@@ -105,13 +105,15 @@ $messages = array(
 'nov'           => 'Nob',
 'dec'           => 'Dis',
 
-# Bits of text used by many pages
-'categories'            => 'Mga kategorya',
-'pagecategories'        => '{{PLURAL:$1|Kategorya|Mga kategorya}}',
-'category_header'       => 'Mga pahina sa kategoryang "$1"',
-'subcategories'         => 'Mga subkategorya',
-'category-media-header' => 'Mga midya sa kategoryang "$1"',
-'category-empty'        => "''Kasalukuyang walang artikulo o midya ang kategoryang ito.''",
+# Categories related messages
+'pagecategories'              => '{{PLURAL:$1|Kategorya|Mga kategorya}}',
+'category_header'             => 'Mga pahina sa kategoryang "$1"',
+'subcategories'               => 'Mga subkategorya',
+'category-media-header'       => 'Mga midya sa kategoryang "$1"',
+'category-empty'              => "''Kasalukuyang walang artikulo o midya ang kategoryang ito.''",
+'hidden-categories'           => '{{PLURAL:$1|Nakatagong kategorya|Mga nakatagong kategorya}}',
+'hidden-category-category'    => 'Mga nakatagong kategorya', # Name of the category where hidden categories will be listed
+'category-file-count-limited' => 'Ang sumusunod na {{PLURAL:$1|talaksan ay|$1 mga talaksan}} ay nasa kasalukuyang kategorya.',
 
 'mainpagetext'      => "<big>'''Matagumpay na ininstala ang MediaWiki.'''</big>",
 'mainpagedocfooter' => "Silipin ang [http://meta.wikimedia.org/wiki/Help:Contents User's Guide] para sa kaalaman sa paggamit ng wiking ''software''.
@@ -159,6 +161,7 @@ $messages = array(
 'print'             => 'Ilimbag',
 'edit'              => 'Baguhin',
 'editthispage'      => 'Baguhin itong pahina',
+'create-this-page'  => 'Likhain itong pahina',
 'delete'            => 'Burahin',
 'deletethispage'    => 'Burahin itong pahina',
 'undelete_short'    => 'Baligtarin ang pagbura ng {{PLURAL:$1|isang pagbabago|$1 mga pagbabago}}',
@@ -195,27 +198,26 @@ $messages = array(
 'jumptosearch'      => 'Paghahanap',
 
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
-'aboutsite'         => 'Tungkol sa {{SITENAME}}',
-'aboutpage'         => 'Project:Patungkol',
-'bugreports'        => 'Mga ulat pampagkakamali',
-'copyright'         => 'Maaring gamitin ang nilalaman sa ilalim ng $1.',
-'copyrightpagename' => 'Karapatang-ari sa {{SITENAME}}',
-'copyrightpage'     => '{{ns:project}}:Karapatang-ari',
-'currentevents'     => 'Kasalukuyang pangyayari',
-'currentevents-url' => 'Project:Kasalukuyang pangyayari',
-'disclaimers'       => 'Mga pagtatanggi',
-'disclaimerpage'    => 'Project:Pangkalahatang pagtatanggi',
-'edithelp'          => 'Tulong sa pagbabago',
-'edithelppage'      => 'Help:Pagbabago',
-'helppage'          => 'Help:Nilalaman',
-'mainpage'          => 'Unang Pahina',
-'policy-url'        => 'Project:Patakaran',
-'portal'            => 'Puntahan ng pamayanan',
-'portal-url'        => 'Project:Puntahan ng pamayanan',
-'privacy'           => 'Patakaran sa paglilihim',
-'privacypage'       => 'Project:Patakaran sa paglilihim',
-'sitesupport'       => 'Donasyon',
-'sitesupport-url'   => 'Project:Donasyon',
+'aboutsite'            => 'Tungkol sa {{SITENAME}}',
+'aboutpage'            => 'Project:Patungkol',
+'bugreports'           => 'Mga ulat pampagkakamali',
+'copyright'            => 'Maaring gamitin ang nilalaman sa ilalim ng $1.',
+'copyrightpagename'    => 'Karapatang-ari sa {{SITENAME}}',
+'copyrightpage'        => '{{ns:project}}:Karapatang-ari',
+'currentevents'        => 'Kasalukuyang pangyayari',
+'currentevents-url'    => 'Project:Kasalukuyang pangyayari',
+'disclaimers'          => 'Mga pagtatanggi',
+'disclaimerpage'       => 'Project:Pangkalahatang pagtatanggi',
+'edithelp'             => 'Tulong sa pagbabago',
+'edithelppage'         => 'Help:Pagbabago',
+'helppage'             => 'Help:Nilalaman',
+'mainpage'             => 'Unang Pahina',
+'mainpage-description' => 'Unang Pahina',
+'policy-url'           => 'Project:Patakaran',
+'portal'               => 'Puntahan ng pamayanan',
+'portal-url'           => 'Project:Puntahan ng pamayanan',
+'privacy'              => 'Patakaran sa paglilihim',
+'privacypage'          => 'Project:Patakaran sa paglilihim',
 
 'badaccess'        => 'Kamalian sa pahintulot',
 'badaccess-group0' => 'Hindi ka pinahintulutang isagawa hiniling mo.',
@@ -234,7 +236,7 @@ $messages = array(
 'youhavenewmessagesmulti' => 'Mayroon kang mga bagong mensahe sa $1',
 'editsection'             => 'baguhin',
 'editold'                 => 'baguhin',
-'editsectionhint'         => 'Baguhin seksyon: $1',
+'editsectionhint'         => 'Baguhin ang seksyon: $1',
 'toc'                     => 'Mga nilalaman',
 'showtoc'                 => 'ipakita',
 'hidetoc'                 => 'itago',
@@ -259,12 +261,12 @@ $messages = array(
 'nosuchactiontext'  => 'Hindi kinikilala ng wiki
 ang gawang itinakda ng URL',
 'nosuchspecialpage' => 'Walang ganoong natatanging pahina',
-'nospecialpagetext' => "<big>'''Humiling ka ng isang walang-kabuluhang natatanging pahina.'''</big>
+'nospecialpagetext' => "<big>'''Humiling ka ng isang natatanging pahina na walang saysay.'''</big>
 
-Isang tala ng mga may-kabuluhang natatanging pahina ay matatagpuan sa [[Special:Specialpages]].",
+Isang tala ng mga natatanging pahina na may saysay ay matatagpuan sa [[Special:SpecialPages|{{int:specialpages}}]].",
 
 # General errors
-'error'                => 'Pagkakamali',
+'error'                => 'Kamalian',
 'databaseerror'        => 'Kamalian sa kalipunan ng datos',
 'dberrortext'          => 'Naganap isang pagkakamali sa usisang palaugnayan sa kalipunan ng datos.
 Maaaring magpakita ito ng kakamaian sa \'\'software\'\'.
@@ -306,7 +308,7 @@ Nagbigay ng sumusunod na dahilan ang tagapangasiwang nangandado nito: $1',
 'viewsourcetext'       => 'Maaari mong tingnan at kopyahin ang pinagmulan ng pahinang ito:',
 'namespaceprotected'   => "Wala kang pahintulot na magbago ng mga pahinang nasa ngalan-espasyong '''$1'''.",
 'customcssjsprotected' => 'Wala kang pahintulot na baguhin ang pahinang ito, dahil naglalaman ito ng mga kagustuhang pansarili ng ibang manggagamit.',
-'ns-specialprotected'  => 'Hindi maaaring baguhin ang mga pahinang nasa ngalan-espasyong {{ns:special}}.',
+'ns-specialprotected'  => 'Hindi pwedeng baguhin ang mga natatanging pahina.',
 
 # Login and logout pages
 'welcomecreation'           => '== Maligayang pagdating, $1! ==
@@ -358,7 +360,7 @@ Nilikha na ang iyong kuwenta. Huwag kalimutang baguhin ang iyong mga kagustuhan 
 # Edit pages
 'summary'                => 'Buod',
 'subject'                => 'Paksa/punong pamagat',
-'minoredit'              => 'Ito ay isang maliit na pagbabago',
+'minoredit'              => 'Ito ay isang munting pagbabago',
 'watchthis'              => 'Bantayan itong pahina',
 'savearticle'            => 'Itala ang pahina',
 'preview'                => 'Pribyu',
@@ -382,7 +384,8 @@ Nilikha na ang iyong kuwenta. Huwag kalimutang baguhin ang iyong mga kagustuhan 
 'recentchangestext' => 'Subaybayan ang mga pinakahuling pagbabago sa wiki sa pahinang ito.',
 
 # Recent changes linked
-'recentchangeslinked' => 'Mga kaugnay na binago',
+'recentchangeslinked'       => 'Mga kaugnay na binago',
+'recentchangeslinked-title' => 'Mga pagbabagong magkaugnay sa "$1"',
 
 # Upload
 'upload'            => 'Magkarga ng talaksan',
@@ -390,13 +393,17 @@ Nilikha na ang iyong kuwenta. Huwag kalimutang baguhin ang iyong mga kagustuhan 
 'reupload'          => 'Magkarga muli',
 'reuploaddesc'      => 'Bumalik sa pormularyo ng pagkarga',
 'uploadnologin'     => 'Hindi nakalagda',
-'uploadnologintext' => 'Dapat ikaw ay [[Special:Userlogin|nakalagda]]
+'uploadnologintext' => 'Dapat ikaw ay [[Special:UserLogin|nakalagda]]
 upang makapagkarga ng talaksan.',
 'uploaderror'       => 'Kamalian sa pagkarga',
 'watchthisupload'   => 'Bantayan itong pahina',
 
-# Image list
+# Image description page
+'filehist'          => 'Kasaysayan ng talaksan',
+'filehist-datetime' => 'Petsa/Oras',
+'filehist-user'     => 'Tagagamit',
 'filehist-filesize' => 'Laki ng talaksan',
+'filehist-comment'  => 'Komento',
 'nolinkstoimage'    => 'Walang pahing tumuturo sa talaksang ito.',
 
 # File reversion
@@ -406,10 +413,10 @@ upang makapagkarga ng talaksan.',
 'filedelete'         => 'Burahin ang $1',
 'filedelete-legend'  => 'Burahin ang talaksan',
 'filedelete-intro'   => "Binubura mo ang '''[[Media:$1|$1]]'''.",
-'filedelete-comment' => 'Komento:',
+'filedelete-comment' => 'Dahilan sa pagkabura:',
 'filedelete-submit'  => 'Burahin',
 'filedelete-success' => "Binura na ang '''$1'''.",
-'filedelete-nofile'  => "Hindi umiiral ang '''$1''' sa {{SITENAME}}.",
+'filedelete-nofile'  => "Hindi umiiral ang '''$1'''.",
 
 # Random page
 'randompage'         => 'Pahinang walang-pili',
@@ -428,21 +435,30 @@ upang makapagkarga ng talaksan.',
 'brokenredirects' => 'Mga sirang pangkarga',
 
 # Miscellaneous special pages
-'lonelypages'        => 'Mga inulilang pahina',
-'allpages'           => 'Lahat ng pahina',
-'shortpages'         => 'Mga maiikling pahina',
-'longpages'          => 'Mga mahahabang pahina',
-'specialpages'       => 'Mga natatanging pahina',
-'spheading'          => 'Mga natatanging pahina para sa lahat ng manggagamit',
-'restrictedpheading' => 'Mga natatakdaang natatanging pahina',
-'newpages'           => 'Mga bagong pahina',
-'newpages-username'  => 'Bansag:',
-'ancientpages'       => 'Mga pinakalumang pahina',
-'move'               => 'Ilipat',
-'movethispage'       => 'Ilipat itong pahina',
+'lonelypages'       => 'Mga inulilang pahina',
+'shortpages'        => 'Mga maiikling pahina',
+'longpages'         => 'Mga mahahabang pahina',
+'newpages'          => 'Mga bagong pahina',
+'newpages-username' => 'Bansag:',
+'ancientpages'      => 'Mga pinakalumang pahina',
+'move'              => 'Ilipat',
+'movethispage'      => 'Ilipat itong pahina',
 
+# Special:AllPages
+'allpages'        => 'Lahat ng pahina',
+'alphaindexline'  => '$1 hanggang $2',
+'allpages-bad-ns' => 'Wala sa {{SITENAME}} ang ngalan-espasyong "$1".',
+
+# Special:Categories
+'categories'         => 'Mga kategorya',
 'categoriespagetext' => 'Ang mga sumusunod na kategorya ay naglalaman ng mga pahina o midya.',
-'version'            => 'Bersyon',
+
+# E-mail user
+'emailfrom'    => 'Mula',
+'emailto'      => 'Kay',
+'emailsubject' => 'Paksa',
+'emailmessage' => 'Mensahe',
+'emailsend'    => 'Ipadala',
 
 # Watchlist
 'watchlist'     => 'Bantayan Ko',
@@ -450,6 +466,9 @@ upang makapagkarga ng talaksan.',
 'watchthispage' => 'Bantayan itong pahina',
 
 # Delete/protect/revert
+'deletepage'                  => 'Burahin ang pahina',
+'deletedarticle'              => 'ibinura ang "[[$1]]"',
+'deletecomment'               => 'Dahilan sa pagkabura:',
 'protect-default'             => '(tinakda)',
 'protect-level-autoconfirmed' => "Harangin ang mga 'di-rehistradong manggagamit",
 'protect-summary-cascade'     => 'kaskada',
@@ -519,22 +538,19 @@ $1',
 'unlockdb' => 'Buksan ang kalipunan ng datos',
 
 # Move page
-'movenologin'             => 'Hindi nakalagda',
-'movenologintext'         => 'Kailangang ikaw ay isang naka-rehistrong manggagamit at ay [[Special:Userlogin|nakalagda]] upang makapaglipat ng pahina.',
-'movenotallowed'          => 'Wala kang permisong maglipat ng pahina sa {{SITENAME}}.',
+'movearticle'             => 'Ilipat ang pahina:',
+'movenotallowed'          => 'Wala kang permisong maglipat ng pahina.',
 'newtitle'                => 'Sa bagong pamagat:',
 'move-watch'              => 'Bantayan itong pahina',
 'movepagebtn'             => 'Ilipat ang pahina',
 'pagemovedsub'            => 'Matagumpay ang paglipat',
-'movepage-moved'          => '<big>\'\'\'Ang "$1" ay inilipat sa "$2"\'\'\'</big>', # The two titles are passed in plain text as $3 and $4 to allow additional goodies in the message.
+'movepage-moved'          => '<big>\'\'\'Inilipat ang "$1" sa "$2"\'\'\'</big>', # The two titles are passed in plain text as $3 and $4 to allow additional goodies in the message.
 'articleexists'           => 'May umiiral nang pahinang may ganitong pangalan, o ang
 pangalang pinili mo ay hindi mabisa.
 Pumili muli ng ibang pangalan.',
 'cantmove-titleprotected' => 'Hindi mo malilipatan ang isang pahina sa lokasyong ito, dahil nakasanggalang sa paglikha ang baong pamagat',
 'movedto'                 => 'inilipat sa',
 'movetalk'                => 'Ilipat ang kaugnay na pahinang usapan',
-'talkpagemoved'           => 'Inilipat rin ang kaugnay na pahinang usapan.',
-'talkpagenotmoved'        => '<strong>Hindi</strong> inilipat ang kaugnay na pahinang usapan.',
 '1movedto2'               => 'Ang [[$1]] ay inilipat sa [[$2]]',
 '1movedto2_redir'         => 'Ang [[$1]] ay inilipat sa [[$2]] sa ibabaw ng pangkarga',
 'movereason'              => 'Dahilan:',
@@ -577,10 +593,6 @@ Please visit [http://www.mediawiki.org/wiki/Localisation MediaWiki Localisation]
 # Attribution
 'othercontribs' => 'Batay sa gawa ni/nina $1.',
 
-# Spam protection
-'subcategorycount'     => 'Mayroong {{PLURAL:$1|isang subkategorya|$1 subkategorya}} sa kategoryang ito.',
-'category-media-count' => 'Mayroong {{PLURAL:$1|isang talaksan|$1 talaksan}} sa kategoryang ito.',
-
 # Info page
 'numedits'     => 'Bilang ng mga pagbabago (pahina): $1',
 'numtalkedits' => 'Bilang ng mga pagbabago (pahinang usapan): $1',
@@ -596,7 +608,7 @@ Please visit [http://www.mediawiki.org/wiki/Localisation MediaWiki Localisation]
 'show-big-image'       => 'Buong resolusyon',
 'show-big-image-thumb' => '<small>Laki ng itong pribyu: $1 × $2 piksel</small>',
 
-# Special:Newimages
+# Special:NewImages
 'newimages' => 'Galeriya ng mga bagong talaksan',
 
 # External editor support
@@ -607,7 +619,7 @@ Please visit [http://www.mediawiki.org/wiki/Localisation MediaWiki Localisation]
 'recreate'            => 'Likhain muli',
 
 # HTML dump
-'redirectingto' => 'Nagkakarga sa [[$1]]...',
+'redirectingto' => 'Nagkakarga sa [[:$1]]...',
 
 # action=purge
 'confirm_purge' => 'Linisin ang baunan ng pahinang ito?
@@ -631,7 +643,11 @@ $1',
 # Friendlier slave lag warnings
 'lag-warn-normal' => 'Maaaring hindi mapakita sa talang ito ang mga pagbabagong mas bago sa $1 segundo.',
 
+# Watchlist editing tools
+'watchlisttools-view' => 'Tingnan ang mga magkaugnay na pagbabago',
+
 # Special:Version
+'version'                   => 'Bersyon', # Not used as normal message but as header for the special page itself
 'version-hook-subscribedby' => 'Sinuskribi ng/ni/nina',
 'version-version'           => 'Bersyon',
 'version-license'           => 'Lisensiya',
@@ -639,7 +655,10 @@ $1',
 'version-software-product'  => 'Produkto',
 'version-software-version'  => 'Bersyon',
 
-# Special:Filepath
+# Special:FilePath
 'filepath-page' => 'Talaksan:',
+
+# Special:SpecialPages
+'specialpages' => 'Mga natatanging pahina',
 
 );

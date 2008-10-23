@@ -1,13 +1,11 @@
 <?php
 /** Gheg Albanian (Gegë)
  *
- * @addtogroup Language
+ * @ingroup Language
+ * @file
  *
  * @author Cradel
  * @author Dardan
- * @author Siebrand
- * @author M.M.S.
- * @author Nike
  */
 
 $fallback = 'sq';
@@ -52,6 +50,7 @@ $messages = array(
 'tog-watchlisthideminor'      => "M'sheh redaktimet e vogla nga lista mbikqyrëse",
 'tog-ccmeonemails'            => 'Më ço kopje të mesazhevé qi u dërgoj të tjerëve',
 'tog-diffonly'                => 'Mos e trego përmbájtjen e fáqes nën ndryshimin',
+'tog-showhiddencats'          => "Trego katégoritë e m'shefta",
 
 'underline-always'  => 'gjithmonë',
 'underline-never'   => 'kurrë',
@@ -111,13 +110,15 @@ $messages = array(
 'nov'           => 'Nën',
 'dec'           => 'Dhj',
 
-# Bits of text used by many pages
-'categories'            => 'Kategori',
-'pagecategories'        => '{{PLURAL:$1|Kategoria|Kategoritë}}',
-'category_header'       => 'Artikuj në kategorinë "$1"',
-'subcategories'         => 'Nën-kategori',
-'category-media-header' => 'Skeda në kategori "$1"',
-'category-empty'        => "''Kjo kategori tashpërtash nuk përmban asnji faqe apo media.''",
+# Categories related messages
+'pagecategories'           => '{{PLURAL:$1|Kategoria|Kategoritë}}',
+'category_header'          => 'Artikuj në kategorinë "$1"',
+'subcategories'            => 'Nën-kategori',
+'category-media-header'    => 'Skeda në kategori "$1"',
+'category-empty'           => "''Kjo kategori tashpërtash nuk përmban asnji faqe apo media.''",
+'hidden-categories'        => '{{PLURAL:$1|Kategoritë e mshehta|Kategoritë e mshehta}}',
+'hidden-category-category' => 'Kategori të mshehta', # Name of the category where hidden categories will be listed
+'listingcontinuesabbrev'   => 'vazh.',
 
 'mainpagetext'      => 'Wiki software u instalue me sukses.',
 'mainpagedocfooter' => 'Për ma shumë informata rreth përdorimit të softwerit wiki , ju lutem shikoni [http://meta.wikimedia.org/wiki/Help:Contents dokumentacionin përkatës].
@@ -204,30 +205,29 @@ $messages = array(
 'jumptosearch'      => 'kërko',
 
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
-'aboutsite'         => 'Rreth {{SITENAME}}',
-'aboutpage'         => 'Project:Rreth',
-'bugreports'        => 'Kontakt',
-'bugreportspage'    => 'Project:Kontakt',
-'copyright'         => 'Përmbajtja asht në disponim nëpërmjet liqencës $1.',
-'copyrightpagename' => '{{SITENAME}} Të drejta autori',
-'copyrightpage'     => '{{ns:project}}:Të drejta autori',
-'currentevents'     => 'Ngjarjet e tashme',
-'currentevents-url' => 'Project:Ngjarjet e tashme',
-'disclaimers'       => 'Shfajësimet',
-'disclaimerpage'    => 'Project:Shfajësimet e përgjithshme',
-'edithelp'          => 'Ndihmë për redaktim',
-'edithelppage'      => 'Help:Si me redaktue një faqe',
-'faq'               => 'Pyetje e Përgjegjje',
-'faqpage'           => 'Project:Pyetje e Përgjegjje',
-'helppage'          => 'Help:Ndihmë',
-'mainpage'          => 'Faqja Kryesore',
-'policy-url'        => 'Project:Policy',
-'portal'            => 'Wikiportal',
-'portal-url'        => 'Project:Wikiportal',
-'privacy'           => 'Rreth të dhanave vetjake',
-'privacypage'       => 'Project:Politika vetjake',
-'sitesupport'       => 'Dhurime',
-'sitesupport-url'   => 'Project:Dhurime',
+'aboutsite'            => 'Rreth {{SITENAME}}',
+'aboutpage'            => 'Project:Rreth',
+'bugreports'           => 'Kontakt',
+'bugreportspage'       => 'Project:Kontakt',
+'copyright'            => 'Përmbajtja asht në disponim nëpërmjet liqencës $1.',
+'copyrightpagename'    => '{{SITENAME}} Të drejta autori',
+'copyrightpage'        => '{{ns:project}}:Të drejta autori',
+'currentevents'        => 'Ngjarjet e tashme',
+'currentevents-url'    => 'Project:Ngjarjet e tashme',
+'disclaimers'          => 'Shfajësimet',
+'disclaimerpage'       => 'Project:Shfajësimet e përgjithshme',
+'edithelp'             => 'Ndihmë për redaktim',
+'edithelppage'         => 'Help:Si me redaktue një faqe',
+'faq'                  => 'Pyetje e Përgjegjje',
+'faqpage'              => 'Project:Pyetje e Përgjegjje',
+'helppage'             => 'Help:Ndihmë',
+'mainpage'             => 'Faqja Kryesore',
+'mainpage-description' => 'Faqja Kryesore',
+'policy-url'           => 'Project:Policy',
+'portal'               => 'Wikiportal',
+'portal-url'           => 'Project:Wikiportal',
+'privacy'              => 'Rreth të dhanave vetjake',
+'privacypage'          => 'Project:Politika vetjake',
 
 'badaccess'        => 'Gabim leje',
 'badaccess-group0' => 'Nuk jeni lejue me e bá kët veprim.',
@@ -306,13 +306,6 @@ artikuj t'ri. Munet qi asht bllokuar për mirëmbajtje,
 dhe do të kthehet në gjèndje normale mas mirëmbajtjes.
 
 Mirëmbajtësi i cili e ka bllokue dha këtë arsye: $1",
-'missingarticle'       => 'Regjistri nuk e gjeti tekstin e faqes që duhet ta kishte gjetur, të quajtem "$1".
-
-Kjo ndodh zakonisht kur ndjek një ndryshim ose lidhje historie te një
-faqe që asht grisur.
-
-Nëse ky nuk asht rasti, atëherë munet qi e keni gjetur një gabim në softuerin.
-Tregojani këtë përmbledhje një administruesi, tuj shënue edhe URL-në.',
 'readonly_lag'         => "Regjistri asht bllokue automatikisht për m'i dhánë kohë shërbyesve skllevër me arrit kryesorin. Ju lutemi provojeni prap ma vonë.",
 'internalerror'        => 'Gabim i brendshëm',
 'internalerror_info'   => 'Gabimi i brenshëm: $1',
@@ -344,36 +337,37 @@ Pyetja: $2',
 'customcssjsprotected' => 'Nuk keni leje me ndryshu këtë faqe sepse përmban informata personale të një përdoruesi tjetër',
 
 # Login and logout pages
-'logouttitle'        => 'Përdoruesi ka dál',
-'logouttext'         => 'Keni dálë jashtë {{SITENAME}}-s. Muneni me vazhdu me përdor {{SITENAME}}-n anonimisht, ose muneni me hy brenda prap.',
-'welcomecreation'    => '== Mirësevini, $1! ==
+'logouttitle'             => 'Përdoruesi ka dál',
+'logouttext'              => 'Keni dálë jashtë {{SITENAME}}-s. Muneni me vazhdu me përdor {{SITENAME}}-n anonimisht, ose muneni me hy brenda prap.',
+'welcomecreation'         => '== Mirësevini, $1! ==
 
 Llogaria juej asht hap. Mos harroni me ndryshu parapëlqimet e {{SITENAME}}-s.',
-'yourpassword'       => 'Futni fjalëkalimin tuej',
-'yourpasswordagain'  => 'Futni fjalëkalimin prap',
-'remembermypassword' => 'Mbaj mend fjalëkalimin tim për krejt vizitat e ardhshme.',
-'yourdomainname'     => 'Faqja juej',
-'externaldberror'    => 'Ose kishte një gabim te regjistri i identifikimit të jashtëm, ose nuk ju lejohet të përtërini llogarinë tuej të jashtme.',
-'login'              => 'Hyni',
-'userlogin'          => 'Hyni ose çeleni një llogari',
-'logout'             => 'Dalje',
-'userlogout'         => 'Dalje',
-'notloggedin'        => 'Nuk keni hy brenda',
-'nologinlink'        => 'Çeleni',
-'gotaccount'         => 'A keni një llogari? $1.',
-'gotaccountlink'     => 'Hyni',
-'createaccountmail'  => 'me email',
-'userexists'         => 'Nofka që përdorët asht në përdorim. Zgjidhni një nofkë tjetër.',
-'youremail'          => 'Adresa e email-it*',
-'username'           => 'Nofka e përdoruesit:',
-'uid'                => 'Nr. i identifikimit:',
-'yourrealname'       => 'Emri juej i vërtetë*',
-'yourlanguage'       => 'Ndërfaqja gjuhësore',
-'yournick'           => 'Nofka :',
-'badsig'             => 'Sintaksa e nënshkrimit asht e pavlefshme, kontrolloni HTML-n.',
-'badsiglength'       => 'Emri i zgjedhun asht shumë i gjatë; duhet me pas ma pak se $1 shkronja',
-'email'              => 'Email',
-'nocookieslogin'     => '{{SITENAME}} përdor "biskota" për me futë brenda përdoruesit. Prandaj, duhet të pranoni "biskota" dhe të provoni prap.',
+'yourpassword'            => 'Futni fjalëkalimin tuej',
+'yourpasswordagain'       => 'Futni fjalëkalimin prap',
+'remembermypassword'      => 'Mbaj mend fjalëkalimin tim për krejt vizitat e ardhshme.',
+'yourdomainname'          => 'Faqja juej',
+'externaldberror'         => 'Ose kishte një gabim te regjistri i identifikimit të jashtëm, ose nuk ju lejohet të përtërini llogarinë tuej të jashtme.',
+'login'                   => 'Hyni',
+'nav-login-createaccount' => 'Hyni ose çeleni një llogari',
+'userlogin'               => 'Hyni ose çeleni një llogari',
+'logout'                  => 'Dalje',
+'userlogout'              => 'Dalje',
+'notloggedin'             => 'Nuk keni hy brenda',
+'nologinlink'             => 'Çeleni',
+'gotaccount'              => 'A keni një llogari? $1.',
+'gotaccountlink'          => 'Hyni',
+'createaccountmail'       => 'me email',
+'userexists'              => 'Nofka që përdorët asht në përdorim. Zgjidhni një nofkë tjetër.',
+'youremail'               => 'Adresa e email-it*',
+'username'                => 'Nofka e përdoruesit:',
+'uid'                     => 'Nr. i identifikimit:',
+'yourrealname'            => 'Emri juej i vërtetë*',
+'yourlanguage'            => 'Ndërfaqja gjuhësore',
+'yournick'                => 'Nofka :',
+'badsig'                  => 'Sintaksa e nënshkrimit asht e pavlefshme, kontrolloni HTML-n.',
+'badsiglength'            => 'Emri i zgjedhun asht shumë i gjatë; duhet me pas ma pak se $1 shkronja',
+'email'                   => 'Email',
+'nocookieslogin'          => '{{SITENAME}} përdor "biskota" për me futë brenda përdoruesit. Prandaj, duhet të pranoni "biskota" dhe të provoni prap.',
 
 # Edit page toolbar
 'bold_sample'     => 'Tekst i trashë',
@@ -382,7 +376,7 @@ Llogaria juej asht hap. Mos harroni me ndryshu parapëlqimet e {{SITENAME}}-s.',
 'italic_tip'      => 'Tekst i pjerrët',
 'link_sample'     => 'Titulli i lidhjes',
 'link_tip'        => 'Lidhje e brendshme',
-'extlink_sample'  => 'http://www.shembull.com Titulli i lidhjes',
+'extlink_sample'  => 'http://www.example.com Titulli i lidhjes',
 'extlink_tip'     => 'Lidhje e jashtme (mos e harro prefiksin http://)',
 'headline_sample' => 'Titull shembull',
 'headline_tip'    => 'Titull i nivelit 2',
@@ -457,7 +451,7 @@ Muneni me [[$1|fillu një artikull]] me kët titull.
 # Upload
 'upload' => 'Ngarkoni skeda',
 
-# Image list
+# Image description page
 'filehist'            => 'Historiku i dosjes',
 'filehist-datetime'   => 'Data/Ora',
 'filehist-user'       => 'Përdoruesi',
@@ -483,16 +477,17 @@ Muneni me [[$1|fillu një artikull]] me kët titull.
 'withoutinterwiki' => 'Artikuj pa lidhje interwiki',
 
 # Miscellaneous special pages
-'nbytes'       => '$1 bytes',
-'nlinks'       => '$1 lidhje',
-'nmembers'     => '$1 anëtarë',
-'specialpages' => 'Faqet speciale',
-'move'         => 'Zhvendose',
+'nbytes'   => '$1 bytes',
+'nlinks'   => '$1 lidhje',
+'nmembers' => '$1 anëtarë',
+'move'     => 'Zhvendose',
 
+# Special:AllPages
 'alphaindexline' => '$1 deri në $2',
-
-# Special:Allpages
 'allpagessubmit' => 'Shko',
+
+# Special:Categories
+'categories' => 'Kategori',
 
 # Watchlist
 'mywatchlist'          => 'Lista mbikqyrëse',
@@ -504,13 +499,13 @@ Muneni me [[$1|fillu një artikull]] me kët titull.
 'watchlist-hide-own'   => 'Mshehi redaktimet e mija',
 'watchlist-hide-minor' => 'Mshehi redaktimet e vogla',
 
-# Displayed when you click the "watch" button and it's in the process of watching
+# Displayed when you click the "watch" button and it is in the process of watching
 'watching'   => 'Tuj mbikqyrë...',
 'unwatching' => 'Tuj çmbikqyrë...',
 
 # Delete/protect/revert
 'deletedarticle'              => 'grisi "$1"',
-'confirmprotect'              => 'Konfirmoni',
+'protect-legend'              => 'Konfirmoni',
 'protectcomment'              => 'Arsyja:',
 'protectexpiry'               => 'Afáti',
 'protect_expiry_invalid'      => 'Data e skadimit asht e pasaktë.',
@@ -539,7 +534,7 @@ Muneni me [[$1|fillu një artikull]] me kët titull.
 'whatlinkshere'       => "Lidhjet k'tu",
 'whatlinkshere-title' => 'Faqe qi lidhen me $1',
 'linklistsub'         => '(Listë e lidhjeve)',
-'linkshere'           => "Faqet e mëposhtme lidhen k'tu:",
+'linkshere'           => "Faqet e mëposhtme lidhen k'tu '''[[:$1]]''':",
 'isredirect'          => 'faqe përcjellëse',
 'istemplate'          => 'përfshirë',
 'whatlinkshere-links' => '← lidhje',
@@ -549,13 +544,12 @@ Muneni me [[$1|fillu një artikull]] me kët titull.
 'contribslink' => 'kontribute',
 
 # Move page
-'movearticle'      => 'Zhvendose faqen',
-'newtitle'         => 'Te titulli i ri',
-'move-watch'       => 'Mbikqyre kët faqe',
-'movepagebtn'      => 'Zhvendose faqen',
-'movedto'          => 'zhvendosur te',
-'talkpagenotmoved' => 'Faqja e diskutimeve korrespondente <strong>nuk</strong> u zhvendos.',
-'movereason'       => 'Arsyja',
+'movearticle' => 'Zhvendose faqen',
+'newtitle'    => 'Te titulli i ri',
+'move-watch'  => 'Mbikqyre kët faqe',
+'movepagebtn' => 'Zhvendose faqen',
+'movedto'     => 'zhvendosur te',
+'movereason'  => 'Arsyja',
 
 # Thumbnails
 'thumbnail-more'  => 'Zmadho',
@@ -582,7 +576,6 @@ Muneni me [[$1|fillu një artikull]] me kët titull.
 'tooltip-n-recentchanges'         => 'Lista e ndryshimeve të fundme në projekt',
 'tooltip-n-randompage'            => 'Shikoni një artikull të rastit.',
 'tooltip-n-help'                  => 'Vendi ku muneni me gjetë ndihmë.',
-'tooltip-n-sitesupport'           => 'Përkraheni projektin',
 'tooltip-t-whatlinkshere'         => 'Lista e faqeve qi lidhen te kjo faqe',
 'tooltip-t-upload'                => 'Ngarkoni figura ose skeda tjera',
 'tooltip-t-specialpages'          => 'Lista e krejt faqeve speciale.',
@@ -593,8 +586,8 @@ Muneni me [[$1|fillu një artikull]] me kët titull.
 'tooltip-diff'                    => 'Trego ndryshimet që Ju i keni bá tekstit.',
 'tooltip-compareselectedversions' => 'Shikoni krahasimin midis dy versioneve të zgjedhme të kësaj faqe.',
 
-# Spam protection
-'listingcontinuesabbrev' => 'vazh.',
+# Browsing diffs
+'previousdiff' => '← Nryshimi ma përpara',
 
 # Media information
 'file-nohires'   => '<small>Rezolucioni i plotë.</small>',
@@ -607,10 +600,13 @@ Muneni me [[$1|fillu një artikull]] me kët titull.
 
 # External editor support
 'edit-externally'      => 'Ndryshoni kët figurë/skedë me një mjet të jashtëm',
-'edit-externally-help' => 'Shikoni [http://meta.wikimedia.org/wiki/Help:External_editors udhëzimet e instalimit] për ma shumë informacion.',
+'edit-externally-help' => 'Shikoni [http://www.mediawiki.org/wiki/Manual:External_editors udhëzimet e instalimit] për ma shumë informacion.',
 
 # 'all' in various places, this might be different for inflected languages
 'watchlistall2' => 'krejt',
 'namespacesall' => 'krejt',
+
+# Special:SpecialPages
+'specialpages' => 'Faqet speciale',
 
 );

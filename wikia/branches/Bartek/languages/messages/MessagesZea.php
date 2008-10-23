@@ -1,17 +1,14 @@
 <?php
 /** Zeeuws (Zeêuws)
  *
- * @addtogroup Language
+ * @ingroup Language
+ * @file
  *
+ * @author Adnergje
+ * @author NJ
  * @author Rob Church <robchur@gmail.com>
- * @author SPQRobin
  * @author Steinbach
  * @author Troefkaart
- * @author Adnergje
- * @author Siebrand
- * @author NJ
- * @author Nike
- * @author Jon Harald Søby
  */
 
 $fallback = 'nl';
@@ -81,6 +78,7 @@ $messages = array(
 'tog-watchlisthideminor'      => 'Kleine wiezigiengen op men volglieste verberhen',
 'tog-ccmeonemails'            => 'Zen me een kopie van e-mails die ak nae aore gebrukers stuur',
 'tog-diffonly'                => 'Pagina-inoud onder wiezigiengen nie weerheven',
+'tog-showhiddencats'          => 'Verborhen categorieën weerheven',
 
 'underline-always'  => 'Aoltied',
 'underline-never'   => 'Nooit',
@@ -140,13 +138,21 @@ $messages = array(
 'nov'           => 'nov',
 'dec'           => 'dec',
 
-# Bits of text used by many pages
-'categories'            => 'Categorieën',
-'pagecategories'        => '{{PLURAL:$1|Categorie|Categorieën}}',
-'category_header'       => 'Artikels in categorie "$1"',
-'subcategories'         => 'Ondercategorieën',
-'category-media-header' => 'Media in categorie "$1".',
-'category-empty'        => "''Deêze categorie bevat hin pahina’s of media.''",
+# Categories related messages
+'pagecategories'                 => '{{PLURAL:$1|Categorie|Categorieën}}',
+'category_header'                => 'Artikels in categorie "$1"',
+'subcategories'                  => 'Ondercategorieën',
+'category-media-header'          => 'Media in categorie "$1".',
+'category-empty'                 => "''Deêze categorie bevat hin pahina’s of media.''",
+'hidden-categories'              => 'Verborhen {{PLURAL:$1|categorie|categorieën}}',
+'hidden-category-category'       => 'Verborhen categorieën', # Name of the category where hidden categories will be listed
+'category-subcat-count'          => '{{PLURAL:$2|Deêze categorie ei de volhende ondercategorie.|Deêze categorie ei de volhende {{PLURAL:$1|ondercategorie|$1 ondercategorieën}}, van een totaol van $2.}}',
+'category-subcat-count-limited'  => 'Deêze categorie ei de volhende {{PLURAL:$1|ondercategorie|$1 ondercategorieën}}.',
+'category-article-count'         => "{{PLURAL:$2|Deêze categorie bevat de volhende pahina.|Deêze categorie bevat de volhende {{PLURAL:$1|pahina|$1 pahina's}}, van in totaol $2.}}",
+'category-article-count-limited' => "Deêze categorie bevat de volhende {{PLURAL:$1|pahina|$1 pahina's}}.",
+'category-file-count'            => "{{PLURAL:$2|Deêze categorie bevat 't volhende bestand.|Deêze categorie bevat {{PLURAL:$1|'t volhende bestand|de volgende $1 bestan'n}}, van in totaol $2.}}",
+'category-file-count-limited'    => "Deêze categorie bevat {{PLURAL:$1|'t volhende bestand|de volhende $1 bestan'n}}.",
+'listingcontinuesabbrev'         => 'vedder',
 
 'mainpagetext'      => "<big>'''De installaotie van MediaWiki is geslaegd.'''</big>",
 'mainpagedocfooter' => "Raedpleeg de [http://meta.wikimedia.org/wiki/ZEA_Ulpe:Inhoudsopgaeve andleidieng] voe informatie over 't gebruuk van de wikisoftware.
@@ -194,7 +200,9 @@ $messages = array(
 'permalink'         => 'Permanente lienk',
 'print'             => "Print'n",
 'edit'              => 'Bewerken',
+'create'            => 'Anmaeken',
 'editthispage'      => 'Deêze bladzie bewerken',
+'create-this-page'  => 'Deêze pahina anmaeken',
 'delete'            => 'Wissen',
 'deletethispage'    => 'Wis deêze bladzie',
 'undelete_short'    => '$1 {{PLURAL:$1|bewerkieng|bewerkiengen}} terugzetten',
@@ -232,30 +240,29 @@ $messages = array(
 'jumptosearch'      => 'zoeken',
 
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
-'aboutsite'         => 'Over {{SITENAME}}',
-'aboutpage'         => 'Project:Info',
-'bugreports'        => "Foutrapport'n",
-'bugreportspage'    => "Project:Foutrapport'n",
-'copyright'         => 'Den inoud is beschikbaer onder de $1.',
-'copyrightpagename' => '{{SITENAME}} auteursrechen',
-'copyrightpage'     => '{{ns:project}}:Auteursrechen',
-'currentevents'     => "In 't nieuws",
-'currentevents-url' => "Project:In 't nieuws",
-'disclaimers'       => 'Voebehoud',
-'disclaimerpage'    => 'Project:Alhemeên voebehoud',
-'edithelp'          => "Ulpe bie't bewerken",
-'edithelppage'      => 'Help:Bewerken',
-'faq'               => 'FAQ (veehestelde vraehen)',
-'faqpage'           => 'Project:Veehestelde vraehen',
-'helppage'          => 'Help:Inoud',
-'mainpage'          => 'Vòblad',
-'policy-url'        => 'Project:Beleid',
-'portal'            => "'t Durpsuus",
-'portal-url'        => 'Project:Durpsuus',
-'privacy'           => 'Privacybeleid',
-'privacypage'       => 'Project:Privacybeleid',
-'sitesupport'       => 'Donaoties',
-'sitesupport-url'   => 'Project:Financieel biedraehen',
+'aboutsite'            => 'Over {{SITENAME}}',
+'aboutpage'            => 'Project:Info',
+'bugreports'           => "Foutrapport'n",
+'bugreportspage'       => "Project:Foutrapport'n",
+'copyright'            => 'Den inoud is beschikbaer onder de $1.',
+'copyrightpagename'    => '{{SITENAME}} auteursrechen',
+'copyrightpage'        => '{{ns:project}}:Auteursrechen',
+'currentevents'        => "In 't nieuws",
+'currentevents-url'    => "Project:In 't nieuws",
+'disclaimers'          => 'Voebehoud',
+'disclaimerpage'       => 'Project:Alhemeên voebehoud',
+'edithelp'             => "Ulpe bie't bewerken",
+'edithelppage'         => 'Help:Bewerken',
+'faq'                  => 'FAQ (veehestelde vraehen)',
+'faqpage'              => 'Project:Veehestelde vraehen',
+'helppage'             => 'Help:Inoud',
+'mainpage'             => 'Vòblad',
+'mainpage-description' => 'Vòblad',
+'policy-url'           => 'Project:Beleid',
+'portal'               => "'t Durpsuus",
+'portal-url'           => 'Project:Durpsuus',
+'privacy'              => 'Privacybeleid',
+'privacypage'          => 'Project:Privacybeleid',
 
 'badaccess'        => 'Fout in toegangsrechten',
 'badaccess-group0' => 'Jie mag de opgevraegde actie nie zelf uutvoere.',
@@ -274,6 +281,7 @@ $messages = array(
 'youhavenewmessagesmulti' => 'Je ei nieuwe berichen op $1',
 'editsection'             => 'bewerken',
 'editold'                 => 'bewerk',
+'viewsourceold'           => 'brontekst bekieken',
 'editsectionhint'         => 'Deêlpahina bewerken: $1',
 'toc'                     => "In'oud",
 'showtoc'                 => 'uutklappe',
@@ -308,7 +316,7 @@ $messages = array(
 'nosuchspecialpage' => 'Deêze speciaole pagina besti nie',
 'nospecialpagetext' => "<big>'''Je ei een onbestaende speciaole pagina opevrogen.'''</big>
 
-Een lieste mie speciaole pagina’s sti op [[Special:Specialpages|speciaole pagina’s]].",
+Een lieste mie speciaole pagina’s sti op [[Special:SpecialPages|speciaole pagina’s]].",
 
 # General errors
 'error'                => 'Fout',
@@ -334,12 +342,6 @@ $1',
 'readonlytext'         => 'De database is heblokkeerd voe bewerkiengen, warschijnlijk voe rehulier databaseonderoud. Nae afrondieng wor de functionaliteit hersteld.
 
 De beheêrder ei de volhende reeën opeheven: $1',
-'missingarticle'       => "In de database is hin tekst anetroffen voe een pagina mie de naem “$1”.
-
-Dit wor mistal veroôrzaekt deur 't volhen van een lienk in een verheliekiengs- of geschiedenispagina nae een pagina die a verwiederd is.
-
-A dit nie 't heval is, dan è je een fout in de software evon'n.
-Rapporteer dit asjeblieft an een beheêrder mie vermeldieng van de URL.",
 'readonly_lag'         => 'De database is automaotisch verhrendeld terwijl an de onderheschikte databaseservers synhroniseren mie den oôdserver.',
 'internalerror'        => 'Interne fout',
 'internalerror_info'   => 'Interne fout: $1',
@@ -399,6 +401,7 @@ Jen account is anemikt. Vergeet nie je vòkeuren voe {{SITENAME}} an te passen.'
 'loginproblem'               => "<b>Der was een probleem bie 't anmelden.</b><br />
 Probeer 't asjeblieft nog een keêr.",
 'login'                      => 'Anmelden',
+'nav-login-createaccount'    => 'Anmelden / Inschrieven',
 'loginprompt'                => "Je mò cookies ineschaokeld ène om je te kunn'n anmelden bie {{SITENAME}}.",
 'userlogin'                  => 'Anmelden / Inschrieven',
 'logout'                     => 'Ofmelden',
@@ -420,7 +423,7 @@ Kies asjeblieft een aore naem.',
 'yourlanguage'               => 'Taele:',
 'yournick'                   => 'Tekst voe onderteêkenienge:',
 'badsig'                     => 'Ongeldege andteêkenienge; kiek de [[HTML]]-expressies nae.',
-'badsiglength'               => 'Te lange naem; ie mag uut maximaol $1 letters bestae.',
+'badsiglength'               => 'Te lange naem; ie mag uut maximaol $1 {{PLURAL:$1|letter|letters}} bestae.',
 'email'                      => 'E-mail',
 'prefs-help-realname'        => 'Echen naem is opsjoneel, a je dezen opgeef kan deêze naem gebruukt worn om je erkennieng te heven voe je werk.',
 'loginerror'                 => 'Anmeldfout',
@@ -486,7 +489,7 @@ Neheer dit bericht as deêze gebruker zonder joe medeweten is anemikt.',
 'italic_tip'      => 'Schuun',
 'link_sample'     => 'Onderwerp',
 'link_tip'        => 'Interne lienk',
-'extlink_sample'  => 'http://www.voebeeld.com lienktekst',
+'extlink_sample'  => 'http://www.example.com lienktekst',
 'extlink_tip'     => 'Externe lienk (verheet http:// nie)',
 'headline_sample' => 'Deêlonderwerp',
 'headline_tip'    => 'Tussenkopje (oôgste niveau)',
@@ -538,16 +541,13 @@ De opeheven reeën is:
 
 Je kan deêze blokkaode bespreken mie $1 of een aore [[{{MediaWiki:Grouppage-sysop}}|opzichter]].
 Je kan hin gebruuk maeken van de functie 'e-mail deêze gebruker', tenzie a je een heldig e-mailadres ei opeheven in je [[Special:Preferences|vòkeuren]] en 't gebruuk van deêze functie nie is eblokkeerd.
-Je udihe IP-adres is $3 en 't blokkaodenummer is #$5. Vermeld beie hehevens a je erhens over deêze blokkaode wil reaheern.",
+Je blokkaodenummer is #$5.
+Vermeld dat a je erhens over deêze blokkaode wil reaheern.",
 'blockednoreason'           => 'hin reeën opeheven',
 'blockedoriginalsource'     => "De brontekst van '''$1''' staet ieronder:",
 'blockededitsource'         => "D'n tekst van '''joen biedragen''' an '''$1''' staet ieronder:",
 'whitelistedittitle'        => 'Voe bewerken is anmelden verplicht',
 'whitelistedittext'         => "Je mò $1 om pagina's te bewerken.",
-'whitelistreadtitle'        => 'Voe leestoehang is anmelden verplicht',
-'whitelistreadtext'         => "[[Special:Preferences|Mel jen eihen an]] voe leestoehang toet pagina's.",
-'whitelistacctitle'         => "'t Anmaeken van nieuwe gebrukers is nie toehestaen",
-'whitelistacctext'          => 'Je dien [[Special:Userlogin|anemeld]] te zien en de juuste rechen te ène om gebrukers an te maeken in {{SITENAME}}.',
 'confirmedittitle'          => 'E-mailbevestigieng is verplicht voeda je kan bewerken',
 'confirmedittext'           => "Je mò jen e-mailadres bevestihen voe da je kan bewerken.
 Voer jen e-mailadres in en bevestig 't via [[Special:Preferences|je vòkeuren]].",
@@ -561,7 +561,9 @@ Voer jen e-mailadres in en bevestig 't via [[Special:Preferences|je vòkeuren]].
 'newarticle'                => '(Nieuw)',
 'newarticletext'            => "Deêze pagina besti nie. Typ in 't onderstaende veld om de pagina an te maeken (meêr informatie sti op de [[{{MediaWiki:Helppage}}|ulppagina]]).
 Gebruuk de knoppe '''vorige''' in je browser as je ier per ongeluk terecht bin ekomm'n.",
-'anontalkpagetext'          => "----''Dit is de overlegbladzie vò 'n anonieme gebruker die-a gin inlognaem eit of 'm nie gebruukt. Zien/eur IP-adres kan deu meêr as eên gebruker gebruukt ore. A je 'n bericht gekrege è dat-a dudelik nie an joe gericht is, ka je 't beste [[Speciaol:Userlogin|jen eige anmelde]] om zukke verwarrienge in 't vervolg te vòkommen.''",
+'anontalkpagetext'          => "----''Dit is de overlegbladzie vò 'n anonieme gebruker die-a gin inlognaem eit of 'm nie gebruukt.
+Zien/eur IP-adres kan deu meêr as eên gebruker gebruukt ore.
+A je 'n bericht gekrege è dat-a dudelik nie an joe gericht is, ka je 't beste [[Special:UserLogin|jen eige anmelde]] om zukke verwarrienge in 't vervolg te vòkommen.''",
 'noarticletext'             => 'Deêze pagina bevat hin tekst.
 Je kan [[Special:Search/{{PAGENAME}}|ni deêze term zoeken]] in aore pagina\'s of <span class="plainlinks">[{{fullurl:{{FULLPAGENAME}}|action=edit}} deêze pagina bewerken]</span>.',
 'userpage-userdoesnotexist' => 'Je bewerk een gebrukerspagina van een gebruker die a nie besti (gebruker "$1"). Controleer of a je deêze pagina wè wil anmaeken/bewerken.',
@@ -597,7 +599,6 @@ Probeer 't opnieuw. A 't dan nog nie luk, mel jen eihen dan of en wee an.</stron
 De bewerkieng is eweiherd om vermienkieng van de paginatekst te voorkomm'n.
 Dit gebeur soms a der een webhebaseerde proxydienst wor gebruukt die a fout'n bevat.</strong>",
 'editing'                   => 'Bezig mie bewerken van $1',
-'editinguser'               => "Bezig mie wiezigen van de gebrukersrechen van gebruker '''[[User:$1|$1]]''' ([[User talk:$1|{{int:talkpagelinktext}}]] | [[Special:Contributions/$1|{{int:contribslink}}]])",
 'editingsection'            => 'Bezig mie bewerken van $1 (deêlpagina)',
 'editingcomment'            => 'Bezig mie bewerken van $1 (opmerkieng)',
 'editconflict'              => 'Bewerkiengsconflict: $1',
@@ -629,22 +630,29 @@ Opslaene is nie meuhlijk.</strong>",
 't Is misschien verstandig om je tekst tiedelijk in een tekstbestand op te slaene om dit te bewaeren                    ve wunnir a de blokkerieng van de database opeheven is.</strong>",
 'protectedpagewarning'      => '<strong>WAERSCHUWIENG! Deêze beveiligde pagina kan allin deur gebrukers mie beheêrdersrechten bewerkt        worn.</strong>',
 'semiprotectedpagewarning'  => "'''Let op:''' deêze pagina is beveiligd en kan allaen deur herehistreerde gebrukers bewerkt worn.",
-'cascadeprotectedwarning'   => "'''Waerschuwieng:''' Deêze pagina is beveiligd en kan allin deur beheêrders bewerkt worn, omda dezen              is openomen in de volhende {{PLURAL:$1|pagina|pagina's}} die a beveiligd {{PLURAL:$1|is|zien}} mie de cascade-optie:",
+'cascadeprotectedwarning'   => "'''Waerschuwieng:''' Deêze pagina is beveiligd en kan allin deur beheêrders bewerkt worn, omda dezen is openomen in de volhende {{PLURAL:$1|pagina|pagina's}} die a beveiligd {{PLURAL:$1|is|zien}} mie de cascade-optie:",
 'titleprotectedwarning'     => "<strong>WAERSCHUWIENG: Deêze pagina is beveiligd zodan allaen ienkele gebrukers 't kunn'n anmaeken.</strong>",
 'templatesused'             => "Op deêze pagina gebruukte sjabloon'n:",
 'templatesusedpreview'      => "Sjabloon'n gebruukt in deêze voevertoônieng:",
 'templatesusedsection'      => "Sjabloon'n die an gebruukt worn in deêze subkop:",
 'template-protected'        => '(beveiligd)',
 'template-semiprotected'    => '(semi-beveiligd)',
+'hiddencategories'          => 'Deêze pagina val in de volhende verborhen {{PLURAL:$1|categorie|categorieën}}:',
 'nocreatetitle'             => "'t Anmaeken van pagina's is beperkt",
 'nocreatetext'              => "{{SITENAME}} ei de meuhlijkeid om nieuwe pagina's an te maeken beperkt.
-Je kan a bestaende pagina's wiezigen, of je kan [[Special:Userlogin|jen eihen anmelden of een gebruker  anmaeken]].",
+Je kan a bestaende pagina's wiezigen, of je kan [[Special:UserLogin|jen eihen anmelden of een gebruker  anmaeken]].",
 'nocreate-loggedin'         => "Je kan hin nieuwe pagina's anmaeken op {{SITENAME}}.",
 'permissionserrors'         => "Fout'n in rechen",
 'permissionserrorstext'     => "Je ei hin rechen om dit te doene wehens de volhende {{PLURAL:$1|reeën|reden'n}}:",
 'recreate-deleted-warn'     => "'''Waerschuwieng: je bin bezig mie 't anmaeken van een pagina die a in 't verleeën verwiederd is.'''
 
 Overweeg of a 't terecht is dat je vadder werk an deêze pagina. Voe je hemak sti ieronder 't verwiederiengslogboek van deêze pagina:",
+
+# Parser/template warnings
+'expensive-parserfunction-warning'  => "Waerschuwieng: deêze pagina gebruuk te vee kosbaere parserfuncties.
+
+Noe zien 't et der $1, terwijl an 't der minder as $2 motten zien.",
+'expensive-parserfunction-category' => "Pagina's die an te vee kosbaere parserfuncties gebruken",
 
 # "Undo" feature
 'undo-success' => "Ieronder sti de tekst wirin a de wiezigieng onedaene is emikt. Controleer voe 't opslaene of a 't resultaot ewenst is.",
@@ -704,7 +712,9 @@ der kunn\'n details anwezig zien in \'t [{{fullurl:Special:Log/delete|page={{PAG
 'rev-delundel'                => 'weerheven/verberhen',
 'revisiondelete'              => 'Versies verwiederen/trugplekken',
 'revdelete-nooldid-title'     => 'Hin doelversie',
+'revdelete-nooldid-text'      => 'Je ei hin doelversie(s) voe deêze handelienge opeheven, de aneheven versie besti nie, of je probeer de lèste versie te verberhen.',
 'revdelete-selected'          => 'Hesillecteerde {{PLURAL:$2|bewerkieng|bewerkiengen}} van [[:$1]]:',
+'logdelete-selected'          => '{{PLURAL:$1|Hesillecteerde logboekactie|Hesillecteerde logboekacties}}:',
 'revdelete-text'              => "Verwiederde bewerkiengen zien zichbaer in de heschiedenisse, mè den inoud is nie langer publiek toehankelijk.
 
 Aore opzichters van {{SITENAME}} kunn'n de verborhen inoud benadern en de verwiederieng onedaene maeken mie de ulpe van dit scherm, tenzie an der anvull'nde beperkiengen heln die an zien inesteld deur de systeembeheêrder.",
@@ -713,6 +723,7 @@ Aore opzichters van {{SITENAME}} kunn'n de verborhen inoud benadern en de verwie
 'revdelete-hide-name'         => 'Actie en doel verberhen',
 'revdelete-hide-comment'      => 'De bewerkiengssaemenvattieng verberhen',
 'revdelete-hide-user'         => 'Gebrukersnaem/IP van de gebruker verberhen',
+'revdelete-hide-restricted'   => 'Deêze beperkiengen toepassen op opzichters en dezen interface ofsluten',
 'revdelete-suppress'          => "Hehevens voe zòwè opzichters as aore onderdrukk'n",
 'revdelete-hide-image'        => 'Bestandsinoud verberhen',
 'revdelete-unsuppress'        => 'Beperkiengen op terugezette wiezigiengen verwiederen',
@@ -720,12 +731,29 @@ Aore opzichters van {{SITENAME}} kunn'n de verborhen inoud benadern en de verwie
 'revdelete-submit'            => 'Toepassen op de hesillecteerde bewerkieng',
 'revdelete-logentry'          => 'zichbaereid van bewerkiengen is ewiezigd voe [[$1]]',
 'logdelete-logentry'          => 'wiezigen zichbaereid van hebeurtenis [[$1]]',
-'revdelete-logaction'         => '$1 {{PLURAL:$1|wiezigieng|wiezigiengen}} inesteld ni modus $2',
 'revdelete-success'           => "'''Zichbaereid van de wiezigieng succesvol inesteld.'''",
 'logdelete-success'           => "'''Zichbaereid van de hebeurtenisse succesvol inesteld.'''",
+'revdel-restore'              => 'Zichbaereid wiezigen',
+'pagehist'                    => 'Paginaheschiedenisse',
+'deletedhist'                 => 'Verwiederde heschiedenisse',
+'revdelete-content'           => 'inoud',
+'revdelete-summary'           => 'saemenvattieng bewerken',
+'revdelete-uname'             => 'gebrukersnaem',
+'revdelete-restricted'        => 'ei beperkiengen an beheêrders opeleid',
+'revdelete-unrestricted'      => 'ei beperkiengen voe beheêrders opeheven',
+'revdelete-hid'               => 'ei $1 verborhen',
+'revdelete-unhid'             => 'ei $1 zichbaer emikt',
+'revdelete-log-message'       => '$1 voe $2 {{PLURAL:$2|versie|versies}}',
+'logdelete-log-message'       => '$1 voe $2 {{PLURAL:$2|logboekrehel|logboekrehels}}',
+
+# Suppression log
+'suppressionlog'     => 'Verberhiengslogboek',
+'suppressionlogtext' => 'De onderstaende lieste bevat de miste recente verwiederiengen en blokkaodes die an voe opzichters verborhen zien. In de [[Special:IPBlockList|IP-blokkeerlieste]] zien de udihe blokkaodes te bekieken.',
 
 # History merging
 'mergehistory'                     => "Heschiedenisse van pagina's saemenvoehen",
+'mergehistory-header'              => "Via deêze pagina kan je versies van de heschiedenisse van een bronpagina ni een nieuwere pagina saemenvoehen.
+Zurg da je bie deêze wiezigieng de heschiedenisdeurloôpendeid van de pagina be'ouw.",
 'mergehistory-box'                 => "Versies van twi pagina's saemenvoehen:",
 'mergehistory-from'                => 'Bronpagina:',
 'mergehistory-into'                => 'Bestemmiengspagina:',
@@ -740,6 +768,8 @@ Aore opzichters van {{SITENAME}} kunn'n de verborhen inoud benadern en de verwie
 'mergehistory-no-destination'      => 'Bestemmiengspagina $1 besti nie.',
 'mergehistory-invalid-source'      => 'De bronpagina mò een heldihe titel zien.',
 'mergehistory-invalid-destination' => 'De bestemmiengspagina mò een heldihe titel zien.',
+'mergehistory-autocomment'         => '[[:$1]] saemenevoegd ni [[:$2]]',
+'mergehistory-comment'             => '[[:$1]] saemenevoegd ni [[:$2]]: $3',
 
 # Merge log
 'mergelog'           => 'Saemenvoehiengslogboek',
@@ -770,11 +800,19 @@ Aore opzichters van {{SITENAME}} kunn'n de verborhen inoud benadern en de verwie
 'prevn'                 => 'vorrege $1',
 'nextn'                 => 'volhende $1',
 'viewprevnext'          => 'Bekiek ($1) ($2) ($3).',
+'search-result-size'    => '$1 ({{PLURAL:$2|1 woôrd|$2 woôrn}})',
+'search-result-score'   => 'Rillevantie: $1%',
+'search-redirect'       => '(deurverwiezieng $1)',
+'search-section'        => '(subkop $1)',
+'search-suggest'        => 'Bedoeln je: $1',
+'searchall'             => 'aolle',
 'showingresults'        => "Ieronder {{PLURAL:$1|sti '''1''' resultaot|staen '''$1''' resultaoten}} vanof #'''$2'''.",
 'showingresultsnum'     => "Ieronder {{PLURAL:$3|sti '''1''' resultaot|staen '''$3''' resultaoten}} vanof #'''$2'''.",
+'showingresultstotal'   => "Ieronder worn de resultaoten '''$1 tot $2''' van '''$3''' weereheven",
 'nonefound'             => "'''Opmerkieng''': mislukte zoekopdrachten worn vaok veroôrzaekt deur zoekn ni vee voekomm'nde woôrn as \"van\" en \"de\", die an nie in de indexen worn openoom'n, of deur meêr dan eên zoekterm op te heven. Allin pagina's die an aolle zoektermen bevatt'n worn openoom'n in de resultaoten.",
 'powersearch'           => 'Uutebreid zoeken',
-'powersearchtext'       => "Zoeken in naemruum'n:<br />$1<br />$2 Deurverwieziengen weerheven<br />Zoeken ni $3 $9",
+'powersearch-legend'    => 'Uutebreid zoeken',
+'search-external'       => 'Extern zoeken',
 'searchdisabled'        => "Zoeken in {{SITENAME}} is nie meuhlijk.
 Je kan gebruuk maeken van Google.
 De hehevens over {{SITENAME}} zien meuhlijk nie bie'ewerkt.",
@@ -784,7 +822,7 @@ De hehevens over {{SITENAME}} zien meuhlijk nie bie'ewerkt.",
 'mypreferences'            => 'Mien vòkeuren',
 'prefs-edits'              => 'Antal bewerkiengen:',
 'prefsnologin'             => 'Nie anemeld',
-'prefsnologintext'         => "Je mò [[Special:Userlogin|anemeld]] zien om je vòkeuren te kunn'n instell'n.",
+'prefsnologintext'         => "Je mò [[Special:UserLogin|anemeld]] zien om je vòkeuren te kunn'n instell'n.",
 'prefsreset'               => 'Standardvòkeuren zien hersteld.',
 'qbsettings'               => 'Menubalke',
 'qbsettings-none'          => 'Uuteschaokeld',
@@ -830,6 +868,7 @@ De hehevens over {{SITENAME}} zien meuhlijk nie bie'ewerkt.",
 'recentchangescount'       => "Antal pagina's in Juust angepast:",
 'savedprefs'               => 'Je vòkeuren zien opeslogen.',
 'timezonelegend'           => 'Tiedzône',
+'timezonetext'             => "¹'t Antal uurn dat a je plaetselijke tied afwiek van de servertied (UTC).",
 'localtime'                => 'Lokaole tied',
 'timezoneoffset'           => 'Tiedsverschil¹',
 'servertime'               => 'Servertied',
@@ -840,22 +879,24 @@ De hehevens over {{SITENAME}} zien meuhlijk nie bie'ewerkt.",
 'files'                    => "Bestan'n",
 
 # User rights
-'userrights-lookup-user'           => "Gebrukershroep'n beheern",
-'userrights-user-editname'         => 'Voer een gebrukersnaem in:',
-'editusergroup'                    => "Gebrukershroep'n wiezigen",
-'userrights-editusergroup'         => "Gebrukershroep'n wiezigen",
-'saveusergroups'                   => "Gebrukershroep'n opslaene",
-'userrights-groupsmember'          => 'Lid van:',
-'userrights-groupsremovable'       => "Verwiederbaere hroep'n:",
-'userrights-groupsavailable'       => "Beschikbaere hroep'n:",
-'userrights-reason'                => "Reeën voe 't verandern:",
-'userrights-available-none'        => 'Je mag hin gebrukersrechen verandern.',
-'userrights-available-add-self'    => "Je kan jen eihen toevoehen an deze {{PLURAL:$2|hroep|hroep'n}}: $1.",
-'userrights-available-remove-self' => "Je kan jen eihen verwiedern uut deze {{PLURAL:$2|hroep|hroep'n}}: $1.",
-'userrights-no-interwiki'          => "Je ei hin rechen om gebrukersrechen op aore wiki's te wiezigen.",
-'userrights-nodatabase'            => 'Database $1 besti nie of is hin plaetselijke database.',
-'userrights-nologin'               => 'Je mò jen eihen[[Special:Userlogin|anmelden]] mie een gebruker mie de juuste rechen om gebrukersrechen toe te wiezen.',
-'userrights-notallowed'            => 'Je ei hin rechen om gebrukersrechen toe te wiezen.',
+'userrights'                  => 'Gebrukersrechenbeheer', # Not used as normal message but as header for the special page itself
+'userrights-lookup-user'      => "Gebrukershroep'n beheern",
+'userrights-user-editname'    => 'Voer een gebrukersnaem in:',
+'editusergroup'               => "Gebrukershroep'n wiezigen",
+'editinguser'                 => "Bezig mie wiezigen van de gebrukersrechen van gebruker '''[[User:$1|$1]]''' ([[User talk:$1|{{int:talkpagelinktext}}]] | [[Special:Contributions/$1|{{int:contribslink}}]])",
+'userrights-editusergroup'    => "Gebrukershroep'n wiezigen",
+'saveusergroups'              => "Gebrukershroep'n opslaene",
+'userrights-groupsmember'     => 'Lid van:',
+'userrights-groups-help'      => "Je kan de hroep'n wiezigen wir a deêze gebruker lid van is.
+Een anekruusd vienkvakje beteêken da de gebruker lid is van de hroep.
+Een nie anekruusd vienkvakje beteêken da de gebruker hin lid is van de hroep.",
+'userrights-reason'           => "Reeën voe 't verandern:",
+'userrights-no-interwiki'     => "Je ei hin rechen om gebrukersrechen op aore wiki's te wiezigen.",
+'userrights-nodatabase'       => 'Database $1 besti nie of is hin plaetselijke database.',
+'userrights-nologin'          => 'Je mò jen eihen[[Special:UserLogin|anmelden]] mie een gebruker mie de juuste rechen om gebrukersrechen toe te wiezen.',
+'userrights-notallowed'       => 'Je ei hin rechen om gebrukersrechen toe te wiezen.',
+'userrights-changeable-col'   => "Hroep'n die a je kan beheern",
+'userrights-unchangeable-col' => "Hroep'n die a je nie kan beheern",
 
 # Groups
 'group'               => 'Hroep:',
@@ -863,17 +904,20 @@ De hehevens over {{SITENAME}} zien meuhlijk nie bie'ewerkt.",
 'group-bot'           => 'Bots',
 'group-sysop'         => 'Opzichters',
 'group-bureaucrat'    => 'Amtenaers',
+'group-suppress'      => 'Toezichtouwers',
 'group-all'           => '(aolles)',
 
 'group-autoconfirmed-member' => 'Herehistreerde gebruker',
 'group-bot-member'           => 'Bot',
 'group-sysop-member'         => 'Opzichter',
 'group-bureaucrat-member'    => 'Amtenaer',
+'group-suppress-member'      => 'Toezichtouwer',
 
 'grouppage-autoconfirmed' => '{{ns:project}}:Herehistreerde gebrukers',
 'grouppage-bot'           => '{{ns:project}}:Bots',
 'grouppage-sysop'         => '{{ns:project}}:Opzichters',
 'grouppage-bureaucrat'    => "{{ns:project}}:Bureaucraot'n",
+'grouppage-suppress'      => '{{ns:project}}:Toezicht',
 
 # User rights log
 'rightslog'      => 'Gebrukersrechtenlogboek',
@@ -912,6 +956,8 @@ De hehevens over {{SITENAME}} zien meuhlijk nie bie'ewerkt.",
 'recentchangeslinked'          => 'Gerelateerde bewerkiengen',
 'recentchangeslinked-title'    => 'Wiezigiengen verwant an "$1"',
 'recentchangeslinked-noresult' => "Der zien hin bewerkiengen in de heheven periode ewist op de pagina's die an vanaf ier elienkt worn.",
+'recentchangeslinked-page'     => 'Paginanaem:',
+'recentchangeslinked-to'       => "Wiezigiengen weerheven ni de helienkte pagina's",
 
 # Upload
 'upload'                     => 'Upload bestand',
@@ -919,12 +965,12 @@ De hehevens over {{SITENAME}} zien meuhlijk nie bie'ewerkt.",
 'reupload'                   => "Opnieuw upload'n",
 'reuploaddesc'               => "Upload annuleern en teruggaene ni 't uploadformelier",
 'uploadnologin'              => 'Nie anemeld',
-'uploadnologintext'          => "Je mò [[Special:Userlogin|anemeld]] zien
+'uploadnologintext'          => "Je mò [[Special:UserLogin|anemeld]] zien
 om bestan'n te upload'n.",
 'upload_directory_read_only' => 'De webserver kan nie schrieven in de uploadmap ($1).',
 'uploaderror'                => 'Uploadfout',
 'uploadtext'                 => "Gebruuk 't onderstaende formelier om bestan'n te uploaden.
-Om eêder toehevoegde bestan'n te bekieken of te zoeken kan je ni de [[Special:Imagelist|bestandslieste]] haen.
+Om eêder toehevoegde bestan'n te bekieken of te zoeken kan je ni de [[Special:ImageList|bestandslieste]] haen.
 Uploads en verwiederiengen worn bie'ehouwen in 't [[Special:Log/upload|uploadlogboek]].
 
 Om 't bestand in te voehen in een pagina kan je eên van de volhende codes gebruken, a ni helang 't bestandsformaot dat van toepassieng is:
@@ -958,10 +1004,8 @@ De lèste lienk is bedoeld voe mediabestan'n die an hin plaetje zien.",
 
 # Miscellaneous special pages
 'nmembers'          => '$1 {{PLURAL:$1|bladzie|bladzies}}',
-'allpages'          => 'Aolle bladzies',
 'longpages'         => 'Langste bladzies',
 'listusers'         => 'Gebrukerslieste',
-'specialpages'      => 'Speciaole bladzies',
 'newpages-username' => 'Gebrukersnaem:',
 'ancientpages'      => 'Bladzies die-an lang nie bin angepast',
 'move'              => 'Verschuuf',
@@ -970,16 +1014,14 @@ De lèste lienk is bedoeld voe mediabestan'n die an hin plaetje zien.",
 # Book sources
 'booksources' => 'Bronnen vò boeken',
 
-'categoriespagetext' => 'De wiki eit de volgende categorieën.',
-'userrights'         => 'Gebrukersrechenbeheer',
-'alphaindexline'     => '$1 toet $2',
-
 # Special:Log
 'specialloguserlabel' => 'Gebruker:',
 'alllogstext'         => "Saemengesteld overzicht van de wis-, bescherm-, blokkeer- en gebrukerslechtenlogboeken.
 Je kan 't overzicht bepaelen deu 'n soôrte logboek, 'n gebrukersnaem of eên bladzie uut te kiezen.",
 
-# Special:Allpages
+# Special:AllPages
+'allpages'          => 'Aolle bladzies',
+'alphaindexline'    => '$1 toet $2',
 'nextpage'          => 'Volgende bladzie ($1)',
 'allpagesfrom'      => 'Laet bladzies zieë vanaf:',
 'allarticles'       => 'Aolle artikels',
@@ -988,6 +1030,12 @@ Je kan 't overzicht bepaelen deu 'n soôrte logboek, 'n gebrukersnaem of eên bl
 'allpagesprev'      => 'Vorrege',
 'allpagesprefix'    => "Laet bladzies zieë mee 't vovoegsel:",
 'allpagesbadtitle'  => "D'n ingegeven bladzie-titel was ongeldeg of ao 'n interwiki-vòvoegsel. Meschien stae d'r eên of meer teêkens in die-an nie in titels gebruukt ore kunne.",
+
+# Special:Categories
+'categories'                    => 'Categorieën',
+'categoriespagetext'            => 'De wiki eit de volgende categorieën.',
+'special-categories-sort-count' => 'op antal sorteern',
+'special-categories-sort-abc'   => 'alfabetisch sorteern',
 
 # E-mail user
 'emailuser' => 'E-mail deêze gebruker',
@@ -998,11 +1046,11 @@ Je kan 't overzicht bepaelen deu 'n soôrte logboek, 'n gebrukersnaem of eên bl
 'mywatchlist'          => 'Mien volglieste',
 'watchlistfor'         => "(vò '''$1''')",
 'watchnologin'         => 'Je bin nie angemolde.',
-'watchnologintext'     => 'Je moe [[Speciaol:Userlogin|angemolde]] weze om je volglieste an te passen.',
+'watchnologintext'     => 'Je moe [[Special:UserLogin|angemolde]] weze om je volglieste an te passen.',
 'addedwatch'           => 'An de volglieste toegevoegd',
 'addedwatchtext'       => "De bladzie \"[[:\$1]]\" is an je [[Special:Watchlist|Volglieste]] toegevoegd.
 Veranderiengen an deêze bladzie en de overlegbladzie die-a d'rbie oort zulle ierop zichtbaer ore
-en de bladzie komt '''vet''' te staen in de [[Special:Recentchanges|lieste van wat-a juust veranderd is]], daermee 't makkeliker te vinden is.
+en de bladzie komt '''vet''' te staen in de [[Special:RecentChanges|lieste van wat-a juust veranderd is]], daermee 't makkeliker te vinden is.
 A je de bladzie laeter weêr van je volglieste afaele wil, klik dan op \"nie meêr volge\" bovenan de bladzie.",
 'watch'                => 'Volg',
 'watchthispage'        => 'Bekiek deêze bladzie',
@@ -1040,28 +1088,31 @@ De lèste bewerkienge wier gedaen deu [[User:$3|$3]] ([[User talk:$3|Overleggien
 'blockip'                     => 'Blokkeer gebruker',
 'badipaddress'                => 'Ongeldig IP-adres',
 'blockipsuccesssub'           => 'Blokkaode is gelukt.',
-'blockipsuccesstext'          => "[[{{ns:Special}}:Contributions/$1|$1]] is geblokkeerd.
-<br />Ziet de [[{{ns:Special}}:Ipblocklist|IP-blokliest]] vo 'n overzicht van blokkaodes.",
+'blockipsuccesstext'          => "[[Special:Contributions/$1|$1]] is geblokkeerd.<br />
+Ziet de [[Special:IPBlockList|IP-blokliest]] vo 'n overzicht van blokkaodes.",
 'anononlyblock'               => 'alleêne anon.',
 'blocklink'                   => 'blokkeer',
 'contribslink'                => 'biedraegen',
-'autoblocker'                 => 'Je bin automaotisch geblokkeerd om-at je IP-adres pas gebruukt is deu "[[Gebruker:$1|$1]]". De reje daevò was: "\'\'\'$2\'\'\'"',
+'autoblocker'                 => 'Je bin automaotisch geblokkeerd om-at je IP-adres pas gebruukt is deu "[[User:$1|$1]]".
+De reje daevò was: "$2"',
 'blocklogentry'               => 'ei "[[$1]]" geblokkeerd mee \'n afloôptied van $2 $3',
-'blocklogtext'                => "Dit is 'n logboek van gebrukersblokkaodes en -deblokkeriengen. Automaotisch geblokte ip-adressen stae d'r nie bie. Ziet de [[Speciaol:Ipblocklist|Lieste van ip-blokkeriengen]] vò blokkaodes die op dit moment in werkienge bin.",
+'blocklogtext'                => "Dit is 'n logboek van gebrukersblokkaodes en -deblokkeriengen.
+Automaotisch geblokte ip-adressen stae d'r nie bie.
+Ziet de [[Special:IPBlockList|Lieste van ip-blokkeriengen]] vò blokkaodes die op dit moment in werkienge bin.",
 'block-log-flags-anononly'    => 'allene anonieme gebrukers',
 'block-log-flags-nocreate'    => 'uutgeslote van anmaeken gebrukersnaemen',
 'block-log-flags-noautoblock' => 'gin autoblokkaode',
 
 # Move page
-'movepage'        => 'Verschuuf bladzie',
-'movearticle'     => 'Verschuuf bladzie',
-'move-watch'      => 'Volg deêze bladzie',
-'movepagebtn'     => 'Verschuuf bladzie',
-'articleexists'   => "D'r bestaet al 'n bladzie mee dieën naem, of de naem
+'move-page-legend' => 'Verschuuf bladzie',
+'movearticle'      => 'Verschuuf bladzie',
+'move-watch'       => 'Volg deêze bladzie',
+'movepagebtn'      => 'Verschuuf bladzie',
+'articleexists'    => "D'r bestaet al 'n bladzie mee dieën naem, of de naem
 die-a je gekozen is is ongeldeg.
 Kiest 'n aore naem.",
-'1movedto2'       => '[[$1]] is verschove nae [[$2]]',
-'1movedto2_redir' => '[[$1]] is verschove nae [[$2]] over de deurverwiezienge',
+'1movedto2'        => '[[$1]] is verschove nae [[$2]]',
+'1movedto2_redir'  => '[[$1]] is verschove nae [[$2]] over de deurverwiezienge',
 
 # Namespace 8 related
 'allmessagesname'           => 'Naem',
@@ -1087,11 +1138,6 @@ Kiest 'n aore naem.",
 'tooltip-n-recentchanges' => 'Bekiek wat-a juust veranderd is op deêze wiki',
 'tooltip-watch'           => 'Voeg deêze bladzie toe an de volglieste',
 
-# Spam protection
-'categoryarticlecount'   => "D'r {{PLURAL:$1|is eên artikel|bin $1 artikels}} in deze catgeorie.",
-'category-media-count'   => "D'r {{PLURAL:$1|is eên bestand|bin $1 bestanden}} in deze categorie.",
-'listingcontinuesabbrev' => 'vedder',
-
 # 'all' in various places, this might be different for inflected languages
 'watchlistall2' => 'aol',
 'namespacesall' => 'aol',
@@ -1113,5 +1159,8 @@ Kiest 'n aore naem.",
 'autosumm-replace' => "Bladzie vervange mee '$1'",
 'autoredircomment' => 'Oor deugestierd nae [[$1]]',
 'autosumm-new'     => 'Nieuwe bladzie mee as inoud: $1',
+
+# Special:SpecialPages
+'specialpages' => 'Speciaole bladzies',
 
 );

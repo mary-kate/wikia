@@ -1,13 +1,12 @@
 <?php
 /** Dzongkha (ཇོང་ཁ)
  *
- * @addtogroup Language
+ * @ingroup Language
+ * @file
  *
- * @author Ævar Arnfjörð Bjarmason <avarab@gmail.com>
+ * @author CFynn
  * @author Tenzin
- * @author Siebrand
- * @author Nike
- * @author Jon Harald Søby
+ * @author Ævar Arnfjörð Bjarmason <avarab@gmail.com>
  */
 
 $digitTransformTable = array(
@@ -25,6 +24,13 @@ $digitTransformTable = array(
 
 $messages = array(
 # Dates
+'sunday'        => 'འབྲུག་གཟའ་ཟླཝ་',
+'monday'        => 'འབྲུག་གཟའ་མིག་དམར་',
+'tuesday'       => 'འབྲུག་གཟའ་ལྷགཔ་',
+'wednesday'     => 'འབྲུག་གཟའ་ཕུརཔ་',
+'thursday'      => 'འབྲུག་གཟའ་པ་སངས་',
+'friday'        => 'འབྲུག་གཟའ་སྤེནཔ་',
+'saturday'      => 'འབྲུག་གཟའ་ཉིམ་',
 'sun'           => 'ཟླཝ།',
 'mon'           => 'མིགམ།',
 'tue'           => 'ལྷགཔ།',
@@ -69,12 +75,12 @@ $messages = array(
 'nov'           => 'ཟླ་༡༡ པ།',
 'dec'           => 'ཟླ་༡༢ པ།',
 
-# Bits of text used by many pages
-'categories'            => 'དབྱེ་རིམ།',
-'category_header'       => 'དབྱེ་རིམ་ "$1" ནང་གི་ཤོག་ལེབ་ཚུ།',
-'subcategories'         => 'ཡན་ལག་དབྱེ་རིམ།',
-'category-media-header' => 'དབྱེ་རིམ་ \\"$1\\" ནང་གི་བརྡ་བརྒྱུད།',
-'category-empty'        => "''ད་ལྟོ་དབྱེ་རིམ་དེ་ནང་ ཤོག་ལེབ་དང་བརྡ་བརྒྱུད་ག་ནི་ཡང་མིན་འདུག།''",
+# Categories related messages
+'category_header'        => 'དབྱེ་རིམ་ "$1" ནང་གི་ཤོག་ལེབ་ཚུ།',
+'subcategories'          => 'ཡན་ལག་དབྱེ་རིམ།',
+'category-media-header'  => 'དབྱེ་རིམ་ \\"$1\\" ནང་གི་བརྡ་བརྒྱུད།',
+'category-empty'         => "''ད་ལྟོ་དབྱེ་རིམ་དེ་ནང་ ཤོག་ལེབ་དང་བརྡ་བརྒྱུད་ག་ནི་ཡང་མིན་འདུག།''",
+'listingcontinuesabbrev' => 'འཕྲོ་མཐུད།',
 
 'about'     => 'སྐོར་ལས།',
 'newwindow' => '(ཝིན་ཌོ་གསརཔ་ནང་ ཁ་ཕྱེཝ་ཨིན།)',
@@ -112,25 +118,24 @@ $messages = array(
 'jumptosearch'     => 'འཚོལ་ཞིབ།',
 
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
-'aboutsite'         => '{{SITENAME}} གི་སྐོར་ལས།',
-'aboutpage'         => 'Project:སྐོར་ལས།',
-'bugreports'        => 'སྐྱོན་གྱི་སྙན་ཞུ།',
-'bugreportspage'    => 'Project:སྐྱོན་གྱི་སྙན་ཞུ།',
-'copyrightpage'     => '{{ns:project}}:འདྲ་བཤུས་འབད་ཆ།',
-'currentevents'     => 'ད་ལྟོའི་བྱུང་ལས།',
-'currentevents-url' => 'Project:ད་ལྟོའི་བྱུང་ལས།',
-'disclaimers'       => 'ཁས་མི་ལེན་པ།',
-'disclaimerpage'    => 'Project: སྤྱིར་བཏང་ཁས་མི་ལེན་པ།',
-'edithelp'          => 'ཞུན་དག་གྲོགས་རམ།',
-'edithelppage'      => 'Help: ཞུན་དག།',
-'helppage'          => 'Help:ནང་དོན།',
-'mainpage'          => 'མ་ཤོག།',
-'portal'            => 'མི་སྡེའི་སྒོ་ར།',
-'portal-url'        => 'Project:མི་སྡེའི་སྒོ་ར།',
-'privacy'           => 'སྒེར་གསང་སྲིད་བྱུས།',
-'privacypage'       => 'Project:སྒེར་གསང་སྲིད་བྱུས།',
-'sitesupport'       => 'ཕན་འདེབས།',
-'sitesupport-url'   => 'Project:ས་ཁོངས་རྒྱབ་སྐྱོར།',
+'aboutsite'            => '{{SITENAME}} གི་སྐོར་ལས།',
+'aboutpage'            => 'Project:སྐོར་ལས།',
+'bugreports'           => 'སྐྱོན་གྱི་སྙན་ཞུ།',
+'bugreportspage'       => 'Project:སྐྱོན་གྱི་སྙན་ཞུ།',
+'copyrightpage'        => '{{ns:project}}:འདྲ་བཤུས་འབད་ཆ།',
+'currentevents'        => 'ད་ལྟོའི་བྱུང་ལས།',
+'currentevents-url'    => 'Project:ད་ལྟོའི་བྱུང་ལས།',
+'disclaimers'          => 'ཁས་མི་ལེན་པ།',
+'disclaimerpage'       => 'Project: སྤྱིར་བཏང་ཁས་མི་ལེན་པ།',
+'edithelp'             => 'ཞུན་དག་གྲོགས་རམ།',
+'edithelppage'         => 'Help: ཞུན་དག།',
+'helppage'             => 'Help:ནང་དོན།',
+'mainpage'             => 'མ་ཤོག།',
+'mainpage-description' => 'མ་ཤོག།',
+'portal'               => 'མི་སྡེའི་སྒོ་ར།',
+'portal-url'           => 'Project:མི་སྡེའི་སྒོ་ར།',
+'privacy'              => 'སྒེར་གསང་སྲིད་བྱུས།',
+'privacypage'          => 'Project:སྒེར་གསང་སྲིད་བྱུས།',
 
 'retrievedfrom'       => '"$1" ལས་ སླར་འདྲེན་འབད་ཡོདཔ།',
 'youhavenewmessages'  => 'ཁྱོད་ལུ་ $1 ($2) འདུག།',
@@ -161,44 +166,45 @@ $messages = array(
 'viewsourcetext' => 'ཁྱོད་ཀྱིས་ ཤོག་ལེབ་འདི་གི་འབྱུང་ས་བལྟ་བཏུབ་པའི་ཁར་ འདྲ་བཤུས་ཡང་རྐྱབ་བཏུབ་ཨིན་:',
 
 # Login and logout pages
-'yourname'              => 'ལག་ལེན་པའི་མིང་:',
-'yourpassword'          => 'ཆོག་ཡིག:',
-'remembermypassword'    => 'གློག་རིག་དེ་གུར་ ངེ་གི་ནང་བསྐྱོད་སེམས་ཁར་བཞག།',
-'login'                 => 'ནང་བསྐྱོད།',
-'loginprompt'           => '{{SITENAME}} ནང་ལུ་ ནང་བསྐྱོད་འབད་ནིའི་དོན་ལུ་ ཁྱོད་ཀྱིས་ ཀུ་ཀིསི་འདི་ལྕོགས་ཅན་བཟོ་དགོ།',
-'userlogin'             => 'ནང་བསྐྱོད་འབད་ / རྩིས་ཐོ་གསརཔ་བཟོ།',
-'logout'                => 'ཕྱིར་བསྐྱོད།',
-'userlogout'            => 'ཕྱིར་བསྐྱོད།',
-'nologin'               => 'ནང་བསྐྱོད་མེད་ག? $1',
-'nologinlink'           => 'རྩིས་ཐོ་གསརཔ་བཟོ།',
-'createaccount'         => 'རྩིས་ཐོ་གསརཔ་བཟོ།',
-'gotaccount'            => 'ཧེ་མ་ལས་རྩིས་ཐོ་ཡོད་ག? $1',
-'gotaccountlink'        => 'ནང་བསྐྱོད།',
-'yourrealname'          => 'མིང་ངོ་མ:',
-'prefs-help-realname'   => 'མིང་ངོ་མ་འདི་ གདམ་ཁ་ཅན་ཨིན་རུང་ ཐོ་བཀོད་འབད་བ་ཅིན་ ཁྱོད་རའི་ལཱ་གི་ཁྱད་བརྗོད་ཀྱི་དོན་ལུ་ ལག་ལེན་འཐབ་འོང་།',
-'loginsuccesstitle'     => 'ནང་བསྐྱོད་ལེགས་ཤོམ་འབད་ཡོདཔ།',
-'loginsuccess'          => "'''ད་འབདན་ཁྱོད་  {{SITENAME}} ནང་ \"\$1\" སྦེ་ ནང་བསྐྱོད་འབད་ཡོདཔ།'''",
-'nosuchuser'            => 'མིང་ "$1" བཟུམ་གྱི་ལག་ལེན་པ་མེད།
+'yourname'                => 'ལག་ལེན་པའི་མིང་:',
+'yourpassword'            => 'ཆོག་ཡིག:',
+'remembermypassword'      => 'གློག་རིག་དེ་གུར་ ངེ་གི་ནང་བསྐྱོད་སེམས་ཁར་བཞག།',
+'login'                   => 'ནང་བསྐྱོད།',
+'nav-login-createaccount' => 'ནང་བསྐྱོད་འབད་ / རྩིས་ཐོ་གསརཔ་བཟོ།',
+'loginprompt'             => '{{SITENAME}} ནང་ལུ་ ནང་བསྐྱོད་འབད་ནིའི་དོན་ལུ་ ཁྱོད་ཀྱིས་ ཀུ་ཀིསི་འདི་ལྕོགས་ཅན་བཟོ་དགོ།',
+'userlogin'               => 'ནང་བསྐྱོད་འབད་ / རྩིས་ཐོ་གསརཔ་བཟོ།',
+'logout'                  => 'ཕྱིར་བསྐྱོད།',
+'userlogout'              => 'ཕྱིར་བསྐྱོད།',
+'nologin'                 => 'ནང་བསྐྱོད་མེད་ག? $1',
+'nologinlink'             => 'རྩིས་ཐོ་གསརཔ་བཟོ།',
+'createaccount'           => 'རྩིས་ཐོ་གསརཔ་བཟོ།',
+'gotaccount'              => 'ཧེ་མ་ལས་རྩིས་ཐོ་ཡོད་ག? $1',
+'gotaccountlink'          => 'ནང་བསྐྱོད།',
+'yourrealname'            => 'མིང་ངོ་མ:',
+'prefs-help-realname'     => 'མིང་ངོ་མ་འདི་ གདམ་ཁ་ཅན་ཨིན་རུང་ ཐོ་བཀོད་འབད་བ་ཅིན་ ཁྱོད་རའི་ལཱ་གི་ཁྱད་བརྗོད་ཀྱི་དོན་ལུ་ ལག་ལེན་འཐབ་འོང་།',
+'loginsuccesstitle'       => 'ནང་བསྐྱོད་ལེགས་ཤོམ་འབད་ཡོདཔ།',
+'loginsuccess'            => "'''ད་འབདན་ཁྱོད་  {{SITENAME}} ནང་ \"\$1\" སྦེ་ ནང་བསྐྱོད་འབད་ཡོདཔ།'''",
+'nosuchuser'              => 'མིང་ "$1" བཟུམ་གྱི་ལག་ལེན་པ་མེད།
 སྡེབ་དཔྱད་འབད་ ཡང་ན་ རྩིས་ཐོ་གསརཔ་ཅིག་བཟོ།',
-'nosuchusershort'       => 'མིང་ "<nowiki>$1</nowiki>" བཟུམ་གྱི་ལག་ལེན་པ་མེད།
+'nosuchusershort'         => 'མིང་ "<nowiki>$1</nowiki>" བཟུམ་གྱི་ལག་ལེན་པ་མེད།
 སྡེབ་དཔྱད་འབད།',
-'nouserspecified'       => 'ལག་ལེན་པའི་མིང་ གསལ་བཀོད་འབད་དགོ།',
-'wrongpassword'         => 'མ་བདེན་པའི་ཆོག་ཡིག་བཙུགས་ཡོདཔ། ལོག་འབད་རྩོལ་བསྐྱེད།',
-'wrongpasswordempty'    => 'ཆོག་ཡིག་བཙུགས་མི་འདི་སྟོངམ་ཨིན་པས། ལོག་འབད་རྩོལ་བསྐྱེད།',
-'passwordtooshort'      => 'ཁྱོད་ཀྱི་ཆོག་ཡིག་འདི་ནུས་མེད་ ཡང་ན་ ཐུང་དྲགས་ནུག།
+'nouserspecified'         => 'ལག་ལེན་པའི་མིང་ གསལ་བཀོད་འབད་དགོ།',
+'wrongpassword'           => 'མ་བདེན་པའི་ཆོག་ཡིག་བཙུགས་ཡོདཔ། ལོག་འབད་རྩོལ་བསྐྱེད།',
+'wrongpasswordempty'      => 'ཆོག་ཡིག་བཙུགས་མི་འདི་སྟོངམ་ཨིན་པས། ལོག་འབད་རྩོལ་བསྐྱེད།',
+'passwordtooshort'        => 'ཁྱོད་ཀྱི་ཆོག་ཡིག་འདི་ནུས་མེད་ ཡང་ན་ ཐུང་དྲགས་ནུག།
 ཆོག་ཡིག་འདི་ ཡིག་འབྲུ་ཉུང་ཤོས་ $1 དགོ་པའི་ཁར་ ལག་ལེན་པའི་མིང་དང་ཡང་མ་འདྲཝ་ཅིག་སྦེ་དགོཔ་ཨིན།',
-'mailmypassword'        => 'གློག་འཕྲིན་ཆོག་ཡིག།',
-'passwordremindertitle' => '{{SITENAME}} གི་དོན་ལུ་ གནས་སྐབས་ཅིག་གི་ཆོག་ཡིག་གསརཔ།',
-'passwordremindertext'  => 'མི་གང་རུང་(ཡང་ན་ ཨའི་པི་ཁ་བྱང་ $1 ནང་ལས་ ཁྱོད་བཟུམ་ཅིག་གིས་)
+'mailmypassword'          => 'གློག་འཕྲིན་ཆོག་ཡིག།',
+'passwordremindertitle'   => '{{SITENAME}} གི་དོན་ལུ་ གནས་སྐབས་ཅིག་གི་ཆོག་ཡིག་གསརཔ།',
+'passwordremindertext'    => 'མི་གང་རུང་(ཡང་ན་ ཨའི་པི་ཁ་བྱང་ $1 ནང་ལས་ ཁྱོད་བཟུམ་ཅིག་གིས་)
 {{SITENAME}} ($4) གི་དོན་ལུ་ ཆོག་ཡིག་གསརཔ་ཅིག་བཏང་ཡོད་པའི་སྐོར་ལས་ཞུ་བ་འབད་ནུག།
 ད་ལས་ཕར་ ལག་ལེན་པ་ \\"$2\\" གི་ཆོག་ཡིག་འདི་ \\"$3\\" ཨིན།
 ཁྱོད་ཀྱིས་ ད་ལྟོ་ར་ ནང་བསྐྱོད་འབད་དེ་ཆོག་ཡིག་སོར་དགོ།
 
 མི་གཞན་ཅིག་གིས་ཞུ་བ་འབད་ཡོད་པའི་སྐབས་ལུ་ ཡང་ན་ ཁྱོད་རའི་ཆོག་ཡིག་འདི་སེམས་ཁར་དྲན་ཚུགས་རུང་ བསྒྱུར་བཅོས་འབད་དགོ་མ་མནོ་བ་ཅིན་ འཕྲིན་དོན་དེ་སྣང་མེད་བཞག་སྟེ་ ཧེ་མའི་ཆོག་ཡིག་འདི་ར་ལག་ལེན་འཐབ་རུང་བཏུབ།',
-'noemail'               => 'ལག་ལེན་པ་ "$1" གི་དོན་ལུ་ གློག་འཕྲིན་ཁ་བྱང་ཐོ་བཀོད་མ་འབད་བས།',
-'passwordsent'          => '"$1" ནང་ཐོ་བཀོད་འབད་ཡོད་མི་ གློག་འཕྲིན་ཁ་བྱང་ནང་ ཆོག་ཡིག་གསརཔ་ཅིག་བཏང་ནུག།
+'noemail'                 => 'ལག་ལེན་པ་ "$1" གི་དོན་ལུ་ གློག་འཕྲིན་ཁ་བྱང་ཐོ་བཀོད་མ་འབད་བས།',
+'passwordsent'            => '"$1" ནང་ཐོ་བཀོད་འབད་ཡོད་མི་ གློག་འཕྲིན་ཁ་བྱང་ནང་ ཆོག་ཡིག་གསརཔ་ཅིག་བཏང་ནུག།
 གློག་འཕྲིན་དེ་ཐོབ་ད་ ལོག་སྟེ་ནང་བསྐྱོད་འབད་གནང་།',
-'eauthentsent'          => 'ངེས་དཔྱད་གློག་འཕྲིན་འདི་ གདམ་ཁ་བརྐྱབས་ཡོད་པའི་གློག་འཕྲིན་ཁ་བྱང་ལུ་ བཏང་ཡོདཔ།
+'eauthentsent'            => 'ངེས་དཔྱད་གློག་འཕྲིན་འདི་ གདམ་ཁ་བརྐྱབས་ཡོད་པའི་གློག་འཕྲིན་ཁ་བྱང་ལུ་ བཏང་ཡོདཔ།
 གཞན་གློག་འཕྲིན་གང་རུང་ རྩིས་ཐོ་ནང་མ་གཏང་པའི་ཧེ་མ་ རྩིས་ཐོ་འདི་ཁྱོད་ར་གི་ཨིན་པའི་ངེས་དཔྱད་འབད་ནི་ལུ་ གློག་འཕྲིན་ནང་གི་བཀོད་རྒྱ་དང་འཁྲིལ་དགོཔ་ཨིན།',
 
 # Edit page toolbar
@@ -262,7 +268,7 @@ $messages = array(
 'template-protected'     => '(ཉེན་སྐྱོབ་འབད་ཡོདཔ།)',
 'template-semiprotected' => '(ཉེན་སྐྱོབ་ཕྱེད་ཀ་འབད་ཡོདཔ་)',
 'nocreatetext'           => '{{SITENAME}} གིས་ ཤོག་ལེབ་གསརཔ་བཟོ་ནི་ལས་ བཀག་དམ་འབད་ཡོདཔ།
-ཁྱོད་ཀྱིས་ ལོག་འགྱོ་ཞིནམ་ལས་ ཡོད་བཞིན་པའི་ཤོག་ལེབ་འདི་ཞུན་དག་འབད་ ཡང་ན་  [[Special:Userlogin|ནང་བསྐྱོད་དང་ ཡངན་ རྩིས་ཐོ་གསརཔ་བཟོ་]].',
+ཁྱོད་ཀྱིས་ ལོག་འགྱོ་ཞིནམ་ལས་ ཡོད་བཞིན་པའི་ཤོག་ལེབ་འདི་ཞུན་དག་འབད་ ཡང་ན་  [[Special:UserLogin|ནང་བསྐྱོད་དང་ ཡངན་ རྩིས་ཐོ་གསརཔ་བཟོ་]].',
 'recreate-deleted-warn'  => "'''ཉེན་བརྡ་: ཁྱོད་ཀྱིས་ ཧ་མ་ལས་བཏོན་བཏང་ཡོད་པའི་ཤོག་ལེབ་ཅིག་ ལོག་གསར་བཟོ་འབདཝ་ཨིན་པས།'''
 
 ཁྱོད་ཀྱིས་ ཤོག་ལེབ་འདི་འཕྲོ་མཐུད་དེ་ཞུན་དག་འབད་ནི་གི་འོས་འབབ་ཡོད་མེད་བལྟ་དགོ།
@@ -341,6 +347,8 @@ $messages = array(
 'recentchangeslinked'          => 'འབྲེལ་བ་ཅན་གྱི་བསྒྱུར་བཅོས།',
 'recentchangeslinked-title'    => '"$1" དང་འབྲེལ་བ་ཡོད་པའི་བསྒྱུར་བཅོས་ཚུ།',
 'recentchangeslinked-noresult' => 'དུས་བཀོད་ཀྱི་སྐབས་ལུ་ འབྲེལ་མཐུད་ཅན་གྱི་ཤོག་ལེབ་ལུ་བསྒྱུར་བཅོས་མེད།',
+'recentchangeslinked-summary'  => "དམིགས་བསལ་ཤོག་ལེབ་འདི་གིས་ འབྲེལ་མཐུད་ཅན་གྱི་ཤོག་ལེབ་གུ་ མཇུག་ཀྱི་བསྒྱུར་བཅོས་ཚུ་ ཐོ་བཀོད་འབདཝ་ཨིན།
+ཁྱོད་ཀྱི་བལྟ་ཞིབ་ཐོ་ཡིག་གུ་འི་ཤོག་ལེབ་ཚུ་ '''མངོན་གསལ་ཅན་ཨིན།'''",
 
 # Upload
 'upload'        => 'ཡིག་སྣོད་སྐྱེལ་བཙུགས་འབད།',
@@ -348,8 +356,10 @@ $messages = array(
 'uploadlogpage' => 'ལོག་སྐྱེལ་བཙུགས་འབད།',
 'uploadedimage' => '"[[$1]]" སྐྱེལ་བཙུགས་འབད་ཡོདཔ།',
 
-# Image list
-'imagelist'                 => 'ཡིག་སྣོད་ཐོ་ཡིག།',
+# Special:ImageList
+'imagelist' => 'ཡིག་སྣོད་ཐོ་ཡིག།',
+
+# Image description page
 'filehist'                  => 'ཡིག་སྣོད་སྤྱོད་ཤུལ།',
 'filehist-help'             => 'ཡིག་སྣོད་འདི་ དེ་བསྒང་སྟོན་དོ་བཟུམ་སྦེ་ བལྟ་ནི་གི་དོན་ལུ་ ཚེས་གྲངས་/ཆུ་ཚོད་གུ་ ཨེབ་གཏང་འབད།',
 'filehist-current'          => 'ད་ལྟོ།',
@@ -413,14 +423,12 @@ $messages = array(
 'mostcategories'          => 'དབྱེ་རིམ་མང་ཤོས་དང་འབྲེལ་བའི་ཤོག་ལེབ་',
 'mostimages'              => 'ཡིག་སྣོད་ལུ་འབྲེལ་མཐུད་ཆེ་ཤོས་',
 'mostrevisions'           => 'བསྐྱར་ཞིབ་མང་ཤོས་དང་འབྲེལ་བའི་ཤོག་ལེབ་',
-'allpages'                => 'ཤོག་ལེབ་ག་ར།',
 'prefixindex'             => 'སྔོན་ཚིག་ཟུར་ཐོ།',
 'shortpages'              => 'ཤོག་ལེབ་ཐུང་ཀུ།',
 'longpages'               => 'ཤོག་ལེབ་རིངམོ།',
 'deadendpages'            => 'ཤོག་ལེབ་མཇུག་',
 'protectedpages'          => 'ཉེན་སྐྱོབ་འབད་ཡོད་པའི་ཤོག་ལེབ།',
 'listusers'               => 'ལག་ལེན་པའི་ཐོ་ཡིག།',
-'specialpages'            => 'དམིགས་བསལ་ཤོག་ལེབ།',
 'newpages'                => 'ཤོག་ལེབ་གསརཔ།',
 'ancientpages'            => 'ཤོག་ལེབ་རྙིང་ཤོས།',
 'move'                    => 'སྤོ་བཤུད་འབད།',
@@ -429,22 +437,24 @@ $messages = array(
 # Book sources
 'booksources' => 'ཀི་དེབ་འབྱུང་ས།',
 
-'alphaindexline' => '$1 ལས་ $2',
-'version'        => 'ཐོན་རིམ།',
-
 # Special:Log
 'specialloguserlabel'  => 'ལག་ལེན་པ:',
 'speciallogtitlelabel' => 'མགོ་མིང:',
 'log'                  => 'ལོགསི།',
 'all-logs-page'        => 'ལོག་སི་ཆ་མཉམ།',
 
-# Special:Allpages
+# Special:AllPages
+'allpages'       => 'ཤོག་ལེབ་ག་ར།',
+'alphaindexline' => '$1 ལས་ $2',
 'nextpage'       => 'ཤུལ་མའི་ཤོག་ལེབ་ ($1)',
 'prevpage'       => 'ཧེ་མའི་ཤོག་ལེབ་ ($1)',
 'allpagesfrom'   => 'ཤོག་ལེབ་བཀྲམ་སྟོན་འགོ་བཙུགས་:',
 'allarticles'    => 'ཤོག་ལེབ་ག་ར།',
 'allpagessubmit' => 'འགྱོ།',
 'allpagesprefix' => 'སྔོན་ཚིག་གི་ཐོག་ལས་ཤོག་ལེབ་ཚུ་སྟོན།',
+
+# Special:Categories
+'categories' => 'དབྱེ་རིམ།',
 
 # E-mail user
 'emailuser' => 'ལག་ལེན་པ་ལུ་ གློག་འཕྲིན་གཏང་',
@@ -455,7 +465,7 @@ $messages = array(
 'watchlistfor'         => "('''$1''' གི་དོན་ལུ་)",
 'addedwatch'           => 'བལྟ་ཞིབ་ཐོ་ཡིག་ལུ་ཁ་སྐོང་རྐྱབ་ཅི།',
 'addedwatchtext'       => "ཤོག་ལེབ་  \"[[:\$1]]\" འདི་ ཁྱོད་རའི་ [[Special:Watchlist|watchlist]] ལུ་ ཁ་སྐོང་བརྐྱབས་ནུག།\\n
-ཤོག་ལེབ་དེ་ལུ་མ་འོངས་བསྒྱུར་བཅོས་དང་ དེ་གི་འབྲེལ་ཡོད་བློ་ཤོག་འདི་ དེ་ཁར་ཐོ་བཀོད་འབད་ནི་དང་ འཇམ་ཏོང་ཏོ་སྦེ་གདམ་ཁ་བརྐྱབ་ཚུགས་ནི་གི་དོན་ལུ་  ཤོག་ལེབ་འདི་ [[Special:Recentchanges|list of recent changes]] ནང་ལུ་ '''མངོན་གསལ་''' སྦེ་འབྱུང་འོང་།",
+ཤོག་ལེབ་དེ་ལུ་མ་འོངས་བསྒྱུར་བཅོས་དང་ དེ་གི་འབྲེལ་ཡོད་བློ་ཤོག་འདི་ དེ་ཁར་ཐོ་བཀོད་འབད་ནི་དང་ འཇམ་ཏོང་ཏོ་སྦེ་གདམ་ཁ་བརྐྱབ་ཚུགས་ནི་གི་དོན་ལུ་  ཤོག་ལེབ་འདི་ [[Special:RecentChanges|list of recent changes]] ནང་ལུ་ '''མངོན་གསལ་''' སྦེ་འབྱུང་འོང་།",
 'removedwatch'         => 'བལྟ་ཞིབ་ཐོ་ཡིག་ནང་ལས་བཏོན་བཀོག་ཡོདཔ།',
 'removedwatchtext'     => 'ཤོག་ལེབ་  "[[:$1]]" འདི་ ཁྱོད་རའི་བལྟ་ཞིབ་ཐོ་ཡིག་ནང་ལས་ བཏོན་བཀོག་ནུག།',
 'watch'                => 'བལྟ་ཞིབ་འབད།',
@@ -467,7 +477,7 @@ $messages = array(
 'watchlist-hide-own'   => 'ངེ་གི་ཞུན་དག་ཚུ་སྦ།',
 'watchlist-hide-minor' => 'གལ་གནད་ཆུང་བའི་ཞུན་དག་ཚུ་སྦ།',
 
-# Displayed when you click the "watch" button and it's in the process of watching
+# Displayed when you click the "watch" button and it is in the process of watching
 'watching'   => 'བལྟ་ཞིབ་འབད་དོ་་་',
 'unwatching' => 'བལྟ་ཞིབ་འབད་བཤོལ་དོ་་་',
 
@@ -575,8 +585,6 @@ $messages = array(
 དེ་ཚུ་ ལག་ཐོག་ལས་མཉམ་བསྡོམས་འབད་གནང་།'''",
 'movedto'          => 'ལུ་སྤོ་བཤུད་འབད།',
 'movetalk'         => 'འབྲེལ་བ་ཡོད་པའི་ཁ་སླབ་ཤོག་ལེབ་ སྤོ་བཤུད་འབད།',
-'talkpagemoved'    => 'རང་སོའི་བློ་ཤོག་འདི་ཡང་སྤོ་བཤུད་འབད་ནུག།',
-'talkpagenotmoved' => 'རང་སོའི་བློ་ཤོག་འདི་ <strong>སྤོ་བཤུད་མ་འབད་བས།</strong>',
 '1movedto2'        => '[[$1]] འདི་ [[$2]] ལུ་སྤོ་བཤུད་འབད་ཡོདཔ།',
 'movelogpage'      => 'ལོག་སྤོ་བཤུད་འབད།',
 'movereason'       => 'རྒྱུ་མཚན:',
@@ -619,7 +627,6 @@ $messages = array(
 'tooltip-n-recentchanges'         => 'ཝི་ཀི་ནང་གི་ཕྲལ་གྱི་བསྒྱུར་བཅོས་ཐོ་ཡིག།',
 'tooltip-n-randompage'            => 'རིམ་བྲལ་ཤོག་ལེབ་ཅིག་ མངོན་གསལ་འབད།',
 'tooltip-n-help'                  => 'འཚོལ་ཞིབ་འབད་སའི་ས་གནས།',
-'tooltip-n-sitesupport'           => 'ང་བཅས་ལུ་རྒྱབ་སྐྱོར་འབད།',
 'tooltip-t-whatlinkshere'         => 'ནཱ་ལུ་ འབྲེལ་མཐུད་འབད་བའི་ཝི་ཀི་ཤོག་ལེབ་ག་ར་གི་ཐོ་ཡིག།',
 'tooltip-t-contributions'         => 'ལག་ལེན་པ་འདི་གི་ཞལ་འདེབས་ཐོ་ཡིག་བལྟ།',
 'tooltip-t-emailuser'             => 'ལག་ལེན་པ་འདི་ལུ་ གློག་འཕྲིན་གཏང་།',
@@ -638,9 +645,6 @@ $messages = array(
 'tooltip-compareselectedversions' => 'ཤོག་ལེབ་འདི་གི་སེལ་འཐུ་འབད་ཡོད་པའི་ཐོན་རིམ་གཉིས་ཀྱི་བར་ནའི་ཁྱད་པར་ཚུ་ བལྟ།',
 'tooltip-watch'                   => 'ཤོག་ལེབ་འདི་ ཁྱོད་རའི་བལྟ་ཞིབ་ཐོ་ཡིག་ནང་ ཁ་སྐོང་རྐྱབས།',
 
-# Spam protection
-'listingcontinuesabbrev' => 'འཕྲོ་མཐུད།',
-
 # Browsing diffs
 'previousdiff' => '← ཧེ་མའི་ཁྱད་པར།',
 'nextdiff'     => 'ཤུལ་མམ་གྱི་ཁྱད་པར་ →',
@@ -652,7 +656,7 @@ $messages = array(
 'show-big-image'       => 'ཧུམ་ཆ་གང་།',
 'show-big-image-thumb' => '<small>སྔོན་ལྟའི་ཚད་: $1 × $2 པིག་སེལསི་</small>',
 
-# Special:Newimages
+# Special:NewImages
 'newimages' => 'ཡིག་སྣོད་གསར་པའི་སྟོན་ཁང་།',
 
 # Bad image list
@@ -679,7 +683,7 @@ $messages = array(
 
 # External editor support
 'edit-externally'      => 'ཕྱིའི་གློག་རིམ་ལག་ལེན་འཐབ་ཐོག་ལས་ ཡིག་སྣོད་འདི་ཞུན་དག་འབད།',
-'edit-externally-help' => 'བརྡ་དོན་ཁ་གསལ་གྱི་དོན་ལུ་ [http://meta.wikimedia.org/wiki/Help:External_editors setup instructions] ལུ་ལྟ།',
+'edit-externally-help' => 'བརྡ་དོན་ཁ་གསལ་གྱི་དོན་ལུ་ [http://www.mediawiki.org/wiki/Manual:External_editors setup instructions] ལུ་ལྟ།',
 
 # 'all' in various places, this might be different for inflected languages
 'watchlistall2' => 'ཆ་མཉམ།',
@@ -690,5 +694,11 @@ $messages = array(
 'watchlisttools-view' => 'འབྲེལ་བ་ཡོད་པའི་བསྒྱུར་བཅོས་ཚུ་སྟོན།',
 'watchlisttools-edit' => 'བལྟ་སྟེ་བལྟ་ཞིབ་ཐོ་ཡིག་ཞུན་དག་འབད།',
 'watchlisttools-raw'  => 'རགས་ཙམ་གྱི་བལྟ་ཞིབ་ཐོ་ཡིག་ ཞུན་དག་འབད་',
+
+# Special:Version
+'version' => 'ཐོན་རིམ།', # Not used as normal message but as header for the special page itself
+
+# Special:SpecialPages
+'specialpages' => 'དམིགས་བསལ་ཤོག་ལེབ།',
 
 );

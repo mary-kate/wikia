@@ -507,9 +507,6 @@ div.wikiaDialog h2,
 'widget-community-hoursago' => ', {{PLURAL:$1|one hour ago|$1 hours ago}}',
 'widget-community-yesterday' => ', yesterday',
 'widgets' => 'Widgets list',
-'widgets-specialpage-info' => 'Widgets work best with one of the new skins, eg. [{{SERVER}}/index.php?title=Special:Widgets&useskin=monaco Monaco].
-
-Please change [[Special:Preferences#prefsection-1|your preferences]] to use this tool.',
 'widget-empty-list' => '(the list is empty)',
 'wt_click_to_close' => 'Click to close tooltip...',
 'hidebots' => 'Hide bots',
@@ -544,11 +541,11 @@ Please change [[Special:Preferences#prefsection-1|your preferences]] to use this
 
 <p>This form is currently working slowly but please press <i>send</i> <b>only once</b>.</p>',
 'shared_help_info' => 'This text is stored on the Help Wikia.  [[w:c:Help:Help_talk:$1|Suggest changes here]].',
-'shared_help_edit_info' => 'The help text within the box is stored at [[w:c:Help:Help:$1|Help:$1]] on Help Wikia.
+'shared_help_edit_info' => 'The help text within the box is stored at [[w:c:help:Help:$1|Help:$1]] on Wikia Help. See [[Help:Shared Help]] for more info.
 
-Any changes that apply to \'\'all\'\' wikis should be made to the Help Wikia copy. [[w:c:Help:Help_talk:$1|Suggest changes here]].
+Any changes that apply to \'\'all\'\' wikis should be made to the Wikia Help copy. [[w:c:help:Help_talk:$1|Suggest changes here]].
 
-Text should be placed on this page only if you wish to explain usage, style and policy guidelines which apply only to the {{SITENAME}} wiki. Text added in this edit box will be displayed below the boxed help text.',
+Text should be placed on this page if you wish to explain usage, style and policy guidelines which apply only to {{SITENAME}}. Text added in this edit box will be displayed below the boxed help text.',
 'shared_help_search_info' => 'To search for help with editing, please visit the [http://help.wikia.com/wiki/Special:Search?search=$1 Help Wikia]',
 'multiplefileuploadsummary' => 'Summary:',
 'uploadtext-ext' => 'A full list of allowed extensions is available on the [[{{ns:Special}}:Version|wiki version page]].',
@@ -1292,4 +1289,7 @@ __NOTOC__ __NOEDITSECTION__',
 'userstatstext' => '<!--see MediaWiki:Sitestatstext for what precedes this-->
 There are \'\'\'$1\'\'\' registered users on all of Wikia. Of the [[Special:ListUsers|registered users]] of {{SITENAME}}, \'\'\'$2\'\'\' are $5 (see also $3).',
 'yournick' => 'Signature:',
+'tog-disablewysiwyg' => 'Disable Rich Text Editing',
+'atom' => 'Wikia Atom',
+'feed-watom' => 'Wikia Atom',
 ) );

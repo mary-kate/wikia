@@ -1,7 +1,8 @@
 <?php
 /** Tachelhit (Tašlḥiyt)
  *
- * @addtogroup Language
+ * @ingroup Language
+ * @file
  *
  * @author Zanatos
  */
@@ -75,8 +76,7 @@ $messages = array(
 'nov'           => 'Nuwember',
 'dec'           => 'Dujanbir',
 
-# Bits of text used by many pages
-'categories'      => 'imggrad',
+# Categories related messages
 'pagecategories'  => '{{PLURAL:$1|amggrd|imggrad}}',
 'category_header' => 'tiwriqin ɣ-omggrd "$1"',
 'subcategories'   => 'imggrad-mzin',
@@ -101,6 +101,7 @@ $messages = array(
 'printableversion' => 'igh trit ati tbзat',
 'permalink'        => 'azday izawmn',
 'edit'             => 'bddl',
+'create'           => 'skr',
 'delete'           => 'msḥ',
 'newpage'          => 'tawriqt tamaynut',
 'talkpagelinktext' => 'assays',
@@ -115,14 +116,15 @@ $messages = array(
 'jumptosearch'     => 'siggl',
 
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
-'aboutsite'      => 'f {{SITENAME}}',
-'aboutpage'      => "Project:f'",
-'disclaimers'    => 'igh ortlla lmsoliya',
-'disclaimerpage' => 'Project:ortlla lmsoliya iɛomman',
-'faq'            => 'isqsitn li bahra itЗawadn',
-'mainpage'       => 'tawriqt tamzwarut',
-'privacy'        => "siassa n' lkhossossia",
-'privacypage'    => "Project:ssiast n' lkhossossia",
+'aboutsite'            => 'f {{SITENAME}}',
+'aboutpage'            => "Project:f'",
+'disclaimers'          => 'igh ortlla lmsoliya',
+'disclaimerpage'       => 'Project:ortlla lmsoliya iɛomman',
+'faq'                  => 'isqsitn li bahra itЗawadn',
+'mainpage'             => 'tawriqt tamzwarut',
+'mainpage-description' => 'tawriqt tamzwarut',
+'privacy'              => "siassa n' lkhossossia",
+'privacypage'          => "Project:ssiast n' lkhossossia",
 
 'retrievedfrom'      => 'itsglbd mn "$1"',
 'youhavenewmessages' => 'illa dark $1 ($2).',
@@ -144,17 +146,18 @@ $messages = array(
 'nodb' => 'ornzdar annaf database $1',
 
 # Login and logout pages
-'welcomecreation'    => '== brrk darnɣ, $1! ==
+'welcomecreation'         => '== brrk darnɣ, $1! ==
 
 lcont nk ati styaqyad. ador tot atbadlt {{SITENAME}} lmЗlomat nk.',
-'loginpagetitle'     => 'ikchim o-msxdam',
-'yourname'           => 'smiyt o-msxdam:',
-'yourpassword'       => 'awal iḥdan:',
-'yourpasswordagain'  => 'Зawd ara awal iḥdan:',
-'userlogin'          => 'kchem / qiyd amskhdam amaynu',
-'userlogout'         => 'foɣ',
-'yourlanguage'       => 'tutlayt:',
-'loginlanguagelabel' => 'tutlayt: $1',
+'loginpagetitle'          => 'ikchim o-msxdam',
+'yourname'                => 'smiyt o-msxdam:',
+'yourpassword'            => 'awal iḥdan:',
+'yourpasswordagain'       => 'Зawd ara awal iḥdan:',
+'nav-login-createaccount' => 'kchem / qiyd amskhdam amaynu',
+'userlogin'               => 'kchem / qiyd amskhdam amaynu',
+'userlogout'              => 'foɣ',
+'yourlanguage'            => 'tutlayt:',
+'loginlanguagelabel'      => 'tutlayt: $1',
 
 # Edit pages
 'noarticletext'    => 'ɣila orilla walo l-ktba ɣ tawriqt ad, tzdart [[Special:Search/{{PAGENAME}}|atsiglt smiyt n tawriqt ad]] 
@@ -168,17 +171,18 @@ ikhssak ola kiyi ador tnqilt ɣtamani yadni.
 'powersearch' => 'amsigl itqdmn',
 
 # Preferences page
-'timezonetext' => 'lfrq nswayЗ gr loqt n ɣilli ɣ tllit d loqt n serveur (UTC).',
+'timezonetext' => '¹lfrq nswayЗ gr loqt n ɣilli ɣ tllit d loqt n serveur (UTC).',
 'localtime'    => 'loqt n ɣilli ɣtllit',
 'servertime'   => 'loqt n serveur',
 
 # Upload
 'upload' => 'sΥlid afaylu',
 
-# Miscellaneous special pages
-'specialpages' => 'tiwriqin tesbtarin',
-
+# Special:AllPages
 'alphaindexline' => '$1 ar $2',
+
+# Special:Categories
+'categories' => 'imggrad',
 
 # Watchlist
 'watch'   => 'zaydtin i tochwafin-niw',
@@ -199,7 +203,6 @@ ikhssak ola kiyi ador tnqilt ɣtamani yadni.
 'tooltip-n-portal'        => "f' usenfar, matzdart atitskrt, maniɣrattaft ɣayli trit",
 'tooltip-n-recentchanges' => 'Umuɣ n yibeddlen imaynuten ɣ l-wiki',
 'tooltip-n-help'          => 'tkhassak lmɛiwna ?achkid sɣid',
-'tooltip-n-sitesupport'   => 'ɛawn anɣ',
 'tooltip-t-upload'        => 'sɣlid ifaylutn',
 'tooltip-t-specialpages'  => 'kolchi tiwriqin tesbtarin',
 
@@ -214,5 +217,8 @@ ikhssak ola kiyi ador tnqilt ɣtamani yadni.
 'table_pager_first'        => 'tawriqt tamzwarut',
 'table_pager_last'         => 'tawriqt tamgrut',
 'table_pager_limit_submit' => 'ballak',
+
+# Special:SpecialPages
+'specialpages' => 'tiwriqin tesbtarin',
 
 );
