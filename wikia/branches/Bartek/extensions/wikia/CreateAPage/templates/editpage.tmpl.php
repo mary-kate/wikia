@@ -25,7 +25,7 @@ foreach ($boxes as $id => $box) {
 			$title_found = false;
 			while( $i < count( $boxes ) - 1 ) {
 				$i++;
-				if ($boxes[$i]['type'] == 'title') {
+				if ( ($boxes[$i]['type'] == 'title') || ($boxes[$i]['type'] == 'optional_textarea') ) {
 					$title_found = true;
 					break;
 				}
@@ -47,6 +47,7 @@ foreach ($boxes as $id => $box) {
 			$value = "<input type=\"hidden\" {$html} value=\"".$box['value']."\">";
 			break;
 		}
+		case "optional_textarea":
                 case "textarea": {
                         $linenum = count( explode( "\n", $box['value'] ) ) + 1;
                         $linenum = ($linenum > 8) ? 8 : $linenum;

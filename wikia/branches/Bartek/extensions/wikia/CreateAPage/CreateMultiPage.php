@@ -412,7 +412,7 @@ class CreateMultiPage
 						//todo fill and create a hidden section, plus add a control at the lowest part
 						$text_html = str_replace( $other_tags[0], "", $text );  // strip the tag
 						$text_html = trim( $text_html );
-						$boxes[] = array("type" => "textarea", "value" => $text_html, "toolbar" => '');
+						$boxes[] = array("type" => "optional_textarea", "value" => $text_html, "toolbar" => '');
 						$optionals[] = count( $boxes );
 						break;
 					}		
