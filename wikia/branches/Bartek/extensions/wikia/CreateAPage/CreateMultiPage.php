@@ -500,7 +500,8 @@ class CreateMultiPage
 				'ew' => $ew,
 				'is_section' => $is_section,
 				'title' => $wgTitle,
-				'imgpath' => $wgExtensionsPath . '/wikia/CreateAPage/images/'
+				'imgpath' => $wgExtensionsPath . '/wikia/CreateAPage/images/',
+				'optional_text' => wfMsg( 'createpage_optionals_text' )
 			)
 		);
 		#---
