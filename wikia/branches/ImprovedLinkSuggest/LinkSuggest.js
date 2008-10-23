@@ -153,6 +153,38 @@ YAHOO.lang.extend(YAHOO.example.AutoCompleteTextArea, YAHOO.widget.AutoComplete,
 		}
 	},
 
+	if (window.YAHOO && YAHOO.example && YAHOO.example.AutoCompleteTextArea) {
+	YAHOO.example.AutoCompleteTextArea.prototype._localisations = [
+		['Talk','Discusión'],
+		['User','Usuario'],
+		['User talk','Usuario Discusión'],
+		['Project','WikiDex'],
+		['Project talk','WikiDex Discusión'],
+		['Image','Imagen'],
+		['Image talk','Imagen Discusión'],
+		['MediaWiki','MediaWiki'],
+		['MediaWiki talk','MediaWiki Discusión'],
+		['Template','Plantilla'],
+		['Template talk','Plantilla Discusión'],
+		['Help','Ayuda'],
+		['Help talk','Ayuda_Discusión'],
+		['Category','Categoría'],
+		['Category talk','Categoría Discusión']
+	];
+
+	YAHOO.example.AutoCompleteTextArea.prototype._localize = function(sItem, bEngToLang){
+		if (!sItem || !sItem.length || !this._localisations || !this._localisations.length) return sItem;
+		for (var i=0; i<this._localisations.length; i++){
+			var sIn = this._localisations[i][(bEngToLang?0:1)].toString()+':';
+			var sOut = this._localisations[i][(bEngToLang?1:0)].toString()+':';
+			if (sItem.toLowerCase().indexOf(sIn.toLowerCase())==0){
+				sItem = sOut+sItem.substr(sIn.length, sItem.length-1);
+				break;
+			}
+		}
+		return sItem;
+	};
+
 	_updateValue: function(oItem) {
 
 		this.track('success');
