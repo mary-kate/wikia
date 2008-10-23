@@ -1,11 +1,10 @@
 <?php
 /** Tetum (Tetun)
  *
- * @addtogroup Language
+ * @ingroup Language
+ * @file
  *
  * @author MF-Warburg
- * @author Siebrand
- * @author SPQRobin
  */
 
 $skinNames = array(
@@ -42,31 +41,37 @@ $namespaceAliases = array(
 );
 
 $specialPageAliases = array(
-	'Watchlist'                 => array( "Lista_hateke" ),
-	'Recentchanges'             => array( "Mudansa_foufoun_sira" ),
-	'Upload'                    => array( "Tau_iha_arkivu_laran" ),
-	'Imagelist'                 => array( "Lista_imajen" ),
-	'Newimages'                 => array( "Imajen_foun" ),
-	'Listusers'                 => array( "Lista_uza-na'in" ),
-	'Statistics'                => array( "Estatístika" ),
-	'Randompage'                => array( "Pájina_ruma" ),
-	'Shortpages'                => array( "Pájina_badak" ),
-	'Longpages'                 => array( "Pájina_naruk" ),
-	'Protectedpages'            => array( "Pájina_sira-ne'ebé_proteje_tiha" ),
-	'Allpages'                  => array( "Pájina_hotu" ),
-	'Ipblocklist'               => array( "Lista_ema_sira-ne'ebé_blokeiu_tiha" ),
-	'Specialpages'              => array( "Pájina_espesiál_sira" ),
-	'Whatlinkshere'             => array( "Pájina_sira_ne'ebé_bá_iha_ne'e" ),
-	'Movepage'                  => array( "Book" ),
-	'Categories'                => array( "Kategoría" ),
-	'Version'                   => array( "Versaun" ),
-	'Allmessages'               => array( "Mensajen_hotu" ),
-	'Blockip'                   => array( "Blokeiu" ),
-	'Undelete'                  => array( "Restaurar" ),
-	'Userrights'                => array( "Kuana" ),
-	'Mypage'                    => array( "Ha'u-nia_pájina" ),
-	'Listadmins'                => array( "Lista_administradór" ),
-	'Search'                    => array( "Buka" ),
+	'CreateAccount'             => array( 'Rejista' ),
+	'Preferences'               => array( 'Preferénsia' ),
+	'Watchlist'                 => array( 'Lista_hateke' ),
+	'Recentchanges'             => array( 'Mudansa_foufoun_sira' ),
+	'Upload'                    => array( 'Tau_iha_arkivu_laran' ),
+	'Imagelist'                 => array( 'Lista_imajen' ),
+	'Newimages'                 => array( 'Imajen_foun' ),
+	'Listusers'                 => array( 'Lista_uza-na\'in' ),
+	'Statistics'                => array( 'Estatístika' ),
+	'Randompage'                => array( 'Pájina_ruma' ),
+	'Shortpages'                => array( 'Pájina_badak' ),
+	'Longpages'                 => array( 'Pájina_naruk' ),
+	'Protectedpages'            => array( 'Pájina_sira-ne\'ebé_proteje_tiha' ),
+	'Allpages'                  => array( 'Pájina_hotu' ),
+	'Ipblocklist'               => array( 'Lista_ema_sira-ne\'ebé_blokeiu_tiha' ),
+	'Specialpages'              => array( 'Pájina_espesiál_sira' ),
+	'Contributions'             => array( 'Kontribuisaun' ),
+	'Emailuser'                 => array( 'Haruka_korreiu_eletróniku' ),
+	'Whatlinkshere'             => array( 'Pájina_sira_ne\'ebé_bá_iha_ne\'e' ),
+	'Movepage'                  => array( 'Book' ),
+	'Categories'                => array( 'Kategoria' ),
+	'Export'                    => array( 'Esporta' ),
+	'Version'                   => array( 'Versaun' ),
+	'Allmessages'               => array( 'Mensajen_hotu' ),
+	'Blockip'                   => array( 'Blokeiu' ),
+	'Undelete'                  => array( 'Restaurar' ),
+	'Userrights'                => array( 'Kuana', 'Priviléjiu' ),
+	'Mypage'                    => array( 'Ha\'u-nia_pájina' ),
+	'Listadmins'                => array( 'Lista_administradór' ),
+	'Search'                    => array( 'Buka' ),
+	'Withoutinterwiki'          => array( 'Laiha_interwiki' ),
 );
 
 $messages = array(
@@ -130,11 +135,11 @@ $messages = array(
 'nov'           => 'Nov',
 'dec'           => 'Dez',
 
-# Bits of text used by many pages
-'categories'      => 'Kategoría',
-'pagecategories'  => '{{PLURAL:$1|Kategoría|Kategoría}}',
-'category_header' => 'Artigu iha kategoría "$1"',
-'category-empty'  => "''Iha kategoría ne'e agora pájina lá'os.''",
+# Categories related messages
+'pagecategories'         => '{{PLURAL:$1|Kategoría|Kategoría}}',
+'category_header'        => 'Artigu iha kategoría "$1"',
+'category-empty'         => "''Kategoria ne'e agora la iha pájina sira.''",
+'listingcontinuesabbrev' => 'kont.',
 
 'about'          => 'Kona-ba',
 'article'        => 'Pájina',
@@ -164,6 +169,7 @@ $messages = array(
 'permalink'         => 'Ligasaun mahelak',
 'print'             => 'Imprime',
 'edit'              => 'Edita',
+'create'            => 'Kria',
 'editthispage'      => "Edita pájina ne'e",
 'delete'            => 'Halakon',
 'deletethispage'    => "Halakon pájina ne'e",
@@ -193,21 +199,21 @@ $messages = array(
 'jumptosearch'      => 'buka',
 
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
-'aboutsite'         => 'Kona-ba {{SITENAME}}',
-'aboutpage'         => 'Project:Kona-ba',
-'copyright'         => 'Testu pájina nian iha $1 okos.',
-'currentevents'     => 'Mamosuk atuál sira',
-'currentevents-url' => 'Project:Mamosuk atuál sira',
-'disclaimers'       => 'Avisu legál',
-'disclaimerpage'    => 'Project:Avisu legál',
-'edithelp'          => 'Ajuda kona-ba edita',
-'edithelppage'      => 'Help:Edita',
-'mainpage'          => 'Pájina Mahuluk',
-'portal'            => 'Portál komunidade nian',
-'portal-url'        => 'Project:Portál komunidade nian',
-'privacy'           => 'Polítika privasidade nian',
-'privacypage'       => 'Project:Polítika privasidade nian',
-'sitesupport'       => 'Fó donativu ida',
+'aboutsite'            => 'Kona-ba {{SITENAME}}',
+'aboutpage'            => 'Project:Kona-ba',
+'copyright'            => 'Testu pájina nian iha $1 okos.',
+'currentevents'        => 'Mamosuk atuál sira',
+'currentevents-url'    => 'Project:Mamosuk atuál sira',
+'disclaimers'          => 'Avisu legál',
+'disclaimerpage'       => 'Project:Avisu legál',
+'edithelp'             => 'Ajuda kona-ba edita',
+'edithelppage'         => 'Help:Edita',
+'mainpage'             => 'Pájina Mahuluk',
+'mainpage-description' => 'Pájina Mahuluk',
+'portal'               => 'Portál komunidade nian',
+'portal-url'           => 'Project:Portál komunidade nian',
+'privacy'              => 'Polítika privasidade nian',
+'privacypage'          => 'Project:Polítika privasidade nian',
 
 'badaccess-group0' => "Ó la bele halo ne'e.",
 'badaccess-group1' => "Ba halo ne'e tenke iha lubu $1.",
@@ -242,7 +248,7 @@ $messages = array(
 'nstab-category'  => 'Kategoria',
 
 # Main script and global functions
-'nosuchspecialpage' => "Pájina espesiál ne'e lá'os",
+'nosuchspecialpage' => "Pájina espesiál ne'e la iha",
 
 # General errors
 'error'         => 'Sala',
@@ -250,6 +256,7 @@ $messages = array(
 
 # Login and logout pages
 'yourname'                  => "Naran uza-n'in:",
+'nav-login-createaccount'   => 'Log in / kriar konta ida',
 'userlogin'                 => 'Log in / kriar konta ida',
 'nologinlink'               => 'Registrar',
 'createaccount'             => "Registrar uza-na'in",
@@ -313,7 +320,7 @@ $messages = array(
 'lineno' => 'Liña $1:',
 
 # Search results
-'noexactmatch' => "'''Pájina ''$1'' lá'os.''' Ó bele [[:$1|kria pájina ne'e]].",
+'noexactmatch' => "'''Pájina ''$1'' la iha.''' Ó bele [[:$1|kria pájina ne'e]].",
 'prevn'        => 'molok $1',
 'nextn'        => 'oinmai $1',
 'viewprevnext' => 'Haree ($1) ($2) ($3)',
@@ -327,13 +334,13 @@ $messages = array(
 'searchresultshead' => 'Buka',
 
 # User rights
-'userrights-lookup-user'    => "Filak lubu uza-na'in",
-'userrights-user-editname'  => "Hakerek naran uza-na'in ida-nian:",
-'editusergroup'             => "Filak lubu uza-na'in",
-'userrights-editusergroup'  => "Filak lubu uza-na'in",
-'userrights-groupsmember'   => 'Membru iha:',
-'userrights-available-none' => "Ó la bele filak lubu uza-na'in.",
-'userrights-no-interwiki'   => "Ó la bele filak kuana uza-na'in iha wiki seluk.",
+'userrights'               => "Filak kuana uza-na'in", # Not used as normal message but as header for the special page itself
+'userrights-lookup-user'   => "Filak lubu uza-na'in",
+'userrights-user-editname' => "Hakerek naran uza-na'in ida-nian:",
+'editusergroup'            => "Filak lubu uza-na'in",
+'userrights-editusergroup' => "Filak lubu uza-na'in",
+'userrights-groupsmember'  => 'Membru iha:',
+'userrights-no-interwiki'  => "Ó la bele filak kuana uza-na'in iha wiki seluk.",
 
 # Groups
 'group'            => 'Lubu:',
@@ -379,17 +386,18 @@ $messages = array(
 'uploadbtn'       => 'Tau iha arkivu laran',
 'watchthisupload' => "Hateke pájina ne'e",
 
-# Image list
-'ilsubmit'           => 'Buka',
+# Special:ImageList
+'imagelist_name' => 'Naran',
+'imagelist_user' => "Uza-na'in",
+
+# Image description page
 'filehist-deleteall' => 'halakon hotu',
-'filehist-deleteone' => "halakon ne'e",
+'filehist-deleteone' => 'halakon',
 'filehist-current'   => 'atuál',
 'filehist-datetime'  => 'Loron/Tempu',
 'filehist-user'      => "Uza-na'in",
 'filehist-comment'   => 'Komentáriu',
 'imagelinks'         => 'Ligasaun',
-'imagelist_name'     => 'Naran',
-'imagelist_user'     => "Uza-na'in",
 
 # File reversion
 'filerevert-comment' => 'Komentáriu:',
@@ -405,20 +413,18 @@ $messages = array(
 # Statistics
 'statistics'    => 'Estátistika',
 'sitestats'     => '{{SITENAME}} estátistika',
-'userstatstext' => "Iha ne'e registrar tiha ona '''$1''' [[Special:Listusers|uza-na'in]], '''$2''' (ka '''$4%''') $5.",
+'userstatstext' => "Iha ne'e registrar tiha ona '''$1''' {{PLURAL:$1|[[Special:ListUsers|uza-na'in]]|[[Special:ListUsers|uza-na'in]]}}, '''$2''' (ka '''$4%''') $5.",
 
 'brokenredirects-edit'   => '(edita)',
 'brokenredirects-delete' => '(halakon)',
 
 # Miscellaneous special pages
 'nlinks'            => '$1 ligasaun',
-'nmembers'          => '$1 membru',
-'nrevisions'        => '$1 versaun',
-'allpages'          => 'Pájina hotu',
+'nmembers'          => '$1 {{PLURAL:$1|membru|membru}}',
+'nrevisions'        => '$1 {{PLURAL:$1|versaun|versaun}}',
 'shortpages'        => 'Pájina badak',
 'longpages'         => 'Pájina naruk',
 'listusers'         => "Lista uza-na'in",
-'specialpages'      => 'Pájina espesiál sira',
 'newpages'          => 'Pájina foun',
 'newpages-username' => "Naran uza-na'in:",
 'ancientpages'      => 'Pájina tuan liu hotu sira',
@@ -428,23 +434,27 @@ $messages = array(
 # Book sources
 'booksources-go' => 'Bá',
 
-'userrights'     => "Filak kuana uza-na'in",
-'groups'         => "Lubu uza-na'in",
-'alphaindexline' => "$1 to'o $2",
-'version'        => 'Versaun',
-
 # Special:Log
 'specialloguserlabel' => "Uza-na'in:",
 'log-search-submit'   => 'Bá',
 
-# Special:Allpages
+# Special:AllPages
+'allpages'       => 'Pájina hotu',
+'alphaindexline' => "$1 to'o $2",
 'nextpage'       => 'Pájina oinmai ($1)',
 'allarticles'    => 'Pájina hotu',
 'allpagesnext'   => 'Oinmai',
 'allpagessubmit' => 'Bá',
 
-# Special:Listusers
+# Special:Categories
+'categories' => 'Kategoría',
+
+# Special:ListUsers
 'listusers-submit' => 'Hatudu',
+
+# Special:ListGroupRights
+'listgrouprights-group'  => 'Lubu',
+'listgrouprights-rights' => 'Priviléjiu',
 
 # E-mail user
 'emailuser'       => "Haruka korreiu eletróniku ba uza-na'in ne'e",
@@ -465,7 +475,7 @@ $messages = array(
 'watchlist-show-minor' => 'Hatudu osan-rahun',
 'watchlist-hide-minor' => 'Subar osan-rahun',
 
-# Displayed when you click the "watch" button and it's in the process of watching
+# Displayed when you click the "watch" button and it is in the process of watching
 'watching'   => 'Hateke...',
 'unwatching' => 'La hateke...',
 
@@ -505,7 +515,7 @@ $messages = array(
 'undeletelink'           => 'restaurar',
 'undeletecomment'        => 'Komentáriu:',
 'undeletedarticle'       => 'restaurar "[[$1]]"',
-'undeletedrevisions'     => 'restaurar $1 versaun',
+'undeletedrevisions'     => 'restaurar $1 {{PLURAL:$1|versaun|versaun}}',
 'undelete-search-submit' => 'Buka',
 
 # Namespace form on various pages
@@ -521,20 +531,22 @@ $messages = array(
 'sp-contributions-submit'   => 'Buka',
 
 # What links here
-'whatlinkshere'       => "Artigu sira ne'ebé bá iha ne'e",
-'whatlinkshere-title' => "Pájina sira ne'ebé bá $1",
-'whatlinkshere-page'  => 'Pájina:',
-'linklistsub'         => '(Lista ligasaun nian)',
-'linkshere'           => "Pájina sira ne'e link ba '''[[:$1]]''':",
-'whatlinkshere-prev'  => '{{PLURAL:$1|oinmai|oinmai $1}}',
-'whatlinkshere-next'  => '{{PLURAL:$1|molok|molok $1}}',
-'whatlinkshere-links' => '← ligasaun',
+'whatlinkshere'           => "Artigu sira ne'ebé bá iha ne'e",
+'whatlinkshere-title'     => 'Pájina sira ne\'ebé bá "$1".',
+'whatlinkshere-page'      => 'Pájina:',
+'linklistsub'             => '(Lista ligasaun nian)',
+'linkshere'               => "Pájina sira ne'e link ba '''[[:$1]]''':",
+'whatlinkshere-prev'      => '{{PLURAL:$1|oinmai|oinmai $1}}',
+'whatlinkshere-next'      => '{{PLURAL:$1|molok|molok $1}}',
+'whatlinkshere-links'     => '← ligasaun',
+'whatlinkshere-hidelinks' => '$1 ligasaun',
 
 # Block/unblock
 'blockip'                 => "Blokeiu uza-na'in",
+'blockip-legend'          => "Blokeiu uza-na'in",
 'ipboptions'              => '2 hours:2 hours,1 loron:1 day,3 Loron:3 days,1 semana:1 week,2 semana:2 weeks,1 fulan:1 month,3 fulan:3 months,6 fulan:6 months,1 tinan:1 year,infinite:infinite', # display1:time1,display2:time2,...
 'ipbotheroption'          => 'seluk',
-'ipblocklist'             => 'Lista ema anónimu no rejista nablokeiu nian',
+'ipblocklist'             => "Ema anónimu no rejista ne'ebé nablokeiu",
 'ipblocklist-username'    => "Naran uza-na'in ka IP:",
 'ipblocklist-submit'      => 'Buka',
 'blocklink'               => 'blokeiu',
@@ -544,17 +556,15 @@ $messages = array(
 'ipb_already_blocked'     => '"$1" nablokeiu tiha ona',
 
 # Move page
-'movepage'                => 'Book pájina',
+'move-page'               => 'Book $1',
+'move-page-legend'        => 'Book pájina',
 'movearticle'             => 'Book pájina:',
 'movenotallowed'          => 'Ó la bele book pájina iha {{SITENAME}}.',
 'newtitle'                => 'Naran foun:',
 'move-watch'              => "Hateke pájina ne'e",
 'movepagebtn'             => 'Book pájina',
-'movepage-moved'          => '<big>\'\'\'Ó book "$1" ba "$2"\'\'\'</big>', # The two titles are passed in plain text as $3 and $4 to allow additional goodies in the message.
 'movedto'                 => 'book tiha ba',
 'movetalk'                => 'Book pájina diskusaun mós',
-'talkpagemoved'           => 'Pájina diskusaun mós nabook tiha',
-'talkpagenotmoved'        => 'Pájina diskusaun mós <strong>la</strong> nabook tiha',
 '1movedto2'               => 'book tiha [[$1]] ba [[$2]]',
 'movelogpage'             => 'Lista book',
 'delete_and_move'         => 'Halakon ho book',
@@ -568,7 +578,7 @@ $messages = array(
 'allmessagescurrent' => 'Testu atuál',
 
 # Import log
-'import-logentry-interwiki-detail' => '$1 versaun husi $2',
+'import-logentry-interwiki-detail' => '$1 {{PLURAL:$1|versaun|versaun}} husi $2',
 
 # Tooltip help for the actions
 'tooltip-pt-userpage'      => "Ha'u-nia pájina uza-na'in",
@@ -586,7 +596,6 @@ $messages = array(
 'tooltip-n-recentchanges'  => "Lista mudansa foufoun sira iha wiki ne'e.",
 'tooltip-n-randompage'     => 'Hola pájina ruma',
 'tooltip-n-help'           => 'Hatudu pájina ajuda.',
-'tooltip-n-sitesupport'    => 'Tulun ami',
 'tooltip-t-whatlinkshere'  => "Lista pájina nian ne'ebé bá iha ne'e",
 'tooltip-t-contributions'  => "Haree lista kontribuisaun uza-na'in ne'e nian",
 'tooltip-t-upload'         => 'Tau iha arkivu laran',
@@ -596,15 +605,13 @@ $messages = array(
 'tooltip-minoredit'        => "Halo ne'e osan-rahun",
 'tooltip-watch'            => "Tau tan pájina ne'e ba ó-nia lista hateke",
 
-# Spam protection
-'listingcontinuesabbrev' => 'kont.',
-
 # Browsing diffs
-'previousdiff' => '←Diferensa molok',
-'nextdiff'     => 'Diferensa oinmai→',
+'previousdiff' => '←Versaun molok',
+'nextdiff'     => 'Versaun oinmai→',
 
-# Special:Newimages
+# Special:NewImages
 'showhidebots' => '($1 bot sira)',
+'ilsubmit'     => 'Buka',
 
 # EXIF tags
 'exif-artist' => 'Autór',
@@ -642,9 +649,16 @@ $messages = array(
 'watchlisttools-edit' => 'Haree no edita lista hateke',
 
 # Special:Version
+'version'                  => 'Versaun', # Not used as normal message but as header for the special page itself
 'version-specialpages'     => 'Pájina espesiál',
 'version-other'            => 'Seluk',
 'version-version'          => 'Versaun',
 'version-software-version' => 'Versaun',
+
+# Special:FileDuplicateSearch
+'fileduplicatesearch-submit' => 'Buka',
+
+# Special:SpecialPages
+'specialpages' => 'Pájina espesiál sira',
 
 );

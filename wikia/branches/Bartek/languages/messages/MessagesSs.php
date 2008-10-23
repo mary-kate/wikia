@@ -1,11 +1,11 @@
 <?php
 /** Swati (SiSwati)
  *
- * @addtogroup Language
+ * @ingroup Language
+ * @file
  *
- * @author MF-Warburg
  * @author Jatrobat
- * @author Siebrand
+ * @author MF-Warburg
  */
 
 $messages = array(
@@ -59,9 +59,10 @@ $messages = array(
 'jumptosearch'     => 'kucálata',
 
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
-'mainpage'   => 'Likhasi Lelikhulu',
-'portal'     => 'Likhefi leinthanethi',
-'portal-url' => 'Project:Likhefi leinthanethi',
+'mainpage'             => 'Likhasi Lelikhulu',
+'mainpage-description' => 'Likhasi Lelikhulu',
+'portal'               => 'Likhefi leinthanethi',
+'portal-url'           => 'Project:Likhefi leinthanethi',
 
 'youhavenewmessages' => 'Ube $1 ($2).',
 'editsection'        => 'kúhlela',
@@ -84,21 +85,21 @@ $messages = array(
 # Preferences page
 'searchresultshead' => 'Kucálata',
 
-# Image list
-'ilsubmit'          => 'Kucálata',
+# Special:ImageList
+'imagelist_date' => 'Lusuku',
+'imagelist_name' => 'Ligama',
+'imagelist_user' => 'Umuntfu',
+
+# Image description page
 'filehist-datetime' => 'Lusuku/Síkhatsí',
 'filehist-user'     => 'Umuntfu',
-'imagelist_date'    => 'Lusuku',
-'imagelist_name'    => 'Ligama',
-'imagelist_user'    => 'Umuntfu',
 
 'brokenredirects-edit' => '(kúhlela)',
 
 'withoutinterwiki-submit' => 'Kúfúna',
 
 # Miscellaneous special pages
-'specialpages' => 'Emakhasi labalulekile',
-'move'         => 'Kúgojotîsa',
+'move' => 'Kúgojotîsa',
 
 # Book sources
 'booksources-go' => 'Kúhámba',
@@ -107,10 +108,10 @@ $messages = array(
 'specialloguserlabel' => 'Umuntfu:',
 'log-search-submit'   => 'Kúhámba',
 
-# Special:Allpages
+# Special:AllPages
 'allpagessubmit' => 'Kúhámba',
 
-# Special:Listusers
+# Special:ListUsers
 'listusers-submit' => 'Kúfúna',
 
 # Watchlist
@@ -141,6 +142,9 @@ $messages = array(
 'tooltip-search' => 'Kucálata {{SITENAME}}',
 'tooltip-p-logo' => 'Likhasi Lelikhulu',
 
+# Special:NewImages
+'ilsubmit' => 'Kucálata',
+
 # Multipage image navigation
 'imgmultigo' => 'Kúhámba!',
 
@@ -149,5 +153,8 @@ $messages = array(
 
 # Special:Version
 'version-specialpages' => 'Emakhasi labalulekile',
+
+# Special:SpecialPages
+'specialpages' => 'Emakhasi labalulekile',
 
 );

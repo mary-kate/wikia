@@ -1,9 +1,9 @@
 <?php
 /** Buginese (ᨅᨔ ᨕᨘᨁᨗ)
  *
- * @addtogroup Language
+ * @ingroup Language
+ * @file
  *
- * @author SPQRobin
  * @author Kurniasan
  */
 
@@ -20,8 +20,18 @@ $messages = array(
 'saturday'  => 'ᨔᨈᨘ',
 'january'   => 'ᨙᨍᨊᨘᨕᨑᨗ',
 'february'  => 'ᨙᨄᨅᨛᨑᨘᨕᨑᨗ',
+'march'     => 'ᨆᨙᨑ',
+'april'     => 'ᨕᨄᨛᨑᨗᨒᨗ',
+'may_long'  => 'ᨙᨆᨕᨗ',
+'june'      => 'ᨍᨘᨊᨗ',
+'july'      => 'ᨍᨘᨒᨗ',
+'august'    => 'ᨕᨁᨘᨔᨘᨈᨘᨔᨘ',
+'september' => 'ᨙᨔᨙᨈᨇᨛᨑᨛ',
+'october'   => 'ᨕᨚᨀᨛᨈᨚᨅᨛᨑᨛ',
+'november'  => 'ᨊᨚᨙᨅᨇᨛᨑᨛ',
+'december'  => 'ᨉᨗᨙᨔᨇᨛᨑᨛ',
 
-# Bits of text used by many pages
+# Categories related messages
 'category_header' => 'ᨒᨛᨄ ᨑᨗᨒᨒᨛ ᨙᨀᨈᨛᨁᨚᨑᨗ "$1"',
 'subcategories'   => 'ᨔᨅᨛᨙᨀᨈᨛᨁᨚᨈᨗ',
 
@@ -39,6 +49,7 @@ $messages = array(
 'searcharticle'    => 'ᨒᨕᨚ',
 'history_short'    => 'ᨔᨛᨍᨑ',
 'edit'             => 'ᨙᨕᨉᨗ',
+'create'           => 'ᨕᨛᨅᨘ',
 'editthispage'     => 'ᨙᨕᨉᨗ ᨙᨕᨙᨉ ᨒᨛᨄ',
 'delete'           => 'ᨄᨛᨙᨉ',
 'talkpagelinktext' => 'ᨅᨗᨌᨑ',
@@ -46,9 +57,10 @@ $messages = array(
 'imagepage'        => 'Ita halamang rapang',
 
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
-'aboutsite' => 'Tentang {{SITENAME}}',
-'mainpage'  => 'ᨒᨛᨄ ᨕᨗᨉᨚᨙᨕ',
-'portal'    => 'Portal komunitas',
+'aboutsite'            => 'Tentang {{SITENAME}}',
+'mainpage'             => 'ᨒᨛᨄ ᨕᨗᨉᨚᨙᨕ',
+'mainpage-description' => 'ᨒᨛᨄ ᨕᨗᨉᨚᨙᨕ',
+'portal'               => 'Portal komunitas',
 
 'editsection' => 'ᨙᨕᨉᨗ',
 
@@ -81,7 +93,7 @@ $messages = array(
 'preview'          => 'ᨄᨛᨑᨗᨅᨗᨐᨘ',
 'accmailtitle'     => 'Ada sandi ni riantarak.',
 'accmailtext'      => 'Ada sandi "$1" riantarak ri $2.',
-'anontalkpagetext' => "----''Ini adalah halaman diskusi untuk pengguna anonim yang belum membuat rekening atau tidak menggunakannya. Karena tidak membuat rekening, kami terpaksa memakai alamat IP untuk mengenalinya. Alamat IP seperti ini dapat dipakai oleh beberapa pengguna yang berbeda. Jika Anda adalah pengguna anonim dan merasa mendapatkan komentar-komentar yang tidak berkaitan dengan anda, kami anjurkan untuk [[Special:Userlogin|membuat rekening atau masuk log]] untuk menghindari kerancuan dengan pengguna anonim lain.''",
+'anontalkpagetext' => "----''Ini adalah halaman diskusi untuk pengguna anonim yang belum membuat rekening atau tidak menggunakannya. Karena tidak membuat rekening, kami terpaksa memakai alamat IP untuk mengenalinya. Alamat IP seperti ini dapat dipakai oleh beberapa pengguna yang berbeda. Jika Anda adalah pengguna anonim dan merasa mendapatkan komentar-komentar yang tidak berkaitan dengan anda, kami anjurkan untuk [[Special:UserLogin|membuat rekening atau masuk log]] untuk menghindari kerancuan dengan pengguna anonim lain.''",
 'editing'          => 'ᨙᨕᨉᨗᨈᨗ $1',
 
 # Recent changes
@@ -94,22 +106,17 @@ $messages = array(
 'upload'    => 'Lureng berkas',
 'uploadbtn' => 'Lureng berkas',
 
-# Image list
-'ilsubmit' => 'ᨔᨄ',
-
 # Random page
 'randompage' => 'Halamang rawak',
 
 # Miscellaneous special pages
-'allpages'     => 'Maneng halamang',
-'specialpages' => 'Halamang Istimewa',
 'ancientpages' => 'Artikel talloa',
 'move'         => 'ᨙᨕᨔᨘ',
 'movethispage' => 'ᨙᨕᨔᨘᨀᨗ ᨕᨗᨙᨐᨙᨉ ᨒᨛᨄ',
 
+# Special:AllPages
+'allpages'       => 'Maneng halamang',
 'alphaindexline' => '$1 ri $2',
-
-# Special:Allpages
 'allpagesfrom'   => 'Mappaitang halamang-halamang rimulai:',
 'allarticles'    => 'Maneng artikel',
 'allinnamespace' => 'Maneng halamang ($1 namespace)',
@@ -121,7 +128,7 @@ $messages = array(
 'addedwatch'     => 'Tamba ri jagaan',
 'addedwatchtext' => "Halamang \"[[:\$1]]\" ni ritamba ri ida [[Special:Watchlist|watchlist]].
 Halamang bicara éréngé gabungan halamang bicara pada wettu depan didaftarkan koe,
-éréngé halamang akan wessi '''umpek''' ri [[Special:Recentchanges|daftar pinra tanappa]] barak lebih lemmak ita.
+éréngé halamang akan wessi '''umpek''' ri [[Special:RecentChanges|daftar pinra tanappa]] barak lebih lemmak ita.
 
 Apak ida ronnak mappedde halamang édé ri daftar jagaan, klik \"Mangedda jaga\" pada kolom ri sedde.",
 
@@ -151,7 +158,13 @@ Silakan pile aseng laing.',
 # Media information
 'imagemaxsize' => 'Gangkai rapang pada keterangan rapang ri halamang hingga:',
 
+# Special:NewImages
+'ilsubmit' => 'ᨔᨄ',
+
 # 'all' in various places, this might be different for inflected languages
 'imagelistall' => 'maneng',
+
+# Special:SpecialPages
+'specialpages' => 'Halamang Istimewa',
 
 );
