@@ -268,6 +268,8 @@ class CreateMultiPage
 		$is_section = ( count( $sections ) > 1 ? true : false );
 
 		$boxes = array(); $num = 0; $loop = 0;
+		$optionals = array();
+
 		if ($is_used_metag) 
 		{
 			$boxes[] = array("type" => "text", "value" => addslashes($multiedit_tag), "display" => 0);
@@ -411,7 +413,7 @@ class CreateMultiPage
 						$text_html = str_replace( $other_tags[0], "", $text );  // strip the tag
 						$text_html = trim( $text_html );
 						$boxes[] = array("type" => "textarea", "value" => $text_html, "toolbar" => '',  "display" => 0);
-						$boxes[] = array("type" => "", "value" => $text_html, "display" => 1);											     break;
+						$optionals[] = count( $boxes );
 					}		
 					case "imageupload" : { //<!---imageupload---> tag support
 						// do a match here, and for each do the thing, yeah
@@ -491,6 +493,7 @@ class CreateMultiPage
 		$oTmpl->set_vars(
 			array(
 				'boxes' => $boxes,
+				'optionals' => $optionals,
 				'cols' => $cols,
 				'rows' => $rows,
 				'ew' => $ew,
