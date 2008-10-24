@@ -33,7 +33,7 @@ function AddLinkSuggest($a, $b, $c, $d) {
 	if($wgUser->getOption('disablelinksuggest') != true) {
 		$wgHooks['ExtendJSGlobalVars'][] = wfLinkSuggestSetupVars;
 		$wgOut->addHTML('<div id="wpTextbox1_container" class="yui-ac-container"></div>');
-		$wgOut->addScript('<script type="text/javascript" src="http://elves.wikia.com/extensions/wikia/LinkSuggest/LinkSuggest.js?'.$wgStyleVersion.'"></script>');
+		$wgOut->addScript('<script type="text/javascript" src="'.$wgExtensionsPath.'wikia/LinkSuggest/LinkSuggest.js?'.$wgStyleVersion.'"></script>');
 	}
 	return true;
 }
