@@ -71,7 +71,7 @@ foreach ($boxes as $id => $box) {
 
 if( !empty ($optionals) ) {
 ?>
-	<div id="createpage_optionals"><br/><?= $optional_text ?>
+	<div id="createpage_optionals"><span id="createpage_optionals_text"><?= $optional_text ?></span><br/>
 <?
 	foreach( $optionals as $opt ) {
 ?>
