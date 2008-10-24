@@ -25,10 +25,14 @@ foreach ($boxes as $id => $box) {
 		case 'section_display': {
 			$i = $id;
 			$title_found = false;
+			$visible = '';
 			while( $i < count( $boxes ) - 1 ) {
 				$i++;
 				if ( ($boxes[$i]['type'] == 'title') || ($boxes[$i]['type'] == 'optional_textarea') ) {
 					$title_found = true;
+					if ($boxes[$i]['type'] == 'optional_textarea') {
+						$visible = 'style="display:none"';
+					}		
 					break;
 				}
 				if ($boxes[$i]['type'] == 'section_display') {
@@ -46,7 +50,7 @@ foreach ($boxes as $id => $box) {
 			<?
 			}
 			?>
-				<div id="createpage_section_<?= $sections ?>">	
+				<div id="createpage_section_<?= $sections ?>" <?= $visible ?>>	
 			<?
 			$sections++;
 			break;
