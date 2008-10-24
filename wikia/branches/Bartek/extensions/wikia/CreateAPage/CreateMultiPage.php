@@ -413,7 +413,7 @@ class CreateMultiPage
 						$text_html = str_replace( $other_tags[0], "", $text );  // strip the tag
 						$text_html = trim( $text_html );
 						$boxes[] = array("type" => "optional_textarea", "value" => $text_html, "toolbar" => '');
-						$optionals[] = count( $boxes );
+						$optionals[] = count( $boxes ) - 1;
 						break;
 					}		
 					case "imageupload" : { //<!---imageupload---> tag support
