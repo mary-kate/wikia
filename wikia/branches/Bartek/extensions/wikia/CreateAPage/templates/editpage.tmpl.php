@@ -10,6 +10,8 @@
 <div style="display:block;" id="wpTableMultiEdit" name="wpTableMultiEdit">
 <?php
 
+$sections = 0;
+
 foreach ($boxes as $id => $box) {
 ?>
 <?	
@@ -38,6 +40,15 @@ foreach ($boxes as $id => $box) {
 				$clear = "";
 			}
 			$value = $box['value'];
+			if ($sections > 0) {
+			?>
+				</div>
+			<?
+			}
+			?>
+				<div id="createpage_section_<?= $sections ?>">	
+			<?
+			$sections++;
 			break;
 		}
 		case "text":  {
@@ -68,7 +79,9 @@ foreach ($boxes as $id => $box) {
 <div style="display:<?=$display?>"<?=$clear?>><?=$value?></div>
 <?
 }
-
+?>
+</div>
+<?
 if( !empty ($optionals) ) {
 ?>
 	<div id="createpage_optionals"><span id="createpage_optionals_text"><?= $optional_text ?></span><br/>
