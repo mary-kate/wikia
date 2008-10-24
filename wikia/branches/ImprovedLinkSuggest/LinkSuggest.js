@@ -153,24 +153,23 @@ YAHOO.lang.extend(YAHOO.example.AutoCompleteTextArea, YAHOO.widget.AutoComplete,
 		}
 	},
 
-/*	_localisations: array
-		['Talk','Discusión'],
-		['User','Usuario'],
-		['User talk','Usuario Discusión'],
-		['Project','WikiDex'],
-		['Project talk','WikiDex Discusión'],
-		['Image','Imagen'],
-		['Image talk','Imagen Discusión'],
-		['MediaWiki','MediaWiki'],
-		['MediaWiki talk','MediaWiki Discusión'],
-		['Template','Plantilla'],
-		['Template talk','Plantilla Discusión'],
-		['Help','Ayuda'],
-		['Help talk','Ayuda_Discusión'],
-		['Category','Categoría'],
-		['Category talk','Categoría Discusión']
-	];
-*/
+	_localisations: Array(
+		['Talk', wgTalkNs],
+		['User', wgUserNs],
+		['User talk', wgUsertalkNs],
+		['Project', wgProjectNs],
+		['Project talk', wgProjecttalkNs],
+		['Image', wgImageNs],
+		['Image talk', wgImagetalkNs],
+		['MediaWiki', wgMediaWikiNs],
+		['MediaWiki talk', wgMediawikitalkNs],
+		['Template', wgTemplateNs],
+		['Template talk', wgTemplatetalkNs],
+		['Help', wgHelpNs],
+		['Help talk', wgHelptalkNs],
+		['Category', wgCategoryNs],
+		['Category talk', wgCategorytalkNs]
+	),
 
 	_localize: function(sItem, bEngToLang){
 		if (!sItem || !sItem.length || !this._localisations || !this._localisations.length) return sItem;
