@@ -40,21 +40,21 @@ function AddLinkSuggest($a, $b, $c, $d) {
 
 function wfLinkSuggestSetupVars($vars) {
 	global $wgContLang;
-	$vars['wgTalkNs'] = $wgContLang->getNsText( NS_TALK ); 
-	$vars['wgUserNs'] = $wgContLang->getNsText( NS_USER );                   	
-	$vars['wgUsertalkNs'] = $wgContLang->getNsText( NS_USER_TALK );                  	
-	$vars['wgProjectNs'] = $wgContLang->getNsText( NS_PROJECT );                  	
-	$vars['wgProjecttalkNs'] = $wgContLang->getNsText( NS_PROJECT_TALK );                  	
-	$vars['wgImageNs'] = $wgContLang->getNsText( NS_IMAGE );                  	
-	$vars['wgImagetalkNs'] = $wgContLang->getNsText( NS_IMAGE_TALK );                  	
-	$vars['wgMediaWikiNs'] = $wgContLang->getNsText( NS_MEDIAWIKI );                  	
-	$vars['wgMediawikitalkNs'] = $wgContLang->getNsText( NS_MEDIAWIKI_TALK );                  	
-	$vars['wgTemplateNs'] = $wgContLang->getNsText( NS_TEMPLATE );                  	
-	$vars['wgTemplatetalkNs'] = $wgContLang->getNsText( NS_TEMPLATE_TALK );                  	
-	$vars['wgHelpNs'] = $wgContLang->getNsText( NS_HELP );                  	
-	$vars['wgHelptalkNs'] = $wgContLang->getNsText( NS_HELP_TALK );                  	
-	$vars['wgCategoryNs'] = $wgContLang->getNsText( NS_CATEGORY );                  	
-	$vars['wgCategorytalkNs'] = $wgContLang->getNsText( NS_CATEGORY_TALK );                  	
+	$vars['wgTalkNs'] = str_replace( "_", " ", $wgContLang->getNsText( NS_TALK ) ); 
+	$vars['wgUserNs'] = str_replace( "_", " ", $wgContLang->getNsText( NS_USER ) );                   	
+	$vars['wgUsertalkNs'] = str_replace( "_", " ", $wgContLang->getNsText( NS_USER_TALK ) );                  	
+	$vars['wgProjectNs'] = str_replace( "_", " ", $wgContLang->getNsText( NS_PROJECT ) );                  	
+	$vars['wgProjecttalkNs'] = str_replace( "_", " ", $wgContLang->getNsText( NS_PROJECT_TALK ) );                  	
+	$vars['wgImageNs'] = str_replace( "_", " ", $wgContLang->getNsText( NS_IMAGE ) );                  	
+	$vars['wgImagetalkNs'] = str_replace( "_", " ", $wgContLang->getNsText( NS_IMAGE_TALK ) );                  	
+	$vars['wgMediaWikiNs'] = str_replace( "_", " ", $wgContLang->getNsText( NS_MEDIAWIKI ) );                  	
+	$vars['wgMediawikitalkNs'] = str_replace( "_", " ", $wgContLang->getNsText( NS_MEDIAWIKI_TALK ) );                  	
+	$vars['wgTemplateNs'] = str_replace( "_", " ", $wgContLang->getNsText( NS_TEMPLATE ) );                  	
+	$vars['wgTemplatetalkNs'] = str_replace( "_", " ", $wgContLang->getNsText( NS_TEMPLATE_TALK ) );                  	
+	$vars['wgHelpNs'] = str_replace( "_", " ", $wgContLang->getNsText( NS_HELP ) );                  	
+	$vars['wgHelptalkNs'] = str_replace( "_", " ", $wgContLang->getNsText( NS_HELP_TALK ) );                  	
+	$vars['wgCategoryNs'] = str_replace( "_", " ", $wgContLang->getNsText( NS_CATEGORY ) );                  	
+	$vars['wgCategorytalkNs'] = str_replace( "_", " ", $wgContLang->getNsText( NS_CATEGORY_TALK ) );                  	
 
 	return true;
 }
