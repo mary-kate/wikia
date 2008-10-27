@@ -33,7 +33,7 @@ foreach ($boxes as $id => $box) {
 					$title_found = true;
 					if ($boxes[$i]['type'] == 'optional_textarea') {
 						$visible = 'style="display:none"';
-						$optionalSections[] = $sections;
+						$optionalSections[] = array( $sections, $box['value'] );
 					}		
 					break;
 				}
@@ -94,7 +94,7 @@ if( !empty ($optionalSections) ) {
 <?
 	foreach( $optionalSections as $opt ) {
 ?>
-	<input type="checkbox" id="wpOptional<?= $opt ?>"/><span id="wpOptionalDesc<?= $opt ?>"></span>
+	<input type="checkbox" id="wpOptional<?= $opt[0] ?>"/><span id="wpOptionalDesc<?= $opt[0] ?>"><?= $opt[1] ?></span>
 <?
 	}
 ?>
