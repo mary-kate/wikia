@@ -77,7 +77,7 @@ class SkinMonaco extends SkinTemplate {
 		wfDebugLog('monaco', sprintf('Cache: %s, wgLang: %s, wgContLang %s', (int) $cache, $wgLang->getCode(), $wgContLang->getCode()));
 
 		if($cache) {
-			$key = wfMemcKey('MonacoData');
+			$key = wfMemcKey('MonacoData','0.1');
 			$data_array = $parserMemc->get($key);
 		}
 
