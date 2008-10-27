@@ -161,6 +161,7 @@ class AdProviderGAM implements iAdProvider {
 		switch ($channel){
 		  case '1089383293': break; //control
 		  case '3156555836': // Testing white backgrounds 
+		  case '7102419657':
 		  case '9000659297':
 			if(!empty($_GET['search'])){
 				// Note that we don't have ads on the search page right now, so this isn't going to do any good
