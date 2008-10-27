@@ -153,37 +153,6 @@ YAHOO.lang.extend(YAHOO.example.AutoCompleteTextArea, YAHOO.widget.AutoComplete,
 		}
 	},
 
-	_localisations: Array(
-		['Talk', wgTalkNs],
-		['User', wgUserNs],
-		['User talk', wgUsertalkNs],
-		['Project', wgProjectNs],
-		['Project talk', wgProjecttalkNs],
-		['Image', wgImageNs],
-		['Image talk', wgImagetalkNs],
-		['MediaWiki', wgMediaWikiNs],
-		['MediaWiki talk', wgMediawikitalkNs],
-		['Template', wgTemplateNs],
-		['Template talk', wgTemplatetalkNs],
-		['Help', wgHelpNs],
-		['Help talk', wgHelptalkNs],
-		['Category', wgCategoryNs],
-		['Category talk', wgCategorytalkNs]
-	),
-
-	_localize: function(sItem, bEngToLang){
-		if (!sItem || !sItem.length || !this._localisations || !this._localisations.length) return sItem;
-		for (var i=0; i<this._localisations.length; i++){
-			var sIn = this._localisations[i][(bEngToLang?0:1)].toString()+':';
-			var sOut = this._localisations[i][(bEngToLang?1:0)].toString()+':';
-			if (sItem.toLowerCase().indexOf(sIn.toLowerCase())==0){
-				sItem = sOut+sItem.substr(sIn.length, sItem.length-1);
-				break;
-			}
-		}
-		return sItem;
-	},
-
 	_updateValue: function(oItem) {
 
 		this.track('success');
@@ -260,7 +229,7 @@ YAHOO.lang.extend(YAHOO.example.AutoCompleteTextArea, YAHOO.widget.AutoComplete,
 				} else {
 					this._bIsColon = false;
 				}
-				sQueryReal = this._localize(sQueryReal, false);
+				sQueryReal = sQueryReal;
 				this._bIsTemplate = false;
 				sQueryStartAt = i;
 				break;
@@ -272,7 +241,7 @@ YAHOO.lang.extend(YAHOO.example.AutoCompleteTextArea, YAHOO.widget.AutoComplete,
 					sQueryReal = "Template:"+this._originalQuery.replace(/subst:/i,'');
 					this._bIsSubstTemplate = true;
 				} else if (this._originalQuery.indexOf(':')==0){
-					sQueryReal = this._localize(this._originalQuery.replace(':',''), false);
+					sQueryReal = this._originalQuery.replace(':','');
 					this._bIsColon = true;
 				} else {
 					sQueryReal = "Template:"+this._originalQuery;
@@ -299,10 +268,10 @@ YAHOO.lang.extend(YAHOO.example.AutoCompleteTextArea, YAHOO.widget.AutoComplete,
 						aList[i]._oResultData[j] = aList[i]._oResultData[j].replace('Template:','');
 					}
 				} else {
-					aList[i].innerHTML = this._localize(aList[i].innerHTML, true);
-					aList[i]._sResultKey = this._localize(aList[i]._sResultKey, true);
+					aList[i].innerHTML = aList[i].innerHTML;
+					aList[i]._sResultKey = aList[i]._sResultKey;
 					for (var j=0; j<aList[i]._oResultData.length; j++){
-						aList[i]._oResultData[j] = this._localize(aList[i]._oResultData[j], true);
+						aList[i]._oResultData[j] = aList[i]._oResultData[j];
 					}
 				}
 			}
