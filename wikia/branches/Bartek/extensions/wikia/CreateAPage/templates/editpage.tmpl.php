@@ -11,12 +11,12 @@
 <?php
 
 $sections = 0;
+$optionalSections = array();
 
 foreach ($boxes as $id => $box) {
 ?>
 <?	
 	$display = (empty($box['display'])) ? 'none' : 'block';
-	$optionalSections = array();
 	$id = trim($id);
 	$html = "name=\"wpTextboxes".$id."\" id=\"wpTextboxes".$id."\" style=\"display:".$display."\"";
 	$value = "";
