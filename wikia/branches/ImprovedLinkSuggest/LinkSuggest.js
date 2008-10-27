@@ -229,7 +229,6 @@ YAHOO.lang.extend(YAHOO.example.AutoCompleteTextArea, YAHOO.widget.AutoComplete,
 				} else {
 					this._bIsColon = false;
 				}
-				sQueryReal = sQueryReal;
 				this._bIsTemplate = false;
 				sQueryStartAt = i;
 				break;
@@ -266,12 +265,6 @@ YAHOO.lang.extend(YAHOO.example.AutoCompleteTextArea, YAHOO.widget.AutoComplete,
 					aList[i]._sResultKey = aList[i]._sResultKey.replace('Template:','');
 					for (var j=0; j<aList[i]._oResultData.length; j++){
 						aList[i]._oResultData[j] = aList[i]._oResultData[j].replace('Template:','');
-					}
-				} else {
-					aList[i].innerHTML = aList[i].innerHTML;
-					aList[i]._sResultKey = aList[i]._sResultKey;
-					for (var j=0; j<aList[i]._oResultData.length; j++){
-						aList[i]._oResultData[j] = aList[i]._oResultData[j];
 					}
 				}
 			}
