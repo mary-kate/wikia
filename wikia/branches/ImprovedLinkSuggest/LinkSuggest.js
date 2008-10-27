@@ -189,7 +189,7 @@ YAHOO.lang.extend(YAHOO.example.AutoCompleteTextArea, YAHOO.widget.AutoComplete,
 		var caret = this.getCaret(this._elTextbox);
 		var sQueryStartAt;
 
-		//also look forward, to see if we closed this one
+		// also look forward, to see if we closed this one
 		for(var i = caret; i < text.length; i++) {
 			var c = text.charAt (i) ;
 			if((c == "[") && (text.charAt(i - 1) == "[")) {
