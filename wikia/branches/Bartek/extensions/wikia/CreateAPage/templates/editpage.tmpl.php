@@ -16,6 +16,7 @@ foreach ($boxes as $id => $box) {
 ?>
 <?	
 	$display = (empty($box['display'])) ? 'none' : 'block';
+	$optionalSections = array();
 	$id = trim($id);
 	$html = "name=\"wpTextboxes".$id."\" id=\"wpTextboxes".$id."\" style=\"display:".$display."\"";
 	$value = "";
@@ -32,6 +33,7 @@ foreach ($boxes as $id => $box) {
 					$title_found = true;
 					if ($boxes[$i]['type'] == 'optional_textarea') {
 						$visible = 'style="display:none"';
+						$optionalSections[] = $sections;
 					}		
 					break;
 				}
@@ -90,7 +92,7 @@ if( !empty ($optionals) ) {
 ?>
 	<div id="createpage_optionals"><span id="createpage_optionals_text"><?= $optional_text ?></span><br/>
 <?
-	foreach( $optionals as $opt ) {
+	foreach( $optionalSections as $opt ) {
 ?>
 	<input type="checkbox" id="wpOptional<?= $opt ?>"/><span id="wpOptionalDesc<?= $opt ?>"></span>
 <?
