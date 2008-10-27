@@ -32,31 +32,9 @@ $wgHooks['EditForm::MultiEdit:Form'][] = 'AddLinkSuggest';
 function AddLinkSuggest($a, $b, $c, $d) {
 	global $wgOut, $wgExtensionsPath, $wgStyleVersion, $wgUser, $wgHooks;
 	if($wgUser->getOption('disablelinksuggest') != true) {
-		$wgHooks['ExtendJSGlobalVars'][] = wfLinkSuggestSetupVars;
 		$wgOut->addHTML('<div id="wpTextbox1_container" class="yui-ac-container"></div>');
 		$wgOut->addScript('<script type="text/javascript" src="'.$wgExtensionsPath.'wikia/LinkSuggest/LinkSuggest.js?'.$wgStyleVersion.'"></script>');
 	}
-	return true;
-}
-
-function wfLinkSuggestSetupVars($vars) {
-	global $wgContLang;
-	$vars['wgTalkNs'] = str_replace( "_", " ", $wgContLang->getNsText( NS_TALK ) ); 
-	$vars['wgUserNs'] = str_replace( "_", " ", $wgContLang->getNsText( NS_USER ) );                   	
-	$vars['wgUsertalkNs'] = str_replace( "_", " ", $wgContLang->getNsText( NS_USER_TALK ) );                  	
-	$vars['wgProjectNs'] = str_replace( "_", " ", $wgContLang->getNsText( NS_PROJECT ) );                  	
-	$vars['wgProjecttalkNs'] = str_replace( "_", " ", $wgContLang->getNsText( NS_PROJECT_TALK ) );                  	
-	$vars['wgImageNs'] = str_replace( "_", " ", $wgContLang->getNsText( NS_IMAGE ) );                  	
-	$vars['wgImagetalkNs'] = str_replace( "_", " ", $wgContLang->getNsText( NS_IMAGE_TALK ) );                  	
-	$vars['wgMediaWikiNs'] = str_replace( "_", " ", $wgContLang->getNsText( NS_MEDIAWIKI ) );                  	
-	$vars['wgMediawikitalkNs'] = str_replace( "_", " ", $wgContLang->getNsText( NS_MEDIAWIKI_TALK ) );                  	
-	$vars['wgTemplateNs'] = str_replace( "_", " ", $wgContLang->getNsText( NS_TEMPLATE ) );                  	
-	$vars['wgTemplatetalkNs'] = str_replace( "_", " ", $wgContLang->getNsText( NS_TEMPLATE_TALK ) );                  	
-	$vars['wgHelpNs'] = str_replace( "_", " ", $wgContLang->getNsText( NS_HELP ) );                  	
-	$vars['wgHelptalkNs'] = str_replace( "_", " ", $wgContLang->getNsText( NS_HELP_TALK ) );                  	
-	$vars['wgCategoryNs'] = str_replace( "_", " ", $wgContLang->getNsText( NS_CATEGORY ) );                  	
-	$vars['wgCategorytalkNs'] = str_replace( "_", " ", $wgContLang->getNsText( NS_CATEGORY_TALK ) );                  	
-
 	return true;
 }
 
