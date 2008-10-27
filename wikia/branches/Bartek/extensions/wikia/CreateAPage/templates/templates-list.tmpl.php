@@ -186,6 +186,15 @@ YWC.FailureCallback = function (oResponse) {
         YD.get ("createpage_image_cancel_section" + oResponse.argument).style.display = 'none' ;
 };
 
+YWC.ToggleSection = function( e, o ) {
+	var section = YD.get( "createpage_section_" + o.num );
+	if ('none' == section.style.display) {
+		section.style.display = 'block';
+	} else {
+		section.style.display = 'none';
+	}	
+}
+
 YWC.Upload = function (e, o) {
     var oForm = YD.get("createpageform") ;
     YE.preventDefault(e);
