@@ -91,13 +91,15 @@ foreach ($boxes as $id => $box) {
 if( !empty ($optionalSections) ) {
 ?>
 	<div id="createpage_optionals"><span id="createpage_optionals_text"><?= $optional_text ?></span><br/>
+	<span id="createpage_optionals_content">
 <?
 	foreach( $optionalSections as $opt ) {
 ?>
-	<input type="checkbox" id="wpOptional<?= $opt[0] ?>"/><span id="wpOptionalDesc<?= $opt[0] ?>"><?= $opt[1] ?></span>
+	<span id="wpOptional<?= $opt[0] ?>"><input type="checkbox" id="wpOptionalInput<?= $opt[0] ?>"/><span id="wpOptionalDesc<?= $opt[0] ?>"><?= $opt[1] ?></span></span>
 <?
 	}
 ?>
+	</span>
 	</div>
 <?
 }
