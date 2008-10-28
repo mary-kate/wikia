@@ -303,6 +303,14 @@ YWC.EditTextareaTest = function (el) {
 	}      
 }
 
+YWC.OptionalSectionTest = function (el) {
+	if (el.id.match ("wpOptionalInput") && (el.style.display != 'none') ) {
+		return true ;
+	} else {
+		return false ;
+	}      
+}
+
 YWC.UploadEvent = function (el) {
         var j = parseInt ( el.id.replace ("createpage_upload_file_section","") ) ;
 	YE.addListener( "createpage_upload_file_section" + j, "change", YWC.Upload, {num : j } );
@@ -930,6 +938,13 @@ YWC.MultiEdit = function () {
 				var el_id = parseInt (edit_textareas [0].id.replace ("wpTextboxes", "")) 
 				YD.get ('toolbar' + el_id).style.display = '' ;
 				YWC.hideOtherBoxes (el_id) ;
+			}
+			// optional sections support
+			if (YD.get( 'createpage_optionals_content' )) {
+				var optionals = YD.getElementsBy( YWC.OptionalSectionTest, 'input', YD.get( 'createpage_optionals_content') ); 
+				for (i=0; i<optionals.length;i++) {
+					YE.addListener(optionals[i], "change", YWC.ToggleSection, {num: optionals[i].id.replace( 'OptionalInput', '' )} );
+				}
 			}
 
 			var edittools_div = YD.get ('createpage_editTools') ;
