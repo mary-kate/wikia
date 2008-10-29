@@ -160,6 +160,16 @@ FCK.Events.AttachEvent( 'OnAfterSetHTML', function() {
 	FCK.GetParentForm().className = (FCK.EditMode == FCK_EDITMODE_WYSIWYG ? 'wysiwyg' : 'source') + '_mode';
 });
 
+// YUI reference
+FCK.YAHOO = window.parent.YAHOO;
+
+// log functionality
+FCK.log = function(msg) {
+	if (FCK.YAHOO) {
+		FCK.YAHOO.log(msg, 'info', 'Wysiwyg');
+	}
+}
+
 // macbre: setup tracker object
 FCK.Tracker = (typeof window.parent.YAHOO != 'undefined' && typeof window.parent.YAHOO.Wikia != 'undefined') ? window.parent.YAHOO.Wikia.Tracker : false;
 
