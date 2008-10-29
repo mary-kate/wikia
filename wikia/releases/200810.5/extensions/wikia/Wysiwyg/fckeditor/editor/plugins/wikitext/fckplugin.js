@@ -128,16 +128,19 @@ FCK.Events.AttachEvent( 'OnAfterSetHTML', function() {
 	if(FCK.EditMode == FCK_EDITMODE_WYSIWYG) {
 
 		// handle drag&drop
-		FCK.EditorDocument.addEventListener( 'mousedown', function(e) {
-			if(e.target.tagName == 'INPUT') {
-					FCKSelection.SelectNode(e.target);
+		FCKTools.AddEventListener(FCK.EditorDocument, 'mousedown', function(e) {
+			var target = FCK.YAHOO.util.Event.getTarget(e);
+			if(target.tagName == 'INPUT') {
+					FCKSelection.SelectNode(target);
 			}
-		}, true);
+		});
+
 
 		// open wikitext dialog
-		FCK.EditorDocument.addEventListener( 'click', function(e) {
-			if(e.target.tagName == 'INPUT') {
-				var refid = e.target.getAttribute('refid');
+		FCKTools.AddEventListener(FCK.EditorDocument, 'click', function(e) {
+			var target = FCK.YAHOO.util.Event.getTarget(e);
+			if(target.tagName == 'INPUT') {
+				var refid = target.getAttribute('refid');
 				if(refid) {
 					if (FCK.Track && FCK.wysiwygData) {
 						FCK.Track('/wikitextbox/' + (FCK.wysiwygData[refid] ? FCK.wysiwygData[refid].type : 'unknown'));
@@ -145,7 +148,7 @@ FCK.Events.AttachEvent( 'OnAfterSetHTML', function() {
 					inputClickCommand.Execute();
 				}
 			}
-		}, true);
+		});
 
 		// macbre: fix issue with input tags as last child (can't move to end of the line)
 		var placeholders = FCK.EditorDocument.getElementsByTagName('input');
@@ -156,9 +159,9 @@ FCK.Events.AttachEvent( 'OnAfterSetHTML', function() {
 			}
 		}
 	}
-	
 	// for QA team tests
 	FCK.GetParentForm().className = (FCK.EditMode == FCK_EDITMODE_WYSIWYG ? 'wysiwyg' : 'source') + '_mode';
+
 });
 
 // store editor state (current mode and data) when leaving editor
