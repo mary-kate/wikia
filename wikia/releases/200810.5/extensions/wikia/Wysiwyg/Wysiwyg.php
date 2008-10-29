@@ -205,6 +205,8 @@ function Wysiwyg_AlternateEdit($form) {
 function Wysiwyg_BeforeDisplayingTextbox($a, $b) {
 	global $wgOut, $wgWysiwygData;
 	$wgOut->addHTML('<input type="hidden" id="wysiwygData" name="wysiwygData" value="'.htmlspecialchars($wgWysiwygData).'" />');
+	$wgOut->addHTML('<input type="hidden" id="wysiwygTemporarySaveType" value="" />');
+	$wgOut->addHTML('<input type="hidden" id="wysiwygTemporarySaveContent" value="" />');
 	return true;
 }
 
