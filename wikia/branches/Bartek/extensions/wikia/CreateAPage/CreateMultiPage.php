@@ -408,11 +408,18 @@ class CreateMultiPage
 						#---
 						break;
 					}
-					case "optional" : {
-						//todo fill and create a hidden section, plus add a control at the lowest part
+					case "optional" : {  // <!---optional---> tag support
 						$text_html = str_replace( $other_tags[0], "", $text );  // strip the tag
 						$text_html = trim( $text_html );
-						$boxes[] = array("type" => "optional_textarea", "value" => $text_html, "toolbar" => '');
+						$toolbarid = count ($boxes);
+                               			$toolbar_text = CreateMultiPage::getMultiEditToolbar ($toolbarid);
+						$boxes[] = array(
+								"type" => "optional_textarea", 
+								"value" => $text_html, 
+								"toolbar" => $toolbar_text ,
+								"display" => 1
+								);
+
 						$optionals[] = count( $boxes ) - 1;
 						break;
 					}		
@@ -494,7 +501,6 @@ class CreateMultiPage
 		$oTmpl->set_vars(
 			array(
 				'boxes' => $boxes,
-				'optionals' => $optionals,
 				'cols' => $cols,
 				'rows' => $rows,
 				'ew' => $ew,
