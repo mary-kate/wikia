@@ -120,6 +120,7 @@ FCK.Events.AttachEvent( 'OnAfterSetHTML', function() {
 	}
 	if(!FCK.wysiwygData) {
 		FCK.wysiwygData = eval("{"+window.parent.document.getElementById('wysiwygData').value+"}");
+		FCK.log(FCK.wysiwygData);
 		if(!FCK.wysiwygData) {
 			FCK.wysiwygData = [];
 		}
@@ -169,9 +170,10 @@ FCKTools.AddEventListener(window, 'beforeunload', function() {
 	// save editor state in hidden editor fields
 	typeField.value = FCK.EditMode;
 	contentField.value = (FCK.EditMode == FCK_EDITMODE_SOURCE) ? FCK.GetData() : FCK.EditorDocument.body.innerHTML;
-	metaField.value = FCK.YAHOO.tools.JSONEncode(FCK.wysiwygData); 
+	metaField.value = FCK.wysiwygData.toSource();
 
 	FCK.log('editor state saved');
+	FCK.log(metaField.value);
 	FCK.Track('/temporarySave/store');
 });
 
