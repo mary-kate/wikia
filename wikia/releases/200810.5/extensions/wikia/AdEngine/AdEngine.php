@@ -18,7 +18,7 @@ interface iAdProvider {
 
 class AdEngine {
 
-	const cacheKeyVersion = "2.01";
+	const cacheKeyVersion = "2.01a";
 	const cacheTimeout = 1800;
 
 	// TODO: pull these from wikicities.provider
@@ -116,7 +116,7 @@ class AdEngine {
 	}
 
 	public function loadConfig() {
-		global $wgMemc, $wgCityId, $wgUser;
+		global $wgMemc, $wgCityId, $wgUser, $wgRequest;
 
                 $skin_name = null;
                 if ( is_object($wgUser)){
@@ -126,7 +126,7 @@ class AdEngine {
 		$cacheKey = wfMemcKey(__CLASS__ . 'slots', $skin_name, self::cacheKeyVersion);
 		$this->slots = $wgMemc->get($cacheKey);
 
-		if(is_array($this->slots)){
+		if(is_array($this->slots) && $wgRequest->getVal('action') != 'purge') {
 			// Found a cached value
 			return true;
 		}
