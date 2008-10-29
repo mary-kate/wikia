@@ -6,6 +6,7 @@ FCKConfig.ToolbarSets["Default"] = [
 ];
 
 FCKConfig.StyleVersion = window.parent.wgStyleVersion;
+FCKConfig.ExtensionsPath = window.parent.wgExtensionsPath;
 FCKConfig.EditorAreaCSS = FCKConfig.BasePath + 'css/fck_editorarea.css';
 FCKConfig.EditorAreaStyles = window.parent.stylepath + '/monobook/main.css';
 

@@ -9,6 +9,7 @@ $wgExtensionCredits['other'][] = array(
 $dir = dirname(__FILE__).'/';
 $wgExtensionMessagesFiles['Wysiwyg'] = $dir.'Wysiwyg.i18n.php';
 $wgAjaxExportList[] = 'Wysywig_Ajax';
+$wgEnableMWSuggest = true;
 
 $wgHooks['AlternateEdit'][] = 'Wysiwyg_AlternateEdit';
 $wgHooks['EditPage::showEditForm:initial'][] = 'Wysiwyg_Initial';
@@ -131,7 +132,6 @@ function initEditor() {
 	if($('wmuLink')) $('wmuLink').parentNode.style.display = 'none';
 	var edgeCasesFound = $wgWysiwygEdgeCasesFound;
 	var oFCKeditor = new FCKeditor("wpTextbox1");
-	oFCKeditor.wgStyleVersion = wgStyleVersion;
 	oFCKeditor.BasePath = "$wgExtensionsPath/wikia/Wysiwyg/fckeditor/";
 	oFCKeditor.Config["CustomConfigurationsPath"] = "$wgExtensionsPath/wikia/Wysiwyg/wysiwyg_config.js";
 	oFCKeditor.ready = true;
