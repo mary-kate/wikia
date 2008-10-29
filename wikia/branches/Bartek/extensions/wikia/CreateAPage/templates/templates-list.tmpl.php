@@ -940,10 +940,13 @@ YWC.MultiEdit = function () {
 				YWC.hideOtherBoxes (el_id) ;
 			}
 			// optional sections support
+			var snum = 0;
 			if (YD.get( 'createpage_optionals_content' )) {
 				var optionals = YD.getElementsBy( YWC.OptionalSectionTest, 'input', YD.get( 'createpage_optionals_content') ); 
-				for (i=0; i<optionals.length;i++) {
-					YE.addListener(optionals[i], "change", YWC.ToggleSection, {num: optionals[i].id.replace( 'wpOptionalInput', '' )} );
+				for (i=0; i<optionals.length; i++) {
+					snum = optionals[i].id.replace( 'wpOptionalInput', '' );
+					YD.get( 'createpage_section_' + snum ).style.display = 'none';
+					YE.addListener(optionals[i], "change", YWC.ToggleSection, {num: snum} );
 				}
 			}
 
