@@ -32,7 +32,6 @@ foreach ($boxes as $id => $box) {
 				if ( ($boxes[$i]['type'] == 'title') || ($boxes[$i]['type'] == 'optional_textarea') ) {
 					$title_found = true;
 					if ($boxes[$i]['type'] == 'optional_textarea') {
-						$visible = 'style="display:none"';
 						$optionalSections[] = array( $sections, $box['value'] );
 					}		
 					break;
@@ -42,7 +41,6 @@ foreach ($boxes as $id => $box) {
 				}	
 			}			
 			if ($title_found) {
-				$display = 'none';
 				$clear = "";
 			}
 			$value = $box['value'];
@@ -52,7 +50,7 @@ foreach ($boxes as $id => $box) {
 			<?
 			}
 			?>
-				<div id="createpage_section_<?= $sections ?>" <?= $visible ?>>	
+				<div id="createpage_section_<?= $sections ?>">	
 			<?
 			$sections++;
 			break;
