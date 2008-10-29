@@ -160,6 +160,22 @@ FCK.Events.AttachEvent( 'OnAfterSetHTML', function() {
 	FCK.GetParentForm().className = (FCK.EditMode == FCK_EDITMODE_WYSIWYG ? 'wysiwyg' : 'source') + '_mode';
 });
 
+// store editor state (current mode and data) when leaving editor
+FCKTools.AddEventListener(window, 'beforeunload', function() {
+	FCK.log('onbeforeunload event catched');
+
+	var typeField = window.parent.document.getElementById('wysiwygTemporarySaveType');
+	var contentField = window.parent.document.getElementById('wysiwygTemporarySaveContent');
+	var metaField = window.parent.document.getElementById('wysiwygData');
+
+	// save editor state in hidden editor fields
+	typeField.value = FCK.EditMode;
+	contentField.value = (FCK.EditMode == FCK_EDITMODE_SOURCE) ? FCK.GetData() : FCK.EditorDocument.body.innerHTML;
+	metaField.value = FCK.YAHOO.tools.JSONEncode(FCK.wysiwygData); 
+
+	FCK.log('editor state saved');
+});
+
 // YUI reference
 FCK.YAHOO = window.parent.YAHOO;
 
