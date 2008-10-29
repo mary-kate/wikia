@@ -106,6 +106,27 @@ function FCKeditor_OnComplete(editorInstance) {
 	}
 }
 
+// start editor in source mode
+function wysiwygInitInSourceMode(src) {
+	var iFrame = document.getElementById('wpTextbox1___Frame');
+	iFrame.style.visibility = 'hidden';
+
+	var intervalId = setInterval(function() {
+		// wait for FCKeditorAPI to be fully loaded
+		if (typeof FCKeditorAPI != 'undefined') {
+			var FCK = FCKeditorAPI.GetInstance('wpTextbox1');
+			// wait for FCK to be fully loaded
+			if (FCK.Status == FCK_STATUS_COMPLETE) {
+				clearInterval(intervalId);
+				FCK.originalSwitchEditMode.apply(FCK, []);
+				FCK.WysiwygSwitchToolbars(true);
+				FCK.SetData(src);
+				iFrame.style.visibility = 'visible';
+			}
+		}
+	}, 250);
+}
+
 function initEditor() {
 	if($('wmuLink')) $('wmuLink').parentNode.style.display = 'none';
 	var edgeCasesFound = $wgWysiwygEdgeCasesFound;
@@ -118,25 +139,27 @@ function initEditor() {
 	oFCKeditor.Width = document.all ? '99%' : '100%'; // IE fix
 	oFCKeditor.ReplaceTextarea();
 
-	if (edgeCasesFound) {
-		// fallback to source mode
-		var iFrame = document.getElementById('wpTextbox1___Frame');
-		iFrame.style.visibility = 'hidden';
+	// restore editor state?
+	var temporarySaveType = document.getElementById('wysiwygTemporarySaveType').value;
 
-		var intervalId = setInterval(function() {
-			// wait for FCKeditorAPI to be fully loaded
-			if (typeof FCKeditorAPI != 'undefined') {
-				var FCK = FCKeditorAPI.GetInstance('wpTextbox1');
-				// wait for FCK to be fully loaded
-				if (FCK.Status == FCK_STATUS_COMPLETE) {
-					clearInterval(intervalId);
-					FCK.originalSwitchEditMode.apply(FCK, []);
-					FCK.WysiwygSwitchToolbars(true);
-					FCK.SetData( document.getElementById('wpTextbox1').value );
-					iFrame.style.visibility = 'visible';
-				}
-			}
-		}, 250);
+	if (temporarySaveType != '') {
+		var content = document.getElementById('wysiwygTemporarySaveContent').value;
+		YAHOO.log('restoring from temporary save', 'info', 'Wysiwyg');
+		switch( parseInt(temporarySaveType) ) {
+			// wysiwyg
+			case 0:
+				document.getElementById('wpTextbox1').value = content;
+				break;
+
+			// source
+			case 1:
+				wysiwygInitInSourceMode(content);
+				break;
+		}
+	}
+
+	if (edgeCasesFound) {
+		wysiwygInitInSourceMode(document.getElementById('wpTextbox1').value);
 	}
 
 	// macbre: tracking
@@ -151,6 +174,9 @@ function initEditor() {
 		});
 		if (edgeCasesFound) {
 			YAHOO.Wikia.Tracker.trackByStr(null, 'wysiwyg/edgecase');
+		}
+		if (temporarySaveType != '') {
+			YAHOO.Wikia.Tracker.trackByStr(null, 'wysiwyg/temporarySave/restore');
 		}
 	}
 }

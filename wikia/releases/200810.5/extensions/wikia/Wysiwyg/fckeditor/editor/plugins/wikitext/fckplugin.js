@@ -162,8 +162,6 @@ FCK.Events.AttachEvent( 'OnAfterSetHTML', function() {
 
 // store editor state (current mode and data) when leaving editor
 FCKTools.AddEventListener(window, 'beforeunload', function() {
-	FCK.log('onbeforeunload event catched');
-
 	var typeField = window.parent.document.getElementById('wysiwygTemporarySaveType');
 	var contentField = window.parent.document.getElementById('wysiwygTemporarySaveContent');
 	var metaField = window.parent.document.getElementById('wysiwygData');
@@ -174,6 +172,7 @@ FCKTools.AddEventListener(window, 'beforeunload', function() {
 	metaField.value = FCK.YAHOO.tools.JSONEncode(FCK.wysiwygData); 
 
 	FCK.log('editor state saved');
+	FCK.Track('/temporarySave/store');
 });
 
 // YUI reference
