@@ -106,7 +106,7 @@ FCK.SwitchEditMode = function() {
 FCK.Events.AttachEvent( 'OnAfterSetHTML', function() {
 	if(FCK.EditingArea.TargetElement.className == 'childrenHidden') {
 		var html = FCK.GetData();
-		var wysiwygDataEncoded =  window.parent.YAHOO.Tools.JSONEncode(FCK.wysiwygData);
+		var wysiwygDataEncoded =  FCK.YAHOO.Tools.JSONEncode(FCK.wysiwygData);
 
 		window.parent.sajax_request_type = 'POST';
 		window.parent.sajax_do_call('Wysywig_Ajax', ['html2wiki', html, wysiwygDataEncoded], function(res) {
@@ -170,7 +170,7 @@ FCKTools.AddEventListener(window, 'beforeunload', function() {
 	// save editor state in hidden editor fields
 	typeField.value = FCK.EditMode;
 	contentField.value = (FCK.EditMode == FCK_EDITMODE_SOURCE) ? FCK.GetData() : FCK.EditorDocument.body.innerHTML;
-	metaField.value = FCK.wysiwygData.toSource();
+	metaField.value = FCK.YAHOO.Tools.encodeArr(FCK.wysiwygData);
 
 	FCK.log('editor state saved');
 	FCK.Track('/temporarySave/store');
