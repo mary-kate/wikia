@@ -939,16 +939,6 @@ YWC.MultiEdit = function () {
 				YD.get ('toolbar' + el_id).style.display = '' ;
 				YWC.hideOtherBoxes (el_id) ;
 			}
-			// optional sections support
-			var snum = 0;
-			if (YD.get( 'createpage_optionals_content' )) {
-				var optionals = YD.getElementsBy( YWC.OptionalSectionTest, 'input', YD.get( 'createpage_optionals_content') ); 
-				for (i=0; i<optionals.length; i++) {
-					snum = optionals[i].id.replace( 'wpOptionalInput', '' );
-					YD.get( 'createpage_section_' + snum ).style.display = 'none';
-					YE.addListener(optionals[i], "change", YWC.ToggleSection, {num: snum} );
-				}
-			}
 
 			var edittools_div = YD.get ('createpage_editTools') ;
 			if (edittools_div) {
@@ -960,6 +950,16 @@ YWC.MultiEdit = function () {
 			}
 
 			YWC.multiEditSetupToolbar () ;                                        		
+			// optional sections support
+			var snum = 0;
+			if (YD.get( 'createpage_optionals_content' )) {
+				var optionals = YD.getElementsBy( YWC.OptionalSectionTest, 'input', YD.get( 'createpage_optionals_content') ); 
+				for (i=0; i<optionals.length; i++) {
+					snum = optionals[i].id.replace( 'wpOptionalInput', '' );
+					YD.get( 'createpage_section_' + snum ).style.display = 'none';
+					YE.addListener(optionals[i], "change", YWC.ToggleSection, {num: snum} );
+				}
+			}
 		},
 		failure: function(e) {
 			YD.get('cp-multiedit').innerHTML = '';
