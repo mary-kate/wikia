@@ -173,7 +173,6 @@ FCKTools.AddEventListener(window, 'beforeunload', function() {
 	metaField.value = FCK.wysiwygData.toSource();
 
 	FCK.log('editor state saved');
-	FCK.log(metaField.value);
 	FCK.Track('/temporarySave/store');
 });
 
