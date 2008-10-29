@@ -943,7 +943,7 @@ YWC.MultiEdit = function () {
 			if (YD.get( 'createpage_optionals_content' )) {
 				var optionals = YD.getElementsBy( YWC.OptionalSectionTest, 'input', YD.get( 'createpage_optionals_content') ); 
 				for (i=0; i<optionals.length;i++) {
-					YE.addListener(optionals[i], "change", YWC.ToggleSection, {num: optionals[i].id.replace( 'OptionalInput', '' )} );
+					YE.addListener(optionals[i], "change", YWC.ToggleSection, {num: optionals[i].id.replace( 'wpOptionalInput', '' )} );
 				}
 			}
 
