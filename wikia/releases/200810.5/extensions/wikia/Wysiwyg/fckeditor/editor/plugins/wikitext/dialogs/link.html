@@ -219,6 +219,10 @@ function Ok() {
 		}
 	}
 
+	if (activeTabCode == 'internal_link') {
+		FCK.CheckInternalLink(data.href, aLinks[0]);
+	}
+
 	FCK.wysiwygData[refid] = data;
 
 	return true;
