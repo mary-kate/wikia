@@ -124,7 +124,7 @@ window.onload = function() {
 				GetE('external_url').value = link.href;
 			}
 
-			if(link.innerHTML == '[link]') { // TODO:
+			if(FCK.YAHOO.util.Dom.hasClass(link, 'autonumber')) {
 				GetE('external_link_text').disabled = true;
 				GetE('external_unlabeled_link').checked = true;
 			} else {
@@ -158,6 +158,8 @@ function Ok() {
 	var data = {};
 	var link_text;
 
+	FCK.YAHOO.util.Dom.removeClass(link, 'autonumber'); // cleanup
+
 	if(activeTabCode == 'internal_link') {
 		if(GetE('internal_article_name').value == '') {
 			alert('Article name field can not be empty!');
@@ -184,8 +186,9 @@ function Ok() {
 			link_text = GetE('external_url').value;
 			data.type = 'external link: raw';
 		} else {
-			link_text = '[link]';
+			link_text = '';
 			data.type = 'external link';
+			link.className = 'autonumber';
 		}
 		data.href = GetE('external_url').value;
 	}
@@ -206,6 +209,14 @@ function Ok() {
 	if(!refid) {
 		refid = FCK.wysiwygData.length;
 		aLinks[0].setAttribute('refid', refid);
+	}
+
+	if (activeTabCode == 'external_link' || TYPE == EXTERNAL) {
+		var numberedLinks = FCK.EditingArea.Document.getElementsByClassName('autonumber');
+		FCK.log('recalculating '+ numberedLinks.length  + ' numbered external links');
+		for (n=0; n<numberedLinks.length; n++) {
+			numberedLinks[n].innerHTML = '[' + parseInt(n+1) + ']';
+		}
 	}
 
 	FCK.wysiwygData[refid] = data;
