@@ -43,7 +43,9 @@ FCK.WysiwygSwitchToolbars = function(switchToWikitext) {
 	var MWtoolbar = window.parent.document.getElementById('toolbar');
 
 	// move MW toolbar next to "Source" button
-	MWtoolbar.style.marginLeft = (toolbarItems[1].offsetWidth+27) + 'px';
+	if (MWtoolbar) {
+		MWtoolbar.style.marginLeft = (toolbarItems[1].offsetWidth+27) + 'px';
+	}
 
 	// show/hide FCK toolbar items
 	for (t=0; t<toolbarItems.length; t++) {
@@ -51,7 +53,9 @@ FCK.WysiwygSwitchToolbars = function(switchToWikitext) {
 	}
 
 	// show/hide MW toolbar
-	MWtoolbar.style.visibility = switchToWikitext ? 'visible' : 'hidden';
+	if (MWtoolbar) {
+		MWtoolbar.style.visibility = switchToWikitext ? 'visible' : 'hidden';
+	}
 }
 
 FCK.SwitchEditMode = function() {
