@@ -171,7 +171,7 @@ body, .BackColor
 	overflow: hidden;
 	z-index: 1;
 }
-
+/*
 .tl, .tr, .tc, .bl, .br, .bc
 {
 	position: absolute;
@@ -207,7 +207,7 @@ body, .BackColor
 {
 	background-image: url(images/dialog.sides.gif);
 }
-
+*/
 .tl
 {
 	top: 0px;
