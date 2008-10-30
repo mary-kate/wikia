@@ -212,8 +212,8 @@ class ReverseParser {
 					case 'h5':
 					case 'h6':
 						$out = '';
-					
-						// ignore 'empty' headers	
+
+						// ignore 'empty' headers
 						if ( trim($textContent) == '' ) {
 							$out = "\n";
 							break;
@@ -421,9 +421,8 @@ class ReverseParser {
 					case 'a':
 						$out = $this->handleLink($node, $textContent);
 						break;
-					case 'span':
 					case 'input':
-						$out = $this->handleSpan($node, $textContent);
+						$out = $this->handlePlaceholder($node, $textContent);
 						break;
 
 					// ignore tbody tag
@@ -606,7 +605,7 @@ class ReverseParser {
 	 *
 	 * Span is used to wrap various elements like templates etc.
 	 */
-	private function handleSpan($node, $content) {
+	private function handlePlaceholder($node, $content) {
 
 		// handle spans with refId attribute: images, templates etc.
 		$refId = $node->getAttribute('refid');
@@ -692,7 +691,7 @@ class ReverseParser {
 				);
 			}
 		}
-		
+
 
 		$data = $this->fckData[$refid];
 
@@ -703,7 +702,7 @@ class ReverseParser {
 				// take link description from HTML
 				$data['description'] = $content;
 				$data['trial'] = '';
-				
+
 				// * [[foo|foo]] -> [[foo]]
 				if ($data['href'] == $data['description']) {
 					$data['description'] = '';
@@ -711,14 +710,14 @@ class ReverseParser {
 				// * [[foo|foots]] -> [[foo]]ts (trial can't contain numbers)
 				else if ($data['description'] != '' && substr($data['description'], 0, strlen($data['href'])) == $data['href']) {
 					$trial = substr($data['description'], strlen($data['href']));
-					
+
 					// validate $trial (might only contain chars)
 					if ( ctype_alpha($trial) ) {
 						$data['trial'] = $trial;
 						$data['description'] = '';
 					}
 				}
-				
+
 				// generate wikisyntax
 				$tag =  "[[{$data['href']}";
 
