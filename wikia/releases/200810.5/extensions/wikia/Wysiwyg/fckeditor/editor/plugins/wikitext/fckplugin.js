@@ -120,10 +120,11 @@ FCK.Events.AttachEvent( 'OnAfterSetHTML', function() {
 	}
 	if(!FCK.wysiwygData) {
 		FCK.wysiwygData = eval("{"+window.parent.document.getElementById('wysiwygData').value+"}");
-		FCK.log(FCK.wysiwygData);
 		if(!FCK.wysiwygData) {
 			FCK.wysiwygData = [];
 		}
+		FCK.log(FCK.wysiwygData);
+
 	}
 	if(FCK.EditMode == FCK_EDITMODE_WYSIWYG) {
 
