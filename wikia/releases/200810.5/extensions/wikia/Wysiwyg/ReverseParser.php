@@ -798,14 +798,14 @@ class ReverseParser {
 	 */
 
 	private function isFormattingElement($node) {
-		return in_array($node->nodeName, array('u', 'b', 'strong', 'i', 'em', 'strike', 's'));
+		return in_array($node->nodeName, array('u', 'b', 'strong', 'i', 'em', 'strike', 's', 'code'));
 	}
 
 	/**
 	 * Return true if given node is inline HTNL element or can contain inline elements (p / div)
 	 */
 	private function isInlineElement($node) {
-		return in_array($node->nodeName, array('u', 'b', 'strong', 'i', 'em', 'strike', 's', 'a', 'p', 'div'));
+		return in_array($node->nodeName, array('u', 'b', 'strong', 'i', 'em', 'strike', 's', 'code', 'a', 'p', 'div'));
 	}
 
 	/**
