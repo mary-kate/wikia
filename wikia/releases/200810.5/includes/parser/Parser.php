@@ -1308,11 +1308,7 @@ class Parser
 			if ( $text == '' ) {
 				# Autonumber if allowed. See bug #5918
 				if ( strpos( wfUrlProtocols(), substr($protocol, 0, strpos($protocol, ':')) ) !== false ) {
-					if (!empty($wgWysiwygParserEnabled)) {
-						$text = '[link]';
-					} else {
-						$text = '[' . ++$this->mAutonumber . ']';
-					}
+					$text = '[' . ++$this->mAutonumber . ']';
 					$linktype = 'autonumber';
 				} else {
 					# Otherwise just use the URL
