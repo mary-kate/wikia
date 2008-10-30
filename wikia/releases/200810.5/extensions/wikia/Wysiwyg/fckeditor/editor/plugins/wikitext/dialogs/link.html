@@ -188,7 +188,6 @@ function Ok() {
 		} else {
 			link_text = '';
 			data.type = 'external link';
-			link.className = 'autonumber';
 		}
 		data.href = GetE('external_url').value;
 	}
@@ -209,6 +208,10 @@ function Ok() {
 	if(!refid) {
 		refid = FCK.wysiwygData.length;
 		aLinks[0].setAttribute('refid', refid);
+	}
+
+	if(link_text == '' && data.type == 'external link') {
+		FCK.YAHOO.util.Dom.addClass(aLinks[0], 'autonumber');
 	}
 
 	if (activeTabCode == 'external_link' || TYPE == EXTERNAL) {
