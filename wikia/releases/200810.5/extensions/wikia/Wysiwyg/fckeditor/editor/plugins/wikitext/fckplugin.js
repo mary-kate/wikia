@@ -164,21 +164,6 @@ FCK.Events.AttachEvent( 'OnAfterSetHTML', function() {
 
 });
 
-// store editor state (current mode and data) when leaving editor
-FCKTools.AddEventListener(window, 'beforeunload', function() {
-	var typeField = window.parent.document.getElementById('wysiwygTemporarySaveType');
-	var contentField = window.parent.document.getElementById('wysiwygTemporarySaveContent');
-	var metaField = window.parent.document.getElementById('wysiwygData');
-
-	// save editor state in hidden editor fields
-	typeField.value = FCK.EditMode;
-	contentField.value = (FCK.EditMode == FCK_EDITMODE_SOURCE) ? FCK.GetData() : FCK.EditorDocument.body.innerHTML;
-	metaField.value = FCK.YAHOO.Tools.encodeArr(FCK.wysiwygData);
-
-	FCK.log('editor state saved');
-	FCK.Track('/temporarySave/store');
-});
-
 // YUI reference
 FCK.YAHOO = window.parent.YAHOO;
 
@@ -200,3 +185,24 @@ FCK.Track = function(fakeUrl) {
 
 // track the fact of using FCK + send the name of edited page
 FCK.Track('/init/' + window.parent.wgPageName);
+
+// store editor state (current mode and data) when leaving editor
+// IE doesn't seem to support that
+if (!FCK.YAHOO.env.ua.ie) {
+	FCKTools.AddEventListener(window, 'beforeunload', function() {
+		var typeField = window.parent.document.getElementById('wysiwygTemporarySaveType');
+		var contentField = window.parent.document.getElementById('wysiwygTemporarySaveContent');
+		var metaField = window.parent.document.getElementById('wysiwygData');
+
+		// save editor state in hidden editor fields
+		typeField.value = FCK.EditMode;
+		contentField.value = (FCK.EditMode == FCK_EDITMODE_SOURCE) ? FCK.GetData() : FCK.EditorDocument.body.innerHTML;
+		metaField.value = FCK.YAHOO.Tools.encodeArr(FCK.wysiwygData);
+
+		FCK.log('editor state saved');
+		FCK.Track('/temporarySave/store');
+	});
+}
+else {
+	FCK.log('temporary save not supported in your browser');
+}
