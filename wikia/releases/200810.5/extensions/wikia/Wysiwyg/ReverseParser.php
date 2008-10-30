@@ -686,7 +686,7 @@ class ReverseParser {
 
 				$this->fckData[$refid] = array(
 					'type' => ($content == $href) ? 'external link: raw' : 'external link',
-					'text' => ($node->textContent == '[link]') ? '[link]' : $content,
+					'text' => (strlen($node->textContent) > 2 && is_numeric(substr(substr($node->textContent,1),0,-1))) ? $node->textContent : $content,
 					'href' => $href
 				);
 			}
@@ -759,7 +759,7 @@ class ReverseParser {
 						// use http://foo.com
 						return $data['href'];
 					}
-					else if ($content == '[link]') {
+					else if (strlen($content) > 2 && is_numeric(substr(substr($content,1),0,-1))) {
 						// use [http://foo.com] - numbered external links
 						return "[{$data['href']}]";
 					} else {
