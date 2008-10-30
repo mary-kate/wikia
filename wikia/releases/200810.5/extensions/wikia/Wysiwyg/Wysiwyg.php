@@ -197,6 +197,10 @@ addOnloadHook(initEditor);
 #editform {
 	background: transparent url('$wgExtensionsPath/wikia/Wysiwyg/fckeditor/editor/skins/default/images/progress_transparent.gif') no-repeat 50% 35%;
 }
+#editform.source_mode,
+#editform.wysiwyg_mode {
+	background: none;
+}
 /*]]>*/</style>
 EOT;
 	$wgOut->addScript($script);
