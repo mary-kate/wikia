@@ -169,6 +169,31 @@ FCK.Events.AttachEvent( 'OnAfterSetHTML', function() {
 
 });
 
+// check whether given page exists (API query returns pageid != 0)
+// if not -> add "new" class to simulate MW parser behaviour
+FCK.CheckInternalLink = function(title, link) {
+	var callback = {
+		success: function(o) {
+			FCK = o.argument.FCK;
+			result = eval('(' + o.responseText + ')');
+			pageExists = (typeof result.query.pages[-1] == 'undefined');
+
+			FCK.log('"' + o.argument.title + '" ' + (pageExists ? 'exists' : 'doesn\'t exist'));
+
+			if (o.argument.link) {
+				if (pageExists) {
+					FCK.YAHOO.util.Dom.removeClass(o.argument.link, 'new');
+				} else {
+					FCK.YAHOO.util.Dom.addClass(o.argument.link, 'new');
+				}
+			}
+		},
+		failure: function(o) {},
+		argument: {'FCK': FCK, 'link': link, 'title': title}
+	}
+	FCK.YAHOO.util.Connect.asyncRequest("POST", window.parent.wgScriptPath + '/api.php', callback, "action=query&format=json&prop=info&titles=" +   encodeURIComponent(title) );
+}
+
 // YUI reference
 FCK.YAHOO = window.parent.YAHOO;
 
