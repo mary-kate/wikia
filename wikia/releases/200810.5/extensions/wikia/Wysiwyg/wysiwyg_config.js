@@ -19,3 +19,6 @@ FCKConfig.FormatOutput = false;
 
 FCKConfig.AutoDetectLanguage = false;
 FCKConfig.DefaultLanguage = window.parent.wgUserLanguage;
+
+FCKConfig.BackgroundBlockerColor = '#000';
+FCKConfig.BackgroundBlockerOpacity = '0.6';
