@@ -1233,7 +1233,7 @@ global $wgOut;
 $topAdCode = '';
 $topAdCodeDisplayed = false;
 if ($wgOut->isArticle()){
-	if (ArticleAdLogic::isMainPage() && ArticleAdLogic::isContentPage()){
+	if (ArticleAdLogic::isMainPage()){
 		$topAdCode .= AdEngine::getInstance()->getPlaceHolderDiv('HOME_TOP_LEADERBOARD');
 		if ($wgEnableFAST_HOME2) {
 			$topAdCode .= AdEngine::getInstance()->getPlaceHolderDiv('HOME_TOP_RIGHT_BOXAD');
@@ -1254,10 +1254,10 @@ if ($wgOut->isArticle()){
 ?>
 <?php		wfProfileIn( __METHOD__ . '-article'); ?>
 			<div id="article" <?php if($this->data['body_ondblclick']) { ?>ondblclick="<?php $this->text('body_ondblclick') ?>"<?php } ?>>
-				<?php
-				// Testing putting the leader board above the title
+				<?php 
+				// Testing putting the leader board above the title 
 				if (! ArticleAdLogic::isMainPage() && AdEngine::getInstance()->getBucketName() == 'lp_at'){
-					// Bucket test to put the ad ad the top
+					// Bucket test to put the ad ad the top 
 					echo $topAdCode;
 					$topAdCodeDisplayed = true;
 				}
@@ -1302,14 +1302,14 @@ if ($wgOut->isArticle()){
 			global $wgContLang;
 			if ($wgOut->isArticle() &&
 			    !$wgContLang->isRTL() && // Since this is in the left nav, not suitable for right-to-left languages
-		            !ArticleAdLogic::isMainPage() &&
-			     ArticleAdLogic::isContentPage() &&
-			     ArticleAdLogic::isSuperLongArticle($this->data['bodytext'])) {
+		            !ArticleAdLogic::isMainPage() && 
+			     ArticleAdLogic::isContentPage() && 
+			     ArticleAdLogic::isSuperLongArticle($this->data['bodytext'])) { 
 				echo '<div style="position: absolute; height: 600px; width: 160px; margin-top: -600px; left: -190px;">' .
 					AdEngine::getInstance()->getPlaceHolderDiv('LEFT_SKYSCRAPER_3', true) .
 				     '</div>' . "\n";
 			}
-
+					
 		wfProfileOut( __METHOD__ . '-article'); ?>
 
 			<!-- ARTICLE FOOTER -->
@@ -1748,7 +1748,7 @@ if (typeof wgID == 'number'){
 	   1916,"UA-1153537-1", 1778,"UA-1068008-1", 2307,"UA-1276867-1", 2166,"UA-1291238-2", 133,"UA-1362746-1",
 	   2342,"UA-1368221-1", 645,"UA-1368532-1", 2193,"UA-1368560-1", 667,"UA-1377241-1", 2195,"UA-1263121-1",
 	   3236,"UA-2100028-5", 193,"UA-1946686-3", 2165,"UA-1946686-2");
-
+	
 	for (i = 0;i<cid_ua.length;i=i+2) {
 		if (wgID==cid_ua[i]) {
 			_uff=0;_uacct=cid_ua[i+1];urchinTracker();
