@@ -4,8 +4,8 @@ $wgExtensionFunctions[] = 'wfCommonReadLang';
 $wgHooks['BeforePageDisplay'][] = 'wfSocialToolsLoadJs';
 
 function wfSocialToolsLoadJs() {
-	global $wgOut, $wgStyleVersion;
-	$wgOut->addScript("<script language=\"javascript\" src=\"/extensions/wikia/onejstorule.js?{$wgStyleVersion}\"></script>");
+	global $wgOut, $wgStyleVersion, $wgExtensionsPath;
+	$wgOut->addScript('<script language="javascript" src="'.$wgExtensionsPath.'/extensions/wikia/onejstorule.js?{$wgStyleVersion}"></script>');
 }
 
 //read in localisation messages
