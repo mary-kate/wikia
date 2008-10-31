@@ -218,7 +218,7 @@ FCK.Track('/init/' + window.parent.wgPageName);
 
 // store editor state (current mode and data) when leaving editor
 // IE doesn't seem to support that
-if (!FCK.YAHOO.env.ua.ie) {
+if (!FCKBrowserInfo.IsIE) {
 	FCKTools.AddEventListener(window, 'beforeunload', function() {
 		var typeField = window.parent.document.getElementById('wysiwygTemporarySaveType');
 		var contentField = window.parent.document.getElementById('wysiwygTemporarySaveContent');
