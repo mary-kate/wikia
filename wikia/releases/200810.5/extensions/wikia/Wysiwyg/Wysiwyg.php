@@ -18,6 +18,24 @@ $wgHooks['getEditingPreferencesTab'][] = 'Wysiwyg_Toggle';
 $wgHooks['MagicWordwgVariableIDs'][] = 'Wysiwyg_RegisterMagicWordID';
 $wgHooks['LanguageGetMagic'][] = 'Wysiwyg_GetMagicWord';
 $wgHooks['InternalParseBeforeLinks'][] = 'Wysiwyg_RemoveMagicWord';
+$wgHooks['SkinTemplateOutputPageBeforeExec'][] = 'Wysiwyg_SetDomain';
+
+function Wysiwyg_SetDomain(&$skin, &$tpl) {
+
+	$js = <<<EOD
+<script type="text/javascript">/*<![CDATA[*/
+if(document.domain != 'localhost') {
+	var chunks = document.domain.split('.');
+	var d = chunks.pop(); // com
+	d = chunks.pop() + '.' + d; // wikia.com
+	document.domain = d;
+}
+/*]]>*/</script>
+EOD;
+
+	$tpl->data['headlinks'] .= $js;
+	return true;
+}
 
 function Wysiwyg_RegisterMagicWordID(&$magicWords) {
 	$magicWords[] = 'MAG_NOWYSIWYG';
@@ -90,13 +108,14 @@ function Wysiwyg_Initial($form) {
 	$script = <<<EOT
 <script type="text/javascript" src="$wgExtensionsPath/wikia/Wysiwyg/fckeditor/fckeditor.js?$wgStyleVersion"></script>
 <script type="text/javascript">
-var org_document_domain = document.domain;
+/*
 if(document.domain != 'localhost') {
 	var chunks = document.domain.split('.');
 	var d = chunks.pop(); // com
 	d = chunks.pop() + '.' + d; // wikia.com
 	document.domain = d;
 }
+*/
 
 function FCKeditor_OnComplete(editorInstance) {
 	editorInstance.LinkedField.form.onsubmit = function() {
