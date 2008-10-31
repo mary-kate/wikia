@@ -227,7 +227,7 @@ function Ok() {
 
 	// recalculate autonumbered links - check only a.autonumber tags
 	if (activeTabCode == 'external_link' || TYPE == EXTERNAL) {
-		var numberedLinks = FCK.EditingArea.Document.getElementsByClassName('autonumber');
+		var numberedLinks = FCK.YAHOO.util.Dom.getElementsByClassName('autonumber', 'a', FCK.EditingArea.Document.body);
 		FCK.log('recalculating '+ numberedLinks.length  + ' numbered external links');
 		for (n=0; n<numberedLinks.length; ) {
 			numberedLinks[n].innerHTML = '[' + (++n) + ']';
