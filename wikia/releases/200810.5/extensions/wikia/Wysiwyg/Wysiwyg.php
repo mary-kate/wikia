@@ -90,6 +90,7 @@ function Wysiwyg_Initial($form) {
 	$script = <<<EOT
 <script type="text/javascript" src="$wgExtensionsPath/wikia/Wysiwyg/fckeditor/fckeditor.js?$wgStyleVersion"></script>
 <script type="text/javascript">
+var org_document_domain = document.domain;
 if(document.domain != 'localhost') {
 	var chunks = document.domain.split('.');
 	var d = chunks.pop(); // com
