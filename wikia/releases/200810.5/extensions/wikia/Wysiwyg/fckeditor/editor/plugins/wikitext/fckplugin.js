@@ -209,7 +209,7 @@ FCK.Tracker = (typeof window.parent.YAHOO != 'undefined' && typeof window.parent
 
 FCK.Track = function(fakeUrl) {
 	if (FCK.Tracker) {
-		FCK.Tracker.trackByStr(null, 'wysiwyg'+fakeUrl);
+//		FCK.Tracker.trackByStr(null, 'wysiwyg'+fakeUrl);
 	}
 }
 
