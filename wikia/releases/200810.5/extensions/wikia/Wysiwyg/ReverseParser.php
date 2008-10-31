@@ -686,7 +686,7 @@ class ReverseParser {
 
 				$this->fckData[$refid] = array(
 					'type' => ($content == $href) ? 'external link: raw' : 'external link',
-					'text' => (strlen($node->textContent) > 2 && is_numeric(substr(substr($node->textContent,1),0,-1))) ? $node->textContent : $content,
+					'text' => $content,
 					'href' => $href
 				);
 			}
@@ -755,11 +755,12 @@ class ReverseParser {
 
 				// fill FCK data
 				if (preg_match('%^(?:' . $this->protocols . ')%im', $data['href'])) {
+					// external links
 					if ($data['type'] == 'external link: raw' && !$textBefore && !$textAfter) {
 						// use http://foo.com
 						return $data['href'];
 					}
-					else if (strlen($content) > 2 && is_numeric(substr(substr($content,1),0,-1))) {
+					else if ($this->hasCSSClass($node, 'autonumber') && strlen($content) > 2 && is_numeric(substr($content,1,-1))) {
 						// use [http://foo.com] - numbered external links
 						return "[{$data['href']}]";
 					} else {
@@ -768,6 +769,7 @@ class ReverseParser {
 					}
 				}
 				else {
+					// internal links
 					return "[{$data['href']} {$content}]";
 				}
 		}
@@ -834,4 +836,18 @@ class ReverseParser {
 		}
 		return false;
  	}
+
+	/**
+	 * Returns true if given node has CSS class set
+	*/
+	private function hasCSSClass($node, $class) {
+		$classes = $node->getAttribute('class');
+
+		if (is_string($classes)) {
+			return in_array($class, explode(' ', $classes));
+		}
+		else {
+			return false;
+		}
+	}
 }
