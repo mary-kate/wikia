@@ -41,7 +41,7 @@ body
 
 body.fckEditor
 {
-	padding: 0 5px !important;
+	padding: 0 5px;
 }
 
 body, td
