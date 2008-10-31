@@ -158,8 +158,6 @@ function Ok() {
 	var data = {};
 	var link_text;
 
-	FCK.YAHOO.util.Dom.removeClass(link, 'autonumber'); // cleanup
-
 	if(activeTabCode == 'internal_link') {
 		if(GetE('internal_article_name').value == '') {
 			alert('Article name field can not be empty!');
