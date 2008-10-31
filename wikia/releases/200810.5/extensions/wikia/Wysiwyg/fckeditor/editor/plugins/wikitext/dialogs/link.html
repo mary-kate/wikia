@@ -164,6 +164,7 @@ function Ok() {
 
 	var data = {};
 	var link_text;
+	var href = '';
 
 	if(activeTabCode == 'internal_link') {
 		if(GetE('internal_article_name').value == '') {
@@ -194,7 +195,7 @@ function Ok() {
 			link_text = '';
 			data.type = 'external link';
 		}
-		data.href = GetE('external_url').value;
+		data.href = href = GetE('external_url').value;
 	}
 
 	if(MODE == EXISTING) {
@@ -208,7 +209,8 @@ function Ok() {
 	}
 
 	aLinks[0].innerHTML = link_text;
-	aLinks[0].href = '';
+	aLinks[0].href = href;
+	aLinks[0].removeAttribute('_fcksavedurl');
 
 	if(!refid) {
 		refid = FCK.wysiwygData.length;
@@ -240,6 +242,7 @@ function Ok() {
 	}
 
 	// check existance of internal links targets
+	// and fill in href attribute
 	if (activeTabCode == 'internal_link') {
 		FCK.CheckInternalLink(data.href, aLinks[0]);
 	}
