@@ -326,12 +326,14 @@ function Wysiwyg_WikiTextToHtml($wikitext, $articleId = -1, $encode = false) {
 	$html = $wysiwygParser->parse($wikitext, $title, $options)->getText();
 	$wgWysiwygParserEnabled = false;
 
-	// replace whitespaces after opening (<li>) and before closing tags (</p>, </h2>, </li>)
+	// replace whitespaces after opening (<li>) and before closing tags (</p>, </h2>, </li>, </dt>, </dd>)
 	$replacements = array(
 		"\n</p>"  => '</p>',
 		' </h'    => '</h',
 		'<li> '   => '<li>',
 		"\n</li>" => '</li>',
+		"\n</dt>" => '</dt>',
+		"\n</dd>" => '</dd>',
 	);
 	$html = strtr($html, $replacements);
 
