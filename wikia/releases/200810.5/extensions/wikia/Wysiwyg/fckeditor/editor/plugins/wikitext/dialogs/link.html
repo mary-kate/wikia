@@ -113,6 +113,11 @@ window.onload = function() {
 			if(GetE('internal_article_name').value != link.innerHTML) {
 				GetE('internal_link_text').value = link.innerHTML;
 			}
+			else {
+				GetE('internal_link_text').value = GetE('internal_article_name').value;
+			}
+
+			GetE('internal_article_name').focus();
 
 		} else if(TYPE == EXTERNAL) {
 
@@ -132,6 +137,7 @@ window.onload = function() {
 					GetE('external_link_text').value = link.innerHTML;
 				}
 			}
+
 			GetE('external_url').focus();
 		}
 
@@ -141,9 +147,9 @@ window.onload = function() {
 
 		if(MODE == NEW_SELECTION) {
 			GetE('internal_article_name').value = GetE('internal_link_text').value = selectionText;
-			GetE('internal_article_name').focus();
 		}
 
+		GetE('internal_article_name').focus();
 	}
 
 	window.parent.SetOkButton(true);
