@@ -175,17 +175,23 @@ FCK.CheckInternalLink = function(title, link) {
 	var callback = {
 		success: function(o) {
 			FCK = o.argument.FCK;
+			title = o.argument.title;
+			link =  o.argument.link;
+
 			result = eval('(' + o.responseText + ')');
 			pageExists = (typeof result.query.pages[-1] == 'undefined');
 
-			FCK.log('"' + o.argument.title + '" ' + (pageExists ? 'exists' : 'doesn\'t exist'));
+			FCK.log('"' + title + '" ' + (pageExists ? 'exists' : 'doesn\'t exist'));
 
-			if (o.argument.link) {
+			if (link) {
 				if (pageExists) {
-					FCK.YAHOO.util.Dom.removeClass(o.argument.link, 'new');
+					FCK.YAHOO.util.Dom.removeClass(link, 'new');
+					link.href = window.parent.wgServer + window.parent.wgArticlePath.replace(/\$1/, encodeURI(title.replace(/ /g, '_')));
 				} else {
-					FCK.YAHOO.util.Dom.addClass(o.argument.link, 'new');
+					FCK.YAHOO.util.Dom.addClass(link, 'new');
+					link.href = window.parent.wgServer + window.parent.wgScript + '?title=' + encodeURIComponent(title.replace(/ /g, '_')) + '&action=edit&redlink=1';
 				}
+				FCK.log('href: ' + link.href);
 			}
 		},
 		failure: function(o) {},
