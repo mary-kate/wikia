@@ -132,7 +132,7 @@ window.onload = function() {
 					GetE('external_link_text').value = link.innerHTML;
 				}
 			}
-
+			GetE('external_url').focus();
 		}
 
 	} else { // NEW LINKS
@@ -140,7 +140,8 @@ window.onload = function() {
 		dialog.SetSelectedTab('internal_link');
 
 		if(MODE == NEW_SELECTION) {
-			GetE('internal_article_name').value = selectionText;
+			GetE('internal_article_name').value = GetE('internal_link_text').value = selectionText;
+			GetE('internal_article_name').focus();
 		}
 
 	}
