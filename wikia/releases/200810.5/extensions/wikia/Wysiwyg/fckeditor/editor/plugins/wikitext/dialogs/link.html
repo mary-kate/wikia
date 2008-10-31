@@ -210,20 +210,36 @@ function Ok() {
 		aLinks[0].setAttribute('refid', refid);
 	}
 
-	if(link_text == '' && data.type == 'external link') {
-		FCK.YAHOO.util.Dom.addClass(aLinks[0], 'autonumber');
+	// CSS classes handling code
+	if(activeTabCode == 'external_link') {
+		FCK.YAHOO.util.Dom.addClass(aLinks[0], 'external');
+		if (link_text == '') {
+			FCK.YAHOO.util.Dom.addClass(aLinks[0], 'autonumber');
+		}
+		else {
+			FCK.YAHOO.util.Dom.removeClass(aLinks[0], 'autonumber');
+		}
+	}
+	else {
+		FCK.YAHOO.util.Dom.removeClass(aLinks[0], 'external');
+		FCK.YAHOO.util.Dom.removeClass(aLinks[0], 'autonumber');
 	}
 
+	// recalculate autonumbered links - check only a.autonumber tags
 	if (activeTabCode == 'external_link' || TYPE == EXTERNAL) {
 		var numberedLinks = FCK.EditingArea.Document.getElementsByClassName('autonumber');
 		FCK.log('recalculating '+ numberedLinks.length  + ' numbered external links');
-		for (n=0; n<numberedLinks.length; n++) {
-			numberedLinks[n].innerHTML = '[' + parseInt(n+1) + ']';
+		for (n=0; n<numberedLinks.length; ) {
+			numberedLinks[n].innerHTML = '[' + (++n) + ']';
 		}
 	}
 
+	// check existance of internal links targets
 	if (activeTabCode == 'internal_link') {
 		FCK.CheckInternalLink(data.href, aLinks[0]);
+	}
+	else {
+		FCK.YAHOO.util.Dom.removeClass(aLinks[0], 'new');
 	}
 
 	FCK.wysiwygData[refid] = data;
