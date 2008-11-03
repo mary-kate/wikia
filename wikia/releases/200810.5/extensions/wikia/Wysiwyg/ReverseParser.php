@@ -219,6 +219,12 @@ class ReverseParser {
 							break;
 						}
 
+						// ignore headers inside lists
+						if (in_array($node->parentNode->nodeName, array('li', 'dt', 'dd'))) {
+							$out = $textContent;
+							break;
+						}
+
 						// remove <br /> when it's the first child of header tag
 						// and add empty line before paragraph
 						if ($node->firstChild->nodeType == XML_ELEMENT_NODE && $node->firstChild->nodeName == 'br') {
@@ -232,6 +238,11 @@ class ReverseParser {
 						// new line logic
 						if ($node->previousSibling || ($node->parentNode && $this->isTableCell($node->parentNode))) {
 							$out = "\n{$out}";
+						}
+
+						// fix for "external HTML" pasted into FCK
+						if ($node->nextSibling && $node->nextSibling->nodeName != 'p') {
+							$out = "{$out}\n";
 						}
 						break;
 
