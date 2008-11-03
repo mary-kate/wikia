@@ -243,7 +243,7 @@ YAHOO.util.Event.onDOMReady(function () {
 					if (_otherStats.style.display == 'block') {
 						document.getElementById( "ws-edits-article" ).style.display = "block";
 						document.getElementById( "ws-active-wikians" ).style.display = "block";
-						document.getElementById( "wk-select-month-wikians-div" ).style.display = "none";
+						document.getElementById( "wk-select-month-wikians-div" ).style.display = "block";
 						document.getElementById( "ws-anon-wikians" ).style.display = "block";
 						document.getElementById( "ws-pageviews-count" ).style.display = "block";
 						document.getElementById( "ws-article-size" ).style.display = "block";
@@ -261,7 +261,7 @@ YAHOO.util.Event.onDOMReady(function () {
 					document.getElementById( "ws-article-size" ).style.display = "none";
 					document.getElementById( "ws-namespace-count" ).style.display = "none";
 					document.getElementById( "ws-page-edits-count" ).style.display = "none";
-					document.getElementById( "ws-othernpaces-edits-count" ).style.display = "block";
+					document.getElementById( "ws-othernpaces-edits-count" ).style.display = "none";
 					document.getElementById( "ws-other-stats-panel" ).style.display = "none";
 				}
 			}
@@ -278,6 +278,7 @@ YAHOO.util.Event.onDOMReady(function () {
 		document.getElementById( "ws-edits-article-table" ).innerHTML = "";
 		document.getElementById( "ws-wikians-active-absent-table" ).innerHTML = "";
 		document.getElementById( "ws-anon-wikians-table" ).innerHTML = "";
+		document.getElementById( "ws-pageviews-table" ).innerHTML = "";
 		document.getElementById( "ws-articles-size-table" ).innerHTML = "";
 		document.getElementById( "ws-namespace-count-table" ).innerHTML = "";
 		document.getElementById( "ws-page-edits-count-table" ).innerHTML = "";
