@@ -159,8 +159,23 @@ FCK.Events.AttachEvent( 'OnAfterSetHTML', function() {
 		var placeholders = FCK.EditorDocument.getElementsByTagName('input');
 		for (p=0; p<placeholders.length; p++) {
 			if (placeholders[p].parentNode.nodeName.IEquals(['p', 'div', 'li', 'dt', 'dd']) &&  placeholders[p] == placeholders[p].parentNode.lastChild) {
-				// add 'dirty' <br/>
-				FCKTools.AppendBogusBr(placeholders[p].parentNode);
+				if (FCKBrowserInfo.IsGecko10) {
+					// add &nbsp; for FF2.x
+					var frag = FCK.EditorDocument.createDocumentFragment();
+					frag.appendChild(FCK.EditorDocument.createTextNode('\xA0'));
+					placeholders[p].parentNode.appendChild(frag);
+				}
+				else {
+					// add 'dirty' <br/>
+					FCKTools.AppendBogusBr(placeholders[p].parentNode);
+				}
+			}
+
+			// insert &nbsp; between <input> tags on FF2.x
+			if (FCKBrowserInfo.IsGecko10 && placeholders[p].nextSibling && placeholders[p].nextSibling.nodeName.IEquals('input')) {
+				var frag = FCK.EditorDocument.createDocumentFragment();
+				frag.appendChild(FCK.EditorDocument.createTextNode('\xA0'));
+				placeholders[p].parentNode.insertBefore(frag, placeholders[p].nextSibling);
 			}
 		}
 	}
