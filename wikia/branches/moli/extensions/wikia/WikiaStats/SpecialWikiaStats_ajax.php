@@ -439,8 +439,12 @@ function axWStatisticsXLS($city_id, $param, $others = "", $date_from = "", $date
 			WikiaGenericStats::getWikiPageEditsCount($city_id, $xls, 1);
 			break;
 		}
+		case "9": { // page views
+			WikiaGenericStats::getWikiPageViewsCount($city_id, $xls, 0);
+			break;
+		}
 		// comparisions
-		case "9": { // overview
+		case "10": { // overview
 			$obj_stats = new WikiaGenericStats($wgUser->getID());
 			$cities = array(0 => 0); //initial and default value
 			if (!empty($others)) {
@@ -454,14 +458,14 @@ function axWStatisticsXLS($city_id, $param, $others = "", $date_from = "", $date
 			//WikiaGenericStats::getWikiPageEditsCount($city_id, $xls);
 			break;
 		}
-		case "10": { // creation history
+		case "11": { // creation history
 			$obj_stats = new WikiaGenericStats($wgUser->getID());
 			$obj_stats->getWikiCreationHistoryXLS($city_id);
 			//WikiaGenericStats::getWikiPageEditsCount($city_id, $xls);
 			break;
 		}
 		default : { // comparisions 
-			if ( ($param > 9) && ($param < 35) ) {
+			if ( ($param > 11) && ($param < 35) ) {
 				$obj_stats = new WikiaGenericStats($wgUser->getID());
 				$cities = array(0 => 0); //initial and default value
 				if (!empty($others)) {

@@ -757,6 +757,106 @@ class WikiaStatsXLS {
 	}
 	
 
+	public function makePageViewsXLS($city_id, $statsCount, $mSourceMetaSpace, $otherNspaces)
+	{
+		global $wgCanonicalNamespaceNames;
+		global $wgLang, $wgDBname;
+
+		$canonicalNamespace = WikiFactory::getVarValueByName('wgExtraNamespacesLocal', $city_id);
+		if ( is_array($aNamespaces) ) {
+			$canonicalNamespace = array_merge($wgCanonicalNamespaceNames, $canonicalNamespace);
+		} else {
+			$canonicalNamespace = $wgCanonicalNamespaceNames;
+		}
+
+		$dbname = $this->getXLSCityDBName($city_id);
+		$cur_month = 1;
+		#----
+		$this->setXLSHeader(wfMsg('wikiastats_filename_other8', $dbname));
+		$centralVersion = ($wgDBname == CENTRAL_WIKIA_ID);
+		#----
+		$this->setXLSFileBegin();
+		$this->writeXLSLabel(1,0,ucfirst($dbname). " - " .wfMsg('wikiastats_pageviews') );
+		$this->mergeXLSColsRows(1, 0, 1, 6);
+		$this->writeXLSLabel(2,0,wfMsg('wikiastats_pageviews_subtext'));
+		$this->mergeXLSColsRows(2, 0, 2, 6);
+		$this->writeXLSLabel(3,0,wfMsg('wikiastats_pageviews_counting'));
+		$this->mergeXLSColsRows(3, 0, 3, 6);
+
+		/*
+		 * Header
+		 */
+		$aNamespaces = $statsCount['namespaces'];
+		ksort($aNamespaces, SORT_NUMERIC);
+		$row = 5;
+		$this->writeXLSLabel($row,1,wfMsg('wikiastats_date'));
+		$this->mergeXLSColsRows($row, 1, $row+1, 1);
+		$this->writeXLSLabel($row,2,wfMsg('wikiastats_namespace'));
+		$this->mergeXLSColsRows($row, 2, $row, 2+(count($aNamespaces)-1));
+
+		$row++;
+		$loop = 0; foreach ($aNamespaces as $id => $value) {
+			$this->writeXLSLabel($row,2+$loop, ($id == 0) ? $wgLang->ucfirst(wfMsg('wikiastats_content')) : $canonicalNamespace[$id]);
+			$loop++;
+		}
+		
+		$rows = $rows_month = array();
+		if (!empty($statsCount['months'])) {
+			$loop = 0;
+			foreach ($statsCount['months'] as $date => $values) {
+				$aRow = array();
+				$dateArr = explode("-",$date);
+				$is_month = 0; if (!isset($dateArr[2])) {
+					$is_month = 1;
+				}
+				/*$stamp = mktime(23,59,59,$dateArr[1],($is_month)?1:$dateArr[2],$dateArr[0]);
+				$out = $wgLang->sprintfDate(($is_month)?"M Y":WikiaGenericStats::getStatsDateFormat(1), wfTimestamp(TS_MW, $stamp));
+				*/
+				$aRow[] = $date; #$out;
+				foreach ($aNamespaces as $id => $value) {
+					$_tmp = (isset($values[$id])) ? $values[$id] : 0;
+					$aRow[] = $_tmp;
+				}
+				($is_month == 0) ? $rows[] = $aRow : $rows_month[] = $aRow;
+			} 			
+		}
+
+		# daily first
+		$row++;
+		if (!empty($rows)) {
+			$loop = 0;
+			for ($id = count($rows)-1; $id >= 0; $id--) {
+				$aRow = $rows[$id]; 
+				if (!empty($aRow)) {
+					foreach ($aRow as $col => $value) {
+						$this->writeXLSLabel($row + $loop,$col+1,$value);
+					} 
+				}
+				$loop++;
+			}
+			$row = $row + $loop;
+		}
+	
+		# monthly next
+		$row++;
+		if (!empty($rows_month)) {
+			$loop = 0;
+			for ($id = count($rows_month)-1; $id >= 0; $id--) {
+				$loop++;
+				$aRow = $rows_month[$id]; 
+				if (!empty($aRow)) {
+					foreach ($aRow as $col => $value) {
+						$this->writeXLSLabel($row+$loop,$col+1,$value);
+					} 
+				}
+			}
+		}
+
+		unset($statsCount);
+		unset($mSourceMetaSpace);
+		$this->setXLSFileEnd();
+	}
+
 	public function makeMostEditOtherNspacesStats($city_id, &$statsCount, &$mSourceMetaSpace)
 	{
 		global $wgCanonicalNamespaceNames;
