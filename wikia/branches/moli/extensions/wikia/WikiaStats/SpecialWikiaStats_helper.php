@@ -883,7 +883,7 @@ class WikiaGenericStats {
 					$dbs =& wfGetDBExt();
 				}
 				#---
-				$sql = "set @day = date_format(now(), '%d') + 1;";
+				$sql = "set @day = date_format(now(), '%d') + 1";
 				$res = $dbs->query($sql);
 				$sql = "select pv_use_date, sum(pv_views) as cnt, pv_namespace from `dbstats`.`city_page_views` ";
 				$sql .= "where pv_city_id = {$city_id} and pv_use_date >= last_day(now() - interval @day day) group by pv_use_date, pv_namespace order by pv_use_date";
@@ -902,17 +902,22 @@ class WikiaGenericStats {
 					}
 					$result['namespaces'][$nspace] += intval($row->cnt);
 				} 
-				#error_log (print_r($result, true), 3, "/tmp/moli.log");
+
+				unset($prevValues);
+				$prevValues = array();
+				$result_months = array();
 
 				$sql = "select date_format(pv_use_date, '%Y-%m') as pv_date, sum(pv_views) as cnt, pv_namespace from `dbstats`.`city_page_views` ";
 				$sql .= "where pv_city_id = {$city_id} and date_format(pv_use_date, '%Y-%m') <= date_format(now(), '%Y-%m') group by pv_date, pv_namespace order by pv_date";
 				$res = $dbs->query($sql);
 				#---
-				unset($prevValues);
-				$prevValues = array();
 				while ( $row = $dbs->fetchObject( $res ) ) {
 					$nspace = (in_array($row->pv_namespace, $namespaces)) ? NS_MAIN : $row->pv_namespace;
 					$result['months'][$row->pv_date][$nspace] = intval($row->cnt);
+					if (isset($prevValues[$nspace])) {
+						$result['trends'][$row->pv_date][$nspace] = self::calculateTrend($result['months'][$row->pv_date][$nspace], $prevValues[$nspace]);
+					}
+					$prevValues[$nspace] = $result['months'][$row->pv_date][$nspace];
 					if (!isset($result['namespaces'][$nspace])) {
 						$result['namespaces'][$nspace] = 0;
 					}
@@ -920,33 +925,6 @@ class WikiaGenericStats {
 				}
 				$dbs->freeResult( $res );
 
-				$sql = "select date_format(pv_use_date, '%Y-%m') as pv_date, sum(pv_views) as cnt, pv_namespace from `dbstats`.`city_page_views` ";
-				$sql .= "where pv_city_id = {$city_id} and date_format(pv_use_date, '%Y-%m') <= date_format(now(), '%Y-%m') group by pv_date, pv_namespace order by pv_date";
-				$res = $dbs->query($sql);
-				#---
-				while ( $row = $dbs->fetchObject( $res ) ) {
-					$nspace = (in_array($row->pv_namespace, $namespaces)) ? NS_MAIN : $row->pv_namespace;
-					$result['months']['2008-09'][$nspace] = intval($row->cnt + rand(10000, 50000));
-					if (!isset($result['namespaces'][$nspace])) {
-						$result['namespaces'][$nspace] = 0;
-					}
-					$result['namespaces'][$nspace] += intval($row->cnt);
-				}
-				$dbs->freeResult( $res );
-
-				$sql = "select date_format(pv_use_date, '%Y-%m') as pv_date, sum(pv_views) as cnt, pv_namespace from `dbstats`.`city_page_views` ";
-				$sql .= "where pv_city_id = {$city_id} and date_format(pv_use_date, '%Y-%m') <= date_format(now(), '%Y-%m') group by pv_date, pv_namespace order by pv_date";
-				$res = $dbs->query($sql);
-				#---
-				while ( $row = $dbs->fetchObject( $res ) ) {
-					$nspace = (in_array($row->pv_namespace, $namespaces)) ? NS_MAIN : $row->pv_namespace;
-					$result['months']['2008-08'][$nspace] = intval($row->cnt + rand(1000, 2000));
-					if (!isset($result['namespaces'][$nspace])) {
-						$result['namespaces'][$nspace] = 0;
-					}
-					$result['namespaces'][$nspace] += intval($row->cnt);
-				}
-				$dbs->freeResult( $res );
 				#---
 				if (self::USE_MEMC) $wgMemc->set($memkey, $result, 60*60*3);
 			}
@@ -2468,6 +2446,7 @@ class WikiaGenericStats {
 						$data = array("code" => 1, "text" => $text);
 					} else {
 						wfProfileOut( __METHOD__ );
+						self::makeWikiaPageViewsXLS($city_id, $pageViewsCount, $mSourceMetaSpace, $otherNspaces);
 						//self::makeWikiaMostEditOtherNspacesPagesXLS($city_id, $sortData, $mSourceMetaSpace);
 					}
 				}				
@@ -2817,6 +2796,14 @@ class WikiaGenericStats {
 		#---
 		$XLSObj = new WikiaStatsXLS();
 		$XLSObj->makeDBNamespaceStats($city_id, $namespaceCount, $nspaces, $allowedNamespace);
+		return;
+	}
+	
+	static private function makeWikiaPageViewsXLS($city_id, $pageViewsCount, $mSourceMetaSpace, $otherNspaces)
+	{
+		#---
+		$XLSObj = new WikiaStatsXLS();
+		$XLSObj->makePageViewsXLS($city_id, $pageViewsCount, $mSourceMetaSpace, $otherNspaces);
 		return;
 	}
 

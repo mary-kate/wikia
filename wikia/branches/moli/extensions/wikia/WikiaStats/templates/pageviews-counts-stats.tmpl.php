@@ -14,6 +14,7 @@ if (!empty($statsCount))
   $rows = array();
   $rows_month = array();
   if (!empty($statsCount['months'])) {
+  	$prev_value = array(0,0);
   	foreach ($statsCount['months'] as $date => $values) {
   		$row = "";
 		$dateArr = explode("-",$date);
@@ -30,16 +31,21 @@ if (!empty($statsCount))
   		$all = 0;
   		foreach ($aNamespaces as $id => $value) {
   			$_tmp = (isset($values[$id])) ? $values[$id] : 0;
-  			$row .= "<td class=\"eb\" style=\"font-size:7pt;background-color:".WikiaGenericStats::colorizeTrend($statsCount['trends'][$date][$id])."\">";
+  			$row .= "<td class=\"eb\" style=\"width:40px;font-size:7pt;background-color:".WikiaGenericStats::colorizeTrend($statsCount['trends'][$date][$id])."\">";
   			$row .= "<div class=\"ws-tpv\">".$wgLang->formatNum(sprintf("%0.1f", $statsCount['trends'][$date][$id]))."%</div>";
   			$row .= "<div class=\"ws-tpvl\">".WikiaGenericStats::getNumberFormat($_tmp)."</div></td>";
   			$all += $_tmp;
 		}
-		$row .= "<td class=\"cb\" style=\"white-space:nowrap;background-color:#ffdead\">".WikiaGenericStats::getNumberFormat($all)."</td>";
+		/*$trend_all = "";
+		if (isset($prev_value[$is_month])) {
+			$trend_all = WikiaGenericStats::calculateTrend($all, $prev_value[$is_month]);
+		}
+		$row .= "<td class=\"cb\" style=\"white-space:nowrap;background-color:#ffdead\">".WikiaGenericStats::getNumberFormat($all)."</td>";*/
 		$row .= "</tr>";
 		($is_month == 0) ? $rows[] = $row : $rows_month[] = $row;
 	} 
 	krsort($rows);
+	krsort($rows_month);
   }
 ?>	
 <table id="ws-pageviews-legend" class="b" style="margin-top: 5px;" cellspacing="0">
@@ -64,13 +70,13 @@ if (!empty($statsCount))
 <table cellspacing="0" cellpadding="0" border="1" id="table_page_edited_stats" style="width:auto; font-family: arial,sans-serif,helvetica; font-size:9pt;background-color:#ffffdd;">
 <tr bgcolor="#ffdead">
 	<td class="cb" rowspan="2"><?=wfMsg('wikiastats_date')?></td>
-	<td class="cb" colspan="<?=count($aNamespaces) + 1?>"><?=wfMsg('wikiastats_namespace')?></td>
+	<td class="cb" colspan="<?=count($aNamespaces)?>"><?=wfMsg('wikiastats_namespace')?></td>
 </tr>	
 <tr bgcolor="#ffeecc">
 <? foreach ($aNamespaces as $id => $value) { ?>	
 	<td class="cb" style="font-size:7pt;"><?= ($id == 0) ? $wgLang->ucfirst(wfMsg('wikiastats_content')) : str_replace("_","<br />",$canonicalNamespace[$id])?></td>
 <? } ?>
-	<td class="cb" style="font-size:7pt;">#</td>
+	<!--<td class="cb" style="font-size:7pt;">#</td>-->
 </tr>
 <?= implode("", $rows)?>
 <?= implode("", $rows_month)?>
@@ -81,16 +87,16 @@ if (!empty($statsCount))
 ?>	
 	<td class="cb"><?= WikiaGenericStats::getNumberFormat($value) ?></td>
 <? } ?>
-	<td class="cb"><?= WikiaGenericStats::getNumberFormat($all)?></td>
+	<!--<td class="cb"><?= WikiaGenericStats::getNumberFormat($all)?></td>-->
 </tr>
 <tr bgcolor="#ffeecc">
 <? foreach ($aNamespaces as $id => $value) { ?>	
 	<td class="cb" style="font-size:7pt;"><?= ($id == 0) ? $wgLang->ucfirst(wfMsg('wikiastats_content')) : str_replace("_","<br />",$canonicalNamespace[$id])?></td>
 <? } ?>
-	<td class="cb" style="font-size:7pt;">#</td>
+	<!--<td class="cb" style="font-size:7pt;">#</td>-->
 </tr>
 <tr bgcolor="#ffdead">
-	<td class="cb" colspan="<?=count($aNamespaces) + 1?>"><?=wfMsg('wikiastats_namespace')?></td>
+	<td class="cb" colspan="<?=count($aNamespaces)?>"><?=wfMsg('wikiastats_namespace')?></td>
 </tr>	
 </table>
 </div>

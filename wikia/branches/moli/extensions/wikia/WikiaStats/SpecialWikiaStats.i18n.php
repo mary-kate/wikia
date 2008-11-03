@@ -258,6 +258,7 @@ $wgWikiaStatsMessages["en"] = array(
 	"wikiastats_filename_other5" => "database_per_nspace_$1",
 	"wikiastats_filename_other6" => "mostedit_articles_$1",
 	"wikiastats_filename_other7" => "mostedit_othernspace_pages_$1",
+	"wikiastats_filename_other8" => "pageviews_$1",
 	"wikiastats_filename_trend" => "trend_$1",
 	"wikiastats_filename_creation" => "creation_$1",
 	#"wikiastats_filename_column_C" => "New registered editors",
