@@ -308,7 +308,7 @@ function Wysiwyg_CheckEdgeCases($text) {
 function Wysiwyg_WikiTextToHtml($wikitext, $articleId = -1, $encode = false) {
 	global $IP, $wgWysiwygMetaData, $wgWysiwygParserEnabled, $wgWysiwygParserTildeEnabled, $wgTitle, $wgUser, $wgWysiwygMarkers;
 
-	require("$IP/extensions/wikia/Wysiwyg/WysiwygParser.php");
+	require_once("$IP/extensions/wikia/Wysiwyg/WysiwygParser.php");
 
 	wfDebug("Wysiwyg_WikiTextToHtml wikitext: {$wikitext}\n");
 
@@ -348,7 +348,7 @@ function Wysiwyg_WikiTextToHtml($wikitext, $articleId = -1, $encode = false) {
 }
 
 function Wysiwyg_HtmlToWikiText($html, $wysiwygData, $decode = false) {
-	require(dirname(__FILE__).'/ReverseParser.php');
+	require_once(dirname(__FILE__).'/ReverseParser.php');
 	$reverseParser = new ReverseParser();
 	return $reverseParser->parse($html, $decode ? Wikia::json_decode($wysiwygData, true) : $wysiwygData);
 }
