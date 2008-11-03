@@ -16,24 +16,20 @@ class DefaultMessages {
 
 	private static function memcKey() {
 		global $wgDefaultMessagesDB;
-		return $wgDefaultMessagesDB . ':default_messages';
+		return $wgDefaultMessagesDB . ':default_messages_new';
 	}
 
 	private static function filecache() {
 		global $wgDefaultMessagesDB;
-		return '/tmp/default_messages.ser';
+		return '/tmp/default_messages_new.ser';
 	}
 
 	public static function get( $key, $lang, &$message ) {
 		if( $message === false ) {
-			wfDebug( __METHOD__ . " called for $key/$lang\n");
 			self::load();
 
-			if( isset( self::$cache["$key/$lang"] ) && is_array( self::$cache["$key/$lang"] ) ) {
-				wfDebug( __METHOD__ . " found " . self::$cache["$key/$lang"]['value'] . "\n" );
-				$message = self::$cache["$key/$lang"]['value'];
-			} else {
-				wfDebug( __METHOD__ . " did not found anything\n" );
+			if( isset( self::$cache[$key][$lang] ) ) {
+				$message = self::$cache[$key][$lang];
 			}
 		}
 
@@ -83,7 +79,7 @@ class DefaultMessages {
 						$lang = 'en';
 					}
 					$value = Revision::getRevisionText( $row );
-					self::$cache["$key/$lang"] = array( 'key' => $key, 'value' => $value, 'lang' => $lang );
+					self::$cache[$key][$lang] = $value;
 				}
 				$dbr->freeResult( $res );
 				$wgMemc->set( self::memcKey(), self::$cache, self::expire );
@@ -111,9 +107,9 @@ class DefaultMessages {
 
 			if( $text === false ) {
 				# Article was deleted
-				unset( self::$cache["$key/$lang"] );
+				unset( self::$cache[$key][$lang] );
 			} else {
-				self::$cache["$key/$lang"] = array( 'key' => $key, 'value' => $text, 'lang' => $lang );
+				self::$cache[$key][$lang] = $text;
 			}
 			$wgMemc->set( self::memcKey(), self::$cache, self::expire );
 			$_touched = time();
