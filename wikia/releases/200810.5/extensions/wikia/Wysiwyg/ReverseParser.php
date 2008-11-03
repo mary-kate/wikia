@@ -47,6 +47,7 @@ class ReverseParser {
 				' </dd>' => '</dd>',
 				' </dt>' => '</dt>',
 				' <pre>' => '<pre>',
+				' <h'    => '<h',
 			);
 
 			$html = strtr($html, $replacements);
@@ -241,7 +242,7 @@ class ReverseParser {
 						}
 
 						// fix for "external HTML" pasted into FCK
-						if ($node->nextSibling && $node->nextSibling->nodeName != 'p') {
+						if ($node->nextSibling && $node->nextSibling->nodeName != 'p' && !$this->isHeader($node->nextSibling)) {
 							$out = "{$out}\n";
 						}
 						break;
@@ -826,6 +827,13 @@ class ReverseParser {
 	 */
 	private function isTableCell($node) {
 		return in_array($node->nodeName, array('td', 'th', 'caption'));
+	}
+
+	/**
+	 * Return true if given node is heading node
+	*/
+	private function isHeader($node) {
+		return (strlen($node->nodeName) == 2) && ($node->nodeName{0} == 'h') && is_numeric($node->nodeName{1});
 	}
 
 	/**
