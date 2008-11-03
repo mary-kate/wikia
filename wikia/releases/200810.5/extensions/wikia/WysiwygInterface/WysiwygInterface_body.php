@@ -29,18 +29,6 @@ class WysiwygInterface extends SpecialPage {
 			// use simple function to parse wikitext to HTML with FCK extra data
 			list($out, $tmpMetaData) = Wysiwyg_WikiTextToHtml($wikitext);
 	
-			/*			
-			$parser = new WysiwygParser();
-			$parser->setOutputType(OT_HTML);
-			global $wgWysiwygParserEnabled;
-			$wgWysiwygParserEnabled = true;
-			$wikitext = $parser->preSaveTransform($wikitext, $wgTitle, $wgUser, $options);
-			$out = $parser->parse($wikitext, $wgTitle, $options)->getText();
-			$wgWysiwygParserEnabled = false;
-
-			// fix UTF issue
-			$out = mb_convert_encoding($out, 'HTML-ENTITIES', "UTF-8");
-			*/
 			// will be used by reverse parser
 			$html = $out;
 
@@ -72,6 +60,7 @@ class WysiwygInterface extends SpecialPage {
 
 				$geshi = new geshi($out, 'html4strict');
 				$geshi->enable_keyword_links(false);
+				$out = $geshi->parse_code(); 
 			}
 			else {
 				$html = '';
@@ -110,7 +99,7 @@ class WysiwygInterface extends SpecialPage {
 			$wgOut->addHTML('<pre>' . htmlspecialchars($wikitext) . '</pre>');
 
 			$wgOut->addHTML('<h3>HTML</h3>');
-			$wgOut->addHTML('<pre>' . htmlspecialchars($html) . '</pre>');
+			$wgOut->addHTML($out);
 
 			$wgOut->addHTML('<h3>Back to wikimarkup</h3>');
 			$wgOut->addHTML('<pre>' . htmlspecialchars($wikitext_parsed) . '</pre>');
