@@ -107,6 +107,13 @@ FCK.SwitchEditMode = function() {
 	return true;
 }
 
+FCK.InsertDirtySpanBefore = function(node) {
+	var span = FCKTools.GetElementDocument(node).createElement('SPAN');
+	span.setAttribute('type', '_moz');
+	span.className = '_moz_dirty';
+	node.parentNode.insertBefore(span, node);
+}
+
 FCK.Events.AttachEvent( 'OnAfterSetHTML', function() {
 	if(FCK.EditingArea.TargetElement.className == 'childrenHidden') {
 		var html = FCK.GetData();
@@ -171,14 +178,14 @@ FCK.Events.AttachEvent( 'OnAfterSetHTML', function() {
 				}
 			}
 
-			var isFirstChild = (placeholders[p].parentNode.firstChild == placeholders[p]);
+			// insert <span type="_moz"> between input tags
+			if ( (placeholders[p].nextSibling && placeholders[p].nextSibling.nodeName.IEquals('input'))) {
+				FCK.InsertDirtySpanBefore(placeholders[p].nextSibling);
+			}
 
-			// insert <span type="_moz"> between input tags and before inpu tags at the beginning of lines
-			if ( (placeholders[p].nextSibling && placeholders[p].nextSibling.nodeName.IEquals('input')) || isFirstChild) {
-				var span = FCK.EditorDocument.createElement('SPAN');
-				span.setAttribute('type', '_moz');
-				span.className = '_moz_dirty';
-				placeholders[p].parentNode.insertBefore(span, isFirstChild ? placeholders[p] : placeholders[p].nextSibling);
+			// and at the beginning of line
+			if (placeholders[p].parentNode.firstChild == placeholders[p]) {
+				FCK.InsertDirtySpanBefore(placeholders[p]);
 			}
 		}
 	}
