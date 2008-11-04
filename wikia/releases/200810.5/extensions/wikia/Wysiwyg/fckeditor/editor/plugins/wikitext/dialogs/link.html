@@ -68,6 +68,15 @@ if(link) {
 } else {
 
 	var selection = FCK.Selection.GetSelection();
+
+	// validate selection - must be placed within one node
+	var range = selection.getRangeAt(0);
+
+	if (range.startContainer != range.endContainer) {
+		FCK.log('fixing link selection');
+		range.setEnd(range.startContainer, range.startContainer.textContent.length);
+	}
+
 	var selectionText = selection.type ? selection.createRange().text : selection.toString();
 	if(selectionText != '') {
 		MODE = NEW_SELECTION;
