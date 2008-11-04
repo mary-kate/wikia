@@ -58,7 +58,7 @@ class WikiFactoryLoader {
 	 * discover which wikia we handle
 	 *
 	 * @access public
-	 * @author Krzysztof Krzyżaniak <eloy@wikia.com>
+	 * @author Krzysztof Krzyżaniak <eloy@wikia-inc.com>
 	 *
 	 * @param integer $id default null	explicite set wiki id
 	 * @param string $server_name default null	explicite set server name
@@ -139,7 +139,7 @@ class WikiFactoryLoader {
 				 */
 				$name = preg_replace( "/^www\./", "", $this->mServerName );
 				$pattern = "/{$domain}$/";
-				if( preg_match( $pattern, $name ) ) {
+				if( $domain !== "wikia.com" && preg_match( $pattern, $name ) ) {
 					$this->mOldServerName = $this->mServerName;
 					$this->mServerName = str_replace( $domain, "wikia.com", $name );
 					$this->mAlternativeDomainUsed = true;
