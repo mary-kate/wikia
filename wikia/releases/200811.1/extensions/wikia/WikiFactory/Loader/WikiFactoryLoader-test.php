@@ -73,24 +73,31 @@ class WikiFactoryLoader {
 				: $server_name;
 		}
 		elseif( !empty($_SERVER['SERVER_NAME'])) {
+			/**
+			 * normal http request
+			 */
 			$this->mServerName = strtolower( $_SERVER['SERVER_NAME'] );
 			$this->mCityID = null;
 		}
-		elseif( !empty($_ENV['SERVER_ID']) ) { #--- interactive/cmdline
+		elseif( !empty($_ENV['SERVER_ID']) ) {
+			/**
+			 * interactive/cmdline
+			 */
 			$this->mCityID = $_ENV['SERVER_ID'];
 			$this->mServerName = null;
 		}
-		else { #--- hardcoded exit, nothing can be done at this point
+		else {
+			/**
+			 * hardcoded exit, nothing can be done at this point
+			 */
 			echo "Cannot tell which wiki it is (neither SERVER_NAME nor SERVER_ID is defined)\n";
 			exit(1);
 		}
 
-		#--- turn on/off error_log
-		$this->mDebug = false;
-
 		/**
 		 * initalizations
 		 */
+		$this->mDebug = false;
 		$this->mOldServerName = false;
 		$this->mAlternativeDomainUsed = false;
 		$this->mDBname = "wikicities";
@@ -182,7 +189,7 @@ class WikiFactoryLoader {
 		}
 		/**
 		 * and finally fallback to $wgDBserver
-		*/
+		 */
 		if( is_null( $this->mDBhandler ) ) {
 			$this->mDBhandler = new Database( $wgDBserver, $wgDBuser, $wgDBpassword, $this->mDBname );
 			$this->debug( "fallback to wgDBserver {$wgDBserver}" );
