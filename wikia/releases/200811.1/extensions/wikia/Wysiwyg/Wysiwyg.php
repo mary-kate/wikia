@@ -385,15 +385,11 @@ function Wysiwyg_SetRefId($type, $params, $addMarker = true, $returnId = false) 
 			break;
 
 		case 'internal link: media':
+		case 'image':
 		case 'category':
 			$data['href'] = ($params['noforce'] ? '' : ':') . $params['link'];
 			$data['description'] = $params['wasblank'] ? '' : $params['text'];
 			$result = "[[" . $data['href'] . ($params['wasblank'] ? '' : "|".$params['text']) . "]]";
-			break;
-
-		case 'image':
-			$data['href'] = ($params['noforce'] ? '' : ':') . $params['link'];
-			$data['description'] = $params['wasblank'] ? '' : $params['text'];
 			break;
 
 		case 'external link: raw image':
