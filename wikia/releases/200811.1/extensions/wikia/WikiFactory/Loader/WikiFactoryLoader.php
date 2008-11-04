@@ -37,9 +37,9 @@ function wfUnserializeHandler( $errno, $errstr ) {
 
 class WikiFactoryLoader {
 
-	public $mServerName, $mWikiID, $mCityHost, $mCityID;
+	public $mServerName, $mWikiID, $mCityHost, $mCityID, $mOldServerName;
 	public $mDomain, $mVariables, $mIsWikiaActive, $mAlwaysFromDB;
-	public $mDevelDomainPart, $mNoRedirect, $mTimestamp, $mAdCategory;
+	public $mNoRedirect, $mTimestamp, $mAdCategory;
 	public $mExpireDomainCacheTimeout = 86400; #--- 24 hours
 	public $mExpireValuesCacheTimeout = 86400; #--- 24 hours
 
@@ -66,6 +66,7 @@ class WikiFactoryLoader {
 	 */
 	public function  __construct( $id = null, $server_name = null ) {
 		global $wgDBname, $wgSharedDB, $wgDevelEnvironment, $wgDevelDomains;
+		global $wgWikiFactoryDomains;
 
 		if( !is_null( $id ) ) {
 			/**
@@ -92,29 +93,57 @@ class WikiFactoryLoader {
 		#--- turn on/off error_log
 		self::$mDebug = 0;
 
-		if( !empty( $wgDevelEnvironment ) ) {
-			if( is_array($wgDevelDomains) ) {
-				$this->mDevelDomains = array_merge( $this->mDevelDomains, $wgDevelDomains );
-			}
-			foreach( $this->mDevelDomains as $domain ) {
-				if( stripos( $this->mServerName, $domain ) ) {
-					$this->mServerName = str_replace( $domain, "wikia.com", $this->mServerName );
-					$this->mDevelDomainPart = $domain;
-				}
-			}
-			self::$mDebug = 1;
-		}
-
-		# now some initalizations
+		/**
+		 * initalizations
+		 */
+		$this->mOldServerName = false;
 		$this->mDBname = "wikicities";
 		$this->mDomain = array();
 		$this->mVariables = array();
 		$this->mIsWikiaActive = 0;
-		$this->mAlwaysFromDB = 0;   #--- skip reading from memcache
+		$this->mAlwaysFromDB = 0;
 		$this->mWikiID = 0;
 		$this->mSkipFileCache = 1;
 		$this->mNoRedirect = false;
 		$this->mDBhandler = null;
+
+		if( !empty( $wgDevelEnvironment ) ) {
+			$wgWikiFactoryDomains = is_array( $wgWikiFactoryDomains )
+				? $wgWikiFactoryDomains : array();
+			$wgDevelDomains = is_array( $wgDevelDomains )
+				? $wgDevelDomains : array();
+
+			$wgWikiFactoryDomains = array_merge( $wgDevelDomains, $wgWikiFactoryDomains );
+			self::$mDebug = 1;
+			$this->mAlwaysFromDB = 1;
+		}
+
+		/**
+		 * @author Krzysztof Krzyżaniak <eloy@wikia-inc.com>
+		 *
+		 * handle additional domains, we have plenty of domains which should
+		 * redirect to <wikia>.wikia.com. They should be added to
+		 * $wgWikiFactoryDomains variable (which is simple list). When
+		 * additional domain is detected we do simple replace:
+		 *
+		 * muppets.wikia.org => muppets.wikia.com
+		 *
+		 * additionally we remove www. before matching
+		 */
+		if( isset( $wgWikiFactoryDomains ) && is_array( $wgWikiFactoryDomains ) ) {
+			foreach( $wgWikiFactoryDomains as $domain ) {
+				/**
+				 * remove www from domain
+				 */
+				$name = preg_replace( "/^www\./", "", $this->mServerName );
+				$pattern = "/{$domain}$/";
+				if( preg_match( $pattern, $name ) ) {
+					$this->mOldServerName = $this->mServerName;
+					$this->mServerName = str_replace( $domain, "wikia.com", $name );
+					break;
+				}
+			}
+		}
 
 		WikiFactory::isUsed( true );
 
@@ -137,6 +166,8 @@ class WikiFactoryLoader {
 	 * @author Krzysztof Krzyżaniak <eloy@wikia.com>
 	 * @access public
 	 *
+	 * @todo change new Database to LoadBalancer factory
+	 *
 	 * @return object Database	database handler
 	 */
 	public function getDB() {
@@ -150,18 +181,14 @@ class WikiFactoryLoader {
 			$server = array_rand( $wgDBservers );
 			$host = $server[0]["host"];
 			$this->mDBhandler = new Database( $host, $wgDBuser, $wgDBpassword, $this->mDBname );
-			if( !empty( self::$mDebug ) ) {
-				error_log("wikifactory: connecting to {$host}");
-			}
+			$this->debug( "connecting to {$host}" );
 		}
 		/**
 		 * and finally fallback to $wgDBserver
 		*/
 		if( is_null( $this->mDBhandler ) ) {
 			$this->mDBhandler = new Database( $wgDBserver, $wgDBuser, $wgDBpassword, $this->mDBname );
-			if( !empty( self::$mDebug ) ) {
-				error_log("wikifactory: fallback to wgDBserver {$wgDBserver}");
-			}
+			$this->debug( "fallback to wgDBserver {$wgDBserver}" );
 		}
 
 		return $this->mDBhandler;
@@ -191,9 +218,7 @@ class WikiFactoryLoader {
 			$key = WikiFactory::getDomainKey( $this->mServerName );
 			$this->mDomain = $oMemc->get( $key );
 			$this->mDomain = isset( $this->mDomain["id"] ) ? $this->mDomain : array ();
-			if( !empty( self::$mDebug ) ) {
-				error_log("wikifactory: reading from cache, key {$key}");
-			}
+			$this->debug( "reading from cache, key {$key}" );
 			wfProfileOut( __METHOD__."-domaincache" );
 		}
 
@@ -295,10 +320,7 @@ class WikiFactoryLoader {
 					$this->mExpireDomainCacheTimeout
 				);
 			}
-			wfDebug("wikifactory: {$this->mWikiID}:{$this->mServerName} (from database)", true);
-			if( !empty( self::$mDebug ) ) {
-				error_log("wikifactory: reading from database {$this->mServerName}");
-			}
+			$this->debug( "city_id={$this->mWikiID}, reading from database key {$this->mServerName}" );
 			wfProfileOut( __METHOD__."-domaindb" );
 		}
 		else {
@@ -323,10 +345,7 @@ class WikiFactoryLoader {
 		 * redirection to another url
 		 */
 		if( $this->mIsWikiaActive == 2 ) {
-			wfDebug("wikifactory: {$this->mWikiID}:{$this->mIsWikiaActive}) redirected to {$this->mCityHost}", true);
-			if ( !empty( self::$mDebug ) ) {
-				error_log( "wikifactory: redirected to {$this->mCityHost}" );
-			}
+			$this->debug( "city_id={$this->mWikiID};city_public={$this->mIsWikiaActive}), redirected to {$this->mCityHost}" );
 			header( "Location: http://{$this->mCityHost}/", true, 301 );
 			wfProfileOut( __METHOD__ );
 			exit(0);
@@ -341,10 +360,17 @@ class WikiFactoryLoader {
 		 */
 		list( $host, $path ) = array_pad( explode( "/", $this->mCityHost, 2 ), 2, false );
 
-		if( !empty( $host ) && !empty( $this->mServerName )
-			&& strtolower( $host ) != $this->mServerName
-			&& empty($wgDevelEnvironment) && $this->mNoRedirect === false )
-		{
+		/**
+		 * check if domain from browser is different than main domain for wiki
+		 */
+		$cond1 = !empty( $host ) && !empty( $this->mServerName ) && strtolower( $host ) != $this->mServerName;
+
+		/**
+		 * check if not additional domain was used (then we redirect anyway)
+		 */
+		$cond2 = $host != $this->mOldServerName;
+
+		if( ( $cond1 || $cond2 ) && empty( $wgDevelEnvironment ) && $this->mNoRedirect === false ) {
 			$url = wfGetCurrentUrl();
 			/**
 			 * dofus exception
@@ -359,6 +385,7 @@ class WikiFactoryLoader {
 				 */
 				$url[ "path" ] = preg_replace( "!^(/wiki)!", "", $url[ "path" ] );
 			}
+
 			/**
 			 * now recombine url from parts
 			 */
@@ -369,10 +396,8 @@ class WikiFactoryLoader {
 			$target = $url[ "scheme" ] . "://" . $host . $url[ "path" ];
 			$target = isset( $url[ "query" ] ) ? $target . "?" . $url[ "query" ] : $target;
 
-			wfDebug("wikifactory: redirected from {$url[ "url" ]} to {$target}", true);
-			if( !empty( self::$mDebug ) ) {
-				error_log( "wikifactory: redirected from {$url[ "url" ]} to {$target}" );
-			}
+			$this->debug( "redirected from {$url[ "url" ]} to {$target}" );
+
 			header( "Location: {$target}", true, 301 );
 			wfProfileOut( __METHOD__ );
 			exit(0);
@@ -381,12 +406,9 @@ class WikiFactoryLoader {
 		/**
 		 * if wikia is not defined or is disabled we redirecting to Not_a_valid_Wikia
 		 */
-		if( empty($this->mWikiID) || empty($this->mIsWikiaActive) ) {
+		if( empty( $this->mWikiID ) || empty( $this->mIsWikiaActive ) ) {
 			global $wgNotAValidWikia;
-			wfDebug("wikifactory: {$this->mWikiID}:{$this->mIsWikiaActive}) wiki id empty or Wikia disabled", true);
-			if ( !empty( self::$mDebug ) ) {
-				error_log("wikifactory: redirected to $wgNotAValidWikia");
-			}
+			$this->debug( "redirected to {$wgNotAValidWikia}" );
 			header("Location: $wgNotAValidWikia");
 			wfProfileOut( __METHOD__ );
 			exit(0);
@@ -450,15 +472,10 @@ class WikiFactoryLoader {
 				$this->mVariables = isset( $data["data"] ) && is_array( $data["data"] )
 					? $data["data"]
 					: array ();
-				if( !empty( self::$mDebug ) ) {
-					error_log("wikifactory: reading from cache, key {$key}, count ".count( $this->mVariables ));
-				}
+				$this->debug( "wikifactory: reading from cache, key {$key}, count ".count( $this->mVariables ) );
 			}
 			else {
-				wfDebug("wikifactory: timestamp doesn't match. Cache expired", true);
-				if( !empty( self::$mDebug ) ) {
-					error_log("wikifactory: timestamp doesn't match. Cache expired");
-				}
+				$this->debug( "wikifactory: timestamp doesn't match. Cache expired" );
 			}
 			wfProfileOut( __METHOD__."-varscache" );
 		}
@@ -492,10 +509,15 @@ class WikiFactoryLoader {
 				$tUnserVal = unserialize( $oRow->cv_value );
 				restore_error_handler();
 
-				if( !empty($wgDevelEnvironment) && $oRow->cv_name === "wgServer" ) {
-					$tUnserVal = str_replace( "wikia.com", $this->mDevelDomainPart, $tUnserVal );
+				if( !empty( $wgDevelEnvironment ) && $oRow->cv_name === "wgServer" ) {
+					/**
+					 * skip this variable
+					 */
+					$this->debug( "{$oRow->cv_name} with value {$tUnserVal} skipped" );
 				}
-				$this->mVariables[$oRow->cv_name] = $tUnserVal;
+				else {
+					$this->mVariables[ $oRow->cv_name ] = $tUnserVal;
+				}
 			}
 			$dbr->freeResult( $oRes );
 
@@ -512,10 +534,7 @@ class WikiFactoryLoader {
 					$this->mExpireValuesCacheTimeout
 				);
 			}
-			if( !empty( self::$mDebug ) ) {
-				error_log( "wikifactory: reading from database, id {$this->mWikiID}, count ".count( $this->mVariables ) );
-			}
-			wfDebug( "wikifactory: reading from database, id {$this->mWikiID}, count ".count( $this->mVariables ), true );
+			$this->debug( "reading from database, id {$this->mWikiID}, count ".count( $this->mVariables ) );
 			wfProfileOut( __METHOD__."-varsdb" );
 		}
 
@@ -627,7 +646,7 @@ class WikiFactoryLoader {
 			 * only 3 parts counts
 			 */
 			if ( count( $parts ) != 3 ) {
-				wfDebug( __METHOD__." not 3 parts." );
+				$this->debug( __METHOD__." not 3 parts." ) ;
 				continue;
 			}
 			$wgGroupPermissions[trim($parts[0])][trim($parts[1])] = (bool)trim($parts[2]);
@@ -644,7 +663,7 @@ class WikiFactoryLoader {
 	 * with flat arrays. Why not array_merge? For safety.
 	 *
 	 *
-	 * @author eloy@wikia
+	 * @author eloy@wikia-inc.com
 	 * @access public
 	 * @static
 	 *
@@ -668,6 +687,25 @@ class WikiFactoryLoader {
 					}
 				}
 			}
+		}
+	}
+
+	/**
+	 * debug
+	 *
+	 * simple conditional function for logging infos and errors
+	 *
+	 * @author Krzysztof Krzyżaniak <eloy@wikia-inc.com>
+	 * @access private
+	 *
+	 * @param	string	$message	log message
+	 *
+	 * @return nothing
+	 */
+	private function debug( $message ) {
+		wfDebug("wikifactory: {$message}", true);
+		if( !empty( self::$mDebug ) ) {
+			error_log("wikifactory: {$message}");
 		}
 	}
 };
