@@ -171,11 +171,14 @@ FCK.Events.AttachEvent( 'OnAfterSetHTML', function() {
 				}
 			}
 
-			// insert &nbsp; between <input> tags on FF2.x
-			if (FCKBrowserInfo.IsGecko10 && placeholders[p].nextSibling && placeholders[p].nextSibling.nodeName.IEquals('input')) {
-				var frag = FCK.EditorDocument.createDocumentFragment();
-				frag.appendChild(FCK.EditorDocument.createTextNode('\xA0'));
-				placeholders[p].parentNode.insertBefore(frag, placeholders[p].nextSibling);
+			var isFirstChild = (placeholders[p].parentNode.firstChild == placeholders[p]);
+
+			// insert <span type="_moz"> between input tags and before inpu tags at the beginning of lines
+			if ( (placeholders[p].nextSibling && placeholders[p].nextSibling.nodeName.IEquals('input')) || isFirstChild) {
+				var span = FCK.EditorDocument.createElement('SPAN');
+				span.setAttribute('type', '_moz');
+				span.className = '_moz_dirty';
+				placeholders[p].parentNode.insertBefore(span, isFirstChild ? placeholders[p] : placeholders[p].nextSibling);
 			}
 		}
 	}
