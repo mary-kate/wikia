@@ -638,7 +638,7 @@ class WikiFactoryLoader {
 	 *
 	 * @return array with permissions
 	 */
-	static public function LocalToGlobalPermissions( $local ) {
+	public function LocalToGlobalPermissions( $local ) {
 		global $wgGroupPermissions;
 
 		wfProfileIn( __METHOD__ );
@@ -649,7 +649,6 @@ class WikiFactoryLoader {
 			 * only 3 parts counts
 			 */
 			if ( count( $parts ) != 3 ) {
-				$this->debug( __METHOD__." not 3 parts." ) ;
 				continue;
 			}
 			$wgGroupPermissions[trim($parts[0])][trim($parts[1])] = (bool)trim($parts[2]);
@@ -668,13 +667,12 @@ class WikiFactoryLoader {
 	 *
 	 * @author eloy@wikia-inc.com
 	 * @access public
-	 * @static
 	 *
 	 * @param array $local: array with local values
 	 * @param array $target: array with global values; by reference - local is appended here
 	 * @param bool  $ignore_keys: treat $local as a hash (false) or as an array (true)
 	 */
-	static public function LocalToGlobalArray( $local, &$target, $ignore_keys = false ) {
+	public function LocalToGlobalArray( $local, &$target, $ignore_keys = false ) {
 		if( is_array( $local ) && count($local) ) {
 			#--- target may not be initialised yet
 			if( !is_array( $target ) ) {
