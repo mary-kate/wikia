@@ -7,7 +7,7 @@ class WysiwygInterface extends SpecialPage {
 		}
 
 		function execute( $par ) {
-			global $wgRequest, $wgOut, $wgTitle, $wgUser, $IP, $wgWysiwygMetaData, $wgParser, $wgWysiwygParserEnabled;
+			global $wgRequest, $wgOut, $wgTitle, $wgUser, $IP, $wgWysiwygMetaData, $wgParser;
 			$this->setHeaders();
 
 			if(empty($par)) {
@@ -74,10 +74,8 @@ class WysiwygInterface extends SpecialPage {
 
 			// parse old and new wikitext to HTML (for visual diff)
 			$options = new ParserOptions();
-			$wgWysiwygParserEnabled = true;
 			$parsedOld = $wgParser->parse($wikitext, $wgTitle, $options)->getText();
 			$parsedNew = $wgParser->parse($wikitext_parsed, $wgTitle, $options)->getText();
-			$wgWysiwygParserEnabled = false;
 
 			// show wikitext diff
 			if ($wikitext == $wikitext_parsed) {
