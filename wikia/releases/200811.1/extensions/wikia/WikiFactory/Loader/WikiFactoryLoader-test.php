@@ -44,13 +44,7 @@ class WikiFactoryLoader {
 	public $mExpireDomainCacheTimeout = 86400; #--- 24 hours
 	public $mExpireValuesCacheTimeout = 86400; #--- 24 hours
 
-	public $mDevelDomains = array();
-
-	public static $mDebug;
-
-	private $mDBhandler;
-	private $mDBname;
-
+	private $mDebug, $mDBhandler, $mDBname;
 
 	/**
 	 * __construct
@@ -92,7 +86,7 @@ class WikiFactoryLoader {
 		}
 
 		#--- turn on/off error_log
-		self::$mDebug = 0;
+		$this->mDebug = false;
 
 		/**
 		 * initalizations
@@ -116,7 +110,7 @@ class WikiFactoryLoader {
 				? $wgDevelDomains : array();
 
 			$wgWikiFactoryDomains = array_merge( $wgDevelDomains, $wgWikiFactoryDomains );
-			self::$mDebug = 1;
+			$this->mDebug = true;
 			$this->mAlwaysFromDB = 1;
 		}
 
@@ -438,9 +432,6 @@ class WikiFactoryLoader {
 				if (!empty($_SERVER['REMOTE_ADDR'])) {
 					$ips[] = $_SERVER['REMOTE_ADDR'];
 				}
-				if( !empty( self::$mDebug ) ) {
-					error_log(print_r($ips, true));
-				}
 
 				if( !empty($ips[0]) ) {
 					require_once 'Net/GeoIP.php';
@@ -705,7 +696,7 @@ class WikiFactoryLoader {
 	 */
 	private function debug( $message ) {
 		wfDebug("wikifactory: {$message}", true);
-		if( !empty( self::$mDebug ) ) {
+		if( !empty( $this->mDebug ) ) {
 			error_log("wikifactory: {$message}");
 		}
 	}
