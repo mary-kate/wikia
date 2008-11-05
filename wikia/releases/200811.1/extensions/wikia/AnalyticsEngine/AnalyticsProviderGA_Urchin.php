@@ -18,14 +18,12 @@ class AnalyticsProviderGA_Urchin implements iAnalyticsProvider {
 		switch ($event){
 		  case AnalyticsEngine::EVENT_PAGEVIEW:
 			return '<script type="text/javascript">_uff=0;_uacct="UA-288915-1";urchinTracker();</script>';
-		  case 'dbname':
-			if (empty($eventDetails[0])){
-				return '<!-- Missing dbname for dbname tracking event -->';
+		  case 'hub':
+			if (empty($eventDetails['name'])){
+				return '<!-- Missing category name  for hub tracking event -->';
 			}
-			$db = "/" . $eventDetails[0];
-			return '<script type="text/javascript">_uff=0;_uacct="UA-288915-2";urchinTracker("' .addslashes($db).'");</script>';
-		  case 'main_page':
-			return '<script type="text/javascript">if ((typeof wgIsMainpage != "undefined") && (wgIsMainpage)) { _uff=0;_uacct="UA-288915-6";urchinTracker(); }</script>';
+			$hub = "/" . str_replace(' ', '_', $eventDetails['name']);
+			return '<script type="text/javascript">_uff=0;_uacct="UA-288915-2";urchinTracker("' .addslashes($hub).'");</script>';
 		  case 'onewiki':
 			return $this->onewiki($eventDetails[0]);
                   default: return '<!-- Unsupported event for ' . __CLASS__ . ' -->';
@@ -49,7 +47,7 @@ class AnalyticsProviderGA_Urchin implements iAnalyticsProvider {
 		    "1404"=>"UA-722649-1", "702"=>"UA-680784-1", "909"=>"UA-968098-1", "999"=>"UA-818628-1", "1981"=>"UA-776391-1",
 		    "1916"=>"UA-1153537-1", "1778"=>"UA-1068008-1", "2307"=>"UA-1276867-1", "2166"=>"UA-1291238-2", "133"=>"UA-1362746-1",
 		    "2342"=>"UA-1368221-1", "645"=>"UA-1368532-1", "2193"=>"UA-1368560-1", "667"=>"UA-1377241-1", "2195"=>"UA-1263121-1",
-		    "3236"=>"UA-2100028-5", "193"=>"UA-1946686-3", "2165"=>"UA-1946686-2");
+		    "3236"=>"UA-2100028-5", "193"=>"UA-1946686-3", "2165"=>"UA-1946686-2", "88"=>"UA-1072717-1");
 
 		if (empty($cities[$city_id])){
 			return '<!-- No tracking for this wiki -->';
