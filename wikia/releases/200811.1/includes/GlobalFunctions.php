@@ -428,10 +428,10 @@ function wfMsgNoDBForContent( $key ) {
  * @return String: the requested message.
  */
 function wfMsgReal( $key, $args, $useDB = true, $forContent=false, $transform = true ) {
-	wfProfileIn( __METHOD__ . "-$key" );
+	wfProfileIn( __METHOD__ );
 	$message = wfMsgGetKey( $key, $useDB, $forContent, $transform );
 	$message = wfMsgReplaceArgs( $message, $args );
-	wfProfileOut( __METHOD__  . "-$key" );
+	wfProfileOut( __METHOD__ );
 	return $message;
 }
 
