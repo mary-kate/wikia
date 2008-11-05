@@ -8,8 +8,8 @@
  * @author add yourself here
  */
 
-define( "NS_BLOG_ARTICLE", 500 );
-define( "NS_BLOG_ARTICLE_TALK", 501 );
+define( "NS_BLOG_ARTICLE", NS_USER /*500*/ );
+define( "NS_BLOG_ARTICLE_TALK", NS_USER_TALK /*501*/ );
 define( "NS_BLOG_LISTING", 502 );
 define( "NS_BLOG_LISTING_TALK", 503 );
 
