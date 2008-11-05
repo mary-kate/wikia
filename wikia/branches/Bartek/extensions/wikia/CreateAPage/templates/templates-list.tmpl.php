@@ -456,6 +456,18 @@ YWC.multiEditSetupToolbar = function ()  {
         return true;
 }
 
+YWC.multiEditSetupOptionalSections = function() {
+	var snum = 0;
+	if (YD.get( 'createpage_optionals_content' )) {
+		var optionals = YD.getElementsBy( YWC.OptionalSectionTest, 'input', YD.get( 'createpage_optionals_content') ); 
+		for (i=0; i<optionals.length; i++) {
+			snum = optionals[i].id.replace( 'wpOptionalInput', '' );
+			YD.get( 'createpage_section_' + snum ).style.display = 'none';
+			YE.addListener(optionals[i], "change", YWC.ToggleSection, {num: snum} );
+		}
+	}
+}
+
 YWC.insertMultiEditButton = function (parent, item) {
         var image = document.createElement("img");
         image.width = 23;
@@ -670,6 +682,7 @@ YWC.InitialRound = function () {
 		YWC.hideOtherBoxes (el_id) ;
 	}
 	YWC.multiEditSetupToolbar () ;
+	YWC.multiEditSetupOptionalSections();
 	YWC.CheckCategoryCloud () ;
 }
 
@@ -950,16 +963,7 @@ YWC.MultiEdit = function () {
 			}
 
 			YWC.multiEditSetupToolbar () ;                                        		
-			// optional sections support
-			var snum = 0;
-			if (YD.get( 'createpage_optionals_content' )) {
-				var optionals = YD.getElementsBy( YWC.OptionalSectionTest, 'input', YD.get( 'createpage_optionals_content') ); 
-				for (i=0; i<optionals.length; i++) {
-					snum = optionals[i].id.replace( 'wpOptionalInput', '' );
-					YD.get( 'createpage_section_' + snum ).style.display = 'none';
-					YE.addListener(optionals[i], "change", YWC.ToggleSection, {num: snum} );
-				}
-			}
+			YWC.multiEditSetupOptionalSections();
 		},
 		failure: function(e) {
 			YD.get('cp-multiedit').innerHTML = '';
