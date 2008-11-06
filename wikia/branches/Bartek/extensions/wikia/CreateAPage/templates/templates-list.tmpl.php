@@ -188,10 +188,26 @@ YWC.FailureCallback = function (oResponse) {
 
 YWC.ToggleSection = function( e, o ) {
 	var section = YD.get( "createpage_section_" + o.num );
+	var optionals = YD.get( "wpOptionals" );
+	var section_content = YD.getElementsBy( YWC.OptionalContentTest, '', section );
+	var ivalue = '';
 	if ('none' == section.style.display) {
 		section.style.display = 'block';
 	} else {
 		section.style.display = 'none';
+		var first = true;
+		for( var i=0; i < section_content.length; i++ ) {
+			if (first) {
+				if ( '' != optionals.value ) {
+					ivalue += ',' ;
+				}
+				first = false;
+			} else {
+				ivalue += ',';
+			}
+			ivalue += section_content[i].id;			
+		}
+		optionals.value += ivalue;
 	}	
 }
 
@@ -305,6 +321,14 @@ YWC.EditTextareaTest = function (el) {
 
 YWC.OptionalSectionTest = function (el) {
 	if (el.id.match ("wpOptionalInput") && (el.style.display != 'none') ) {
+		return true ;
+	} else {
+		return false ;
+	}      
+}
+
+YWC.OptionalContentTest = function (el) {
+	if (el.id.match ("wpTextboxes")) {
 		return true ;
 	} else {
 		return false ;
