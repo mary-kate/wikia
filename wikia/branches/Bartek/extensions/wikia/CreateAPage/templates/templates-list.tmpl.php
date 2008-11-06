@@ -193,6 +193,11 @@ YWC.ToggleSection = function( e, o ) {
 	var ivalue = '';
 	if ('none' == section.style.display) {
 		section.style.display = 'block';
+		ivalue = optionals.value;
+		for( var i=0; i < section_content.length; i++ ) {
+			ivalue = ivalue.replace( section_content[i].id, "" );				
+		}	
+		optionals.value = ivalue;
 	} else {
 		section.style.display = 'none';
 		var first = true;
