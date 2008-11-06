@@ -149,16 +149,21 @@ class CreatePageMultiEditor extends CreatePageEditor {
 
 	function GlueArticle ($preview = false) {		
 		global $wgRequest, $wgOut ;
-
         	$text = '' ;
-		$infoboxes = array () ;
-		$categories = array () ;
-		$images = array () ;
-		$all_images = array () ;		
+		$infoboxes = array();
+		$categories = array();
+		$optionals = array();
+		$images = array ();
+		$all_images = array();		
 		$error_once = false ;
 
-		foreach ($_POST as $key => $value) {						
-			if (strpos ($key, "wpTextboxes") !== false) {
+		foreach ($_POST as $key => $value) {									
+
+			if( strpos( $key, "wpOptionals" ) !== false ) {
+				// build optional data
+				$optionals = explode( ',', $value  );				
+			} else if (strpos ($key, "wpTextboxes") !== false) {
+				// check if this was optional				
                         	$text .= "\n" . $value ;
 			} else if (strpos ($key, "wpInfoboxPar") !==  false ) {
 				$infoboxes[] = $value ; 				
@@ -181,7 +186,6 @@ class CreatePageMultiEditor extends CreatePageEditor {
 					$uploadform->CurlError       = $wgRequest->getUploadError( 'wpUploadFile' . $postfix );
 
 					// required by latest functions
-
 					$par_name = $wgRequest->getText ('wpParName' .$postfix) ;
 					if ($uploadform->mSrcName ) {
 						$file_ext = split ("\.", $uploadform->mSrcName) ;

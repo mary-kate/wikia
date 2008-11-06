@@ -8,6 +8,7 @@
 /*]]>*/
 </style>
 <div style="display:block;" id="wpTableMultiEdit" name="wpTableMultiEdit">
+<input type="hidden" id="wpOptionals" name="wpOptionals" value="">
 <?php
 
 $sections = 0;
