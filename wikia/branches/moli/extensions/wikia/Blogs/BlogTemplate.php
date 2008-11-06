@@ -4,14 +4,14 @@
 $wgExtensionFunctions[] = array("BlogTemplateClass", "setup");
 $wgHooks['LanguageGetMagic'][] = "BlogTemplateClass::setMagicWord";
 
-define ("BLOGS_TIMESTAMP", "20081101000000");
+define ("BLOGS_TIMESTAMP", "20071101000000");
 define ("BLOGS_XML_REGEX", "/\<(.*?)\>(.*?)\<\/(.*?)\>/si");
 
 class BlogTemplateClass {
 	/*
 	 * Tag options
 	 */ 	
-	private static $aBlogParams = array(
+	public static $aBlogParams = array(
 		/*
 		 * <category>Cat11</category>
 		 * <category>Cat12</category>
@@ -31,9 +31,10 @@ class BlogTemplateClass {
 		 */
 		'category' 		=> array ( 
 			'type' 		=> 'string',
-			'default' 	=> null 
+			'default' 	=> null,
+			'count'		=> 10 
 		),
-		
+
         /*
 		 * <author>Author1</author>
 		 * <author>Author2</author>
@@ -53,7 +54,8 @@ class BlogTemplateClass {
          */
 		'author' 		=> array ( 
 			'type' 		=> 'string', 
-			'default' 	=> '' 
+			'default' 	=> '', 
+			'count'		=> 10 
 		),
 		
         /*
@@ -74,7 +76,7 @@ class BlogTemplateClass {
 		
 		/*
 		 * ordertype = descending (or ascending)
-		 * 
+		 *
 		 * type: 	predefined list (descending, ascending)
 		 * default: descending
 		 */
@@ -94,7 +96,8 @@ class BlogTemplateClass {
 		'count' 		=> array ( 
 			'type' 		=> 'number', 
 			'default' 	=> '5', 
-			'pattern' 	=> '/^\d*$/'
+			'pattern' 	=> '/^\d*$/',
+			'max'		=> 10 
 		),
 		
 		/*
@@ -174,19 +177,23 @@ class BlogTemplateClass {
 		wfProfileOut( __METHOD__ );
 		return true;
 	}
-    
+
 	public static function parseTag( $input, $params, &$parser ) {
 		wfProfileIn( __METHOD__ );
 		error_log ("parseTag: input : ".$input."\n", 3, "/tmp/moli.log");
 		error_log ("parseTag: params : ".print_r($params, true)."\n", 3, "/tmp/moli.log");
 		/* parse input parameters */
 		$matches = array();
+		$start = self::__getmicrotime();
 		$aParams = self::__parseXMLTag($input);
 		wfDebugLog( __METHOD__, "parse input parameters\n" );
 		/* parse all and return result */
 		$res = self::__parse($aParams, $params, $parser);
+		$end = self::__getmicrotime();
+		print "parse: ".($end - $start). " s";
+		exit;
 		wfProfileOut( __METHOD__ );
-		return "parseTag";
+		return "parse: ".($end - $start). " s";
 	}
 	
 	public static function parseTagFunction(&$parser) {
@@ -238,9 +245,14 @@ class BlogTemplateClass {
 		return $aResult; 
 	}
 
+	private static function __getmicrotime(){ 
+		list($usec, $sec) = explode(" ",microtime()); 
+		return ((float)$usec + (float)$sec); 
+    }   
 	
 	private static function __setDefault() {
 		/* set default options */
+    	wfProfileIn( __METHOD__ );
 		/* default tables */
 		if ( !in_array( "page", self::$aTables) ) {
 			self::$aTables[] = "page";
@@ -249,25 +261,111 @@ class BlogTemplateClass {
 		if ( !in_array("page_namespace", array_keys( self::$aWhere )) ) {
 			self::$aWhere["page_namespace"] = NS_BLOG_ARTICLE;
 		}
-		if ( BLOGS_TIMESTAMP ) {
-			self::$aWhere[] = "page_timestamp >= '".BLOGS_TIMESTAMP."'";
-		}
 		/* default options */
-		if ( !isset(self::$aOptions['ORDER BY']) ) {
-			self::$aOptions['ORDER BY'] = self::$aBlogParams['order']['pattern'][self::$aBlogParams['order']['default']];
+		if ( !isset(self::$aOptions['order']) ) {
+			self::__makeOrder('order', self::$aBlogParams['order']['pattern'][self::$aBlogParams['order']['default']]);
 		}
-		if ( !isset(self::$aOptions['SORT']) ) {
-			self::$aOptions['SORT'] = self::$aBlogParams['ordertype']['default'];
+		if ( !isset(self::$aOptions['ordertype']) ) {
+			self::__makeListOption('ordertype', self::$aBlogParams['ordertype']['default']);
 		}
-		if ( !isset(self::$aOptions['LIMIT']) ) {
-			self::$aOptions['LIMIT'] = self::$aBlogParams['count']['default'];
+		if ( !isset(self::$aOptions['count']) ) {
+			self::__makeIntOption('count', self::$aBlogParams['count']['default']);
 		}
-		if ( !isset(self::$aOptions['OFFSET']) ) {
-			self::$aOptions['OFFSET'] = self::$aBlogParams['offset']['default'];
+		if ( !isset(self::$aOptions['offset']) ) {
+			self::__makeIntOption('offset', self::$aBlogParams['offset']['default']);
 		}
+    	wfProfileOut( __METHOD__ );
+	}
+
+	private static function __makeOrder($sParamName, $sParamValue) {
+    	wfProfileIn( __METHOD__ );
+    	wfDebugLog( __METHOD__, "__makeOrder: ".$sParamName.",".$sParamValue."\n" );
+		error_log ("__makeOrder: ".$sParamName.",".$sParamValue."\n", 3, "/tmp/moli.log");
+    	if ( !empty($sParamValue) ) {
+			if ( in_array( $sParamValue, array_keys( self::$aBlogParams[$sParamName]['pattern'] ) ) ) {
+				if ( $sParamValue == 'author' ) {
+					self::__addRevisionTable();
+				}
+				self::$aOptions['order'] = self::$aBlogParams[$sParamName]['pattern'][$sParamValue];
+			}
+		}
+    	wfProfileOut( __METHOD__ );
+	}
+
+	private static function __makeListOption($sParamName, $sParamValue) {
+    	wfProfileIn( __METHOD__ );
+    	wfDebugLog( __METHOD__, "__makeListOption: ".$sParamName.",".$sParamValue."\n" );
+		error_log ("__makeListOption: ".$sParamName.",".$sParamValue."\n", 3, "/tmp/moli.log");
+		if ( in_array( $sParamValue, self::$aBlogParams[$sParamName]['pattern'] ) ) {
+			self::$aOptions[$sParamName] = $sParamValue;
+		}
+    	wfProfileOut( __METHOD__ );
 	}
 	
-    private static function __parse( $aInput, $params, &$parser ) {
+	private static function __makeBoolOption($sParamName, $sParamValue) {
+    	wfProfileIn( __METHOD__ );
+    	wfDebugLog( __METHOD__, "__makeBoolOption: ".$sParamName.",".$sParamValue."\n" );
+		error_log ("__makeBoolOption: ".$sParamName.",".$sParamValue."\n", 3, "/tmp/moli.log");
+		if ( in_array($sParamValue, array("true", "false") ) ) {
+			self::$aOptions[$sParamName] = $sParamValue;
+		}
+    	wfProfileOut( __METHOD__ );
+	}
+
+	private static function __makeIntOption($sParamName, $sParamValue) {
+    	wfProfileIn( __METHOD__ );
+    	wfDebugLog( __METHOD__, "__makeIntOption: ".$sParamName.",".$sParamValue."\n" );
+    	error_log ("__makeIntOption: ".$sParamName.",".$sParamValue."\n", 3, "/tmp/moli.log");
+		$m = array(); if (preg_match(self::$aBlogParams[$sParamName]['pattern'], $sParamValue, $m) !== FALSE) {
+			/* check max value of int param */
+			if ( array_key_exists('max', self::$aOptions[$sParamName]) && ($sParamValue > self::$aOptions[$sParamName]['max']) ) {
+				$sParamValue = $aOptions[$sParamName]['max'];
+			}
+			self::$aOptions[$sParamName] = $sParamValue;
+		}
+    	wfProfileOut( __METHOD__ );
+	}
+	
+	private static function __addRevisionTable() {
+    	wfProfileIn( __METHOD__ );
+		$sRevisionTable = 'revision';
+		if ( !in_array(self::$aTables, $sRevisionTable) ) {
+			self::$aWhere[] = "rev_page = page_id";
+			self::$aTables[] = $sRevisionTable;
+			if ( BLOGS_TIMESTAMP ) {
+				self::$aWhere[] = "rev_timestamp >= '".BLOGS_TIMESTAMP."'";
+			}
+		}
+    	wfProfileOut( __METHOD__ );
+	}
+
+	private static function __makeDBOrder() {
+    	wfProfileIn( __METHOD__ );
+    	$dbOption = array();
+    	/* ORDER BY */
+    	if ( isset(self::$aOptions['order']) ) {
+    		$dbOption['ORDER BY'] = self::$aOptions['order'];
+    		if ( isset(self::$aOptions['ordertype']) ) {
+    			$dbOption['ORDER BY'] .= " " . self::$aOptions['ordertype'];
+			}
+		}
+    	/* LIMIT  */
+    	if ( isset(self::$aOptions['count']) ) {
+    		$dbOption['LIMIT'] = intval(self::$aOptions['count']);
+		} else {
+    		$dbOption['LIMIT'] = intval(self::$aOptions['count']['default']);
+		}
+    	/* OFFSET  */
+    	if ( isset(self::$aOptions['offset']) ) {
+    		$dbOption['OFFSET'] = intval(self::$aOptions['offset']);
+		} else {
+    		$dbOption['OFFSET'] = intval(self::$aOptions['offset']['default']);
+		}
+    	wfProfileOut( __METHOD__ );
+    	return $dbOption;
+	}
+							
+    private static function __parse( $aInput, $aParams, &$parser ) {
     	wfProfileIn( __METHOD__ );
     	$result = "";
 
@@ -276,18 +374,18 @@ class BlogTemplateClass {
         try {
 			/* database connect */
 			$dbr = wfGetDB( DB_SLAVE, 'dpl' );
-			/* parse input parameters */
-			wfDebugLog( __METHOD__, "parse ".count($aInput)." parameters\n" );
+			/* parse parameters as XML tags */
+			wfDebugLog( __METHOD__, "parse ".count($aInput)." parameters (XML tags)\n" );
 			error_log ("aInput: ".print_r($aInput, true)."\n", 3, "/tmp/moli.log");
 			foreach ($aInput as $sParamName => $aParamValues) {
 				/* ignore empty lines */
 				if ( empty($aParamValues) ) {
-					wfDebugLog( __METHOD__, "ignore empty param: ".$sKey." \n" );
+					wfDebugLog( __METHOD__, "ignore empty param: ".$sParamName." \n" );
 					continue;
 				}
 				/* invalid name of parameter or empty name */
 				if ( !in_array($sParamName, array_keys(self::$aBlogParams)) ) {
-					throw new Exception(wfMsg('blog_invalidparam', $sParamName, array_keys(self::$aBlogParams)));
+					throw new Exception( wfMsg('blog_invalidparam', $sParamName, implode(", ", array_keys(self::$aBlogParams))) );
 				} elseif ( trim($sParamName) == '' ) {
 					throw new Exception(wfMsg('blog_emptyparam'));						
 				} 
@@ -300,69 +398,108 @@ class BlogTemplateClass {
 			
 				/* parse value of parameter */
 				switch ($sParamName) {
-					case 'category'		: 
+					case 'category'		:
 						if ( !empty($aParamValues) ) {
+							$aParamValues = array_slice($aParamValues, 0, self::$aBlogParams[$sParamName]['count']);
 							self::$aTables[] = 'categorylinks';
+							self::$aWhere[] = "cl_from = page_id";
 							self::$aWhere[] = "cl_to in (" . $dbr->makeList( $aParamValues ) . ")";
 							error_log ( "category: " . print_r($aParamValues, true) . "\n", 3, "/tmp/moli.log" );
 						}
 						break;
-					case 'author'		: 
+					case 'author'		:
 						if ( !empty($aParamValues) ) {
-							$sRevisionTable = 'revision';
-							if ( !in_array($aTables, $sRevisionTable) ) {
-								self::$aTables[] = $sRevisionTable;
-							}
+							$aParamValues = array_slice($aParamValues, 0, self::$aBlogParams[$sParamName]['count']);
+							self::__addRevisionTable();
 							self::$aWhere[] = "rev_user_text in (" . $dbr->makeList( $aParamValues ) . ")";
 							error_log ( "author: " . print_r($aParamValues, true) . "\n", 3, "/tmp/moli.log" );
 						}
 						break;
+					case 'order'		:
+						if ( !empty($aParamValues) && is_array($aParamValues) ) {
+							list ($sParamValue) = $aParamValues;
+							self::__makeOrder($sParamName, $sParamValue);
+						}
+						break;
+					case 'ordertype'	:
+						if ( !empty($aParamValues) && is_array($aParamValues) ) {
+							list ($sParamValue) = $aParamValues;
+							self::__makeListOption($sParamName, $sParamValue);
+						}
+						break;
+					case 'count'		: 
+					case 'offset'		:
+					case 'summarylength':
+						if ( !empty($aParamValues) && is_array($aParamValues) ) {
+							list ($sParamValue) = $aParamValues;
+							self::__makeIntOption($sParamName, $sParamValue);
+						}
+						break;
+					case 'showtimestamp':
+					case 'showsummary'	:
+						if ( !empty($aParamValues) && is_array($aParamValues) ) {
+							list ($sParamValue) = $aParamValues;
+							self::__makeBoolOption($sParamName, $sParamValue);
+						}
+						break;
+				}
+			}
+
+			/* parse parameters */
+			error_log ("aParams: ".print_r($aParams, true)."\n", 3, "/tmp/moli.log");
+			foreach ($aParams as $sParamName => $sParamValue) {
+				/* ignore empty lines */
+				if ( empty($sParamValue) ) {
+					wfDebugLog( __METHOD__, "ignore empty param: ".$sParamName." \n" );
+					continue;
+				}
+				/* invalid name of parameter or empty name */
+				if ( !in_array($sParamName, array_keys(self::$aBlogParams)) ) {
+					throw new Exception( wfMsg('blog_invalidparam', $sParamName, implode(", ", array_keys(self::$aBlogParams))) );
+				} 
+
+				/* parse value of parameter */
+				switch ($sParamName) {
 					case 'order'		: 
-						if ( !empty($aParamValues) ) {
-							if ( in_array( $aParamValues, self::$aBlogParams[$sParamName]['pattern'] ) ) {
-								$_aTmp = array();
-								foreach ($aParamValues as $id => $sParamValue) {
-									switch ($sParamValue) { 
-										case 'title'	: 
-											self::$aOptions['ORDER BY'] = 'page_title';
-											break;
-										case 'author'	: 
-											$sRevisionTable = 'revision';
-											if ( !in_array(self::$aTables, $sRevisionTable) ) {
-												self::$aTables[] = $sRevisionTable;
-											}
-											self::$aOptions['ORDER BY'] = 'rev_user_text';
-											break;
-										default 		: /* date */
-											self::$aOptions['ORDER BY'] = 'page_touched';
-											break;
-									}
-								}
-							}
-						} 
+						self::__makeOrder($sParamName, $sParamValue); 
 						break;
 					case 'ordertype'	: 
+						self::__makeListOption($sParamName, $sParamValue); 
 						break;
-					case 'count'		: break;
-					case 'offset'		: break;
-					case 'showtimestamp': break;
-					case 'showsummary'	: break;
-					case 'summarylength': break;
+					case 'count'		: 
+					case 'offset'		: 
+					case 'summarylength': 
+						self::__makeIntOption($sParamName, $sParamValue); 
+						break;
+					case 'showtimestamp': 
+					case 'showsummary'	: 
+						self::__makeBoolOption($sParamName, $sParamValue);
+						break;
 				}
-				
-				error_log ("tables: " . print_r(self::$aTables, true) . "\n", 3, "/tmp/moli.log");
-				error_log ("where: " . print_r(self::$aWhere, true) . "\n", 3, "/tmp/moli.log");
-				error_log ("options: " . print_r(self::$aOptions, true) . "\n", 3, "/tmp/moli.log" );
 			}
+			
+			/* build query */
+			$res = $dbr->select(
+				array_map(array($dbr, 'tableName'), self::$aTables),  
+				array( '*' ), 
+				self::$aWhere, 
+				__METHOD__, 
+				array( self::__makeDBOrder() )
+			);
+			
         }
 		catch (Exception $e) {
 			wfDebugLog( __METHOD__, "parse error: ".$e->getMessage()."\n" );
-			wfProfileOut( __METHOD__ );
+			error_log ("exception: ".$e->getMessage()."\n", 3, "/tmp/moli.log");
 			return $e->getMessage();
 		}
-    	
+
+		error_log ("tables: " . print_r(self::$aTables, true) . "\n", 3, "/tmp/moli.log");
+		error_log ("where: " . print_r(self::$aWhere, true) . "\n", 3, "/tmp/moli.log");
+		error_log ("options: " . print_r(self::$aOptions, true) . "\n\n\n\n\n\n", 3, "/tmp/moli.log" );
+
     	wfProfileOut( __METHOD__ );
     	return $result;
-	}	
+	}
 
 }
