@@ -164,7 +164,9 @@ class CreatePageMultiEditor extends CreatePageEditor {
 				$optionals = explode( ',', $value  );				
 			} else if (strpos ($key, "wpTextboxes") !== false) {
 				// check if this was optional				
-                        	$text .= "\n" . $value ;
+				if( !in_array( $key, $optionals ) ) {
+	                        	$text .= "\n" . $value ;
+				}
 			} else if (strpos ($key, "wpInfoboxPar") !==  false ) {
 				$infoboxes[] = $value ; 				
 			} else if (strpos ($key, "category_") !==  false) {
