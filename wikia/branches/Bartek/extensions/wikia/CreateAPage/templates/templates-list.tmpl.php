@@ -191,6 +191,7 @@ YWC.RestoreSection = function( section, text ) {
 	for( var i=0; i < section_content.length; i++ ) {
 		text = text.replace( section_content[i].id, "" );				
 	}		
+	section.style.display = 'block';
 	return text;
 }
 
@@ -209,6 +210,7 @@ YWC.UnuseSection = function( section, text ) {
 		}
 		ivalue += section_content[i].id;					
 	}
+	section.style.display = 'none';
 	return text + ivalue;
 }
 
@@ -217,10 +219,8 @@ YWC.ToggleSection = function( e, o ) {
 	var optionals = YD.get( "wpOptionals" );
 	var ivalue = '';
 	if ('none' == section.style.display) {
-		section.style.display = 'block';
 		optionals.value = YWC.RestoreSection( section, optionals.value );
 	} else {
-		section.style.display = 'none';
 		optionals.value = YWC.UnuseSection( section, optionals.value );
 	}	
 }
@@ -498,9 +498,10 @@ YWC.multiEditSetupOptionalSections = function() {
 	var snum = 0;
 	if (YD.get( 'createpage_optionals_content' )) {
 		var optionals = YD.getElementsBy( YWC.OptionalSectionTest, 'input', YD.get( 'createpage_optionals_content') ); 
+		var optionalsElements = YD.get( 'wpOptionals' );
 		for (i=0; i<optionals.length; i++) {
 			snum = optionals[i].id.replace( 'wpOptionalInput', '' );
-			YD.get( 'createpage_section_' + snum ).style.display = 'none';
+			YWC.UnuseSection( YD.get( 'createpage_section_' + snum ), optionalsElements.value );
 			YE.addListener(optionals[i], "change", YWC.ToggleSection, {num: snum} );
 		}
 	}
