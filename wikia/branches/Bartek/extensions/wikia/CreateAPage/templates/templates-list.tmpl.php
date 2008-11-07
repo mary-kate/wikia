@@ -501,7 +501,7 @@ YWC.multiEditSetupOptionalSections = function() {
 		var optionalsElements = YD.get( 'wpOptionals' );
 		for (i=0; i<optionals.length; i++) {
 			snum = optionals[i].id.replace( 'wpOptionalInput', '' );
-			YWC.UnuseSection( YD.get( 'createpage_section_' + snum ), optionalsElements.value );
+			optionalsElements.value = YWC.UnuseSection( YD.get( 'createpage_section_' + snum ), optionalsElements.value );
 			YE.addListener(optionals[i], "change", YWC.ToggleSection, {num: snum} );
 		}
 	}
