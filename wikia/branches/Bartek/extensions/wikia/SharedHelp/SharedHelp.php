@@ -153,7 +153,7 @@ function SharedHelpHook(&$out, &$text) {
 				if ( 'no' != $wgRequest->getVal( 'redirect' ) ) {
 					$out->redirect( $wgServer . str_replace( "$1", $destinationPage, $wgArticlePath ) );
 				} else {
-					$content = "\n\nThis is a redirect test\n\n";
+					$content = "\n\n" . wfMsg( 'redirectedfrom', $destinationPage );
 				} 
 			} else {
 				$tmp = split("\r\n\r\n", $content, 2);
