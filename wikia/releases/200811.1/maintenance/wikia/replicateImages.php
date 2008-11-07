@@ -45,7 +45,8 @@ class WikiaReplicateImages {
 	 */
 	public function execute() {
 		$iImageLimit = isset( $this->mOptions['limit'] ) ? $this->mOptions['limit'] : 10;
-		$login = isset( $this->mOptions['u']) ? $this->mOptions['u'] : 'cron';
+		// rsync must be run from root in order to save file's ownership
+		$login = isset( $this->mOptions['u']) ? $this->mOptions['u'] : 'root';
 		$test = isset( $this->mOptions['test']) ? true : false;
 
 		$dbr = wfGetDBExt( DB_SLAVE );
@@ -79,8 +80,9 @@ class WikiaReplicateImages {
 					 */
 					if( file_exists( $source ) ) {
 						$cmd = wfEscapeShellArg(
-							"/usr/bin/scp",
-							"-q",
+							"/usr/bin/rsync",
+							"-axp",
+							"--chmod=g+w",
 							$oResultRow->up_path,
 							$login . '@' . $server["address"] . ':' . $destination
 						);
