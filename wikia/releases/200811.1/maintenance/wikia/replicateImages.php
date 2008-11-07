@@ -77,15 +77,14 @@ class WikiaReplicateImages {
 					/**
 					 * check if source file exists. I know, stats are bad
 					 */
-					if( file_exists( $source ) ) {
+					if( file_exists( $source ) || $test ) {
 						$cmd = wfEscapeShellArg(
 							"/usr/bin/rsync",
 							"-axp",
 							"--chmod=g+w",
 							$oResultRow->up_path,
-							$login . '@' . $server["address"] . ':' . $destination
+							escapeshellcmd( $login . '@' . $server["address"] . ':' . $destination )
 						);
-						$cmd = escapeshellcmd( $cmd );
 
 						if( $test ) {
 							print( $cmd . "\n" );
