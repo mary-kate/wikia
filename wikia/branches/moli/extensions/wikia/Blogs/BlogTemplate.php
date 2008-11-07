@@ -6,6 +6,7 @@ $wgHooks['LanguageGetMagic'][] = "BlogTemplateClass::setMagicWord";
 
 define ("BLOGS_TIMESTAMP", "20071101000000");
 define ("BLOGS_XML_REGEX", "/\<(.*?)\>(.*?)\<\/(.*?)\>/si");
+define ("GROUP_CONCAT", "64000");
 
 class BlogTemplateClass {
 	/*
@@ -82,8 +83,8 @@ class BlogTemplateClass {
 		 */
 		'ordertype' 	=> array ( 
 			'type' 		=> 'list', 
-			'default' 	=> 'descending', 
-			'pattern'	=> array('descending', 'ascending') 
+			'default' 	=> 'desc', 
+			'pattern'	=> array('desc', 'asc') 
 		),
 		
 		/*
@@ -154,20 +155,24 @@ class BlogTemplateClass {
 	private static $aWhere 		= array( );
 	private static $aOptions	= array( );
 	
+	private static $dbr 		= null;
+	
 	public static function setup() {
 		global $wgParser, $wgMessageCache;
 		wfProfileIn( __METHOD__ );
 		
 		// variant as a parser tag: <BLOGTPL_TAG>
 		$wgParser->setHook( BLOGTPL_TAG, array( __CLASS__, "parseTag" ) );
-		// variant as a parser function: {{#BLOGTPL_TAG}}
-		$wgParser->setFunctionHook( BLOGTPL_TAG, array( __CLASS__, "parseTagFunction" ) );
-		
+
+		// set empty value 
+		error_log ("************** setup ******************* \n", 3, "/tmp/moli.log");
+		// language file 
 		require_once( "BlogArticle.i18n.php" );
 		foreach( $wgBlogArticleMessages as $sLang => $aMsgs ) {
 			$wgMessageCache->addMessages( $aMsgs, $sLang );
 		}
 		wfProfileOut( __METHOD__ );
+		return true;
 	}
 	
 	public static function setMagicWord( &$magicWords, $langCode ) {
@@ -190,10 +195,9 @@ class BlogTemplateClass {
 		/* parse all and return result */
 		$res = self::__parse($aParams, $params, $parser);
 		$end = self::__getmicrotime();
-		print "parse: ".($end - $start). " s";
-		exit;
+		error_log("parse: ".($end - $start). " s", 3, "/tmp/moli.log");
 		wfProfileOut( __METHOD__ );
-		return "parse: ".($end - $start). " s";
+		return $res;
 	}
 	
 	public static function parseTagFunction(&$parser) {
@@ -260,6 +264,9 @@ class BlogTemplateClass {
 		/* default conditions */
 		if ( !in_array("page_namespace", array_keys( self::$aWhere )) ) {
 			self::$aWhere["page_namespace"] = NS_BLOG_ARTICLE;
+		}
+		if ( !in_array("page_is_redirect", array_keys( self::$aWhere )) ) {
+			self::$aWhere["page_is_redirect"] = 0;
 		}
 		/* default options */
 		if ( !isset(self::$aOptions['order']) ) {
@@ -364,16 +371,76 @@ class BlogTemplateClass {
     	wfProfileOut( __METHOD__ );
     	return $dbOption;
 	}
+
+	private static function __getCategories ($aParamValues) {
+    	wfProfileIn( __METHOD__ );
+		$aPages = array();
+    	if ( !empty($aParamValues) ) {
+			$sql = "select cl_to, GROUP_CONCAT(DISTINCT cl_from SEPARATOR ',') AS cl_page from categorylinks, page  ";
+			$sql .= "where page_id = cl_from and cl_to in (".self::$dbr->makeList( $aParamValues ).") ";
+			$sql .= "and page_namespace = " . NS_BLOG_ARTICLE . " and page_touched >= ".self::$dbr->addQuotes(BLOGS_TIMESTAMP)." group by cl_to";
+
+			/* set max length of group concat query */
+			self::$dbr->query( 'SET group_concat_max_len = '.GROUP_CONCAT, __METHOD__ );
+			/* run query */
+			$res = self::$dbr->select(
+				array( self::$dbr->tableName( 'page' ), self::$dbr->tableName( 'categorylinks' ) ), 
+				array( "cl_to", "GROUP_CONCAT(DISTINCT cl_from SEPARATOR ',') AS cl_page" ), 
+				array( 
+					"page_namespace" => NS_BLOG_ARTICLE,
+					"page_id = cl_from",
+					"cl_to in (".self::$dbr->makeList( $aParamValues ).")",
+					"page_touched >= ".self::$dbr->addQuotes(BLOGS_TIMESTAMP)
+				), 
+				__METHOD__, 
+				array( 'GROUP BY' => 'cl_to' )
+			);
+			while ( $oRow = self::$dbr->fetchObject( $res ) ) {
+				$aPages[] = $oRow->cl_page;
+			}
+			self::$dbr->freeResult( $res );
+		}
+    	wfProfileOut( __METHOD__ );
+    	return $aPages;
+	}
+	
+	private static function __getResults() {
+    	wfProfileIn( __METHOD__ );
+    	/* main query */
+    	$aResult = array();
+		$res = self::$dbr->select(
+			array_map(array(self::$dbr, 'tableName'), self::$aTables),  
+			array( 'distinct(page_id) as page_id', 'page_namespace', 'page_title', 'page_touched' ), 
+			self::$aWhere, 
+			__METHOD__, 
+			self::__makeDBOrder() 
+		);
+		while ( $oRow = self::$dbr->fetchObject( $res ) ) {
+			$aResult[$oRow->page_id] = array(
+				"page" 			=> $oRow->page_id,
+				"namespace" 	=> $oRow->page_namespace,
+				"title" 		=> $oRow->page_title,
+				"page_touched" 	=> $oRow->page_touched
+			);
+		}
+		self::$dbr->freeResult( $res );
+    	wfProfileOut( __METHOD__ );
+    	return $aResult;
+	}
 							
     private static function __parse( $aInput, $aParams, &$parser ) {
+    	global $wgLang, $wgUser, $wgCityId;
+    	
     	wfProfileIn( __METHOD__ );
-    	$result = "";
+    	$sResult = "";
 
+		self::$aTables = self::$aWhere = self::$aOptions = array();
+		self::$dbr = null;
 		/* default settings for query */
     	self::__setDefault();
         try {
 			/* database connect */
-			$dbr = wfGetDB( DB_SLAVE, 'dpl' );
+			self::$dbr = wfGetDB( DB_SLAVE, 'dpl' );
 			/* parse parameters as XML tags */
 			wfDebugLog( __METHOD__, "parse ".count($aInput)." parameters (XML tags)\n" );
 			error_log ("aInput: ".print_r($aInput, true)."\n", 3, "/tmp/moli.log");
@@ -401,17 +468,18 @@ class BlogTemplateClass {
 					case 'category'		:
 						if ( !empty($aParamValues) ) {
 							$aParamValues = array_slice($aParamValues, 0, self::$aBlogParams[$sParamName]['count']);
-							self::$aTables[] = 'categorylinks';
-							self::$aWhere[] = "cl_from = page_id";
-							self::$aWhere[] = "cl_to in (" . $dbr->makeList( $aParamValues ) . ")";
-							error_log ( "category: " . print_r($aParamValues, true) . "\n", 3, "/tmp/moli.log" );
+							$aPages = self::__getCategories ($aParamValues);
+							if ( !empty($aPages) ) {
+								self::$aWhere[] = "page_id in (" . implode(",", $aPages) . ")";
+							}
+							error_log ( "category: " . implode(",", $aPages) . "\n", 3, "/tmp/moli.log" );
 						}
 						break;
 					case 'author'		:
 						if ( !empty($aParamValues) ) {
 							$aParamValues = array_slice($aParamValues, 0, self::$aBlogParams[$sParamName]['count']);
 							self::__addRevisionTable();
-							self::$aWhere[] = "rev_user_text in (" . $dbr->makeList( $aParamValues ) . ")";
+							self::$aWhere[] = "rev_user_text in (" . self::$dbr->makeList( $aParamValues ) . ")";
 							error_log ( "author: " . print_r($aParamValues, true) . "\n", 3, "/tmp/moli.log" );
 						}
 						break;
@@ -479,14 +547,21 @@ class BlogTemplateClass {
 			}
 			
 			/* build query */
-			$res = $dbr->select(
-				array_map(array($dbr, 'tableName'), self::$aTables),  
-				array( '*' ), 
-				self::$aWhere, 
-				__METHOD__, 
-				array( self::__makeDBOrder() )
-			);
+			$aResult = self::__getResults();
+			error_log ("aResult: " . print_r($aResult, true) . "\n", 3, "/tmp/moli.log");
 			
+			/* run template */
+			$oTmpl = new EasyTemplate( dirname( __FILE__ ) . "/templates/" );
+			$oTmpl->set_vars( array(
+				"wgUser"		=> $wgUser,
+				"cityId"		=> $wgCityId,
+				"wgLang"		=> $wgLang,
+				"aRows"			=> $aResult,
+			));
+			
+			#---
+			wfProfileOut( __METHOD__ );
+			return $oTmpl->execute("blog-list");
         }
 		catch (Exception $e) {
 			wfDebugLog( __METHOD__, "parse error: ".$e->getMessage()."\n" );
@@ -499,7 +574,7 @@ class BlogTemplateClass {
 		error_log ("options: " . print_r(self::$aOptions, true) . "\n\n\n\n\n\n", 3, "/tmp/moli.log" );
 
     	wfProfileOut( __METHOD__ );
-    	return $result;
+    	return $sResult;
 	}
 
 }
