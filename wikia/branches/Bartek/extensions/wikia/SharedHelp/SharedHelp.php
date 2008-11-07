@@ -149,7 +149,12 @@ function SharedHelpHook(&$out, &$text) {
 				global $wgServer, $wgArticlePath ;
 				$helpNs = $wgLang->getNsText(NS_HELP);
 				$destinationPage = substr( $destinationUrl, strpos( $destinationUrl, "$helpNs:") );
-				$out->redirect( $wgServer . str_replace( "$1", $destinationPage, $wgArticlePath ) );
+				global $wgRequest;
+				if ( 'no' != $wgRequest->getVal( 'redirect' ) ) {
+					$out->redirect( $wgServer . str_replace( "$1", $destinationPage, $wgArticlePath ) );
+				} else {
+					$content = "\n\nThis is a redirect test\n\n";
+				} 
 			} else {
 				$tmp = split("\r\n\r\n", $content, 2);
 				$content = $tmp[1];
