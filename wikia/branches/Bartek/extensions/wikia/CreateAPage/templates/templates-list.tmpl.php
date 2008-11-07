@@ -186,33 +186,42 @@ YWC.FailureCallback = function (oResponse) {
         YD.get ("createpage_image_cancel_section" + oResponse.argument).style.display = 'none' ;
 };
 
+YWC.RestoreSection = function( section, text ) {
+	var section_content = YD.getElementsBy( YWC.OptionalContentTest, '', section );
+	for( var i=0; i < section_content.length; i++ ) {
+		text = text.replace( section_content[i].id, "" );				
+	}		
+	return text;
+}
+
+YWC.UnuseSection = function( section, text ) {
+	var section_content = YD.getElementsBy( YWC.OptionalContentTest, '', section );
+	var first = true;
+	var ivalue = '';
+	for( var i=0; i < section_content.length; i++ ) {
+		if (first) {
+			if ( '' != text ) {
+				ivalue += ',' ;
+			}
+			first = false;
+		} else {
+			ivalue += ',';
+		}
+		ivalue += section_content[i].id;					
+	}
+	return text + ivalue;
+}
+
 YWC.ToggleSection = function( e, o ) {
 	var section = YD.get( "createpage_section_" + o.num );
 	var optionals = YD.get( "wpOptionals" );
-	var section_content = YD.getElementsBy( YWC.OptionalContentTest, '', section );
 	var ivalue = '';
 	if ('none' == section.style.display) {
 		section.style.display = 'block';
-		ivalue = optionals.value;
-		for( var i=0; i < section_content.length; i++ ) {
-			ivalue = ivalue.replace( section_content[i].id, "" );				
-		}	
-		optionals.value = ivalue;
+		optionals.value = YWC.RestoreSection( section, optionals.value );
 	} else {
 		section.style.display = 'none';
-		var first = true;
-		for( var i=0; i < section_content.length; i++ ) {
-			if (first) {
-				if ( '' != optionals.value ) {
-					ivalue += ',' ;
-				}
-				first = false;
-			} else {
-				ivalue += ',';
-			}
-			ivalue += section_content[i].id;			
-		}
-		optionals.value += ivalue;
+		optionals.value = YWC.UnuseSection( section, optionals.value );
 	}	
 }
 
