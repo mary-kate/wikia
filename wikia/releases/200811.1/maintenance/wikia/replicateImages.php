@@ -48,7 +48,6 @@ class WikiaReplicateImages {
 		// rsync must be run from root in order to save file's ownership
 		$login = isset( $this->mOptions['u']) ? $this->mOptions['u'] : 'root';
 		$test = isset( $this->mOptions['test']) ? true : false;
-
 		$dbr = wfGetDBExt( DB_SLAVE );
 		$dbw = wfGetDBExt( DB_MASTER );
 
@@ -79,13 +78,14 @@ class WikiaReplicateImages {
 					 * check if source file exists. I know, stats are bad
 					 */
 					if( file_exists( $source ) ) {
-						$cmd = wfEscapeShellArg(
+						$cmd = array(
 							"/usr/bin/rsync",
 							"-axp",
 							"--chmod=g+w",
 							$oResultRow->up_path,
 							$login . '@' . $server["address"] . ':' . $destination
 						);
+						$cmd = escapeshellcmd( implode( " ", $cmd ) );
 
 						if( $test ) {
 							print( $cmd . "\n" );
