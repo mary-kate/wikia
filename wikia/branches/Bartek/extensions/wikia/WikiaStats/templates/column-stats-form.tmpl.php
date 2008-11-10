@@ -4,11 +4,13 @@
 var YC = YAHOO.util.Connect;
 var YD = YAHOO.util.Dom;
 var YE = YAHOO.util.Event;
-
-ChangeColumnStats = function(e) 
-{
+ChangeColumnStats = function(e) {
 	var column = YD.get( "ws_column_stats" ).value;
-    var baseurl = "/index.php?title=Special:WikiaStats&action=compare&table=" + column;
+	var cities = "<?=$cities?>";
+    var baseurl = "/index.php?title=Special:WikiaStats&action=compare&table=" + column; 
+    if (cities) {
+    	baseurl += "&cities=" + cities;
+	}
     document.location = baseurl;
 };
 
@@ -26,18 +28,18 @@ $empty_row = "<td>&nbsp;</td>";
 $cityUrl = "<a href=\"/index.php?title=Special:WikiaStats&action=citystats&city=%s\">";
 $i = 0;
 ?>
-<div style="text-align:right; float:right;padding:5px;">
+<div style="text-align:right; float:left;padding:5px;">
 <select name="ws_column_stats" id="ws_column_stats" style="text-align:left; font-size:11px;">
 <? foreach ($rangeColumns as $id => $letter) { ?>
-<option value="<?=($id+3)?>" <?=(($column == ($id+3)) ? "selected" : "")?>><?=wfMsg("wikiastats_mainstats_short_column_" . $letter)?></option>
+<option value="<?=($id+3)?>" <?=(($column == ($id+3)) ? " selected=\"selected\" " : "")?>><?=wfMsg("wikiastats_mainstats_short_column_" . $letter)?></option>
 <? } ?>
 </select>
 </div>
 <div style="float:left; margin-left:auto;margin-right:auto;width:100%">
-<?=$pager?>
+<!--<?=$pager?>-->
 </div>
 <!-- table -->
-<div class="medium" style="float:left; width:auto; overflow-x:auto;">
+<div class="medium" style="float:left; width:auto;overflow-x:auto;">
 <table style="width:auto" class="ws-trend-table">
 <?
 $rows = array();
@@ -91,7 +93,7 @@ foreach ($columnHistory as $date => $dateValues)
 	$outDate = WikiaGenericStats::makeCorrectDate($date, ($date==date('Y-m')));
 ?>	
 <tr>
-<td class="eb-trend" style="width:90px;" nowrap><?=$outDate?></td>
+<td class="eb-trend" style="width:80px;white-space:nowrap;"><strong><?=$outDate?></strong></td>
 <?
 	#---
 	foreach ($cityOrderList as $id => $city_id)
@@ -103,35 +105,35 @@ foreach ($columnHistory as $date => $dateValues)
 			{
 				if ($show_percent === false)
 				{
-					if ($column == 3)
+					if ($column == 9)
 						$output = sprintf("%0d", $dateValues[$city_id]);
-					elseif ($column == 10)
-						$output = sprintf("%0.1f", $dateValues[$city_id]);
-					elseif ($column == 11)
+					elseif ($column == 13)
+						$output = $wgLang->formatNum(sprintf("%0.1f", $dateValues[$city_id]));
+					elseif ($column == 14)
 						$output = sprintf("%0.0f", $dateValues[$city_id]);
-					elseif (($column == 12) || ($column == 13))
+					elseif (($column == 15) || ($column == 16))
 					{
 						$output = sprintf("%0d%%", $dateValues[$city_id] * 100);
 					}
-					elseif ($column == 15)
+					elseif ($column == 18)
 					{
 						if ($dateValues[$city_id] > $GB)
-							$output = sprintf("%0.1f GB", $dateValues[$city_id]/$GB);
+							$output = wfMsg('size-gigabytes', $wgLang->formatNum(sprintf("%0.1f", $dateValues[$city_id]/$GB)));
 						elseif ($dateValues[$city_id] > $MB)
-							$output = sprintf("%0.1f MB", $dateValues[$city_id]/$MB);
+							$output = wfMsg('size-megabytes', $wgLang->formatNum(sprintf("%0.1f", $dateValues[$city_id]/$MB)));
 						elseif ($dateValues[$city_id] > $KB)
-							$output = sprintf("%0.1f KB", $dateValues[$city_id]/$KB);
+							$output = wfMsg('size-kilobytes', $wgLang->formatNum(sprintf("%0.1f", $dateValues[$city_id]/$KB)));
 						else
 							$output = sprintf("%0d", intval($dateValues[$city_id]));
 					}
 					else
 					{
 						if ($dateValues[$city_id] > $G)
-							$output = sprintf("%0.1f G", intval($dateValues[$city_id]/$G));
+							$output = sprintf("%s G", $wgLang->formatNum(sprintf("%0.1f", floatval($dateValues[$city_id]/$G))));
 						elseif ($dateValues[$city_id] > $M)
-							$output = sprintf("%0.1f M", $dateValues[$city_id]/$M);
+							$output = sprintf("%s M", $wgLang->formatNum(sprintf("%0.1f", floatval($dateValues[$city_id]/$M))));
 						elseif ($dateValues[$city_id] > $K)
-							$output = sprintf("%0.1f k", intval($dateValues[$city_id])/$K);
+							$output = sprintf("%s K", $wgLang->formatNum(sprintf("%0.1f", floatval($dateValues[$city_id]/$K))));
 						else
 							$output = sprintf("%0d", $dateValues[$city_id]);
 					}
@@ -144,7 +146,7 @@ foreach ($columnHistory as $date => $dateValues)
 					}
 					elseif (($dateValues[$city_id] > 0) && ($dateValues[$city_id] < 25))
 					{
-						$output = "<font color=\"#000000\">".sprintf("+%0.0f%%", $dateValues[$city_id])."</font>";
+						$output = "<font color=\"#555555\">".sprintf("+%0.0f%%", $dateValues[$city_id])."</font>";
 					}
 					elseif (($dateValues[$city_id] > 25) && ($dateValues[$city_id] < 75))
 					{
@@ -162,7 +164,7 @@ foreach ($columnHistory as $date => $dateValues)
 			}
 		}
 ?>
-<td class="eb-trend" nowrap style="width:40px;"><?=((!empty($output)) ? $output : "&nbsp;")?></td>
+<td class="eb-trend" style="width:30px;white-space:nowrap;"><?=((!empty($output)) ? $output : "&nbsp;")?></td>
 <?
 	}
 ?>
@@ -175,6 +177,6 @@ foreach ($columnHistory as $date => $dateValues)
 </div>
 <div class="clear"></div>
 <div style="float:left; margin-left:auto;margin-right:auto;width:100%">
-<?=$pager?>
+<!--<?=$pager?>-->
 </div>
 <!-- e:<?= __FILE__ ?> -->

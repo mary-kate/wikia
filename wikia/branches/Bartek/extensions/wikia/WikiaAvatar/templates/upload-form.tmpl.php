@@ -26,17 +26,17 @@
     z-index:3;
 }
 
-.user-feed-title{
-    background-color:transparent;
-    border-bottom:1px solid #DCDCDC;
-    color:#000000;
-    float:left;
-    font-weight:bold;
-    margin:-14px 0px 15px;
-    padding-bottom:20px;
-    position:relative;
-    width:100%;
-    z-index:2;
+.user-feed-title {
+	background-color:transparent;
+	border-bottom:1px solid #DCDCDC;
+	color:#000000;
+	float:left;
+	font-weight:bold;
+	margin:-14px 0px 35px;
+	position:relative;
+	width:100%;
+	z-index:2;
+	padding-bottom: 10px;
 }
 
 .user-feed-menu {
@@ -64,9 +64,15 @@
 
 #siteSub {
 	float:left;
-	padding-top: 65px;
+	left: 10px;
+	padding-top: 58px;
 	position: absolute;
 	width: auto;
+}
+
+* html #bodyContent {
+	position: relative;
+	height: 1%;
 }
 
 .usermessage {

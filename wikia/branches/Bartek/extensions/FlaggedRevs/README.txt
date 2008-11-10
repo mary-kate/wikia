@@ -5,10 +5,13 @@ http://www.mediawiki.org/wiki/Extension:FlaggedRevs
 * Download the extension from SVN
 * (MySQL) Run the 'FlaggedRevs.sql' query, substituting in your wiki's table prefix. 
 * (PostgreSQL) Use 'FlaggedRevs.pg.sql' instead.
-* Upgrade to MediaWiki 1.12+
+* Upgrade to MediaWiki 1.13+
 * Run 'maintenance/update.php'
 * Run 'maintenance/archives/populateSha1.php'.
-* Add the following line to 'LocalSettings.php':
+* Make sure '../extensions/FlaggedRevs' is readable (for CSS/JS)
+* To enable reader feedback, make sure PHP has the GD libraries installed. In windows, this is done by un-commenting them out in php.ini. 
+In linux, php should be compiled with it enabled ('--with-gd'). See a nice guide here (http://www.onlamp.com/pub/a/php/2003/03/27/php_gd.html).
+* Add the following line to 'LocalSettings.php': 
 	include_once('extensions/FlaggedRevs/FlaggedRevs.php');
 
 It is important that the sha1 column is populated. This allows for image injection via key 

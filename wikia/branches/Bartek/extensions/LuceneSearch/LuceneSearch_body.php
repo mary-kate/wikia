@@ -240,7 +240,7 @@ class LuceneSearch extends SpecialPage
 
 				$top = wfMsg('searchnumber', $offset + 1,
 					min($results->getTotalHits(), $offset+$limit), $results->getTotalHits());
-				$out = "<ul>";
+				$out = '<ul id="lucene-results">';
 				$numchunks = ceil($results->getTotalHits() / $limit);
 				$whichchunk = $offset / $limit;
 				$prevnext = "";
@@ -798,7 +798,7 @@ class LuceneSearchSet {
 			wfDebug( "Fetching search data from $searchUrl\n" );
 			wfSuppressWarnings();
 			wfProfileIn( $fname.'-contact-'.$host );
-			$data = wfGetHTTP( $searchUrl );
+			$data = Http::get( $searchUrl );
 			wfProfileOut( $fname.'-contact-'.$host );
 			wfRestoreWarnings();
 
@@ -911,7 +911,8 @@ class LuceneSearchSet {
 	function iterateResults( $callback, $userdata = null ) {
 		$out = array();
 		foreach( $this->mResults as $key => $line ) {
-			$out[$key] = call_user_func( $callback, new LuceneResult( $line ), $userdata );
+			$item = call_user_func( $callback, new LuceneResult( $line ), $userdata );
+			if ( !is_null($item) ) $out[$key] = $item;
 		}
 		return $out;
 	}

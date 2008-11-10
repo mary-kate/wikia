@@ -82,17 +82,29 @@ class UserBoard {
 	
 		$user = User::newFromId($user_id_to);
 		$user->loadFromId();
+		
+		$user_from_obj = User::newFromName($user_from);
+		if( is_object( $user_from_obj ) ){
+			$user_from_obj->load();
+			$user_from_display =  trim($user_from_obj->getRealName());
+		}
+		if( !$user_from_display ){
+			$user_from_display = $user_from;
+		}
+		
 		if($user->isEmailConfirmed() && $user->getIntOption("notifymessage",1) ){
 			$board_link = Title::makeTitle( NS_SPECIAL , "UserBoard"  );
 			$update_profile_link = Title::makeTitle( NS_SPECIAL , "UpdateProfile"  );
 			$subject = wfMsgExt( 'message_received_subject',"parsemag",
-				$user_from
+				$user_from,
+				$user_from_display
 				 );
 			$body = wfMsgExt( 'message_received_body', "parsemag",
-				$user->getName(),
+				(( trim($user->getRealName()) )?$user->getRealName():$user->getName()),
 				$user_from,
 				$board_link->escapeFullURL(),
-				$update_profile_link->escapeFullURL()
+				$update_profile_link->escapeFullURL(),
+				$user_from_display
 			);
 				
 			$user->sendMail($subject, $body );
@@ -192,7 +204,7 @@ class UserBoard {
 	}
 	
 	public function getUserBoardMessages($user_id,$user_id_2=0,$limit=0,$page=0){
-		global $wgUser, $wgOut, $wgTitle;
+		global $wgUser, $wgOut, $wgTitle, $wgParser;
 		$dbr =& wfGetDB( DB_MASTER );
 		
 		if($limit>0){
@@ -228,8 +240,7 @@ class UserBoard {
 		$res = $dbr->query($sql);
 		$messages = array();
 		while ($row = $dbr->fetchObject( $res ) ) {
-			$CommentParser = new Parser();
-			$message_text = $CommentParser->parse( $row->ub_message, $wgTitle, $wgOut->parserOptions(),true );
+			$message_text = $wgParser->parse( $row->ub_message, $wgTitle, $wgOut->parserOptions(),true );
 			$message_text = $message_text->getText();
 		
 			 $messages[] = array(
@@ -244,7 +255,7 @@ class UserBoard {
 	}
 
 	public function getAnonUserBoardMessages($user_name,$user_id_2=0,$limit=0,$page=0){
-		global $wgUser, $wgOut, $wgTitle;
+		global $wgUser, $wgOut, $wgTitle, $wgParser;
 		$dbr =& wfGetDB( DB_MASTER );
 		
 		if($limit>0){
@@ -280,8 +291,7 @@ class UserBoard {
 		$res = $dbr->query($sql);
 		$messages = array();
 		while ($row = $dbr->fetchObject( $res ) ) {
-			$CommentParser = new Parser();
-			$message_text = $CommentParser->parse( $row->ub_message, $wgTitle, $wgOut->parserOptions(),true );
+			$message_text = $wgParser->parse( $row->ub_message, $wgTitle, $wgOut->parserOptions(),true );
 			$message_text = $message_text->getText();
 		
 			 $messages[] = array(

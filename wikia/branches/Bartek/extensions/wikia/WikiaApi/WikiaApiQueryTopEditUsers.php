@@ -5,7 +5,7 @@
  *
  * @author Piotr Molski (moli) <moli@wikia.com>
  *
- * @todo 
+ * @todo
  *
  */
 
@@ -51,7 +51,7 @@ class WikiaApiQueryTopEditUsers extends WikiaApiQuery {
 	#---
 	private function getTopEditUsers() {
 		global $wgDBname;
-		
+
         #--- blank variables
         $nspace = $user = null;
 
@@ -62,7 +62,6 @@ class WikiaApiQueryTopEditUsers extends WikiaApiQuery {
 		extract($this->extractRequestParams());
 
 		$this->initCacheKey($lcache_key, __METHOD__);
-	
 		try {
 			#--- database instance
 			$db =& $this->getDB();
@@ -72,23 +71,18 @@ class WikiaApiQueryTopEditUsers extends WikiaApiQuery {
 				throw new WikiaApiQueryError(0);
 			}
 
-			$this->addTables( array( "revision" ) );
-			$this->addFields( array(
-				'rev_user',
-				'count(*) as edit_cnt', 
-				'rev_user_text',
-				));
+			$this->addTables( array( "`user_rev_cnt` JOIN `wikicities`.`user` on user_id = rev_user" ) );
+			$this->addFields( array('rev_user','rev_cnt as edit_cnt','user_name'));
+			$this->addWhere ( "rev_user > 0" );
 
 			#--- user
-			if ( !is_null($user) ) { 
+			if ( !is_null($user) ) {
 				if ( !$this->isInt($user) ) {
 					throw new WikiaApiQueryError(1);
 				}
 				$this->setCacheKey ($lcache_key, 'U', $user);
-				$this->addWhereFld ( "rev_user", $user );						
+				$this->addWhere ( "rev_user = '" . intval($user) . "'" );
 			}
-
-			$this->addWhere ( "rev_user > 0" );
 
 			#---
 			if ( !empty($ctime) ) {
@@ -96,7 +90,7 @@ class WikiaApiQueryTopEditUsers extends WikiaApiQuery {
 					throw new WikiaApiQueryError(1);
 				}
 			}
-			
+
 			#--- limit
 			if ( !empty($limit)  ) { //WikiaApiQuery::DEF_LIMIT
 				if ( !$this->isInt($limit) ) {
@@ -116,7 +110,6 @@ class WikiaApiQueryTopEditUsers extends WikiaApiQuery {
 			}
 
 			#--- order by
-			$this->addOption( "GROUP BY", "rev_user, rev_user_text	" );
 			$this->addOption( "ORDER BY", "edit_cnt DESC" );
 
 			$data = array();
@@ -128,16 +121,16 @@ class WikiaApiQueryTopEditUsers extends WikiaApiQuery {
 					$data[$row->rev_user] = array(
 						"user_id"		=> $row->rev_user,
 						"cnt"			=> $row->edit_cnt,
-						"user_name"		=> $row->rev_user_text
+						"user_name"		=> $row->user_name
 					);
-					ApiResult :: setContent( $data[$row->rev_user], $row->rev_user_text);
+					ApiResult :: setContent( $data[$row->rev_user], $row->user_name);
 				}
 				$db->freeResult($res);
 				$this->saveCacheData($lcache_key, $data, $ctime);
 			} else {
 				// ... cached
 				$data = $cached;
-			}		
+			}
 		} catch (WikiaApiQueryError $e) {
 			// getText();
 		} catch (DBQueryError $e) {
@@ -161,20 +154,20 @@ class WikiaApiQueryTopEditUsers extends WikiaApiQuery {
 	}
 
 	/*
-	 * 
+	 *
 	 * Description's functions
-	 * 
-	 */ 
+	 *
+	 */
 	#---
 	protected function getQueryDescription() {
 		return 'Get list of users with most edited pages';
 	}
 
 	/*
-	 * 
+	 *
 	 * Description's parameters
-	 * 
-	 */ 
+	 *
+	 */
 	#---
 	protected function getParamQueryDescription() {
 		return 	array (
@@ -183,11 +176,11 @@ class WikiaApiQueryTopEditUsers extends WikiaApiQuery {
 	}
 
 	/*
-	 * 
+	 *
 	 * Allowed parameters
-	 * 
-	 */ 
-	
+	 *
+	 */
+
 	#---
 	protected function getAllowedQueryParams() {
 		return array (
@@ -195,13 +188,13 @@ class WikiaApiQueryTopEditUsers extends WikiaApiQuery {
 				ApiBase :: PARAM_TYPE => 'integer'
 			),
 		);
-	} 
+	}
 
 	/*
-	 * 
+	 *
 	 * Examples
-	 * 
-	 */ 
+	 *
+	 */
 	#---
 	protected function getQueryExamples() {
 		return array (
@@ -211,10 +204,10 @@ class WikiaApiQueryTopEditUsers extends WikiaApiQuery {
 	}
 
 	/*
-	 * 
+	 *
 	 * Version
-	 * 
-	 */ 
+	 *
+	 */
 	#---
 	public function getVersion() {
 		return __CLASS__ . ': $Id: '.__CLASS__.'.php '.filesize(dirname(__FILE__)."/".__CLASS__.".php").' '.strftime("%Y-%m-%d %H:%M:%S", time()).'Z wikia $';

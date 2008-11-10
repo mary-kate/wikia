@@ -3,9 +3,11 @@
 # http://www.mediawiki.org/wiki/Extension:Google_Maps
 
 # Copyright Evan Miller (emmiller@gmail.com)
-# Modifications copyright Hartmut Holzgraefe, Joshua Hodge
+# Modifications copyright Joshua Hodge
 
-# Version 0.9.0, 20 Feb 2008
+# Version 0.9.4a, 2 Jun 2008
+
+define('GOOGLE_MAPS_EXTENSION_VERSION', '0.9.4a');
 
 // if we're not in the mediawiki framework just die
 if( !defined( 'MEDIAWIKI' ) ) {
@@ -16,13 +18,11 @@ if( !defined( 'MEDIAWIKI' ) ) {
 
 // require the message file
 require( 'extensions/GoogleMaps/GoogleMaps.i18n.php' );
-
-require( 'extensions/GoogleMaps/GoogleMapsJsOutputter.php' );
-
-require( 'extensions/GoogleMaps/GoogleMapsKmlOutputter.php' );
-
+require( 'extensions/GoogleMaps/export/GoogleMapsExporter.php' );
+require( 'extensions/GoogleMaps/export/GoogleMapsJsExporter.php' );
+require( 'extensions/GoogleMaps/export/GoogleMapsKmlExporter.php' );
+require( 'extensions/GoogleMaps/export/GoogleMapsImgExporter.php' );
 require( 'extensions/GoogleMaps/SpecialGoogleMapsKML.php' );
-
 require( 'extensions/GoogleMaps/GoogleMaps.body.php' );
 
 /**
@@ -45,6 +45,11 @@ function wfGoogleMaps_Render15 ( $pContent, $pArgv ) {
 function wfGoogleMaps_RenderKmlLink15 ( $pContent, $pArgv ) {
 	global $wgGoogleMaps;
 	return $wgGoogleMaps->renderKmlLink( $pContent, $pArgv );
+}
+
+function wfGoogleMaps_CommentJS(&$pParser, &$pText) {
+    global $wgGoogleMaps;
+    return $wgGoogleMaps->commentJS($pParser, $pText);
 }
 
 /**
@@ -132,29 +137,30 @@ function wfGoogleMaps_Install() {
 		$wgJsMimeType,
 		$wgLanguageCode,
 		$wgContLang,
-		$wgParser,
 		$wgProxyKey,
 		$wgTitle );
 
 	// This hook will add the interactive editing map to the article edit page.
 	// This hook was introduced in MW 1.6
+        $editHook = array( $wgGoogleMaps, 'editForm' );
 	if( version_compare( $wgVersion, "1.6" ) >= 0 ) {
 		if( !$wgGoogleMapsDisableEditorsMap ) {
 			if( isset( $wgHooks['EditPage::showEditForm:initial'] )
 				&& is_array( $wgHooks['EditPage::showEditForm:initial'] ) ) {
-					array_unshift( $wgHooks['EditPage::showEditForm:initial'], array( $wgGoogleMaps, 'editForm' ) );
+					array_unshift( $wgHooks['EditPage::showEditForm:initial'], $editHook );
 			} else {
-				$wgHooks['EditPage::showEditForm:initial'] = array( array( $wgGoogleMaps, 'editForm' ) );
+				$wgHooks['EditPage::showEditForm:initial'] = array( $editHook );
 			}
 		}
 	}
 
 	// This hook will do some post-processing on the javascript that has been added
 	// to an article.
+        $hook = 'wfGoogleMaps_CommentJS';
 	if( isset( $wgHooks['ParserAfterTidy'] ) && is_array( $wgHooks['ParserAfterTidy'] ) ) {
-		array_unshift( $wgHooks['ParserAfterTidy'], array( $wgGoogleMaps, 'commentJS' ) );
+		array_unshift( $wgHooks['ParserAfterTidy'], $hook );
 	} else {
-		$wgHooks['ParserAfterTidy'] = array( array( $wgGoogleMaps, 'commentJS' ) );
+		$wgHooks['ParserAfterTidy'] = array( $hook );
 	}
 
 	// This hook will be called any time the parser encounters a <googlemap>
@@ -179,7 +185,7 @@ $wgExtensionFunctions[] = 'wfGoogleMaps_Install'; # array( $wgGoogleMapExtension
 $wgExtensionCredits['other'][] = array(
 	'name'        => 'Google Maps Extension',
 	'author'      => 'Evan Miller',
-	'version'     => '0.9.1',
+	'version'     => GOOGLE_MAPS_EXTENSION_VERSION,
 	'url'         => 'http://www.mediawiki.org/wiki/Extension:Google_Maps',
 	'description' => 'Easily create maps with wiki-fied markers'
 );

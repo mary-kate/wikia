@@ -6,7 +6,7 @@
 * @package MediaWiki
 * @subpackage Extensions
 *
-* @author Bartek Lapinski <bartek@wikia.com>
+* @author Bartek Łapiński <bartek@wikia.com>
 * @copyright Copyright (C) 2008, Wikia Inc.
 * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License 2.0 or later
 */
@@ -38,7 +38,7 @@ $wgExtensionFunctions [] = 'wfEditSimilarSetup' ;
 $wgExtensionCredits['other'][] = array(
         'name' => 'EditSimilar',
         'version' => 1.16 ,
-        'author' => 'Bartek Łapiński, [http://inside.wikia.com/wiki/User:TOR Łukasz \'TOR\' Garczewski]',
+        'author' => 'Bartek Łapiński, [http://www.wikia.com/wiki/User:TOR Łukasz \'TOR\' Garczewski]',
         'url' => 'http://help.wikia.com/wiki/Help:EditSimilar',
         'description' => 'Encourages users to edit an article similar (by categories) to the one they just had edited.',
 );
@@ -285,19 +285,6 @@ class EditSimilar {
 	// message box wrapper
 	static public function showMessage ($text) {
 		global $wgOut, $wgUser, $wgScript ;
-		$wgOut->addHTML ("
-			<style type=\"text/css\">
-				.editsimilar {
-					background-color: #c0fec0;
-					border: solid 1px #006400;
-				}
-
-				.editsimilar_dismiss {
-					float:right;
-					font-size:0.9em;
-				}
-			</style>
-		");
 		$wgOut->addScript ("
 			<script type=\"text/javascript\">
 				if (YAHOO.Wikia && YAHOO.Wikia.Tracker) {

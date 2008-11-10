@@ -35,6 +35,8 @@
 	/*function getStreamPage(){
 		return ;		
 	}*/	
+	
+	/* @@todo cache this */
 	function get_tool_html($tool_id, $ns='', $title_str=''){		
 		global $wgUser;
 		if($title_str=='')$title_str = $this->mv_interface->article->mvTitle->getStreamName();
@@ -54,7 +56,8 @@
 					$this->innerHTML =  $wgOut->getHTML();
 				}else{				
 					$sk =& $wgUser->getSkin();
-						
+					//empty out the categories
+					$wgOut->mCategoryLinks = array();
 					//run via parser to add in Category info: 
 					$parserOptions = ParserOptions::newFromUser( $wgUser );
 					$parserOptions->setEditSection( false );
@@ -171,37 +174,7 @@
 			wfMsg('mv_tool_'.$tool_id) . '</li>'."\n";
 		}		
 		$out.='</ul>';
-		/*$lines = explode( "\n", wfMsgForContent( 'MvStreamTools' ) );	
-	
-		foreach($lines as $line){
-			if (strpos($line, '*') !== 0)
-				continue;
-			if (strpos($line, '**') !== 0) {
-				$line = trim($line, '* ');
-				$heading = $line;
-			} else {			
-				if (strpos($line, '|') !== false) { // sanity check
-					$line = explode( '|' , trim($line, '* '), 2 );
-					//check if the tool is valid
-					if(in_array($line[0], $mv_valid_tools)){
-						$out.='<a href="javascript:mv_tool_disp(\''.$line[0].'\')">';
-						$out.=wfMsg($line[1]) . '</a>';
-					}else{
-						$out.=wfMsg('mv_tool_missing', $line[0]);
-					}
-				}else{
-					$out.=wfMsg('mv_bad_tool_request');	
-				}
-				$out.='<br>';			
-			}
-		}*/
-		return '<h3>'.$heading.'</h3>' . $out;
-		/*$out='<h3>Tool listing</h3>
-			<a href="javascript:tool_disp(\'search\')>Search Current Stream</a><br>
-			<a href="javascript:tool_disp(\'navigate\')>Navigate Current Stream</a><br>
-			<a href="javascript:tool_disp(\'embed\')>External Embed Options</a><br>
-			<a href="javascript:tool_disp(\'overlay\')>Overlay Set</a><br>
-		';*/			
+		return '<h3>'.$heading.'</h3>' . $out;			
 	}
 	//returns layers overview text 
 	function get_mang_layers_page($stream_title){
@@ -213,7 +186,7 @@
 			//@@todo use something better than "title" for type_key description 
 			$checked = (in_array($type_key, $this->mvd_tracks))?' checked':'';
 			$out.='<input type="checkbox" name="option_'.$type_key.'"  id="option_'.$type_key.'" value="'.$type_key.'" '.$checked.'/> '.
-				'<a class="mv_mang_layers" id="a_'.$type_key.'" title="'.wfMsg($type_key.'_desc').'" href="#">'.wfMsg($type_key).'</a><br>';
+				'<a class="mv_mang_layers" id="a_'.$type_key.'" title="'.wfMsg($type_key.'_desc').'" href="#">'.wfMsg($type_key).'</a><br />';
 		}		
 		$out.='<input id="submit_mang_layers" type="submit" value="'.wfMsg('mv_update_layers').'">';
 		return $out;
@@ -227,7 +200,7 @@
 		
 		//get the total length of the stream: 		
 		$stream =  new MV_Stream(array('name'=>$stream_title));
-		//$out.= "sn: ". $stream->name . '<br>';
+		//$out.= "sn: ". $stream->name . '<br />';
 		$duration = $stream->getDuration();
 		//$out.=" duration: $duration";			
 		$MvOverlay = new MV_Overlay();					
@@ -253,6 +226,20 @@
 		$out.=' for '. $mvTitle->getTitleDesc();
 		return $out;
 	}
-	
+	function getStyleOverride(){
+		if($this->mv_interface->smwProperties['playback_resolution']!=null){			
+			@list($width,$height) = explode('x', $this->mv_interface->smwProperties['playback_resolution']);
+			if(isset($width) && isset($height)){
+				if(is_numeric($width) && is_numeric($height)){
+					//offset in refrence to mv_custom.css 
+					$width+=2;
+					$height+=30;
+					$top = $height+30+12;
+					return "style=\"top:{$top}px;width:{$width}px;\"";
+				}	
+			}
+		}
+		return '';
+	}
  }
 ?>

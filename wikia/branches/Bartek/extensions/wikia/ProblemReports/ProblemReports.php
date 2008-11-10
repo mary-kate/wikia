@@ -8,7 +8,7 @@ if (!defined('MEDIAWIKI')) die();
  * @package MediaWiki
  * @subpackage Extensions
  *
- * @author Maciej Brencz <macbre@wikia.com>
+ * @author Maciej Brencz <macbre@wikia-inc.com>
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License 2.0 or later
  * 
   create table problem_reports (
@@ -39,9 +39,9 @@ if (!defined('MEDIAWIKI')) die();
 $wgExtensionCredits['other'][] = array(
 	'name' => 'ProblemReports',
 	'url' => 'http://help.wikia.com/wiki/Help:ProblemReports',
-	'version' => '2.21',
+	'version' => '2.4',
 	'description' => 'Allows users to report problems with wiki-articles and helpers/sysops/janitors/staff to view & resolve them',
-	'author' => '[http://pl.inside.wikia.com/wiki/User:Macbre Maciej Brencz]'
+	'author' => '[http://pl.wikia.com/wiki/User:Macbre Maciej Brencz]'
 );
 
 // extension setup function
@@ -51,29 +51,25 @@ $wgExtensionFunctions[] = 'wfProblemReports';
 $wgExtensionMessagesFiles['ProblemReports'] = $IP . '/extensions/wikia/ProblemReports/ProblemReports.i18n.php';
 
 // load files
-require_once( "$IP/extensions/wikia/ProblemReports/ProblemReports.i18n.php" );
-require_once( "$IP/extensions/wikia/ProblemReports/ProblemReportsDialog.php" );
-require_once( "$IP/extensions/wikia/ProblemReports/ProblemReportsAjax.php" );
+require( "$IP/extensions/wikia/ProblemReports/ProblemReportsDialog.php" );
+require( "$IP/extensions/wikia/ProblemReports/ProblemReportsAjax.php" );
 
 // special page
 $wgSpecialPages['ProblemReports'] = 'SpecialProblemReports'; 
 $wgAutoloadClasses['SpecialProblemReports'] = $IP . '/extensions/wikia/ProblemReports/SpecialProblemReports_body.php'; 
+$wgSpecialPageGroups['ProblemReports'] = 'maintenance';
 
 // extension setup (install hooks, load WikiaAPI modules)
 function wfProblemReports()
 {
-	global $wgLogTypes, $wgLogNames, $wgLogTypes, $wgLogActions, $wgLogHeaders, $wgProblemReportsEnable, $wgHooks, $wgServer;
+	global $wgLogTypes, $wgLogNames, $wgLogActions, $wgLogHeaders, $wgProblemReportsEnable, $wgHooks, $wgServer;
 	
 	// add hooks & messages if problem reporting is enabled
-	if (isset($wgProblemReportsEnable) && $wgProblemReportsEnable)
-	{
+	if (!empty($wgProblemReportsEnable)) {
 		global $wgOut, $wgExtensionsPath, $wgStyleVersion;
 	
-		// add "Report a problem" link and return html of Report a problem" dialog
+		// add "Report a problem" link and return html of "Report a problem" dialog
 		$wgHooks['SkinTemplateContentActions'][] = 'wfProblemReportsAddLink';
-		
-		// what's why we all love u$ IE :)
-		$wgOut->addScript('<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="'.$wgExtensionsPath.'/wikia/ProblemReports/css/ProblemReports.ieFixes.css?'.$wgStyleVersion.'" /><![endif]-->'."\n");
 	}
 
 	// setup for Special:Log
@@ -110,8 +106,6 @@ function wfProblemReports()
 	$wgAjaxExportList[] = 'wfProblemReportsAjaxGetDialog';
 	$wgAjaxExportList[] = 'wfProblemReportsAjaxAPI';
 	$wgAjaxExportList[] = 'wfProblemReportsAjaxReport';
-
-	wfDebug("ProblemReports: extension initalized\n");
 
 	// fixes #2791
 	global $wgRequest;

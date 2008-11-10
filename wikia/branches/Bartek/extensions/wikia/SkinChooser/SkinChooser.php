@@ -3,12 +3,13 @@
  * Author: Inez Korczynski
  */
 
-$wgHooks['SetExtraCookies'][] = 'SetSkinChooserCookies';
-function SetSkinChooserCookies($user) {
-	global $wgCookieExpiration, $wgCookiePath, $wgCookieDomain, $wgCookieSecure, $wgCookiePrefix;
-	$exp = time() + $wgCookieExpiration;
-	$skinpref = join('-',array($user->getOption('skin'), $user->getOption('theme'), $user->getOption('skinoverwrite')));
-	setcookie( $wgCookiePrefix.'skinpref', $skinpref, $exp, $wgCookiePath, $wgCookieDomain, $wgCookieSecure );
+# basic permissions
+$wgGroupPermissions['sysop']['setadminskin'] = true;
+$wgGroupPermissions['staff']['setadminskin'] = true;
+
+$wgHooks['UserSetCookies'][] = 'SetSkinChooserCookies';
+function SetSkinChooserCookies( $user, &$session, &$cookies ) {
+	$cookies['skinpref'] = join('-',array($user->getOption('skin'), $user->getOption('theme'), $user->getOption('skinoverwrite')));
 	return true;
 }
 
@@ -39,13 +40,9 @@ function SavePreferencesSkinChooser($pref) {
 
 	# Save setting for admin skin
 	if(!empty($pref->mAdminSkin)) {
-		$ug = $wgUser->getGroups();
-		if( in_array('staff', $ug) || in_array('sysop', $ug) ) {
-			$adminSkin = getAdminSkin();
-			if($pref->mAdminSkin != $adminSkin) {
-
+		if( $wgUser->isAllowed( 'setadminskin' ) ) {
+			if($pref->mAdminSkin != $wgAdminSkin && !(empty($wgAdminSkin) && $pref->mAdminSkin == 'ds')) {
 				$log = new LogPage('var_log');
-
 				if($pref->mAdminSkin == 'ds') {
 					WikiFactory::SetVarById( 599, $wgCityId, null);
 					$wgAdminSkin = null;
@@ -71,13 +68,13 @@ function SavePreferencesSkinChooser($pref) {
 $wgHooks['UserToggles'][] = 'SkinChooserExtraToggle';
 function SkinChooserExtraToggle(&$extraToggle) {
 	$extraToggle[] = 'skinoverwrite';
-
+	$extraToggle[] = 'showAds';
 	return true;
 }
 
 $wgHooks['AlternateSkinPreferences'][] = 'WikiaSkinPreferences';
 function WikiaSkinPreferences($pref) {
-	global $wgOut, $wgSkinTheme, $wgSkipSkins, $wgStylePath, $wgSkipThemes, $wgUser, $wgDefaultSkin, $wgDefaultTheme, $wgSkinPreviewPage;
+	global $wgOut, $wgSkinTheme, $wgSkipSkins, $wgStylePath, $wgSkipThemes, $wgUser, $wgDefaultSkin, $wgDefaultTheme, $wgSkinPreviewPage, $wgAdminSkin;
 
 	global $wgForceSkin;
 	if(!empty($wgForceSkin)) {
@@ -86,10 +83,8 @@ function WikiaSkinPreferences($pref) {
 		return true;
 	}
 
-	$adminSkin = getAdminSkin();
-
-	if(!empty($adminSkin)) {
-		$defaultSkinKey = $adminSkin;
+	if(!empty($wgAdminSkin)) {
+		$defaultSkinKey = $wgAdminSkin;
 	} else if(!empty($wgDefaultTheme)) {
 		$defaultSkinKey = $wgDefaultSkin . '-' . $wgDefaultTheme;
 	} else {
@@ -204,8 +199,7 @@ function WikiaSkinPreferences($pref) {
 	$wgOut->addHTML('<br/>'.$pref->getToggle('skinoverwrite'));
 
 	# Display ComboBox for admins/staff only
-	$ug = $wgUser->getGroups();
-	if(in_array('staff', $ug) || in_array('sysop', $ug)) {
+	if( $wgUser->isAllowed( 'setadminskin' ) ) {
 
 		$wgOut->addHTML("<br/><h2>".wfMsg('admin_skin')."</h2>".wfMsg('defaultskin_choose'));
 		$wgOut->addHTML('<select name="adminSkin" id="adminSkin">');
@@ -217,7 +211,7 @@ function WikiaSkinPreferences($pref) {
 				continue;
 			}
 			if($skinKey == 'quartz') {
-				$skinKeyA = split('-', $adminSkin);
+				$skinKeyA = split('-', $wgAdminSkin);
 				if($skinKey != $skinKeyA[0]) {
 					continue;
 				}
@@ -237,24 +231,24 @@ function WikiaSkinPreferences($pref) {
 						}
 					}
 					$skinkey = $skinKey . '-' . $themeVal;
-					$wgOut->addHTML("<option value='{$skinkey}'".($skinkey == $adminSkin ? ' selected' : '').">".wfMsg($skinkey)."</option>");
+					$wgOut->addHTML("<option value='{$skinkey}'".($skinkey == $wgAdminSkin ? ' selected' : '').">".wfMsg($skinkey)."</option>");
 				}
 				$wgOut->addHTML('</optgroup>');
 			}
 		}
-		$wgOut->addHTML("<option value='ds'".(empty($adminSkin) ? ' selected' : '').">".wfMsg('adminskin_ds')."</option>");
+		$wgOut->addHTML("<option value='ds'".(empty($wgAdminSkin) ? ' selected' : '').">".wfMsg('adminskin_ds')."</option>");
 		$wgOut->addHTML('</select>');
 		$wgOut->addWikiText(wfMsg('skinchooser-customcss'));
 	} else {
 		$wgOut->addHTML('<br/>');
-		if(!empty($adminSkin)) {
-            $elems = split('-',$adminSkin);
+		if(!empty($wgAdminSkin)) {
+            $elems = split('-', $wgAdminSkin);
             $skin = ( array_key_exists(0, $elems) ) ? $elems[0] : null;
             $theme = ( array_key_exists(1, $elems) ) ? $elems[1] : null;
 			if($theme != 'custom') {
-				$wgOut->addHTML(wfMsg('defaultskin1', wfMsg($skin.'_skins').' '.wfMsg($adminSkin)));
+				$wgOut->addHTML(wfMsg('defaultskin1', wfMsg($skin.'_skins').' '.wfMsg($wgAdminSkin)));
 			} else {
-				$wgOut->addHTML(wfMsgForContent('defaultskin2', wfMsg($skin.'_skins').' '.wfMsg($adminSkin), Skin::makeNSUrl(ucfirst($skin).'.css','',NS_MEDIAWIKI)));
+				$wgOut->addHTML(wfMsgForContent('defaultskin2', wfMsg($skin.'_skins').' '.wfMsg($wgAdminSkin), Skin::makeNSUrl(ucfirst($skin).'.css','',NS_MEDIAWIKI)));
 			}
 		} else {
 			if(empty($wgDefaultTheme)) {
@@ -272,16 +266,14 @@ function WikiaSkinPreferences($pref) {
 
 $wgHooks['AlternateGetSkin'][] = 'WikiaGetSkin';
 function WikiaGetSkin ($user) {
-	global $wgCookiePrefix, $wgCookieExpiration, $wgCookiePath, $wgCookieDomain, $wgCookieSecure;
-	global $wgDefaultSkin, $wgDefaultTheme, $wgVisitorSkin, $wgVisitorTheme, $wgOldDefaultSkin;
-	global $wgSkinTheme, $wgOut, $wgForceSkin, $wgRequest, $wgHomePageName, $wgHomePageSkin, $wgTitle;
+	global $wgCookiePrefix, $wgCookieExpiration, $wgCookiePath, $wgCookieDomain, $wgCookieSecure, $wgDefaultSkin, $wgDefaultTheme, $wgVisitorSkin, $wgVisitorTheme, $wgOldDefaultSkin, $wgSkinTheme, $wgOut, $wgForceSkin, $wgRequest, $wgHomePageName, $wgHomePageSkin, $wgTitle, $wgAdminSkin;
 
 	if(!($wgTitle instanceof Title)) {
 		$user->mSkin = &Skin::newFromKey(isset($wgDefaultSkin) ? $wgDefaultSkin : 'monobook');
 		return false;
 	}
 
-	if($wgTitle->getText() == $wgHomePageName) {
+	if( $wgTitle->getText() == $wgHomePageName && $wgTitle->getNamespace() == NS_MAIN ) {
 		$user->mSkin = &Skin::newFromKey($wgHomePageSkin);
 		return false;
 	}
@@ -294,8 +286,6 @@ function WikiaGetSkin ($user) {
 		$user->mSkin->themename = $wgRequest->getVal('usetheme', $userTheme);
 		return false;
 	}
-
-	$adminSkin = getAdminSkin();
 
 	if(!empty($wgVisitorTheme) && $wgVisitorSkin == 'quartz') {
 		$wgVisitorSkin .= $wgVisitorTheme;
@@ -320,8 +310,8 @@ function WikiaGetSkin ($user) {
 			$skinpref = split('-', $_COOKIE[$wgCookiePrefix.'skinpref']);
 			if(true == (bool) $skinpref[2]) { # Doest have overwrite enabled?
 
-				if(!empty($adminSkin)) {
-					$elems = split('-',$adminSkin);
+				if(!empty($wgAdminSkin)) {
+					$elems = split('-',$wgAdminSkin);
                     $userSkin = ( array_key_exists(0, $elems) ) ? $elems[0] : null;
                     $userTheme = ( array_key_exists(1, $elems) ) ? $elems[1] : null;
 				} else {
@@ -334,8 +324,8 @@ function WikiaGetSkin ($user) {
 				$userTheme = $skinpref[1];
 			}
 		} else {
-			if(!empty($adminSkin)) {
-				$adminSkinArray = split('-',$adminSkin);
+			if(!empty($wgAdminSkin)) {
+				$adminSkinArray = split('-', $wgAdminSkin);
 				$userSkin = isset($adminSkinArray[0]) ? $adminSkinArray[0] : null;
 				$userTheme = isset($adminSkinArray[1]) ? $adminSkinArray[1] : null;
 			} else {
@@ -348,8 +338,8 @@ function WikiaGetSkin ($user) {
 		$userTheme = $user->getOption('theme');
 
 		if(true == (bool) $user->getOption('skinoverwrite')) { # Doest have overwrite enabled?
-			if(!empty($adminSkin)) {
-				$adminSkinArray = split('-',$adminSkin);
+			if(!empty($wgAdminSkin)) {
+				$adminSkinArray = split('-', $wgAdminSkin);
 				$userSkin = isset($adminSkinArray[0]) ? $adminSkinArray[0] : null;
 				$userTheme = isset($adminSkinArray[1]) ? $adminSkinArray[1] : null;
 			}
@@ -376,9 +366,4 @@ function WikiaGetSkin ($user) {
 		$user->mSkin->themename = $userTheme;
 	}
 	return false;
-}
-
-function getAdminSkin() {
-	global $wgAdminSkin;
-	return $wgAdminSkin;
 }

@@ -12,11 +12,6 @@
  */
 if (!defined('MEDIAWIKI')) die();
 
-require_once ("$IP/includes/api/ApiBase.php");
-
-global $wgAPIModules;
-$wgAPIModules['sfautocomplete'] = 'SFAutocompleteAPI';
-
 /**
  * @addtogroup API
  */

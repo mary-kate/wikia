@@ -77,6 +77,7 @@ WR.addTracker = function(elem, type, url) {
 YE.addListener("cw-submit", "click", WR.watchForm, "cw-submit" );
 YE.addListener("cw-form", "submit", WR.watchForm, "cw-submit" );
 WR.addTracker('requestwikiform1', 'submit', 'Continue');
+YE.onDOMReady( function() {WR.addTracker(YD.get('tos').getElementsByTagName('a')[0], 'click', 'Terms_of_use'); });
 
 function viewMoreWikis() {
 	var cwResult = document.getElementById('cw-result');
@@ -114,7 +115,6 @@ YAHOO.util.Event.onDOMReady( function() {
 			for (i=0; i<images.length; i++) {
 				YD.setStyle(images[i], 'width', images[i].width + 'px');
 				YD.setStyle(images[i], 'height', images[i].height + 'px');
-				// YD.setStyle(images[i], 'background-image', 'url(' + images[i].src + ')');
 				YD.setStyle(images[i], 'filter', 'progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\'' + images[i].src + '\', sizingMethod=\'crop\')');
 				images[i].src = '/skins/common/dot.gif';
 			}

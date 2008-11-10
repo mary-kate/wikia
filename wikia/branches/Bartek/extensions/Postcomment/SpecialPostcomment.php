@@ -21,6 +21,7 @@ $wgExtensionCredits['other'][] = array(
     'name' => 'PostComment',
     'author' => 'Travis Derouin, Siebrand Mazeland',
     'description' => 'Allows users to post comments directly to discussion pages.',
+    'descriptionmsg' => 'postcomment_desc',
     'url' => 'http://www.mediawiki.org/wiki/Extension:PostComment',
 );
 
@@ -61,12 +62,12 @@ function wfPostcommentForm() {
 	$pc = Title::newFromText("Postcomment", NS_SPECIAL);
     if ($wgTitle->getNamespace() == NS_USER_TALK)
         $msg = wfMsg('postcomment_leavemessagefor',$wgTitle->getText());
-   echo "<br/><br/><table>
+   echo "<br /><br /><table>
         <FORM name=\"commentForm\" method=\"POST\" action=\"{$pc->getFullURL()}\">
         <input name=\"target\" type=\"hidden\" value=\"" . htmlspecialchars($wgTitle->getPrefixedDBkey()) . "\"/>
         <tr><td colspan=\"2\" valign=\"top\">
         <a name=\"post\"></a>
-        <b>$msg:</b><br/><br/></td></tr>
+        <b>$msg:</b><br /><br /></td></tr>
 
         <tr><td valign=\"top\"></td><td><textarea tabindex=3 rows=\"15\"cols=\"50\" name=\"comment_text\"></TEXTAREA>
         <tr><td>&nbsp;</td><td>
@@ -93,10 +94,10 @@ function wfSpecialPostcomment( $par )
 	$wgOut->setRobotpolicy( "noindex,nofollow" );
 	$fname = "wfSpecialPostcomment";
 
-	//echo "topic: " . $wgRequest->getVal("topic_name") . "<BR>";
-	//echo "title: " . $wgRequest->getVal("title") . "<BR>";
-	//echo "comment: " . $wgRequest->getVal("comment_text") . "<BR>";
-	//echo "new_topic id " . $wgRequest->getVal("new_topic") . "<BR>";
+	//echo "topic: " . $wgRequest->getVal("topic_name") . "<br />";
+	//echo "title: " . $wgRequest->getVal("title") . "<br />";
+	//echo "comment: " . $wgRequest->getVal("comment_text") . "<br />";
+	//echo "new_topic id " . $wgRequest->getVal("new_topic") . "<br />";
 
 	$t = Title::newFromDBKey($wgRequest->getVal("target"));
 	$update = true;
@@ -120,13 +121,13 @@ function wfSpecialPostcomment( $par )
 	$comment = $wgRequest->getVal("comment_text");
 	$topic = $wgRequest->getVal("topic_name");
 
-	//echo "$dateStr<br/>";
+	//echo "$dateStr<br />";
 
 	$formattedComment = "
 	<div id=\"discussion_entry\"><table width=\"100%\">
 	   <tr><td width=\"50%\" valign=\"top\" class=\"discussion_entry_user\">
 	[[User:$user|$real_name]] " . wfMsg('postcomment_said') . ":
-</td><td align=\"right\" width=\"50%\" class=\"discussion_entry_date\">" . wfMsg('postcomment_on') . " $dateStr<br/>
+</td><td align=\"right\" width=\"50%\" class=\"discussion_entry_date\">" . wfMsg('postcomment_on') . " $dateStr<br />
 	</td></tr><tr>
 <td colspan=2 class=\"discussion_entry_comment\">
 	$comment</td></tr>
@@ -146,7 +147,7 @@ function wfSpecialPostcomment( $par )
 	$text .= "\n\n$formattedComment\n\n";
 
 
-	//echo "updating with text:<br/> $text";
+	//echo "updating with text:<br /> $text";
 	//exit;
 	$tmp = "";
 	if ( $wgUser->isBlocked() ) {

@@ -14,7 +14,8 @@ if ( ! defined( 'MEDIAWIKI' ) )
 
 $wgExtensionCredits['specialpage'][] = array(
 	'name' => 'Give Rollback',
-	'version' => '2008-01-11',
+	'svn-date' => '$LastChangedDate: 2008-05-31 03:03:00 +0000 (Sat, 31 May 2008) $',
+	'svn-revision' => '$LastChangedRevision: 35631 $',
 	'author' => 'Rob Church',
 	'description' => 'Allows local bureaucrats to give [[Special:Giverollback|rollback permissions]] to a non-sysop user',
 	'url' => 'http://www.mediawiki.org/wiki/Extension:Giverollback',
@@ -24,6 +25,7 @@ $dir = dirname(__FILE__) . '/';
 $wgExtensionMessagesFiles['GiveRollback'] = $dir . 'GiveRollback.i18n.php';
 $wgAutoloadClasses['GiveRollback'] = $dir . 'GiveRollback.page.php';
 $wgSpecialPages['Giverollback'] = 'GiveRollback';
+$wgSpecialPageGroups['Giverollback'] = 'users';
 $wgAvailableRights[] = 'giverollback';
 
 $wgExtensionFunctions[] = 'efGiveRollback';

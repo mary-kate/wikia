@@ -3,7 +3,7 @@
 /**
  * @package MediaWiki
  * @subpackage SpecialPage
- * @author Krzysztof Krzyżaniak <eloy@wikia.com> for Wikia.com
+ * @author Krzysztof Krzyżaniak <eloy@wikia-inc.com> for Wikia.com
  * @version: 0.1
  */
 
@@ -34,7 +34,6 @@ class WikiFactoryPage extends SpecialPage {
 	 *
 	 * main entry point
 	 *
-	 * @author eloy@wikia.com
 	 * @access public
 	 *
 	 * @param string $subpage: subpage of Title
@@ -100,7 +99,6 @@ class WikiFactoryPage extends SpecialPage {
 	 * use subpage as param and try to find wiki which match criteria
 	 *
 	 * @access private
-	 * @author eloy
 	 *
 	 * @param mixed $subpage:
 	 *
@@ -129,19 +127,20 @@ class WikiFactoryPage extends SpecialPage {
 				$domain = $subpage;
 			}
 
-			/**
-			 * if there's no dot in cityname we add .wikia.com
-			 * or if is only one dot (language.domain.wikia.com)
-			 */
-			if( sizeof(explode(".", $domain )) <= 2 && strlen( $domain ) > 0) {
-				$domain = $domain.".wikia.com";
-			}
-			$this->mDomain = $domain;
-
-			$cityid = WikiFactory::DomainToId( $domain );
-
-			if( is_null( $cityid ) && is_numeric( $subpage ) ) {
+			if( is_numeric( $subpage ) ) {
 				$cityid = $subpage;
+			}
+			else {
+				/**
+				 * if there's no dot in cityname we add .wikia.com
+				 * or if is only one dot (language.domain.wikia.com)
+				 */
+				if( sizeof(explode(".", $domain )) <= 2 && strlen( $domain ) > 0) {
+					$domain = $domain.".wikia.com";
+				}
+				$this->mDomain = $domain;
+
+				$cityid = WikiFactory::DomainToId( $domain );
 			}
 		}
 		$this->mTab = $tab;
@@ -219,7 +218,7 @@ class WikiFactoryPage extends SpecialPage {
 		}
 
 		$oTmpl = new EasyTemplate( dirname( __FILE__ ) . "/templates/" );
-		$oTmpl->set_vars( array(
+		$vars = array(
 			"tab"         => $this->mTab,
 			"hub"         => WikiFactoryHub::getInstance(),
 			"wiki"        => $this->mWiki,
@@ -230,27 +229,39 @@ class WikiFactoryPage extends SpecialPage {
 			"statuses" 	  => $this->mStatuses,
 			"variables"   => WikiFactory::getVariables(),
 			"wikiRequest" => $oWikiRequest
-		));
+		);
+		if( $this->mTab === "clog" ) {
+			$pager = new ChangeLogPager( $this->mWiki->city_id );
+			$vars[ "changelog" ] = array(
+				"limit"     => $pager->getForm(),
+				"body"      => $pager->getBody(),
+				"nav"       => $pager->getNavigationBar()
+			);
+		}
+		$oTmpl->set_vars( $vars );
 		$wgOut->addHTML( $oTmpl->execute("form") );
 	}
 
-    /**
-     * doUpdateHubs
-     *
-     * Store changes connected with hubs
-     *
-     * @access private
-     * @author eloy@wikia
-     *
-     * @return mixed	info when change, null when not changed
-     */
+	/**
+	 * doUpdateHubs
+	 *
+	 * Store changes connected with hubs
+	 *
+	 * @access private
+	 *
+	 * @return mixed	info when change, null when not changed
+	 */
 	private function doUpdateHubs( &$request ) {
 		$cat_id = $request->getVal( "wpWikiCategory", null );
 		if( !is_null( $cat_id ) ){
 			$hub = WikiFactoryHub::getInstance();
 			$hub->setCategory( $this->mWiki->city_id, $cat_id );
+			$categories = $hub->getCategories();
+			return Wikia::successmsg( "Hub is now set to: ". $categories[ $cat_id ] );
 		}
-		return Wikia::successmsg( "Hubs data updated" );
+		else {
+			return Wikia::errormsg( "Hub was not changed.");
+		}
 	}
 
     /**
@@ -342,6 +353,7 @@ class CityListPager extends TablePager {
                 'city_id' => wfMsg( "wf_city_id" ),
                 'city_url' => wfMsg( "wf_city_url" ),
                 'city_lang' => wfMsg( "wf_city_lang" ),
+					 'cc_name' => wfMsg( "wf_cc_name" ),
                 'city_public' => wfMsg( "wf_city_public" ),
                 'city_title' => wfMsg( "wf_city_title" ),
                 'city_created' => wfMsg( "wf_city_created" ),
@@ -351,7 +363,7 @@ class CityListPager extends TablePager {
     }
 
     function isFieldSortable( $field ) {
-        static $sortable = array( "city_url", "city_public", "city_id", "city_lang" );
+        static $sortable = array( "city_url", "city_public", "city_id", "city_lang", "cc_name" );
         return in_array( $field, $sortable );
     }
 
@@ -395,11 +407,20 @@ class CityListPager extends TablePager {
         $fields = $this->getFieldNames();
         unset( $fields['links'] );
         $fields = array_keys( $fields );
-        return array(
-            'tables' => wfSharedTable('city_list'),
-            'fields' => $fields,
-            'conds' => $this->mQueryConds
-        );
+
+			$query = array(
+				"tables" => array(
+					wfSharedTable("city_list"),
+					wfSharedTable("city_cats_view"),
+				),
+				"fields" => $fields,
+				"conds" => array(
+					wfSharedTable("city_list").".city_id = ".
+					wfSharedTable("city_cats_view").".cc_city_id",
+				)
+			);
+
+			return $query;
     }
 
     function getForm() {
@@ -427,17 +448,28 @@ class ChangeLogPager extends TablePager {
 	public $mMessages = array();
 	public $mQueryConds = array();
 	public $mTitle;
+	public $mWikiId;
 
 	/**
 	 * __construct
 	 *
-	 * Public constructor
+	 * Public constructor with standard initializations
 	 *
-	 * @author eloy@wikia.com
+	 * @access public
+	 * @author Krzysztof Krzyżaniak <eloy@wikia.com>
+	 *
+	 * @param integer $wiki_id	wiki identifier in wiki factory
 	 *
 	 */
-	function __construct() {
-		$this->mTitle = Title::makeTitle( NS_SPECIAL, "WikiFactory/change.log" );
+	function __construct( $wiki_id = false ) {
+		if( is_numeric( $wiki_id ) ) {
+			$this->mTitle = Title::makeTitle( NS_SPECIAL, "WikiFactory/{$wiki_id}/clog" );
+			$this->mWikiId = $wiki_id;
+		}
+		else {
+			$this->mTitle = Title::makeTitle( NS_SPECIAL, "WikiFactory/change.log" );
+			$this->mWikiId = false;
+		}
 		$this->mDefaultDirection = true;
 		parent::__construct();
 	}
@@ -445,7 +477,6 @@ class ChangeLogPager extends TablePager {
 	/**
 	 * getTitle
 	 *
-	 * @author eloy@wikia.com
 	 * @return Title object
      */
 	function getTitle() {
@@ -455,17 +486,18 @@ class ChangeLogPager extends TablePager {
 	/**
 	 * getFieldNames
 	 *
-	 * @author eloy@wikia.com
 	 * @return Array with column names
 	 */
 	public function getFieldNames() {
 		if( !$this->mFieldNames ) {
 			$this->mFieldNames = array();
-			$this->mFieldNames["city_url"]      = "Wiki";
-			$this->mFieldNames["cv_name"]       = "Variable name";
-			$this->mFieldNames["cv_value_old"]  = "Changed value";
-			$this->mFieldNames["cv_timestamp"]  = "Changed";
-			$this->mFieldNames["cv_user_id"]    = "Who";
+			if( ! $this->mWikiId ) {
+				$this->mFieldNames["city_url"]      = "Wiki";
+			}
+			$this->mFieldNames["cl_timestamp"]  = "Changed";
+			$this->mFieldNames["cl_type"]       = "Type";
+			$this->mFieldNames["cl_user_id"]    = "Who";
+			$this->mFieldNames["cl_text"]       = "What";
 		}
 
 		return $this->mFieldNames;
@@ -474,13 +506,12 @@ class ChangeLogPager extends TablePager {
 	/**
 	 * isFieldSortable
 	 *
-	 * @author eloy@wikia.com
 	 * @param string $field: field name
 	 *
 	 * @return boolean: flag if $field is sortable of not
      */
 	public function isFieldSortable( $field ) {
-		static $aSortable = array( "city_url", "cv_name", "cv_timestamp", "cv_user_id" );
+		static $aSortable = array( "city_url", "cl_type", "cl_timestamp", "cl_user_id" );
 		return in_array( $field, $aSortable );
 	}
 
@@ -492,8 +523,6 @@ class ChangeLogPager extends TablePager {
 	 * @param string $field: field name
 	 * @param mixed $value: field value
 	 *
-	 * @author eloy@wikia.com
-	 *
 	 * @return string: formated table field
 	 */
 	function formatValue( $field, $value ) {
@@ -504,15 +533,27 @@ class ChangeLogPager extends TablePager {
 				return $sRetval;
 				break;
 
-			case "cv_value_old":
-				return var_export(unserialize( $value ), 1);
-				break;
-
-			case "cv_timestamp":
+			case "cl_timestamp":
 				return wfTimestamp( TS_EXIF, $value );
 				break;
+			case "cl_type":
+				switch( $value ) {
+					case WikiFactory::LOG_CATEGORY:
+						return "category";
+						break;
+					case WikiFactory::LOG_VARIABLE:
+						return "variable";
+						break;
+					case WikiFactory::LOG_DOMAIN:
+						return "domain";
+						break;
+					case WikiFactory::LOG_STATUS:
+						return "status";
+						break;
+				}
+				break;
 
-			case "cv_user_id":
+			case "cl_user_id":
 				$oUser = User::newFromId( $value );
 				$oUser->load();
 				return sprintf("<a href=\"%s\">%s</a>", $oUser->getUserPage()->getLocalUrl(), $oUser->getName());
@@ -528,13 +569,11 @@ class ChangeLogPager extends TablePager {
 	 *
 	 * get default field for sorting
 	 *
-	 * @author eloy@wikia.com
-	 *
 	 * @return string: table field
 	 */
 	function getDefaultSort() {
 		$this->mDefaultDirection = true;
-		return "cv_timestamp";
+		return "cl_timestamp";
 	}
 
 	/**
@@ -542,33 +581,30 @@ class ChangeLogPager extends TablePager {
 	 *
 	 * get default field for sorting
 	 *
-	 * @author eloy@wikia.com
-	 *
 	 * @return array: query info
 	 */
 	function getQueryInfo() {
-		return array(
+		$query = array(
 			"tables" => array(
-				wfSharedTable("city_variables_log"),
+				wfSharedTable("city_list_log"),
 				wfSharedTable("city_list"),
-				wfSharedTable("city_variables_pool")
 			),
-			"fields" => array("*"),
+			"fields" => array( "*" ),
 			"conds" => array(
-				wfSharedTable("city_variables_log").".cv_variable_id = ".
-				wfSharedTable("city_variables_pool").".cv_id",
-				wfSharedTable("city_list").".city_id = ".
-				wfSharedTable("city_variables_log").".cv_city_id"
+				wfSharedTable("city_list").".city_id = " . wfSharedTable("city_list_log").".cl_city_id"
 			)
 		);
+
+		if( $this->mWikiId ) {
+			$query[ "conds" ][] = wfSharedTable("city_list").".city_id = " . $this->mWikiId;
+		}
+		return $query;
 	}
 
 	/**
 	 * getForm
 	 *
 	 * get form definition
-	 *
-	 * @author eloy@wikia.com
 	 *
 	 * @return string: empty
 	 */

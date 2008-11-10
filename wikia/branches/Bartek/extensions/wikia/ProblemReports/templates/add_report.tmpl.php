@@ -1,16 +1,3 @@
-<style type="text/css">
-    #reportProblemForm_c {top: 0px; left: 0px; position: absolute}
-    #reportProblemSummary_c {position: absolute; top: 150px; left: 150px;}
-    #reportProblemForm a {color: inherit; text-decoration: underline}
-    #reportProblem label.floaty {width: 120px; display: inline; float: left; padding: 10px 0; text-align: left; margin: 0}
-    #reportProblem input.floaty, #reportProblem select.floaty, #reportProblem textarea {width:405px; display: inline; float: left; margin: 7px 0 7px 10px}
-    #reportProblem input.floaty {width: 250px}
-    #reportProblem select.floaty {width: 256px}
-    #reportProblem br.floaty {clear: both}
-    #reportProblemForm .errorField {border: solid 1px #DC143C !important;background-color: #FFFAFA !important}
-    #reportProblemForm #pr_browser {margin: 5px 0 5px 130px; font-size: 0.8em; color: #666}
-</style>
-
 <b class="xtop"><b class="xb1"></b><b class="xb2"></b><b class="xb3"></b><b class="xb4"></b></b><div class="r_boxContent">
 
 <form name="reportProblem" id="reportProblem" method="post" action="" onsubmit="return wikiaProblemReportsDialog.panelSubmit()">

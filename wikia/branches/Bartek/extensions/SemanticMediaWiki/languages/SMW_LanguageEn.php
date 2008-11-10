@@ -18,6 +18,7 @@ protected $m_DatatypeLabels = array(
 	'_wpg' => 'Page', // name of page datatype
 	'_str' => 'String',  // name of the string type
 	'_txt' => 'Text',  // name of the text type
+	'_cod' => 'Code',  // name of the (source) code type
 	'_boo' => 'Boolean',  // name of the boolean type
 	'_num' => 'Number',  // name for the datatype of numbers
 	'_geo' => 'Geographic coordinate', // name of the geocoord type
@@ -57,7 +58,9 @@ protected $m_Namespaces = array(
 	SMW_NS_PROPERTY       => 'Property',
 	SMW_NS_PROPERTY_TALK  => 'Property_talk',
 	SMW_NS_TYPE           => 'Type',
-	SMW_NS_TYPE_TALK      => 'Type_talk'
+	SMW_NS_TYPE_TALK      => 'Type_talk',
+	SMW_NS_CONCEPT        => 'Concept',
+	SMW_NS_CONCEPT_TALK   => 'Concept_talk'
 );
 
 }

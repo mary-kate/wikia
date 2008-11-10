@@ -503,7 +503,7 @@ class CreateWikiForm extends SpecialPage {
 		$aWiki["subdomain"] = $aWiki["name"];
 		$aWiki["redirect"]  = $aWiki["name"];
 		$aWiki["dir_part"]  = $aWiki["name"];
-		$aWiki["dbname"]    = $aWiki["name"];
+		$aWiki["dbname"]    = substr($aWiki["name"], 0, 64);
 		$aWiki["path"]      = "/usr/wikia/docroot/wiki.factory";
 		$aWiki["images"]    = $WikiImagesDir . $aWiki["name"];
 
@@ -610,7 +610,7 @@ class CreateWikiForm extends SpecialPage {
 			"wgRedirectScript"      => '/redirect.php',
 			"wgArticlePath"         => '/wiki/$1',
 			"wgLogo"                => '$wgUploadPath/b/bc/Wiki.png',
-			"wgUploadPath"          => "http://images.wikia.com/{$aWiki["dir_part"]}/images/",
+			"wgUploadPath"          => "http://images.wikia.com/{$aWiki["dir_part"]}/images",
 			"wgUploadDirectory"     => "/images/{$aWiki["dir_part"]}/images",
 			"wgDBname"              => $aWiki["dbname"],
 			"wgSharedDB"            => "wikicities",
@@ -626,11 +626,6 @@ class CreateWikiForm extends SpecialPage {
 			"wgDefaultTheme"        => 'sapphire',
 			"wgEnableNewParser"     => true
 		);
-
-		#--- change default skin to monobook when RTL wiki
-		if (in_array($aWiki["language"], array( "he", "ar", "fa", "ur", "yi", "ku", "dv", "ps", "ks", "arc", "ha"))) {
-			$aLocalSettingsVars["wgDefaultSkin"] = "monobook";
-		}
 
 		#--- insert all wiki variables into city_variables table
 		foreach ($aLocalSettingsVars as $tVariable => $tValue) {
@@ -696,7 +691,7 @@ class CreateWikiForm extends SpecialPage {
 		$fExecTimeCur = wfTime();
 
 		#--- importing content from starter.wikia.com (language starter)
-		if ($this->mParams["wpCreateWikiImportStarter"] && (in_array($aWiki["language"], array("en", "de", "ja")))) {
+		if ($this->mParams["wpCreateWikiImportStarter"]) {
 			$prefix = "";
 		 if ($aWiki["language"] != "en") {
 				$prefix = $aWiki["language"];
@@ -704,7 +699,7 @@ class CreateWikiForm extends SpecialPage {
 
 		 $sDBstarter = "{$prefix}starter";
 
-			#--- first check if database for starter exists
+			#--- first check whether database starter exists
 			$sql = sprintf( "SHOW DATABASES LIKE '%s';", $sDBstarter );
 			$oRes = $dbw->query( $sql, __METHOD__ );
 			$iNumRows = $oRes->numRows();
@@ -738,12 +733,13 @@ class CreateWikiForm extends SpecialPage {
 					$wgWikiaLocalSettingsPath
 				);
 				wfShellExec( $cmd );
+				
+				wfDebugLog( "createwiki", sprintf("Copying starter database: %F", wfTime() - $fExecTimeCur ));
+				$fExecTimeCur = wfTime();
 			}
 			else {
 				error_log("no starter database");
 			}
-			wfDebugLog( "createwiki", sprintf("Copying starter database: %F", wfTime() - $fExecTimeCur ));
-			$fExecTimeCur = wfTime();
 		}
 
 		#--- making the wiki founder a sysop/bureaucrat
@@ -824,13 +820,12 @@ class CreateWikiForm extends SpecialPage {
 			$sPage = str_ireplace("RequestForm4", "RequestForm4a", $sPage);
 			$sPage = str_ireplace("###REQUEST_CLOSED###", date('YmdHis'), $sPage);
 
-			$oArticle->doEdit( $sPage, "request accepted", EDIT_UPDATE|EDIT_MINOR );
+			$oArticle->doEdit( $sPage, "request accepted", EDIT_UPDATE );
 		}
 		wfDebugLog( "createwiki", sprintf( "update request page: %F", wfTime() - $fExecTimeCur ));
 		$fExecTimeCur = wfTime();
 
 		$this->releaseLock($this->mParams["wpRequestID"]);
-		$dbw->close();
 
 		#--- add task to TaskManager
 		$oTask = new CreateWikiTask();

@@ -53,7 +53,9 @@ function getEditingTips() {
 					}
 				}
 			} else {
-				$tips[$j]['body'] .= getTextOfDomElement($element);
+				if( isset( $tips[$j]['body'] ) ) {
+					$tips[$j]['body'] .= getTextOfDomElement($element);
+				}
 			}
 			$i++;
 		}
@@ -102,7 +104,7 @@ function AddEditingToggles($o) {
 		$wgOut->addHtml('<div id="editingTipsToggleDiv" style="float: left; margin-top:20px; '. $marg . '">');
 
 		if(count(getEditingTips()) > 0) {
-			$wgOut->addHtml('<a href="" id="toggleEditingTips">'. $sep . (isEditingTipsEnabled() ? wfMsg ('editingtips_hide') : wfMsg ('editingtips_show') ).'</a> - ');
+			$wgOut->addHtml($sep . '<a href="" id="toggleEditingTips">'. (isEditingTipsEnabled() ? wfMsg ('editingtips_hide') : wfMsg ('editingtips_show') ).'</a> - ');
 		}
 		$wgOut->addHtml('<a href="" id="toggleWideScreen">' . wfMsg ('editingtips_enter_widescreen') .'</a></div>');
 		$wgOut->addHtml('
@@ -150,7 +152,7 @@ function SaveEditingTipsState() {
 		$wgUser->setOption('disableeditingtips', ($wgRequest->getVal('open') != 'true'));
 		$wgUser->SaveSettings();
 		$dbw = wfGetDB( DB_MASTER );
-		$dbw->close();
+		$dbw->commit();
 	} else {
 		global $wgCookieExpiration, $wgCookiePath, $wgCookieDomain, $wgCookieSecure, $wgCookiePrefix;
 		$exp = time() + $wgCookieExpiration;

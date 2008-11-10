@@ -1,111 +1,131 @@
 <?php
-# Not a valid entry point, skip unless MEDIAWIKI is defined
-if (defined('MEDIAWIKI')) {
 
 if( empty( $wgDefaultMessagesDB ) ) {
 	$wgDefaultMessagesDB = 'messaging';
 }
 
 if( $wgDefaultMessagesDB == $wgDBname ) {
-	$wgHooks['wfMessageCacheReplace'][] = 'wfDefaultMessagesReplace';
+	$wgHooks['MessageCacheReplace'][] = 'DefaultMessages::onMessageCacheReplace';
 } else {
-	$wgExtensionFunctions[] = 'wfReplaceDefaultMessages';
+	$wgHooks['MessagesGetFromNamespaceAfter'][] = 'DefaultMessages::get';
 }
 
-function wfReplaceDefaultMessages() {
-	$maxRevId = 5366;
+class DefaultMessages {
+	const expire = 86400;
+	static $cache, $loaded = false;
 
-	global $wgMemc, $wgMessageCache, $wgContLang, $wgDefaultMessagesDB, $wgDBprefix;
-	if( !empty( $wgDefaultMessagesDB ) && is_object( $wgMessageCache ) ) {
-		$_filecache = '/tmp/default_messages_v3.ser';
-		$memcKey = "$wgDefaultMessagesDB:default_messages:v3";
+	private static function memcKey() {
+		global $wgDefaultMessagesDB;
+		return $wgDefaultMessagesDB . ':default_messages_new';
+	}
+	
+	private static function memcKeyTouched() {
+		global $wgDefaultMessagesDB;
+		return $wgDefaultMessagesDB . ':default_messages:touched';
+	}
 
-		$_touched = $wgMemc->get( $memcKey . ":touched" );
-		wfDebug( "trying file cache $_filecache with touched=$_touched\n" );
-		$defaultMessages = WikiFactory::fetch( $_filecache, $_touched );
+	private static function filecache() {
+		global $wgDefaultMessagesDB;
+		return '/tmp/default_messages_new.ser';
+	}
 
-		if( empty( $defaultMessages ) ) {
-			wfDebug( "trying memcached ($memcKey)\n" );
-			$defaultMessages = $wgMemc->get( $memcKey );
-			if( !empty( $defaultMessages ) ) {
-				WikiFactory::store( $_filecache, $defaultMessages, 60*60, $_touched );
-				wfDebug( "stored in $_filecache with touched=$_touched\n" );
+	public static function get( $key, $lang, &$message ) {
+		if( $message === false ) {
+			self::load();
+
+			if( isset( self::$cache[$key][$lang] ) ) {
+				$message = self::$cache[$key][$lang];
 			}
 		}
 
-		if( empty( $defaultMessages ) ) {
-			$dbr = wfGetDB( DB_SLAVE );
-			$res = $dbr->select( array( "`$wgDefaultMessagesDB`.`page`", "`$wgDefaultMessagesDB`.`revision`", "`$wgDefaultMessagesDB`.`text`" ),
-				array( 'page_title', 'old_text', 'old_flags' ),
-				array( 
-					'page_is_redirect' => 0,
-					'page_namespace' => NS_MEDIAWIKI,
-					'page_latest=rev_id',
-					"rev_id > $maxRevId",
-					'rev_text_id=old_id' ),
-				__METHOD__ );
+		return true;
+	}
 
-			$defaultMessages = array();
-			for ( $row = $dbr->fetchObject( $res ); $row; $row = $dbr->fetchObject( $res ) ) {
-				$lckey = $wgContLang->lcfirst( $row->page_title );
-				if( strpos( $lckey, '/' ) ) {
-					$t = explode( '/', $lckey );
-					$key = $t[0];
-					$lang = $t[1];
-				} else {
-					$key = $lckey;
-					$lang = 'en';
+	public static function load() {
+		global $wgMemc, $wgContLang, $wgDefaultMessagesDB;
+		if( !empty( $wgDefaultMessagesDB ) ) {
+			if( self::$loaded ) {
+				return;
+			}
+
+			$_touched = $wgMemc->get( self::memcKeyTouched() );
+			self::$cache = WikiFactory::fetch( self::filecache(), $_touched );
+
+			if( empty( self::$cache ) ) {
+				// try memcached
+				self::$cache = $wgMemc->get( self::memcKey() );
+				if( !empty( self::$cache ) ) {
+					WikiFactory::store( self::filecache(), self::$cache, self::expire, $_touched );
 				}
-				$value = Revision::getRevisionText( $row );
-				$wgMessageCache->addMessage( $key, $value, $lang );
-				$defaultMessages["$key/$lang"] = array( 'key' => $key, 'value' => $value, 'lang' => $lang );
 			}
-			$dbr->freeResult( $res );
-			$wgMemc->set( $memcKey, $defaultMessages, 60*60 );
-			WikiFactory::store( $_filecache, $defaultMessages, 60*60, $_touched );
-		} else {
-			foreach( $defaultMessages as $msg ) {
-				$wgMessageCache->addMessage( $msg['key'], $msg['value'], $msg['lang'] );
+
+			if( empty( self::$cache ) ) {
+				// fetch from db as a last resort
+				$dbr = wfGetDB( DB_SLAVE );
+				$res = $dbr->select(
+						array( "`$wgDefaultMessagesDB`.`page`", "`$wgDefaultMessagesDB`.`revision`", "`$wgDefaultMessagesDB`.`text`" ),
+						array( 'page_title', 'old_text', 'old_flags' ),
+						array( 
+							'page_is_redirect' => 0,
+							'page_namespace' => NS_MEDIAWIKI,
+							'page_latest=rev_id',
+							'rev_text_id=old_id' ),
+							__METHOD__ );
+
+				self::$cache = array();
+				for ( $row = $dbr->fetchObject( $res ); $row; $row = $dbr->fetchObject( $res ) ) {
+					$lckey = $wgContLang->lcfirst( $row->page_title );
+					if( strpos( $lckey, '/' ) ) {
+						$t = explode( '/', $lckey );
+						$key = $t[0];
+						$lang = $t[1];
+					} else {
+						$key = $lckey;
+						$lang = 'en';
+					}
+					$value = Revision::getRevisionText( $row );
+					self::$cache[$key][$lang] = $value;
+				}
+				$dbr->freeResult( $res );
+				$wgMemc->set( self::memcKey(), self::$cache, self::expire );
+				WikiFactory::store( self::filecache(), self::$cache, self::expire, $_touched );
 			}
+
+			self::$loaded = true;
 		}
+	}
+
+	public static function onMessageCacheReplace( $title, $text ) {
+		global $wgMemc, $wgContLang;
+
+		self::$cache = $wgMemc->get( self::memcKey() );
+		if( !empty( self::$cache ) ) {
+			$lckey = $wgContLang->lcfirst( $title );
+			if( strpos( $lckey, '/' ) ) {
+				$t = explode( '/', $lckey );
+				$key = $t[0];
+				$lang = $t[1];
+			} else {
+				$key = $lckey;
+				$lang = 'en';
+			}
+
+			if( $text === false ) {
+				# Article was deleted
+				unset( self::$cache[$key][$lang] );
+			} else {
+				self::$cache[$key][$lang] = $text;
+			}
+			$wgMemc->set( self::memcKey(), self::$cache, self::expire );
+			$_touched = time();
+			$wgMemc->set( self::memcKeyTouched(), $_touched );
+			WikiFactory::store( self::filecache(), self::$cache, self::expire, $_touched );
+		}
+
+		return true;
 	}
 }
 
-function wfDefaultMessagesReplace( $title, $text ) {
-	global $wgDefaultMessagesDB, $wgMemc, $wgContLang;
-
-for( $i=2; $i<=3; $i++ ) {
-	$_filecache = "/tmp/default_messages_v$i.ser";
-	$memcKey = "$wgDefaultMessagesDB:default_messages:v$i";
-
-	$defaultMessages = $wgMemc->get( $memcKey );
-	if( !empty( $defaultMessages ) ) {
-		$lckey = $wgContLang->lcfirst( $title );
-		if( strpos( $lckey, '/' ) ) {
-			$t = explode( '/', $lckey );
-			$key = $t[0];
-			$lang = $t[1];
-		} else {
-			$key = $lckey;
-			$lang = 'en';
-		}
-
-		if( $text === false ) {
-			# Article was deleted
-			unset( $defaultMessages["$key/$lang"] );
-		} else {
-			$defaultMessages["$key/$lang"] = array( 'key' => $key, 'value' => $text, 'lang' => $lang );
-		}
-		$wgMemc->set( $memcKey, $defaultMessages, 60*60 );
-		$_touched = time();
-		$wgMemc->set( $memcKey . ":touched", $_touched );
-		WikiFactory::store( $_filecache, $defaultMessages, 60*60, $_touched );
-	}
+function efDefaultMessagesSetup() {
+	DefaultMessages::loadMessages();
 }
-
-	return true;
-}
-
-}
-
-?>

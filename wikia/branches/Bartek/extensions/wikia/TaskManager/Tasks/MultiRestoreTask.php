@@ -113,7 +113,7 @@ class MultiRestoreTask extends BatchTask {
 					"task_arguments" => $sParams,
 					));
 		$task_id = $dbw->insertId () ;		
-		$dbw->close();
+		$dbw->commit();
 		return $task_id ;
 	}
 

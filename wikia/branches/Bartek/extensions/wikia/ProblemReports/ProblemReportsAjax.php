@@ -6,7 +6,7 @@ if (!defined('MEDIAWIKI')) die();
  * @package MediaWiki
  * @subpackage Extensions
  *
- * @author Maciej Brencz <macbre@wikia.com>
+ * @author Maciej Brencz <macbre@wikia-inc.com>
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License 2.0 or later
  */
 
@@ -16,30 +16,40 @@ function wfProblemReportsAjaxGetDialog($ns, $title)
 {
 	wfProfileIn(__METHOD__);
 
-	global $mediaWiki, $wgTitle, $wgRequest, $wgUser, $wgOut;
-    	
-	// initialize basic MW objects
-	$article = $mediaWiki->initialize ( $wgTitle, $wgOut, $wgUser, $wgRequest );
+	global $wgUser, $wgOut;
 
 	// load extension messages
    	wfLoadExtensionMessages( 'ProblemReports' );
     
 	// use template
 	$tpl = new EasyTemplate( dirname( __FILE__ )."/templates/" );
-	
-	$tpl->set_vars(array
-	(
-		'user'				=> & $wgUser,
-		'url'				=> '',
-		'pageTitle'			=> htmlspecialchars($title),
-		'pageNamespace'			=> (int) $ns,
-		'introductoryText'		=> $wgOut->parse(wfMsg('pr_introductory_text')),
-		'what_problem_options' 		=> array('pr_what_problem_spam', 'pr_what_problem_vandalised','pr_what_problem_incorrect_content', 
-					    		'pr_what_problem_software_bug', 'pr_what_problem_other')
-	));
+
+	// check for read-only mode
+	if ( wfReadOnly() ) {
+		$tpl->set_vars(array
+		(
+			'reason' => wfReadOnlyReason()
+		));
+
+		$text = $tpl->execute('add_report_readonly');
+	}
+	else {
+		$tpl->set_vars(array
+		(
+			'user'				=> & $wgUser,
+			'url'				=> '',
+			'pageTitle'			=> htmlspecialchars($title),
+			'pageNamespace'			=> (int) $ns,
+			'introductoryText'		=> $wgOut->parse(wfMsg('pr_introductory_text')),
+			'what_problem_options' 		=> array('pr_what_problem_spam', 'pr_what_problem_vandalised','pr_what_problem_incorrect_content', 
+						    		'pr_what_problem_software_bug', 'pr_what_problem_other')
+		));
+
+		$text = $tpl->execute('add_report');
+	}
 
 	// create AJAX response
-	$response = new AjaxResponse( $tpl->execute('add_report') );
+	$response = new AjaxResponse( $text );
 	$response->setContentType('text/plain; charset=utf-8');
 
 	wfProfileOut(__METHOD__);

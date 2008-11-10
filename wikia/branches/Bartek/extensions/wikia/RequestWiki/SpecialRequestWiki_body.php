@@ -115,7 +115,7 @@ class RequestWikiPage extends SpecialPage {
 			$wgOut->redirect($tLogin->getFullURL('returnto=' . $tRequest->getPrefixedURL()));
 		}
 		#--- check if user have confirmed mail email first
-		elseif (!$wgUser->isAllowed( 'emailconfirmed' )) {
+		elseif (!$wgUser->isEmailConfirmed()) {
 			#--- show info that user should be emailconfirmed
 			$oTmpl->set_vars( array(
 				'title' => $this->mTitle,
@@ -194,6 +194,8 @@ class RequestWikiPage extends SpecialPage {
 			$aLinks['request more info'] = $oLinksTitle->getLocalUrl("action=req_more_info&request={$params["request_id"]}");
 		}
 
+		$hubs = WikiFactoryHub::getInstance();
+
 		$oTmpl->set_vars( array(
 			'user'      => $oRequester,
 			'title'     => $this->mTitle,
@@ -203,7 +205,7 @@ class RequestWikiPage extends SpecialPage {
 			'editing'   => $editing,
 			'is_staff'  => $is_staff,
 			'languages' => $languages,
-			'categories'    => explode('|', wfMsg('requestwiki-second-category-list')),
+			'categories'    => $hubs->getCategories(),
 			'request_id'    => $iRequestID,
 			'is_requester'  => $is_requester
 		));
@@ -216,13 +218,19 @@ class RequestWikiPage extends SpecialPage {
 		}
 	}
 
-	#--- do_thirdstep -------------------------------------------------------
 	/**
+	 * do_thirdstep
+	 *
 	 * third step, validate all params and store request in database.
 	 * if there are errors redirect to do_secondstep
+	 *
+	 * @access public
+	 * @author Krzysztof Krzyżaniak <eloy@wikia-inc.com>
+	 * @author Maciej Błaszkowski <marooned@wikia-inc.com>
+	 *
+	 * @return string	HTML code with page
 	 */
-	function do_thirdstep()
-	{
+	public function do_thirdstep() {
 		global $wgOut, $wgRequest, $wgContLang, $wgDBname, $wgUser;
 
 		#-- some initialization
@@ -276,10 +284,10 @@ class RequestWikiPage extends SpecialPage {
 		$sRequestUserName = $wgRequest->getVal('rw-username');
 		$languages = Language::getLanguageNames();
 
-		#---
-		# staff can change username, we would know about it by comparing
-		# $sRequestUserName with getName user object created from $iRequestUserID
-
+		/**
+		 * staff can change username, we would know about it by comparing
+		 * $sRequestUserName with getName user object created from $iRequestUserID
+		 */
 		$oRequester = User::newFromId($iRequestUserID);
 		$oRequester->load();
 
@@ -307,10 +315,13 @@ class RequestWikiPage extends SpecialPage {
 			$errors['rw-name'] = Wikia::errormsg(wfMsg('requestwiki-error-empty-field'));
 		} elseif (preg_match('/[^a-z0-9-]/i', $params['request_name'])) {
 			$errors['rw-name'] = Wikia::errormsg(wfMsg('requestwiki-error-bad-name'));
+		} elseif (in_array($params['request_name'], array_keys(Language::getLanguageNames()))) {
+			$errors['rw-name'] = Wikia::errormsg(wfMsg('requestwiki-error-name-is-lang'));
 		}
 
 		#--- category
-		$categories = explode('|', wfMsg('requestwiki-second-category-list'));
+		$hubs = WikiFactoryHub::getInstance();
+		$categories = $hubs->getCategories();
 		if (empty($params['request_category']) || !in_array(htmlspecialchars_decode($params['request_category']), $categories)) {
 			$errors['rw-category'] = Wikia::errormsg(wfMsg('requestwiki-error-bad-category'));
 		}
@@ -402,8 +413,6 @@ class RequestWikiPage extends SpecialPage {
 		}
 		else {
 			#--- editing exisiting request
-			unset( $params['request_timestamp'] );
-
 			#---
 			# check if title is changed, if is changed mark it -
 			# then we first read request from database
@@ -477,7 +486,8 @@ class RequestWikiPage extends SpecialPage {
 			'pr_cascade' => 0,
 			'pr_user' => null,
 			'pr_expiry' => 'infinity'
-		));
+			), __METHOD__
+		);
 		$dbw->insert('page_restrictions', array(
 			'pr_page' => $oArticle->getID(),
 			'pr_type' => 'move',
@@ -485,12 +495,8 @@ class RequestWikiPage extends SpecialPage {
 			'pr_cascade' => 0,
 			'pr_user' => null,
 			'pr_expiry' => 'infinity'
-		));
-
-		#$oArticle->updateRestrictions(
-		#            array( "edit" => "sysop", "move" => "sysop" ),
-		#    "auto after creating or editing", 0, "infinity"
-		#);
+			), __METHOD__
+		);
 
 		#--- now if name was changed we have to edit old page and made redirect
 		if ( $bTitleChanged == true ) {

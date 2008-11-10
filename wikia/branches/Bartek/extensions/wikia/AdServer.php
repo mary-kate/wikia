@@ -101,7 +101,35 @@ class AdServer {
 	}
 
 	public function getAd($ad_pos) {
-		global $wgAdServingType, $wgShowAds, $wgUseAdServer;
+		global $wgAdServingType, $wgShowAds, $wgUseAdServer, $wgUseDARTOnMainPage;
+
+		//$wgUseDARTOnMainPAge = true;
+
+		if(empty($wgUseDARTOnMainPage)) {
+			if($ad_pos == 'HOME_TOP_LEADERBOARD') {
+				$ad_pos = 'FAST_HOME1';
+			}
+			if($ad_pos == 'HOME_TOP_RIGHT_BOXAD') {
+				$ad_pos = 'FAST_HOME2';
+			}
+		}
+
+		if(substr($ad_pos,0,4) == 'HOME') {
+			$this->adsDisplayed[] = array($ad_pos, AdEngine::getInstance()->getAd($ad_pos));
+			return "<!-- {$ad_pos} -->".'<div id="adSpace'.(count($this->adsDisplayed) - 1).'"'.(($ad_pos == 'HOME_TOP_LEADERBOARD' || $ad_pos == 'HOME_TOP_RIGHT_BOXAD') ? ' class="'.$ad_pos.'"' : '').'>&nbsp;</div>';
+		}
+
+		if($this->skinName == 'monaco') {
+			if($ad_pos == 'b' && !isset($this->adsConfig[$ad_pos])) {
+				$ad_pos = 'bb';
+			} else if($ad_pos == 'bb2' && !isset($this->adsConfig[$ad_pos])) {
+				$ad_pos = 'bb3';
+			} else if($ad_pos == 'bb4' && !isset($this->adsConfig[$ad_pos])) {
+				$ad_pos = 'bb5';
+			} else if($ad_pos == 'r' && !isset($this->adsConfig[$ad_pos])) {
+				$ad_pos = 'bl';
+			}
+		}
 
 		if(isset($this->adsConfig[$ad_pos]) && !empty($wgShowAds) && !empty($wgUseAdServer)) {
 			$ad = $this->adsConfig[$ad_pos];
@@ -109,7 +137,7 @@ class AdServer {
 				if($ad['server'] == 'L') {
 					if($this->skinName == 'monaco' && $wgAdServingType == 1) {
 						$this->adsDisplayed[] = array($ad['zone'], $ad_pos);
-						return "<!-- adserver={$ad['server']} {$ad_pos} {$ad['zone']} -->".'<div id="adSpace'.(count($this->adsDisplayed) - 1).'"'.(($ad_pos == 'FAST_HOME1' || $ad_pos == 'FAST_HOME2') ? ' class="'.$ad_pos.'"' : '').'></div>';
+						return "<!-- adserver={$ad['server']} {$ad_pos} {$ad['zone']} -->".'<div id="adSpace'.(count($this->adsDisplayed) - 1).'"'.(($ad_pos == 'FAST_HOME1' || $ad_pos == 'FAST_HOME2') ? ' class="'.$ad_pos.'"' : '').'>&nbsp;</div>';
 					} else {
 						return "<!-- adserver={$ad['server']} {$ad_pos} {$ad['zone']} -->
 <script type='text/javascript'><!--//<![CDATA[

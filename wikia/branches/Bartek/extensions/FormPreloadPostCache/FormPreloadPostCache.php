@@ -16,7 +16,7 @@ if ( $wgUseFileCache ) {
 $wgHooks['OutputPageBeforeHTML'][] = 'FormPreloadPostCache::htmlHook';
 
 class FormPreloadPostCache {
-	function htmlHook( &$outputPage, &$text ) {
+	static function htmlHook( &$outputPage, &$text ) {
 		global $wgRequest;
 
 		$dom = new DOMDocument;
@@ -103,4 +103,3 @@ EOT
 		return true;
 	}
 }
-?>

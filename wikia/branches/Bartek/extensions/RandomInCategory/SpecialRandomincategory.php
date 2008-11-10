@@ -14,7 +14,8 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 
 $wgExtensionCredits['specialpage'][] = array(
 	'name' => 'Random in category',
-	'version' => '2008-01-14',
+	'svn-date' => '$LastChangedDate: 2008-05-06 11:59:58 +0000 (Tue, 06 May 2008) $',
+	'svn-revision' => '$LastChangedRevision: 34306 $',
 	'author' => 'VasilievVV',
 	'description' => 'Special page to get a random page in category',
 	'descriptionmsg' => 'randomincategory-desc',

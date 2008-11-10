@@ -40,10 +40,10 @@ $wgExtensionFunctions[] = 'wfYouTube';
 $wgExtensionCredits['parserhook'][] = array
 (
 	'name'        => 'YouTube',
-	'version'     => '1.5',
+	'version'     => '1.8',
 	'author'      => 'Przemek Piotrowski',
 	'url'         => 'http://help.wikia.com/wiki/Help:YouTube',
-	'description' => 'embeds YouTube and Google Video movies + Archive.org audio and video + WeGame video + Tangler forum',
+	'description' => 'embeds YouTube and Google Video movies + Archive.org audio and video + WeGame and Gametrailers video + Tangler forum + GoGreenTube video',
 );
 
 function wfYouTube() 
@@ -56,6 +56,9 @@ function wfYouTube()
 	$wgParser->setHook('aoaudio', 'embedArchiveOrgAudio');
 	$wgParser->setHook('wegame', 'embedWeGame');
 	$wgParser->setHook('tangler', 'embedTangler');
+	$wgParser->setHook('gtrailer', 'embedGametrailers');
+	$wgParser->setHook('nicovideo', 'embedNicovideo');
+	$wgParser->setHook('ggtube', 'embedGoGreenTube');
 }
 
 function embedYouTube_url2ytid($url)
@@ -103,7 +106,7 @@ function embedYouTube($input, $argv, &$parser)
 	if (!empty($ytid))
 	{
 		$url = "http://www.youtube.com/v/{$ytid}";
-		return "<object type=\"application/x-shockwave-flash\" data=\"{$url}\" width=\"{$width}\" height=\"{$height}\"><param name=\"movie\" value=\"{$url}\"/></object>";
+		return "<object type=\"application/x-shockwave-flash\" data=\"{$url}\" width=\"{$width}\" height=\"{$height}\"><param name=\"movie\" value=\"{$url}\"/><param name=\"wmode\" value=\"transparent\"/></object>";
 	}
 }
 
@@ -150,7 +153,7 @@ function embedGoogleVideo($input, $argv, &$parser)
 	if (!empty($gvid))
 	{
 		$url = "http://video.google.com/googleplayer.swf?docId={$gvid}";
-		return "<object type=\"application/x-shockwave-flash\" data=\"{$url}\" width=\"{$width}\" height=\"{$height}\"><param name=\"movie\" value=\"{$url}\"/></object>";
+		return "<object type=\"application/x-shockwave-flash\" data=\"{$url}\" width=\"{$width}\" height=\"{$height}\"><param name=\"movie\" value=\"{$url}\"/><param name=\"wmode\" value=\"transparent\"/></object>";
 	}
 }
 
@@ -322,5 +325,140 @@ function embedTangler($input, $argv, &$parser)
 	if (!empty($tid) && !empty($gid))
 	{
 		return "<p style=\"width: 410px; height: 480px\" id=\"tangler-embed-topic-{$tid}\"></p><script src=\"http://www.tangler.com/widget/embedtopic.js?id={$tid}&gId={$gid}\"></script>";
+	}
+}
+
+function embedYouTube_url2gtid($url)
+{
+	$id = $url;
+
+	if (preg_match('/^http:\/\/www\.gametrailers\.com\/player\/(.+)\.html$/', $url, $preg))
+	{
+		$id = $preg[1];
+	} elseif (preg_match('/^http:\/\/www\.gametrailers\.com\/remote_wrap\.php\?mid=(.+)$/', $url, $preg))
+	{
+		$id = $preg[1];
+	}
+
+	preg_match('/([0-9]+)/', $id, $preg);
+	$id = $preg[1];
+
+	return $id;
+}
+
+function embedGametrailers($input, $argv, &$parser)
+{
+	$gtid   = '';
+	$width  = $width_max  = 480;
+	$height = $height_max = 392;
+
+	if (!empty($argv['gtid']))
+	{
+		$gtid = embedYouTube_url2gtid($argv['gtid']);
+	} elseif (!empty($input))
+	{
+		$gtid = embedYouTube_url2gtid($input);
+	}
+	if (!empty($argv['width']) && settype($argv['width'], 'integer') && ($width_max >= $argv['width']))
+	{
+		$width = $argv['width'];
+	}
+	if (!empty($argv['height']) && settype($argv['height'], 'integer') && ($height_max >= $argv['height']))
+	{
+		$height = $argv['height'];
+	}
+
+	if (!empty($gtid))
+	{
+		$url = "http://www.gametrailers.com/remote_wrap.php?mid={$gtid}";
+		// return "<object type=\"application/x-shockwave-flash\" width=\"{$width}\" height=\"{$height}\"><param name=\"movie\" value=\"{$url}\"/></object>"; 
+		// gametrailers' flash doesn't work on FF with object tag alone )-: weird, yt and gvideo are ok )-: valid xhtml no more )-:
+		return "<object classid=\"clsid:d27cdb6e-ae6d-11cf-96b8-444553540000\"  codebase=\"http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0\" id=\"gtembed\" width=\"{$width}\" height=\"{$height}\">	<param name=\"allowScriptAccess\" value=\"sameDomain\" /> 	<param name=\"allowFullScreen\" value=\"true\" /> <param name=\"movie\" value=\"{$url}\"/> <param name=\"quality\" value=\"high\" /> <embed src=\"{$url}\" swLiveConnect=\"true\" name=\"gtembed\" align=\"middle\" allowScriptAccess=\"sameDomain\" allowFullScreen=\"true\" quality=\"high\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" type=\"application/x-shockwave-flash\" width=\"{$width}\" height=\"{$height}\"></embed> </object>";
+	}
+}
+
+function embedYouTube_url2nvid($url)
+{
+	$id = $url;
+
+	preg_match('/([0-9A-Za-z]+)/', $id, $preg);
+	$id = $preg[1];
+
+	return $id;
+}
+
+function embedNicovideo($input, $argv, &$parser)
+{
+	$nvid = '';
+	$width  = $width_max  = 640;
+	$height = $height_max = 480;
+
+	if (!empty($argv['nvid']))
+	{
+		$nvid = embedYouTube_url2nvid($argv['nvid']);
+	} elseif (!empty($input))
+	{
+		$nvid = embedYouTube_url2nvid($input);
+	}
+	if (!empty($argv['width']) && settype($argv['width'], 'integer') && ($width_max >= $argv['width']))
+	{
+		$width = $argv['width'];
+	}
+	if (!empty($argv['height']) && settype($argv['height'], 'integer') && ($height_max >= $argv['height']))
+	{
+		$height = $argv['height'];
+	}
+
+	if (!empty($nvid))
+	{
+		$url = "http://ext.nicovideo.jp/thumb_watch/{$nvid}?w={$width}&amp;h={$height}";
+		return "<script type=\"text/javascript\" src=\"{$url}\"></script>";
+	}
+}
+
+function embedYouTube_url2ggid($url)
+{
+	$id = $url;
+
+	if (preg_match('/^http:\/\/www\.gogreentube\.com\/watch\.php\?v=(.+)$/', $url, $preg))
+	{
+		$id = $preg[1];
+	} elseif (preg_match('/^http:\/\/www\.gogreentube\.com\/embed\/(.+)$/', $url, $preg))
+	{
+		$id = $preg[1];
+	}
+
+	preg_match('/([0-9A-Za-z]+)/', $id, $preg);
+	$id = $preg[1];
+
+	return $id;
+}
+
+function embedGoGreenTube($input, $argv, &$parser)
+{
+	$ggid = '';
+	$width  = $width_max  = 432;
+	$height = $height_max = 394;
+
+	if (!empty($argv['ggid']))
+	{
+		$ggid = embedYouTube_url2ggid($argv['ggid']);
+	} elseif (!empty($input))
+	{
+		$ggid = embedYouTube_url2ggid($input);
+	}
+	if (!empty($argv['width']) && settype($argv['width'], 'integer') && ($width_max >= $argv['width']))
+	{
+		$width = $argv['width'];
+	}
+	if (!empty($argv['height']) && settype($argv['height'], 'integer') && ($height_max >= $argv['height']))
+	{
+		$height = $argv['height'];
+	}
+
+	if (!empty($ggid))
+	{
+		$url = "http://www.gogreentube.com/embed/{$ggid}";
+		return "<script type=\"text/javascript\" src=\"{$url}\"></script>";
 	}
 }

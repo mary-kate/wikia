@@ -13,7 +13,7 @@ $wgDPL2Messages = array();
  */
 
 $wgDPL2Messages['en'] = array(
-	'dpl2-desc' => 'hack of the original [http://www.mediawiki.org/wiki/Extension:DynamicPageList DynamicPageList] extension featuring many Improvements',
+	'dpl2-desc' => 'Hack of the original [http://www.mediawiki.org/wiki/Extension:DynamicPageList DynamicPageList] extension featuring many Improvements',
 	/*
 		Debug
 	*/
@@ -23,71 +23,71 @@ $wgDPL2Messages['en'] = array(
 	 * $1: wrong parameter given by user
 	 * $3: list of possible titles of namespaces (except pseudo-namespaces: Media, Special)
 	 */
-	'dpl2_debug_' . DPL2_ERR_WRONGNS => "ERROR: Wrong '$0' parameter: '$1'! Help:  <code>$0= <i>empty string</i> (Main)$3</code>. (Equivalents with magic words are allowed too.)",
+	'dpl2_debug_' . DPL2_ERR_WRONGNS => "Error: Wrong '$0' parameter: '$1'! Help:  <code>$0= <i>empty string</i> (Main)$3</code>. (Equivalents with magic words are allowed too.)",
 	/**
 	 * $0: 'linksto' (left as $0 just in case the parameter is renamed in the future)
 	 * $1: wrong parameter given by user
 	*/
-	'dpl2_debug_' . DPL2_ERR_WRONGLINKSTO => "ERROR: Wrong '$0' parameter: '$1'! Help:  <code>$0= <i>full pagename</i></code>. (Magic words are allowed.)",
+	'dpl2_debug_' . DPL2_ERR_WRONGLINKSTO => "Error: Wrong '$0' parameter: '$1'! Help:  <code>$0= <i>full pagename</i></code>. (Magic words are allowed.)",
 	/**
 	 * $0: max number of categories that can be included
 	*/
-	'dpl2_debug_' . DPL2_ERR_TOOMANYCATS => 'ERROR: Too many categories! Maximum: $0. Help: increase <code>$wgDPL2MaxCategoryCount</code> to specify more categories or set <code>$wgDPL2AllowUnlimitedCategories=true</code> for no limitation. (Set the variable in <code>LocalSettings.php</code>, after including <code>DynamicPageList2.php</code>.)',
+	'dpl2_debug_' . DPL2_ERR_TOOMANYCATS => 'Error: Too many categories! Maximum: $0. Help: increase <code>$wgDPL2MaxCategoryCount</code> to specify more categories or set <code>$wgDPL2AllowUnlimitedCategories=true</code> for no limitation. (Set the variable in <code>LocalSettings.php</code>, after including <code>DynamicPageList2.php</code>.)',
 	/**
 	 * $0: min number of categories that have to be included
 	*/
-	'dpl2_debug_' . DPL2_ERR_TOOFEWCATS => 'ERROR: Too few categories! Minimum: $0. Help: decrease <code>$wgDPL2MinCategoryCount</code> to specify fewer categories. (Set the variable preferably in <code>LocalSettings.php</code>, after including <code>DynamicPageList2.php</code>.)',
-	'dpl2_debug_' . DPL2_ERR_CATDATEBUTNOINCLUDEDCATS => "ERROR: You need to include at least one category if you want to use 'addfirstcategorydate=true' or 'ordermethod=categoryadd'!",
-	'dpl2_debug_' . DPL2_ERR_CATDATEBUTMORETHAN1CAT => "ERROR: If you include more than one category, you cannot use 'addfirstcategorydate=true' or 'ordermethod=categoryadd'!",
-	'dpl2_debug_' . DPL2_ERR_MORETHAN1TYPEOFDATE => 'ERROR: You cannot add more than one type of date at a time!',
+	'dpl2_debug_' . DPL2_ERR_TOOFEWCATS => 'Error: Too few categories! Minimum: $0. Help: decrease <code>$wgDPL2MinCategoryCount</code> to specify fewer categories. (Set the variable preferably in <code>LocalSettings.php</code>, after including <code>DynamicPageList2.php</code>.)',
+	'dpl2_debug_' . DPL2_ERR_CATDATEBUTNOINCLUDEDCATS => "Error: You need to include at least one category if you want to use 'addfirstcategorydate=true' or 'ordermethod=categoryadd'!",
+	'dpl2_debug_' . DPL2_ERR_CATDATEBUTMORETHAN1CAT => "Error: If you include more than one category, you cannot use 'addfirstcategorydate=true' or 'ordermethod=categoryadd'!",
+	'dpl2_debug_' . DPL2_ERR_MORETHAN1TYPEOFDATE => 'Error: You cannot add more than one type of date at a time!',
 	/**
 	 * $0: param=val that is possible only with $1 as last 'ordermethod' parameter
 	 * $1: last 'ordermethod' parameter required for $0
 	*/
-	'dpl2_debug_' . DPL2_ERR_WRONGORDERMETHOD => "ERROR: You can use '$0' with 'ordermethod=[...,]$1' only!",
+	'dpl2_debug_' . DPL2_ERR_WRONGORDERMETHOD => "Error: You can use '$0' with 'ordermethod=[...,]$1' only!",
 	/**
-	 * $0: prefix_dpl_clview where 'prefix' is the prefix of your mediawiki table names
-	 * $1: SQL query to create the prefix_dpl_clview on your mediawiki DB
+	 * $0: prefix_dpl_clview where 'prefix' is the prefix of your MediaWiki table names
+	 * $1: SQL query to create the prefix_dpl_clview on your MediaWiki DB
 	*/
-	'dpl2_debug_' . DPL2_ERR_NOCLVIEW => "ERROR: Cannot perform logical operations on the Uncategorized pages (e.g. with the 'category' parameter) because the $0 view does not exist on the database! Help: have the DB admin execute this query: <code>$1</code>.",
+	'dpl2_debug_' . DPL2_ERR_NOCLVIEW => "Error: Cannot perform logical operations on the Uncategorized pages (e.g. with the 'category' parameter) because the $0 view does not exist on the database! Help: have the DB admin execute this query: <code>$1</code>.",
 
 	// WARNINGS
 	/**
 	 * $0: unknown parameter given by user
 	 * $1: list of DPL2 available parameters separated by ', '
 	*/
-	'dpl2_debug_' . DPL2_WARN_UNKNOWNPARAM => "WARNING: Unknown parameter '$0' is ignored. Help: available parameters: <code>$1</code>.",
+	'dpl2_debug_' . DPL2_WARN_UNKNOWNPARAM => "Warning: Unknown parameter '$0' is ignored. Help: available parameters: <code>$1</code>.",
 	/**
 	 * $3: list of valid param values separated by ' | '
 	*/
-	'dpl2_debug_' . DPL2_WARN_WRONGPARAM => "WARNING: Wrong '$0' parameter: '$1'! Using default: '$2'. Help: <code>$0= $3</code>.",
+	'dpl2_debug_' . DPL2_WARN_WRONGPARAM => "Warning: Wrong '$0' parameter: '$1'! Using default: '$2'. Help: <code>$0= $3</code>.",
 	/**
 	 * $0: param name
 	 * $1: wrong param value given by user
 	 * $2: default param value used instead by program
 	*/
-	'dpl2_debug_' . DPL2_WARN_WRONGPARAM_INT => "WARNING: Wrong '$0' parameter: '$1'! Using default: '$2' (no limit). Help: <code>$0= <i>empty string</i> (no limit) | n</code>, with <code>n</code> a positive integer.",
-	'dpl2_debug_' . DPL2_WARN_NORESULTS => 'WARNING: No results!',
-	'dpl2_debug_' . DPL2_WARN_CATOUTPUTBUTWRONGPARAMS => "WARNING: Add* parameters ('adduser', 'addeditdate', etc.)' and 'includepage' have no effect with 'mode=category'. Only the page namespace/title can be viewed in this mode.",
+	'dpl2_debug_' . DPL2_WARN_WRONGPARAM_INT => "Warning: Wrong '$0' parameter: '$1'! Using default: '$2' (no limit). Help: <code>$0= <i>empty string</i> (no limit) | n</code>, with <code>n</code> a positive integer.",
+	'dpl2_debug_' . DPL2_WARN_NORESULTS => 'Warning: No results!',
+	'dpl2_debug_' . DPL2_WARN_CATOUTPUTBUTWRONGPARAMS => "Warning: Add* parameters ('adduser', 'addeditdate', etc.)' and 'includepage' have no effect with 'mode=category'. Only the page namespace/title can be viewed in this mode.",
 	/**
 	 * $0: 'headingmode' value given by user
 	 * $1: value used instead by program (which means no heading)
 	*/
-	'dpl2_debug_' . DPL2_WARN_HEADINGBUTSIMPLEORDERMETHOD => "WARNING: 'headingmode=$0' has no effect with 'ordermethod' on a single component. Using: '$1'. Help: you can use not-$1 'headingmode' values with 'ordermethod' on multiple components. The first component is used for headings. E.g. 'ordermethod=category,<i>comp</i>' (<i>comp</i> is another component) for category headings.",
+	'dpl2_debug_' . DPL2_WARN_HEADINGBUTSIMPLEORDERMETHOD => "Warning: 'headingmode=$0' has no effect with 'ordermethod' on a single component. Using: '$1'. Help: you can use not-$1 'headingmode' values with 'ordermethod' on multiple components. The first component is used for headings. E.g. 'ordermethod=category,<i>comp</i>' (<i>comp</i> is another component) for category headings.",
 	/**
 	 * $0: 'debug' value
 	*/
-	'dpl2_debug_' . DPL2_WARN_DEBUGPARAMNOTFIRST => "WARNING: 'debug=$0' is not in first position in the DPL element. The new debug settings are not applied before all previous parameters have been parsed and checked.",
+	'dpl2_debug_' . DPL2_WARN_DEBUGPARAMNOTFIRST => "Warning: 'debug=$0' is not in first position in the DPL element. The new debug settings are not applied before all previous parameters have been parsed and checked.",
 	/**
 	 * $0: title of page that creates an infinite transclusion loop
 	*/
-	'dpl2_debug_' . DPL2_WARN_TRANSCLUSIONLOOP => "WARNING: An infinite transclusion loop is created by page '$0'.",
+	'dpl2_debug_' . DPL2_WARN_TRANSCLUSIONLOOP => "Warning: An infinite transclusion loop is created by page '$0'.",
 
 	// OTHERS
 	/**
 	 * $0: SQL query executed to generate the dynamic page list
 	*/
-	'dpl2_debug_' . DPL2_QUERY => 'QUERY: <code>$0</code>',
+	'dpl2_debug_' . DPL2_QUERY => 'Query: <code>$0</code>',
 
 	/*
 	   Output formatting
@@ -97,6 +97,183 @@ $wgDPL2Messages['en'] = array(
 	*/
 	'dpl2_articlecount' => 'There {{PLURAL:$1|is one article|are $1 articles}} in this heading.'
 );
+
+$wgDPL2Messages['ar'] = array(
+	'dpl2-desc' => 'تعديل على امتداد [http://www.mediawiki.org/wiki/Extension:DynamicPageList DynamicPageList] الأصلي بالعديد من التحسينات',
+	/*
+		Debug
+	*/
+	// (FATAL) ERRORS
+	/**
+	 * $0: 'namespace' or 'notnamespace'
+	 * $1: wrong parameter given by user
+	 * $3: list of possible titles of namespaces (except pseudo-namespaces: Media, Special)
+	 */
+	'dpl2_debug_' . DPL2_ERR_WRONGNS => "خطأ: محدد '$0' خاطئ: '$1'! مساعدة:  <code>$0= <i>سلسلة فارغة</i> (رئيسي)$3</code>. (المساويات مع الكلمات السحرية مسموح بها أيضا.)",
+	/**
+	 * $0: 'linksto' (left as $0 just in case the parameter is renamed in the future)
+	 * $1: wrong parameter given by user
+	*/
+	'dpl2_debug_' . DPL2_ERR_WRONGLINKSTO => "خطأ: محدد '$0' خاطئ: '$1'! مساعدة:  <code>$0= <i>اسم الصفحة الكامل</i></code>. (الكلمات السحرية مسموح بها.)",
+	/**
+	 * $0: max number of categories that can be included
+	*/
+	'dpl2_debug_' . DPL2_ERR_TOOMANYCATS => 'خطأ: تصنيفات كثيرة جدا! الحد الأقصى: $0. مساعدة: زد <code>$wgDPL2MaxCategoryCount</code> لتحديد المزيد من التصنيفات أو اضبط <code>$wgDPL2AllowUnlimitedCategories=true</code> للا حد. (اضبط المتغير في <code>LocalSettings.php</code>, بعد تضمين <code>DynamicPageList2.php</code>.)',
+	/**
+	 * $0: min number of categories that have to be included
+	*/
+	'dpl2_debug_' . DPL2_ERR_TOOFEWCATS => 'خطأ: تصنيفات قليلة جدا! الحد الأدنى: $0. مساعدة: قلل <code>$wgDPL2MinCategoryCount</code> لتحديد عدد أقل من التصنيفات. (اضبط المتغير مفضلا في <code>LocalSettings.php</code>, بعد تضمين <code>DynamicPageList2.php</code>.)',
+	'dpl2_debug_' . DPL2_ERR_CATDATEBUTNOINCLUDEDCATS => "خطأ: تحتاج إلى أن تضمن على الأقل تصنيفا واجدا إذا كنت تريد استخدام 'addfirstcategorydate=true' او 'ordermethod=categoryadd'!",
+	'dpl2_debug_' . DPL2_ERR_CATDATEBUTMORETHAN1CAT => "خطأ: إذا قمت بتضمين أكثر من تصنيف واحد, لا يمكنك استخدام 'addfirstcategorydate=true' أو 'ordermethod=categoryadd'!",
+	'dpl2_debug_' . DPL2_ERR_MORETHAN1TYPEOFDATE => 'خطأ: لا يمكنك إضافة أكثر من نوع واحد من البيانات في المرة!',
+	/**
+	 * $0: param=val that is possible only with $1 as last 'ordermethod' parameter
+	 * $1: last 'ordermethod' parameter required for $0
+	*/
+	'dpl2_debug_' . DPL2_ERR_WRONGORDERMETHOD => "خطأ: يمكنك استخدام '$0' مع 'ordermethod=[...,]$1' فقط!",
+	/**
+	 * $0: prefix_dpl_clview where 'prefix' is the prefix of your MediaWiki table names
+	 * $1: SQL query to create the prefix_dpl_clview on your MediaWiki DB
+	*/
+	'dpl2_debug_' . DPL2_ERR_NOCLVIEW => "خطأ: لم يمكن عمل عمليات منطقية على الصفحات غير المصنفة (على سبيل المثال مع محدد 'category') لأن رؤية $0 غير موجودة في قاعدة البيانات! مساعدة: اجعل إداري قاعدة البيانات ينفذ هذا الاستعلام: <code>$1</code>.",
+
+	// WARNINGS
+	/**
+	 * $0: unknown parameter given by user
+	 * $1: list of DPL2 available parameters separated by ', '
+	*/
+	'dpl2_debug_' . DPL2_WARN_UNKNOWNPARAM => "تحذير: المحدد غير المعروف '$0' يتم تجاهله. مساعدة: المحددات المتوفرة: <code>$1</code>.",
+	/**
+	 * $3: list of valid param values separated by ' | '
+	*/
+	'dpl2_debug_' . DPL2_WARN_WRONGPARAM => "تحذير: محدد '$0' خاطئ: '$1'! استخدام الافتراضي: '$2'. مساعدة: <code>$0= $3</code>.",
+	/**
+	 * $0: param name
+	 * $1: wrong param value given by user
+	 * $2: default param value used instead by program
+	*/
+	'dpl2_debug_' . DPL2_WARN_WRONGPARAM_INT => "تحذير: محدد '$0' خاطئ: '$1'! استخدام الافتراضي: '$2' (لا حد). مساعدة: <code>$0= <i>سلسلة فارغة</i> (لا حد) | n</code>، مع <code>n</code> عدد صحيح موجب.",
+	'dpl2_debug_' . DPL2_WARN_NORESULTS => 'تحذير: لا نتائج!',
+	'dpl2_debug_' . DPL2_WARN_CATOUTPUTBUTWRONGPARAMS => "تحذير: أضف المحددات ('adduser', 'addeditdate', إلى آخره)' و 'includepage' ليس لها تاثير مع 'mode=category'. فقط نظاق/عنوان الصفحة يمكن رؤيتها في هذا النمط.",
+	/**
+	 * $0: 'headingmode' value given by user
+	 * $1: value used instead by program (which means no heading)
+	*/
+	'dpl2_debug_' . DPL2_WARN_HEADINGBUTSIMPLEORDERMETHOD => "تحذير: 'headingmode=$0' ليس له تاثير مع 'ordermethod' على مكون واحد. استخدام قيم: '$1'. مساعدة: you can use not-$1 'headingmode' مع 'ordermethod' على مكونات متعددة. المكون الأول يتم استخدامه للعناوين. على سبيل المثال 'ordermethod=category,<i>comp</i>' (<i>comp</i> مكون آخر) لعناوين التصنيفات.",
+	/**
+	 * $0: 'debug' value
+	*/
+	'dpl2_debug_' . DPL2_WARN_DEBUGPARAMNOTFIRST => "تحذير: 'debug=$0' ليس في الموضع الأول في عنصر DPL. إعدادات التصحيح الجديدة لا يتم تطبيقها قبل أن يتم التحقق من كل المحددات السابقة.",
+	/**
+	 * $0: title of page that creates an infinite transclusion loop
+	*/
+	'dpl2_debug_' . DPL2_WARN_TRANSCLUSIONLOOP => "تحذير: لفة تضمين لا نهائية تم إنشاؤها بواسطة الصفحة '$0'.",
+
+	// OTHERS
+	/**
+	 * $0: SQL query executed to generate the dynamic page list
+	*/
+	'dpl2_debug_' . DPL2_QUERY => 'استعلام: <code>$0</code>',
+
+	/*
+	   Output formatting
+	*/
+	/**
+	 * $1: number of articles
+	*/
+	'dpl2_articlecount' => 'توجد {{PLURAL:$1|مقالة واحدة|$1 مقالة}} في هذا العنوان.'
+);
+
+$wgDPL2Messages['arz'] = array(
+	'dpl2-desc' => 'تعديل على امتداد [http://www.mediawiki.org/wiki/Extension:DynamicPageList DynamicPageList] الأصلى بالعديد من التحسينات',
+	/*
+		Debug
+	*/
+	// (FATAL) ERRORS
+	/**
+	 * $0: 'namespace' or 'notnamespace'
+	 * $1: wrong parameter given by user
+	 * $3: list of possible titles of namespaces (except pseudo-namespaces: Media, Special)
+	 */
+	'dpl2_debug_' . DPL2_ERR_WRONGNS => "خطأ: محدد '$0' خاطئ: '$1'! مساعدة:  <code>$0= <i>سلسلة فارغة</i> (رئيسى)$3</code>. (المساويات مع الكلمات السحرية مسموح بها أيضا.)",
+	/**
+	 * $0: 'linksto' (left as $0 just in case the parameter is renamed in the future)
+	 * $1: wrong parameter given by user
+	*/
+	'dpl2_debug_' . DPL2_ERR_WRONGLINKSTO => "خطأ: محدد '$0' خاطئ: '$1'! مساعدة:  <code>$0= <i>اسم الصفحة الكامل</i></code>. (الكلمات السحرية مسموح بها.)",
+	/**
+	 * $0: max number of categories that can be included
+	*/
+	'dpl2_debug_' . DPL2_ERR_TOOMANYCATS => 'خطأ: تصنيفات كتيرة أوى! الحد الأقصى: $0. مساعدة: زد <code>$wgDPL2MaxCategoryCount</code> لتحديد المزيد من التصنيفات أو اضبط <code>$wgDPL2AllowUnlimitedCategories=true</code> للا حد. (اضبط المتغير في <code>LocalSettings.php</code>, بعد تضمين <code>DynamicPageList2.php</code>.)',
+	/**
+	 * $0: min number of categories that have to be included
+	*/
+	'dpl2_debug_' . DPL2_ERR_TOOFEWCATS => 'خطأ: تصنيفات قليلة أوى! الحد الأدنى: $0. مساعدة: قلل <code>$wgDPL2MinCategoryCount</code> لتحديد عدد أقل من التصنيفات. (اضبط المتغير مفضلا فى <code>LocalSettings.php</code>, بعد تضمين <code>DynamicPageList2.php</code>.)',
+	'dpl2_debug_' . DPL2_ERR_CATDATEBUTNOINCLUDEDCATS => "خطأ: تحتاج إلى أن تضمن على الأقل تصنيفا واجدا إذا كنت تريد استخدام 'addfirstcategorydate=true' او 'ordermethod=categoryadd'!",
+	'dpl2_debug_' . DPL2_ERR_CATDATEBUTMORETHAN1CAT => "خطأ: إذا قمت بتضمين أكثر من تصنيف واحد، لا يمكنك استخدام 'addfirstcategorydate=true' أو 'ordermethod=categoryadd'!",
+	'dpl2_debug_' . DPL2_ERR_MORETHAN1TYPEOFDATE => 'خطأ: لا يمكنك إضافة أكثر من نوع واحد من البيانات فى المرة!',
+	/**
+	 * $0: param=val that is possible only with $1 as last 'ordermethod' parameter
+	 * $1: last 'ordermethod' parameter required for $0
+	*/
+	'dpl2_debug_' . DPL2_ERR_WRONGORDERMETHOD => "خطأ: يمكنك استخدام '$0' مع 'ordermethod=[...,]$1' فقط!",
+	/**
+	 * $0: prefix_dpl_clview where 'prefix' is the prefix of your MediaWiki table names
+	 * $1: SQL query to create the prefix_dpl_clview on your MediaWiki DB
+	*/
+	'dpl2_debug_' . DPL2_ERR_NOCLVIEW => "خطأ: لم يمكن عمل عمليات منطقية على الصفحات غير المصنفة (على سبيل المثال مع محدد 'category') لأن رؤية $0 غير موجودة فى قاعدة البيانات! مساعدة: اجعل إدارى قاعدة البيانات ينفذ هذا الاستعلام: <code>$1</code>.",
+
+	// WARNINGS
+	/**
+	 * $0: unknown parameter given by user
+	 * $1: list of DPL2 available parameters separated by ', '
+	*/
+	'dpl2_debug_' . DPL2_WARN_UNKNOWNPARAM => "تحذير: المحدد غير المعروف '$0' يتم تجاهله. مساعدة: المحددات المتوفرة: <code>$1</code>.",
+	/**
+	 * $3: list of valid param values separated by ' | '
+	*/
+	'dpl2_debug_' . DPL2_WARN_WRONGPARAM => "تحذير: محدد '$0' خاطئ: '$1'! استخدام الافتراضي: '$2'. مساعدة: <code>$0= $3</code>.",
+	/**
+	 * $0: param name
+	 * $1: wrong param value given by user
+	 * $2: default param value used instead by program
+	*/
+	'dpl2_debug_' . DPL2_WARN_WRONGPARAM_INT => "تحذير: محدد '$0' خاطئ: '$1'! استخدام الافتراضي: '$2' (لا حد). مساعدة: <code>$0= <i>سلسلة فارغة</i> (لا حد) | n</code>، مع <code>n</code> عدد صحيح موجب.",
+	'dpl2_debug_' . DPL2_WARN_NORESULTS => 'تحذير: لا نتائج!',
+	'dpl2_debug_' . DPL2_WARN_CATOUTPUTBUTWRONGPARAMS => "تحذير: أضف المحددات ('adduser', 'addeditdate', إلى آخره)' و 'includepage' ليس لها تاثير مع 'mode=category'. فقط نظاق/عنوان الصفحة يمكن رؤيتها فى هذا النمط.",
+	/**
+	 * $0: 'headingmode' value given by user
+	 * $1: value used instead by program (which means no heading)
+	*/
+	'dpl2_debug_' . DPL2_WARN_HEADINGBUTSIMPLEORDERMETHOD => "تحذير: 'headingmode=$0' ليس له تاثير مع 'ordermethod' على مكون واحد. استخدام قيم: '$1'. مساعدة: you can use not-$1 'headingmode' مع 'ordermethod' على مكونات متعددة. المكون الأول يتم استخدامه للعناوين. على سبيل المثال 'ordermethod=category,<i>comp</i>' (<i>comp</i> مكون آخر) لعناوين التصنيفات.",
+	/**
+	 * $0: 'debug' value
+	*/
+	'dpl2_debug_' . DPL2_WARN_DEBUGPARAMNOTFIRST => "تحذير: 'debug=$0' ليس فى الموضع الأول فى عنصر DPL. إعدادات التصحيح الجديدة لا يتم تطبيقها قبل أن يتم التحقق من كل المحددات السابقة.",
+	/**
+	 * $0: title of page that creates an infinite transclusion loop
+	*/
+	'dpl2_debug_' . DPL2_WARN_TRANSCLUSIONLOOP => "تحذير: لفة تضمين لا نهائية تم إنشاؤها بواسطة الصفحة '$0'.",
+
+	// OTHERS
+	/**
+	 * $0: SQL query executed to generate the dynamic page list
+	*/
+	'dpl2_debug_' . DPL2_QUERY => 'استعلام: <code>$0</code>',
+
+	/*
+	   Output formatting
+	*/
+	/**
+	 * $1: number of articles
+	*/
+	'dpl2_articlecount' => 'توجد {{PLURAL:$1|مقالة واحدة|$1 مقالة}} فى هذا العنوان.'
+);
+
+$wgDPL2Messages['de'] = array(
+	'dpl2-desc' => 'Erweiterung der [http://www.mediawiki.org/wiki/Extension:DynamicPageList DynamicPageList] mit vielen Verbesserungen',
+);
+
 $wgDPL2Messages['fr'] = array(
 	'dpl2-desc' => 'Reprise de l’extension originale [http://www.mediawiki.org/wiki/Extension:DynamicPageList DynamicPageList] avec des fonctionnalités supplémentaires.',
 	/*
@@ -131,8 +308,8 @@ $wgDPL2Messages['fr'] = array(
 	*/
 	'dpl2_debug_' . DPL2_ERR_WRONGORDERMETHOD => "ERREUR : Vous ne pouvez utiliser '$0' qu’avec 'ordermethod=[...,]$1' !",
 	/**
-	 * $0: prefix_dpl_clview where 'prefix' is the prefix of your mediawiki table names
-	 * $1: SQL query to create the prefix_dpl_clview on your mediawiki DB
+	 * $0: prefix_dpl_clview where 'prefix' is the prefix of your MediaWiki table names
+	 * $1: SQL query to create the prefix_dpl_clview on your MediaWiki DB
 	*/
 	'dpl2_debug_' . DPL2_ERR_NOCLVIEW => "ERREUR : Ne peut pas effectuer d’opérations logiques sur les pages sans catégories (avec la paramètre 'category') car la vue $0 n’existe pas dans la base de données ! Aide : demander à un administrateur de la base de données d'effectuer : <code>$1</code>.",
 
@@ -215,8 +392,8 @@ $wgDPL2Messages['he'] = array(
 	*/
 	'dpl2_debug_' . DPL2_ERR_WRONGORDERMETHOD => "שגיאה: באפשרותכם להשתמש ב־'$0' עם 'ordermethod=[...,]$1' בלבד!",
 	/**
-	 * $0: prefix_dpl_clview where 'prefix' is the prefix of your mediawiki table names
-	 * $1: SQL query to create the prefix_dpl_clview on your mediawiki DB
+	 * $0: prefix_dpl_clview where 'prefix' is the prefix of your MediaWiki table names
+	 * $1: SQL query to create the prefix_dpl_clview on your MediaWiki DB
 	*/
 	'dpl2_debug_' . DPL2_ERR_NOCLVIEW => "שגיאה: לא ניתן לבצע פעולות לוגיות על דפים ללא קטגוריות (למשל, עם הפרמטר 'קטגוריה') כיוון שתצוגת $0 אינה קיימת במסד הנתונים! עזרה: מנהל מסד הנתונים צריך להריץ את השאילתה: <code>$1</code>.",
 
@@ -264,7 +441,7 @@ $wgDPL2Messages['he'] = array(
 	/**
 	 * $1: number of articles
 	*/
-	'dpl2_articlecount' => '{{plural:$1|ישנם $1 דפים|ישנו דף אחד}} תחת כותרת זו.'
+	'dpl2_articlecount' => '{{PLURAL:$1|ישנם $1 דפים|ישנו דף אחד}} תחת כותרת זו.'
 );
 $wgDPL2Messages['id'] = array(
 	'dpl2_debug_' . DPL2_ERR_WRONGNS => "KESALAHAN: Parameter '$0' salah: '$1'! Bantuan: <code>$0= <i>string kosong</i> (Utama)$3</code>. (Ekivalen kata kunci juga diizinkan.)",
@@ -320,8 +497,8 @@ $wgDPL2Messages['it'] = array(
 	*/
 	'dpl2_debug_' . DPL2_ERR_WRONGORDERMETHOD => "ERRORE: L'uso del parametro '$0' è consentito unicamente con 'ordermethod=[...,]$1'.",
 	/**
-	 * $0: prefix_dpl_clview where 'prefix' is the prefix of your mediawiki table names
-	 * $1: SQL query to create the prefix_dpl_clview on your mediawiki DB
+	 * $0: prefix_dpl_clview where 'prefix' is the prefix of your MediaWiki table names
+	 * $1: SQL query to create the prefix_dpl_clview on your MediaWiki DB
 	*/
 	'dpl2_debug_' . DPL2_ERR_NOCLVIEW => "ERRORE: Impossibile effettuare operazioni logiche sulle pagine prive di categoria (ad es. con il parametro 'category') in quanto il database non contiene la vista $0. Suggerimento: chiedere all'amministratore del database di eseguire la seguente query: <code>$1</code>.",
 
@@ -400,8 +577,8 @@ $wgDPL2Messages['nl'] = array(
 	*/
 	'dpl2_debug_' . DPL2_ERR_WRONGORDERMETHOD => "FOUT: U kunt '$0' alleen met 'ordermethod=[...,]$1' gebruiken!",
 	/**
-	 * $0: prefix_dpl_clview where 'prefix' is the prefix of your mediawiki table names
-	 * $1: SQL query to create the prefix_dpl_clview on your mediawiki DB
+	 * $0: prefix_dpl_clview where 'prefix' is the prefix of your MediaWiki table names
+	 * $1: SQL query to create the prefix_dpl_clview on your MediaWiki DB
 	*/
 	'dpl2_debug_' . DPL2_ERR_NOCLVIEW => $wgDPL2Messages['en']['dpl2_debug_' . DPL2_ERR_NOCLVIEW],
 
@@ -479,8 +656,8 @@ $wgDPL2Messages['ru'] = array(
 	*/
 	'dpl2_debug_' . DPL2_ERR_WRONGORDERMETHOD => "ОШИБКА: вы можете использовать «$0» только с «ordermethod=[...,]$1»!",
 	/**
-	 * $0: prefix_dpl_clview where 'prefix' is the prefix of your mediawiki table names
-	 * $1: SQL query to create the prefix_dpl_clview on your mediawiki DB
+	 * $0: prefix_dpl_clview where 'prefix' is the prefix of your MediaWiki table names
+	 * $1: SQL query to create the prefix_dpl_clview on your MediaWiki DB
 	*/
 	'dpl2_debug_' . DPL2_ERR_NOCLVIEW => $wgDPL2Messages['en']['dpl2_debug_' . DPL2_ERR_NOCLVIEW],
 
@@ -559,8 +736,8 @@ $wgDPL2Messages['sk'] = array(
 	*/
 	'dpl2_debug_' . DPL2_ERR_WRONGORDERMETHOD => "CHYBA: '$0' môžete použiť iba s 'ordermethod=[...,]$1'!",
 	/**
-	 * $0: prefix_dpl_clview where 'prefix' is the prefix of your mediawiki table names
-	 * $1: SQL query to create the prefix_dpl_clview on your mediawiki DB
+	 * $0: prefix_dpl_clview where 'prefix' is the prefix of your MediaWiki table names
+	 * $1: SQL query to create the prefix_dpl_clview on your MediaWiki DB
 	*/
 	'dpl2_debug_' . DPL2_ERR_NOCLVIEW => "CHYBA: Nie je momožné vykonávať logické operácie na nekategorizovaných kategóriách (napr. s parametrom 'Kategória') lebo neexistuje na databázu pohľad $0! Pomocník: nech admin databázy vykoná tento dotaz: <code>$1</code>.",
 
@@ -803,8 +980,8 @@ $wgDPL2Messages['yue'] = array(
 	*/
 	'dpl2_debug_' . DPL2_ERR_WRONGORDERMETHOD => "錯誤: 你只可以用 'ordermethod=[...,]$1' 響 '$0' 上!",
 	/**
-	 * $0: prefix_dpl_clview where 'prefix' is the prefix of your mediawiki table names
-	 * $1: SQL query to create the prefix_dpl_clview on your mediawiki DB
+	 * $0: prefix_dpl_clview where 'prefix' is the prefix of your MediaWiki table names
+	 * $1: SQL query to create the prefix_dpl_clview on your MediaWiki DB
 	*/
 	'dpl2_debug_' . DPL2_ERR_NOCLVIEW => $wgDPL2Messages['en']['dpl2_debug_' . DPL2_ERR_NOCLVIEW],
 
@@ -878,8 +1055,8 @@ $wgDPL2Messages['zh-hans'] = array(
 	*/
 	'dpl2_debug_' . DPL2_ERR_WRONGORDERMETHOD => "错误: 你只可以用 'ordermethod=[...,]$1' 在 '$0' 上!",
 	/**
-	 * $0: prefix_dpl_clview where 'prefix' is the prefix of your mediawiki table names
-	 * $1: SQL query to create the prefix_dpl_clview on your mediawiki DB
+	 * $0: prefix_dpl_clview where 'prefix' is the prefix of your MediaWiki table names
+	 * $1: SQL query to create the prefix_dpl_clview on your MediaWiki DB
 	*/
 	'dpl2_debug_' . DPL2_ERR_NOCLVIEW => $wgDPL2Messages['en']['dpl2_debug_' . DPL2_ERR_NOCLVIEW],
 
@@ -953,8 +1130,8 @@ $wgDPL2Messages['zh-hant'] = array(
 	*/
 	'dpl2_debug_' . DPL2_ERR_WRONGORDERMETHOD => "錯誤: 你只可以用 'ordermethod=[...,]$1' 在 '$0' 上!",
 	/**
-	 * $0: prefix_dpl_clview where 'prefix' is the prefix of your mediawiki table names
-	 * $1: SQL query to create the prefix_dpl_clview on your mediawiki DB
+	 * $0: prefix_dpl_clview where 'prefix' is the prefix of your MediaWiki table names
+	 * $1: SQL query to create the prefix_dpl_clview on your MediaWiki DB
 	*/
 	'dpl2_debug_' . DPL2_ERR_NOCLVIEW => $wgDPL2Messages['en']['dpl2_debug_' . DPL2_ERR_NOCLVIEW],
 
@@ -1006,7 +1183,3 @@ $wgDPL2Messages['zh-hk'] = $wgDPL2Messages['zh-hant'];
 $wgDPL2Messages['zh-sg'] = $wgDPL2Messages['zh-hans'];
 $wgDPL2Messages['zh-tw'] = $wgDPL2Messages['zh-hant'];
 $wgDPL2Messages['zh-yue'] = $wgDPL2Messages['yue'];
-
-
-
-

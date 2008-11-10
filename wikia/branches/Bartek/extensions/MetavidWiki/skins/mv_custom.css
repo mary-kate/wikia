@@ -18,6 +18,7 @@
 	float:left;
 	margin:4px;
 	width:90%;
+	min-width: 350px;
 }
 .mv_video_time_hr{
  	position:absolute;
@@ -27,6 +28,9 @@
 	font-weight: 100; 
 	background:black;
 	color:white;
+}
+.mv_timeline_mvd_jumper{
+	cursor:pointer;
 }
 .mv_fd_im_cont{
 	 display: block;
@@ -63,30 +67,30 @@ textarea.mv_ajax_textarea{
 	font-variant:normal;
 	font-weight:normal;
 }
-   div.autocomplete {   
+div.autocomplete {   
       position:absolute;
-      min-width:250px;
+      min-width:250px;      
       overflow:hidden;
       z-index:99;
       background-color:white;
       border:1px solid #888;
       margin:0px;
       padding:0px;
-    }
-    div.autocomplete ul {
+}
+div.autocomplete ul {
       list-style-type:none;       
       margin:0px;
       padding:0px;
-    }
-    div.autocomplete ul li.selected { background-color: #ffb;}
-    div.autocomplete ul li {
+}
+div.autocomplete ul li.selected { background-color: #ffb;}
+div.autocomplete ul li {
       list-style-type:none;
       display:block;
       margin:0;      
       padding:2px;
-      height:52px;
       cursor:pointer;
-    }
+      font-size:1.2em;
+}
 
 #resizable css:    
 .ui-resizable-handle { position: absolute; background: #ddd; display: none; }
@@ -128,19 +132,20 @@ textarea.mv_ajax_textarea{
 	padding: 2px 5px;
 	cursor: pointer;
 	display: block;
-	width: 100%;
+	width: 96%;
 	font: menu;
 	font-size: 12px;
 	overflow: hidden;
 }
 
 .ac_loading {
-	background : Window url('./indicator.gif') right center no-repeat;
+	background : Window url('./images/indicator.gif') right center no-repeat;
 }
 
 .ac_over {
-	background-color: Highlight;
-	color: HighlightText;
+	background-color: #CCC;
+	color: #000;
+	padding-right:10px;
 }
 .set_ogg_player_pref{
 	text-align:left;
@@ -149,6 +154,9 @@ textarea.mv_ajax_textarea{
 /**********************
 * stream interface
 ***********************/
+.mv_stream_title{
+	font-weight:bold;font-size:1.1em;
+}
 #mv_page_spacer{
 	width:100%;
 	height:550px;
@@ -157,10 +165,10 @@ textarea.mv_ajax_textarea{
 	position:absolute;width:322px;top:30px;height:270px;left:10px;margin:4px;
 }
 #MV_Overlay{
-	position:absolute;left:365px;top:30px;right:15px;bottom:10px;margin:4px;
+	position:absolute;left:365px;top:30px;right:15px;bottom:10px;margin:4px;min-width:470px;
 }
 #mv_fd_mvd_cont{
-	position:absolute;top:0px;bottom:30px;right:12px;overflow-x:hidden;overflow-y:auto; 
+	position:absolute;top:0px;bottom:30px;right:12px;overflow-x:hidden;overflow-y:auto;
 }
 #mv_time_line{
 	position:absolute;background:#DDDDDD;left:0px;height:94%;overflow:hidden;
@@ -171,19 +179,22 @@ textarea.mv_ajax_textarea{
 #mv_tool_cont{
 	position:absolute;top:0px;left:0px;right:13px;bottom:30px;overflow:auto;
 }
-
-
 #mv_videoPlayerTime{
-	position:absolute;top:10px;right:30px;z-index:5;font-weight: 100;background:black;color:white;
+	position:absolute;left:50px;z-index:5;font-weight: 100;width:120px;background:black;color:white;
+}
+
+/*hide page title for streams*/
+body.ns-106 .firstHeading{
+	display:none;
 }
 /***********************
 *sequence interface
 ************************/
 #MV_SequencePlayer{
-	position:absolute;width:322px;top:25px;bottom:195px;left:10px;margin:4px;
+	position:absolute;width:322px;top:30px;bottom:195px;left:10px;margin:4px;
 }
 #MV_SequenceTools{
-	position:absolute;left:365px;right:10px;top:25px;bottom:195px;margin:4px;
+	position:absolute;left:365px;right:10px;top:30px;bottom:195px;margin:4px;
 }
 #MV_SequenceTimeline{
 	position:absolute;left:10px;right:10px;height:174px;bottom:0px;margin:4px;
@@ -191,7 +202,6 @@ textarea.mv_ajax_textarea{
 
 #cmml_link{
 	position: absolute; right: 17px; top: 18px;width:28px;height:28px;z-index:2;
-
 }
 
 /***********************
@@ -360,6 +370,10 @@ a.dp-choose-date.dp-disabled {
  */
 input.dp-applied {
 	/*float: left;*/
+}
+
+.mv_adj_hr{
+	border:solid black thin;
 }
 
 

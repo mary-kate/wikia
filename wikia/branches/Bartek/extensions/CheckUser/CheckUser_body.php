@@ -24,9 +24,21 @@ class CheckUser extends SpecialPage
 		$this->setHeaders();
 		$this->sk = $wgUser->getSkin();
 
-		if ( $wgContLang->lc( $subpage ) == $wgContLang->lc( wfMsg( 'checkuser-log-subpage' ) ) ) {
-			$this->showLog();
-			return;
+		// This is horribly shitty.
+		// Lacking formal aliases, it's tough to ensure we have compatibility.
+		// Links may break, which sucks.
+		// Language fallbacks will not always be properly utilized.
+		$logMatches = array(
+			wfMsgForContent( 'checkuser-log-subpage' ),
+			'Log'
+		);
+		
+		foreach( $logMatches as $log ) {
+			if ( str_replace( '_', ' ', $wgContLang->lc( $subpage ) )
+				== str_replace( '_ ', ' ', $wgContLang->lc( $log ) ) ) {
+				$this->showLog();
+				return;
+			}
 		}
 
 		$user = $wgRequest->getText( 'user' ) ? $wgRequest->getText( 'user' ) : $wgRequest->getText( 'ip' );
@@ -82,7 +94,7 @@ class CheckUser extends SpecialPage
 
 	function getLogSubpageTitle() {
 		if ( !isset( $this->logSubpageTitle ) ) {
-			$this->logSubpageTitle = $this->getTitle( wfMsg( 'checkuser-log-subpage' ) );
+			$this->logSubpageTitle = $this->getTitle( wfMsgForContent( 'checkuser-log-subpage' ) );
 		}
 		return $this->logSubpageTitle;
 	}
@@ -298,7 +310,7 @@ class CheckUser extends SpecialPage
 		$line .= $this->sk->commentBlock( $row->cuc_comment );
 		
 		$cuTitle = SpecialPage::getTitleFor( 'CheckUser' );
-		$line .= '<br/>&nbsp; &nbsp; &nbsp; &nbsp; <small>';
+		$line .= '<br />&nbsp; &nbsp; &nbsp; &nbsp; <small>';
 		# IP
 		$line .= ' <strong>IP</strong>: '.$this->sk->makeKnownLinkObj( $cuTitle,
 			htmlspecialchars( $row->cuc_ip ),
@@ -507,7 +519,7 @@ class CheckUser extends SpecialPage
 					$s .= ' (' . $wgLang->timeanddate( $users_first[$name], true ) .
 					' -- ' . $wgLang->timeanddate( $users_last[$name], true ) . ') ';
 				}
-				$s .= ' [<strong>' . $count . '</strong>]<br/>';
+				$s .= ' [<strong>' . $count . '</strong>]<br />';
 				# Check if this user or IP is blocked
 				# If so, give a link to the block log
 				$block = new Block();
@@ -549,7 +561,7 @@ class CheckUser extends SpecialPage
 					}
 					$s .= "</li>\n";
 				}
-				$s .= '</ol><br/><ol>';
+				$s .= '</ol><br /><ol>';
 				# List out each agent for this username
 				for( $i = (count($users_agentsets[$name]) - 1); $i >= 0; $i-- ) {
 					$agent = $users_agentsets[$name][$i];
@@ -626,7 +638,7 @@ class CheckUser extends SpecialPage
 
 		#if user is not IP or nonexistant
 		if( !$user_id ) {
-			$s = wfMsgHtml('nosuchusershort', $user);
+			$s = wfMsgExt('nosuchusershort',array('parseinline'),$user);
 			$wgOut->addHTML( $s );
 			return;
 		}
@@ -638,10 +650,10 @@ class CheckUser extends SpecialPage
 		# Ordering by the latest timestamp makes a small filesort on the IP list
 		$cu_changes = $dbr->tableName( 'cu_changes' );
 		$use_index = $dbr->useIndexClause( 'cuc_user_ip_time' );
-		$sql = "SELECT cuc_ip, COUNT(*) AS count, 
+		$sql = "SELECT cuc_ip,cuc_ip_hex, COUNT(*) AS count, 
 			MIN(cuc_timestamp) AS first, MAX(cuc_timestamp) AS last 
 			FROM $cu_changes $use_index WHERE cuc_user = $user_id 
-			GROUP BY cuc_ip ORDER BY last DESC";
+			GROUP BY cuc_ip,cuc_ip_hex ORDER BY last DESC";
 		
 		$ret = $dbr->query( $sql, __METHOD__ );
 
@@ -651,9 +663,10 @@ class CheckUser extends SpecialPage
 			$blockip = SpecialPage::getTitleFor( 'blockip' );
 			$ips_edits=array();
 			while( $row = $dbr->fetchObject( $ret ) ) {
-				$ips_edits[$row->cuc_ip]=$row->count;
-				$ips_first[$row->cuc_ip]=$row->first;
-				$ips_last[$row->cuc_ip]=$row->last;
+				$ips_edits[$row->cuc_ip] = $row->count;
+				$ips_first[$row->cuc_ip] = $row->first;
+				$ips_last[$row->cuc_ip] = $row->last;
+				$ips_hex[$row->cuc_ip] = $row->cuc_ip_hex;
 			}
 			
 			$logs = SpecialPage::getTitleFor( 'Log' );
@@ -673,6 +686,23 @@ class CheckUser extends SpecialPage
 						' -- ' . $wgLang->timeanddate( $ips_last[$ip], true ) . ') '; 
 				}
 				$s .= ' <strong>[' . $edits . ']</strong>';
+				
+				# If we get some results, it helps to know if the IP in general
+				# has a lot more edits, e.g. "tip of the iceberg"...
+				global $wgMiserMode;
+				if( $wgMiserMode ) {
+					$ipedits = $dbr->estimateRowCount( 'cu_changes', '*',
+						array( 'cuc_ip_hex' => $ips_hex[$ip] ),
+						__METHOD__ );
+				} else {
+					$ipedits = $dbr->selectField( 'cu_changes', 'COUNT(*)',
+						array( 'cuc_ip_hex' => $ips_hex[$ip] ),
+						__METHOD__ );
+				}
+				# Kludge a little for estimates...
+				if( !$wgMiserMode || $ipedits > (1.5*$ips_edits[$ip]) ) {
+					$s .= ' <i>(' . wfMsgHtml('checkuser-ipeditcount',$ipedits) . ')</i>';
+				}
 				
 				# If this IP is blocked, give a link to the block log
 				$block = new Block();
@@ -808,7 +838,7 @@ class CheckUser extends SpecialPage
 		}
 		
 		$dbw = wfGetDB( DB_MASTER );
-		$cul_id = $dbw->nextSequenceValue( 'cu_log_cul_id' );
+		$cul_id = $dbw->nextSequenceValue( 'cu_log_cul_id_seq' );
 		$dbw->insert( 'cu_log', 
 			array(
 				'cul_id' => $cul_id,

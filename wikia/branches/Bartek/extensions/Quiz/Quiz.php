@@ -51,7 +51,11 @@ $wgExtensionCredits['parserhook'][] = array(
 $dir = dirname(__FILE__) . '/';
 $wgExtensionMessagesFiles['QuizExtension'] = $dir . 'Quiz.i18n.php';
 
-$wgExtensionFunctions[] = "wfQuizExtension";
+if ( defined( 'MW_SUPPORTS_PARSERFIRSTCALLINIT' ) ) {
+	$wgHooks['ParserFirstCallInit'][] = 'wfQuizExtension';
+} else {
+	$wgExtensionFunctions[] = 'wfQuizExtension';
+}
 
 $wgHooks['ParserClearState'][] = 'Quiz::resetQuizID';
 $wgHooks['LoadAllMessages'][] = 'Quiz::loadMessages';
@@ -64,6 +68,7 @@ $wgHooks['LoadAllMessages'][] = 'Quiz::loadMessages';
 function wfQuizExtension() {
     global $wgParser;
     $wgParser->setHook("quiz", "renderQuiz");
+	return true;
 }
 
 /**
@@ -199,11 +204,14 @@ class Quiz {
 	function parseQuiz($input) {
 		# Ouput the style and the script to the header once for all.
 		if($this->mQuizId == 0) {
+			global $wgContLang;
+			$start = $wgContLang->isRTL() ? "right" : "left";
+			$end = $wgContLang->isRTL() ? "left" : "right";
 			$head  = "<style type=\"text/css\">\n";
 	    	$head .= ".quiz .settings input.numerical { width:2em; }\n";
-	    	$head .= ".quiz .question { margin-left:2em; }\n";
-	    	$head .= ".quiz .margin { padding-left:20px; }\n";
-	    	$head .= ".quiz .header .questionId {font-size: 1.1em; font-weight: bold; float: left;}\n";
+	    	$head .= ".quiz .question { margin-$start:2em; }\n";
+	    	$head .= ".quiz .margin { padding-$start:20px; }\n";
+	    	$head .= ".quiz .header .questionId {font-size: 1.1em; font-weight: bold; float: $start;}\n";
 	    	$head .= "*>.quiz .header .questionId {text-indent: -1.5em; }\n"; // *> prevent ie6 to interprate it.
 			$head .= ".quiz table.object, .quiz table.correction { background-color:transparent; }";
 			$head .= ".quiz .correction { background-color: ".Quiz::getColor('correction').";}\n";
@@ -215,8 +223,8 @@ class Quiz {
 			# Part for the inputfields
 			$head .= ".quiz a.input, .quiz a.input:hover, .quiz a.input:active, .quiz a.input:visited { text-decoration:none; color:black; outline:0 }\n";
 			$head .= ".quiz a.input span { outline:#7F9DB9 solid 1px; *border:1px solid #7F9DB9; }\n"; // *border is for IE6/7
-			$head .= ".quiz a.input em { color:black; background-color:#DFDFDF; margin-right:1px; }\n";
-			$head .= ".quiz a.input input { padding-left:2px; border:0; }\n";
+			$head .= ".quiz a.input em { color:black; background-color:#DFDFDF; margin-$end:1px; }\n";
+			$head .= ".quiz a.input input { padding-$start:2px; border:0; }\n";
 			$head .= ".quiz a.input span.correction { padding:3px; margin:0; list-style-type:none; display:none; background-color:".Quiz::getColor("correction")."; }\n";
 			$head .= ".quiz a.input:active span.correction, .quiz a.input:focus span.correction { display:inline; position:absolute; margin:1.8em 0 0 0.1em; }\n";
 			$head .= "</style>\n";
@@ -377,7 +385,7 @@ class Quiz {
 				}
 				break;
 			default:
-				return "<div class=\"quizText\">$buffer<br/></div>";
+				return "<div class=\"quizText\">$buffer<br /></div>";
 				break;
 			}
 		}
@@ -389,9 +397,11 @@ class Quiz {
 		$buffer = call_user_func(array($question, "{$question->mType}ParseObject"), $matches[3]);
  		$output .= "<table class=\"object\" ";
 		$lState = $question->getState();
-		# Determine the border-left color, title, score and the total of the question.
+		# Determine the side border color, title, score and the total of the question.
 		if($lState != "") {
-			$output .= "style=\"border-left:3px solid ".$this->getColor($lState)."\"";
+			global $wgContLang;
+			$border = $wgContLang->isRTL() ? "border-right" : "border-left";
+			$output .= "style=\"$border:3px solid ".$this->getColor($lState)."\"";
 			if($this->mIgnoringCoef) {
 				$question->mCoef = 1;
 			}
@@ -399,16 +409,16 @@ class Quiz {
 			case "right":
 				$this->mTotal += $this->mAddedPoints * $question->mCoef;
 				$this->mScore += $this->mAddedPoints * $question->mCoef;
-				$output.= "title=\"".wfMsgHtml('quiz_points', wfMsgHtml('quiz_colorRight'), $this->mAddedPoints * $question->mCoef)."\"";
+				$output.= "title=\"".wfMsgExt('quiz_points', array('escape', 'parsemag'), wfMsg('quiz_colorRight'), $this->mAddedPoints * $question->mCoef)."\"";
 				break;
 			case "wrong":
 				$this->mTotal += $this->mAddedPoints * $question->mCoef;
 				$this->mScore -= $this->mCutoffPoints * $question->mCoef;
-				$output.= "title=\"".wfMsgHtml('quiz_points', wfMsgHtml('quiz_colorWrong'), -$this->mCutoffPoints * $question->mCoef)."\"";
+				$output.= "title=\"".wfMsgExt('quiz_points', array('escape', 'parsemag'), wfMsg('quiz_colorWrong'), -$this->mCutoffPoints * $question->mCoef)."\"";
 				break;
 			case "NA":
 				$this->mTotal += $this->mAddedPoints * $question->mCoef;
-				$output.= "title=\"".wfMsgHtml('quiz_points', wfMsgHtml('quiz_colorNA'), 0)."\"";
+				$output.= "title=\"".wfMsgExt('quiz_points', array('escape', 'parsemag'), wfMsg('quiz_colorNA'), 0)."\"";
 				break;
 			case "error":
 				$this->mState = "error";
@@ -418,7 +428,7 @@ class Quiz {
 		$output .= "><tbody>\n";
 		$output .= $buffer;
 		$output .= "</tbody></table>\n";
-		$output .= "<br/></div>\n";
+		$output .= "<br /></div>\n";
 		return $output;
 	}
 }
@@ -811,7 +821,7 @@ class Question {
 						$value = "&lt;_{$possibility}_ &gt;";
 					}
 				}
-				if($this->mBeingCorrected) $a_inputBeg.= "$possibility<br/>";
+				if($this->mBeingCorrected) $a_inputBeg.= "$possibility<br />";
 			}
 			$value = empty($value)? "" : "value=\"".str_replace('"', "&quot;", $value)."\"";
 			if($this->mBeingCorrected) {
@@ -821,7 +831,9 @@ class Question {
 			}
 		}
 		if($state == "error" || $this->mBeingCorrected) {
-			$style = "style=\"border-left:3px solid ".Quiz::getColor($state)."; \"";
+			global $wgContLang;
+			$border = $wgContLang->isRTL() ? "border-right" : "border-left";
+			$style = "style=\"$border:3px solid ".Quiz::getColor($state)."; \"";
 			$this->setState(empty($value)? "new_NA" : $state);
 			if($state == "error") {
 				$size = "";

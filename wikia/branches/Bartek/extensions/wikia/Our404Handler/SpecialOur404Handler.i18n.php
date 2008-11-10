@@ -21,7 +21,7 @@ $messages["en"] = array(
 Article '''$1''' could not be found.
 
 * You can try article [[$2]]
-* You can use search box in top right of page
+* You can use a search box on the left side of the page
 * To go on to the main page of this site, click the link: [{{SERVER}} {{SITENAME}}]
 "
 );

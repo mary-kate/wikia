@@ -3,64 +3,47 @@ if ( ! defined( 'MEDIAWIKI' ) )
     die();
 
 /**#@+
- * An extension that allows users to upload multiple photos at once.
+ * An extension that allows users to upload multiple files at once.
  *
  * @addtogroup Extensions
  *
  * @link http://www.mediawiki.org/wiki/Extension:MultiUpload
- *
  *
  * @author Travis Derouin <travis@wikihow.com>
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License 2.0 or later
  */
 
 // change this parameter to limit the # of files one can upload
-$wgMaxUploadFiles = 5;
-
-$wgAvailableRights [] = 'multipleupload';
-$wgGroupPermissions ['staff']['multipleupload'] = true;
-$wgGroupPermissions ['sysop']['multipleupload'] = true;
-$wgGroupPermissions ['rollback']['multipleupload'] = true;
+$wgMaxUploadFiles = isset( $wgMaxUploadFiles ) ? $wgMaxUploadFiles : 5;
 
 $wgExtensionFunctions[] = 'wfMultipleUpload';
 
 $wgExtensionCredits['specialpage'][] = array(
 	'name'           => 'MultipleUpload',
 	'author'         => 'Travis Derouin',
+	'version'        => '1.0',
 	'description'    => 'Allows users to upload several files at once.',
 	'descriptionmsg' => 'multipleupload-desc',
 	'url'            => 'http://www.mediawiki.org/wiki/Extension:MultiUpload',
 );
 
 $dir = dirname(__FILE__) . '/';
-$wgExtensionMessagesFiles['MultipleUpload'] = $dir . 'SpecialMultipleUpload.i18n.php';
-$wgSpecialPages['MultipleUpload'] =  array( 'MultipleUploadPage', 'MultipleUpload' );
-
+$wgExtensionMessagesFiles['MultiUpload'] = $dir . 'SpecialMultipleUpload.i18n.php';
+$wgExtensionAliasesFiles['MultiUpload'] = $dir . 'SpecialMultipleUpload.alias.php';
 
 function wfMultipleUpload() {
-	global $wgMaxUploadFiles, $wgHooks;
+	SpecialPage::AddPage(new SpecialPage('MultipleUpload'));
+
+	global $wgMaxUploadFiles, $wgHooks, $wgSpecialPageGroups;
 	$wgMaxUploadFiles = intval( $wgMaxUploadFiles );
+	wfLoadExtensionMessages( 'MultiUpload' );
 
-	$wgHooks['MonoBookTemplateToolboxEnd'][]  = 'wfMultiUploadToolbox';
-	$wgHooks['UploadComplete'][]  = 'wfMultiUploadShowSuccess';
-	$wgHooks['SkinTemplateBuildNavUrlsNav_urlsAfterPermalink'][] = 'wfSpecialMultiUploadNav';
-}
+    $wgHooks['MonoBookTemplateToolboxEnd'][]  = 'wfMultiUploadToolbox';
+    $wgHooks['UploadComplete'][]  = 'wfMultiUploadShowSuccess';
+    $wgHooks['SkinTemplateBuildNavUrlsNav_urlsAfterPermalink'][] = 'wfSpecialMultiUploadNav';
 
+    $wgSpecialPageGroups['MultipleUpload'] = 'media';
 
-/**
- *
- */
-require_once 'SpecialUpload.php';
-require_once 'SpecialPage.php';
-
-/**
- * Only for lazy loading
- */
-class MultipleUploadPage extends SpecialPage {
-	function __construct() {
-		parent::__construct( 'MultipleUpload' );
-		wfLoadExtensionMessages( 'MultipleUpload' );
-	}
 }
 
 /**
@@ -68,7 +51,6 @@ class MultipleUploadPage extends SpecialPage {
  */
 function wfSpecialMultipleUpload() {
 	global $wgRequest;
-
 	$form = new MultipleUploadForm( $wgRequest );
 	$form->execute();
 }
@@ -91,7 +73,6 @@ class MultipleUploadForm extends UploadForm {
 	 */
 	function MultipleUploadForm( &$request ) {
 		global $wgMaxUploadFiles;
-
 		// call the parent constructor
 		parent::UploadForm($request);
 
@@ -108,7 +89,7 @@ class MultipleUploadForm extends UploadForm {
 		}
 
 		for ($x = 0; $x < $wgMaxUploadFiles; $x++) {
-			$this->mDestFileArray[$x] = $request->getText( "wpDestFile_$x" );
+			$this->mDestFile[$x] = $request->getText( "wpDestFile_$x" );
 			$this->mUploadDescriptionArray[$x] = $request->getText( "wpUploadDescription_$x" );
 		}
 		$this->mSessionKey        = $request->getInt( 'wpSessionKey' );
@@ -151,8 +132,8 @@ class MultipleUploadForm extends UploadForm {
 		for ($x = 0; $x < $wgMaxUploadFiles; $x++) {
 			$this->mFileIndex = $x;
 			if (!isset ($this->mUploadTempNameArray[$x]) || $this->mUploadTempNameArray[$x] == null) continue;
-
-            $this->mTempPath = $this->mUploadTempNameArray[$x];
+   
+            $this->mTempPath = $this->mUploadTempNameArray[$x]; 
             $this->mFileSize = $this->mUploadSizeArray[$x];
             $this->mSrcName = $this->mOnameArray[$x]; // for mw > 1.9
             $this->mRemoveTempFile = true;
@@ -230,7 +211,7 @@ class MultipleUploadForm extends UploadForm {
 
 		$wgOut->addHTML( "<b>{$this->mUploadSaveName}</b>\n" );
 		$wgOut->addHTML( "<ul class='warning'>{$warning}</ul><br />\n" );
-		$wgOut->addHTML(" <input type='hidden' name='wpUploadDescription_{$this->mFileIndex}' value=\"" . htmlspecialchars( $this->mComment ) . "\" />");
+		$wgOut->addHTML(" <input type='hidden' name='wpUploadDescription_{$this->mFileIndex}' value=\"" . htmlspecialchars( $this->mUploadDescription ) . "\" />");
 
 	}
 	function stashSession() {
@@ -260,8 +241,7 @@ class MultipleUploadForm extends UploadForm {
 		$reupload = wfMsgHtml( 'reupload' );
 		$iw = wfMsgWikiHtml( 'multipleupload-ignoreallwarnings' );
 		$reup = wfMsgWikiHtml( 'reuploaddesc' );
-		if ( $wgUseCopyrightUpload )
-		{
+		if ( $wgUseCopyrightUpload ) {
 			$copyright =  "
 	<input type='hidden' name='wpUploadCopyStatus' value=\"" . htmlspecialchars( $this->mUploadCopyStatus ) . "\" />
 	<input type='hidden' name='wpUploadSource' value=\"" . htmlspecialchars( $this->mUploadSource ) . "\" />
@@ -308,13 +288,6 @@ class MultipleUploadForm extends UploadForm {
 	function mainUploadForm( $msg='' ) {
 		global $wgOut, $wgUser;
 		global $wgUseCopyrightUpload, $wgMaxUploadFiles;
-		global $wgStylePath, $wgUseAjax, $wgAjaxUploadDestCheck, $wgAjaxLicensePreview;
-		
-		$useAjaxDestCheck = $wgUseAjax && $wgAjaxUploadDestCheck;
-		$useAjaxLicensePreview = $wgUseAjax && $wgAjaxLicensePreview;
-
-		$adc = wfBoolToStr( $useAjaxDestCheck );
-		$alp = wfBoolToStr( $useAjaxLicensePreview );
 
 		if ($msg == '' && !$this->mShowUploadForm) return;
 		$cols = intval($wgUser->getOption( 'cols' ));
@@ -348,98 +321,8 @@ class MultipleUploadForm extends UploadForm {
 			? 'checked="checked"'
 			: '';
 
-		$wgOut->addHTML( <<<EOT
-<script type="text/javascript">
-wgAjaxUploadDestCheck = {$adc};
-wgAjaxLicensePreview = {$alp};
-
-var wgMultiUploadWarningObj = {
-	'responseCache' : { '' : '&nbsp;' },
-	'nameToCheck' : '',
-	'typing': false,
-	'delay': 500, // ms
-	'timeoutID': false,
-
-	'keypress': function (fieldIndex) {
-		if ( !wgAjaxUploadDestCheck || !sajax_init_object() ) return;
-
-		// Find file to upload
-		var destFile = document.getElementById('wpDestFile_' + fieldIndex);
-		var warningElt = document.getElementById( 'wpDestFile_' + fieldIndex + '-warning' );
-		if ( !destFile || !warningElt ) return ;
-
-		this.nameToCheck = destFile.value ;
-		//this.fileIndex = i;
-
-		// Clear timer 
-		if ( this.timeoutID ) {
-			window.clearTimeout( this.timeoutID );
-		}
-		// Check response cache
-		for (cached in this.responseCache) {
-			if (this.nameToCheck == cached) {
-				this.setWarning(this.responseCache[this.nameToCheck], fieldIndex);
-				return;
-			}
-		}
-
-		this.timeoutID = window.setTimeout( 'wgMultiUploadWarningObj.timeout(' + fieldIndex + ')', this.delay );
-	},
-
-	'checkNow': function (fname, fieldIndex) {
-		if ( !wgAjaxUploadDestCheck || !sajax_init_object() ) return;
-		if ( this.timeoutID ) {
-			window.clearTimeout( this.timeoutID );
-		}
-		this.nameToCheck = fname;
-		//this.fileIndex = i;
-		this.timeout(fieldIndex);
-	},
-	
-	'timeout' : function(fieldIndex) {
-		if ( !wgAjaxUploadDestCheck || !sajax_init_object() ) return;
-		injectSpinner( document.getElementById( 'wpUploadDescription_' + fieldIndex ), 'destcheck_' + fieldIndex );
-
-		// Get variables into local scope so that they will be preserved for the 
-		// anonymous callback. fileName is copied so that multiple overlapping 
-		// ajax requests can be supported.
-		var obj = this;
-		var fileName = this.nameToCheck;
-		sajax_do_call( 'UploadForm::ajaxGetExistsWarning', [this.nameToCheck], 
-			function (result) {
-				obj.processResult(result, fileName, fieldIndex)
-			}
-		);
-	},
-
-	'processResult' : function (result, fileName, fieldIndex) {
-		removeSpinner( 'destcheck_' + fieldIndex );
-		this.setWarning(result.responseText, fieldIndex);
-		this.responseCache[fileName] = result.responseText;
-	},
-
-	'setWarning' : function (warning, fieldIndex) {
-		var warningElt = document.getElementById( 'wpDestFile_' + fieldIndex + '-warning' );
-		var ackElt = document.getElementById( 'wpDestFileWarningAck' );
-		this.setInnerHTML(warningElt, warning);
-
-		// Set a value in the form indicating that the warning is acknowledged and 
-		// doesn't need to be redisplayed post-upload
-		if ( warning == '' || warning == '&nbsp;' ) {
-			ackElt.value = '';
-		} else {
-			ackElt.value = '1';
-		}
-	},
-
-	'setInnerHTML' : function (element, text) {
-		// Check for no change to avoid flicker in IE 7
-		if (element.innerHTML != text) {
-			element.innerHTML = text;
-		}
-	}
-}
-
+		$wgOut->addHTML( "
+<script type=\"text/javascript\">
 function fillDestFilenameMulti(i) {
     if (!document.getElementById)
         return;
@@ -461,50 +344,33 @@ function fillDestFilenameMulti(i) {
 
     // Output result
     var destFile = document.getElementById('wpDestFile_' + i);
-    if (destFile) {
+    if (destFile)
         destFile.value = fname;
-								wgMultiUploadWarningObj.checkNow(fname, i);
-    }
 }
 </script>
 
-	<form id='upload' method='post' enctype='multipart/form-data' action="$action">
+	<form id='upload' method='post' enctype='multipart/form-data' action=\"$action\">
 		<table border='0'>
 		<tr>
-			<td align='left'><label for='wpUploadFile'><b>{$sourcefilename}:</b></label></td>
-			<td align='left'><label for='wpDestFile'><b>{$destfilename}:</b></label></td>
+			<td align='left'><label for='wpUploadFile'><b>{$sourcefilename}</b></label></td>
+			<td align='left'><label for='wpDestFile'><b>{$destfilename}</b></label></td>
 			<td align='left' valign='middle'><b>{$summary}</b></td>
-		</tr>
-EOT
-);
-
+		</tr>");
 	for ($i = 0; $i < $wgMaxUploadFiles; $i++) {
 		$encDestFile = htmlspecialchars( $this->mDestFileArray[$i] );
-		if ( $useAjaxDestCheck ) {
-			$destOnkeyup = 'onkeyup="wgMultiUploadWarningObj.keypress(' . $i . ');"';
-		}
-		
 		$wgOut->addHTML("
 		<tr>
-			<td align='left' width='320px'>
+			<td align='left'>
 				<input tabindex='1' type='file' name='wpUploadFile_$i' id='wpUploadFile_$i' " . ($this->mDestName?"":"onchange='fillDestFilenameMulti($i)' ") . "size='25' />
 			</td>
-			<td align='left' width='220px'>
-				<input tabindex='2' type='text' name='wpDestFile_$i' id='wpDestFile_$i' size='25' value=\"$encDestFile\" $destOnkeyup />
+			<td align='left'>
+				<input tabindex='2' type='text' name='wpDestFile_$i' id='wpDestFile_$i' size='25' value=\"$encDestFile\" />
 			</td>
-			<td align='left' width='250px'>
-				<input tabindex='3' name='wpUploadDescription_$i' id='wpUploadDescription_$i' value=\"". htmlspecialchars( $this->mComment ) . "\" size=25>
+			<td align='left'>
+				<input tabindex='3' name='wpUploadDescription_$i' id='wpUploadDescription' value=\"". htmlspecialchars( $this->mComment ) . "\" size=25>
 			</td>
 		</tr>
 		<tr>" );
-
-		if ( $useAjaxDestCheck ) {
-			$wgOut->addHTML("<td colspan='3' id='wpDestFile_$i-warning'>&nbsp;</td></tr><tr>");
-			$warningRow = "";
-		}
-
-
-
 	}
 
 		if ( $licenseshtml != '' ) {
@@ -531,18 +397,18 @@ EOT
 			$uploadsource = htmlspecialchars( $this->mUploadSource );
 
 			$wgOut->addHTML( "
-			        <td align='right' nowrap='nowrap'><label for='wpUploadCopyStatus'>$filestatus:</label></td>
+			        <td align='right' nowrap='nowrap'><label for='wpUploadCopyStatus'>$filestatus</label></td>
 			        <td><input tabindex='5' type='text' name='wpUploadCopyStatus' id='wpUploadCopyStatus' value=\"$copystatus\" size='40' /></td>
 		        </tr>
 			<tr>
-		        	<td align='right'><label for='wpUploadCopyStatus'>$filesource:</label></td>
+		        	<td align='right'><label for='wpUploadCopyStatus'>$filesource</label></td>
 			        <td><input tabindex='6' type='text' name='wpUploadSource' id='wpUploadCopyStatus' value=\"$uploadsource\" size='40' /></td>
 			</tr>
 			<tr>
 		");
 		}
 
-		$wgOut->addHtml( "
+		$wgOut->addHTML( "
 		<td>
  			<input tabindex='7' type='checkbox' name='wpWatchthis' id='wpWatchthis' $watchChecked value='true' />
 			<label for='wpWatchthis'>" . wfMsgHtml( 'watchthis' ) . "</label>
@@ -557,17 +423,7 @@ EOT
 		<td align='left'><input tabindex='9' type='submit' name='wpUpload' value=\"{$ulb}\" /></td>
 	</tr>
 
-	<tr>
-		<td></td>
-		<td align='left'>
-		" );
-		$wgOut->addWikiText( wfMsgForContent( 'edittools' ) );
-		$wgOut->addHTML( "
-		</td>
-	</tr>
-
 	</table>
-	<input type='hidden' name='wpDestFileWarningAck' id='wpDestFileWarningAck' value=''/>
 	</form>" );
 	}
 

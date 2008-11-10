@@ -37,7 +37,7 @@ class WikiFactoryHub {
 	 *
 	 * @return object	WikiFactoryHub object
 	 */
-	public function getInstance() {
+	public static function getInstance() {
 		if( self::$mInstance === false ) {
 			self::$mInstance = new WikiFactoryHub();
 		}
@@ -181,10 +181,14 @@ class WikiFactoryHub {
 	 * @return array	array with category maps id => name
      */
     private function loadCategories() {
+      global $wgSharedDB ;
+	$tmp = array();
 
-		$tmp = array();
+
+	if( !$wgSharedDB ) {
+	  return array();
+	}
         wfProfileIn( __METHOD__ );
-
         $dbr = wfGetDB( DB_SLAVE );
 
         $oRes = $dbr->select(
@@ -241,8 +245,8 @@ class WikiFactoryHub {
 	 *
      * remove previous value in database and insert new one
      *
-     * @author Krzysztof Krzyżaniak <eloy@wikia.com>
-     *
+     * @param integer   $city_id    identifier from city_list
+     * @param integer   $cat_id     category identifier
      */
     public function setCategory( $city_id, $cat_id ) {
 
@@ -252,6 +256,10 @@ class WikiFactoryHub {
         $dbw->begin();
         $dbw->delete( wfSharedTable("city_cat_mapping"), array( "city_id" => $city_id ), __METHOD__ );
         $dbw->insert( wfSharedTable("city_cat_mapping"), array( "city_id" => $city_id, "cat_id" => $cat_id ), __METHOD__  );
+
+		$categories = $this->getCategories();
+		WikiFactory::log( WikiFactory::LOG_CATEGORY, "Category changed to {$categories[$cat_id]}", $city_id );
+
         $dbw->commit();
 
         wfProfileOut( __METHOD__ );

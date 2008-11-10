@@ -1,6 +1,6 @@
 <!-- s:<?= __FILE__ ?> -->
 <!-- PAGE EDITED DETAILS TABLE -->
-<table cellspacing="0" cellpadding="0" border="0" style="width:auto; font-family: arial,sans-serif,helvetica; font-size:9pt;">
+<table cellspacing="0" cellpadding="0" border="0" style="width:auto; font-family: arial,sans-serif,helvetica; font-size:9pt;" id="table_page_edited_stats_details">
 <tr>
 <td class="wk-select-class">&nbsp;</td>
 <?php
@@ -24,9 +24,9 @@ foreach ($userStats as $id => $stats)
             $rank++;
 ?>
 	<tr>
-		<td class="eb" nowrap><?= $rank ?></td>
-		<td class="ebl" nowrap><a href="<?= $city_url ?><?= Title::makeTitle(NS_USER, $info['user_text'])->getLocalURL() ?>" target="new"><?= $info['user_text'] ?></a></td>
-		<td class="eb" nowrap><?= $cnt ?></td>
+		<td class="eb" style="white-space:nowrap;"><?= $rank ?></td>
+		<td class="ebl" style="white-space:nowrap;"><a href="<?= $city_url ?><?= Title::makeTitle(NS_USER, $info['user_text'])->getLocalURL() ?>" target="new"><?= $info['user_text'] ?></a></td>
+		<td class="eb" style="white-space:nowrap;"><?= $cnt ?></td>
 	</tr>	
 <?php
         }

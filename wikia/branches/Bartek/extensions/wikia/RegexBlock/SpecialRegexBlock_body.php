@@ -130,8 +130,9 @@ class RegexBlockForm extends SpecialPage
         $titleObj = Title::makeTitle( NS_SPECIAL, 'RegexBlock' );
         $action = $titleObj->escapeLocalURL( "action=submit" )."&".$this->makeListUrlParams();
     
-        $expiries = RegexBlockData::getExpireValues();
-    
+        $expiries = RegexBlockData::getExpireValues();    				
+    	$regexBlockAddress = (empty($this->mRegexBlockedAddress) && ($wgRequest->getVal('ip') != null) && ($wgRequest->getVal('action') == null)) ? $wgRequest->getVal('ip') : $this->mRegexBlockedAddress;
+    				
         $oTmpl = new EasyTemplate( dirname( __FILE__ ) . "/templates/" );
         $oTmpl->set_vars( array(
             "err"                   => $this->mError,
@@ -141,7 +142,7 @@ class RegexBlockForm extends SpecialPage
             "out"                   => $wgOut,
             "sel_blocker"           => $this->mFilter,
             "expiries"              => $expiries,
-            "mRegexBlockedAddress"  => $this->mRegexBlockedAddress,
+            "mRegexBlockedAddress"  => $regexBlockAddress,
             "mRegexBlockedExact"    => $this->mRegexBlockedExact,
             "mRegexBlockedCreation" => $this->mRegexBlockedCreation,
             "mRegexBlockedExpire"   => $this->mRegexBlockedExpire,
@@ -250,7 +251,7 @@ class RegexBlockForm extends SpecialPage
         $result = RegexBlockData::blockUser($this->mRegexBlockedAddress, $expiry, $this->mRegexBlockedExact, $this->mRegexBlockedCreation, $this->mRegexBlockedReason);
 		/* clear memcache */
 		$uname = $wgUser->getName();
-		wfRegexBlockUnsetKeys($uname, $this->mRegexBlockedAddress);
+		wfRegexBlockUnsetKeys($this->mRegexBlockedAddress);
 
         wfProfileOut( __METHOD__ );
         
@@ -286,7 +287,7 @@ class RegexBlockForm extends SpecialPage
                 
             if ( $dbw->affectedRows() ) {
                 /* success, remember to delete cache key  */
-                wfRegexBlockUnsetKeys( $blocker, $ip );
+                wfRegexBlockUnsetKeys( $ip );
                 $result = true;
             }
         }

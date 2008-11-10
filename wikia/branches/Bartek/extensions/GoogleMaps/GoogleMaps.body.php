@@ -5,6 +5,9 @@ if( !defined( 'MEDIAWIKI' ) ) {
 	die( );
 }
 
+define('GOOGLE_MAPS_PARSE_INCLUDES', 0);
+define('GOOGLE_MAPS_PARSE_ADD_MARKER', 1);
+define('GOOGLE_MAPS_PARSE_POINTS', 2);
 /**
  * This is a class for adding Google maps to Mediawiki articles.  The class
  * takes care of all hook registration and output of both the map editing
@@ -22,9 +25,6 @@ class GoogleMaps {
 	// MEMBER FIELDS
 	//----------------------------------------------
 
-	const PARSE_INCLUDES = 0;
-	const PARSE_ADD_MARKER = 1;
-	const PARSE_POINTS = 2;
 	// the Google API key (obtained from
 	// http://www.google.com/apis/maps/signup.html)
 	var $mApiKey = null;
@@ -65,9 +65,6 @@ class GoogleMaps {
 
 	// whether the current language is read right-to-left
 	var $mLanguage = null;
-
-	// a reference to the global parser object
-	var $mGlobalParser = null;
 
 	// a secret key used in parsing
 	var $wgProxyKey = null;
@@ -114,7 +111,6 @@ class GoogleMaps {
 		&$pJsMimeType,
 		&$pLanguageCode,
 		&$pContLang,
-		&$pGlobalParser,
 		&$pProxyKey,
 		&$pTitle ) {
 
@@ -128,7 +124,6 @@ class GoogleMaps {
 		$this->mCustomMessages			  =& $pCustomMessages;
 		$this->mProcessTemplateVariables  =& $pProcessTemplateVariables;
 		$this->mLanguage =& $pContLang;
-		$this->mGlobalParser =& $pGlobalParser;
 		$this->mProxyKey =& $pProxyKey;
 		$this->mTitle =& $pTitle;
 	}
@@ -152,14 +147,14 @@ class GoogleMaps {
 	function editForm ( $pForm ) {
 
 		// get the current map settings
-		$o = GoogleMaps::getMapSettings( $this->mTitle, $this->mMapDefaults );
+		$o = self::getMapSettings( $this->mTitle, $this->mMapDefaults );
 
 		$output = '';
 
 		// output the necessary styles, script includes, and global variables
 		$output .= '
 <style type="text/css">
-	@import "' . $this->mUrlPath . '/color_select.css";
+	@import "' . $this->mUrlPath . '/css/color_select.css";
 	textarea.balloon_textarea {
 		width: 220px;
 		height: 52px;
@@ -167,14 +162,12 @@ class GoogleMaps {
 </style>
 <!--[if IE]>
 <style type="text/css">
-	@import "' . $this->mUrlPath . '/color_select_ie.css";
+	@import "' . $this->mUrlPath . '/css/color_select_ie.css";
 </style><![endif]-->
 <!--[if lt IE 7]>
 <style type="text/css">
-	@import "' . $this->mUrlPath . '/color_select_ie6.css";
+	@import "' . $this->mUrlPath . '/css/color_select_ie6.css";
 </style><![endif]-->
-<script src="http://maps.google.com/maps?file=api&amp;v=' . $o['api'] . '&amp;key=' . $this->mApiKey . '&amp;hl=' . $this->mLanguageCode . '" type="' . $this->mJsMimeType . '"></script>
-<script src="http://www.google.com/uds/api?file=uds.js&amp;v=1.0&amp;key=' . $this->mApiKey . '" type="' . $this->mJsMimeType . '"></script>
 <script type="' . $this->mJsMimeType . '">
 //<![CDATA[
 ';
@@ -185,6 +178,17 @@ class GoogleMaps {
 			'container':'toolbar', 'textbox':'wpTextbox1', 'toggle':'google_maps_toggle_link',
 JAVASCRIPT;
 
+        if ($o['icondir'] && is_dir($o['icondir'])) {
+            $labels = array();
+            if ($dh = opendir($o['icondir'])) {
+                while (($file = readdir($dh)) !== false) {
+                    if (substr($file, 0, 1) != "." && substr($file, -4) == ".png") {
+                        $labels[] = substr($file, 0, -4);
+                    }
+                }
+            }
+            $o['iconlabels'] = implode(",", $labels);
+        }
 	// add all of the map settings to the editors_options JS variable
 	foreach( array_keys( $o ) as $key ) {
 		if( is_numeric( $o[$key] ) ) {
@@ -196,6 +200,7 @@ JAVASCRIPT;
 
 	// output the 'rtl' setting
 	$isRTLString = $this->mLanguage->isRTL() ? 'true' : 'false';
+        $extensionVersion = GOOGLE_MAPS_EXTENSION_VERSION;
 	$output .= " 'rtl':{$isRTLString} };";
 
 	// output the base utility JS (addLoadEvent function, etc.)
@@ -211,51 +216,56 @@ JAVASCRIPT;
 	$output .= <<<JAVASCRIPT
 
 	function addScript(script) {
-		var js = document.createElement("script");
-		js.setAttribute('src', script);
-		js.setAttribute('type', '{$this->mJsMimeType}');
-		document.getElementsByTagName("head")[0].appendChild(js);
+            var js = document.createElement("script");
+            js.setAttribute('src', script);
+            js.setAttribute('type', '{$this->mJsMimeType}');
+            //document.getElementsByTagName("head")[0].appendChild(js);
+            document.body.appendChild(js);
 	}
-	function loadEditorsMapJavascript(image) {
+
+        function loadGoogleMapsJavascript() {
+                        addScript('http://maps.google.com/maps?file=api&v={$o['api']}&key={$this->mApiKey}&hl={$this->mLanguageCode}&async=2&callback=initEditorsMap');
+        }
+	function loadEditorsMapJavascript() {
 			addScript('{$this->mUrlPath}/color_select.js');
-			addScript('{$this->mUrlPath}/EditorsMap.js');
+			addScript('{$this->mUrlPath}/EditorsMap.js?v={$extensionVersion}');
 
-			window.setTimeout(tryLoadingEditorsMap(image), 100);
+			window.setTimeout(tryLoadingEditorsMap, 100);
 	}
 
-	function tryLoadingEditorsMap(image) {
-		return(function() {
-			if (typeof(EditorsMap) != "undefined") {
-				GME_SMALL_ICON = new GIcon();
-				GME_SMALL_ICON.image = "http://labs.google.com/ridefinder/images/mm_20_yellow.png";
-				GME_SMALL_ICON.shadow	= "http://labs.google.com/ridefinder/images/mm_20_shadow.png";
-				GME_SMALL_ICON.iconSize =	new	GSize(12, 20);
-				GME_SMALL_ICON.shadowSize	= new GSize(22,	20);
-				GME_SMALL_ICON.iconAnchor	= new GPoint(6,	20);
-				GME_SMALL_ICON.infoWindowAnchor =	new	GPoint(5, 1);
-
-				emap = new EditorsMap(editors_options);
-				image.initDone = true;
-			} else {
-				window.setTimeout(tryLoadingEditorsMap(image), 100);
-			}
-		});
+	function tryLoadingEditorsMap() {
+            if (typeof(EditorsMap) != "undefined") {
+                loadGoogleMapsJavascript();
+            } else {
+                window.setTimeout(tryLoadingEditorsMap, 100);
+            }
 	}
+
+        function initEditorsMap() {
+                GME_SMALL_ICON = new GIcon();
+                GME_SMALL_ICON.image = "http://labs.google.com/ridefinder/images/mm_20_yellow.png";
+                GME_SMALL_ICON.shadow	= "http://labs.google.com/ridefinder/images/mm_20_shadow.png";
+                GME_SMALL_ICON.iconSize =	new	GSize(12, 20);
+                GME_SMALL_ICON.shadowSize	= new GSize(22,	20);
+                GME_SMALL_ICON.iconAnchor	= new GPoint(6,	20);
+                GME_SMALL_ICON.infoWindowAnchor =	new	GPoint(5, 1);
+
+                emap = new EditorsMap(editors_options);
+        }
 
 	function insertGoogleMapLinks() {
 		var image = document.createElement("img");
 		image.width = 23;
 		image.height = 22;
-		image.src = '{$this->mUrlPath}/button_map_open.gif';
+		image.src = '{$this->mUrlPath}/images/button_map_open.gif';
 		image.border = 0;
 		image.alt = _['gm-make-map'];
 		image.title = _['gm-make-map'];
 		image.style.cursor = "pointer";
 		image.onclick = function() {
-			if( !this.initDone ) {
-				loadEditorsMapJavascript(this);
-			}
-			else {
+			if( typeof(EditorsMap) == "undefined" ) {
+                            loadEditorsMapJavascript();
+			} else {
 				emap.toggleGoogleMap();
 			}
 			if( this.buttonOn ) {
@@ -263,8 +273,7 @@ JAVASCRIPT;
 				this.alt = _['gm-make-map'];
 				this.title = _['gm-make-map'];
 				this.buttonOn = false;
-			}
-			else {
+			} else {
 				this.src = this.src.replace(/_open/,"_close");
 				this.alt = _['gm-hide-map'];
 				this.title = _['gm-hide-map'];
@@ -274,7 +283,7 @@ JAVASCRIPT;
 		};
 		document.getElementById('toolbar').appendChild(image);
 	}
-	window.unload = GUnload;
+	window.unload = function() { GUnload() };
 
 	 addLoadEvent(insertGoogleMapLinks);
 	 //]]>
@@ -304,7 +313,7 @@ JAVASCRIPT;
 		// check to see if the proxy token appears in the page output (if not, we don't have a map so
 		// no need to output our stuff)
 		if( isset( $this->mGoogleMapsOnThisPage ) && strstr( $pValue, "%%BEGINJAVASCRIPT" . $this->mProxyKey . "%%" ) ) {
-			$o = GoogleMaps::getMapSettings( $this->mTitle, $this->mMapDefaults );
+			$o = self::getMapSettings( $this->mTitle, $this->mMapDefaults );
 
 		// output our standard css and script include
 		$prefix = '
@@ -350,7 +359,7 @@ JAVASCRIPT;
 		global $wgGoogleMaps;
 		// pass through to the main render function, creating a new parser
 		// for parsing the local content
-	return $wgGoogleMaps->render( $pContent, $pArgv, $pParser, new Parser( ) );
+                return $wgGoogleMaps->render( $pContent, $pArgv, $pParser, new Parser() );
 	}
 
 	/**
@@ -365,44 +374,41 @@ JAVASCRIPT;
 	 * @return string - the html for rendering the map
 	 **/
 	function render ( $pContent, $pArgv, &$pParser, &$pLocalParser ) {
+            $pLocalParser->mTitle = $this->mTitle;
+            $pLocalParser->mOptions = $pParser->mOptions;
 
-		// Keep a count of how many <googlemap> tags were used for unique ids
-		if( !isset( $this->mGoogleMapsOnThisPage ) ) {
-			$this->mGoogleMapsOnThisPage = 1;
-		} else {
-			$this->mGoogleMapsOnThisPage++;
-		}
+            // Keep a count of how many <googlemap> tags were used for unique ids
+            if( !isset( $this->mGoogleMapsOnThisPage ) ) {
+                $this->mGoogleMapsOnThisPage = 1;
+            } else {
+                $this->mGoogleMapsOnThisPage++;
+            }
 
-		if( $this->mProcessTemplateVariables ) { // experimental, see MW bug #2257
-			foreach( array_keys( $pArgv ) as $key ) {
-				$pArgv[$key] = $pParser->replaceTemplateVariables( $pArgv[$key] );
-			}
-			$pContent = $pParser->replaceTemplateVariables( $pContent );
-		}
+            if( $this->mProcessTemplateVariables ) { // experimental, see MW bug #2257
+                foreach( array_keys( $pArgv ) as $key ) {
+                    $pArgv[$key] = $pParser->replaceTemplateVariables( $pArgv[$key] );
+                }
+                $pContent = $pParser->replaceTemplateVariables( $pContent );
+            }
 
-		// a dictionary for validating and interpreting some options.
-		$o = GoogleMaps::getMapSettings( $this->mTitle, $this->mMapDefaults );
+            // a dictionary for validating and interpreting some options.
+            $o = self::getMapSettings( $this->mTitle, $this->mMapDefaults );
+            $o = $this->getThisMapSettings( $o, $pArgv );
 
-		// Override the defaults with what the user specified.
-		foreach( array_keys( $o ) as $key ) {
-			if( is_numeric( $o[$key] ) && isset( $pArgv[$key] ) && is_numeric( $pArgv[$key] ) ) {
-				$o[$key] = $pArgv[$key];
-			} elseif( isset($pArgv[$key] ) && GoogleMaps::isOptionLegal( $key, $pArgv[$key] ) ) {
-				$o[$key] = $this->translateOption( $key, $pArgv[$key] );
-			} else { // and translate
-				$o[$key] = $this->translateOption( $key, $o[$key] );
-			}
-		}
+            $o = array_merge($o, array('number_of_maps' => $this->mGoogleMapsOnThisPage,
+                'incompatible_message' => $this->translateMessage( 'gm-incompatible-browser' ),
+                'incompatible_message_link' => $this->translateMessage( 'gm-incompatible-browser-link' )));
+            $img_exporter = new GoogleMapsImgExporter($this->mApiKey, $this->mLanguageCode);
+            $img_exporter->addHeader($o);
+            self::renderContent($pContent, $pParser, $pLocalParser, $img_exporter, $o);
+            $img_exporter->addTrailer();
 
-		$o = array_merge($o, array('number_of_maps' => $this->mGoogleMapsOnThisPage,
-			'incompatible_message' => $this->translateMessage( 'gm-incompatible-browser' )));
-		$outputter = new GoogleMapsJsOutputter($this->mLanguage, $this->mProxyKey, $this->mEnablePaths);
-		$outputter->addHeader($o);
-		GoogleMaps::renderContent($pContent, &$pParser, &$pLocalParser,
-			$pParser->mTitle, $pParser->mOptions, $outputter, $o);
-		$outputter->addTrailer($o);
-		return $outputter->render();
-	}
+            $js_exporter = new GoogleMapsJsExporter($this->mLanguage, $this->mProxyKey, $this->mEnablePaths);
+            $js_exporter->addHeader($o, $img_exporter->render());
+            self::renderContent($pContent, $pParser, $pLocalParser, $js_exporter, $o);
+            $js_exporter->addTrailer($o);
+            return $js_exporter->render();
+        }
 
 	function renderKmlLink($pContent, $pArgv) {
 		global $wgTitle;
@@ -412,138 +418,166 @@ JAVASCRIPT;
 		return '<a href="'.$specialTitle->escapeLocalUrl('article='.$title->getPartialURL()).'">'.$pContent.'</a>';
 	}
 
-	static function renderContent($pContent, &$pParser, &$pLocalParser, &$pParserTitle, $pParserOptions, &$outputter, $o) {
-		// parse the content of the tag
-		$lines        = preg_split( "/[\r\n]/", $pContent );
-		$tabs         = array( ); // the tabs for the current marker
-		$polyline     = array( ); // points in a polyline
-		$icons        = array( ); // keeps track of which icons we've made in the JS
-		$lineColor    = null;
-		$lineOpacity  = null;
-		$fillColor    = null;
-		$fillOpacity  = null;
-		$state        = GoogleMaps::PARSE_INCLUDES;
+	static function renderContent($pContent, &$pParser, &$pLocalParser, &$exporter, $o) {
+            $lines        = preg_split( "/[\r\n]/", $pContent );
+            $tabs         = array( ); // the tabs for the current marker
+            $polyline     = array( ); // points in a polyline
+            $icons        = array( ); // keeps track of which icons we've made in the JS
+            $lineColor    = null;
+            $lineOpacity  = null;
+            $fillColor    = null;
+            $fillOpacity  = null;
+            $state        = GOOGLE_MAPS_PARSE_INCLUDES;
 
-		$icon    = null;
-		$lat     = null;
-		$lon     = null;
-		$caption = '';
-		$title   = null;
-		$stroke  = null;
-		$syntax  = $o['version'];
+            $icon    = null;
+            $lat     = null;
+            $lon     = null;
+            $caption = '';
+            $title   = null;
+            $stroke  = null;
+            $syntax  = $o['version'];
 
-	// The meat of the extension. Translate the content of the tag
-	// into JS that produces a set of points, lines, and markers
-	foreach( $lines as $line ) {
-		// if the line is a hex code, it's the start of a path
-		if( preg_match( "/^(\d+)?#([0-9a-fA-F]{2})?([0-9a-fA-F]{6})(?: \(#([0-9a-fA-F]{2})?([0-9a-fA-F]{6})\))?$/", $line, $matches ) ) {
+            // The meat of the extension. Translate the content of the tag
+            // into JS that produces a set of points, lines, and markers
+            foreach( $lines as $line ) {
+                // if the line is a hex code, it's the start of a path
+                if( preg_match( "/^(\d+)?#([0-9a-fA-F]{2})?([0-9a-fA-F]{6})(?: \(#([0-9a-fA-F]{2})?([0-9a-fA-F]{6})\))?$/", $line, $matches ) ) {
 
-			// if the color is already set, we were just rendering a path so finish it and start
-			// a new one
-			if( isset( $lineColor ) ) {
-				$outputter->addPolyline( $polyline, $lineColor, $lineOpacity, $stroke, $fillColor, $fillOpacity );
-				$polyline = array( );
-			}
+                    // if the color is already set, we were just rendering a path so finish it and start
+                    // a new one
+                    if( isset( $lineColor ) ) {
+                        $exporter->addPolyline( $polyline, $lineColor, $lineOpacity, $stroke, $fillColor, $fillOpacity );
+                        $polyline = array( );
+                    }
 
-			$stroke      = isset($matches[1]) && $matches[1] ? $matches[1] : $o['stroke'];
-			$lineOpacity = isset($matches[2]) && $matches[2] ? $matches[2] : "ff";
-			$lineColor   = isset($matches[3]) && $matches[3] ? $matches[3] : null;
-			$fillOpacity = isset($matches[4]) && $matches[4] ? $matches[4] : "ff";
-			$fillColor   = isset($matches[5]) && $matches[5] ? $matches[5] : null;
-		}
+                    if( $state == GOOGLE_MAPS_PARSE_ADD_MARKER ) {
+                        self::addMarker($exporter, $pParser, $pLocalParser, $lat, $lon, 
+                            $icon, $title, $tabs, $caption, isset($lineColor));
 
-		// if the line matches the tab format, add the tabs
-		else if( $syntax == "0" && preg_match( '/^\/([^\\\\]+)\\\\ *(.*)$/', $line, $matches ) ) {
-			$parsed = $pLocalParser->parse( $matches[2], $pParserTitle, $pParserOptions, false );
-			$tabs[] = array( 'title' => $matches[1], 'gm-caption' => $parsed->getText());
-			$state = GoogleMaps::PARSE_ADD_MARKER;
-		}
-		else if ($syntax != "0" && preg_match( '/^\/([^\\\\]+)\\\\$/', $line, $matches ) ) {
-			if (count($tabs)) {
-				$parsed = $pLocalParser->parse( $caption, $pParserTitle, $pParserOptions, false );
-				$tabs[count($tabs)-1]['gm-caption'] = $parsed->getText();
-				$caption = '';
-			}
-			$tabs[] = array( 'title' => $matches[1] );
-		}
-		else if( $state == GoogleMaps::PARSE_INCLUDES && preg_match( "/^http:\/\//", $line ) ) {
-			$outputter->addXmlSource($line);
-		}
-		// the line is a regular point
-		else if( preg_match( "/^(?:\(([.a-zA-Z0-9_-]*?)\) *)?([^,]+), *([^ ,]+)(?:, ?(.+))?/", $line, $matches ) ) {
-			// first create the previous marker, now that we have all the tab/caption info
-			if( $state == GoogleMaps::PARSE_ADD_MARKER ) {
-				$parsed = $pLocalParser->parse( $caption, $pParserTitle, $pParserOptions, false );
-				if (count($tabs)) {
-					$tabs[count($tabs)-1]['gm-caption'] = $parsed->getText();
-					$outputter->addMarker( $lat, $lon, $icon, $title, $tabs, isset($lineColor) );
-				} else {
-					$outputter->addMarker( $lat, $lon, $icon, $title, $parsed->getText(), isset($lineColor));
-				}
-				// This parse function above lets us insert wiki markup into the map markers.
+                        $tabs    = array( );
+                        $caption = '';
+                        $title   = null;
+                    }
 
-				$tabs    = array( );
-				$caption = '';
-				$title   = null;
-			}
+                    $state = GOOGLE_MAPS_PARSE_POINTS;
 
-			$state = GoogleMaps::PARSE_POINTS;
+                    $stroke      = isset($matches[1]) && $matches[1] ? $matches[1] : $o['stroke'];
+                    $lineOpacity = isset($matches[2]) && $matches[2] ? $matches[2] : "ff";
+                    $lineColor   = isset($matches[3]) && $matches[3] ? $matches[3] : null;
+                    $fillOpacity = isset($matches[4]) && $matches[4] ? $matches[4] : "ff";
+                    $fillColor   = isset($matches[5]) && $matches[5] ? $matches[5] : null;
+                }
 
-			// extract the individual fields from the regex match
-			$icon = isset( $matches[1] ) ? $matches[1] : null;
-			$lat  = isset( $matches[2] ) ? $matches[2] : null;
-			$lon  = isset( $matches[3] ) ? $matches[3] : null;
-			if ($syntax == "0") {
-				$caption = isset( $matches[4] ) ? $matches[4] : '';
-			} else {
-				$title = isset( $matches[4] ) ? $matches[4] : null;
-			}
+                // if the line matches the tab format, add the tabs
+                else if( $syntax == "0" && preg_match( '/^\/([^\\\\]+)\\\\ *(.*)$/', $line, $matches ) ) {
+                    $parsed = self::parseWikiText($pParser, $pLocalParser, $matches[2], $pParser->mTitle, $pParser->mOptions);
+                    $tabs[] = array( 'title' => $matches[1], 'gm-caption' => $parsed);
+                    $state = GOOGLE_MAPS_PARSE_ADD_MARKER;
+                }
+                else if ($syntax != "0" && preg_match( '/^\/([^\\\\]+)\\\\ *$/', $line, $matches ) ) {
+                    if (count($tabs)) {
+                        $parsed = self::parseWikiText($pParser, $pLocalParser, $caption, $pParser->mTitle, $pParser->mOptions);
+                        $tabs[count($tabs)-1]['gm-caption'] = $parsed;
+                        $caption = '';
+                    }
+                    $tabs[] = array( 'title' => $matches[1] );
+                }
+                else if( $state == GOOGLE_MAPS_PARSE_INCLUDES && preg_match( "/^http:\/\//", $line ) ) {
+                    $exporter->addXmlSource($line);
+                }
+                // the line is a regular point
+                else if( preg_match( "/^(?:\(([.a-zA-Z0-9_-]*?)\))? *([0-9.-]+), *([0-9.-]+)(?:, ?(.+))?/", $line, $matches ) ) {
+                    // first create the previous marker, now that we have all the tab/caption info
+                    if( $state == GOOGLE_MAPS_PARSE_ADD_MARKER ) {
+                        self::addMarker($exporter, $pParser, $pLocalParser, $lat, $lon, 
+                            $icon, $title, $tabs, $caption, isset($lineColor));
 
-			// need to create this icon, since we haven't already
-			if( $icon && !$icons[$icon] ) {
-				$outputter->addIcon($icon, $o['icons']);
-				$icons[$icon] = true;
-			}
+                        $tabs    = array( );
+                        $caption = '';
+                        $title   = null;
+                    }
 
-			// if we have numeric latitude and longitude, process the point
-			if( is_numeric( $lat ) && is_numeric( $lon ) ) {
+                    $state = GOOGLE_MAPS_PARSE_POINTS;
 
-			// if it has an icon override, a caption, or is not in a path, add the marker
-				if ( $icon || count($tabs) > 0 || $caption || $title || !isset( $lineColor ) ) {
-					$state = GoogleMaps::PARSE_ADD_MARKER;
-				}
+                    // extract the individual fields from the regex match
+                    $icon = isset( $matches[1] ) ? $matches[1] : null;
+                    $lat  = isset( $matches[2] ) ? $matches[2] : null;
+                    $lon  = isset( $matches[3] ) ? $matches[3] : null;
+                    if ($syntax == "0") {
+                        $caption = isset( $matches[4] ) ? $matches[4] : '';
+                    } else {
+                        $title = isset( $matches[4] ) ? $matches[4] : null;
+                    }
 
-				// If we're making a path, record the location and move on.
-				if( isset( $lineColor ) ) {
-					$polyline[] = array( 'lat' => $lat, 'lon' => $lon );
-				}
-			}
-		}
+                    // need to create this icon, since we haven't already
+                    if( $icon && !$icons[$icon] ) {
+                        $exporter->addIcon($icon, $o);
+                        $icons[$icon] = true;
+                    }
 
-		else if (($state == GoogleMaps::PARSE_POINTS || $state == GoogleMaps::PARSE_ADD_MARKER) && $syntax != "0") { // a caption line
-			if ($line != '') {
-				$caption .= $line . "\r\n";
-				$state = GoogleMaps::PARSE_ADD_MARKER;
-			}
-		}
-	}
+                    // if we have numeric latitude and longitude, process the point
+                    if( is_numeric( $lat ) && is_numeric( $lon ) ) {
 
-	// if the last iteration was to add a marker, add it
-	if( $state == GoogleMaps::PARSE_ADD_MARKER ) {
-		$parsed = $pLocalParser->parse( $caption, $pParser->mTitle, $pParser->mOptions, false );
-		if (count($tabs) > 0) {
-			$tabs[count($tabs)-1]['gm-caption'] = $parsed->getText();
-			$outputter->addMarker( $lat, $lon, $icon, $title, $tabs, isset($lineColor) );
-		} else {
-			$outputter->addMarker( $lat, $lon, $icon, $title, $parsed->getText(), isset($lineColor));
-		}
-	}
+                        // if it has an icon override, a caption, or is not in a path, add the marker
+                        if ( $icon || count($tabs) > 0 || $caption || $title || !isset( $lineColor ) ) {
+                            $state = GOOGLE_MAPS_PARSE_ADD_MARKER;
+                        }
 
-	// if the last iteration was to	add	a polyline,	add	it
-	if(	isset( $lineColor )	) {
-		$outputter->addPolyline( $polyline,	$lineColor,	$lineOpacity, $stroke, $fillColor, $fillOpacity	);
-	}
-	}
+                        // If we're making a path, record the location and move on.
+                        if( isset( $lineColor ) ) {
+                            $polyline[] = array( 'lat' => $lat, 'lon' => $lon );
+                        }
+                    }
+                }
+
+                else if (($state == GOOGLE_MAPS_PARSE_POINTS || $state == GOOGLE_MAPS_PARSE_ADD_MARKER) && $syntax != "0") { // a caption line
+                    if ($line != '') {
+                        $caption .= $line . "\r\n";
+                        $state = GOOGLE_MAPS_PARSE_ADD_MARKER;
+                    }
+                }
+            }
+
+                // if the last iteration was to add a marker, add it
+                if( $state == GOOGLE_MAPS_PARSE_ADD_MARKER ) {
+                    self::addMarker($exporter, $pParser, $pLocalParser, $lat, $lon, $icon, 
+                        $title, $tabs, $caption, isset($lineColor));
+                }
+
+                // if the last iteration was to	add	a polyline,	add	it
+                if(	isset( $lineColor )	) {
+                    $exporter->addPolyline( $polyline,	$lineColor,	$lineOpacity, $stroke, $fillColor, $fillOpacity	);
+                }
+        }
+
+        static function addMarker(&$pExporter, &$pParser, &$pLocalParser, $pLat, $pLon, 
+            $pIcon, $pTitle, $pTabs, $pCaption, $pLineColorSet) {
+            global $wgUser, $wgVersion;
+            $parsed = self::parseWikiText($pParser, $pLocalParser, preg_replace('/\r\n/', '<br />', $pCaption), $pParser->mTitle, $pParser->mOptions);
+            $title = Title::newFromText($pTitle);
+            $revision = is_null($title) ? null :
+                Revision::newFromTitle($title);
+            $parsedArticleText = is_null($revision) ? null : 
+                self::parseWikiText($pParser, $pLocalParser, $revision->getText(), $revision->getTitle(), $pParser->mOptions);
+            $titleMaybeNonexistent = is_null($title) ? Title::makeTitleSafe(NS_MAIN, $pTitle) : $title;
+            $skin = $wgUser->getSkin();
+            $titleLink = is_null($titleMaybeNonexistent) ? '' : $skin->makeLinkObj($titleMaybeNonexistent);
+            if (count($pTabs)) {
+                $pTabs[count($pTabs)-1]['gm-caption'] = $parsed;
+                $pExporter->addMarker( $pLat, $pLon, $pIcon, $pTitle, $titleLink,
+                    $pTabs, $parsedArticleText, $pLineColorSet );
+            } else {
+                $pExporter->addMarker( $pLat, $pLon, $pIcon, $pTitle, $titleLink,
+                    $parsed, $parsedArticleText, $pLineColorSet);
+            }
+        }
+
+        static function parseWikiText(&$pParser, &$pLocalParser, $pText, $pTitle, &$pOptions) {
+            // recursiveTagParse seems broken, so do it the old-fashioned way.
+            $parsed = $pLocalParser->parse( $pText, $pTitle, $pOptions, false );
+            $html = $parsed->getText();
+            return preg_replace('/<script.*?<\/script>/', '', $html);
+        }
 
 	//----------------------------------------------
 	// UTILITIES
@@ -563,7 +597,9 @@ JAVASCRIPT;
 				'normal',
 				'hybrid',
 				'terrain',
-				'satellite'
+                                'satellite',
+                                'elevation',
+                                'infrared'
 			),
 			'controls' => array(
 				'small',
@@ -588,6 +624,11 @@ JAVASCRIPT;
 				'smooth',
 				'fast'
 			),
+                        'world' => array(
+                            'earth',
+                            'moon',
+                            'mars'
+                        ),
 			'scrollwheel' => array(
 				'zoom',
 				'nothing'
@@ -616,16 +657,8 @@ JAVASCRIPT;
 	 *   are dictionaries containing the mappings for that setting
 	 **/
 	function &getOptionDictionary ( ) {
-
 		if( empty( $this->mOptionDictionary ) ) {
 			$this->mOptionDictionary = array(
-				'type' => array(
-					'map'       => 'G_NORMAL_MAP',
-					'normal'    => 'G_NORMAL_MAP',
-					'hybrid'    => 'G_HYBRID_MAP',
-					'terrain'   => 'G_PHYSICAL_MAP',
-					'satellite' => 'G_SATELLITE_MAP'
-				),
 				'controls' => array(
 					'small'  => 'GSmallZoomControl',
 					'medium' => 'GSmallMapControl',
@@ -648,7 +681,7 @@ JAVASCRIPT;
 
 		// our defaults, in	case $wgGoogleMapsDefaults isn't specified.
 		$o = array(
-			'api'         => 2.94,
+			'api'         => 2.108,
 			'color'       => '#758bc5',
 			'controls'    => 'medium',
 			'doubleclick' => 'recenter',
@@ -656,20 +689,29 @@ JAVASCRIPT;
 			'height'      => 400,
 			'icon'        => 'http://www.google.com/mapfiles/marker.png',
 			'icons'       => 'http://maps.google.com/mapfiles/marker{label}.png',
+                        'iconlabels'  => 'A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z',
+                        'icondir'     => false,
+			'shadow'      => 'http://maps.google.com/intl/en_us/mapfiles/shadow50.png',
+                        'shadowsize'  => '37x34',
+                        'windowanchor'=> '9x2',
+                        'iconsize'    => '20x34',
+                        'iconanchor'  => '9x34',
 			'lat'         => 42.711618,
 			'localsearch' => true,
 			'lon'         => -73.205112,
 			'opacity'     => 0.7,
 			'overview'    => 'no',
+                        'world'      => 'earth',
 			'precision'   => 6,
 			'scale'       => 'no',
 			'scrollwheel' => 'nothing',
 			'selector'    => 'yes',
 			'stroke'      => 6,
+                        'style'       => '',
 			'type'        => 'hybrid',
 			'units'       => 'kilometers',
 			'version'     => 0,
-			'width'       => 400,
+			'width'       => 600,
 			'zoom'        => 12,
 			'zoomstyle'   => 'fast',
 		);
@@ -695,15 +737,30 @@ JAVASCRIPT;
 			}
 			else {
 				if( isset( $pDefaults[$title] ) && is_array( $pDefaults[$title] ) &&
-				  isset( $pDefaults[$title][$key] ) && GoogleMaps::isOptionLegal( $key, $pDefaults[$title][$key] ) ) {
+				  isset( $pDefaults[$title][$key] ) && self::isOptionLegal( $key, $pDefaults[$title][$key] ) ) {
 					$o[$key] = $pDefaults[$title][$key];
-				} elseif( isset( $pDefaults[$key] ) && GoogleMaps::isOptionLegal( $key, $pDefaults[$key] ) ) {
+				} elseif( isset( $pDefaults[$key] ) && self::isOptionLegal( $key, $pDefaults[$key] ) ) {
 					$o[$key] = $pDefaults[$key];
 				}
 			}
 		}
 		return $o;
 	}
+
+        function getThisMapSettings($o, $pArgv) {
+            // Override the defaults with what the user specified.
+            foreach( array_keys( $o ) as $key ) {
+                if( is_numeric( $o[$key] ) && isset( $pArgv[$key] ) && is_numeric( $pArgv[$key] ) ) {
+                    $o[$key] = $pArgv[$key];
+                } elseif( isset($pArgv[$key] ) && self::isOptionLegal( $key, $pArgv[$key] ) ) {
+                    $o[$key] = $this->translateOption( $key, $pArgv[$key] );
+                } else { // and translate
+                    $o[$key] = $this->translateOption( $key, $o[$key] );
+                }
+            }
+            return $o;
+        }
+
 
 	/**
 	 * Check to see if the value of the specified setting is a valid value.
@@ -714,7 +771,7 @@ JAVASCRIPT;
 	static function isOptionLegal ( $pKey, $pValue ) {
 
 		// get the set of approved values to check
-		$approvedValues = GoogleMaps::getApprovedValues( );
+		$approvedValues = self::getApprovedValues( );
 
 		// if it's in the approved list, explicitly check the value against the approved values
 		if( isset( $approvedValues[$pKey] ) ) {
@@ -778,7 +835,7 @@ JAVASCRIPT;
 
 		// replace multiple spaces with a single space and strip newlines and tabs (make sure no tabs
 		// are used within a line of code!)
-		return preg_replace( '/  +/', ' ', preg_replace( '/[\n\t]/', '', $js ) );
+		return preg_replace( '/  +/', ' ', preg_replace( '/[\n\t]+/', '', $js ) );
 	}
 
 	/**

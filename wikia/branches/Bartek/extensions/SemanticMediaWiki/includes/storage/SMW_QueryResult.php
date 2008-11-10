@@ -13,9 +13,10 @@
  * Objects of this class encapsulate the result of a query in SMW. They
  * provide access to the query result and printed data, and to some
  * relevant query parameters that were used.
- * 
+ *
  * While the API does not require this, it is ensured that every result row 
  * returned by this object has the same number of elements (columns).
+ * @note: AUTOLOADED
  */
 class SMWQueryResult {
 	protected $m_content; // array (table) of arrays (rows) of arrays (fields, SMWResultArray)
@@ -128,6 +129,10 @@ class SMWQueryResult {
 		return $this->m_query->getErrors();
 	}
 
+	public function addErrors($errors) {
+		$this->m_query->addErrors($errors);
+	}
+
 	/**
 	 * Create an SMWInfolink object representing a link to further query results.
 	 * This link can then be serialised or extended by further params first.
@@ -158,7 +163,7 @@ class SMWQueryResult {
 			$params['order'] = $porder;
 		}
 		if ($caption == false) {
-			$caption = wfMsgForContent('smw_iq_moreresults');
+			$caption = ' ' . wfMsgForContent('smw_iq_moreresults'); // the space is right here, not in the QPs!
 		}
 		$result = SMWInfolink::newInternalLink($caption,':Special:Ask', false, $params);
 		// Note: the initial : prevents SMW from reparsing :: in the query string

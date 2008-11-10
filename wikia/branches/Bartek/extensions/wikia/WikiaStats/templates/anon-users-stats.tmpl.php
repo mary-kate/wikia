@@ -29,18 +29,18 @@ foreach ($anonData as $id => $data)
 {
 	$rank++;
 	#---
-	$outFirstEdit = substr(wfMsg(strtolower(date("F",$data['min']))), 0, 3) . " " . date("d",$data['min']) .", ".date("Y",$data['min']);
+	$outFirstEdit = $wgLang->sprintfDate(WikiaGenericStats::getStatsDateFormat(0), wfTimestamp(TS_MW, $data['min']));
 	#---
-	$outLastEdit = substr(wfMsg(strtolower(date("F",$data['max']))), 0, 3) . " " . date("d",$data['max']) .", ".date("Y",$data['max']);
+	$outLastEdit = $wgLang->sprintfDate(WikiaGenericStats::getStatsDateFormat(0), wfTimestamp(TS_MW, $data['max']));
 ?>
 <tr>
-	<td class="eb" nowrap><a href="<?= $city_url ?><?= Title::makeTitle(NS_USER, $data['user_name'])->getLocalURL() ?>" target="new"><?= $data['user_name'] ?></a></td>
-	<td class="eb" nowrap><?= $rank ?></td>
-	<td class="eb" nowrap><?= $data['cnt'] ?></td>
-	<td class="eb" nowrap><?= $outFirstEdit ?></td>
-	<td class="eb" nowrap><?= sprintf("%0.0f", (time() - $data["min"])/(60*60*24)) ?></td>
-	<td class="eb" nowrap><?= $outLastEdit ?></td>
-	<td class="eb" nowrap><?= sprintf("%0.0f", (time() - $data["max"])/(60*60*24)) ?></td>
+	<td class="eb" style="white-space:nowrap;"><a href="<?= $city_url ?><?= Title::makeTitle(NS_SPECIAL, "Contributions")->getLocalURL() ?>/<?=$data['user_name']?>" target="new"><?= $data['user_name'] ?></a></td>
+	<td class="eb" style="white-space:nowrap;"><?= $rank ?></td>
+	<td class="eb" style="white-space:nowrap;"><?= $data['cnt'] ?></td>
+	<td class="eb" style="white-space:nowrap;"><?= $outFirstEdit ?></td>
+	<td class="eb" style="white-space:nowrap;"><?= sprintf("%0.0f", (time() - $data["min"])/(60*60*24)) ?></td>
+	<td class="eb" style="white-space:nowrap;"><?= $outLastEdit ?></td>
+	<td class="eb" style="white-space:nowrap;"><?= sprintf("%0.0f", (time() - $data["max"])/(60*60*24)) ?></td>
 </tr>	
 <?php
 }

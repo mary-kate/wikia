@@ -9,11 +9,11 @@
 $messages = array();
 
 $messages['en'] = array(
-	'purgecache' => 'Purge cache',
-	'purgecache-desc' => '[[Special:PurgeCache|Special page]] used to wipe the OBJECTCACHE table',
+	'purgecache'         => 'Purge cache',
+	'purgecache-desc'    => '[[Special:PurgeCache|Special page]] used to wipe the OBJECTCACHE table',
 	'purgecache-warning' => 'This will purge the cache tables.',
-	'purgecache-purged' => 'The cache has been purged.',
-	'purgecache-button' => 'Purge',
+	'purgecache-purged'  => 'The cache has been purged.',
+	'purgecache-button'  => 'Purge',
 );
 
 /** Arabic (العربية)
@@ -31,7 +31,11 @@ $messages['ar'] = array(
  * @author DCLXVI
  */
 $messages['bg'] = array(
-	'purgecache-button' => 'Изчистване',
+	'purgecache'         => 'Изчистване на складираното копие',
+	'purgecache-desc'    => '[[Special:PurgeCache|Специална страница]], използвана за изчистване на таблицата OBJECTCACHE',
+	'purgecache-warning' => 'Това ще изчисти таблиците със складирани копия.',
+	'purgecache-purged'  => 'Складираното копие беше изчистено.',
+	'purgecache-button'  => 'Изчистване',
 );
 
 /** Catalan (Català)
@@ -55,6 +59,18 @@ $messages['de'] = array(
 	'purgecache-button'  => 'Löschen',
 );
 
+/** Esperanto (Esperanto)
+ * @author Yekrats
+ */
+$messages['eo'] = array(
+	'purgecache'         => 'Ĝisdatigu kaŝmemoron.',
+	'purgecache-desc'    => '[[Special:PurgeCache|Speciala paĝo]] por forviŝi la OBJECTCACHE-tabelon',
+	'purgecache-warning' => 'Ĉi tiu ĝisdatigos la kaŝmemorajn tabelojn.',
+	'purgecache-purged'  => 'La kaŝmemoro estas ĝisdatigita.',
+	'purgecache-button'  => 'Ĝisdatigu',
+);
+
+/** French (Français) */
 $messages['fr'] = array(
 	'purgecache'         => 'Purger le cache',
 	'purgecache-desc'    => '[[Special:PurgeCache|Page spéciale]] utilisée pour effacer la table OBJECTCACHE',
@@ -64,10 +80,25 @@ $messages['fr'] = array(
 );
 
 /** Galician (Galego)
+ * @author Toliño
  * @author Alma
  */
 $messages['gl'] = array(
-	'purgecache-button' => 'Depurar',
+	'purgecache'         => 'Purgar a memoria caché',
+	'purgecache-desc'    => '[[Special:PurgeCache|Páxina especial]] usada para limpar a táboa OBJECTCACHE',
+	'purgecache-warning' => 'Isto purgará a memoria caché das táboas.',
+	'purgecache-purged'  => 'A memoria caché foi purgada.',
+	'purgecache-button'  => 'Depurar',
+);
+
+/** Hindi (हिन्दी)
+ * @author Kaustubh
+ */
+$messages['hi'] = array(
+	'purgecache'         => 'कैशे साफ़ करें (purge)',
+	'purgecache-warning' => 'इससे कैशे तालिका साफ (purge) हो जायेगी।',
+	'purgecache-purged'  => 'कैशे साफ़ (purge) कर दी गई हैं।',
+	'purgecache-button'  => 'साफ़ करें (purge)',
 );
 
 /** Upper Sorbian (Hornjoserbsce)
@@ -82,13 +113,24 @@ $messages['hsb'] = array(
 );
 
 /** Hungarian (Magyar)
- * @author Bdanee
+ * @author Dani
  */
 $messages['hu'] = array(
 	'purgecache'         => 'Gyorsítótár kiürítése',
 	'purgecache-warning' => 'Segítségével kiürítheted a gyorsítótáblákat.',
 	'purgecache-purged'  => 'A gyorsítótár ki lett ürítve.',
 	'purgecache-button'  => 'Frissít',
+);
+
+/** Italian (Italiano)
+ * @author Pietrodn
+ */
+$messages['it'] = array(
+	'purgecache'         => 'Purga la cache',
+	'purgecache-desc'    => '[[Special:PurgeCache|Pagina speciale]] usata per pulire la tabella OBJECTCACHE',
+	'purgecache-warning' => 'Questo purgherà le tabelle di cache.',
+	'purgecache-purged'  => 'La cache è stata svuotata.',
+	'purgecache-button'  => 'Purga',
 );
 
 /** Japanese (日本語)
@@ -101,14 +143,45 @@ $messages['ja'] = array(
 	'purgecache-button'  => 'キャッシュ削除',
 );
 
+/** Javanese (Basa Jawa)
+ * @author Meursault2004
+ */
+$messages['jv'] = array(
+	'purgecache'         => "Ngilangi ''cache''",
+	'purgecache-warning' => "Iki bakal ngosongaké tabèl-tabèl ''cache''.",
+	'purgecache-purged'  => 'Cache wis dikosongaké.',
+	'purgecache-button'  => 'Kosongna',
+);
+
+/** Khmer (ភាសាខ្មែរ)
+ * @author Lovekhmer
+ */
+$messages['km'] = array(
+	'purgecache'        => 'សំអាតឃ្លាំងសំងាត់',
+	'purgecache-purged' => 'ឃ្លាំងសំងាត់ត្រូវបានសំអាតរួចរាល់ហើយ។',
+	'purgecache-button' => 'លុបបំបាត់',
+);
+
 /** Luxembourgish (Lëtzebuergesch)
  * @author Robby
  */
 $messages['lb'] = array(
 	'purgecache'         => 'Cache eidel maachen',
+	'purgecache-desc'    => "[[Special:PurgeCache|Spezialsäit]] fir d'Tabell-OBJECTCACHE eidel ze maachen",
 	'purgecache-warning' => "Hei ginn d'Tafele vum Cache eidelgemaach.",
 	'purgecache-purged'  => 'De Cache gouf eidel gemaach.',
 	'purgecache-button'  => 'Eidel maachen',
+);
+
+/** Marathi (मराठी)
+ * @author Kaustubh
+ */
+$messages['mr'] = array(
+	'purgecache'         => 'सय स्वच्छ करा (purge)',
+	'purgecache-desc'    => 'OBJECTCACHE सारणी स्वच्छ करण्यासाठी [[Special:PurgeCache|विशेष पान]]',
+	'purgecache-warning' => 'ह्यामुळे सय सारण्या स्वच्छ होतील. (purge)',
+	'purgecache-purged'  => 'सय स्वच्छ करण्यात आलेली आहे.',
+	'purgecache-button'  => 'स्वच्छ करा',
 );
 
 /** Dutch (Nederlands)
@@ -132,7 +205,7 @@ $messages['nn'] = array(
 	'purgecache-button'  => 'Slett mellomlagring',
 );
 
-/** Norwegian (‪Norsk (bokmål)‬)
+/** Norwegian (bokmål)‬ (‪Norsk (bokmål)‬)
  * @author Jon Harald Søby
  */
 $messages['no'] = array(
@@ -148,6 +221,7 @@ $messages['no'] = array(
  */
 $messages['oc'] = array(
 	'purgecache'         => "Purgar l'amagatal",
+	'purgecache-desc'    => '[[Special:PurgeCache|Pagina especiala]] utilizada per escafar la taula OBJECTCACHE',
 	'purgecache-warning' => "Aquò purgarà las taulas de l'amagatal.",
 	'purgecache-purged'  => "L'amagatal es estat purgat.",
 	'purgecache-button'  => 'Purgar',
@@ -157,17 +231,39 @@ $messages['oc'] = array(
  * @author Sp5uhe
  */
 $messages['pl'] = array(
-	'purgecache'         => 'Czyść pamięć podręczną',
-	'purgecache-warning' => 'To polecenie spowoduje wyczyszczenie tablic pamięci podręcznej.',
+	'purgecache'         => 'Wyczyść pamięć podręczną',
+	'purgecache-desc'    => '[[Special:PurgeCache|Strona specjalna]] wykorzystywana do czyszczenia pamięci podręcznej tablic obiektów',
+	'purgecache-warning' => 'To polecenie spowoduje wyczyszczenie pamięci podręcznej.',
 	'purgecache-purged'  => 'Pamięć podręczna została wyczyszczona.',
-	'purgecache-button'  => 'Czyść',
+	'purgecache-button'  => 'Wyczyść',
+);
+
+/** Pashto (پښتو)
+ * @author Ahmed-Najib-Biabani-Ibrahimkhel
+ */
+$messages['ps'] = array(
+	'purgecache'        => 'ساتلې حافظه سپينول',
+	'purgecache-purged' => 'د همدې مخ ساتل شوې حافظه سپينه شوه.',
+	'purgecache-button' => 'سپينول',
+);
+
+/** Portuguese (Português)
+ * @author Lijealso
+ */
+$messages['pt'] = array(
+	'purgecache'         => 'Purgar a cache',
+	'purgecache-desc'    => '[[Special:PurgeCache|Página especial]] utilizada para limpar a tabela OBJECTCACHE',
+	'purgecache-warning' => 'Isto irá purgar as tabelas de cache.',
+	'purgecache-purged'  => 'A cache foi purgada.',
+	'purgecache-button'  => 'Purgar',
 );
 
 /** Russian (Русский)
- * @author .:Ajvol:.
+ * @author Александр Сигачёв
  */
 $messages['ru'] = array(
 	'purgecache'         => 'Очистить кэш',
+	'purgecache-desc'    => '[[Special:PurgeCache|Служебная страница]] для очистки таблицы OBJECTCACHE',
 	'purgecache-warning' => 'Будет произведена очистка кэш-таблиц.',
 	'purgecache-purged'  => 'Кэш был очищен.',
 	'purgecache-button'  => 'Очистить',
@@ -184,7 +280,7 @@ $messages['sk'] = array(
 	'purgecache-button'  => 'Prečistiť',
 );
 
-/** ћирилица (ћирилица)
+/** Serbian Cyrillic ekavian (ћирилица)
  * @author Sasa Stefanovic
  */
 $messages['sr-ec'] = array(
@@ -194,12 +290,51 @@ $messages['sr-ec'] = array(
 	'purgecache-button'  => 'Освежи',
 );
 
+/** Sundanese (Basa Sunda)
+ * @author Irwangatot
+ */
+$messages['su'] = array(
+	'purgecache'        => 'Hapus sindangan',
+	'purgecache-button' => 'Hapus',
+);
+
+/** Swedish (Svenska)
+ * @author M.M.S.
+ */
+$messages['sv'] = array(
+	'purgecache'         => 'Rensa cachen',
+	'purgecache-desc'    => '[[Special:PurgeCache|Specialsida]] använd för att rensa OBJEKTCACHE-tabellen',
+	'purgecache-warning' => 'Detta rensar cachetabellerna.',
+	'purgecache-purged'  => 'Cachen har rensats.',
+	'purgecache-button'  => 'Rensa',
+);
+
+/** Thai (ไทย)
+ * @author Passawuth
+ */
+$messages['th'] = array(
+	'purgecache' => 'ล้างแคช',
+);
+
+/** Ukrainian (Українська)
+ * @author Ahonc
+ */
+$messages['uk'] = array(
+	'purgecache'         => 'Очистити кеш',
+	'purgecache-warning' => 'Буде здійснене очищення кеш-таблиць.',
+	'purgecache-purged'  => 'Кеш було очищено.',
+	'purgecache-button'  => 'Очистити',
+);
+
 /** Vietnamese (Tiếng Việt)
  * @author Minh Nguyen
+ * @author Vinhtantran
  */
 $messages['vi'] = array(
-	'purgecache'        => 'Tẩy sạch vùng nhớ đệm',
-	'purgecache-purged' => 'Đã tẩy sạch vùng nhớ đệm.',
-	'purgecache-button' => 'Làm tươi',
+	'purgecache'         => 'Tẩy sạch vùng nhớ đệm',
+	'purgecache-desc'    => '[[Special:PurgeCache|Trang đăc biệt]] được dùng để quét bảng OBJECTCACHE',
+	'purgecache-warning' => 'Cái này sẽ tẩy các bảng bộ đệm.',
+	'purgecache-purged'  => 'Đã tẩy sạch vùng nhớ đệm.',
+	'purgecache-button'  => 'Làm tươi',
 );
 
