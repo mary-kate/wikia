@@ -33,11 +33,19 @@ class WidgetFramework {
 	protected function __construct() {
 		global $wgUser;
 
-		$skinClass = get_class($wgUser->getSkin());
-		if($skinClass == "SkinMonaco") {
+		switch (get_class($wgUser->getSkin())) {
+		case "SkinMonaco":
 			$this->skinname = 'monaco';
-		} else {
+			break;
+		case "SkinQuartz":
 			$this->skinname = 'quartz';
+			break;
+		default:
+			# This is a generalization, but we don't really care
+			# most of the times -- widgets are only displayed on
+			# Quartz and Monaco.
+			# We do care for things like Special:WidgetDashboard
+			$this->skinname = 'monobook';
 		}
 
 		$this->loadConfig();
@@ -84,19 +92,21 @@ class WidgetFramework {
 		global $isWidgetCommunity, $isWidgetSidebar, $isWidgetWikiaToolbox, $isWidgetLanguages;
 		$isWidgetCommunity = $isWidgetSidebar = $isWidgetWikiaToolbox = $isWidgetLanguages = false;
 
-		function tempFunc($item, $key) {
-			if($item == 'WidgetCommunity') {
-				global $isWidgetCommunity;
-				$isWidgetCommunity = true;
-			} else if($item == 'WidgetSidebar') {
-				global $isWidgetSidebar;
-				$isWidgetSidebar = true;
-			} else if($item == 'WidgetWikiaToolbox') {
-				global $isWidgetWikiaToolbox;
-				$isWidgetWikiaToolbox = true;
-			} else if($item == 'WidgetLanguages') {
-				global $isWidgetLanguages;
-				$isWidgetLanguages = true;
+		if (!function_exists('tempFunc')) {
+			function tempFunc($item, $key) {
+				if($item == 'WidgetCommunity') {
+					global $isWidgetCommunity;
+					$isWidgetCommunity = true;
+				} else if($item == 'WidgetSidebar') {
+					global $isWidgetSidebar;
+					$isWidgetSidebar = true;
+				} else if($item == 'WidgetWikiaToolbox') {
+					global $isWidgetWikiaToolbox;
+					$isWidgetWikiaToolbox = true;
+				} else if($item == 'WidgetLanguages') {
+					global $isWidgetLanguages;
+					$isWidgetLanguages = true;
+				}
 			}
 		}
 
@@ -333,9 +343,8 @@ class WidgetFramework {
 		$wgUser->setOption('widgets', serialize($this->config));
 		$wgUser->saveSettings();
 
-		// Added when migrating to MediaWiki 1.12.0
 		$dbw = wfGetDB( DB_MASTER );
-		$dbw->close();
+		$dbw->commit(); // macbre: $dbw->close() was causing fatal error in MW1.13
 
 		return true;
 	}
@@ -570,7 +579,7 @@ function WidgetFrameworkWrapLinks($links) {
 		$out = '<ul>';
 		foreach($links as $link) {
 			$out .= '<li>';
-			$out .= '<a href="'.$link['href'].'"'.(isset($link['title']) ? ' title="'.htmlspecialchars($link['title']).'"' : '').'>'.htmlspecialchars($link['name']).'</a>';
+			$out .= '<a href="'.htmlspecialchars($link['href']).'"'.(isset($link['title']) ? ' title="'.htmlspecialchars($link['title']).'"' : '').(!empty($link['nofollow']) ? ' rel="nofollow"' : '').'>'.htmlspecialchars($link['name']).'</a>';
 			if(isset($link['desc'])) {
 				$out .= '<br/>'.$link['desc'];
 			}
@@ -588,7 +597,7 @@ function WidgetFrameworkWrapLinks($links) {
  */
 function WidgetFrameworkMoreLink($link) {
 	wfProfileIn(__METHOD__);
-	$out = '<div class="widgetMore"><a href="'.$link.'">'.wfMsg('moredotdotdot').'</a></div>';
+	$out = '<div class="widgetMore"><a href="'.htmlspecialchars($link).'">'.wfMsg('moredotdotdot').'</a></div>';
 	wfProfileOut( __METHOD__ );
 	return $out;
 }

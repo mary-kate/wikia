@@ -25,12 +25,12 @@ class CreateWikiTask extends BatchTask {
 	 * contructor
 	 */
 	function  __construct() {
-        	$this->mType = "createwiki";
-        	$this->mVisible = false;
-        	$this->mTTL = 1800;
-        	parent::__construct();
+		$this->mType = "createwiki";
+		$this->mVisible = false;
+		$this->mTTL = 1800;
+		parent::__construct();
 		$this->mDebug = true;
-    	}
+	}
 
 	/**
 	 * execute
@@ -46,13 +46,18 @@ class CreateWikiTask extends BatchTask {
 	 */
 	function execute( $params = null ) {
 		global $IP, $wgDevelEnvironment;
-		global $wgWikiaLocalSettingsPath, $wgWikiaAdminSettingsPath;
+		global $wgWikiaLocalSettingsPath, $wgWikiaAdminSettingsPath; // $wgExtensionMessagesFiles;
+		global $wgHubCreationVariables, $wgLangCreationVariables;
 
 		if( !isset( $wgWikiaAdminSettingsPath ) ) {
 			$wgWikiaAdminSettingsPath = dirname( $wgWikiaLocalSettingsPath ) . "/../AdminSettings.php";
 		}
-		wfLoadExtensionMessages( "CreateWikiTask" );
 
+		/* we don't need it actually, messages are kept on messaging.wikia (fixes #3592)
+		$wgExtensionMessagesFiles["CreateWikiTask"] = dirname(__FILE__) . '/CreateWikiTask/CreateWikiTask.i18n.php';
+		wfLoadExtensionMessages( "CreateWikiTask" );
+		*/
+		
 		$this->mData = $params;
 
 		/**
@@ -113,6 +118,9 @@ class CreateWikiTask extends BatchTask {
 		 */
 		$this->sendWelcomeMail();
 
+		#--- modify wiki's variables based on language and $wgLangCreationVariables values
+		$this->addCreationSettings( $this->mTaskData['language'], $wgLangCreationVariables, 'language' );
+
 		# 8. Run WikiMover if there is starter for category choosen
 		if ( !empty($this->mParams["params"]["wpCreateWikiCategoryStarter"])) {
 			$oWikiMover = WikiMover::newFromIDs(
@@ -127,12 +135,29 @@ class CreateWikiTask extends BatchTask {
 			foreach( $oWikiMover->getLog( true ) as $log ) {
 				$this->addLog( $log["info"], $log["timestamp"] );
 			}
+
+			#--- clear message cache, in case we ovewrote some MediaWiki ns pages
+			$cmd = sprintf("SERVER_ID={$this->mWikiID} php {$IP}/maintenance/rebuildmessages.php --conf {$wgWikiaLocalSettingsPath} --aconf {$wgWikiaAdminSettingsPath}");
+			$this->addLog( "Running {$cmd}");
+			$retval = wfShellExec( $cmd, $status );
+			$this->addLog( $retval );
+			
+			#--- modify wiki's variables based on hub and $wgHubCreationVariables values
+	                $this->addCreationSettings( $this->mParams["params"]["wpCreateWikiCategory"], $wgHubCreationVariables, 'hub' );
 		}
 
 		/**
 		 * setting images creation dates (bug: #1687)
 		 */
 		$this->resetImagesTimestamp();
+
+		/**
+		 * protect key pages, e.g. logo and favicon (bug: 3209)
+		 */
+		$cmd = sprintf("SERVER_ID={$this->mWikiID} php {$IP}/maintenance/wikia/protectKeyPages.php --conf {$wgWikiaLocalSettingsPath} --aconf {$wgWikiaAdminSettingsPath}");
+		$this->addLog( "Running {$cmd}");
+		$retval = wfShellExec( $cmd, $status );
+		$this->addLog( $retval );
 
 		/**
 		 * Move Main_Page to $wgSitename page
@@ -143,11 +168,20 @@ class CreateWikiTask extends BatchTask {
 		$this->addLog( $retval );
 
 		/**
-		 * Add aditional domains
+		 * Add additional domains
 		 */
 		$this->addDomains( $this->mParams["params"]["wpCreateWikiDomains"] );
 
 		echo "Hi! its ".__METHOD__." task_id={$this->mData->task_id}\n";
+
+		/**
+		 * we need some stuffs in recent changes so this one is run last
+		 */
+		$cmd = sprintf("SERVER_ID={$this->mWikiID} php {$IP}/extensions/CheckUser/install.php --quick --conf {$wgWikiaLocalSettingsPath} --aconf {$wgWikiaAdminSettingsPath}");
+		$this->addLog( "Running {$cmd}" );
+		$retval = wfShellExec( $cmd, $status );
+		$this->addLog( $retval );
+
 		return true;
 	}
 
@@ -421,8 +455,9 @@ class CreateWikiTask extends BatchTask {
 
 		/**
 		 * set user for all maintenance work on central
-		 * $wgUser = $this->mStaff;
 		 */
+		$oldUser = $wgUser;
+		$wgUser = User::newFromName( 'CreateWiki script' );
 		$this->addLog( "Creating and modifing pages on Central Wikia (as user: " . $wgUser->getName() . ")..." );
 
 		/**
@@ -550,6 +585,10 @@ class CreateWikiTask extends BatchTask {
 				return false;
 			}
 		}
+
+		#--- revert back to original User object, just in case
+		$wgUser = $oldUser;
+
 		$this->addLog( "Creating and modifing pages on Central Wikia finished." );
 		return true;
 	}
@@ -605,5 +644,40 @@ class CreateWikiTask extends BatchTask {
 			return false;
 		}
 		return false;
+	}
+
+	/**
+	 * addCreationSettings
+	 *
+	 * @author tor@wikia-inc.com
+	 * @param  string $match
+	 * @param  array  $settings
+	 * @param  string $type
+	 */
+	public function addCreationSettings( $match, $settings, $type = 'unknown' ) {
+		global $wgUser;
+
+		if (!empty($match) && is_array($settings[$match])) {
+			$this->addLog("Found '$match' in $type settings array.");
+
+			# switching user for correct logging
+			$oldUser = $wgUser;
+			$wgUser = User::newFromName( 'CreateWiki script' );
+
+			foreach ($settings[$match] as $key => $value) {
+				$success = WikiFactory::setVarById($key, $this->mWikiID, $value);
+				if ($success) {
+	                                $this->addLog("Successfully added setting: $key = $value");
+				} else {
+					$this->addLog("Failed to add setting: $key = $value");
+				}
+			}
+
+			$wgUser = $oldUser;
+
+			$this->addLog("Finished adding $type settings.");
+		} else {
+			$this->addLog("'$match' not found in $type settings array. Skipping this step.");
+		}
 	}
 }

@@ -71,11 +71,13 @@ function reportProblemToogleSummary(id)
 }
 
 // sets up menu of templated responses in mailer form
-function reportProblemMailerResponsesTemplatesSetup(list, textarea)
+function reportProblemMailerResponsesTemplatesSetup(list, textarea, footer)
 {
 	if (!list || !textarea || list.childNodes.length == 0) {
 		return;
 	}
+
+	var args = {textarea: textarea, footer: footer};
 
 	// add onlick handler for li > a elements
 	for (i=0; i < list.childNodes.length; i++)
@@ -85,21 +87,21 @@ function reportProblemMailerResponsesTemplatesSetup(list, textarea)
 		anchor.href = '#mailer-message';
 
 		// onclick handler
-		YAHOO.util.Event.addListener(anchor, "click", function(type, textarea) {
+		YAHOO.util.Event.addListener(anchor, "click", function(type, args) {
 
 			// make ajax request
 			var callback = {
 				success: function(o) {
 					o.argument.textarea.style.cursor = 'text';
 					o.argument.textarea.disabled = false;
-					o.argument.textarea.value = o.responseText;
+					o.argument.textarea.value = o.responseText + "\n\n----\n" + o.argument.footer;
 				},
 				failure: function(o) {
 					o.argument.textarea.style.cursor = 'text';
 					o.argument.textarea.disabled = false;
 					o.argument.textarea.value = '';
 				},
-				argument: {textarea: textarea}
+				argument: args
 			}
 
 			// get template content via AJAX call
@@ -108,7 +110,7 @@ function reportProblemMailerResponsesTemplatesSetup(list, textarea)
 			textarea.style.cursor = 'wait';
 			textarea.disabled = true;
 
-		}, textarea);
+		}, args);
     }
 }
 

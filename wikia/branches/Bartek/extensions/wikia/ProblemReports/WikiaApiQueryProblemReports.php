@@ -6,7 +6,7 @@
  * API for ProblemReports extension
  * Lists, adds, updates and removes problem reports
  *
- * @author Maciej Brencz <macbre@wikia.com>
+ * @author Maciej Brencz <macbre@wikia-inc.com>
  *
  */
 
@@ -51,17 +51,17 @@ class WikiaApiQueryProblemReports extends WikiaApiQuery {
 	
 		global $wgServerName;
 	
-        $params  = $this->getInitialParams();
+ 		$params  = $this->getInitialParams();
 		
 		// validate given token
 		$isTokenValid = ( !empty($params['token']) && WikiaApiQueryProblemReports::getToken($wgServerName) == $params['token'] );
 
-        // database instance
-        $db =& $this->getDB(DB_SLAVE);
+		// database instance
+		$db =& $this->getDB(DB_SLAVE);
 
-        // build query
-        $this->addTables( array( wfSharedTable('problem_reports'), wfSharedTable('city_list') ) );
-        $this->addFields( array
+		// build query
+		$this->addTables( array( wfSharedTable('problem_reports'), wfSharedTable('city_list') ) );
+		$this->addFields( array
 			(
 				'problem_reports.pr_id as id',
 				'problem_reports.pr_city_id as city_id',
@@ -228,7 +228,7 @@ class WikiaApiQueryProblemReports extends WikiaApiQuery {
 			// add the log entry for problem reports
 			$log = new LogPage('pr_rep_log', true); // true: also add entry to Special:Recentchanges
 			
-			$reportedTitle = Title::newFromText($params['title'], $params['ns']);
+			$reportedTitle = Title::newFromText($params['title'], NS_MAIN);
 			$desc = 'reported a problem';
 			
 			$log->addEntry('prl_rep', $reportedTitle, /*$data['summary']*/ '', array
@@ -329,7 +329,7 @@ class WikiaApiQueryProblemReports extends WikiaApiQuery {
 		if ($ret) {
 			// create title object of reported page
 			$report = self::getReportById($params['report']);
-			$reportedTitle = Title::newFromText($report['title'], $report['ns']);
+			$reportedTitle = Title::newFromText($report['title'], NS_MAIN);
 		
 			// add the log entry for problem reports
 			$log = new LogPage('pr_rep_log', true); // true: also add entry to Special:Recentchanges
@@ -396,7 +396,7 @@ class WikiaApiQueryProblemReports extends WikiaApiQuery {
 		
 		// create title object of reported page
 		$report = self::getReportById($params['report']);
-		$reportedTitle = Title::newFromText($report['title'], $report['ns']);
+		$reportedTitle = Title::newFromText($report['title'], NS_MAIN);
 		
 		// delete row from problem_reports table (use DB_MASTER !!!)
 		$dbw =& wfGetDB( DB_MASTER );
@@ -672,18 +672,18 @@ class WikiaApiQueryProblemReports extends WikiaApiQuery {
 		$tables = array(wfSharedTable('problem_reports'));
 
 		$sql_wheres = array();
-		
+
 		// select from given city only?	
-		if (intval($params['showall']) != 1) {
+		if ( empty($params['showall']) ) {
 			$sql_wheres ['pr_city_id'] = !empty($params['wikia']) ? (int) $params['wikia'] : self::getCityID();
 		}
 		
 		// archived?
-		if ((int) $params['archived']) {
+		if ( !empty($params['archived']) ) {
 			$sql_wheres[] = 'pr_status in (1,2)';
 		}
 		// staff?
-		else if ((int) $params['staff']) {
+		else if ( !empty($params['staff']) ) {
 			$sql_wheres['pr_status'] = 3;
 		}
 		else {
@@ -711,94 +711,27 @@ class WikiaApiQueryProblemReports extends WikiaApiQuery {
 		wfProfileOut(__METHOD__);
 		
 		return $count;
-    }	
-
-
-
-
-
-	// check whether provided problem description contains spam-like things: words, hostnames etc
-	// based on SpamBlacklist extension
+	}	
+		
+	// check whether provided problem description contains spam
+	// using SpamBlacklist extension (which should be enabled sitewide)
 	static function checkForSpam($content)
 	{
-		global $wgTitle, $IP, $wgUser, $wgParser;
-
-		// SpamBlacklist should be loaded in DefaultSettings...	
-		if ( !function_exists('wfSpamBlacklistLoader') ) {
-			// extension is not loaded! fallback - not spam...
-			wfDebug('Install SpamBlacklist extension to check for spam in problem reports!');
+		// empty content cannot contain spam
+		if ( empty($content) ) {
 			return false;
 		}
-		
-		// perform check (based on SpamBlackList::filter)
+
 		wfProfileIn(__METHOD__);
 		
-		// some settings stuff
-		$settings = array
-		(
-			'files' => array( 'http://meta.wikimedia.org/w/index.php?title=Spam_blacklist&action=raw&sb_ver=1' ),
-			'title' => $wgTitle,
-			'text'  => $content,
-			
-			'regexes' => false,
-			
-			'warningTime'   => 8 * 3600,	// 8h - after when try to get new version of regexps file
-			'expiryTime'    => 10 * 3600,	// 10h - how long should we keep regexps in memcache
-			'warningChance' => 100,			// posibility of HTTP request after 'warningTime' elapses
-			
-			'memcache_file'    => 'spam_blacklist_file',
-			'memcache_regexes' => 'spam_blacklist_regexes'
-		);
-		
-		// do filtering
-		$spamList = new SpamList_helper($settings);
+		$spamObj = wfSpamBlacklistObject();
+		$title = new Title();
 
-		$regexes    = $spamList->getRegexes();
-		$whitelists = $spamList->getWhitelists();
-
-		if ( is_array( $regexes ) ) 
-		{
-			# Run parser to strip SGML comments and such out of the markup
-			# This was being used to circumvent the filter (see bug 5185)
-			$options = new ParserOptions();
-			$text = $wgParser->preSaveTransform( $content, $wgTitle, $wgUser, $options );
-			$out = $wgParser->parse( $content, $wgTitle, $options );
-			
-			$links = implode( "\n", array_keys( $out->getExternalLinks() ) );
-
-			# Strip whitelisted URLs from the match
-			if( is_array( $whitelists ) ) 
-			{
-				wfDebug( "Excluding whitelisted URLs from " . count( $whitelists ) . " regexes: " . implode( ', ', $whitelists ) . "\n" );
-				foreach( $whitelists as $regex ) 
-				{
-					$links = preg_replace( $regex, '', $links );
-				}
-			}
-
-			# Do the match
-			//wfDebug( "Checking text against " . count( $regexes ) . " regexes: " . implode( ', ', $regexes ) . "\n" );
-			wfDebug( "Checking text against " . count( $regexes ) . " regexes\n" );
-			$retVal = false;
-			foreach( $regexes as $regex ) 
-			{
-				if ( preg_match( $regex, $links, $matches ) ) 
-				{
-					wfDebug( "\n".' -- Match: "'.$matches[0].'"' );
-					$retVal = true;
-					break;
-				}
-			}
-		} 
-		else 
-		{
-			$retVal = false;
-		}
-		
-		wfDebug("\n".' -- Spam check result: ' . ($retVal ? 'spam found :(' : 'spam not found :D') ."\n");
+		$result = $spamObj->filter($title, $content, 0, false);
 
 		wfProfileOut( __METHOD__ );
-		return $retVal;
+
+		return $result;
 	}
 
     
@@ -845,11 +778,9 @@ class WikiaApiQueryProblemReports extends WikiaApiQuery {
     static function makeActionText( $key, $title, $params, $skin )
     {
 		global $wgLogActions, $wgOut, $wgTitle;
-		
+
 		wfProfileIn(__METHOD__);
-	
-		$titleLink = '[['.$title->getNsText().':'.$title->getPrefixedText().']]';
-		
+
 		$problemTypes = array (
 			wfMsg('pr_what_problem_spam_short'),
 			wfMsg('pr_what_problem_vandalised_short'),
@@ -862,6 +793,13 @@ class WikiaApiQueryProblemReports extends WikiaApiQuery {
 		switch($key) {
 			// problem is reported
 			case 'pr_rep_log/prl_rep':
+				// dirty hack
+				if (empty($params[1])) {
+					$params = explode("\n", $params[0]);
+				}
+
+				$titleLink = '[['.$title->getPrefixedText().']]';
+
 				$rt = wfMsg( $wgLogActions[$key], $titleLink, '[[Special:ProblemReports/'.$params[1].'|#'.$params[1].']]' );
 				break;
 		

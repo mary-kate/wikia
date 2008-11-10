@@ -7,7 +7,7 @@
  * warranty.
  */
 
-/* @(#) $Id: JIRA.php 28553 2007-12-16 18:38:50Z siebrand $ */
+/* @(#) $Id: JIRA.php 584 2008-07-29 13:59:13Z emil $ */
 
 
 # To use:

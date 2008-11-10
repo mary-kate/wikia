@@ -6,7 +6,7 @@
  * A SiteWideMessages extension for MediaWiki
  * Provides an interface for sending messages seen on all wikis
  *
- * @author Maciej Błaszkowski (Marooned) <marooned@wikia.com>
+ * @author Maciej Błaszkowski (Marooned) <marooned at wikia-inc.com>
  * @date 2008-01-09
  * @copyright Copyright (C) 2008 Maciej Błaszkowski, Wikia Inc.
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License 2.0 or later
@@ -42,6 +42,7 @@ if (!function_exists('extAddSpecialPage')) {
 	require("$IP/extensions/ExtensionFunctions.php");
 }
 extAddSpecialPage(dirname(__FILE__) . '/SpecialSiteWideMessages_body.php', 'SiteWideMessages', 'SiteWideMessages');
+$wgSpecialPageGroups['SiteWideMessages'] = 'wikia';
 
 /**
  * Initialize hooks
@@ -58,11 +59,12 @@ function SiteWideMessagesInit() {
 		$wgHooks['OutputPageParserOutput'][] = 'SiteWideMessagesGetUserMessages';
 		$wgHooks['EditPage::showEditForm:initial'][] = 'SiteWideMessagesArticleEditor';
 		$wgHooks['AbortDiffCache'][] = 'SiteWideMessagesAbortDiffCache';
+		$wgHooks['WikiFactoryPublicStatusChange'][] = 'SiteWideMessagesPublicStatusChange';
 	}
 }
 
 /**
- * Used to cancel cashing diff when user has some messages - important security issue
+ * Used to cancel caching diff when user has some messages - important security issue
  *
  */
 function SiteWideMessagesAbortDiffCache($oDiffEngine) {
@@ -226,6 +228,16 @@ function SiteWideMessagesArticleEditor($editPage) {
  */
 function SiteWideMessagesAjaxDismiss($msgId) {
 	$result = SiteWideMessages::dismissMessage($msgId);
-	return $result ? '1' : '0';
+	return is_bool($result) ? ($result ? '1' : '0') : $result;
 }
-?>
+
+/**
+ * When wiki is disabled or changed into the redirect, remove all messages from that wiki
+ * User won't be able to do this by his own
+ */
+function SiteWideMessagesPublicStatusChange($city_public, $city_id) {
+	if ($city_public == 0 || $city_public == 2) {
+		SiteWideMessages::deleteMessagesOnWiki($city_id);
+	}
+	return true;
+}

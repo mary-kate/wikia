@@ -36,7 +36,7 @@ $wgHooks['CreatePageMultiEditor::GenerateForm:presubmit'][] = 'wfAntiSpamInputBo
 $wgExtensionFunctions[] = 'wfAntiSpamInputInit';
 $wgExtensionCredits['other'][] = array(
     'name' => 'AntiSpamInput' ,
-    'author' => "[http://inside.wikia.com/wiki/User:TOR Łukasz 'TOR' Garczewski]",
+    'author' => "[http://www.wikia.com/wiki/User:TOR Łukasz 'TOR' Garczewski]",
     'version' => 0.3 ,
     'description' => 'Simple spambot blocking mechanism.'
 );
@@ -58,7 +58,7 @@ function wfAntiSpamInputBoxInclusion ( $form = false ) {
 
 	# check if we're using EditPage, wgOut or something else
 	# FIXME: if possible all cases should be handled identically
-	if (property_exists($form, 'editFormTextBottom')) {
+	if (is_object($form) && property_exists($form, 'editFormTextBottom')) {
 		$form->editFormTextBottom .= $input;
 	} elseif (method_exists($form, 'addHTML')) {
 		$form->addHTML($input);

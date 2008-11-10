@@ -18,7 +18,7 @@ $wgExtensionCredits['specialpage'][] = array(
     "name" => "WikiFactory",
     "description" => "Store MediaWiki settings in database",
 	"version" => preg_replace( '/^.* (\d\d\d\d-\d\d-\d\d).*$/', '\1', '$Id: SpecialWikiFactory.php 11926 2008-04-23 13:58:29Z eloy $' ),
-    "author" => "[http://inside.wikia.com/wiki/User:Eloy.wikia Krzysztof Krzyżaniak (eloy)]"
+    "author" => "[http://www.wikia.com/wiki/User:Eloy.wikia Krzysztof Krzyżaniak (eloy)]"
 );
 
 /**
@@ -37,5 +37,7 @@ require_once( dirname(__FILE__) . '/SpecialWikiFactory_ajax.php' );
  */
 $wgAvailableRights[] = 'wikifactory';
 $wgGroupPermissions['staff']['wikifactory'] = true;
+$wgGroupPermissions['wikifactory']['wikifactory'] = true;
 
 extAddSpecialPage( dirname(__FILE__) . '/SpecialWikiFactory_body.php', 'WikiFactory', 'WikiFactoryPage' );
+$wgSpecialPageGroups['WikiFactory'] = 'wikia';

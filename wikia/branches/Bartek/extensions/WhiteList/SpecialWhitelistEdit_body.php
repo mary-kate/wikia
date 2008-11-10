@@ -4,12 +4,12 @@ This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation, version 2
 of the License.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -40,17 +40,22 @@ function WhiteListLoadMessages() {
 }
 
 function wfMsgWhiteList($key) {
-    WhiteListLoadMessages();
-    return wfMsg($key);
+	WhiteListLoadMessages();
+	return wfMsg($key);
 }
 
 class WhitelistEdit extends SpecialPage
 {
     function WhitelistEdit() {
-        global $wgWhiteListManagerRight;
-        
-        SpecialPage::SpecialPage("WhitelistEdit", $wgWhiteListManagerRight);
-        self::loadMessages();
+        SpecialPage::SpecialPage("WhitelistEdit", 'editwhitelist');
+
+        # the standard method for LoadingExtensionMessages was apparently broken in several versions of MW
+        # so, to make this work with multiple versions of MediaWiki, let's load the messages nicely
+        if (function_exists('wfLoadExtensionMessages'))
+            wfLoadExtensionMessages('WhitelistEdit');
+        else
+            self::loadMessages();
+
         return true;
     }
 
@@ -59,7 +64,7 @@ class WhitelistEdit extends SpecialPage
 
         $this->setHeaders();
         $wgOut->setPagetitle(wfMsg('whitelistedit'));
-        
+
         $contractorId = $wgRequest->getInt('contractor', 0);
         if (!$contractorId)
         {
@@ -85,6 +90,7 @@ class WhitelistEdit extends SpecialPage
     {
         global $wgOut, $wgUser, $wgRequest;
         global $wgServer, $wgArticlePath;
+        $debug = 1;
         $dbr = wfGetDB( DB_SLAVE );
 
         # first lets process the changes to the existing entries
@@ -99,8 +105,7 @@ class WhitelistEdit extends SpecialPage
             $wgOut->addHtml("<form name='mainform' method='post'>");
             $wgOut->addHtml("<input type='hidden' name='contractor' value='$contractorId'>");
             foreach ($modify_array as $modify)
-                $wgOut->addHtml("<input type='hidden' name='' value=''>");
-            $wgOut->addHtml("<input type='hidden' name='cb_modify[]' value='$modify'>");
+                $wgOut->addHtml("<input type='hidden' name='cb_modify[]' value='$modify'>");
             $wgOut->addHtml("<input type='hidden' name='NewExpiryDate' value='$NewExpiryDate'>");
             $wgOut->addHtml("<input type='hidden' name='action' value='$action'>");
 
@@ -112,6 +117,7 @@ class WhitelistEdit extends SpecialPage
             $date = ($NewExpiryDate == '') ? "" : date("Y-m-d H:i:s", strtotime($NewExpiryDate));
             foreach ($modify_array as $entry => $rowid)
             {
+                $dbr->begin();
                 if ($doit)
                 {
                     $dbr->update('whitelist',
@@ -131,10 +137,12 @@ class WhitelistEdit extends SpecialPage
                                                  );
                     $wgOut->addWikiText(wfMsg('whitelistoverviewcd', $date, $pagename));
                 }
+                $dbr->commit();
             }
         } else if (($action == 'SetEdit') || ($action == 'SetView')) {
             foreach ($modify_array as $entry => $rowid)
             {
+                $dbr->begin();
                 if ($doit)
                 {
                     $dbr->update('whitelist',
@@ -158,10 +166,12 @@ class WhitelistEdit extends SpecialPage
                                              )
                                        );
                 }
+                $dbr->commit();
             }
         } else if ($action == 'Remove') {
             foreach ($modify_array as $entry => $rowid)
             {
+                $dbr->begin();
                 if ($doit)
                 {
                     $dbr->delete('whitelist',
@@ -176,8 +186,9 @@ class WhitelistEdit extends SpecialPage
                                                   array('wl_id' => $rowid),
                                                   __METHOD__
                                                  );
-                    $wgOut->addWikiText(wfMsg('whitelistoverviewrm', $pagename));
+                    self::DisplayWildCardMatches($pagename,wfMsg('whitelistoverviewrm', $pagename),-1);
                 }
+                $dbr->commit();
             }
         }
 
@@ -192,7 +203,7 @@ class WhitelistEdit extends SpecialPage
             $wgOut->addHtml("<input type='hidden' name='ExpiryDate' value='$expiryDate'>");
             $wgOut->addHtml("<input type='hidden' name='newAction' value='$newAction'>");
         }
-        
+
         $pages = preg_split('/\n/', $newPages, -1, PREG_SPLIT_NO_EMPTY);
         foreach ($pages as $entry => $pagename){
             $pagename = trim($pagename);
@@ -206,15 +217,22 @@ class WhitelistEdit extends SpecialPage
             if (preg_match("/^$myServer$myArticlePath(.*)$/", $pagename, $matches))
                 $pagename = preg_replace('/_/', ' ', $matches[1]);
 
+            # ensure we have a wildcard of %
+            $pagename = str_replace('*', '%', $pagename);
+
             if ($doit)
                 self::insertNewPage($dbr, $contractorId, $pagename, $newAction, $expiryDate);
             else
-                $wgOut->addWikiText(wfMsg('whitelistoverviewna',
+            {
+                self::DisplayWildCardMatches($pagename,
+                                    wfMsg('whitelistoverviewna',
                                           $pagename,
-                                          ($action == 'SetEdit') ? wfMsg('whitelisttablesetedit') : wfMsg('whitelisttablesetview'),
-                                          $expiryDate
-                                         )
+                                          ($newAction == 'SetEdit') ? wfMsg('whitelisttablesetedit') : wfMsg('whitelisttablesetview'),
+                                          ($expiryDate == '') ? wfMsg('whitelistnever') : $expiryDate
+                                         ),
+                                         -1
                                    );
+            }
 
             # check to see if the page is a redirect and if so, add the redirected-to page also
             $title = Title::newFromText($pagename);
@@ -229,27 +247,28 @@ class WhitelistEdit extends SpecialPage
                     else
                         $wgOut->addWikiText(wfMsg('whitelistoverviewna',
                                                 $redirecttitle->getPrefixedText(),
-                                                ($action == 'SetEdit') ? wfMsg('whitelisttablesetedit') : wfMsg('whitelisttablesetview'),
+                                                ($newAction == 'SetEdit') ? wfMsg('whitelisttablesetedit') : wfMsg('whitelisttablesetview'),
                                                 $expiryDate
                                                 )
                                            );
             }
         }
-        
+
         if (!$doit)
         {
             $wgOut->addHTML("<p><input type='submit' value='" . wfMsg('whitelistnewtableprocess') . "' />");
             $wgOut->addHtml("</form>");
         }
-        
+
         return;
     }
 
     function InsertNewPage($dbr, $contractorId, $pagename, $newAction, $expiryDate)
     {
         global $wgUser;
-        
+
         # this is for some reason a case insensitive search, so be ware!!!
+        $dbr->begin();
         if (!$dbr->selectRow('whitelist',
                                 array('wl_id'),
                                 array('wl_user_id'    => $contractorId,
@@ -267,16 +286,17 @@ class WhitelistEdit extends SpecialPage
                             ),
                         __METHOD__
                     );
+        $dbr->commit();
     }
 
     function DisplayContractorEditDetails($contractorId)
     {
-        global $wgOut, $wgUser;
+        global $wgOut, $wgUser, $wgWhitelistUsePrettyCalendar;
         $dbr = wfGetDB( DB_SLAVE );
 
         $wgOut->addScript(<<<END
 <script language = "Javascript">
-<!-- 
+<!--
 
 var form='mainform' //Give the form name here
 
@@ -292,11 +312,14 @@ dml.elements[i].checked=val;
 }
 // -->
 </script>
-<script type='text/javascript'>document.write(getCalendarStyles());</SCRIPT>
 END
 );
-        SpecialUserStats::AddCalendarJavascript();
-        
+        if ($wgWhitelistUsePrettyCalendar)
+        {
+            SpecialUserStats::AddCalendarJavascript();
+            $wgOut->addScript("<script type='text/javascript'>document.write(getCalendarStyles());</SCRIPT>");
+        }
+
         ob_start();
 print  <<<END
 <form name="mainform" method="post">
@@ -315,7 +338,7 @@ END;
         $wgOut->addHtml(wfMsg('whitelistfor', $ContractorUser->getRealName()));
         $wgOut->addHtml('</td></tr><tr><th><center>' .
                         wfMsg('whitelisttablemodify') .
-                        "<br><a href=\"javascript:SetChecked(1,'cb_modify[]')\">" .
+                        "<br /><a href=\"javascript:SetChecked(1,'cb_modify[]')\">" .
                         wfMsg('whitelisttablemodifyall') .
                         "</a> <a href=\"javascript:SetChecked(0,'cb_modify[]')\">" .
                         wfMsg('whitelisttablemodifynone') .
@@ -335,10 +358,7 @@ END;
         for ($row = $dbr->fetchObject($res); $row; $row = $dbr->fetchObject($res)) {
             $wgOut->addHtml("<tr><td><center><input type='checkbox' name='cb_modify[]' value='$row->wl_id'></center></td><td>");
             $page_title = Title::newFromText($row->wl_page_title);
-            if ($page_title == NULL)
-                $wgOut->addHtml(wfMsg('whitelistbadtitle') . $row->wl_page_title);
-            else
-                $wgOut->addHtml('<a href="' . $page_title->getFullUrl() . '">' . $row->wl_page_title . "</a>");
+            self::DisplayWildCardMatches($row->wl_page_title, $row->wl_page_title, 0);
             $wgOut->addHTML("</td><td><center>");
             if ($row->wl_allow_edit)
                 $wgOut->addHtml(wfMsg('whitelisttableedit'));
@@ -357,14 +377,22 @@ print  <<<END
     </tr>
     <tr>
       <td>
-        <script type='text/javascript'>
-          var cal1 = new CalendarPopup('testdiv1');
-          cal1.showNavigationDropdowns();
-        </SCRIPT>
-        <A HREF='#' onClick="cal1.select(document.forms[0].NewExpiryDate,'anchor1','MM/dd/yyyy'); return false;" NAME='anchor1' ID='anchor1'>
 END;
         $wgOut->addHTML(ob_get_contents());
         ob_clean();
+        
+        if ($wgWhitelistUsePrettyCalendar)
+        {
+print  <<<END
+            <script type='text/javascript'>
+              var cal1 = new CalendarPopup('testdiv1');
+              cal1.showNavigationDropdowns();
+            </SCRIPT>
+            <A HREF='#' onClick="cal1.select(document.forms[0].NewExpiryDate,'anchor1','MM/dd/yyyy'); return false;" NAME='anchor1' ID='anchor1'>
+END;
+            $wgOut->addHTML(ob_get_contents());
+            ob_clean();
+        }
 
         $wgOut->addHtml(wfMsg('whitelisttablenewdate') .
                         "</A> <input type='text' size='10'  name='NewExpiryDate'/><input type='radio' name='action' value='ChangeDate'>" .
@@ -385,14 +413,22 @@ print  <<<END
           </tr>
           <tr>
             <td>
+END;
+        $wgOut->addHTML(ob_get_contents());
+        ob_clean();
+        
+        if ($wgWhitelistUsePrettyCalendar)
+        {
+print  <<<END
                 <script type='text/javascript'>
                 var cal1 = new CalendarPopup('testdiv2');
                 cal1.showNavigationDropdowns();
                 </SCRIPT>
                 <A HREF='#' onClick="cal1.select(document.forms[0].ExpiryDate,'anchor2','MM/dd/yyyy'); return false;" NAME='anchor2' ID='anchor2'>
 END;
-        $wgOut->addHTML(ob_get_contents());
-        ob_clean();
+            $wgOut->addHTML(ob_get_contents());
+            ob_clean();
+        }
 
         $wgOut->addHtml(wfMsg('whitelistnewtabledate') .
                         "</A><input type='text' size='10'  name='ExpiryDate'/> <input type='radio' name='newAction' value='SetEdit'>" .
@@ -405,29 +441,35 @@ END;
                         "' /></center></td></tr></table></form>"
                        );
     }
-    
+
     function DisplayContractorSelectForm() {
-        global $wgOut, $wgWhiteListRestrictedGroup;
+        global $wgOut, $wgWhiteListRestrictedGroup, $wgWhitelistUsePrettyCalendar;
         $dbr = wfGetDB( DB_SLAVE );
-        
+
         $wgOut->addWikiText(wfMsg('whitelistselectrestricted'));
 
-        $required = new SpecialUserStats();
-        if (!method_exists($required, 'AddCalendarJavascript'))
-            $wgOut->addWikiText(wfMsg('whitelistnocalendar'));
-        
+        if ($wgWhitelistUsePrettyCalendar)
+        {
+            if (!class_exists("SpecialUserStats"))
+                $wgOut->addWikiText(wfMsg('whitelistnocalendar'));
+        }
+
         $wgOut->addHTML("<form method=\"post\">");
         $wgOut->addHTML('<select name="contractor">');
-        
+
         $users = array();
+        $dbr->begin();
         $res = $dbr->select( 'user_groups', 'ug_user', array('ug_group'=>$wgWhiteListRestrictedGroup), __METHOD__);
+        $dbr->commit();
         for ( $row = $dbr->fetchObject($res); $row; $row = $dbr->fetchObject($res)) {
             $u = User::newFromID($row->ug_user);
-            $users[$u->getRealName()] = $row->ug_user;
+            $users[$row->ug_user] = $u->getRealName();
+            if ($users[$row->ug_user] == "")
+                $users[$row->ug_user] = $u->getName();
         }
         $dbr->freeResult($res);
-        ksort($users);
-        foreach ($users as $name => $id)
+        asort($users);
+        foreach ($users as $id => $name )
             $wgOut->addHTML("<option value=\"$id\">".$name."</option>");
         $wgOut->addHTML('</select> ');
         $wgOut->addHTML("<input type=\"submit\" value=\"" . wfMsg('whitelistnewtableprocess') . "\" />");
@@ -437,6 +479,7 @@ END;
 
     function contractorWhitelistTable($dbr, $contractorId)
     {
+        $dbr->begin();
         $res = $dbr->select('whitelist',
                             array('wl_id',
                                 'wl_page_title',
@@ -449,7 +492,132 @@ END;
                                 ),
                             __METHOD__
                             );
+        $dbr->commit();
         return $res;
+    }
+
+    function ExpandWildCardWhiteList($wl_pattern)
+    {
+        global $wgContLanguageCode, $wgWhitelistWildCardInsensitive;
+
+        $dbr = wfGetDB( DB_SLAVE );
+        $dbr->debug(true);
+        $expanded = array();
+        $whitelisted = array();
+        $debug = 0;
+
+        # extract the NameSpace (the first part before the optional first colon followed by the article name
+        $pattern = '/^((:?)(.*?):)?(.*)$/';
+        $pattern .= $wgWhitelistWildCardInsensitive ? 'i' : '';
+
+        if (preg_match($pattern, $wl_pattern, $matches))
+        {
+            $found = array();
+            $found['title'] = $matches[4];
+            $found['ns'] = '%';
+
+            $ns = Language::Factory($wgContLanguageCode);
+            if ($matches[1] == ':' && $matches[2] == '' )
+                $found['ns'] = NS_MAIN;
+            if ($nsindex = $ns->getNsIndex($matches[3]))
+                $found['ns'] = $nsindex;
+            if (!is_int($found['ns']) && ($found['ns'] == '%'))
+                $found['title'] = $wl_pattern;
+
+            $found['title'] = str_replace('*', '%',  $found['title']);
+            $found['title'] = str_replace(' ', '_',  $found['title']);
+            array_push($expanded, $found);
+
+            # process the talk categories as well as the underlying categories
+            if (is_int($found['ns']) && $found['ns'] >= NS_MAIN)
+            {
+                if ($found['ns'] % 2)
+                    $found['ns']--;
+                else
+                    $found['ns']++;
+                array_push($expanded, $found);
+            }
+        }
+
+        if ($debug)
+            print_r($expanded);
+
+        foreach ($expanded as $entry)
+        {
+            $sql = "SELECT page_id FROM ". $dbr->tableName('page') .
+                   " WHERE `page_namespace` LIKE '" . $entry['ns'] .
+                   "' AND `page_title` LIKE '" . $entry['title'] . "'";
+            if ($wgWhitelistWildCardInsensitive)
+            {
+                $sql = "SELECT page_id FROM " .
+                       $dbr->tableName('page') .
+                       " WHERE UPPER(`page_namespace`) LIKE '" . strtoupper($entry['ns']) . "'" .
+                       " AND UPPER(`page_title`) LIKE '" . strtoupper($entry['title']) . "'";
+            }
+            $dbr->begin();
+            $res = $dbr->query($sql, __METHOD__);
+            $dbr->commit();
+            for ($row = $dbr->fetchObject($res); $row; $row = $dbr->fetchObject($res))
+                array_push($whitelisted, $row->page_id);
+            $dbr->freeResult($res);
+        }
+
+        if ($debug)
+            print_r($whitelisted);
+
+        return $whitelisted;
+    }
+
+
+    // createlink:  negative = No link
+    //                  zero = Only if possible
+    //              Positive = Link
+
+    function DisplayWildCardMatches($pagename, $headertext, $createlink=1)
+    {
+        global $wgOut;
+        $debug = 0;
+
+        $wildcard_match = self::ExpandWildCardWhiteList($pagename);
+        $num_matches = count($wildcard_match);
+        $need_bullet = 0;
+        if (substr($headertext, 0, 1) == '*')
+        {
+            $need_bullet = 1;
+            $headertext = substr($headertext, 1);
+        }
+        if (($num_matches <= 1) && !preg_match('/\%/', $pagename))
+        {
+            if ($createlink >= 0)
+                $headertext = "[[:$pagename|$headertext]]";
+            if ($need_bullet)
+                $headertext = '* ' . $headertext;
+            if ($debug)
+                print "Adding '$headertext'\n";
+            $wgOut->addWikiText($headertext);
+            return;
+        }
+
+        if ($createlink > 0)
+            $headertext = "[[:$pagename|$headertext]]";
+        if ($debug)
+            print "Adding '$headertext'\n";
+
+        $wgOut->addHtml('<div class="NavFrame" style="padding:0px;border-style:none;">');
+        $wgOut->addHtml('<div class="NavHead" style="background: #ffffff; text-align: left; font-size:100%;">');
+        # this is a hack to make the [show]/[hide] always appear after the text
+        $wgOut->addWikiText("$headertext" . wfMsg('whitelistnummatches', $num_matches) . "&nbsp;<font color='#ffffff'>[show]</font>&nbsp;</div>");
+        $wgOut->addHtml('<div class="NavContent" style="display:none; font-size:normal; text-align:left">');
+
+        foreach ($wildcard_match as $pageid)
+        {
+            $page = Title::newFromId($pageid);
+            $link = ":* [[:". $page->getNsText() . ":" . $page->getText() . "|" . $page->getNsText() . ":" . $page->getText() ."]]";
+            $wgOut->addWikiText($link);
+            if ($debug)
+                print "Adding '$link'\n";
+        }
+        $wgOut->addHtml('</div></div>');
     }
 }
 
@@ -458,7 +626,7 @@ function wfAddRestrictedPagesTab(&$personal_urls, $wgTitle)
     global $wgOut, $wgUser, $wgWhiteListRestrictedGroup;
 
     $userIsRestricted = in_array( $wgWhiteListRestrictedGroup, $wgUser->getGroups() );
-    
+
     if ($wgUser->isLoggedIn() && $userIsRestricted) {
         $personal_urls['mypages'] = array(
             'text' => wfMsgWhiteList('mywhitelistpages'),
@@ -471,10 +639,15 @@ function wfAddRestrictedPagesTab(&$personal_urls, $wgTitle)
 class WhiteList extends SpecialPage
 {
     function WhiteList() {
-        global $wgWhiteListRestrictedRight;
-       
-        SpecialPage::SpecialPage("WhiteList", $wgWhiteListRestrictedRight);
-        self::loadMessages();
+        SpecialPage::SpecialPage("WhiteList", 'restricttowhitelist');
+
+        # the standard method for LoadingExtensionMessages was apparently broken in several versions of MW
+        # so, to make this work with multiple versions of MediaWiki, let's load the messages nicely
+        if (function_exists('wfLoadExtensionMessages'))
+            wfLoadExtensionMessages('WhiteList');
+        else
+            self::loadMessages();
+
         return true;
     }
 
@@ -493,8 +666,6 @@ class WhiteList extends SpecialPage
         {
             $dummy = NULL;
             $user = User::newFromId($user);
-            # this is a hack to get properly fill in the $wgWhitelistOverride array with defaults
-            wfCheckWhitelist($dummy, $user, $dummy, $dummy);
         }
 
         $this->setHeaders();
@@ -525,15 +696,14 @@ class WhiteList extends SpecialPage
             $wgOut->addWikiText("");
         }
 
-        
+
         $wgOut->addHtml("<table cellspacing=0 cellpadding=2 border=1 width=100%><tr>");
         $wgOut->addHtml("<th>" . wfMsg('whitelistpagelist', $user->getRealName()) . "</th><th>" . wfMsg('whitelistrequest') . "</th>");
         $wgOut->addHtml("</tr><tr><td width=30%>");
 
         $res = WhitelistEdit::contractorWhitelistTable($dbr, $user->getId());
-        for ($row = $dbr->fetchObject($res); $row; $row = $dbr->fetchObject($res)) {
-            $wgOut->addWikiText("* [[:$row->wl_page_title|$row->wl_page_title]]");
-        }
+        for ($row = $dbr->fetchObject($res); $row; $row = $dbr->fetchObject($res)) 
+            WhitelistEdit::DisplayWildCardMatches($row->wl_page_title,$row->wl_page_title, 0);
         $dbr->freeResult($res);
         $pages = array();
         foreach ($wgWhitelistOverride['always']['read'] as $page)
@@ -542,16 +712,18 @@ class WhiteList extends SpecialPage
             array_push($pages, $page);
         sort($pages);
         foreach ($pages as $page)
-            $wgOut->addWikiText("* [[$page]]");
+            WhitelistEdit::DisplayWildCardMatches($page,$page,0);
 
-                
+
         $wgOut->addHtml("</td><td valign=top>");
         $wgOut->addHtml("<table cellspacing=0 cellpadding=2 border=0 width=100%><tr><td align='right'>$wgWhiteListManagerGroup:</td><td>");
         $wgOut->addHTML("<form method=\"post\">");
         $wgOut->addHTML('<select name="manager">');
-        
+
         $users = array();
+        $dbr->begin();
         $res = $dbr->select( 'user_groups', 'ug_user', array('ug_group'=>$wgWhiteListManagerGroup), __METHOD__);
+        $dbr->commit();
         for ( $row = $dbr->fetchObject($res); $row; $row = $dbr->fetchObject($res)) {
             $u = User::newFromID($row->ug_user);
             $users[$u->getRealName()] = $row->ug_user;
@@ -562,16 +734,14 @@ class WhiteList extends SpecialPage
             $wgOut->addHTML("<option value=\"$id\">".$name."</option>");
         $wgOut->addHTML('</select> ');
 
-        
+
         $wgOut->addHtml("</td></tr><tr><td align='right'>" . wfMsg('mywhitelistpages') . ":</td><td>");
         $wgOut->addHtml("<textarea name='newPages' cols=40 rows=5></textarea>");
         $wgOut->addHtml("</td></tr><tr><td colspan=2><center>");
         $wgOut->addHTML("<input type='submit' name='submit' value='" . wfMsg('whitelistnewtableprocess') . "' />");
         $wgOut->addHTML("</form>");
-        $wgOut->addHtml("</center></td></tr></table>");        
+        $wgOut->addHtml("</center></td></tr></table>");
         $wgOut->addHtml("</td></tr></table>");
         $wgOut->addHtml("</td></tr></table>");
     }
 }
-
-?>

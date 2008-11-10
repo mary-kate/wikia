@@ -149,15 +149,17 @@ class SearchRankTracker extends SpecialPage {
 				$graph->xaxis->SetTickLabels(array_values($aDataX));
 				$graph->xaxis->SetLabelAngle(90);
 				
+				$nullData = true;
 				foreach($aDataY as $sEngineName => $aData) {
 					// finall preparing data for y axis
 					$aPlotData = array();
 					foreach($aDataX as $sDate) {
-						if(isset($aData[$sDate])) {
+						if($aData[$sDate]) {
 							$aPlotData[] = -$aData[$sDate];
+							$nullData = false;
 						}
 						else {
-							$aPlotData[] = null;
+							$aPlotData[] = 'x';
 						}
 					}
 					
@@ -166,13 +168,27 @@ class SearchRankTracker extends SpecialPage {
 					$plot->SetColor($wgSearchRankTrackerConfig['searchEngines'][$sEngineName]['graphColor']);
 					$plot->SetLegend(ucfirst($sEngineName));
 					
+					if($sEngineName == 'google') {
+						$plot->SetWeight(2);
+					}
+					
 					$graph->Add($plot);				
 				}
 	
-				$graph->legend->SetShadow( 'gray@0.4', 5 );
-				$graph->legend->SetPos( 0.1, 0.1, 'right', 'top' );			
-				$graph->Stroke();
-				
+				if(!$nullData) {
+					$graph->legend->SetShadow( 'gray@0.4', 5 );
+					$graph->legend->SetPos( 0.1, 0.1, 'right', 'top' );			
+					$graph->Stroke();					
+				}
+				else {
+					// only zero/null values, display placeholder
+					$sImageBody = file_get_contents(dirname(__FILE__) . '/no_data.png');
+	
+					header("Content-type: image/jpeg");
+					header("Content-length: " . strlen($sImageBody));
+					
+					print $sImageBody;					
+				}
 			}
 			else {
 				// not enough data for plotting, display placeholder

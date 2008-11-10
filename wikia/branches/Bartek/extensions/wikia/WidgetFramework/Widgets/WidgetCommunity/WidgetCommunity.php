@@ -43,7 +43,7 @@ function WidgetCommunity($id, $params) {
 	global $wgEnableWhosOnlineExt;
 	if( !empty( $wgEnableWhosOnlineExt ) ) {
 		$aResult = WidgetFrameworkCallAPI(array('action' => 'query', 'list' => 'whosonline', 'wklimit' => 5));
-		if(isset($aResult) && isset($aResult['query']['whosonline'])) {
+		if(!empty($aResult['query']['whosonline'])) {
 			$online = $aResult['query']['whosonline'];
 		}
 	}
@@ -53,11 +53,12 @@ function WidgetCommunity($id, $params) {
 		"action" => "query",
 		"list" => "recentchanges",
 		"rclimit" => 2,
+		"rctype" => "edit|new",
 		"rcshow" => "!anon|!bot",
 		"rcnamespace" => "0|1|2|3|6|7",
 		"rcprop" => "title|timestamp|user"));
 
-	if(isset($aResult['query']) && isset($aResult['query']['recentchanges'])) {
+	if(!empty($aResult['query']['recentchanges'])) {
 		$recentlyEdited = $aResult['query']['recentchanges'];
 	} else {
 		$recentlyEdited = array();
@@ -84,23 +85,15 @@ function WidgetCommunity($id, $params) {
 function WidgetCommunityFormatTime($time) {
 	$diff = time() - strtotime($time);
 	if ($diff < 60) { //less than a minute
-		return(', seconds ago');
+		return wfMsgExt( 'widget-community-secondsago', array( 'parsemag' ), $diff );
 	} else if ($diff < (60 * 60)) { //less than an hour
 		$minutes = floor($diff/60);
-		$plural = ' minutes ago';
-		if ($minutes == 1) {
-			$plural = ' minute ago';
-		}
-		return(', '. floor($diff/60) . $plural);
+		return wfMsgExt('widget-community-minutesago', array( 'parsemag' ), $minutes);
 	} else if ($diff < (60 * 60 * 24)) { //less than a day
 		$hours = floor($diff/(60*60));
-		$plural = ' hours ago';
-		if ($hours == 1) {
-			$plural = ' hour ago';
-		}
-		return(', '. floor($diff/(60*60)). $plural);
+		return wfMsgExt('widget-community-hoursago', array( 'parsemag' ), $hours);
 	} else if ($diff < (60 * 60 * 24 * 2)) { //less than 2 days
-		return(', yesterday');
+		return wfMsg('widget-community-yesterday');
 	}
 	return '';
 }

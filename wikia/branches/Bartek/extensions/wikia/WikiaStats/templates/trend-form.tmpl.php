@@ -19,7 +19,7 @@ foreach ($cityOrderList as $id => $city_id)
 	#---
 	$empty_row .= "<td>&nbsp;</td>";
 	#---
-	$dbname = (array_key_exists($city_id, $cityList)) ? $cityList[$city_id]['dbname'] : "";
+	$dbname = (array_key_exists($city_id, $cityList)) ? $cityList[$city_id]['dbname'] : $city_id;
 	$wikiaName = ($city_id == 0) ? wfMsg('wikiastats_trend_all_wikia_text') : $dbname;
 	$rows[$k] .= "<td colspan=\"$colspan\" align=\"$align\"><strong><a href=\"/index.php?title=Special:WikiaStats&action=citystats&city=$city_id\">".$wikiaName."</a></strong></td>";
 	$loop++;
@@ -45,7 +45,7 @@ $KB = 1024;
 		#---
 		$day = ($i == $nbr_month) ? date("d") : date("d", $cur_date);
 		$sum += $day;
-		$month = substr(wfMsg(strtolower(date("F",$cur_date))), 0, 3);
+		$month = $wgLang->sprintfDate("M", wfTimestamp(TS_MW, $cur_date));
 		#---
 		$variable = "<strong style=\"font-color:#00008B\">X" . $i . "</strong>";
 		$meanArray[0][] = $variable;
@@ -74,8 +74,8 @@ $KB = 1024;
 		#---
 		$day = ($i == $nbr_month) ? date("d") : date("d", $next_date);
 		#---
-		$month = substr(wfMsg(strtolower(date("F",$cur_date))), 0, 3);
-		$next_month = substr(wfMsg(strtolower(date("F",$next_date))), 0, 3);
+		$month = $wgLang->sprintfDate("M", wfTimestamp(TS_MW, $cur_date));
+		$next_month = $wgLang->sprintfDate("M", wfTimestamp(TS_MW, $next_date));
 		#---
 		if ($i < $nbr_month)
 		{
@@ -104,59 +104,62 @@ $KB = 1024;
 $i = 0;
 foreach ($trend_stats as $column => $dateValues)
 {
-	$linkText = array("wikians" => wfMsg('wikiastats_distrib_wikians'), "articles" => wfMsg('wikiastats_articles_text'), "database" => wfMsg('wikiastats_database'), "links" => wfMsg('wikiastats_links'), "usage" => wfMsg('wikiastats_daily_usage'));
+	$linkText = array(
+		"wikians" => wfMsg('wikiastats_distrib_wikians'), 
+		"articles" => wfMsg('wikiastats_articles_text'), 
+		"database" => wfMsg('wikiastats_database'), 
+		"links" => wfMsg('wikiastats_links'), 
+		"images" => wfMsg('wikiastats_images')
+	);
 
 	$active = "";
-	if (($i >= 0) && ($i < 4)) {
+	if (($i >= 0) && ($i < 7)) {
 		$active = $linkText["wikians"];
 		$linkText["wikians"] = "";
-	} elseif ( ($i >= 4) && ($i < 11) ) {
+	} elseif ( ($i >= 7) && ($i < 14) ) {
 		$active = $linkText["articles"];
 		$linkText["articles"] = "";
-	} elseif ( ($i >= 11) && ($i < 14) ) {
+	} elseif ( ($i >= 14) && ($i < 17) ) {
 		$active = $linkText["database"];
 		$linkText["database"] = "";
-	} elseif ( ($i >= 14) && ($i < 19) ) {
+	} elseif ( ($i >= 17) && ($i < 22) ) {
 		$active = $linkText["links"];
 		$linkText["links"] = "";
-	} elseif ( ($i >= 19) && ($i < 21) ) {
-		$active = $linkText["usage"];
-		$linkText["usage"] = "";
+	} elseif ( ($i >= 22) && ($i < 24) ) {
+		$active = $linkText["images"];
+		$linkText["images"] = "";
 	}
 ?>	
 <tr>
 <td colspan="<?= round(count($cityOrderList) + 3) ?>">
 <table width="100%" class="ws-trend-table-nobrd">
 <tr>
-<td width="100%" style="height:25px;"><a name="<?=strtolower($active)?>">
-<table style="width:100%;" class="ws-trend-table-wob-nobrd">
-<tr>
+	<td width="100%" style="height:25px;"><a name="<?=strtolower($active)?>">
+	<table style="width:100%;" class="ws-trend-table-wob-nobrd">
+	<tr>
 <?
 	$loop = 0;	
 	$links = array();
-	foreach ($linkText as $id => $name)
-	{
-		if (!empty($name))
-		{
-			$links[] = "<a href=\"/index.php?title=Special:WikiaStats&action=compare&table=1&page=$page#".$id."\">".$name."</a>";
+	foreach ($linkText as $id => $name) {
+		if (!empty($name)) {
+			$links[] = "<a href=\"/index.php?title=Special:WikiaStats&action=compare&table=1&page=$page#".$id."\" style=\"color:#800000\">".$name."</a>";
 		}
 		$loop++;
 	}
 ?>	        
-<td style="width:250px" nowrap>(<?=$column?>) <?= "<strong>".implode (" - ", $links)."</strong>" ?></td>
+<td style="width:250px; font-size:8pt;white-space:nowrap;">(<?=$column?>) <?= "<strong>".implode (" - ", $links)."</strong>" ?></td>
 <?
 	$roundCols = round( ( (count($cityOrderList) * 5) / 100), 0);
 	#---
-	for ($col = 0; $col < $roundCols; $col++)
-	{
+	for ($col = 0; $col < $roundCols; $col++) {
 ?>
-<td style="width:auto;text-align:center;" nowrap><strong><?= $active ?> - <a href="/index.php?title=Special:WikiaStats&action=compare&table=3"><?= wfMsg('wikiastats_mainstats_short_column_' . $column) ?></a></strong></td>
+<td style="width:auto;font-size:8pt;text-align:center;white-space:nowrap;"><strong><?= $active ?> - <a style="color:#008000;" href="/index.php?title=Special:WikiaStats&action=compare&table=3"><?= wfMsg('wikiastats_mainstats_short_column_' . $column) ?></a></strong></td>
 <?		
 	}
 ?>	        
-</tr>
-</table>
-</td>
+	</tr>
+	</table>
+	</td>
 </tr>
 </table>
 </td>
@@ -190,8 +193,8 @@ foreach ($dateValues as $date => $cities)
 	{
 		$dateArr = explode("-", date("Y-m-d"));
 		#---
-		$stamp = mktime(0,0,0,$dateArr[1],$dateArr[2],$dateArr[0]);
-		$outDate = substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " " . $dateArr[2] .", ". $dateArr[0];
+		$stamp = mktime(23,59,59,$dateArr[1],$dateArr[2],$dateArr[0]);
+		$outDate = $wgLang->sprintfDate(WikiaGenericStats::getStatsDateFormat(0), wfTimestamp(TS_MW, $stamp));
 	}
 	else
 	{
@@ -199,8 +202,8 @@ foreach ($dateValues as $date => $cities)
 		{
 			$dateArr = explode("-", $date);
 			#---
-			$stamp = mktime(0,0,0,$dateArr[1],1,$dateArr[0]);
-			$outDate = substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " ".$dateArr[0];
+			$stamp = mktime(23,59,59,$dateArr[1],1,$dateArr[0]);
+			$outDate = $wgLang->sprintfDate("M Y", wfTimestamp(TS_MW, $stamp));
 		}
 		else
 		{
@@ -209,8 +212,8 @@ foreach ($dateValues as $date => $cities)
 				$trend = 1;
 				$dateArr = explode("-", date("Y-m-f"));
 				#---
-				$stamp = mktime(0,0,0,$dateArr[1],1,$dateArr[0]);
-				$outDate = substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " ".$dateArr[0];
+				$stamp = mktime(23,59,59,$dateArr[1],1,$dateArr[0]);
+				$outDate = $wgLang->sprintfDate("M Y", wfTimestamp(TS_MW, $stamp));
 			}
 			else
 			{
@@ -221,42 +224,40 @@ foreach ($dateValues as $date => $cities)
 		}
 	}
 ?>
-<tr><td class="eb-trend" style="width: 90px;<?= $backColor ?>" nowrap><strong><?= $outDate ?></strong></td>
+<tr><td class="eb-trend" style="width: 90px;<?= $backColor ?>white-space:nowrap;"><strong><?= $outDate ?></strong></td>
 <?		
 	foreach ($cityOrderList as $id => $city_id)
 	{
         $value = (array_key_exists($city_id, $cities)) ? $cities[$city_id] : 0;
 		if (empty($growth))
 		{
-			if ($column == 'A')
+			if ($column == 'G')
 				$out = sprintf("%0d", $value);
-			elseif ($column == 'H')
-				$out = sprintf("%0.1f", $value);
-			elseif ($column == 'I')
+			elseif ($column == 'K')
+				$out = $wgLang->formatNum(sprintf("%0.1f", $value)); 
+			elseif ($column == 'L')
 				$out = sprintf("%0.0f", $value);
-			elseif (($column == 'J') || ($column == 'K'))
+			elseif (($column == 'M') || ($column == 'N'))
 			{
 				$out = sprintf("%0d%%", $value * 100);
 			}
-			elseif ($column == 'M')
+			elseif ($column == 'P')
 			{
 				if (intval($value) > $GB)
-					$out = sprintf("%0.1f GB", $value/$GB);
+					$out = wfMsg('size-gigabytes', $wgLang->formatNum(sprintf("%0.1f", $value/$GB)));
 				elseif (intval($value) > $MB)
-					$out = sprintf("%0.1f MB", $value/$MB);
+					$out = wfMsg('size-megabytes', $wgLang->formatNum(sprintf("%0.1f", $value/$MB)));
 				elseif ($value > $KB)
-					$out = sprintf("%0.1f KB", $value/$KB);
+					$out = wfMsg('size-kilobytes', $wgLang->formatNum(sprintf("%0.1f", $value/$KB)));
 				else
 					$out = sprintf("%0d", intval($value));
 			}
 			else
 			{
 				if (intval($value) > $G)
-					$out = sprintf("%0.1f G", intval($value/$G));
+					$out = sprintf("%s G", $wgLang->formatNum(sprintf("%0.1f", $value/$G)));
 				elseif (intval($value) > $M)
-					$out = sprintf("%0.1f M", $value/$M);
-				//elseif (intval($value) > $K)
-				//	$out = sprintf("%0.1f k", intval($value)/$K);
+					$out = sprintf("%s M", $wgLang->formatNum(sprintf("%0.1f", $value/$M)));
 				else
 					$out = sprintf("%0d", $value);
 			}
@@ -270,7 +271,7 @@ foreach ($dateValues as $date => $cities)
 			}
 			elseif (($out > 0) && ($out < 25))
 			{
-				$out = "<font color=\"#000000\">".sprintf("+%0.0f%%", $out)."</font>";
+				$out = "<font color=\"#555555\">".sprintf("+%0.0f%%", $out)."</font>";
 			}
 			elseif (($out > 25) && ($out < 75))
 			{
@@ -286,22 +287,20 @@ foreach ($dateValues as $date => $cities)
 			}
 		}	
 ?>		
-<td class="eb-trend" nowrap style="<?=$backColor?> width:45px;">&nbsp;<?= (($trend == 1) ? "&#177 ".$out : $out) ?><?= ((($growth == 1) && ($out !== "") && (strpos($out,"%") === false)) ? "%" : "") ?></td>
+<td class="eb-trend" style="<?=$backColor?> width:40px;white-space:nowrap;">&nbsp;<?= (($trend == 1) ? "&#177 ".$out : $out) ?><?= ((($growth == 1) && ($out !== "") && (strpos($out,"%") === false)) ? "%" : "") ?></td>
 <?		
 	}
 ?>
 </tr>
 <?	
-	if ($loop == 0)
-	{
+	if ($loop == 0) {
 ?>
 <tr style="background-color:#ffdead;font-size:1px"><?=$empty_row?></tr>
 <?	
-	}
-	$loop++;
+	} $loop++;
 }
 ?>
-<tr style="background-color:white;font-size:8pt;"><?=$empty_row?></tr>
+<tr style="height:20px;"><?=$empty_row?></tr>
 <?
 	$i++;
 }

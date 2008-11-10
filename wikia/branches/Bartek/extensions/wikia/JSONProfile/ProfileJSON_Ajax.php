@@ -84,8 +84,15 @@ function wfProfileJSON($user_name, $r_user_name="") {
 					"user_add_friend"=>wfMsg("user-add-friend"),
 					"user_remove_friend"=>wfMsg("user-remove-friend")
 				);
+				
+				//load gender
+				$dbr =& wfGetDB( DB_SLAVE );
+				$sql = "SELECT up_gender from user_profile where up_user_id={$user->getID()}";
+				$gender_res = $dbr->query($sql);
+				if ($gender_row = $dbr->fetchObject($gender_res)) $gender = $gender_row->up_gender;
+		
 				$profile_JSON_array["messages"] = array(
-					"private" => user_name_display($user->getID(), $user->getName()) . " elected to make his profile private."
+					"private" => user_name_display($user->getID(), $user->getName()) . " elected to make " . (( $gender == 0 )?"his":"her") . " profile private."
 				);
 				
 				//bulletins placeholder (blank)
@@ -1023,11 +1030,13 @@ function wfUpdateProfileBGJSON($user_name, $bg, $scroll=0) {
 $wgAjaxExportList [] = 'wfGetURLContents';
 
 function wfGetURLContents($url, $callback) {
+	$url = urldecode( $url );
 	$html = file_get_contents( $url );
+	$html = mb_convert_encoding($html, 'UTF-8',mb_detect_encoding($html, 'UTF-8, ISO-8859-1', true));
 	
 	preg_match("/<title[^>]*?>(.*?)<\/title>/si", $html, $matches );
 	$title = $matches[1];
-	
+
 	preg_match("/<body[^>]*?>(.*?)<\/body>/si", $html, $matches );
 	$body = $matches[1];
 	$body =  preg_replace('/<script[^>]*?>.*?<\/script>/si', '', $body);
@@ -1039,8 +1048,10 @@ function wfGetURLContents($url, $callback) {
 	$page["url"] = $url;
 	$page["html"] = $html;
 	$page["title"] = $title;
+	
 	$page["body"] = $body;
 	$page["description"] = $meta_description;
 	return "var page=" . jsonify($page) . ";\n\n{$callback}(page);";
+	
 }
 ?>

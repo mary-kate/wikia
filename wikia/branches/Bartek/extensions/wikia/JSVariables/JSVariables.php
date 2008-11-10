@@ -6,7 +6,7 @@
 $wgHooks['ExtendJSGlobalVars'][] = 'wfExtendJSGlobalVars';
 
 function wfExtendJSGlobalVars($vars) {
-	global $wgCurse, $wgCityId, $wgEnableAjaxLogin, $wgUser, $wgDBname, $wgPrivateTracker, $wgWikiaAdvertiserCategory;
+	global $wgCurse, $wgCityId, $wgEnableAjaxLogin, $wgUser, $wgDBname, $wgPrivateTracker, $wgWikiaAdvertiserCategory, $wgExtensionsPath, $wgTitle, $wgArticle, $wgStyleVersion;
 
 	$cats = wfGetBreadCrumb();
 	$idx = count($cats)-2;
@@ -25,18 +25,26 @@ function wfExtendJSGlobalVars($vars) {
 	$vars['wgReturnTo'] = isset($_REQUEST['returnto']) ? $_REQUEST['returnto'] : '';
 	$vars['wgDB'] = $wgDBname;
 	$vars['wgPrivateTracker'] = !empty($wgPrivateTracker) ? $wgPrivateTracker : false;
-	$vars['wgWikiaAdvertiserCategory'] = $wgWikiaAdvertiserCategory;
 	if($vars['wgIsArticle'] == false && $vars['wgEnableAjaxLogin']) {
 		$vars['ajaxLogin1'] = wfMsg('ajaxLogin1');
 		$vars['ajaxLogin2'] = wfMsg('ajaxLogin2');
 	}
 	$vars['wgMainpage'] = wfMsgForContent( 'mainpage' );
-	$vars['wgIsMainpage'] = ($vars['wgMainpage'] == (empty($vars['wgCanonicalNamespace']) ?
-							$vars['wgTitle'] :
-							$vars['wgCanonicalNamespace'].':'.$vars['wgTitle']));
+	$vars['wgIsMainpage'] = $wgTitle->getArticleId() == Title::newMainPage()->getArticleId();
+	if(!$vars['wgIsMainpage']) {
+		if(!empty($wgArticle->mRedirectedFrom)) {
+			if($vars['wgMainpage'] == $wgArticle->mRedirectedFrom->getPrefixedText()) {
+				$vars['wgIsMainpage'] = true;
+			}
+		}
+	}
+
+	$vars['wgStyleVersion'] = isset($wgStyleVersion) ? $wgStyleVersion : '' ;
 	if(isset($wgUser->getSkin()->themename)) {
 		$vars['themename'] = $wgUser->getSkin()->themename;
 	}
+
+	$vars['wgExtensionsPath'] = $wgExtensionsPath;
 
 	return true;
 }

@@ -31,7 +31,7 @@ foreach ($cityStats as $id => $cityId)
 		$wikia_rows[$y] .= "<a href=\"/index.php?title=Special:WikiaStats&action=citycharts&city={$cityId}\">".wfMsg('wikiastats_charts')."</a>&nbsp;-&nbsp;";
 		$wikia_rows[$y] .= "<a href=\"javascript:void(0)\" onClick=\"XLSShowMenu('{$cityId}');\">".wfMsg('wikiastats_xls_files_stats')."</a></td></tr>";
 		
-		$cities_list .= "<input type=\"checkbox\" {$readolny} id=\"wscid\" name=\"wscid\" value=\"{$cityId}\">". ucfirst($cityList[$cityId]['title']) ." (".ucfirst($cityList[$cityId]['dbname']).") <br />";
+		$cities_list .= "<input type=\"checkbox\" {$readolny} id=\"wscid\" name=\"wscid\" value=\"{$cityId}\" />". ucfirst($cityList[$cityId]['title']) ." (".ucfirst($cityList[$cityId]['dbname']).") <br />";
 		$cities_list .= ($cityId == 0) ? "<br />" : "";
 	}
 }
@@ -57,7 +57,7 @@ function showXLSCompareDialog(statistics)
 		YD.get("wk-stats-panel").style.display = "none";
 		YD.get("wk-stats-main-panel").style.display = "none";
 		YD.get("wk-progress-stats-panel").style.display = "block";	
-		XLSGenerate(statistics, '');
+		XLSGenerate(statistics, '', '', '');
 		YAHOO.wkstatsxlsmenu.container.xlsmenu.setHeader('<?= addslashes(wfMsg('wikiastats_creation_panel_header')) ?>');
 		YAHOO.wkstatsxlsmenu.container.xlsmenu.show();
 	}
@@ -89,18 +89,19 @@ YAHOO.namespace("wkstatsxlsmenu.container");
 
                 xlmmenutext = "<div class=\"wk-stats-main-panel\" id=\"wk-stats-main-panel\">";
                 xlmmenutext += "<ul>";
-                xlmmenutext += "<li id=\"wk-xls-pagetitle\"><a href=\"javascript:void(0);\" onClick=\"XLSGenerate('1', '');\"><?=wfMsg("wikiastats_pagetitle")?></a></li>";
+                xlmmenutext += "<li id=\"wk-xls-pagetitle\"><a href=\"javascript:void(0);\" onClick=\"XLSGenerate('1', '', '', '');\"><?=wfMsg("wikiastats_pagetitle")?></a></li>";
                 xlmmenutext += "</ul>";
                 xlmmenutext += "</div>";
 
                 xlmmenutext += "<div class=\"wk-stats-panel\" id=\"wk-stats-panel\">";
                 xlmmenutext += "<ul>";
-                xlmmenutext += "<li><a href=\"javascript:void(0);\" onClick=\"XLSGenerate('2', '');\"><?=wfMsg("wikiastats_distrib_article")?></a></li>";
-                xlmmenutext += "<li><a href=\"javascript:void(0);\" onClick=\"XLSGenerate('3', '');\"><?=wfMsg("wikiastats_active_absent_wikians")?></a></li>";
-                xlmmenutext += "<li><a href=\"javascript:void(0);\" onClick=\"XLSGenerate('4', '');\"><?=wfMsg("wikiastats_anon_wikians")?></a></li>";
-                xlmmenutext += "<li><a href=\"javascript:void(0);\" onClick=\"XLSGenerate('5', '');\"><?=wfMsg("wikiastats_article_one_link")?></a></li>";
-                xlmmenutext += "<li><a href=\"javascript:void(0);\" onClick=\"XLSGenerate('6', '');\"><?=wfMsg("wikiastats_namespace_records")?></a></li>";
-                xlmmenutext += "<li><a href=\"javascript:void(0);\" onClick=\"XLSGenerate('7', '');\"><?=wfMsg("wikiastats_page_edits")?></a></li>";
+                xlmmenutext += "<li><a href=\"javascript:void(0);\" onClick=\"XLSGenerate('2', '', '', '');\"><?=wfMsg("wikiastats_distrib_article")?></a></li>";
+                xlmmenutext += "<li><a href=\"javascript:void(0);\" onClick=\"XLSGenerate('3', '', '', '');\"><?=wfMsg("wikiastats_active_absent_wikians")?></a></li>";
+                xlmmenutext += "<li><a href=\"javascript:void(0);\" onClick=\"XLSGenerate('4', '', '', '');\"><?=wfMsg("wikiastats_anon_wikians")?></a></li>";
+                xlmmenutext += "<li><a href=\"javascript:void(0);\" onClick=\"XLSGenerate('5', '', '', '');\"><?=wfMsg("wikiastats_article_one_link")?></a></li>";
+                xlmmenutext += "<li><a href=\"javascript:void(0);\" onClick=\"XLSGenerate('6', '', '', '');\"><?=wfMsg("wikiastats_namespace_records")?></a></li>";
+                xlmmenutext += "<li><a href=\"javascript:void(0);\" onClick=\"XLSGenerate('7', '', '', '');\"><?=wfMsg("wikiastats_page_edits")?></a></li>";
+                xlmmenutext += "<li><a href=\"javascript:void(0);\" onClick=\"XLSGenerate('8', '', '', '');\"><?=wfMsg("wikiastats_other_nspaces_edits")?></a></li>";
                 xlmmenutext += "</ul>";
                 xlmmenutext += "</div>";
 
@@ -109,7 +110,7 @@ YAHOO.namespace("wkstatsxlsmenu.container");
                 xlmmenutext += "</div>";
 
                 xlmmenutext += "<div style=\"float:right;\">";
-                xlmmenutext += "<input type=\"button\" name=\"closePanel\" value=\"<?=wfMsg('wikiastats_panel_close_btn')?>\" onClick=\"XLSPanelClose();\">";
+                xlmmenutext += "<input type=\"button\" name=\"closePanel\" value=\"<?=wfMsg('wikiastats_panel_close_btn')?>\" onClick=\"XLSPanelClose();\" />";
                 xlmmenutext += "</div>";
 
                 YAHOO.wkstatsxlsmenu.container.xlsmenu.setBody(xlmmenutext); 
@@ -151,7 +152,7 @@ YAHOO.namespace("Wikia.Statistics");
                         return false;
                     }
                     YD.get("wk-progress-compare-panel").style.display = "block";
-                    XLSGenerate(compare_stats, checked_list);
+                    XLSGenerate(compare_stats, checked_list, '', '');
                 };
                 YAHOO.Wikia.Statistics.handleCancel = function() 
                 { 
@@ -219,24 +220,24 @@ YE.addListener("ws-check-cities", "click", XLSClearCitiesList);
 <!-- WIKI's INFORMATION -->
 <table style="width:auto; font-family: arial,sans-serif,helvetica;" height="100%" valign="top">
  <tr>
-    <td class="panel-bootom-big" nowrap align="left">
+    <td class="panel-bootom-big" style="white-space:nowrap;" align="left">
         <strong><?= wfMsg('wikiastats_wikia') ?> <!--(<?=$loop?> <?= wfMsg('wikiastats_records') ?>)--></strong> 
     </td>
-    <td nowrap align="left" style="width:30px;">&nbsp;</td>
-    <td class="panel-bootom-big" nowrap align="left">
+    <td align="left" style="width:30px;white-space:nowrap;">&nbsp;</td>
+    <td class="panel-bootom-big" style="white-space:nowrap;" align="left">
         <strong><?= wfMsg('wikiastats_comparision') ?></strong>
     </td>
  </tr>
 <!-- main tables -->
  <tr>
-    <td nowrap align="left" valign="top" id="tdMenu" valign="top" height="100%">
+    <td align="left" valign="top" id="tdMenu" valign="top" height="100%" style="white-space:nowrap;">
     <?= count($wikia_rows); ?>
     <? foreach ($wikia_rows as $id => $rows) { ?>
         <table valign="top" class="ws-trend-table"><?=$rows?></table>
 	<? } ?>        
     </td>
-    <td nowrap align="left" valign="top">&nbsp;</td>
-    <td nowrap align="left" valign="top">
+    <td align="left" valign="top">&nbsp;</td>
+    <td align="left" valign="top">
         <table class="ws-trend-table-wob" id="ws-trend-table">
 <?
 $k = 7;

@@ -89,7 +89,7 @@ class DataProvider
 	final public static function /* array */ GetTopFiveArray() {
 		wfProfileIn( __METHOD__ );
 		global $wgMemc;
-        
+
 		$links = array();
         $links['most_popular'] = 'GetMostPopularArticles';
         $links['most_visited'] = 'GetMostVisitedArticles';
@@ -246,7 +246,7 @@ class DataProvider
 			self::removeAdultPages($results);
 
 			$results = array_slice( $results, 0, $limit );
-			$wgMemc->set( $memckey, $results, 300 );
+			$wgMemc->set( $memckey, $results, 60 * 60);
 		}
 
 		wfProfileOut( __METHOD__ );
@@ -307,9 +307,9 @@ class DataProvider
             if (!empty($results)) {
 			    $results = array_slice( $results, 0, $limit );
             }
-			$wgMemc->set( $memckey, $results, 300 );
+			$wgMemc->set( $memckey, $results, 60 * 60 * 3);
 		}
-		
+
 
 		wfProfileOut( __METHOD__ );
 		return $results;
@@ -331,7 +331,7 @@ class DataProvider
             /* take data from 'page_visited' table */
             $query = "SELECT page_namespace, page_title, page_id, count as cnt FROM page, page_visited WHERE page_namespace = 0 and article_id = page_id ORDER BY cnt DESC";
             self::GetTopContentQuery($results, $query, $limit, 'page_visited');
-            
+
 			if ( count( $results ) < $limit ) {
 			    if ( function_exists("wfGetMostPopularArticlesFromCache") ) {
                     $most_popular = wfGetMostPopularArticlesFromCache($limit, 0);
@@ -356,8 +356,8 @@ class DataProvider
             if (!empty($results)) {
                 $results = array_slice ($results, 0, $limit);
             }
-            
-			$wgMemc->set( $memckey, $results, 300 );
+
+			$wgMemc->set( $memckey, $results, 60 * 60 * 3);
 		}
 
 		wfProfileOut( __METHOD__ );
@@ -397,7 +397,7 @@ class DataProvider
 			self::removeAdultPages($results);
 
 			$results = array_slice( $results, 0, $limit );
-			$wgMemc->set( $memckey, $results, 300 );
+			$wgMemc->set($memckey, $results, 60 * 10);
 		}
 
 		wfProfileOut( __METHOD__ );
@@ -416,9 +416,14 @@ class DataProvider
 		$results = $wgMemc->get( $memckey );
 
 		if ( !is_array( $results ) ) {
-
-			$query = "SELECT rev_user, count(*) AS cnt FROM revision WHERE rev_user != 0 GROUP BY rev_user ORDER BY cnt DESC";
+			$query = "select rev_user, rev_cnt as cnt from user_rev_cnt where rev_user != 0 and rev_user NOT IN (SELECT ug_user FROM user_groups WHERE ug_group IN ('staff', 'bot'))  order by rev_cnt desc";
 			$dbr = &wfGetDB( DB_SLAVE );
+			if ($dbr->tableExists("user_rev_cnt") === false) {
+				$query = "select rev_user, cnt from ";
+				$query .= "(SELECT rev_user, count(0) as cnt FROM revision where rev_user > 0 and rev_user not in (select ug_user from user_groups where ug_group IN ('staff', 'bot')) ";
+				$query .= "GROUP BY rev_user) as c ";
+				$query .= "ORDER BY cnt desc";
+			}
 			$res = $dbr->query( $dbr->limitResult($query, $limit * 4, 0) );
 
 			$results = array();
@@ -435,7 +440,7 @@ class DataProvider
 			$dbr->freeResult( $res );
 
 			$results = array_slice( $results, 0, $limit );
-			$wgMemc->set( $memckey, $results, 300 );
+			$wgMemc->set($memckey, $results, 60 * 60 * 3);
 		}
 
 		wfProfileOut( __METHOD__ );
@@ -450,7 +455,7 @@ class DataProvider
 		wfProfileIn( __METHOD__ );
 
         $dbr = &wfGetDB( DB_SLAVE );
-        
+
         /* check if table exists */
         if (!empty($exists_table)) {
             if ($dbr->tableExists($exists_table) === false) {
@@ -657,6 +662,3 @@ class DataProvider
 		return $output;
 	}
 }
-
-
-?>

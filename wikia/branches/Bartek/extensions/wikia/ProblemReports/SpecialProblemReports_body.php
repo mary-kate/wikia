@@ -90,51 +90,51 @@ class SpecialProblemReports extends SpecialPage
 
 	// sends emails from mailer form
 	function handleMailer() {
-	    global $wgRequest, $wgUser, $wgOut, $wgServerName;
+		global $wgRequest, $wgUser, $wgOut, $wgServerName;
 	    
-	    // check user permission to send emails (and maybe his email is empty)
-	    if ( !WikiaApiQueryProblemReports::userCanDoActions() || $wgUser->getEmail() == '' ) {
+		// check user permission to send emails (and maybe his email is empty)
+		if ( !WikiaApiQueryProblemReports::userCanDoActions() || $wgUser->getEmail() == '' ) {
 			$wgOut->showPermissionsErrorPage( array('mailnologintext') );
 			return;
-	    }
+		}
 	    
-	    wfProfileIn(__METHOD__);
+		wfProfileIn(__METHOD__);
 	
-	    // get email params
-	    $params = array(
+		// get email params
+		$params = array(
 			'id'      => (int) $wgRequest->getVal('mailer-id'),
 			'subject' => $wgRequest->getVal('mailer-subject'),
 			'message' => $wgRequest->getVal('mailer-message'),
 			'cc'      => ($wgRequest->getVal('mailer-ccme') == 'on') ? true : false,
-	    );
+		);
 	    
-	    // get problem report data from API
-	    $apiCall['wkid']    = $params['id'];
-	    $apiCall['wktoken'] = WikiaApiQueryProblemReports::getToken($wgServerName);
-	    $apiCall['action']  = 'query';
-	    $apiCall['list']    = 'problemreports';
+		// get problem report data from API
+		$apiCall['wkid']    = $params['id'];
+		$apiCall['wktoken'] = WikiaApiQueryProblemReports::getToken($wgServerName);
+		$apiCall['action']  = 'query';
+		$apiCall['list']    = 'problemreports';
 
 		// call API
-	    $FauxRequest = new FauxRequest($apiCall);
-	    $api = new ApiMain($FauxRequest);
-	    $api->execute();
-	    $data =& $api->GetResultData();
+		$FauxRequest = new FauxRequest($apiCall);
+		$api = new ApiMain($FauxRequest);
+		$api->execute();
+		$data =& $api->GetResultData();
 		
-	    $report = $data['query']['problemreports'][$params['id']];
+		$report = $data['query']['problemreports'][$params['id']];
 	    
-	    // add email headers to params
-	    $params['from'] = $wgUser->getEmail();
-	    $params['to']   = $report['email'];
+		// add email headers to params
+		$params['from'] = $wgUser->getEmail();
+		$params['to']   = $report['email'];
 	    
-	    // parse message as it can contain {{templates}} and remove any HTML inside it
-	    $params['message'] = strip_tags($wgOut->parse($params['message']));
+		// parse message as it can contain {{templates}} and remove any HTML inside it
+		$params['message'] = strip_tags($wgOut->parse($params['message']));
 	    
-	    // send emails using UserMailer class
-	    wfDebug('ProblemReports: sending email to <'.$params['to'].'> on behalf of <'.$params['from'].">\n");
+		// send emails using UserMailer class
+		wfDebug('ProblemReports: sending email to <'.$params['to'].'> on behalf of <'.$params['from'].">\n");
 	    
-	    // create MailAddress objects
-	    $to   = new MailAddress($params['to'],   $report['reporter']);
-	    $from = new MailAddress($params['from'], $wgUser->getName());
+		// create MailAddress objects
+		$to   = new MailAddress($params['to'],   $report['reporter']);
+		$from = new MailAddress($params['from'], $wgUser->getName());
 
 		// send email (at least try)	   
 		$mailResult = UserMailer::send($to, $from, $params['subject'], $params['message']);
@@ -194,6 +194,13 @@ class SpecialProblemReports extends SpecialPage
 		}
 	}
 	
+	static function makeEmailTitle($city) {
+		global $wgSitename;
+
+		$msg =  wfMsg('defemailsubject');
+		$citySitename = WikiaApiQueryProblemReports::getCitySitename($city);
+		return str_replace($wgSitename, $citySitename, $msg);
+	}
 	
 	
 	function buildSubtitleAndLocalURL($title, $params) {
@@ -253,7 +260,7 @@ class SpecialProblemReports extends SpecialPage
 		}
 		
 		// RSS link
-		$subtitle .= ' | <a href="'.$wgRequest->appendQuery('feed=rss').'">RSS</a>';
+		$subtitle .= ' | <a href="'.htmlspecialchars($wgRequest->appendQuery('feed=rss')).'">RSS</a>';
 
 
 		// link to Special:Log/pr_rep_log
@@ -313,31 +320,23 @@ class SpecialProblemReports extends SpecialPage
 	
 		wfProfileIn(__METHOD__);
 		
-		global $wgDBname, $wgOut, $wgRequest;
+		global $wgDBname, $wgOut, $wgUser;
 	
 		$dbr =& wfGetDB( DB_SLAVE );
 		
 		// switch to DB of wikia report was made from
 		$dbr->selectDB( $report['db'] );
-		
-		$logReader = new LogReader( $wgRequest );
-		$logReader->limitType( 'pr_rep_log' );					// only log entries for ProblemReports ...
-		$logReader->whereClauses[] = "log_params LIKE '%\n{$report['id']}%'";	// .. and for given report
-		
-		$logViewer = new LogViewer( $logReader );
-		
-		// format log list
-		$result = $logViewer->getLogRows();
-		$logs = '';
 
-		if ($logViewer->numResults > 0) {
-			$result->seek( 0 );
-			
-			while( $s = $result->fetchObject() ) {
-				$logs .= $logViewer->logLine( $s );
-			}
-		}
-		
+		// setup classes for log
+		$loglist = new LogEventsList( $wgUser->getSkin(), $wgOut );
+		$pager = new LogPager( $loglist, 'pr_rep_log' );
+
+		// show logs only for given report
+		$pager->mConds[] = "log_params LIKE '%\n{$report['id']}%'";
+	
+		// get logs	
+		$logs = $pager->getBody();
+
 		// switch back to our DB
 		$dbr->selectDB( $wgDBname );
 		
@@ -365,7 +364,8 @@ class SpecialProblemReports extends SpecialPage
 
 		// add CSS (from static file)
 		$wgOut->addScript(
-			'<link rel="stylesheet" type="text/css" href="'.$wgExtensionsPath.'/wikia/ProblemReports/css/ProblemReports.css?'.$wgStyleVersion.'" />'.
+			'<link rel="stylesheet" type="text/css" href="'.$wgExtensionsPath.'/wikia/ProblemReports/css/SpecialProblemReports.css?'.$wgStyleVersion.'" />'.
+			"\n\t\t".'<!--[if lt IE 9]><link rel="stylesheet" type="text/css" href="'.$wgExtensionsPath.'/wikia/ProblemReports/css/SpecialProblemReports.ieFixes.css?'.$wgStyleVersion.'" /><![endif]-->'.
 			"\n\t\t".'<script type="text/javascript" src="'.$wgExtensionsPath.'/wikia/ProblemReports/js/SpecialProblemReports.js?'.$wgStyleVersion.'" ></script>'.
 			"\n"
 		);
@@ -556,6 +556,8 @@ class SpecialProblemReports extends SpecialPage
 				'mailer_message'	=> $wgRequest->getVal('msg'),
 				
 				'logs'			=> $logs,
+
+				'is_readonly'		=> wfReadOnly()
 			));
 			
 		    $wgOut->addHTML($tpl->execute('reports_list'));

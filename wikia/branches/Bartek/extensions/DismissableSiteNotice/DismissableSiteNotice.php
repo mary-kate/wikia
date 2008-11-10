@@ -1,12 +1,13 @@
 <?php
 
 $wgExtensionCredits['other'][] = array(
-        'name' => 'DismissableSiteNotice',
-        'version' => '2008-01-09',
-        'author' => 'Brion Vibber',
-        'description' => 'Allows users to close the sitenotice.',
+	'name' => 'DismissableSiteNotice',
+	'svn-date' => '$LastChangedDate: 2008-07-29 13:59:13 +0000 (Tue, 29 Jul 2008) $',
+	'svn-revision' => '$LastChangedRevision: 584 $',
+	'author' => 'Brion Vibber',
+	'description' => 'Allows users to close the sitenotice.',
 	'descriptionmsg' => 'sitenotice-desc',
-        'url' => 'http://www.mediawiki.org/wiki/Extension:DismissableSiteNotice',
+	'url' => 'http://www.mediawiki.org/wiki/Extension:DismissableSiteNotice',
 );
 
 $wgExtensionMessagesFiles['DismissableSiteNotice'] = dirname(__FILE__) . '/DismissableSiteNotice.i18n.php';
@@ -62,8 +63,8 @@ if (cookieValue != siteNoticeID) {
 		var element = document.getElementById('siteNotice');
 		element.parentNode.removeChild(element);
 	}
-	document.writeln('<table width="100%" id="mw-dismissable-notice"><tr><td width="100%">'+siteNoticeValue+'</td>');
-	document.writeln('<td><span style="margin:0 30px">[<a href="javascript:dismissNotice();">'+msgClose+'</a>]</span></td></tr></table>');
+	document.writeln('<table width="100%" id="mw-dismissable-notice"><tr><td width="80%">'+siteNoticeValue+'</td>');
+	document.writeln('<td width="20%" align="right">[<a href="javascript:dismissNotice();">'+msgClose+'</a>]</td></tr></table>');
 }
 -->
 </script>

@@ -17,6 +17,7 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 function axWStatisticsGenerate($city_id, $year_from, $month_from, $year_to, $month_to, $charts = 0)
 {
     global $wgRequest, $wgUser, $wgMessageCache, $wgWikiaStatsMessages;
+    global $wgCityId, $wgDBname;
 
 	if (empty($wgUser)) {
 		return false;
@@ -30,26 +31,35 @@ function axWStatisticsGenerate($city_id, $year_from, $month_from, $year_to, $mon
 		return;
 	}	
 
+	if ($wgDBname != CENTRAL_WIKIA_ID) { 
+		// central version
+		$city_id = $wgCityId;
+	}
+
 	require_once ( dirname( __FILE__ ) . '/SpecialWikiaStats.i18n.php' );
-	foreach( $wgWikiaStatsMessages as $key => $value ) 
-	{
+	foreach( $wgWikiaStatsMessages as $key => $value ) {
 		$wgMessageCache->addMessages( $wgWikiaStatsMessages[$key], $key );
 	}
 
-    $aResponse = WikiaGenericStats::getWikiMainStatistics($city_id, $year_from, $month_from, $year_to, $month_to, $charts);
+	$obj_stats = new WikiaGenericStats($wgUser->getID());
+    $aResponse = $obj_stats->getWikiMainStatistics($city_id, $year_from, $month_from, $year_to, $month_to, $charts);
     
-    if (!function_exists('json_encode'))  {
+    $result = ($aResponse['code'] == 1) ? $aResponse['text'] : "";
+    
+    /*if (!function_exists('json_encode'))  {
         $oJson = new Services_JSON();
         return $oJson->encode($aResponse);
     }
     else {
         return json_encode($aResponse);
-    }
+    }*/
+    return $result;
 }
 
 function axWStatisticsDistribEditsGenerate($city_id)
 {
     global $wgRequest, $wgUser, $wgMessageCache, $wgWikiaStatsMessages;
+    global $wgCityId, $wgDBname;
     
 	if (empty($wgUser)) {
 		return false;
@@ -62,6 +72,11 @@ function axWStatisticsDistribEditsGenerate($city_id)
 	if ( !$wgUser->isLoggedIn() ) {
 		return;
 	}	
+
+	if ($wgDBname != CENTRAL_WIKIA_ID) { 
+		// central version
+		$city_id = $wgCityId;
+	}
     
 	require_once ( dirname( __FILE__ ) . '/SpecialWikiaStats.i18n.php' );
 	foreach( $wgWikiaStatsMessages as $key => $value ) 
@@ -83,6 +98,7 @@ function axWStatisticsDistribEditsGenerate($city_id)
 function axWStatisticsWikiansRank($city_id, $month = 1)
 {
     global $wgRequest, $wgUser, $wgMessageCache, $wgWikiaStatsMessages;
+    global $wgCityId, $wgDBname;
     
 	if (empty($wgUser)) {
 		return false;
@@ -95,6 +111,11 @@ function axWStatisticsWikiansRank($city_id, $month = 1)
 	if ( !$wgUser->isLoggedIn() ) {
 		return;
 	}	
+
+	if ($wgDBname != CENTRAL_WIKIA_ID) { 
+		// central version
+		$city_id = $wgCityId;
+	}
     
 	require_once ( dirname( __FILE__ ) . '/SpecialWikiaStats.i18n.php' );
 	foreach( $wgWikiaStatsMessages as $key => $value ) 
@@ -116,6 +137,7 @@ function axWStatisticsWikiansRank($city_id, $month = 1)
 function axWStatisticsAnonUsers($city_id)
 {
     global $wgRequest, $wgUser, $wgMessageCache, $wgWikiaStatsMessages;
+    global $wgCityId, $wgDBname;
     
 	if (empty($wgUser)) {
 		return false;
@@ -128,6 +150,11 @@ function axWStatisticsAnonUsers($city_id)
 	if ( !$wgUser->isLoggedIn() ) {
 		return;
 	}	
+
+	if ($wgDBname != CENTRAL_WIKIA_ID) { 
+		// central version
+		$city_id = $wgCityId;
+	}
     
 	require_once ( dirname( __FILE__ ) . '/SpecialWikiaStats.i18n.php' );
 	foreach( $wgWikiaStatsMessages as $key => $value ) 
@@ -149,6 +176,7 @@ function axWStatisticsAnonUsers($city_id)
 function axWStatisticsArticleSize ($city_id, $sizeList = "")
 {
     global $wgRequest, $wgUser, $wgMessageCache, $wgWikiaStatsMessages;
+    global $wgCityId, $wgDBname;
     
 	if (empty($wgUser)) {
 		return false;
@@ -162,6 +190,11 @@ function axWStatisticsArticleSize ($city_id, $sizeList = "")
 		return;
 	}	
     
+	if ($wgDBname != CENTRAL_WIKIA_ID) { 
+		// central version
+		$city_id = $wgCityId;
+	}
+
 	require_once ( dirname( __FILE__ ) . '/SpecialWikiaStats.i18n.php' );
 	foreach( $wgWikiaStatsMessages as $key => $value ) 
 	{
@@ -182,6 +215,7 @@ function axWStatisticsArticleSize ($city_id, $sizeList = "")
 function axWStatisticsNamespaceCount($city_id)
 {
     global $wgRequest, $wgUser, $wgMessageCache, $wgWikiaStatsMessages;
+    global $wgCityId, $wgDBname;
     
 	if (empty($wgUser)) {
 		return false;
@@ -194,6 +228,11 @@ function axWStatisticsNamespaceCount($city_id)
 	if ( !$wgUser->isLoggedIn() ) {
 		return;
 	}	
+
+	if ($wgDBname != CENTRAL_WIKIA_ID) { 
+		// central version
+		$city_id = $wgCityId;
+	}
     
 	require_once ( dirname( __FILE__ ) . '/SpecialWikiaStats.i18n.php' );
 	foreach( $wgWikiaStatsMessages as $key => $value ) 
@@ -215,6 +254,7 @@ function axWStatisticsNamespaceCount($city_id)
 function axWStatisticsPageEdits($city_id)
 {
     global $wgRequest, $wgUser, $wgMessageCache, $wgWikiaStatsMessages;
+    global $wgCityId, $wgDBname;
     
 	if (empty($wgUser)) {
 		return false;
@@ -228,6 +268,11 @@ function axWStatisticsPageEdits($city_id)
 		return;
 	}	
     
+	if ($wgDBname != CENTRAL_WIKIA_ID) { 
+		// central version
+		$city_id = $wgCityId;
+	}
+
 	require_once ( dirname( __FILE__ ) . '/SpecialWikiaStats.i18n.php' );
 	foreach( $wgWikiaStatsMessages as $key => $value ) 
 	{
@@ -245,9 +290,10 @@ function axWStatisticsPageEdits($city_id)
     }
 }
 
-function axWStatisticsPageEditsDetails($city_id, $page_id)
+function axWStatisticsOtherNpacesPageEdits($city_id)
 {
     global $wgRequest, $wgUser, $wgMessageCache, $wgWikiaStatsMessages;
+    global $wgCityId, $wgDBname;
     
 	if (empty($wgUser)) {
 		return false;
@@ -260,6 +306,51 @@ function axWStatisticsPageEditsDetails($city_id, $page_id)
 	if ( !$wgUser->isLoggedIn() ) {
 		return;
 	}	
+    
+	if ($wgDBname != CENTRAL_WIKIA_ID) { 
+		// central version
+		$city_id = $wgCityId;
+	}
+
+	require_once ( dirname( __FILE__ ) . '/SpecialWikiaStats.i18n.php' );
+	foreach( $wgWikiaStatsMessages as $key => $value ) 
+	{
+		$wgMessageCache->addMessages( $wgWikiaStatsMessages[$key], $key );
+	}
+
+    $aResponse = WikiaGenericStats::getWikiPageEditsCount($city_id, 0, 1);
+    
+    if (!function_exists('json_encode'))  {
+        $oJson = new Services_JSON();
+        return $oJson->encode($aResponse);
+    }
+    else {
+        return json_encode($aResponse);
+    }
+}
+
+
+function axWStatisticsPageEditsDetails($city_id, $page_id)
+{
+    global $wgRequest, $wgUser, $wgMessageCache, $wgWikiaStatsMessages;
+    global $wgCityId, $wgDBname;
+    
+	if (empty($wgUser)) {
+		return false;
+	}
+
+	if ( $wgUser->isBlocked() ) {
+		return;
+	}
+	
+	if ( !$wgUser->isLoggedIn() ) {
+		return;
+	}	
+
+	if ($wgDBname != CENTRAL_WIKIA_ID) { 
+		// central version
+		$city_id = $wgCityId;
+	}
     
 	require_once ( dirname( __FILE__ ) . '/SpecialWikiaStats.i18n.php' );
 	foreach( $wgWikiaStatsMessages as $key => $value ) 
@@ -281,82 +372,89 @@ function axWStatisticsPageEditsDetails($city_id, $page_id)
 /*
  * function to generate XLS statistics
  */
-function axWStatisticsXLS($city_id, $param, $others = "")
+function axWStatisticsXLS($city_id, $param, $others = "", $date_from = "", $date_to = "")
 {
     global $wgRequest, $wgUser, $wgMessageCache, $wgWikiaStatsMessages;
+    global $wgCityId, $wgDBname;
 
 	if ( $wgUser->isBlocked() ) {
 		return;
 	}
 	
-/*	if ( $wgUser->isAnon() ) {
+	if ( !$wgUser->isLoggedIn() ) {
 		return;
-	}*/
+	}
+	
+	if ($wgDBname != CENTRAL_WIKIA_ID) { 
+		// central version
+		$city_id = $wgCityId;
+	}
 
 	require_once ( dirname( __FILE__ ) . '/SpecialWikiaStats.i18n.php' );
-	foreach( $wgWikiaStatsMessages as $key => $value ) 
-	{
+	foreach( $wgWikiaStatsMessages as $key => $value ) {
 		$wgMessageCache->addMessages( $wgWikiaStatsMessages[$key], $key );
 	}
 
 	$xls = 1;
-	switch ($param)
-	{
-		case "1": // generate main statistics for Wikia
-		{
-			WikiaGenericStats::getWikiMainStatistics($city_id, MIN_STATS_YEAR, MIN_STATS_MONTH, '', '', 0, $xls);
+	switch ($param) {
+		case "1": { // generate main statistics for Wikia
+			// parse parameters
+			list($year_from, $month_from) = array(MIN_STATS_YEAR, MIN_STATS_MONTH);
+			if ($date_from != "") {
+				list($year_from, $month_from) = explode("-", $date_from);
+				$month_from = sprintf("%02d", $month_from);
+			}
+			
+			list($year_to, $month_to) = array(date("Y"), date("m"));
+			if ($date_to != "") {
+				list($year_to, $month_to) = explode("-", $date_to);
+				$month_to = sprintf("%02d", $month_to);
+			}
+			$obj_stats = new WikiaGenericStats($wgUser->getID());
+			$obj_stats->getWikiMainStatistics($city_id, $year_from, $month_from, $year_to, $month_to, 0, $xls);
 			break;
 		}
-		case "2": // generate "Distribution of article edits over wikians"
-		{
+		case "2": { // generate "Distribution of article edits over wikians"
 			WikiaGenericStats::getWikiDistribStatistics($city_id, $xls);
 			break;
 		}
-		case "3" : // Active/Absent wikians, ordered by number of contributions
-		{
+		case "3": { // Active/Absent wikians, ordered by number of contributions
 		    WikiaGenericStats::getWikiWikiansRank($city_id, 1, $xls);
 		    break;
 		}
-		case "4" : // Active/Absent wikians, ordered by number of contributions
-		{
+		case "4": { // Active/Absent wikians, ordered by number of contributions
 		    WikiaGenericStats::getWikiAnonUsers($city_id, $xls);
 		    break;
 		}
-		case "5" : // Articles that contain at least one internal link and .. characters readable text, 
-		{
+		case "5": { // Articles that contain at least one internal link and .. characters readable text, 
 			$sizeList = "";
-			for ($i = 0 ; $i <= 13 ; $i++)
-			{
+			for ($i = 0 ; $i <= 13 ; $i++) {
 				$s = pow(2, 5 + $i);
 				$sizeList .= $s . "," ;
 			}
 		    WikiaGenericStats::getWikiArticleSize($city_id, $sizeList, $xls);
 		    break;
 		}
-		case "6" : // Database records per namespace
-		{
+		case "6": { // Database records per namespace
 			WikiaGenericStats::getWikiNamespaceCount($city_id, $xls);
 			break;			
 		}
-		case "7" : // Most edited articles (> 25 edits)
-		{
+		case "7": { // Most edited articles (> 25 edits)
 			WikiaGenericStats::getWikiPageEditsCount($city_id, $xls);
 			break;
 		}
+		case "8": { // Most edited articles (> 25 edits)
+			WikiaGenericStats::getWikiPageEditsCount($city_id, $xls, 1);
+			break;
+		}
 		// comparisions
-		case "8" : // overview
-		{
+		case "9": { // overview
 			$obj_stats = new WikiaGenericStats($wgUser->getID());
 			$cities = array(0 => 0); //initial and default value
-			if (!empty($others))
-			{
+			if (!empty($others)) {
 				$_ = explode(";", $others);
-				foreach ($_ as $id => $key)
-				{
-					if (is_numeric($key))
-					{
-						$cities[] = intval($key);
-					}
+				foreach ($_ as $id => $key) {
+					if (is_numeric($key)) $cities[] = intval($key);
 				}
 			}
 			#---
@@ -364,26 +462,20 @@ function axWStatisticsXLS($city_id, $param, $others = "")
 			//WikiaGenericStats::getWikiPageEditsCount($city_id, $xls);
 			break;
 		}
-		case "9" : // creation history
-		{
+		case "10": { // creation history
 			$obj_stats = new WikiaGenericStats($wgUser->getID());
 			$obj_stats->getWikiCreationHistoryXLS($city_id);
 			//WikiaGenericStats::getWikiPageEditsCount($city_id, $xls);
 			break;
 		}
-		default : // comparisions 
-		{
-			if ( ($param > 9) && ($param < 31) )
-			{
+		default : { // comparisions 
+			if ( ($param > 9) && ($param < 35) ) {
 				$obj_stats = new WikiaGenericStats($wgUser->getID());
 				$cities = array(0 => 0); //initial and default value
-				if (!empty($others))
-				{
+				if (!empty($others)) {
 					$_ = explode(";", $others);
-					foreach ($_ as $id => $key)
-					{
-						if (is_numeric($key))
-						{
+					foreach ($_ as $id => $key) {
+						if (is_numeric($key)) {
 							$cities[] = intval($key);
 						}
 					}
@@ -406,30 +498,32 @@ function axWStatisticsWikiaList() {
 	if ( $wgUser->isBlocked() ) {
 		return;
 	}
-	
-/*	if ( $wgUser->isAnon() ) {
-		return;
-	}*/
 
+	if ( !$wgUser->isLoggedIn() ) {
+		return;
+	}
+	
 	require_once ( dirname( __FILE__ ) . '/SpecialWikiaStats.i18n.php' );
-	foreach( $wgWikiaStatsMessages as $key => $value ) 
-	{
+	foreach( $wgWikiaStatsMessages as $key => $value ) {
 		$wgMessageCache->addMessages( $wgWikiaStatsMessages[$key], $key );
 	}
 	
-	$memckey = wfMemcKey("wikiastatslist");
+	$usLang = $wgUser->getOption( 'language' );
+	$usLang = (!empty($usLang)) ? $usLang : "en";
+	
+	$memckey = wfMemcKey("wikiastatslist_" . $usLang);
 	$main_select = $wgMemc->get($memckey);
 	
 	if (empty($main_select)) {
         $mStats = new WikiaGenericStats($wgUser->getID());
         
         $cityStatsList = $mStats->getWikiaOrderStatsList();
-        if (is_array($cityStatsList) && (empty($cityStatsList[0])))
-        {
+        if (is_array($cityStatsList) && (empty($cityStatsList[0]))) {
             $cityStatsList = array_merge(array(0=>0) /*All stats*/, $cityStatsList);
         }
         $cityList = $mStats->getWikiaAllCityList();
 
+/*
         $oTmpl = new EasyTemplate( dirname( __FILE__ ) . "/templates/" );
         $oTmpl->set_vars( array(
             "cityStats"	=> $cityStatsList,
@@ -437,8 +531,28 @@ function axWStatisticsWikiaList() {
             "user"		=> $wgUser,
         ));
         
-        $main_select = $oTmpl->execute("wikia-main-list");
-        $wgMemc->set($memckey, $main_select, 60*60*10);
+        $main_select = $oTmpl->execute("wikia-main-list"); 
+*/
+		$main_select = array();
+		$loop = 0;
+		foreach ($cityStatsList as $id => $cityId) {
+			if (!empty($cityList[$cityId])) {
+				$loop++;
+				$title = ($cityList[$cityId]['title'] == "&Sigma;") ? wfMsg("wikiastats_trend_all_wikia_text") . " " . wfMsg("wikiastats_always_selected") : $cityList[$cityId]['title'];
+				$urlshort = ($cityList[$cityId]['title'] == "&Sigma;") ? $title : ucfirst($cityList[$cityId]['urlshort']) . " (".$title.")";
+				#(!empty($cityList[$cityId]['urlshort'])) ? " (".ucfirst($cityList[$cityId]['urlshort']).")" : "";
+				$main_select[] = array("city" => $cityId, "name" => ucfirst($urlshort));
+			}
+		}
+		if (!function_exists('json_encode'))  {
+			$oJson = new Services_JSON();
+			$main_select = $oJson->encode($main_select);
+		}
+		else {
+			$main_select = json_encode($main_select);
+		}
+
+        $wgMemc->set($memckey, $main_select, 60*60*10);        
     }
 	
 	return $main_select;
@@ -451,11 +565,11 @@ function axWStatisticsWikiaListJson($limit=25, $offset=0) {
 	if ( $wgUser->isBlocked() ) {
 		return;
 	}
-	
-/*	if ( $wgUser->isAnon() ) {
-		return;
-	}*/
 
+	if ( !$wgUser->isLoggedIn() ) {
+		return;
+	}
+	
 	require_once ( dirname( __FILE__ ) . '/SpecialWikiaStats.i18n.php' );
 	foreach( $wgWikiaStatsMessages as $key => $value ) 
 	{
@@ -519,17 +633,26 @@ function axWStatisticsWikiaListJson($limit=25, $offset=0) {
 
 /* get list of wikia */
 function axWStatisticsWikiaInfo($city) {
-    global $wgRequest, $wgUser, $wgMessageCache, $wgWikiaStatsMessages, $wgMemc;
+    global $wgRequest, $wgUser, $wgMessageCache, $wgWikiaStatsMessages, $wgMemc, $wgContLang;
+    global $wgCityId, $wgDBname, $wgLang;
 
 	if ( $wgUser->isBlocked() ) {
 		return;
 	}
 	
-/*	if ( $wgUser->isAnon() ) {
+	if ( !$wgUser->isLoggedIn() ) {
 		return;
-	}*/
+	}
 
-	$memckey = wfMemcKey("wikiastatscityinfo_$city");
+	if ($wgDBname != CENTRAL_WIKIA_ID) { 
+		// central version
+		$city = $wgCityId;
+	}
+
+	$usLang = $wgUser->getOption( 'language' );
+	$usLang = (!empty($usLang)) ? $usLang : "en";
+
+	$memckey = wfMemcKey("wikiastatscityinfo_".$city."_".$usLang);
 	$cityinfo = $wgMemc->get($memckey);
 	if (empty($cityinfo)) {
 		#---
@@ -542,20 +665,54 @@ function axWStatisticsWikiaInfo($city) {
 		if (class_exists('WikiFactory')) {
 			$city_row = WikiFactory::getWikiByID($city);
 		} 
-        
-        if (!empty($city_row)) {
-			$oTmpl = new EasyTemplate( dirname( __FILE__ ) . "/templates/" );
-			$oTmpl->set_vars( array(
-				"city_row"	=> $city_row,
-				"user"		=> $wgUser,
-			));
-			$cityinfo = $oTmpl->execute("wikia-info");
+		
+		$cats = array();
+		if (!empty($city)) {
+			$cats = WikiaGenericStats::getCategoryForCityFromDB($city);
 		}
+        
+		$oTmpl = new EasyTemplate( dirname( __FILE__ ) . "/templates/" );
+		$oTmpl->set_vars( array(
+			"city_row"	 => $city_row,
+			"user"		 => $wgUser,
+			"wgContLang" => $wgContLang,
+			"cats"		 => $cats,
+			"city"		 => $city,
+			"wgLang"	 => $wgLang,
+		));
+		$cityinfo = $oTmpl->execute("wikia-info");
 
         $wgMemc->set($memckey, $cityinfo, 60*60*3);
     }
     
     return $cityinfo;    
+}
+
+function axWStatisticsSearchWikis($search_text) {
+    global $wgRequest, $wgUser, $wgMessageCache, $wgWikiaStatsMessages, $wgContLang;
+
+	if ( $wgUser->isBlocked() ) {
+		return;
+	}
+
+	if ( !$wgUser->isLoggedIn() ) {
+		return;
+	}
+
+	require_once ( dirname( __FILE__ ) . '/SpecialWikiaStats.i18n.php' );
+	foreach( $wgWikiaStatsMessages as $key => $value ) {
+		$wgMessageCache->addMessages( $wgWikiaStatsMessages[$key], $key );
+	}
+
+	$cities = WikiaGenericStats::getWikisListByValue($search_text);
+
+	if (!function_exists('json_encode'))  {
+		$oJson = new Services_JSON();
+		return $oJson->encode($cities);
+	}
+	else {
+		return json_encode($cities);
+	}
 }
 
 global $wgAjaxExportList;
@@ -567,9 +724,11 @@ $wgAjaxExportList[] = "axWStatisticsArticleSize";
 $wgAjaxExportList[] = "axWStatisticsNamespaceCount";
 $wgAjaxExportList[] = "axWStatisticsPageEdits";
 $wgAjaxExportList[] = "axWStatisticsPageEditsDetails";
+$wgAjaxExportList[] = "axWStatisticsOtherNpacesPageEdits";
 $wgAjaxExportList[] = "axWStatisticsWikiaList";
 $wgAjaxExportList[] = "axWStatisticsWikiaListJson";
 $wgAjaxExportList[] = "axWStatisticsWikiaInfo";
+$wgAjaxExportList[] = "axWStatisticsSearchWikis";
 //xls-functions
 $wgAjaxExportList[] = "axWStatisticsXLS";
 

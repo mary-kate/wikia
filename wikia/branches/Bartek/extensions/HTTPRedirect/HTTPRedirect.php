@@ -18,7 +18,7 @@ $wgExtensionFunctions[] = 'wfHTTPRedirect';
 function wfHTTPRedirect() {
 	wfUsePHP( 5.0 );
 	wfUseMW( '1.6alpha' );
-
+	
 	class HTTPRedirect {
 		public function __construct() {
 			global $wgHooks;
@@ -26,11 +26,11 @@ function wfHTTPRedirect() {
 			$wgHooks['ArticleViewRedirect'][] = array( &$this, 'redirectHook' );
 		}
 
-
+		
 		public static function redirectHook( Article &$article ) {
 			global $wgOut;
 
-			$wgOut->redirect( $article->mTitle->escapeFullURL(), 301 );
+			$wgOut->redirect( $article->mTitle->escapeFullURL(), 302 );
 
 			return false;
 		}

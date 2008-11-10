@@ -16,6 +16,7 @@ $wgGroupPermissions['staff']['multiwikiedit'] = true;
 
 $dir = dirname(__FILE__);
 $wgExtensionMessagesFiles ['MultiWikiEdit'] = $dir . '/MultiWikiEdit.i18n.php';
+$wgSpecialPageGroups['Multiwikiedit'] = 'pagetools';
 
 $wgExtensionFunctions[] = 'wfMultiWikiEditSetup';
 $wgExtensionCredits['specialpage'][] = array(
@@ -467,7 +468,7 @@ class MultiWikiEditForm {
 		/* now, renumerate array */
 		$result_array = array_values ($result_array) ;
 
-                $limit = '5000' ;
+                $limit = '10000' ;
 		$offset = 0 ;
 		( count ($result_array) < ($limit + $offset) ) ? $range = count ($result_array) : $range = ($limit + $offset) ;
 		for ($i = $offset; $i < $range; $i++) {
@@ -597,6 +598,8 @@ class MultiWikiEditForm {
 
 		if (NS_PROJECT == $nt->getNamespace()) {
 			$str = preg_replace ("/$wgMetaNamespace/", "Project", $str) ;
+		} elseif (NS_PROJECT_TALK == $nt->getNamespace()) {
+			$str = preg_replace ("/$wgMetaNamespaceTalk/", "Project talk", $str) ;
 		}
 
 		$part = explode ("php", $str ) ;

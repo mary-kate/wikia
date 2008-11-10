@@ -20,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *
- * $Id: LuceneSearch.php 30935 2008-02-14 07:36:13Z raymond $
+ * $Id: LuceneSearch.php 584 2008-07-29 13:59:13Z emil $
  */
 
 # To use this, add something like the following to LocalSettings:
@@ -85,3 +85,8 @@ extAddSpecialPage( dirname(__FILE__) . '/LuceneSearch_body.php', 'Search', 'Luce
 
 $wgExtensionMessagesFiles['LuceneSearch'] = dirname(__FILE__) . '/LuceneSearch.i18n.php';
 $wgAutoloadClasses['LuceneResult'] = dirname(__FILE__) . '/LuceneSearch_body.php';
+
+$wgAutoloadClasses['ApiQueryLuceneSearch'] = dirname(__FILE__) . '/ApiQueryLuceneSearch.php';
+// Override the default search engine
+$wgApiQueryListModules['search'] = 'ApiQueryLuceneSearch';
+

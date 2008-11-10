@@ -252,29 +252,43 @@ class Poke {
 		global $wgProfileJSONPath;
 		$user = User::newFromId($user_id_to);
 		$user->loadFromDatabase();
+		
+		$user_from_obj = User::newFromName($user_from);
+		if( is_object( $user_from_obj ) ){
+			$user_from_obj->load();
+			$user_from_display =  trim($user_from_obj->getRealName());
+		}
+		if( !$user_from_display ){
+			$user_from_display = $user_from;
+		}
+			
 		//if(  $user->getEmail() && $user->getIntOption("notifyfriendrequest",1) ){ //if($user->isEmailConfirmed()  && $user->getIntOption("notifyfriendrequest",1)){
 		if(  $user->getEmail() ){
 			$request_link = "{$wgProfileJSONPath}profile.html";
 			$update_profile_link = "{$wgProfileJSONPath}editprofile.html";
 			if($is_pokeback){
 				$subject = wfMsgExt( 'poke_back_subject', 'parsemag',
-					$user_from
+					$user_from,
+					$user_from_display
 				 );
 				$body = wfMsgExt( 'poke_back_body', 'parsemag',
 					(( trim($user->getRealName()) )?$user->getRealName():$user->getName()),
 					$user_from,
 					$request_link,
-					$update_profile_link
+					$update_profile_link,
+					$user_from_display
 				);
 			}else{
 				$subject = wfMsgExt( 'poke_subject', 'parsemag',
-					$user_from
+					$user_from,
+					$user_from_display 
 				 );
 				$body = wfMsgExt( 'poke_body', 'parsemag',
 					(( trim($user->getRealName()) )?$user->getRealName():$user->getName()),
 					$user_from,
 					$request_link,
-					$update_profile_link
+					$update_profile_link,
+					$user_from_display 
 				);			
 			}
 			$user->sendMail($subject, $body );

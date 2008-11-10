@@ -269,7 +269,7 @@ class RegexBlockData
 
     static public function getExpireValues() {
         $expiry_values = explode(",", wfMsg('regexblock_expire_duration')); 
-        $expiry_text = array("1 hour","2 hours","4 hours","6 hours","1 day","3 days","1 week","2 weeks","1 month","3 months","1 year","infinite");
+        $expiry_text = array("1 hour","2 hours","4 hours","6 hours","1 day","3 days","1 week","2 weeks","1 month","3 months","6 months","1 year","infinite");
         
         if (!function_exists("array_combine")) {
             function array_combine($a,$b) {

@@ -64,7 +64,8 @@ function wfQuestionGameAdmin($action,$key,$id,$comment=""){
 			array( "q_flag"=>"FLAGGED", "q_comment" => $comment ),
 			array( 'q_id' => $id  ),
 			__METHOD__ );
-				
+		$dbw->commit();
+		
 		$sql = "UPDATE quizgame_questions SET q_flag=\"FLAGGED\" WHERE q_id={$id};";
 		$sql="";
 		$output = "The question has been flagged.";
@@ -121,9 +122,11 @@ function wfQuestionGameAdmin($action,$key,$id,$comment=""){
 		
 		$sql = "DELETE FROM quizgame_answers WHERE a_q_id={$id};";
 		$res = $dbr->query($sql);
+		$dbr->commit();
 		
 		$sql = "DELETE FROM quizgame_choice WHERE choice_q_id={$id};";
 		$res = $dbr->query($sql);
+		$dbr->commit();
 		
 		$sql = "DELETE FROM quizgame_questions WHERE q_id={$id};";
 		$output = "Delete Succesfull!";
@@ -136,6 +139,7 @@ function wfQuestionGameAdmin($action,$key,$id,$comment=""){
 	//"
 	if($sql){
 		$res = $dbr->query($sql);
+		$dbr->commit();
 	}
 	return $output;
 }

@@ -1,176 +1,217 @@
 <!-- s:<?= __FILE__ ?> -->
-<?php
-if (!empty($cityInfo))
-{
-    $outDate = "";
-	$created = $cityInfo->city_created;
-	if (!empty($created))
-	{
-		$dateTime = explode(" ", $created);
-		#---
-		$dateArr = explode("-", $dateTime[0]);
-		#---
-		$stamp = mktime(0,0,0,$dateArr[1],$dateArr[2],$dateArr[0]);
-		$outDate = substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " " . $dateArr[2] .", ". $dateArr[0]. " ".$dateTime[1];
-	}
-    
-    #--- dbdumps ---
-    $full_url = "http://wikistats.wikia.com/dbdumps/".$cityInfo->city_dbname."/pages_full.xml.gz";
-    $current_url = "http://wikistats.wikia.com/dbdumps/".$cityInfo->city_dbname."/pages_current.xml.gz";
+<script type="text/javascript">
+/*<![CDATA[*/
+YAHOO.util.Event.onDOMReady(function () {
+	visible_column(18,22,0,'<?= wfMsg('wikiastats_links') ?>');
+	visible_column(23,24,0,'<?= wfMsg('wikiastats_images') ?>');
+});
+/*]]>*/
+</script>
 
-    $full_dump_time = WikiaGenericStats::getFileMTimeRemove($full_url);
-    $outFullDumpTime = substr(wfMsg(strtolower(date("F",$full_dump_time))), 0, 3) . " " . date("d", $full_dump_time) .", ". date("Y", $full_dump_time). " ".date("H:i:s", $full_dump_time);
-    $current_dump_time = WikiaGenericStats::getFileMTimeRemove($current_url);
-    $outCurrentDumpTime = substr(wfMsg(strtolower(date("F",$current_dump_time))), 0, 3) . " " . date("d", $current_dump_time) .", ". date("Y", $current_dump_time). " ".date("H:i:s", $current_dump_time);
-
-    $full_dump_size = WikiaGenericStats::getUrlFilesize($full_url);
-    $current_dump_size = WikiaGenericStats::getUrlFilesize($current_url);
-
-?>
-<!-- WIKI's INFORMATION -->
-<table cellspacing="0" cellpadding="2" border="0" style="width:auto; font-family: arial,sans-serif,helvetica;">
-<tr>
-<td class="cityinfo" nowrap align="left">
-	<strong><?= wfMsg('wikiastats_wikiname') ?></strong> <?= ucfirst($cityInfo->city_title) ?> (id: <?= $cityInfo->city_id ?>)
-</td>
-<td class="cityinfo" nowrap align="center">
-	<strong><?= wfMsg('wikiastats_wikiurl') ?></strong> <a target="new" href="<?= $cityInfo->city_url ?>"><?= $cityInfo->city_url ?></a>
-</td>
-<td class="cityinfo" align="center" nowrap>
-	<strong><?= wfMsg('wikiastats_wikicreated') ?></strong> <?= $outDate ?>
-</td>
-</tr>
-<tr>
-<td colspan="3" width="100%" class="cityinfo" align="left">
-	<strong><?= wfMsg('wikiastats_dbdumps_stats') ?>:</strong> 
-	<?=wfMsg('wikiastats_full_dump_stats')?>: <font style="color:gray; font-size: small; clear: none;"><?=wfMsg('wikiastats_size').": ".$full_dump_size?>, <?= wfMsg('wikiastats_dbdump_generated') ?><?=$outFullDumpTime?> </font>, 
-	<?=wfMsg('wikiastats_current_dump_stats')?>: <font style="color:gray; font-size: small; clear: none;"><?=wfMsg('wikiastats_size').": ".$current_dump_size?>, <?= wfMsg('wikiastats_dbdump_generated') ?><?=$outCurrentDumpTime?> </font>
-</td>
-</tr>
-<tr>
-<td colspan="3" width="100%" class="cityinfo" align="left">
-	<strong><?= wfMsg('wikiastats_see_MW_stats') ?></strong> <a href="http://wikistats.wikia.com/EN/TablesWikia<?=strtoupper($cityInfo->city_dbname)?>.htm" target="new">http://wikistats.wikia.com/EN/TablesWikia<?=strtoupper($cityInfo->city_dbname)?>.htm</a> 
-</td>
-</tr>	
-</table>
-<!-- END OF WIKI's INFORMATION -->
-<?php
-}
-?>
-<table cellspacing="1" cellpadding="0" border="0" width="500">
-<tr><td id="ws-hide-table" class="panel" width="100"></td></tr>
-</table>
+<div class="clear"></div>
+<div id="ws-hide-table" class="panel"></div>
 <!-- MAIN STATISTICS TABLE -->
-<input type="hidden" id="wk-stats-city-id" value="<?=$cityId?>">
-<div id="ws-main-table-stats">
-<table cellspacing="0" cellpadding="0" border="1" id="table_stats" style="width:auto; font-family: arial,sans-serif,helvetica; font-size:9pt;background-color:#ffffdd;">
+<input type="hidden" id="wk-stats-city-id" value="<?=$cityId?>" />
+<br />
+<div class="clear" style="font-size:7.7pt;height:15px;"><a href="#definitions"><?=wfMsg("wikiastats_see_definitions")?></a></div>
+<div id="ws-main-table-stats" style="width:100%;overflow:auto;margin:0px -225px 0px 0px;">
+<a name="mainstats"></a>
+<table align="left" cellspacing="0" cellpadding="0" border="1" id="table_stats" style="font-family: Trebuchet MS,arial,sans-serif,helvetica; font-size:9pt;background-color:#ffffdd;">
 <tr bgcolor="#ffdead">
-	<td class="cb"><b><?= wfMsg('wikiastats_date') ?></b></td>
-	<td colspan="4" class="cb">
-		<div class="hide"><a href="javascript:void(0);" alt="<?= wfMsg('wikiastats_hide') ?>" title="<?= wfMsg('wikiastats_hide') ?>" onClick="javascript:visible_column(1,4,0,'<?= wfMsg('wikiastats_wikians') ?>');">X</a></div>
-		<b><?= wfMsg('wikiastats_wikians') ?></b>
+	<td class="cb"><b><?= ucfirst(wfMsg('wikiastats_date')) ?></b></td>
+	<td colspan="7" class="cb">
+		<div class="hide"><a href="javascript:void(0);" title="<?= wfMsg('wikiastats_hide') ?>" onclick="javascript:visible_column(1,7,0,'<?= wfMsg('wikiastats_wikians') ?>');">X</a></div>
+		<b><a href="#wikians"><?= wfMsg('wikiastats_wikians') ?></a></b>
 	</td>
 	<td colspan="7" class="cb">
-		<div class="hide"><a href="javascript:void(0);" alt="<?= wfMsg('wikiastats_hide') ?>" title="<?= wfMsg('wikiastats_hide') ?>" onClick="javascript:visible_column(5,11,0,'<?= wfMsg('wikiastats_articles') ?>');">X</a></div>
-		<b><?= wfMsg('wikiastats_articles') ?></b>
+		<div class="hide"><a href="javascript:void(0);" title="<?= wfMsg('wikiastats_hide') ?>" onclick="javascript:visible_column(8,14,0,'<?= wfMsg('wikiastats_articles') ?>');">X</a></div>
+		<b><a href="#articles"><?= wfMsg('wikiastats_articles') ?></a></b>
 	</td>
 	<td colspan="3" class="cb">
-		<div class="hide"><a href="javascript:void(0);" alt="<?= wfMsg('wikiastats_hide') ?>" title="<?= wfMsg('wikiastats_hide') ?>" onClick="javascript:visible_column(12,14,0,'<?= wfMsg('wikiastats_database') ?>');">X</a></div>
-		<b><?= wfMsg('wikiastats_database') ?></b>
+		<div class="hide"><a href="javascript:void(0);" title="<?= wfMsg('wikiastats_hide') ?>" onclick="javascript:visible_column(15,17,0,'<?= wfMsg('wikiastats_database') ?>');">X</a></div>
+		<b><a href="#database"><?= wfMsg('wikiastats_database') ?></a></b>
 	</td>
 	<td colspan="5" class="cb">
-		<div class="hide"><a href="javascript:void(0);" alt="<?= wfMsg('wikiastats_hide') ?>" title="<?= wfMsg('wikiastats_hide') ?>" onClick="javascript:visible_column(15,19,0,'<?= wfMsg('wikiastats_links') ?>');">X</a></div>
-		<b><?= wfMsg('wikiastats_links') ?></b>
+		<div class="hide"><a href="javascript:void(0);" title="<?= wfMsg('wikiastats_hide') ?>" onclick="javascript:visible_column(18,22,0,'<?= wfMsg('wikiastats_links') ?>');">X</a></div>
+		<b><a href="#links"><?= wfMsg('wikiastats_links') ?></a></b>
 	</td>
 	<td colspan="2" class="cb">
-		<div class="hide"><a href="javascript:void(0);" alt="<?= wfMsg('wikiastats_hide') ?>" title="<?= wfMsg('wikiastats_hide') ?>" onClick="javascript:visible_column(20,21,0,'<?= wfMsg('wikiastats_daily_usage') ?>');">X</a></div>
-		<b><?= wfMsg('wikiastats_daily_usage') ?></b>
+		<div class="hide"><a href="javascript:void(0);" title="<?= wfMsg('wikiastats_hide') ?>" onclick="javascript:visible_column(23,24,0,'<?= wfMsg('wikiastats_images') ?>');">X</a></div>
+		<b><a href="#images"><?= wfMsg('wikiastats_images') ?></a></b>
 	</td>
 </tr>
 <tr bgcolor="#ffeecc">
-	<td class="cb" rowspan="2">&nbsp;</td>
-	<td valign="top" rowspan="2" class="cb">total</td>
-	<td valign="top" rowspan="2" class="cb">new</td>
-	<td colspan="2" class="cb">edits</td>
-	<td colspan="2" class="cb">count</td>
-	<td valign="top" rowspan="2" class="cb">new<br/>per day</td>
-	<td colspan="2" class="cb">mean</td>
-	<td colspan="2" class="cb">larger than</td>
-	<td valign="top" rowspan="2" class="cb">edits</td>
-	<td valign="top" rowspan="2" class="cb">size</td>
-	<td valign="top" rowspan="2" class="cb">words</td>
-	<td valign="top" rowspan="2" class="cb">internal</td>
-	<td valign="top" rowspan="2" class="cb">interwiki</td>
-	<td valign="top" rowspan="2" class="cb">image</td>
-	<td valign="top" rowspan="2" class="cb">external</td>
-	<td valign="top" rowspan="2" class="cb">redirects</td>
-	<td valign="top" rowspan="2" class="cb">page<br/>requests</td>
-	<td valign="top" rowspan="2" class="cb">visits</td>
+	<td class="cb" rowspan="3">&nbsp;</td>
+	<td colspan="5" class="cb"><?=wfMsg('wikiastats_months_edits')?></td>
+	<td valign="middle" colspan="2" class="cb"><?=wfMsg('wikiastats_lifetime_editors')?></td>
+	<td colspan="2" rowspan="2" class="cb"><?=wfMsg('wikiastats_count')?></td>
+	<td valign="middle" rowspan="3" class="cb"><?=wfMsg('wikiastats_new_per_day')?></td>
+	<td colspan="2" class="cb" rowspan="2" ><?=wfMsg('wikiastats_mean')?></td>
+	<td colspan="2" class="cb" rowspan="2" ><?=wfMsg('wikiastats_largerthan')?></td>
+	<td rowspan="3" class="cb"><?=wfMsg('wikiastats_edits')?></td>
+	<td rowspan="3" class="cb"><?=wfMsg('wikiastats_size')?></td>
+	<td rowspan="3" class="cb"><?=wfMsg('wikiastats_words')?></td>
+	<td rowspan="3" class="cb"><?=wfMsg('wikiastats_internal')?></td>
+	<td rowspan="3" class="cb"><?=wfMsg('wikiastats_interwiki')?></td>
+	<td rowspan="3" class="cb"><?=wfMsg('wikiastats_image')?></td>
+	<td rowspan="3" class="cb"><?=wfMsg('wikiastats_external')?></td>
+	<td rowspan="3" class="cb"><?=wfMsg('wikiastats_redirects')?></td>
+	<td rowspan="3" class="cb"><?=wfMsg('wikiastats_uploaded_images')?></td>
+	<td rowspan="3" class="cb"><?=wfMsg('wikiastats_with_links')?></td>
 </tr>
 <tr bgcolor="#ffeecc">
+	<td colspan="3" class="cb"><?=wfMsg('wikiastats_main_namespace')?></td>
+	<td colspan="2" class="cb"><?=wfMsg('wikiastats_other_namespace')?></td>
+	<td class="cb" rowspan="2"><?=wfMsg('wikiastats_total')?></td>
+	<td class="cb"><?=wfMsg('wikiastats_main_namespace')?></td>
+</tr>
+<tr bgcolor="#ffeecc">
+	<td class="cb"><?=wfMsg('wikiastats_total')?></td>
 	<td class="cb">&gt;5</td>
 	<td class="cb">&gt;100</td>
-	<td class="cb">official</td>
-	<td class="cb">&gt;200 ch</td>
-	<td class="cb">edits</td>
-	<td class="cb">bytes</td>
-	<td class="cb" nowrap>0.5 Kb</td>
-	<td class="cb" nowrap>2 Kb</td>
+	<td class="cb" style="white-space:nowrap;"><?=$wgLang->lcfirst(wfMsg('wikiastats_username'))?></td>
+	<td class="cb" style="white-space:nowrap;"><?=wfMsg('wikistats_image_namespace')?></td>
+	<td class="cb">&gt;10</td>
+	<td class="cb"><?=wfMsg('wikiastats_official')?></td>
+	<td class="cb" style="white-space:nowrap;"><?=wfMsg('wikiastats_more_200_ch')?></td>
+	<td class="cb"><?=wfMsg('wikiastats_edits')?></td>
+	<td class="cb"><?=wfMsg('wikiastats_bytes')?></td>
+	<td class="cb" style="white-space:nowrap;"><?=wfMsg('size-kilobytes', 0.5)?></td>
+	<td class="cb" style="white-space:nowrap;"><?=wfMsg('size-kilobytes', 2)?></td>
 </tr>
 <?php
-foreach ($monthlyStats as $date => $columnsData)
-{
+foreach ($statsData as $date => $columnsData) {
+?>
+<tr>
+<?php
+	$G = 1000 * 1000 * 1000;
+	$M = 1000 * 1000;
+	$K = 1000;
+	$GB = 1024 * 1024 * 1024;
+	$MB = 1024 * 1024;
+	$KB = 1024;
+	$loop = 0;
+	foreach ($columns as $column) {
+		$out = $columnsData[$column];
+		$class = "rb";
+		$loop++;
+		#if ( empty($userIsSpecial) && (is_array($wgStatsExcludedNonSpecialGroup)) && (in_array($loop, $wgStatsExcludedNonSpecialGroup) )) continue;
+
+		if (empty($columnsData[$column]) || ($columnsData[$column] == 0)) {
+			$out = "&nbsp;";
+		} else {
+			if ($column == 'date') {
+				$class = "db";
+				$dateArr = explode("-",$columnsData[$column]);
+				$stamp = mktime(23,59,59,$dateArr[1],1,$dateArr[0]);
+				$out = $wgLang->sprintfDate("M Y", wfTimestamp(TS_MW, $stamp));
+				if ($columnsData[$column] == $today) {
+				    $stamp = (!empty($today_day)) ? $today_day : $stamp;
+					$out = $wgLang->sprintfDate(WikiaGenericStats::getStatsDateFormat(0), wfTimestamp(TS_MW, $stamp));
+				}
+			}
+			elseif ($column == 'G')
+				$out = sprintf("%0d", $columnsData[$column]);
+			elseif ($column == 'K')
+				$out = $wgLang->formatNum(sprintf("%0.1f", $columnsData[$column]));
+			elseif ($column == 'L')
+				$out = sprintf("%0.0f", $columnsData[$column]);
+			elseif (($column == 'M') || ($column == 'N'))
+				$out = sprintf("%0d%%", $columnsData[$column] * 100);
+			elseif ($column == 'P') {
+				if (intval($columnsData[$column]) > $GB)
+					$out = wfMsg('size-gigabytes', $wgLang->formatNum(sprintf("%0.1f", intval($columnsData[$column])/$GB)));
+				elseif (intval($columnsData[$column]) > $MB)
+					$out = wfMsg('size-megabytes', $wgLang->formatNum(sprintf("%0.1f", intval($columnsData[$column])/$MB)));
+				elseif ($columnsData[$column] > $KB)
+					$out = wfMsg('size-kilobytes', $wgLang->formatNum(sprintf("%0.1f", intval($columnsData[$column])/$KB)));
+				else
+					$out = sprintf("%0d", intval($columnsData[$column]));
+			} else {
+				if (intval($columnsData[$column]) > $G)
+					$out = sprintf("%s G", $wgLang->formatNum(sprintf("%0.1f", intval($columnsData[$column])/$G)));
+				elseif (intval($columnsData[$column]) > $M)
+					$out = sprintf("%s M", $wgLang->formatNum(sprintf("%0.1f", intval($columnsData[$column])/$M)));
+				elseif ($columnsData[$column] > $K)
+					$out = sprintf("%s K", $wgLang->formatNum(sprintf("%0.1f", intval($columnsData[$column])/$K)));
+				else
+					$out = sprintf("%0d", intval($columnsData[$column]));
+			}
+		}
+
+?>
+	<td class="<?= $class ?>" style="white-space:nowrap;"><?= $out ?></td>
+<?
+	}
+
+	if ($date == $today) {
+?>
+</tr><tr>
+<?
+		$loop = 0;
+		foreach ($columns as $column) {
+			$loop++;
+			#if ( empty($userIsSpecial) && (is_array($wgStatsExcludedNonSpecialGroup)) && (in_array($loop, $wgStatsExcludedNonSpecialGroup) )) continue;
+?>
+	<td bgcolor="#ffeecc" class="cb_small">&nbsp;</td>
+<?
+		}
+	}
+?>
+</tr>
+<?
+}
+?>
+<tr bgcolor="#ffeecc">
+<?php
+$loop = 0;
+foreach ($columns as $column) {
+	if ($column == "date") $column = "&nbsp;";
+	$loop++;
+	if ( empty($userIsSpecial) && (is_array($wgStatsExcludedNonSpecialGroup)) && (in_array($loop, $wgStatsExcludedNonSpecialGroup) )) continue;
+?>
+	<td class="cb" title="<?= wfMsg("wikiastats_mainstats_column_".$column) ?>"><?= $column ?></td>
+<?
+}
+foreach ($monthlyStats as $date => $columnsData) {
 	#---
-	if ($columnsData['visible'] === 1)
-	{
+	if ($columnsData['visible'] === 1) {
 		$dateArr = explode("-", $date);
-		$stamp = mktime(0,0,0,$dateArr[1],1,$dateArr[0]);
-		$outDate = substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " " . $dateArr[0];
+		$stamp = mktime(23,59,59,$dateArr[1],1,$dateArr[0]);
+		$outDate = $wgLang->sprintfDate("M Y", wfTimestamp(TS_MW, $stamp));
 
 ?>
 <tr>
-	<td class="db" nowrap><?= $outDate ?></td>
+	<td class="db" style="white-space:nowrap;"><?= $outDate ?></td>
 <?
-		foreach ($columns as $column)
-		{
+		$loop = 0;
+		foreach ($columns as $column) {
 			if ( in_array($column, array('date')) ) continue;
+			$loop++;
 			#---
 			$out = $columnsData[$column];
 			$class = "rb";
-			if ( in_array($column, array('B','H','I','J','K')) )
-			{
+			/*if ( in_array($column, array('B','H','I','J','K')) ) {
 				$out = "&nbsp;";
-			}
-			elseif (empty($columnsData[$column]) || ($columnsData[$column] == 0))
-			{
+			} else*/
+			if (empty($columnsData[$column]) || ($columnsData[$column] == 0)) {
 				$out = "&nbsp;";
-			}
-			else
-			{
-				if ($columnsData[$column] < 0)
-				{
+			} else {
+				if ($columnsData[$column] < 0) {
 					$out = "<font color=\"#800000\">".sprintf("%0.0f%%", $columnsData[$column])."</font>";
-				}
-				elseif (($columnsData[$column] > 0) && ($columnsData[$column] < 25))
-				{
-					$out = "<font color=\"#000000\">".sprintf("+%0.0f%%", $columnsData[$column])."</font>";
-				}
-				elseif (($columnsData[$column] > 25) && ($columnsData[$column] < 75))
-				{
+				} elseif (($columnsData[$column] > 0) && ($columnsData[$column] < 25)) {
+					$out = "<font color=\"#555555\">".sprintf("+%0.0f%%", $columnsData[$column])."</font>";
+				} elseif (($columnsData[$column] > 25) && ($columnsData[$column] < 75)) {
 					$out = "<font color=\"#008000\">".sprintf("+%0.0f%%", $columnsData[$column])."</font>";
-				}
-				elseif (($columnsData[$column] > 75) && ($columnsData[$column] < 100))
-				{
+				} elseif (($columnsData[$column] > 75) && ($columnsData[$column] < 100)) {
 					$out = "<font color=\"#008000\"><u>".sprintf("+%0.0f%%", $columnsData[$column])."</u></font>";
-				}
-				elseif ($columnsData[$column] >= 100)
-				{
+				} elseif ($columnsData[$column] >= 100) {
 					$out = "&nbsp;";
 				}
 			}
 ?>
 	<td class="rb"><?= $out ?></td>
-<?php			
+<?php
 		}
 ?>
 </tr>
@@ -178,189 +219,65 @@ foreach ($monthlyStats as $date => $columnsData)
 	}
 }
 ?>
-</tr>
 <tr bgcolor="#ffeecc">
-<?php 
-foreach ($columns as $column)
-{
-	if ($column == "date") $column = "&nbsp;";
-?>
-	<td class="cb" title="<?= wfMsg("wikiastats_mainstats_column_".$column) ?>"><?= $column ?></td>
-<?	
-}
-?>
-<?php
-foreach ($statsData as $date => $columnsData)
-{
-?>
-<tr>
-<?php 
-	$G = 1000 * 1000 * 1000;
-	$M = 1000 * 1000;
-	$K = 1000;	
-	$GB = 1024 * 1024 * 1024;
-	$MB = 1024 * 1024;
-	$KB = 1024;	
-	foreach ($columns as $column)
-	{
-		$out = $columnsData[$column];
-		$class = "rb";
-		if (empty($columnsData[$column]) || ($columnsData[$column] == 0))
-		{
-			$out = "&nbsp;";
-		}
-		else
-		{
-			if ($column == 'date')
-			{
-				$class = "db";
-				$dateArr = explode("-",$columnsData[$column]);
-				$stamp = mktime(0,0,0,$dateArr[1],1,$dateArr[0]);
-				$out = substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " " . $dateArr[0];
-				if ($columnsData[$column] == $today)
-				{
-				    $stamp = (!empty($today_day)) ? $today_day : $stamp;
-					$out = substr(wfMsg(strtolower(date("F",$stamp))), 0, 3) . " " . date("d", $stamp) . ", " . date("Y", $stamp);
-				}
-			}
-			elseif ($column == 'A')
-				$out = sprintf("%0d", $columnsData[$column]);
-			elseif ($column == 'H')
-				$out = sprintf("%0.1f", $columnsData[$column]);
-			elseif ($column == 'I')
-				$out = sprintf("%0.0f", $columnsData[$column]);
-			elseif (($column == 'J') || ($column == 'K'))
-				$out = sprintf("%0d%%", $columnsData[$column] * 100);
-			elseif ($column == 'M')
-			{
-				if (intval($columnsData[$column]) > $GB)
-					$out = sprintf("%0.1f GB", intval($columnsData[$column])/$GB);
-				elseif (intval($columnsData[$column]) > $MB)
-					$out = sprintf("%0.1f MB", intval($columnsData[$column])/$MB);
-				elseif ($columnsData[$column] > $KB)
-					$out = sprintf("%0.1f KB", intval($columnsData[$column])/$KB);
-				else
-					$out = sprintf("%0d", intval($columnsData[$column]));
-			}
-			else
-			{
-				if (intval($columnsData[$column]) > $G)
-					$out = sprintf("%0.1f G", intval($columnsData[$column])/$G);
-				elseif (intval($columnsData[$column]) > $M)
-					$out = sprintf("%0.1f M", intval($columnsData[$column])/$M);
-				elseif ($columnsData[$column] > $K)
-					$out = sprintf("%0.1f k", intval($columnsData[$column])/$K);
-				else
-					$out = sprintf("%0d", intval($columnsData[$column]));
-			}
-		}
-		
-?>
-	<td class="<?= $class ?>" nowrap><?= $out ?></td>
-<?	
-	}
-	
-	if ($date == $today)
-	{
-?>
-</tr><tr>
-<? 
-		foreach ($columns as $column) 
-		{ 
-?>
-	<td bgcolor="#ffeecc" class="cb_small">&nbsp;</td>
-<? 
-		} 
-	} 
-?>	
-</tr>
-<?
-}
-?>
-</tr>
-<tr bgcolor="#ffdead">
-	<td class="cb"><b><?= wfMsg('wikiastats_date') ?></b></td>
-	<td colspan="4" class="cb"><b><?= wfMsg('wikiastats_wikians') ?></b></td>
-	<td colspan="7" class="cb"><b><?= wfMsg('wikiastats_articles') ?></b></td>
-	<td colspan="3" class="cb"><b><?= wfMsg('wikiastats_database') ?></b></td>
-	<td colspan="5" class="cb"><b><?= wfMsg('wikiastats_links') ?></b></td>
-	<td colspan="2" class="cb"><b><?= wfMsg('wikiastats_daily_usage') ?></b></td>
-</tr>
-<tr bgcolor="#ffeecc">
-	<td class="cb" rowspan="2">&nbsp;</td>
-	<td valign="top" rowspan="2" class="cb">total</td>
-	<td valign="top" rowspan="2" class="cb">new</td>
-	<td colspan="2" class="cb">edits</td>
-	<td colspan="2" class="cb">count</td>
-	<td valign="top" rowspan="2" class="cb">new<br/>per day</td>
-	<td colspan="2" class="cb">mean</td>
-	<td colspan="2" class="cb">larger than</td>
-	<td valign="top" rowspan="2" class="cb">edits</td>
-	<td valign="top" rowspan="2" class="cb">size</td>
-	<td valign="top" rowspan="2" class="cb">words</td>
-	<td valign="top" rowspan="2" class="cb">internal</td>
-	<td valign="top" rowspan="2" class="cb">interwiki</td>
-	<td valign="top" rowspan="2" class="cb">image</td>
-	<td valign="top" rowspan="2" class="cb">external</td>
-	<td valign="top" rowspan="2" class="cb">redirects</td>
-	<td valign="top" rowspan="2" class="cb">page<br/>requests</td>
-	<td valign="top" rowspan="2" class="cb">visits</td>
-</tr>
-<tr bgcolor="#ffeecc">
+	<td class="cb" rowspan="3">&nbsp;</td>
+	<td class="cb"><?=wfMsg('wikiastats_total')?></td>
 	<td class="cb">&gt;5</td>
 	<td class="cb">&gt;100</td>
-	<td class="cb">official</td>
-	<td class="cb">&gt;200 ch</td>
-	<td class="cb">edits</td>
-	<td class="cb">bytes</td>
-	<td class="cb" nowrap>0.5 Kb</td>
-	<td class="cb" nowrap>2 Kb</td>
+	<td class="cb" style="white-space:nowrap;"><?=$wgLang->lcfirst(wfMsg('wikiastats_username'))?></td>
+	<td class="cb" style="white-space:nowrap;"><?=wfMsg('wikistats_image_namespace')?></td>
+	<td class="cb" rowspan="2"><?=wfMsg('wikiastats_total')?></td>
+	<td class="cb">&gt;10</td>
+	<td class="cb"><?=wfMsg('wikiastats_official')?></td>
+	<td class="cb" style="white-space:nowrap;"><?=wfMsg('wikiastats_more_200_ch')?></td>
+	<td valign="middle" rowspan="3" class="cb"><?=wfMsg('wikiastats_new_per_day')?></td>
+	<td class="cb"><?=wfMsg('wikiastats_edits')?></td>
+	<td class="cb"><?=wfMsg('wikiastats_bytes')?></td>
+	<td class="cb" style="white-space:nowrap;"><?=wfMsg('size-kilobytes', 0.5)?></td>
+	<td class="cb" style="white-space:nowrap;"><?=wfMsg('size-kilobytes', 2)?></td>
+	<td rowspan="3" class="cb"><?=wfMsg('wikiastats_edits')?></td>
+	<td rowspan="3" class="cb"><?=wfMsg('wikiastats_size')?></td>
+	<td rowspan="3" class="cb"><?=wfMsg('wikiastats_words')?></td>
+	<td rowspan="3" class="cb"><?=wfMsg('wikiastats_internal')?></td>
+	<td rowspan="3" class="cb"><?=wfMsg('wikiastats_interwiki')?></td>
+	<td rowspan="3" class="cb"><?=wfMsg('wikiastats_image')?></td>
+	<td rowspan="3" class="cb"><?=wfMsg('wikiastats_external')?></td>
+	<td rowspan="3" class="cb"><?=wfMsg('wikiastats_redirects')?></td>
+	<td rowspan="3" class="cb"><?=wfMsg('wikiastats_uploaded_images')?></td>
+	<td rowspan="3" class="cb"><?=wfMsg('wikiastats_with_links')?></td>
+</tr>
+<tr bgcolor="#ffeecc">
+	<td colspan="3" class="cb"><?=wfMsg('wikiastats_main_namespace')?></td>
+	<td colspan="2" class="cb"><?=wfMsg('wikiastats_other_namespace')?></td>
+	<td class="cb"><?=wfMsg('wikiastats_main_namespace')?></td>
+	<td colspan="2" rowspan="2" class="cb"><?=wfMsg('wikiastats_count')?></td>
+	<td colspan="2" class="cb" rowspan="2" ><?=wfMsg('wikiastats_mean')?></td>
+	<td colspan="2" class="cb" rowspan="2" ><?=wfMsg('wikiastats_largerthan')?></td>
+</tr>
+<tr bgcolor="#ffeecc">
+	<td colspan="5" class="cb"><?=wfMsg('wikiastats_months_edits')?></td>
+	<td valign="middle" colspan="2" class="cb"><?=wfMsg('wikiastats_lifetime_editors')?></td>
+</tr>
+<tr bgcolor="#ffdead">
+	<td class="cb"><b><?= ucfirst(wfMsg('wikiastats_date')) ?></b></td>
+	<td colspan="7" class="cb">
+		<b><a href="#wikians"><?= wfMsg('wikiastats_wikians') ?></a></b>
+	</td>
+	<td colspan="7" class="cb">
+		<b><a href="#articles"><?= wfMsg('wikiastats_articles') ?></a></b>
+	</td>
+	<td colspan="3" class="cb">
+		<b><a href="#database"><?= wfMsg('wikiastats_database') ?></a></b>
+	</td>
+	<td colspan="5" class="cb">
+		<b><a href="#links"><?= wfMsg('wikiastats_links') ?></a></b>
+	</td>
+	<td colspan="2" class="cb">
+		<b><a href="#images"><?= wfMsg('wikiastats_images') ?></a></b>
+	</td>
 </tr>
 </table>
 </div>
+
 <!-- END OF MAIN STATISTICS TABLE -->
-<!-- MAIN STATISTICS NOTES -->
-<div id="wk-stats-legend">
-<?= wfMsg('wikiastats_note_mainstats') ?><br />
-<span id="wk-stats-legend-values"><font color="#800000"><?= wfMsg('wikiastats_history_mainstats_value1'); ?></font></span>
-<span id="wk-stats-legend-values"><font color="#000000"><?= wfMsg('wikiastats_history_mainstats_value2'); ?></font></span>
-<span id="wk-stats-legend-values"><font color="#008000"><?= wfMsg('wikiastats_history_mainstats_value3'); ?></font></span>
-<span id="wk-stats-legend-values"><font color="#008000"><u><?= wfMsg('wikiastats_history_mainstats_value4'); ?></u></font></span>
-<br />
-<div id="wk-stats-legend-columns">
-<?php 
-$i = 0;
-foreach ($columns as $column)
-{
-	if ($column == "date") continue;
-	if ($i == 0) {
-?>		
-<span id="wk-column-group"><?= wfMsg("wikiastats_wikians") ?></span><br />
-<?		
-	} elseif ($i == 4) {
-?>		
-<span id="wk-column-group"><?= wfMsg("wikiastats_articles") ?></span><br />
-<?		
-	} elseif ($i == 11) {
-?>		
-<span id="wk-column-group"><?= wfMsg("wikiastats_database") ?></span><br />
-<?		
-	} elseif ($i == 14) {
-?>		
-<span id="wk-column-group"><?= wfMsg("wikiastats_links") ?></span><br />
-<?	
-	} elseif ($i == 19) {
-?>		
-<span id="wk-column-group"><?= wfMsg("wikiastats_daily_usage") ?></span><br />
-<?
-	}
-	$i++;
-?>
-<span id="wk-column-<?=$column?>"><?=$column?>: <?= wfMsg("wikiastats_mainstats_column_".$column) ?></span><br />
-<?	
-}
-?>
-</div>
-</div>
-<!-- END OF MAIN STATISTICS NOTES -->
 <!-- e:<?= __FILE__ ?> -->

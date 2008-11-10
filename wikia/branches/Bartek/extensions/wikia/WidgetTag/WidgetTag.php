@@ -6,14 +6,14 @@
  *
  * To activate the functionality of this extension include the following in your
  * LocalSettings.php file:
- * require_once('$IP/extensions/wikia/WidgetTag/WidgetTag.php');
+ * require_once("$IP/extensions/wikia/WidgetTag/WidgetTag.php");
  */
 
 
 $wgExtensionCredits['parserhook'][] = array(
   'name'	=> 'WidgetTag',
   'url'		=> 'http://help.wikia.com/wiki/Help:WidgetTag',
-  'author'	=> '[http://pl.inside.wikia.com/wiki/User:Macbre Maciej Brencz]', 
+  'author'	=> '[http://pl.wikia.com/wiki/User:Macbre Maciej Brencz]', 
   'description'	=> 'Adds &lt;widget&gt; tag for dynamic embedding of Wikia widgets',
   'version'	=> 0.1
 );

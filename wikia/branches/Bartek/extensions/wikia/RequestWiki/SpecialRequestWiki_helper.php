@@ -59,6 +59,24 @@ function wfRequestTitle( $name, $language = null)
 }
 
 /**
+ * wfRequestDeleteCommonPostfix
+ *
+ * deletes common postfixes like 'pedia' or 'wiki'
+ *
+ * @access public
+ * @author Maciej Błaszkowski <marooned at wikia-inc.com>
+ *
+ * @param string $name: name process
+ *
+ * @return string processed name
+ */
+function wfRequestDeleteCommonPostfix($name) {
+	$commonPostfixes = array('pedia', 'wikia', 'wiki');
+	$regexp = array('/(?:^|(?<!\s))(?:' . implode('|', $commonPostfixes) . ')(?:\s|$)/');
+	return preg_replace($regexp, '', $name);
+}
+
+/**
  * wfRequestLikeOrExact
  *
  * check if name is similar or the same, using sql like queries
@@ -80,10 +98,12 @@ function wfRequestLikeOrExact( $name, $language = null ) {
 	$domains["exact"] = array();
 	$unique = array();
 
+	$name = wfRequestDeleteCommonPostfix($name);
+
 	/**
 	 * don't check short names
 	 */
-	if( strlen( $name ) > 2 ) {
+	if( strlen( $name ) > 3 ) {
 
 		$names = explode(" ", $name);
 		$skip = false;
@@ -210,12 +230,13 @@ function axWRequestCheckName() {
     if (!strlen($sName)) {
         $sResponse = Wikia::errormsg(wfMsg('requestwiki-error-empty-field'));
         $iError++;
-    }
-    elseif (preg_match('/[^a-z0-9-]/i', $sName)) {
+    } elseif (preg_match('/[^a-z0-9-]/i', $sName)) {
         $sResponse = Wikia::errormsg(wfMsg('requestwiki-error-bad-name'));
         $iError++;
-    }
-    else {
+    } elseif (in_array($sName, array_keys(Language::getLanguageNames()))) {
+	$sResponse = Wikia::errormsg(wfMsg('requestwiki-error-name-is-lang'));
+	$iError++;
+    } else {
 
         $iExists = wfRequestExact($sName, $sLang);
         #--- only $aDomains['exact'] are insteresting

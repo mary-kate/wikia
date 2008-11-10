@@ -36,7 +36,7 @@ return array(
 			'sitemetrics-com'=>'Comments',
 			'sitemetrics-refresh'=>'Refresh',
 			'sitemetrics-month-average' => '3 Month Average',
-			'sitemetrics-day-average' => '30 Day Average',
+			'sitemetrics-day-average' => '35 Day Average',
 			'sitemetrics-friendships' => 'Friendships',
 			'sitemetrics-wall-posts' => 'Wall Posts',
 			'sitemetrics-pokes' => 'Nudges',
@@ -67,8 +67,10 @@ return array(
 			'sitemetrics-most-wanted-message'=>'Wanted Search Results lists keywords in the top 250 queries from the <a href="sitemetrics-topqueries-recent.html">Recent Top Queries</a> that do not appear in the top 250 keywords from the <a href="sitemetrics-topkt-recent.html">Recent Top Contributions</a> over the the last 6 hours. The list is only ordered by the most queried keyword.',
 			'sitemetrics-edit-actions'=>'Contribution Breakdown',
 			'sitemetrics-edit-actions-message'=>'Below is the breakdown of contributions to Wikia Search.  If you click a contribution, you will see the breakdown of that contribution by day',
-			'sitemetrics-trend' => 'Trends'
-			
+			'sitemetrics-trend' => 'Trends',
+			'sitemetrics-tools-list-metrics' => 'Tools',
+			'sitemetrics-short-average' => '7 Day Average',
+			'sitemetrics-long-average' => '28 Day Average'
 			),);
 }
 

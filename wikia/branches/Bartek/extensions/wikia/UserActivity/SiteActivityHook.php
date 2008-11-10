@@ -39,7 +39,7 @@ function GetSiteActivity( $input, $args, &$parser ){
 	$output = '';
 	if($activity) {
 		
-		$output .= "<div class=\"mp-site-activity\"><h2>" . wfMsg("site_activity_title") . "</h2>";
+		$output .= "<div class=\"mp-site-activity\"><h2>" . $wgParser->recursiveTagParse( wfMsg("site_activity_title") ) . "</h2>";
 		
 		$x = 1;
 		foreach ($activity as $item) {

@@ -15,7 +15,7 @@
   | Author:                                                              |
   +----------------------------------------------------------------------+
 
-  $Id: php_proctitle.h 9174 2005-05-24 16:39:22Z midom $ 
+  $Id: php_proctitle.h 584 2008-07-29 13:59:13Z emil $ 
 */
 
 #ifndef PHP_PROCTITLE_H

@@ -17,7 +17,8 @@ if( !defined( 'MEDIAWIKI' ) ) {
 
 $wgExtensionCredits['specialpage'][] = array(
 	'name' => 'ContactPage',
-	'version' => '2008-02-03',
+	'svn-date' => '$LastChangedDate: 2008-07-09 17:40:14 +0000 (Wed, 09 Jul 2008) $',
+	'svn-revision' => '$LastChangedRevision: 37418 $',
 	'author' => 'Daniel Kinzler',
 	'url' => 'http://www.mediawiki.org/wiki/Extension:ContactPage',
 	'description' => 'Contact form for visitors',
@@ -26,9 +27,13 @@ $wgExtensionCredits['specialpage'][] = array(
 
 $dir = dirname(__FILE__) . '/';
 $wgExtensionMessagesFiles['ContactPage'] = $dir . 'ContactPage.i18n.php';
+$wgExtensionAliasesFiles['ContactPage'] = $dir . 'ContactPage.alias.php';
+
 $wgAutoloadClasses['SpecialContact'] = $dir . 'SpecialContact.php';
 $wgSpecialPages['Contact'] = 'SpecialContact';
 
 $wgContactUser = NULL;
-$wgContactSender = 'apache@' . $wgServerName;
+$wgContactSender = NULL;
 $wgContactSenderName = 'Contact Form on ' . $wgSitename;
+
+$wgContactRequireAll = false;

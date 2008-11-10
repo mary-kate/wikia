@@ -9,15 +9,20 @@ $messages = array();
 
 $messages['en'] = array(
 	'desysoptitle'         => 'Revoke sysop access for a user',
-	'desysoptext'          => "This form is used by bureaucrats to revoke a user's sysop permission. Type the user in the box and press the button to revoke the user's sysop access.",
+	'desysoptext'          => "This form is used by bureaucrats to revoke sysop permission for a user.
+Type the user in the box and press the button to revoke sysop access for the user.",
 	'desysopname'          => 'Name of the user:',
 	'desysopok'            => "<b>User \"$1\" has been desysopped</b>",
 	'desysopsetrights'     => 'Set user rights',
-	'desysoprightsfail'    => "<b>User rights for \"$1\" could not be set. (Did you enter the name correctly?)</b>",
+	'desysoprightsfail'    => "<b>User rights for \"$1\" could not be set.
+Did you enter the name correctly?</b>",
 	'desysop'              => 'Desysop a user',
 	'desysopnot_sysop'     => 'This user is not an administrator',
 );
 
+/** Arabic (العربية)
+ * @author Meno25
+ */
 $messages['ar'] = array(
 	'desysoptitle'         => 'اسحب الصلاحيات الإدارية من مستخدم',
 	'desysoptext'          => 'هذه الاستمارة يتم استخدامها بواسطة البيروقراطيين لسحب صلاحيات المستخدم الإدارية. اكتب اسم المستخدم في الصندوق واضغط الزر لكي تسحب صلاحيات المستخدم الإدارية.',

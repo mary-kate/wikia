@@ -18,6 +18,7 @@ protected $m_DatatypeLabels = array(
 	'_wpg' => 'Page', // name of page datatype
 	'_str' => 'Chaîne de caractères',  // name of the string type
 	'_txt' => 'Texte',  // name of the text type (very long strings)
+	'_cod' => 'Code',  // name of the (source) code type //TODO: translate
 	'_boo' => 'Booléen',  // name of the boolean type
 	'_num' => 'Nombre', // name for the datatype of numbers
 	'_geo' => 'Coordonnées géographiques', // name of the geocoord type
@@ -77,7 +78,9 @@ protected $m_Namespaces = array(
 	SMW_NS_PROPERTY       => "Attribut",
 	SMW_NS_PROPERTY_TALK  => "Discussion_attribut",
 	SMW_NS_TYPE           => "Type",
-	SMW_NS_TYPE_TALK      => "Discussion_type"
+	SMW_NS_TYPE_TALK      => "Discussion_type",
+	SMW_NS_CONCEPT        => 'Concept', // TODO: translate
+	SMW_NS_CONCEPT_TALK   => 'Concept_talk' // TODO: translate
 );
 
 protected $m_NamespaceAliases = array(
@@ -87,7 +90,9 @@ protected $m_NamespaceAliases = array(
 	'Property'      => SMW_NS_PROPERTY,
 	'Property_talk' => SMW_NS_PROPERTY_TALK,
 	'Type'          => SMW_NS_TYPE,
-	'Type_talk'     => SMW_NS_TYPE_TALK
+	'Type_talk'     => SMW_NS_TYPE_TALK,
+	'Concept'       => SMW_NS_CONCEPT,
+	'Concept_talk'  => SMW_NS_CONCEPT_TALK
 );
 
 }

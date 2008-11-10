@@ -28,11 +28,11 @@ CREATE TABLE globalnames (
 -- only existing databases not yet migrated have to be loaded.
 --
 CREATE TABLE localnames (
-  ln_dbname varchar(32) binary not null,
+  ln_wiki varchar(255) binary not null,
   ln_name varchar(255) binary not null,
 
-  primary key (ln_dbname, ln_name),
-  key (ln_name, ln_dbname)
+  primary key (ln_wiki, ln_name),
+  key (ln_name, ln_wiki)
 ) /*$wgDBTableOptions*/;
 
 --
@@ -41,7 +41,7 @@ CREATE TABLE localnames (
 CREATE TABLE globaluser (
   -- Internal unique ID for the authentication server
   gu_id int auto_increment,
-  
+
   -- Username.
   gu_name varchar(255) binary,
 
@@ -54,33 +54,36 @@ CREATE TABLE globaluser (
   -- or the account the user was first registered at for new ones.
   -- May be changed over time.
   gu_home_db varchar(255) binary,
-  
+
   -- Registered email address, may be empty.
   gu_email varchar(255) binary,
-  
+
   -- Timestamp when the address was confirmed as belonging to the user.
   -- NULL if not confirmed.
   gu_email_authenticated char(14) binary,
-  
+
   -- Salt and hashed password
   -- For migrated passwords, the salt is the local user_id.
   gu_salt varchar(16) binary,
   gu_password tinyblob,
-  
+
   -- If true, this account cannot be used to log in on any wiki.
   gu_locked bool not null default 0,
-  
+
   -- If true, this account should be hidden from most public user lists.
   -- Used for "deleting" accounts without breaking referential integrity.
   gu_hidden bool not null default 0,
-  
+
   -- Registration time
   gu_registration varchar(14) binary,
-  
+
   -- Random key for password resets
   gu_password_reset_key tinyblob,
   gu_password_reset_expiration varchar(14) binary,
   
+  -- Random key for crosswiki authentication tokens
+  gu_auth_token varbinary(32) NULL,
+
   primary key (gu_id),
   unique key (gu_name),
   key (gu_email)
@@ -93,7 +96,7 @@ CREATE TABLE globaluser (
 -- All local DBs will be swept on an opt-in check event.
 --
 CREATE TABLE localuser (
-  lu_dbname varchar(32) binary not null,
+  lu_wiki varchar(255) binary not null,
   lu_name varchar(255) binary not null,
 
   -- Migration status/logging information, to help diagnose issues
@@ -107,6 +110,27 @@ CREATE TABLE localuser (
     'new',
     'login'),
 
-  primary key (lu_dbname, lu_name),
-  key (lu_name, lu_dbname)
+  primary key (lu_wiki, lu_name),
+  key (lu_name, lu_wiki)
+) /*$wgDBTableOptions*/;
+
+
+-- Global user groups.
+CREATE TABLE global_user_groups (
+	gug_user int(11) not null,
+	gug_group varchar(255) not null,
+	
+	PRIMARY KEY (gug_user,gug_group),
+	KEY (gug_user),
+	key (gug_group)
+) /*$wgDBTableOptions*/;
+
+-- Global group permissions.
+CREATE TABLE global_group_permissions (
+	ggp_group varchar(255) not null,
+	ggp_permission varchar(255) not null,
+	
+	PRIMARY KEY (ggp_group, ggp_permission),
+	KEY (ggp_group),
+	KEY (ggp_permission)
 ) /*$wgDBTableOptions*/;

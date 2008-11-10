@@ -5,14 +5,6 @@
 
 define( 'REPORTING_INTERVAL', 10 );
 
-require_once( 'includes/ImagePage.php' );
-require_once( 'includes/CategoryPage.php' );
-require_once( 'includes/RawPage.php' );
-
-# Explicitly disable article view counter (bug 6823)
-global $wgDisableCounters;
-$wgDisableCounters = true;
-
 class DumpHTML {
 	# Destination directory
 	var $dest;
@@ -84,6 +76,9 @@ class DumpHTML {
 
 	# UDP profiling
 	var $udpProfile, $udpProfileCounter = 0, $udpProfileInit = false;
+
+	# Debugging options
+	var $showTitles = false;
 
 	# Extension version
 	const VERSION = '2.0';
@@ -349,6 +344,10 @@ class DumpHTML {
 					}
 
 					$title = Title::makeTitleSafe( NS_IMAGE, $file );
+					if ( !$title ) {
+						wfDebug( __METHOD__.": invalid title: $file\n" );
+						continue;
+					}
 					$this->doArticle( $title );
 				}
 				if ( $handle ) {
@@ -466,6 +465,10 @@ class DumpHTML {
 			if ( file_exists( $fileName ) ) {
 				return;
 			}
+		}
+
+		if ( $this->showTitles ) {
+			print $title->getPrefixedDBkey() . "\n";
 		}
 
 		$this->profile();
@@ -640,6 +643,7 @@ class DumpHTML {
 		global $wgEnableParserCache, $wgHooks, $wgServer;
 		global $wgRightsUrl, $wgRightsText, $wgCopyrightIcon, $wgEnableSidebarCache;
 		global $wgGenerateThumbnailOnParse, $wgValidSkinNames, $wgFavicon;
+		global $wgDisableCounters;
 
 		if ( !$this->setupDone ) {
 			$wgHooks['GetLocalURL'][] =& $this;
@@ -703,12 +707,13 @@ class DumpHTML {
 		$wgMathPath = "$wgScriptPath/math";
 		$wgEnableSidebarCache = false;
 		$wgGenerateThumbnailOnParse = true;
+		$wgDisableCounters = true;
 
 		if ( !empty( $wgRightsText ) ) {
 			$wgRightsUrl = "$wgScriptPath/COPYING.html";
 		}
 
-		$wgUser = new User;
+		$wgUser = User::newFromName( '__dumpHTML', false );
 		$wgUser->setOption( 'skin', $this->skin );
 		$wgUser->setOption( 'editsection', 0 );
 
@@ -968,6 +973,9 @@ ENDTEXT;
 	}
 
 	function getHashedFilename( &$title ) {
+		if ( !$title ) {
+			throw new MWException( 'Invalid $title parameter to '.__METHOD__ );
+		}
 		if ( '' != $title->mInterwiki ) {
 			$dbkey = $title->getDBkey();
 		} else {
@@ -1139,13 +1147,13 @@ ENDTEXT;
 	}
 	
 	function mkdir( $dir ) {
-		if ( wfIsWindows() ) {
+		//if ( wfIsWindows() ) {
 			return wfMkdirParents( $dir, 0755 );
-		} else {
+		/*} else {
 			$dir = escapeshellarg( $dir );
 			`mkdir -p -- $dir`;
 			return true;
-		}
+		}*/
 	}
 }
 
@@ -1290,6 +1298,10 @@ class DumpHTML_ProxyFile {
 	}
 
 	function __call( $name, $args ) {
+		$callback = array( $this->backend, $name );
+		if ( !is_callable( $callback ) ) {
+			throw new MWException( "Attempt to call invalid function LocalFile::$name\n" );
+		}
 		$result = call_user_func_array( array( $this->backend, $name ), $args );
 		if ( is_string( $result ) ) {
 			$result = $this->fixURL( $result );
