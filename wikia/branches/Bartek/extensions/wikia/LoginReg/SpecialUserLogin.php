@@ -14,10 +14,10 @@ function wfSpecialLogin(){
 	
 		function execute(){
 			
-			global $IP, $wgUser, $wgOut, $wgRequest, $wgSitename, $wgMessageCache, $wgFriendingEnabled; 
+			global $IP, $wgUser, $wgOut, $wgRequest, $wgSitename, $wgMessageCache, $wgFriendingEnabled, $wgExtensionsPath; 
 			
-			$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"/extensions/wikia/LoginReg/LoginReg.css?{$wgStyleVersion}\"/>\n");
-			$wgOut->addScript("<script type=\"text/javascript\" src=\"/extensions/wikia/onejstorule.js\"></script>\n");
+			$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"" . $wgExtensionsPath . "/wikia/LoginReg/LoginReg.css?{$wgStyleVersion}\"/>\n");
+			$wgOut->addScript("<script type=\"text/javascript\" src=\"" . $wgExtensionsPath . "/wikia/onejstorule.js\"></script>\n");
 
 			//language messages
 			require_once ( "$IP/extensions/wikia/LoginReg/LoginReg.i18n.php" );
