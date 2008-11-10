@@ -145,16 +145,17 @@ function SharedHelpHook(&$out, &$text) {
 					$destinationUrl = $dest_url[1];
 				}
 			}
+			global $wgServer, $wgArticlePath, $wgRequest, $wgTitle, $wgUser;
+			$helpNs = $wgLang->getNsText(NS_HELP);
 
 			if (!empty ($_SESSION ['SH_redirected'])) {
-				$out->setSubtitle( wfMsg( "redirectedfrom", $_SESSION['SH_redirected'] ) );
+				$from_link = $wgServer . str_replace( "$1", $helpNs . ":" . $_SESSION ['SH_redirected'], $wgArticlePath );		
+                                $s = wfMsg( 'redirectedfrom', "<a href='" . $from_link  . "'>" . $helpNs . ":" . $_SESSION ['SH_redirected'] . "</a>" );
+                                $out->setSubtitle( $s );
 				$_SESSION ['SH_redirected'] = '';
 			}
 
-			if(isset($destinationUrl)) {
-				global $wgServer, $wgArticlePath, $wgRequest, $wgTitle;
-				
-				$helpNs = $wgLang->getNsText(NS_HELP);
+			if(isset($destinationUrl)) {				
 				$destinationPage = substr( $destinationUrl, strpos( $destinationUrl, "$helpNs:") );
 				$link = $wgServer . str_replace( "$1", $destinationPage, $wgArticlePath );
 				if ( 'no' != $wgRequest->getVal( 'redirect' ) ) {
