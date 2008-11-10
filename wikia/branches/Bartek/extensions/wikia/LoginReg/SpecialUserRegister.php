@@ -14,14 +14,14 @@ function wfSpecialUserRegister(){
 	
 		function execute(){
 			
-			global $IP, $wgUser, $wgOut, $wgRequest, $wgSitename, $wgFriendingEnabled, $wgMessageCache; 
+			global $IP, $wgUser, $wgOut, $wgRequest, $wgSitename, $wgFriendingEnabled, $wgMessageCache, $wgExtensionsPath; 
 			
 			$register =  Title::makeTitle( NS_SPECIAL  , "Userlogin"  );
 			$wgOut->redirect( $register->getFullURL( "type=signup" ) );
 	
-			$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"/extensions/wikia/LoginReg/LoginReg.css?{$wgStyleVersion}\"/>\n");\
-			$wgOut->addScript("<script type=\"text/javascript\" src=\"/extensions/wikia/onejstorule.js\"></script>\n");
-			$wgOut->addScript("<script type=\"text/javascript\" src=\"/extensions/wikia/LoginReg/UserRegister.js\"></script>\n");
+			$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"" . $wgExtensionsPath . "/wikia/LoginReg/LoginReg.css?{$wgStyleVersion}\"/>\n");\
+			$wgOut->addScript("<script type=\"text/javascript\" src=\"" . $wgExtensionsPath . "/wikia/onejstorule.js\"></script>\n");
+			$wgOut->addScript("<script type=\"text/javascript\" src=\"" . $wgExtensionsPath . "/wikia/LoginReg/UserRegister.js\"></script>\n");
 			
 			if( session_id() == '' ) {
 				wfSetupSession();
