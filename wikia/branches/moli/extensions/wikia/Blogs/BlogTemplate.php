@@ -66,31 +66,31 @@ class BlogTemplateClass {
          * default: timestamp
          */
 		'order' 		=> array ( 
-			'type' 		=> 'list', 
+			'type' 		=> 'list',
 			'default' 	=> 'date', 
 			'pattern'	=> array(
-				'date' 	=> 'page_touched', 
-				'title' => 'page_title', 
+				'date' 	=> 'page_touched',
+				'title' => 'page_title',
 				'author'=> 'rev_user_text'
-			) 
+			)
 		),
-		
+
 		/*
 		 * ordertype = descending (or ascending)
 		 *
 		 * type: 	predefined list (descending, ascending)
 		 * default: descending
 		 */
-		'ordertype' 	=> array ( 
-			'type' 		=> 'list', 
-			'default' 	=> 'desc', 
-			'pattern'	=> array('desc', 'asc') 
+		'ordertype' 	=> array (
+			'type' 		=> 'list',
+			'default' 	=> 'desc',
+			'pattern'	=> array('desc', 'asc')
 		),
-		
+
 		/*
 		 * max of results to display.
 		 * count = /^\d*$/
-		 * 
+		 *
 		 * type: 	number
 		 * default: 5
 		 */
@@ -100,7 +100,7 @@ class BlogTemplateClass {
 			'pattern' 	=> '/^\d*$/',
 			'max'		=> 10 
 		),
-		
+
 		/*
 		 * number of results which shall be skipped before display starts.
 		 * offset = /^\d*$/
@@ -120,19 +120,19 @@ class BlogTemplateClass {
 		 * type: 	boolean,
 		 * default: false
 		 */
-		'showtimestamp' => array (
+		'timestamp' => array (
 			'type' 		=> 'boolean',
 			'default' 	=> false
 		),		
 
 		/*
-		 * show summary 
+		 * show summary
 		 * showsummary = false (or true)
 		 * 
 		 * type: 	boolean,
 		 * default: false
 		 */
-		'showsummary' 	=> array (
+		'summary' 	=> array (
 			'type' 		=> 'boolean',
 			'default' 	=> false
 		),
@@ -148,6 +148,20 @@ class BlogTemplateClass {
 			'type' 		=> 'number',
 			'default' 	=> '200', 
 			'pattern' 	=> '/^\d*$/'
+		)
+
+		/*
+		 * default=box, other option is "plain". box is the 300px width both in style of image shown.
+		 * Plain is just the box content, no styling - so users can do what they want with it.
+		 * style = box | plain
+		 *
+		 * type: 	number,
+		 * default: 200
+		 */
+		'style' 	=> array (
+			'type' 		=> 'list',
+			'default' 	=> 'box',
+			'pattern'	=> array( 'box', 'plain' )
 		)
 	);
 
@@ -280,6 +294,9 @@ class BlogTemplateClass {
 		}
 		if ( !isset(self::$aOptions['offset']) ) {
 			self::__makeIntOption('offset', self::$aBlogParams['offset']['default']);
+		}
+		if ( !isset(self::$aOptions['style']) ) {
+			self::__makeListOption('style', self::$aBlogParams['style']['default']);
 		}
     	wfProfileOut( __METHOD__ );
 	}
@@ -490,12 +507,13 @@ class BlogTemplateClass {
 						}
 						break;
 					case 'ordertype'	:
+					case 'style'		:
 						if ( !empty($aParamValues) && is_array($aParamValues) ) {
 							list ($sParamValue) = $aParamValues;
 							self::__makeListOption($sParamName, $sParamValue);
 						}
 						break;
-					case 'count'		: 
+					case 'count'		:
 					case 'offset'		:
 					case 'summarylength':
 						if ( !empty($aParamValues) && is_array($aParamValues) ) {
@@ -503,8 +521,8 @@ class BlogTemplateClass {
 							self::__makeIntOption($sParamName, $sParamValue);
 						}
 						break;
-					case 'showtimestamp':
-					case 'showsummary'	:
+					case 'timestamp':
+					case 'summary'	:
 						if ( !empty($aParamValues) && is_array($aParamValues) ) {
 							list ($sParamValue) = $aParamValues;
 							self::__makeBoolOption($sParamName, $sParamValue);
@@ -524,32 +542,33 @@ class BlogTemplateClass {
 				/* invalid name of parameter or empty name */
 				if ( !in_array($sParamName, array_keys(self::$aBlogParams)) ) {
 					throw new Exception( wfMsg('blog_invalidparam', $sParamName, implode(", ", array_keys(self::$aBlogParams))) );
-				} 
+				}
 
 				/* parse value of parameter */
 				switch ($sParamName) {
-					case 'order'		: 
-						self::__makeOrder($sParamName, $sParamValue); 
+					case 'order'		:
+						self::__makeOrder($sParamName, $sParamValue);
 						break;
-					case 'ordertype'	: 
-						self::__makeListOption($sParamName, $sParamValue); 
+					case 'ordertype'	:
+					case 'style'	:
+						self::__makeListOption($sParamName, $sParamValue);
 						break;
-					case 'count'		: 
-					case 'offset'		: 
-					case 'summarylength': 
-						self::__makeIntOption($sParamName, $sParamValue); 
+					case 'count'		:
+					case 'offset'		:
+					case 'summarylength':
+						self::__makeIntOption($sParamName, $sParamValue);
 						break;
-					case 'showtimestamp': 
-					case 'showsummary'	: 
+					case 'timestamp':
+					case 'summary'	:
 						self::__makeBoolOption($sParamName, $sParamValue);
 						break;
 				}
 			}
-			
+
 			/* build query */
 			$aResult = self::__getResults();
 			error_log ("aResult: " . print_r($aResult, true) . "\n", 3, "/tmp/moli.log");
-			
+
 			/* run template */
 			$oTmpl = new EasyTemplate( dirname( __FILE__ ) . "/templates/" );
 			$oTmpl->set_vars( array(
@@ -557,11 +576,13 @@ class BlogTemplateClass {
 				"cityId"		=> $wgCityId,
 				"wgLang"		=> $wgLang,
 				"aRows"			=> $aResult,
+				"options"		=> self::$aOptions,
+				"comments"		=> 0, // todo
 			));
-			
+
 			#---
-			wfProfileOut( __METHOD__ );
-			return $oTmpl->execute("blog-list");
+			$sResult = $oTmpl->execute("blog-page");
+
         }
 		catch (Exception $e) {
 			wfDebugLog( __METHOD__, "parse error: ".$e->getMessage()."\n" );
