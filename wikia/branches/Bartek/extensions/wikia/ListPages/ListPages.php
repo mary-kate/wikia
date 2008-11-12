@@ -3,8 +3,10 @@ $wgExtensionFunctions[] = "wfListPages";
 $wgExtensionFunctions[] = 'wfListPagesReadLang';
 
 function wfListPages() {
-	global $wgParser ,$wgOut;
+	global $wgParser ,$wgOut, $wgExtensionsPath, $wgStyleVersion;
 	//$wgOut->addScript("<script type=\"text/javascript\" src=\"extensions/ListPages/ListPages.js\"></script>\n");
+	$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js{$wgStyleVersion}\"></script>\n");
+	
 	$wgParser->setHook( "ListPages", "ListPages" );
 }
 
