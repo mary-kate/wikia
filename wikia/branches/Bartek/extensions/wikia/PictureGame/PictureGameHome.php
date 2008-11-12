@@ -41,6 +41,8 @@ function wfSpecialPictureGameHome(){
 
 		/* Construct the MediaWiki special page */
 		function PictureGameHome(){
+			global $wgExtensionsPath;
+			$this->INCLUDEPATH = "{$wgExtensionsPath}/wikia/PictureGame/picturegame/";
 			UnlistedSpecialPage::UnlistedSpecialPage("PictureGameHome");
 		}
 
@@ -254,7 +256,7 @@ function wfSpecialPictureGameHome(){
 
 		/* Displays the edit panel */
 		function editPanel(){
-			global $wgRequest, $wgUser, $wgOut, $wgRequest, $wgSiteView, $IP, $wgStyleVersion, $wgUploadPath;
+			global $wgRequest, $wgUser, $wgOut, $wgRequest, $wgSiteView, $IP, $wgStyleVersion, $wgUploadPath, $wgExtensionsPath;
 
 			$id =  addslashes( $wgRequest->getVal("id") );
 
@@ -292,7 +294,7 @@ function wfSpecialPictureGameHome(){
 			var __picturegame_editgameediting__ = \"" . wfMsgForContent('picturegame_editgameediting') . "\";
 			var __request_url__ = \"" . $wgRequest->getRequestURL() . "\";
 			</script>";
-			
+			$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");	
 			$wgOut->addScript("<script type=\"text/javascript\" src=\"{$this->INCLUDEPATH}editpanel.js?{$wgStyleVersion}\"></script>\n");
 
 
@@ -417,7 +419,7 @@ function wfSpecialPictureGameHome(){
 
 		/* Displays the admin panel */
 		function adminPanel(){
-			global $wgRequest, $wgUser, $wgOut, $wgRequest, $wgSiteView, $IP, $wgUploadPath;
+			global $wgRequest, $wgUser, $wgOut, $wgRequest, $wgSiteView, $IP, $wgUploadPath, $wgExtensionsPath;
 
 			$now = time();
 			$key = md5($now . $this->SALT);
@@ -430,7 +432,7 @@ function wfSpecialPictureGameHome(){
 			var __admin_panel_key__ = \"" . $key . "\";
 			
 			</script>";
-			
+			$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");	
 			$wgOut->addScript("<script type=\"text/javascript\" src=\"{$this->INCLUDEPATH}adminpanel.js?{$wgStyleVersion}\"></script>\n");
 			//$wgOut->setPagetitle("Picture Game Admin Panel");
                         $wgOut->setPagetitle(wfMsgForContent('picturegame_adminpaneltitle'));
