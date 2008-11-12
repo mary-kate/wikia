@@ -83,8 +83,8 @@ $wgHooks['ArticleFromTitle'][] = 'wfLinkFromTitle';
 //ArticleFromTitle
 //Calls VideoPage instead of standard article
 function wfLinkFromTitle( &$title, &$article ){
-	global $wgUser, $wgRequest, $IP, $wgOut,  $wgTitle, $wgSupressPageTitle, $wgSupressSubTitle, $wgStyleVersion,$wgMessageCache, 
-	$wgLinkFilterDirectory, $wgLinkFilterScripts ;
+	global $wgUser, $wgRequest, $IP, $wgOut,  $wgTitle, $wgSupressPageTitle, $wgSupressSubTitle, $wgStyleVersion,$wgMessageCache; 
+	global $wgLinkFilterDirectory, $wgLinkFilterScripts, $wgExtensionsPath ;
 	
 	if ( NS_LINK == $title->getNamespace()  ) {
 		
@@ -111,7 +111,8 @@ function wfLinkFromTitle( &$title, &$article ){
 		foreach( efWikiaLinkFilter() as $lang => $messages ){
 			$wgMessageCache->addMessages( $messages, $lang );
 		}
-		
+	
+		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");	
 		$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgLinkFilterScripts}/LinkFilter.css?{$wgStyleVersion}\"/>\n");
 		
 		$article = new LinkPage(&$title);
@@ -199,6 +200,7 @@ function wfAddLinkFilterScripts(&$tpl){
 	global $wgOut, $wgStyleVersion, $wgStylePath;
 	
 	if( $tpl->data['linkfilter-scripts-loaded'] != 1 ){
+		//TODO check this out later
 		echo ("<link rel='stylesheet' type='text/css' href=\"/extensions/wikia/LinkFilter/LinkFilter.css?{$wgStyleVersion}\"/>\n");
 		
 		$tpl->set( 'linkfilter-scripts-loaded', 1 );

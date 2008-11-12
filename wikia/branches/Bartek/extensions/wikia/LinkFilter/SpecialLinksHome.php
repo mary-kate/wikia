@@ -81,10 +81,12 @@ class LinksHome extends UnlistedSpecialPage {
 	
 	function execute(){
 		
-		global $IP, $wgUser, $wgOut, $wgRequest, $wgSitename, $wgMessageCache, $wgFriendingEnabled, $wgSupressPageTitle, $wgServer, $wgLinkFilterScripts; 
+		global $IP, $wgUser, $wgOut, $wgRequest, $wgSitename, $wgMessageCache, $wgFriendingEnabled, $wgSupressPageTitle, $wgServer;
+		global $wgStyleVersion, $wgExtensionsPath, $wgLinkFilterScripts; 
 	
 		$wgSupressPageTitle = true;
-		
+
+		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");
 		$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgLinkFilterScripts}/LinkFilter.css?{$wgStyleVersion}\"/>\n");
 		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgLinkFilterScripts}/LinkFilter.js?{$wgStyleVersion}\"></script>\n");
 		
