@@ -7,8 +7,11 @@ class LinkEdit extends UnlistedSpecialPage {
 	
 	function execute(){
 		
-		global $IP, $wgUser, $wgOut, $wgRequest, $wgSitename, $wgMessageCache, $wgLinkFilterScripts; 
-		
+		global $IP, $wgUser, $wgOut, $wgRequest, $wgSitename, $wgMessageCache, $wgLinkFilterScripts;
+		global $wgStyleVersion, $wgExtensionsPath; 
+
+		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");
+		// $wgLinkFilterScripts may need to be modified when this goes live
 		$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgLinkFilterScripts}/LinkFilter.css?{$wgStyleVersion}\"/>\n");
 		
 		//language messages

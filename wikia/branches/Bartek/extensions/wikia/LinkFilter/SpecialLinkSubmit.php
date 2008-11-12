@@ -7,8 +7,9 @@ class LinkSubmit extends UnlistedSpecialPage {
 
 	function execute(){
 		
-		global $IP, $wgUser, $wgOut, $wgRequest, $wgSitename, $wgMessageCache, $wgLinkFilterScripts; 
-		
+		global $IP, $wgUser, $wgOut, $wgRequest, $wgSitename, $wgMessageCache, $wgLinkFilterScripts;
+		global $wgStyleVersion, $wgExtensionsPath; 
+		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");
 		$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgLinkFilterScripts}/LinkFilter.css?{$wgStyleVersion}\"/>\n");
 		
 		//language messages

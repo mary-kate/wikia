@@ -17,10 +17,12 @@ class LinkApprove extends UnlistedSpecialPage {
 	
 	function execute(){
 		
-		global $IP, $wgUser, $wgOut, $wgRequest, $wgSitename, $wgMessageCache, $wgFriendingEnabled, $wgLinkFilterScripts; 
+		global $IP, $wgUser, $wgOut, $wgRequest, $wgSitename, $wgMessageCache, $wgFriendingEnabled, $wgLinkFilterScripts;
+		global $wgStyleVersion, $wgExtensionsPath; 
 		global $max_link_text_length;
 		$max_link_text_length = 60;
 		
+		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");
 		$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgLinkFilterScripts}/LinkFilter.css?{$wgStyleVersion}\"/>\n");
 		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgLinkFilterScripts}/LinkFilter.js?{$wgStyleVersion}\"></script>\n");
 		
