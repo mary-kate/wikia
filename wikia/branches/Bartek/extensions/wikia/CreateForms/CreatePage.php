@@ -6,7 +6,7 @@ $wgExtensionFunctions[] = 'registerCreateForm';
 function registerCreateForm(){
     global $wgParser ,$wgOut, $wgExtensionsPath, $wgStyleVersion;
     //$wgOut->addScript("<script type=\"text/javascript\" src=\"extensions/CreateForms/CreatePage.js\"></script>\n");
-    $wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js{$wgStyleVersion}\"></script>\n");
+    $wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");
     $wgParser->setHook('createform', 'renderCreateForm');
 }
 

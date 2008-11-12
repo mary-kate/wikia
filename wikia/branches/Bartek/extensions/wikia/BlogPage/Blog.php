@@ -22,8 +22,8 @@ $wgHooks['ArticleFromTitle'][] = 'wfBlogFromTitle';
 //ArticleFromTitle
 //Calls BlogPage instead of standard article
 function wfBlogFromTitle( &$title, &$article ){
-	global $wgUser, $wgRequest, $IP, $wgOut, $wgTitle, $wgMessageCache, $wgStyleVersion, $wgParser, 
-	$wgSupressPageTitle, $wgSupressSubTitle, $wgSupressPageCategories;
+	global $wgUser, $wgRequest, $IP, $wgOut, $wgTitle, $wgMessageCache, $wgStyleVersion, $wgParser; 
+	global $wgSupressPageTitle, $wgSupressSubTitle, $wgSupressPageCategories, $wgExtensionsPath;	
 	
 	if ( NS_BLOG == $title->getNamespace()  ) {
 		if( !$wgRequest->getVal("action") ){
@@ -44,9 +44,10 @@ function wfBlogFromTitle( &$title, &$article ){
 		foreach( efWikiaBlog() as $lang => $messages ){
 			$wgMessageCache->addMessages( $messages, $lang );
 		}
-		
+				
 		require_once( "BlogPage.php" );
-		$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"/extensions/wikia/BlogPage/BlogPage.css?{$wgStyleVersion}\"/>\n");
+		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");
+		$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgExtensionsPath}/wikia/BlogPage/BlogPage.css?{$wgStyleVersion}\"/>\n");
 		
 		$article = new BlogPage($wgTitle);
 		

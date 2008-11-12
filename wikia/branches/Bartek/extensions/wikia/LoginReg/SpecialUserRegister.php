@@ -20,8 +20,8 @@ function wfSpecialUserRegister(){
 			$wgOut->redirect( $register->getFullURL( "type=signup" ) );
 	
 			$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgExtensionsPath}/wikia/LoginReg/LoginReg.css?{$wgStyleVersion}\"/>\n");
-			$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js{$wgStyleVersion}\"></script>\n");
-			$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/LoginReg/UserRegister.js{$wgStyleVersion}\"></script>\n");
+			$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");
+			$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/LoginReg/UserRegister.js?{$wgStyleVersion}\"></script>\n");
 			
 			if( session_id() == '' ) {
 				wfSetupSession();

@@ -27,7 +27,7 @@ class InviteEmail extends UnlistedSpecialPage {
 	
 	function execute(){
 		global $wgUser, $wgOut, $wgRequest;
-		global $wgEmailFrom, $wgSitename, $wgExtensionsPath, $wgStyleVersion;
+		global $wgEmailFrom, $wgSitename;
 
 		global $wgMessageCache;
 		$wgMessageCache->addMessages( array("inviteemailanontext" => 'Please $1 to send out invite emails.'), "en" );
@@ -40,8 +40,7 @@ class InviteEmail extends UnlistedSpecialPage {
 			return;
 		}
 			
-		$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgExtensionsPath}/wikia/Invite/invite.css?{$wgStyleVersion}\"/>\n");
-		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js{$wgStyleVersion}\"></script>\n");
+		$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"/extensions/wikia/Invite/invite.css?{$wgStyleVersion}\"/>\n");
 		
 		if($wgEmailFrom) {
 			$this->from = $wgEmailFrom;

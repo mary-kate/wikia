@@ -158,7 +158,6 @@ class CreatePageMultiEditor extends CreatePageEditor {
 		$error_once = false ;
 
 		foreach ($_POST as $key => $value) {									
-
 			if( strpos( $key, "wpOptionals" ) !== false ) {
 				// build optional data
 				$optionals = explode( ',', $value  );				

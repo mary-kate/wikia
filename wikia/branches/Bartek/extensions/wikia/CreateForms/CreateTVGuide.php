@@ -6,7 +6,7 @@ class CreateTVGuide extends CreateForm {
 	
 	function displayForm(){
 		global $wgOut, $wgStyleVersion, $wgExtensionsPath;
-		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js{$wgStyleVersion}\"></script>\n");
+		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");
 		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/CreateForms/CreateTVGuide.js?{$wgStyleVersion}\"></script>\n");
 		$output = $this->displayFormStart();
 		

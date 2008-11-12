@@ -21,7 +21,7 @@ class IFrameUpload extends UnlistedSpecialPage {
 	$sk = $wgUser->getSkin();
 	$wgOut->addHTML($sk->getUserStyles());
 	//$wgOut->addHTML($sk->getHeadScripts());
-	$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js{$wgStyleVersion}\"></script>\n");
+	$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");
 	
 	$form = new UploadFormCustom( $wgRequest );
 	$wgOut->addHTML("

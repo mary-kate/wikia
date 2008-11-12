@@ -15,13 +15,14 @@ function wfSpecialSiteScoutPage(){
 	  }
 	  
 	    function execute(){
-			global $wgSiteView, $wgOut, $wgParser, $wgStyleVersion, $wgRequest, $wgUploadPath;
+			global $wgSiteView, $wgOut, $wgParser, $wgStyleVersion, $wgRequest, $wgUploadPath, $wgExtensionsPath;
 
 			require_once ('extensions/wikia/SiteScout/SiteScoutClass.php');
 		 
 			$wgOut->setPagetitle( "Site Scout" );
-			$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"/extensions/wikia/SiteScout/sitescout.css?{$wgStyleVersion}\"/>\n");
-			$wgOut->addScript("<script type=\"text/javascript\" src=\"/extensions/wikia/SiteScout/SiteScout.js?{$wgStyleVersion}\"></script>\n");
+			$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgExtensionsPath}/wikia/SiteScout/sitescout.css?{$wgStyleVersion}\"/>\n");
+			$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");
+			$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/SiteScout/SiteScout.js?{$wgStyleVersion}\"></script>\n");
 			$wgOut->addScript("<script>YAHOO.util.Event.on(window, 'load', function () {start_scout()});</script>");
 			
 			$wgOut->addHTML("<script>
