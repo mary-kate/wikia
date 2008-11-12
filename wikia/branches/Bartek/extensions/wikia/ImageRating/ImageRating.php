@@ -20,16 +20,19 @@ class ImageRating extends SpecialPage {
 	
 	function execute(){
 		global $wgRequest, $IP, $wgOut, $wgUser, $wgMemc, $wgStyleVersion, $wgContLang, $wgVoteDirectory, $wgVoteScripts;
+		global $wgExtensionsPath;
 	 
 		# Add messages
 		global $wgMessageCache, $wgImageRatingMessages;
 		foreach( $wgImageRatingMessages as $key => $value ) {
 			$wgMessageCache->addMessages( $wgImageRatingMessages[$key], $key );
 		}
-	
+
+		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");	
+		// $wgVoteScripts would need to be changed when this goes live
 		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgVoteScripts}/Vote.js?{$wgStyleVersion}\"></script>\n");
-		$wgOut->addScript("<script type=\"text/javascript\" src=\"/extensions/wikia/ImageRating/ImageRating.js?{$wgStyleVersion}\"></script>\n");
-		$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"/extensions/wikia/ImageRating/ImageRating.css?{$wgStyleVersion}\"/>\n");
+		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/ImageRating/ImageRating.js?{$wgStyleVersion}\"></script>\n");
+		$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgExtensionsPath}/wikia/ImageRating/ImageRating.css?{$wgStyleVersion}\"/>\n");
 			$wgOut->addHTML("<script>
 				var _CATEGORY_NS_NAME = \"" . $wgContLang->getNsText( NS_CATEGORY ) . "\"
 			</script>
