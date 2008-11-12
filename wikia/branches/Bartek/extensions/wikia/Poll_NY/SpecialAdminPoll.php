@@ -16,8 +16,9 @@ class AdminPoll extends SpecialPage {
 
 	
 	function execute(){
-		global $wgRequest, $wgUser, $wgOut, $wgRequest, $IP, $wgStyleVersion, $wgUploadPath, $wgPollScripts;
+		global $wgRequest, $wgUser, $wgOut, $wgRequest, $IP, $wgStyleVersion, $wgUploadPath, $wgPollScripts, $wgExtensionsPath;
 		
+		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");
 		$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgPollScripts}/Poll.css?{$wgStyleVersion}\"/>\n");
 		
 		global $wgMessageCache;
