@@ -94,7 +94,7 @@ function wfSpecialQuizGameHome(){
 		
 		// main execute function
 		function execute( $permalink ){
-			global $wgRequest, $wgUser, $wgOut, $wgRequest, $wgSiteView, $IP, $wgStyleVersion, $wgSupressPageTitle;
+			global $wgRequest, $wgUser, $wgOut, $wgRequest, $wgSiteView, $IP, $wgStyleVersion, $wgSupressPageTitle, $wgExtensionsPath;
 			
 			if( $permalink ){
 				$wgOut->redirect( Title::makeTitle( NS_SPECIAL, "QuizGameHome" )->getFullURL("questionGameAction=renderPermalink&permalinkID={$permalink}") );
@@ -105,7 +105,8 @@ function wfSpecialQuizGameHome(){
 			
 			$wgSupressPageTitle=true;
 
-			$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"/extensions/wikia/QuizGame/questiongame.css?{$wgStyleVersion}\"/>\n");
+			$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgExtensionsPath}/wikia/QuizGame/questiongame.css?{$wgStyleVersion}\"/>\n");
+			$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");
 			
 			// salt at will
 			$this->SALT = "SALT";

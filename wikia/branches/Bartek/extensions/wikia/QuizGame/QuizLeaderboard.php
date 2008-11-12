@@ -17,13 +17,13 @@ class QuizLeaderboard extends SpecialPage {
 	}
 	
 	function execute($input){
-		global $wgRequest, $IP, $wgOut, $wgUser;
+		global $wgRequest, $IP, $wgOut, $wgUser, $wgStyleVersion, $wgExtensionsPath;
 		
 		if(!$input)$input="points";
 		
 		
-		$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"/extensions/wikia/QuizGame/questiongame.css?{$wgStyleVersion}\"/>\n");
-		
+		$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgExtensionsPath}/wikia/QuizGame/questiongame.css?{$wgStyleVersion}\"/>\n");
+		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");	
 		switch($input){
 			
 			case "correct":
