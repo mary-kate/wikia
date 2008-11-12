@@ -17,7 +17,7 @@ function wfSpecialLogin(){
 			global $IP, $wgUser, $wgOut, $wgRequest, $wgSitename, $wgMessageCache, $wgFriendingEnabled, $wgExtensionsPath, $wgStyleVersion; 
 			
 			$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgExtensionsPath}/wikia/LoginReg/LoginReg.css?{$wgStyleVersion}\"/>\n");
-			$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js{$wgStyleVersion}\"></script>\n");
+			$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");
 
 			//language messages
 			require_once ( "$IP/extensions/wikia/LoginReg/LoginReg.i18n.php" );
