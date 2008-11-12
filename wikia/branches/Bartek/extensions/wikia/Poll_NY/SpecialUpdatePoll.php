@@ -16,8 +16,10 @@ function wfSpecialUpdatePoll(){
 		
 		function execute(){
 			
-			global $wgUser, $wgOut, $wgRequest, $IP, $wgMemc, $wgStyleVersion, $wgPollScripts;
+			global $wgUser, $wgOut, $wgRequest, $IP, $wgMemc, $wgStyleVersion, $wgPollScripts, $wgExtensionsPath;
 
+		// $wgPollScripts will need to be modified when this goes live				
+		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");
 		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgPollScripts}/Poll.js?{$wgStyleVersion}\"></script>\n");
 		$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgPollScripts}/Poll.css?{$wgStyleVersion}\"/>\n");
 

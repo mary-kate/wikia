@@ -11,13 +11,14 @@ class PollPage extends Article{
 
 	function view(){
 		global $wgUser, $wgTitle, $wgOut, $wgStyleVersion, $wgRequest, $wgSupressPageTitle, $wgNameSpacesWithEditMenu, $wgUploadPath;
+		global $wgStyleVersion, $wgExtensionsPath;
 		
 		$wgSupressPageTitle = true;
 		$wgOut->setHTMLTitle(  $wgTitle->getText() );
 		$wgOut->setPageTitle(  $wgTitle->getText() );
 	
 		$wgNameSpacesWithEditMenu[] = NS_POLL;
-	
+		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");	
 		$wgOut->addScript("<script>YAHOO.util.Event.on(window, 'load', function () {initLightbox();show_poll();});</script>");
 		
 		$wgOut->addHTML("<script>

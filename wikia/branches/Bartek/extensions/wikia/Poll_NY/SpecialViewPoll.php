@@ -16,10 +16,10 @@ class ViewPoll extends SpecialPage {
 
 	
 	function execute(){
-		global $wgRequest, $wgUser, $wgOut, $wgRequest, $IP, $wgStyleVersion, $wgUploadPath, $wgPollScripts;
+		global $wgRequest, $wgUser, $wgOut, $wgRequest, $IP, $wgStyleVersion, $wgUploadPath, $wgPollScripts, $wgExtensionsPath;
 		
 		$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgPollScripts}/Poll.css?{$wgStyleVersion}\"/>\n");
-		
+		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");		
 		global $wgMessageCache;
 		require_once ( "Poll.i18n.php" );
 		foreach( efWikiaPoll() as $lang => $messages ){

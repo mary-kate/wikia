@@ -63,8 +63,8 @@ function RenderPollny( $input, $args, &$parser ){
 
 $wgHooks['ArticleFromTitle'][] = 'wfPollFromTitle';
 function wfPollFromTitle( &$title, &$article ){
-	global $wgUser, $wgRequest, $IP, $wgOut, $wgTitle, $wgMessageCache, $wgStyleVersion,
-	$wgSupressPageTitle, $wgSupressSubTitle, $wgSupressPageCategories, $wgParser;
+	global $wgUser, $wgRequest, $IP, $wgOut, $wgTitle, $wgMessageCache, $wgStyleVersion;
+	global $wgSupressPageTitle, $wgSupressSubTitle, $wgSupressPageCategories, $wgParser, $wgExtensionsPath;
 	
 	if ( NS_POLL == $title->getNamespace()  ) {
 		
@@ -93,6 +93,7 @@ function wfPollFromTitle( &$title, &$article ){
 		}
 		$wgNameSpacesWithEditMenu[] = NS_POLL;
 
+		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");
 		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgPollScripts}/Poll.js?{$wgStyleVersion}\"></script>\n");
 		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgPollScripts}/lightbox_light.js?{$wgStyleVersion}\"></script>\n");
 		$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgPollScripts}/Poll.css?{$wgStyleVersion}\"/>\n");

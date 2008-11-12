@@ -16,9 +16,9 @@ function wfSpecialCreatePoll(){
 		
 		function execute(){
 			
-			global $wgUser, $wgOut, $wgRequest, $IP, $wgMemc, $wgStyleVersion, $wgContLang, $wgSupressPageTitle, $wgPollScripts;
-		
-			global $wgMessageCache;
+			global $wgUser, $wgOut, $wgRequest, $IP, $wgMemc, $wgStyleVersion, $wgContLang, $wgSupressPageTitle, $wgPollScripts;		
+			global $wgMessageCache, $wgExtensionsPath;
+
 			require_once ( "Poll.i18n.php" );
 			foreach( efWikiaPoll() as $lang => $messages ){
 				$wgMessageCache->addMessages( $messages, $lang );
@@ -26,6 +26,7 @@ function wfSpecialCreatePoll(){
 		
 			$wgSupressPageTitle=true;
 
+			$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");
 			$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgPollScripts}/Poll.js?{$wgStyleVersion}\"></script>\n");
 			$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgPollScripts}/Poll.css?{$wgStyleVersion}\"/>\n");
 			
