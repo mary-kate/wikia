@@ -15,9 +15,10 @@ function wfSpecialViewQuizzes(){
 		
 		// main execute function
 		function execute(){
-			global $wgRequest, $wgUser, $wgOut, $wgRequest, $wgSiteView, $IP, $wgStyleVersion, $wgUploadPath;
+			global $wgRequest, $wgUser, $wgOut, $wgRequest, $wgSiteView, $IP, $wgStyleVersion, $wgUploadPath, $wgExtensionsPath;
 			
-			$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"/extensions/wikia/QuizGame/questiongame.css?{$wgStyleVersion}\"/>\n");
+			$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgExtensionsPath}/wikia/QuizGame/questiongame.css?{$wgStyleVersion}\"/>\n");
+			$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");
 			
 			
 			//page either most or newest for everyone
