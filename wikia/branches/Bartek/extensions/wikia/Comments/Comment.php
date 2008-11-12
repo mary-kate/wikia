@@ -35,11 +35,13 @@ function wfComments() {
 }
 
 function DisplayComments( $input , $args, &$parser ){
-	global $wgUser, $wgTitle, $wgOut, $wgVoteDirectory, $wgReadOnly, $wgStyleVersion;
+	global $wgUser, $wgTitle, $wgOut, $wgVoteDirectory, $wgReadOnly, $wgStyleVersion, $wgExtensionsPath;
 	
 	wfProfileIn(__METHOD__);
 	  
 	//$wgOut->addScript("<script type=\"text/javascript\" src=\"extensions/wikia/Comments/Comment.js?{$wgStyleVersion}\"></script>\n");
+	$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js{$wgStyleVersion}\"></script>\n")
+
 	$parser->disableCache();
 	
 	$wgOut->addHTML("<script type=\"text/javascript\">

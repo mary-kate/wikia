@@ -9,11 +9,12 @@ function wfVote() {
 }
 
 function RenderVote( $input, $args, &$parser ){
-	global $wgUser, $wgTitle, $wgOut, $wgStyleVersion;
+	global $wgUser, $wgTitle, $wgOut, $wgStyleVersion, $wgExtensionsPath;
 	
 	wfProfileIn(__METHOD__);
 	
 	//$wgOut->addScript("<script type=\"text/javascript\" src=\"extensions/wikia/Vote/Vote.js?{$wgStyleVersion}\"></script>\n");
+	$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js{$wgStyleVersion}\"></script>\n")
 
 	$wgOut->addHTML("<script>
 				var _VOTE_LINK = \"" . wfMsgForContent( 'vote_link' ) . "\"
