@@ -25,6 +25,8 @@ class UpdateProfile extends SpecialPage {
 
 	function execute($section){
 		global $wgUser, $wgOut, $wgRequest, $IP, $wgUserProfileScripts, $wgUpdateProfileInRecentChanges, $wgSupressPageTitle ;
+		global $wgStyleVersion, $wgExtensionsPath; 
+
 		$wgSupressPageTitle = true;
 		$wgOut->setHTMLTitle(   wfMsg('edit-profile-title'));
 		$wgOut->setPageTitle(  wfMsg('edit-profile-title'));
@@ -38,7 +40,8 @@ class UpdateProfile extends SpecialPage {
 			$wgOut->blockedPage( false );
 			return false;
 		}
-		
+
+		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");
 		$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgUserProfileScripts}/UserProfile.css?{$wgStyleVersion}\"/>\n");
 		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgUserProfileScripts}/UpdateProfile.js\"></script>\n");
 		

@@ -1527,6 +1527,8 @@ class UserProfilePage extends Article{
 	
 	function getUserBoard($user_id,$user_name){
 		global $IP, $wgMemc, $wgUser, $wgTitle, $wgOut, $wgUserProfileDisplay, $wgUserProfileScripts;
+		global $wgStyleVersion, $wgExtensionsPath;
+
 		if($user_id == 0)return "";
 	
 		if ($wgUserProfileDisplay['board'] == false) {
@@ -1534,8 +1536,9 @@ class UserProfilePage extends Article{
 		}
 	
 		$output = "";
-		
-		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgUserProfileScripts}/UserProfilePage.js\"></script>\n");
+
+		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");
+		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgUserProfileScripts}/UserProfilePage.js?{$wgStyleVersion}\"></script>\n");
 
 		$rel = new UserRelationship($user_name);
 		$friends = $rel->getRelationshipList(1,4);
@@ -1600,14 +1603,16 @@ class UserProfilePage extends Article{
 	}
 
 	function getFanBoxes($user_name){
-		global $wgOut, $IP, $wgUser, $wgTitle, $wgMemc, $wgUserProfileDisplay, $wgMessageCache, $wgFanBoxScripts, $wgFanBoxDirectory, $wgEnableUserBoxes;
+		global $wgOut, $IP, $wgUser, $wgTitle, $wgMemc, $wgUserProfileDisplay, $wgMessageCache, $wgFanBoxScripts;
+		global $wgFanBoxDirectory, $wgEnableUserBoxes, $wgStyleVersion, $wgExtensionsPath;
 		
 		if (!$wgEnableUserBoxes || $wgUserProfileDisplay['userboxes'] == false) {
 			return "";
 		}
-		
-		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgFanBoxScripts}/FanBoxes.js\"></script>\n");
-		$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgFanBoxScripts}/FanBoxes.css\"/>\n");
+
+		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");
+		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgFanBoxScripts}/FanBoxes.js?{$wgStyleVersion}\"></script>\n");
+		$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgFanBoxScripts}/FanBoxes.css?{$wgStyleVersion}\"/>\n");
 		
 		require_once ( "{$wgFanBoxDirectory}/FanBox.i18n.php" );
 			foreach( efWikiaFantag() as $lang => $messages ){

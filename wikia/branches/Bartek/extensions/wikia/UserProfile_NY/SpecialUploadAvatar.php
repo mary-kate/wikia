@@ -14,6 +14,7 @@ class UploadAvatar extends SpecialPage {
 
   function execute(){
 	  global $wgRequest, $wgOut, $IP, $wgUser, $wgUserProfileScripts, $wgSupressPageTitle;
+	  global $wgStyleVersion, $wgExtensionsPath;
 	
 	  $wgSupressPageTitle = true;
 	  
@@ -23,6 +24,8 @@ class UploadAvatar extends SpecialPage {
 		}
 	  $wgOut->setPageTitle(  wfMsg('user-profile-picture-title'));
 	  $wgOut->setHTMLTitle(  wfMsg('user-profile-picture-title'));
+	  $wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");
+	  // $wgUserProfileScripts may need to be modified when this goes live
 	  $wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgUserProfileScripts}/UserProfile.css?{$wgStyleVersion}\"/>\n"); $this->initAvatar($wgRequest);
 	  $this->executeAvatar();
 	 
