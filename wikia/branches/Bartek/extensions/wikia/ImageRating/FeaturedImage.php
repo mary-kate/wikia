@@ -10,7 +10,7 @@ function wfFeaturedImage() {
 }
 
 function RenderFeaturedImage($input ){
-	global $wgUser, $wgTitle, $wgOut, $wgStyleVersion, $wgMemc, $IP;
+	global $wgUser, $wgTitle, $wgOut, $wgStyleVersion, $wgMemc, $IP, $wgExtensionsPath;
 	
 	# Add messages
 	global $wgMessageCache, $wgImageRatingMessages;
@@ -19,8 +19,9 @@ function RenderFeaturedImage($input ){
 	}
 	
 	//needed if allowing voting inline
+	$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");
 	$wgOut->addScript("<script type=\"text/javascript\" src=\"/extensions/Vote-Mag/Vote.js?{$wgStyleVersion}\"></script>\n");
-	$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"/extensions/wikia/ImageRating/ImageRating.css?{$wgStyleVersion}\"/>\n");
+	$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgExtensionsPath}/wikia/ImageRating/ImageRating.css?{$wgStyleVersion}\"/>\n");
 	
 	//needed if you want to display vote count/stars
 	require_once ("$IP/extensions/Vote-Mag/VoteClass.php");

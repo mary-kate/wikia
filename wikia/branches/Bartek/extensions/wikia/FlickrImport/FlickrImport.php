@@ -25,7 +25,7 @@ function wfImageImport() {
 				$wgMessageCache->addMessages( $wgFlickrImportMessages[$key], $key );
 			}
 		      
-		        global $IP, $wgRequest, $wgStyleVersion, $wgOut, $wgUser,$wgIFI_FlickrAPIKey;
+		        global $IP, $wgRequest, $wgStyleVersion, $wgOut, $wgUser,$wgIFI_FlickrAPIKey, $wgExtensionsPath;
 
 			if( $wgUser->isBlocked() ){
 				$wgOut->blockedPage( false );
@@ -41,8 +41,9 @@ function wfImageImport() {
 			require_once("$IP/extensions/wikia/FlickrImport/FlickrImportClass.php");
 			require_once("phpFlickr-2.1.0/phpFlickr.php");
 			
-			$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"/extensions/wikia/FlickrImport/FlickrImport.css?{$wgStyleVersion}\"/>\n");
-			$wgOut->addScript("<script type=\"text/javascript\" src=\"/extensions/wikia/FlickrImport/FlickrImport.js?{$wgStyleVersion}\"></script>\n");
+			$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgExtensionsPath}/wikia/FlickrImport/FlickrImport.css?{$wgStyleVersion}\"/>\n");
+			$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");
+			$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/FlickrImport/FlickrImport.js?{$wgStyleVersion}\"></script>\n");
 			
 			$wgOut->addHTML("<script>
 					var _IMPORTING_MSG = \"" . wfMsgForContent( 'importfreeimages_importing' ) . "\"
