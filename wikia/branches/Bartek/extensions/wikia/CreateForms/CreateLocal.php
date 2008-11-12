@@ -39,8 +39,9 @@ class CreateLocal extends CreateForm {
 	}
 	
 	function displayForm(){
-		global $wgOut;
-		$wgOut->addScript("<script type=\"text/javascript\" src=\"/extensions/CreateForms/CreateLocal.js?2\"></script>\n");
+		global $wgOut, $wgExtensionsPath, $wgStyleVersion;
+		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js{$wgStyleVersion}\"></script>\n");
+		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/CreateForms/CreateLocal.js?{$wgStyleVersion}\"></script>\n");
 		$output = $this->displayFormStart();
 		
 		$output .= $this->displayFormPageTitle();
