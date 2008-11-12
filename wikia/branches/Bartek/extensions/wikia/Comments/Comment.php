@@ -40,7 +40,7 @@ function DisplayComments( $input , $args, &$parser ){
 	wfProfileIn(__METHOD__);
 	  
 	//$wgOut->addScript("<script type=\"text/javascript\" src=\"extensions/wikia/Comments/Comment.js?{$wgStyleVersion}\"></script>\n");
-	$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js{$wgStyleVersion}\"></script>\n")
+	$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js{$wgStyleVersion}\"></script>\n");
 
 	$parser->disableCache();
 	
