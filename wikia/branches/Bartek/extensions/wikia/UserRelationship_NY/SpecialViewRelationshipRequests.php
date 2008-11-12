@@ -22,6 +22,7 @@
 		function execute(){
 			
 			global $wgUser, $wgOut, $wgTitle, $wgRequest, $IP, $wgMessageCache, $wgStyleVersion, $wgUserRelationshipScripts;
+			global $wgExtensionsPath;
 		
 			/*/
 			/* Redirect Non-logged in users to Login Page
@@ -33,7 +34,7 @@
 				$wgOut->redirect( $login->getFullURL('returnto=Special:ViewRelationshipRequests') );
 				return false;
 			}
-			
+			$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");
 			$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgUserRelationshipScripts}/UserRelationship.js?{$wgStyleVersion}\"></script>\n");
 			$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgUserRelationshipScripts}/UserRelationship.css?{$wgStyleVersion}\"/>\n");
 			

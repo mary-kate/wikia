@@ -25,7 +25,9 @@
 		function execute(){
 			
 			global $wgUser, $wgOut, $wgRequest, $IP, $wgMessageCache, $wgStyleVersion, $wgUserRelationshipScripts, $wgDisableFoeing;
-		
+			global $wgExtensionsPath;
+
+			$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");
 			$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgUserRelationshipScripts}/UserRelationship.css?{$wgStyleVersion}\"/>\n");
 			
 			$output = "";
