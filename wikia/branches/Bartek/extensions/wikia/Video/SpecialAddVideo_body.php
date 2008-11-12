@@ -15,14 +15,15 @@ class AddVideo extends SpecialPage {
 	
 	function execute() {
 
-	        global $IP, $wgRequest, $wgStyleVersion, $wgOut, $wgUser ;
+	        global $IP, $wgRequest, $wgStyleVersion, $wgOut, $wgUser, $wgExtensionsPath ;
 
 		if(!$wgUser->isAllowed('AddVideo')) {
                         $wgOut->permissionRequired('AddVideo');
                         return;
                 }
 
-		$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"/extensions/wikia/Video/Video.css?{$wgStyleVersion}\"/>\n");
+		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");
+		$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgExtensionsPath}/wikia/Video/Video.css?{$wgStyleVersion}\"/>\n");
 
 		if( $wgUser->isBlocked() ){
 			$wgOut->blockedPage( false );

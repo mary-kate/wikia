@@ -91,8 +91,8 @@ function wfRenderFanBoxTag($matches){
 //ArticleFromTitle
 //Calls BlogPage instead of standard article
 function wfFantagFromTitle( &$title, &$article ){
-	global $wgUser, $wgRequest, $IP, $wgOut, $wgTitle, $wgMessageCache, $wgStyleVersion, $wgSupressPageTitle, 
-	$wgSupressPageCategories, $wgFanBoxDirectory, $wgFanBoxScripts;
+	global $wgUser, $wgRequest, $IP, $wgOut, $wgTitle, $wgMessageCache, $wgStyleVersion, $wgSupressPageTitle;
+ 	global $wgSupressPageCategories, $wgFanBoxDirectory, $wgFanBoxScripts, $wgExtensionsPath;
 	
 	if ( NS_FANTAG == $title->getNamespace()  ) {
 		$wgSupressPageTitle = true;
@@ -103,6 +103,7 @@ function wfFantagFromTitle( &$title, &$article ){
 		}
 	
 		require_once( "{$wgFanBoxDirectory}/FanBoxPage.php" );
+		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");
 		$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgFanBoxScripts}/FanBoxes.css?{$wgStyleVersion}\"/>\n");
 				
 		
@@ -191,6 +192,7 @@ function wfAddFanBoxScripts(&$tpl){
 	global $wgOut, $wgFanBoxScripts, $wgStyleVersion, $wgStylePath;
 
 	if( $tpl->data['fanbox-scripts-loaded'] != 1 ){
+		// TODO check this out later
 		echo ("<link rel='stylesheet' type='text/css' href=\"{$wgFanBoxScripts}/FanBoxes.css?{$wgStyleVersion}\"/>\n");
 		echo ("<link rel='stylesheet' type='text/css' href=\"{$wgFanBoxScripts}/FanBoxes.js?{$wgStyleVersion}\"/>\n");
 		

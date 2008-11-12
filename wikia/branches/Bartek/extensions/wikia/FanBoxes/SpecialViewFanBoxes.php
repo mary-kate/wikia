@@ -16,6 +16,7 @@ function wfSpecialViewFanBoxes(){
 		
 		function execute(){
 			global $IP, $wgOut, $wgUser, $wgTitle, $wgRequest, $wgContLang, $wgMessageCache, $wgStyleVersion, $wgFanBoxScripts;
+			global $wgExtensionsPath;
 
 			require_once ( "FanBox.i18n.php" );
 			foreach( efWikiaFantag() as $lang => $messages ){
@@ -23,8 +24,9 @@ function wfSpecialViewFanBoxes(){
 			}
 
 			$tagParser = new Parser();
-			$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgFanBoxScripts}/FanBoxes.js\"></script>\n");
-			$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgFanBoxScripts}/FanBoxes.css\"/>\n");
+			$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");
+			$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgFanBoxScripts}/FanBoxes.js?{$wgStyleVersion}\"></script>\n");
+			$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgFanBoxScripts}/FanBoxes.css?{$wgStyleVersion}\"/>\n");
 
 			$wgOut->setPageTitle("Userboxes");
 	
