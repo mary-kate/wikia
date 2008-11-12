@@ -40,8 +40,8 @@ class InviteEmail extends UnlistedSpecialPage {
 			return;
 		}
 			
-		$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"" . $wgExtensionsPath . "/wikia/Invite/invite.css?{$wgStyleVersion}\"/>\n");
-		$wgOut->addScript("<script type=\"text/javascript\" src=\"" . $wgExtensionsPath . "/wikia/onejstorule.js{$wgStyleVersion}\"></script>\n");
+		$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgExtensionsPath}/wikia/Invite/invite.css?{$wgStyleVersion}\"/>\n");
+		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js{$wgStyleVersion}\"></script>\n");
 		
 		if($wgEmailFrom) {
 			$this->from = $wgEmailFrom;
