@@ -14,8 +14,8 @@ function wfSpecialTopUsers(){
 		}
 	
 		function execute(){
-			global $IP, $wgUser, $wgOut, $wgStyleVersion, $wgMessageCache, $wgMemc, $wgUserStatsTrackWeekly, 
-			       $wgUserStatsTrackMonthly, $wgUserLevels, $wgUploadPath; 
+			global $IP, $wgUser, $wgOut, $wgStyleVersion, $wgMessageCache, $wgMemc, $wgUserStatsTrackWeekly;
+			global $wgUserStatsTrackMonthly, $wgUserLevels, $wgUploadPath, $wgExtensionsPath; 
 			
 			//read in localisation messages
 			require_once ( "$IP/extensions/wikia/UserStats/UserStats.i18n.php" );
@@ -23,8 +23,9 @@ function wfSpecialTopUsers(){
 				$wgMessageCache->addMessages( $messages, $lang );
 			}
 			
-			//load css
-			$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"/extensions/wikia/UserStats/TopList.css?{$wgStyleVersion}\"/>\n");
+			$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");
+			//load css			
+			$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgExtensionsPath}/wikia/UserStats/TopList.css?{$wgStyleVersion}\"/>\n");
 			
 			$wgOut->setPagetitle( wfMsg( "user_stats_alltime_title") );
 			

@@ -18,13 +18,13 @@ class ArticlesHome extends SpecialPage {
 	 
 	
 	function execute($type){
-		global $wgUser, $wgRequest, $IP, $wgOut, $wgStyleVersion, $wgSupressPageTitle, $wgBlogCategory;
+		global $wgUser, $wgRequest, $IP, $wgOut, $wgStyleVersion, $wgSupressPageTitle, $wgBlogCategory, $wgExtensionsPath;
 		
 		$wgSupressPageTitle = true;
 		
 		require_once ("$IP/extensions/wikia/ListPages/ListPagesClass.php");
-
-		$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"/extensions/wikia/ArticlesHome/ArticlesHome.css?{$wgStyleVersion}\"/>\n");
+		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");
+		$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgExtensionsPath}/wikia/ArticlesHome/ArticlesHome.css?{$wgStyleVersion}\"/>\n");
 		
 		
 		if(!$type)$type = "popular";

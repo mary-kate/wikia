@@ -15,17 +15,18 @@ function wfSpecialTopFansByStat(){
 		}
 		
 		function execute(){
-			global $IP, $wgRequest, $wgUser, $wgOut, $wgStyleVersion, $wgMessageCache, $wgMemc, $wgUserStatsTrackWeekly, 
-			       $wgUserStatsTrackMonthly, $wgUserLevels, $wgOut, $wgUploadPath; 
+			global $IP, $wgRequest, $wgUser, $wgOut, $wgStyleVersion, $wgMessageCache, $wgMemc, $wgUserStatsTrackWeekly;
+			global $wgUserStatsTrackMonthly, $wgUserLevels, $wgOut, $wgUploadPath, $wgExtensionsPath; 
 			
 			//read in localisation messages
 			require_once ( "$IP/extensions/wikia/UserStats/UserStats.i18n.php" );
 			foreach( efWikiaUserStats() as $lang => $messages ){
 				$wgMessageCache->addMessages( $messages, $lang );
 			}
-			
+
+			$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");			
 			//load css
-			$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"/extensions/wikia/UserStats/TopList.css?{$wgStyleVersion}\"/>\n");
+			$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgExtensionsPath}/wikia/UserStats/TopList.css?{$wgStyleVersion}\"/>\n");
 			
 			
 			$statistic = $wgRequest->getVal("stat");
