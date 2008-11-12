@@ -4,13 +4,14 @@ $wgBlogDates = true;
 $wgExtensionFunctions[] = 'registerCreateForm';
 
 function registerCreateForm(){
-    global $wgParser ,$wgOut;
+    global $wgParser ,$wgOut, $wgExtensionsPath, $wgStyleVersion;
     //$wgOut->addScript("<script type=\"text/javascript\" src=\"extensions/CreateForms/CreatePage.js\"></script>\n");
+    $wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js{$wgStyleVersion}\"></script>\n");
     $wgParser->setHook('createform', 'renderCreateForm');
 }
 
 function renderCreateForm($input, $args, &$parser){
-	global $wgUser, $wgSiteView, $wgOut, $wgStyleVersion, $wgBlogDates;
+	global $wgUser, $wgSiteView, $wgOut, $wgStyleVersion, $wgBlogDates, $wgExtensionsPath;
 	
 	$wgOut->addScript("<script>var wgBlogDates=" . (($wgBlogDates)?1:0) . "</script>");
 	
@@ -33,8 +34,8 @@ function renderCreateForm($input, $args, &$parser){
 	$options = array( "wysiwyg" => strtoupper($wysiwyg), "namespace" => $namespace );
 	
 	
-	$wgOut->addScript("<script type=\"text/javascript\" src=\"/extensions/wikia/CreateForms/CreatePage.js?{$wgStyleVersion}\"></script>\n");
-		$wgOut->addScript("<link rel=\"stylesheet\" type=\"text/css\" href=\"/extensions/wikia/CreateForms/CreatePage.css?{$wgStyleVersion}\" />\n");
+	$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/CreateForms/CreatePage.js?{$wgStyleVersion}\"></script>\n");
+		$wgOut->addScript("<link rel=\"stylesheet\" type=\"text/css\" href=\"{$wgExtensionsPath}/wikia/CreateForms/CreatePage.css?{$wgStyleVersion}\" />\n");
 	if(strtoupper($wysiwyg) == "ON"){
 		$wgOut->addScript("<link rel=\"stylesheet\" type=\"text/css\" href=\"/extensions/Wikiwyg-Mag/css/wikiwyg.css?{$wgStyleVersion}\" />\n");
 		$wgOut->addScript("<script type=\"text/javascript\" src=\"/extensions/Wikiwyg-Mag/lib/Wikiwyg.js?{$wgStyleVersion}\"></script>\n");
