@@ -120,6 +120,7 @@ function wfUserProfileFromTitle( &$title, &$article ){
 
 function wfAddProfileCSS(&$tpl){
 	global $wgOut, $wgUserProfileScripts, $wgStyleVersion, $wgStylePath;
+	// todo check this out later
 	echo ("<link rel='stylesheet' type='text/css' href=\"{$wgUserProfileScripts}/UserProfile.css?{$wgStyleVersion}\"/>\n");
 
 	return true;

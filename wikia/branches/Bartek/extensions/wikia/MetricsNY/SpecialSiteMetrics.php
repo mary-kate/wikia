@@ -139,6 +139,7 @@ class SiteMetrics extends SpecialPage {
 	
 	function execute(){
 		global $wgRequest, $IP, $wgOut, $wgStyleVersion, $wgTitle, $wgUser;
+		global $wgStyleVersion, $wgExtensionsPath;
 		
 		if ( !$wgUser->isAllowed( 'metricsview' ) ) {
 		    $this->displayRestrictionError();
@@ -151,8 +152,8 @@ class SiteMetrics extends SpecialPage {
 		$user_groups = $wgUser->getGroups();
 		$user_groups = array_flip($user_groups);
 		
-			
-			$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"/extensions/wikia/MetricsNY/SiteMetrics.css?{$wgStyleVersion}\"/>\n");
+			$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");
+			$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgExtensionsPath}/wikia/MetricsNY/SiteMetrics.css?{$wgStyleVersion}\"/>\n");
 			
 			$statistic = $wgRequest->getVal('stat');
 			if($statistic=="")$statistic = "Edits";

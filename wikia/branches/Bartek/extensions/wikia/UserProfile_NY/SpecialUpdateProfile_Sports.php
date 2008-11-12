@@ -113,7 +113,7 @@ function wfSpecialUpdateProfileSports(){
 		}
 		
 		function execute(){
-			global $wgUser, $wgOut, $wgRequest, $wgSiteView, $wgTitle, $wgStyleVersion;
+			global $wgUser, $wgOut, $wgRequest, $wgSiteView, $wgTitle, $wgStyleVersion, $wgExtensionsPath;
 	
 			$this->getSports();
 			
@@ -124,9 +124,10 @@ function wfSpecialUpdateProfileSports(){
 				$wgOut->addHTML( wfMsg( 'user-profile-sports-notloggedintitle') );
 				return;
 			}
-			$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"/extensions/wikia/UserProfile/UserProfile.css?{$wgStyleVersion}\"/>\n");
-			$wgOut->addScript("<script type=\"text/javascript\" src=\"/extensions/wikia/UserProfile/UpdateProfile.js?{$wgStyleVersion}\"></script>\n");
-			$wgOut->addScript("<script type=\"text/javascript\" src=\"/extensions/wikia/DoubleCombo/DoubleCombo.js?{$wgStyleVersion}\"></script>\n");
+			$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");
+			$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgExtensionsPath}/wikia/UserProfile/UserProfile.css?{$wgStyleVersion}\"/>\n");
+			$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/UserProfile/UpdateProfile.js?{$wgStyleVersion}\"></script>\n");
+			$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/DoubleCombo/DoubleCombo.js?{$wgStyleVersion}\"></script>\n");
 			$js = "<script>
 				var fav_count;
 				function show_next(){
