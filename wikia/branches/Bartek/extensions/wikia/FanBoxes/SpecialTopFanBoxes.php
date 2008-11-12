@@ -15,8 +15,8 @@ function wfSpecialTopFanBoxes(){
 		}
 		
 		function execute(){
-			global $IP, $wgOut, $wgUser, $wgTitle, $wgRequest, $wgContLang, $wgMessageCache, $wgStyleVersion, 
-			$wgFanBoxScripts, $wgUploadPath;
+			global $IP, $wgOut, $wgUser, $wgTitle, $wgRequest, $wgContLang, $wgMessageCache, $wgStyleVersion;
+			galobal $wgFanBoxScripts, $wgUploadPath, $wgExtensionsPath;
 
 
 			require_once ( "FanBox.i18n.php" );
@@ -24,9 +24,10 @@ function wfSpecialTopFanBoxes(){
 				$wgMessageCache->addMessages( $messages, $lang );
 			}
 
-		
-			$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgFanBoxScripts}/FanBoxes.js\"></script>\n");
-			$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgFanBoxScripts}/FanBoxes.css\"/>\n");
+			$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");
+			// $wgFanBoxScripts may need to be modified upon putting this live	
+			$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgFanBoxScripts}/FanBoxes.js?{$wgStyleVersion}\"></script>\n");
+			$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgFanBoxScripts}/FanBoxes.css?{$wgStyleVersion}\"/>\n");
 
 			$topfanboxid = $wgRequest->getVal("id");
 			$topfanboxcategory = $wgRequest->getVal("cat");

@@ -20,17 +20,21 @@ class FanBoxes extends SpecialPage {
 	
 	
 	function execute(){
-		global $IP, $wgOut, $wgUser, $wgTitle, $wgRequest, $wgContLang, $wgMessageCache, $wgStyleVersion, $wgFanBoxScripts;
+		global $IP, $wgOut, $wgUser, $wgTitle, $wgRequest, $wgContLang, $wgMessageCache, $wgStyleVersion;
+		global $wgFanBoxScripts, $wgExtensionsPath;
 
 		require_once ( "FanBox.i18n.php" );
 		
 		foreach( efWikiaFantag() as $lang => $messages ){
 			$wgMessageCache->addMessages( $messages, $lang );
 		}
-			
-		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgFanBoxScripts}/FanBoxes.js\"></script>\n");
-		$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgFanBoxScripts}/FanBoxes.css\"/>\n");
+
+		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");			
+		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgFanBoxScripts}/FanBoxes.js?{$wgStyleVersion}\"></script>\n");
+		$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgFanBoxScripts}/FanBoxes.css?{$wgStyleVersion}\"/>\n");
 		//colorpicker
+
+		// TODO check this out later
 		$wgOut->addScript("<script type=\"text/javascript\" src=\"http://yui.yahooapis.com/2.4.1/build/utilities/utilities.js\" ></script>\n");
 		$wgOut->addScript("<script type=\"text/javascript\" src=\"http://yui.yahooapis.com/2.4.1/build/slider/slider-min.js\" ></script>\n");
 		$wgOut->addScript("<link rel=\"stylesheet\" type=\"text/css\" href=\"http://yui.yahooapis.com/2.4.1/build/colorpicker/assets/skins/sam/colorpicker.css\"/>\n");
