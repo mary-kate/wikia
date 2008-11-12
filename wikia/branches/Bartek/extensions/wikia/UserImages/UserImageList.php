@@ -16,10 +16,11 @@ class UserImageList extends SpecialPage {
 
 	
 	function execute(){
-		global $wgRequest, $IP, $wgOut, $wgUser, $wgMessageCache;
+		global $wgRequest, $IP, $wgOut, $wgUser, $wgMessageCache, $wgStyleVersion, $wgExtensionsPath;
 		
-		$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"/extensions/wikia/UserImages/UserImages.css?{$wgStyleVersion}\"/>\n");
-		$wgOut->addScript("<script type=\"text/javascript\" src=\"/extensions/wikia/UserImages/UserImages.js?{$wgStyleVersion}\"></script>\n");
+		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");	
+		$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgExtensionsPath}/wikia/UserImages/UserImages.css?{$wgStyleVersion}\"/>\n");
+		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/UserImages/UserImages.js?{$wgStyleVersion}\"></script>\n");
 		
 		//language messages
 		require_once ( "UserImages.i18n.php" );
