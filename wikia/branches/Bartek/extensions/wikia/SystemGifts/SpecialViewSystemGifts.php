@@ -8,7 +8,10 @@ class ViewSystemGifts extends SpecialPage {
 	function execute(){
 		
 		global $wgUser, $wgOut, $wgRequest, $IP, $wgMemc, $wgUploadPath, $wgMessageCache, $wgSystemGiftsScripts;
-		
+		global $wgStyleVersion, $wgExtensionsPath;
+	
+		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");	
+		// $wgSystemGiftsScripts may need to be modified when this goes live
 		$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgSystemGiftsScripts}/SystemGift.css?{$wgStyleVersion}\"/>\n");
 
 		//language messages
