@@ -20,8 +20,10 @@ class BoardBlast extends SpecialPage {
 	}
 	
 	function execute( ){
-		global $wgRequest, $wgOut, $wgStyleVersion, $wgUser, $IP, $wgUserBoardScripts;
+		global $wgRequest, $wgOut, $wgStyleVersion, $wgUser, $IP, $wgUserBoardScripts, $wgExtensionsPath;
 		
+		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");
+		// $wgUserBoardScripts may have to be modified before this goes live
 		$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgUserBoardScripts}/BoardBlast.css?{$wgStyleVersion}\"/>\n");
 		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgUserBoardScripts}/BoardBlast.js?{$wgStyleVersion}\"></script>\n");
 		

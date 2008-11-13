@@ -10,7 +10,9 @@
 		function execute(){
 			
 			global $wgUser, $wgOut, $wgRequest, $IP, $wgMemc, $wgMessageCache, $wgStyleVersion, $wgUploadPath, $wgUserGiftsScripts;
-			
+			global $wgExtensionsPath;
+
+			$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");		
 			$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgUserGiftsScripts}/UserGifts.css?{$wgStyleVersion}\"/>\n");
 
 			//language messages
