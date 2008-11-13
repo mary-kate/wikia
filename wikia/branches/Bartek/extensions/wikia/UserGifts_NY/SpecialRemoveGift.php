@@ -8,7 +8,10 @@ class RemoveGift extends SpecialPage {
 	function execute(){
 		
 		global $wgUser, $wgOut, $wgRequest, $IP, $wgMemc, $wgMessageCache, $wgUploadPath, $wgUserGiftsScripts;
+		global $wgStyleVersion, $wgExtensionsPath;
 
+		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/onejstorule.js?{$wgStyleVersion}\"></script>\n");
+		// $wgUserGiftsScripts may need to be modified when this goes live
 		$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgUserGiftsScripts}/UserGifts.css?{$wgStyleVersion}\"/>\n");
 		
 		//language messages
