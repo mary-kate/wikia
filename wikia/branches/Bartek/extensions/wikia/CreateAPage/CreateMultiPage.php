@@ -169,7 +169,7 @@ class CreateMultiPage
 	}	
 
 
-	static public function multiEditParse($rows, $cols, $ew, $sourceText) {
+	static public function multiEditParse($rows, $cols, $ew, $sourceText, $optional_sections = null) {
 		global $wgTitle;
 		global $wgMultiEditTag;
 		global $wgMultiEditPageSimpleTags, $wgMultiEditPageTags;
@@ -177,7 +177,7 @@ class CreateMultiPage
 
 		$me_content = '' ;
 		$found_categories = array () ;
-		
+
 		$is_used_metag = false;
 		$is_used_category_cloud = false ;
 		$wgMultiEditTag = (empty($wgMultiEditTag)) ? "useMultiEdit" : $wgMultiEditTag;
@@ -507,7 +507,8 @@ class CreateMultiPage
 				'is_section' => $is_section,
 				'title' => $wgTitle,
 				'imgpath' => $wgExtensionsPath . '/wikia/CreateAPage/images/',
-				'optional_text' => wfMsg( 'createpage_optionals_text' )
+				'optional_text' => wfMsg( 'createpage_optionals_text' ),
+				'optional_sections' => $optional_sections
 			)
 		);
 		#---

@@ -92,7 +92,9 @@ if( !empty ($optionalSections) ) {
 	<div id="createpage_optionals"><span id="createpage_optionals_text"><?= $optional_text ?></span><br/>
 	<span id="createpage_optionals_content">
 <?
+	$check = '';
 	foreach( $optionalSections as $opt ) {
+		in_array( $opt[0], $optional_sections ) ? $check = 'checked="checked"' : $check = '';
 ?>
 	<span id="wpOptional<?= $opt[0] ?>"><input type="checkbox" id="wpOptionalInput<?= $opt[0] ?>" name="wpOptionalInput<?= $opt[0] ?>" <?= $check ?>/><span id="wpOptionalDesc<?= $opt[0] ?>"><?= $opt[1] ?></span></span>
 <?

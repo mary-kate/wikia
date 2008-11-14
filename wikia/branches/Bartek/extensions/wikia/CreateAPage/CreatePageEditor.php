@@ -26,25 +26,32 @@ abstract class CreatePageEditor {
 
 //wraps up special multi editor class
 class CreatePageMultiEditor extends CreatePageEditor {	
-	var $mRedLinked, $mInitial ;	
-	function CreatePageEditor ($template, $redlinked = false, $initial = false) {
+	var $mRedLinked, $mInitial, $mPreviewed;	
+	function CreatePageEditor ($template, $redlinked = false, $initial = false, $previewed = false) {
 		$this->mTemplate = $template ;
 		$this->mRedLinked = $redlinked ;		
 		$this->mInitial = $initial ;
+		$this->mPreviewed = $previewed;
 	}
 
 	function GenerateForm ($content = false) {
 		global $wgOut, $wgUser, $wgRequest ;
+		$optional_sections = array();
+		foreach ($_POST as $key => $value) {
+			if( strpos( $key, "wpOptionalInput" ) !== false ) {
+				$optional_sections[] = str_replace( "wpOptionalInput", "", $key );
+			}
+		}
 		if (!$content) {
 			$title = Title::newFromText ('Createplate-' . $this->mTemplate, NS_MEDIAWIKI) ;
 			if ($title->exists()) {
 				$rev = Revision::newFromTitle ($title) ;
-				$me = CreateMultiPage::multiEditParse (10, 10, '?', $rev->getText () ) ;
+				$me = CreateMultiPage::multiEditParse (10, 10, '?', $rev->getText (), $optional_sections ) ;
 			} else {
 				$me = CreateMultiPage::multiEditParse (10, 10, '?', "<!---blanktemplate--->") ;
 			}
 		} else {
-			$me = CreateMultiPage::multiEditParse (10,10,'?', $content) ;
+			$me = CreateMultiPage::multiEditParse (10,10,'?', $content, $optional_sections ) ;
 		}
                 $wgOut->addHTML ("<div id=\"cp-restricted\">") ;
 		$wgOut->addHTML ("

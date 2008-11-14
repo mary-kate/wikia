@@ -419,7 +419,7 @@ class CreatePageCreateplateForm {
 				return false ;
 			} else if ($wgRequest->getCheck ('wpPreview')) {		        	
 				$mainform = new CreatePageCreatePlateForm () ;
-				$editor = new CreatePageMultiEditor ($this->mCreateplate) ;
+				$editor = new CreatePageMultiEditor ($this->mCreateplate, true) ;
 				$content = $editor->GlueArticle (true) ;				
 				$mainform->showForm ('', $content) ;
 				$editor->GenerateForm ($content) ;
