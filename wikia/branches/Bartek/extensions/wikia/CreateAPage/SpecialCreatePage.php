@@ -420,8 +420,9 @@ class CreatePageCreateplateForm {
 			} else if ($wgRequest->getCheck ('wpPreview')) {		        	
 				$mainform = new CreatePageCreatePlateForm () ;
 				$editor = new CreatePageMultiEditor ($this->mCreateplate, true) ;
-				$content = $editor->GlueArticle (true) ;				
-				$mainform->showForm ('', $content) ;
+				$content = $editor->GlueArticle () ;				
+				$content_static = $editor->GlueArticle (true) ;				
+				$mainform->showForm ('', $content_static) ;
 				$editor->GenerateForm ($content) ;
 				return false ;
 			} else if ($wgRequest->getCheck ('wpAdvancedEdit')) {
