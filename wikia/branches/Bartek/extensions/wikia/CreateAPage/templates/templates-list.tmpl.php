@@ -216,9 +216,10 @@ YWC.UnuseSection = function( section, text ) {
 
 YWC.ToggleSection = function( e, o ) {
 	var section = YD.get( "createpage_section_" + o.num );
+	var input = YD.get( "wpOptionalInput" + o.num );
 	var optionals = YD.get( "wpOptionals" );
 	var ivalue = '';
-	if ('none' == section.style.display) {
+	if (input.checked) {
 		optionals.value = YWC.RestoreSection( section, optionals.value );
 	} else {
 		optionals.value = YWC.UnuseSection( section, optionals.value );
