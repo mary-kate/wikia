@@ -94,7 +94,7 @@ if( !empty ($optionalSections) ) {
 <?
 	foreach( $optionalSections as $opt ) {
 ?>
-	<span id="wpOptional<?= $opt[0] ?>"><input type="checkbox" id="wpOptionalInput<?= $opt[0] ?>"/><span id="wpOptionalDesc<?= $opt[0] ?>"><?= $opt[1] ?></span></span>
+	<span id="wpOptional<?= $opt[0] ?>"><input type="checkbox" id="wpOptionalInput<?= $opt[0] ?>" name="wpOptionalInput<?= $opt[0] ?>" <?= $check ?>/><span id="wpOptionalDesc<?= $opt[0] ?>"><?= $opt[1] ?></span></span>
 <?
 	}
 ?>
