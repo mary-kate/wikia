@@ -58,7 +58,8 @@ insert into user_groups(ug_user, ug_group) values
 (/*Peteparker*/122657, 'helper'),
 (/*Richard1990*/25261,'helper'),
 (/*Tommy6*/239851,'helper'),
-(/*Uberfuzzy*/161697, 'helper')
+(/*Uberfuzzy*/161697, 'helper'),
+(/*MtaÄ*/826221, 'helper')
 ;
 
 delete from user_groups where ug_user in (
