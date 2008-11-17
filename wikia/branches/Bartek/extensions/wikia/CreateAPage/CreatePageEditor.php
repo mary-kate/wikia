@@ -154,7 +154,7 @@ class CreatePageMultiEditor extends CreatePageEditor {
 		return $text ;
 	}
 
-	function GlueArticle ($preview = false) {		
+	function GlueArticle ($preview = false, $render_option = true) {		
 		global $wgRequest, $wgOut ;
         	$text = '' ;
 		$infoboxes = array();
@@ -166,7 +166,7 @@ class CreatePageMultiEditor extends CreatePageEditor {
 
 		foreach ($_POST as $key => $value) {									
 			if( strpos( $key, "wpOptionals" ) !== false ) {
-				if ( $preview ) {
+				if ( $render_option ) {
 					// build optional data
 					$optionals = explode( ',', $value  );				
 				}
