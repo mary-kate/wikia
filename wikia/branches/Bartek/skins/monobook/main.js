@@ -73,6 +73,12 @@ function CreateDialogProgress(header, body)
   return Dialog;
 }
 
+function doClearValue( item ) { 
+	if ( $( item ) ) { 
+		$( item ).value = ""; 
+ 	} 
+} 
+
 // ShowDialogInfo('Test Dialog',' foo bar', 'OK', function(){alert('OK is ok'); this.hide();}); // info dialog (OK)
 // ShowDialogAsk('Test Dialog',' foo bar?', 'Yes', function(){alert('OK is ok'); this.hide();}, 'No', function(){alert('OK is not ok'); this.hide();}); // ask dialog (OK/NO)
 // progress = CreateDialogProgress('Test Dialog', 'Doing something in background, please wait...'); progress.hide();
