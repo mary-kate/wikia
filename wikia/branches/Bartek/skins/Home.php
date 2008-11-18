@@ -11,6 +11,8 @@ if (!defined('MEDIAWIKI')) die();
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License 2.0 or later
  */
 
+require_once dirname(__FILE__) . "/../extensions/wikia/AnalyticsEngine/AnalyticsEngine.php";
+
 class SkinHome extends SkinTemplate {
 
 	function initPage(&$out) {
@@ -342,7 +344,7 @@ class HomeTemplate extends QuickTemplate {
 					</td>
 				</tr>
 				</table>';
-		
+
 		$entertainment_featured = '<h1>Wikia Entertainment is home to over 1,000 wiki fansites built by millions of Movies, TV, Comics and Anime addicts.</h1>
 				<table cellspacing="0">
 				<tr>
@@ -351,8 +353,8 @@ class HomeTemplate extends QuickTemplate {
 						<h2>Movies &amp; TV</h2>
 						<ul>
 							<li><a href="http://starwars.wikia.com">Star Wars</a></li>
-							<li><a href="http://fringe.wikia.com">Fringe</a></li>
-							<li><a href="http://harrypotter.wikia.com">Harry Potter</a></li>
+							<li><a href="http://twilight.wikia.com">Twilight</a></li>
+							<li><a href="http://watchmen.wikia.com">Watchmen</a></li>
 							<li><a href="http://24.wikia.com">24</a></li>
 							<li><a href="http://muppet.wikia.com">Muppets</a></li>
 						</ul>
@@ -363,17 +365,17 @@ class HomeTemplate extends QuickTemplate {
 						<ul>
 							<li><a href="http://en.marveldatabase.com">Marvel Comics</a></li>
 							<li><a href="http://bleach.wikia.com">Bleach</a></li>
-							<li><a href="http://naruto.wikia.com">Naruto</a></li>
-							<li><a href="http://watchmen.wikia.com">Watchmen</a></li>
+							<li><a href="http://familyguy.wikia.com">Family Guy</a></li>
+							<li><a href="http://batman.wikia.com">Batman</a></li>
 							<li><a href="http://southpark.wikia.com">South Park</a></li>
 						</ul>
 						more <a href="http://entertainment.wikia.com/wiki/Comics">comics</a> &amp; <a href="http://entertainment.wikia.com/wiki/Anime">anime wikis</a>
 					</td>
 				</tr>
 				</table>';
-		
+
 		$gaming_non_featured = '<h1><a href="http://gaming.wikia.com">Gaming</a></h1>
-					Everything from MMO and RPGs to Fighters and Shooters... 
+					Everything from MMO and RPGs to Fighters and Shooters...
 					<ul>
 						<li><a href="http://www.wowwiki.com">World of Warcraft</a></li>
 						<li><a href="http://fallout.wikia.com">Fallout</a></li>
@@ -387,9 +389,9 @@ class HomeTemplate extends QuickTemplate {
 					Movies, TV, Comics, Anime, Books, and more.
 					<ul>
 						<li><a href="http://starwars.wikia.com">Star Wars</a></li>
-						<li><a href="http://en.marveldatabase.com">Marvel Comics</a></li>
+						<li><a href="http://twilight.wikia.com">Twilight</a></li>
 						<li><a href="http://harrypotter.wikia.com">Harry Potter</a></li>
-						<li><a href="http://muppet.wikia.com">Muppets</a></li>
+						<li><a href="http://en.marveldatabase.com">Marvel Comics</a></li>
 						<li><a href="http://watchmen.wikia.com">Watchmen</a></li>
 					</ul>
 					more <a href="http://entertainment.wikia.com">entertainment wikis</a>';
@@ -436,7 +438,7 @@ class HomeTemplate extends QuickTemplate {
 
 <?= Skin::makeGlobalVariablesScript( $this->data ); ?>
 
-<!-- Dependency --> 
+<!-- Dependency -->
 <script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/yahoo/yahoo-min.js" ></script>
 
 <!-- Event source file -->
@@ -592,7 +594,7 @@ class HomeTemplate extends QuickTemplate {
 <div class="shrinkwrap clearfix">
 	<div id="homepage_left_outside">
 		<div id="homepage_left_inside">
-		
+
 			<div id="featured_box">
 				<?php
 					echo $featured_hub;
@@ -646,7 +648,7 @@ class HomeTemplate extends QuickTemplate {
 	<div id="homepage_right">
 		<div style="position: absolute; top: 15px; left: 50%;"><a href="http://requests.wikia.com" class="big_button orange" style="margin-left: -50%;"><big>Create a Wiki</big><small></small></a></div>
 		<div class="box yellow" style="background-image: url(<?php $this->text('stylepath') ?>/home/images/new_to_wikis_accent.gif); background-position: 240px 100%; background-repeat: no-repeat; padding-right: 70px;">
-			<h1>New to Wikis?</h1> 
+			<h1>New to Wikis?</h1>
 			"Wiki" comes from the Hawaiian word for fast. Wikia's wikis are websites where editing is simple and quick.<br />
 			<a href="http://help.wikia.com/wiki/Help:Video_demos">Take a video tour</a> to learn more.
 		</div>
@@ -670,20 +672,20 @@ class HomeTemplate extends QuickTemplate {
 	<div class="shrinkwrap">
 		<table cellspacing="0">
 		<tr>
-			<th class="first">Most Horrifying Characters</th>
+			<th class="first">Fallout 3 Most Wanted Items</th>
 			<th>Wikia's Top Robots</th>
 			<th>WoW's Most Wanted Items</th>
-			<th class="last">Harry Potter's Spells</th>
+			<th class="last">Favorite Twilight Vampires</th>
 		</tr>
 		<tr>
 			<td class="first gaming">
-				<ol>
-					<li><a href="http://residentevil.wikia.com/wiki/Nemesis">Nemesis</a> (<a href="http://residentevil.wikia.com" class="secondary" >Resident Evil</a>)</li>
-					<li><a href="http://silenthill.wikia.com/wiki/The_One_Truth">The One Truth</a> (<a href="http://silenthill.wikia.com" class="secondary">Silent Hill</a>)</li>
-					<li><a href="http://bioshock.wikia.com/wiki/Little_Sisters">Little Sisters</a> (<a href="http://bioshock.wikia.com" class="secondary">BioShock</a>)</li>
-					<li><a href="http://doom.wikia.com/wiki/Vulgar">The Vulgar</a> (<a href="http://doom.wikia.com" class="secondary">Doom</a>)</li>
-					<li><a href="http://animalcrossing.wikia.com/wiki/Agent_S">Agent S</a> (<a href="http://animalcrossing.wikia.com" class="secondary">Animal Crossing</a>)</li>
-				</ol>
+				<ul>
+					<li><a href="http://fallout.wikia.com/wiki/Stimpak">Stimpacks</a></li>
+					<li><a href="http://fallout.wikia.com/wiki/Stealth_Boy">Stealthboy</a></li>
+					<li><a href="http://fallout.wikia.com/wiki/Scrap_Metal">Scrap Metal</a></li>
+					<li><a href="http://fallout.wikia.com/wiki/Rock-It_Launcher">Rock-it Launcher</a></li>
+					<li><a href="http://fallout.wikia.com/wiki/Vault_Boy_Bobblehead">Valut Boy Bobblehead</a></li>
+				</ul>
 			</td>
 			<td class="entertainment">
 				<ul>
@@ -705,11 +707,11 @@ class HomeTemplate extends QuickTemplate {
 			</td>
 			<td class="last entertainment">
 				<ul>
-					<li><a href="http://harrypotter.wikia.com/wiki/Patronus">Patronus</a></li>
-					<li><a href="http://harrypotter.wikia.com/wiki/Cruciatus_Curse">Cruciatus Curse</a></li>
-					<li><a href="http://harrypotter.wikia.com/wiki/Expelliarmus">Expelliarmus</a></li>
-					<li><a href="http://harrypotter.wikia.com/wiki/Imperius_Curse">Imperius Curse</a></li>
-					<li><a href="http://harrypotter.wikia.com/wiki/Avada_Kedavra">Avada Kedavra</a></li>
+					<li><a href="http://twilight.wikia.com/wiki/Bella_Swan">Bella Swan</a></li>
+					<li><a href="http://twilight.wikia.com/wiki/Edward_Cullen">Edward Cullen</a></li>
+					<li><a href="http://twilight.wikia.com/wiki/Alice_Cullen">Alice Cullen</a></li>
+					<li><a href="http://twilight.wikia.com/wiki/Victoria">Victoria</a></li>
+					<li><a href="http://twilight.wikia.com/wiki/Aro">Aro</a></li>
 				</ul>
 			</td>
 		</tr>
@@ -725,7 +727,7 @@ class HomeTemplate extends QuickTemplate {
 			<li><a href="http://www.wikia.com/wiki/Hiring">Hiring</a></li>
 			<li><a href="http://www.wikia.com/wiki/Press">Press</a></li>
 			<li><a href="http://www.wikia.com/wiki/Terms_of_use">Terms of Use</a></li>
-			<li><img src="<?php $this->text('stylepath') ?>/home/images/gp_media.png" border="0" width="128" height="22" style="position: relative; top: 5px;" /></li>
+			<li><img src="<?php $this->text('stylepath') ?>/home/images/gp_media.png" border="0" width="128" height="22" style="vertical-align: top; position: relative; top: 25px" /></li>
 		</ul>
 		<div id="copyright">
 			<img src="<?php $this->text('stylepath') ?>/home/images/footer_logo.gif?<?= $wgStyleVersion ?>" alt="Wikia" /><br />
@@ -736,35 +738,15 @@ class HomeTemplate extends QuickTemplate {
 </div>
 
 <!-- analytics (start) -->
-<script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
 <?php
-    global $wgServer;
-    if ( !empty($this->data['adserver_ads']) ) {
-        echo "<!-- adserver on, injecting bottom JS.. " . count($this->data['adserver_ads']) . "-->\n";
-        echo $this->data['adserver_ads'][ADSERVER_POS_JS_BOT1];
-        echo $this->data['adserver_ads'][ADSERVER_POS_JS_BOT2];
-        echo $this->data['adserver_ads'][ADSERVER_POS_JS_BOT3];
-    }
-    //Emil - display GoogleAnalytics for wikis that don't use adserver
-    elseif ( preg_match("/wikia.com/",$wgServer) ) {
-?>
-<script src="http://www.google-analytics.com/urchin.js"  type="text/javascript"></script>
-<script type="text/javascript">
-_udn = "none";_uff = 0;_uacct="UA-288915-1"; urchinTracker();
-_udn = "none";_uff = 0;_uacct="UA-288915-3"; urchinTracker();
-</script>
-<?php
-    }
-	$this->html('bottomscripts');
+echo AnalyticsEngine::track('GA_Urchin', AnalyticsEngine::EVENT_PAGEVIEW);
+global $wgCityId;
+echo AnalyticsEngine::track('GA_Urchin', 'onewiki', array($wgCityId));
+echo AnalyticsEngine::track('QuantServe', AnalyticsEngine::EVENT_PAGEVIEW);
+
+$this->html('bottomscripts');
 ?>
 
-<!-- Start Quantcast tag -->
-<script type="text/javascript" src="http://edge.quantserve.com/quant.js"></script>
-<script type="text/javascript">_qacct="p-8bG6eLqkH6Avk";quantserve();</script>
-<noscript>
-<a href="http://www.quantcast.com/p-8bG6eLqkH6Avk" target="_blank"><img src="http://pixel.quantserve.com/pixel/p-8bG6eLqkH6Avk.gif" style="display: none;" border="0" height="1" width="1" alt="Quantcast"/></a>
-</noscript>
-<!-- End Quantcast tag -->
 <!-- analytics (end) -->
 </body>
 </html>
