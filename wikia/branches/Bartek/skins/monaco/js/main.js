@@ -367,6 +367,13 @@ function doClear(item, type) {
 		$(type+item).style.display="none";
 	}
 }
+
+function doClearValue( item ) {
+	if ( $( item ) ) {
+		$( item ).value = "";
+	}
+}
+
 function doClearAll() {
 	var the_last_displayed;
 	while( displayed_menus.length > 0 ) {
