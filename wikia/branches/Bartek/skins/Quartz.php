@@ -14,7 +14,7 @@ if (!defined('MEDIAWIKI')) die();
  */
 global $IP;
 require_once("$IP/includes/SkinTemplate.php");
-require_once("$IP/extensions/wikia/AdServer.php");
+require_once("$IP/extensions/wikia/AnalyticsEngine/AnalyticsEngine.php");
 
 class SkinQuartz extends SkinTemplate {
 
@@ -225,13 +225,13 @@ class QuartzTemplate extends QuickTemplate {
 
 					$spots = '';
 
-					$ad = AdServer::getInstance()->getAd('tr_user');
+					$ad = AdEngine::getInstance()->getAd('RIGHT_SPOTLIGHT_1');
 
 					if( !empty( $ad ) ) {
 						$spots .= "\n\t".'<div id="spotlight-1">'.$ad.'</div>'."\n";
 					}
 
-					$ad = AdServer::getInstance()->getAd('spot_user');
+					$ad = AdEngine::getInstance()->getAd('RIGHT_SPOTLIGHT_2');
 
 					if( !empty( $ad ) ) {
 						$spots .= "\n\t".'<div id="spotlight-2">'.$ad.'</div>'."\n";
@@ -242,22 +242,29 @@ class QuartzTemplate extends QuickTemplate {
 				}
 				else
 				{
-					$ad = AdServer::getInstance()->getAd('tr_anon');
-					return empty( $ad ) ? null : $ad;
+					return AdEngine::getInstance()->getAd('TOP_RIGHT_BOXAD');
 				}
 
 
 			case 'br':
 				if($wgUser->isLoggedIn() || $wgNoWideAd) {
-					$ad = AdServer::getInstance()->getAd('br_user');
-					return empty( $ad ) ? null : $ad;
+					// Display nothing, they already saw the spotlights at the top
 				} else {
-					$ad = AdServer::getInstance()->getAd('br_anon');
-					return empty( $ad ) ? null : $ad;
+					$ad = AdEngine::getInstance()->getAd('RIGHT_SPOTLIGHT_1');
+
+					if( !empty( $ad ) ) {
+						$spots .= "\n\t".'<div id="spotlight-1">'.$ad.'</div>'."\n";
+					}
+
+					$ad = AdEngine::getInstance()->getAd('RIGHT_SPOTLIGHT_2');
+
+					if( !empty( $ad ) ) {
+						$spots .= "\n\t".'<div id="spotlight-2">'.$ad.'</div>'."\n";
+					}
+
+					// macbre: return spotlights container only if we have spotlights
+					return (!empty($spots) ? '<div id="spotlights" class="clearfix">'.$spots.'</div>' : '');
 				}
-			default :
-				$ad = AdServer::getInstance()->getAd($pos);
-				return empty( $ad ) ? null : $ad;
 		}
 	}
 
@@ -784,8 +791,12 @@ if($displayArticleFooter) {
 
 self::printWikiaFooter();
 
+AdEngine::getInstance()->setLoadType('inline');
+echo AdEngine::getInstance()->getSetupHtml();
+
 ?>
 
+	<div id="wikia_header" style="display:none"></div><!-- Hack because ads have code that references this. Awful -->
 	<div id="sidebar">
 		<?php wfRunHooks('HTMLBeforeWidgets'); ?>
 		<div id="sidebar_widgets" style="clear: both">
@@ -822,11 +833,12 @@ if( !empty($wgNotificationEnableSend) ) {
 </div>
 
 <?php
-echo AdServer::getInstance()->getAd('js_bot1');
-echo AdServer::getInstance()->getAd('js_bot2');
-echo AdServer::getInstance()->getAd('js_bot3');
-echo AdServer::getInstance()->getAd('js_bot4');
-echo AdServer::getInstance()->getAd('js_bot5');
+echo AnalyticsEngine::track('GA_Urchin', AnalyticsEngine::EVENT_PAGEVIEW);
+global $wgCityId;
+echo AnalyticsEngine::track('GA_Urchin', 'onewiki', array($wgCityId));
+echo AnalyticsEngine::track('GA_Urchin', 'hub', AdEngine::getCachedCategory());
+echo AnalyticsEngine::track('QuantServe', AnalyticsEngine::EVENT_PAGEVIEW);
+
 ?>
 <!-- analytics (end) -->
 
