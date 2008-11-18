@@ -2224,7 +2224,7 @@ class Article {
 					Xml::label( wfMsg( 'deleteotherreason' ), 'wpReason' ) .
 				"</td>
 				<td>" .
-					Xml::input( 'wpReason', 60, $reason, array( 'type' => 'text', 'maxlength' => '255', 'tabindex' => '2', 'id' => 'wpReason' ) ) . Xml::element( 'input', array( 'type' => 'button', 'id' => 'wpClearReason', 'name' => 'wpClearReason', 'value' => wfMsg( 'clear-field' ) ) ) .
+					Xml::input( 'wpReason', 60, $reason, array( 'type' => 'text', 'maxlength' => '255', 'tabindex' => '2', 'id' => 'wpReason' ) ) . Xml::element( 'input', array( 'type' => 'button', 'id' => 'wpClearReason', 'name' => 'wpClearReason', 'value' => wfMsg( 'clear-field' ), 'onclick' => 'doClearValue( \'wpReason\'  )' ) ) .
 				"</td>
 			</tr>
 			<tr>
