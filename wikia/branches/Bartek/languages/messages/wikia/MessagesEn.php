@@ -301,6 +301,7 @@ Your account has been created. Don't forget to change your {{SITENAME}} [[Specia
 'quartz-custom' => 'Custom',
 
 # Need to find a better place for it
+'clear-field' => 'clear field',
 'custom_info' => 'Custom themes can be built by selecting "Custom" above and then editing ',
 'quartz.css' => 'body {
 	background: url(http://images.wikia.com/common/skins/quartz/sapphire/images/background.gif) repeat-x;
