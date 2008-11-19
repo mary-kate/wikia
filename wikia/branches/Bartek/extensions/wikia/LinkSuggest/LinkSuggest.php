@@ -42,7 +42,9 @@ global $wgAjaxExportList;
 $wgAjaxExportList[] = 'getLinkSuggest';
 
 function getLinkSuggest() {
-	global $wgRequest, $wgContLang;
+	global $wgRequest, $wgContLang, $wgDebugLogGroups;
+
+	$wgDebugLogGroups["linksuggest"] = '/tmp/linksuggest.log';
 
 	$namespace = 0;
 
