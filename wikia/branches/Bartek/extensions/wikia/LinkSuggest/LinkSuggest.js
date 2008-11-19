@@ -16,7 +16,7 @@ YAHOO.lang.extend(YAHOO.example.AutoCompleteTextArea, YAHOO.widget.AutoComplete,
 		if ((v.keyCode == 221)) { //double brackets
 			var text = oSelf._elTextbox.value.replace(/\r/g, "");
 			var caret = oSelf.getCaret(oSelf._elTextbox);			
-                        if(text.charAt(i) == "]") {
+                        if( ( ( text.charAt( i ) == "]" ) && !this._bIsTemplate ) || ( text.charAt( i ) == "}" ) && this._bIsTemplate ) ) {
 				oSelf._toggleContainer(false);		
                         }			
 		}
