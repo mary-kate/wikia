@@ -165,7 +165,7 @@ YAHOO.lang.extend(YAHOO.example.AutoCompleteTextArea, YAHOO.widget.AutoComplete,
 		var caret = this.getCaret(this._elTextbox);
 
 		for(var i = caret; i >= 0; i--) {
-			if(text.charAt(i - 1) == "[" || text.charAt(i - 1) == "{") {
+			if( ((text.charAt(i - 1) == "[") && !this._bIsTemplate ) || ((text.charAt(i - 1) == "{") && this._bIsTemplate) ) {
 				break;
 			}
 		}
