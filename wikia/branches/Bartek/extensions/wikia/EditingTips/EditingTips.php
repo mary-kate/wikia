@@ -71,8 +71,10 @@ function wfEditingTipsToggle($toggles, $default_array = false) {
 	wfLoadExtensionMessages('EditingTips');
 	if(is_array($default_array)) {
 		$default_array[] = 'disableeditingtips';
+		$default_array[] = 'widescreeneditingtips';		
 	} else {
 		$toggles[] = 'disableeditingtips';
+		$toggles[] = 'widescreeneditingtips';
 	}
 	return true;
 }
