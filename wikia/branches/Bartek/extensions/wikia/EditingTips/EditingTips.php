@@ -66,7 +66,7 @@ function getEditingTips() {
 
 $wgHooks['UserToggles'][] = 'wfEditingTipsToggle';
 $wgHooks['getEditingPreferencesTab'][] = 'wfEditingTipsToggle';
-$wgHooks['ExtendJSGlobalVars'][] = 'ETSetupVars';
+$wgHooks['ExtendJSGlobalVars'][] = 'wfEditingTipsSetupVars';
 
 function wfEditingTipsToggle($toggles, $default_array = false) {
 	wfLoadExtensionMessages('EditingTips');
@@ -90,7 +90,7 @@ function isEditingTipsEnabled() {
 	}
 }
 
-function ETSetupVars($vars) {
+function wfEditingTipsSetupVars($vars) {
 	global $wgUser;
 	$vars['et_widescreen'] = $wgUser->getOption('widescreeneditingtips');
 	return true;
