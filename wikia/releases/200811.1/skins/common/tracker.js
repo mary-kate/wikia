@@ -135,19 +135,31 @@ YAHOO.widget.Logger.enableBrowserConsole();
 Event.onDOMReady(YAHOO.Wikia.Tracker.init, YAHOO.Wikia.Tracker, true);
 })();
 
-function onYouTubePlayerReady(playerid) {
-	var ytplayer = document.getElementById("YT_" + playerid);
-	ytplayer.addEventListener("onStateChange", "onytplayerStateChange");
-}
+var youTubePlayerLoggers = {};
+var youTubePlayedVideos = {};
 
-function onytplayerStateChange(newState) {
-	var event;
-	if(newState == 0) {
-		event = "ended";
-	} else if(newState == 1) {
-		event = "playing";
-	}
-	if(event) {
-		YAHOO.Wikia.Tracker.trackByStr(null, "youtube/"+event);
-	}
+function onYouTubePlayerReady(id) {
+	var video = document.getElementById("YT_" + id);
+
+	youTubePlayerLoggers[id] = function(state) {
+		if(state == 1) {
+			if(youTubePlayedVideos[id]) {
+				return;
+			}
+			youTubePlayedVideos[id] = true;
+		} else if(state != 0) {
+			return;
+		}
+
+		var o = Array();
+		o.push("cb=" + (new Date() * 1));
+		o.push("id=" + id);
+		o.push("state=" + state);
+		o.push("wikiid=" + wgID);
+		o.push("pagename=" + wgPageName);
+		img = new Image();
+		img.src = "http://wikia-ads.wikia.com/onedot.php?" + o.join("&");
+
+    };
+    video.addEventListener("onStateChange", "youTubePlayerLoggers."+id);
 }
