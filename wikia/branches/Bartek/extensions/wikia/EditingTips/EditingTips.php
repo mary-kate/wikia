@@ -91,7 +91,7 @@ function isEditingTipsEnabled() {
 }
 
 function wfEditingTipsSetupVars($vars) {
-	global $wgUser;
+	global $wgUser, $wgCookiePrefix;
 	if($wgUser->isLoggedIn()) {
 		$vars['et_widescreen'] = $wgUser->getOption('widescreeneditingtips');
 	} else {
