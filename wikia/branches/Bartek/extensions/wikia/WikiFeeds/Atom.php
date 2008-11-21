@@ -115,27 +115,26 @@ class WAtomFeed extends ChannelFeed {
 <author><name><?php print $item->getAuthor() ?></name><?php print $uurl ?></author>
         </entry>
 			<?
-			return;
-		}
-		$articleId = $titleObj->getArticleID();
-		$revId = $titleObj->getLatestRevID();
-		$categories = $titleObj->getParentCategories();
-		$category_string = $wgContLang->getNSText( NS_CATEGORY ) . ':';
-		$url = $titleObj->getFullURL();
-		$rc_user_text = $item->getAuthor();
-
-		foreach( $categories as $key=>$value ) {
-			$c .= '<category term="' . str_replace( '_', ' ', str_replace( $category_string, '', $key) ) . '" />' . "\n\t\t" ;
-		}
-
-		$ut = explode('.',$rc_user_text);
-		if ( count($ut) == 4 ) {
-			//ip;
-			$uurl = '';
 		} else {
-			//username;
-			$uurl = '<uri>' . str_replace('$1' , 'User:'. $rc_user_text, $wgServer.$wgArticlePath) . '</uri>';
-		}
+			$articleId = $titleObj->getArticleID();
+			$revId = $titleObj->getLatestRevID();
+			$categories = $titleObj->getParentCategories();
+			$category_string = $wgContLang->getNSText( NS_CATEGORY ) . ':';
+			$url = $titleObj->getFullURL();
+			$rc_user_text = $item->getAuthor();
+
+			foreach( $categories as $key=>$value ) {
+				$c .= '<category term="' . str_replace( '_', ' ', str_replace( $category_string, '', $key) ) . '" />' . "\n\t\t" ;
+			}
+
+			$ut = explode('.',$rc_user_text);
+			if ( count($ut) == 4 ) {
+				//ip;
+				$uurl = '';
+			} else {
+				//username;
+				$uurl = '<uri>' . str_replace('$1' , 'User:'. $rc_user_text, $wgServer.$wgArticlePath) . '</uri>';
+			}
 
 	?>
 	<entry>
@@ -152,6 +151,7 @@ class WAtomFeed extends ChannelFeed {
 <?php /* FIXME need to add comments
 	<?php if( $item->getComments() ) { ?><dc:comment><?php print $item->getComments() ?></dc:comment><?php }?>
 	  */
+		}
 	}
 
 	/**
