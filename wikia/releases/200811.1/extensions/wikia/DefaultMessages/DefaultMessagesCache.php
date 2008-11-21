@@ -16,6 +16,8 @@ class DefaultMessagesCache {
 	var $mLocalMessageCache, $mLocalMessageCacheSerialized = true;
 
 	function __construct( &$memCached, $useDB, $expiry ) {
+		global $wgLocalMessageCache;
+
 		$this->mUseCache = !is_null( $memCached );
 		$this->mMemc = &$memCached;
 		$this->mDisable = !$useDB;
