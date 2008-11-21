@@ -277,7 +277,7 @@ class DefaultMessagesCache {
 	 */
 	function loadFromDB( $code = false ) {
 		wfProfileIn( __METHOD__ );
-		global $wgMaxMsgCacheEntrySize, $wgContLanguageCode;
+		global $wgMaxMsgCacheEntrySize;
 		global $wgDefaultMessagesDB;
 		$dbr = wfGetDB( DB_SLAVE );
 		$cache = array();
@@ -291,14 +291,14 @@ class DefaultMessagesCache {
 		if ( $code ) {
 			# Is this fast enough. Should not matter if the filtering is done in the
 			# database or in code.
-			if ( $code !== $wgContLanguageCode ) {
+			if ( $code !== 'en' ) {
 				# Messages for particular language
 				$escapedCode = $dbr->escapeLike( $code );
 				$conds[] = "page_title like '%%/$escapedCode'";
 			} else {
 				# Effectively disallows use of '/' character in NS_MEDIAWIKI for uses
 				# other than language code.
-				$conds[] = "page_title not like '%%/%%'";
+				$conds[] = "(page_title not like '%%/%%') OR (page_title like '%%/en')";
 			}
 		}
 
