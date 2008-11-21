@@ -102,20 +102,7 @@ class WAtomFeed extends ChannelFeed {
 		$c='';
 		$t = $item->getTitle();
 		$titleObj = Title::newFromText($t);
-		if ( !is_object($titleObj) ) {
-			?>
-      <entry>
-                <id>wikia:<?php print $wgCityId ?>:<?php print 0 ?>:<?php print 0 ?></id>
-                <title><?php print $t ?></title>
-                <link rel="alternate" type="<?php print $wgMimeType ?>" href="<?php print 0 ?>"/>
-                <?php if( $item->getDate() ) { ?>
-<updated><?php print $this->formatTime( $item->getDate() ) ?>Z</updated>
-                <?php } ?>
-<?php print $c ?>
-<author><name><?php print $item->getAuthor() ?></name><?php print $uurl ?></author>
-        </entry>
-			<?
-		} else {
+		if ( is_object($titleObj) ) {
 			$articleId = $titleObj->getArticleID();
 			$revId = $titleObj->getLatestRevID();
 			$categories = $titleObj->getParentCategories();
