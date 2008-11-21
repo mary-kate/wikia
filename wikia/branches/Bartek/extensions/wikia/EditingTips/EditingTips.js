@@ -43,8 +43,8 @@ YAHOO.util.Event.addListener(["toggleEditingTips", "editingTips_close"], "click"
         }
 });
 
-function SaveEditingTipsState(open) {
-	YAHOO.util.Connect.asyncRequest('GET', wgScriptPath + '/index.php?action=ajax&rs=SaveEditingTipsState&open='+open);
+function SaveEditingTipsState(open,screen) {
+	YAHOO.util.Connect.asyncRequest('GET', wgScriptPath + '/index.php?action=ajax&rs=SaveEditingTipsState&open='+open+'&screen='+screen);
 }
 
 YAHOO.util.Event.addListener("toggleWideScreen", "click", function(e) {

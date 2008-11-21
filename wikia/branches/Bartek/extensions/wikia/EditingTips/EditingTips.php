@@ -92,7 +92,11 @@ function isEditingTipsEnabled() {
 
 function wfEditingTipsSetupVars($vars) {
 	global $wgUser;
-	$vars['et_widescreen'] = $wgUser->getOption('widescreeneditingtips');
+	if($wgUser->isLoggedIn()) {
+		$vars['et_widescreen'] = $wgUser->getOption('widescreeneditingtips');
+	} else {
+		$vars['et_widescreen'] = isset($_COOKIE[$wgCookiePrefix.'et']) ? 0 : 1;
+	}
 	return true;
 }
 
@@ -159,6 +163,7 @@ function SaveEditingTipsState() {
 	global $wgRequest, $wgUser;
 	if($wgUser->isLoggedIn()) {
 		$wgUser->setOption('disableeditingtips', ($wgRequest->getVal('open') != 'true'));
+		$wgUser->setOption('widescreeneditingtips', ($wgRequest->getVal('screen') != 'true'));
 		$wgUser->SaveSettings();
 		$dbw = wfGetDB( DB_MASTER );
 		$dbw->commit();
@@ -166,6 +171,7 @@ function SaveEditingTipsState() {
 		global $wgCookieExpiration, $wgCookiePath, $wgCookieDomain, $wgCookieSecure, $wgCookiePrefix;
 		$exp = time() + $wgCookieExpiration;
 		setcookie( $wgCookiePrefix.'et', ($wgRequest->getVal('open') != 'true') ? true : null, $exp, $wgCookiePath, $wgCookieDomain, $wgCookieSecure );
+		setcookie( $wgCookiePrefix.'etw', ($wgRequest->getVal('screen') != 'true') ? true : null, $exp, $wgCookiePath, $wgCookieDomain, $wgCookieSecure );
 	}
 	return new AjaxResponse(array());
 }
