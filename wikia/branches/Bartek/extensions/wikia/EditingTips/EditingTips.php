@@ -163,7 +163,7 @@ function SaveEditingTipsState() {
 	global $wgRequest, $wgUser;
 	if($wgUser->isLoggedIn()) {
 		$wgUser->setOption('disableeditingtips', ($wgRequest->getVal('open') != 'true'));
-		$wgUser->setOption('widescreeneditingtips', ($wgRequest->getVal('screen') != 'true'));
+		$wgUser->setOption('widescreeneditingtips', ($wgRequest->getVal('screen') == 'true'));
 		$wgUser->SaveSettings();
 		$dbw = wfGetDB( DB_MASTER );
 		$dbw->commit();
