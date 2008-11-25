@@ -33,12 +33,15 @@ function wfCheckUserLoginJSONnew($callback_function="handle_user_logged_in("){
 	if( strpos( $callback_function, "(" ) === false ){
 		$callback_function .= "(";
 	}
-	return "var user_logged_in = " . 
+	$text = "var user_logged_in = " . 
 		jsonify($logged_in_info) . 
 		";\n\n" . 
 		"setLoginCookie(user_logged_in);\n\n" . 
 		"set_header_loggedin();\n\n" . 
 		"{$callback_function}user_logged_in);";
+	$response = new AjaxResponse( $text );
+	$response->setContentType( "application/javascript; charset=utf-8" ); 
+	return $response;
 }
 
 //we are keeping this function so the API to the Wikia Search Toolbar doesn't break :)
@@ -102,7 +105,7 @@ function wfDoEmailPassword($username, $returnto){
 	$_REQUEST['wpMailmypassword'] = "true";
 	
 	wfSpecialUserlogin();
-	 
+
 	// see if something bombed
 	$ret = $wgOut->getHTML();
 	if(strpos($ret, 'class="errorbox"') === false){
@@ -162,11 +165,23 @@ function wfDoLoginJSONPost(){
 			</script>";
 	}
 	else {
+		//if user forgot password, we need to redirect to mediawiki
+		if( strpos( $temp_out, wfMsg( 'resetpass_announce' ) ) !== false ){
+			return "<script type=\"text/javascript\">
+				location.href='{$wpSourceForm}?reset=1';
+			</script>";
+		}
+		
 		$re_pattern = "/<div class=\"errorbox\"\>[^<]*<h2\>Login error\:<\/h2\>([^<]*)<\/div\>/iU";
 		preg_match($re_pattern, $temp_out, $matches);
+		
 		if (sizeof($matches)) {
+			
 			$message = str_replace("\"", "\\\"", trim($matches[1]));
-			$output = "<script type=\"text/javascript\">alert(\"{$message}\"); location.href='{$wpSourceForm}';</script>";
+			$json = new Services_JSON();
+			$message = $json->encode( $message );
+			
+			$output = "<script type=\"text/javascript\">alert({$message}); location.href='{$wpSourceForm}';</script>";
 		}
 		else {
 			$message = "not logged in";
@@ -186,7 +201,7 @@ function wfGetRegCaptchaJSON($callback_function="process_captcha"){
 	return "var captcha_stuff = ". jsonify($res) . ";\n\n{$callback_function}(captcha_stuff);";
 	
 }
-//"
+
 $wgAjaxExportList [] = 'wfDoRegisterJSONPost';
 function wfDoRegisterJSONPost(){
 	
@@ -202,7 +217,7 @@ function wfDoRegisterJSONPost(){
 	
 	// before we do anything - check the reCaptcha
 	$ip = wfGetIP();
-	$resp = recaptcha_check_answer ($recaptcha_private_key, $ip, $wgRequest->getVal("wpCaptchaId"), $wgRequest->getVal("wpCaptchaWord"));
+	$resp = recaptcha_check_answer ($recaptcha_private_key, $ip, $wgRequest->getVal("wpCaptchaId"), $wgRequest->getVal("wpCaptchaWord")); 
 	
 	// if it failed just bail
 	if (!$resp->is_valid) {
@@ -294,9 +309,10 @@ function wfInitializeEmail($callback="get_invite_email"){
 	
 	$email_array = array("name"=>$return_name,"url"=>"http://search.wikia.com");
 	
-	
-	
-	return "var email_array = ". jsonify($email_array) . ";\n\n{$callback}(email_array);";
+	$text = "var email_array = ". jsonify($email_array) . ";\n\n{$callback}(email_array);";
+	$response = new AjaxResponse( $text );
+	$response->setContentType( "application/javascript; charset=utf-8" ); 
+	return $response;
 }
 
 $wgAjaxExportList [] = 'wfSendInviteEmail';
