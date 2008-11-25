@@ -437,21 +437,25 @@ function wfProfileJSON($user_name, $r_user_name="") {
 			$rel_randomized_keys = array_rand( $mutual_friends, $count );
 			if( $count == 1 ){ //if one array_rand just returns index
 				$mutual_friends_randomized[] = $mutual_friends[$rel_randomized_keys];
-			}else{
-				foreach( $rel_randomized_keys as $random ){
-					$mutual_friends_randomized[] = $mutual_friends[ $random ];
+			} else {
+				if ( is_array( $rel_randomized_keys ) ) {
+					foreach( $rel_randomized_keys as $random ){
+						$mutual_friends_randomized[] = $mutual_friends[ $random ];
+					}
 				}
 			}
 			$friends_full = array();
-			foreach ($mutual_friends_randomized as $friend) {
-			
-				$user =  Title::makeTitle( NS_USER  , $friend["user_name"]  );
-				$p = new ProfilePhoto( $friend["user_id"] );
-				
-				$friend["avatar"] = $p->getProfileImageURL("l");
-				$friend["friend_display"] = user_name_display($friend["user_id"], $friend["user_name"]);
-				$friend["link"] = $user->escapeFullUrl();
-				$friends_full[] = $friend;
+			if ( is_array( $mutual_friends_randomized ) ) {
+				foreach ($mutual_friends_randomized as $friend) {
+
+					$user =  Title::makeTitle( NS_USER  , $friend["user_name"]  );
+					$p = new ProfilePhoto( $friend["user_id"] );
+
+					$friend["avatar"] = $p->getProfileImageURL("l");
+					$friend["friend_display"] = user_name_display($friend["user_id"], $friend["user_name"]);
+					$friend["link"] = $user->escapeFullUrl();
+					$friends_full[] = $friend;
+				}
 			}
 		
 			$profile_JSON_array["mutual_friends"] = array(
