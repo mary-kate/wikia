@@ -38,7 +38,7 @@ function WMUSetup($editform) {
 	return true;
 }
 
-function WMUSetupVars($vars) {	
+function WMUSetupVars($vars) {
 	global $wgFileBlacklist, $wgCheckFileExtensions, $wgStrictFileExtensions, $wgFileExtensions;
 
 	$vars['wmu_back'] = wfMsg('wmu-back');
@@ -73,7 +73,9 @@ function WMU() {
 	$wmu = new WikiaMiniUpload();
 
 	$html = $wmu->$method();
-	$html .= '<script type="text/javascript">document.domain = "' . $wgRequest->getVal('domain')  . '"</script>';
-
+	$domain = $wgRequest->getVal('domain', null);
+	if(!empty($domain)) {
+		$html .= '<script type="text/javascript">document.domain = "' . $domain  . '"</script>';
+	}
 	return new AjaxResponse($html);
 }
