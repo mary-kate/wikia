@@ -135,9 +135,9 @@ function Wysiwyg_Initial($form) {
 
 	// JS
 	$wgOut->addInlineScript(
-		'var fallbackToSourceMode = ' . ($wgWysiwygFallbackToSourceMode ? 'true;' : 'false;') . "\n" .
+		'var fallbackToSourceMode = ' . ($wgWysiwygFallbackToSourceMode ? 'true' : 'false') . ";\n" .
 		'var templateList = ' . WysiwygGetTemplateList() . ";\n" .
-		'var templateHotList = ' . WysiwygGetTemplateHotList() . ';' .
+		'var templateHotList = ' . WysiwygGetTemplateHotList() . ";\n" .
 		'var magicWordList = ' . Wikia::json_encode($magicWords, true) . ';'
 	);
 
@@ -626,12 +626,20 @@ function WysiwygGetTemplateList() {
  * @author Maciej Błaszkowski <marooned at wikia-inc.com>
  */
 function WysiwygGetTemplateHotList() {
-	global $wgMemc, $wgCityId;
+	global $wgMemc, $wgCityId, $wgTemplateExcludeList;
 	$key = "wysiwyg-$wgCityId-template-list";
 	$list = $wgMemc->get($key);
 	if(empty($list)) {
 		$dbr = wfGetDB(DB_SLAVE);
-		$sql = "SELECT * FROM querycache WHERE qc_type = 'Mostlinkedtemplates' AND qc_namespace = " . NS_TEMPLATE . ' ORDER BY qc_value DESC LIMIT 10;';
+		$templateExcludeList = '';
+		if (is_array($wgTemplateExcludeList)) {
+			$templateExcludeListA = array();
+			foreach($wgTemplateExcludeList as $tmpl) {
+				$templateExcludeListA[] = $dbr->AddQuotes($tmpl);
+			}
+			$templateExcludeList = ' AND qc_title NOT IN (' . implode(',', $templateExcludeListA) . ')';
+		}
+		$sql = "SELECT * FROM querycache WHERE qc_type = 'Mostlinkedtemplates' AND qc_namespace = " . NS_TEMPLATE . "$templateExcludeList ORDER BY qc_value DESC LIMIT 10;";
 		$res = $dbr->query($sql);
 		$list = array();
 		while ($row = $dbr->fetchObject($res)) {
