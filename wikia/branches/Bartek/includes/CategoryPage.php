@@ -105,6 +105,7 @@ class CategoryViewer {
 			$this->getSubcategorySection() .
 			$this->getPagesSection() .
 			$this->getImageSection() .
+			$this->getOtherSection() .
 			$this->getCategoryBottom();
 
 		// Give a proper message if category is empty
@@ -144,7 +145,7 @@ class CategoryViewer {
 	}
 
 	/**
-	 * Add a subcategory to the internal lists, using a title object 
+	 * Add a subcategory to the internal lists, using a title object
 	 * @deprectated kept for compatibility, please use addSubcategoryObject instead
 	 */
 	function addSubcategory( $title, $sortkey, $pageLength ) {
@@ -253,7 +254,9 @@ class CategoryViewer {
 			} elseif( $this->showGallery && $title->getNamespace() == NS_IMAGE ) {
 				$this->addImage( $title, $x->cl_sortkey, $x->page_len, $x->page_is_redirect );
 			} else {
-				$this->addPage( $title, $x->cl_sortkey, $x->page_len, $x->page_is_redirect );
+				if( wfRunHooks( "CategoryViewer::addPage", array( &$this, &$title, &$x ) ) ) {
+					$this->addPage( $title, $x->cl_sortkey, $x->page_len, $x->page_is_redirect );
+				}
 			}
 		}
 		$dbr->freeResult( $res );
@@ -324,6 +327,12 @@ class CategoryViewer {
 		} else {
 			return '';
 		}
+	}
+
+	function getOtherSection() {
+		$r = "";
+		wfRunHooks( "CategoryViewer::getOtherSection", array( &$this, &$r ) );
+		return $r;
 	}
 
 	function getCategoryBottom() {
@@ -511,4 +520,17 @@ class CategoryViewer {
 		return wfMsgExt( "category-$type-count", 'parse', $wgLang->formatNum( $rescnt ),
 			$wgLang->formatNum( $totalcnt ) );
 	}
+
+	/**
+	 * getter for private $cat variable, used in Hooks
+	 *
+	 * @author Krzysztof Krzyżaniak <eloy@wikia-inc.com>
+	 * @public
+	 *
+	 * @return Category $cat
+	 */
+	public function getCat() {
+		return $this->cat;
+	}
+
 }
