@@ -1108,8 +1108,8 @@ FCK.TemplatePreviewShow = function(placeholder) {
 	preview.style.display = '';
 
 	// calculate cloud placement
-	var x = placeholder.offsetLeft;
-	var y = placeholder.offsetTop + placeholder.clientHeight + 32;
+	var x = FCK.YD.getX(placeholder);
+	var y = FCK.YD.getY(placeholder) + placeholder.clientHeight + 32;
 
 	// editor area scroll
 	var scrollXY = [FCK.EditorDocument.body.scrollLeft, FCK.EditorDocument.body.scrollTop];
