@@ -251,6 +251,8 @@ FCK.Events.AttachEvent( 'OnAfterSetHTML', function() {
 			window.parent.document.getElementById('wysiwygTemporarySaveType').value = "1";
 		});
 	}
+
+	// initialize meta data
 	if(!FCK.wysiwygData) {
 		FCK.wysiwygData = eval("{"+window.parent.document.getElementById('wysiwygData').value+"}");
 		if(!FCK.wysiwygData) {
@@ -260,6 +262,7 @@ FCK.Events.AttachEvent( 'OnAfterSetHTML', function() {
 
 	}
 
+	// setup wysiwyg mode
 	if(FCK.EditMode == FCK_EDITMODE_WYSIWYG) {
 		// handle drag&drop
 		FCKTools.AddEventListener(FCK.EditorDocument, 'mousedown', function(e) {
@@ -380,6 +383,23 @@ FCK.Events.AttachEvent( 'OnAfterSetHTML', function() {
 
 		// setup elements with refid (templates, images, ...)
 		FCK.SetupElementsWithRefId();
+	}
+	// setup source mode
+	else {
+		// add Tab handler -> move to summary field
+		FCKTools.AddEventListener(FCK.EditingArea.Textarea, 'keydown', function(e) {
+			e = FCK.YE.getEvent(e);
+			if (e.keyCode == 9) {
+				FCK.log('tab key pressed');
+				FCK.YE.stopEvent(e);
+
+				// focus on #wpSummary
+				var summary = window.parent.document.getElementById('wpSummary');
+				if (summary) {
+					summary.focus();
+				}
+			}
+		});
 	}
 
 	// for QA team tests
