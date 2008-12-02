@@ -953,6 +953,7 @@ class Parser
 	 * @private
 	 */
 	function internalParse( $text ) {
+		global $wgWysiwygParserEnabled;
 		$isMain = true;
 		$fname = 'Parser::internalParse';
 		wfProfileIn( $fname );
@@ -984,6 +985,10 @@ class Parser
 		$text = $this->doAllQuotes( $text );
 		$text = $this->replaceInternalLinks( $text );
 		$text = $this->replaceExternalLinks( $text );
+
+		if(!empty($wgWysiwygParserEnabled)) {
+			$text = preg_replace('/\x7e-start-\d+-stop/', '', $text);
+		}
 
 		# replaceInternalLinks may sometimes leave behind
 		# absolute URLs, which have to be masked to hide them from replaceExternalLinks
@@ -1303,16 +1308,21 @@ class Parser
 			# Set linktype for CSS - if URL==text, link is essentially free
 			$linktype = ($text == $url) ? 'free' : 'text';
 
+			if (!empty($wgWysiwygParserEnabled)) {
+				global $wgWikitext;
+				$originalWikitext = '';
+				if (preg_match('/\]\x7e-start-(\d+)-stop[^\x7e]*$/', $trail, $matches)) {
+					$originalWikitext = $wgWikitext[$matches[1]];
+					$trail = str_replace("\x7e-start-{$matches[1]}-stop", '', $trail);
+				}
+			}
+
 			$wasblank = $text == '';
 			# No link text, e.g. [http://domain.tld/some.link]
 			if ( $text == '' ) {
 				# Autonumber if allowed. See bug #5918
 				if ( strpos( wfUrlProtocols(), substr($protocol, 0, strpos($protocol, ':')) ) !== false ) {
-					if (!empty($wgWysiwygParserEnabled)) {
-						$text = '[link]';
-					} else {
-						$text = '[' . ++$this->mAutonumber . ']';
-					}
+					$text = '[' . ++$this->mAutonumber . ']';
 					$linktype = 'autonumber';
 				} else {
 					# Otherwise just use the URL
@@ -1334,7 +1344,7 @@ class Parser
 			$trail = $this->replaceFreeExternalLinks( $trail );
 
 			if (!empty($wgWysiwygParserEnabled)) {
-				Wysiwyg_SetRefId('external link', array('text' => &$text, 'link' => $url, 'wasblank' => $wasblank));
+				Wysiwyg_SetRefId('external link', array('text' => &$text, 'link' => $url, 'wasblank' => $wasblank, 'original' => $originalWikitext));
 			}
 
 			# Use the encoded URL
@@ -1569,6 +1579,17 @@ class Parser
 		# Loop for each link
 		for ($k = 0; isset( $a[$k] ); $k++) {
 			$line = $a[$k];
+
+			if (!empty($wgWysiwygParserEnabled)) {
+				global $wgWikitext;
+				$originalWikitext = '';
+				if($line[0] == "\x7d" && $line[1] == "-") {
+					$linkmark = intval(substr($line, 2, 4));
+					$originalWikitext = $wgWikitext[$linkmark];
+					$line = substr($line, 6);
+				}
+			}
+
 			if ( $useLinkPrefixExtension ) {
 				wfProfileIn( $fname.'-prefixhandling' );
 				if ( preg_match( $e2, $s, $m ) ) {
@@ -1728,8 +1749,12 @@ class Parser
 						# actually, this will parse them in any other parameters, too,
 						# but it might be hard to fix that, and it doesn't matter ATM
 						if (!empty($wgWysiwygParserEnabled)) {
-							$FCKtmp = Wysiwyg_SetRefId('image', array('text' => &$text, 'link' => $link, 'wasblank' => $wasblank, 'noforce' => $noforce), false);
-							$s .= $prefix . $this->armorLinks($FCKtmp) . $trail;
+							Wysiwyg_SetRefId('image', array('text' => &$text, 'link' => $link, 'wasblank' => $wasblank, 'noforce' => $noforce, 'original' => $originalWikitext));
+							$wgWysiwygParserEnabled = false;
+							$text = $this->replaceExternalLinks(preg_replace('/\x7e-start-\d+-stop/', '', $text));
+							$text = $this->replaceInternalLinks(preg_replace('/\x7d-\d{4}/', '', $text));
+							$wgWysiwygParserEnabled = true;
+							$s .= $prefix . $this->armorLinks( $this->makeImage( $nt, $text ) ) . $trail;
 						} else {	//original action
 							$text = $this->replaceExternalLinks($text);
 							$text = $this->replaceInternalLinks($text);
@@ -1741,7 +1766,7 @@ class Parser
 						continue;
 					} else {
 						if (!empty($wgWysiwygParserEnabled)) {
-							$FCKtmp = Wysiwyg_SetRefId('image', array('text' => &$text, 'link' => $link, 'wasblank' => $wasblank, 'noforce' => $noforce), false);
+							$FCKtmp = Wysiwyg_SetRefId('image', array('text' => &$text, 'link' => $link, 'wasblank' => $wasblank, 'noforce' => $noforce, 'original' => $originalWikitext));
 							$s .= $prefix . $this->armorLinks($FCKtmp) . $trail;
 							continue;	//this continue is added to prevent adding additional link by parser as it's used above
 						} else {	//original action
@@ -1757,7 +1782,7 @@ class Parser
 					wfProfileIn( "$fname-category" );
 					$s = rtrim($s . "\n"); # bug 87
 					if (!empty($wgWysiwygParserEnabled)) {
-						$FCKtmp = Wysiwyg_SetRefId('category', array('text' => &$text, 'link' => $link, 'wasblank' => $wasblank, 'noforce' => $noforce), false);
+						$FCKtmp = Wysiwyg_SetRefId('category', array('text' => &$text, 'link' => $link, 'wasblank' => $wasblank, 'noforce' => $noforce, 'original' => $originalWikitext), false);
 					}
 					if ( $wasblank ) {
 						$sortkey = $this->getDefaultSort();
@@ -1839,7 +1864,7 @@ class Parser
 				}
 			}
 			if (!empty($wgWysiwygParserEnabled)) {
-				Wysiwyg_SetRefId('internal link', array('text' => &$text, 'link' => $link, 'trail' => $trail, 'wasblank' => $wasblank, 'noforce' => $noforce));
+				Wysiwyg_SetRefId('internal link', array('text' => &$text, 'link' => $link, 'trail' => $trail, 'wasblank' => $wasblank, 'noforce' => $noforce, 'original' => $originalWikitext));
 			}
 			$s .= $this->makeLinkHolder( $nt, $text, '', $trail, $prefix );
 		}
@@ -2821,6 +2846,7 @@ class Parser
 		$args = (null == $piece['parts']) ? array() : $piece['parts'];
 		wfProfileOut( __METHOD__.'-setup' );
 
+		/*
 		# FCK helper
 		if (!empty($wgWysiwygParserEnabled)) {
 			$textArgs = array();
@@ -2831,6 +2857,7 @@ class Parser
 			$text = Wysiwyg_SetRefId('curly brackets', array('text' => &$templateText, 'lineStart' => $piece['lineStart']), false);
 			$found = true;
 		}
+		*/
 
 		# SUBST
 		wfProfileIn( __METHOD__.'-modifiers' );
@@ -4566,7 +4593,7 @@ class Parser
 	 * Parse image options text and use it to make an image
 	 */
 	function makeImage( $title, $options ) {
-		global $wgWysiwygParserEnabled;
+		global $wgWysiwygParserEnabled, $wgWysiwygMetaData;
 		# Check if the options text is of the form "options|alt text"
 		# Options are:
 		#  * thumbnail       	make a thumbnail with enlarge-icon and caption, alignment depends on lang
@@ -4594,6 +4621,9 @@ class Parser
 		}
 
 		$parts = array_map( 'trim', explode( '|', $options) );
+		if (!empty($wgWysiwygParserEnabled)) {
+			$parts = array_map( create_function('$par', 'global $wgWysiwygMetaData; return preg_replace(\'%\x7f-wtb-(\d+)-\x7f(.*?)\x7f-wte-\1-\x7f%si\', \'\\2\', $par);'), $parts);
+		}
 		$sk = $this->mOptions->getSkin();
 
 		# Give extensions a chance to select the file revision for us
@@ -4679,21 +4709,27 @@ class Parser
 			$params['frame']['valign'] = key( $params['vertAlign'] );
 		}
 
-		# Strip bad stuff out of the alt text
-		$alt = $this->replaceLinkHoldersText( $caption );
-
-		# make sure there are no placeholders in thumbnail attributes
-		# that are later expanded to html- so expand them now and
-		# remove the tags
-		$alt = $this->mStripState->unstripBoth( $alt );
-		$alt = Sanitizer::stripAllTags( $alt );
-
-		$params['frame']['alt'] = $alt;
-		$params['frame']['caption'] = $caption;
-
 		if (!empty($wgWysiwygParserEnabled)) {
+			$params['frame']['alt'] = '';
 			$params['frame']['refid'] = $refId;
+			if (isset($params['frame']['align'])) $wgWysiwygMetaData[$refId]['align'] = $params['frame']['align'];
+			if (isset($params['frame']['thumbnail'])) $wgWysiwygMetaData[$refId]['thumb'] = 1;
+			if (isset($params['frame']['framed'])) $wgWysiwygMetaData[$refId]['frame'] = 1;
+			if (isset($params['handler']['width'])) $wgWysiwygMetaData[$refId]['width'] = $params['handler']['width'];
+			if ($caption == '') unset($wgWysiwygMetaData[$refId]['caption']);
+		} else {	//original code - add alt&title to images
+			# Strip bad stuff out of the alt text
+			$alt = $this->replaceLinkHoldersText( $caption );
+
+			# make sure there are no placeholders in thumbnail attributes
+			# that are later expanded to html- so expand them now and
+			# remove the tags
+			$alt = $this->mStripState->unstripBoth( $alt );
+			$alt = Sanitizer::stripAllTags( $alt );
+
+			$params['frame']['alt'] = $alt;
 		}
+		$params['frame']['caption'] = $caption;
 
 		wfRunHooks( 'ParserMakeImageParams', array( $title, $file, &$params ) );
 

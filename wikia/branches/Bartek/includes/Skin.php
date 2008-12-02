@@ -1749,7 +1749,7 @@ END;
 							$title = $title->fixSpecialName();
 							$href = $title->getLocalURL();
 						} else {
-							$href = 'INVALID-TITLE';
+							$href = 'SAREMOS-SIERI';
 						}
 					}
 

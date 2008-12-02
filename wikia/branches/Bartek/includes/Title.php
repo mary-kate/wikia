@@ -1181,7 +1181,8 @@ class Title {
 		}
 		
 		$specialOKActions = array( 'createaccount', 'execute' );
-		if( NS_SPECIAL == $this->mNamespace && !in_array( $action, $specialOKActions) ) {
+		// #3628 and #3633 fix, 29.10.2008 by Bartek, always allow for Special:Createpage to create a page
+		if( (NS_SPECIAL == $this->mNamespace && !in_array( $action, $specialOKActions)) && ('Createpage' != $this->getText()) && ('create' != $action) ) {
 			$errors[] = array('ns-specialprotected');
 		}
 
@@ -2388,18 +2389,27 @@ class Title {
 			}
 		}
 
-		// if this is a site css purge it as well
-		global $wgSquidMaxage;
-		if( $this->getNamespace() == NS_MEDIAWIKI ) {
+		// if this is a site css or js purge it as well
+		global $wgUseSiteJs, $wgUseSiteCss, $wgAllowUserJs;
+		global $wgSquidMaxage, $wgJsMimeType;
+		if( $wgUseSiteCss && $this->getNamespace() == NS_MEDIAWIKI ) {
 			if( $this->getText() == 'Common.css' ) {
-				$urls[] = Title::newFromText( 'MediaWiki:Common.css' )->getInternalURL( "usemsgcache=yes&action=raw&ctype=text/css&smaxage=$wgSquidMaxage" );
+				$urls[] = $this->getInternalURL( "usemsgcache=yes&action=raw&ctype=text/css&smaxage=$wgSquidMaxage" );
 			} else {
 				foreach( Skin::getSkinNames() as $skinkey => $skinname ) {
-					if( $this->getText() == $skinname.'.css' ) {
+					if( $this->getText() == ucfirst($skinkey).'.css' ) {
 						$urls[] = $this->getInternalURL( "usemsgcache=yes&action=raw&ctype=text/css&smaxage=$wgSquidMaxage" );
 						break;
+					} elseif ( $wgUseSiteJs && $this->getText() == 'Common.js' ) {
+						$urls[] = Skin::makeUrl('-', "action=raw&gen=js&useskin=" .urlencode( $skinkey ) );
 					}
 				}
+			}
+		} elseif( $wgAllowUserJs && $this->isValidCssJsSubpage() ) {
+			if( $this->isJsSubpage() ) {
+				$urls[] = $this->getInternalURL( 'action=raw&ctype='.$wgJsMimeType );
+			} elseif( $this->isCssSubpage() ) {
+				$urls[] = $this->getInternalURL( 'action=raw&ctype=text/css' );
 			}
 		}
 

@@ -65,7 +65,7 @@ class MessageCache {
 	function loadFromLocal( $hash, $code ) {
 		global $wgLocalMessageCache, $wgLocalMessageCacheSerialized;
 
-		$filename = "$wgLocalMessageCache/messages-" . wfWikiID() . "-$code";
+		$filename = $wgLocalMessageCache . '/' . substr( wfWikiID(), 0, 1 ) . '/' . wfWikiID() . "/messages-$code";
 
 		# Check file existence
 		wfSuppressWarnings();
@@ -109,8 +109,9 @@ class MessageCache {
 	function saveToLocal( $serialized, $hash, $code ) {
 		global $wgLocalMessageCache;
 
-		$filename = "$wgLocalMessageCache/messages-" . wfWikiID() . "-$code";
-		wfMkdirParents( $wgLocalMessageCache, 0777 ); // might fail
+		$dirname = $wgLocalMessageCache . '/' . substr( wfWikiID(), 0, 1 ) . '/' . wfWikiID();
+		$filename = "$dirname/messages-$code";
+		wfMkdirParents( $dirname, 0777 ); // might fail
 
 		wfSuppressWarnings();
 		$file = fopen( $filename, 'w' );
@@ -129,9 +130,10 @@ class MessageCache {
 	function saveToScript( $array, $hash, $code ) {
 		global $wgLocalMessageCache;
 
-		$filename = "$wgLocalMessageCache/messages-" . wfWikiID() . "-$code";
+		$dirname = $wgLocalMessageCache . '/' . substr( wfWikiID(), 0, 1 ) . '/' . wfWikiID();
+                $filename = "$dirname/messages-$code";
 		$tempFilename = $filename . '.tmp';
-  	wfMkdirParents( $wgLocalMessageCache, 0777 ); // might fail
+		wfMkdirParents( $dirname, 0777 ); // might fail
 
 		wfSuppressWarnings();
 		$file = fopen( $tempFilename, 'w');
@@ -547,11 +549,16 @@ class MessageCache {
 				$title .= '/' . $langcode;
 			}
 			$message = $this->getMsgFromNamespace( $title, $langcode );
+
+			wfRunHooks( 'MsgGetFromNamespaceAfter', array( $title, $langcode, &$message ) );
 		}
 
 		# Try the extension array
 		if ( $message === false && isset( $this->mExtensionMessages[$langcode][$lckey] ) ) {
 			$message = $this->mExtensionMessages[$langcode][$lckey];
+		}
+		if ( $message === false && isset( $this->mExtensionMessages['en'][$lckey] ) ) {
+			$message = $this->mExtensionMessages['en'][$lckey];
 		}
 
 		# Try the array in the language object
@@ -585,10 +592,6 @@ class MessageCache {
 			!$this->mDisable && $useDB &&
 			!$isFullKey && ($langcode != $wgContLanguageCode) ) {
 			$message = $this->getMsgFromNamespace( $wgContLang->ucfirst( $lckey ), $wgContLanguageCode );
-		}
-		# Try the default language in the extension array
-		if ( $message === false && isset( $this->mExtensionMessages['en'][$lckey] ) ) {
-			$message = $this->mExtensionMessages['en'][$lckey];
 		}
 
 		# Final fallback

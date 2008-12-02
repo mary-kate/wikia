@@ -64,6 +64,7 @@ class Preprocessor_DOM implements Preprocessor {
 	function preprocessToObj( $text, $flags = 0 ) {
 		wfProfileIn( __METHOD__ );
 		wfProfileIn( __METHOD__.'-makexml' );
+		global $wgWysiwygParserEnabled;
 
 		$rules = array(
 			'{' => array(
@@ -82,6 +83,15 @@ class Preprocessor_DOM implements Preprocessor {
 				'max' => 2,
 			)
 		);
+
+		if(!empty($wgWysiwygParserEnabled)) {
+			$rules['['] = array(
+				'end' => ']',
+				'names' => array( 1=> 'external', 2 => null ),
+				'min' => 1,
+				'max' => 2,
+			);
+		}
 
 		$forInclusion = $flags & Parser::PTD_FOR_INCLUSION;
 
@@ -119,6 +129,7 @@ class Preprocessor_DOM implements Preprocessor {
 		$noMoreGT = false;         # True if there are no more greater-than (>) signs right of $i
 		$findOnlyinclude = $enableOnlyinclude; # True to ignore all input up to the next <onlyinclude>
 		$fakeLineStart = true;     # Do a line-start run without outputting an LF character
+		$openAt = $closeAt = array(); # Wysiwyg
 
 		while ( true ) {
 			//$this->memCheck();
@@ -445,6 +456,12 @@ class Preprocessor_DOM implements Preprocessor {
 					# Add literal brace(s)
 					$accum .= htmlspecialchars( str_repeat( $curChar, $count ) );
 				}
+
+				# Wysiwyg
+				if($flags == 0 && $wgWysiwygParserEnabled && $count == 2 && $curChar == "{") {
+					$openAt[] = $i;
+				}
+
 				$i += $count;
 			}
 
@@ -480,9 +497,21 @@ class Preprocessor_DOM implements Preprocessor {
 					continue;
 				}
 				$name = $rule['names'][$matchingCount];
-				if ( $name === null ) {
+				if ( $name === null || $name == 'external') {
 					// No element, just literal text
 					$element = $piece->breakSyntax( $matchingCount ) . str_repeat( $rule['end'], $matchingCount );
+
+					if(!empty($wgWysiwygParserEnabled)) {
+
+						global $wgWikitext;
+						$wgWikitext[] = $element;
+						if($name === null) {
+							$element = sprintf("[[\x7d-%04d", count($wgWikitext)-1).substr($element,2);
+						} else if($name === 'external') {
+							$element .= "\x7e-start-".(count($wgWikitext)-1)."-stop";
+						}
+
+					}
 				} else {
 					# Create XML element
 					# Note: $parts is already XML, does not need to be encoded further
@@ -500,6 +529,19 @@ class Preprocessor_DOM implements Preprocessor {
 
 					$element = "<$name$attr>";
 					$element .= "<title>$title</title>";
+
+					# Wysiwyg
+					if($flags == 0 && $wgWysiwygParserEnabled && $count == 2 && $curChar == "}") {
+						$closeAt[] = $i;
+						if(count($closeAt) == count($openAt)) {
+							$openIdx = $openAt[0];
+							$closeIdx = $closeAt[count($closeAt)-1];
+							$originalCall = substr($text, $openIdx, $closeIdx-$openIdx+2);
+							$element .= "<originalCall><![CDATA[$originalCall]]></originalCall>";
+							$openAt = $closeAt = array();
+						}
+					}
+
 					$argIndex = 1;
 					foreach ( $parts as $partIndex => $part ) {
 						if ( isset( $part->eqpos ) ) {
@@ -826,6 +868,7 @@ class PPFrame_DOM implements PPFrame {
 	}
 
 	function expand( $root, $flags = 0 ) {
+		global $wgWysiwygParserEnabled;
 		static $depth = 0;
 		if ( is_string( $root ) ) {
 			return $root;
@@ -916,7 +959,11 @@ class PPFrame_DOM implements PPFrame {
 						if ( isset( $ret['object'] ) ) {
 							$newIterator = $ret['object'];
 						} else {
-							$out .= $ret['text'];
+							if($wgWysiwygParserEnabled && ($originalCall = $xpath->query( 'originalCall', $contextNode )->item( 0 ))) {
+								$out .= Wysiwyg_WrapTemplate($originalCall->textContent, $ret['text'], $lineStart);
+							} else {
+								$out .= $ret['text'];
+							}
 						}
 					}
 				} elseif ( $contextNode->nodeName == 'tplarg' ) {

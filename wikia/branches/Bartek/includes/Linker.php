@@ -95,6 +95,7 @@ class Linker {
 	 * Common code for getLinkAttributesX functions
 	 */
 	private function getLinkAttributesInternal( $title, $class, $classDefault = false ) {
+		global $wgWysiwygParserEnabled;
 		$title = htmlspecialchars( $title );
 		if( $class === '' and $classDefault !== false ) {
 			# FIXME: Parameter defaults the hard way!  We should just have
@@ -107,7 +108,9 @@ class Linker {
 		if( $class !== '' ) {
 			$r .= " class=\"$class\"";
 		}
-		$r .= " title=\"$title\"";
+		if (empty($wgWysiwygParserEnabled)) {
+			$r .= " title=\"$title\"";
+		}
 		return $r;
 	}
 
@@ -278,11 +281,13 @@ class Linker {
 					$trail = $m[2];
 				}
 			}
-			$refId = '';
 			if (!empty($wgWysiwygParserEnabled)) {
 				$refId = Wysiwyg_GetRefId($text);
+				$t = "<a href=\"{$u}\"{$style}{$refId}>{$text}{$inside}</a>";
 			}
-			$t = "<a href=\"{$u}\"{$style}{$refId}>{$text}{$inside}</a>";
+			else {
+				$t = "<a href=\"{$u}\"{$style}>{$text}{$inside}</a>";
+			}
 
 			wfProfileOut( __METHOD__ );
 			return $t;
@@ -346,6 +351,11 @@ class Linker {
 			return "<!-- ERROR -->{$prefix}{$text}{$trail}";
 		}
 
+		$refId = '';
+		if (!empty($wgWysiwygParserEnabled)) {
+			$refId = Wysiwyg_GetRefId($text);
+		}
+
 		$nt = $this->normaliseSpecialPage( $title );
 
 		$u = $nt->escapeLocalURL( $query );
@@ -368,10 +378,7 @@ class Linker {
 		if ( $aprops !== '' ) $aprops = ' ' . $aprops;
 
 		list( $inside, $trail ) = Linker::splitTrail( $trail );
-		$refId = '';
-		if (!empty($wgWysiwygParserEnabled)) {
-			$refId = Wysiwyg_GetRefId($text);
-		}
+		
 		$r = "<a href=\"{$u}\"{$style}{$aprops}{$refId}>{$prefix}{$text}{$inside}</a>{$trail}";
 		wfProfileOut( __METHOD__ );
 		return $r;
@@ -416,12 +423,15 @@ class Linker {
 		$style = $this->getInternalLinkAttributesObj( $nt, $text, 'new', $titleAttr );
 		list( $inside, $trail ) = Linker::splitTrail( $trail );
 
-		$refId = '';
+		wfRunHooks( 'BrokenLink', array( &$this, $nt, $query, &$u, &$style, &$prefix, &$text, &$inside, &$trail ) );
+
 		if (!empty($wgWysiwygParserEnabled)) {
 			$refId = Wysiwyg_GetRefId($text);
+			$s = "<a href=\"{$u}\"{$style}{$refId}>{$prefix}{$text}{$inside}</a>{$trail}";
 		}
-		wfRunHooks( 'BrokenLink', array( &$this, $nt, $query, &$u, &$style, &$prefix, &$text, &$inside, &$trail ) );
-		$s = "<a href=\"{$u}\"{$style}{$refId}>{$prefix}{$text}{$inside}</a>{$trail}";
+		else  {
+			$s = "<a href=\"{$u}\"{$style}>{$prefix}{$text}{$inside}</a>{$trail}";
+		}
 
 		wfProfileOut( __METHOD__ );
 		return $s;
@@ -619,7 +629,10 @@ class Linker {
 			return $res;
 		}
 
-		global $wgContLang, $wgUser, $wgThumbLimits, $wgThumbUpright, $wgWysiwygParserEnabled;
+		global $wgContLang, $wgUser, $wgThumbLimits, $wgThumbUpright, $wgWysiwygParserEnabled, $wgWysiwygMetaData;
+		if (!empty($wgWysiwygParserEnabled) && isset($frameParams['refid']) && $file) {
+			$wgWysiwygMetaData[$frameParams['refid']]['url'] = $file->getFullUrl();
+		}
 		if ( $file && !$file->allowInlineDisplay() ) {
 			wfDebug( __METHOD__.': '.$title->getPrefixedDBkey()." does not allow inline display\n" );
 			return $this->makeKnownLinkObj( $title );
@@ -698,8 +711,17 @@ class Linker {
 			$thumb = false;
 		}
 
+		$refId = '';
 		if ( !$thumb ) {
-			$s = $this->makeBrokenImageLinkObj( $title, '', '', '', '', $time==true );
+			$txt = '';
+			if (!empty($wgWysiwygParserEnabled) && isset($fp['refid'])) {
+				if ($fp['align'] == '') {
+					$txt = "\x1{$fp['refid']}\x1";
+				} else {
+					$refId = " refid=\"{$fp['refid']}\"";
+				}
+			}
+			$s = $this->makeBrokenImageLinkObj( $title, $txt, '', '', '', $time==true );
 		} else {
 			$attrArr = array(
 				'desc-link' => true,
@@ -708,7 +730,6 @@ class Linker {
 				'valign' => isset( $fp['valign'] ) ? $fp['valign'] : false ,
 				'img-class' => isset( $fp['border'] ) ? 'thumbborder' : false
 			);
-			$refId = '';
 			if (!empty($wgWysiwygParserEnabled) && isset($fp['refid'])) {
 				if ($fp['align'] == '') {
 					$attrArr['refid'] = $fp['refid'];
@@ -847,6 +868,10 @@ class Linker {
 			wfProfileIn( __METHOD__ );
 			$currentExists = $time ? ( wfFindFile( $title ) != false ) : false;
 			if( $wgEnableUploads && !$currentExists ) {
+				$refId = '';
+				if (!empty($wgWysiwygParserEnabled)) {
+					$refId = Wysiwyg_GetRefId($text);
+				}
 				$upload = SpecialPage::getTitleFor( 'Upload' );
 				if( $text == '' )
 					$text = htmlspecialchars( $title->getPrefixedText() );
@@ -859,10 +884,6 @@ class Linker {
 					$q .= '&' . $query;
 				list( $inside, $trail ) = self::splitTrail( $trail );
 				$style = $this->getInternalLinkAttributesObj( $title, $text, 'new' );
-				$refId = '';
-				if (!empty($wgWysiwygParserEnabled)) {
-					$refId = Wysiwyg_GetRefId($text);
-				}
 				wfProfileOut( __METHOD__ );
 				return '<a href="' . $upload->escapeLocalUrl( $q ) . '"'
 					. $style . $refId . '>' . $prefix . $text . $inside . '</a>' . $trail;
@@ -932,11 +953,6 @@ class Linker {
 
 	/** @todo document */
 	function makeExternalLink( $url, $text, $escape = true, $linktype = '', $ns = null ) {
-		global $wgWysiwygParserEnabled;
-		$refId = '';
-		if (!empty($wgWysiwygParserEnabled)) {
-			$refId = Wysiwyg_GetRefId($text);
-		}
 		$style = $this->getExternalLinkAttributes( $url, $text, 'external ' . $linktype );
 		global $wgNoFollowLinks, $wgNoFollowNsExceptions;
 		if( $wgNoFollowLinks && !(isset($ns) && in_array($ns, $wgNoFollowNsExceptions)) ) {
@@ -952,7 +968,15 @@ class Linker {
 			wfDebug("Hook LinkerMakeExternalLink changed the output of link with url {$url} and text {$text} to {$link}", true);
 			return $link;
 		}
-		return '<a href="'.$url.'"'.$style.$refId.'>'.$text.'</a>';
+	
+		global $wgWysiwygParserEnabled;
+		if (!empty($wgWysiwygParserEnabled)) {
+			$refId = Wysiwyg_GetRefId($text);
+			return '<a href="'.$url.'"'.$style.$refId.'>'.$text.'</a>';
+		}
+		else {
+			return '<a href="'.$url.'"'.$style.'>'.$text.'</a>';
+		}
 	}
 
 	/**
