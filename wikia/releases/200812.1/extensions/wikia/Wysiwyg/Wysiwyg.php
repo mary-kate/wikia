@@ -632,7 +632,7 @@ function WysiwygGetTemplateHotList() {
 	if(empty($list)) {
 		$dbr = wfGetDB(DB_SLAVE);
 		$templateExcludeList = '';
-		if (is_array($wgTemplateExcludeList)) {
+		if (is_array($wgTemplateExcludeList) && count($wgTemplateExcludeList)) {
 			$templateExcludeListA = array();
 			foreach($wgTemplateExcludeList as $tmpl) {
 				$templateExcludeListA[] = $dbr->AddQuotes($tmpl);
