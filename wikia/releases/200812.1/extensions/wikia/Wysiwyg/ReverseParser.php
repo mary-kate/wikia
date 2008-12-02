@@ -871,14 +871,14 @@ class ReverseParser {
 	 */
 
 	private function isFormattingElement($node) {
-		return in_array($node->nodeName, array('u', 'b', 'strong', 'i', 'em', 'strike', 's', 'code', 'tt', 'cite', 'var', 'span', 'font'));
+		return in_array($node->nodeName, array('u', 'b', 'strong', 'i', 'em', 'strike', 's', 'code', 'tt', 'cite', 'var', 'span', 'font', 'big', 'small'));
 	}
 
 	/**
 	 * Return true if given node is inline HTNL element or can contain inline elements (p / div) - used for nice HTML formatting
 	 */
 	private function isInlineElement($node) {
-		return in_array($node->nodeName, array('u', 'b', 'strong', 'i', 'em', 'strike', 's', 'code', 'tt', 'cite', 'var', 'span', 'font', 'a', 'p', 'div'));
+		return in_array($node->nodeName, array('u', 'b', 'strong', 'i', 'em', 'strike', 's', 'code', 'tt', 'cite', 'var', 'span', 'font', 'big', 'small', 'a', 'p', 'div'));
 	}
 
 	/**
