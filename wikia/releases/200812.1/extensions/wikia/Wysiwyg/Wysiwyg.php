@@ -18,7 +18,6 @@ $wgHooks['getEditingPreferencesTab'][] = 'Wysiwyg_Toggle';
 $wgHooks['MagicWordwgVariableIDs'][] = 'Wysiwyg_RegisterMagicWordID';
 $wgHooks['LanguageGetMagic'][] = 'Wysiwyg_GetMagicWord';
 $wgHooks['InternalParseBeforeLinks'][] = 'Wysiwyg_RemoveMagicWord';
-$wgHooks['SkinTemplateOutputPageBeforeExec'][] = 'Wysiwyg_SetDomain';
 $wgHooks['EditPageAfterGetContent'][] = 'Wysiwyg_CheckEditPageContent';
 
 function Wysiwyg_SetDomain(&$skin, &$tpl) {
@@ -153,6 +152,7 @@ function Wysiwyg_Initial($form) {
 
 	$wgHooks['EditPage::showEditForm:initial2'][] = 'Wysiwyg_Initial2';
 	$wgHooks['EditForm:BeforeDisplayingTextbox'][] = 'Wysiwyg_BeforeDisplayingTextbox';
+	$wgHooks['SkinTemplateOutputPageBeforeExec'][] = 'Wysiwyg_SetDomain';
 	return true;
 }
 
