@@ -516,13 +516,14 @@ var onReadyRegister = function()
 		FCKTools.DisableSelection( document.body ) ;
 
 		// Make the title area draggable.
+		/*
 		var titleElement = $( 'header' ) ;
 		titleElement.onmousedown = DragAndDrop.MouseDownHandler ;
 
 		// Connect mousemove and mouseup events from dialog frame and outer window to dialog dragging logic.
 		DragAndDrop.RegisterHandlers( window ) ;
 		DragAndDrop.RegisterHandlers( Args().TopWindow ) ;
-
+		*/
 		// Disable the previous dialog if it exists.
 		if ( ParentDialog() )
 		{
