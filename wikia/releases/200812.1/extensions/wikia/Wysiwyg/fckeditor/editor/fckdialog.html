@@ -628,6 +628,18 @@ var onReadyRegister = function()
 		$('btnCancel').style.display = ( showIt ? 'block' : 'none' ) ;
 	} ;
 
+	window.SetBackButton = function( html )
+	{
+		if (!html) {
+			$('backButton').style.display = 'none';
+			$('backButton').innerHTML = html;
+		}
+		else {
+			$('backButton').style.display = 'block';
+			$('backButton').innerHTML = html;
+		}
+	} ;
+
 	window.Ok = function()
 	{
 		Selection.EnsureSelection() ;

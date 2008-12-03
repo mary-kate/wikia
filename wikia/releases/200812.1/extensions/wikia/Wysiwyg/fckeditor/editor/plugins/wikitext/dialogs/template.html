@@ -171,6 +171,9 @@ FCK.TemplateEditor.SelectStep = function(stepId) {
 
 			// setup MW suggest
 			FCK.TemplateEditor.EnableTemplateSuggestion(true);
+
+			// clear back button
+			FCK.TemplateEditor.Dialog.SetBackButton(false);
 			break;
 
 
@@ -205,6 +208,9 @@ FCK.TemplateEditor.SelectStep = function(stepId) {
 
 			// disable MW suggest
 			FCK.TemplateEditor.EnableTemplateSuggestion(false);
+
+			// clear back button
+			FCK.TemplateEditor.Dialog.SetBackButton('<span onclick="FCK.TemplateEditor.SelectStep(1)">choose another template</span>');
 			break;
 	}
 
@@ -486,7 +492,7 @@ function Ok() {
 
 	<div id="templateEditorStep2" class="editorStep">
 		<h1 id="templateName">Template</h1>
-		<span id="templateOptions"><a id="templateViewLink" target="_blank">view template page (opens a new window)</a> <a onclick="FCK.TemplateEditor.SelectStep(1)">choose another template</a></span>
+		<span id="templateOptions"><a id="templateViewLink" target="_blank">view template page (opens a new window)</a></span>
 		<h3>Change the values on the left and click to preview. When you're done making your edits, click to save</h3>
 
 		<table id="templateEditor" height="330px"><tr>
