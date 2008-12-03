@@ -220,6 +220,23 @@ body, .BackColor
 	z-index: 11;
 }
 
+#backButton {
+	margin: 4px 10px;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+}
+
+#backButton span {
+	background-image: url(images/back.png);
+	background-repeat: no-repeat;
+	background-position: left 50%;
+	padding-left: 20px;
+	font-size: 13px;
+	color: #fff;
+	cursor: pointer;
+}
+
 #closeButton
 {
 	margin: 4px 10px;
