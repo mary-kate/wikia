@@ -58,11 +58,6 @@ body, .BackColor
 	height: 98%;
 }
 
-#header
-{
-	cursor: move;
-}
-
 .PopupButtons
 {
 	position: absolute;
