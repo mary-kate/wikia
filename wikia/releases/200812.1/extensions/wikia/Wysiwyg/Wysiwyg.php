@@ -244,6 +244,7 @@ function Wysiwyg_WikiTextToHtml($wikitext, $articleId = -1, $encode = false) {
 
 	$options = new ParserOptions();
 	$wysiwygParser = new WysiwygParser();
+	$wysiwygParser->disableCache();
 	$wysiwygParser->startExternalParse($title, $options, OT_HTML, false);
 
 	$wgWysiwygParserTildeEnabled = true;
