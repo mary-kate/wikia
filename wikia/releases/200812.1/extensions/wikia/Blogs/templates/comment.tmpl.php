@@ -29,7 +29,7 @@ else:
 <h2 class="wikia_header">
 <?php echo wfMsg("blog-comments") ?>
 </h2>
-<?php if( count( $comments ) > 10 && isset( $props[ "commenting" ] ) && $props[ "commenting" ] == 1 ): ?>
+<?php if( isset( $props[ "commenting" ] ) && $props[ "commenting" ] == 1  && count( $comments ) > 1 ): ?>
 <form action="<?php echo $title->getFullURL() ?>" method="get" id="blog-comm-form-select">
 <select name="order">
 	<option value="asc" <?php if ($order=="asc") echo 'selected="selected"' ?>><?php echo wfMsg("blog-comments-asc") ?></option>
@@ -65,8 +65,8 @@ else:
 	endif;
 
 	if( ! $comments ):
-		echo "<ul id=\"blog-comments-ul\" ><li>";
-		echo wfMsg( "blog-zero-comments" );
+		echo "<ul id=\"blog-comments-ul\"><li>";
+		echo "<div id=\"blog-comments-zero\">" . wfMsg( "blog-zero-comments" ) . "</div>";
 		echo "</li></ul>";
 	else:
 		echo "<ul id=\"blog-comments-ul\" >";

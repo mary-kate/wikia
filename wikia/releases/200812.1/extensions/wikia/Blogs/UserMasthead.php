@@ -14,6 +14,8 @@ function userMasthead() {
 	$isAnon = $wgUser->isAnon();
 
 	if( $namespace == NS_BLOG_ARTICLE ||
+		$namespace == NS_BLOG_LISTING ||
+		$namespace == NS_BLOG_LISTING_TALK ||
 		$namespace == NS_USER ||
 		$namespace == NS_USER_TALK ||
 		$namespace == NS_SPECIAL && (
@@ -43,7 +45,10 @@ function userMasthead() {
 			}
 			$Avatar = BlogAvatar::newFromUserName( $userspace );
 		}
-		if( $dbKey == 'Watchlist' || $dbKey == 'WidgetDashboard' || $dbKey == 'Preferences' ) {
+		if(	in_array( $namespace, array( NS_BLOG_LISTING, NS_BLOG_LISTING_TALK ) ) ||
+		   $dbKey == 'Watchlist' ||
+		   $dbKey == 'WidgetDashboard' ||
+		   $dbKey == 'Preferences' ) {
 			$userspace = $wgUser->getName();
 			$Avatar = BlogAvatar::newFromUser( $wgUser );
 		}

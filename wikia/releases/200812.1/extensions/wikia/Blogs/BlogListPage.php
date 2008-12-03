@@ -118,6 +118,10 @@ class BlogListPage extends Article {
 			if( $this->exists() ) {
 				Article::view();
 			}
+			else {
+				$wgOut->setArticleFlag( true );
+				$wgOut->setPageTitle( $this->mTitle->getPrefixedText() );
+			}
 			$this->showBlogListing();
 		}
 	}
@@ -373,7 +377,7 @@ class BlogListPage extends Article {
 	static public function addCategoryPage( &$catView, &$title, &$row ) {
 		global $wgContLang;
 
-		if( $row->page_namespace == NS_BLOG_ARTICLE ) {
+		if( in_array( $row->page_namespace, array( NS_BLOG_ARTICLE, NS_BLOG_LISTING ) ) ) {
 			/**
 			 * initialize CategoryView->blogs array
 			 */
@@ -426,6 +430,7 @@ class BlogListPage extends Article {
 					"text" => wfMsg("blog-create-label"),
 					"href" => Title::newFromText("CreateBlogPage", NS_SPECIAL)->getLocalUrl()
 				);
+				$tabs = $row + $tabs;
 				break;
 			case NS_BLOG_LISTING:
 				$row["listing-create-tab"] = array(
@@ -433,9 +438,16 @@ class BlogListPage extends Article {
 					"text" => wfMsg("blog-create-listing-label"),
 					"href" => Title::newFromText( "CreateBlogListingPage", NS_SPECIAL)->getLocalUrl()
 				);
+				$tabs = $row + $tabs;
+				$row["listing-refresh-tab"] = array(
+					"class" => "",
+					"text" => wfMsg("blog-refresh-label"),
+					"href" => $wgTitle->getLocalUrl( "action=purge" )
+				);
+				$tabs += $row;
 				break;
 		}
-		$tabs = $row + $tabs;
+
 
 		return true;
 	}

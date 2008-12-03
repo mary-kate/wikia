@@ -187,6 +187,8 @@ class BlogAvatar {
 	 * @param String  $id -- DOM identifier
 	 */
 	public function getImageTag( $width = AVATAR_DEFAULT_WIDTH, $height = AVATAR_DEFAULT_HEIGHT, $alt = false, $class = "avatar", $id = false ) {
+		global $wgUser;
+
 		wfProfileIn( __METHOD__ );
 
 		$url = $this->getUrl();
@@ -205,10 +207,14 @@ class BlogAvatar {
 		);
 		if( $class ) {
 			$attribs[ "class" ] = $class;
+			if( $wgUser->getID() == $this->mUser->getID( ) ) {
+				$attribs[ "class" ] .= " avatar-self";
+			}
 		}
 		if( $id ) {
 			$attribs[ "id" ] = $id;
 		}
+
 		return Xml::element( 'img', $attribs, '', true );
 	}
 
@@ -222,17 +228,10 @@ class BlogAvatar {
 	 * @param String  $id -- DOM identifier
 	 */
 	public function getLinkTag( $width = AVATAR_DEFAULT_WIDTH, $height = AVATAR_DEFAULT_HEIGHT, $alt = false, $class = "avatar", $id = false ) {
-		global $wgUser;
 
 		wfProfileIn( __METHOD__ );
 		$image = $this->getImageTag( $width, $height, $alt, $class, $id );
-
-		if( $wgUser->getID() == $this->mUser->getID( ) ) {
-			$url = sprintf("<a href=\"%s\">%s</a>", Title::newFromText( "Preferences", NS_SPECIAL)->getFullUrl(), $image );
-		}
-		else {
-			$url = sprintf("<a href=\"%s\">%s</a>", $this->mUser->getUserPage()->getFullUrl(), $image );
-		}
+		$url = sprintf("<a href=\"%s\">%s</a>", $this->mUser->getUserPage()->getFullUrl(), $image );
 		wfProfileOut( __METHOD__ );
 
 		return $url;
