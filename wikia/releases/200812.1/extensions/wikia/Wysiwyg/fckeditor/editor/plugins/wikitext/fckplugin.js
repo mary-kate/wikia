@@ -75,7 +75,7 @@ FCK.WysiwygSwitchToolbars = function(switchToWikitext) {
 
 	// move MW toolbar next to "Source" button
 	if (MWtoolbar) {
-		MWtoolbar.style.marginLeft = (toolbarItems[1].offsetWidth+27) + 'px';
+		MWtoolbar.style.marginLeft = (toolbarItems[1].offsetWidth + 4) + 'px';
 		MWtoolbar.style.top = (FCKiframe.offsetTop - FCK.GetParentForm().offsetTop + 3) + 'px';
 	}
 
