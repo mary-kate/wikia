@@ -575,12 +575,12 @@ function WysiwygGetTemplateParams($name, $templateCall = null) {
 					if (count($vals) == 1) {
 						$key = trim($key);
 						if (array_key_exists($key, $result)) {
-							$result[$key] = $val;
+							$result[$key] = rtrim($val, "\n");
 						}
 					} else {
 						$vals[0] = trim($vals[0]);
 						if (array_key_exists($vals[0], $result)) {
-							$result[$vals[0]] = $vals[1];
+							$result[$vals[0]] = rtrim($vals[1], "\n");
 						}
 					}
 				}
