@@ -12,6 +12,11 @@ YAHOO.Wikia.Blogs.callback = {
 
 YAHOO.Wikia.Blogs.callback.add = function( data ) {
 	if( ! data[ "error" ] ) {
+		// remove zero comments div
+		var zero = YAHOO.util.Dom.get("blog-comments-zero");
+		if( zero ) {
+			zero.innerHTML = "";
+		}
 		var li = document.createElement( "li" );
 		li.innerHTML = data["text"];
 		YAHOO.util.Dom.get( "blog-comments-ul" ).appendChild( li );
@@ -59,6 +64,30 @@ YAHOO.Wikia.Blogs.submit = function( event, id ) {
 	}
 };
 
+YAHOO.Wikia.Blogs.mouseover = function( event ) {
+	console.log( event );
+	var overlay = document.createElement( "span" );
+	var div = event.relatedTarget;
+	div.style.position = 'relative';
+
+	overlay.className = "avatar-overlay";
+	overlay.style.visibility = 'visible';
+	overlay.innerHTML = "blabla";
+	overlay.id = "blog-avatar-overlay";
+	div.appendChild( overlay );
+};
+
+YAHOO.Wikia.Blogs.mouseout = function( event ) {
+	console.log( event.currentTarget );
+};
+
 YAHOO.util.Event.addListener( "blog-comm-submit-top", "click", YAHOO.Wikia.Blogs.submit, "blog-comm-form-top" );
 YAHOO.util.Event.addListener( "blog-comm-submit-bottom", "click", YAHOO.Wikia.Blogs.submit, "blog-comm-form-bottom" );
 YAHOO.util.Event.addListener( "blog-comm-form-select", "change", YAHOO.Wikia.Blogs.submit, "blog-comm-form-select" );
+
+// dropdown for images
+/**
+YAHOO.Wikia.Blogs.images = YAHOO.util.Dom.getElementsByClassName( "avatar-self","img" );
+YAHOO.util.Event.addListener( YAHOO.Wikia.Blogs.images, "mouseover", YAHOO.Wikia.Blogs.mouseover );
+YAHOO.util.Event.addListener( YAHOO.Wikia.Blogs.images, "mouseout", YAHOO.Wikia.Blogs.mouseout );
+**/

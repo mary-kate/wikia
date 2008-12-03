@@ -111,6 +111,7 @@ div.wk_blogs_post {
 }
 div.wk_blogs_post .wk_blogs_link {
 	padding: 1px 0px;
+	font-weight: bold;
 	font-size: 110%;
 }
 div.wk_blogs_post ul.list {
@@ -126,11 +127,10 @@ div.wk_blogs_post ul.list li {
 }
 div.wk_blogs_post .wk_date {
 	display: inline;
-	font-weight: bold;
 	margin: 0px 0.1em;
 	padding: 0px 5px 2px 0px;
 	clear: both;
-	font-size: 95%;
+	font-size: 90%;
 }
 div.wk_blogs_post .wk_date span.left {
 	clear: left;
@@ -184,13 +184,28 @@ div.blog-comment_input {
 /**
  * footer
  */
+
+span.avatar-overlay {
+/**	background: url(http://images.wikia.com/common/skins/monaco/images/widget_sprite.png); **/
+/**	clip: rect(0px 7px 12px 0px); **/
+	background: white;
+	border: red;
+	cursor: pointer;
+	height: 12px;
+	position: absolute;
+	right: -17px;
+	top: 4px;
+	width: 28px;
+}
+
 #blog-footer ul {
 	margin: 0;
-	margin-top: 0.5em;
+	margin-top: 1.5em;
 	margin-bottom: 0.5em;
 	list-style: none;
 }
-
+#blog-footer ul li { float: left; margin-right: 10px }
+#blog-footer #star-rating {top: -20px;}
 
 #blog-comm-form-select select {
 	margin: 0;
