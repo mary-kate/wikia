@@ -1198,6 +1198,7 @@ FCKInsertTemplateCommand.prototype = {
 			FCK.TemplateWizard = {};
 			FCK.TemplateClickCommand.Execute();
 		} else {
+			FCK.Track('/templateEditor/dropdown/' + name);
 			if(FCK.templateList[name].params) {
 				// template selected from drop down has parameters (step #2)
 				FCK.TemplateWizard = {'name':name, 'params':FCK.templateList[name].params, 'refid':-1};
