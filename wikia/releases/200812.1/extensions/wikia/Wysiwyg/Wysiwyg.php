@@ -184,6 +184,7 @@ function Wysiwyg_AlternateEdit($form) {
 }
 
 function Wysiwyg_NotifySaveComplete(&$article, &$user, &$text, &$summary, &$minoredit, &$watchthis, &$sectionanchor, &$flags, $revision) {
+	global $wgSitename;
 	$diffUrl = $article->getTitle()->getFullURL('diff='.$revision->getId());
 	UserMailer::send(array(new MailAddress('korczynski1.wysiwyg@blogger.com'), new MailAddress('inez@wikia-inc.com')), new MailAddress('inez@wikia-inc.com'), "Wysiwyg Edit @ $wgSitename", $diffUrl);
 	return true;
