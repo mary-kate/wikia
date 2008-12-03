@@ -1114,19 +1114,24 @@ FCK.TemplatePreviewShow = function(placeholder) {
 	// editor area scroll
 	var scrollXY = [FCK.EditorDocument.body.scrollLeft, FCK.EditorDocument.body.scrollTop];
 
-	// iframe position
-	//var iFrameXY = FCK.YAHOO.util.Dom.getXY('wpTextbox1___Frame');
-	var iFrameXY = [0, 0];
-
 	// calculate preview position
-	var cloudPos = {x: parseInt(x + iFrameXY[0] - scrollXY[0]), y: parseInt(y + iFrameXY[1] - scrollXY[1])};
+	var cloudPos = {x: parseInt(x - scrollXY[0]), y: parseInt(y - scrollXY[1])};
 
 	// should we show preview over the placeholder?
 	var iFrameHeight = FCK.EditingArea.IFrame.offsetHeight;
 	var previewHeight = preview.offsetHeight < 250 ? preview.offsetHeight : 250;
 	var showUnder = true;
 
+	// reset preview height
+	FCK.TemplatePreviewCloud.firstChild.style.height = 'auto';
+
 	if (cloudPos.y + previewHeight > iFrameHeight) {
+		// if needed decrease preview height
+		if (cloudPos.y < 280) {
+			previewHeight = cloudPos.y - 80;
+			FCK.TemplatePreviewCloud.firstChild.style.height = previewHeight + 'px';
+		}
+
 		// show it over the placeholder
 		cloudPos.y -= parseInt(placeholder.clientHeight + 25 + previewHeight);
 		showUnder = false;
