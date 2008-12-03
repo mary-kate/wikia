@@ -41,14 +41,15 @@ body, td, input, select, textarea
 
 body, .BackColor
 {
-	background-color: #f1f1e3;
+	background-color: #fff;
 }
 
 .PopupBody
 {
 	height: 100%;
 	width: 100%;
-	overflow: hidden;
+	
+	padding-right: 20px;overflow: hidden;
 	background-color: transparent;
 	padding: 0px;
 }
@@ -169,14 +170,40 @@ body, .BackColor
  * Dialog frame related styles.
  */
 
-.contents
-{
+#border {
 	position: absolute;
 	top: 0;
 	left: 0;
 	right: 0;
 	bottom: 0;
-	background-color: #f1f1e3;
+	background: #000;
+	border: solid 1px #fff;
+	opacity: 0.6;
+}
+
+#TitleArea {
+	margin: 4px 12px;
+	font-size: 13px;
+	color: #fff;
+	position: absolute;
+}
+
+#PopupButtons {
+	text-align: right;
+}
+
+#PopupButtons input {
+	margin-right: 10px;
+}
+
+.contents
+{
+	position: absolute;
+	top: 24px;
+	left: 10px;
+	right: 10px;
+	bottom: 10px;
+	background-color: #fff;
 	overflow: hidden;
 	z-index: 1;
 }
@@ -204,23 +231,17 @@ body, .BackColor
 
 #closeButton
 {
+	margin: 4px 10px;
+	padding-left: 20px;
+	font-size: 13px;
+	color: #fff;
 	position: absolute;
 	right: 0px;
 	top: 0px;
-	margin-top: 5px;
-	margin-right: 10px;
-	width: 20px;
-	height: 20px;
 	cursor: pointer;
-	background-image: url(images/sprites.png);
+	background-image: url(images/close.png);
 	background-repeat: no-repeat;
-	background-position: -16px -651px;
-}
-
-* html #closeButton
-{
-	cursor: hand;
-	background-image: url(images/sprites.gif);
+	background-position: left 50%;
 }
 
 .rtl #closeButton
@@ -228,11 +249,6 @@ body, .BackColor
 	right: auto;
 	left: 10px;
 	margin-right: 0px;
-}
-
-#closeButton:hover
-{
-	background-position: -16px -687px;
 }
 
 .throbber
