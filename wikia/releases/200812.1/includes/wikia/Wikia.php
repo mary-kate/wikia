@@ -351,9 +351,9 @@ class Wikia {
 		global $wgDevelEnvironment;
 
 		$method = $sub ? $method . "-" . $sub : $method;
-#		if( $wgDevelEnvironment ) {
+		if( $wgDevelEnvironment ) {
 			error_log( $method . ": " . $message );
-#		}
+		}
 		/**
 		 * and use wfDebug as well
 		 */
