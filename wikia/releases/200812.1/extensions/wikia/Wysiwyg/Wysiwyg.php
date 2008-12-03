@@ -169,16 +169,26 @@ function Wysiwyg_Initial2($form) {
 }
 
 function Wysiwyg_AlternateEdit($form) {
-	global $wgRequest;
+	global $wgRequest, $wgHooks;
 	if(isset($wgRequest->data['wpTextbox1'])) {
 		if(isset($wgRequest->data['wysiwygData'])) {
 			if($wgRequest->data['wysiwygData'] != '') {
 				$wgRequest->data['wpTextbox1'] = Wysiwyg_HtmlToWikiText($wgRequest->data['wpTextbox1'], $wgRequest->data['wysiwygData'], true);
+				if(!empty($wgRequest->data['wpSave'])) {
+					$wgHooks['ArticleSaveComplete'][] = 'Wysiwyg_NotifySaveComplete';
+				}
 			}
 		}
 	}
 	return true;
 }
+
+function Wysiwyg_NotifySaveComplete(&$article, &$user, &$text, &$summary, &$minoredit, &$watchthis, &$sectionanchor, &$flags, $revision) {
+	$diffUrl = $article->getTitle()->getFullURL('diff='.$revision->getId());
+	UserMailer::send(new MailAddress('inez@wikia-inc.com'), new MailAddress('inez@wikia-inc.com'), '[Wysiwyg Edit]', $diffUrl);
+	return true;
+}
+
 function Wysiwyg_BeforeDisplayingTextbox($a, $b) {
 	global $wgOut, $wgWysiwygData;
 	$wgOut->addHTML('<input type="hidden" id="wysiwygData" name="wysiwygData" value="'.htmlspecialchars($wgWysiwygData).'" />');
