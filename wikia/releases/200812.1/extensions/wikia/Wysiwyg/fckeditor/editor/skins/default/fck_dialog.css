@@ -63,15 +63,6 @@ body, .BackColor
 	cursor: move;
 }
 
-.PopupTitle
-{
-	font-weight: bold;
-	font-size: 14pt;
-	color: #737357;
-	background-color: #e3e3c7;
-	padding: 3px 10px 3px 10px;
-}
-
 .PopupButtons
 {
 	position: absolute;
