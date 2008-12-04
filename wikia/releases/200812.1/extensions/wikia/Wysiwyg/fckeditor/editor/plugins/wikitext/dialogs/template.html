@@ -257,16 +257,19 @@ FCK.TemplateEditor.GetWikitextFromStep2 = function() {
 	// parameters name and value
 	var params = FCK.TemplateEditor.GetParametersFromStep2();
 
+	var paramsCount = 0;
+
 	for(key in params) {
 		var value = params[key];
 
 		if (value == '') continue; // ignore empty parameters
 
 		wikitext += '\n|' + key + '=' + value;
+		paramsCount++;
 	}
 
 	// close template markup
-	wikitext += '}}';
+	wikitext += (paramsCount ? '\n}}' : '}}');
 
 	return wikitext;
 }
