@@ -249,36 +249,13 @@ FCK.TemplateEditor.GetParametersFromStep2 = function() {
 
 // generate wikitext from template editor
 FCK.TemplateEditor.GetWikitextFromStep2 = function() {
-	var wikitext = '';
-
-	// template name
-	wikitext = '{{' + FCK.TemplateEditor.GetE('templateName').innerHTML;
-
-	// parameters name and value
-	var params = FCK.TemplateEditor.GetParametersFromStep2();
-
-	var paramsCount = 0;
-
-	for(key in params) {
-		var value = params[key];
-
-		if (value == '') continue; // ignore empty parameters
-
-		wikitext += '\n|' + key + '=' + value;
-		paramsCount++;
-	}
-
-	// close template markup
-	wikitext += (paramsCount ? '\n}}' : '}}');
-
-	return wikitext;
+	return FCK.GenerateTemplateWikitext( FCK.TemplateEditor.GetE('templateName').innerHTML, FCK.TemplateEditor.GetParametersFromStep2() );
 }
 
 // generate preview in template editor
 FCK.TemplateEditor.CreatePreview = function() {
 
 	var wikitext = FCK.TemplateEditor.GetWikitextFromStep2();
-	FCK.log('generating preview for >>' + wikitext + '<<');
 
 	// block preview button and show progress icon
 	FCK.TemplateEditor.GetE('templateDoPreview').disabled = true;
