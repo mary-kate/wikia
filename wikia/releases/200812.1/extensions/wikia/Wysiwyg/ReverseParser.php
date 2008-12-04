@@ -670,6 +670,10 @@ class ReverseParser {
 				case 'nowiki':
 					return "<nowiki>{$refData['description']}</nowiki>";
 
+				// <html></html>
+				case 'html':
+					return "<html>{$refData['description']}</html>";
+
 				// [[Category:foo]]
 				case 'category':
 					$pipe = ($refData['description'] != '') ? '|'.$refData['description'] : '';
