@@ -3354,6 +3354,9 @@ class Parser
 				case 'html':
 					if( $wgRawHtml ) {
 						$output = $content;
+						if (!empty($wgWysiwygParserEnabled)) {
+							$output = Wysiwyg_SetRefId('html', array('text' => &$content), false);
+						}
 						break;
 					} else {
 						throw new MWException( '<html> extension tag encountered unexpectedly' );
