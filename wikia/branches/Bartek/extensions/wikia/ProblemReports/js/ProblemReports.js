@@ -8,6 +8,7 @@ YAHOO.wikia.ProblemReportsDialog.prototype = {
 
 	panel: false,
 	form: false,
+	blocked: false,
 
 	// add onlick event for 'report a problem' action tabs
 	init: function(links) {
@@ -27,6 +28,12 @@ YAHOO.wikia.ProblemReportsDialog.prototype = {
 			// disable the submit button & show the alert to tell the user what went wrong...
 			YAHOO.util.Dom.addClass('pr_summary', 'errorField');
 			this.infobox('Too long', 'You have entered more than 512 characters', "OK", function() {this.hide()});
+			this.blocked = true;
+		} else {
+			if (this.blocked) {
+				YAHOO.util.Dom.removeClass('pr_summary', 'errorField');
+				this.blocked = false;
+			}			
 		}
 	},
 
