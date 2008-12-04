@@ -1258,6 +1258,8 @@ FCK.InsertTemplate = function(refid, name, params) {
         var wikitext = '';
 
 	wikitext = '{{' + name;
+
+	var paramsCount = 0;
 	
 	// parameters name and value
 	for(key in params) {
@@ -1266,9 +1268,11 @@ FCK.InsertTemplate = function(refid, name, params) {
 		if (value == '') continue; // ignore empty parameters
 
 		wikitext += '\n|' + key + '=' + value;
+		paramsCount++;
 	}
 
-	wikitext += '}}';
+	// close template markup
+	wikitext += (paramsCount ? '\n}}' : '}}');
 
 	// update metaData and send AJAX request to generate template preview
 	FCK.wysiwygData[refid].name = name;
