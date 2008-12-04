@@ -2846,19 +2846,6 @@ class Parser
 		$args = (null == $piece['parts']) ? array() : $piece['parts'];
 		wfProfileOut( __METHOD__.'-setup' );
 
-		/*
-		# FCK helper
-		if (!empty($wgWysiwygParserEnabled)) {
-			$textArgs = array();
-			for ($i = 0; $i < $args->node->length; $i++) {
-				$textArgs[] = $args->node->item($i)->textContent;
-			}
-			$templateText = implode('', $frame->virtualBracketedImplode('{{', '|', '}}', $titleWithSpaces, $textArgs));
-			$text = Wysiwyg_SetRefId('curly brackets', array('text' => &$templateText, 'lineStart' => $piece['lineStart']), false);
-			$found = true;
-		}
-		*/
-
 		# SUBST
 		wfProfileIn( __METHOD__.'-modifiers' );
 		if ( !$found ) {
