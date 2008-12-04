@@ -24,7 +24,9 @@ YAHOO.wikia.ProblemReportsDialog.prototype = {
 		len = elem.textLength;
 
 		if (len > 512) {
-			elem.value = elem.value.substr(0,511);
+			// disable the submit button & show the alert to tell the user what went wrong...
+			YAHOO.util.Dom.addClass('pr_summary', 'errorField');
+			this.infobox('Too long', 'You have entered more than 512 characters', "OK", function() {this.hide()});
 		}
 	},
 
