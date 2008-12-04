@@ -45,8 +45,8 @@ if (isset($status) && ($status == "WMSG_REMOVE_ERROR"))
 }
 ?>
 <div id="wba-upload">
-    <div style="float:left;padding:2px;text-align:center;">
-    	<?= wfMsg("blog-avatar-remove-info") ?> "<?= wfmsg("blog-avatar-getuser") ?>"
+    <div style="float:left;padding:5px 2px;text-align:left;">
+    	<?= wfMsg("blog-avatar-remove-info") ?>
     </div>	
 	<div style="clear: both;"></div>    
 	<div>
@@ -60,12 +60,12 @@ if (isset($status) && ($status == "WMSG_REMOVE_ERROR"))
 <div style="clear: both;"></div>    
 <? if ($user && $is_posted) { ?>
 <div id="wba-upload">
-    <div style="text-align: center;padding: 1em;">
-        <div id="wba-upload-progress">&nbsp;</div>
-        <div style="text-align: center;"><?= $avatar->getImageTag( 50, 50 )?></div>
+    <div style="text-align: center;padding: 5px;">
+        <div style="text-align:center;padding: 5px;font-weight:bold"><?= $user->getName() ?></div>
+        <div style="text-align: center;"><?= $avatar->getImageTag( 100, 100 )?></div>
     </div>
 	<div style="clear: both;"></div>
-    <div style="text-align: center;padding: 1em;">
+    <div style="text-align: center;padding: 5px;">
 <?if (!$avatar->isDefault()) { ?>
         <form id="wba-remove-form" enctype="multipart/form-data" action="<?= $title->getLocalUrl() ?>" method="post">
             <input type="hidden" name="action" value="remove_avatar" />
