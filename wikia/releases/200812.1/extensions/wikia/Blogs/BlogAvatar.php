@@ -23,6 +23,25 @@ $wgHooks['AdditionalUserProfilePreferences'][] = "BlogAvatar::additionalUserProf
 $wgHooks['SavePreferences'][] = "BlogAvatar::savePreferences";
 
 
+$wgExtensionCredits['specialpage'][] = array(
+    "name" => "RemoveAvatar",
+    "description" => "Remove User's avatars",
+    "author" => "Krzysztof Krzyzaniak (eloy) <eloy@wikia-inc.com>, Piotr Molski (moli) <moli@wikia-inc.com>"
+);
+
+#--- register special page (MW 1.10 way)
+if ( !function_exists( 'extAddSpecialPage' ) ) {
+    require( "$IP/extensions/ExtensionFunctions.php" );
+}
+
+#--- permissions
+$wgAvailableRights[] = 'removeavatar';
+$wgGroupPermissions['staff']['removeavatar'] = true;
+#$wgGroupPermissions['sysop']['removeavatar'] = true;
+extAddSpecialPage( '', 'RemoveAvatar', 'BlogAvatarRemovePage' );
+$wgSpecialPageGroups['RemoveAvatar'] = 'users';
+
+
 class BlogAvatar {
 
 	/**
@@ -136,6 +155,20 @@ class BlogAvatar {
     	return $this->mDefaultAvatars;
 	}
 
+	/**
+	 * getUserName
+	 *
+	 * @access public
+	 *
+	 * @return String
+	 */
+	public function getUserName() {
+		$username = "";
+		if (isset($this->mUser)) {
+			$username = $this->mUser->getName();
+		}
+		return $username;
+	}
 
 	/**
 	 * getUrl -- read url from preferences or from defaults if preference is
@@ -197,7 +230,6 @@ class BlogAvatar {
 		if ( ! $alt ) {
 			$alt = "[" .$this->mUser->getName() ."]";
 		}
-		wfProfileOut( __METHOD__ );
 		$attribs = array (
 			'src' 		=> $url,
 			'border' 	=> 0,
@@ -215,6 +247,7 @@ class BlogAvatar {
 			$attribs[ "id" ] = $id;
 		}
 
+		wfProfileOut( __METHOD__ );
 		return Xml::element( 'img', $attribs, '', true );
 	}
 
@@ -227,11 +260,17 @@ class BlogAvatar {
 	 * @param String  $class -- which class should be used for element
 	 * @param String  $id -- DOM identifier
 	 */
-	public function getLinkTag( $width = AVATAR_DEFAULT_WIDTH, $height = AVATAR_DEFAULT_HEIGHT, $alt = false, $class = "avatar", $id = false ) {
+	public function getLinkTag( $width = AVATAR_DEFAULT_WIDTH, $height = AVATAR_DEFAULT_HEIGHT, $alt = false, $class = "avatar", $id = false, $showEditMenu = false ) {
 
 		wfProfileIn( __METHOD__ );
 		$image = $this->getImageTag( $width, $height, $alt, $class, $id );
-		$url = sprintf("<a href=\"%s\">%s</a>", $this->mUser->getUserPage()->getFullUrl(), $image );
+		$additionalAttribs = "";
+		if (!empty($showEditMenu)) {
+			$showEditDiv = "document.getElementById('wk-avatar-change').style.visibility='visible'";
+			$hideEditDiv = "document.getElementById('wk-avatar-change').style.visibility='hidden'";
+			$additionalAttribs = "onmouseover=\"{$showEditDiv}\" onmouseout=\"{$hideEditDiv}\"";
+		}
+		$url = sprintf("<a href=\"%s\" %s>%s</a>", $this->mUser->getUserPage()->getFullUrl(), $additionalAttribs, $image );
 		wfProfileOut( __METHOD__ );
 
 		return $url;
@@ -286,29 +325,29 @@ class BlogAvatar {
 	/**
 	 * removeFile -- remove file from directory
 	 */
-	public function removeFile($iUserID) {
+	public function removeFile() {
 		wfProfileIn( __METHOD__ );
 		global $wgLogTypes, $wgUser;
 
 		$result = false;
-		if ($this->iUserID == $wgUser->getID()) {
-			$sImageFull = $this->getFullPath();
+		$sImageFull = $this->getFullPath();
 
-			if (file_exists($sImageFull)) {
-				if (!unlink($sImageFull)) {
-					wfDebug( __METHOD__.": cannot remove avatar's files {$sImageFull}\n" );
-					$result = false;
-				} else {
-					/* add log */
-					$this->__setLogType();
-					$sUserText =  $this->mUser->getName();
-					$mUserBlogPage = Title::newFromText( $sUserText, NS_BLOG_ARTICLE );
-					$oLogPage = new LogPage( AVATAR_LOG_NAME );
-					$sLogComment = "Remove {$sUserText}'s avatars by {$wgUser->getName()}";
-					$oLogPage->addEntry( AVATAR_LOG_NAME, $mUserBlogPage, $sLogComment);
-					/* */
-					$result = true;
-				}
+		if (file_exists($sImageFull)) {
+			if (!unlink($sImageFull)) {
+				wfDebug( __METHOD__.": cannot remove avatar's files {$sImageFull}\n" );
+				$result = false;
+			} else {
+				/* add log */
+				$this->__setLogType();
+				$sUserText =  $this->mUser->getName();
+				$this->mUser->setOption( AVATAR_USER_OPTION_NAME, "" );
+				$this->mUser->saveSettings();
+				$mUserBlogPage = Title::newFromText( $sUserText, NS_BLOG_ARTICLE );
+				$oLogPage = new LogPage( AVATAR_LOG_NAME );
+				$sLogComment = "Remove {$sUserText}'s avatars by {$wgUser->getName()}";
+				$oLogPage->addEntry( AVATAR_LOG_NAME, $mUserBlogPage, $sLogComment);
+				/* */
+				$result = true;
 			}
 		}
 		wfProfileOut( __METHOD__ );
@@ -328,39 +367,42 @@ class BlogAvatar {
 	 * uploadFile -- save file when is in proper format, do resize and
 	 * other stuffs
 	 *
+	 * @param Request $request -- WebRequest instance
+	 * @param String $input    -- name of file input in form
+	 *
+	 * @return Integer -- error code of operation
 	 */
-	public function uploadFile($request, $sFormField = AVATAR_UPLOAD_FIELD) {
+	public function uploadFile($request, $input = AVATAR_UPLOAD_FIELD) {
 		global $wgTmpDirectory;
 		wfProfileIn(__METHOD__);
 
 		$this->__setLogType();
 
-		if (!isset($wgTmpDirectory) || empty($wgTmpDirectory)) {
+		if( !isset( $wgTmpDirectory ) || !is_dir( $wgTmpDirectory ) ) {
 			$wgTmpDirectory = "/tmp";
 		}
 		Wikia::log( __METHOD__, "tmp", "Temp directory set to {$wgTmpDirectory}" );
 
-
-		$errorNo = $request->getUploadError( $sFormField );
+		$errorNo = $request->getUploadError( $input );
 		if ( $errorNo != UPLOAD_ERR_OK ) {
 			Wikia::log( __METHOD__, "error", "Upload error {$errorNo}" );
 			wfProfileOut(__METHOD__);
 			return $errorNo;
 		}
-		$iFileSize = $request->getFileSize( $sFormField );
+		$iFileSize = $request->getFileSize( $input );
 
 		if( empty( $iFileSize ) ) {
 			/**
 			 * file size = 0
 			 */
-			Wikia::log( __METHOD__, "empty", "Empty file {$sFormField} reported size {$iFileSize}" );
+			Wikia::log( __METHOD__, "empty", "Empty file {$input} reported size {$iFileSize}" );
 			wfProfileOut(__METHOD__);
 			return UPLOAD_ERR_NO_FILE;
 		}
 
 		$sTmpFile = $wgTmpDirectory."/".substr(sha1(uniqid($this->mUser->getID())), 0, 16);
 		Wikia::log( __METHOD__, "tmp", "Temp file set to {$sTmpFile}" );
-		$sTmp = $request->getFileTempname($sFormField);
+		$sTmp = $request->getFileTempname($input);
 		Wikia::log( __METHOD__, "path", "Path to uploaded file is {$sTmp}" );
 
 		if( move_uploaded_file( $sTmp, $sTmpFile )  ) {
@@ -453,7 +495,7 @@ class BlogAvatar {
 				$sUserText =  $this->mUser->getName();
 				$mUserBlogPage = Title::newFromText( $sUserText, NS_BLOG_ARTICLE );
 				$oLogPage = new LogPage( AVATAR_LOG_NAME );
-				$sLogComment = "Add/change avatar by {$sUserText}";
+				$sLogComment = "Avatar added or changed by {$sUserText}";
 				$oLogPage->addEntry( AVATAR_LOG_NAME, $mUserBlogPage, $sLogComment);
 				unlink($sTmpFile);
 				$errorNo = UPLOAD_ERR_OK;
@@ -567,5 +609,100 @@ class BlogAvatar {
 
 		wfProfileOut( __METHOD__ );
 		return $result;
+	}
+}
+
+class BlogAvatarRemovePage extends SpecialPage {
+	var $mAvatar;
+	var $mTitle;
+	var $mPosted;
+	var $mUser;
+	var $mCommitRemoved;
+
+	#--- constructor
+	public function __construct() {
+		$this->mPosted = false;
+		$this->mCommitRemoved = false;
+		$this->mSysMsg = false;
+		$this->mTitle = Title::makeTitle( NS_SPECIAL, "RemoveAvatar" );
+		parent::__construct( "RemoveAvatar", 'removeavatar');
+	}
+
+	public function execute() {
+		global $wgUser, $wgOut, $wgRequest;
+		wfProfileIn( __METHOD__ );
+
+		if ( $wgUser->isBlocked() ) {
+			$wgOut->blockedPage();
+			wfProfileOut( __METHOD__ );
+			return;
+		}
+		if ( wfReadOnly() ) {
+			$wgOut->readOnlyPage();
+			wfProfileOut( __METHOD__ );
+			return;
+		}
+		if ( !$wgUser->isLoggedIn() ) {
+			$this->displayRestrictionError();
+			wfProfileOut( __METHOD__ );
+			return;
+		}
+		if ( !$wgUser->isAllowed( 'removeavatar' ) ) {
+			$this->displayRestrictionError();
+			wfProfileOut( __METHOD__ );
+			return;
+		}
+
+		$wgOut->setPageTitle( wfMsg("blog-avatar-removeavatar") );
+
+		if ($wgRequest->getVal("action") === "search_user") {
+			$this->mPosted = true;
+		}
+
+		if ($wgRequest->getVal("action") === "remove_avatar") {
+			$this->mCommitRemoved = true;
+		}
+
+		wfProfileOut( __METHOD__ );
+		$this->removeForm();
+	}
+
+	private function removeForm() {
+		global $wgUser, $wgOut, $wgRequest;
+
+		if ($this->mPosted) {
+			if ($wgRequest->getVal("av_user")) {
+				$avUser = User::newFromName($wgRequest->getVal("av_user"));
+				if ($avUser->getID() !== 0) {
+					$this->mAvatar = BlogAvatar::newFromUser($avUser);
+					$this->mUser = $avUser;
+				}
+			}
+		}
+
+		if ($this->mCommitRemoved) {
+			if ($wgRequest->getVal("av_user")) {
+				$avUser = User::newFromName($wgRequest->getVal("av_user"));
+				if ($avUser->getID() !== 0) {
+					$this->mAvatar = BlogAvatar::newFromUser($avUser);
+					if (!$this->mAvatar->removeFile($avUser->getID())) {
+						$this->iStatus = "WMSG_REMOVE_ERROR";
+					}
+					$this->mUser = $avUser;
+					$this->mPosted = true;
+				}
+			}
+		}
+
+		$oTmpl = new EasyTemplate( dirname( __FILE__ ) . "/templates/" );
+		$oTmpl->set_vars( array(
+			"title"     	=> $this->mTitle,
+			"avatar"   	 	=> $this->mAvatar,
+			"search_user"	=> $wgRequest->getVal("av_user"),
+			"user"			=> $this->mUser,
+			"is_posted" 	=> $this->mPosted,
+			"status"    	=> $iStatus
+		));
+		$wgOut->addHTML( $oTmpl->execute("remove-avatar-form") );
 	}
 }

@@ -33,6 +33,9 @@ YAHOO.Wikia.Blogs.callback.add = function( data ) {
 			top.value = "";
 			top.style.cursor = "auto";
 		}
+		if (typeof TieDivLibrary != "undefined" ) {
+			TieDivLibrary.calculate();
+		}
 	}
 };
 
