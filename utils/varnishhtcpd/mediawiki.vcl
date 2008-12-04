@@ -4,6 +4,32 @@ C{
   void TIM_format(double t, char *p);
 }C
 
+C{
+  #include <dlfcn.h>
+  #include <stdlib.h>
+  #include <stdio.h>
+  #include <string.h>
+  #include <GeoIPCity.h>
+  #include <pthread.h>
+
+  pthread_key_t geoip_key;
+
+  GeoIP* geoip () {
+    GeoIP *gi;
+    if(!geoip_key) {
+      pthread_key_create(&geoip_key, NULL);
+    }
+    gi = pthread_getspecific(geoip_key);
+    if(gi = pthread_getspecific(geoip_key)) {
+      return gi;
+    } else {
+      gi = GeoIP_open_type(GEOIP_CITY_EDITION_REV1,GEOIP_STANDARD);
+      pthread_setspecific(geoip_key, gi);
+      return gi;
+    }
+  }
+}C
+
 #
 # This is a basic VCL configuration file for varnish.  See the vcl(7)
 # man page for details on VCL syntax and semantics.
@@ -20,6 +46,7 @@ backend default {
 }
 
 
+
 # Below is a commented-out copy of the default VCL logic.  If you
 # redefine any of these subroutines, the built-in logic will be
 # appended to your code.
@@ -28,7 +55,9 @@ backend default {
 #
 sub vcl_recv {
 
-
+    if(req.http.host == "geoip.example") {
+      error 200 "OK";
+    }
 
 	if (req.http.Accept-Encoding) {
 		if (req.http.Accept-Encoding ~ "gzip") {
@@ -42,7 +71,7 @@ sub vcl_recv {
 	}
 
 	# clean out requests sent via curls -X mode and LWP
-	if (req.url ~ "http://") {
+	if (req.url ~ "^http://") {
 		set req.url = regsub(req.url, "http://[^/]*","");
 	}
 
@@ -50,9 +79,6 @@ sub vcl_recv {
 	if (req.url == "/lvscheck.html") {
 		error 200 "varnish is okay";
 	}
-
-        set req.backend = default;
-
 
 	if (req.http.Expect) {
 		pipe;
@@ -96,9 +122,21 @@ sub vcl_recv {
 		pipe;
 	}
 
-	if ((req.http.Pragma ~ "no-cache" && req.url ~ "raw") || req.request == "PURGE") {
-	   nuke(req.url, req.http.host);
+	if ((req.http.Pragma ~ "xxno-cache" && req.url ~ "raw") || req.request == "PURGE") {
+	  if (req.http.host ~ "images.wikia.com" 
+	      || req.http.host ~ "nocookie.net" 
+	      || req.http.X-Initial-Url ~ "images.wikia.com"
+	      || req.http.X-Initial-Url ~ "nocookie.net") {
+	    nuke(req.url, "origin-images.wikia.com");
+	  } else {
+	    nuke(req.url, req.http.host);
+	  }
+	  if (req.request == "PURGE") {
+	    error 200 "purged";
+	  }
+
 	}
+
 
 	if (req.http.Authenticate) {
 		pass;
@@ -113,12 +151,15 @@ sub vcl_hash {
 	hash;
 }
 
+sub vcl_miss {
+}
 
 #
 ## Called when the requested object has been retrieved from the
 ## backend, or the request to the backend has failed
 #
 sub vcl_fetch {
+
 
 	set obj.http.X-Orighost = req.http.host;
 	set obj.http.X-Served-By-Backend = obj.http.X-Served-By;
@@ -145,9 +186,6 @@ sub vcl_fetch {
 	set obj.grace = 300s;
 
 # ignore the cache rules on images
-	if (req.http.host ~ "images") {
-	  set obj.ttl = 604800s;
-	}
 
 	# do not cache 404
 	if(obj.status == 404) {
@@ -168,14 +206,15 @@ sub vcl_prefetch {
 ## Called before a cached object is delivered to the client
 #
 sub vcl_deliver {
-
-  set resp.http.X-Served-By = "varnish2";
+  
+  set resp.http.X-Served-By = "varnishx";
+  
 
   if (obj.hits > 0) {
-    set resp.http.X-Cache = "HIT";
+    set resp.http.X-Cache = "HIT";	
     set resp.http.X-Cache-Hits = obj.hits;
   } else {
-    set resp.http.X-Cache = "MISS";
+    set resp.http.X-Cache = "MISS";	
   }
 
 
@@ -187,10 +226,10 @@ sub vcl_deliver {
   } elsif ( resp.http.origurl ~ ".*/.*\.(css|js)"
 	    || resp.http.orgiurl ~ "raw") {
 # dont touch it let mediawiki decide
-  } elsif (! resp.http.X-Orig-Host ~ "images") {
+  } elsif (! resp.http.X-Orig-Host ~ "images.wikia.com") {
 # lighttpd knows what it is doing
   } else {
-#follow squid content here
+#follow squid content here 
     set resp.http.cache-control = "private, s-maxage=0, max-age=0, must-revalidate";
   }
 
@@ -220,14 +259,49 @@ sub vcl_deliver {
 	  VRT_SetHdr(sp, HDR_RESP, "\010Expires:", date, vrt_magic_string_end);
 	}
       }
-    }C
+    }C  
        #;
   }
 
   if( resp.http.cache-control ~ "max-age=0") {
     set resp.http.Expires = "Thu, 01 Jan 1970 00:00:00 GMT";
   }
+  
+  deliver;
+}
+
+sub vcl_error {
+  if(req.http.host == "geoip.example.com") {
+  set obj.http.Content-Type = "text/plain";
+    C{
+      GeoIP *gi = geoip();
+      char json[255];
+      char *ip = VRT_IP_string(sp, VRT_r_client_ip(sp));
+      GeoIPRecord *record = GeoIP_record_by_addr(gi, ip);
+
+      if(record) {
+        snprintf(json, 255, "Geo = {\"city\":\"%s\",\"country\":\"%s\",\"lat\":\"%f\",\"lon\":\"%f\",\"classC\":\"%s\",\"netmask\":\"%d\"}",
+                 record->city,
+                 record->country_code,
+                 record->latitude,
+                 record->longitude,
+                 ip,
+                 GeoIP_last_netmask(gi)
+                 );
+        VRT_synth_page(sp, 0, json,  vrt_magic_string_end);
+      } else {
+        VRT_synth_page(sp, 0, "Geo = {}",  vrt_magic_string_end);
+      }
+
+
+    }C
+       }
+       
+       if(req.url ~ "lvscheck.html") {
+       synthetic {"varnish is okay"};
+       }
 
   deliver;
+
 }
 
