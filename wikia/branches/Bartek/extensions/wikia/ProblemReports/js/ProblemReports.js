@@ -24,16 +24,16 @@ YAHOO.wikia.ProblemReportsDialog.prototype = {
 	checkTextareaLength: function(elem) {
 		len = elem.textLength;
 
-		if (len > 512) {
+		if ( (len > 512) && (false == this.blocked) ) {			
+			this.blocked = true;
 			// disable the submit button & show the alert to tell the user what went wrong...
 			YAHOO.util.Dom.addClass('pr_summary', 'errorField');
+			YAHOO.util.Dom.get("pr_submit").disabled = true;
 			this.infobox('Too long', 'You have entered more than 512 characters', "OK", function() {this.hide()});
-			this.blocked = true;
-		} else {
-			if (this.blocked) {
+		} else if ((len <= 512) &&  (this.blocked)) {
 				YAHOO.util.Dom.removeClass('pr_summary', 'errorField');
+				YAHOO.util.Dom.get("pr_submit").disabled = false;
 				this.blocked = false;
-			}			
 		}
 	},
 
