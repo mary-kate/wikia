@@ -29,7 +29,7 @@ YAHOO.wikia.ProblemReportsDialog.prototype = {
 			// disable the submit button & show the alert to tell the user what went wrong...
 			YAHOO.util.Dom.addClass('pr_summary', 'errorField');
 			YAHOO.util.Dom.get("pr_submit").disabled = true;
-			this.infobox('Too long', 'You have entered more than 512 characters', "OK", function() {this.hide()});
+			this.infobox( pr_msg_exchead, pr_msg_exceeded, "OK", function() {this.hide()});
 		} else if ((len <= 512) &&  (this.blocked)) {
 				YAHOO.util.Dom.removeClass('pr_summary', 'errorField');
 				YAHOO.util.Dom.get("pr_submit").disabled = false;

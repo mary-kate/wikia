@@ -70,6 +70,7 @@ function wfProblemReports()
 	
 		// add "Report a problem" link and return html of "Report a problem" dialog
 		$wgHooks['SkinTemplateContentActions'][] = 'wfProblemReportsAddLink';
+		$wgHooks['ExtendJSGlobalVars'][] = 'wfProblemReportsSetupVars';
 	}
 
 	// setup for Special:Log
@@ -115,3 +116,12 @@ function wfProblemReports()
 		wfLoadExtensionMessages('ProblemReports');
 	}
 }
+
+function wfProblemReportsSetupVars($vars) {
+
+        $vars['pr_msg_exceeded'] = wfMsg('pr_msg_exceeded');
+        $vars['pr_msg_exchead'] = wfMsg('pr_msg_exchead') ;
+
+        return true;
+}
+
