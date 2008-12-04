@@ -1215,6 +1215,33 @@ FCKInsertTemplateCommand.prototype = {
 	}
 };
 
+// generate wikitext for template
+FCK.GenerateTemplateWikitext = function(name, params) {
+	var wikitext = '';
+
+	wikitext = '{{' + name;
+
+	var paramsCount = 0;
+	
+	// parameters name and value
+	for(key in params) {
+		var value = params[key];
+	
+		if (value == '') continue; // ignore empty parameters
+
+		wikitext += '\n|' + key + '=' + value;
+		paramsCount++;
+	}
+
+	// close template markup
+	wikitext += (paramsCount ? '\n}}' : '}}');
+
+	// debug
+	FCK.log('template wikisyntax >>' + wikitext + '<<');
+
+	return wikitext;
+}
+
 // add new / update template
 FCK.InsertTemplate = function(refid, name, params) {
 	FCK.log([refid, name, params]);
@@ -1255,24 +1282,7 @@ FCK.InsertTemplate = function(refid, name, params) {
 	placeholder.value = name;
 
 	// generate new wikitext
-        var wikitext = '';
-
-	wikitext = '{{' + name;
-
-	var paramsCount = 0;
-	
-	// parameters name and value
-	for(key in params) {
-		var value = params[key];
-	
-		if (value == '') continue; // ignore empty parameters
-
-		wikitext += '\n|' + key + '=' + value;
-		paramsCount++;
-	}
-
-	// close template markup
-	wikitext += (paramsCount ? '\n}}' : '}}');
+        var wikitext = FCK.GenerateTemplateWikitext(name, params);
 
 	// update metaData and send AJAX request to generate template preview
 	FCK.wysiwygData[refid].name = name;
