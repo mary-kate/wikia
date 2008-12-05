@@ -348,7 +348,9 @@ class ApiMain extends ApiBase {
 		$this->mAction = $params['action'];
 
 		// Instantiate the module requested by the user
-		if ( (is_object( $this->mModules[$this->mAction] ) || ('' != $this->mModules[$this->mAction]) ) && class_exists( $this->mModules[$this->mAction] )) {
+
+		# RT #1576 5.12.2008 Bartek
+		if ( class_exists( $this->mModules[$this->mAction] ) )  {
 			$module = new $this->mModules[$this->mAction] ($this, $this->mAction);
 		} else {
 			ApiBase :: dieUsage( "Trying to load a nonexistant or undefined classname" );
