@@ -1233,13 +1233,13 @@ FCK.GenerateTemplateWikitext = function(name, params) {
 	
 	// parameters name and value
 	for(key in params) {
-		var value = params[key];
+		var value = FCK.YAHOO.Tools.trim(params[key]);
 	
 		if (value == '') continue; // ignore empty parameters
 
 		var fill = FCK.YAHOO.Tools.stringRepeat(' ', longestParam - key.length);
 
-		wikitext += '\n|' + key + fill + ' =' + value;
+		wikitext += '\n|' + key + fill + ' = ' + value;
 		paramsCount++;
 	}
 
