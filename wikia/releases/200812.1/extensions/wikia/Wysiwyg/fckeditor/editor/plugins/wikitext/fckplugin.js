@@ -1222,6 +1222,14 @@ FCK.GenerateTemplateWikitext = function(name, params) {
 	wikitext = '{{' + name;
 
 	var paramsCount = 0;
+	var longestParam = 0;
+
+	// find length of the longest param
+	for (key in params) {
+		if ( (params[key] != '') && (longestParam < key.length) ) {
+			longestParam = key.length;
+		}
+	}
 	
 	// parameters name and value
 	for(key in params) {
@@ -1229,7 +1237,9 @@ FCK.GenerateTemplateWikitext = function(name, params) {
 	
 		if (value == '') continue; // ignore empty parameters
 
-		wikitext += '\n|' + key + '=' + value;
+		var fill = FCK.YAHOO.Tools.stringRepeat(' ', longestParam - key.length);
+
+		wikitext += '\n|' + key + fill + ' =' + value;
 		paramsCount++;
 	}
 
@@ -1237,7 +1247,7 @@ FCK.GenerateTemplateWikitext = function(name, params) {
 	wikitext += (paramsCount ? '\n}}' : '}}');
 
 	// debug
-	FCK.log('template wikisyntax >>' + wikitext + '<<');
+	FCK.log('template wikisyntax >>' + wikitext + '<< (longest param: ' + longestParam + ')');
 
 	return wikitext;
 }
