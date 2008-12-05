@@ -569,7 +569,6 @@ class EmailNotification {
 	 * @private
 	 */
 	function sendPersonalised( $watchingUser ) {
-		global $wgLang;
 		// From the PHP manual:
 		//     Note:  The to parameter cannot be an address in the form of "Something <someone@example.com>".
 		//     The mail command will not parse this properly while talking with the MTA.
