@@ -2123,6 +2123,8 @@ class Parser
 	}
 	/**#@-*/
 
+	var $mCurrentPrefix = '';
+
 	/**
 	 * Make lists from lines starting with ':', '*', '#', etc.
 	 *
@@ -2166,6 +2168,9 @@ class Parser
 				$pref = $pref2 = '';
 				$t = $oLine;
 			}
+
+			// macbre: change for FCK
+			$this->mCurrentPrefix = $pref;
 
 			# List generation
 			if( $prefixLength && 0 == strcmp( $lastPrefix, $pref2 ) ) {
