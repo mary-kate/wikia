@@ -986,6 +986,7 @@ class Parser
 		$text = $this->replaceInternalLinks( $text );
 		$text = $this->replaceExternalLinks( $text );
 
+		//Wysiwyg: remove marker
 		if(!empty($wgWysiwygParserEnabled)) {
 			$text = preg_replace('/\x7e-start-\d+-stop/', '', $text);
 		}
@@ -1308,6 +1309,7 @@ class Parser
 			# Set linktype for CSS - if URL==text, link is essentially free
 			$linktype = ($text == $url) ? 'free' : 'text';
 
+			//Wysiwyg: restore original external link
 			if (!empty($wgWysiwygParserEnabled)) {
 				global $wgWikitext;
 				$originalWikitext = '';
@@ -1343,6 +1345,7 @@ class Parser
 			# replacing any non-bracketed links
 			$trail = $this->replaceFreeExternalLinks( $trail );
 
+			//Wysiwyg: mark element and add metadata to wysiwyg array
 			if (!empty($wgWysiwygParserEnabled)) {
 				Wysiwyg_SetRefId('external link', array('text' => &$text, 'link' => $url, 'wasblank' => $wasblank, 'original' => $originalWikitext));
 			}
@@ -1430,6 +1433,7 @@ class Parser
 				$text = $this->maybeMakeExternalImage( $url );
 				if ( $text === false ) {
 					$description = $wgContLang->markNoConversion($url);
+					//Wysiwyg: mark element and add metadata to wysiwyg array
 					if (!empty($wgWysiwygParserEnabled)) {
 						Wysiwyg_SetRefId('external link: raw', array('text' => &$description, 'link' => $url));
 					}
@@ -1501,6 +1505,7 @@ class Parser
 			if ( preg_match( self::EXT_IMAGE_REGEX, $url ) ) {
 				# Image found
 				global $wgWysiwygParserEnabled;
+				//Wysiwyg: mark element and add metadata to wysiwyg array
 				if (!empty($wgWysiwygParserEnabled)) {
 					Wysiwyg_SetRefId('external link: raw image', array('text' => &$url));
 				} else {
@@ -1580,6 +1585,7 @@ class Parser
 		for ($k = 0; isset( $a[$k] ); $k++) {
 			$line = $a[$k];
 
+			//Wysiwyg: restore original internal link
 			if (!empty($wgWysiwygParserEnabled)) {
 				global $wgWikitext;
 				$originalWikitext = '';
@@ -1748,6 +1754,7 @@ class Parser
 						# recursively parse links inside the image caption
 						# actually, this will parse them in any other parameters, too,
 						# but it might be hard to fix that, and it doesn't matter ATM
+						//Wysiwyg: mark image and add metadata to wysiwyg array, parse links in caption without wysiwyg related actions
 						if (!empty($wgWysiwygParserEnabled)) {
 							Wysiwyg_SetRefId('image', array('text' => &$text, 'link' => $link, 'wasblank' => $wasblank, 'noforce' => $noforce, 'original' => $originalWikitext));
 							$wgWysiwygParserEnabled = false;
@@ -1765,6 +1772,7 @@ class Parser
 						wfProfileOut( "$fname-image" );
 						continue;
 					} else {
+						//Wysiwyg: mark image and add metadata to wysiwyg array
 						if (!empty($wgWysiwygParserEnabled)) {
 							$FCKtmp = Wysiwyg_SetRefId('image', array('text' => &$text, 'link' => $link, 'wasblank' => $wasblank, 'noforce' => $noforce, 'original' => $originalWikitext));
 							$s .= $prefix . $this->armorLinks($FCKtmp) . $trail;
@@ -1781,6 +1789,7 @@ class Parser
 				if ( $ns == NS_CATEGORY ) {
 					wfProfileIn( "$fname-category" );
 					$s = rtrim($s . "\n"); # bug 87
+					//Wysiwyg: mark element and add metadata to wysiwyg array
 					if (!empty($wgWysiwygParserEnabled)) {
 						$FCKtmp = Wysiwyg_SetRefId('category', array('text' => &$text, 'link' => $link, 'wasblank' => $wasblank, 'noforce' => $noforce, 'original' => $originalWikitext), false);
 					}
@@ -1798,6 +1807,7 @@ class Parser
 					 * Strip the whitespace Category links produce, see bug 87
 					 * @todo We might want to use trim($tmp, "\n") here.
 					 */
+					//Wysiwyg: don't strip new lines and replace category with placeholders
 					if (!empty($wgWysiwygParserEnabled)) {
 						$s .= $prefix . $FCKtmp . $trail;
 					} else {
@@ -1812,8 +1822,8 @@ class Parser
 			# Self-link checking
 			if( $nt->getFragment() === '' ) {
 				if( in_array( $nt->getPrefixedText(), $selflink, true ) ) {
+					//Wysiwyg: do not use 'continue' so we can handle self link as a regular link
 					if (!$wgWysiwygParserEnabled) {
-						//do not use 'continue' so we can handle self link as a regular link
 						$s .= $prefix . $sk->makeSelfLinkObj( $nt, $text, '', $trail );
 						continue;
 					}
@@ -1822,6 +1832,7 @@ class Parser
 
 			# Special and Media are pseudo-namespaces; no pages actually exist in them
 			if( $ns == NS_MEDIA ) {
+				//Wysiwyg: mark element and add metadata to wysiwyg array
 				if (!empty($wgWysiwygParserEnabled)) {
 					$FCKtmp = Wysiwyg_SetRefId('internal link: media', array('text' => &$text, 'link' => $link, 'wasblank' => $wasblank, 'noforce' => $noforce), false);
 					$s .= $prefix . $FCKtmp . $trail;
@@ -1840,6 +1851,7 @@ class Parser
 				}
 				continue;
 			} elseif( $ns == NS_SPECIAL ) {
+				//Wysiwyg: mark element and add metadata to wysiwyg array
 				if (!empty($wgWysiwygParserEnabled)) {
 					Wysiwyg_SetRefId('internal link: special page', array('text' => &$text, 'link' => $link, 'trail' => $trail, 'wasblank' => $wasblank, 'noforce' => $noforce));
 				}
@@ -1855,6 +1867,7 @@ class Parser
 					// Force a blue link if the file exists; may be a remote
 					// upload on the shared repository, and we want to see its
 					// auto-generated page.
+					//Wysiwyg: mark element and add metadata to wysiwyg array
 					if (!empty($wgWysiwygParserEnabled)) {
 						Wysiwyg_SetRefId('internal link: file', array('text' => &$text, 'link' => $link, 'trail' => $trail, 'wasblank' => $wasblank, 'noforce' => $noforce));
 					}
@@ -1863,6 +1876,7 @@ class Parser
 					continue;
 				}
 			}
+			//Wysiwyg: mark element and add metadata to wysiwyg array
 			if (!empty($wgWysiwygParserEnabled)) {
 				Wysiwyg_SetRefId('internal link', array('text' => &$text, 'link' => $link, 'trail' => $trail, 'wasblank' => $wasblank, 'noforce' => $noforce, 'original' => $originalWikitext));
 			}
@@ -2817,7 +2831,7 @@ class Parser
 	 * @private
 	 */
 	function braceSubstitution( $piece, $frame ) {
-		global $wgContLang, $wgLang, $wgAllowDisplayTitle, $wgNonincludableNamespaces, $wgWysiwygParserEnabled;
+		global $wgContLang, $wgLang, $wgAllowDisplayTitle, $wgNonincludableNamespaces;
 		$fname = __METHOD__;
 		wfProfileIn( $fname );
 		wfProfileIn( __METHOD__.'-setup' );
@@ -3341,6 +3355,7 @@ class Parser
 				case 'html':
 					if( $wgRawHtml ) {
 						$output = $content;
+						//Wysiwyg: mark element and add metadata to wysiwyg array
 						if (!empty($wgWysiwygParserEnabled)) {
 							$output = Wysiwyg_SetRefId('html', array('text' => &$content), false);
 						}
@@ -3350,6 +3365,7 @@ class Parser
 					}
 				case 'nowiki':
 					$output = Xml::escapeTagsOnly( $content );
+					//Wysiwyg: mark element and add metadata to wysiwyg array
 					if (!empty($wgWysiwygParserEnabled)) {
 						$output = Wysiwyg_SetRefId('nowiki', array('text' => &$content), false);
 					}
@@ -3361,6 +3377,7 @@ class Parser
 					break;
 				*/
 				case 'gallery':
+					//Wysiwyg: mark element and add metadata to wysiwyg array, don't render gallery to HTML
 					if (!empty($wgWysiwygParserEnabled)) {
 						$content = "<gallery$attrText>$content</gallery>";
 						$output = Wysiwyg_SetRefId('gallery', array('text' => &$content), false);
@@ -3374,6 +3391,7 @@ class Parser
 						if ( !is_callable( $this->mTagHooks[$name] ) ) {
 							throw new MWException( "Tag hook for $name is not callable\n" );
 						}
+						//Wysiwyg: mark element and add metadata to wysiwyg array, don't render parser hook
 						if (!empty($wgWysiwygParserEnabled)) {
 							$tmp = ($content != ''
 								? "<{$name}{$attrText}>{$content}</{$name}>"
@@ -3457,6 +3475,7 @@ class Parser
 			$this->mForceTocPosition = true;
 
 			// Set a placeholder. At the end we'll fill it in with the TOC.
+			//Wysiwyg: mark element and add metadata to wysiwyg array, replace __TOC__ to temporary placeholder
 			if (!empty($wgWysiwygParserEnabled)) {
 				$tmp = '__TOC__';
 				$FCKtmp = Wysiwyg_SetRefId('double underscore: toc', array('text' => &$tmp), false);
@@ -3489,6 +3508,7 @@ class Parser
 				wfDebug( __METHOD__.": [[MediaWiki:hidden-category-category]] is not a valid title!\n" );
 			}
 		}
+		//Wysiwyg: replace temporary placeholder to __TOC__
 		if (!empty($wgWysiwygParserEnabled)) {
 			$text = str_replace('<!--MWTOC-->', '__TOC__', $text);
 		}
@@ -3831,6 +3851,7 @@ class Parser
 		$text = $this->replaceVariables( $text );
 
 		# Signatures
+		//Wysiwyg: mark element and add metadata to wysiwyg array, don't render signature, replace tildes with placeholder
 		if ($wgWysiwygParserTildeEnabled) {
 			$text = preg_replace_callback('/~{3,5}/', create_function('$tilde', 'return Wysiwyg_SetRefId("tilde", array("text" => &$tilde[0]), false);'), $text);
 		} else {	//original code
@@ -4606,11 +4627,13 @@ class Parser
 		#  * bottom
 		#  * text-bottom
 
+		//Wysiwyg: get refId and remove it from wikitext
 		if (!empty($wgWysiwygParserEnabled)) {
 			$refId = Wysiwyg_GetRefId($options, true);
 		}
 
 		$parts = array_map( 'trim', explode( '|', $options) );
+		//Wysiwyg: remove markers
 		if (!empty($wgWysiwygParserEnabled)) {
 			$parts = array_map( create_function('$par', 'return preg_replace(\'%\x7f-wtb-(\d+)-\x7f(.*?)\x7f-wte-\1-\x7f%si\', \'\\2\', $par);'), $parts);
 		}
@@ -4699,6 +4722,7 @@ class Parser
 			$params['frame']['valign'] = key( $params['vertAlign'] );
 		}
 
+		//Wysiwyg: add original data for image
 		if (!empty($wgWysiwygParserEnabled)) {
 			$params['frame']['alt'] = '';
 			$params['frame']['refid'] = $refId;
