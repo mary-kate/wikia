@@ -189,10 +189,15 @@ class ReverseParser {
 
 					case 'p':
 						if($textContent{0} == ' ') {
-							$textContent = '<nowiki> </nowiki>' . substr($textContent, 1);
+							$textContent = '&nbsp;' . substr($textContent, 1);
 						}
 
 						$out = $textContent;
+
+						// handle <dt> elements being rendered as p.definitionTerm
+						if ($this->hasCSSClass($node, 'definitionTerm')) {
+							$out = ';' . $out;
+						}
 
 						// handle indentations
 						$indentation = $this->getIndentationLevel($node);
@@ -201,7 +206,7 @@ class ReverseParser {
 						}
 
 						// new line logic
-						if($node->previousSibling && $node->previousSibling->nodeName == 'p') {
+						if($node->previousSibling && $node->previousSibling->nodeName == 'p' && !$indentation) {
 							// paragraph after paragraph
 							$out = "\n\n{$out}";
 						} else {
