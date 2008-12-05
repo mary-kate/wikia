@@ -84,6 +84,7 @@ class Preprocessor_DOM implements Preprocessor {
 			)
 		);
 
+		//Wysiwyg: add rules to handle external links
 		if(!empty($wgWysiwygParserEnabled)) {
 			$rules['['] = array(
 				'end' => ']',
@@ -501,8 +502,8 @@ class Preprocessor_DOM implements Preprocessor {
 					// No element, just literal text
 					$element = $piece->breakSyntax( $matchingCount ) . str_repeat( $rule['end'], $matchingCount );
 
+					//Wysiwyg: add proper marker to internal or external link
 					if(!empty($wgWysiwygParserEnabled)) {
-
 						global $wgWikitext;
 						$wgWikitext[] = $element;
 						if($name === null) {
@@ -510,7 +511,6 @@ class Preprocessor_DOM implements Preprocessor {
 						} else if($name === 'external') {
 							$element .= "\x7e-start-".(count($wgWikitext)-1)."-stop";
 						}
-
 					}
 				} else {
 					# Create XML element
@@ -530,7 +530,7 @@ class Preprocessor_DOM implements Preprocessor {
 					$element = "<$name$attr>";
 					$element .= "<title>$title</title>";
 
-					# Wysiwyg
+					//Wysiwyg: add original wikitext for template call to XML
 					if($flags == 0 && $wgWysiwygParserEnabled && $count == 2 && $curChar == "}") {
 						$closeAt[] = $i;
 						if(count($closeAt) == count($openAt)) {
@@ -959,6 +959,7 @@ class PPFrame_DOM implements PPFrame {
 						if ( isset( $ret['object'] ) ) {
 							$newIterator = $ret['object'];
 						} else {
+							//Wysiwyg: mark template call and add metadata to wysiwyg array
 							if($wgWysiwygParserEnabled && ($originalCall = $xpath->query( 'originalCall', $contextNode )->item( 0 ))) {
 								$out .= Wysiwyg_WrapTemplate($originalCall->textContent, $ret['text'], $lineStart);
 							} else {
