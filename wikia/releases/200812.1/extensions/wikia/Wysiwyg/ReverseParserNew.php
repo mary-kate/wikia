@@ -94,7 +94,8 @@ class ReverseParser {
 					case 'h1':
 					case 'h2':
 						$level = intval($node->nodeName{1});
-						$out = str_repeat('=', $level) . $node->textContent . str_repeat('=', $level) . "\n";
+						$newlinesAfter = intval($node->getAttribute('linesafter')) + 1;
+						$out = str_repeat('=', $level) . $node->textContent . str_repeat('=', $level) . str_repeat("\n", $newlinesAfter);
 						break;
 				}
 				break;

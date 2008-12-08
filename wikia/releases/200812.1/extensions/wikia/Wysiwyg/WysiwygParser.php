@@ -104,6 +104,27 @@ class WysiwygParser extends Parser {
 	}
 	/**#@-*/
 
+	/**
+	 * Parse headers and return html
+	 *
+	 * @private
+	 */
+	function doHeadings( $text ) {
+		$fname = 'Parser::doHeadings';
+		wfProfileIn( $fname );
+		for ( $i = 6; $i >= 1; --$i ) {
+			$h = str_repeat( '=', $i );
+			$text = preg_replace_callback( "/^($h)(.+)$h(\\s*)$/m",
+			  create_function(
+				'$matches',
+				'$i = strlen($matches[1]); return "<h$i linesafter=\"".strlen($matches[3])."\">$matches[2]</h$i>";'
+			  ),
+			  $text );
+		}
+		wfProfileOut( $fname );
+		return $text;
+	}
+
 	function __construct( $conf = array() ) {
 		parent::__construct($conf);
 
