@@ -318,7 +318,15 @@ function Wysiwyg_WikiTextToHtml($wikitext, $articleId = -1, $encode = false) {
 }
 
 function Wysiwyg_HtmlToWikiText($html, $wysiwygData, $decode = false) {
-	require_once(dirname(__FILE__).'/ReverseParser.php');
+	global $wgUseNewReverseParser;
+
+	if (empty($wgUseNewReverseParser)) {
+		require_once(dirname(__FILE__).'/ReverseParser.php');
+	}
+	else {
+		require_once(dirname(__FILE__).'/ReverseParserNew.php');
+	}
+
 	$reverseParser = new ReverseParser();
 	return $reverseParser->parse($html, $decode ? Wikia::json_decode($wysiwygData, true) : $wysiwygData);
 }
