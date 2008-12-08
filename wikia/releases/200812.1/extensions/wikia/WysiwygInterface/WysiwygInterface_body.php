@@ -42,7 +42,7 @@ class WysiwygInterface extends SpecialPage {
 			$out = mb_convert_encoding($out, 'HTML-ENTITIES', "UTF-8");
 
 			$dom = new DOMDocument();
-
+/*
 			if (!empty($out)) {
 
 				wfSuppressWarnings();
@@ -65,6 +65,8 @@ class WysiwygInterface extends SpecialPage {
 			else {
 				$html = '';
 			}
+*/
+			$out = '<pre>'.htmlspecialchars($out).'</pre>';
 
 			// macbre: call ReverseParser to parse HTML back to wikimarkup
 			$wgOut->addHtml('<h5>$wgWysiwygMetaData</h5>');
