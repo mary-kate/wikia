@@ -34,7 +34,7 @@ class WysiwygParser extends Parser {
 		$result = $this->closeParagraph();
 
 		if ( ':' == $char) {
-			if ( substr($this->mCurrentPrefix, -1) == ':' ) {
+			if ( substr($this->mCurrentPrefix, -1) == ':' && $this->mLastCommonPrefix ) {
 				$this->mLast = 'open';
 				$this->mListLevel = strlen($this->mCurrentPrefix);
 				$style = ' style="margin-left:'.($this->mListLevel*40).'px"';
@@ -65,7 +65,7 @@ class WysiwygParser extends Parser {
 		return $result;
 	}
 
-/* private */ function nextItem( $char ) {
+	/* private */ function nextItem( $char ) {
 		if ( ':' == $char ) {
 			$this->mListLevel = strlen($this->mCurrentPrefix);
 			$style = ' style="margin-left:'.($this->mListLevel*40).'px"';
