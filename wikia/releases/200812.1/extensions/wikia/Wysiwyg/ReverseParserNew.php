@@ -36,7 +36,7 @@ class ReverseParser {
 				'<p><br /></p>' => "\n"
 			);
 
-			$html = strtr($html, $replacements);
+			//$html = strtr($html, $replacements);
 
 			// fix for proper encoding of UTF characters
 			$html = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/></head><body>'.$html.'</body></html>';
@@ -82,6 +82,9 @@ class ReverseParser {
 
 		switch($node->nodeType) {
 			case XML_ELEMENT_NODE:
+
+				$refid = $node->getAttribute('refid');
+
 				switch($node->nodeName) {
 					case 'body':
 						$out = $childOut;
@@ -93,9 +96,19 @@ class ReverseParser {
 
 					case 'h1':
 					case 'h2':
-						$level = intval($node->nodeName{1});
-						$newlinesAfter = intval($node->getAttribute('linesafter')) + 1;
-						$out = str_repeat('=', $level) . $node->textContent . str_repeat('=', $level) . str_repeat("\n", $newlinesAfter);
+					case 'h3':
+					case 'h4':
+					case 'h5':
+					case 'h6':
+						$tag = str_repeat('=', intval($node->nodeName{1}));
+						$out = $tag.$node->textContent.$tag;
+
+						if(!empty($this->fckData[$refid])) {
+							$out = str_repeat("\n", $this->fckData[$refid]['linesBefore']).$out.str_repeat("\n", $this->fckData[$refid]['linesAfter']);
+						} else {
+							$out .= "\n";
+						}
+
 						break;
 				}
 				break;
