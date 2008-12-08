@@ -57,9 +57,40 @@ class ReverseParser {
 	private function parseNode($node, $level = 0) {
 		wfProfileIn(__METHOD__);
 
-		wfDebug("ReverseParser: {$node->nodeName}\n");
+		wfDebug('ReverseParser: ' . str_repeat(' ', $level) . $node->nodeName . "\n");
 
+		$childOut = '';
+
+		// parse child nodes
+		if($node->hasChildNodes()) {
+			$nodes = $node->childNodes;
+			for($n = 0; $n < $nodes->length; $n++) {
+				$childOut .= $this->parseNode($nodes->item($n), $level+1);
+			}
+		}
+
+		// parse current node
 		$out = '';
+
+		switch($node->nodeType) {
+			case XML_ELEMENT_NODE:
+				switch($node->nodeName) {
+					case 'body':
+						$out = $childOut;
+						break;
+
+					case 'p':
+						$out = $node->textContent."\n";
+						break;
+
+					case 'h1':
+					case 'h2':
+						$level = intval($node->nodeName{1});
+						$out = str_repeat('=', $level) . $node->textContent . str_repeat('=', $level);
+						break;
+				}
+				break;
+		}
 
 		wfProfileOut(__METHOD__);
 		return $out;
