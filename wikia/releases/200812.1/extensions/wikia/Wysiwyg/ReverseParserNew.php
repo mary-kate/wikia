@@ -30,6 +30,14 @@ class ReverseParser {
 		$out = '';
 
 		if(is_string($html) && $html != '') {
+			// cleanup
+			$replacements = array(
+				' <h' => '<h',
+				'<p><br /></p>' => "\n"
+			);
+
+			$html = strtr($html, $replacements);
+
 			// fix for proper encoding of UTF characters
 			$html = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/></head><body>'.$html.'</body></html>';
 
@@ -86,9 +94,13 @@ class ReverseParser {
 					case 'h1':
 					case 'h2':
 						$level = intval($node->nodeName{1});
-						$out = str_repeat('=', $level) . $node->textContent . str_repeat('=', $level);
+						$out = str_repeat('=', $level) . $node->textContent . str_repeat('=', $level) . "\n";
 						break;
 				}
+				break;
+
+			case XML_TEXT_NODE:
+				$out = $node->textContent;
 				break;
 		}
 
