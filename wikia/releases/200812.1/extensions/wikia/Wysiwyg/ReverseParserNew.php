@@ -1,7 +1,6 @@
 <?php
 /**
- * PHP Reverse Parser - Processes given HTML into DOM tree and
- * transform it into wikimarkup (new development version)
+ * PHP Reverse Parser - Processes given HTML into wikimarkup (new development version)
  *
  * @author Maciej 'macbre' Brencz <macbre(at)wikia-inc.com>
  * @author Inez Korczynski <inez(at)wikia-inc.com>
@@ -10,52 +9,51 @@
  */
 class ReverseParser {
 
-	// DOMDocument
+	// DOMDocument for processes HTML
 	private $dom;
 
-	// FCK meta data
-	private $fckData = array();
+	// Wysiwyg/FCK meta data
+	private $data = array();
 
 	// cache results of wfUrlProtocols()
-	private $protocols;
+	private $urlProtocols;
+
+	private function getUrlProtocols() {
+		if(empty($this->urlProtocols)) {
+			$this->urlProtocols = wfUrlProtocols();
+		}
+		return $this->urlProtocols;
+	}
 
 	function __construct() {
 		$this->dom = new DOMdocument();
-		$this->protocols = wfUrlProtocols();
 	}
 
-	public function parse($html, $wysiwygData = array()) {
+	public function parse($html, $data = array()) {
 		wfProfileIn(__METHOD__);
 
 		$out = '';
 
 		if(is_string($html) && $html != '') {
-			// cleanup
-			$replacements = array(
-				' <h' => '<h',
-				'<p><br /></p>' => "\n"
-			);
-
-			//$html = strtr($html, $replacements);
 
 			// fix for proper encoding of UTF characters
 			$html = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/></head><body>'.$html.'</body></html>';
 
-			$this->fckData = $wysiwygData;
+			$this->data = $data;
 
-			wfDebug("metaData: ".print_r($this->fckData, true)."\n");
+			wfDebug("Wysiwyg ReverseParserNew data: ".print_r($this->data, true)."\n");
 
-			wfDebug("ReverseParserNew HTML: {$html}\n");
+			wfDebug("Wysiwyg ReverseParserNew HTML: $html\n");
 
 			wfSuppressWarnings();
 			if($this->dom->loadHTML($html)) {
 				$body = $this->dom->getElementsByTagName('body')->item(0);
-				wfDebug("ReverseParser HTML from DOM: ".$this->dom->saveHTML()."\n");
+				wfDebug("Wysiwyg ReverseParserNew HTML from DOM: ".$this->dom->saveHTML()."\n");
 				$out = $this->parseNode($body);
 			}
 			wfRestoreWarnings();
 
-			wfDebug("ReverseParserNew wikitext: {$out}\n");
+			wfDebug("Wysiwyg ReverseParserNew wikitext: {$out}\n");
 		}
 
 		wfProfileOut(__METHOD__);
@@ -65,7 +63,7 @@ class ReverseParser {
 	private function parseNode($node, $level = 0) {
 		wfProfileIn(__METHOD__);
 
-		wfDebug('ReverseParser: ' . str_repeat(' ', $level) . $node->nodeName . "\n");
+		wfDebug("Wysiwyg ReverseParserNew level: ".str_repeat('.', $level).$node->nodeName."\n");
 
 		$childOut = '';
 
@@ -80,20 +78,43 @@ class ReverseParser {
 		// parse current node
 		$out = '';
 
+		$textContent = ($childOut != '') ? $childOut : $node->textContent;
+
 		switch($node->nodeType) {
 			case XML_ELEMENT_NODE:
 
 				$refid = $node->getAttribute('refid');
 
+				if(!empty($refid)) {
+					$nodeData = $this->data[$refid];
+				}
+
 				switch($node->nodeName) {
 					case 'body':
-						$out = $childOut;
+						$out = $textContent;
+						break;
+
+					case 'br':
+						$out = "\n\n";
 						break;
 
 					case 'p':
-						$out =  ($this->previousNodeIs($node, 'p') ? "\n" : '') . $node->textContent . "\n";
+
+						if($node->previousSibling->nodeName == 'p') {
+							$textContent = "\n" . $textContent;
+							if($node->firstChild->nodeName == 'br') {
+								$textContent = substr($textContent, 1);
+							}
+						}
+
+						if($textContent == '') {
+							$textContent = "\n";
+						}
+
+						$out = $textContent."\n";
 						break;
 
+/*
 					case 'h1':
 					case 'h2':
 					case 'h3':
@@ -110,11 +131,15 @@ class ReverseParser {
 						}
 
 						break;
+*/
 				}
 				break;
 
 			case XML_TEXT_NODE:
-				$out = $node->textContent;
+				if($node->previousSibling->nodeName == 'br' && $textContent{0} == " ") {
+					$textContent = substr($textContent, 1);
+				}
+				$out = $textContent;
 				break;
 		}
 
@@ -122,7 +147,4 @@ class ReverseParser {
 		return $out;
 	}
 
-	private function previousNodeIs($node, $name) {
-		return ($node->previousSibling && $node->previousSibling->nodeName == $name);
-	}
 }
