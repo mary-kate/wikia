@@ -300,7 +300,11 @@ function Wysiwyg_WikiTextToHtml($wikitext, $articleId = -1, $encode = false) {
 	if(count($matches[1]) > 0) {
 		$templateCallsToParse = array();
 		foreach($matches[1] as $val) {
-			$templateCallsToParse[] = $wgWysiwygMetaData[$val]['originalCall'];
+			$originalCall = $wgWysiwygMetaData[$val]['originalCall'];
+			if($originalCall{strlen($originalCall)-1} != "\n") {
+				$originalCall .= "\n";
+			}
+			$templateCallsToParse[] = $originalCall;
 		}
 
 		$templateParser = new Parser();
@@ -353,6 +357,10 @@ function Wysiwyg_WrapTemplate($originalCall, $output, $lineStart) {
 	}
 
 	$wgWysiwygMetaData[$refId] = $data;
+
+	if($output{strlen($output)-1} != "\n") {
+		$output .= "\n";
+	}
 
 	return "\x7f-wtb-{$refId}-\x7f{$output}\x7f-wte-{$refId}-\x7f";
 }
