@@ -109,19 +109,17 @@ class WysiwygParser extends Parser {
 	 *
 	 * @private
 	 */
-	function doHeadings( $text ) {
+	function doHeadings($text) {
 		$fname = 'Parser::doHeadings';
-		wfProfileIn( $fname );
-		for ( $i = 6; $i >= 1; --$i ) {
-			$h = str_repeat( '=', $i );
-			$text = preg_replace_callback( "/(\\s*)^$h(.+)$h(\\s*)$/mi",
-			  create_function(
-				'$matches',
-				'return "$matches[1]<h'.$i.' linesafter=\"".strlen($matches[3])."\" linesbefore=\"".strlen($matches[1])."\">$matches[2]</h'.$i.'>";'
-			  ),
-			  $text );
+		wfProfileIn($fname);
+		for($i = 6; $i >= 1; --$i) {
+			$h = str_repeat('=', $i);
+			$text = preg_replace_callback( "/(\\s*)^$h(.+)$h(\\s*)/mi",
+				 create_function(
+				 	'$matches', '$refId = Wysiwyg_SetRefId(\'heading\', array(\'level\' => '.$i.', \'linesBefore\' => count(explode("\n", $matches[1]))-1, \'linesAfter\' => count(explode("\n", $matches[3]))-1), false, true); return "$matches[1]<h'.$i.' refid=$refId>$matches[2]</h'.$i.'>";'
+				 ),$text );
 		}
-		wfProfileOut( $fname );
+		wfProfileOut($fname);
 		return $text;
 	}
 

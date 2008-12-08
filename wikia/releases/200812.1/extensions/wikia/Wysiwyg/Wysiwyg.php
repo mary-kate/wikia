@@ -392,6 +392,9 @@ function Wysiwyg_SetRefId($type, $params, $addMarker = true, $returnId = false) 
 	);
 
 	switch ($type) {
+		case 'heading' :
+			$data = $params;
+			break;
 		case 'external link':
 			$data['href'] = $params['link'];
 //			$data['description'] = $params['wasblank'] ? '' : $params['text'];
