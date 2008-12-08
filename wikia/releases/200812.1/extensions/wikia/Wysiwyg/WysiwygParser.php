@@ -81,7 +81,7 @@ class WysiwygParser extends Parser {
 		else if ( '*' == $char || '#' == $char ) { return '</li><li>'; }
 		else if ( ';' == $char ) {
 			$indentLevel = strspn($this->mCurrentPrefix, ':');
-			return '</p><!-- next ; --><p class="definitionTerm" style="margin-left: '.($indentLevel*40).'px">';
+			return '</p><p class="definitionTerm" style="margin-left: '.($indentLevel*40).'px">';
 		}
 		return '<!-- ERR 2 -->';
 	}
