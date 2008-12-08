@@ -88,7 +88,7 @@ class ReverseParser {
 						break;
 
 					case 'p':
-						$out = $node->textContent."\n";
+						$out =  ($this->previousNodeIs($node, 'p') ? "\n" : '') . $node->textContent . "\n";
 						break;
 
 					case 'h1':
@@ -106,5 +106,9 @@ class ReverseParser {
 
 		wfProfileOut(__METHOD__);
 		return $out;
+	}
+
+	private function previousNodeIs($node, $name) {
+		return ($node->previousSibling && $node->previousSibling->nodeName == $name);
 	}
 }
