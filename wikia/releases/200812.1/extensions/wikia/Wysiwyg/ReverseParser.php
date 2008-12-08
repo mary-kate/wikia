@@ -188,19 +188,22 @@ class ReverseParser {
 						break;
 
 					case 'p':
-						if($textContent{0} == ' ') {
-							$textContent = '&nbsp;' . substr($textContent, 1);
-						}
-
-						$out = $textContent;
+						// detect indented paragraph (margin-left CSS property)
+						$indentation = $this->getIndentationLevel($node);
 
 						// handle <dt> elements being rendered as p.definitionTerm
 						if ($this->hasCSSClass($node, 'definitionTerm')) {
-							$out = ';' . $out;
+							$out = ';' . $textContent;
+						}
+						// replace initial space with &nbsp;
+						else if($textContent{0} == ' ' && $indentation === false) {
+							$out = '&nbsp;' . substr($textContent, 1);
+						}
+						else {
+							$out = $textContent;
 						}
 
 						// handle indentations
-						$indentation = $this->getIndentationLevel($node);
 						if ($indentation !== false) {
 							$out = str_repeat(':', $indentation) . $out;
 						}
