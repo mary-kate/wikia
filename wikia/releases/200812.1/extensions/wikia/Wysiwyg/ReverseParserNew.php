@@ -63,4 +63,5 @@ class ReverseParser {
 
 		wfProfileOut(__METHOD__);
 		return $out;
-	}	
+	}
+}
