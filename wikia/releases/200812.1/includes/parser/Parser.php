@@ -2124,6 +2124,7 @@ class Parser
 	/**#@-*/
 
 	var $mCurrentPrefix = '';
+	var $mLastCommonPrefix = false;
 
 	/**
 	 * Make lists from lines starting with ':', '*', '#', etc.
@@ -2203,6 +2204,7 @@ class Parser
 				}
 				while ( $prefixLength > $commonPrefixLength ) {
 					$char = substr( $pref, $commonPrefixLength, 1 );
+					$this->mLastCommonPrefix = ($prefixLength == $commonPrefixLength + 1);
 					$output .= $this->openList( $char );
 
 					if ( ';' == $char ) {
