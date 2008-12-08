@@ -114,10 +114,10 @@ class WysiwygParser extends Parser {
 		wfProfileIn( $fname );
 		for ( $i = 6; $i >= 1; --$i ) {
 			$h = str_repeat( '=', $i );
-			$text = preg_replace_callback( "/^$h(.+)$h(\\s*)$/m",
+			$text = preg_replace_callback( "/(\\s*)^$h(.+)$h(\\s*)$/mi",
 			  create_function(
 				'$matches',
-				'return "<h'.$i.' linesafter=\"".strlen($matches[2])."\">$matches[1]</h'.$i.'>";'
+				'return "$matches[1]<h'.$i.' linesafter=\"".strlen($matches[3])."\" linesbefore=\"".strlen($matches[1])."\">$matches[2]</h'.$i.'>";'
 			  ),
 			  $text );
 		}
