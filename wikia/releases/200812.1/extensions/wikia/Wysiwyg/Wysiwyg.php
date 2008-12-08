@@ -674,3 +674,12 @@ function WysiwygGetTemplateHotList() {
 	}
 	return $list;
 }
+
+/**
+ * Bogus function for setHook
+ *
+ * @author Maciej Błaszkowski <marooned at wikia-inc.com>
+ */
+function WysiwygParserHookCallback($input, $args, $parser) {
+	return $input;
+}

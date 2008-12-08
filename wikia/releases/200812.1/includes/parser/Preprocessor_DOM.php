@@ -64,7 +64,7 @@ class Preprocessor_DOM implements Preprocessor {
 	function preprocessToObj( $text, $flags = 0 ) {
 		wfProfileIn( __METHOD__ );
 		wfProfileIn( __METHOD__.'-makexml' );
-		global $wgWysiwygParserEnabled;
+		global $wgWysiwygParserEnabled, $wgWysiwygParserTildeEnabled;
 
 		$rules = array(
 			'{' => array(
@@ -110,6 +110,16 @@ class Preprocessor_DOM implements Preprocessor {
 			$ignoredElements = array( 'includeonly' );
 			$xmlishElements[] = 'includeonly';
 		}
+
+		//Wysiwyg: handle 'noinclude', 'includeonly', 'onlyinclude' as normal parser hooks
+		if (!empty($wgWysiwygParserEnabled) || !empty($wgWysiwygParserTildeEnabled)) {
+			$ignoredTags = $ignoredElements = array();
+			global $wgParser;
+			$wgParser->setHook('noinclude', 'WysiwygParserHookCallback');
+			$wgParser->setHook('includeonly', 'WysiwygParserHookCallback');
+			$wgParser->setHook('onlyinclude', 'WysiwygParserHookCallback');
+		}
+
 		$xmlishRegex = implode( '|', array_merge( $xmlishElements, $ignoredTags ) );
 
 		// Use "A" modifier (anchored) instead of "^", because ^ doesn't work with an offset
