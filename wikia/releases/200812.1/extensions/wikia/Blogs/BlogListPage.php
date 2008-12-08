@@ -96,7 +96,7 @@ class BlogListPage extends Article {
 
 			$tmpl = new EasyTemplate( dirname( __FILE__ ) . '/templates/' );
 			$tmpl->set_vars( $templateParams );
-			$wgOut->addHTML( $tmpl->execute("footer") );
+			$wgOut->addHTML( $tmpl->execute( "footer" ) );
 
 			/**
 			 * check if something was posted, maybe comment with ajax switched
@@ -107,7 +107,7 @@ class BlogListPage extends Article {
 			}
 
 			/**
-			 * show comments for this article (if exists)
+			 * show comments for this article (if exists) or info otherwise
 			 */
 			if( $this->exists() ) {
 				$this->showBlogComments();
@@ -123,6 +123,7 @@ class BlogListPage extends Article {
 			else {
 				$wgOut->setArticleFlag( true );
 				$wgOut->setPageTitle( $this->mTitle->getPrefixedText() );
+				$wgOut->addHTML( wfMsg("blog-listing-zero-other") );
 			}
 			$this->showBlogListing();
 		}
@@ -185,12 +186,12 @@ class BlogListPage extends Article {
 			$listing = BlogTemplateClass::parseTag( "<author>$user</author>", $params, $wgParser );
 			$wgMemc->set( wfMemcKey( "blog", "listing", $user, $offset ), $page, 3600 );
 		}
-		
+
 		$wgOut->addScript (
 			$this->__makefeedLink( 'rss', 'application/rss+xml' ) .
-			$this->__makefeedLink( 'atom', 'application/atom+xml' ) 
+			$this->__makefeedLink( 'atom', 'application/atom+xml' )
 		);
-		
+
 		$wgOut->addHTML( $listing );
 	}
 
@@ -260,12 +261,12 @@ class BlogListPage extends Article {
 			}
 		}
 		$feed->outFooter();
-		
+
 		wfProfileOut( __METHOD__ );
 	}
-		
+
 	/**
-	 * private function 
+	 * private function
 	 *
 	 * @access private
 	 */
@@ -273,7 +274,7 @@ class BlogListPage extends Article {
 		return wfElement( 'link', array(
 			'rel' => 'alternate',
 			'type' => $mime,
-			'href' => $this->mTitle->getLocalUrl( "feed={$type}" ) ) 
+			'href' => $this->mTitle->getLocalUrl( "feed={$type}" ) )
 		);
 	}
 
