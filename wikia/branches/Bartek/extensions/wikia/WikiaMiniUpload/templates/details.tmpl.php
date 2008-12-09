@@ -15,12 +15,13 @@ if(isset($props['name'])) {
 			<label for="ImageUploadLicenseSelect"><?= wfMsg( 'license' ) ?></label>
 				<select id="ImageUploadLicenseSelect" />
 					<option>--will be filled</option>
-				</select>			
+				</select>
+			</span><br/>
 			<?php
 			}
 			?>
 			<input id="ImageUploadName" type="text" size="30" value="<?= $props['name'] ?>" />
-			<label for="ImageUploadName"><?= $props['name'] ?></label>
+				<label for="ImageUploadName"><?= $props['name'] ?></label>
 			</td>
 		</tr>
 	</table>
