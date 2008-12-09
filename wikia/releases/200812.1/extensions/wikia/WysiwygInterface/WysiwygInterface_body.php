@@ -28,11 +28,12 @@ class WysiwygInterface extends SpecialPage {
 
 			// use simple function to parse wikitext to HTML with FCK extra data
 			list($out, $tmpMetaData) = Wysiwyg_WikiTextToHtml($wikitext);
-	
+
 			// will be used by reverse parser
 			$html = $out;
 
 			// macbre: return nicely colored & tabbed code
+/*
 			require($IP. '/lib/geshi/geshi.php');
 
 			// clear whitespaces between tags
@@ -42,7 +43,7 @@ class WysiwygInterface extends SpecialPage {
 			$out = mb_convert_encoding($out, 'HTML-ENTITIES', "UTF-8");
 
 			$dom = new DOMDocument();
-/*
+
 			if (!empty($out)) {
 
 				wfSuppressWarnings();
@@ -66,7 +67,7 @@ class WysiwygInterface extends SpecialPage {
 				$html = '';
 			}
 */
-			$out = '<pre>'.htmlspecialchars($out).'</pre>';
+			$out = '<pre>'.htmlspecialchars($html).'</pre>';
 
 			// macbre: call ReverseParser to parse HTML back to wikimarkup
 			$wgOut->addHtml('<h5>$wgWysiwygMetaData</h5>');
