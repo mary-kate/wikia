@@ -148,7 +148,7 @@ function WMU_show(e) {
 	var element = document.createElement('div');
 	element.id = 'WMU_div';
 	element.style.width = '722px';
-	element.style.height = '437px';
+	element.style.height = '587px';
 	element.innerHTML = html;
 
 	document.body.appendChild(element);
