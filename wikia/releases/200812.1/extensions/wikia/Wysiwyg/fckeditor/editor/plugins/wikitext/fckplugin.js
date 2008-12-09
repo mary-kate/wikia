@@ -386,6 +386,9 @@ FCK.Events.AttachEvent( 'OnAfterSetHTML', function() {
 	}
 	// setup source mode
 	else {
+		// hide currently shown template preview
+		FCK.TemplatePreviewInit();
+
 		// add Tab handler -> move to summary field
 		FCKTools.AddEventListener(FCK.EditingArea.Textarea, 'keydown', function(e) {
 			e = FCK.YE.getEvent(e);
