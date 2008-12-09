@@ -16,6 +16,7 @@ if(isset($props['name'])) {
 			}
 			?>
 			<input id="ImageUploadName" type="text" size="30" value="<?= $props['name'] ?>" />
+			<label for="ImageUploadName"><?= $props['name'] ?></label>
 			</td>
 		</tr>
 	</table>
