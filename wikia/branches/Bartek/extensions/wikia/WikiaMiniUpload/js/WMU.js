@@ -605,7 +605,9 @@ AIM = {
 	},
 	submit : function(f, c) {
 		// macbre: allow cross-domain
-		f.action += '&domain=' + escape(document.domain);
+		if(document.domain != 'localhost' && typeof FCK != 'undefined') {
+			f.action += '&domain=' + escape(document.domain);
+		}
 
 		AIM.form(f, AIM.frame(c));
 		if (c && typeof(c.onStart) == 'function') {
