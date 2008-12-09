@@ -93,7 +93,6 @@ class WikiaMiniUpload {
 
 		$mFileSize = $wgRequest->getFileSize( 'wpUploadFile' );
 		$mSrcName = stripslashes($wgRequest->getFileName( 'wpUploadFile' ));
-//		$mTempPath = $wgRequest->get
 		$filtered = wfStripIllegalFilenameChars( $mSrcName );
 		$form = new UploadForm( $wgRequest );
 
