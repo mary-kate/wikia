@@ -239,3 +239,9 @@ ImageUploadOptionsTable img {
 #WMU_error_box {
 	display: none;
 }
+
+#ImageUploadMessage {
+	border: 1px solid gray;
+	padding: 6px 6px 6px 6px;	
+	margin-bottom: 16px;
+}
