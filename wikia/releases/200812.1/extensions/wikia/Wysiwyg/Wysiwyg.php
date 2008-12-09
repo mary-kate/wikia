@@ -275,7 +275,6 @@ function Wysiwyg_WikiTextToHtml($wikitext, $articleId = -1, $encode = false) {
 	$replacements = array(
 		"\n<p>"   => '<p>',
 		"\n</p>"  => '</p>',
-		' </h'    => '</h',
 		'<li> '   => '<li>',
 		"\n</li>" => '</li>',
 		"\n</dt>" => '</dt>',

@@ -15,10 +15,6 @@ class WysiwygParser extends Parser {
 			'</pre>';
 	}
 
-	function formatHeadings( $text, $isMain=true ) {
-		return $text;
-	}
-
 	function doMagicLinks( $text ) {
 		return $text;
 	}
@@ -120,6 +116,10 @@ class WysiwygParser extends Parser {
 				 ),$text );
 		}
 		wfProfileOut($fname);
+		return $text;
+	}
+
+	function formatHeadings( $text, $isMain=true ) {
 		return $text;
 	}
 
