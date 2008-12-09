@@ -44,4 +44,7 @@ $messages['en'] = array(
 	'wmu-bad-extension' => 'You tried to upload an illegal file type. Please try again.',
 	'wmu-filetype-missing' => 'This upload is missing its file extension',
 	'wmu-filetype-incorrect' => 'This upload has an incorrect file extension',
+	'wmu-uploadtext' => 'Use the form below to upload and display files.
+
+To view or search previously uploaded files go to the [[Special:ImageList|list of uploaded files]], (re)uploads are also logged in the [[Special:Log/upload|upload log]], deletions in the [[Special:Log/delete|deletion log]].',
 );
