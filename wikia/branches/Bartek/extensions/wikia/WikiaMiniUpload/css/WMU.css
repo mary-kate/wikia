@@ -1,5 +1,5 @@
 #ImageUpload {
-	height: 437px;
+	height: 587px;
 	padding: 25px 10px 10px;
 	position: relative;
 	width: 722px;
@@ -8,7 +8,7 @@
 	background-color: #000;
 	border: 1px solid #FFF;
 	filter: alpha(opacity=60);
-	height: 435px;
+	height: 585px;
 	left: 0;
 	opacity: .6;
 	position: absolute;
@@ -17,7 +17,7 @@
 }
 #ImageUploadBody {
 	background: #FFF;
-	height: 370px;
+	height: 520px;
 	opacity: 1;
 	overflow: hidden;
 	padding: 15px;
