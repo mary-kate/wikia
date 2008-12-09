@@ -11,7 +11,8 @@ if(isset($props['name'])) {
 			<?php
 			if(!empty($props['upload'])) {
 			?>
-			<span style="float: right; font-size: 8pt;"><input type="checkbox" id="CC_license"/> <label for="CC_license"><?= wfMsg('wmu-license-cc') ?></label></span>
+			<span id="ImageUploadLicenseSpan">
+			<label for="ImageUploadLicenseSelect"><?= wfMsg( 'license' ) ?></label><input type="select" id="ImageUploadLicenseSelect" />
 			<?php
 			}
 			?>
