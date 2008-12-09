@@ -12,7 +12,10 @@ if(isset($props['name'])) {
 			if(!empty($props['upload'])) {
 			?>
 			<span id="ImageUploadLicenseSpan">
-			<label for="ImageUploadLicenseSelect"><?= wfMsg( 'license' ) ?></label><input type="select" id="ImageUploadLicenseSelect" />
+			<label for="ImageUploadLicenseSelect"><?= wfMsg( 'license' ) ?></label>
+				<select id="ImageUploadLicenseSelect" />
+					<option>--will be filled</option>
+				</select>			
 			<?php
 			}
 			?>
