@@ -114,7 +114,6 @@ class ReverseParser {
 						$out = $textContent."\n";
 						break;
 
-/*
 					case 'h1':
 					case 'h2':
 					case 'h3':
@@ -124,14 +123,13 @@ class ReverseParser {
 						$tag = str_repeat('=', intval($node->nodeName{1}));
 						$out = $tag.$node->textContent.$tag;
 
-						if(!empty($this->fckData[$refid])) {
-							$out = str_repeat("\n", $this->fckData[$refid]['linesBefore']).$out.str_repeat("\n", $this->fckData[$refid]['linesAfter']);
+						if(!empty($nodeData)) {
+							$out = str_repeat("\n", $nodeData['linesBefore']) . $out . str_repeat("\n", $nodeData['linesAfter']);
 						} else {
 							$out .= "\n";
 						}
 
 						break;
-*/
 				}
 				break;
 
