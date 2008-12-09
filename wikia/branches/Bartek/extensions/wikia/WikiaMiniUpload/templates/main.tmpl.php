@@ -1,5 +1,7 @@
 <div id="ImageUploadError"></div>
 
+<div id="ImageUploadMessage"><?= wfMsgExt( 'uploadtext', 'parse') ?></div>
+
 <table cellspacing="0" style="width: 100%;" id="ImageUploadInputTable">
 	<tr id="ImageUploadUpload">
 		<td><h1><?= wfMsg('wmu-upload') ?></h1></td>
