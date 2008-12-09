@@ -245,3 +245,8 @@ ImageUploadOptionsTable img {
 	padding: 6px 6px 6px 6px;	
 	margin-bottom: 16px;
 }
+
+#ImageUploadLicenseSpan {
+	float: right;
+	font-size: 8pt;
+}
