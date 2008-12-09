@@ -116,7 +116,7 @@ class BlogTemplateClass {
 			'type' 		=> 'number',
 			'default' 	=> '5',
 			'pattern' 	=> '/^\d*$/',
-			'max'		=> 10
+			'max'		=> 50
 		),
 
 		/*
@@ -704,19 +704,12 @@ class BlogTemplateClass {
 	}
 
 
-	private static function __getRevisionText($iPage, $iRev) {
+	private static function __getRevisionText($iPage, $oRev) {
 		global $wgLang, $wgUser;
 		wfProfileIn( __METHOD__ );
 		$sResult = "";
 		/* parse summary */
-		if ( (!empty($iRev)) && (!empty(self::$aOptions['summary'])) ) {
-			$oRev = Revision::newFromId($iRev);
-			if( !$oRev ) {
-			  /**
-                           * article is deleted! it should be handled in different way
-			   */
-			  return $sResult;
-			}
+		if ( (!empty($oRev)) && (!empty(self::$aOptions['summary'])) ) {
 			$sBlogText = $oRev->revText();
 			/* parse or not parse - this is a good question */
 			$localParser = new Parser();
@@ -766,15 +759,18 @@ class BlogTemplateClass {
 			if ($oTitle instanceof Title) {
 				$username = $oTitle->getBaseText();
 			}
-
+			
+			$oRevision = Revision::newFromId($oRow->rev_id);
+			
 			$aResult[$oRow->page_id] = array(
 				"page" 			=> $oRow->page_id,
 				"namespace" 	=> $oRow->page_namespace,
 				"title" 		=> $oRow->page_title,
 				"page_touched" 	=> $oRow->page_touched,
+				"rev_timestamp"	=> $oRevision->getTimestamp(),
 				"timestamp" 	=> $oRow->timestamp,
 				"username"		=> (isset($username)) ? $username : "",
-				"text"			=> self::__getRevisionText($oRow->page_id, $oRow->rev_id),
+				"text"			=> self::__getRevisionText($oRow->page_id, $oRevision),
 				"revision"		=> $oRow->rev_id,
 				"comments"		=> $iCount,
 				"votes"			=> self::__getVoteCode($oRow->page_id),
@@ -1087,9 +1083,10 @@ class BlogTemplateClass {
 				self::$oTitle = $oTitle;
 				$oRevision = Revision::newFromTitle($oTitle);
 				$sText = $oRevision->getText();
-				$id = Parser::extractTagsAndParams( array(BLOGTPL_TAG), $oRevision->getText(), $matches, md5(BLOGTPL_TAG, $articleId, $namespace, $offset));
-				if (!empty($matches) && !empty($matches[$id])) {
-					list (, $input, $params, ) = $matches[$id];
+				$id = Parser::extractTagsAndParams( array(BLOGTPL_TAG), $oRevision->getText(), $matches, md5(BLOGTPL_TAG . $articleId . $namespace . $offset));
+				if (!empty($matches)) {
+					list ($sKey, $aValues) = each ($matches);
+					list (, $input, $params, ) = $matches[$sKey];
 					$input = trim($input);
 					if ( !empty($input) && (!empty($params)) ) {
 						$aTags = array();
