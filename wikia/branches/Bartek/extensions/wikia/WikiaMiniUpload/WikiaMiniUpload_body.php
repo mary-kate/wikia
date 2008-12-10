@@ -288,9 +288,12 @@ class WikiaMiniUpload {
 					} else {
 						// get the supplied license value
 						$license = $wgRequest->getVal( 'ImageUploadLicense' );
+						
 						if ( $license != '' ) {
-			                                $caption. = '== ' . wfMsgForContent( 'license' ) . " ==\n" . '{{' . $license . '}}' . "\n";
-                        			}
+			                                $caption = '== ' . wfMsgForContent( 'license' ) . " ==\n" . '{{' . $license . '}}' . "\n";
+                        			} else {
+							$caption = "";
+						}						 
 					}
 
 					$file->upload($temp_file->getPath(), '', $caption);
