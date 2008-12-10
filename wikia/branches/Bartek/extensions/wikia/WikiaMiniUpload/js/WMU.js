@@ -427,8 +427,8 @@ function WMU_insertImage(e, type) {
 		}
 	}
 
-	if($('CC_license')) {
-		params.push('CC_license='+$('CC_license').checked);
+	if($('ImageUploadLicense')) {
+		params.push('ImageUploadLicense='+$('ImageUploadLicense').value);
 	}
 
 	if($('ImageUploadExtraId')) {
