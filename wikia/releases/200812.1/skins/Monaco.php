@@ -659,7 +659,7 @@ class SkinMonaco extends SkinTemplate {
 			$js[] = array('url' => $tpl->data['userjs'], 'mime' => 'text/javascript');
 		}
 		if($tpl->data['userjsprev']) {
-			$js[] = array('url' => $tpl->data['userjsprev'], 'mime' => 'text/javascript');
+			$js[] = array('content' => $tpl->data['userjsprev'], 'mime' => 'text/javascript');
 		}
 		// JS - end
 
@@ -875,7 +875,7 @@ class MonacoTemplate extends QuickTemplate {
 				//$mouseout = ' onmouseout="clearBackground(\'_' . $count . '\')"';
 				$menu_output .='<div class="menu-item' .
 				(($count==sizeof($this->navmenu[$id]['children'])) ? ' border-fix' : '') . '" id="' . ($level ? 'sub-' : '') . 'menu-item' . ($level ? $last_count . '_' :'_') .$count . '">';
-				$menu_output .= '<a id="' . ($level ? 'a-sub-' : 'a-') . 'menu-item' . ($level ? $last_count . '_' : '_') .$count . '" href="'.(!empty($this->navmenu[$child]['href']) ? htmlspecialchars($this->navmenu[$child]['href']) : '#').'"' . $extraAttributes . '>';
+				$menu_output .= '<a id="' . ($level ? 'a-sub-' : 'a-') . 'menu-item' . ($level ? $last_count . '_' : '_') .$count . '" href="'.(!empty($this->navmenu[$child]['href']) ? htmlspecialchars($this->navmenu[$child]['href']) : '#').'" class="'.(!empty($this->navmenu[$child]['class']) ? htmlspecialchars($this->navmenu[$child]['class']) : '').'"' . $extraAttributes . '>';
 
 				if (($fixed_art_path) == $this->navmenu[$child]['href']) {
 					$prevent_blank = '.onclick = YAHOO.util.Event.preventDefault ; ' ;
@@ -975,9 +975,16 @@ class MonacoTemplate extends QuickTemplate {
 	if($wgRequest->getVal('action') != '' || $wgTitle->getNamespace() == NS_SPECIAL) {
 		echo $wgUser->isLoggedIn() ? GetReferences("monaco_loggedin_js") : GetReferences("monaco_non_loggedin_js");
 		foreach($this->data['references']['js'] as $script) {
+			if (!empty($script['url'])) {
 ?>
 		<script type="<?= $script['mime'] ?>" src="<?= htmlspecialchars($script['url']) ?>"></script>
 <?php
+			}
+			else if (!empty($script['content'])) {
+?>
+		<script type="<?= $script['mime'] ?>"><?= $script['content'] ?></script>
+<?php
+			}
 		}
 		$this->html('headscripts');
 	}
@@ -1208,7 +1215,11 @@ if(isset($this->data['articlelinks']['left'])) {
 				<ul id="page_tabs">
 <?php
 global $userMasthead;
-if(isset($this->data['articlelinks']['right']) && !$userMasthead ) {
+$showright = true;
+if( defined( "NS_BLOG_ARTICLE" ) && $wgTitle->getNamespace() == NS_BLOG_ARTICLE ) {
+	$showright = false;
+}
+if(isset($this->data['articlelinks']['right']) && $showright ) {
 	foreach($this->data['articlelinks']['right'] as $key => $val) {
 ?>
 					<li class="<?= $val['class'] ?>"><a href="<?= htmlspecialchars($val['href']) ?>" id="ca-<?= $key ?>" <?= $skin->tooltipAndAccesskey('ca-'.$key) ?> class="<?= $val['class'] ?>"><?= htmlspecialchars(ucfirst($val['text'])) ?></a></li>
