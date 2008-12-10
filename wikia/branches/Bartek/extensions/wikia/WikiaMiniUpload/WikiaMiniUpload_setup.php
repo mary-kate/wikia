@@ -8,7 +8,7 @@ if(!defined('MEDIAWIKI')) {
 }
 
 $wgExtensionCredits['other'][] = array(
-        'name' => 'WikiaMiniUpload',
+        'name' => 'WikiaMiniUpload (Add Images)',
         'author' => 'Inez Korczyński, Bartek Łapiński',
 );
 
