@@ -19,6 +19,8 @@ class WysiwygParser extends Parser {
 		return $text;
 	}
 
+	var $mEmptyLineCounter = 0;
+
 	# These next three functions open, continue, and close the list
 	# element appropriate to the prefix character passed into them.
 	#

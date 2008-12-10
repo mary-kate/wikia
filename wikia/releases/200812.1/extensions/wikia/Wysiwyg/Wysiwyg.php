@@ -253,6 +253,9 @@ function Wysiwyg_WikiTextToHtml($wikitext, $articleId = -1, $encode = false) {
 
 	$title = ($articleId == -1) ? $wgTitle : Title::newFromID($articleId);
 
+	// detect empty lines at the beginning of wikitext
+	$emptyLinesAtStart = strspn($wikitext, "\n");
+
 	$options = new ParserOptions();
 	$wysiwygParser = new WysiwygParser();
 	$wysiwygParser->disableCache();
@@ -265,6 +268,12 @@ function Wysiwyg_WikiTextToHtml($wikitext, $articleId = -1, $encode = false) {
 	$wgWysiwygParserEnabled = true;
 	$html = $wysiwygParser->parse($wikitext, $title, $options)->getText();
 	$wgWysiwygParserEnabled = false;
+
+	if($emptyLinesAtStart == 1) {
+		$html = '<!--NEW_LINE-->' . $html;
+	}
+
+	$html = preg_replace('/<\!--NEW_LINE--><(\w+)/', '<$1 emptylinebefore="true"', $html);
 
 	// replace placeholders with HTML
 	if (!empty($wgWysiwygMarkers)) {
