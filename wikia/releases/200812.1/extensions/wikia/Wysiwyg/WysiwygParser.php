@@ -45,16 +45,10 @@ class WysiwygParser extends Parser {
 				$result = '';
 			}
 		}
-		else if ( '*' == $char ) {
+		else if ( '*' == $char || '#' == $char ) {
 			$indentLevel = strspn($this->mCurrentPrefix, ':');
 			$style = ($indentLevel > 0 && $this->bulletLevel == 0) ? ' style="margin-left:'.($indentLevel*40).'px"' : '';
-			$result .= "<ul{$style}><li>";
-			$this->bulletLevel++;
-		}
-		else if ( '#' == $char ) {
-			$indentLevel = strspn($this->mCurrentPrefix, ':');
-			$style = ($indentLevel > 0 && $this->bulletLevel == 0) ? ' style="margin-left:'.($indentLevel*40).'px"' : '';
-			$result .= "<ol{$style}><li>";
+			$result .= '<' . ($char == '*' ? 'ul' : 'ol') . $style . '><li>';
 			$this->bulletLevel++;
 		}
 		else if ( ';' == $char ) {
