@@ -13,8 +13,13 @@ if(isset($props['name'])) {
 			?>
 			<span id="ImageUploadLicenseSpan">
 			<label for="ImageUploadLicenseSelect"><?= wfMsg( 'license' ) ?></label>
+			<?php
+				$licenses = new Licenses();
+				$licensehtml = $licenses->getHtml();	
+			?>
 				<select id="ImageUploadLicenseSelect" />
-					<option>--will be filled</option>
+					<option><?= wfMsg( 'nolicense' ) ?></option>
+					<?= $licensehtml ?>
 				</select>
 			</span><br/>
 			<?php
