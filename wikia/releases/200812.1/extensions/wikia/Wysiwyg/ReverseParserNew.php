@@ -80,69 +80,81 @@ class ReverseParser {
 
 		$textContent = ($childOut != '') ? $childOut : $node->textContent;
 
-		switch($node->nodeType) {
-			case XML_ELEMENT_NODE:
+		if($node->nodeType == XML_ELEMENT_NODE) {
+			$refid = $node->getAttribute('refid');
 
-				$refid = $node->getAttribute('refid');
+			if(!empty($refid)) {
+				$nodeData = $this->data[$refid];
+			}
 
-				if(!empty($refid)) {
-					$nodeData = $this->data[$refid];
+			switch($node->nodeName) {
+				case 'body':
+					$out = $textContent;
+					break;
+
+				case 'br':
+					break;
+
+				case 'p':
+					// if the first previous XML_ELEMENT_NODE (so no text and no comment) of the current
+					// node is <p> then add new line before the current one
+					if(($previousNode = $this->getPreviousElementNode($node)) && $previousNode->nodeName == 'p') {
+						$textContent = "\n" . $textContent;
+					}
+
+					$out = $textContent;
+					break;
+
+				case 'h1':
+				case 'h2':
+				case 'h3':
+				case 'h4':
+				case 'h5':
+				case 'h6':
+					break;
+			}
+
+			// if current processed node contains attribute _wysiwyg_new_line (added in Parser.php)
+			// then add new line before it
+			if($node->getAttribute('_wysiwyg_new_line')) {
+				$out = "\n" . $out;
+			}
+
+		} else if($node->nodeType == XML_COMMENT_NODE) {
+
+
+		} else if($node->nodeType == XML_TEXT_NODE) {
+
+			// if the next sibling node of the current one text node is comment (NEW_LINE_1)
+			// then cut the last character of current text node (it must be space) and add new line
+			// e.g. "abc <!--NEW_LINE_1-->" => "abc\n"
+			if($node->nextSibling && $node->nextSibling->nodeType == XML_COMMENT_NODE && $node->nextSibling->data == "NEW_LINE_1") {
+				if(substr($textContent, -1) != ' ') {
+					exit("Wysiwyg error 1");
 				}
+				$textContent = substr($textContent, 0, -1) . "\n";
+			}
 
-				switch($node->nodeName) {
-					case 'body':
-						$out = $textContent;
-						break;
+			$out = $textContent;
 
-					case 'br':
-						$out = "\n\n";
-						break;
-
-					case 'p':
-
-						if($node->previousSibling->nodeName == 'p') {
-							$textContent = "\n" . $textContent;
-							if($node->firstChild->nodeName == 'br') {
-								$textContent = substr($textContent, 1);
-							}
-						}
-
-						if($textContent == '') {
-							$textContent = "\n";
-						}
-
-						$out = $textContent."\n";
-						break;
-
-					case 'h1':
-					case 'h2':
-					case 'h3':
-					case 'h4':
-					case 'h5':
-					case 'h6':
-						$tag = str_repeat('=', intval($node->nodeName{1}));
-						$out = $tag.$node->textContent.$tag;
-
-						if(!empty($nodeData)) {
-							$out = str_repeat("\n", $nodeData['linesBefore']) . $out . str_repeat("\n", $nodeData['linesAfter']);
-						} else {
-							$out .= "\n";
-						}
-
-						break;
-				}
-				break;
-
-			case XML_TEXT_NODE:
-				if($node->previousSibling->nodeName == 'br' && $textContent{0} == " ") {
-					$textContent = substr($textContent, 1);
-				}
-				$out = $textContent;
-				break;
 		}
 
 		wfProfileOut(__METHOD__);
 		return $out;
 	}
+
+	private function getPreviousElementNode($node) {
+		$temp = $node;
+		while($node->previousSibling) {
+			$node = $node->previousSibling;
+			if($node->nodeType == XML_ELEMENT_NODE) {
+				return $node;
+			}
+		}
+		return false;
+	}
+
+
+
 
 }
