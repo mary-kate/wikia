@@ -116,8 +116,14 @@ class ReverseParser {
 				case 'h5':
 				case 'h6':
 					$head = str_repeat("=", $node->nodeName{1});
-					$linesBefore = (($previousNode = $this->getPreviousElementNode($node)) && $this->isHeaderNode($previousNode)) ? 0 : ($nodeData['linesBefore']+1)%2;
-					$linesAfter = $nodeData['linesAfter']-1;
+					if(!empty($nodeData)) {
+						$linesBefore = ((($previousNode = $this->getPreviousElementNode($node)) && $this->isHeaderNode($previousNode)) || empty($node->previousSibling)) ? 0 : ($nodeData['linesBefore']+1)%2;
+						$linesAfter = $nodeData['linesAfter']-1;
+					} else {
+						$linesBefore = 0;
+						$linesAfter = 1;
+						$textContent = " ".trim($textContent)." ";
+					}
 
 					$out = str_repeat("\n", $linesBefore) . $head . $textContent . $head . str_repeat("\n", $linesAfter);
 					break;
@@ -125,7 +131,7 @@ class ReverseParser {
 
 			// if current processed node contains attribute _wysiwyg_new_line (added in Parser.php)
 			// then add new line before it
-			if($node->getAttribute('_wysiwyg_new_line') && !$this->isHeaderNode($node)) {
+			if($node->getAttribute('_wysiwyg_new_line') && (!$this->isHeaderNode($node) || empty($node->previousSibling))) {
 				$out = "\n" . $out;
 			}
 
