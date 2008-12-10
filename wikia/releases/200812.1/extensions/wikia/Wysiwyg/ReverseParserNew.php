@@ -93,6 +93,10 @@ class ReverseParser {
 					break;
 
 				case 'br':
+					// e.g. "<br/><!--NEW_LINE_1-->" => "\n"
+					if($node->nextSibling && $node->nextSibling->nodeType == XML_COMMENT_NODE && $node->nextSibling->data == "NEW_LINE_1") {
+						$out = "\n";
+					}
 					break;
 
 				case 'p':
@@ -129,9 +133,6 @@ class ReverseParser {
 			// then cut the last character of current text node (it must be space) and add new line
 			// e.g. "abc <!--NEW_LINE_1-->" => "abc\n"
 			if($node->nextSibling && $node->nextSibling->nodeType == XML_COMMENT_NODE && $node->nextSibling->data == "NEW_LINE_1") {
-				if(substr($textContent, -1) != ' ') {
-					exit("Wysiwyg error 1");
-				}
 				$textContent = substr($textContent, 0, -1) . "\n";
 			}
 
