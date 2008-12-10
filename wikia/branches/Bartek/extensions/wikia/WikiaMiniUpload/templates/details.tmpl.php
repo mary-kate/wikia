@@ -29,7 +29,8 @@ if(isset($props['name'])) {
 			<th><?= wfMsg('wmu-name') ?></th>
 			<td>
 			<input id="ImageUploadName" type="text" size="30" value="<?= $props['partname'] ?>" />
-				<label for="ImageUploadName">.<?= $props['extension'] ?></label>
+			<label for="ImageUploadName">.<?= $props['extension'] ?></label>
+			<input id="ImageUploadExtension" type="hidden" value="<?= $props['extension'] ?>" />
 			</td>
 		</tr>
 	</table>
