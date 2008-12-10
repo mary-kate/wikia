@@ -273,7 +273,7 @@ function Wysiwyg_WikiTextToHtml($wikitext, $articleId = -1, $encode = false) {
 		$html = '<!--NEW_LINE-->' . $html;
 	}
 
-	$html = preg_replace('/<\!--NEW_LINE--><(\w+)/', '<$1 emptylinebefore="true"', $html);
+	$html = preg_replace('/<\!--NEW_LINE--><(\w+)/', '<$1 _fck_new_line="true"', $html);
 
 	// replace placeholders with HTML
 	if (!empty($wgWysiwygMarkers)) {
