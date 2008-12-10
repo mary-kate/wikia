@@ -83,7 +83,7 @@ class ReverseParser {
 		if($node->nodeType == XML_ELEMENT_NODE) {
 			$refid = $node->getAttribute('refid');
 
-			if(!empty($refid)) {
+			if(is_numeric($refid)) {
 				$nodeData = $this->data[$refid];
 			}
 
@@ -115,12 +115,17 @@ class ReverseParser {
 				case 'h4':
 				case 'h5':
 				case 'h6':
+					$head = str_repeat("=", $node->nodeName{1});
+					$linesBefore = (($previousNode = $this->getPreviousElementNode($node)) && $this->isHeaderNode($previousNode)) ? 0 : ($nodeData['linesBefore']+1)%2;
+					$linesAfter = $nodeData['linesAfter']-1;
+
+					$out = str_repeat("\n", $linesBefore) . $head . $textContent . $head . str_repeat("\n", $linesAfter);
 					break;
 			}
 
 			// if current processed node contains attribute _wysiwyg_new_line (added in Parser.php)
 			// then add new line before it
-			if($node->getAttribute('_wysiwyg_new_line')) {
+			if($node->getAttribute('_wysiwyg_new_line') && !$this->isHeaderNode($node)) {
 				$out = "\n" . $out;
 			}
 
@@ -155,7 +160,9 @@ class ReverseParser {
 		return false;
 	}
 
-
+	private function isHeaderNode($node) {
+		return ($node->nodeName{0} == 'h') && is_numeric($node->nodeName{1});
+	}
 
 
 }
