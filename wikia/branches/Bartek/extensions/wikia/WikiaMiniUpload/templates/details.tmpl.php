@@ -12,7 +12,6 @@ if(isset($props['name'])) {
 			if(!empty($props['upload'])) {
 			?>
 			<span id="ImageUploadLicenseSpan">
-			<label for="ImageUploadLicenseSelect"><?= wfMsg( 'license' ) ?></label>
 			<?php
 				$licenses = new Licenses();
 				$licensehtml = $licenses->getHtml();	
