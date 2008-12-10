@@ -272,6 +272,16 @@ class WikiaMiniUpload {
 						return $tmpl->execute('conflict');
 					}
 				} else {
+					// is the target protected?
+					$permErrors = $title->getUserPermissionsErrors( 'edit', $wgUser );
+					$permErrorsUpload = $title->getUserPermissionsErrors( 'upload', $wgUser );
+					$permErrorsCreate = ( $title->exists() ? array() : $title->getUserPermissionsErrors( 'create', $wgUser ) );
+
+					if( $permErrors || $permErrorsUpload || $permErrorsCreate ) {
+						header('X-screen-type: error');
+						return 'This image is protected';
+					}
+
 					$temp_file = new LocalFile(Title::newFromText($mwname, 6), RepoGroup::singleton()->getLocalRepo());
 					$file = new LocalFile($title, RepoGroup::singleton()->getLocalRepo());
 
