@@ -273,6 +273,7 @@ function Wysiwyg_WikiTextToHtml($wikitext, $articleId = -1, $encode = false) {
 
 	// replace whitespaces after opening (<li>) and before closing tags (</p>, </h2>, </li>, </dt>, </dd>)
 	$replacements = array(
+		' <p>'    => '<p>',
 		"\n<p>"   => '<p>',
 		"\n</p>"  => '</p>',
 		'<li> '   => '<li>',
