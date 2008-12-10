@@ -208,7 +208,7 @@ class WikiaMiniUpload {
                 }
 	
 		$props['partname'] = $partname;
-		$props['extension'] = $finalExt;
+		$props['extension'] = strtolower( $finalExt );
 		$tmpl->set_vars(array('props' => $props));	
 		return $tmpl->execute('details');
 	}
