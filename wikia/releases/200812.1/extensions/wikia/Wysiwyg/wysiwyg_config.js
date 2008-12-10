@@ -15,9 +15,11 @@ FCKConfig.BodyClass = 'fckeditor';
 FCKConfig.Plugins.Add('wikitext');
 
 FCKConfig.FillEmptyBlocks = false;
+/*
 FCKConfig.IgnoreEmptyParagraphValue = true;
 FCKConfig.FormatSource = false;
 FCKConfig.FormatOutput = false;
+*/
 
 FCKConfig.DisableObjectResizing = true;
 
