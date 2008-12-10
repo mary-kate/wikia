@@ -2055,6 +2055,12 @@ class Parser
 		$result = '';
 		if ( '' != $this->mLastSection ) {
 			$result = '</' . $this->mLastSection  . ">\n";
+			global $wgWysiwygParserEnabled;
+			if(!empty($wgWysiwygParserEnabled)) {
+				if($this->mEmptyLineCounter%2 == 1) {
+					$result.= "<!--NEW_LINE-->";
+				}
+			}
 		}
 		$this->mInPre = false;
 		$this->mLastSection = '';
@@ -2133,6 +2139,7 @@ class Parser
 	 * @return string the lists rendered as HTML
 	 */
 	function doBlockLevels( $text, $linestart ) {
+		global $wgWysiwygParserEnabled;
 		$fname = 'Parser::doBlockLevels';
 		wfProfileIn( $fname );
 
@@ -2240,6 +2247,9 @@ class Parser
 					}
 				} else if ( !$inBlockElem && !$this->mInPre ) {
 					if ( ' ' == $t{0} and ( $this->mLastSection == 'pre' or trim($t) != '' ) ) {
+						if(!empty($wgWysiwygParserEnabled)) {
+							$this->mEmptyLineCounter = 0;
+						}
 						// pre
 						if ($this->mLastSection != 'pre') {
 							$paragraphStack = false;
@@ -2250,6 +2260,9 @@ class Parser
 					} else {
 						// paragraph
 						if ( '' == trim($t) ) {
+							if(!empty($wgWysiwygParserEnabled)) {
+								$this->mEmptyLineCounter++;
+							}
 							if ( $paragraphStack ) {
 								$output .= $paragraphStack.'<br />';
 								$paragraphStack = false;
@@ -2264,6 +2277,9 @@ class Parser
 								}
 							}
 						} else {
+							if(!empty($wgWysiwygParserEnabled)) {
+								$this->mEmptyLineCounter = 0;
+							}
 							if ( $paragraphStack ) {
 								$output .= $paragraphStack;
 								$paragraphStack = false;
@@ -2271,11 +2287,17 @@ class Parser
 							} else if ($this->mLastSection != 'p') {
 								$output .= $this->closeParagraph().'<p>';
 								$this->mLastSection = 'p';
+							} else {
+								$output .= "<!--NEW_LINE_1-->";
 							}
 						}
 					}
 				}
 				wfProfileOut( "$fname-paragraph" );
+			} else {
+				if(!empty($wgWysiwygParserEnabled)) {
+					$this->mEmptyLineCounter = 0;
+				}
 			}
 			// somewhere above we forget to get out of pre block (bug 785)
 			if($preCloseMatch && $this->mInPre) {
