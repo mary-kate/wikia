@@ -28,8 +28,8 @@ if(isset($props['name'])) {
 		<tr class="ImageUploadNoBorder">
 			<th><?= wfMsg('wmu-name') ?></th>
 			<td>
-			<input id="ImageUploadName" type="text" size="30" value="<?= $props['name'] ?>" />
-				<label for="ImageUploadName"><?= $props['name'] ?></label>
+			<input id="ImageUploadName" type="text" size="30" value="<?= $props['partname'] ?>" />
+				<label for="ImageUploadName">.<?= $props['extension'] ?></label>
 			</td>
 		</tr>
 	</table>

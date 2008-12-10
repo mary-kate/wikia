@@ -189,8 +189,27 @@ class WikiaMiniUpload {
 	}
 
 	function detailsPage($props) {
+		$data = array('wpUpload' => 1, 'wpSourceType' => 'web', 'wpUploadFileURL' => '');
+		$form = new UploadForm(new FauxRequest($data, true));
+
 		$tmpl = new EasyTemplate(dirname(__FILE__).'/templates/');
-		$tmpl->set_vars(array('props' => $props));
+		list( $partname, $ext ) = $form->splitExtensions( $props['name'] );
+
+		if( count( $ext ) ) {
+			$finalExt = $ext[count( $ext ) - 1];
+		} else {
+			$finalExt = '';
+		}
+
+                // for more than one "extension"
+                if( count( $ext ) > 1 ) {
+                        for( $i = 0; $i < count( $ext ) - 1; $i++ )
+                                $partname .= '.' . $ext[$i];
+                }
+	
+		$props['partname'] = $partname;
+		$props['extension'] = $finalExt;
+		$tmpl->set_vars(array('props' => $props));	
 		return $tmpl->execute('details');
 	}
 
