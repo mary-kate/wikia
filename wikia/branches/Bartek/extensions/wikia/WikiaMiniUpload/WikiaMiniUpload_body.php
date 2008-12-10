@@ -286,7 +286,11 @@ class WikiaMiniUpload {
 
 						$caption = '{{MediaWiki:Flickr'.intval($license).'|1='.wfEscapeWikiText($extraId).'|2='.wfEscapeWikiText($nsid).'|3='.wfEscapeWikiText($username).'}}';
 					} else {
-						$caption = $wgRequest->getVal('CC_license') == 'true' ? "== Licensing ==\n{{cc-by-sa-3.0}}" : '';
+						// get the supplied license value
+						$license = $wgRequest->getVal( 'ImageUploadLicense' );
+						if ( $license != '' ) {
+			                                $caption. = '== ' . wfMsgForContent( 'license' ) . " ==\n" . '{{' . $license . '}}' . "\n";
+                        			}
 					}
 
 					$file->upload($temp_file->getPath(), '', $caption);
