@@ -205,7 +205,7 @@ class ReverseParser {
 
 						// handle indentations
 						if ($indentation !== false) {
-							$out = str_repeat(':', $indentation) . $out;
+							$out = str_repeat(':', $indentation) . ' ' . $out;
 						}
 
 						// new line logic
