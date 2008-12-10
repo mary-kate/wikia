@@ -17,7 +17,7 @@ if(isset($props['name'])) {
 				$licenses = new Licenses();
 				$licensehtml = $licenses->getHtml();	
 			?>
-				<select id="ImageUploadLicenseSelect" />
+				<select id="wpImageUploadLicense" />
 					<option><?= wfMsg( 'nolicense' ) ?></option>
 					<?= $licensehtml ?>
 				</select>
