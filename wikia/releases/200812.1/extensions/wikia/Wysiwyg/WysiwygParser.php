@@ -51,7 +51,12 @@ class WysiwygParser extends Parser {
 			$result .= "<ul{$style}><li>";
 			$this->bulletLevel++;
 		}
-		else if ( '#' == $char ) { $result .= '<ol><li>'; }
+		else if ( '#' == $char ) {
+			$indentLevel = strspn($this->mCurrentPrefix, ':');
+			$style = ($indentLevel > 0 && $this->bulletLevel == 0) ? ' style="margin-left:'.($indentLevel*40).'px"' : '';
+			$result .= "<ol{$style}><li>";
+			$this->bulletLevel++;
+		}
 		else if ( ';' == $char ) {
 			$indentLevel = strspn($this->mCurrentPrefix, ':');
 			$result .= '<p class="definitionTerm" style="margin-left: '.($indentLevel*40).'px">';
