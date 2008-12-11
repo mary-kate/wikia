@@ -257,3 +257,10 @@ ImageUploadOptionsTable img {
 	margin-top: 6px;
 	margin-bottom: 6px;
 }
+
+#ImageUploadMessageControl {
+	position: absolute;
+	font-size: 9pt;
+	right: 24px;
+	top: 18px;
+}
