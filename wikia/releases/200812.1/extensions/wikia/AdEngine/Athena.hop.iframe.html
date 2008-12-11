@@ -13,8 +13,7 @@ var frameid = "frameid_" + Math.random();
 window.frameElement.id = frameid;
 top.Athena.debug("Athena.hop being called inside iframe from " + window.location.href);
 slotname = top.Athena.getSlotnameFromDom(frameid);
-Athena.hopTracker[slotname]['write_document'] = document;
-top.Athena.hop(slotname, window);
+top.Athena.hop(slotname);
 </script>
 </body>
 </html>
