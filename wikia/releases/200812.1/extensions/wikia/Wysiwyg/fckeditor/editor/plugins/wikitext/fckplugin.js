@@ -71,12 +71,10 @@ FCK.originalSwitchEditMode = FCK.SwitchEditMode;
 FCK.WysiwygSwitchToolbars = function(switchToWikitext) {
 	var toolbarItems = document.getElementById('xToolbar').getElementsByTagName('tr')[0].childNodes;
 	var MWtoolbar = window.parent.document.getElementById('toolbar');
-	var FCKiframe = window.parent.document.getElementById('wpTextbox1___Frame');
 
 	// move MW toolbar next to "Source" button
 	if (MWtoolbar) {
 		MWtoolbar.style.marginLeft = (toolbarItems[1].offsetWidth + 4) + 'px';
-		MWtoolbar.style.top = (FCKiframe.offsetTop - FCK.GetParentForm().offsetTop + 3) + 'px';
 	}
 
 	// show/hide FCK toolbar items
