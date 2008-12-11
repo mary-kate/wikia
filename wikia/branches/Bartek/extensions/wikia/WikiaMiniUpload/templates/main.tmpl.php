@@ -1,6 +1,11 @@
 <div id="ImageUploadError"></div>
 <div id="ImageUploadMessageControl"><a href="#">[Hide]</a></div>
-<div id="ImageUploadMessage"><?= wfMsgExt( 'wmu-uploadtext', 'parse') ?></div>
+<?php
+	$uploadmesg = wfMsgExt( 'wmu-uploadtext', 'parse' );
+	$uploadmesg = preg_replace( '/(<a[^>]+)/', '$1 target="_new" ', $uploadmesg );
+
+?>
+<div id="ImageUploadMessage"><?= $uploadmesg ?></div>
 <div id="ImageUploadLicenseText"></div>
 
 <table cellspacing="0" style="width: 100%;" id="ImageUploadInputTable">
