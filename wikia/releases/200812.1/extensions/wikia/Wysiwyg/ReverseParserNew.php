@@ -127,6 +127,65 @@ class ReverseParser {
 
 					$out = str_repeat("\n", $linesBefore) . $head . $textContent . $head . str_repeat("\n", $linesAfter);
 					break;
+
+				// text formatting
+				// 1 '</b><i><b>' => '<i>'
+				// 2 '</i><b><i>' => '<b>'
+				// 3 '</b></i><b>' => '</i>'
+				// 4 '</i></b><i>' => '</b>'
+				case 'i':
+				case 'b':
+					switch($node->nodeName) {
+						case 'i':
+							$open = $close = "''";
+							break;
+						case 'b':
+							$open = $close = "'''";
+							break;
+					}
+
+					// A) opening tags
+					// 1, 2
+					if($node->parentNode && $node->parentNode->previousSibling &&
+						$node->isSameNode($node->parentNode->firstChild) &&
+						in_array($node->parentNode->nodeName, array('i','b')) &&
+						$node->parentNode->nodeName != $node->nodeName &&
+						$node->parentNode->previousSibling->nodeName == $node->nodeName) {
+						// don't open bold (1) / italic (2)
+						$open = '';
+					}
+
+					// 3, 4
+					if($node->previousSibling && $node->previousSibling->hasChildNodes() &&
+						in_array($node->previousSibling->nodeName, array('i','b')) &&
+						$node->previousSibling->nodeName != $node->nodeName &&
+						$node->previousSibling->lastChild->nodeName == $node->nodeName) {
+						// don't open bold (3) / italic (4)
+						$open = '';
+					}
+
+					// B) closing tags
+					// 1, 2
+					if($node->nextSibling && $node->nextSibling->hasChildNodes() &&
+						in_array($node->nextSibling->nodeName, array('i','b')) &&
+						$node->nextSibling->nodeName != $node->nodeName &&
+						$node->nextSibling->firstChild->nodeName == $node->nodeName) {
+						// don't close bold (1) / italic (2)
+						$close = '';
+					}
+
+					// 3, 4
+					if($node->parentNode && $node->parentNode->nextSibling &&
+						$node->isSameNode($node->parentNode->lastChild) &&
+						in_array($node->parentNode->nodeName, array('i','b')) &&
+						$node->parentNode->nodeName != $node->nodeName &&
+						$node->parentNode->nextSibling->nodeName == $node->nodeName) {
+						// don't close bold (3) / italic (4)
+						$close = '';
+					}
+
+					$out = "{$open}{$textContent}{$close}";
+					break;
 			}
 
 			// if current processed node contains attribute _wysiwyg_new_line (added in Parser.php)
