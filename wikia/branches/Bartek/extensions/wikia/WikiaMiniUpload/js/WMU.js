@@ -45,7 +45,6 @@ function WMU_loadDetails() {
 			if(FCK.wysiwygData[WMU_refid].caption) {
 				$('ImageUploadCaption').value = FCK.wysiwygData[WMU_refid].caption;
 			}
-
 		}
 	}
 
@@ -411,6 +410,7 @@ function WMU_displayDetails(responseText) {
 	if ($( 'WMU_error_box' )) {
 		alert( $( 'WMU_error_box' ).innerHTML );
 	}
+	$( 'ImageUploadSlider' ).style.visibility = 'hidden';
 
 	WMU_indicator(1, false);
 }
@@ -516,13 +516,13 @@ function MWU_imageWidthChanged(changes) {
 	var image = $('ImageUploadThumb').firstChild;
 	if( !$( 'ImageUploadWidthCheckbox' ).checked ) {
 		$('ImageSize').innerHTML = 'Default size';
-		$('ImageUploadSlider').style.display = 'none';
+		$('ImageUploadSlider').style.visibility = 'hidden';
 		image.width = WMU_orgThumbSize[0];
 		image.height = WMU_orgThumbSize[1];
 		WMU_track('slider/disable'); // tracking
 	} else {
 		$('ImageSize').innerHTML = WMU_slider.getRealValue() + 'px';
-		$('ImageUploadSlider').style.display = '';
+		$('ImageUploadSlider').style.visibility = 'visible';
 		image.width = WMU_thumbSize[0];
 		image.height = WMU_thumbSize[1];
 		WMU_track('slider/enable'); // tracking
