@@ -2288,7 +2288,9 @@ class Parser
 								$output .= $this->closeParagraph().'<p>';
 								$this->mLastSection = 'p';
 							} else {
-								$output .= "<!--NEW_LINE_1-->";
+								if(!empty($wgWysiwygParserEnabled)) {
+									$output .= "<!--NEW_LINE_1-->";
+								}
 							}
 						}
 					}
