@@ -204,7 +204,7 @@ class ReverseParser {
 
 			} else {
 
-				$attstr = $this->getAttributesStr($node);
+				$attStr = $this->getAttributesStr($node);
 
 				if($node->nodeName == 'br' || $node->nodeName == 'hr') {
 					$out = "<{$node->nodeName}{$attStr} />";
