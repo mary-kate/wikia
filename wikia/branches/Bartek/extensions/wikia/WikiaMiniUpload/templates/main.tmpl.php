@@ -1,5 +1,5 @@
 <div id="ImageUploadError"></div>
-
+<div id="ImageUploadMessageControl"><a href="#">[Hide]</a></div>
 <div id="ImageUploadMessage"><?= wfMsgExt( 'wmu-uploadtext', 'parse') ?></div>
 <div id="ImageUploadLicenseText"></div>
 
