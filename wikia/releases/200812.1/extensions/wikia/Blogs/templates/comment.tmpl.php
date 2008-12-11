@@ -63,7 +63,7 @@ if( count( $comments ) > 10 && isset( $props[ "commenting" ] ) && $props[ "comme
 			<big><? echo wfMsg("blog-comment-post") ?></big>
 			<small></small>
 		</a>
-		<div class="right"><?php echo wfMsg("blog-comments-info") ?></div>
+		<div class="right" style="font-style: italic;"><?php echo wfMsg("blog-comments-info") ?></div>
 		</div>
 	</form>
 </div>
@@ -81,7 +81,7 @@ endif;
 		echo "<ul id=\"blog-comments-ul\" >";
 		foreach( $comments as $comment ):
 ?>
-	<li>
+	<li id="comm-<?php echo $comment[ "title" ]->getArticleId() ?>">
 		<div class="blog-comment">
 		<a name="<?php echo isset( $comment["anchor"][2] ) ? $comment["anchor"][2] : "" ?>"></a>
 		<div class="comment_avatar">
@@ -92,8 +92,13 @@ endif;
 				<strong><?php echo $comment["sig"] ?></strong>
 				<span class="timestamp"><?php echo $comment["timestamp"] ?></span>
 <?php if( $canDelete ): ?>
-				| <a href="<?php echo $comment[ "title" ]->getLocalUrl( "redirect=no&action=delete" ) ?>">delete</a>
-<?php endif ?>
+				<a href="<?php echo $comment[ "title" ]->getLocalUrl( "redirect=no&action=delete" ) ?>">delete</a>
+<?php endif;
+	if( !empty( $GLOBALS["wgDevelEnvironment"]) ):
+		echo '<a href="#" class="blog-comm-hide" id="'.$comment[ "title" ]->getArticleId().'">hide this</a>';
+	endif;
+?>
+
 			</div>
 			<?php
 				echo $comment["text"];
@@ -126,7 +131,7 @@ endif;
 			<big><? echo wfMsg("blog-comment-post") ?></big>
 			<small>Inne info</small>
 		</a>
-		<div class="right"><?php echo wfMsg("blog-comments-info") ?></div>
+		<div class="right" style="font-style: italic;"><?php echo wfMsg("blog-comments-info") ?></div>
 		</div>
 	</form>
 </div>
