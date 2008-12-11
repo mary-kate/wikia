@@ -537,6 +537,15 @@ function MWU_imageSizeChanged(size) {
 	}
 }
 
+function WMU_toggleMainMesg(e) {
+	YAHOO.util.Event.preventDefault(e);
+	if ('none' == $('ImageUploadMessage').style.display) {
+		$('ImageUploadMessage').style.display = '';
+	} else {
+		$('ImageUploadMessage').style.display = 'none';
+	}
+}
+
 function WMU_switchScreen(to) {
 	WMU_prevScreen = WMU_curScreen;
 	WMU_curScreen = to;
