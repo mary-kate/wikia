@@ -32,6 +32,8 @@ class BlogListPage extends Article {
 	 */
 	public function view() {
 		global $wgOut, $wgUser, $wgRequest, $wgTitle, $wgContLang;
+		global $wgStylePath, $wgLang;
+		global $wgProblemReportsEnable, $wgNotificationEnableSend;
 
 		$feed = $wgRequest->getText( "feed", false );
 		if( $feed && in_array( $feed, array( "rss", "atom" ) ) ) {
@@ -82,17 +84,29 @@ class BlogListPage extends Article {
 				$rating = round($rating * 2)/2;
 				$ratingPx = round($rating * 17);
 				$templateParams = $templateParams + array(
-					"voted"          => $voted,
-					"rating"         => $rating,
-					"ratingPx"       => $ratingPx,
-					"hidden_star"    => $hidden_star,
-					"voting_enabled" => true,
+					"voted"				=> $voted,
+					"rating"			=> $rating,
+					"ratingPx"			=> $ratingPx,
+					"hidden_star"		=> $hidden_star,
+					"voting_enabled"	=> true,
 				);
 			}
 			else {
 				$templateParams[ "voting_enabled" ] = false;
 			}
 			$templateParams[ "edited" ] = $wgContLang->timeanddate( $this->getTimestamp() );
+			$templateParams[ "oTitle" ] = $this->mTitle;
+			$templateParams[ "wgStylePath" ] = $wgStylePath;
+			$templateParams[ "lastUpdate" ] = $wgLang->date($this->getTimestamp());
+			$templateParams[ "wgNotificationEnableSend" ] = $wgNotificationEnableSend;
+			$templateParams[ "wgProblemReportsEnable" ] = $wgProblemReportsEnable;
+
+			if ($this->getUser() > 0) {
+				$username = $this->getUserText();
+				$oUserTitle = Title::makeTitle(NS_USER, $username);
+				$templateParams[ "username" ] = $username;
+				$templateParams[ "oUserTitle" ] = $oUserTitle;
+			}
 
 			$tmpl = new EasyTemplate( dirname( __FILE__ ) . '/templates/' );
 			$tmpl->set_vars( $templateParams );
@@ -155,6 +169,7 @@ class BlogListPage extends Article {
 	 */
 	private function showBlogListing() {
 		global $wgOut, $wgRequest, $wgParser, $wgMemc;
+		global $displayArticleFooter;
 
 		/**
 		 * use cache or skip cache when action=purge
@@ -210,6 +225,7 @@ class BlogListPage extends Article {
 	 */
 	private function showFeed( $format ) {
 		global $wgOut, $wgRequest, $wgParser, $wgMemc, $wgFeedClasses, $wgTitle;
+		global $wgSitename;
 
 		$user    = $this->mTitle->getBaseText();
 		$listing = false;
@@ -237,7 +253,7 @@ class BlogListPage extends Article {
 			$wgMemc->set( wfMemcKey( "blog", "feed", $user, $offset ), $listing, 3600 );
 		}
 
-		$feed = new $wgFeedClasses[ $format ]( $this->mTitle->getFullText(), "", $wgTitle->getFullUrl() );
+		$feed = new $wgFeedClasses[ $format ]( wfMsg("blog-userblog", $this->getUserText()), wfMsg("blog-fromsitename", $wgSitename), $wgTitle->getFullUrl() );
 
 		$feed->outHeader();
 		if( is_array( $listing ) ) {
@@ -557,7 +573,6 @@ class BlogListPage extends Article {
 		return true;
 	}
 
-
 	/**
 	 * guess Owner of blog from title
 	 *
@@ -567,13 +582,15 @@ class BlogListPage extends Article {
 	 * @return String -- guessed name
 	 */
 	static public function getOwner( $title ) {
+		wfProfileIn( __METHOD__ );
 		if( $title instanceof Title ) {
 			$title = $title->getBaseText();
 		}
-		if( strpos( $title, "/" ) === false ) {
-			return $title;
+		if( strpos( $title, "/" ) !== false ) {
+			list( $title, $rest) = explode( "/", $title, 2 );
 		}
-		$parts = explode( "/", $title );
-		return $parts[0];
+		wfProfileOut( __METHOD__ );
+
+		return $title;
 	}
 }
