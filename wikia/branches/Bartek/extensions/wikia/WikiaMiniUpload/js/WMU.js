@@ -15,7 +15,7 @@ var WMU_prevScreen = null;
 var WMU_slider = null;
 var WMU_thumbSize = null;
 var WMU_orgThumbSize = null;
-var WMU_widthChanges;
+var WMU_widthChanges = 1;
 var WMU_refid = null;
 var WMU_wysiwygStart = 1;
 
@@ -514,7 +514,7 @@ function WMU_insertImage(e, type) {
 
 function MWU_imageWidthChanged(changes) {
 	var image = $('ImageUploadThumb').firstChild;
-	if(changes%2 == 0) {
+	if( !$( 'ImageUploadWidthCheckbox' ).checked ) {
 		$('ImageSize').innerHTML = 'Default size';
 		$('ImageUploadSlider').style.display = 'none';
 		image.width = WMU_orgThumbSize[0];
