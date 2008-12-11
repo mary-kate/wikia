@@ -181,11 +181,18 @@ function WMU_loadMain() {
 			$('ImageUploadMain').innerHTML = o.responseText;
 			WMU_indicator(1, false);
 			if($('ImageQuery') && WMU_panel.element.style.visibility == 'visible') $('ImageQuery').focus();
+			var cookieMsg = document.cookie.indexOf("wmumainmesg=");
+			if (cookieMsg > -1 && document.cookie.charAt(cookieMsg + 12) == 0) {
+				$('ImageUploadMessage').style.display = 'none';
+		                $('ImageUploadMessageLink').innerHTML = '[' + wmu_show_message  + ']';
+			}
 		}
 	}
 	WMU_indicator(1, true);
 	YAHOO.util.Connect.asyncRequest('GET', wgScriptPath + '/index.php?action=ajax&rs=WMU&method=loadMain', callback);
 	WMU_curSourceId = 0;
+
+
 }
 
 function WMU_recentlyUploaded(param, pagination) {
@@ -542,9 +549,11 @@ function WMU_toggleMainMesg(e) {
 	if ('none' == $('ImageUploadMessage').style.display) {
 		$('ImageUploadMessage').style.display = '';
 		$('ImageUploadMessageLink').innerHTML = '[' + wmu_hide_message  + ']';
+		document.cookie = "wmumainmesg=1";
 	} else {
 		$('ImageUploadMessage').style.display = 'none';
 		$('ImageUploadMessageLink').innerHTML = '[' + wmu_show_message  + ']';
+		document.cookie = "wmumainmesg=0";
 	}
 }
 
