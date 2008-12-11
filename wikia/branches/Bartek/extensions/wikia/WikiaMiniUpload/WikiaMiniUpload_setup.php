@@ -52,6 +52,8 @@ function WMUSetupVars($vars) {
 	$vars['file_blacklist'] = $wgFileBlacklist;
 	$vars['check_file_extensions'] = $wgCheckFileExtensions;
 	$vars['strict_file_extensions'] = $wgStrictFileExtensions;
+	$vars['wmu_show_message'] = wfMsg('wmu-show-message');
+	$vars['wmu_hide_message'] = wfMsg('wmu-hide-message');
 
 	return true;
 }
