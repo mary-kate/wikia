@@ -6,6 +6,14 @@ if(isset($props['name'])) {
 	<?= wfMsg('wmu-details-inf') ?>
 	<table class="ImageUploadOptionsTable" style="width: 100%;">
 		<tr class="ImageUploadNoBorder">
+			<th><?= wfMsg('wmu-name') ?></th>
+			<td>
+			<input id="ImageUploadName" type="text" size="30" value="<?= $props['partname'] ?>" />
+			<label for="ImageUploadName">.<?= $props['extension'] ?></label>
+			<input id="ImageUploadExtension" type="hidden" value="<?= $props['extension'] ?>" />
+			</td>
+		</tr>
+		<tr class="ImageUploadNoBorder">
 			<th><?= wfMsg('license') ?></th>
 			<td>
 			<?php
@@ -25,14 +33,6 @@ if(isset($props['name'])) {
 			}
 			?>
 		</tr>		
-		<tr class="ImageUploadNoBorder">
-			<th><?= wfMsg('wmu-name') ?></th>
-			<td>
-			<input id="ImageUploadName" type="text" size="30" value="<?= $props['partname'] ?>" />
-			<label for="ImageUploadName">.<?= $props['extension'] ?></label>
-			<input id="ImageUploadExtension" type="hidden" value="<?= $props['extension'] ?>" />
-			</td>
-		</tr>
 	</table>
 </div>
 <?php
