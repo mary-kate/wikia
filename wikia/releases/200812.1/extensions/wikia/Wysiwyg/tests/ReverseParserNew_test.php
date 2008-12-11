@@ -17,8 +17,8 @@ foreach($htmlFiles as $htmlFile) {
 	if($out != file_get_contents('wikitext_'.$testNo)) {
 		echo "\n\nERROR, TEST NO: $testNo\n\n";
 		exit();
+	} else {
+		echo "\n\nSUCCESS, TEST NO: $testNo\n\n";
 	}
 
 }
-
-echo "\n\nSUCCESS\n\n";

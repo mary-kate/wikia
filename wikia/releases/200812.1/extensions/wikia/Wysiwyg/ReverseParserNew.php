@@ -114,6 +114,11 @@ class ReverseParser {
 							$textContent = "\n" . $textContent;
 						} else if($textContent == ""){
 							$textContent = "\n\n";
+						} else {
+							$newLinesBefore = $node->getAttribute('_new_lines_before');
+							if(is_numeric($newLinesBefore)) {
+								$textContent = str_repeat("\n", $newLinesBefore+1).$textContent;
+							}
 						}
 
 						$out = $textContent;
