@@ -1,5 +1,5 @@
 <div id="ImageUploadError"></div>
-<div id="ImageUploadMessageControl"><a href="#" onclick="WMU_toggleMainMesg(event);" >[Hide]</a></div>
+<div id="ImageUploadMessageControl"><a href="#" onclick="WMU_toggleMainMesg(event);" >[<?= wfMsg( 'wmu-hide-message' ) ?>]</a></div>
 <?php
 	$uploadmesg = wfMsgExt( 'wmu-uploadtext', 'parse' );
 	$uploadmesg = preg_replace( '/(<a[^>]+)/', '$1 target="_new" ', $uploadmesg );

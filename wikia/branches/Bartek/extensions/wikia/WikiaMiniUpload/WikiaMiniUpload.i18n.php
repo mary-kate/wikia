@@ -47,4 +47,6 @@ $messages['en'] = array(
 	'wmu-uploadtext' => 'Use the form below to upload and display files.
 
 To view or search previously uploaded files go to the [[Special:ImageList|list of uploaded files]], (re)uploads are also logged in the [[Special:Log/upload|upload log]], deletions in the [[Special:Log/delete|deletion log]].',
+	'wmu-show-message' => 'show message',
+	'wmu-hide-message' => 'hide message',
 );
