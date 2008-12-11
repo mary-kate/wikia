@@ -28,6 +28,7 @@ $wgNamespacesWithSubpages[ NS_BLOG_LISTING_TALK ] = true;
 $wgContentNamespaces[] = NS_BLOG_ARTICLE;
 $wgContentNamespaces[] = NS_BLOG_LISTING;
 
+
 /**
  * messages file
  */
