@@ -2237,6 +2237,9 @@ class Parser
 					$paragraphStack = false;
 					# TODO bug 5718: paragraph closed
 					$output .= $this->closeParagraph();
+					if(!empty($wgWysiwygParserEnabled)) {
+						$this->mEmptyLineCounter = 0;
+					}
 					if ( $preOpenMatch and !$preCloseMatch ) {
 						$this->mInPre = true;
 					}
@@ -2271,7 +2274,11 @@ class Parser
 								if ($this->mLastSection != 'p' ) {
 									$output .= $this->closeParagraph();
 									$this->mLastSection = '';
-									$paragraphStack = '<p>';
+									if(!empty($wgWysiwygParserEnabled)) {
+										$paragraphStack = '<p _new_lines_before='.($this->mEmptyLineCounter).'>';
+									} else {
+										$paragraphStack = '<p>';
+									}
 								} else {
 									$paragraphStack = '</p><p>';
 								}
@@ -2285,7 +2292,11 @@ class Parser
 								$paragraphStack = false;
 								$this->mLastSection = 'p';
 							} else if ($this->mLastSection != 'p') {
-								$output .= $this->closeParagraph().'<p>';
+								if(!empty($wgWysiwygParserEnabled)) {
+									$output .= $this->closeParagraph().'<p _new_lines_before=0>';
+								} else {
+									$output .= $this->closeParagraph().'<p>';
+								}
 								$this->mLastSection = 'p';
 							} else {
 								if(!empty($wgWysiwygParserEnabled)) {
