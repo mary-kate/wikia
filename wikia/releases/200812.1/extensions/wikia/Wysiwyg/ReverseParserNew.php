@@ -116,7 +116,7 @@ class ReverseParser {
 							$textContent = "\n\n";
 						} else {
 							$newLinesBefore = $node->getAttribute('_new_lines_before');
-							if(is_numeric($newLinesBefore)) {
+							if(is_numeric($newLinesBefore) && $node->previousSibling) {
 								$textContent = str_repeat("\n", $newLinesBefore+1).$textContent;
 							}
 						}
@@ -202,6 +202,64 @@ class ReverseParser {
 						$out = "{$open}{$textContent}{$close}";
 						break;
 
+					// tables
+					// @see http://en.wikipedia.org/wiki/Help:Table
+					case 'table':
+						if (empty($nodeData)) {
+							$attStr = ltrim($this->getAttributesStr($node));
+							$out = "{|{$attStr}\n{$textContent}|}\n";
+						}
+						else {
+							// thumbnail generation error - handle as an image
+							$out = $this->handleImage($node, $textContent);
+						}
+						break;
+
+					case 'caption':
+						$attStr = $this->getAttributesStr($node);
+						if ($attStr != '') {
+							$attStr = ltrim("{$attStr}|");
+						}
+						$out = "|+{$attStr}{$textContent}";
+						break;
+
+					case 'tr':
+						$isFirstRow = $node->isSameNode($node->parentNode->firstChild);
+						$attStr = ltrim($this->getAttributesStr($node));
+
+						// don't convert first table row into |-
+						if ($isFirstRow && $attStr == '') {
+							$out = $textContent;
+						}
+						else {
+							$out = "|-{$attStr}\n{$textContent}";
+						}
+						break;
+
+					case 'th':
+						$attStr = $this->getAttributesStr($node);
+						if ($attStr != '') {
+							$attStr = ltrim("{$attStr}|");
+						}
+						$out = "!{$attStr}{$textContent}\n";
+						break;
+
+					case 'td':
+						$attStr = $this->getAttributesStr($node);
+						if ($attStr != '') {
+							$attStr = ltrim("{$attStr}|");
+						}
+						$textContent = rtrim($textContent);
+
+						// |- |+ |} are reserved wikimarkup syntax inside table - just add space before
+						if ($textContent!='' && in_array($textContent{0}, array('-', '+', '}'))) {
+							$textContent = " {$textContent}";
+						}
+
+						$out = "|{$attStr}{$textContent}";
+						break;
+
+					// ignore tbody tag - just pass it through
 					case 'tbody':
 						$out = $textContent;
 						break;
