@@ -112,6 +112,8 @@ class ReverseParser {
 						// node is <p> then add new line before the current one
 						if(($previousNode = $this->getPreviousElementNode($node)) && $previousNode->nodeName == 'p') {
 							$textContent = "\n" . $textContent;
+						} else if($textContent == ""){
+							$textContent = "\n\n";
 						}
 
 						$out = $textContent;
