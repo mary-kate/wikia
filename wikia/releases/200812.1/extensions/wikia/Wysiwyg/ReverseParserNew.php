@@ -37,6 +37,9 @@ class ReverseParser {
 		if(is_string($html) && $html != '') {
 
 			// fix for proper encoding of UTF characters
+
+			wfDebug("Wysiwyg ReverseParserNew HTML original: $html\n");
+
 			$html = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/></head><body>'.$html.'</body></html>';
 
 			$this->data = $data;
