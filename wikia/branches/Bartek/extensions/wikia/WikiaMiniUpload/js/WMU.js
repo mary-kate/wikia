@@ -541,8 +541,10 @@ function WMU_toggleMainMesg(e) {
 	YAHOO.util.Event.preventDefault(e);
 	if ('none' == $('ImageUploadMessage').style.display) {
 		$('ImageUploadMessage').style.display = '';
+		$('ImageUploadMessageLink').innerHTML = '[' + wmu_hide_message  + ']';
 	} else {
 		$('ImageUploadMessage').style.display = 'none';
+		$('ImageUploadMessageLink').innerHTML = '[' + wmu_show_message  + ']';
 	}
 }
 
