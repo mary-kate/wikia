@@ -430,7 +430,7 @@ function WMU_insertImage(e, type) {
 		params.push('name='+$('ImageUploadRenameName').value);
 	} else {
 		if($('ImageUploadName')) {
-			params.push('name='+$('ImageUploadName').value+$('ImageUploadExtension').value);
+			params.push('name='+$('ImageUploadName').value + '.' + $('ImageUploadExtension').value);
 		}
 	}
 
