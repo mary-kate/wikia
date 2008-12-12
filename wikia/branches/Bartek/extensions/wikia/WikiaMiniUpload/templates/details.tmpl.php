@@ -28,12 +28,17 @@ if(isset($props['name'])) {
 					<option><?= wfMsg( 'nolicense' ) ?></option>
 					<?= $licensehtml ?>
 				</select>
-			</span><br/>
-			<div id="ImageUploadLicenseText"></div>
+			</span>
 			<?php
 			}
 			?>
+			</td>
 		</tr>		
+		<tr class="ImageUploadNoBorder">
+			<td colspan="2">
+				<div id="ImageUploadLicenseText"></div>			
+			</td>
+		</tr>
 	</table>
 </div>
 <?php
