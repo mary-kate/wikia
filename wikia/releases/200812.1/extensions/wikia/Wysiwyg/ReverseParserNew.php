@@ -305,14 +305,20 @@ class ReverseParser {
 
 		} else if($node->nodeType == XML_COMMENT_NODE) {
 
+			// if the next sibling node of the current one comment node is text
+			// then add new line
+			// e.g. "<!--NEW_LINE_1-->abc" => "\nabc"
+			if($node->nextSibling && $node->nextSibling->nodeType == XML_TEXT_NODE) {
+				$out = "\n";
+			}
 
 		} else if($node->nodeType == XML_TEXT_NODE) {
 
 			// if the next sibling node of the current one text node is comment (NEW_LINE_1)
-			// then cut the last character of current text node (it must be space) and add new line
-			// e.g. "abc <!--NEW_LINE_1-->" => "abc\n"
+			// then cut the last character of current text node (it must be space)
+			// e.g. "abc <!--NEW_LINE_1-->" => "abc<!--NEW_LINE_1-->"
 			if($node->nextSibling && $node->nextSibling->nodeType == XML_COMMENT_NODE && $node->nextSibling->data == "NEW_LINE_1") {
-				$textContent = substr($textContent, 0, -1) . "\n";
+				$textContent = substr($textContent, 0, -1);
 			}
 
 			// replace space with empty string before HTML tag with _wysiwyg_line_start attribute
