@@ -140,6 +140,11 @@ class ReverseParser {
 							$textContent = " ".trim($textContent)." ";
 						}
 
+						// headings inside table cell
+						if ( in_array($node->parentNode->nodeName, array('td', 'th')) ) {
+							$linesBefore++;
+						}
+
 						$out = str_repeat("\n", $linesBefore) . $head . $textContent . $head . str_repeat("\n", $linesAfter);
 						break;
 
