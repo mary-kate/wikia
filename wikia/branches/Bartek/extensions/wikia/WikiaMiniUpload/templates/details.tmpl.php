@@ -24,7 +24,7 @@ if(isset($props['name'])) {
 				$licenses = new Licenses();
 				$licensehtml = $licenses->getHtml();	
 			?>
-				<select name="ImageUploadLicense" id="ImageUploadLicense" />
+				<select name="ImageUploadLicense" id="ImageUploadLicense" onchange="WMU_licenseSelectorCheck()" />
 					<option><?= wfMsg( 'nolicense' ) ?></option>
 					<?= $licensehtml ?>
 				</select>
