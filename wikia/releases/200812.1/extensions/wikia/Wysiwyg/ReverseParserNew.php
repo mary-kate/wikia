@@ -220,7 +220,7 @@ class ReverseParser {
 						if ($attStr != '') {
 							$attStr = ltrim("{$attStr}|");
 						}
-						$out = "|+{$attStr}{$textContent}";
+						$out = "|+{$attStr}{$textContent}\n";
 						break;
 
 					case 'tr':
@@ -256,7 +256,7 @@ class ReverseParser {
 							$textContent = " {$textContent}";
 						}
 
-						$out = "|{$attStr}{$textContent}";
+						$out = "|{$attStr}{$textContent}\n";
 						break;
 
 					// ignore tbody tag - just pass it through
