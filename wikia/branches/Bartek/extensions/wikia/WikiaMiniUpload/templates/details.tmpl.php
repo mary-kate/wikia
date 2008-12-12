@@ -13,7 +13,7 @@ if(isset($props['name'])) {
 			<input id="ImageUploadExtension" type="hidden" value="<?= $props['extension'] ?>" />
 			</td>
 		</tr>
-		<tr class="ImageUploadNoBorder">
+		<tr class="ImageUploadNoBorder ImageUploadThin">
 			<th><?= wfMsg('license') ?></th>
 			<td>
 			<?php
@@ -34,6 +34,12 @@ if(isset($props['name'])) {
 			?>
 			</td>
 		</tr>		
+		<tr class="ImageUploadNoBorder ImageUploadNoSpace">
+			<th>&nbsp;</th>	
+			<td>
+				<div id="ImageUploadLicenseControl"><a id="ImageUploadLicenseLink" href="#" onclick="WMU_toggleMainMesg(event);" >[<?= wfMsg( 'wmu-hide-message' ) ?>]</a></div>
+			</td>
+		</tr>
 		<tr class="ImageUploadNoBorder">
 			<td colspan="2">
 				<div id="ImageUploadLicenseText"></div>			

@@ -185,6 +185,14 @@ ImageUploadOptionsTable img {
 .ImageUploadNoBorder td, .ImageUploadNoBorder th {
 	border: 0 !important;
 }
+.ImageUploadNoSpace td, .ImageUploadNoSpace th {
+	padding: 0 !important;
+}
+
+.ImageUploadThin td, .ImageUploadThin th {
+	padding: 10px 5px 2px 2px !important;
+}
+
 #ImageUploadSection {
 	background: #EEE;
 	border-bottom: 1px solid #CCC;
@@ -256,3 +264,8 @@ ImageUploadOptionsTable img {
 	right: 24px;
 	top: 18px;
 }
+
+#ImageUploadLicenseControl {
+	font-size: 9pt;
+}
+
