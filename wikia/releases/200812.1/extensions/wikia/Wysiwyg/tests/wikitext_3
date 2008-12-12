@@ -1,18 +1,18 @@
 {|cellspacing="1" cellpadding="1" border="1" width="200"
-|+111 
+|+111
 |
 == foo ==
 |}
-aa 
+aa
 
 {|cellspacing="1" cellpadding="1" border="1" width="200"
-|+222 
+|+222
 |bar
 |}
 
 aaaa
 {|cellspacing="1" cellpadding="1" border="1" width="200"
-|+333 
+|+333
 |
 {|cellspacing="1" cellpadding="1" border="1" width="200"
 |asd
@@ -26,7 +26,7 @@ aaaa
 |}
 |}
 
-aaa 
+aaa
 
 {|cellspacing="1" cellpadding="1" border="1" width="200"
 |
