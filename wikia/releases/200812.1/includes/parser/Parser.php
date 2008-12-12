@@ -2238,6 +2238,9 @@ class Parser
 					# TODO bug 5718: paragraph closed
 					$output .= $this->closeParagraph();
 					if(!empty($wgWysiwygParserEnabled)) {
+						if ($this->mEmptyLineCounter%2 == 1) {
+							$t = preg_replace('/^<(\w+)/', '<$1 _wysiwyg_new_line="true"', $t);
+						}
 						$this->mEmptyLineCounter = 0;
 					}
 					if ( $preOpenMatch and !$preCloseMatch ) {
