@@ -45,6 +45,7 @@ function WMU_loadDetails() {
 			if(FCK.wysiwygData[WMU_refid].caption) {
 				$('ImageUploadCaption').value = FCK.wysiwygData[WMU_refid].caption;
 			}
+//			 $( 'ImageSize' ).innerHTML = '';
 		}
 	}
 
@@ -416,8 +417,7 @@ function WMU_displayDetails(responseText) {
 			return Math.max(2, Math.round(this.getValue() * (thumbSize[0] / 200)));
 		}
 		WMU_slider.subscribe("change", function(offsetFromStart) {
-			$( 'ImageSize' ).innerHTML = 'Default size';
-	//		$('ImageSize').innerHTML = WMU_slider.getRealValue() + 'px';
+			$('ImageSize').innerHTML = WMU_slider.getRealValue() + 'px';
 			image.width = WMU_slider.getRealValue();
 			image.height = image.width / (thumbSize[0] / thumbSize[1]);
 			if(WMU_orgThumbSize == null) {
@@ -425,11 +425,12 @@ function WMU_displayDetails(responseText) {
 			}
 			WMU_thumbSize = [image.width, image.height];
 		});
+		
 		if(image.width < 250) {
 			WMU_slider.setValue(200, true);
 		} else {
 			WMU_slider.setValue(125, true);
-		}
+		}		
 	}
 	if ($( 'WMU_error_box' )) {
 		alert( $( 'WMU_error_box' ).innerHTML );
@@ -544,7 +545,7 @@ function WMU_insertImage(e, type) {
 function MWU_imageWidthChanged(changes) {
 	var image = $('ImageUploadThumb').firstChild;
 	if( !$( 'ImageUploadWidthCheckbox' ).checked ) {
-		$('ImageSize').innerHTML = 'Default size';
+		$('ImageSize').innerHTML = '';
 		$('ImageUploadSlider').style.visibility = 'hidden';
 		image.width = WMU_orgThumbSize[0];
 		image.height = WMU_orgThumbSize[1];
