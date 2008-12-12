@@ -2281,7 +2281,7 @@ class Parser
 									$output .= $this->closeParagraph();
 									$this->mLastSection = '';
 									if(!empty($wgWysiwygParserEnabled)) {
-										$paragraphStack = '<p _new_lines_before='.($this->mEmptyLineCounter).'>';
+										$paragraphStack = '<p _new_lines_before='.($this->mEmptyLineCounter).' _wysiwyg_line_start="true">';
 									} else {
 										$paragraphStack = '<p>';
 									}
@@ -2299,7 +2299,7 @@ class Parser
 								$this->mLastSection = 'p';
 							} else if ($this->mLastSection != 'p') {
 								if(!empty($wgWysiwygParserEnabled)) {
-									$output .= $this->closeParagraph().'<p _new_lines_before=0>';
+									$output .= $this->closeParagraph().'<p _new_lines_before="0" _wysiwyg_line_start="true">';
 								} else {
 									$output .= $this->closeParagraph().'<p>';
 								}
