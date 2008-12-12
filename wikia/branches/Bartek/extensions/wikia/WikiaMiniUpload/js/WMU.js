@@ -95,7 +95,7 @@ function WMU_licenseSelectorCheck() {
 			selector.selectedIndex = 0;
 		}
 	}
-	//show preview
+	WMU_loadLicense( selection );
 }
 
 function WMU_show(e) {
@@ -203,6 +203,19 @@ function WMU_loadMain() {
 	WMU_curSourceId = 0;
 
 
+}
+
+function WMU_loadLicense( license ) {
+	var callback = {
+		success: function(o) {			
+			$('ImageUploadLicenseText').innerHTML = o.responseText;
+			$('ImageUploadLicenseText').style.display = '';
+			WMU_indicator(1, false);
+		}
+	}
+	WMU_indicator(1, false);
+	YAHOO.util.Connect.asyncRequest('GET', wgScriptPath + '/index.php?action=ajax&rs=WMU&method=loadLicense&license='+license, callback);
+	WMU_curSourceId = 0;
 }
 
 function WMU_recentlyUploaded(param, pagination) {
