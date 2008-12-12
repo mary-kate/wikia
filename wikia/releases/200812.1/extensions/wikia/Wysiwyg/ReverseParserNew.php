@@ -111,7 +111,7 @@ class ReverseParser {
 						// if the first previous XML_ELEMENT_NODE (so no text and no comment) of the current
 						// node is <p> then add new line before the current one
 						if(($previousNode = $this->getPreviousElementNode($node)) && $previousNode->nodeName == 'p') {
-							$textContent = "\n" . $textContent;
+							$textContent = "\n\n" . $textContent;
 						} else if($textContent == ""){
 							$textContent = "\n\n";
 						} else {
