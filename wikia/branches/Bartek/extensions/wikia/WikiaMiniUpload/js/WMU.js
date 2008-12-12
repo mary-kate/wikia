@@ -87,6 +87,17 @@ function WMU_addHandler() {
   	YAHOO.util.Event.addListener(['wmuLink', 'wmuHelpLink', btn], 'click',  WMU_show);
 }
 
+function WMU_licenseSelectorCheck() {
+	var selector = document.getElementById( "wpLicense" );
+	var selection = selector.options[selector.selectedIndex].value;
+	if( selector.selectedIndex > 0 ) {
+		if( selection == "" ) {
+			selector.selectedIndex = 0;
+		}
+	}
+	//show preview
+}
+
 function WMU_show(e) {
 	WMU_refid = null;
 	WMU_wysiwygStart = 1;
@@ -393,7 +404,8 @@ function WMU_displayDetails(responseText) {
 			return Math.max(2, Math.round(this.getValue() * (thumbSize[0] / 200)));
 		}
 		WMU_slider.subscribe("change", function(offsetFromStart) {
-			$('ImageSize').innerHTML = WMU_slider.getRealValue() + 'px';
+			$( 'ImageSize' ).innerHTML = 'Default size';
+	//		$('ImageSize').innerHTML = WMU_slider.getRealValue() + 'px';
 			image.width = WMU_slider.getRealValue();
 			image.height = image.width / (thumbSize[0] / thumbSize[1]);
 			if(WMU_orgThumbSize == null) {
@@ -411,7 +423,6 @@ function WMU_displayDetails(responseText) {
 		alert( $( 'WMU_error_box' ).innerHTML );
 	}
 	$( 'ImageUploadSlider' ).style.visibility = 'hidden';
-	$( 'ImageSize' ).innerHTML = 'Default size';
 
 	WMU_indicator(1, false);
 }
