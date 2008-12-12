@@ -40,6 +40,9 @@ class WysiwygParser extends Parser {
 					$result = "</p><p{$style}>";
 				}
 				else {
+					if ($this->mEmptyLineCounter%2 == 1) {
+						$style .= ' _wysiwyg_new_line="true"';
+					}
 					$result = "<p{$style}>";
 				}
 			}
@@ -50,12 +53,23 @@ class WysiwygParser extends Parser {
 		else if ( '*' == $char || '#' == $char ) {
 			$indentLevel = strspn($this->mCurrentPrefix, ':');
 			$style = ($indentLevel > 0 && $this->bulletLevel == 0) ? ' style="margin-left:'.($indentLevel*40).'px"' : '';
+
+			if ($this->mEmptyLineCounter%2 == 1) {
+				$style .= ' _wysiwyg_new_line="true"';
+			}
+
 			$result .= '<' . ($char == '*' ? 'ul' : 'ol') . $style . '><li>';
 			$this->bulletLevel++;
 		}
 		else if ( ';' == $char ) {
 			$indentLevel = strspn($this->mCurrentPrefix, ':');
-			$result .= '<p class="definitionTerm" style="margin-left: '.($indentLevel*40).'px">';
+			if ($this->mEmptyLineCounter%2 == 1) {
+				$attr = ' _wysiwyg_new_line="true"';
+			}
+			else {
+				$attr = '';
+			}
+			$result .= '<p class="definitionTerm" style="margin-left: '.($indentLevel*40).'px"'.$attr.'>';
 		}
 		else { $result = '<!-- ERR 1 -->'; }
 
