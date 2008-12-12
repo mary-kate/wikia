@@ -73,8 +73,53 @@ class ReverseParser {
 		// parse child nodes
 		if($node->hasChildNodes()) {
 			$nodes = $node->childNodes;
+
+			// handle lists (open)
+			$isListNode = in_array($node->nodeName, array('ul', 'ol', 'dl'));
+
+			if($isListNode) {
+				// build bullets stack
+				switch ($node->nodeName) {
+					case 'ul':
+						$bullet = '*';
+						break;
+					case 'ol':
+						$bullet = '#';
+						break;
+					case 'dl':
+						$bullet = ':';
+						break;
+				}
+				if (!$node->getAttribute('washtml')) {
+					// handle (un)ordered lists indentation done by FCK (margin-left/right CSS property)
+					if (in_array($node->nodeName, array('ol','ul'))) {
+						$indentation = $this->getIndentationLevel($node);
+						if ($indentation !== false) {
+							$this->listBullets = str_repeat(':', $indentation);
+						}
+					}
+					$this->listLevel++;
+					$this->listBullets .= $bullet;
+				}
+			}
+
 			for($n = 0; $n < $nodes->length; $n++) {
 				$childOut .= $this->parseNode($nodes->item($n), $level+1);
+			}
+
+			// handle lists (close)
+			if($isListNode) {
+				// fix for different list types on the same level of nesting
+				if($node->previousSibling && in_array($node->previousSibling->nodeName, array('ol', 'ul', 'dl')) && $this->listLevel > 1) {
+					$childOut = "\n" . trim($childOut);
+				} else {
+					$childOut = trim($childOut);
+				}
+
+				if (!$node->getAttribute('washtml')) {
+					$this->listLevel--;
+					$this->listBullets = substr($this->listBullets, 0, -1);
+				}
 			}
 		}
 
@@ -114,6 +159,19 @@ class ReverseParser {
 						break;
 
 					case 'p':
+						// detect indented paragraph (margin-left CSS property)
+						$indentation = $this->getIndentationLevel($node);
+
+						// handle <dt> elements being rendered as p.definitionTerm
+						if ($this->hasCSSClass($node, 'definitionTerm')) {
+							$textContent = ';' . $textContent;
+						}
+
+						// handle indentations
+						if ($indentation > 0) {
+							$textContent = str_repeat(':', $indentation) . $textContent;
+						}
+
 						// if the first previous XML_ELEMENT_NODE (so no text and no comment) of the current
 						// node is <p> then add new line before the current one
 						if(($previousNode = $this->getPreviousElementNode($node)) && $previousNode->nodeName == 'p') {
@@ -147,7 +205,7 @@ class ReverseParser {
 						}
 
 						// headings inside table cell
-						if ( in_array($node->parentNode->nodeName, array('td', 'th')) ) {
+						if ( $this->isTableCell($node->parentNode) ) {
 							$linesBefore++;
 						}
 
@@ -279,6 +337,49 @@ class ReverseParser {
 					case 'tbody':
 						$out = $textContent;
 						break;
+
+					// lists
+					case 'ul':
+					case 'ol':
+					case 'dl':
+						$prefix = $suffix = '';
+						// handle indentations created using definition lists
+						if($node->nodeName == 'dl') {
+							$indentation = $this->getIndentationLevel($node);
+							if($indentation !== false) {
+								$prefix = str_repeat(':', $indentation);
+							}
+							// paragraph is following this <dl> list
+							if($node->nextSibling && $node->nextSibling->nodeName == 'p') {
+								$suffix = ($node->nextSibling->textContent != '') ? "\n" : "\n\n";
+							}
+						}
+						if($node->previousSibling) {
+							// first item of nested list
+							$prefix = "\n{$prefix}";
+
+							// add space after previous list, so we won't break numbers
+							if ($this->listLevel == 0 && $this->isList($node->previousSibling)) {
+								$prefix = "\n{$prefix}";
+							}
+						}
+						// lists inside table cell
+						else if ($node->parentNode && $this->isTableCell($node->parentNode)) {
+							$prefix = "\n{$prefix}";
+						}
+						// rtrim used to remove \n added by the last list item
+						$out = $prefix . rtrim($textContent, " \n") . $suffix;
+						break;
+
+					// lists elements
+					case 'li':
+					case 'dd':
+					case 'dt':
+						$out = $this->handleListItem($node, $textContent);
+						break;
+
+
+
 				}
 
 			} else {
@@ -341,6 +442,40 @@ class ReverseParser {
 		return $out;
 	}
 
+	/**
+	 * Returns wikimarkup for ordered, unordered and definition lists
+	 */
+	private function handleListItem($node, $content) {
+		switch($node->nodeName) {
+			case 'li':
+				if( $node->hasChildNodes() && in_array($node->childNodes->item(0)->nodeName, array('ul', 'ol')) ) {
+					// nested lists like
+					// *** foo
+					// *** bar
+					return $content . "\n";
+				} else {
+					return $this->listBullets . ' ' . ltrim($content) . "\n";
+				}
+/*
+			case 'dt':
+				return substr($this->listBullets, 0, -1) . ";{$node->textContent}\n";
+
+			case 'dd':
+				// hack for :::::foo markup used for indentation
+				// <dl><dl>...</dl></dl> (produced by MW markup) would generate wikimarkup like the one below:
+				// :
+				// ::
+				// ::: ...
+				if($node->hasChildNodes() && $node->childNodes->item(0)->nodeName == 'dl') {
+					return rtrim($content, ' ') . "\n";
+				} else if ($this->hasListInside($node)) {
+					return $content . "\n";
+				} else {
+					return $this->listBullets . $content . "\n";
+				}
+*/		}
+	}
+
 	private function getPreviousElementNode($node) {
 		$temp = $node;
 		while($node->previousSibling) {
@@ -354,6 +489,20 @@ class ReverseParser {
 
 	private function isHeaderNode($node) {
 		return ($node->nodeName{0} == 'h') && is_numeric($node->nodeName{1});
+	}
+
+	/**
+	 * Return true if given node is table cell (td/th) - used to add newline before certain wikimarkup when is table cell
+	 */
+	private function isTableCell($node) {
+		return in_array($node->nodeName, array('td', 'th', 'caption'));
+	}
+
+	/**
+	 * Return true if given node is list container
+	 */
+	private function isList($node) {
+		return in_array($node->nodeName, array('ol', 'ul', 'dl'));
 	}
 
 	/**
@@ -373,4 +522,37 @@ class ReverseParser {
 		}
 		return $attStr;
 	}
+
+	/**
+	 * Returns level of indentation from value of margin-left CSS property
+	 */
+	private function getIndentationLevel($node) {
+		if(!$node->hasAttributes()) {
+			return false;
+		}
+
+		$cssStyle = $node->getAttribute('style');
+
+		if(!empty($cssStyle)) {
+			$margin = (substr($cssStyle, 0, 11) == 'margin-left') ? intval(substr($cssStyle, 12)) : 0;
+			return intval($margin/40);
+		}
+
+		return false;
+	}
+
+	/**
+	 * Returns true if given node has CSS class set
+	 */
+	private function hasCSSClass($node, $class) {
+		$classes = $node->getAttribute('class');
+
+		if (is_string($classes)) {
+			return in_array($class, explode(' ', $classes));
+		}
+		else {
+			return false;
+		}
+	}
+
 }
