@@ -101,10 +101,6 @@ class ReverseParser {
 						break;
 
 					case 'br':
-						// e.g. "<br/><!--NEW_LINE_1-->" => "\n"
-						if($node->nextSibling && $node->nextSibling->nodeType == XML_COMMENT_NODE && $node->nextSibling->data == "NEW_LINE_1") {
-							$out = "\n";
-						}
 						break;
 
 					case 'p':
@@ -308,7 +304,7 @@ class ReverseParser {
 			// if the next sibling node of the current one comment node is text
 			// then add new line
 			// e.g. "<!--NEW_LINE_1-->abc" => "\nabc"
-			if($node->nextSibling && $node->nextSibling->nodeType == XML_TEXT_NODE) {
+			if($node->data == "NEW_LINE_1" && $node->nextSibling && $node->nextSibling->nodeType == XML_TEXT_NODE) {
 				$out = "\n";
 			}
 
