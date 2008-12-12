@@ -29,6 +29,7 @@ if(isset($props['name'])) {
 					<?= $licensehtml ?>
 				</select>
 			</span><br/>
+			<div id="ImageUploadLicenseText"></div>
 			<?php
 			}
 			?>
