@@ -451,7 +451,7 @@ class ReverseParser {
 
 			// replace space with empty string before HTML tag with _wysiwyg_line_start attribute
 			// e.g. ' <div _wysiwyg_new_line="true">...' => '\n<div>...'
-			else if ($node->nextSibling && $node->nextSibling->nodeType == XML_ELEMENT_NODE && $node->nextSibling->getAttribute('_wysiwyg_line_start')) {
+			else if ( trim($textContent) == '' && $node->nextSibling && $node->nextSibling->nodeType == XML_ELEMENT_NODE && $node->nextSibling->getAttribute('_wysiwyg_line_start')) {
 				$textContent = '';
 			}
 
