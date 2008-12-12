@@ -37,7 +37,7 @@ if(isset($props['name'])) {
 		<tr class="ImageUploadNoBorder ImageUploadNoSpace">
 			<th>&nbsp;</th>	
 			<td>
-				<div id="ImageUploadLicenseControl"><a id="ImageUploadLicenseLink" href="#" onclick="WMU_toggleMainMesg(event);" >[<?= wfMsg( 'wmu-hide-message' ) ?>]</a></div>
+				<div id="ImageUploadLicenseControl"><a id="ImageUploadLicenseLink" href="#" onclick="WMU_toggleMainMesg(event);" >[<?= wfMsg( 'wmu-hide-license-msg' ) ?>]</a></div>
 			</td>
 		</tr>
 		<tr class="ImageUploadNoBorder">
