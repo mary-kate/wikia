@@ -20,15 +20,17 @@ slotname = top.Athena.getSlotnameFromDom(frameid);
 // Note a simple Athena.hop can not be used here, because it needs to do the document.write
 // in the current frame
 var thisTag = top.Athena.getNextTag(slotname);
-top.Athena.debug("Config for ad being called from inside iframe = " + Athena.print_r(thisTag), 6);
+top.Athena.debug("Config for ad being called from inside iframe = " + top.Athena.print_r(thisTag), 6);
 
 // Print the tag, wrapped in a try/catch so that errors don't prevent the rest of
 // our javascript from loading.
+document.write("<!-- Writing in Athena.hop.iframe.html -->");
 try {
 	document.write(thisTag['tag']);
 } catch (e) {
-	top.Athena.reportError("Error loading ads from iframe = " + Athena.print_r(e));
+	top.Athena.reportError("Error loading ads from iframe = " + top.Athena.print_r(e));
 }
+document.write("<!-- /Writing in Athena.hop.iframe.html -->");
 </script>
 </body>
 </html>
