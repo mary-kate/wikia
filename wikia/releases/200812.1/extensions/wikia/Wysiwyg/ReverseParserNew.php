@@ -199,6 +199,11 @@ class ReverseParser {
 							if(is_numeric($newLinesBefore) && $node->previousSibling) {
 								$textContent = str_repeat("\n", $newLinesBefore).$textContent;
 							}
+
+							// we're in definion list and previous node wasn't paragraph -> add extra line break
+							if($prefix == "\n") {
+								$textContent = "\n{$textContent}";
+							}
 						}
 
 						$out = $textContent;
