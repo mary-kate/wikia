@@ -162,20 +162,36 @@ class ReverseParser {
 						// detect indented paragraph (margin-left CSS property)
 						$indentation = $this->getIndentationLevel($node);
 
+						// default prefix -> empty line after previous paragraph
+						// doesn't apply to definition lists parsed as <p> tags
+						// ;foo
+						// :bar
+						$prefix = "\n\n";
+	
 						// handle <dt> elements being rendered as p.definitionTerm
 						if ($this->hasCSSClass($node, 'definitionTerm')) {
-							$textContent = ';' . $textContent;
+							$textContent = ';' . rtrim($textContent);
+							$prefix = "\n";
 						}
 
 						// handle indentations
 						if ($indentation > 0) {
-							$textContent = str_repeat(':', $indentation) . $textContent;
+							$textContent = str_repeat(':', $indentation) . rtrim($textContent);
+							$prefix = "\n";
 						}
+
+						$previousNode = $this->getPreviousElementNode($node);
 
 						// if the first previous XML_ELEMENT_NODE (so no text and no comment) of the current
 						// node is <p> then add new line before the current one
-						if(($previousNode = $this->getPreviousElementNode($node)) && $previousNode->nodeName == 'p') {
-							$textContent = "\n\n" . $textContent;
+						if ($previousNode && $previousNode->nodeName == 'p') {
+							// previous <p> node was related to definion lists
+							// take just _new_lines_before value under consideration
+							if ( ($this->hasCSSClass($previousNode, 'definitionTerm') || $this->getIndentationLevel($previousNode) > 0 ) && $prefix == "\n\n") {
+								$newLinesBefore = $node->getAttribute('_new_lines_before');
+								$prefix = str_repeat("\n",  $newLinesBefore);
+							}
+							$textContent = $prefix . $textContent;
 						} else if($textContent == ""){
 							$textContent = "\n";
 						} else {
