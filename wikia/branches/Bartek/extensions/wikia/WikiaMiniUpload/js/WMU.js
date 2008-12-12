@@ -88,7 +88,7 @@ function WMU_addHandler() {
 }
 
 function WMU_licenseSelectorCheck() {
-	var selector = document.getElementById( "wpLicense" );
+	var selector = document.getElementById( "ImageUploadLicense" );
 	var selection = selector.options[selector.selectedIndex].value;
 	if( selector.selectedIndex > 0 ) {
 		if( selection == "" ) {
