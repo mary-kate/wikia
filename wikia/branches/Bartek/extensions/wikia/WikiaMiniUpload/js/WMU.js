@@ -413,11 +413,17 @@ function WMU_displayDetails(responseText) {
 		var thumbSize = [image.width, image.height];
 		WMU_orgThumbSize = null;
 		WMU_slider = YAHOO.widget.Slider.getHorizSlider('ImageUploadSlider', 'ImageUploadSliderThumb', 0, 200);
+		WMU_slider.initialRound = true;
 		WMU_slider.getRealValue = function() {
 			return Math.max(2, Math.round(this.getValue() * (thumbSize[0] / 200)));
 		}
 		WMU_slider.subscribe("change", function(offsetFromStart) {
-			$('ImageSize').innerHTML = WMU_slider.getRealValue() + 'px';
+			if (WMU_slider.initialRound) {
+				$('ImageSize').innerHTML = '';
+				WMU_slider.initialRound = false;	
+			} else {
+				$('ImageSize').innerHTML = WMU_slider.getRealValue() + 'px';
+			}
 			image.width = WMU_slider.getRealValue();
 			image.height = image.width / (thumbSize[0] / thumbSize[1]);
 			if(WMU_orgThumbSize == null) {
