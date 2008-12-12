@@ -15,8 +15,9 @@ foreach($htmlFiles as $htmlFile) {
 	$out = $reverseParser->parse(file_get_contents($htmlFile), json_decode(file_get_contents('data_'.$testNo), true));
 
 	if($out != file_get_contents('wikitext_'.$testNo)) {
+		//file_put_contents('out_'.$testNo, $out);
 		echo "\n\nERROR, TEST NO: $testNo\n\n";
-		exit();
+		//exit();
 	} else {
 		echo "\n\nSUCCESS, TEST NO: $testNo\n\n";
 	}
