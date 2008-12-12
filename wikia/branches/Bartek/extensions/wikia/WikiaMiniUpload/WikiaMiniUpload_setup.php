@@ -54,6 +54,8 @@ function WMUSetupVars($vars) {
 	$vars['strict_file_extensions'] = $wgStrictFileExtensions;
 	$vars['wmu_show_message'] = wfMsg('wmu-show-message');
 	$vars['wmu_hide_message'] = wfMsg('wmu-hide-message');
+	$vars['wmu_show_license_message'] = wfMsg('wmu-show-license-message');
+	$vars['wmu_hide_license_message'] = wfMsg('wmu-hide-license-message');
 
 	return true;
 }
