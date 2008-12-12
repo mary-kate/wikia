@@ -82,6 +82,12 @@ if($props['file']->media_type == 'BITMAP' || $props['file']->media_type == 'DRAW
 			<span id="ImageSize"></span>
 		</td>
 	</tr>
+	<tr id="ImageWidthInputRow">
+		<th>&nbsp;</th>
+		<td>
+			<?= wfMsg( 'wmu-manual-width' ) ?> <input type="text" id="ImageUploadManualWidth" name="ImageUploadManualWidth" value="" /> px
+		</td>
+	</tr>
 	<tr id="ImageLayoutRow">
 		<th><?= wfMsg('wmu-layout') ?></th>
 		<td>
