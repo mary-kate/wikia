@@ -2239,8 +2239,11 @@ class Parser
 					$output .= $this->closeParagraph();
 					if(!empty($wgWysiwygParserEnabled)) {
 						if ($this->mEmptyLineCounter%2 == 1) {
+							// empty line before HTML tag
 							$t = preg_replace('/^<(\w+)/', '<$1 _wysiwyg_new_line="true"', $t);
 						}
+						// HTML tag begins the line
+						$t = preg_replace('/^<(\w+)/', '<$1 _wysiwyg_line_start="true"', $t);
 						$this->mEmptyLineCounter = 0;
 					}
 					if ( $preOpenMatch and !$preCloseMatch ) {
