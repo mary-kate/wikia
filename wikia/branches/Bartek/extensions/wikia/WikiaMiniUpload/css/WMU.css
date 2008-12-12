@@ -269,3 +269,7 @@ ImageUploadOptionsTable img {
 	font-size: 9pt;
 }
 
+#ImageUploadLicenseLink {
+	margin-left: 4px;
+}
+
