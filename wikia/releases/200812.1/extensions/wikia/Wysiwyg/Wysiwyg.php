@@ -270,34 +270,17 @@ function Wysiwyg_WikiTextToHtml($wikitext, $articleId = -1, $encode = false) {
 	$wgWysiwygParserEnabled = true;
 	$html = $wysiwygParser->parse($wikitext, $title, $options)->getText();
 	$wgWysiwygParserEnabled = false;
-
+/*
 	if($emptyLinesAtStart == 1) {
 		$html = '<!--NEW_LINE-->' . $html;
 	}
 
 	$html = preg_replace('/<\!--NEW_LINE--><(\w+)/', '<$1 _wysiwyg_new_line="true"', $html);
-
+*/
 	// replace placeholders with HTML
 	if (!empty($wgWysiwygMarkers)) {
 		$html = strtr($html, $wgWysiwygMarkers);
 	}
-
-	// replace whitespaces after opening (<li>) and before closing tags (</p>, </h2>, </li>, </dt>, </dd>)
-	$replacements = array(
-		' <p>'    => '<p>',
-		"\n<p>"   => '<p>',
-		"\n</p>"  => '</p>',
-		'<li> '   => '<li>',
-		"\n</li>" => '</li>',
-		"\n</dt>" => '</dt>',
-		"\n</dd>" => '</dd>',
-		"</dl>\n" => '</dl>',
-		"</ol>\n" => '</ol>',
-		"</ul>\n" => '</ul>',
-		"\n</td>" => '</td>',
-		"\n<input" => '<input',
-	);
-	$html = strtr($html, $replacements);
 
 	// replace placeholders with HTML
 	if (!empty($wgWysiwygMarkers)) {
