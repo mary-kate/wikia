@@ -208,8 +208,8 @@ function WMU_loadMain() {
 function WMU_loadLicense( license ) {
 	var callback = {
 		success: function(o) {			
-			$('ImageUploadLicenseText').innerHTML = o.responseText;
 			$('ImageUploadLicenseText').style.display = '';
+			$('ImageUploadLicenseText').innerHTML = o.responseText;
 			WMU_indicator(1, false);
 		}
 	}
