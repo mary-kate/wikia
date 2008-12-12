@@ -45,6 +45,11 @@ function WMU_loadDetails() {
 			if(FCK.wysiwygData[WMU_refid].caption) {
 				$('ImageUploadCaption').value = FCK.wysiwygData[WMU_refid].caption;
 			}
+			var cookieMsg = document.cookie.indexOf("wmulicensemesg=");
+			if (cookieMsg > -1 && document.cookie.charAt(cookieMsg + 15) == 0) {
+				$('ImageUploadlicenseText').style.display = 'none';
+		                $('ImageUploadLicenseLink').innerHTML = '[' + wmu_show_license_message  + ']';
+			}
 		}
 	}
 
@@ -585,11 +590,11 @@ function WMU_toggleLicenseMesg(e) {
 	YAHOO.util.Event.preventDefault(e);
 	if ('none' == $('ImageUploadLicenseText').style.display) {
 		$('ImageUploadLicenseText').style.display = '';
-		$('ImageUploadLicenseLink').innerHTML = '[' + wmu_hide_message  + ']';
+		$('ImageUploadLicenseLink').innerHTML = '[' + wmu_hide_license_message  + ']';
 		document.cookie = "wmulicensemesg=1";
 	} else {
 		$('ImageUploadLicenseText').style.display = 'none';
-		$('ImageUploadLicenseLink').innerHTML = '[' + wmu_show_message  + ']';
+		$('ImageUploadLicenseLink').innerHTML = '[' + wmu_show_license_message  + ']';
 		document.cookie = "wmulicensemesg=0";
 	}
 }
