@@ -207,7 +207,12 @@ class ReverseParser {
 					case 'table':
 						if (empty($nodeData)) {
 							$attStr = ltrim($this->getAttributesStr($node));
-							$out = "{|{$attStr}\n{$textContent}|}\n";
+							$out = "{|{$attStr}\n{$textContent}|}";
+
+							// handle nested tables and tables following content
+							if ($node->previousSibling || $node->parentNode->nodeName != 'body') {
+								$out = "\n$out";
+							}
 						}
 						else {
 							// thumbnail generation error - handle as an image
