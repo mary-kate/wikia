@@ -208,7 +208,7 @@ class ReverseParser {
 					case 'table':
 						if (empty($nodeData)) {
 							$attStr = ltrim($this->getAttributesStr($node));
-							$out = "{|{$attStr}\n{$textContent}|}";
+							$out = "{|{$attStr}\n{$textContent}\n|}";
 
 							// handle nested tables and tables following content
 							if ($node->previousSibling || $node->parentNode->nodeName != 'body') {
@@ -235,10 +235,10 @@ class ReverseParser {
 
 						// don't convert first table row into |-
 						if ($isFirstRow && $attStr == '') {
-							$out = $textContent;
+							$out = rtrim($textContent);
 						}
 						else {
-							$out = "|-{$attStr}\n{$textContent}";
+							$out = "|-{$attStr}\n".rtrim($textContent);
 						}
 						break;
 
