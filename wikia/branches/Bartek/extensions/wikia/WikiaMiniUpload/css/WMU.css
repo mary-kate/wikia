@@ -250,13 +250,6 @@ ImageUploadOptionsTable img {
 	font-size: 8pt;
 }
 
-#ImageUploadLicenseText {
-	display: none;
-	padding: 4px 4px 4px 4px;
-	margin-top: 6px;
-	margin-bottom: 6px;
-}
-
 #ImageUploadMessageControl {
 	position: absolute;
 	font-size: 9pt;
