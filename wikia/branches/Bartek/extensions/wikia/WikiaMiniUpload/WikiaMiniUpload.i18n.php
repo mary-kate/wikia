@@ -51,4 +51,5 @@ To view or search previously uploaded files go to the [[Special:ImageList|list o
 	'wmu-hide-message' => 'hide message',
 	'wmu-hide-license-msg' => 'hide license text',
 	'wmu-show-license-msg' => 'show license text',
+	'wmu-manual-width' => 'edit: ',
 );
