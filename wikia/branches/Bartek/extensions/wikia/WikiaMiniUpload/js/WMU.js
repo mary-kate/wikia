@@ -581,6 +581,19 @@ function WMU_toggleMainMesg(e) {
 	}
 }
 
+function WMU_toggleLicenseMesg(e) {
+	YAHOO.util.Event.preventDefault(e);
+	if ('none' == $('ImageUploadLicenseText').style.display) {
+		$('ImageUploadLicenseText').style.display = '';
+		$('ImageUploadLicenseLink').innerHTML = '[' + wmu_hide_message  + ']';
+		document.cookie = "wmulicensemesg=1";
+	} else {
+		$('ImageUploadLicenseText').style.display = 'none';
+		$('ImageUploadLicenseLink').innerHTML = '[' + wmu_show_message  + ']';
+		document.cookie = "wmulicensemesg=0";
+	}
+}
+
 function WMU_switchScreen(to) {
 	WMU_prevScreen = WMU_curScreen;
 	WMU_curScreen = to;
