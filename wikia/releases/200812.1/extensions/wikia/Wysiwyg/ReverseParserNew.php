@@ -298,6 +298,11 @@ class ReverseParser {
 				$out = "\n" . $out;
 			}
 
+			// do the same with nodes containing attribute _wysiwyg_line_start (added in Parser.php)
+			if($node->getAttribute('_wysiwyg_line_start') && $node->previousSibling) {
+				$out = "\n" . $out;
+			}
+
 		} else if($node->nodeType == XML_COMMENT_NODE) {
 
 
@@ -308,6 +313,12 @@ class ReverseParser {
 			// e.g. "abc <!--NEW_LINE_1-->" => "abc\n"
 			if($node->nextSibling && $node->nextSibling->nodeType == XML_COMMENT_NODE && $node->nextSibling->data == "NEW_LINE_1") {
 				$textContent = substr($textContent, 0, -1) . "\n";
+			}
+
+			// replace space with empty string before HTML tag with _wysiwyg_line_start attribute
+			// e.g. ' <div _wysiwyg_new_line="true">...' => '\n<div>...'
+			else if ($node->nextSibling && $node->nextSibling->getAttribute('_wysiwyg_line_start')) {
+				$textContent = '';
 			}
 
 			$out = $textContent;
@@ -343,7 +354,7 @@ class ReverseParser {
 		}
 		$attStr = '';
 		foreach ($node->attributes as $attrName => $attrNode) {
-			if($attrName == 'washtml' || $attrName == '_wysiwyg_new_line') {
+			if( in_array($attrName, array('washtml', '_wysiwyg_new_line', '_wysiwyg_line_start')) ) {
 				continue;
 			}
 			$attStr .= ' ' . $attrName . '="' . $attrNode->nodeValue  . '"';
