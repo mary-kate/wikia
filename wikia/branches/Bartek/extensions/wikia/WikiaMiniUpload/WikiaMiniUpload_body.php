@@ -16,6 +16,13 @@ class WikiaMiniUpload {
 		return $tmpl->execute("main");
 	}
 
+	function loadLicense() {
+		global $wgRequest, $IP;
+		$license = $wgRequest->getText('license');
+		require_once($IP . '/includes/specials/SpecialUpload.php');
+		return UploadForm::ajaxGetLicensePreview( $license );		
+	}
+
 	function recentlyUploaded() {
 		global $IP, $wmu;
 		require_once($IP . '/includes/SpecialPage.php');
