@@ -101,6 +101,16 @@ class ReverseParser {
 						break;
 
 					case 'br':
+						// ignore <br type="_moz"> (fix for IE)
+						if($node->getAttribute('type') == '_moz') {
+							$out = '';
+						}
+
+						// <br /> inside paragraphs (without <!--NEW_LINE_1--> comment following it)
+						if($node->nextSibling && $node->nextSibling->nodeType != XML_COMMENT_NODE) {
+							$out = "<br />";
+						}
+						
 						break;
 
 					case 'p':
