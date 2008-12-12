@@ -6,7 +6,6 @@
 
 ?>
 <div id="ImageUploadMessage"><?= $uploadmesg ?></div>
-<div id="ImageUploadLicenseText"></div>
 
 <table cellspacing="0" style="width: 100%;" id="ImageUploadInputTable">
 	<tr id="ImageUploadUpload">
