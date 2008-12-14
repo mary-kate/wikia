@@ -265,9 +265,7 @@ class AdEngine {
 
 			if ($wgLanguageCode == 'en' ){
 			
-			// Turn on Athena for all
-				return AdProviderAthena::getInstance();
-			// 	return $this->getProviderFromId($this->slots[$slotname]['provider_id']);
+			 	return $this->getProviderFromId($this->slots[$slotname]['provider_id']);
 			} else if (in_array($wgLanguageCode, $this->tier1Languages)){
 				
 				if (!in_array($slotname, $this->internationalSlotsTier1)){
