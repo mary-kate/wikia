@@ -307,9 +307,6 @@ function Wysiwyg_WikiTextToHtml($wikitext, $articleId = -1, $encode = false) {
 		$html = preg_replace('/\x7f-wtb-(\d+)-\x7f.*?\x7f-wte-\1-\x7f/sie', "'<input type=\"button\" refid=\"\\1\" _fck_type=\"template\" value=\"'.\$wgWysiwygMetaData[\\1]['name'].'\" class=\"wysiwygDisabled wysiwygTemplate\" /><input value=\"'.htmlspecialchars(stripslashes(\$templateCallsParsed[\\1])).'\" style=\"display:none\" />'", $html);
 	}
 
-	// add _wysiwyg_line_start attribute to HTML node following <!--NEW_LINE_1--> comment (<input> placeholders within paragraphs and <a>)
-	$html = preg_replace('/<\!--NEW_LINE_1--><(a|input)/', '<$1 _wysiwyg_line_start="true"', $html);
-
 	wfDebug("Wysiwyg_WikiTextToHtml html: {$html}\n");
 
 	return array($html, $encode ? Wikia::json_encode($wgWysiwygMetaData, true) : $wgWysiwygMetaData);

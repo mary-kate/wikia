@@ -2059,12 +2059,14 @@ class Parser
 		$result = '';
 		if ( '' != $this->mLastSection ) {
 			$result = '</' . $this->mLastSection  . ">\n";
+/*
 			global $wgWysiwygParserEnabled;
 			if(!empty($wgWysiwygParserEnabled)) {
 				if($this->mEmptyLineCounter%2 == 1) {
 					$result.= "<!--NEW_LINE-->";
 				}
 			}
+*/
 		}
 		$this->mInPre = false;
 		$this->mLastSection = '';
@@ -2261,12 +2263,13 @@ class Parser
 				} else if ( !$inBlockElem && !$this->mInPre ) {
 					if ( ' ' == $t{0} and ( $this->mLastSection == 'pre' or trim($t) != '' ) ) {
 						if(!empty($wgWysiwygParserEnabled)) {
+							$newLines = ($this->mEmptyLineCounter %2) == 1;
 							$this->mEmptyLineCounter = 0;
 						}
 						// pre
 						if ($this->mLastSection != 'pre') {
 							$paragraphStack = false;
-							$output .= $this->closeParagraph().'<pre _wysiwyg_line_start="true">';
+							$output .= rtrim($this->closeParagraph()).'<pre _wysiwyg_line_start="true" '.(!empty($newLines) ? '_wysiwyg_new_line="true"' : '').'>';
 							$this->mLastSection = 'pre';
 						}
 						$t = substr( $t, 1 );
