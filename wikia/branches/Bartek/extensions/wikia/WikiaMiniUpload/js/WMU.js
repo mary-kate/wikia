@@ -567,7 +567,7 @@ function MWU_imageWidthChanged(changes) {
 
 function MWU_imageSizeChanged(size) {
 	WMU_track('size/' + size); // tracking
-	YAHOO.util.Dom.setStyle(['ImageWidthRow', 'ImageLayoutRow'], 'display', size == 'thumb' ? '' : 'none');
+	YAHOO.util.Dom.setStyle(['ImageWidthRow', 'ImageLayoutRow', 'ImageWidthInputRow'], 'display', size == 'thumb' ? '' : 'none');
 	if($('ImageUploadThumb')) {
 		var image = $('ImageUploadThumb').firstChild;
 		if(size == 'thumb') {
