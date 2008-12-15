@@ -20,7 +20,7 @@ class WikiaMiniUpload {
 		global $wgRequest, $IP;
 		$license = $wgRequest->getText('license');
 		require_once($IP . '/includes/specials/SpecialUpload.php');
-		return UploadForm::ajaxGetLicensePreview( $license );		
+		return preg_replace( '/(<a[^>]+)/', '$1 target="_new" ', UploadForm::ajaxGetLicensePreview( $license ) );		
 	}
 
 	function recentlyUploaded() {
