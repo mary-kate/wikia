@@ -441,6 +441,8 @@ function WMU_displayDetails(responseText) {
 		alert( $( 'WMU_error_box' ).innerHTML );
 	}
 	$( 'ImageUploadSlider' ).style.visibility = 'hidden';
+	$( 'ImageUploadInputWidth' ).style.display = 'none';
+
 	var cookieMsg = document.cookie.indexOf("wmulicensemesg=");
 	if (cookieMsg > -1 && document.cookie.charAt(cookieMsg + 15) == 0) {
 		$('ImageUploadLicenseText').style.display = 'none';
@@ -552,12 +554,14 @@ function MWU_imageWidthChanged(changes) {
 	if( !$( 'ImageUploadWidthCheckbox' ).checked ) {
 		$('ImageSize').innerHTML = '';
 		$('ImageUploadSlider').style.visibility = 'hidden';
+		$('ImageUploadInputWidth').style.display = 'none';
 		image.width = WMU_orgThumbSize[0];
 		image.height = WMU_orgThumbSize[1];
 		WMU_track('slider/disable'); // tracking
 	} else {
 		$('ImageSize').innerHTML = WMU_slider.getRealValue() + 'px';
 		$('ImageUploadSlider').style.visibility = 'visible';
+		$('ImageUploadInputWidth').style.display = '';
 		image.width = WMU_thumbSize[0];
 		image.height = WMU_thumbSize[1];
 		WMU_track('slider/enable'); // tracking
@@ -566,7 +570,7 @@ function MWU_imageWidthChanged(changes) {
 
 function MWU_imageSizeChanged(size) {
 	WMU_track('size/' + size); // tracking
-	YAHOO.util.Dom.setStyle(['ImageWidthRow', 'ImageLayoutRow', 'ImageWidthInputRow'], 'display', size == 'thumb' ? '' : 'none');
+	YAHOO.util.Dom.setStyle(['ImageWidthRow', 'ImageLayoutRow'], 'display', size == 'thumb' ? '' : 'none');
 	if($('ImageUploadThumb')) {
 		var image = $('ImageUploadThumb').firstChild;
 		if(size == 'thumb') {
