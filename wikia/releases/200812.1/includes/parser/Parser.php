@@ -1791,7 +1791,11 @@ class Parser
 					$s = rtrim($s . "\n"); # bug 87
 					//Wysiwyg: mark element and add metadata to wysiwyg array
 					if (!empty($wgWysiwygParserEnabled)) {
-						$FCKtmp = Wysiwyg_SetRefId('category', array('text' => &$text, 'link' => $link, 'wasblank' => $wasblank, 'noforce' => $noforce, 'original' => $originalWikitext), false);
+						$extraTrial = '';
+						if ($k && preg_match('/(\s+)$/', $a[$k-1], $extraTrial)) {
+							$extraTrial = $extraTrial[1];
+						}
+						$FCKtmp = Wysiwyg_SetRefId('category', array('text' => &$text, 'link' => $link, 'wasblank' => $wasblank, 'noforce' => $noforce, 'original' => $originalWikitext, 'whiteSpacePrefix' => $extraTrial), false);
 					}
 					if ( $wasblank ) {
 						$sortkey = $this->getDefaultSort();
