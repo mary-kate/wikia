@@ -236,6 +236,12 @@ class ReverseParser {
 						$out = str_repeat("\n", $linesBefore) . $head . $textContent . $head . str_repeat("\n", $linesAfter);
 						break;
 
+					// preformatted text
+					case 'pre':
+						$textContent = trim(str_replace("\n", "\n ", $textContent)); // add white space before each line
+						$out = " {$textContent}";
+						break;
+
 					// text formatting
 					// 1 '</b><i><b>' => '<i>'
 					// 2 '</i><b><i>' => '<b>'
