@@ -15,6 +15,7 @@ var WMU_prevScreen = null;
 var WMU_slider = null;
 var WMU_thumbSize = null;
 var WMU_orgThumbSize = null;
+var WMU_width = null;
 var WMU_widthChanges = 1;
 var WMU_refid = null;
 var WMU_wysiwygStart = 1;
@@ -104,11 +105,20 @@ function WMU_manualWidthInput( elem ) {
 	if(WMU_orgThumbSize == null) {
 		var WMU_orgThumbSize = [image.width, image.height];
 	}
-	var thumbSize = [image.width, image.height];	
-	image.height = elem.value / WMU_ratio;
-	image.width = elem.value;
-	WMU_thumbSize = [image.width, image.height];
-	$('ImageSize').innerHTML = elem.value + 'px';
+	if (elem.value > WMU_width) {
+		image.width = WMU_width;
+		image.height = WMU_width / WMU_ratio;
+		WMU_thumbSize = [image.width, image.height];
+		$( 'ImageSize' ).innerHTML = image.width + 'px';		
+		$( 'ImageUploadManualWidth' ).value = image.width;
+		alert (wmu_max_thumb);
+			
+	} else {
+		image.height = elem.value / WMU_ratio;
+		image.width = elem.value;
+		WMU_thumbSize = [image.width, image.height];
+		$('ImageSize').innerHTML = elem.value + 'px';
+	}
 }
 
 function WMU_show(e) {
@@ -422,6 +432,7 @@ function WMU_displayDetails(responseText) {
 	if($('ImageUploadThumb')) {
 		WMU_orgThumbSize = null;
 		var image = $('ImageUploadThumb').firstChild;
+		WMU_width = image.width;
 		var thumbSize = [image.width, image.height];
 		WMU_orgThumbSize = null;
 		WMU_slider = YAHOO.widget.Slider.getHorizSlider('ImageUploadSlider', 'ImageUploadSliderThumb', 0, 200);
