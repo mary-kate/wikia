@@ -273,3 +273,7 @@ ImageUploadOptionsTable img {
 	margin-left: 4px;
 }
 
+
+#ImageUploadManualWidth {
+	width: 40px;
+}
