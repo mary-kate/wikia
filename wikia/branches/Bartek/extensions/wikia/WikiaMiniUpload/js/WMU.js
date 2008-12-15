@@ -108,6 +108,7 @@ function WMU_manualWidthInput( elem ) {
 	image.height = elem.value / WMU_ratio;
 	image.width = elem.value;
 	WMU_thumbSize = [image.width, image.height];
+	$('ImageSize').innerHTML = elem.value + 'px';
 }
 
 function WMU_show(e) {
