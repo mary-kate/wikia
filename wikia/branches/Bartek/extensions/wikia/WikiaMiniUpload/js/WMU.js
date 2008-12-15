@@ -18,6 +18,7 @@ var WMU_orgThumbSize = null;
 var WMU_widthChanges = 1;
 var WMU_refid = null;
 var WMU_wysiwygStart = 1;
+var WMU_ratio = 1;
 
 function WMU_loadDetails() {
 	YAHOO.util.Dom.setStyle('ImageUploadMain', 'display', 'none');
@@ -104,9 +105,8 @@ function WMU_manualWidthInput( elem ) {
 		var WMU_orgThumbSize = [image.width, image.height];
 	}
 	var thumbSize = [image.width, image.height];	
-	var height = elem.value / (WMU_orgThumbSize[0] / WMU_orgThumbSize[1]);
+	image.height = elem.value / WMU_ratio;
 	image.width = elem.value;
-	image.height = height;
 	WMU_thumbSize = [image.width, image.height];
 }
 
@@ -440,6 +440,7 @@ function WMU_displayDetails(responseText) {
 			image.height = image.width / (thumbSize[0] / thumbSize[1]);
 			if(WMU_orgThumbSize == null) {
 				WMU_orgThumbSize = [image.width, image.height];
+				WMU_ratio = image.width / image.height;
 			}
 			WMU_thumbSize = [image.width, image.height];
 		});
