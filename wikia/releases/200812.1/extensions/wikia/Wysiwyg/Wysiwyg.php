@@ -213,12 +213,8 @@ function Wysiwyg_CheckEdgeCases($text) {
 		'regular' => array(
 			'<!--' => 'wysiwyg-edgecase-comment', // HTML comments
 			'{{{' => 'wysiwyg-edgecase-triplecurls', // template parameters
-			//'__NOWYSIWYG__' => 'wysiwyg-edgecase-nowysiwyg', // new magic word to disable FCK for current article
 		),
 		'regexp' => array(
-//			'/\[\[[^|]+\|.*?(?:(?:' . wfUrlProtocols() . ')|{{).*?]]/' => 'wysiwyg-edgecase-complex-description', // external url or template found in the description of a link
-			//'/{{[^}]*(?<=\[)[^}]*}}/' => 'wysiwyg-edgecase-template-with-link', // template with link as a parameter
-//			'/\[\[(?:image|media)[^]|]+\|[^]]+(?:\[\[|(?:' . wfUrlProtocols() . '))(?:[^]]+])?[^]]+]]/si' => 'wysiwyg-edgecase-image-with-link', // template with link as a parameter
 			'/<span.*?refid/si' => 'wysiwyg-edgecase-syntax', // span with fck metadata - shouldn't be used by user
 		)
 	);
@@ -271,6 +267,7 @@ function Wysiwyg_WikiTextToHtml($wikitext, $articleId = -1, $encode = false) {
 	$html = $wysiwygParser->parse($wikitext, $title, $options)->getText();
 	$wgWysiwygParserEnabled = false;
 
+	// detect empty line at the beginning of wikitext
 	if($emptyLinesAtStart == 1) {
 		$html = '<!--NEW_LINE-->' . $html;
 	}
