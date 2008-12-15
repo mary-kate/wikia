@@ -320,12 +320,14 @@ class ReverseParser {
 						break;
 
 					case 'tr':
+						$node->removeAttribute('_wysiwyg_line_start');
+
 						$isFirstRow = $node->isSameNode($node->parentNode->firstChild);
 						$attStr = ltrim($this->getAttributesStr($node));
 
 						// don't convert first table row into |-
 						if ($isFirstRow && $attStr == '') {
-							$out = rtrim($textContent);
+							$out = rtrim($textContent) . "\n";
 						}
 						else {
 							$out = "|-{$attStr}\n".rtrim($textContent)."\n";
@@ -333,6 +335,8 @@ class ReverseParser {
 						break;
 
 					case 'th':
+						$node->removeAttribute('_wysiwyg_line_start');
+
 						$attStr = $this->getAttributesStr($node);
 						if ($attStr != '') {
 							$attStr = ltrim("{$attStr}|");
@@ -341,6 +345,8 @@ class ReverseParser {
 						break;
 
 					case 'td':
+						$node->removeAttribute('_wysiwyg_line_start');
+
 						$attStr = $this->getAttributesStr($node);
 						if ($attStr != '') {
 							$attStr = ltrim("{$attStr}|");
