@@ -45,7 +45,6 @@ function WMU_loadDetails() {
 			if(FCK.wysiwygData[WMU_refid].caption) {
 				$('ImageUploadCaption').value = FCK.wysiwygData[WMU_refid].caption;
 			}
-//			 $( 'ImageSize' ).innerHTML = '';
 		}
 	}
 
