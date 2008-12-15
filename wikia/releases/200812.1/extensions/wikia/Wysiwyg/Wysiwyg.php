@@ -120,7 +120,7 @@ function Wysiwyg_Initial($form) {
 		return true;
 	}
 
-	// detec edgecases
+	// detect edgecases
 	$wgWysiwygEdgeCasesFound = (Wysiwyg_CheckEdgeCases($form->textbox1) != '');
 
 	// initialize FCK in source mode for articles in which edge case occured / user adds fckmode=source to edit page URL / user requested diff/preview when in source mode
@@ -286,7 +286,6 @@ function Wysiwyg_WikiTextToHtml($wikitext, $articleId = -1, $encode = false) {
 	$html = preg_replace('/<\!--NEW_LINE--><(\w+)/', '<$1 _wysiwyg_new_line="true"', $html);
 
 	// extract refid's of templates from template markers
-	// preg_match_all('/\x7f-wtb-(\d+)-\x7f.*?\x7f-wte-\1-\x7f/si', $html, $matches);
 	preg_match_all('/\x7f-wtb-(\d+)-\x7f/', $html, $matches);
 
 	if(count($matches[1]) > 0) {
@@ -392,7 +391,6 @@ function Wysiwyg_SetRefId($type, $params, $addMarker = true, $returnId = false) 
 			break;
 		case 'external link':
 			$data['href'] = $params['link'];
-//			$data['description'] = $params['wasblank'] ? '' : $params['text'];
 			if ($params['original'] != '') {
 				$data['original'] = htmlspecialchars_decode(preg_replace($regexPreProcessor['search'], $regexPreProcessor['replace'], $params['original']));
 			}
@@ -409,7 +407,6 @@ function Wysiwyg_SetRefId($type, $params, $addMarker = true, $returnId = false) 
 					$data['trial'] = $tmpInside;
 				}
 			}
-//			$data['description'] = preg_replace('%\x7f-wtb-(\d+)-\x7f.*?\x7f-wte-\1-\x7f%sie', '$wgWysiwygMetaData[\\1]["originalCall"];', $data['description']);
 			if (isset($params['original']) && $params['original'] != '') {
 				$data['original'] = htmlspecialchars_decode(preg_replace($regexPreProcessor['search'], $regexPreProcessor['replace'], $params['original']));
 			}
@@ -418,17 +415,15 @@ function Wysiwyg_SetRefId($type, $params, $addMarker = true, $returnId = false) 
 		case 'internal link: media':
 		case 'category':
 			$data['href'] = ($params['noforce'] ? '' : ':') . $params['link'];
-//			$data['description'] = $params['wasblank'] ? '' : $params['text'];
 			if ($params['original'] != '') {
 				$data['original'] = htmlspecialchars_decode(preg_replace($regexPreProcessor['search'], $regexPreProcessor['replace'], $params['original']));
 			}
 			$result = '[[' . $data['href'] . ($params['wasblank'] ? '' : '|' . $params['text']) . ']]';
+			$data['after'] = $params['after'];
 			break;
 
 		case 'image':
 			$data['href'] = ($params['noforce'] ? '' : ':') . $params['link'];
-//			$data['description'] = $params['wasblank'] ? '' : $params['text'];
-//			$data['description'] = preg_replace('%\x7f-wtb-(\d+)-\x7f.*?\x7f-wte-\1-\x7f%sie', '$wgWysiwygMetaData[\\1]["originalCall"];', $data['description']);
 			if ($params['original'] != '') {
 				$data['original'] = htmlspecialchars_decode(preg_replace($regexPreProcessor['search'], $regexPreProcessor['replace'], $params['original']));
 				if (empty($params['wasblank'])) {
