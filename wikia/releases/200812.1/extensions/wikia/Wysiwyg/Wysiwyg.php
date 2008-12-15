@@ -275,17 +275,18 @@ function Wysiwyg_WikiTextToHtml($wikitext, $articleId = -1, $encode = false) {
 		$html = '<!--NEW_LINE-->' . $html;
 	}
 
+	// replace placeholders with HTML
+	if (!empty($wgWysiwygMarkers)) {
+		$html = strtr($html, $wgWysiwygMarkers);
+	}
+
+	// replace placeholders with HTML
+	if (!empty($wgWysiwygMarkers)) {
+		$html = strtr($html, $wgWysiwygMarkers);
+	}
+
+	// add _wysiwyg_new_line attribute to HTML node following <!--NEW_LINE--> comment
 	$html = preg_replace('/<\!--NEW_LINE--><(\w+)/', '<$1 _wysiwyg_new_line="true"', $html);
-
-	// replace placeholders with HTML
-	if (!empty($wgWysiwygMarkers)) {
-		$html = strtr($html, $wgWysiwygMarkers);
-	}
-
-	// replace placeholders with HTML
-	if (!empty($wgWysiwygMarkers)) {
-		$html = strtr($html, $wgWysiwygMarkers);
-	}
 
 	// extract refid's of templates from template markers
 	// preg_match_all('/\x7f-wtb-(\d+)-\x7f.*?\x7f-wte-\1-\x7f/si', $html, $matches);
@@ -309,6 +310,9 @@ function Wysiwyg_WikiTextToHtml($wikitext, $articleId = -1, $encode = false) {
 
 		$html = preg_replace('/\x7f-wtb-(\d+)-\x7f.*?\x7f-wte-\1-\x7f/sie', "'<input type=\"button\" refid=\"\\1\" _fck_type=\"template\" value=\"'.\$wgWysiwygMetaData[\\1]['name'].'\" class=\"wysiwygDisabled wysiwygTemplate\" /><input value=\"'.htmlspecialchars(stripslashes(\$templateCallsParsed[\\1])).'\" style=\"display:none\" />'", $html);
 	}
+
+	// add _wysiwyg_line_start attribute to HTML node following <!--NEW_LINE_1--> comment (<input> placeholders within paragraphs)
+	$html = preg_replace('/<\!--NEW_LINE_1--><input/', '<input _wysiwyg_line_start="true"', $html);
 
 	wfDebug("Wysiwyg_WikiTextToHtml html: {$html}\n");
 

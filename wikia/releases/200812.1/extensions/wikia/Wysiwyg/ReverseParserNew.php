@@ -139,6 +139,9 @@ class ReverseParser {
 				if(is_numeric($refid)) {
 					$nodeData = $this->data[$refid];
 				}
+				else {
+					$nodeData = false;
+				}
 
 				switch($node->nodeName) {
 					case 'body':
@@ -406,8 +409,23 @@ class ReverseParser {
 						$out = $this->handleListItem($node, $textContent);
 						break;
 
+					// images
+					case 'div':
+					case 'iframe':
+						if (!empty($nodeData)) {
+							$out = $this->handleImage($node, $textContent);
+						}
+						break;
 
+					// links
+					case 'a':
+						$out = $this->handleLink($node, $textContent);
+						break;
 
+					// templates, magic words, parser hooks placeholders
+					case 'input':
+						$out = $this->handlePlaceholder($node, $textContent);
+						break;
 				}
 
 			} else {
@@ -468,6 +486,212 @@ class ReverseParser {
 
 		wfProfileOut(__METHOD__);
 		return $out;
+	}
+
+	/**
+	 * Returns wikimarkup for <span> tag
+	 *
+	 * Span is used to wrap various elements like templates etc.
+	 */
+	private function handlePlaceholder($node, $content) {
+
+		// handle spans with refId attribute: images, templates etc.
+		$refid = $node->getAttribute('refid');
+
+		if ( is_numeric($refid) && isset($this->data[$refid]) ) {
+			$refData = (array) $this->data[$refid];
+
+			switch($refData['type']) {
+				// [[Image:Jimbo.jpg|thumb]]
+				case 'image':
+				// [[Media:foo.jpg]]
+				case 'internal link: media':
+					$pipe = ($refData['description'] != '') ? '|'.$refData['description'] : '';
+					return "[[{$refData['href']}{$pipe}]]";
+
+				// <gallery></gallery>
+				case 'gallery':
+					return $refData['description'];
+
+				// <nowiki></nowiki>
+				case 'nowiki':
+					return "<nowiki>{$refData['description']}</nowiki>";
+
+				// <html></html>
+				case 'html':
+					return "<html>{$refData['description']}</html>";
+
+				// [[Category:foo]]
+				case 'category':
+					$pipe = ($refData['description'] != '') ? '|'.$refData['description'] : '';
+					return "[[{$refData['href']}{$pipe}]]{$refData['trial']}";
+
+				// parser hooks
+				case 'hook':
+					return $refData['description'];
+
+				// {{template}}
+				//case 'curly brackets':
+				case 'template':
+					return $refData['originalCall'];
+
+				// __NOTOC__ ...
+				case 'double underscore':
+				// __TOC__
+				case 'double underscore: toc':
+					return $refData['description'];
+
+				// <gallery> parser hook tag
+				case 'gallery':
+					return $refData['description'];
+
+				// ~~~~
+				case 'tilde':
+					return $refData['description'];
+
+				// link with template inside description
+				case 'internal link':
+					return $this->handleLink($node, $refData['description']);
+
+				// fallback
+				default:
+					return '<!-- unsupported placeholder type -->';
+			}
+		}
+		// sometimes FCK adds empty spans with "display: none"
+		return '';
+	}
+
+	/**
+	 * Returns wikimarkup for <a> tag
+	 */
+	private function handleLink($node, $content) {
+
+		$refid = $node->getAttribute('refid');
+
+		// handle links pasted from external sites -> assign new refid
+		if (!is_numeric($refid) || !isset($this->fckdata[$refid])) {
+			$href = $node->getAttribute('href');
+
+			if( is_string($href) ) {
+				array_push($this->data, array(
+					'type' => ($content == $href) ? 'external link: raw' : 'external link',
+					'text' => $content,
+					'href' => $href
+				));
+				// generate new refid
+				$refid = count($this->fckData);
+			}
+		}
+
+
+		$data = $this->data[$refid];
+
+		switch($data['type']) {
+			case 'image';
+				return $this->handleImage($node, $content);
+			
+			case 'internal link':
+			case 'internal link: file':
+			case 'internal link: special page':
+				// take link description from parsed HTML
+				$data['description'] = $content;
+				$data['trial'] = '';
+
+				// * [[foo|foo]] -> [[foo]]
+				if ($data['href'] == $data['description']) {
+					$data['description'] = '';
+				}
+				// * [[:foo]]
+				else if ( ($data['href']{0} == ':') && (substr($data['href'],1) == $data['description']) ) {
+					$data['description'] = '';
+				}
+				// * [[foo|foots]] -> [[foo]]ts (trial can't contain numbers)
+				else if ($data['description'] != '' && substr($data['description'], 0, strlen($data['href'])) == $data['href']) {
+					$trial = substr($data['description'], strlen($data['href']));
+
+					// validate $trial (might only contain chars)
+					if ( ctype_alpha($trial) ) {
+						$data['trial'] = $trial;
+						$data['description'] = '';
+					}
+				}
+
+				// generate wikisyntax
+				$tag =  "[[{$data['href']}";
+
+				if($data['description'] != '') {
+					$tag .=  "|{$data['description']}]]";
+				} else {
+					$tag .=  "]]";
+				}
+				if($data['trial'] != '') {
+					$tag .= $data['trial'];
+				}
+				return $tag;
+
+			case 'external link':
+			case 'external link: raw':
+				// do we have text before the link?
+				$textBefore = $node->previousSibling && $node->previousSibling->nodeType == XML_TEXT_NODE && substr($node->previousSibling->textContent, -1) != ' ';
+				$textAfter = $node->nextSibling && $node->nextSibling->nodeType == XML_TEXT_NODE && $node->nextSibling->textContent{0} != ' ';
+
+				// validate URL
+				if (strpos($data['href'], ':')) {
+					list($protocol, $path) = explode(':', $data['href'], 2);
+				}
+				else {
+					// default to http if none protocol provided
+					$protocol = 'http';
+					$path = '//'.$data['href'];
+				}
+
+				// make sure to have protocol name in lower case
+				$protocol = strtolower($protocol);
+
+				// put it back together
+				$data['href'] = $protocol . ':' . $path;
+
+				// fill FCK data
+				if (preg_match('%^(?:' . $this->protocols . ')%im', $data['href'])) {
+					// external links
+					if ($data['type'] == 'external link: raw' && !$textBefore && !$textAfter) {
+						// use http://foo.com
+						return $data['href'];
+					}
+					else if ($this->hasCSSClass($node, 'autonumber') && strlen($content) > 2 && is_numeric(substr($content,1,-1))) {
+						// use [http://foo.com] - numbered external links
+						return "[{$data['href']}]";
+					} else {
+						// use [http://foo.com desc]
+						return "[{$data['href']} {$content}]";
+					}
+				}
+				else {
+					// internal links
+					return "[{$data['href']} {$content}]";
+				}
+		}
+
+	}
+
+	/**
+	 * Returns wikimarkup for image tags
+	 */
+	private function handleImage($node, $content) {
+
+		// check is perfomed earlier
+		$data = $this->data[ $node->getAttribute('refid') ];
+
+		switch($data['type']) {
+			case 'image':
+				$prefix = ''; //( in_array($node->nodeName, array('div', 'table')) ) ? "\n\n" : '';
+				$out = $prefix . $data['original'];
+				return $out;
+
+			default:
+				return '';
+		}
 	}
 
 	/**
