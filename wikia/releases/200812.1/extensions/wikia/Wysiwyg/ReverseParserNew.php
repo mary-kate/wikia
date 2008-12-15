@@ -474,10 +474,10 @@ class ReverseParser {
 				$textContent = substr($textContent, 0, -1);
 			}
 
-			// replace space with empty string before HTML tag with _wysiwyg_line_start attribute
+			// remove last space from text node before HTML tag with _wysiwyg_line_start attribute
 			// e.g. ' <div _wysiwyg_new_line="true">...' => '\n<div>...'
-			else if ( trim($textContent) == '' && $node->nextSibling && $node->nextSibling->nodeType == XML_ELEMENT_NODE && $node->nextSibling->getAttribute('_wysiwyg_line_start')) {
-				$textContent = '';
+			else if ( substr($textContent, -1) == ' ' && $node->nextSibling && $node->nextSibling->nodeType == XML_ELEMENT_NODE && $node->nextSibling->getAttribute('_wysiwyg_line_start')) {
+				$textContent = substr($textContent, 0, -1);
 			}
 
 			$out = $textContent;
@@ -570,7 +570,7 @@ class ReverseParser {
 		$refid = $node->getAttribute('refid');
 
 		// handle links pasted from external sites -> assign new refid
-		if (!is_numeric($refid) || !isset($this->fckdata[$refid])) {
+		if (!is_numeric($refid) || !isset($this->data[$refid])) {
 			$href = $node->getAttribute('href');
 
 			if( is_string($href) ) {
@@ -653,7 +653,7 @@ class ReverseParser {
 				$data['href'] = $protocol . ':' . $path;
 
 				// fill FCK data
-				if (preg_match('%^(?:' . $this->protocols . ')%im', $data['href'])) {
+				if (preg_match('%^(?:' . $this->urlProtocols . ')%im', $data['href'])) {
 					// external links
 					if ($data['type'] == 'external link: raw' && !$textBefore && !$textAfter) {
 						// use http://foo.com
