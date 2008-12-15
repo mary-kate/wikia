@@ -424,6 +424,7 @@ function WMU_displayDetails(responseText) {
 				$('ImageSize').innerHTML = WMU_slider.getRealValue() + 'px';
 			}
 			image.width = WMU_slider.getRealValue();
+			$('ImageUploadManualWidth').value = image.width;			
 			image.height = image.width / (thumbSize[0] / thumbSize[1]);
 			if(WMU_orgThumbSize == null) {
 				WMU_orgThumbSize = [image.width, image.height];
@@ -576,9 +577,11 @@ function MWU_imageSizeChanged(size) {
 		if(size == 'thumb') {
 			image.width = WMU_thumbSize[0];
 			image.height = WMU_thumbSize[1];
+			$('ImageUploadManualWidth').value = WMU_thumbSize[0];
 		} else {
 			image.width = WMU_orgThumbSize[0];
 			image.height = WMU_orgThumbSize[1];
+			$('ImageUploadManualWidth').value = WMU_orgThumbSize[0];
 		}
 	}
 }
