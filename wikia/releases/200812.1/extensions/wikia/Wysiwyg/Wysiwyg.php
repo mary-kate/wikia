@@ -418,8 +418,10 @@ function Wysiwyg_SetRefId($type, $params, $addMarker = true, $returnId = false) 
 			if ($params['original'] != '') {
 				$data['original'] = htmlspecialchars_decode(preg_replace($regexPreProcessor['search'], $regexPreProcessor['replace'], $params['original']));
 			}
+			if ($params['whiteSpacePrefix'] != '') {
+				$data['whiteSpacePrefix'] = $params['whiteSpacePrefix'];
+			}
 			$result = '[[' . $data['href'] . ($params['wasblank'] ? '' : '|' . $params['text']) . ']]';
-			$data['after'] = $params['after'];
 			break;
 
 		case 'image':
