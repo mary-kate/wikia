@@ -98,6 +98,18 @@ function WMU_licenseSelectorCheck() {
 	WMU_loadLicense( selection );
 }
 
+function WMU_manualWidthInput( elem ) {
+	var image = $('ImageUploadThumb').firstChild;
+	if(WMU_orgThumbSize == null) {
+		var WMU_orgThumbSize = [image.width, image.height];
+	}
+	var thumbSize = [image.width, image.height];	
+	var height = elem.value / (WMU_orgThumbSize[0] / WMU_orgThumbSize[1]);
+	image.width = elem.value;
+	image.height = height;
+	WMU_thumbSize = [image.width, image.height];
+}
+
 function WMU_show(e) {
 	WMU_refid = null;
 	WMU_wysiwygStart = 1;
