@@ -2262,7 +2262,7 @@ class Parser
 						// pre
 						if ($this->mLastSection != 'pre') {
 							$paragraphStack = false;
-							$output .= $this->closeParagraph().'<pre>';
+							$output .= $this->closeParagraph().'<pre _wysiwyg_line_start="true">';
 							$this->mLastSection = 'pre';
 						}
 						$t = substr( $t, 1 );
