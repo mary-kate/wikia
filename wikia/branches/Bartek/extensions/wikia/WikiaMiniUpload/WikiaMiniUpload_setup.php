@@ -56,6 +56,7 @@ function WMUSetupVars($vars) {
 	$vars['wmu_hide_message'] = wfMsg('wmu-hide-message');
 	$vars['wmu_show_license_message'] = wfMsg('wmu-show-license-msg');
 	$vars['wmu_hide_license_message'] = wfMsg('wmu-hide-license-msg');
+	$vars['wmu_max_thumb'] = wfMsg('wmu-max-thumb');
 
 	return true;
 }
