@@ -106,22 +106,10 @@ function WMU_manualWidthInput( elem ) {
 	if( WMU_orgThumbSize == null ) {
 		var WMU_orgThumbSize = [image.width, image.height];
 	}
-	if ( elem.value > WMU_width ) {
-		if (!WMU_shownMax) {
-			image.width = WMU_width;
-			image.height = WMU_width / WMU_ratio;
-			WMU_thumbSize = [image.width, image.height];
-			$( 'ImageSize' ).innerHTML = image.width + 'px';		
-			$( 'ImageUploadManualWidth' ).value = image.width;
-			WMU_shownMax = true;
-			alert (wmu_max_thumb);
-		}
-	} else {
-		image.height = elem.value / WMU_ratio;
-		image.width = elem.value;
-		WMU_thumbSize = [image.width, image.height];
-		$( 'ImageSize' ).innerHTML = elem.value + 'px';
-		WMU_shownMax = false;			
+	image.height = elem.value / WMU_ratio;
+	image.width = elem.value;
+	WMU_thumbSize = [image.width, image.height];
+	$( 'ImageSize' ).innerHTML = elem.value + 'px';
 	}
 }
 
