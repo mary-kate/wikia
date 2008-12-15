@@ -174,7 +174,7 @@
 }
 .ImageUploadOptionsTable td, .ImageUploadOptionsTable th {
 	border-bottom: 1px solid #CCC;
-	padding: 10px 5px;
+	padding: 5px 5px;
 }
 ImageUploadOptionsTable img {
 	vertical-align: middle;
@@ -265,7 +265,7 @@ ImageUploadOptionsTable img {
 	top: 18px;
 }
 
-#ImageUploadLicenseControl {
+#ImageUploadLicenseControl, #ImageUploadLicenseText {
 	font-size: 9pt;
 }
 
