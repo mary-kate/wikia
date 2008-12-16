@@ -2059,14 +2059,6 @@ class Parser
 		$result = '';
 		if ( '' != $this->mLastSection ) {
 			$result = '</' . $this->mLastSection  . ">\n";
-/*
-			global $wgWysiwygParserEnabled;
-			if(!empty($wgWysiwygParserEnabled)) {
-				if($this->mEmptyLineCounter%2 == 1) {
-					$result.= "<!--NEW_LINE-->";
-				}
-			}
-*/
 		}
 		$this->mInPre = false;
 		$this->mLastSection = '';
@@ -2248,7 +2240,7 @@ class Parser
 							// empty line before HTML tag
 							$t = preg_replace('/^<(\w+)/', '<$1 _wysiwyg_new_line="true"', $t);
 						}
-						// HTML tag begins the line
+						// HTML tag starts the line
 						$t = preg_replace('/^<(\w+)/', '<$1 _wysiwyg_line_start="true"', $t);
 						$this->mEmptyLineCounter = 0;
 					}
@@ -2263,13 +2255,16 @@ class Parser
 				} else if ( !$inBlockElem && !$this->mInPre ) {
 					if ( ' ' == $t{0} and ( $this->mLastSection == 'pre' or trim($t) != '' ) ) {
 						if(!empty($wgWysiwygParserEnabled)) {
+							// empty line before preformatted block?
 							$newLines = ($this->mEmptyLineCounter %2) == 1;
 							$this->mEmptyLineCounter = 0;
 						}
 						// pre
 						if ($this->mLastSection != 'pre') {
 							$paragraphStack = false;
-							$output .= rtrim($this->closeParagraph()).'<pre _wysiwyg_line_start="true" '.(!empty($newLines) ? '_wysiwyg_new_line="true"' : '').'>';
+							$close = $this->closeParagraph();
+							// in wysiwyg don't add line break before <pre> tag
+							$output .= (!empty($wgWysiwygParserEnabled) ? rtrim($close) : $close).'<pre'.(!empty($newLines) ? ' _wysiwyg_new_line="true"' : '').'>';
 							$this->mLastSection = 'pre';
 						}
 						$t = substr( $t, 1 );
@@ -2288,7 +2283,7 @@ class Parser
 									$output .= $this->closeParagraph();
 									$this->mLastSection = '';
 									if(!empty($wgWysiwygParserEnabled)) {
-										$paragraphStack = '<p _new_lines_before='.($this->mEmptyLineCounter).' _wysiwyg_line_start="true">';
+										$paragraphStack = '<p _new_lines_before='.($this->mEmptyLineCounter).'>';
 									} else {
 										$paragraphStack = '<p>';
 									}
@@ -2306,7 +2301,7 @@ class Parser
 								$this->mLastSection = 'p';
 							} else if ($this->mLastSection != 'p') {
 								if(!empty($wgWysiwygParserEnabled)) {
-									$output .= $this->closeParagraph().'<p _new_lines_before="0" _wysiwyg_line_start="true">';
+									$output .= $this->closeParagraph().'<p _new_lines_before="0">';
 								} else {
 									$output .= $this->closeParagraph().'<p>';
 								}

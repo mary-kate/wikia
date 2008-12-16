@@ -29,8 +29,8 @@ class WysiwygParser extends Parser {
 	var $bulletLevel = 0;
 
 	/* private */ function openList( $char ) {
+		$lastSection = $this->mLastSection;
 		$result = $this->closeParagraph();
-
 		if ( ':' == $char) {
 			if ( substr($this->mCurrentPrefix, -1) == ':' && $this->mLastCommonPrefix ) {
 				$this->mLast = 'open';
@@ -48,6 +48,9 @@ class WysiwygParser extends Parser {
 			}
 			else {
 				$result = '';
+
+				// reset mLastSection for intended bullet lists
+				$this->mLastSection = $lastSection;
 			}
 		}
 		else if ( '*' == $char || '#' == $char ) {
@@ -57,6 +60,8 @@ class WysiwygParser extends Parser {
 			if ($this->mEmptyLineCounter%2 == 1) {
 				$style .= ' _wysiwyg_new_line="true"';
 			}
+
+			$style .= ' _wysiwyg_line_start="true"';
 
 			$result .= '<' . ($char == '*' ? 'ul' : 'ol') . $style . '><li>';
 			$this->bulletLevel++;
