@@ -165,6 +165,9 @@ class ReverseParser {
 						// detect indented paragraph (margin-left CSS property)
 						$indentation = $this->getIndentationLevel($node);
 
+						// is current <p> node of definition list?
+						$isDefinitionList = false;
+
 						// default prefix -> empty line after previous paragraph
 						// doesn't apply to definition lists parsed as <p> tags
 						// ;foo
@@ -174,13 +177,17 @@ class ReverseParser {
 						// handle <dt> elements being rendered as p.definitionTerm
 						if ($this->hasCSSClass($node, 'definitionTerm')) {
 							$textContent = ';' . rtrim($textContent);
-							$prefix = "\n";
+							$prefix = $node->previousSibling ? "\n" : '';
+
+							$isDefinitionList = true;
 						}
 
 						// handle indentations
 						if ($indentation > 0) {
 							$textContent = str_repeat(':', $indentation) . rtrim($textContent);
-							$prefix = "\n";
+							$prefix = $node->previousSibling ? "\n" : '';
+
+							$isDefinitionList = true;
 						}
 
 						$previousNode = $this->getPreviousElementNode($node);
@@ -188,6 +195,7 @@ class ReverseParser {
 						// if the first previous XML_ELEMENT_NODE (so no text and no comment) of the current
 						// node is <p> then add new line before the current one
 						if ($previousNode && $previousNode->nodeName == 'p') {
+
 							// previous <p> node was related to definion lists
 							// take just _new_lines_before value under consideration
 							if ( ($this->hasCSSClass($previousNode, 'definitionTerm') || $this->getIndentationLevel($previousNode) > 0 ) && $prefix == "\n\n") {
@@ -196,15 +204,17 @@ class ReverseParser {
 							}
 							$textContent = $prefix . $textContent;
 						} else if($textContent == ""){
+							// empty paragraph
 							$textContent = "\n";
 						} else {
+							// add new lines before paragraph
 							$newLinesBefore = $node->getAttribute('_new_lines_before');
-							if(is_numeric($newLinesBefore) && $node->previousSibling) {
+							if(is_numeric($newLinesBefore)) {
 								$textContent = str_repeat("\n", $newLinesBefore).$textContent;
 							}
 
 							// we're in definion list and previous node wasn't paragraph -> add extra line break
-							if($prefix == "\n") {
+							if($isDefinitionList && $node->previousSibling) {
 								$textContent = "\n{$textContent}";
 							}
 						}
@@ -329,8 +339,6 @@ class ReverseParser {
 						break;
 
 					case 'tr':
-						$node->removeAttribute('_wysiwyg_line_start');
-
 						$isFirstRow = $node->isSameNode($node->parentNode->firstChild);
 						$attStr = ltrim($this->getAttributesStr($node));
 
@@ -344,8 +352,6 @@ class ReverseParser {
 						break;
 
 					case 'th':
-						$node->removeAttribute('_wysiwyg_line_start');
-
 						$attStr = $this->getAttributesStr($node);
 						if ($attStr != '') {
 							$attStr = ltrim("{$attStr}|");
@@ -354,8 +360,6 @@ class ReverseParser {
 						break;
 
 					case 'td':
-						$node->removeAttribute('_wysiwyg_line_start');
-
 						$attStr = $this->getAttributesStr($node);
 						if ($attStr != '') {
 							$attStr = ltrim("{$attStr}|");
@@ -378,34 +382,8 @@ class ReverseParser {
 					// lists
 					case 'ul':
 					case 'ol':
-					case 'dl':
-						$prefix = $suffix = '';
-						// handle indentations created using definition lists
-						if($node->nodeName == 'dl') {
-							$indentation = $this->getIndentationLevel($node);
-							if($indentation !== false) {
-								$prefix = str_repeat(':', $indentation);
-							}
-							// paragraph is following this <dl> list
-							if($node->nextSibling && $node->nextSibling->nodeName == 'p') {
-								$suffix = ($node->nextSibling->textContent != '') ? "\n" : "\n\n";
-							}
-						}
-						if($node->previousSibling) {
-							// first item of nested list
-							$prefix = "\n{$prefix}";
-
-							// add space after previous list, so we won't break numbers
-							if ($this->listLevel == 0 && $this->isList($node->previousSibling)) {
-								$prefix = "\n{$prefix}";
-							}
-						}
-						// lists inside table cell
-						else if ($node->parentNode && $this->isTableCell($node->parentNode)) {
-							$prefix = "\n{$prefix}";
-						}
 						// rtrim used to remove \n added by the last list item
-						$out = $prefix . rtrim($textContent, " \n") . $suffix;
+						$out = rtrim($textContent, " \n");
 						break;
 
 					// lists elements
@@ -451,38 +429,38 @@ class ReverseParser {
 
 			}
 
-			// if current processed node contains attribute _wysiwyg_new_line (added in Parser.php)
+			// if current processed node contains _wysiwyg_new_line attribute (added in Parser.php)
 			// then add new line before it
-			if($node->getAttribute('_wysiwyg_new_line') && (!$this->isHeaderNode($node) || empty($node->previousSibling))) {
+			if($this->nodeHasNewLineBefore($node)) {
 				$out = "\n" . $out;
 			}
-
-			// do the same with nodes containing attribute _wysiwyg_line_start (added in Parser.php)
-			if($node->getAttribute('_wysiwyg_line_start') && $node->previousSibling) {
+			
+			// do the same with nodes containing _wysiwyg_line_start and washtml attributes (added in Parser.php)
+			if($this->nodeHasLineStart($node)) {
 				$out = "\n" . $out;
 			}
-
 		} else if($node->nodeType == XML_COMMENT_NODE) {
 
-			// if the next sibling node of the current one comment node is text
+			// if the next sibling node of the current one comment node is text or node (so any sibling)
 			// then add new line
 			// e.g. "<!--NEW_LINE_1-->abc" => "\nabc"
-			if($node->data == "NEW_LINE_1" && $node->nextSibling) { // && $node->nextSibling->nodeType == XML_TEXT_NODE) {
+			if($node->data == "NEW_LINE_1" && $node->nextSibling) { 
 				$out = "\n";
 			}
 
 		} else if($node->nodeType == XML_TEXT_NODE) {
 
 			// if the next sibling node of the current one text node is comment (NEW_LINE_1)
-			// then cut the last character of current text node (it must be space)
+			// then cut the last character of current text node (it must be space added by FCK after convertion of \n)
 			// e.g. "abc <!--NEW_LINE_1-->" => "abc<!--NEW_LINE_1-->"
 			if($node->nextSibling && $node->nextSibling->nodeType == XML_COMMENT_NODE && $node->nextSibling->data == "NEW_LINE_1") {
 				$textContent = substr($textContent, 0, -1);
 			}
 
-			// remove last space from text node before HTML tag with _wysiwyg_line_start attribute
+			// remove last space (added by FCK after convertion of \n) from text node
+			// before HTML tag with _wysiwyg_line_start attribute
 			// e.g. ' <div _wysiwyg_new_line="true">...' => '\n<div>...'
-			else if ( substr($textContent, -1) == ' ' && $node->nextSibling && $node->nextSibling->nodeType == XML_ELEMENT_NODE && $node->nextSibling->getAttribute('_wysiwyg_line_start')) {
+			else if ( substr($textContent, -1) == ' ' && $this->nextSiblingIsInNextLine($node) ) {
 				$textContent = substr($textContent, 0, -1);
 			}
 
@@ -714,24 +692,8 @@ class ReverseParser {
 				} else {
 					return $this->listBullets . ' ' . ltrim($content) . "\n";
 				}
-/*
-			case 'dt':
-				return substr($this->listBullets, 0, -1) . ";{$node->textContent}\n";
-
-			case 'dd':
-				// hack for :::::foo markup used for indentation
-				// <dl><dl>...</dl></dl> (produced by MW markup) would generate wikimarkup like the one below:
-				// :
-				// ::
-				// ::: ...
-				if($node->hasChildNodes() && $node->childNodes->item(0)->nodeName == 'dl') {
-					return rtrim($content, ' ') . "\n";
-				} else if ($this->hasListInside($node)) {
-					return $content . "\n";
-				} else {
-					return $this->listBullets . $content . "\n";
-				}
-*/		}
+			break;
+		}
 	}
 
 	private function getPreviousElementNode($node) {
@@ -742,6 +704,90 @@ class ReverseParser {
 				return $node;
 			}
 		}
+		return false;
+	}
+
+	/*
+	 * Detect _wysiwyg_new_line attribute (empty line of wikitext before given node) and perform extra check
+	 */
+	private function nodeHasNewLineBefore($node) {
+
+		// no node before <p>
+		if(empty($node->previousSibling) && $node->nodeName == 'p') {
+			return false;
+		}
+
+		if($node->getAttribute('_wysiwyg_new_line') && !$this->isHeaderNode($node)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/*
+	 * Detect whether given node starts line of wikitext and perfrom extra check
+	 */
+	private function nodeHasLineStart($node) {
+
+		if (!$node->previousSibling) {
+			return false;
+		}
+
+		// support for HTML tags in wikitext
+		if ($node->getAttribute('washtml') && $node->getAttribute('_wysiwyg_line_start')) {
+			return true;
+		}
+
+		// we have proper handling of tables wikisyntax so don't add any new \n for table nodes
+		if (in_array($node->nodeName, array('tr', 'th', 'td')) && !$node->getAttribute('washtml')) {
+			return false;
+		}
+
+		// they start new line, but we don't have to add new line before them
+		if (in_array($node->nodeName, array('p', 'pre'))) {
+			return false;
+		}
+
+		// HTML tags in wikitext
+		if ($node->getAttribute('_wysiwyg_line_start')) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/*
+	 * Check if next sibling of given node starts next line of wikitext (based on _wysiwyg_line_start attribute and node name)
+	 *
+	 * Used to remove last char (space) of text node
+	 */
+	private function nextSiblingIsInNextLine($node) {
+
+		$node = $node->nextSibling;
+
+		if (empty($node)) {
+			return false;
+		}
+
+		if ($node->nodeType != XML_ELEMENT_NODE) {
+			return false;
+		}
+
+		// we have proper handling of tables wikisyntax so don't add any new \n for table nodes
+		if (in_array($node->nodeName, array('tr', 'th', 'td')) && !$node->getAttribute('washtml')) {
+			return false;
+		}
+
+		// "by definition" <p> and <pre> nodes starts line of wikitext
+		if (in_array($node->nodeName, array('p', 'pre'))) {
+			return true;
+		}
+
+		// HTML tags in wikitext
+		if ($node->getAttribute('_wysiwyg_line_start')) {
+			return true;
+		}
+
 		return false;
 	}
 
