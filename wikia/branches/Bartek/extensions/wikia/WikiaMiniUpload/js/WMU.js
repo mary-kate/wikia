@@ -670,7 +670,7 @@ function WMU_close(e) {
 	}
 	WMU_track('close/' + WMU_curScreen);
 	WMU_panel.hide();
-	if((typeof FCK != 'undefined') && $('wpTextbox1')) $('wpTextbox1').focus();
+	if(typeof FCK == 'undefined' && $('wpTextbox1')) $('wpTextbox1').focus();
 	WMU_switchScreen('Main');
 	WMU_loadMain();
 	YAHOO.util.Dom.setStyle('header_ad', 'display', 'block');
@@ -710,7 +710,7 @@ AIM = {
 	submit : function(f, c) {
 		// macbre: allow cross-domain
 		if(document.domain != 'localhost' && typeof FCK != 'undefined') {
-			f.action += '&domain=' + escape(document.domain);
+			f.action += ((f.action.indexOf('?') > 0) ? '&' : '?') + 'domain=' + escape(document.domain);
 		}
 
 		AIM.form(f, AIM.frame(c));
