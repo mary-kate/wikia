@@ -390,7 +390,9 @@ class WikiaMiniUpload {
 	}
 }
 
-class FakeFSRepo extends FSRepo {
+
+
+class FakeLocalRepo extends LocalRepo {
         function publishBatch( $triplets, $flags = 0 ) {
                 // Perform initial checks
                 if ( !wfMkdirParents( $this->directory ) ) {
