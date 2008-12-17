@@ -1,24 +1,3 @@
-var search_terms = [ 
-	['Spider-Man', 'marvel'],
-	['Spore', 'spore'],
-	['Grand Theft Auto', 'gta'],
-	['Super Smash Bros', 'ssb'],
-	['Indiana Jones', 'indianajones'],
-	['Nascar Racing', 'thirdturn'],
-	['Harry Potter', 'harrypotter'],
-	['Star Wars', 'starwars'],
-	['Star Trek', 'memoryalpha'],
-	['Lost', 'lost'],
-	['Muppets', 'muppets'],
-	['Jack Bauer', '24'],
-	['Simpsons', 'simpsons'],
-	['Family Guy', 'familyguy'],
-	['South Park', 'southpark'],
-	['Wrestling', 'prowrestling'],
-	['Transformers', 'transformers'],
-	['Godzilla', 'godzilla'],
-	['Pixar Movies', 'pixar']
-];
 var search_term_index = '';
 
 function doSubmit() {
