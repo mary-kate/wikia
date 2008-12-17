@@ -253,6 +253,11 @@ ImageUploadOptionsTable img {
 	margin-bottom: 16px;
 }
 
+#ImageUploadMessage p {
+	line-height:1.5em !important;
+	margin:0.4em 0 0.5em !important;
+}
+
 #ImageUploadLicenseSpan {
 	font-size: 8pt;
 }
