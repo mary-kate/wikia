@@ -417,8 +417,8 @@ class FakeLocalFile extends LocalFile {
 
         function publish( $srcPath, $flags = 0 ) {
                 $this->lock();
-                $dstRel = $this->getName();
                 $archiveName = gmdate( 'YmdHis' ) . '!'. $this->getName();
+		$dstRel = $archiveName;
                 $archiveRel = 'archive/' . $this->getHashPath() . $archiveName;
                 $flags = $flags & File::DELETE_SOURCE ? LocalRepo::DELETE_SOURCE : 0;
                 $status = $this->repo->publish( $srcPath, $dstRel, $archiveRel, $flags );
