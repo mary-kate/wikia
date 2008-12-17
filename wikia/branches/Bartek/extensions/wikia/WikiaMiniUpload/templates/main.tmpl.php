@@ -40,7 +40,7 @@ if( !$wgUser->isAllowed( 'upload' ) ) {
 		<td><h1><?= wfMsg('wmu-find') ?></h1></td>
 		<td>
 <?php
-if($wgUser->isLoggedIn()) {
+if( ( $wgUser->isLoggedIn() ) && ( $wgUser->isAllowed( 'upload' ) ) ) {
 ?>
 			<div onclick="WMU_changeSource(event);" style="font-size: 9pt; float: right; margin-top: 5px;">
 				<a id="WMU_source_0" href="#" style="font-weight: bold;"><?= wfMsg('wmu-thiswiki') ?></a> |
