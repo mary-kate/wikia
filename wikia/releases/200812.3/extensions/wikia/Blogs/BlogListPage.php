@@ -463,6 +463,7 @@ class BlogListPage extends Article {
 	 */
 	static public function skinTemplateTabs( $skin, &$tabs ) {
 		global $wgTitle, $wgUser;
+		global $wgEnableSemanticMediaWikiExt;
 
 		if( ! in_array( $wgTitle->getNamespace(), array( NS_BLOG_ARTICLE, NS_BLOG_LISTING ) ) ) {
 			return true;
@@ -493,12 +494,14 @@ class BlogListPage extends Article {
 					"href" => Title::newFromText( "CreateBlogListingPage", NS_SPECIAL)->getLocalUrl()
 				);
 				$tabs = $row + $tabs;
-				$row["listing-refresh-tab"] = array(
-					"class" => "",
-					"text" => wfMsg("blog-refresh-label"),
-					"href" => $wgTitle->getLocalUrl( "action=purge" )
-				);
-				$tabs += $row;
+				if (!empty($wgEnableSemanticMediaWikiExt)) {
+					$row["listing-refresh-tab"] = array(
+						"class" => "",
+						"text" => wfMsg("blog-refresh-label"),
+						"href" => $wgTitle->getLocalUrl( "action=purge" )
+					);
+					$tabs += $row;
+				}
 				break;
 		}
 
