@@ -16,7 +16,7 @@ require_once dirname(__FILE__) . "/../extensions/wikia/AnalyticsEngine/Analytics
 class SkinHome extends SkinTemplate {
 
 	function initPage(&$out) {
-
+		global $wgOut;
 		wfProfileIn(__METHOD__);
 
 		SkinTemplate::initPage($out);
@@ -24,6 +24,8 @@ class SkinHome extends SkinTemplate {
 		$this->skinname  = 'home';
 		$this->stylename = 'home';
 		$this->template  = 'HomeTemplate';
+
+		$wgOut->addInlineScript('var search_terms = ' . wfSearchPropositions() . ';');
 
 		wfProfileOut(__METHOD__);
 	}
@@ -313,101 +315,6 @@ class HomeTemplate extends QuickTemplate {
         }
     }
 
- 	function choose_featured_hub() {
-		global $featured_hub, $non_featured_hub, $wgStyleVersion;
-
-		$gaming_featured = '<h1>Wikia Gaming is home to over 500,000 pages of content on more than 1,500 wiki fansites built by millions of Xbox, PS3, Wii, PC and handheld gamers.</h1>
-				<table cellspacing="0">
-				<tr>
-					<td style="vertical-align: middle;"><a href="http://gaming.wikia.com"><img src="'. $this->data['stylepath'] .'/home/images/featured_wikia_gaming.gif?'. $wgStyleVersion .'" alt="Wikia Gaming" /></a></td>
-					<td>
-						<h2>Console</h2>
-						<ul>
-							<li><a href="http://super-smash-bros.wikia.com">Super Smash Bros.</a></li>
-							<li><a href="http://fallout.wikia.com">Fallout</a></li>
-							<li><a href="http://littlebigplanet.wikia.com">Little Big Planet</a></li>
-							<li><a href="http://finalfantasy.wikia.com">Final Fantasy</a></li>
-							<li><a href="http://residentevil.wikia.com">Resident Evil</a></li>
-						</ul>
-						more <a href="http://gaming.wikia.com">console wikis</a>
-					</td>
-					<td>
-						<h2>PC</h2>
-						<ul>
-							<li><a href="http://www.wowwiki.com">World of Warcraft</a></li>
-							<li><a href="http://warhammeronline.wikia.com">Warhammer Online</a></li>
-							<li><a href="http://spore.wikia.com">Spore</a></li>
-							<li><a href="http://diablo.wikia.com">Diablo</a></li>
-							<li><a href="http://wiki.ffxiclopedia.org">Final Fantasy XI</a></li>
-						</ul>
-						more <a href="http://gaming.wikia.com">PC wikis</a>
-					</td>
-				</tr>
-				</table>';
-
-		$entertainment_featured = '<h1>Wikia Entertainment is home to over 1,000 wiki fansites built by millions of Movies, TV, Comics and Anime addicts.</h1>
-				<table cellspacing="0">
-				<tr>
-					<td style="vertical-align: middle;"><a href="http://entertainment.wikia.com"><img src="'. $this->data['stylepath'] .'/home/images/featured_wikia_entertainment.gif?'. $wgStyleVersion .'" alt="Wikia Gaming" /></a></td>
-					<td>
-						<h2>Movies &amp; TV</h2>
-						<ul>
-							<li><a href="http://starwars.wikia.com">Star Wars</a></li>
-							<li><a href="http://twilight.wikia.com">Twilight</a></li>
-							<li><a href="http://watchmen.wikia.com">Watchmen</a></li>
-							<li><a href="http://24.wikia.com">24</a></li>
-							<li><a href="http://muppet.wikia.com">Muppets</a></li>
-						</ul>
-						more <a href="http://entertainment.wikia.com/wiki/Movies">movies</a> &amp <a href="http://entertainment.wikia.com/wiki/TV">TV wikis</a>
-					</td>
-					<td>
-						<h2>Comics &amp; Anime</h2>
-						<ul>
-							<li><a href="http://en.marveldatabase.com">Marvel Comics</a></li>
-							<li><a href="http://bleach.wikia.com">Bleach</a></li>
-							<li><a href="http://familyguy.wikia.com">Family Guy</a></li>
-							<li><a href="http://batman.wikia.com">Batman</a></li>
-							<li><a href="http://southpark.wikia.com">South Park</a></li>
-						</ul>
-						more <a href="http://entertainment.wikia.com/wiki/Comics">comics</a> &amp; <a href="http://entertainment.wikia.com/wiki/Anime">anime wikis</a>
-					</td>
-				</tr>
-				</table>';
-
-		$gaming_non_featured = '<h1><a href="http://gaming.wikia.com">Gaming</a></h1>
-					Everything from MMO and RPGs to Fighters and Shooters...
-					<ul>
-						<li><a href="http://www.wowwiki.com">World of Warcraft</a></li>
-						<li><a href="http://fallout.wikia.com">Fallout</a></li>
-						<li><a href="http://warhammeronline.wikia.com">Warhammer Online</a></li>
-						<li><a href="http://super-smash-bros.wikia.com">Super Smash Bros.</a></li>
-						<li><a href="http://halo.wikia.com">Halo</a></li>
-					</ul>
-					more <a href="http://gaming.wikia.com">gaming wikis</a>';
-
-		$entertainment_non_featured = '<h1><a href="http://entertainment.wikia.com">Entertainment</a></h1>
-					Movies, TV, Comics, Anime, Books, and more.
-					<ul>
-						<li><a href="http://starwars.wikia.com">Star Wars</a></li>
-						<li><a href="http://twilight.wikia.com">Twilight</a></li>
-						<li><a href="http://harrypotter.wikia.com">Harry Potter</a></li>
-						<li><a href="http://en.marveldatabase.com">Marvel Comics</a></li>
-						<li><a href="http://watchmen.wikia.com">Watchmen</a></li>
-					</ul>
-					more <a href="http://entertainment.wikia.com">entertainment wikis</a>';
-
-
-
-		//$choice = rand(0, 1);
-		$choice = 0;
-		if ($choice == 0) {
-			$featured_hub = $gaming_featured;
-			$non_featured_hub = $entertainment_non_featured;
-		} else if ($choice == 1) {
-			$featured_hub = $entertainment_featured;
-			$non_featured_hub = $gaming_non_featured;
-		}
-	}
 	function execute()
 	{
 		wfProfileIn( __METHOD__ );
@@ -417,7 +324,6 @@ class HomeTemplate extends QuickTemplate {
 		global $wgAdServerTest, $wgWikiaUniqueBrowserId;
 		global $wgNoWideAd;
 		global $wgStyleVersion;
-		global $featured_hub, $non_featured_hub;
 
 		$this->mTitle = &$this->data['skin']->mTitle;
 		$this->memc = &wfGetCache(CACHE_MEMCACHED);  // is this still needed?
@@ -426,7 +332,6 @@ class HomeTemplate extends QuickTemplate {
 		$this->width = isset($_COOKIE['width']) && is_numeric($_COOKIE['width']) ? $_COOKIE['width'] : 1280;
 		$this->action = $wgRequest->getText('action', 'view');
 		$this->cachetime = 300;
-		$this->choose_featured_hub();
 
 ?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -571,23 +476,7 @@ class HomeTemplate extends QuickTemplate {
 				<input type="submit" value="submit" style="display: none;" />
 			</form>
 		</div>
-		<ul id="navigation">
-			<li class="first">
-				<a href="http://www.wikia.com/wiki/Category:Hubs">Content Hubs</a>
-			</li>
-			<li>
-				<a href="http://www.wikia.com/wiki/Big_wikis">Biggest Wikis</a>
-			</li>
-			<li>
-				<a href="http://www.wikia.com/wiki/Wikia_languages">Wikis by Language</a>
-			</li>
-			<li>
-				<a href="http://help.wikia.com/wiki/Help:Video_demos">What is a Wiki?</a>
-			</li>
-			<li>
-				<a href="http://help.wikia.com">Wikia Help</a>
-			</li>
-		</ul>
+		<?= HomeDataProvider::getContentForBox('nav-bar') ?>
 	</div>
 </div>
 
@@ -597,9 +486,7 @@ class HomeTemplate extends QuickTemplate {
 		<div id="homepage_left_inside">
 
 			<div id="featured_box">
-				<?php
-					echo $featured_hub;
-				?>
+				<?= HomeDataProvider::getContentForBox('main-hub') ?>
 			</div>
 
 			<ul id="featured_hubs_header">
@@ -610,38 +497,18 @@ class HomeTemplate extends QuickTemplate {
 			<table cellspacing="0" id="featured_hubs">
 			<tr>
 				<td class="first">
-					<?php
-						echo $non_featured_hub;
-					?>
+					<?= HomeDataProvider::getContentForBox('featured-hubs-column-1') ?>
 				</td>
 				<td>
-					<h1><a href="http://www.wikia.com/wiki/Sports">Sports</a></h1>
-					Football, Basketball, Racing, Wrestling, Snooker, and more.
-					<ul>
-						<li><a href="http://www.armchairgm.com">Armchair GM</a></li>
-						<li><a href="http://prowrestling.wikia.com">Pro Wrestling</a></li>
-						<li><a href="http://mma.wikia.com">Mixed Martial Arts</a></li>
-						<li><a href="http://thirdturn.wikia.com">NASCAR</a></li>
-						<li><a href="http://baseball.wikia.com">Baseball</a></li>
-					</ul>
-					more <a href="http://www.wikia.com/wiki/Sports">sports wikis</a>
+					<?= HomeDataProvider::getContentForBox('featured-hubs-column-2') ?>
 				</td>
 				<td>
-					<h1><a href="http://www.wikia.com/wiki/Toys">Toys</a></h1>
-					For collectors, customizers, and kids of all ages.
-					<ul>
-						<li><a href="http://hotwheels.wikia.com">Hot Wheels</a></li>
-						<li><a href="http://bionicle.wikia.com">Bionicle</a></li>
-						<li><a href="http://americangirl.wikia.com">American Girl</a></li>
-						<li><a href="http://gijoe.wikia.com">GI Joe</a></li>
-						<li><a href="http://lego.wikia.com">Lego</a></li>
-					</ul>
-					more <a href="http://www.wikia.com/wiki/Toys">toys wikis</a>
+					<?= HomeDataProvider::getContentForBox('featured-hubs-column-3') ?>
 				</td>
 			</tr>
 			</table>
 			<div id="all_hubs">
-				See more content hubs: <a href="http://www.wikia.com/wiki/Humor">Humor</a>, <a href="http://www.wikia.com/wiki/Auto">Auto</a>, <a href="http://www.wikia.com/wiki/Technology">Technology</a>, <a href="http://www.wikia.com/wiki/Finance">Finance</a>... <a href="http://www.wikia.com/wiki/Category:Hubs">See All</a>
+				<?= HomeDataProvider::getContentForBox('hubs-footer') ?>
 			</div>
 
 		</div>
@@ -654,9 +521,7 @@ class HomeTemplate extends QuickTemplate {
 			<a href="http://help.wikia.com/wiki/Help:Video_demos">Take a video tour</a> to learn more.
 		</div>
 		<div class="box blue">
-			<h1>Adding Pictures just got easier</h1>
-			<img src="<?php $this->text('stylepath') ?>/home/images/adding_pictures_accent.gif?<?= $wgStyleVersion ?>" alt="Flickr" style="float: right; margin-left: 10px;" />
-			Now you can search for images on Flickr, Wikia, or your desktop and add them directly to any article from the edit toolbar. Read the <a href="http://help.wikia.com/wiki/Help:Add_Images">help page</a> to learn more.
+			<?= HomeDataProvider::getContentForBox('promoted-feature') ?>
 		</div>
 		<div class="box green">
 			<img src="<?php $this->text('stylepath') ?>/home/images/wikia_search.gif?<?= $wgStyleVersion ?>" alt="Wikia Search" style="float: right; margin-left: 10px;" />
@@ -671,52 +536,7 @@ class HomeTemplate extends QuickTemplate {
 
 <div id="feature_footer">
 	<div class="shrinkwrap">
-		<table cellspacing="0">
-		<tr>
-			<th class="first">Fallout 3 Most Wanted Items</th>
-			<th>Wikia's Top Robots</th>
-			<th>WoW's Most Wanted Items</th>
-			<th class="last">Favorite Twilight Vampires</th>
-		</tr>
-		<tr>
-			<td class="first gaming">
-				<ul>
-					<li><a href="http://fallout.wikia.com/wiki/Stimpak">Stimpacks</a></li>
-					<li><a href="http://fallout.wikia.com/wiki/Stealth_Boy">Stealthboy</a></li>
-					<li><a href="http://fallout.wikia.com/wiki/Scrap_Metal">Scrap Metal</a></li>
-					<li><a href="http://fallout.wikia.com/wiki/Rock-It_Launcher">Rock-it Launcher</a></li>
-					<li><a href="http://fallout.wikia.com/wiki/Vault_Boy_Bobblehead">Valut Boy Bobblehead</a></li>
-				</ul>
-			</td>
-			<td class="entertainment">
-				<ul>
-					<li><a href="http://starwars.wikia.com/wiki/R2-D2">R2-D2</a> (<a href="http://starwars.wikia.com" class="secondary">Wookieepedia</a>)</li>
-					<li><a href="http://terminator.wikia.com/wiki/T-800">T-800</a> (<a href="http://terminator.wikia.com" class="secondary">Terminator Wiki</a>)</li>
-					<li><a href="http://futurama.wikia.com/wiki/Bender_Bending_Rodr%C3%ADguez">Bender</a> (<a href="http://futurama.wikia.com" class="secondary">Futurama Wiki</a>)</li>
-					<li><a href="http://memory-alpha.org/en/wiki/Data">Data</a> (<a href="http://memory-alpha.org" class="secondary">Memory Alpha</a>)</li>
-					<li><a href="http://pixar.wikia.com/wiki/WALL%E2%80%A2E_(character)">WALL-E</a> (<a href="http://pixar.wikia.com" class="secondary">Pixar Wiki</a>)</li>
-				</ul>
-			</td>
-			<td class="gaming">
-				<ul>
-			    		<li><a href="http://www.wowwiki.com/The_Skull_of_Gul%27dan">Skull of Gul'dan</a></li>
-			        	<li><a href="http://www.wowwiki.com/Frostmourne">Frostmourne</a></li>
-					<li><a href="http://www.wowwiki.com/Ashbringer">Ashbringer</a></li>
-					<li><a href="http://www.wowwiki.com/The_1_Ring">The 1 Ring</a></li>
-					<li><a href="http://www.wowwiki.com/Atiesh%2C_Greatstaff_of_the_Guardian">Atiesh</a></li>
-				</ul>
-			</td>
-			<td class="last entertainment">
-				<ul>
-					<li><a href="http://twilight.wikia.com/wiki/Bella_Swan">Bella Swan</a></li>
-					<li><a href="http://twilight.wikia.com/wiki/Edward_Cullen">Edward Cullen</a></li>
-					<li><a href="http://twilight.wikia.com/wiki/Alice_Cullen">Alice Cullen</a></li>
-					<li><a href="http://twilight.wikia.com/wiki/Victoria">Victoria</a></li>
-					<li><a href="http://twilight.wikia.com/wiki/Aro">Aro</a></li>
-				</ul>
-			</td>
-		</tr>
-		</table>
+		<?= HomeDataProvider::getContentForBox('footer-columns') ?>
 	</div>
 </div>
 <div id="footer">
@@ -756,4 +576,277 @@ $this->html('bottomscripts');
 
 		wfProfileOut( __METHOD__ );
 	}
+}
+
+class HomeDataProvider {
+	static $data;
+	static function getContentForBox($boxname) {
+		global $wgStyleVersion, $wgStylePath, $wgMemc;
+
+		$prefix = 'Main-page-';
+
+		if(self::$data==null) {
+			$key = 'wikia:main_page:data';
+			self::$data = $wgMemc->get($key);
+			if(!self::$data) {
+				//begin: main hub
+				//consists of: main-hub-header, main-hub-column-1, main-hub-column-2
+
+				//header + image
+				//line no. 1: header
+				//line no. 2: url | image | alt
+				$msgKey = 'main-hub-header';
+				if (wfEmptyMsg($prefix . $msgKey, $msg = wfMsg($prefix . $msgKey))) {
+					continue;
+				}
+				$msg = explode("\n", $msg);
+				if(count($msg) >= 2) {
+					$header = ltrim($msg[0], '* ');
+					$image = parseItem($msg[1]);
+					if ($title = Title::newFromText($image['text'])) {
+						$image['src'] = Image::newFromTitle($title)->getUrl();
+					}
+				}
+
+				//columns
+				//line no. 1: header
+				//line no. 2: 'more' link
+				//line no. 3+: items
+				$colsArr = array();
+				for($i=1; $i<=2; $i++) {
+					$msgKey = "main-hub-column-$i";
+					if (wfEmptyMsg($prefix . $msgKey, $msg = wfMsg($prefix . $msgKey))) {
+						continue;
+					}
+					$tmp = explode("\n", $msg, 4);
+					if(count($tmp) == 4) {
+						$tmp[3] = explode("\n", $tmp[3]);
+						$items = '';
+						foreach($tmp[3] as $item) {
+							if (strpos($item, '*') !== 0) {
+								break;
+							}
+							$item = parseItem($item);
+							$items .= "<li><a href=\"{$item['href']}\">{$item['text']}</a></li>";
+						}
+						if ($items != '') {
+							$items = "<ul>$items</ul>";
+						}
+						$colHeader = parseItem($tmp[0]);
+						$subtitle = parseItem($tmp[1]);
+						$more = parseItem($tmp[2]);
+						$colsArr[$msgKey] = "
+							<h2>{$colHeader['text']}</h2>
+							{$items}
+							more <a href=\"{$more['href']}\">{$more['text']}</a>";
+					}
+				}
+				self::$data['main-hub'] = "<h1>$header</h1>
+				<table cellspacing=\"0\">
+				<tr>
+					<td style=\"vertical-align: middle;\"><a href=\"{$image['href']}\"><img src=\"{$image['src']}\" alt=\"{$image['desc']}\" /></a></td>
+					<td>
+						{$colsArr['main-hub-column-1']}
+					</td>
+					<td>
+						{$colsArr['main-hub-column-2']}
+					</td>
+				</tr>
+				</table>";
+				//end: main hub
+
+				//begin: featured hubs
+				//line no. 1: header
+				//line no. 2: subtitle
+				//line no. 3: 'more' link
+				//line no. 4+: items
+				for($i=1; $i<=3; $i++) {
+					$msgKey = "featured-hubs-column-$i";
+					if (wfEmptyMsg($prefix . $msgKey, $msg = wfMsg($prefix . $msgKey))) {
+						continue;
+					}
+					$tmp = explode("\n", $msg, 4);
+					if(count($tmp) == 4) {
+						$tmp[3] = explode("\n", $tmp[3]);
+						$items = '';
+						foreach($tmp[3] as $item) {
+							if (strpos($item, '*') !== 0) {
+								break;
+							}
+							$item = parseItem($item);
+							$items .= "<li><a href=\"{$item['href']}\">{$item['text']}</a></li>";
+						}
+						if ($items != '') {
+							$items = "<ul>$items</ul>";
+						}
+						$header = parseItem($tmp[0]);
+						$subtitle = parseItem($tmp[1]);
+						$more = parseItem($tmp[2]);
+						self::$data[$msgKey] = "
+							<h1><a href=\"{$header['href']}\">{$header['text']}</a></h1>
+							{$subtitle['text']}
+							{$items}
+							more <a href=\"{$more['href']}\">{$more['text']}</a>";
+					}
+				}
+				//end: featured hubs
+
+				//begin: footer with 4 columns
+				//consists of: footer-column-1 .. 4
+
+				//line no. 1: header
+				//line no. 2: css class
+				//line no. 3+: items
+				$footerArr = array();
+				for($i=1; $i<=4; $i++) {
+					$msgKey = "footer-column-$i";
+					if (wfEmptyMsg($prefix . $msgKey, $msg = wfMsg($prefix . $msgKey))) {
+						continue;
+					}
+					$tmp = explode("\n", $msg, 3);
+					if(count($tmp) == 3) {
+						$tmp[2] = explode("\n", $tmp[2]);
+						$items = '';
+						foreach($tmp[2] as $item) {
+							if (strpos($item, '*') !== 0) {
+								break;
+							}
+							$item = parseItem($item);
+							$sublink = '';
+							if ($item['desc'] != '') {
+								$sublinkA = explode('|', $item['desc'], 2);
+								if (count($sublinkA) == 2) {
+									$sublink = " (<a href=\"{$sublinkA[0]}\" class=\"secondary\">{$sublinkA[1]}</a>)";
+								}
+							}
+							$items .= "<li><a href=\"{$item['href']}\">{$item['text']}</a>$sublink</li>";
+						}
+						if ($items != '') {
+							$items = "<ul>$items</ul>";
+						}
+						$image = parseItem($tmp[1]);
+						if ($title = Title::newFromText($image['org'])) {
+							$image['src'] = Image::newFromTitle($title)->getUrl();
+						}
+						$footerArr[$msgKey] = array('header' => parseItem($tmp[0]), 'image' => $image['src'], 'items' => $items);
+					}
+				}
+				self::$data['footer-columns'] = "
+					<table cellspacing=\"0\">
+					<tr>
+						<th class=\"first\">{$footerArr['footer-column-1']['header']['text']}</th>
+						<th>{$footerArr['footer-column-2']['header']['text']}</th>
+						<th>{$footerArr['footer-column-3']['header']['text']}</th>
+						<th class=\"last\">{$footerArr['footer-column-4']['header']['text']}</th>
+					</tr>
+					<tr>
+						<td class=\"first\" style=\"background: transparent url({$footerArr['footer-column-1']['image']}) no-repeat scroll 95% 95%\">
+							{$footerArr['footer-column-1']['items']}
+						</td>
+						<td style=\"background: transparent url({$footerArr['footer-column-2']['image']}) no-repeat scroll 95% 95%\">
+							{$footerArr['footer-column-2']['items']}
+						</td>
+						<td style=\"background: transparent url({$footerArr['footer-column-3']['image']}) no-repeat scroll 95% 95%\">
+							{$footerArr['footer-column-3']['items']}
+						</td>
+						<td class=\"last\" style=\"background: transparent url({$footerArr['footer-column-2']['image']}) no-repeat scroll 95% 95%\">
+							{$footerArr['footer-column-4']['items']}
+						</td>
+					</tr>
+					</table>";
+				//end: footer with 4 columns
+
+				//begin: nav bar
+				//line no. 1+: items
+				$msgKey = 'nav-bar';
+				if (!wfEmptyMsg($prefix . $msgKey, $msg = wfMsg($prefix . $msgKey))) {
+					$msg = explode("\n", $msg);
+					$items = '';
+					$first = ' class=\"first\"';
+					foreach($msg as $item) {
+						if (strpos($item, '*') !== 0) {
+							break;
+						}
+						$item = parseItem($item);
+						$items .= "<li$first><a href=\"{$item['href']}\">{$item['text']}</a></li>";
+						$first = '';
+					}
+					if ($items != '') {
+						$items = "<ul id=\"navigation\">$items</ul>";
+					}
+					self::$data[$msgKey] = $items;
+				}
+				//end: nav bar
+
+				//begin: hubs footer
+				//line no. 1: header
+				//line no. 2+: items
+				$msgKey = 'hubs-footer';
+				if (!wfEmptyMsg($prefix . $msgKey, $msg = wfMsg($prefix . $msgKey))) {
+					$msg = explode("\n", $msg);
+					$header = ltrim(array_shift($msg), '* ');
+					$items = array();
+					foreach($msg as $item) {
+						if (strpos($item, '*') !== 0) {
+							break;
+						}
+						$item = parseItem($item);
+						$items[] = "<a href=\"{$item['href']}\">{$item['text']}</a>";
+					}
+					if (count($items)) {
+						$lastItem = array_pop($items);
+						$items = $header . ' ' . implode(', ', $items) . "... $lastItem";
+						self::$data[$msgKey] = $items;
+					}
+				}
+				//end: hubs footer
+
+				//begin: promoted feature
+				//line no. 1: header
+				//line no. 2: image | alt
+				//line no. 3: text
+				$msgKey = 'promoted-feature';
+				if (!wfEmptyMsg($prefix . $msgKey, $msg = wfMsg($prefix . $msgKey))) {
+					$msg = explode("\n", $msg);
+					$header = ltrim($msg[0], '* ');
+					$image = parseItem($msg[1]);
+					if ($title = Title::newFromText($image['org'])) {
+						$image['src'] = Image::newFromTitle($title)->getUrl();
+					}
+					global $wgOut;
+					$text = $wgOut->parse(ltrim($msg[2], '* '));
+					self::$data[$msgKey] = "
+						<h1>$header</h1>
+						<img id=\"promoted_feature_img\" src=\"{$image['src']}\" alt=\"{$image['text']}\" style=\"float: right; margin-left: 10px;\" />
+						$text";
+				}
+				//end: promoted feature
+				$wgMemc->set($key, self::$data, 300);
+			}
+		}
+		return isset(self::$data[$boxname]) ? self::$data[$boxname] : "&lt;$prefix$boxname&gt;";
+	}
+}
+
+function wfSearchPropositions() {
+	global $wgMemc;
+	$key = 'wikia:main_page:search_terms';
+	$items = $wgMemc->get($key);
+	if(!$items) {
+		$prefix = 'Main-page-';
+		$msgKey = 'search-terms';
+		if (!wfEmptyMsg($prefix . $msgKey, $msg = wfMsg($prefix . $msgKey))) {
+			$msg = explode("\n", $msg);
+			$items = array();
+			foreach($msg as $item) {
+				if (strpos($item, '*') !== 0) {
+					break;
+				}
+				$items[] = explode('|', ltrim($item, '* '));
+			}
+		}
+		$items = Wikia::json_encode($items);
+		$wgMemc->set($key, $items, 300);
+	}
+	return $items;
 }
