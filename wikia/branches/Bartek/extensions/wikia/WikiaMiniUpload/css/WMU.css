@@ -132,7 +132,7 @@
 	padding: 8px 0;
 }
 #ImageUploadUpload td {
-	padding-top: 0px;
+	padding-top: 8px;
 }
 #ImageUploadFindTable {
 	background: #EEE;
@@ -248,11 +248,6 @@ ImageUploadOptionsTable img {
 	display: none;
 }
 
-#ImageUploadMessage {
-	padding: 6px 6px 6px 6px;	
-	margin-bottom: 8px;
-}
-
 #ImageUploadMessage p {
 	line-height:1.5em !important;
 	margin:0.4em 0 0.5em !important;
@@ -266,7 +261,11 @@ ImageUploadOptionsTable img {
 	position: absolute;
 	font-size: 9pt;
 	right: 24px;
-	top: 18px;
+	top: 6px;
+}
+
+#ImageUploadTextCont td {
+	padding-top: 0;
 }
 
 #ImageUploadLicenseControl, #ImageUploadLicenseText {
