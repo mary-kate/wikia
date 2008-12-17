@@ -618,11 +618,11 @@ class HomeDataProvider {
 					if (wfEmptyMsg($prefix . $msgKey, $msg = wfMsg($prefix . $msgKey))) {
 						continue;
 					}
-					$tmp = explode("\n", $msg, 4);
-					if(count($tmp) == 4) {
-						$tmp[3] = explode("\n", $tmp[3]);
+					$tmp = explode("\n", $msg, 3);
+					if(count($tmp) == 3) {
+						$tmp[2] = explode("\n", $tmp[2]);
 						$items = '';
-						foreach($tmp[3] as $item) {
+						foreach($tmp[2] as $item) {
 							if (strpos($item, '*') !== 0) {
 								break;
 							}
@@ -633,8 +633,7 @@ class HomeDataProvider {
 							$items = "<ul>$items</ul>";
 						}
 						$colHeader = parseItem($tmp[0]);
-						$subtitle = parseItem($tmp[1]);
-						$more = parseItem($tmp[2]);
+						$more = parseItem($tmp[1]);
 						$colsArr[$msgKey] = "
 							<h2>{$colHeader['text']}</h2>
 							{$items}
@@ -762,7 +761,7 @@ class HomeDataProvider {
 				if (!wfEmptyMsg($prefix . $msgKey, $msg = wfMsg($prefix . $msgKey))) {
 					$msg = explode("\n", $msg);
 					$items = '';
-					$first = ' class=\"first\"';
+					$first = ' class="first"';
 					foreach($msg as $item) {
 						if (strpos($item, '*') !== 0) {
 							break;
