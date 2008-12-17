@@ -390,6 +390,114 @@ class WikiaMiniUpload {
 	}
 }
 
+class FakeFSRepo extends FSRepo {
+        function publishBatch( $triplets, $flags = 0 ) {
+                // Perform initial checks
+                if ( !wfMkdirParents( $this->directory ) ) {
+                        return $this->newFatal( 'upload_directory_missing', $this->directory );
+                }
+                if ( !is_writable( $this->directory ) ) {
+                        return $this->newFatal( 'upload_directory_read_only', $this->directory );
+                }
+                $status = $this->newGood( array() );
+                foreach ( $triplets as $i => $triplet ) {
+                        list( $srcPath, $dstRel, $archiveRel ) = $triplet;
+
+                        if ( substr( $srcPath, 0, 9 ) == 'mwrepo://' ) {
+                                $triplets[$i][0] = $srcPath = $this->resolveVirtualUrl( $srcPath );
+                        }
+                        if ( !$this->validateFilename( $dstRel ) ) {
+                                throw new MWException( 'Validation error in $dstRel' );
+                        }
+                        if ( !$this->validateFilename( $archiveRel ) ) {
+                                throw new MWException( 'Validation error in $archiveRel' );
+                        }
+                        $dstPath = "{$this->directory}/$dstRel";
+                        $archivePath = "{$this->directory}/$archiveRel";
+
+                        $dstDir = dirname( $dstPath );
+                        $archiveDir = dirname( $archivePath );
+                        // Abort immediately on directory creation errors since they're likely to be repetitive
+                        if ( !is_dir( $dstDir ) && !wfMkdirParents( $dstDir ) ) {
+                                return $this->newFatal( 'directorycreateerror', $dstDir );
+                        }
+                        if ( !is_dir( $archiveDir ) && !wfMkdirParents( $archiveDir ) ) {
+                                return $this->newFatal( 'directorycreateerror', $archiveDir );
+                        }
+                        if ( !is_file( $srcPath ) ) {
+                                // Make a list of files that don't exist for return to the caller
+                                $status->fatal( 'filenotfound', $srcPath );
+                        }
+                }
+
+                if ( !$status->ok ) {
+                        return $status;
+                }
+
+                foreach ( $triplets as $i => $triplet ) {
+                        list( $srcPath, $dstRel, $archiveRel ) = $triplet;
+                        $dstPath = "{$this->directory}/$dstRel";
+                        $archivePath = "{$this->directory}/$archiveRel";
+
+                        // Archive destination file if it exists
+                        if( is_file( $dstPath ) ) {
+                                // Check if the archive file exists
+                                // This is a sanity check to avoid data loss. In UNIX, the rename primitive
+                                // unlinks the destination file if it exists. DB-based synchronisation in
+                                // publishBatch's caller should prevent races. In Windows there's no
+                                // problem because the rename primitive fails if the destination exists.
+                                if ( is_file( $archivePath ) ) {
+                                        $success = false;
+                                } else {
+                                        wfSuppressWarnings();
+                                        $success = rename( $dstPath, $archivePath );
+                                        wfRestoreWarnings();
+                                }
+
+                                if( !$success ) {
+                                        $status->error( 'filerenameerror',$dstPath, $archivePath );
+                                        $status->failCount++;
+                                        continue;
+                                } else {
+                                        wfDebug(__METHOD__.": moved file $dstPath to $archivePath\n");
+                                }
+                                $status->value[$i] = 'archived';
+                        } else {
+                                $status->value[$i] = 'new';
+                        }
+
+                        $good = true;
+                        wfSuppressWarnings();
+                        if ( $flags & self::DELETE_SOURCE ) {
+                                if ( !rename( $srcPath, $dstPath ) ) {
+                                        $status->error( 'filerenameerror', $srcPath, $dstPath );
+                                        $good = false;
+                                }
+                        } else {
+                                if ( !copy( $srcPath, $dstPath ) ) {
+                                        $status->error( 'filecopyerror', $srcPath, $dstPath );
+                                        $good = false;
+                                }
+                        }
+                        wfRestoreWarnings();
+
+                        if ( $good ) {
+                                $status->successCount++;
+                                wfDebug(__METHOD__.": wrote tempfile $srcPath to $dstPath\n");
+                                // Thread-safe override for umask
+                                chmod( $dstPath, 0644 );
+                        } else {
+                                $status->failCount++;
+                        }
+                }
+                return $status;
+        }
+
+
+
+
+}
+
 class FakeLocalFile extends LocalFile {
 
 	function recordUpload2( $oldver, $comment, $pageText, $props = false, $timestamp = false ) {
