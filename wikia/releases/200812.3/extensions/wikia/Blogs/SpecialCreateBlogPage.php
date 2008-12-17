@@ -8,12 +8,8 @@
 class CreateBlogPage extends SpecialBlogPage {
 
 	public function __construct() {
-		global $wgExtensionMessagesFiles;
-
 		// initialise messages
-		$wgExtensionMessagesFiles['CreateBlogPage'] = dirname(__FILE__) . '/Blogs.i18n.php';
-		wfLoadExtensionMessages('CreateBlogPage');
-
+		wfLoadExtensionMessages( "Blogs" );
 		parent::__construct( 'CreateBlogPage'  /*class*/, '' /*restriction*/, true);
 	}
 
@@ -130,7 +126,6 @@ class CreateBlogPage extends SpecialBlogPage {
 
 		$wgOut->addScript( '<script type="text/javascript" src="' . $wgScriptPath . '/skins/common/edit.js"><!-- edit js --></script>');
 		$wgOut->addScript( '<script type="text/javascript" src="' . $wgScriptPath . '/extensions/wikia/Blogs/js/categoryCloud.js"><!-- categoryCloud js --></script>');
-		$wgOut->addHTML( '<link rel="stylesheet" type="text/css" href="' . $wgScriptPath . '/extensions/wikia/Blogs/css/BlogCreateForm.css" />' );
 
 		$oTmpl = new EasyTemplate( dirname( __FILE__ ) . "/templates/" );
 
@@ -170,8 +165,8 @@ class CreateBlogPage extends SpecialBlogPage {
 		$this->mFormData['postTitle'] = $aTitleParts[1];
 		$this->mFormData['postBody'] = trim(preg_replace('/\[\[' . $wgContLang->getFormattedNsText( NS_CATEGORY ) . ':(.*)\]\]/siU', '', $sArticleBody));
 		$this->mFormData['postCategories'] = implode('|', $this->getCategoriesFromArticleContent($sArticleBody));
-		$this->mFormData['isVotingEnabled'] = $aPageProps['voting'];
-		$this->mFormData['isCommentingEnabled'] = $aPageProps['commenting'];
+		$this->mFormData['isVotingEnabled'] = isset($aPageProps['voting']) ? $aPageProps['voting'] : 0;
+		$this->mFormData['isCommentingEnabled'] = isset($aPageProps['commenting']) ? $aPageProps['commenting'] : 0;
 		$this->mFormData['isExistingArticleEditAllowed'] = 1;
 
 	}
