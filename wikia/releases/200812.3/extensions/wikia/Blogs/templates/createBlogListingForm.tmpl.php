@@ -32,7 +32,7 @@ BL.checkMatches = function (e) {
 <br />
 <br />
 <form name="blogPostForm" id="blogPostForm" class="wikia_form" method="post" action="<?php echo $title->getLocalUrl();?>">
-	<input type="hidden" name="articleEditAllowed" value="<?php echo $formData['isExistingArticleEditAllowed']; ?>" />
+	<input type="hidden" name="articleEditAllowed" value="<?php echo isset($formData['isExistingArticleEditAllowed']) ? $formData['isExistingArticleEditAllowed'] : "0"; ?>" />
 	<?php if(!empty($preview)): ?>
 		<h2>Preview</h2>
 		<div class='previewnote'><p><strong><?php echo wfMsg('previewnote');?></strong></p></div>
@@ -48,10 +48,10 @@ BL.checkMatches = function (e) {
 	<?php endif; ?>
 	<div class="formBlock">
 		<label><?php echo wfMsg( "create-blog-listing-page-title" ) ?></label>
-		<?php if($formData['isExistingArticleEditAllowed']): ?>
+		<?php if(isset($formData['isExistingArticleEditAllowed']) && $formData['isExistingArticleEditAllowed']): ?>
 			<input type="hidden" name="blogListingTitle" value="<?=$formData['listingTitle']; ?>" />
-			<div id="blogPostTitle">
-				<strong><?=$formData['listingTitle']; ?></strong>
+			<div id="blogPostROTitle">
+				<?=$formData['listingTitle']; ?>
 			</div>
 			<?php else: ?>
 				<input type="text" id="blogPostTitle" name="blogListingTitle" value="<?php echo ( isset($formData['listingTitle']) ? htmlspecialchars($formData['listingTitle']) : "" ); ?>" size="60" maxlength="255" />
