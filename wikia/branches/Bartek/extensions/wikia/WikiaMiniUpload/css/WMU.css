@@ -1,5 +1,5 @@
 #ImageUpload {
-	height: 587px;
+	height: 507px;
 	padding: 25px 10px 10px;
 	position: relative;
 	width: 722px;
@@ -8,7 +8,7 @@
 	background-color: #000;
 	border: 1px solid #FFF;
 	filter: alpha(opacity=60);
-	height: 585px;
+	height: 505px;
 	left: 0;
 	opacity: .6;
 	position: absolute;
@@ -17,7 +17,7 @@
 }
 #ImageUploadBody {
 	background: #FFF;
-	height: 520px;
+	height: 440px;
 	opacity: 1;
 	overflow: hidden;
 	padding: 15px;
@@ -250,7 +250,7 @@ ImageUploadOptionsTable img {
 
 #ImageUploadMessage {
 	padding: 6px 6px 6px 6px;	
-	margin-bottom: 16px;
+	margin-bottom: 8px;
 }
 
 #ImageUploadMessage p {
