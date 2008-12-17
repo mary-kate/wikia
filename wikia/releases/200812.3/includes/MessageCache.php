@@ -361,7 +361,7 @@ class MessageCache {
 	 * @param $text Mixed: new contents of the page.
 	 */
 	public function replace( $title, $text ) {
-		global $wgMaxMsgCacheEntrySize;
+		global $wgMaxMsgCacheEntrySize, $wgCityId;
 		wfProfileIn( __METHOD__ );
 
 
@@ -402,6 +402,11 @@ class MessageCache {
 		$parserMemc->delete( wfMemcKey( 'quartzsidebar' ) );
 		$parserMemc->delete( wfMemcKey( 'navlinks' ) );
 		$parserMemc->delete( wfMemcKey( 'MonacoData' ) );
+		$parserMemc->delete( wfMemcKey( 'MonacoData' ) );
+		if($wgCityId == 177) {
+			$parserMemc->delete( 'wikia:main_page:search_terms' );
+			$parserMemc->delete( 'wikia:main_page:data' );
+		}
 
 		wfRunHooks( "MessageCacheReplace", array( $title, $text ) );
 
@@ -698,7 +703,7 @@ class MessageCache {
 
 	function disable() { $this->mDisable = true; }
 	function enable() { $this->mDisable = false; }
- 
+
 	/** @deprecated */
 	function disableTransform(){
 		wfDeprecated( __METHOD__ );
@@ -811,9 +816,9 @@ class MessageCache {
 
 	/**
 	 * Load messages from a given file
-	 * 
+	 *
 	 * @param string $filename Filename of file to load.
-	 * @param string $langcode Language to load messages for, or false for 
+	 * @param string $langcode Language to load messages for, or false for
      *                         default behvaiour (en, content language and user
      *                         language).
 	 */
@@ -858,7 +863,7 @@ class MessageCache {
 			}
 			$fallbackCode = Language::getFallbackfor( $fallbackCode );
 		} while( $fallbackCode && $fallbackCode !== 'en' );
-		
+
 		if ( !empty($mergedMessages) )
 			$this->addMessages( $mergedMessages, $langcode );
 	}
