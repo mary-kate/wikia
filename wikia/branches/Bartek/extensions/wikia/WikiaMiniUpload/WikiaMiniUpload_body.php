@@ -397,8 +397,8 @@ class FakeLocalFile extends LocalFile {
         function upload( $srcPath, $comment, $pageText, $flags = 0, $props = false, $timestamp = false ) {
 		global $wgServer;
 		$oldrepo = $this->repo;
-		$this->repo->directory = $tempFolder;
-		$this->repo->url = $wgServer . $tempFolder;
+		$this->repo->directory = $this->tempFolder;
+		$this->repo->url = $wgServer . $this->tempFolder;
 		$status = parent::upload(  $srcPath, $comment, $pageText, $flags, $props, $timestamp );
 		$this->repo = $oldrepo;
 		
@@ -407,8 +407,8 @@ class FakeLocalFile extends LocalFile {
 
         function delete( $reason, $suppress = false ) {
 		$oldrepo = $this->repo;
-		$this->repo->directory = $tempFolder;
-		$this->repo->url = $wgServer . $tempFolder;
+		$this->repo->directory = $this->tempFolder;
+		$this->repo->url = $wgServer . $this->tempFolder;
 		$status = parent::delete( $reason, $suppress );
 		$this->repo = $oldrepo;
 
