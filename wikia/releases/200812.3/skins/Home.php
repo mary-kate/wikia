@@ -34,16 +34,16 @@ class SkinHome extends SkinTemplate {
 
 class HomeTemplate extends QuickTemplate {
 
-    /*
-     * Grabs and returns wiki page content
-     *
-     * @param  string  title of page to get
-     * @return string  content of page
-     * @author Maciej Brencz <macbre@wikia.com>
-     */
+	/*
+	 * Grabs and returns wiki page content
+	 *
+	 * @param  string  title of page to get
+	 * @return string  content of page
+	 * @author Maciej Brencz <macbre@wikia.com>
+	 */
 
-    function getWikiPage($name)
-    {
+	function getWikiPage($name)
+	{
 	$page = null;
 
 	$title = Title::newFromText ($name, NS_TEMPLATE);
@@ -52,49 +52,49 @@ class HomeTemplate extends QuickTemplate {
 		$page = $article->getContent();
 	}
 
-        return $page;
-    }
+		return $page;
+	}
 
-    /*
-     * Parses wiki page containing an unordered list of links
-     *
-     * @param  string  title of page to get
-     * @return mixed   array of xHTML formated links
-     * @author Maciej Brencz <macbre@wikia.com>
-     */
+	/*
+	 * Parses wiki page containing an unordered list of links
+	 *
+	 * @param  string  title of page to get
+	 * @return mixed   array of xHTML formated links
+	 * @author Maciej Brencz <macbre@wikia.com>
+	 */
 
-    function parseWikiPage($name)
-    {
-        $page = $this->getWikiPage($name);
+	function parseWikiPage($name)
+	{
+		$page = $this->getWikiPage($name);
 
-        // format links grabbed from static page
-        foreach(explode("\n", $page) as $line)
-        {
-            $line = trim($line, '* []');
+		// format links grabbed from static page
+		foreach(explode("\n", $page) as $line)
+		{
+			$line = trim($line, '* []');
 
-            if (strpos($line, '|') !== FALSE)
-            {
-                list($link, $title) = explode('|', $line);
-            }
-            else
-            {
-                $link  = $line;
-                $title = $line;
-            }
+			if (strpos($line, '|') !== FALSE)
+			{
+				list($link, $title) = explode('|', $line);
+			}
+			else
+			{
+				$link  = $line;
+				$title = $line;
+			}
 
-            // make url
-            $url = Title::makeTitle(0, $link)->escapeFullURL();
+			// make url
+			$url = Title::makeTitle(0, $link)->escapeFullURL();
 
-            // format HTML
-            $links[] = '<a href="'.$url.'">'.htmlspecialchars( shortenText( $title ) ).'</a>';
-        }
+			// format HTML
+			$links[] = '<a href="'.$url.'">'.htmlspecialchars( shortenText( $title ) ).'</a>';
+		}
 
-        // return it
-        return $links;
-    }
+		// return it
+		return $links;
+	}
 
-    function getSearchData()
-    {
+	function getSearchData()
+	{
 	global $wgMemc, $wgMaxSearchTextLength;
 
 	$cnt = 9;
@@ -102,26 +102,26 @@ class HomeTemplate extends QuickTemplate {
 	$data = getData( 'wikia:searchcachedata' );
 	if( $cnt > count( $data ) )
 	{
-	    $cnt = count( $data );
+		$cnt = count( $data );
 	}
 	if( $cnt )
 	{
-	    $keys = array_rand( $data, $cnt );	// random keys from memcached search data
+		$keys = array_rand( $data, $cnt );	// random keys from memcached search data
 	}
 	else $keys = array();
 	for( $i=0; $i<$cnt; $i++ )
 	{
-	    if( is_array( $keys ) )
-	    {
+		if( is_array( $keys ) )
+		{
 		$arr[] = shortenText( $data[ $keys[ $i ] ], $wgMaxSearchTextLength );
-	    }
-	    else $arr[] = shortenText( $data[ $keys ], $wgMaxSearchTextLength );
+		}
+		else $arr[] = shortenText( $data[ $keys ], $wgMaxSearchTextLength );
 	}
 	return $arr;
-    }
+	}
 
-    function getReading()
-    {
+	function getReading()
+	{
 	global $wgMemc, $wgOut;
 
 	$cnt = 8;
@@ -129,26 +129,26 @@ class HomeTemplate extends QuickTemplate {
 	$data = getData( 'wikia:readingcachedata' );
 	if( $cnt > count( $data ) )
 	{
-	    $cnt = count( $data );
+		$cnt = count( $data );
 	}
 	if( $cnt )
 	{
-	    $keys = array_rand( $data, $cnt );	// random keys from memcached search data
+		$keys = array_rand( $data, $cnt );	// random keys from memcached search data
 	}
 	else $keys = array();
 	for( $i=0; $i<$cnt; $i++ )
 	{
-	    $pos = strpos( $data [ $keys[ $i ] ], ' ');
-	    $url = substr( $data [ $keys[ $i ] ], 0, $pos );
-	    $title = trim( substr( $data[ $keys[ $i ] ], $pos+1) );
-	    $arr[] = '<a href="' . $url . '">' . $title  . '</a>';
-	    //$arr[] = $wgOut->parse( $data[ $keys[ $i ] ] );
+		$pos = strpos( $data [ $keys[ $i ] ], ' ');
+		$url = substr( $data [ $keys[ $i ] ], 0, $pos );
+		$title = trim( substr( $data[ $keys[ $i ] ], $pos+1) );
+		$arr[] = '<a href="' . $url . '">' . $title  . '</a>';
+		//$arr[] = $wgOut->parse( $data[ $keys[ $i ] ] );
 	}
 	return implode( '<br />', $arr );
-    }
+	}
 
-    function getEditing()
-    {
+	function getEditing()
+	{
 	global $wgMemc, $wgOut;
 
 	$cnt = 8;
@@ -156,26 +156,26 @@ class HomeTemplate extends QuickTemplate {
 	$data = getData( 'wikia:editingcachedata' );
 	if( $cnt > count( $data ) )
 	{
-	    $cnt = count( $data );
+		$cnt = count( $data );
 	}
 	if( $cnt )
 	{
-	    $keys = array_rand( $data, $cnt );	// random keys from memcached search data
+		$keys = array_rand( $data, $cnt );	// random keys from memcached search data
 	}
 	else $keys = array();
 	for( $i=0; $i<$cnt; $i++ )
 	{
-	    $pos = strpos( $data [ $keys[ $i ] ], ' ');
-	    $url = substr( $data [ $keys[ $i ] ], 0, $pos );
-	    $title = trim( substr( $data[ $keys[ $i ] ], $pos+1) );
-	    $arr[] = '<a href="' . $url . '">' . $title  . '</a>';
-	    //$arr[] = $wgOut->parse( $data[ $keys[ $i ] ] );
+		$pos = strpos( $data [ $keys[ $i ] ], ' ');
+		$url = substr( $data [ $keys[ $i ] ], 0, $pos );
+		$title = trim( substr( $data[ $keys[ $i ] ], $pos+1) );
+		$arr[] = '<a href="' . $url . '">' . $title  . '</a>';
+		//$arr[] = $wgOut->parse( $data[ $keys[ $i ] ] );
 	}
 	return implode( '<br />', $arr );
-    }
+	}
 
-    function getDiscussing()
-    {
+	function getDiscussing()
+	{
 	global $wgMemc, $wgOut;
 
 	$cnt = 8;
@@ -183,137 +183,137 @@ class HomeTemplate extends QuickTemplate {
 	$data = getData( 'wikia:discusscachedata' );
 	if( $cnt > count( $data ) )
 	{
-	    $cnt = count( $data );
+		$cnt = count( $data );
 	}
 	if( $cnt )
 	{
-	    $keys = array_rand( $data, $cnt );	// random keys from memcached search data
+		$keys = array_rand( $data, $cnt );	// random keys from memcached search data
 	}
 	else $keys = array();
 	for( $i=0; $i<$cnt; $i++ )
 	{
-	    $pos = strpos( $data [ $keys[ $i ] ], ' ');
-	    $url = substr( $data [ $keys[ $i ] ], 0, $pos );
-	    $title = trim( substr( $data[ $keys[ $i ] ], $pos+1) );
-	    $arr[] = '<a href="' . $url . '">' . $title  . '</a>';
+		$pos = strpos( $data [ $keys[ $i ] ], ' ');
+		$url = substr( $data [ $keys[ $i ] ], 0, $pos );
+		$title = trim( substr( $data[ $keys[ $i ] ], $pos+1) );
+		$arr[] = '<a href="' . $url . '">' . $title  . '</a>';
 	}
 	return implode( '<br />', $arr );
-    }
+	}
 
-    function getStarting()
-    {
+	function getStarting()
+	{
 	global $wgMemc;
 	$cnt = 8;
 	$arr = array();
 	$data = getData( 'wikia:newwikiscachedata' );
 	if( $cnt > count( $data ) )
 	{
-	    $cnt = count( $data );
+		$cnt = count( $data );
 	}
 	if( $cnt )
 	{
-	    $keys = array_rand( $data, $cnt );	// random keys from memcached search data
+		$keys = array_rand( $data, $cnt );	// random keys from memcached search data
 	}
 	else $keys = array();
 	for( $i=0; $i<$cnt; $i++ )
 	{
-	    $pos = strpos( $data [ $keys[ $i ] ], ' ');
-	    $url = substr( $data [ $keys[ $i ] ], 0, $pos );
-	    $title = trim( substr( $data[ $keys[ $i ] ], $pos+1) );
-	    $arr[] = '<a href="' . $url . '">' . $title  . '</a>';
+		$pos = strpos( $data [ $keys[ $i ] ], ' ');
+		$url = substr( $data [ $keys[ $i ] ], 0, $pos );
+		$title = trim( substr( $data[ $keys[ $i ] ], $pos+1) );
+		$arr[] = '<a href="' . $url . '">' . $title  . '</a>';
 	}
 	return implode( '<br />', $arr );
-    }
+	}
 
-    function grabStaticData($id)
-    {
+	function grabStaticData($id)
+	{
 	global $wgOut;
 
-        switch($id)
-        {
-            case 'editing':
-                //$data = $this->parseWikiPage('Editing');
-                //return "\n\t\t\t\t\t\t\t\t\t".'<div>'.implode("</div>\n\t\t\t\t\t\t\t\t\t<div>", $data).'</div>';
+		switch($id)
+		{
+			case 'editing':
+				//$data = $this->parseWikiPage('Editing');
+				//return "\n\t\t\t\t\t\t\t\t\t".'<div>'.implode("</div>\n\t\t\t\t\t\t\t\t\t<div>", $data).'</div>';
 		return '<p>'.$this->getEditing().'</p>';
 
-            case 'reading':
-                //$data = $this->parseWikiPage('Reading');
-                //return "\n\t\t\t\t\t\t\t\t\t".'<div>'.implode("</div>\n\t\t\t\t\t\t\t\t\t<div>", $data).'</div>';
+			case 'reading':
+				//$data = $this->parseWikiPage('Reading');
+				//return "\n\t\t\t\t\t\t\t\t\t".'<div>'.implode("</div>\n\t\t\t\t\t\t\t\t\t<div>", $data).'</div>';
 		return '<p>'.$this->getReading().'</p>';
 
-            case 'discussing':
-                //$data = $this->parseWikiPage('Discussing');
-                //return "\n\t\t\t\t\t\t\t\t\t".'<div>'.implode("</div>\n\t\t\t\t\t\t\t\t\t<div>", $data).'</div>';
+			case 'discussing':
+				//$data = $this->parseWikiPage('Discussing');
+				//return "\n\t\t\t\t\t\t\t\t\t".'<div>'.implode("</div>\n\t\t\t\t\t\t\t\t\t<div>", $data).'</div>';
 		return '<p>'.$this->getDiscussing().'</p>';
 
-	    case 'favorites':
+		case 'favorites':
 		return $wgOut->parse( '{{Favorites}}' );
-            case 'starting':
-                //$data = $this->parseWikiPage('Starting');
-                //return "\n\t\t\t\t\t\t\t\t\t".'<div>'.implode("</div>\n\t\t\t\t\t\t\t\t\t<div>", $data).'</div>';
+			case 'starting':
+				//$data = $this->parseWikiPage('Starting');
+				//return "\n\t\t\t\t\t\t\t\t\t".'<div>'.implode("</div>\n\t\t\t\t\t\t\t\t\t<div>", $data).'</div>';
 		return '<p>'.$this->getStarting().'</p>';
 
-            // format searching stats
-            //
-            case 'search':
-                //$data  = $this->getWikiPage('Searching');
+			// format searching stats
+			//
+			case 'search':
+				//$data  = $this->getWikiPage('Searching');
 		$data = $this->getSearchData();
 
 		if( empty( $data ) )	return '';
 
-                // three columns data
-                $columns = array();
+				// three columns data
+				$columns = array();
 
-                // grab words
-                foreach( $data as $word) $words[] = trim($word, ' *');
+				// grab words
+				foreach( $data as $word) $words[] = trim($word, ' *');
 
-                // sort them
-                //sort($words);
+				// sort them
+				//sort($words);
 
-                // format three columns of words
+				// format three columns of words
 				$c=0;
-                foreach($words as $word) $columns[$c++ % 3][] = $word;
+				foreach($words as $word) $columns[$c++ % 3][] = $word;
 
-                $html = '';
+				$html = '';
 
-                foreach ($columns as $column)
-                {
-                    $html .= "\n\t\t\t\t\t\t\t\t".'<div class="linkSection">';
+				foreach ($columns as $column)
+				{
+					$html .= "\n\t\t\t\t\t\t\t\t".'<div class="linkSection">';
 
-                    foreach($column as $word)
-                        $html .= "\n\t\t\t\t\t\t\t\t\t".
-                        '<div><a href="'.Title::makeTitle(NS_SPECIAL, 'Search')->escapeFullURL().'?search='.urlencode($word).'&amp;fulltext=go'.'">'.
-                        htmlspecialchars($word).'</a></div>';
+					foreach($column as $word)
+						$html .= "\n\t\t\t\t\t\t\t\t\t".
+						'<div><a href="'.Title::makeTitle(NS_SPECIAL, 'Search')->escapeFullURL().'?search='.urlencode($word).'&amp;fulltext=go'.'">'.
+						htmlspecialchars($word).'</a></div>';
 
 					$html .= "\n\t\t\t\t\t\t\t\t".'</div>';
-                }
+				}
 
-                return $html;
+				return $html;
 
-            case 'whats_new':
-                $data = $this->parseWikiPage("What's new");
-                return "\n\t\t\t\t\t\t\t\t\t".'<div>'.implode("</div>\n\t\t\t\t\t\t\t\t\t<div>", $data).'</div>';
+			case 'whats_new':
+				$data = $this->parseWikiPage("What's new");
+				return "\n\t\t\t\t\t\t\t\t\t".'<div>'.implode("</div>\n\t\t\t\t\t\t\t\t\t<div>", $data).'</div>';
 
-            case 'featured':
-                $data = $this->parseWikiPage('Featured');
-                return "\n\t\t\t\t\t\t\t\t\t".'<div>'.implode("</div>\n\t\t\t\t\t\t\t\t\t<div>", $data).'</div>';
+			case 'featured':
+				$data = $this->parseWikiPage('Featured');
+				return "\n\t\t\t\t\t\t\t\t\t".'<div>'.implode("</div>\n\t\t\t\t\t\t\t\t\t<div>", $data).'</div>';
 
-            case 'interest_areas':
-                $data = $this->parseWikiPage('Interest areas');
-                return "\n\t\t\t\t\t\t\t\t\t".'<div>'.implode("</div>\n\t\t\t\t\t\t\t\t\t<div>", $data).'</div>';
+			case 'interest_areas':
+				$data = $this->parseWikiPage('Interest areas');
+				return "\n\t\t\t\t\t\t\t\t\t".'<div>'.implode("</div>\n\t\t\t\t\t\t\t\t\t<div>", $data).'</div>';
 
-            case 'all_wikia':
-                $data = $this->parseWikiPage('All the wikia');
-                return "\n\t\t\t\t\t\t\t\t\t".'<div>'.implode("</div>\n\t\t\t\t\t\t\t\t\t<div>", $data).'</div>';
+			case 'all_wikia':
+				$data = $this->parseWikiPage('All the wikia');
+				return "\n\t\t\t\t\t\t\t\t\t".'<div>'.implode("</div>\n\t\t\t\t\t\t\t\t\t<div>", $data).'</div>';
 
-            case 'help':
-                $data = $this->parseWikiPage('Help');
-                return "\n\t\t\t\t\t\t\t\t\t".'<div>'.implode("</div>\n\t\t\t\t\t\t\t\t\t<div>", $data).'</div>';
+			case 'help':
+				$data = $this->parseWikiPage('Help');
+				return "\n\t\t\t\t\t\t\t\t\t".'<div>'.implode("</div>\n\t\t\t\t\t\t\t\t\t<div>", $data).'</div>';
 
-            default:
-                return FALSE;
-        }
-    }
+			default:
+				return FALSE;
+		}
+	}
 
 	function execute()
 	{
@@ -361,27 +361,28 @@ class HomeTemplate extends QuickTemplate {
 <script type="text/javascript" src="http://images.wikia.com/common/yui/3rdpart/yui-cookie.js?<?= $wgStyleVersion ?>"></script>
 <script type="text/javascript" src="http://images.wikia.com/common/yui/3rdpart/tools-min.js?<?= $wgStyleVersion ?>"></script>
 **/ ?>
+	<script type="text/javascript" src="http://images.wikia.com/common/yui/logger/logger-min.js?<?= $wgStyleVersion ?>"></script>
 	<script type="<?php $this->text('jsmimetype') ?>" src="<?php $this->text('stylepath' ) ?>/common/wikibits.js?<?= $wgStyleVersion ?>"><!-- wikibits js --></script>
 <?php	if($this->data['jsvarurl'  ]) { ?>
-    <script type="<?php $this->text('jsmimetype') ?>" src="<?php $this->text('jsvarurl'  ) ?>"><!-- site js --></script>
+	<script type="<?php $this->text('jsmimetype') ?>" src="<?php $this->text('jsvarurl'  ) ?>"><!-- site js --></script>
 <?php	} ?>
 <?php	if($this->data['pagecss'   ]) { ?>
 	<style type="text/css"><?php $this->html('pagecss'   ) ?></style>
 <?php	}
-        if($this->data['usercss'   ]) { ?>
+		if($this->data['usercss'   ]) { ?>
 	<style type="text/css"><?php $this->html('usercss'   ) ?></style>
 <?php	}
-        if($this->data['userjs'    ]) { ?>
+		if($this->data['userjs'    ]) { ?>
 	<script type="<?php $this->text('jsmimetype') ?>" src="<?php $this->text('userjs' ) ?>"></script>
 <?php	}
-        if($this->data['userjsprev']) { ?>
+		if($this->data['userjsprev']) { ?>
 	<script type="<?php $this->text('jsmimetype') ?>"><?php $this->html('userjsprev') ?></script>
 <?php	}
-        if($this->data['trackbackhtml']) echo $this->data['trackbackhtml']; ?>
-    	<style type="text/css" media="screen,projection">/*<![CDATA[*/@import "<?php $this->text('stylepath') ?>/common/yui_2.5.2/reset/reset-min.css?<?= $wgStyleVersion ?>"; /*]]>*/</style>
-        <?php $this->html('headscripts') ?>
-    	<style type="text/css" media="screen,projection">/*<![CDATA[*/@import "<?php $this->text('stylepath') ?>/home/css/main.css?<?= $wgStyleVersion ?>"; /*]]>*/</style>
-    	<style type="text/css" media="screen,projection">/*<![CDATA[*/@import "<?php $this->text('stylepath') ?>/home/css/main.css?<?= $wgStyleVersion ?>"; /*]]>*/</style>
+		if($this->data['trackbackhtml']) echo $this->data['trackbackhtml']; ?>
+	<style type="text/css" media="screen,projection">/*<![CDATA[*/@import "<?php $this->text('stylepath') ?>/common/yui_2.5.2/reset/reset-min.css?<?= $wgStyleVersion ?>"; /*]]>*/</style>
+		<?php $this->html('headscripts') ?>
+	<style type="text/css" media="screen,projection">/*<![CDATA[*/@import "<?php $this->text('stylepath') ?>/home/css/main.css?<?= $wgStyleVersion ?>"; /*]]>*/</style>
+	<style type="text/css" media="screen,projection">/*<![CDATA[*/@import "<?php $this->text('stylepath') ?>/home/css/main.css?<?= $wgStyleVersion ?>"; /*]]>*/</style>
 	<!--[if lt IE 7]><link rel="stylesheet" href="<?php $this->text('stylepath') ?>/home/css/ie.css?<?= $wgStyleVersion ?>" /><![endif]-->
 	<!--[if IE 7]><link rel="stylesheet" href="<?php $this->text('stylepath') ?>/home/css/ie7.css?<?= $wgStyleVersion ?>" /><![endif]-->
 
@@ -391,6 +392,8 @@ class HomeTemplate extends QuickTemplate {
 
 **/ ?>
 	<script type="text/javascript" src="<?php $this->text('stylepath') ?>/home/js/main.js?<?= $wgStyleVersion ?>"></script>
+	<script type="text/javascript" src="<?php $this->text('stylepath') ?>/home/js/tracker.js?<?= $wgStyleVersion ?>"></script>
+	<script type="text/javascript" src="<?php $this->text('stylepath') ?>/common/tracker.js?<?= $wgStyleVersion ?>"></script>
 </head>
 
 <body class="mediawiki <?php $this->text('nsclass') ?> <?php $this->text('dir') ?> <?php $this->text('pageclass') ?>">
@@ -596,15 +599,14 @@ class HomeDataProvider {
 				//line no. 1: header
 				//line no. 2: url | image | alt
 				$msgKey = 'main-hub-header';
-				if (wfEmptyMsg($prefix . $msgKey, $msg = wfMsg($prefix . $msgKey))) {
-					continue;
-				}
-				$msg = explode("\n", $msg);
-				if(count($msg) >= 2) {
-					$header = ltrim($msg[0], '* ');
-					$image = parseItem($msg[1]);
-					if ($title = Title::newFromText($image['text'])) {
-						$image['src'] = Image::newFromTitle($title)->getUrl();
+				if (!wfEmptyMsg($prefix . $msgKey, $msg = wfMsg($prefix . $msgKey))) {
+					$msg = explode("\n", $msg);
+					if(count($msg) >= 2) {
+						$header = ltrim($msg[0], '* ');
+						$image = parseItem($msg[1]);
+						if ($title = Title::newFromText($image['text'])) {
+							$image['src'] = Image::newFromTitle($title)->getUrl();
+						}
 					}
 				}
 
@@ -622,12 +624,14 @@ class HomeDataProvider {
 					if(count($tmp) == 3) {
 						$tmp[2] = explode("\n", $tmp[2]);
 						$items = '';
+						$no = 1;
 						foreach($tmp[2] as $item) {
 							if (strpos($item, '*') !== 0) {
 								break;
 							}
 							$item = parseItem($item);
-							$items .= "<li><a href=\"{$item['href']}\">{$item['text']}</a></li>";
+							$items .= "<li><a id=\"$msgKey-$no\" href=\"{$item['href']}\">{$item['text']}</a></li>";
+							$no++;
 						}
 						if ($items != '') {
 							$items = "<ul>$items</ul>";
@@ -637,7 +641,7 @@ class HomeDataProvider {
 						$colsArr[$msgKey] = "
 							<h2>{$colHeader['text']}</h2>
 							{$items}
-							more <a href=\"{$more['href']}\">{$more['text']}</a>";
+							more <a id=\"$msgKey-$no\" href=\"{$more['href']}\">{$more['text']}</a>";
 					}
 				}
 				self::$data['main-hub'] = "<h1>$header</h1>
@@ -668,12 +672,13 @@ class HomeDataProvider {
 					if(count($tmp) == 4) {
 						$tmp[3] = explode("\n", $tmp[3]);
 						$items = '';
+						$no = 1;
 						foreach($tmp[3] as $item) {
 							if (strpos($item, '*') !== 0) {
 								break;
 							}
 							$item = parseItem($item);
-							$items .= "<li><a href=\"{$item['href']}\">{$item['text']}</a></li>";
+							$items .= "<li><a id=\"$msgKey-$no\" href=\"{$item['href']}\">{$item['text']}</a></li>";
 						}
 						if ($items != '') {
 							$items = "<ul>$items</ul>";
@@ -685,7 +690,7 @@ class HomeDataProvider {
 							<h1><a href=\"{$header['href']}\">{$header['text']}</a></h1>
 							{$subtitle['text']}
 							{$items}
-							more <a href=\"{$more['href']}\">{$more['text']}</a>";
+							more <a id=\"$msgKey-$no\" href=\"{$more['href']}\">{$more['text']}</a>";
 					}
 				}
 				//end: featured hubs
@@ -706,6 +711,7 @@ class HomeDataProvider {
 					if(count($tmp) == 3) {
 						$tmp[2] = explode("\n", $tmp[2]);
 						$items = '';
+						$no = 1;
 						foreach($tmp[2] as $item) {
 							if (strpos($item, '*') !== 0) {
 								break;
@@ -715,10 +721,10 @@ class HomeDataProvider {
 							if ($item['desc'] != '') {
 								$sublinkA = explode('|', $item['desc'], 2);
 								if (count($sublinkA) == 2) {
-									$sublink = " (<a href=\"{$sublinkA[0]}\" class=\"secondary\">{$sublinkA[1]}</a>)";
+									$sublink = " (<a id=\"$msgKey-sub-$no\" href=\"{$sublinkA[0]}\" class=\"secondary\">{$sublinkA[1]}</a>)";
 								}
 							}
-							$items .= "<li><a href=\"{$item['href']}\">{$item['text']}</a>$sublink</li>";
+							$items .= "<li><a id=\"$msgKey-$no\" href=\"{$item['href']}\">{$item['text']}</a>$sublink</li>";
 						}
 						if ($items != '') {
 							$items = "<ul>$items</ul>";
@@ -762,12 +768,13 @@ class HomeDataProvider {
 					$msg = explode("\n", $msg);
 					$items = '';
 					$first = ' class="first"';
+					$no = 1;
 					foreach($msg as $item) {
 						if (strpos($item, '*') !== 0) {
 							break;
 						}
 						$item = parseItem($item);
-						$items .= "<li$first><a href=\"{$item['href']}\">{$item['text']}</a></li>";
+						$items .= "<li$first><a id=\"$msgKey-$no\" href=\"{$item['href']}\">{$item['text']}</a></li>";
 						$first = '';
 					}
 					if ($items != '') {
@@ -785,12 +792,13 @@ class HomeDataProvider {
 					$msg = explode("\n", $msg);
 					$header = ltrim(array_shift($msg), '* ');
 					$items = array();
+					$no = 1;
 					foreach($msg as $item) {
 						if (strpos($item, '*') !== 0) {
 							break;
 						}
 						$item = parseItem($item);
-						$items[] = "<a href=\"{$item['href']}\">{$item['text']}</a>";
+						$items[] = "<a id=\"$msgKey-$no\" href=\"{$item['href']}\">{$item['text']}</a>";
 					}
 					if (count($items)) {
 						$lastItem = array_pop($items);

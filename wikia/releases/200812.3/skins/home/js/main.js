@@ -5,6 +5,10 @@ function doSubmit() {
 }
 
 function get_search_term() {
+	if (!search_terms) {
+		search_query = search_site = '';
+		return;
+	}
 	if (!search_term_index) {
 		search_term_index = Math.floor(search_terms.length * Math.random());
 	} else if (search_term_index == search_terms.length - 1) {
