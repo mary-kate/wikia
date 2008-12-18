@@ -21,7 +21,9 @@ class BlogComment {
 	public
 		$mProps,
 		$mTitle,
-		$mRevision;
+		$mRevision,
+		$mUser,	 ### comment creator
+		$mOwner; ### owner of blog
 
 	public function __construct( $Title ) {
 		/**
@@ -59,12 +61,6 @@ class BlogComment {
 		$Title = $Article->getTitle();
 
 		$Comment = new BlogComment( $Title );
-		if( $Article->isCurrent() ) {
-			/**
-			 * hack, $this->mRevision is marked as private
-			 */
-			$Comment->setRevision( $Article->mRevision );
-		}
 		return $Comment;
 	}
 
@@ -87,13 +83,22 @@ class BlogComment {
 	}
 
 	/**
-	 * setRevision -- setter
+	 * load -- set variables, load data from database
 	 *
-	 * @param Revision $revision -- object of revision
+	 * @access private
 	 */
-	public function setRevision( $revision ) {
-		if( $revision ) {
-			$this->mRevision = $revision;
+	private function load() {
+		if( $this->mTitle ) {
+			$this->mRevision = Revision::newFromTitle( $this->mTitle );
+			if( $this->mRevision ) {
+				$this->mUser = User::newFromId( $this->mRevision->getUser() );
+			}
+			$this->getProps();
+			/**
+			 * set blog owner
+			 */
+			$owner = BlogListPage::getOwner( $this->mTitle );
+			$this->mOwner = User::newFromName( $owner );
 		}
 	}
 
@@ -106,58 +111,78 @@ class BlogComment {
 	}
 
 	/**
+	 * isDeleted -- checks (of course) is deleted
+	 *
+	 * @access public
+	 */
+	public function isDeleted() {
+		$this->load();
+		if( $this->mRevision ) {
+			$deleted = $this->mRevision->isDeleted( Revision::DELETED_TEXT );
+		}
+		else {
+			$deleted = true;
+		}
+
+		return $deleted;
+	}
+
+	/**
 	 * render -- generate HTML for displaying comment
 	 *
 	 * @return String -- generated HTML text
 	 */
 	public function render() {
-		global $wgContLang, $wgUser;
+		global $wgContLang, $wgUser, $wgCityId, $wgDevelEnvironment;
 
-		if( ! $this->mRevision ) {
-			$this->mRevision = Revision::newFromTitle( $this->mTitle );
+		wfProfileIn( __METHOD__ );
+
+		$text = false;
+		if( !$this->isDeleted() ) {
+			$canDelete = $wgUser->isAllowed( "delete" );
+
+			$Parser  = new Parser( );
+			$Options = new ParserOptions( );
+			$Options->initialiseFromUser( $this->mUser );
+
+			/**
+			 * if $props are not cache we read them from database
+			 */
+			$this->getProps();
+
+			$text     = $Parser->parse( $this->mRevision->getText(), $this->mTitle, $Options )->getText();
+			$anchor   = explode( "/", $this->mTitle->getDBkey(), 3 );
+			$sig      = ( $this->mUser->isAnon() )
+				? wfMsg("blog-comments-anonymous")
+				: Xml::element( 'a', array ( "href" => $this->mUser->getUserPage()->getFullUrl() ), $this->mUser->getName() );
+
+			$hidden   = isset( $this->mProps[ "hiddencomm" ] )
+				? (bool )$this->mProps[ "hiddencomm" ]
+				: false;
+
+			$comments = array(
+				"sig"       => $sig,
+				"text"      => $text,
+				"title"     => $this->mTitle,
+				"author"    => $this->mUser,
+				"anchor"    => $anchor,
+				"avatar"    => BlogAvatar::newFromUser( $this->mUser )->getLinkTag( 50, 50 ),
+				"hidden"	=> $hidden,
+				"timestamp" => $wgContLang->timeanddate( $this->mRevision->getTimestamp() )
+			);
+
+			$template = new EasyTemplate( dirname( __FILE__ ) . '/templates/' );
+			$template->set_vars(
+				array(
+					"comment" => $comments,
+					"canToggle" => $this->canToggle(),
+					"canDelete" => $canDelete,
+				)
+			);
+			$text = $template->execute( "comment" );
 		}
-		$User     = User::newFromId( $this->mRevision->getUser( ) );
 
-		$isSysop   = ( in_array('sysop', $wgUser->getGroups()) || in_array('staff', $wgUser->getGroups() ) );
-		$canDelete = $wgUser->isAllowed( "delete" );
-
-		$Parser  = new Parser( );
-		$Options = new ParserOptions( );
-		$Options->initialiseFromUser( $User );
-
-		/**
-		 * if $props are not cache we read them from database
-		 */
-		$this->getProps();
-
-		$text     = $Parser->parse( $this->mRevision->getText(), $this->mTitle, $Options )->getText();
-		$anchor   = explode( "/", $this->mTitle->getDBkey(), 3 );
-		$sig      = ( $User->isAnon() )
-			? wfMsg("blog-comments-anonymous")
-			: Xml::element( 'a', array ( "href" => $User->getUserPage()->getFullUrl() ), $User->getName() );
-		$hidden   = isset( $this->mProps[ "hiddencomm" ] )
-			? (bool )$this->mProps[ "hiddencomm" ]
-			: false;
-
-		$comments = array(
-			"sig"       => $sig,
-			"text"      => $text,
-			"title"     => $this->mTitle,
-			"author"    => $User,
-			"anchor"    => $anchor,
-			"avatar"    => BlogAvatar::newFromUser( $User )->getLinkTag( 50, 50 ),
-			"hidden"	=> $hidden,
-			"timestamp" => $wgContLang->timeanddate( $this->mRevision->getTimestamp() )
-		);
-
-		$template = new EasyTemplate( dirname( __FILE__ ) . '/templates/' );
-		$template->set_vars(
-			array(
-				"comment" => $comments,
-				"canDelete" => $canDelete
-			)
-		);
-		$text = $template->execute( "comment" );
+		wfProfileOut( __METHOD__ );
 
 		return $text;
 	}
@@ -189,6 +214,51 @@ class BlogComment {
 	}
 
 	/**
+	 * check if current user can toggle show/hide comment
+	 *
+	 * @access private
+	 */
+	private function canToggle() {
+		global $wgUser, $wgCityId, $wgDevelEnvironment;
+
+		$devel    = $wgCityId == 4832 || $wgDevelEnvironment;
+		$isAuthor = $this->mUser->getId() == $wgUser->getId() && ! $wgUser->isAnon();
+		$isOwner  = $this->mOwner->getId() == $wgUser->getId();
+		$isSysop  = ( in_array('sysop', $wgUser->getGroups()) || in_array('staff', $wgUser->getGroups() ) );
+
+		return $devel && ($isAuthor || $isOwner || $isSysop );
+	}
+
+	/**
+	 * toggle -- toggle hidden/show flag
+	 *
+	 * @access public
+	 *
+	 * @return Boolean -- new status
+	 */
+	public function toggle() {
+		global $wgUser;
+
+		wfProfileIn( __METHOD__ );
+
+		$this->load();
+
+		if( $this->canToggle() ) {
+			if( isset( $this->mProps["hiddencomm"] ) ) {
+				$this->mProps["hiddencomm"] = empty( $this->mProps["hiddencomm"] ) ? 1 : 0;
+			}
+			else {
+				$this->mProps["hiddencomm"] = 1;
+			}
+			BlogListPage::saveProps( $this->mTitle->getArticleID(), $this->mProps );
+			$wgMemc->delete( wfMemcKey( "blog", "comm", $this->mTitle->getArticleID() ) );
+		}
+		wfProfileOut( __METHOD__ );
+
+		return (bool )$this->mProps["hiddencomm"];
+	}
+
+	/**
 	 * axToggle -- static hook/entry for ajax request post -- toggle visbility
 	 * of comment
 	 *
@@ -198,7 +268,7 @@ class BlogComment {
 	 * @return String -- json-ized array
 	 */
 	static public function axToggle() {
-		global $wgRequest, $wgUser, $wgTitle, $wgMemc;
+		global $wgRequest, $wgUser, $wgTitle;
 
 		$commentId = $wgRequest->getVal( "id", false );
 		$articleId = $wgRequest->getVal( "article", false );
@@ -212,34 +282,25 @@ class BlogComment {
 			$error = 1;
 		}
 
-		$props = BlogListPage::getProps( $commentId );
-
-		if( isset( $props["hiddencomm"] ) ) {
-			/**
-			 * toggle option: 0 -> 1, 1 -> 0
-			 */
-			$props["hiddencomm"] = empty( $props["hiddencomm"] ) ? 1 : 0;
-		}
-		else {
-			$props["hiddencomm"] = 1;
-		}
+		/**
+		 * toggle
+		 */
+		$Comment = BlogComment::newFromId( $commentId );
+		$status  = $Comment->toggle();
+		$text    = $Comment->render();
 
 		/**
-		 * clear listing cache
+		 * clear article/listing cache for this article
 		 */
-		$wgMemc->delete( wfMemcKey( "blog", "comm", $articleId ) );
+		$Title->invalidateCache();
 		$update = SquidUpdate::newSimplePurge( $Title );
 		$update->doUpdate();
-
-		$Comment = BlogComment::newFromId( $commentId );
-		$Comment->setProps( $props, true );
-		$text = $Comment->render();
 
 		return Wikia::json_encode(
 			array(
 				"id"     => $commentId,
 				"error"  => $error,
-				"hidden" => $props["hiddencomm"],
+				"hidden" => $status,
 				"text"	 => $text
 			)
 		);
