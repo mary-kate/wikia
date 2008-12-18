@@ -402,7 +402,6 @@ class MessageCache {
 		$parserMemc->delete( wfMemcKey( 'quartzsidebar' ) );
 		$parserMemc->delete( wfMemcKey( 'navlinks' ) );
 		$parserMemc->delete( wfMemcKey( 'MonacoData' ) );
-		$parserMemc->delete( wfMemcKey( 'MonacoData' ) );
 		if($wgCityId == 177) {
 			$parserMemc->delete( 'wikia:main_page:search_terms' );
 			$parserMemc->delete( 'wikia:main_page:data' );
