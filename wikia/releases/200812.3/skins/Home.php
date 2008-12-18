@@ -392,7 +392,6 @@ class HomeTemplate extends QuickTemplate {
 
 **/ ?>
 	<script type="text/javascript" src="<?php $this->text('stylepath') ?>/home/js/main.js?<?= $wgStyleVersion ?>"></script>
-	<script type="text/javascript" src="<?php $this->text('stylepath') ?>/home/js/tracker.js?<?= $wgStyleVersion ?>"></script>
 	<script type="text/javascript" src="<?php $this->text('stylepath') ?>/common/tracker.js?<?= $wgStyleVersion ?>"></script>
 </head>
 
@@ -630,7 +629,7 @@ class HomeDataProvider {
 								break;
 							}
 							$item = parseItem($item);
-							$items .= "<li><a id=\"$msgKey-$no\" href=\"{$item['href']}\">{$item['text']}</a></li>";
+							$items .= "<li><a id=\"$msgKey/$no\" href=\"{$item['href']}\">{$item['text']}</a></li>";
 							$no++;
 						}
 						if ($items != '') {
@@ -641,13 +640,13 @@ class HomeDataProvider {
 						$colsArr[$msgKey] = "
 							<h2>{$colHeader['text']}</h2>
 							{$items}
-							more <a id=\"$msgKey-$no\" href=\"{$more['href']}\">{$more['text']}</a>";
+							more <a id=\"$msgKey/$no\" href=\"{$more['href']}\">{$more['text']}</a>";
 					}
 				}
 				self::$data['main-hub'] = "<h1>$header</h1>
 				<table cellspacing=\"0\">
 				<tr>
-					<td style=\"vertical-align: middle;\"><a href=\"{$image['href']}\"><img src=\"{$image['src']}\" alt=\"{$image['desc']}\" /></a></td>
+					<td style=\"vertical-align: middle;\"><a id=\"$msgKey/image\" href=\"{$image['href']}\"><img src=\"{$image['src']}\" alt=\"{$image['desc']}\" /></a></td>
 					<td>
 						{$colsArr['main-hub-column-1']}
 					</td>
@@ -678,7 +677,8 @@ class HomeDataProvider {
 								break;
 							}
 							$item = parseItem($item);
-							$items .= "<li><a id=\"$msgKey-$no\" href=\"{$item['href']}\">{$item['text']}</a></li>";
+							$items .= "<li><a id=\"$msgKey/$no\" href=\"{$item['href']}\">{$item['text']}</a></li>";
+							$no++;
 						}
 						if ($items != '') {
 							$items = "<ul>$items</ul>";
@@ -690,7 +690,7 @@ class HomeDataProvider {
 							<h1><a href=\"{$header['href']}\">{$header['text']}</a></h1>
 							{$subtitle['text']}
 							{$items}
-							more <a id=\"$msgKey-$no\" href=\"{$more['href']}\">{$more['text']}</a>";
+							more <a id=\"$msgKey/$no\" href=\"{$more['href']}\">{$more['text']}</a>";
 					}
 				}
 				//end: featured hubs
@@ -721,10 +721,11 @@ class HomeDataProvider {
 							if ($item['desc'] != '') {
 								$sublinkA = explode('|', $item['desc'], 2);
 								if (count($sublinkA) == 2) {
-									$sublink = " (<a id=\"$msgKey-sub-$no\" href=\"{$sublinkA[0]}\" class=\"secondary\">{$sublinkA[1]}</a>)";
+									$sublink = " (<a id=\"$msgKey/subitem/$no\" href=\"{$sublinkA[0]}\" class=\"secondary\">{$sublinkA[1]}</a>)";
 								}
 							}
-							$items .= "<li><a id=\"$msgKey-$no\" href=\"{$item['href']}\">{$item['text']}</a>$sublink</li>";
+							$items .= "<li><a id=\"$msgKey/$no\" href=\"{$item['href']}\">{$item['text']}</a>$sublink</li>";
+							$no++;
 						}
 						if ($items != '') {
 							$items = "<ul>$items</ul>";
@@ -774,8 +775,9 @@ class HomeDataProvider {
 							break;
 						}
 						$item = parseItem($item);
-						$items .= "<li$first><a id=\"$msgKey-$no\" href=\"{$item['href']}\">{$item['text']}</a></li>";
+						$items .= "<li$first><a id=\"$msgKey/$no\" href=\"{$item['href']}\">{$item['text']}</a></li>";
 						$first = '';
+						$no++;
 					}
 					if ($items != '') {
 						$items = "<ul id=\"navigation\">$items</ul>";
@@ -798,7 +800,8 @@ class HomeDataProvider {
 							break;
 						}
 						$item = parseItem($item);
-						$items[] = "<a id=\"$msgKey-$no\" href=\"{$item['href']}\">{$item['text']}</a>";
+						$items[] = "<a id=\"$msgKey/$no\" href=\"{$item['href']}\">{$item['text']}</a>";
+						$no++;
 					}
 					if (count($items)) {
 						$lastItem = array_pop($items);
