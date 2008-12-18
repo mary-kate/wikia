@@ -417,7 +417,7 @@ class FakeLocalFile extends LocalFile {
 
         function publish( $srcPath, $flags = 0 ) {
                 $this->lock();
-                $archiveName = gmdate( 'YmdHis' ) . '!'. $this->getName();
+                $archiveName = $this->getName();
 		$dstRel = $archiveName;
                 $archiveRel =  $archiveName;
                 $flags = $flags & File::DELETE_SOURCE ? LocalRepo::DELETE_SOURCE : 0;
@@ -431,7 +431,6 @@ class FakeLocalFile extends LocalFile {
 
                 return $status;
         }
-
 
 	function recordUpload2( $oldver, $comment, $pageText, $props = false, $timestamp = false ) {
 		global $wgUser;
