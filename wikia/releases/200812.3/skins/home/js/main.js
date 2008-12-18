@@ -59,3 +59,21 @@ YAHOO.util.Event.onDOMReady(function() {
 function wikia_search() {
 	document.location = 'http://re.search.wikia.com/search.html#' + YAHOO.util.Dom.get('wikia_search_field').value;
 }
+
+//Add tracking for links
+//Author: Maciej B³aszkowski <marooned at wikia-inc.com>
+var initTracker = function() {
+	var Tracker = YAHOO.Wikia.Tracker;
+	var Event = YAHOO.util.Event;
+
+	Event.addListener(['navigation','featured_box','featured_hubs','all_hubs','feature_footer'], 'click', function(e) {
+		var el = Event.getTarget(e);
+		if(el.nodeName == 'IMG') {
+			el = el.parentNode;
+		}
+		if(el.nodeName == 'A') {
+			var str  = 'main_page/' + el.id;
+			Tracker.trackByStr(e, str);
+		}
+	});
+};
