@@ -118,7 +118,6 @@ function WMU_manualWidthInput( elem ) {
 			image.width = WMU_width;
 			image.height = WMU_width / WMU_ratio;
 			WMU_thumbSize = [image.width, image.height];
-			$( 'ImageSize' ).innerHTML = image.width + 'px';		
 			$( 'ImageUploadManualWidth' ).value = image.width;
 			WMU_shownMax = true;
 			alert (wmu_max_thumb);
@@ -127,7 +126,7 @@ function WMU_manualWidthInput( elem ) {
 		image.height = elem.value / WMU_ratio;
 		image.width = elem.value;
 		WMU_thumbSize = [image.width, image.height];
-		$( 'ImageSize' ).innerHTML = elem.value + 'px';
+		$( 'ImageUploadManualWidth' ).value = elem.value + 'px';
 		WMU_shownMax = false;			
 	}
 }
@@ -455,10 +454,10 @@ function WMU_displayDetails(responseText) {
 		}
 		WMU_slider.subscribe("change", function(offsetFromStart) {
 			if (WMU_slider.initialRound) {
-				$('ImageSize').innerHTML = '';
+				$('ImageUploadManualWidth').value = '';
 				WMU_slider.initialRound = false;	
 			} else {
-				$('ImageSize').innerHTML = WMU_slider.getRealValue() + 'px';
+				$('ImageUploadManualWidth').value = WMU_slider.getRealValue();
 			}
 			image.width = WMU_slider.getRealValue();
 			$('ImageUploadManualWidth').value = image.width;			
@@ -521,7 +520,7 @@ function WMU_insertImage(e, type) {
 
 	if($('ImageUploadThumb')) {
 		params.push('size=' + ($('ImageUploadThumbOption').checked ? 'thumb' : 'full'));
-		params.push('width=' + $('ImageSize').innerHTML);
+		params.push('width=' + $('ImageUploadManualWidth').value);
 		params.push('layout=' + ($('ImageUploadLayoutLeft').checked ? 'left' : 'right'));
 		params.push('caption=' + $('ImageUploadCaption').value);
 		params.push('slider=' + $('ImageUploadWidthCheckbox').checked);
@@ -592,14 +591,14 @@ function WMU_insertImage(e, type) {
 function MWU_imageWidthChanged(changes) {
 	var image = $('ImageUploadThumb').firstChild;
 	if( !$( 'ImageUploadWidthCheckbox' ).checked ) {
-		$('ImageSize').innerHTML = '';
+		$('ImageUploadManualWidth').value = '';
 		$('ImageUploadSlider').style.visibility = 'hidden';
 		$('ImageUploadInputWidth').style.display = 'none';
 		image.width = WMU_orgThumbSize[0];
 		image.height = WMU_orgThumbSize[1];
 		WMU_track('slider/disable'); // tracking
 	} else {
-		$('ImageSize').innerHTML = WMU_slider.getRealValue() + 'px';
+		$('ImageUploadManualWidth').value = WMU_slider.getRealValue();
 		$('ImageUploadSlider').style.visibility = 'visible';
 		$('ImageUploadInputWidth').style.display = '';
 		image.width = WMU_thumbSize[0];
