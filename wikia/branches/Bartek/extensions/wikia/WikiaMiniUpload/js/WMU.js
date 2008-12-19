@@ -126,7 +126,7 @@ function WMU_manualWidthInput( elem ) {
 		image.height = elem.value / WMU_ratio;
 		image.width = elem.value;
 		WMU_thumbSize = [image.width, image.height];
-		$( 'ImageUploadManualWidth' ).value = elem.value + 'px';
+		$( 'ImageUploadManualWidth' ).value = elem.value;
 		WMU_shownMax = false;			
 	}
 }
@@ -520,7 +520,7 @@ function WMU_insertImage(e, type) {
 
 	if($('ImageUploadThumb')) {
 		params.push('size=' + ($('ImageUploadThumbOption').checked ? 'thumb' : 'full'));
-		params.push('width=' + $('ImageUploadManualWidth').value);
+		params.push('width=' + $('ImageUploadManualWidth').value) + 'px';
 		params.push('layout=' + ($('ImageUploadLayoutLeft').checked ? 'left' : 'right'));
 		params.push('caption=' + $('ImageUploadCaption').value);
 		params.push('slider=' + $('ImageUploadWidthCheckbox').checked);
