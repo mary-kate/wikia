@@ -36,21 +36,21 @@ if (!empty($chartValues)) {
 				if (strlen($value) > 4) { 
 					$value = sprintf("%0.0f", intval($out)/$GB);
 				}
-				$suffix = wfMsg('size-gigabytes', "");
+				$suffix = "G";
 				$maxValue = $wgLang->formatNum(sprintf("%0.1f", intval($iMax)/$GB));
 			} elseif (intval($iMax) > $MB) {
 				$value = $wgLang->formatNum(sprintf("%0.1f", intval($out)/$MB));
 				if (strlen($value) > 4) { 
 					$value = sprintf("%0.0f", intval($out)/$MB);
 				}
-				$suffix = wfMsg('size-megabytes', "");
+				$suffix = "M";
 				$maxValue = $wgLang->formatNum(sprintf("%0.1f", intval($iMax)/$MB));
 			} elseif (intval($iMax) > $KB) {
 				$value = $wgLang->formatNum(sprintf("%0.1f", intval($out)/$KB));
 				if (strlen($value) > 4) { 
 					$value = sprintf("%0.0f", intval($out)/$KB);
 				}
-				$suffix = wfMsg('size-kilobytes', "");
+				$suffix = "K";
 				$maxValue = $wgLang->formatNum(sprintf("%0.1f", intval($iMax)/$KB));
 			}
 			$chartData[$date] = array("date" => $new_date, "value" => (!empty($out))?$value:0, "alt" => $out);
