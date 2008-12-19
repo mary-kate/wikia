@@ -44,7 +44,7 @@ function WMU_loadDetails() {
 					WMU_width = FCK.wysiwygData[WMU_refid].width;
 					MWU_imageWidthChanged( WMU_width );
 					$( 'ImageUploadSlider' ).style.visibility = 'visible';
-					$( 'ImageUploadInputWidth' ).style.display = '';
+					$( 'ImageUploadInputWidth' ).style.visibility = 'visible';
 					$( 'ImageUploadWidthCheckbox' ).checked = true;
 					$( 'ImageUploadManualWidth' ).value = WMU_width;
 					WMU_manualWidthInput( $( 'ImageUploadManualWidth' ) );
@@ -479,7 +479,7 @@ function WMU_displayDetails(responseText) {
 		alert( $( 'WMU_error_box' ).innerHTML );
 	}
 	$( 'ImageUploadSlider' ).style.visibility = 'hidden';
-	$( 'ImageUploadInputWidth' ).style.display = 'none';
+	$( 'ImageUploadInputWidth' ).style.visibility = 'hidden';
 
 	if ( $( 'ImageUploadLicenseText' ) ) {
 		var cookieMsg = document.cookie.indexOf("wmulicensemesg=");
@@ -593,14 +593,14 @@ function MWU_imageWidthChanged(changes) {
 	if( !$( 'ImageUploadWidthCheckbox' ).checked ) {
 		$('ImageUploadManualWidth').value = '';
 		$('ImageUploadSlider').style.visibility = 'hidden';
-		$('ImageUploadInputWidth').style.display = 'none';
+		$('ImageUploadInputWidth').style.visibility = 'hidden';
 		image.width = WMU_orgThumbSize[0];
 		image.height = WMU_orgThumbSize[1];
 		WMU_track('slider/disable'); // tracking
 	} else {
 		$('ImageUploadManualWidth').value = WMU_slider.getRealValue();
 		$('ImageUploadSlider').style.visibility = 'visible';
-		$('ImageUploadInputWidth').style.display = '';
+		$('ImageUploadInputWidth').style.visibility = 'visible';
 		image.width = WMU_thumbSize[0];
 		image.height = WMU_thumbSize[1];
 		WMU_track('slider/enable'); // tracking
