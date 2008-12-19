@@ -42,7 +42,7 @@ if(isset($props['name'])) {
 		</tr>
 		<tr class="ImageUploadNoBorder">
 			<td colspan="2">
-				<div id="ImageUploadLicenseText"></div>			
+				<div id="ImageUploadLicenseText">&nbsp;</div>			
 			</td>
 		</tr>
 	</table>
