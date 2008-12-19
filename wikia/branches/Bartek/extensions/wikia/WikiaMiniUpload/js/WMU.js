@@ -110,10 +110,15 @@ function WMU_licenseSelectorCheck() {
 
 function WMU_manualWidthInput( elem ) {
 	var image = $( 'ImageUploadThumb' ).firstChild;
+	var val = parseInt( elem.value );
+	if ( isNaN( val ) ) {
+		return false;
+	}
+
 	if( WMU_orgThumbSize == null ) {
 		var WMU_orgThumbSize = [image.width, image.height];
 	}
-	if ( elem.value > WMU_width ) {
+	if ( val > WMU_width ) {
 		if (!WMU_shownMax) {
 			image.width = WMU_width;
 			image.height = WMU_width / WMU_ratio;
@@ -123,12 +128,18 @@ function WMU_manualWidthInput( elem ) {
 			alert (wmu_max_thumb);
 		}
 	} else {
-		image.height = elem.value / WMU_ratio;
-		image.width = elem.value;
+		image.height = val / WMU_ratio;
+		image.width = val;
 		WMU_thumbSize = [image.width, image.height];
-		$( 'ImageUploadManualWidth' ).value = elem.value;
+		$( 'ImageUploadManualWidth' ).value = val;
+		WMU_readjustSlider( val );
+
 		WMU_shownMax = false;			
 	}
+}
+
+function WMU_readjustSlider( value ) {
+	WMU_slider.setValue(value, true);
 }
 
 function WMU_show(e) {
