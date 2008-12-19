@@ -277,5 +277,6 @@ ImageUploadOptionsTable img {
 
 
 #ImageUploadManualWidth {
-	width: 40px;
+	width: 36px;
+	height: 16px;
 }
