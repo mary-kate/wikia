@@ -349,6 +349,7 @@ function LS_PrepareTextarea (textarea, oDS) {
 	oAutoComp.typeAhead = oAutoComp.animHoriz = oAutoComp.animVert = oAutoComp.autoHighlight = oAutoComp.forceSelection = oAutoComp.useShadow = false;
 	oAutoComp.minQueryLength = 1;
 	oAutoComp.maxResultsDisplayed = 10;
+	oAutoComp.queryDelay = 0.4;
 
 	oAutoComp.containerExpandEvent.subscribe(function(o) {
 			YAHOO.util.Event.removeListener(this._elTextbox, "keydown");
