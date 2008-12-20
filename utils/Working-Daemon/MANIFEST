@@ -1,0 +1,6 @@
+Changes
+Makefile.PL
+MANIFEST
+README
+t/Working-Daemon.t
+lib/Working/Daemon.pm
