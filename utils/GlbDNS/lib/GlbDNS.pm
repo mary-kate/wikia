@@ -20,7 +20,7 @@ sub new {
     my $class = shift;
     my $self = bless {}, $class;
     $self->{dns} = Net::DNS::Nameserver->new(
-        Verbose => 1,
+        Verbose => 0,
         ReplyHandler => sub { $self->request(@_) },
         );
     $self->{config} = GlbDNS::Config->new;
@@ -119,11 +119,14 @@ sub lookup {
 
             $distance{$server} = $self->distance($geo->{$server}->{lat}, $geo->{$server}->{lon}, $lat, $lon);
         }
-	print "From: " . $record->city . "\n";
-	print Dumper(\%distance);
+
         my @answer;
         foreach my $server (@{[sort { $distance{$a} <=> $distance{$b} } keys %distance ]}) {
-            foreach my $host (@{$geo->{$server}->{hosts}}) {
+            print "Distance $server > $distance{$server}\n";
+	    foreach my $host (@{$geo->{$server}->{hosts}}) {
+		next if ($geo->{$server}->{radius} &&
+			 $geo->{$server}->{radius} > $distance{$server});
+		    
                 my $key = $host->type eq 'A' ? $host->address : $host->cname;
                 push @answer, $host if (!exists $status{$key} || $status{$key});
 
@@ -164,15 +167,15 @@ sub distance {
     my $slat_r = int($slat) * ($pi/180);
     my $slon_r = int($slon) * ($pi/180);
 
-    print "$tlat $tlon => $slat $slon\n";
-    print "$tlat_r $tlon_r => $slat_r $slon_r\n";
+#    print "$tlat $tlon => $slat $slon\n";
+#    print "$tlat_r $tlon_r => $slat_r $slon_r\n";
 
     my $delta_lat = $slat_r - $tlat_r;
     my $delta_lon = $slon_r - $tlon_r;
 
     my $temp = sin($delta_lat/2.0)**2 + cos($tlat_r) * cos($slat_r) * sin($delta_lon/2.0)**2;
 
-    return atan2(sqrt($temp),sqrt(1-$temp));
+    return (atan2(sqrt($temp),sqrt(1-$temp)) * 12756.32);
 }
 
 1;
