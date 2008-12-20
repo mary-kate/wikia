@@ -4,10 +4,9 @@ use strict;
 use warnings;
 use Net::DNS::RR;
 use Data::Dumper;
-use GlbDNS::Config;
-package GlbDNS::Config;
+use base qw(GlbDNS::Config);
 
-sub domains { "wikia-glb.net." }
+sub domain { "wikia-glb.net." }
 
 sub ns { return q{
 
@@ -28,7 +27,7 @@ sub geo {
                          ttl => 60,
 #                         check_type => 'http',
                          url => 'lvscheck.html',
-			 radius => 750,
+                         radius => 750,
                          expect => 'is okay',
             },
             "lon"   => { lon => '0',
@@ -43,16 +42,16 @@ sub geo {
                          lat => '37',
                          servers => ["216.224.121.143", "216.151.156.12"],
                          ttl => 60,
-			 radius => 500,  #only a certain distance
+                         radius => 500,  #only a certain distance
 #                         check_type => 'http',
                          url => 'lvscheck.html',
                          expect => 'is okay',
             },
-	    # locating this one in dallas
-	    'panther' => { lon => "-97",
-			   lat => "32", 
-			   servers => ['g1.panthercdn.com'],
-	    }
+            # locating this one in dallas
+            'panther' => { lon => "-97",
+                           lat => "32",
+                           servers => ['g1.panthercdn.com'],
+            }
         },
         "images.wikia-glb.net" => {
             "lon"   => { lon => '0',
