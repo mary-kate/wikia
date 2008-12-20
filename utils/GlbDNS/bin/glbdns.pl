@@ -124,6 +124,7 @@ GlbDNS::Config->load_configs($dns, $config{config});
     mkdir ("/etc") || die;
     open(my $protocol, "+>/etc/protocols") || die;
     print $protocol "tcp     6       TCP\n";
+    print $protocol "udp     17      UDP\n";
     close($protocol);
 }
 
