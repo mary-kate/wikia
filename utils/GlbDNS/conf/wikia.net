@@ -37,6 +37,7 @@ sub geo {
                          check_type => 'http',
                          url => 'lvscheck.html',
                          expect => 'is okay',
+			 radius => 
             },
             "sjc"   => { lon => "-121",
                          lat => '37',
@@ -50,6 +51,11 @@ sub geo {
             # locating this one in dallas
             'panther' => { lon => "-97",
                            lat => "32",
+                           servers => ['g1.panthercdn.com'],
+            }
+            # locating this in asia to capture asia that traffic
+            'panther_australia' => { lon => 151",
+                           lat => "-33",
                            servers => ['g1.panthercdn.com'],
             }
         },
