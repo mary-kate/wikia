@@ -73,7 +73,6 @@ sub request {
     return ("NXDOMAIN", [],[],[],{}) unless($domain);
 
 #    $query->print;
-
     if ($qtype eq 'ANY' || $qtype eq 'A' || $qtype eq 'PTR' || $qtype eq 'CNAME') {
         ($rcode, $ans) = $self->lookup($qname, $domain, $peerhost);
     }
@@ -83,6 +82,9 @@ sub request {
     }
     if ($qtype eq 'ANY' || $qtype eq 'SOA') {
 	push @$ans, $domain->{soa};
+    }
+    if ($qtype eq 'ANY' || $qtype eq 'MX') {
+	push @$ans, values %{$domain->{mx}};
     }
 
 
