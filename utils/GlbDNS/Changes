@@ -1,0 +1,6 @@
+Revision history for Perl extension GlbDNS.
+
+0.01  Fri Dec 19 11:59:01 2008
+	- original version; created by h2xs 1.23 with options
+		-X GlbDNS
+
