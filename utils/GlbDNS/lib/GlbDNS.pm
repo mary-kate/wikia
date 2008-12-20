@@ -23,13 +23,20 @@ sub new {
         Verbose => 0,
         ReplyHandler => sub { $self->request(@_) },
         );
-    $self->{config} = GlbDNS::Config->new;
 
-    foreach my $check (values %{$self->{config}->{_check}}) {
+    return $self;
+}
+
+sub add_config {
+    my $self = shift;
+    my $config = shift;
+    $self->{config}->{ref($config)} = $config;
+
+    foreach my $check (values %{$config->{_check}}) {
         $status{$check->{ip}} = 0;
         threads->create('check_service', $check->{ip}, $check->{url}, $check->{expect});
     }
-    return $self;
+
 }
 
 sub check_service {
@@ -54,11 +61,11 @@ sub check_status {
 
 sub start {
     my $self = shift;
-    while(sum(values %status) == 0) {
-        print "Waiting to start\n";
+    $0 = "$main::config{name} worker - waiting for status checks before accepting requests";
+    while(keys %stats && sum(values %status) == 0) {
         sleep 1;
     }
-    print "Starting the loop\n";
+    $0 = "$main::config{name} worker - accepting requests";
     $self->{dns}->main_loop;
 }
 
@@ -81,10 +88,10 @@ sub request {
         push @$ans, @{$domain->{ns}};
     }
     if ($qtype eq 'ANY' || $qtype eq 'SOA') {
-	push @$ans, $domain->{soa};
+        push @$ans, $domain->{soa};
     }
     if ($qtype eq 'ANY' || $qtype eq 'MX') {
-	push @$ans, values %{$domain->{mx}};
+        push @$ans, values %{$domain->{mx}};
     }
 
 
@@ -110,10 +117,14 @@ sub lookup {
     my $domain = shift;
     my $peerhost = shift;
 
-    my $record = $gi->record_by_addr($peerhost);
-    my $lat = $record->latitude;
-    my $lon = $record->longitude;
     if (my $geo = $domain->{geo}->{$qname}) {
+        my $record = $gi->record_by_addr($peerhost);
+        my ($lat, $lon) = (0,0);
+        if($record) {
+            my $lat = $record->latitude;
+            my $lon = $record->longitude;
+        }
+
         my %distance;
         foreach my $server (keys %$geo) {
 
@@ -122,12 +133,11 @@ sub lookup {
 
         my @answer;
         foreach my $server (@{[sort { $distance{$a} <=> $distance{$b} } keys %distance ]}) {
-            print "Distance $server $geo->{$server}->{radius} < $distance{$server}\n";
-	    next if ($geo->{$server}->{radius} &&
-		     $geo->{$server}->{radius} < $distance{$server});
+            print "Distance $server $geo->{$server}->{radius} < $distance{$server}\n" if($geo->{$server}->{radius});
+            next if ($geo->{$server}->{radius} &&
+                     $geo->{$server}->{radius} < $distance{$server});
 
-	    foreach my $host (@{$geo->{$server}->{hosts}}) {
-		    
+            foreach my $host (@{$geo->{$server}->{hosts}}) {
                 my $key = $host->type eq 'A' ? $host->address : $host->cname;
                 push @answer, $host if (!exists $status{$key} || $status{$key});
 
@@ -150,7 +160,11 @@ sub get_domain {
 
     my $domain;
     while(@query) {
-        last if $domain = $self->{config}->{join(".",@query) . "."};
+        foreach my $config_file (values %{$self->{config}}) {
+
+            last if $domain = $config_file->{join(".",@query) . "."};
+        }
+        last if $domain;
         shift @query;
     }
     return $domain;
