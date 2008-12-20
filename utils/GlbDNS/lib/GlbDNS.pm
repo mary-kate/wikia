@@ -101,8 +101,8 @@ sub lookup {
     my $peerhost = shift;
 
     my $record = $gi->record_by_addr(_ip);
-    my $lat = $gi->latitude;
-    my $long = $gi->longtitude;
+    my $lat = $record->latitude;
+    my $long = $record->longtitude;
 
     if (my $geo = $domain->{geo}->{$qname}) {
         my %distance;
