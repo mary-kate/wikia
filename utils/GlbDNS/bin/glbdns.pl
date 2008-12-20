@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-BEGIN {require 'conf/example.pl'};
+BEGIN {require 'conf/wikia.net'};
 use GlbDNS;
 
 my $dns = GlbDNS->new();
