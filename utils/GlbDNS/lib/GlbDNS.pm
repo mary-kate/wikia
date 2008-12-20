@@ -73,7 +73,7 @@ sub request {
     return ("NXDOMAIN", [],[],[],{}) unless($domain);
 
 #    $query->print;
-    if ($qtype eq 'ANY' || $qtype eq 'A' || $qtype eq 'PTR' || $qtype eq 'CNAME') {
+    if ($qtype eq 'ANY' || $qtype eq 'A' || $qtype eq 'PTR') {
         ($rcode, $ans) = $self->lookup($qname, $domain, $peerhost);
     }
 
