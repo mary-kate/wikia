@@ -70,7 +70,8 @@ sub new {
         } elsif ($rr->type eq 'SOA') {
             $config->{$base}->{soa} = $rr;
             my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = gmtime($mtime);
-            $rr->serial($year+1900 . "$mon$mday$hour$min");
+	    $year += 1900;
+            $rr->serial("$year$mon$mday$hour$min");
         } elsif ($rr->type eq 'MX') {
             $config->{$base}->{mx}->{$rr->exchange} = $rr;
         } else {
