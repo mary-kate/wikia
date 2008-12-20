@@ -14,7 +14,7 @@ my %status : shared;
 my %stats : shared;
 use Geo::IP;
 
-my $gi = Geo::IP->open_type( GEOIP_CITY_EDITION_REV1, GEOIP_STANDARD)
+my $gi = Geo::IP->open_type( GEOIP_CITY_EDITION_REV1, GEOIP_STANDARD);
 
 sub new {
     my $class = shift;
@@ -75,7 +75,7 @@ sub request {
 #    $query->print;
 
     if ($qtype eq 'A' || $qtype eq 'PTR' || $qtype eq 'CNAME') {
-        ($rcode, $ans) = $self->lookup($qname, $domain);
+        ($rcode, $ans) = $self->lookup($qname, $domain, $peerhost);
     }
 
     $auth = $domain->{ns};
@@ -83,7 +83,7 @@ sub request {
     foreach my $ns (@$auth) {
         my $ns_domain = $self->get_domain($ns->nsdname);
         if ($ns_domain) {
-            my ($result, $host) = $self->lookup($ns->nsdname, $ns_domain);
+            my ($result, $host) = $self->lookup($ns->nsdname, $ns_domain, $peerhost);
             push @$add, @$host;
         }
     }
@@ -100,10 +100,9 @@ sub lookup {
     my $domain = shift;
     my $peerhost = shift;
 
-    my $record = $gi->record_by_addr(_ip);
+    my $record = $gi->record_by_addr($peerhost);
     my $lat = $record->latitude;
-    my $long = $record->longtitude;
-
+    my $lon = $record->longitude;
     if (my $geo = $domain->{geo}->{$qname}) {
         my %distance;
         foreach my $server (keys %$geo) {

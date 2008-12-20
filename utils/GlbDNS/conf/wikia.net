@@ -1,3 +1,5 @@
+#!/usr/bin/perl
+
 use strict;
 use warnings;
 use Net::DNS::RR;
@@ -5,20 +7,20 @@ use Data::Dumper;
 use GlbDNS::Config;
 package GlbDNS::Config;
 
-sub domains { "example.net." }
+sub domains { "wikia-glb.net." }
 
 sub ns { return q{
 
-60 IN NS ns-lon-1.example.net.
-60 IN NS ns-lon-2.example.net.
-60 IN NS ns-sjc-1.example.net.
-60 IN NS ns-nj-1.example.net.
+60 IN NS ns-lon-1.wikia-glb.net.
+60 IN NS ns-lon-2.wikia-glb.net.
+60 IN NS ns-sjc-1.wikia-glb.net.
+60 IN NS ns-nj-1.wikia-glb.net.
 
 }}
 
 sub geo {
     return {
-        "glb.example.net" => {
+        "glb.wikia-glb.net" => {
             "iowa"  => { lon => '42',
                          lat => '91',
                          servers => ['208.68.167.146'],
@@ -44,7 +46,7 @@ sub geo {
                          expect => 'is okay',
             },
         },
-        "glb-images.example.net" => {
+        "glb-images.wikia-glb.net" => {
             "lon"   => { lon => '0',
                          lat => '51',
                          servers => ['83.223.112.142','83.223.112.138'],
