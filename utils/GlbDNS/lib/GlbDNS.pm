@@ -119,6 +119,8 @@ sub lookup {
 
             $distance{$server} = $self->distance($geo->{$server}->{lat}, $geo->{$server}->{lon}, $lat, $lon);
         }
+	print "From: " . $record->city . "\n";
+	print Dumper(\%distance);
         my @answer;
         foreach my $server (@{[sort { $distance{$a} <=> $distance{$b} } keys %distance ]}) {
             foreach my $host (@{$geo->{$server}->{hosts}}) {
@@ -153,16 +155,17 @@ sub get_domain {
 
 my $pi = atan2(1,1) * 4;
 my $earth_radius = 6378;
+
 sub distance {
     my ($self, $tlat, $tlon, $slat, $slon) = @_;
 
-    my $tlat_r = $tlat * ($pi/180);
-    my $tlon_r = $tlon * ($pi/180);
-    my $slat_r = $slat * ($pi/180);
-    my $slon_r = $slon * ($pi/180);
+    my $tlat_r = int($tlat) * ($pi/180);
+    my $tlon_r = int($tlon) * ($pi/180);
+    my $slat_r = int($slat) * ($pi/180);
+    my $slon_r = int($slon) * ($pi/180);
 
-#    print "$tlat $tlon => $slat $slon\n";
-#    print "$tlat_r $tlon_r => $slat_r $slon_r\n";
+    print "$tlat $tlon => $slat $slon\n";
+    print "$tlat_r $tlon_r => $slat_r $slon_r\n";
 
     my $delta_lat = $slat_r - $tlat_r;
     my $delta_lon = $slon_r - $tlon_r;

@@ -19,11 +19,11 @@ sub ns { return q{
 sub geo {
     return {
         "glb.wikia-glb.net" => {
-            "iowa"  => { lon => '42',
+            "iowa"  => { lon => '-42',
                          lat => '91',
                          servers => ['208.68.167.146'],
                          ttl => 60,
-                         check_type => 'http',
+#                         check_type => 'http',
                          url => 'lvscheck.html',
                          expect => 'is okay',
             },
@@ -35,11 +35,11 @@ sub geo {
                          url => 'lvscheck.html',
                          expect => 'is okay',
             },
-            "sjc"   => { lon => "121",
+            "sjc"   => { lon => "-121",
                          lat => '37',
                          servers => ["216.224.121.143", "216.151.156.12"],
                          ttl => 60,
-                         check_type => 'http',
+#                         check_type => 'http',
                          url => 'lvscheck.html',
                          expect => 'is okay',
             },
@@ -55,7 +55,7 @@ sub geo {
             },
             "panther"   => { lon => "42",
                              lat => '92',
-                             servers => ["g1.panthercnd.com"],
+                             servers => ["g1.panthercdn.com"],
                              ttl => 60,
             },
         }
@@ -64,7 +64,7 @@ sub geo {
 
 sub hosts {q{
 
-600 IN SOA ns1.wikia.net. dnsmaster.wikia-inc.com.
+600 IN SOA ns-lon-2.wikia-glb.net. dnsmaster.wikia-inc.com. 2008121101 1200 120 1209600 3600
 
 
 

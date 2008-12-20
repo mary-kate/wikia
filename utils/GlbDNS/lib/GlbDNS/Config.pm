@@ -86,7 +86,9 @@ sub new {
            die unless $rr->type eq 'NS';
            push @$domains, $rr;
        }
+
     }
+    
 
 
 
