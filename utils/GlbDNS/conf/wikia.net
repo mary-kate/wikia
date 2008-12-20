@@ -11,10 +11,8 @@ sub domains { "wikia-glb.net." }
 
 sub ns { return q{
 
-60 IN NS ns-lon-1.wikia-glb.net.
 60 IN NS ns-lon-2.wikia-glb.net.
-60 IN NS ns-sjc-1.wikia-glb.net.
-60 IN NS ns-nj-1.wikia-glb.net.
+60 IN NS nj.wikia-glb.net.
 
 }}
 
@@ -82,6 +80,7 @@ sub hosts {q{
 googleffffffffdfb14994 60 IN CNAME google.com.
 
 
+60 IN A 216.224.121.143
 
 ns1             600 IN A         76.9.5.203
 ns2             600 IN A         216.224.121.138
@@ -126,6 +125,7 @@ ns-lon-1        60 IN A 83.223.112.142
 ns-lon-2        60 IN A 83.223.112.138
 ns-sjc-1        60 IN A 216.224.121.143
 ns-nj-1         60 IN A 76.9.5.204
+nj  60 IN A 76.9.5.195
 
 london-cache    60 IN A 83.223.112.142
 london-cache    60 IN A 83.223.112.138

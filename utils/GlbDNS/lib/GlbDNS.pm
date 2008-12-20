@@ -74,9 +74,17 @@ sub request {
 
 #    $query->print;
 
-    if ($qtype eq 'A' || $qtype eq 'PTR' || $qtype eq 'CNAME') {
+    if ($qtype eq 'ANY' || $qtype eq 'A' || $qtype eq 'PTR' || $qtype eq 'CNAME') {
         ($rcode, $ans) = $self->lookup($qname, $domain, $peerhost);
     }
+
+    if ($qtype eq 'ANY' || $qtype eq 'NS') {
+        push @$ans, @{$domain->{ns}};
+    }
+    if ($qtype eq 'ANY' || $qtype eq 'SOA') {
+	push @$ans, $domain->{soa};
+    }
+
 
     $auth = $domain->{ns};
 
