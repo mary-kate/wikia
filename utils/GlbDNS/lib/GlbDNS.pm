@@ -123,9 +123,10 @@ sub lookup {
         my @answer;
         foreach my $server (@{[sort { $distance{$a} <=> $distance{$b} } keys %distance ]}) {
             print "Distance $server > $distance{$server}\n";
+	    next if ($geo->{$server}->{radius} &&
+		     $geo->{$server}->{radius} < $distance{$server});
+
 	    foreach my $host (@{$geo->{$server}->{hosts}}) {
-		next if ($geo->{$server}->{radius} &&
-			 $geo->{$server}->{radius} < $distance{$server});
 		    
                 my $key = $host->type eq 'A' ? $host->address : $host->cname;
                 push @answer, $host if (!exists $status{$key} || $status{$key});
