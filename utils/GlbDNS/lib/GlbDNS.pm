@@ -12,6 +12,9 @@ use LWP::Simple;
 use List::Util qw(sum);
 my %status : shared;
 my %stats : shared;
+use Geo::IP;
+
+my $gi = Geo::IP->open_type( GEOIP_CITY_EDITION_REV1, GEOIP_STANDARD)
 
 sub new {
     my $class = shift;
@@ -89,13 +92,17 @@ sub request {
     }
 
 
-#my ($lat, $lon) = (42,93);
-my ($lat, $lon) = (0,0);
+
 
 sub lookup {
     my $self = shift;
     my $qname = shift;
     my $domain = shift;
+    my $peerhost = shift;
+
+    my $record = $gi->record_by_addr(_ip);
+    my $lat = $gi->latitude;
+    my $long = $gi->longtitude;
 
     if (my $geo = $domain->{geo}->{$qname}) {
         my %distance;
