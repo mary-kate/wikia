@@ -70,13 +70,13 @@ function getLinkSuggest() {
 		$sql = "SELECT qc_title FROM querycache WHERE qc_type = 'Mostlinked' AND LOWER(qc_title) LIKE '{$query}%' AND qc_namespace = {$namespace} ORDER BY qc_value DESC LIMIT 10;";
 		$res = $db->query($sql);
 		while($row = $db->fetchObject($res)) {
-			$results[] = (!empty($namespaceName) ? $namespaceName . ':' : '') . $row->qc_title;
+			$results[] = str_replace('_', ' ', (!empty($namespaceName) ? $namespaceName . ':' : '') . $row->qc_title);
 		}
 
 		$sql = "SELECT page_title FROM page WHERE lower(page_title) LIKE '{$query}%' AND page_is_redirect=0 AND page_namespace = {$namespace} ORDER BY page_title ASC LIMIT ".(15 - count($results));
 		$res = $db->query($sql);
 		while($row = $db->fetchObject($res)) {
-			$results[] = (!empty($namespaceName) ? $namespaceName . ':' : '') . $row->page_title;
+			$results[] = str_replace('_', ' ', (!empty($namespaceName) ? $namespaceName . ':' : '') . $row->page_title);
 		}
 
 		$results = array_unique($results);
