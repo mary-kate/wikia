@@ -20,7 +20,7 @@ sub new {
     my $class = shift;
     my $self = bless {}, $class;
     $self->{dns} = Net::DNS::Nameserver->new(
-        Verbose => 0,
+        Verbose => $main::config{debug},
         ReplyHandler => sub { $self->request(@_) },
         );
 
@@ -121,8 +121,8 @@ sub lookup {
         my $record = $gi->record_by_addr($peerhost);
         my ($lat, $lon) = (0,0);
         if($record) {
-            my $lat = $record->latitude;
-            my $lon = $record->longitude;
+            $lat = $record->latitude;
+            $lon = $record->longitude;
         }
 
         my %distance;
