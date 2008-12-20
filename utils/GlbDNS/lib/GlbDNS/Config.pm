@@ -48,6 +48,7 @@ sub new {
                 my $hosts = $location->{hosts} = [];
                 $location->{lat} = $geo->{$host}->{$location_name}->{lat};
                 $location->{lon} = $geo->{$host}->{$location_name}->{lon};
+		$location->{radius} = $geo->{$host}->{$location_name}->{radius};
                 foreach my $ip (@{$geo->{$host}->{$location_name}->{servers}}) {
                     if($ip =~/\d+\.\d+\.\d+\.\d+/) {
                         push @$hosts, Net::DNS::RR::A->new({name => $host,
