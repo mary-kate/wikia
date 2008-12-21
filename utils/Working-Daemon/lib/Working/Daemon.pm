@@ -14,15 +14,11 @@ our %config;
 #these are all default configs
 
 # perl really need the protocols file to function
-sub chroot_files {
-    my $self = shift;
-    return ("/etc/protocols");
-}
+sub chroot_files { return ("/etc/protocols") }
 
-sub chroot_dirs {
-    my $self = shift;
-    return ("/etc/");
-}
+
+sub chroot_dirs { return ("/etc/") }
+
 
 sub tmpdir {
     my $self = shift;
@@ -30,17 +26,17 @@ sub tmpdir {
 }
 
 
-sub default_options {
-    return ("loglevel=i","daemon!","chroot!","foreground","user=s","group=s","");
-}
+sub default_options { return ("loglevel=i","daemon!","chroot!","foreground","user=s","group=s","") }
 
 
+# end of config methods
 
 sub new {
     my $class = shift;
     my $self = bless {}, $class;
     return $self;
 }
+
 
 sub parse_options {
     my $self = shift;
@@ -54,9 +50,6 @@ sub parse_options {
 }
 
 
-
-
-
 sub assign_options {
     my ($self, @options) = @_;
     foreach my $option (@options) {
@@ -66,26 +59,31 @@ sub assign_options {
 }
 
 
-
 sub change_root {
     my $self = shift;
-    print $self->chroot;
     return unless $self->chroot;
-    my $tmpdir = $self->tmpdir;
 
-    mkdir ($tmpdir) || die;
-    chown($self->uid,$self->gid, $tmpdir) || croak("Cannot chown $tmpdir to (". $self->uid . ":". $self->gid . "): $!");
+    my $tmpdir = $self->tmpdir;
+    mkdir ($tmpdir)
+        || croak "Cannot create directory '$tmpdir': $!";
+
+    chown($self->uid,$self->gid, $tmpdir)
+        || croak("Cannot chown $tmpdir to (". $self->uid . ":". $self->gid . "): $!");
 
 
     foreach my $dir ($self->chroot_dirs) {
-        mkdir("$tmpdir/$dir") || croak "Cannot create $tmpdir/$dir: $!";
+        mkdir("$tmpdir/$dir")
+            || croak "Cannot create $tmpdir/$dir: $!";
     }
     foreach my $file_to_copy ($self->chroot_files) {
-        copy("$file_to_copy", "$tmpdir/$file_to_copy") || croak "Cannot copy $file_to_copy -> $tmpdir/$file_to_copy: $!";
+        copy("$file_to_copy", "$tmpdir/$file_to_copy")
+            || croak "Cannot copy $file_to_copy -> $tmpdir/$file_to_copy: $!";
     }
 
-    chroot("$tmpdir/") || croak ("Can't chroot to $tmpdir: $!");
-    chdir("/");
+    chroot("$tmpdir/")
+        || croak ("Can't chroot to $tmpdir: $!");
+    chdir("/")
+        || croak ("Can't chdir to '/': $!");
 }
 
 
@@ -104,6 +102,7 @@ sub stop {
     return 0;
 }
 
+
 sub get_pid {
     my $self = shift;
     my $pidfile = $self->pidfile;
@@ -119,6 +118,7 @@ sub get_pid {
     }
    return 0;
 }
+
 
 sub check_pid {
     my $self = shift;
@@ -146,6 +146,7 @@ sub daemonize {
     open (STDERR, '>/dev/null') || croak "Can't write to /dev/null: $!";
     return 1;
 }
+
 
 sub log {
     my ($self, $level, $prio, $msg) = @_;
@@ -176,6 +177,7 @@ sub uid {
     return scalar getpwnam($self->user);
 }
 
+
 sub gid {
     my $self = shift;
     return scalar getpwnam($self->group);
@@ -184,6 +186,7 @@ sub gid {
 
 
 # accessors
+# yes they are nearly identical
 
 sub user {
     my $self = shift;
@@ -196,6 +199,7 @@ sub user {
     }
 }
 
+
 sub daemon {
     my $self = shift;
     if (@_) {
@@ -207,6 +211,7 @@ sub daemon {
     }
 }
 
+
 sub foreground {
     my $self = shift;
     if (@_) {
@@ -215,6 +220,7 @@ sub foreground {
         return !$self->daemon;
     }
 }
+
 
 sub chroot {
     my $self = shift;
@@ -226,6 +232,7 @@ sub chroot {
         return 1;
     }
 }
+
 
 sub log_level {
     my $self = shift;
@@ -250,6 +257,7 @@ sub group {
     }
 }
 
+
 sub name {
     my $self = shift;
     if (@_) {
@@ -260,7 +268,6 @@ sub name {
         return "unnamed app";
     }
 }
-
 
 
 sub options {
