@@ -4,8 +4,9 @@ use 5.008008;
 use strict;
 use warnings;
 use Data::Dumper;
-
+use File::Copy;
 use Getopt::Long;
+use Carp;
 
 our ($uid, $gid);
 our %config;
@@ -20,25 +21,55 @@ sub parse_options {
     my @args = @_;
     my %options;
     GetOptions(\%options, @args);
-    print Dumper(\%options);
-    exit;
-
+    $self->options(\%options);
+    $self->assign_options(qw(user group name));
+    return \%options;
 
 }
 
-sub change_root {
+sub assign_options {
+    my ($self, @options) = @_;
+    foreach my $option (@options) {
+        $self->$option($self->options->{$option})
+            if (exists $self->options->{$option});
+    }
+}
+
+sub chroot {
     my $self = shift;
 
-    mkdir ("/tmp/glbdns.$$") || die;
-    chown($uid,$gid, "/tmp/glbdns.$$") || die;
-    chroot("/tmp/glbdns.$$") || die;
-    chdir("/");
-    $self->drop_privs();
-    mkdir ("/etc") || die;
-    open(my $protocol, "+>/etc/protocols") || die;
-    print $protocol "tcp     6       TCP\n";
-    close($protocol);
+    my $tmpdir = $self->tmpdir;
 
+    mkdir ($tmpdir) || die;
+    chown($self->uid,$self->gid, $tmpdir) || croak("Cannot chown $tmpdir to (". $self->uid . ":". $self->gid . "): $!");
+
+
+    foreach my $dir ($self->chroot_dirs) {
+        mkdir("$tmpdir/$dir") || croak "Cannot create $tmpdir/$dir: $!";
+    }
+    foreach my $file_to_copy ($self->chroot_files) {
+        copy("$file_to_copy", "$tmpdir/$file_to_copy") || croak "Cannot copy $file_to_copy -> $tmpdir/$file_to_copy: $!";
+    }
+
+    chroot("$tmpdir/") || croak ("Can't chroot to $tmpdir: $!");;
+    chdir("/");
+}
+
+
+# perl really need the protocols file to function
+sub chroot_files {
+    my $self = shift;
+    return ("/etc/protocols");
+}
+
+sub chroot_dirs {
+    my $self = shift;
+    return ("/etc/");
+}
+
+sub tmpdir {
+    my $self = shift;
+    return "/tmp/" . $self->name . ".$$";
 }
 
 sub stop {
@@ -96,27 +127,107 @@ sub daemonize {
     open (STDERR, '>/dev/null') || die "Can't write to /dev/null: $!";
 }
 
-sub mylog {
-  my ($level, $prio, $msg) = @_;
-  return 1 if ($level > $config{loglevel});
-  if ($config{syslog}) {
-    syslog($prio, $msg) || die "$!";
-  } else {
-    print STDERR "$prio - $msg\n";
-  }
+sub log {
+    my ($self, $level, $prio, $msg) = @_;
+    return if ($level > $self->log_level);
+    $self->do_log($prio, $msg);
 }
 
 
+sub do_log {
+    my ($self, $prio, $msg) = @_;
+    print STDERR "$prio - $msg";
+}
 
 
 sub drop_privs {
-  # drop user to nobody
-  $< = $uid;
-  $> = $uid;
-  # drop group to nobody
-  $( = $gid;
-  $) = $gid;
+    my $self = shift;
+  # drop user
+    $< = $self->uid;
+    $> = $self->uid;
+  # drop group
+    $( = $self->gid;
+    $) = $self->gid;
 }
+
+
+sub uid {
+    my $self = shift;
+    return scalar getpwnam($self->user);
+}
+
+sub gid {
+    my $self = shift;
+    return scalar getpwnam($self->user);
+}
+
+
+
+# accessors
+
+sub user {
+    my $self = shift;
+    if (@_) {
+        return $self->{__PACKAGE__}->{user} = shift;
+    } elsif (exists($self->{__PACKAGE__}->{user})) {
+        return $self->{__PACKAGE__}->{user};
+    } else {
+        return "nobody";
+    }
+}
+
+sub log_level {
+    my $self = shift;
+    if (@_) {
+        return $self->{__PACKAGE__}->{log_level} = shift;
+    } elsif (exists($self->{__PACKAGE__}->{log_level})) {
+        return $self->{__PACKAGE__}->{log_level};
+    } else {
+        return 1;
+    }
+}
+
+
+sub group {
+    my $self = shift;
+    if (@_) {
+        return $self->{__PACKAGE__}->{group} = shift;
+    } elsif (exists($self->{__PACKAGE__}->{group})) {
+        return $self->{__PACKAGE__}->{group};
+    } else {
+        return "nobody";
+    }
+}
+
+sub name {
+    my $self = shift;
+    if (@_) {
+        return $self->{__PACKAGE__}->{name} = shift;
+    } elsif (exists($self->{__PACKAGE__}->{name})) {
+        return $self->{__PACKAGE__}->{name};
+    } else {
+        return "unnamed app";
+    }
+}
+
+
+
+sub options {
+    my $self = shift;
+    if (@_) {
+        return $self->{__PACKAGE__}->{options} = shift;
+    } elsif (exists($self->{__PACKAGE__}->{options})) {
+        return $self->{__PACKAGE__}->{options};
+    } else {
+        return {};
+    }
+}
+
+
+
+
+
+
 # Preloaded methods go here.
 
 # Autoload methods go after =cut, and are processed by the autosplit program.
