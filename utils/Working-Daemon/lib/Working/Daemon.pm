@@ -8,53 +8,10 @@ use File::Copy;
 use Getopt::Long;
 use Carp;
 
-our ($uid, $gid);
+
 our %config;
-sub new {
-    my $class = shift;
-    my $self = bless {}, $class;
-    return $self;
-}
 
-sub parse_options {
-    my $self = shift;
-    my @args = @_;
-    my %options;
-    GetOptions(\%options, @args);
-    $self->options(\%options);
-    $self->assign_options(qw(user group name));
-    return \%options;
-
-}
-
-sub assign_options {
-    my ($self, @options) = @_;
-    foreach my $option (@options) {
-        $self->$option($self->options->{$option})
-            if (exists $self->options->{$option});
-    }
-}
-
-sub chroot {
-    my $self = shift;
-
-    my $tmpdir = $self->tmpdir;
-
-    mkdir ($tmpdir) || die;
-    chown($self->uid,$self->gid, $tmpdir) || croak("Cannot chown $tmpdir to (". $self->uid . ":". $self->gid . "): $!");
-
-
-    foreach my $dir ($self->chroot_dirs) {
-        mkdir("$tmpdir/$dir") || croak "Cannot create $tmpdir/$dir: $!";
-    }
-    foreach my $file_to_copy ($self->chroot_files) {
-        copy("$file_to_copy", "$tmpdir/$file_to_copy") || croak "Cannot copy $file_to_copy -> $tmpdir/$file_to_copy: $!";
-    }
-
-    chroot("$tmpdir/") || croak ("Can't chroot to $tmpdir: $!");;
-    chdir("/");
-}
-
+#these are all default configs
 
 # perl really need the protocols file to function
 sub chroot_files {
@@ -72,33 +29,91 @@ sub tmpdir {
     return "/tmp/" . $self->name . ".$$";
 }
 
-sub stop {
-    my $class = shift;
 
-    if(my $pid = get_pid()) {
-        while(check_pid($pid)) {
+sub default_options {
+    return ("loglevel=i","daemon!","chroot!","foreground","user=s","group=s","");
+}
+
+
+
+sub new {
+    my $class = shift;
+    my $self = bless {}, $class;
+    return $self;
+}
+
+sub parse_options {
+    my $self = shift;
+    my @args = @_;
+    my %options;
+    GetOptions(\%options, @args, $self->default_options);
+    $self->options(\%options);
+    $self->assign_options(qw(user group name));
+    return \%options;
+
+}
+
+
+
+
+
+sub assign_options {
+    my ($self, @options) = @_;
+    foreach my $option (@options) {
+        $self->$option($self->options->{$option})
+            if (exists $self->options->{$option});
+    }
+}
+
+
+
+sub change_root {
+    my $self = shift;
+
+    my $tmpdir = $self->tmpdir;
+
+    mkdir ($tmpdir) || die;
+    chown($self->uid,$self->gid, $tmpdir) || croak("Cannot chown $tmpdir to (". $self->uid . ":". $self->gid . "): $!");
+
+
+    foreach my $dir ($self->chroot_dirs) {
+        mkdir("$tmpdir/$dir") || croak "Cannot create $tmpdir/$dir: $!";
+    }
+    foreach my $file_to_copy ($self->chroot_files) {
+        copy("$file_to_copy", "$tmpdir/$file_to_copy") || croak "Cannot copy $file_to_copy -> $tmpdir/$file_to_copy: $!";
+    }
+
+    chroot("$tmpdir/") || croak ("Can't chroot to $tmpdir: $!");
+    chdir("/");
+}
+
+
+sub stop {
+    my $self = shift;
+
+    if(my $pid = $self->get_pid()) {
+        while($self->check_pid($pid)) {
             kill(2, $pid);
-            mylog(0, 'info', "sent SIGINT to $pid - waiting on stopped pid $pid");
-            print STDERR "sent SIGINT to $pid - waiting on stopped pid $pid\n";
+            $self->log(0, 'info', "sent SIGINT to $pid - waiting on stopped pid $pid");
             sleep 1;
         }
-        mylog(0, 'info',"Stopped $config{name} on $pid");
-        print STDERR "$config{name} stopped on $pid\n";
+        $self->log(0, 'info',"Stopped " . $self->name . " on $pid");
         return $pid;
     }
     return 0;
 }
 
 sub get_pid {
-    my $class = shift;
-    if(-r $config{pidfile}) {
-        open(my $pidfile, "<$config{pidfile}") || die;
-        my $line = <$pidfile>;
-        close($pidfile);
+    my $self = shift;
+    my $pidfile = $self->pidfile;
+    if(-r $pidfile) {
+        open(my $pidfh, "<$pidfile") || croak "Cannot open pidfil ($pidfile): $!";
+        my $line = <$pidfh>;
+        close($pidfh);
         $line =~/(\d+)/;
         if(my $pid_to_check = $1) {
             $ENV{PATH} = '';
-            return $pid_to_check if(check_pid($pid_to_check));
+            return $pid_to_check if($self->check_pid($pid_to_check));
         }
     }
    return 0;
@@ -109,22 +124,26 @@ sub check_pid {
     my $pid  = shift;
     my $grep = "/bin/grep";
     $grep = "/usr/bin/grep" if ($^O eq 'darwin');
-    return !system("/bin/ps aux | $grep $pid | $grep -v grep | $grep $config{name}");
+    my $name = $self->name;
+    return !system("/bin/ps aux | $grep $pid | $grep -v grep | $grep $name");
 }
 
 
 sub daemonize {
     my $self = shift;
+    return 0 if ($self->foreground);
     use POSIX qw(setsid);
-    defined(my $pid = fork) || die "Can't fork: $!";
+    my $name = $self->name;
+    defined(my $pid = fork) || croak "Can't fork: $!";
     if ($pid) {
-        print "$config{name} started on $pid\n";
+        print "$name started on $pid\n";
         exit 0;
     }
-    setsid() || die "Can't start a new session: $!";
-    open (STDIN , '/dev/null') || die "Can't read /dev/null: $!";
-    open (STDOUT, '>/dev/null') || die "Can't write to /dev/null: $!";
-    open (STDERR, '>/dev/null') || die "Can't write to /dev/null: $!";
+    setsid() || croak "Can't start a new session: $!";
+    open (STDIN , '/dev/null') || croak "Can't read /dev/null: $!";
+    open (STDOUT, '>/dev/null') || croak "Can't write to /dev/null: $!";
+    open (STDERR, '>/dev/null') || croak "Can't write to /dev/null: $!";
+    return 1;
 }
 
 sub log {
@@ -173,6 +192,37 @@ sub user {
         return $self->{__PACKAGE__}->{user};
     } else {
         return "nobody";
+    }
+}
+
+sub daemon {
+    my $self = shift;
+    if (@_) {
+        return $self->{__PACKAGE__}->{daemon} = shift;
+    } elsif (exists($self->{__PACKAGE__}->{daemon})) {
+        return $self->{__PACKAGE__}->{daemon};
+    } else {
+        return 1;
+    }
+}
+
+sub foreground {
+    my $self = shift;
+    if (@_) {
+        return $self->daemon(!$_[0]);
+    } else {
+        return !$self->daemon;
+    }
+}
+
+sub chroot {
+    my $self = shift;
+    if (@_) {
+        return $self->{__PACKAGE__}->{chroot} = shift;
+    } elsif (exists($self->{__PACKAGE__}->{chroot})) {
+        return $self->{__PACKAGE__}->{chroot};
+    } else {
+        return 1;
     }
 }
 
