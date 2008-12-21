@@ -1,6 +1,6 @@
 package Working::Daemon;
 
-use 5.008008;
+use 5.008;
 use strict;
 use warnings;
 use Data::Dumper;
@@ -16,17 +16,20 @@ our %config;
 # perl really need the protocols file to function
 sub chroot_files { return ("/etc/protocols") }
 
-
 sub chroot_dirs { return ("/etc/") }
 
+sub default_options { return ("loglevel=i","daemon!","chroot!","foreground","user=s","group=s","pidfile=s") }
+
+sub default_action { return "start" }
+
+sub exit_success { exit(0) }
+
+sub exit_error { exit(1) }
 
 sub tmpdir {
     my $self = shift;
     return "/tmp/" . $self->name . ".$$";
 }
-
-
-sub default_options { return ("loglevel=i","daemon!","chroot!","foreground","user=s","group=s","") }
 
 
 # end of config methods
@@ -38,13 +41,20 @@ sub new {
 }
 
 
+sub do_action {
+    my $self = shift;
+    my $action = shift @ARGV || $self->default_action;
+
+    $self->$action();
+}
+
 sub parse_options {
     my $self = shift;
     my @args = @_;
     my %options;
     GetOptions(\%options, @args, $self->default_options);
     $self->options(\%options);
-    $self->assign_options(qw(user group name chroot foreground daemon));
+    $self->assign_options(qw(user group name chroot foreground daemon pidfile));
     return \%options;
 
 }
@@ -75,6 +85,7 @@ sub change_root {
         mkdir("$tmpdir/$dir")
             || croak "Cannot create $tmpdir/$dir: $!";
     }
+
     foreach my $file_to_copy ($self->chroot_files) {
         copy("$file_to_copy", "$tmpdir/$file_to_copy")
             || croak "Cannot copy $file_to_copy -> $tmpdir/$file_to_copy: $!";
@@ -87,9 +98,88 @@ sub change_root {
 }
 
 
+sub write_pidfile {
+    my $self = shift;
+    my $pidfile = $self->pidfile;
+    open(my $pidfh, "+>$pidfile") || croak "Cannot open '$pidfile': $!";
+    print $pidfh "$$";
+    close $pidfh;
+}
+
+
+sub delete_pidfile {
+    my $self = shift;
+    unlink($self->pidfile) || croak "Cannot remove pidfile '".$self->pidfile."': $!";
+}
+
+
+sub cleanup_chroot {
+#    unlink("/tmp/glbdns.$pid/etc/protocols") || die "$!";
+#    rmdir("/tmp/glbdns.$pid/etc/") || die;
+#    rmdir("/tmp/glbdns.$pid/") || die;
+#    unlink($config{pidfile}) || die $!;
+}
+
+sub start {
+    my $self = shift;
+    my $name = $self->name;
+    if(my $pid = $self->get_pid) {
+        $self->log(0, "fatal", "Cannot start '$name' because it is already running at $pid");
+        $self->exit_error;
+    }
+    $self->log(0, 'info', "Starting '$name'");
+
+    if(my $pid = fork()) {
+
+        # this is the master session
+        # it makes sure to cleanup from the slave
+        # it stays as superuser
+
+
+        $self->write_pidfile;
+
+        $self->openlog;
+        $self->log(1, 'info', "started master session $name - child is $pid");
+        $SIG{INT} = sub { kill(2,$pid) };
+        $0 = "$name - waiting for child $pid";
+        waitpid($pid, 0);
+        $self->log(1, 'info', "exiting master session $name - child is $pid");
+
+        $self->cleanup_chroot;
+
+        $self->delete_pidfile;
+        exit;
+    }
+
+    return 1;
+}
+
+sub restart {
+    my $self = shift;
+    if ($self->is_running) {
+        $self->stop
+    }
+    $self->start;
+}
+
+sub status {
+    my $self = shift;
+    if ($self->is_running) {
+        $self->exit_success;
+    } else {
+        $self->exit_error;
+    }
+}
+
 sub stop {
     my $self = shift;
+    $self->stop if ($self->is_running);
+    $self->exit_success;
+}
 
+sub stop_old {
+    my $self = shift;
+    die;
     if(my $pid = $self->get_pid()) {
         while($self->check_pid($pid)) {
             kill(2, $pid);
@@ -103,11 +193,17 @@ sub stop {
 }
 
 
+sub openlog {
+#        openlog("$config{name}", 'ndelay,pid', LOG_DAEMON) if($config{syslog});}
+}
+
+
 sub get_pid {
+    # pid code needs serious overhaul to use flock
     my $self = shift;
     my $pidfile = $self->pidfile;
     if(-r $pidfile) {
-        open(my $pidfh, "<$pidfile") || croak "Cannot open pidfil ($pidfile): $!";
+        open(my $pidfh, "<$pidfile") || croak "Cannot open pidfile ($pidfile): $!";
         my $line = <$pidfh>;
         close($pidfh);
         $line =~/(\d+)/;
@@ -157,7 +253,7 @@ sub log {
 
 sub do_log {
     my ($self, $prio, $msg) = @_;
-    print STDERR "$prio - $msg";
+    print STDERR "$prio - $msg\n";
 }
 
 
@@ -196,6 +292,18 @@ sub user {
         return $self->{__PACKAGE__}->{user};
     } else {
         return "nobody";
+    }
+}
+
+
+sub pidfile {
+    my $self = shift;
+    if (@_) {
+        return $self->{__PACKAGE__}->{pidfile} = shift;
+    } elsif (exists($self->{__PACKAGE__}->{pidfile})) {
+        return $self->{__PACKAGE__}->{pidfile};
+    } else {
+        return "/var/run/". $self->name . ".pid";
     }
 }
 
