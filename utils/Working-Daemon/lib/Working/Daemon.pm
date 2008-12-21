@@ -323,7 +323,7 @@ If you have a web site set up for your module, mention it here.
 
 =head1 AUTHOR
 
-Artur Bergman, E<lt>sky@apple.comE<gt>
+Artur Bergman, E<lt>cpan@crucially.net@E<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
