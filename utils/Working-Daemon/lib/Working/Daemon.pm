@@ -48,7 +48,7 @@ sub parse_options {
     my %options;
     GetOptions(\%options, @args, $self->default_options);
     $self->options(\%options);
-    $self->assign_options(qw(user group name));
+    $self->assign_options(qw(user group name chroot foreground daemon));
     return \%options;
 
 }
@@ -69,7 +69,8 @@ sub assign_options {
 
 sub change_root {
     my $self = shift;
-
+    print $self->chroot;
+    return unless $self->chroot;
     my $tmpdir = $self->tmpdir;
 
     mkdir ($tmpdir) || die;
@@ -131,7 +132,7 @@ sub check_pid {
 
 sub daemonize {
     my $self = shift;
-    return 0 if ($self->foreground);
+    return 0 unless $self->daemon;
     use POSIX qw(setsid);
     my $name = $self->name;
     defined(my $pid = fork) || croak "Can't fork: $!";
