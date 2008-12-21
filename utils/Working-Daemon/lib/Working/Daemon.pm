@@ -178,7 +178,7 @@ sub uid {
 
 sub gid {
     my $self = shift;
-    return scalar getpwnam($self->user);
+    return scalar getpwnam($self->group);
 }
 
 
