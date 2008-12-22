@@ -40,8 +40,6 @@ $messages = array(
 'underline-never'   => 'Indi gid',
 'underline-default' => 'Onay nga browser',
 
-'skinpreview' => '(Bilid)',
-
 # Dates
 'sunday'        => 'Domingo',
 'monday'        => 'Lones',
@@ -168,6 +166,7 @@ $messages = array(
 
 'badaccess'        => 'Sayup sa lisensya',
 'badaccess-group0' => 'Indi kaw ginpasogtan nga himoon ang lihuk nga ginalaum mo.',
+'badaccess-groups' => 'Ang imo ginpangayo nga lihuk ay para lang sa mga users sa {{PLURAL:$2|nga grupo|sara sa mga grupo}}: $1.',
 
 'versionrequired'     => 'Version $1 kang MediaWiki kinahanglan',
 'versionrequiredtext' => 'Version $1 of MediaWiki kinahanglan para magamit ang page nga ja.
@@ -222,6 +221,7 @@ Lantawa sa [[Special:Version|version kang page]].',
 'preview' => 'Bilid',
 
 # Preferences page
+'skin-preview'      => 'Bilid',
 'searchresultshead' => 'Sagap',
 
 # Recent changes
@@ -230,7 +230,7 @@ Lantawa sa [[Special:Version|version kang page]].',
 
 'upload-file-error' => 'Sayup internal',
 
-# Special:ImageList
+# Special:FileList
 'imgfile' => 'inayap',
 
 # File deletion
@@ -244,11 +244,11 @@ Lantawa sa [[Special:Version|version kang page]].',
 # Book sources
 'booksources-go' => 'Agto',
 
-# Special:Log
-'log-search-submit' => 'Agto',
-
 # Special:Categories
 'categories' => 'Manga Kategorya',
+
+# Special:LinkSearch
+'linksearch-ok' => 'Sagap',
 
 # Special:ListUsers
 'listusers-submit' => 'Ipakita',
@@ -256,7 +256,7 @@ Lantawa sa [[Special:Version|version kang page]].',
 # E-mail user
 'emailmessage' => 'Mensahe',
 
-# Delete/protect/revert
+# Delete
 'delete-legend' => 'Para',
 
 # Restrictions (nouns)
@@ -291,7 +291,7 @@ Lantawa sa [[Special:Version|version kang page]].',
 'tooltip-t-contributions'       => 'Lantawa ang listahan kang mga ginbulig kang user nga ja',
 'tooltip-t-emailuser'           => 'Padarhi kang e-mail ang user nga ja',
 
-# Special:NewImages
+# Special:NewFiles
 'ilsubmit' => 'Sagap',
 
 # action=purge

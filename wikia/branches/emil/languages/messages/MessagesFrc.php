@@ -56,8 +56,6 @@ $messages = array(
 'underline-never'   => 'Jamais',
 'underline-default' => "D'après le réglage du navigateur",
 
-'skinpreview' => "(Vue d'avance)",
-
 # Dates
 'sunday'        => 'dimanche',
 'monday'        => 'lundi',
@@ -222,8 +220,6 @@ $messages = array(
 
 'badaccess'        => 'Erreur de permission',
 'badaccess-group0' => 'Vous avez pas assez de permission de faire ça que vous demandez.',
-'badaccess-group1' => "L'action que vous avez demandé est juste pour les useurs dans groupe $1.",
-'badaccess-group2' => "L'action que vous avez demandé est juste pour les useurs dans une des groupes $1.",
 'badaccess-groups' => "L'action que vous avez demandé est juste pour les useurs dans une des groupes $1.",
 
 'versionrequired'     => 'Vous avez besoin de la version $1 de MediaWiki.',
@@ -304,7 +300,6 @@ L'administrateur qui l'a barrée a donné cette explication: $1",
 'cannotdelete'         => "Impossible d'ôter la page ou le dossier choisi.  (Il est possible que quèqu'une d'autre l'a déjà ôté.)",
 'badtitle'             => 'Mauvais titre',
 'badtitletext'         => 'Le titre que vous avez demandé était pas bon, vide, ou y avait un mauvais titre entre-langue ou entre-wiki.  Ça pourrait avoir des caractères qui pouvont pas être usés dans les titres.',
-'perfdisabled'         => "Oups!  Cette fonction est barrée pour le moment parce que ça fait la base d'information aller doucement jusqu'à personne peut p'us user le wiki.",
 'perfcached'           => 'Cette information est en cache et pourrait pas être courante.',
 'perfcachedts'         => 'Cette information est en cache et le dernier changement a été fait $1.',
 'querypage-no-updates' => "À présent, les renouvelages pour cette page sont barrés.  L'information ici va pas être renouvelée t'à l'heure.",
@@ -336,7 +331,6 @@ Votre compte a été créé.  Oubliez pas de changer votre réglage sus {{SITENA
 'remembermypassword'         => 'Se rappeler de mon mot de passe:',
 'yourdomainname'             => 'Votre domaine:',
 'externaldberror'            => "Soit y avait une erreur avec la base d'information de certification extérieur, soit vous avez pas la permission de renouveler votre compte extérieur.",
-'loginproblem'               => "<b>Problème d'identification.</b><br />Assayez encore!",
 'login'                      => 'Connecter',
 'nav-login-createaccount'    => 'Connecter / créer un compte',
 'loginprompt'                => 'Il faut partir les cookies pour connecter à {{SITENAME}}.',
@@ -404,7 +398,6 @@ Si quèqu\'une d\'autre a demandé ce mot de passe ou si vous vous rappelez de v
 'resetpass_success'       => 'Vous avez bien changé votre mot de passe!  On est après vous connecter...',
 'resetpass_bad_temporary' => 'Mauvais mot de passe de peu de durée.  Il est possible que vous avez déjà changé votre mot de passe ou demandé un nouveau mot de passe de peu de durée.',
 'resetpass_forbidden'     => 'Vous pouvez pas changer votre mot de passe sus ce wiki ici.',
-'resetpass_missing'       => 'Vide.',
 
 # Edit page toolbar
 'bold_sample'     => 'Gras',
@@ -551,11 +544,9 @@ Les notes d'ôtage pour cette page sont données ici pour vous aider:",
 # History pages
 'viewpagelogs'        => 'Voir les notes pour cette page',
 'nohistory'           => 'Y a pas de changements pour cette page.',
-'revnotfound'         => 'Changement pas trouvé',
-'revnotfoundtext'     => "Le vieux changement de la page que vous avez demandé pouvait pas être trouvé.  Regardez donc l'adresse URL que vous avez usée.",
 'currentrev'          => 'Version courante',
 'revisionasof'        => 'Version depuis le $1',
-'revision-info'       => 'Version depuis le $1 par $2',
+'revision-info'       => 'Version depuis le $1 par $2', # Additionally available: $3: revision id
 'previousrevision'    => '←Version avant',
 'nextrevision'        => 'Version après→',
 'currentrevisionlink' => 'Version courante',
@@ -620,10 +611,12 @@ Des autres administrateurs sus ce wiki ont la permission de voir et de rétablir
 # Search results
 'searchresults'    => 'Résultats de la charche',
 'searchresulttext' => "Pour plus d'information pour vous aider à charcher dans {{SITENAME}}, voyez [[{{MediaWiki:Helppage}}|{{int:help}}]].",
+'searchhelp-url'   => 'Help:Aide',
 
 # Preferences page
 'preferences'   => 'Réglage',
 'mypreferences' => 'Mon réglage',
+'skin-preview'  => "Vue d'avance",
 
 # User rights
 'editinguser' => "Changement de '''[[User:$1|$1]]''' ([[User talk:$1|{{int:talkpagelinktext}}]] | [[Special:Contributions/$1|{{int:contribslink}}]])",

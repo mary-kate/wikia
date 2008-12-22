@@ -41,6 +41,7 @@
 	'bn' => 'বাংলা',	# Bengali
 	'bo' => 'བོད་ཡིག',	# Tibetan
 	'bpy' => 'ইমার ঠার/বিষ্ণুপ্রিয়া মণিপুরী',	# Bishnupriya Manipuri
+	'bqi' => 'بختياري',	# Bakthiari
 	'br' => 'Brezhoneg',	# Breton
 	'bs' => 'Bosanski',		# Bosnian
 	'bto' => 'Iriga Bicolano',		# Iriga Bicolano/Rinconada Bikol
@@ -101,7 +102,7 @@
 	'gl' => 'Galego',		# Galician
 	'glk' => 'گیلکی',	# Gilaki
 	'gn' => 'Avañe\'ẽ',	# Guaraní, Paraguayan
-	'got' => '������������������������������������',	# Gothic
+	'got' => '𐌲𐌿𐍄𐌹𐍃𐌺',	# Gothic
 	'grc' => 'Ἀρχαία ἑλληνικὴ', # Ancient Greece
 	'gsw' => 'Alemannisch',	# Alemannic
 	'gu' => 'ગુજરાતી',	# Gujarati
@@ -190,6 +191,7 @@
 	'mdf' => 'Мокшень',		# Moksha
 	'mg' => 'Malagasy',		# Malagasy
 	'mh' => 'Ebon',			# Marshallese
+	'mhr' => 'Олык Марий',	# Eastern Mari
 	'mi' => 'Māori',	# Maori
 	'mk' => 'Македонски',	# Macedonian
 	'ml' => 'മലയാളം',	# Malayalam
@@ -238,6 +240,7 @@
 	'pl' => 'Polski',		# Polish
 	'plm' => 'Palembang',		# Palembang
 	'pms' => 'Piemontèis', 	# Piedmontese
+	'pnb' => 'پنجابی',	# Western Punjabi
 	'pnt' => 'Ποντιακά', 	# Pontic/Pontic Greek
 	'ps' => 'پښتو',	# Pashto, Northern/Paktu/Pakhtu/Pakhtoo/Afghan/Pakhto/Pashtu/Pushto/Yusufzai Pashto
 	'pt' => 'Português',	# Portuguese
@@ -289,6 +292,7 @@
 	'sw' => 'Kiswahili',	# Swahili
 	'szl' => 'Ślůnski',	# Silesian
 	'ta' => 'தமிழ்',	# Tamil
+	'tcy' => 'ತುಳು', # Tulu
 	'te' => 'తెలుగు',	# Telugu
 	'tet' => 'Tetun',	# Tetun
 	'tg' => 'Тоҷикӣ',	# Tajiki (falls back to tg-cyrl)

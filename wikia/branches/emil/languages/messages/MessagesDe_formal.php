@@ -4,9 +4,11 @@
  * @ingroup Language
  * @file
  *
+ * @author ChrisiPK
  * @author Jimmy Collins <jimmy.collins@web.de>
  * @author Leithian
  * @author MichaelFrey
+ * @author Michawiki
  * @author Pill
  * @author Raimond Spekking (Raymond) <raimond.spekking@gmail.com> since January 2007
  * @author Tim Bartel (avatar) <wikipedia@computerkultur.org> formal addressing
@@ -17,8 +19,6 @@ $fallback = 'de';
 
 $messages = array(
 # User preference toggles
-'tog-underline'        => 'Links unterstreichen:',
-'tog-nocache'          => 'Seitencache deaktivieren',
 'tog-enotifrevealaddr' => 'Ihre E-Mail-Adresse wird in Benachrichtigungs-E-Mails angezeigt.',
 
 'mainpagedocfooter' => 'Hilfe zur Benutzung und Konfiguration der Wiki-Software finden Sie im [http://meta.wikimedia.org/wiki/Help:Contents Benutzerhandbuch].
@@ -56,7 +56,6 @@ Sie können {{SITENAME}} jetzt anonym weiter benutzen, oder sich erneut unter de
 Ihr Benutzerkonto wurde eingerichtet. Vergessen Sie nicht, Ihre Einstellungen anzupassen.',
 'yourdomainname'             => 'Ihre Domain:',
 'externaldberror'            => 'Entweder es liegt ein Fehler bei der externen Authentifizierung vor, oder Sie dürfen Ihr externes Benutzerkonto nicht aktualisieren.',
-'loginproblem'               => "'''Es gab ein Problem mit Ihrer Anmeldung.'''<br />Bitte versuchen Sie es noch einmal!",
 'nologin'                    => 'Sie haben kein Benutzerkonto? $1.',
 'gotaccount'                 => 'Haben Sie bereits ein Benutzerkonto? $1.',
 'userexists'                 => 'Dieser Benutzername ist schon vergeben. Bitte wählen Sie einen anderen.',
@@ -87,19 +86,25 @@ Bitte melden Sie sich damit an, sobald sie es erhalten haben. Das alte Passwort 
 'eauthentsent'               => 'Eine Bestätigungs-E-Mail wurde an die angegebene Adresse verschickt.
 
 Bevor eine E-Mail von anderen Benutzern über die E-Mail-Funktion empfangen werden kann, muss die Adresse und ihre tatsächliche Zugehörigkeit zu diesem Benutzerkonto erst bestätigt werden. Bitte befolgen Sie die Hinweise in der Bestätigungs-E-Mail.',
-'acct_creation_throttle_hit' => 'Sie haben schon $1 Benutzerkonten angelegt und können jetzt keine weiteren mehr anlegen.',
-'emailauthenticated'         => 'Ihre E-Mail-Adresse wurde bestätigt: $1.',
+'acct_creation_throttle_hit' => 'Sie haben schon {{PLURAL:$1|1 Benutzerkonto|$1 Benutzerkonten}} angelegt.
+Weitere Benutzerkonten können nicht angelegt werden.',
+'emailauthenticated'         => 'Ihre E-Mail-Adresse wurde am $2 um $3 Uhr bestätigt.',
 'emailnotauthenticated'      => 'Ihre E-Mail-Adresse ist noch nicht bestätigt. Die folgenden E-Mail-Funktionen stehen erst nach erfolgreicher Bestätigung zur Verfügung.',
 'noemailprefs'               => 'Geben Sie eine E-Mail-Adresse an, damit die nachfolgenden Funktionen zur Verfügung stehen.',
 'invalidemailaddress'        => 'Die E-Mail-Adresse wird nicht akzeptiert, weil sie ein ungültiges Format (eventuell ungültige Zeichen) zu haben scheint. Bitte geben Sie eine korrekte Adresse ein oder leeren Sie das Feld.',
 'createaccount-text'         => 'Es wurde für Sie ein Benutzerkonto "$2" auf {{SITENAME}} ($4) erstellt. Das automatisch generierte Passwort für "$2" ist "$3". Sie sollten sich nun anmelden und das Passwort ändern.
 
 Falls das Benutzerkonto irrtümlich angelegt wurde, können Sie diese Nachricht ignorieren.',
+'login-throttled'            => 'Sie haben zu oft vergeblich versucht, sich unter diesem Benutzernamen anzumelden.
+Bitte warten Sie, bevor Sie es erneut probieren.',
 
 # Password reset dialog
 'resetpass_announce'      => 'Anmeldung mit dem per E-Mail zugesandten Code. Um die Anmeldung abzuschließen, müssen Sie jetzt ein neues Passwort wählen.',
 'resetpass_success'       => 'Ihr Passwort wurde erfolgreich geändert. Es folgt die Anmeldung …',
 'resetpass_bad_temporary' => 'Ungültiges vorläufiges Passwort. Sie haben bereits Ihr Passwort erfolgreich geändert oder ein neues, vorläufiges Passwort angefordert.',
+'resetpass-no-info'       => 'Sie müssen sich anmelden, um auf diese Seite direkt zuzugreifen.',
+'resetpass-wrong-oldpass' => 'Ungültiges temporäres oder aktuelles Passwort.
+Möglicherweise haben Sie Ihr Passwort bereits erfolgreich geändert oder ein neues temporäres Passwort beantragt.',
 
 # Edit page toolbar
 'sig_tip' => 'Ihre Signatur mit Zeitstempel',
@@ -195,8 +200,10 @@ Sie bestätigen hiermit auch, dass Sie diese Texte selbst geschrieben haben oder
 'longpagewarning'                  => '<strong>WARNUNG: Diese Seite ist $1 kB groß; einige Browser könnten Probleme haben, Seiten zu bearbeiten, die größer als 32 kB sind.
 Überlegen Sie bitte, ob eine Aufteilung der Seite in kleinere Abschnitte möglich ist.</strong>',
 'longpageerror'                    => '<strong>FEHLER: Den Text den Sie versucht haben zu speichern ist $1 KB groß. Das ist größer als das erlaubte Maximum von $2 KB – Speicherung nicht möglich.</strong>',
-'readonlywarning'                  => '<strong>WARNUNG: Die Datenbank wurde während der Seitenbearbeitung für Wartungsarbeiten gesperrt, so dass Sie die Seite im Moment nicht
-speichern können. Sichern Sie den Text und versuchen Sie die Änderungen später einzuspielen.</strong>',
+'readonlywarning'                  => '<strong>ACHTUNG: Die Datenbank wurde für Wartungsarbeiten gesperrt, so dass Ihre Änderungen derzeit nicht gespeichert werden können.
+Sichern Sie den Text bitte lokal auf Ihrem Computer und versuchen Sie zu einem späteren Zeitpunkt, die Änderungen zu übertragen.</strong>
+
+Grund für die Sperre: $1',
 'nocreatetext'                     => 'Auf {{SITENAME}} wurde das Erstellen neuer Seiten eingeschränkt. Sie können bestehende Seiten ändern oder sich [[Special:UserLogin|anmelden]].',
 'nocreate-loggedin'                => 'Sie haben keine Berechtigung, neue Seiten zu erstellen.',
 'permissionserrorstext'            => 'Sie sind nicht berechtigt, die Aktion auszuführen. {{PLURAL:$1|Grund|Gründe}}:',
@@ -206,9 +213,7 @@ speichern können. Sichern Sie den Text und versuchen Sie die Änderungen späte
 
 Bitte prüfen Sie sorgfältig, ob die erneute Seitenerstellung den Richtlinien entspricht.
 Zu Ihrer Information folgt das Lösch-Logbuch mit der Begründung für die vorhergehende Löschung:",
-
-# History pages
-'revnotfoundtext' => 'Die Version dieser Seite, nach der Sie suchen, konnte nicht gefunden werden. Bitte überprüfen Sie die URL dieser Seite.',
+'edit-no-change'                   => 'Ihre Bearbeitung wurde ignoriert, da keine Änderung an dem Text vorgenomme wurde.',
 
 # Revision deletion
 'rev-deleted-text-view'  => '<div class="mw-warning plainlinks">Diese Version wurde gelöscht und ist nicht mehr öffentlich einsehbar.
@@ -259,7 +264,7 @@ Seiten auf Ihrer [[Special:Watchlist|Beobachtungsliste]] sind '''fett''' dargest
 'uploadnologintext'           => 'Sie müssen [[Special:UserLogin|angemeldet sein]], um Dateien hochladen zu können.',
 'uploadtext'                  => "Benutzen Sie dieses Formular, um neue Dateien hochzuladen. 
 
-Gehen Sie zu der [[Special:ImageList|Liste hochgeladener Dateien]], um vorhandene Dateien zu suchen und anzuzeigen. Siehe auch das [[Special:Log/upload|Datei-]]- und [[Special:Log/upload|Lösch-Logbuch]].
+Gehen Sie zu der [[Special:FileList|Liste hochgeladener Dateien]], um vorhandene Dateien zu suchen und anzuzeigen. Siehe auch das [[Special:Log/upload|Datei-]]- und [[Special:Log/upload|Lösch-Logbuch]].
 
 Klicken Sie auf '''„Durchsuchen …“''', um einen Dateiauswahl-Dialog zu öffnen.
 Nach der Auswahl einer Datei wird der Dateiname im Textfeld '''„Quelldatei“''' angezeigt.
@@ -267,8 +272,8 @@ Bestätigen Sie dann die Lizenz-Vereinbarung und klicken Sie anschließend auf '
 Dies kann eine Weile dauern, besonders bei einer langsamen Internet-Verbindung.
 
 Um ein '''Bild''' in einer Seite zu verwenden, schreiben Sie an Stelle des Bildes zum Beispiel:
-* '''<tt><nowiki>[[</nowiki>{{ns:image}}:Datei.jpg<nowiki>]]</nowiki></tt>'''
-* '''<tt><nowiki>[[</nowiki>{{ns:image}}:Datei.jpg|Link-Text<nowiki>]]</nowiki></tt>'''
+* '''<tt><nowiki>[[</nowiki>{{ns:file}}:Datei.jpg<nowiki>]]</nowiki></tt>'''
+* '''<tt><nowiki>[[</nowiki>{{ns:file}}:Datei.jpg|Link-Text<nowiki>]]</nowiki></tt>'''
 
 Um '''Mediendateien''' einzubinden, verwenden Sie zum Beispiel:
 * '''<tt><nowiki>[[</nowiki>{{ns:media}}:Datei.ogg<nowiki>]]</nowiki></tt>'''
@@ -288,10 +293,12 @@ Nur die Dateiendung unterscheidet sich in Groß-/Kleinschreibung. Bitte prüfen 
 Wenn es sich um das Bild in Originalgröße handelt, so braucht kein separates Vorschaubild hochgeladen zu werden.',
 'file-thumbnail-no'           => 'Der Dateiname beginnt mit <strong><tt>$1</tt></strong>. Dies deutet auf ein Bild verringerter Größe <i>(thumbnail)</i> hin.
 Bitte prüfen Sie, ob Sie das Bild in voller Auflösung vorliegen haben und laden dieses unter dem Originalnamen hoch.',
-'fileexists-forbidden'        => 'Unter diesem Namen existiert bereits eine Datei. Bitte gehen Sie zurück und laden Sie diese Datei unter einem anderen Namen hoch. [[Image:$1|thumb|center|$1]]',
+'fileexists-forbidden'        => 'Unter diesem Namen existiert bereits eine Datei. Bitte gehen Sie zurück und laden Sie diese Datei unter einem anderen Namen hoch. [[File:$1|thumb|center|$1]]',
 'fileexists-shared-forbidden' => 'Unter diesem Namen existiert bereits eine Datei im zentralen Medienarchiv.
 Wenn Sie diese Datei trotzdem hochladen möchten, gehen Sie bitte zurück und ändern den Namen.
-[[Image:$1|thumb|center|$1]]',
+[[File:$1|thumb|center|$1]]',
+'file-deleted-duplicate'      => 'Eine identische Datei dieser Datei ([[$1]]) wurde früher gelöscht.
+Überprüfen Sie das Löschlogbuch, bevor Sie sie hochladen.',
 'uploadcorrupt'               => 'Die Datei ist beschädigt oder hat eine falsche Datei-Erweiterung. Bitte überprüfen Sie die Datei und wiederholen Sie den Hochlade-Vorgang.',
 'filewasdeleted'              => 'Eine Datei mit diesem Namen wurde schon einmal hochgeladen und zwischenzeitlich wieder gelöscht. Bitte prüfen Sie zuerst den Eintrag im $1, bevor Sie die Datei wirklich speichern.',
 'upload-wasdeleted'           => "'''Achtung: Sie laden eine Datei hoch, die bereits früher gelöscht wurde.'''
@@ -313,7 +320,7 @@ Wenn das Problem weiter besteht, informieren Sie einen [[Special:ListUsers/sysop
 
 'upload_source_file' => ' (eine Datei auf Ihrem Computer)',
 
-# Image description page
+# File description page
 'filehist-help' => 'Klicken Sie auf einen Zeitpunkt, um diese Version zu laden.',
 'noimage'       => 'Eine Datei mit diesem Namen existiert nicht, Sie können sie jedoch $1.',
 
@@ -323,7 +330,6 @@ Wenn das Problem weiter besteht, informieren Sie einen [[Special:ListUsers/sysop
 # File deletion
 'filedelete-intro'     => "Sie löschen die Datei '''„[[Media:$1|$1]]“'''.",
 'filedelete-intro-old' => "Sie löschen von der Datei '''„[[Media:$1|$1]]“''' die [$4 Version vom $2, $3 Uhr].",
-'filedelete-iscurrent' => 'Sie versuchen die aktuelle Version dieser Datei zu löschen. Bitte setzen Sie diese vorher auf eine ältere Version zurück.',
 
 # Unused templates
 'unusedtemplatestext' => 'Diese Seite listet alle Seiten im {{ns:template}}-Namensraum auf, die nicht in anderen Seiten eingebunden sind.
@@ -377,13 +383,17 @@ Es werden solange keine weiteren Benachrichtigungsmails gesendet, bis Sie die Se
 --
 Um die Einstellungen Ihrer Beobachtungsliste anzupassen, besuchen Sie: {{fullurl:Special:Watchlist/edit}}',
 
-# Delete/protect/revert
-'historywarning'         => 'Achtung, die Seite, die Sie löschen möchten, hat eine Versionsgeschichte:',
-'confirmdeletetext'      => 'Sie sind dabei, eine Seite mit allen zugehörigen älteren Versionen zu löschen. Bitte bestätigen Sie, dass Sie sich der Konsequenzen bewusst sind, und dass Sie in Übereinstimmung mit den [[{{MediaWiki:Policy-url}}|Richtlinien]] handeln.',
-'deletedtext'            => '„<nowiki>$1</nowiki>“ wurde gelöscht. Im $2 finden Sie eine Liste der letzten Löschungen.',
-'sessionfailure'         => 'Es gab ein Problem mit der Übertragung Ihrer Benutzerdaten.
+# Delete
+'historywarning'    => 'Achtung, die Seite, die Sie löschen möchten, hat eine Versionsgeschichte:',
+'confirmdeletetext' => 'Sie sind dabei, eine Seite mit allen zugehörigen älteren Versionen zu löschen. Bitte bestätigen Sie, dass Sie sich der Konsequenzen bewusst sind, und dass Sie in Übereinstimmung mit den [[{{MediaWiki:Policy-url}}|Richtlinien]] handeln.',
+'deletedtext'       => '„<nowiki>$1</nowiki>“ wurde gelöscht. Im $2 finden Sie eine Liste der letzten Löschungen.',
+
+# Rollback
+'sessionfailure' => 'Es gab ein Problem mit der Übertragung Ihrer Benutzerdaten.
 Diese Aktion wurde daher sicherheitshalber abgebrochen, um eine falsche Zuordnung Ihrer Änderungen zu einem anderen Benutzer zu verhindern.
 Bitte gehen Sie zurück und versuchen Sie den Vorgang erneut auszuführen.',
+
+# Protect
 'protect-text'           => 'Hier können Sie den Schutzstatus für die Seite „$1“ einsehen und ändern.',
 'protect-locked-blocked' => 'Sie können den Seitenschutz nicht ändern, da Ihr Benutzerkonto gesperrt ist. Hier sind die aktuellen Seitenschutz-Einstellungen für die Seite <strong>„$1“:</strong>',
 'protect-locked-access'  => 'Ihr Benutzerkonto verfügt nicht über die notwendigen Rechte zur Änderung des Seitenschutzes. Hier sind die aktuellen Seitenschutzeinstellungen für die Seite <strong>„$1“:</strong>',
@@ -404,19 +414,22 @@ Im [[Special:Log/delete|Lösch-Logbuch]] finden Sie eine Übersicht der gelösch
 'undelete-show-file-confirm' => 'Sind Sie sicher, dass Sie eine gelöschte Version der Datei „<nowiki>$1</nowiki>“ vom $2, $3 Uhr sehen wollen?',
 
 # Block/unblock
-'blockiptext'      => 'Mit diesem Formular sperren Sie eine IP-Adresse oder einen Benutzernamen, so dass von dort keine Änderungen mehr vorgenommen werden können.
+'blockiptext'              => 'Mit diesem Formular sperren Sie eine IP-Adresse oder einen Benutzernamen, so dass von dort keine Änderungen mehr vorgenommen werden können.
 Dies sollte nur erfolgen, um Vandalismus zu verhindern und in Übereinstimmung mit den [[{{MediaWiki:Policy-url}}|Richtlinien]].
 Bitte geben Sie den Grund für die Sperre an.',
-'unblockiptext'    => 'Mit diesem Formular können Sie eine IP-Adresse oder einen Benutzer freigeben.',
-'autoblocker'      => 'Automatische Sperre, da Sie eine gemeinsame IP-Adresse mit [[User:$1|Benutzer:$1]] benutzen. Grund: „$2“.',
-'proxyblockreason' => 'Ihre IP-Adresse wurde gesperrt, da sie ein offener Proxy ist. Bitte kontaktieren Sie Ihren Internet-Provider oder Ihre Systemadministratoren und informieren Sie sie über dieses mögliche Sicherheitsproblem.',
+'unblockiptext'            => 'Mit diesem Formular können Sie eine IP-Adresse oder einen Benutzer freigeben.',
+'autoblocker'              => 'Automatische Sperre, da Sie eine gemeinsame IP-Adresse mit [[User:$1|Benutzer:$1]] benutzen. Grund: „$2“.',
+'ipb-needreblock'          => '== Sperre vorhanden ==
+„$1“ ist bereits gesperrt. Möchten Sie die Sperrparameter ändern?',
+'proxyblockreason'         => 'Ihre IP-Adresse wurde gesperrt, da sie ein offener Proxy ist. Bitte kontaktieren Sie Ihren Internet-Provider oder Ihre Systemadministratoren und informieren Sie sie über dieses mögliche Sicherheitsproblem.',
+'cant-block-while-blocked' => 'Sie dürfen keine anderen Benutzer sperren, während Sie selbst gesperrt sind.',
 
 # Developer tools
 'locknoconfirm'     => 'Sie haben das Bestätigungsfeld nicht markiert.',
 'lockdbsuccesstext' => 'Die {{SITENAME}}-Datenbank wurde gesperrt.<br />Bitte geben Sie die Datenbank [[Special:UnlockDB|wieder frei]], sobald die Wartung abgeschlossen ist.',
 
 # Move page
-'movepagetext'         => "Mit diesem Formular können Sie eine Seite umbenennen (mitsamt allen Versionen).
+'movepagetext'           => "Mit diesem Formular können Sie eine Seite umbenennen (mitsamt allen Versionen).
 Der alte Titel wird zum neuen weiterleiten.
 Sie können Weiterleitungen, die auf den Originaltitel verlinken, automatisch korrigieren lassen.
 Falls Sie dies nicht tun, prüfen Sie auf [[Special:DoubleRedirects|doppelte]] oder [[Special:BrokenRedirects|defekte Weiterleitungen]].
@@ -427,17 +440,20 @@ Die Seite wird '''nicht''' verschoben, wenn es bereits eine Seite mit demselben 
 '''Warnung'''
 Die Verschiebung kann weitreichende und unerwartete Folgen für beliebte Seiten haben.
 Sie sollten daher die Konsequenzen verstanden haben, bevor Sie fortfahren.",
-'movepagetalktext'     => "Die dazugehörige Diskussionsseite wird, sofern vorhanden, mitverschoben, '''es sei denn:'''
+'movepagetalktext'       => "Die dazugehörige Diskussionsseite wird, sofern vorhanden, mitverschoben, '''es sei denn:'''
 *Es existiert bereits eine Diskussionsseite mit diesem Namen, oder
 *Sie wählen die unten stehende Option ab.
 
 In diesen Fällen müssen Sie, falls gewünscht, den Inhalt der Seite von Hand verschieben oder zusammenführen.
 
 Bitte den '''neuen''' Titel unter '''Ziel''' eintragen, darunter die Umbenennung bitte '''begründen.'''",
-'movenotallowed'       => 'Sie haben keine Berechtigung, Seiten zu verschieben.',
-'articleexists'        => 'Unter diesem Namen existiert bereits eine Seite. Bitte wählen Sie einen anderen Namen.',
-'talkexists'           => 'Die Seite selbst wurde erfolgreich verschoben, aber die zugehörige Diskussions-Seite nicht, da bereits eine mit dem neuen Titel existiert. Bitte gleichen Sie die Inhalte von Hand ab.',
-'delete_and_move_text' => '==Zielseite vorhanden, löschen?==
+'movenologintext'        => 'Sie müssen ein registrierter Benutzer und [[Special:UserLogin|angemeldet]] sein, um eine Seite zu verschieben.',
+'movenotallowed'         => 'Sie haben keine Berechtigung, Seiten zu verschieben.',
+'cant-move-user-page'    => 'Sie haben keine Berechtigung, Benutzerhauptseiten zu verschieben.',
+'cant-move-to-user-page' => 'Sie haben nicht die Berechtigung, Seiten auf eine Benutzerseite zu verschieben (mit Ausnahme von Benutzerunterseiten).',
+'articleexists'          => 'Unter diesem Namen existiert bereits eine Seite. Bitte wählen Sie einen anderen Namen.',
+'talkexists'             => 'Die Seite selbst wurde erfolgreich verschoben, aber die zugehörige Diskussions-Seite nicht, da bereits eine mit dem neuen Titel existiert. Bitte gleichen Sie die Inhalte von Hand ab.',
+'delete_and_move_text'   => '==Zielseite vorhanden, löschen?==
 
 Die Seite „[[:$1]]“ existiert bereits. Möchten Sie diese löschen, um die Seite verschieben zu können?',
 

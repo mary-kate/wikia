@@ -74,8 +74,6 @@ $messages = array(
 'underline-never'   => 'هیچ كات',
 'underline-default' => 'نمایشكه‌ری پێوانه‌یی',
 
-'skinpreview' => '(پێش بینین)',
-
 # Dates
 'sunday'        => 'یه‌كشه‌ممه‌',
 'monday'        => 'دووشه‌ممه‌',
@@ -294,6 +292,7 @@ $messages = array(
 'yourpasswordagain'       => 'تێپه‌ڕه‌وشه‌ دووباره‌',
 'remembermypassword'      => 'زانیاریی چوونه‌ ژووره‌وه‌م له‌سه‌ر ئه‌م كۆمپیوته‌ره‌ پاشه‌كه‌وت بكه‌',
 'yourdomainname'          => 'ناوی دۆمه‌ینی خۆت',
+'login'                   => 'تێکەوە (login)',
 'nav-login-createaccount' => 'دروست کردنی ھەژمار/چوونە ژورەوە',
 'userlogin'               => 'دروست کردنی ھەژمار/چوونە ژورەوە',
 'logout'                  => 'ده‌رچوون',
@@ -378,15 +377,19 @@ $messages = array(
 # Search results
 'noexactmatch' => "'''ھیچ پەڕەیەک ھەر بەم سەردێڕەوە نیە.''' 
 ئێستە دەتوانی ئەم پەڕە دروست بکەیت",
+'powersearch'  => 'بە ھێز بگەڕە',
 
 # Preferences page
 'mypreferences' => 'ھەڵبژاردەکانی من',
+'skin-preview'  => 'پێش بینین',
 
 # Recent changes
+'recentchanges'   => 'دوایین گۆڕانکارییەکان',
 'rcnote'          => "لە خوارەوەدا {{PLURAL:$1|'''۱''' گۆڕانکاری |دوایین '''$1''' گۆڕانکارییەکان}} لە دوایین {{PLURAL:$2|ڕۆژ|'''$2''' ڕۆژەوە}} ، تا $5، $4 دەبینن.",
 'diff'            => 'جیاوازی',
 'hist'            => 'مێژوو',
 'hide'            => 'شاردنەوە',
+'show'            => 'نیشان بە',
 'minoreditletter' => 'ور',
 'newpageletter'   => 'ن',
 'boteditletter'   => 'ڕ',
@@ -397,7 +400,7 @@ $messages = array(
 # Upload
 'upload' => 'وێنەیەک بار بکە',
 
-# Image description page
+# File description page
 'filehist'   => 'مێژووی پەڕگە',
 'imagelinks' => 'بەستەرەکان',
 
@@ -405,11 +408,18 @@ $messages = array(
 'randompage' => 'پەڕەیەک بە ھەرەمەکی',
 
 # Miscellaneous special pages
-'nbytes' => '$1 {{PLURAL:$1|بایت|بایت}}',
-'move'   => 'ناوی ئەم پەڕە بگۆڕە',
+'nbytes'   => '$1 {{PLURAL:$1|بایت|بایت}}',
+'newpages' => 'پەڕە نوێکان',
+'move'     => 'ناوی ئەم پەڕە بگۆڕە',
+
+# Special:AllPages
+'allarticles' => 'ھەمووی وتارەکان',
 
 # Special:Categories
 'categories' => 'هاوپۆله‌كان',
+
+# E-mail user
+'emailuser' => 'بۆ ئەم بەکارھێنەرە E-Mail بنێرە',
 
 # Watchlist
 'mywatchlist' => 'لیستی چاودێڕی‌یەکانم',
@@ -418,10 +428,11 @@ $messages = array(
 # Displayed when you click the "watch" button and it is in the process of watching
 'watching' => 'چاودێڕی...',
 
-# Delete/protect/revert
+# Rollback
 'rollbacklink' => 'گەڕاندنەوە',
 
 # Namespace form on various pages
+'invert'         => 'ھەڵبژاردەکان پێچەوانە بکە',
 'blanknamespace' => '(سەرەکی)',
 
 # Contributions
@@ -442,6 +453,9 @@ $messages = array(
 'tooltip-ca-nstab-user'           => 'پەڕەی بەکارھێنەر تەماشا بکە',
 'tooltip-compareselectedversions' => 'جیاوازییەکانی دوو وەشانە دیاریکراوەی ئەم پەڕە ببینە.',
 
+# Media information
+'show-big-image' => 'گەورە کردنەوە',
+
 # Metadata
 'metadata-help'   => 'ئەم پەڕگە زانیاری زێدەی ھەیە، کە لەوە دەچێت کامێرا یان ھێماگر (scanner) خستبێتیە سەری. ئەگەر پەڕگەکە لە حاڵەتی سەرەتاییەکەیەوە دەستکاری کرابێ، شایەد بڕێ لە بڕگەکان بە تەواوی زانیارەکانی وێنە گۆڕدراوەکە نیشان نەدەن.',
 'metadata-fields' => 'ئەو کێڵگە EXIFانە لەم پەیامە بە ڕیز کراون، کاتێک خشتەی metadata کۆ کراوەش بێ ھەر نیشان ئەدرێت. کێڵگەکانی تر تا خشتەکە باز نەکرێ، شاراوەن.
@@ -453,7 +467,7 @@ $messages = array(
 * focallength', # Do not translate list items
 
 # Separators for various lists, etc.
-'semicolon-separator' => '؛',
+'semicolon-separator' => '؛&#32;',
 'comma-separator'     => '،&#32;',
 
 # Live preview

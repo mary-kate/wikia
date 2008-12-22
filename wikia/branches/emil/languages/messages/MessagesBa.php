@@ -18,8 +18,8 @@ $namespaceNames = array(
 	NS_USER_TALK        => 'Ҡатнашыусы_м-н_фекер_алышыу', 
 	#NS_PROJECT set by $wgMetaNamespace
 	NS_PROJECT_TALK     => '$1_б-са_фекер_алышыу',
-	NS_IMAGE            => 'Рәсем',
-	NS_IMAGE_TALK       => 'Рәсем_б-са_фекер_алышыу',
+	NS_FILE             => 'Рәсем',
+	NS_FILE_TALK        => 'Рәсем_б-са_фекер_алышыу',
 	NS_MEDIAWIKI        => 'MediaWiki',
 	NS_MEDIAWIKI_TALK   => 'MediaWiki_б-са_фекер_алышыу',
 	NS_TEMPLATE         => 'Ҡалып',
@@ -106,7 +106,7 @@ $messages = array(
 'mypage'         => 'Шәхси бит',
 'mytalk'         => 'Минең менән фекер алышыу',
 'navigation'     => 'Төп йүнәлештәр',
-'and'            => 'һәм',
+'and'            => '&#32;һәм',
 
 'errorpagetitle'   => 'Хата',
 'returnto'         => '$1 битенә ҡайтыу.',
@@ -225,7 +225,7 @@ $messages = array(
 # Recent changes linked
 'recentchangeslinked' => 'Бәйле үҙгәртеүҙәр',
 
-# Special:ImageList
+# Special:FileList
 'imagelist_user' => 'Ҡатнашыусы',
 
 # MIME search
@@ -236,9 +236,6 @@ $messages = array(
 
 # Random page
 'randompage' => 'Осраҡлы мәҡәлә',
-
-# Statistics
-'userstatstext' => "Бөтәһе '''$1''' ҡатнашыусы теркәлгән, шуларҙан '''$2''' ($4 %) хәким бурыстарын үтәй.",
 
 # Miscellaneous special pages
 'listusers'         => 'Ҡатнашыусылар исемлеге',
@@ -260,6 +257,9 @@ $messages = array(
 'allpagesnext'      => 'Киләһе',
 'allpagessubmit'    => 'Үтәргә',
 
+# Special:DeletedContributions
+'deletedcontributions' => 'Ҡулланыусыларҙың юйылған өлөшө',
+
 # E-mail user
 'emailuser'    => 'Ҡатнашыусыға хат',
 'emailfrom'    => 'Кемдән',
@@ -278,7 +278,7 @@ $messages = array(
 'enotif_newpagetext' => 'Был яңы бит.',
 'changed'            => 'үҙгәртелгән',
 
-# Delete/protect/revert
+# Delete
 'actioncomplete' => 'Ғәмәл үтәлде',
 
 # Namespace form on various pages

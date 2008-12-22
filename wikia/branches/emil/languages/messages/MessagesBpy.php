@@ -8,6 +8,8 @@
  * @author Uttam Singha, Dec 2006
  */
 
+$fallback='bn';
+
 $digitTransformTable = array(
 	'0' => '০',
 	'1' => '১',
@@ -30,8 +32,8 @@ $namespaceNames = array(
 	NS_USER_TALK      => 'আতাকুরার_য়্যারী',
 	# NS_PROJECT set by $wgMetaNamespace
 	NS_PROJECT_TALK   => '$1_য়্যারী',
-	NS_IMAGE          => 'ছবি',
-	NS_IMAGE_TALK     => 'ছবি_য়্যারী',
+	NS_FILE           => 'ছবি',
+	NS_FILE_TALK      => 'ছবি_য়্যারী',
 	NS_MEDIAWIKI      => 'মিডিয়াউইকি',
 	NS_MEDIAWIKI_TALK => 'মিডিয়াউইকির_য়্যারী',
 	NS_TEMPLATE       => 'মডেল',
@@ -88,8 +90,6 @@ $messages = array(
 'underline-always'  => 'হারি সময়',
 'underline-never'   => 'সুপৌনা',
 'underline-default' => 'বাউজারগত যেসারে আসিল',
-
-'skinpreview' => '(মিল্লেখ)',
 
 # Dates
 'sunday'        => 'লামুইসিং',
@@ -178,7 +178,7 @@ $messages = array(
 'mytalk'         => 'মর য়্যারি-পরি',
 'anontalk'       => 'অচিনা এগর য়্যারির পাতা',
 'navigation'     => 'দিশা-ধরুনী',
-'and'            => 'বারো',
+'and'            => '&#32;বারো',
 
 # Metadata in edit box
 'metadata_help' => 'মেটাডাটা:',
@@ -265,8 +265,6 @@ $messages = array(
 
 'badaccess'        => 'য়্যাথাঙে লালসে',
 'badaccess-group0' => 'তি যে কামহানর হেইচা করিসত, তরতা অহান করানির য়্যাথাং নেই।',
-'badaccess-group1' => 'তি যে কামহানর হেইচা করিসত, অহান করানির য়্যাথাং হুদ্দা $1 গ্রুপরতা আসে।',
-'badaccess-group2' => 'তি যে কামহানর হেইচা করিসত, অহান করানির য়্যাথাং হুদ্দা $1 গ্রুপর আতাকুরারতা আসে।',
 'badaccess-groups' => 'তি যে কামহানর হেইচা করিসত, অহান করানির য়্যাথাং হুদ্দা $1 গ্রুপরতা আসে।',
 
 'ok'                  => 'চুমিসে',
@@ -367,6 +365,9 @@ $messages = array(
 'accountcreated'             => 'একাউন্টহান হঙকরানি ইল',
 'accountcreatedtext'         => 'আতাকুরা $1 -র কা একাউন্টহান হঙকরানি ইল।',
 
+# Password reset dialog
+'retypenew' => 'নুৱা খন্তাচাবি বারো টাইপ কর:',
+
 # Edit page toolbar
 'bold_sample'     => 'গাঢ়পা ৱাহি',
 'bold_tip'        => 'গাঢ়পা ৱাহি',
@@ -446,7 +447,7 @@ $messages = array(
 'viewpagelogs'        => 'পাতাহানর লগ চা',
 'currentrev'          => 'হাদিএহানর পতানি',
 'revisionasof'        => 'রিভিসনহান $1 পেয়া',
-'revision-info'       => '$1 পেয়া  $2-এ পতাসেতা',
+'revision-info'       => '$1 পেয়া  $2-এ পতাসেতা', # Additionally available: $3: revision id
 'previousrevision'    => '←পুরানা পতানিহান',
 'nextrevision'        => 'নুৱা ভার্সনহান→',
 'currentrevisionlink' => 'হাদি এহানর পতানি',
@@ -471,19 +472,20 @@ $messages = array(
 'diff-multi'              => '({{PLURAL:$1|হমবুকর রিভিসন আহান|$1 হমবুকর রিভিসন হানি}} দেহাদেনা এহাত না মিহিসে।)',
 
 # Search results
-'noexactmatch' => "'''\"\$1\" চিংনাঙর কোন পাতা নেই।'''
+'noexactmatch'   => "'''\"\$1\" চিংনাঙর কোন পাতা নেই।'''
 তি [[:\$1|পাতা এহান হঙকরে পারর]]।",
-'prevn'        => 'পিসেদে $1',
-'nextn'        => 'থাংনাত $1',
-'viewprevnext' => 'চা ($1) ($2) ($3)',
-'powersearch'  => 'এডভান্স বিসারানি',
+'prevn'          => 'পিসেদে $1',
+'nextn'          => 'থাংনাত $1',
+'viewprevnext'   => 'চা ($1) ($2) ($3)',
+'searchhelp-url' => 'Help:পাংলাক',
+'powersearch'    => 'এডভান্স বিসারানি',
 
 # Preferences page
 'preferences'    => 'পছনহানি',
 'mypreferences'  => 'মর পছন',
 'changepassword' => 'খন্তাচাবি(password) পতা',
+'skin-preview'   => 'আগচা',
 'saveprefs'      => 'ইতু',
-'retypenew'      => 'নুৱা খন্তাচাবি বারো টাইপ কর:',
 'columns'        => 'দুরগিঃ',
 'allowemail'     => 'আরতা(ব্যবহার করেকুরা)ই ইমেইল করানির য়্যাথাং দে।',
 
@@ -529,10 +531,10 @@ $messages = array(
 'uploadedimage'   => 'আপলোডকরানি অইল "[[$1]]"',
 'watchthisupload' => 'পাতাএহান খিয়ালে থ',
 
-# Special:ImageList
+# Special:FileList
 'imagelist' => 'ছবির তালিকা',
 
-# Image description page
+# File description page
 'filehist'                  => 'ফাইলর ইতিহাস',
 'filehist-help'             => 'দিন/সময়-র গজে যাতিলে ঔ খেন্তাম পেয়া হঙিসে ফাইলগ চ পারতেই।',
 'filehist-current'          => 'এপাগা',
@@ -638,24 +640,21 @@ $messages = array(
 'emailuser' => 'আতাকুরাগরে ইমেইল কর',
 
 # Watchlist
-'watchlist'            => 'মর তালাবি',
-'mywatchlist'          => 'মর তালাবি',
-'watchlistfor'         => "('''$1'''-র কা)",
-'addedwatch'           => 'তালাবির তালিকাহাত থনা ইল',
-'addedwatchtext'       => "\"<nowiki>\$1</nowiki>\" পাতা এহান তর [[Special:Watchlist|আহির-আরুম তালিকা]]-ত তিলকরানি ইল। পিসেদে এরে পাতা এহান বারো পাতা এহানর লগে সাকেই আসে য়্যারী পাতাত অইতই হারি জাতর পতানি এহানাত তিলকরানি অইতই। অতাবাদেউ [[Special:RecentChanges|হাদি এহানর পতানিহানি]]-ত পাতা এহানরে '''গাঢ়করা''' মেয়েকে দেহা দেনা অইতই যাতে তি নুঙিকরে পাতা এহান চিনে পারবেতা।
+'watchlist'         => 'মর তালাবি',
+'mywatchlist'       => 'মর তালাবি',
+'watchlistfor'      => "('''$1'''-র কা)",
+'addedwatch'        => 'তালাবির তালিকাহাত থনা ইল',
+'addedwatchtext'    => "\"<nowiki>\$1</nowiki>\" পাতা এহান তর [[Special:Watchlist|আহির-আরুম তালিকা]]-ত তিলকরানি ইল। পিসেদে এরে পাতা এহান বারো পাতা এহানর লগে সাকেই আসে য়্যারী পাতাত অইতই হারি জাতর পতানি এহানাত তিলকরানি অইতই। অতাবাদেউ [[Special:RecentChanges|হাদি এহানর পতানিহানি]]-ত পাতা এহানরে '''গাঢ়করা''' মেয়েকে দেহা দেনা অইতই যাতে তি নুঙিকরে পাতা এহান চিনে পারবেতা।
 
 পিসেদে তি পাতা এহানরে থেইকরানি মনেইলে \"আহির-আরুমেত্ত থেইকরেদে\" ট্যাবগত ক্লিক করিস৷",
-'removedwatch'         => 'তালাবির পাতাত্ত গুসাদে',
-'removedwatchtext'     => 'এরে পাতা "[[:$1]]" এহান গুসানি ইলতা [[Special:Watchlist|তর তালাবির]] পাতাত্ত।',
-'watch'                => 'তালাবি',
-'watchthispage'        => 'পাতাএহান খিয়ালে থ',
-'unwatch'              => 'তালাবি নেই',
-'unwatchthispage'      => 'তালাবি এরাদেনা',
-'watchlist-details'    => '{{PLURAL:$1|$1 পাতা|$1 পাতাহানি}} চানাঅসিল অতার কোন য়্যারির পাতা নেই।',
-'wlshowlast'           => 'গেলগা $1 ঘন্টা $2 দিনর $3 দেখাদে',
-'watchlist-hide-bots'  => 'বোটর পতানি থেইকর',
-'watchlist-hide-own'   => 'মি পতাসুতা গুর',
-'watchlist-hide-minor' => 'হুরকা পতানি থেইকর',
+'removedwatch'      => 'তালাবির পাতাত্ত গুসাদে',
+'removedwatchtext'  => 'এরে পাতা "[[:$1]]" এহান গুসানি ইলতা [[Special:Watchlist|তর তালাবির]] পাতাত্ত।',
+'watch'             => 'তালাবি',
+'watchthispage'     => 'পাতাএহান খিয়ালে থ',
+'unwatch'           => 'তালাবি নেই',
+'unwatchthispage'   => 'তালাবি এরাদেনা',
+'watchlist-details' => '{{PLURAL:$1|$1 পাতা|$1 পাতাহানি}} চানাঅসিল অতার কোন য়্যারির পাতা নেই।',
+'wlshowlast'        => 'গেলগা $1 ঘন্টা $2 দিনর $3 দেখাদে',
 
 # Displayed when you click the "watch" button and it is in the process of watching
 'watching'   => 'চা...',
@@ -663,23 +662,28 @@ $messages = array(
 
 'changed' => 'পতেসে',
 
-# Delete/protect/revert
-'deletepage'                  => 'পাতাহান পুস',
-'confirm'                     => 'লেপকরানি',
-'historywarning'              => 'সিঙুইস: তি যে পাতাহান পুসানিত লেপুইসত এহানর ইতিহাস আহান আসে:',
-'confirmdeletetext'           => 'তি যে পাতাহান পুসানি লেপুইসত অহানর লগে ইতিহাসহানউ পুসতই।
+# Delete
+'deletepage'            => 'পাতাহান পুস',
+'confirm'               => 'লেপকরানি',
+'historywarning'        => 'সিঙুইস: তি যে পাতাহান পুসানিত লেপুইসত এহানর ইতিহাস আহান আসে:',
+'confirmdeletetext'     => 'তি যে পাতাহান পুসানি লেপুইসত অহানর লগে ইতিহাসহানউ পুসতই।
 তি লেপকর যে তি এহান করতেই বুলিয়া, বারো তি এহানর পিসহান হারপাসত লগে [[{{MediaWiki:Policy-url}}|পলিসিহান]] ইলয়া তি কামএহান করানিত লেপুইসত।',
-'actioncomplete'              => 'কামহান লমিল।',
-'deletedtext'                 => '"<nowiki>$1</nowiki>" পুসানি অইল।
+'actioncomplete'        => 'কামহান লমিল।',
+'deletedtext'           => '"<nowiki>$1</nowiki>" পুসানি অইল।
 চা $2 এহার বারে আগে আসে পুসানির লাতংগ।',
-'deletedarticle'              => 'পুসানিইল "[[$1]]"',
-'dellogpage'                  => 'পুসিসিতার লাতংগ',
-'deletecomment'               => 'পুসানির কারনহান:',
-'deleteotherreason'           => 'আরাক/উপরি কারন:',
-'deletereasonotherlist'       => 'আর আর কারন',
-'rollbacklink'                => 'রোলবেক',
-'cantrollback'                => 'আগেকার সঙস্করনহাত আলথকে যানা নুৱারলু, লমিলগা সম্পদনাকরেকুরা অগ পাতা অহানর আকখুলা লেখকগ।',
+'deletedarticle'        => 'পুসানিইল "[[$1]]"',
+'dellogpage'            => 'পুসিসিতার লাতংগ',
+'deletecomment'         => 'পুসানির কারনহান:',
+'deleteotherreason'     => 'আরাক/উপরি কারন:',
+'deletereasonotherlist' => 'আর আর কারন',
+
+# Rollback
+'rollbacklink' => 'রোলবেক',
+'cantrollback' => 'আগেকার সঙস্করনহাত আলথকে যানা নুৱারলু, লমিলগা সম্পদনাকরেকুরা অগ পাতা অহানর আকখুলা লেখকগ।',
+
+# Protect
 'protectlogpage'              => 'লুকরানির লগ',
+'prot_1movedto2'              => '[[$1]]-রে [[$2]]-ত গুসানি ইল',
 'protectcomment'              => 'মতহান:',
 'protectexpiry'               => 'মিয়াদহান লালর:',
 'protect_expiry_invalid'      => 'খেন্তাম লিতনাহান লালুইসে।',
@@ -697,6 +701,7 @@ $messages = array(
 'protect-expiring'            => '$1 (আমাস) খেন্তামে মিয়াদহান লালুইতই',
 'protect-cascade'             => 'এরে পাতাত মিহিসে পাতাহানি তালাবি করানি অক (আগপাতাকরেকুরা তালাবি)',
 'protect-cantedit'            => 'লুকরিসি পাতাহানরে তি সিলকরে নারবে, কিদিয়া বুল্লে তরতা পতানির য়্যাথাঙ নেই।',
+'protect-expiry-options'      => '২ ঘন্টা:2 hours,১ দিন:1 day,৩ দিন:3 days,হাপ্তা আহান:1 week,হাপ্তা দুহান:2 weeks,মাহা আহান:1 month,৩ মাহা:3 months,৬ মাহা:6 months,বসর আহান:1 year,লম নেই সময়:infinite', # display1:time1,display2:time2,...
 'restriction-type'            => 'য়্যাথাঙ:',
 'restriction-level'           => 'লুকরানির থাক:',
 
@@ -725,7 +730,6 @@ $messages = array(
 # What links here
 'whatlinkshere'       => 'যে পাতাহানিত্ত এহানাত মিলাপ আসে',
 'whatlinkshere-title' => 'পাতাহানি $1 -ত মিলাপ আসে',
-'linklistsub'         => '(মিলাপর লাতংগ)',
 'linkshere'           => "থাঙনার পাতাহানি '''[[:$1]]'''র লগে মিলাপ আসে:",
 'nolinkshere'         => "পাতা '''[[:$1]]'''হানাত কোন মিলাপ নেই।",
 'isredirect'          => 'বুলনদের পাতা',
@@ -858,7 +862,7 @@ $messages = array(
 'show-big-image'       => 'পুল্লাপ রিজলিউশন',
 'show-big-image-thumb' => '<small>আগচা হানর সাইজহান: $1 × $2 পিক্সেলস</small>',
 
-# Special:NewImages
+# Special:NewFiles
 'newimages' => 'নুৱা ফাইলর গ্যালারিগ',
 'ilsubmit'  => 'বিসারা',
 'bydate'    => 'তারিখর সিজিলন',
@@ -902,13 +906,8 @@ $messages = array(
 'confirmemail_loggedin'   => 'তর ই-মেইল ঠিকানাহার লেপকরানিহান চুমিল।',
 
 # action=purge
-'confirm_purge'        => 'পাতা এহানর ক্যাশহান ঙক্ষি করানি মনারতা? 
-
-$1',
 'confirm_purge_button' => 'চুমিসে',
-
-# AJAX search
-'articletitles' => "যে পাতাহানি ''$1'' ন অকরাগ, অতার তালিকা",
+'confirm-purge-top'    => 'পাতা এহানর ক্যাশহান ঙক্ষি করানি মনারতা?',
 
 # Auto-summaries
 'autoredircomment' => '[[$1]]-ত যানার বারো-র্নিদেশ করানি ইল',

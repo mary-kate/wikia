@@ -96,7 +96,7 @@ $messages = array(
 'mypage'         => 'ჩქიმ ხასილა',
 'mytalk'         => 'ჩქიმ სხუნუა',
 'navigation'     => 'ნავიგაცია',
-'and'            => 'დო',
+'and'            => '&#32;დო',
 
 'errorpagetitle'   => 'შეცთომა',
 'returnto'         => 'დირთი $1-შა',
@@ -279,7 +279,7 @@ $messages = array(
 'viewpagelogs'        => 'თე ხასილაშა სარეგისტრაციე ჟურნალეფიშ ძირაფა',
 'currentrev'          => 'მიმალ გიშანწყუალა',
 'revisionasof'        => '$1-იშ ვერსია',
-'revision-info'       => '$1-იშ ვერსია, $2-იშ მიშაღალირ',
+'revision-info'       => '$1-იშ ვერსია, $2-იშ მიშაღალირ', # Additionally available: $3: revision id
 'previousrevision'    => '←ჯვეშ ვერსია',
 'nextrevision'        => 'უკულ ვერსია→',
 'currentrevisionlink' => 'მიმალ ვერსია',
@@ -308,11 +308,12 @@ $messages = array(
 'editundo'                => 'გაუქვება',
 
 # Search results
-'noexactmatch' => "'''ხასილა თე სახელით \"\$1\" ვაარსეენს.''' თქვა შეილებნა [[:\$1|თე გვერდიშ ღოლამა]].",
-'prevn'        => 'წოხლენ $1',
-'nextn'        => 'უკულ $1',
-'viewprevnext' => 'ქოძირ  ($1) ($2) ($3).',
-'powersearch'  => 'გორუა',
+'noexactmatch'   => "'''ხასილა თე სახელით \"\$1\" ვაარსეენს.''' თქვა შეილებნა [[:\$1|თე გვერდიშ ღოლამა]].",
+'prevn'          => 'წოხლენ $1',
+'nextn'          => 'უკულ $1',
+'viewprevnext'   => 'ქოძირ  ($1) ($2) ($3).',
+'searchhelp-url' => 'Help:მოხვარა',
+'powersearch'    => 'გორუა',
 
 # Preferences page
 'preferences'   => 'კონფიგურაცია',
@@ -356,11 +357,11 @@ $messages = array(
 'uploadlogpage' => 'გიმოხარგუაშ რეგისტრაცია',
 'uploadedimage' => 'გეთებაა "[[$1]]"',
 
-# Special:ImageList
+# Special:FileList
 'imagelist'      => 'სურათეფიშ ერკებულ',
 'imagelist_name' => 'სახელ',
 
-# Image description page
+# File description page
 'filehist'            => 'ფაილიშ ისტორია',
 'filehist-help'       => 'ქოგეუნჭირით ბორჯის, ნამდა ქოძირათ ფაილი თეშ, მუჭოთ თინა თიწკუმა კილეძირედუ.',
 'filehist-current'    => 'მიმალ',
@@ -429,32 +430,34 @@ $messages = array(
 'emailuser' => 'მიდუჯღონით ელ.ფოშტა ათე მახვარებუს',
 
 # Watchlist
-'watchlist'            => 'ჩქიმ კონტროლიშ ხასილეფ',
-'mywatchlist'          => 'ჩქიმ კონტროლიშ ერკებულ',
-'watchlistfor'         => "('''$1'''-შენი)",
-'removedwatchtext'     => 'ასე გვერდ "[[:$1]]" ვარე თქვან კონტროლიშ გვერდეფს.',
-'watch'                => 'კონტროლ',
-'watchthispage'        => 'თე ხასილაშ კონტროლ',
-'unwatch'              => 'კონტროლიშ გაუქვება',
-'watchlist-details'    => '$1 ხასილას კილმაჯინეთ სხუნუაშ ხასილაშ უკოროცხუო.',
-'wlshowlast'           => 'ძირაფა ბოლო $1 საათიშ $2 დღაშ $3',
-'watchlist-hide-bots'  => 'რობოტიშ თირუეფიშ ფულუა',
-'watchlist-hide-own'   => 'ჩქიმ რედაქტირებაშ ფულუა',
-'watchlist-hide-minor' => 'ჭიჭე რედაქტირებებაშ ფულუა',
+'watchlist'         => 'ჩქიმ კონტროლიშ ხასილეფ',
+'mywatchlist'       => 'ჩქიმ კონტროლიშ ერკებულ',
+'watchlistfor'      => "('''$1'''-შენი)",
+'removedwatchtext'  => 'ასე გვერდ "[[:$1]]" ვარე თქვან კონტროლიშ გვერდეფს.',
+'watch'             => 'კონტროლ',
+'watchthispage'     => 'თე ხასილაშ კონტროლ',
+'unwatch'           => 'კონტროლიშ გაუქვება',
+'watchlist-details' => '$1 ხასილას კილმაჯინეთ სხუნუაშ ხასილაშ უკოროცხუო.',
+'wlshowlast'        => 'ძირაფა ბოლო $1 საათიშ $2 დღაშ $3',
 
 # Displayed when you click the "watch" button and it is in the process of watching
 'watching'   => 'კონტროლირაფონი...',
 'unwatching' => 'ვაკონტროლირაფონი...',
 
-# Delete/protect/revert
-'deletepage'                  => 'ხასილაშ შალუა',
-'actioncomplete'              => 'მოქმედალა რსულებულ რე',
-'deletedarticle'              => 'წაშალულ რე "[[$1]]"',
-'dellogpage'                  => 'ლასირეფიშ ერკებულ',
-'deleteotherreason'           => 'შხვა/დამატებით ბაძაძი:',
-'deletereasonotherlist'       => 'შხვა ბაძაძი',
-'rollbacklink'                => 'გაუქვება',
+# Delete
+'deletepage'            => 'ხასილაშ შალუა',
+'actioncomplete'        => 'მოქმედალა რსულებულ რე',
+'deletedarticle'        => 'წაშალულ რე "[[$1]]"',
+'dellogpage'            => 'ლასირეფიშ ერკებულ',
+'deleteotherreason'     => 'შხვა/დამატებით ბაძაძი:',
+'deletereasonotherlist' => 'შხვა ბაძაძი',
+
+# Rollback
+'rollbacklink' => 'გაუქვება',
+
+# Protect
 'protectlogpage'              => 'თხილუაშ ისტორია',
+'prot_1movedto2'              => '[[$1]] გინოღალირიე ხასილაშა [[$2]]',
 'protectcomment'              => 'კომენტარ:',
 'protectexpiry'               => 'ვადა',
 'protect-unchain'             => 'გინოღალას ალობას ბლოკიშ მონწყუმა',
@@ -463,6 +466,7 @@ $messages = array(
 'protect-level-autoconfirmed' => 'ვარეგისტრირებულ მახვარებელეფიშ დაბლოკვა',
 'protect-level-sysop'         => 'ხვალე ადმინისტრატორეფ',
 'protect-summary-cascade'     => 'იერარქიულ',
+'protect-expiry-options'      => '2 საათი:2 hours,1 დღა:1 დღა,3 დღა:3 დღალეფ,1 მარა:1 week,2 მარა:2 weeks,1 თუთა:1 month,3 თუთა:3 months,6 თუთა:6 months,1 წანა:1 year,განუსაზღვრელი ვადით:infinite', # display1:time1,display2:time2,...
 'restriction-type'            => 'ულაფა',
 
 # Undelete
@@ -489,7 +493,6 @@ $messages = array(
 'whatlinkshere'       => 'სო რე თენა ხასილა წურაფილ',
 'whatlinkshere-title' => 'ხასილეფ, სოდეთ რენა რსხილეფ $1-ს',
 'whatlinkshere-page'  => 'გვერდ:',
-'linklistsub'         => '(რსხილეფ)',
 'linkshere'           => "გეჸვენჯ ხასილეფს ოხოლუ რსხილეფ '''[[:$1]]'''-შენ",
 'nolinkshere'         => "'''[[:$1]]''', თე ხასილას ვარე რსხილ.",
 'isredirect'          => 'გინოწურაფაშ ხასილა',
@@ -590,7 +593,7 @@ $messages = array(
 'show-big-image'       => 'რსული გარჩევადობა',
 'show-big-image-thumb' => '<small>ზომა ოწმახ ძირაშ დროს: $1 × $2 პიქსელ</small>',
 
-# Special:NewImages
+# Special:NewFiles
 'newimages' => 'ახალ სურათეფ',
 
 # Bad image list

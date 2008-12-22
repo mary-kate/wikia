@@ -86,6 +86,9 @@ Putiv cuntinuèr ad usèr {{SITENAME}} anonimamèint, o putiv cunnètterv dòp c
 'yourdiff'         => 'Differèinzi',
 'templatesused'    => 'Modêl usèdi in sta pàgina:',
 
+# Search results
+'searchhelp-url' => 'Help:Introduzione',
+
 # Preferences page
 'mypreferences' => 'AL mê preferèinzi',
 
@@ -102,7 +105,7 @@ Putiv cuntinuèr ad usèr {{SITENAME}} anonimamèint, o putiv cunnètterv dòp c
 'filedesc'          => "Ugêt d'al cambiamèint",
 'fileuploadsummary' => "Ugêt d'al cambiamèint:",
 
-# Special:ImageList
+# Special:FileList
 'imagelist_size' => 'Dimensiòun (bytes)',
 
 # Random page
@@ -117,12 +120,16 @@ Putiv cuntinuèr ad usèr {{SITENAME}} anonimamèint, o putiv cunnètterv dòp c
 # Special:AllPages
 'allpages' => 'Tôt al pàgin',
 
+# Special:Log/newusers
+'newuserlogpage'          => 'Regestér di nōv utèint',
+'newuserlog-create-entry' => 'Un utèint nōv',
+
 # Watchlist
 'watchlist'     => 'Al còsi ca guèrd',
 'watch'         => 'Tîn a drê',
 'watchthispage' => "Tîn a drê a c'la pàgina chè",
 
-# Delete/protect/revert
+# Delete
 'excontent'         => "al cointgnû l'éra: '$1'",
 'excontentauthor'   => "al cointgnû l'éra: '$1' (e l'ónic cuntribudôr l'éra '[[Special:Contributions/$2|$2]]')",
 'confirmdeletetext' => "Stèt per scanzlèr 'na pàgina o n'imàgin, insìmma a tòt la sô crunolugî dal database.
@@ -147,7 +154,7 @@ Guèrda $2 par vèdder la lésta d\'al pàgin ch\'i sun stèdi scanzlèdi di rec
 '1movedto2'   => "[[$1]] l'è stê mòs a [[$2]]",
 'movelogpage' => 'Regestér di muvimèint',
 
-# Special:NewImages
+# Special:NewFiles
 'ilsubmit' => 'Zerca',
 
 # Special:SpecialPages

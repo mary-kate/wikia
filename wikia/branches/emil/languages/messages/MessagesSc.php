@@ -15,8 +15,8 @@ $namespaceNames = array(
 	NS_USER_TALK       => 'Utente_discussioni',
 	# NS_PROJECT set by $wgMetaNamespace
 	NS_PROJECT_TALK    => '$1_discussioni',
-	NS_IMAGE           => 'Immàgini',
-	NS_IMAGE_TALK      => 'Immàgini_contièndha'
+	NS_FILE            => 'Immàgini',
+	NS_FILE_TALK       => 'Immàgini_contièndha'
 );
 
 $dateFormats = array(
@@ -159,7 +159,6 @@ L/'amministratore di sistema che ha imposto il blocco, ha lasciato questa nota:
 'cannotdelete'    => "Impossibile cancellare la pagina o l'immagine richiesta.",
 'badtitle'        => 'Titolo non corretto',
 'badtitletext'    => 'La pagina richiesta non è disponibile, potrebbe essere non valida, vuota, o potrebbe trattarsi di un errore in un link interlinguistico o fra diverse versioni di {{SITENAME}}.',
-'perfdisabled'    => 'Siamo davvero rammaricati, ma questa funzionalità è temporaneamente disabilitata durante le ore di maggiore accesso al database per ragioni di accessibilità al resto del sito! Torna fra le 02:00 e le 14:00 UTC e riprova. Grazie.',
 
 # Login and logout pages
 'logouttitle'             => 'Logout Utente',
@@ -171,7 +170,6 @@ Ora puoi continuare ad usare {{SITENAME}} come utente anonimo (ma il tuo indiriz
 'yourpassword'            => 'La tua  password',
 'yourpasswordagain'       => 'Ripeti la password',
 'remembermypassword'      => 'Ricorda la mia password per più sessioni (richiede uso dei cookies).',
-'loginproblem'            => '<b>Si è verificato un errore durante il tuo tentativo di login.</b><br />Riprova, sarai più fortunato!',
 'nav-login-createaccount' => 'Log in',
 'userlogin'               => 'Log in',
 'createaccount'           => 'Crea nuovo account',
@@ -195,6 +193,11 @@ Per evidenti ragioni di sicurezza, dovresti fare un log in il prima possibile, e
 'noemail'                 => 'Nessuna casella e-mail risulta registrata per l\'Utente "$1".',
 'passwordsent'            => 'Una nuova password è stata inviata alla casella e-mail registrata per l\'Utente "$1".
 Per favore, fai subito un log in non appena la ricevi.',
+
+# Password reset dialog
+'oldpassword' => 'Vecchia password',
+'newpassword' => 'Nuova password',
+'retypenew'   => 'Riscrivi qui la nuova password',
 
 # Edit pages
 'summary'         => 'Oggetto',
@@ -232,16 +235,13 @@ Se la salvi così, tutti i cambiamenti apportati dopo questa revisione verranno 
 'yourdiff'        => 'Differenze',
 
 # History pages
-'nohistory'       => 'Cronologia delle versioni di questa pagina non reperibile.',
-'revnotfound'     => 'Versione non trovata',
-'revnotfoundtext' => 'La versione precedente di questo articolo che hai richiesto, non è stata trovata.
-Controlla per favore la URL che hai usato per accedere a questa pagina.',
-'currentrev'      => 'Versione attuale',
-'revisionasof'    => 'Revisione $1',
-'cur'             => 'corr',
-'next'            => 'succ',
-'last'            => 'prec',
-'histlegend'      => 'Legend: (corr) = differenze con la versione corrente,
+'nohistory'    => 'Cronologia delle versioni di questa pagina non reperibile.',
+'currentrev'   => 'Versione attuale',
+'revisionasof' => 'Revisione $1',
+'cur'          => 'corr',
+'next'         => 'succ',
+'last'         => 'prec',
+'histlegend'   => 'Legend: (corr) = differenze con la versione corrente,
 (prec) = differenze con la versione precedente, M = modifica minore',
 
 # Diffs
@@ -260,6 +260,7 @@ Controlla per favore la URL che hai usato per accedere a questa pagina.',
 'prevn'                 => 'precedenti $1',
 'nextn'                 => 'successivi $1',
 'viewprevnext'          => 'Vedi ($1) ($2) ($3).',
+'searchhelp-url'        => 'Help:Aiuto',
 'showingresults'        => 'Qui di seguito <b>$1</b> risultati, partendo dal numero #<b>$2</b>.',
 'nonefound'             => '<strong>Nota</strong>: la ricerca di parole troppo comuni, come "avere" o "essere", che non sono indicizzate, può causare un esito negativo, così come indicare più di un termine da ricercare (solo le pagine che contengano tutti i termini ricercati verrebbero infatti visualizzate fra i risultati).',
 'powersearch'           => 'Ricerca',
@@ -280,9 +281,6 @@ per poter personalizzare le tue preferenze.',
 'skin'                     => 'Aspetto',
 'saveprefs'                => 'Salva preferenze',
 'resetprefs'               => 'Resetta preferenze',
-'oldpassword'              => 'Vecchia password',
-'newpassword'              => 'Nuova password',
-'retypenew'                => 'Riscrivi qui la nuova password',
 'textboxsize'              => 'Dimensione della casella di edizione',
 'rows'                     => 'Righe',
 'columns'                  => 'Colonne',
@@ -323,7 +321,7 @@ per fare lo upload di files.',
 'uploadtext'        => "'''FERMA!''' Prima di effettuare un upload su {{SITENAME}}, accertati di avere ben letto e soprattutto compreso
 le regole di {{SITENAME}} sull'uso delle immagini.
 
-Per visualizzare o cercare immagini precedentemente caricate su {{SITENAME}}, vai alla [[Special:ImageList|lista delle immagini già caricate]].
+Per visualizzare o cercare immagini precedentemente caricate su {{SITENAME}}, vai alla [[Special:FileList|lista delle immagini già caricate]].
 Uploads e cancellazioni delle immagini sono registrati nello
 upload log.
 
@@ -355,10 +353,10 @@ Tutti i tempi indicati sono calcolati sul fuso orario del server.',
 'savefile'          => 'Salva file',
 'uploadedimage'     => 'caricato "[[$1]]"',
 
-# Special:ImageList
+# Special:FileList
 'imagelist' => 'Lista delle immagini',
 
-# Image description page
+# File description page
 'imagelinks'     => 'Link alle immagini',
 'linkstoimage'   => 'Le pagine seguenti linkano questa immagine:',
 'nolinkstoimage' => 'Nessuna pagina linka questa immagine.',
@@ -367,16 +365,8 @@ Tutti i tempi indicati sono calcolati sul fuso orario del server.',
 'randompage' => 'Una pagina a caso',
 
 # Statistics
-'statistics'    => 'Statistiche',
-'sitestats'     => 'Statistiche del sito',
-'userstats'     => 'Statistiche del {{SITENAME}}',
-'sitestatstext' => 'Ci sono ben <b>$1</b> pagine nel database.
-Questa cifra comprende le pagine "talk" (discussione), pagine su {{SITENAME}}, articoli esigui ("stub"), redirects, e altre pagine che probabilmente non andrebbero conteggiate fra gli articoli.
-Escludendo queste, ci sono ben  <b>$2</b> pagine che sono con buona probabilità propriamente degli articoli.<p>
-Ci sono state un totale di <b>$3</b> pagine viste, e <b>$4</b> modifiche agli articoli da quando il software è stato potenziato (Dicembre, 2002).
-Questa media rivela che ci sono state una media di  <b>$5</b> modifiche per ciascun articolo, e che l\'articolo è stato letto <b>$6</b> volte per ciascuna modifica.',
-'userstatstext' => 'Ci sono <b>$1</b> Utenti registrati.
-<b>$2</b> di questi hanno il grado di amministratori (vedi $3).',
+'statistics'              => 'Statistiche',
+'statistics-header-users' => 'Statistiche del {{SITENAME}}',
 
 'disambiguationspage' => '{{ns:project}}:Links_to_disambiguating_pages',
 
@@ -437,7 +427,7 @@ Se in seguito vorrai togliere questo articolo dalla tua lista di osservati speci
 'unwatchthispage'  => 'Smetti di seguire',
 'notanarticle'     => 'Non è un articolo',
 
-# Delete/protect/revert
+# Delete
 'deletepage'        => 'Cancella pagina',
 'confirm'           => 'Conferma',
 'confirmdeletetext' => 'Stai per cancellare permanentemente dal database una pagina o una immagine, insieme a tutta la sua cronologia.
@@ -452,9 +442,11 @@ Vedi $2 per un elenco delle pagine cancellate di recente.',
 Tutti i tempi sono in ora del server.',
 'reverted'          => 'Ripristinata versione precedente',
 'deletecomment'     => 'Motivazione della cancellazione',
-'rollback'          => 'Usa una revisione precdente',
-'cantrollback'      => "Impossibile tornare ad una versione precedente: l'ultima modifica è stata apportata dall'unico utente che abbia lavorato a questo articolo.",
-'revertpage'        => 'Riportata alla revisione precedente da [[User:$1|$1]]', # Additional available: $3: revid of the revision reverted to, $4: timestamp of the revision reverted to, $5: revid of the revision reverted from, $6: timestamp of the revision reverted from
+
+# Rollback
+'rollback'     => 'Usa una revisione precdente',
+'cantrollback' => "Impossibile tornare ad una versione precedente: l'ultima modifica è stata apportata dall'unico utente che abbia lavorato a questo articolo.",
+'revertpage'   => 'Riportata alla revisione precedente da [[User:$1|$1]]', # Additionally available: $3: revid of the revision reverted to, $4: timestamp of the revision reverted to, $5: revid of the revision reverted from, $6: timestamp of the revision reverted from
 
 # Undelete
 'undelete'          => 'Recupera una pagina cancellata',
@@ -474,7 +466,6 @@ Se una nuova pagina è stata creata con questo stesso nome dopo la cancellazione
 
 # What links here
 'whatlinkshere' => 'Pagine che linkano questa',
-'linklistsub'   => '(Lista di links)',
 'linkshere'     => 'Le seguenti pagine contengono link che puntano qui:',
 'nolinkshere'   => 'Nessuna pagina contiene links che puntano a questa.',
 'isredirect'    => 'redirect',
@@ -537,6 +528,9 @@ Questo cambiamento drastico potrebbe creare inattesi contrattempi, specialmente 
 
 In questi casi, se lo ritieni opportuno, dovrai spostare o aggiungere manualmente la pagina di discussione.",
 'movearticle'      => 'Rinomina articolo',
+'movenologin'      => 'Non hai effettuato il login',
+'movenologintext'  => 'Devi essere un Utente registrato ed aver effettuato il [[Special:UserLogin|login]]
+per poter spostare una pagina.',
 'newtitle'         => 'Al nuovo titolo di',
 'movepagebtn'      => 'Sposta questa pagina',
 'pagemovedsub'     => 'Spostamento effettuato con successo',
@@ -546,7 +540,7 @@ Scegli, per cortesia, un titolo diverso per l'articolo.",
 'movedto'          => 'spostata a',
 'movetalk'         => 'Sposta anche la corrispondente pagina "discussione", se possibile.',
 
-# Special:NewImages
+# Special:NewFiles
 'imagelisttext' => 'Qui di seguito una lista di $1 immagini, ordinate per $2.',
 'ilsubmit'      => 'Cerca',
 'bydate'        => 'data',

@@ -55,8 +55,6 @@ $messages = array(
 'underline-never'   => 'Nunca',
 'underline-default' => 'Sigún esté nel esproraol',
 
-'skinpreview' => '(Previsoreal)',
-
 # Dates
 'sunday'        => 'Domingu',
 'monday'        => 'Lunis',
@@ -150,7 +148,7 @@ $messages = array(
 'mytalk'         => 'La mi caraba',
 'anontalk'       => 'Caraba pa esta IP',
 'navigation'     => 'Güiquipeandu',
-'and'            => 'i',
+'and'            => '&#32;i',
 
 # Metadata in edit box
 'metadata_help' => 'Metadatus:',
@@ -236,8 +234,6 @@ $messages = array(
 
 'badaccess'        => 'Marru colos tus premisus',
 'badaccess-group0' => 'Nu se te premiti hazel esa ación.',
-'badaccess-group1' => 'Solu los usuárius del grupu $1 puein hazel esa ación.',
-'badaccess-group2' => 'Solu los usuárius los grupus $1 puein hazel esa ación.',
 'badaccess-groups' => 'Solu los usuárius los grupus $1 puein hazel esa ación.',
 
 'versionrequired'     => 'Es mestel tenel la velsión $1 de MeyaGüiqui',
@@ -331,7 +327,6 @@ La razón dá pol el alministraol que pusu el tarugu es: $1',
 'cannotdelete'         => 'Nu se puei esborral esa páhina u archivu. (Puei que ya lo aiga esborrau otra presona.)',
 'badtitle'             => 'Mal entitulau',
 'badtitletext'         => 'El entítulu la páhina está vaciu, nu es váliu, u es un atihu entelluenga u entelgüiqui encorretu.',
-'perfdisabled'         => 'Lo sentimus, peru esta hunción está temporalmenti desativá.',
 'perfcached'           => "Los siguientis datus s'alcuentran nel caché i es posibri que nu estén atualizaus.",
 'perfcachedts'         => 'Estus datus están emburacaus. La su úrtima atualización hue el $1.',
 'querypage-no-updates' => "Las atualiçacionis desta páhina s'alcuentran atualmenti desativás. Los datus nu sedrán atualizaus a cortu praçu.",
@@ -367,7 +362,6 @@ Ya está criá la tu cuenta. Alcuerdati de chambal las tus preferéncias al tent
 'remembermypassword'         => 'Recordal la mi cuenta nesti ordinaol',
 'yourdomainname'             => 'El tu domiñu:',
 'externaldberror'            => "Marru d'autentificación esterna e la basi e datus, u bien nu t'alcuentras autorizau p'atualizal la tu cuenta esterna.",
-'loginproblem'               => '<b>Marru al abril la tu cuenta.</b><br />Preba otra vezi!',
 'login'                      => 'Entral',
 'nav-login-createaccount'    => 'Entral/Crial cuenta',
 'loginprompt'                => 'Ebis atival las cookies pa entral en {{SITENAME}}.',
@@ -448,11 +442,13 @@ Si s\'á criau la cuenta ebiu a angún marru, inora esti mensahi.',
 'resetpass_announce'      => 'As entrau ena tu cuenta con una consínia temporal. Pol favol, escrebi una nueva consínia aquí:',
 'resetpass_text'          => '<!-- Aquí s´escrebi el testu -->',
 'resetpass_header'        => 'Reahustal consínia',
+'oldpassword'             => 'Consínia antigua:',
+'newpassword'             => 'Consínia nueva:',
+'retypenew'               => 'Güervi a escrebil la nueva consínia:',
 'resetpass_submit'        => 'Escrebi la consínia i entra',
 'resetpass_success'       => 'La tu consínia á siu chambá! Ya pueis entral otra vezi ena tu cuenta...',
 'resetpass_bad_temporary' => "Consínia temporal embilmá. Es posibri que ya aigas chambau la tu consínia u qu'aigas solicitau el enviu d'otra.",
 'resetpass_forbidden'     => 'Nu se puein chambal las consínias nesti güiqui',
-'resetpass_missing'       => 'Nu ai datus nel hormuláriu.',
 
 # Edit page toolbar
 'bold_sample'     => 'Testu en letra "Bold"',
@@ -618,11 +614,9 @@ La razón dá pol $3 es ''$2''",
 # History pages
 'viewpagelogs'        => 'Vel los rustrihus d´esta páhina',
 'nohistory'           => 'Nu ai dengún estorial d´eicionis pa esta páhina.',
-'revnotfound'         => 'Revisión nu alcuentrá',
-'revnotfoundtext'     => 'La revisión antigua qu´estás landeandu nu se puei alcuentral. Pol favol, compreba la URL que gastasti pa dil a esta páhina.',
 'currentrev'          => 'Revisión atual',
 'revisionasof'        => 'Revisión de $1',
-'revision-info'       => 'Revisión de $1 hecha pol $2',
+'revision-info'       => 'Revisión de $1 hecha pol $2', # Additionally available: $3: revision id
 'previousrevision'    => '←Revisión mas antigua',
 'nextrevision'        => 'Revisión mas recienti→',
 'currentrevisionlink' => 'Revisión atual',
@@ -746,6 +740,7 @@ Asigurati e qu'esti chambu mantenga la continuiá el estorial la páhina.",
 'prevn'                    => '$1 anterioris',
 'nextn'                    => '$1 siguientis',
 'viewprevnext'             => 'Vel ($1) ($2) ($3).',
+'searchhelp-url'           => 'Help:Continius',
 'search-result-size'       => '$1 ({{PLURAL:$2|1 letra|$2 letras}})',
 'search-result-score'      => 'Emportáncia: $1%',
 'search-redirect'          => '(rederihil $1)',
@@ -783,6 +778,7 @@ Asigurati e qu'esti chambu mantenga la continuiá el estorial la páhina.",
 'qbsettings-floatingright' => 'Frotanti ena derecha',
 'changepassword'           => 'Chambal consínia',
 'skin'                     => 'Aparéncia',
+'skin-preview'             => 'Previsoreal',
 'math'                     => 'Hórmulas',
 'dateformat'               => 'Hormatu e fecha',
 'datedefault'              => 'Sin preferéncias',
@@ -804,9 +800,6 @@ Asigurati e qu'esti chambu mantenga la continuiá el estorial la páhina.",
 'prefs-misc'               => 'Bandallu (una mihina e tó)',
 'saveprefs'                => 'Emburacal',
 'resetprefs'               => 'Esborral los chambus nu emburacaus',
-'oldpassword'              => 'Consínia antigua:',
-'newpassword'              => 'Consínia nueva:',
-'retypenew'                => 'Güervi a escrebil la nueva consínia:',
 'textboxsize'              => 'Eitandu',
 'rows'                     => 'Filas:',
 'columns'                  => 'Colunas:',
@@ -940,11 +933,11 @@ Las páhinas de la tu [[Special:Watchlist|lista e seguimientu]] están en '''neg
 pa empuntal archivus.',
 'upload_directory_read_only'  => "Nu puei escrebilsi nel diretoriu d'empuntu ($1) el sirviol.",
 'uploaderror'                 => 'Marru d´empuntu',
-'uploadtext'                  => "Gasta el hormuláriu d'embahu pa empuntal archivus, pa vel u landeal imahin ya empuntás vaiti pala [[Special:ImageList|lista d'archivus empuntaus]]. Tantu los archivus empuntaus cumu los esborraus se rustrin nel [[Special:Log/upload|rustrihu d'empuntu]].
+'uploadtext'                  => "Gasta el hormuláriu d'embahu pa empuntal archivus, pa vel u landeal imahin ya empuntás vaiti pala [[Special:FileList|lista d'archivus empuntaus]]. Tantu los archivus empuntaus cumu los esborraus se rustrin nel [[Special:Log/upload|rustrihu d'empuntu]].
 
 P'añiil la imahin nuna páhina, gasta el atihu el hormuláriu
-'''<nowiki>[[</nowiki>{{ns:image}}<nowiki>:File.jpg]]</nowiki>''',
-'''<nowiki>[[</nowiki>{{ns:image}}<nowiki>:File.png|alt text]]</nowiki>''' u
+'''<nowiki>[[</nowiki>{{ns:file}}<nowiki>:File.jpg]]</nowiki>''',
+'''<nowiki>[[</nowiki>{{ns:file}}<nowiki>:File.png|alt text]]</nowiki>''' u
 '''<nowiki>[[</nowiki>{{ns:media}}<nowiki>:File.ogg]]</nowiki>''' p'atihal diretamenti al archivu.",
 'upload-permitted'            => "Crasis d'archivus premitias: $1.",
 'upload-preferred'            => "Crasis d'archivus preferias: $1.",
@@ -981,8 +974,8 @@ Pol favol, lihi un nombri deferenti.',
 Nel chascu en que huera la mesm imahin (inque seya en grandi) nu es mestel qu'empuntis el tu archivu.",
 'file-thumbnail-no'           => 'El nombri el archivu esmiença pol <strong><tt>$1</tt></strong>. Paci sel una imahin pequeña <i>(cuairu)</i>.
 Si tiinis la imahin cola resolución orihinal, empúntala, si nu, pol favol, chamba el nombri del archivu.',
-'fileexists-forbidden'        => 'Ya desisti un archivu con esti nombri; pol favol, güervi p´atrás i empunta el archivu con otru nombri. [[Image:$1|thumb|center|$1]]',
-'fileexists-shared-forbidden' => "Ya desisti un archivu con esti nombri; pol favol, vaiti p'atrás i empunta el archivu con otru nombri. [[Image:$1|thumb|center|$1]]",
+'fileexists-forbidden'        => 'Ya desisti un archivu con esti nombri; pol favol, güervi p´atrás i empunta el archivu con otru nombri. [[File:$1|thumb|center|$1]]',
+'fileexists-shared-forbidden' => "Ya desisti un archivu con esti nombri; pol favol, vaiti p'atrás i empunta el archivu con otru nombri. [[File:$1|thumb|center|$1]]",
 'successfulupload'            => 'Empuntu satisfatoriu',
 'uploadwarning'               => 'Avisu d´empuntu',
 'savefile'                    => 'Emburacal archivu',
@@ -1023,7 +1016,7 @@ Velaquí el antigu rustrihu d´esborrau pa esti archivu:",
 'upload_source_url'  => ' (una URL vália i acesibri)',
 'upload_source_file' => ' (un archivu nel tu ordinaol)',
 
-# Special:ImageList
+# Special:FileList
 'imagelist-summary'     => 'Esta páhina especial muestra tolos archivus empuntaus.
 Pol defetu los úrtimus archivus empuntaus se muestran ena parti arta la lista.
 Pursa nel entítulu la coluna pa chambal el ordin.',
@@ -1036,7 +1029,7 @@ Pursa nel entítulu la coluna pa chambal el ordin.',
 'imagelist_size'        => 'Grandol',
 'imagelist_description' => 'Descrición',
 
-# Image description page
+# File description page
 'filehist'                  => 'Estorial el archivu',
 'filehist-help'             => 'Pursa nuna fecha/ora pa vel cumu era el archivu nesi momentu.',
 'filehist-deleteall'        => 'esborral tós',
@@ -1080,7 +1073,6 @@ Pursa nel entítulu la coluna pa chambal el ordin.',
 'filedelete-success-old'      => '<span class="plainlinks">Á siu esborrá la velsión de \'\'\'[[Media:$1|$1]]\'\'\' del $3 a las $2.</span>',
 'filedelete-nofile'           => "Nu desisti '''$1''' nesti lugal.",
 'filedelete-nofile-old'       => "Nu desisti una velsión archivá e '''$1''' con esas caraterísticas.",
-'filedelete-iscurrent'        => "Vas a esborral la úrtima velsión d'esti archivu. Pol favol enantis revierti a una velsión anteriol.",
 'filedelete-otherreason'      => 'Razón adicional:',
 'filedelete-reason-otherlist' => 'Otra razón',
 'filedelete-reason-dropdown'  => "*Razonis frecuentis d'esborrau
@@ -1114,23 +1106,9 @@ Pursa nel entítulu la coluna pa chambal el ordin.',
 'randomredirect-nopages' => 'Nu ai redirecionis nesti "espaciu e nombris".',
 
 # Statistics
-'statistics'             => 'Estaísticas',
-'sitestats'              => 'Estaísticas de {{SITENAME}}',
-'userstats'              => 'Estaísticas d´usuáriu',
-'sitestatstext'          => "Atualmenti desistin {{PLURAL:\$1|'''1''' páhina|'''\$1''' páhinas}} ena basi e datus.
-Estu encrui \"carabas\", páhinas al tentu {{SITENAME}}, artículus nu acabihaus, redirecionis i algotras páhinas que nu chegan a sel artículus.
-Se crei que ai {{PLURAL:\$2|'''1''' páhina|unas '''\$2''' páhinas}} que realmenti {{PLURAL:\$2|es artículu|son artículus}}.
-
-Un total de '''\$8''' {{PLURAL:\$8|archivu á siu empuntau|archivus an siu empuntaus}}.
-
-La güiqui á tiniu '''\$3''' {{PLURAL:\$3|vesita|vesitas}} i '''\$4''' {{PLURAL:\$4|eición|eicionis}} enas sus páhinas
-endi que {{SITENAME}} prencipió a huncional.
-Estu resurta un promeyu e '''\$5''' eicionis pol páhina, i '''\$6''' vesitas pol eición.
-
-El longol de la [http://www.mediawiki.org/wiki/Manual:Job_queue cola e tareas] es de '''\$7'''.",
-'userstatstext'          => "Ai {{PLURAL:$1|un [[Special:ListUsers|usuáriu]] rustriu|'''$1''' [[Special:ListUsers|usuárius]] rustrius}}, de los cualis,
-'''$2''' (un '''$4%''') {{PLURAL:$2|es|son}} $5.",
-'statistics-mostpopular' => 'Páhinas mas visoreás',
+'statistics'              => 'Estaísticas',
+'statistics-header-users' => 'Estaísticas d´usuáriu',
+'statistics-mostpopular'  => 'Páhinas mas visoreás',
 
 'disambiguations'      => 'Páhinas de desambiguáncia',
 'disambiguationspage'  => 'Prantilla:desambiguáncia',
@@ -1210,8 +1188,6 @@ El longol de la [http://www.mediawiki.org/wiki/Manual:Job_queue cola e tareas] e
 'speciallogtitlelabel' => 'Entítulu:',
 'log'                  => 'Rustrihus',
 'all-logs-page'        => 'Tolos rustrihus',
-'log-search-legend'    => 'Landeal rustrihus',
-'log-search-submit'    => 'Dil',
 'logempty'             => 'Nu desistin elementus con esas condicionis nel rustrihu.',
 'log-title-wildcard'   => 'Landeal entítulus qu´esmiencin con esti testu',
 
@@ -1235,6 +1211,12 @@ El longol de la [http://www.mediawiki.org/wiki/Manual:Job_queue cola e tareas] e
 'categoriespagetext'            => 'Las siguientis categorias contienin artículus u archivus murtimeya.',
 'special-categories-sort-count' => 'ordenal pol cuenta',
 'special-categories-sort-abc'   => 'ordenal alfabeticamenti',
+
+# Special:DeletedContributions
+'deletedcontributions' => 'Contribucionis el usuáriu esborrás',
+
+# Special:LinkSearch
+'linksearch-ok' => 'Landeal',
 
 # Special:ListUsers
 'listusersfrom'      => "Muestral usuárius qu'esmiencin pol:",
@@ -1303,12 +1285,6 @@ Si quieis ehal de vehilal la páhina, pursa sobri \"Ehal de vehilal\".",
 'iteminvalidname'      => "Pobrema con el artículu '$1', nombri nu premitiu...",
 'wlnote'               => "Embahu {{PLURAL:$1|es el úrtimu chambu|son los úrtimus '''$1''' chambus}} enas úrtimas {{PLURAL:$2|oras|'''$2''' oras}}.",
 'wlshowlast'           => 'Muestral úrtimus $1 oras $2 dias $3',
-'watchlist-show-bots'  => 'Muestral eicionis de bots',
-'watchlist-hide-bots'  => 'Açonchal eicionis de bots',
-'watchlist-show-own'   => 'Muestral las mis eicionis',
-'watchlist-hide-own'   => 'Açonchal las mis eicionis',
-'watchlist-show-minor' => 'Muestral eicionis chiqueninas',
-'watchlist-hide-minor' => 'Açonchal eicionis chiqueninas',
 
 # Displayed when you click the "watch" button and it is in the process of watching
 'watching'   => 'Vehilandu...',
@@ -1348,56 +1324,61 @@ Pa hazel chambus ena tu lista e seguimientu, vesita
 Ayua la Güiquipeya:
 {{fullurl:{{MediaWiki:Helppage}}}}',
 
-# Delete/protect/revert
-'deletepage'                  => 'Esborral páhina',
-'confirm'                     => 'Confirmal',
-'excontent'                   => "el continiu era: '$1'",
-'excontentauthor'             => "el continiu era: '$1' (i el únicu contribuyenti hue '[[Special:Contributions/$2|$2]]')",
-'exbeforeblank'               => "el continiu enantis de branquealu era: '$1'",
-'exblank'                     => 'la páhina estaba vacia',
-'delete-confirm'              => 'Esborral "$1"',
-'delete-legend'               => 'Esborral',
-'historywarning'              => 'Avisu: La páhina que vas a esborral tieni un estorial:',
-'confirmdeletetext'           => "Vas a esborral una páhina/imahin i el su estorial de horma permanenti.
+# Delete
+'deletepage'             => 'Esborral páhina',
+'confirm'                => 'Confirmal',
+'excontent'              => "el continiu era: '$1'",
+'excontentauthor'        => "el continiu era: '$1' (i el únicu contribuyenti hue '[[Special:Contributions/$2|$2]]')",
+'exbeforeblank'          => "el continiu enantis de branquealu era: '$1'",
+'exblank'                => 'la páhina estaba vacia',
+'delete-confirm'         => 'Esborral "$1"',
+'delete-legend'          => 'Esborral',
+'historywarning'         => 'Avisu: La páhina que vas a esborral tieni un estorial:',
+'confirmdeletetext'      => "Vas a esborral una páhina/imahin i el su estorial de horma permanenti.
 Pol favol, confirma que realmenti quieis hazel esu, qu'entiendis las consecuencias, i que lo hazis dalcuerdu cola
 [[{{MediaWiki:Policy-url}}]].",
-'actioncomplete'              => 'Ación acabihá',
-'deletedtext'                 => 'S\'á esborrau "<nowiki>$1</nowiki>" corretamenti.
+'actioncomplete'         => 'Ación acabihá',
+'deletedtext'            => 'S\'á esborrau "<nowiki>$1</nowiki>" corretamenti.
 Consurta $2 pa vel los úrtimus esborraus.',
-'deletedarticle'              => 'esborrau "[[$1]]"',
-'dellogpage'                  => 'Rustrihu d´esborrau',
-'dellogpagetext'              => 'Embahu se muestra una lista colos úrtimus esborraus.',
-'deletionlog'                 => 'rustrihu d´esborrau',
-'reverted'                    => 'Revertiu a la úrtima revisión',
-'deletecomment'               => 'Razón del esborrau',
-'deleteotherreason'           => 'Otras razonis:',
-'deletereasonotherlist'       => 'Otra razón',
-'deletereason-dropdown'       => "*Motivus mas frecuentis d'esborrau
+'deletedarticle'         => 'esborrau "[[$1]]"',
+'dellogpage'             => 'Rustrihu d´esborrau',
+'dellogpagetext'         => 'Embahu se muestra una lista colos úrtimus esborraus.',
+'deletionlog'            => 'rustrihu d´esborrau',
+'reverted'               => 'Revertiu a la úrtima revisión',
+'deletecomment'          => 'Razón del esborrau',
+'deleteotherreason'      => 'Otras razonis:',
+'deletereasonotherlist'  => 'Otra razón',
+'deletereason-dropdown'  => "*Motivus mas frecuentis d'esborrau
 ** Pol solicitú el autol
 ** Violación el Copyright
 ** Vandalismu",
-'delete-edit-reasonlist'      => 'Eital razonis del esborrau',
-'delete-warning-toobig'       => "Esta páhina tieni un estorial d'eicionis grandi, mas de $1 revisionis. Esborralu puei causal pobremas enas operacionis la basi e datus de {{SITENAME}}; atua con cudiau.",
-'rollback'                    => 'Revertil eicionis',
-'rollback_short'              => 'Revertil',
-'rollbacklink'                => 'revertil',
-'rollbackfailed'              => 'Marru revirtiendu',
-'cantrollback'                => 'Nu se puei eshazel la eición; el úrtimu colabutaol es el únicu autol d´esta páhina.',
-'alreadyrolled'               => 'Nu es posibri revertil la úrtima eición de [[:$1]], hecha pol [[User:$2|$2]] ([[User talk:$2|Caraba]]); alguien ya á eitau u revertiu la páhina.
+'delete-edit-reasonlist' => 'Eital razonis del esborrau',
+'delete-warning-toobig'  => "Esta páhina tieni un estorial d'eicionis grandi, mas de $1 revisionis. Esborralu puei causal pobremas enas operacionis la basi e datus de {{SITENAME}}; atua con cudiau.",
+
+# Rollback
+'rollback'         => 'Revertil eicionis',
+'rollback_short'   => 'Revertil',
+'rollbacklink'     => 'revertil',
+'rollbackfailed'   => 'Marru revirtiendu',
+'cantrollback'     => 'Nu se puei eshazel la eición; el úrtimu colabutaol es el únicu autol d´esta páhina.',
+'alreadyrolled'    => 'Nu es posibri revertil la úrtima eición de [[:$1]], hecha pol [[User:$2|$2]] ([[User talk:$2|Caraba]]); alguien ya á eitau u revertiu la páhina.
 
 La úrtima eición á siu hecha pol [[User:$3|$3]] ([[User talk:$3|Caraba]]).',
-'editcomment'                 => 'La síntesis la eición hue: "<i>$1</i>".', # only shown if there is an edit comment
-'revertpage'                  => 'Án siu revertias las eicionis de [[Special:Contributions/$2|$2]] ([[User talk:$2|Caraba]]); chambau a la úrtima velsión de [[User:$1|$1]]', # Additional available: $3: revid of the revision reverted to, $4: timestamp of the revision reverted to, $5: revid of the revision reverted from, $6: timestamp of the revision reverted from
-'rollback-success'            => 'Revertias las eicionis de $1; chambau a la úrtima velsión de $2.',
-'sessionfailure'              => "Paci qu'ai un pobrema cola tu sesión; pol precaución
+'editcomment'      => 'La síntesis la eición hue: "<i>$1</i>".', # only shown if there is an edit comment
+'revertpage'       => 'Án siu revertias las eicionis de [[Special:Contributions/$2|$2]] ([[User talk:$2|Caraba]]); chambau a la úrtima velsión de [[User:$1|$1]]', # Additionally available: $3: revid of the revision reverted to, $4: timestamp of the revision reverted to, $5: revid of the revision reverted from, $6: timestamp of the revision reverted from
+'rollback-success' => 'Revertias las eicionis de $1; chambau a la úrtima velsión de $2.',
+'sessionfailure'   => "Paci qu'ai un pobrema cola tu sesión; pol precaución
 s'á cancelau l'ación solicitá. Pursa nel botón \"Atrás\" del
 tu escrucaol pa cargal otra vezi la páhina i güervi a ententalu.",
+
+# Protect
 'protectlogpage'              => 'Rustrihu e proteción',
 'protectlogtext'              => 'Embahu se muestra una lista cola proteción i desproteción la páhina. Pa mas enhormación, lei "[[Special:ProtectedPages|Esta páhina está protehia]]".',
 'protectedarticle'            => '"[[$1]]" protehiu',
 'modifiedarticleprotection'   => 'chambau el nivel de proteción a "[[$1]]"',
 'unprotectedarticle'          => '"[[$1]]" esprotehiu',
 'protect-title'               => 'Estableciendu nivel de proteción pa "$1"',
+'prot_1movedto2'              => '[[$1]] s´á moviu a [[$2]]',
 'protect-legend'              => 'Confirmal proteción',
 'protectcomment'              => 'Comentáriu:',
 'protectexpiry'               => 'Acabiha:',
@@ -1419,6 +1400,7 @@ Velaquí las ocionis atualis la páhina <strong>$1</strong>:',
 'protect-expiring'            => 'acabiha el $1 (UTC)',
 'protect-cascade'             => 'Protehel las páhinas encluias nesta páhina (proteción en "cascá")',
 'protect-cantedit'            => "Nu t'es posibri chambal el nivel de proteción desta páhina ebiu a que nu tienis los premisus nesezárius pa eitala.",
+'protect-expiry-options'      => '2 oras:2 hours,1 dia:1 day,3 dias:3 days,1 semana:1 week,2 semanas:2 weeks,1 mes:1 month,3 mesis:3 months,6 mesis:6 months,1 añu:1 year,enfinitu:infinite', # display1:time1,display2:time2,...
 'restriction-type'            => 'Premisus:',
 'restriction-level'           => 'Nivel de restrición:',
 'minimum-size'                => 'Grandol mén',
@@ -1499,7 +1481,6 @@ $1',
 'whatlinkshere'            => "Lo qu'atiha aquí",
 'whatlinkshere-title'      => 'Páhinas qu´atihan a $1',
 'whatlinkshere-page'       => 'Páhina:',
-'linklistsub'              => '(Lista d´atihus)',
 'linkshere'                => "Las siguientis páhinas atihan a '''[[:$1]]''':",
 'nolinkshere'              => "Denguna páhina atiha a '''[[:$1]]'''.",
 'nolinkshere-ns'           => "Nu ai denguna páhina qu´atihi a '''[[:$1]]''' nel espaciu e nombris lihiu.",
@@ -1639,6 +1620,8 @@ pol favol, asigurati e qu'entiendis las consecuéncias enantis d'acontinal.",
 
 En dambus los dos chascus, si lo deseas, tendrás que movel u mestural la páhina manualmenti.",
 'movearticle'             => 'Movel páhina:',
+'movenologin'             => "Nu t'alcuentras rustriu",
+'movenologintext'         => 'Ebis estal rustriu i [[Special:UserLogin|entral ena tu cuenta]] pa movel una páhina.',
 'movenotallowed'          => 'Nu tiinis premisu pa mual páhinas nesti güiqui.',
 'newtitle'                => 'Nuevu entítulu:',
 'move-watch'              => 'Vehilal esta páhina',
@@ -1663,7 +1646,6 @@ Ya desisti la páhina "[[:$1]]". Te petaria esborrala pa premitil el treslau?',
 'delete_and_move_confirm' => 'Sí, esborral la páhina',
 'delete_and_move_reason'  => 'Esborrá pa premitil el treslau',
 'selfmove'                => "Los entítulus d'orihin i destinu son los mesmus. Nu es posibri movel una páhina sobri sí mesma..",
-'immobile_namespace'      => 'El entítulu e destinu es dun tipu especial. Nu es posibri movel páhinas a esi espaciu e nombris.',
 
 # Export
 'export'            => 'Esporteal páhinas',
@@ -1705,6 +1687,7 @@ Tolas acionis d'emporteau transwiki se rustrin nel [[Special:Log/import|rustrihu
 'import-interwiki-history'   => "Copial tolas velsionis estóricas d'esta páhina",
 'import-interwiki-submit'    => 'Emporteal',
 'import-interwiki-namespace' => 'Movel páhinas al espaciu e nombris:',
+'import-comment'             => 'Comentáriu:',
 'importstart'                => 'Emporteandu páhinas...',
 'import-revision-count'      => '$1 {{PLURAL:$1|revisión|revisionis}}',
 'importnopages'              => 'Nu ai páhinas pa emporteal.',
@@ -1871,7 +1854,7 @@ $1',
 'show-big-image'       => 'Resolución máisima',
 'show-big-image-thumb' => '<small>Grandol al previsoreal: $1 × $2 pixelis</small>',
 
-# Special:NewImages
+# Special:NewFiles
 'newimages'             => 'Correol d´archivus nuevus',
 'imagelisttext'         => "Embahu ai una lista con '''$1''' {{PLURAL:$1|archivu|archivus}} ordenaus $2.",
 'noimages'              => 'Nu ai ná pa vel.',
@@ -2176,21 +2159,9 @@ $1
 Pol favol, confirma si rialmenti quieis gorvel a crial la páhina.",
 'recreate'            => 'Gorvel a crial',
 
-# HTML dump
-'redirectingto' => 'Rederihiendu a [[:$1]]...',
-
 # action=purge
-'confirm_purge'        => 'Esborral el caché desta páhina?
-
-$1',
 'confirm_purge_button' => 'Dalcuerdu',
-
-# AJAX search
-'searchcontaining' => "Landeal páhinas que contengan ''$1''.",
-'searchnamed'      => "Landeal artículus llamaus ''$1''.",
-'articletitles'    => "Artículus qu'esmiencin pol ''$1''",
-'hideresults'      => 'Açonchal resurtaus',
-'useajaxsearch'    => 'Usa el landeru AJAX',
+'confirm-purge-top'    => 'Esborral el caché desta páhina?',
 
 # Multipage image navigation
 'imgmultipageprev' => '← páhina anteriol',
@@ -2284,7 +2255,7 @@ $1',
 'filepath-submit'  => 'Ruta',
 'filepath-summary' => "Esta páhina especial degüervi la ruta compreta dun archivu. Las imahin se muestran a resolución compreta; las demas crasis d'archivu s'ehecutan diretamenti con el su pograma asociau.
 
-Escribi el nombri d'archivu sin el prefihu \"{{ns:image}}:\".",
+Escribi el nombri d'archivu sin el prefihu \"{{ns:file}}:\".",
 
 # Special:FileDuplicateSearch
 'fileduplicatesearch'          => 'Landeal archivus dupricaus',

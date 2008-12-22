@@ -5,6 +5,7 @@
  * @file
  *
  * @author Malafaya
+ * @author Metalhead64
  */
 
 $fallback = 'de';
@@ -40,7 +41,7 @@ $messages = array(
 'yourlanguage'               => 'Sprache vo da Benutzeroberfläche:',
 'wrongpassword'              => "Des Passwort is falsch (oda fehlt). Bitte probier's no amoi.",
 'wrongpasswordempty'         => 'Des eigemne Passwort is laar gwen. Bitte no amoi probiern.',
-'acct_creation_throttle_hit' => 'Du hosst scho $1 Benutzakonten und kinnan iatzat koane mehr oleng.',
+'acct_creation_throttle_hit' => 'Du hosst scho $1 {{PLURAL:$1|Benutzakonto|Benutzakonten}} und konnst iatzat koane mehr oleng.',
 'accountcreated'             => 'Benutzerkonto is erstellt worn',
 'accountcreatedtext'         => "'s Benutzerkonto $1 is eigricht worn.",
 
@@ -85,6 +86,9 @@ $messages = array(
 'watchthispage'     => 'Seitn beobachtn',
 'unwatch'           => 'nimma beobachten',
 
+# Protect
+'prot_1movedto2' => 'håt [[$1]] nåch [[$2]] verschom',
+
 # Contributions
 'contributions' => 'Benutzerbeiträg',
 'mycontris'     => 'Eigene Beiträg',
@@ -105,7 +109,7 @@ $messages = array(
 Please visit [http://www.mediawiki.org/wiki/Localisation MediaWiki Localisation] and [http://translatewiki.net Betawiki] if you wish to contribute to the generic MediaWiki localisation.',
 'allmessagesmodified' => 'Nur geänderte zoagn',
 
-# Special:NewImages
+# Special:NewFiles
 'newimages' => 'Neie Dateien',
 
 );

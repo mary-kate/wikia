@@ -222,6 +222,7 @@ $messages = array(
 
 # Move page
 'movearticle' => 'སྤོར་ངོས།',
+'movenologin' => 'ནང་འཛུལ་བྱས་མེད།',
 'move-watch'  => 'དྲ་ངོས་འདི་ལ་མཉམ་འཇོག་པ།',
 'movereason'  => 'རྒྱུ་མཚན།',
 
@@ -234,7 +235,7 @@ $messages = array(
 'tooltip-ca-move'        => 'ཨཾོབེ༹་ ཐིས་ པགེ་',
 'tooltip-p-logo'         => 'གཙོ་ངོས།',
 
-# Special:NewImages
+# Special:NewFiles
 'ilsubmit' => 'འཚོལ།',
 
 # Multipage image navigation

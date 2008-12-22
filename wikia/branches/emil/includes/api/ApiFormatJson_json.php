@@ -50,7 +50,7 @@
 * @author      Matt Knapp <mdknapp[at]gmail[dot]com>
 * @author      Brett Stimmerman <brettstimmerman[at]gmail[dot]com>
 * @copyright   2005 Michal Migurski
-* @version     CVS: $Id: ApiFormatJson_json.php 35098 2008-05-20 17:13:28Z ialex $
+* @version     CVS: $Id: ApiFormatJson_json.php 38683 2008-08-06 03:55:49Z krimpet $
 * @license     http://www.opensource.org/licenses/bsd-license.php
 * @see         http://pear.php.net/pepr/pepr-proposal-show.php?id=198
 */
@@ -812,6 +812,9 @@ class Services_JSON
     }
 }
 
+
+// Hide the PEAR_Error variant from Doxygen
+/// @cond
 if (class_exists('PEAR_Error')) {
 
     /**
@@ -827,6 +830,7 @@ if (class_exists('PEAR_Error')) {
     }
 
 } else {
+/// @endcond
 
     /**
      * @todo Ultimately, this class shall be descended from PEAR_Error

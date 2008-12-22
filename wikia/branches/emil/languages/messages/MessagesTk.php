@@ -117,7 +117,8 @@ $messages = array(
 'last' => 'soň',
 
 # Search results
-'powersearch' => 'Giňişleýin Gözleg',
+'searchhelp-url' => 'Help:Içindäkiler',
+'powersearch'    => 'Giňişleýin Gözleg',
 
 # Recent changes
 'recentchanges'   => 'Ahyrky özgertişler',
@@ -132,7 +133,7 @@ $messages = array(
 # Recent changes linked
 'recentchangeslinked' => 'Meňzeçli özgertişler',
 
-# Image description page
+# File description page
 'filehist-current'  => 'häzirki',
 'filehist-datetime' => 'Gün/Zaman',
 'filehist-user'     => 'Ulanyjy',
@@ -146,6 +147,9 @@ $messages = array(
 
 # Watchlist
 'mywatchlist' => 'Synlama tablisam',
+
+# Protect
+'prot_1movedto2' => '[[$1]] sahypasy [[$2]] sahypasyna göçürildi',
 
 # Namespace form on various pages
 'blanknamespace' => '(Baş)',

@@ -27,8 +27,6 @@ $messages = array(
 'underline-never'   => 'ʻIkai teitei',
 'underline-default' => 'Palausa tuʻunga',
 
-'skinpreview' => '(Vakai pē)',
-
 # Dates
 'sunday'        => 'Sāpate',
 'monday'        => 'Mōnite',
@@ -103,7 +101,7 @@ $messages = array(
 'mytalk'         => 'Alea ʻaʻaku',
 'anontalk'       => 'Alea maʻa e IP´ ni',
 'navigation'     => 'ʻai taumuʻa ki he…',
-'and'            => 'mo e',
+'and'            => '&#32;mo e',
 
 'errorpagetitle'    => 'Halaʻi',
 'returnto'          => 'Foki ki he $1',
@@ -169,8 +167,6 @@ $messages = array(
 
 'badaccess'        => 'Halaʻi fakangofua',
 'badaccess-group0' => 'ʻOku ʻikai ngofua kia te koe ʻo fai ʻa e ngāue naʻa ke eke ki ai.',
-'badaccess-group1' => 'Ko e ngāue naʻa ke eke ki ai, ʻoku fakangatangata ki he kau ʻetita ʻi he kulupu $1 pē.',
-'badaccess-group2' => 'Ko e ngāue naʻa ke eke ki ai, ʻoku fakangatangata ki he kau ʻetita ʻi he taha ʻo e ngaahi kulupu $1 pē.',
 'badaccess-groups' => 'Ko e ngāue naʻa ke eke ki ai, ʻoku fakangatangata ki he kau ʻetita ʻi he taha ʻo e ngaahi kulupu $1 pē.',
 
 'versionrequired'     => "ʻOku pau ko e paaki $1 ʻo e ''Mediawiki''",
@@ -226,7 +222,6 @@ Ko e pule, naʻe lokaʻi ia, ʻoku pehē: $1',
 'cannotdelete'         => 'Naʻe ʻikai lava tāmateʻi ʻa e peesi pe faile naʻe tala. Mahalo pē kuo tāmateʻi ʻuluaki ia ʻe he ʻetita kehe.',
 'badtitle'             => 'Hingoa ʻikai sai',
 'badtitletext'         => "Naʻe taʻeʻaonga ʻa e hingoa ʻo e peesi naʻa ke fili, pe naʻe ʻi ai ha fehokotaki māhehei fakalea kehe pe fehokotaki māhehei faka''wiki'' kehe. Mahalo pe ʻoku ʻi loto ha ʻū mataʻitohi ʻoku ʻikai lava ngāueʻaki ʻi ha hingoa.",
-'perfdisabled'         => 'Fakamolemole! Naʻe fakataʻeʻaongaʻi fakataimi ʻa e fōtungá ni, koeʻuhi ʻoku fakatumotuma ʻa e tānekingaʻilo ʻe ʻikai lava ngāueʻakiʻi ʻa e wiki.',
 'perfcached'           => 'ʻOku fafaʻo ʻa e meʻaʻilo ʻi lalo, pea mahalo pē ʻoku ʻikai fakafoʻoua.',
 'perfcachedts'         => 'ʻOku fafaʻo ʻa e meʻaʻilo ʻi lalo, naʻe fakaonopooni fakamuimui ia $1.',
 'wrong_wfQuery_params' => "Ngaahi mahuʻinga ʻikai totonu ki he ''wfQuery()''<br />
@@ -252,7 +247,6 @@ Kuo fakatupu hoʻo tohi kau-ki-ai. ʻOua ʻe ngalo ke liliu hoʻo faʻiteliha {{
 'yourpasswordagain'          => 'Toe ʻai leatapu',
 'remembermypassword'         => 'Manatuʻi au',
 'yourdomainname'             => 'ho ngāueʻanga',
-'loginproblem'               => '<b>Naʻe ʻi ai ha meʻafihi mo hoʻo kau-ki-ai.</b><br />Toe feinga.',
 'login'                      => 'Kau ki ai',
 'nav-login-createaccount'    => 'Kau ki ai',
 'loginprompt'                => 'ʻOku pau te ke fakamafeia ʻa e ngaahi foʻi keke kapau te ke fie kau-ki-ai ki he {{SITENAME}}.',
@@ -307,6 +301,11 @@ Kapau naʻe kole ia ʻe he tokotaha kehe, pea ʻosi hoʻo manatuʻi ʻo e leatap
 'accountcreated'             => 'Kuo fakatupu ʻa e tohi-kau-ki-ai',
 'accountcreatedtext'         => 'Kuo fakatupu ʻa e tohi kau-ki-ai maʻa $1.',
 'loginlanguagelabel'         => 'Lea: $1',
+
+# Password reset dialog
+'oldpassword' => 'Ko e leatapu motuʻa:',
+'newpassword' => 'Ko e leatapu foʻou:',
+'retypenew'   => 'Toe ʻai leatapu foʻou:',
 
 # Edit page toolbar
 'bold_sample'     => 'Tohi sinolahi',
@@ -389,7 +388,7 @@ Ko e konga ʻi olunga, ko e '''konga pē ʻe taha''' ʻe haofaki ʻi he lomiʻi 
 'nohistory'           => 'ʻOku ʻikai ʻi ai ha hisitōlia fatu maʻa e kupú ni.',
 'currentrev'          => 'Paaki taka',
 'revisionasof'        => 'Paaki he ko $1',
-'revision-info'       => 'Paaki he ko $1 fai ʻe $2',
+'revision-info'       => 'Paaki he ko $1 fai ʻe $2', # Additionally available: $3: revision id
 'previousrevision'    => '←Paaki motuʻa ange',
 'nextrevision'        => 'Paaki foʻou ange→',
 'currentrevisionlink' => 'Paaki taka',
@@ -434,6 +433,7 @@ Ko e konga ʻi olunga, ko e '''konga pē ʻe taha''' ʻe haofaki ʻi he lomiʻi 
 'prefsnologin'          => 'ʻOku ʻikai kau ki ai',
 'changepassword'        => 'Liliu hoʻo leatapu',
 'skin'                  => 'Kili',
+'skin-preview'          => 'Vakai pē',
 'math'                  => 'Matematika',
 'dateformat'            => 'Ngaohi ʻo e ʻaho',
 'datedefault'           => 'ʻIkai ha faʻiteliha',
@@ -449,9 +449,6 @@ Ko e konga ʻi olunga, ko e '''konga pē ʻe taha''' ʻe haofaki ʻi he lomiʻi 
 'prefs-misc'            => 'Kehekehe',
 'saveprefs'             => 'Haofaki',
 'resetprefs'            => 'Fakafoki',
-'oldpassword'           => 'Ko e leatapu motuʻa:',
-'newpassword'           => 'Ko e leatapu foʻou:',
-'retypenew'             => 'Toe ʻai leatapu foʻou:',
 'textboxsize'           => 'ʻOku fatu',
 'rows'                  => 'Ngaahi ʻotu:',
 'columns'               => 'Vahaʻa laini:',
@@ -532,8 +529,8 @@ Ko e konga ʻi olunga, ko e '''konga pē ʻe taha''' ʻe haofaki ʻi he lomiʻi 
 'largefileserver'             => 'ʻOku fuʻu lahi ange ʻa e failé ni ʻi he tauhia hono ʻinasi.',
 'emptyfile'                   => 'ʻOku ngalingali maha ʻa e faile naʻa ke hiki hake ai. Mahalo pē naʻa ke fakasipelahalaʻi ki he hingoa. Kātaki vakai ke ke pau te ke fiehiki ʻa e failé ni.',
 'fileexists'                  => 'ʻOku toka ʻi ai ha peesi mo e hingoa ē; fakamolemole fakamoʻoniʻi ki he <strong><tt>$1</tt></strong> kapau ʻoku ʻikai te ke pau ʻo te ke fieliliu ia.',
-'fileexists-forbidden'        => 'ʻOku toka ʻi ai ha peesi mo e hingoa ē; fakamolemole ʻe foki pea hiki hake ʻa e failé ni mo e ha hingoa foʻou. [[Image:$1|thumb|center|$1]]',
-'fileexists-shared-forbidden' => 'ʻOku toka ʻi ai ha peesi mo e hingoa ē ʻi he kalasi vahevahe; fakamolemole ʻe foki pea hiki hake ʻa e failé ni mo e ha hingoa foʻou. [[Image:$1|thumb|center|$1]]',
+'fileexists-forbidden'        => 'ʻOku toka ʻi ai ha peesi mo e hingoa ē; fakamolemole ʻe foki pea hiki hake ʻa e failé ni mo e ha hingoa foʻou. [[File:$1|thumb|center|$1]]',
+'fileexists-shared-forbidden' => 'ʻOku toka ʻi ai ha peesi mo e hingoa ē ʻi he kalasi vahevahe; fakamolemole ʻe foki pea hiki hake ʻa e failé ni mo e ha hingoa foʻou. [[File:$1|thumb|center|$1]]',
 'successfulupload'            => 'Kuo ola ʻa e hiki hake',
 'uploadwarning'               => 'Tokanga hiki hake',
 'savefile'                    => 'Haofaki faitaá ni',
@@ -550,7 +547,7 @@ Ko e konga ʻi olunga, ko e '''konga pē ʻe taha''' ʻe haofaki ʻi he lomiʻi 
 'license'   => 'Laiseni:',
 'nolicense' => 'ʻIkai fili ha taha',
 
-# Special:ImageList
+# Special:FileList
 'imagelist_search_for'  => 'Kumi ki he hingoa ʻo e faitā:',
 'imgfile'               => 'faile',
 'imagelist'             => 'Hokohoko faitā',
@@ -560,7 +557,7 @@ Ko e konga ʻi olunga, ko e '''konga pē ʻe taha''' ʻe haofaki ʻi he lomiʻi 
 'imagelist_size'        => 'Hono lahi (ʻū valu)',
 'imagelist_description' => 'Fakamahino',
 
-# Image description page
+# File description page
 'imagelinks'                => 'Ngaahi fehokotaki',
 'linkstoimage'              => 'ʻOku fehokotaki ʻa e ngaahi peesi ki he failé ni:',
 'nolinkstoimage'            => 'ʻOku ʻikai ha ngaahi peesi fehokotaki ki he faitaá ni.',
@@ -602,11 +599,9 @@ Ko e konga ʻi olunga, ko e '''konga pē ʻe taha''' ʻe haofaki ʻi he lomiʻi 
 'randomredirect' => 'Leʻei noa pē',
 
 # Statistics
-'statistics'             => 'Sitesitesika',
-'sitestats'              => 'Sitesitesika ʻo e {{SITENAME}}',
-'userstats'              => 'Sitesitesika ʻo e ʻetita',
-'userstatstext'          => "ʻOku ʻi ai ha kau ʻetita lēsista ʻe '''$1'''. ʻOku ʻi ai ha $5 ʻe '''$2''' (ʻa ia ko e '''$4%''').",
-'statistics-mostpopular' => 'Ko e ngaahi peesi naʻe vakai ki ai lahi taha',
+'statistics'              => 'Sitesitesika',
+'statistics-header-users' => 'Sitesitesika ʻo e ʻetita',
+'statistics-mostpopular'  => 'Ko e ngaahi peesi naʻe vakai ki ai lahi taha',
 
 'disambiguations'      => 'Peesi fakaʻuhingakehe',
 'disambiguationspage'  => 'Template:Fakaʻuhingakehe',
@@ -669,8 +664,6 @@ Ko e konga ʻi olunga, ko e '''konga pē ʻe taha''' ʻe haofaki ʻi he lomiʻi 
 'speciallogtitlelabel' => 'Hingoa:',
 'log'                  => 'Tohinoa',
 'all-logs-page'        => 'Tohinoa kātoa',
-'log-search-legend'    => 'Kumi ha ngaahi tohinoa',
-'log-search-submit'    => 'Fai ā',
 'alllogstext'          => 'Fakaʻaliʻali fakakātoa ʻo e ngaahi tohinoa hiki hake, mo tāmateʻi, mo maluʻi, mo taʻofi, mo fakapule. ʻOku lava ke ke sivi ʻa e fakaʻaliʻalí ni ʻi he fili ʻo e falenga tohinoa pe hingoa ʻo e ʻetita pe peesi hūkitonu.',
 'logempty'             => 'ʻOku maha ʻa e tohinoa.',
 
@@ -693,9 +686,23 @@ Ko e konga ʻi olunga, ko e '''konga pē ʻe taha''' ʻe haofaki ʻi he lomiʻi 
 'categories'         => 'Faʻahinga',
 'categoriespagetext' => 'ʻOku ʻi ai ha ngaahi faʻahinga pehē.',
 
+# Special:DeletedContributions
+'deletedcontributions' => 'Ngaahi foaki ʻo ha ʻetita kuo tāmateʻi',
+
+# Special:LinkSearch
+'linksearch'       => 'Kumi ha ngaahi fehokotaki fakamatamatakupenga',
+'linksearch-line'  => 'Kuo fehokotaki ʻa e $1 mei he $2',
+'linksearch-error' => 'ʻOku ngofua pē ke ʻasi ha ngaahi lauʻifano ʻi he kamataʻanga ʻo e tauhia hono hingoa.',
+
 # Special:ListUsers
 'listusersfrom'    => 'ʻAsi mai kau ʻetita mei he:',
 'listusers-submit' => 'ʻAsi mai',
+
+# Special:Log/newusers
+'newuserlogpage'           => 'Tohinoa ʻo e fakatupu kau ʻetita',
+'newuserlogpagetext'       => 'Ko e tohinoa ʻeni ʻo e fakatupu kau ʻetita.',
+'newuserlog-create-entry'  => 'ʻEtita foʻou',
+'newuserlog-create2-entry' => 'Naʻe fakatupu ʻa e tohi-kau-ki-ai maʻa $1',
 
 # E-mail user
 'mailnologin'     => 'ʻOku ʻikai ha tuʻasila ke tohila ki ai',
@@ -741,12 +748,6 @@ Kapau ʻaho ʻe taha, te ke fietoʻo ʻa e pēsí mei hoʻo hokohoko leʻo, lomi
 'iteminvalidname'      => "Meʻa fihi mo e meʻa '$1', hingo taʻeʻaongaʻi...",
 'wlnote'               => 'ʻOku ʻasi ʻi lalo ʻa e liliu fakamuimui ʻe $1 ʻi he houa fakamuimui ʻe <b>$2</b>.',
 'wlshowlast'           => 'ʻAsi mai houa fakamuimui ʻe $1, ʻaho ʻe $2, $3',
-'watchlist-show-bots'  => 'ʻAsi mai fatu fakamīsini',
-'watchlist-hide-bots'  => 'Toi fatu fakamīsini',
-'watchlist-show-own'   => 'ʻAsi mai fatu ʻaʻaku',
-'watchlist-hide-own'   => 'Toi fatu ʻaʻaku',
-'watchlist-show-minor' => 'ʻAsi mai fatu siʻi',
-'watchlist-hide-minor' => 'Toi fatu siʻi',
 
 # Displayed when you click the "watch" button and it is in the process of watching
 'watching'   => 'ʻOku leʻo...',
@@ -756,38 +757,43 @@ Kapau ʻaho ʻe taha, te ke fietoʻo ʻa e pēsí mei hoʻo hokohoko leʻo, lomi
 'changed'            => 'ʻosi liliu',
 'created'            => 'kuo fakatupu',
 
-# Delete/protect/revert
-'deletepage'          => 'Tāmateʻi peesi',
-'confirm'             => 'Fakamoʻoniʻi',
-'excontent'           => "ko e kakano naʻe: '$1'",
-'excontentauthor'     => "ko e kakano naʻe: '$1', mei he ʻetita ʻe taha pē: '[[Special:Contributions/$2|$2]]'",
-'exbeforeblank'       => "ko e kakano ʻi muʻa ʻene fakaʻatā naʻe: '$1'",
-'exblank'             => 'Naʻe maha ʻa e peesi',
-'historywarning'      => 'Tokanga: ko e peesi te ke fietāmateʻi, ʻoku ʻi ai haʻane histolia.',
-'confirmdeletetext'   => 'Te ke tāmateʻi, ʻikai ala fūlihi, ʻa e peesi pe faitā mo hono hisitōlia kātoa mei he tānekingaʻilo. Kātaki fakamoʻoniʻi ʻoku sai ia, ʻoku ke ʻilo ʻa e fua, pea ʻoku ke fai pehē ototaha ia mo e [[{{MediaWiki:Policy-url}}]].',
-'actioncomplete'      => 'ʻOsi ngāue',
-'deletedtext'         => 'Kuo tāmateʻi "<nowiki>$1</nowiki>"
+# Delete
+'deletepage'        => 'Tāmateʻi peesi',
+'confirm'           => 'Fakamoʻoniʻi',
+'excontent'         => "ko e kakano naʻe: '$1'",
+'excontentauthor'   => "ko e kakano naʻe: '$1', mei he ʻetita ʻe taha pē: '[[Special:Contributions/$2|$2]]'",
+'exbeforeblank'     => "ko e kakano ʻi muʻa ʻene fakaʻatā naʻe: '$1'",
+'exblank'           => 'Naʻe maha ʻa e peesi',
+'historywarning'    => 'Tokanga: ko e peesi te ke fietāmateʻi, ʻoku ʻi ai haʻane histolia.',
+'confirmdeletetext' => 'Te ke tāmateʻi, ʻikai ala fūlihi, ʻa e peesi pe faitā mo hono hisitōlia kātoa mei he tānekingaʻilo. Kātaki fakamoʻoniʻi ʻoku sai ia, ʻoku ke ʻilo ʻa e fua, pea ʻoku ke fai pehē ototaha ia mo e [[{{MediaWiki:Policy-url}}]].',
+'actioncomplete'    => 'ʻOsi ngāue',
+'deletedtext'       => 'Kuo tāmateʻi "<nowiki>$1</nowiki>"
 Vakai ki he $2 maʻa e fakamatala ʻo e ngaahi toki tāmateʻi.',
-'deletedarticle'      => 'ʻosi tamateʻi "[[$1]]"',
-'dellogpage'          => 'Tohinoa ʻo e tāmateʻi',
-'dellogpagetext'      => 'ʻOku ʻasi ʻi lalo ha hokohoko ʻo e ngaahi tāmateʻi fakamuimui taha.',
-'deletionlog'         => 'tohinoa ʻo e tāmateʻi',
-'reverted'            => 'Kuo foki ki he paaki mui',
-'deletecomment'       => 'Ko e ʻuhinga ʻo e tāmateʻi',
-'rollback'            => 'Ngaahi fatu he teka hifo',
-'rollback_short'      => 'Teka hifo',
-'rollbacklink'        => 'teka hifo',
-'rollbackfailed'      => 'Halaʻi teka hifo',
-'cantrollback'        => 'Naʻe ʻikai lava fakafoki ʻa e fatu; ko e ʻetita fakamuimui ko e ʻetita ʻe taha pē ʻo e pēsí ni.',
-'alreadyrolled'       => 'ʻOku ʻikai lava teka hifo ʻa e fatu fakamuimui ʻo e [[:$1]] ʻe [[User:$2|$2]] ([[User talk:$2|Alea]]); ko e tokotaha ʻe taha naʻe fatu pe fatu teka hifo ʻa e peesi.
+'deletedarticle'    => 'ʻosi tamateʻi "[[$1]]"',
+'dellogpage'        => 'Tohinoa ʻo e tāmateʻi',
+'dellogpagetext'    => 'ʻOku ʻasi ʻi lalo ha hokohoko ʻo e ngaahi tāmateʻi fakamuimui taha.',
+'deletionlog'       => 'tohinoa ʻo e tāmateʻi',
+'reverted'          => 'Kuo foki ki he paaki mui',
+'deletecomment'     => 'Ko e ʻuhinga ʻo e tāmateʻi',
+
+# Rollback
+'rollback'       => 'Ngaahi fatu he teka hifo',
+'rollback_short' => 'Teka hifo',
+'rollbacklink'   => 'teka hifo',
+'rollbackfailed' => 'Halaʻi teka hifo',
+'cantrollback'   => 'Naʻe ʻikai lava fakafoki ʻa e fatu; ko e ʻetita fakamuimui ko e ʻetita ʻe taha pē ʻo e pēsí ni.',
+'alreadyrolled'  => 'ʻOku ʻikai lava teka hifo ʻa e fatu fakamuimui ʻo e [[:$1]] ʻe [[User:$2|$2]] ([[User talk:$2|Alea]]); ko e tokotaha ʻe taha naʻe fatu pe fatu teka hifo ʻa e peesi.
 
 Ko e fatu fakamuimui naʻe fatu ʻe [[User:$3|$3]] ([[User talk:$3|Alea]]).',
-'editcomment'         => 'Ko e fakamatala fatu naʻe "<i>$1</i>" ia.', # only shown if there is an edit comment
+'editcomment'    => 'Ko e fakamatala fatu naʻe "<i>$1</i>" ia.', # only shown if there is an edit comment
+
+# Protect
 'protectlogpage'      => 'Tohinoa ʻo e maluʻi',
 'protectlogtext'      => 'ʻOku ʻasi ʻi lalo ha hokohoko ʻo e ngaahi loka mo e taʻeloka fakapeesi.',
 'protectedarticle'    => 'maluʻi: "[[$1]]"',
 'unprotectedarticle'  => 'taʻemaluʻi "[[$1]]"',
 'protect-title'       => 'ʻOku maluʻi "$1"',
+'prot_1movedto2'      => 'Kuo ʻunu ʻa e [[$1]] ki he [[$2]]',
 'protect-legend'      => 'Fakamoʻoniʻi e maluʻi',
 'protectcomment'      => 'ʻUhingha maʻa e maluʻi',
 'protect-level-sysop' => 'Kau pule fakafounga pē',
@@ -824,7 +830,6 @@ Vakai ki he [[Special:Log/delete|hokohoko tāmateʻi]] ki he lekooti ʻo e ngaah
 
 # What links here
 'whatlinkshere'       => 'Ngaahi fehokotaki ki heni',
-'linklistsub'         => '(Hokohoko ʻo e ngaahi fehokotaki)',
 'linkshere'           => 'ʻOku fehokotaki ki heni ʻa e ngaahi peesi:',
 'nolinkshere'         => 'ʻOku ʻikai ha ngaahi kupu fehokotaki ki heni.',
 'isredirect'          => 'Peesi leʻei',
@@ -903,6 +908,8 @@ Vakai ki he [[Special:Log/delete|hokohoko tāmateʻi]] ki he lekooti ʻo e ngaah
 *te ke tiki ʻa e puha ʻi lalo.
 ʻI he meʻa ko ia, ʻe ʻunuʻi pe fakatahaʻi ʻa e peesi alea faiʻaki ʻa e nima.",
 'movearticle'             => 'ʻUnu ʻa e kupu',
+'movenologin'             => 'ʻOku ʻikai ke kau-ki-ai',
+'movenologintext'         => 'Kuo pau ko e ʻetita lēsisita koe pea [[Special:UserLogin|kau-ki-ai]] kapau te ke fieʻunu ha peesi.',
 'newtitle'                => 'Ki he hingoa foʻou',
 'move-watch'              => 'Leʻo he pēsí ni',
 'movepagebtn'             => 'Peesi ʻunu',
@@ -948,6 +955,7 @@ Vakai ki he [[Special:Log/delete|hokohoko tāmateʻi]] ki he lekooti ʻo e ngaah
 'import-interwiki-history'   => 'Hiki ko e paaki hisitōlia kotoa maʻa e pēsí ni',
 'import-interwiki-submit'    => 'Hū mai',
 'import-interwiki-namespace' => 'ʻAve ngaahi peesi ki he vā hingoa:',
+'import-comment'             => 'Fakamatala:',
 'importtext'                 => "Kātaki ʻe hū atu ʻa e faile mei he ''wiki'' tupunga ngāueʻaki ''Special:Export'', pea haofakiʻi ʻi hoʻo tisi, pea hū mai ia mei hē.",
 'importstart'                => 'Hū mai ngaahi peesi...',
 'import-revision-count'      => 'Paaki ʻe $1',
@@ -1005,7 +1013,7 @@ Vakai ki he [[Special:Log/delete|hokohoko tāmateʻi]] ki he lekooti ʻo e ngaah
 'show-big-image'       => 'ʻAsi ʻa e faitā auiiki',
 'show-big-image-thumb' => '<small>Vakai pē ʻi hono lahi: $1 x $2 tefitoʻifaitā</small>',
 
-# Special:NewImages
+# Special:NewFiles
 'newimages'             => 'Fakaʻaliʻali ʻo e ngaahi faitā foʻou',
 'imagelisttext'         => "ʻOku ʻasi ʻi lalo ha hokohoko ʻo e '''$1''' vahevahe he $2.",
 'showhidebots'          => '($1 fatu fakamīsini)',
@@ -1169,20 +1177,9 @@ Kapau ʻoku ʻikai ko koe, ʻoua ʻe fakaava ia. ʻE mate ʻa e lea fakapulipul�
 Kātaki fakapapauʻi te ke fie toe fatu ʻa e kupu ni.",
 'recreate'            => 'Toe fakatupu',
 
-# HTML dump
-'redirectingto' => 'ʻOku leʻei ki [[:$1]]...',
-
 # action=purge
-'confirm_purge'        => 'Fakaʻatā ko e fafaʻo ʻo e pēsí ni?
-
-$1',
 'confirm_purge_button' => 'Fai ā',
-
-# AJAX search
-'searchcontaining' => "Kumi ha ngaahi kupu ʻoku faʻo ai ʻa e ''$1''.",
-'searchnamed'      => "Kumi ha ngaahi kupu ʻoku nau hingoa ''$11''.",
-'articletitles'    => "Ngaahi kupu ʻoku kamata mo e ''$1''",
-'hideresults'      => 'Toi fua',
+'confirm-purge-top'    => 'Fakaʻatā ko e fafaʻo ʻo e pēsí ni?',
 
 # Multipage image navigation
 'imgmultipageprev' => '← Peesi ki muʻa',
