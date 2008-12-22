@@ -97,7 +97,7 @@ class BlogComment {
 			/**
 			 * set blog owner
 			 */
-			$owner = BlogListPage::getOwner( $this->mTitle );
+			$owner = BlogArticle::getOwner( $this->mTitle );
 			$this->mOwner = User::newFromName( $owner );
 		}
 	}
@@ -195,7 +195,7 @@ class BlogComment {
 		wfProfileIn( __METHOD__ );
 
 		if( $update ) {
-			BlogListPage::saveProps( $this->mTitle->getArticleID(), $props );
+			BlogArticle::setProps( $this->mTitle->getArticleID(), $props );
 		}
 		$this->mProps = $props;
 
@@ -208,7 +208,7 @@ class BlogComment {
 	 */
 	public function getProps() {
 		if( ! $this->mProps || ! is_array( $this->mProps ) ) {
-			$this->mProps = BlogListPage::getProps( $this->mTitle->getArticleID() );
+			$this->mProps = BlogArticle::getProps( $this->mTitle->getArticleID() );
 		}
 		return $this->mProps;
 	}
@@ -224,9 +224,9 @@ class BlogComment {
 		$devel    = $wgCityId == 4832 || $wgDevelEnvironment;
 		$isAuthor = $this->mUser->getId() == $wgUser->getId() && ! $wgUser->isAnon();
 		$isOwner  = $this->mOwner->getId() == $wgUser->getId();
-		$isSysop  = ( in_array('sysop', $wgUser->getGroups()) || in_array('staff', $wgUser->getGroups() ) );
+		$isSysop  = $wgUser->isAllowed( "blog-comments-toggle" );
 
-		return $devel && ($isAuthor || $isOwner || $isSysop );
+		return $devel && ( $isOwner || $isSysop );
 	}
 
 	/**
@@ -250,7 +250,7 @@ class BlogComment {
 			else {
 				$this->mProps["hiddencomm"] = 1;
 			}
-			BlogListPage::saveProps( $this->mTitle->getArticleID(), $this->mProps );
+			BlogArticle::setProps( $this->mTitle->getArticleID(), $this->mProps );
 			$wgMemc->delete( wfMemcKey( "blog", "comm", $this->mTitle->getArticleID() ) );
 		}
 		wfProfileOut( __METHOD__ );
@@ -325,22 +325,28 @@ class BlogComment {
 			return Wikia::json_encode( array( "error" => 1 ) );
 		}
 
-		$article = self::doPost( $wgRequest, $wgUser, $Title );
-		if( !$article ) {
-			Wikia::log( __METHOD__, "error", "No article created" );
-			return Wikia::json_encode(
-				array( "msg" => wfMsg("blog-comment-error"), "error" => 1 )
-			);
-		}
+		list( $status, $article ) = self::doPost( $wgRequest, $wgUser, $Title );
+		$error  = false;
 
-		$comment = BlogComment::newFromArticle( $article );
-		$text = $comment->render();
+		switch( $status ) {
+			case EditPage::AS_SUCCESS_UPDATE:
+			case EditPage::AS_SUCCESS_NEW_ARTICLE:
+				$comment = BlogComment::newFromArticle( $article );
+				$text = $comment->render();
+				$message = false;
+				break;
+			default:
+				Wikia::log( __METHOD__, "error", "No article created" );
+				$text  = false;
+				$error = true;
+				$message = wfMsg("blog-comment-error");
+		}
 
 		return Wikia::json_encode(
 			array(
-				"msg" => wfMsg("blog-comment-error"),
-				"error" => 0,
-				"text" => $text,
+				"msg" => $message,
+				"error" => $error,
+				"text"  => $text,
 			)
 		);
 	}
@@ -371,14 +377,22 @@ class BlogComment {
 		 * title for comment is combination of article title and some "random"
 		 * data
 		 */
-		$commentTitleText = sprintf( "%s/%s-%s", $Title->getText(), $User->getName(), wfTimestampNow() );
-		$commentTitle = Title::newFromText( $commentTitleText, NS_BLOG_ARTICLE_TALK );
+		$commentTitle = Title::newFromText(
+			sprintf( "%s/%s-%s", $Title->getText(), $User->getName(), wfTimestampNow() ),
+			NS_BLOG_ARTICLE_TALK );
 
 		/**
-		 * add article
+		 * add article using EditPage class (for hooks)
 		 */
-		$article = new Article( $commentTitle, 0 );
-		$article->doEdit( $text, "New comment in blog" );
+		$result   = null;
+		$article  = new Article( $commentTitle, 0 );
+		$editPage = new EditPage( $article );
+		$editPage->textbox1 = $text;
+		$editpage->summary  = wfMsg('blog-comments-new');
+		$retval = $editPage->internalAttemptSave( $result );
+		Wikia::log( __METHOD__, "editpage", "Returned value {$retval}" );
+
+		// $article->doEdit( $text, wfMsg('blog-comments-new') );
 
 		/**
 		 * clear comments cache for this article
@@ -392,7 +406,7 @@ class BlogComment {
 
 		wfProfileOut( __METHOD__ );
 
-		return $article;
+		return array( $retval, $article );
 	}
 }
 

@@ -58,8 +58,8 @@ if ('de' == $wgLanguageCode) {
 /**
  * setup function
  */
-$wgAutoloadClasses[ "BlogListPage" ] = dirname(__FILE__) . '/BlogListPage.php';
-$wgExtensionFunctions[] = "BlogListPage::setup";
+$wgAutoloadClasses[ "BlogArticle" ] = dirname(__FILE__) . '/BlogArticle.php';
+$wgExtensionFunctions[] = "BlogArticle::setup";
 
 /**
  * messages file
@@ -67,9 +67,25 @@ $wgExtensionFunctions[] = "BlogListPage::setup";
 $wgExtensionMessagesFiles["Blogs"] = dirname(__FILE__) . '/Blogs.i18n.php';
 
 /**
- * Special page
+ * permissions (eventually will be moved to CommonSettings.php)
  */
+$wgAvailableRights[] = 'blog-comments-toggle';
+$wgAvailableRights[] = 'blog-comments-delete';
 
+$wgGroupPermissions['*'][ 'blog-comments-toggle' ] = false;
+$wgGroupPermissions['sysop'][ 'blog-comments-toggle' ] = true;
+$wgGroupPermissions['staff'][ 'blog-comments-toggle' ] = true;
+$wgGroupPermissions['helper'][ 'blog-comments-toggle' ] = true;
+
+$wgGroupPermissions['*'][ 'blog-comments-delete' ] = false;
+$wgGroupPermissions['sysop'][ 'blog-comments-delete' ] = true;
+$wgGroupPermissions['staff'][ 'blog-comments-delete' ] = true;
+$wgGroupPermissions['helper'][ 'blog-comments-delete' ] = true;
+
+
+/**
+ * Special pages
+ */
 extAddSpecialPage(dirname(__FILE__) . '/SpecialCreateBlogPage.php', 'CreateBlogPage', 'CreateBlogPage');
 extAddSpecialPage(dirname(__FILE__) . '/SpecialCreateBlogListingPage.php', 'CreateBlogListingPage', 'CreateBlogListingPage');
 
@@ -93,6 +109,6 @@ include( dirname( __FILE__ ) . "/SpecialBlogPage.php");
 include( dirname( __FILE__ ) . "/BlogAvatar.php");
 include( dirname( __FILE__ ) . "/BlogTemplate.php");
 include( dirname( __FILE__ ) . "/UserMasthead.php");
-include( dirname( __FILE__ ) . "/BlogListPage.php");
+include( dirname( __FILE__ ) . "/BlogArticle.php");
 include( dirname( __FILE__ ) . "/BlogComments.php");
 include( dirname( __FILE__ ) . "/BlogLockdown.php");
