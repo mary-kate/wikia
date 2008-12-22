@@ -11,10 +11,24 @@ $messages['en'] = array(
 	'didyoumean-desc' => 'Adds links to pages with "similar" titles',
 );
 
+/** Message documentation (Message documentation)
+ * @author Raimond Spekking
+ */
+$messages['qqq'] = array(
+	'didyoumean-desc' => 'Extension description displayed on [[Special:Version]].',
+);
+
 /** Arabic (العربية)
  * @author Meno25
  */
 $messages['ar'] = array(
+	'didyoumean-desc' => 'يضيف وصلات إلى صفحات بعناوين "مشابهة"',
+);
+
+/** Egyptian Spoken Arabic (مصرى)
+ * @author Meno25
+ */
+$messages['arz'] = array(
 	'didyoumean-desc' => 'يضيف وصلات إلى صفحات بعناوين "مشابهة"',
 );
 
@@ -46,11 +60,41 @@ $messages['de'] = array(
 	'didyoumean-desc' => 'Ergänzt Seiten um Links zu ähnlichen Titeln',
 );
 
+/** Lower Sorbian (Dolnoserbski)
+ * @author Michawiki
+ */
+$messages['dsb'] = array(
+	'didyoumean-desc' => 'Pśidawa wótkaze do bokow z "pódobnymi" titelami',
+);
+
+/** Greek (Ελληνικά)
+ * @author Dead3y3
+ */
+$messages['el'] = array(
+	'didyoumean-desc' => 'Προσθέτει συνδέσμους σε σελίδες με «παρόμοιους» τίτλους',
+);
+
 /** Esperanto (Esperanto)
  * @author Yekrats
  */
 $messages['eo'] = array(
 	'didyoumean-desc' => 'Aldonu ligilojn al paĝoj kun "similaj" titoloj',
+);
+
+/** Spanish (Español)
+ * @author Academo
+ * @author Sanbec
+ */
+$messages['es'] = array(
+	'didyoumean-desc' => 'Añade enlaces a páginas con títulos «similares»',
+);
+
+/** Finnish (Suomi)
+ * @author Jaakonam
+ * @author Nike
+ */
+$messages['fi'] = array(
+	'didyoumean-desc' => 'Lisää linkkejä sivuihin, joilla on samankaltainen otsikko.',
 );
 
 /** French (Français)
@@ -67,6 +111,13 @@ $messages['gl'] = array(
 	'didyoumean-desc' => 'Engade ligazóns cara a páxinas con títulos "similares"',
 );
 
+/** Hebrew (עברית)
+ * @author Rotemliss
+ */
+$messages['he'] = array(
+	'didyoumean-desc' => 'הוספת קישורים לדפים עם כותרות "דומות"',
+);
+
 /** Hindi (हिन्दी)
  * @author Kaustubh
  */
@@ -81,6 +132,13 @@ $messages['hsb'] = array(
 	'didyoumean-desc' => 'Přidawa wotkazy stronam z "podobnymi" titulemi',
 );
 
+/** Interlingua (Interlingua)
+ * @author McDutchie
+ */
+$messages['ia'] = array(
+	'didyoumean-desc' => 'Adde ligamines a paginas con titulos "similar"',
+);
+
 /** Italian (Italiano)
  * @author Darth Kule
  */
@@ -88,11 +146,33 @@ $messages['it'] = array(
 	'didyoumean-desc' => 'Aggiunge collegamenti a pagine che hanno titoli "simili"',
 );
 
+/** Japanese (日本語)
+ * @author Fryed-peach
+ */
+$messages['ja'] = array(
+	'didyoumean-desc' => '類似した名前のページへのリンクを追加する',
+);
+
 /** Khmer (ភាសាខ្មែរ)
+ * @author Thearith
  * @author គីមស៊្រុន
  */
 $messages['km'] = array(
-	'didyoumean-desc' => 'បន្ថែម​តំនភ្ជាប់នានា​ទៅកាន់​ទំព័រទាំងឡាយណា​ដែលមានចំនងជើង"ស្រដៀងគ្នា"',
+	'didyoumean-desc' => 'បន្ថែម​តំណភ្ជាប់នានា​ទៅកាន់​ទំព័រទាំងឡាយណា​ដែលមានចំណងជើង"ស្រដៀងគ្នា"',
+);
+
+/** Korean (한국어)
+ * @author Kwj2772
+ */
+$messages['ko'] = array(
+	'didyoumean-desc' => '"비슷한" 이름을 가진 문서로 향하는 링크를 추가합니다.',
+);
+
+/** Ripoarisch (Ripoarisch)
+ * @author Purodha
+ */
+$messages['ksh'] = array(
+	'didyoumean-desc' => 'Deit Lengks op Sigge met „ähnlijje“ Tittele dobei.',
 );
 
 /** Luxembourgish (Lëtzebuergesch)
@@ -107,6 +187,13 @@ $messages['lb'] = array(
  */
 $messages['mr'] = array(
 	'didyoumean-desc' => 'शीर्षकात "सारखेपणा" असणार्‍या पानांचे दुवे देतो',
+);
+
+/** Erzya (Эрзянь)
+ * @author Botuzhaleny-sodamo
+ */
+$messages['myv'] = array(
+	'didyoumean-desc' => 'Полады сюлмавома пенеть, конатнень вельде ютават «ёнов молиця» конякс марто лопатнес',
 );
 
 /** Dutch (Nederlands)
@@ -127,7 +214,7 @@ $messages['no'] = array(
  * @author Cedric31
  */
 $messages['oc'] = array(
-	'didyoumean-desc' => 'Apondís de ligams a las paginas amb de títols « semblables »',
+	'didyoumean-desc' => 'Apond de ligams a las paginas amb de títols « semblables »',
 );
 
 /** Polish (Polski)
@@ -142,6 +229,13 @@ $messages['pl'] = array(
  */
 $messages['pt'] = array(
 	'didyoumean-desc' => 'Adiciona ligações a páginas com títulos "semelhantes"',
+);
+
+/** Tarandíne (Tarandíne)
+ * @author Joetaras
+ */
+$messages['roa-tara'] = array(
+	'didyoumean-desc' => "Aggiunge le collegaminde a le pàggene cu titele ca s'assomigghiene",
 );
 
 /** Russian (Русский)
@@ -172,7 +266,7 @@ $messages['te'] = array(
 	'didyoumean-desc' => '"ఒకే విధమైన" పేర్లు కలిగిన పేజీలకు లింకులు ఇస్తుంది',
 );
 
-/** Tajik (Cyrillic) (Тоҷикӣ/tojikī (Cyrillic))
+/** Tajik (Cyrillic) (Тоҷикӣ (Cyrillic))
  * @author Ibrahim
  */
 $messages['tg-cyrl'] = array(

@@ -25,16 +25,22 @@ class SFCreateCategory extends SpecialPage {
 }
 
 function createCategoryText($default_form, $category_name, $parent_category) {
-	global $sfgContLang;
+	wfLoadExtensionMessages('SemanticForms');
 
 	if ($default_form == '') {
 		$text = wfMsgForContent('sf_category_desc', $category_name);
 	} else {
-		$namespace_labels = $sfgContLang->getNamespaces();
-		$form_label = $namespace_labels[SF_NS_FORM];
-		$specprops = $sfgContLang->getSpecialPropertiesArray();
-		$form_tag = "[[" . $specprops[SF_SP_HAS_DEFAULT_FORM] .
-			"::$form_label:$default_form|$default_form]]";
+		global $sfgContLang;
+		$specprops = $sfgContLang->getPropertyLabels();
+		// a simpler call is possible in SMW 1.4 and higher
+		if (class_exists('SMWPropertyValue')) {
+			$form_tag = "[[" . $specprops[SF_SP_HAS_DEFAULT_FORM] . "::$default_form]]";
+		} else {
+			$namespace_labels = $sfgContLang->getNamespaces();
+			$form_label = $namespace_labels[SF_NS_FORM];
+			$form_tag = "[[" . $specprops[SF_SP_HAS_DEFAULT_FORM] .
+				"::$form_label:$default_form|$default_form]]";
+		}
 		$text = wfMsgForContent('sf_category_hasdefaultform', $form_tag);
 	}
 	if ($parent_category != '') {
@@ -48,6 +54,8 @@ function createCategoryText($default_form, $category_name, $parent_category) {
 
 function doSpecialCreateCategory() {
 	global $wgOut, $wgRequest, $wgUser, $sfgScriptPath;
+
+	wfLoadExtensionMessages('SemanticForms');
 
 	# cycle through the query values, setting the appropriate local variables
 	$category_name = $wgRequest->getVal('category_name');
@@ -65,6 +73,7 @@ function doSpecialCreateCategory() {
 			$category_name_error_str = wfMsg('sf_blank_error');
 		} else {
 			# redirect to wiki interface
+			$wgOut->setArticleBodyOnly(true);
 			$namespace = NS_CATEGORY;
 			$title = Title::newFromText($category_name, $namespace);
 			$full_text = createCategoryText($default_form, $category_name, $parent_category);

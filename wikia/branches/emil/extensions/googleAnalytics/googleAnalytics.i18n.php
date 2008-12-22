@@ -14,11 +14,25 @@ $messages['en'] = array(
 	'googleanalytics-desc' => 'Inserts Google Analytics script (ga.js) in to MediaWiki pages for tracking',
 );
 
+/** Message documentation (Message documentation)
+ * @author Purodha
+ */
+$messages['qqq'] = array(
+	'googleanalytics-desc' => 'Short description of this extension, shown on [[Special:Version]]. Do not translate or change links.',
+);
+
 /** Arabic (العربية)
  * @author Meno25
  */
 $messages['ar'] = array(
 	'googleanalytics-desc' => 'يضيف سكريبت جوجل التحليلي (ga.js) إلى صفحات الميدياويكي للتتبع',
+);
+
+/** Egyptian Spoken Arabic (مصرى)
+ * @author Meno25
+ */
+$messages['arz'] = array(
+	'googleanalytics-desc' => 'يضيف سكريبت جوجل التحليلى (ga.js) إلى صفحات الميدياويكى للتتبع',
 );
 
 /** Bulgarian (Български)
@@ -35,9 +49,23 @@ $messages['de'] = array(
 	'googleanalytics-desc' => 'Ermöglicht das Einbinden des Google-Analytics-Skript (ga.js) auf Seiten',
 );
 
+/** Lower Sorbian (Dolnoserbski)
+ * @author Michawiki
+ */
+$messages['dsb'] = array(
+	'googleanalytics-desc' => 'Zasuwa skript Google Analytics (ga.js) do bokow MediaWiki za slědowanje',
+);
+
+/** Spanish (Español)
+ * @author Sanbec
+ */
+$messages['es'] = array(
+	'googleanalytics-desc' => 'Inserta el guión de Google Analytics (ga.js) en las páginas de MediaWiki para su seguimiento',
+);
+
 /** Finnish (Suomi)
- * @author Str4nd
  * @author Nike
+ * @author Str4nd
  */
 $messages['fi'] = array(
 	'googleanalytics-desc' => 'Lisää Google Analytics -seurantakoodin (ga.js) MediaWikin sivuille käyttäjien seurantaa varten.',
@@ -57,6 +85,14 @@ $messages['gl'] = array(
 	'googleanalytics-desc' => 'Insire a escritura do Google Analytics (ga.js) nas páxinas MediaWiki para facer un seguimento',
 );
 
+/** Hebrew (עברית)
+ * @author Rotemliss
+ * @author YaronSh
+ */
+$messages['he'] = array(
+	'googleanalytics-desc' => 'הוספת סקריפט של Google Analytics (בשם ga.js) לעמודי מדיה־ויקי לצורכי מעקב.',
+);
+
 /** Hindi (हिन्दी)
  * @author Kaustubh
  */
@@ -71,11 +107,32 @@ $messages['hsb'] = array(
 	'googleanalytics-desc' => 'Zasunje skript Google Analytics (ga.js) do stronow MediaWiki za wuslědźenje',
 );
 
+/** Interlingua (Interlingua)
+ * @author McDutchie
+ */
+$messages['ia'] = array(
+	'googleanalytics-desc' => 'Insere le script de Google Analytics (ga.js) in le paginas de MediaWiki pro facer traciamento',
+);
+
 /** Indonesian (Bahasa Indonesia)
  * @author Rex
  */
 $messages['id'] = array(
 	'googleanalytics-desc' => 'Menambahkan skrip Google Analytics (ga.js) ke halaman-halaman MediaWiki untuk tujuan penjejakan',
+);
+
+/** Japanese (日本語)
+ * @author Fryed-peach
+ */
+$messages['ja'] = array(
+	'googleanalytics-desc' => '利用者追尾のために Google Analytics のスクリプト (ga.js) を MediaWiki のページに挿入する',
+);
+
+/** Ripoarisch (Ripoarisch)
+ * @author Purodha
+ */
+$messages['ksh'] = array(
+	'googleanalytics-desc' => 'Deit dat <i lang="en">Google Analytics</i> Projrämmsche (<code>ga.js</code>) in Sigge fum MediaWiki zom Verfollje.',
 );
 
 /** Luxembourgish (Lëtzebuergesch)
@@ -93,8 +150,8 @@ $messages['mr'] = array(
 );
 
 /** Dutch (Nederlands)
- * @author Siebrand
  * @author SPQRobin
+ * @author Siebrand
  */
 $messages['nl'] = array(
 	'googleanalytics-desc' => "Voegt het script voor Google Analytics (ga.js) toe in MediaWiki-pagina's voor tracking",
@@ -111,7 +168,7 @@ $messages['no'] = array(
  * @author Cedric31
  */
 $messages['oc'] = array(
-	'googleanalytics-desc' => 'Apondís un escript Google Analitic (ga.js) dins las paginas MediaWiki per las recèrcas.',
+	'googleanalytics-desc' => 'Apond un escript Google Analitic (ga.js) dins las paginas MediaWiki per las recèrcas.',
 );
 
 /** Portuguese (Português)
@@ -119,6 +176,13 @@ $messages['oc'] = array(
  */
 $messages['pt'] = array(
 	'googleanalytics-desc' => 'Insere o script Google Analytics (ga.js) nas páginas MediaWiki para rastreio',
+);
+
+/** Tarandíne (Tarandíne)
+ * @author Joetaras
+ */
+$messages['roa-tara'] = array(
+	'googleanalytics-desc' => "Mitte 'nu script de Google Analitycs (ga.js) jndr'à le pàggene de MediaUicchi pe farle traccià",
 );
 
 /** Russian (Русский)
@@ -143,8 +207,8 @@ $messages['stq'] = array(
 );
 
 /** Swedish (Svenska)
- * @author M.M.S.
  * @author Lejonel
+ * @author M.M.S.
  */
 $messages['sv'] = array(
 	'googleanalytics-desc' => 'Lägger in ett skript från Google Analytics (ga.js) på MediaWiki-sidor för att spåra användare',

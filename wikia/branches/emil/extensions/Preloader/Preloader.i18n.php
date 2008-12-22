@@ -14,11 +14,39 @@ $messages['en'] = array(
 	'preloader-desc' => 'Provides customisable per-namespace boilerplate text for new pages',
 );
 
+/** Message documentation (Message documentation)
+ * @author Purodha
+ */
+$messages['qqq'] = array(
+	'preloader-desc' => 'Shown in [[Special:Version]] as a short description of this extension. Do not translate links.',
+);
+
+/** Arabic (العربية)
+ * @author Meno25
+ */
+$messages['ar'] = array(
+	'preloader-desc' => 'يوفر نص بويلربلات مخصص لكل نطاق للصفحات الجديدة',
+);
+
+/** Egyptian Spoken Arabic (مصرى)
+ * @author Meno25
+ */
+$messages['arz'] = array(
+	'preloader-desc' => 'يوفر نص بويلربلات مخصص لكل نطاق للصفحات الجديدة',
+);
+
 /** German (Deutsch)
  * @author Raimond Spekking
  */
 $messages['de'] = array(
 	'preloader-desc' => 'Ermöglicht das Hinzufügen pro Namensraum anpassbarer Vorlagen bei der Erstellung neuer Seiten',
+);
+
+/** Lower Sorbian (Dolnoserbski)
+ * @author Michawiki
+ */
+$messages['dsb'] = array(
+	'preloader-desc' => 'Zmóžnja pśiměrjujobne tekstowe elementy za nowe boki na mjenjowy rum',
 );
 
 /** Esperanto (Esperanto)
@@ -28,11 +56,19 @@ $messages['eo'] = array(
 	'preloader-desc' => 'Provizas ŝanĝeblan norman tekston laŭ nomspaco por novaj paĝoj',
 );
 
+/** Spanish (Español)
+ * @author Sanbec
+ */
+$messages['es'] = array(
+	'preloader-desc' => 'Provee texto por defecto para las páginas nuevas configurable para cada espacio de nombres',
+);
+
 /** French (Français)
  * @author Grondin
+ * @author Zetud
  */
 $messages['fr'] = array(
-	'preloader-desc' => 'Fournis, pour les nouvelles pages, des fenêtres de texte personnalisables par nom d’espace',
+	'preloader-desc' => 'Fournit, pour les nouvelles pages, des fenêtres de texte personnalisables par nom d’espace',
 );
 
 /** Galician (Galego)
@@ -42,11 +78,39 @@ $messages['gl'] = array(
 	'preloader-desc' => 'Proporciona, para as páxinas novas, ventás de texto personalizable para os nomes dos espazos',
 );
 
+/** Upper Sorbian (Hornjoserbsce)
+ * @author Michawiki
+ */
+$messages['hsb'] = array(
+	'preloader-desc' => 'Dodawa tekstowe elementy za nowe strony přiměrjomne na mjenowy rum',
+);
+
 /** Hungarian (Magyar)
  * @author Tgr
  */
 $messages['hu'] = array(
 	'preloader-desc' => 'Névterenként más-más rendszerüzenet az új oldalakhoz',
+);
+
+/** Interlingua (Interlingua)
+ * @author McDutchie
+ */
+$messages['ia'] = array(
+	'preloader-desc' => 'Permitte predefinir un modello de texto pro nove paginas, un pro cata spatio de nomines',
+);
+
+/** Japanese (日本語)
+ * @author Fryed-peach
+ */
+$messages['ja'] = array(
+	'preloader-desc' => '新しいページ用に名前空間ごとのカスタマイズ可能な雛形文章を用意する',
+);
+
+/** Ripoarisch (Ripoarisch)
+ * @author Purodha
+ */
+$messages['ksh'] = array(
+	'preloader-desc' => 'Määt et müjjelesch, för jedes Appachtemang ene Täx förzejävve, dä eets ens ne de neu Sigge erin küt.',
 );
 
 /** Luxembourgish (Lëtzebuergesch)
@@ -82,6 +146,13 @@ $messages['no'] = array(
  */
 $messages['oc'] = array(
 	'preloader-desc' => 'Provesís, per las paginas novèlas, de fenèstras de tèxt personalizablas per nom d’espaci',
+);
+
+/** Portuguese (Português)
+ * @author Waldir
+ */
+$messages['pt'] = array(
+	'preloader-desc' => 'Fornece textos-modelo para novas páginas, persnonalizáveis por domínio',
 );
 
 /** Russian (Русский)

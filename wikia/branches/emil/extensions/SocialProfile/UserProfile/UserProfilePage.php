@@ -64,8 +64,11 @@ class UserProfilePage extends Article {
 
 		$wgOut->addHTML( $this->getRelationships($this->user_name, 1) );
 		$wgOut->addHTML( $this->getRelationships($this->user_name, 2) );
+		$wgOut->addHTML( $this->getGifts($this->user_name) );
+		$wgOut->addHTML( $this->getAwards($this->user_name) );
 		$wgOut->addHTML( $this->getCustomInfo($this->user_name) );
 		$wgOut->addHTML( $this->getInterests($this->user_name) );
+		$wgOut->addHTML( $this->getFanBoxes($this->user_name) );
 		$wgOut->addHTML( $this->getUserStats($this->user_id, $this->user_name) );
 
 		if ( ! wfRunHooks( 'UserProfileEndLeft', array( &$this  ) ) ) {
@@ -97,6 +100,8 @@ class UserProfilePage extends Article {
 	function getUserStatsRow($label, $value) {
 		global $wgUser, $wgTitle, $wgOut;
 
+		$output = ""; // Prevent E_NOTICE
+
 		if ($value != 0) {
 			$output = "<div>
 					<b>{$label}</b>
@@ -114,12 +119,14 @@ class UserProfilePage extends Article {
 			return "";
 		}
 
+		$output = ""; // Prevent E_NOTICE
+
 		$stats = new UserStats($user_id, $user_name);
 		$stats_data = $stats->getUserStats();
 
 		$total_value = $stats_data["edits"] . $stats_data["votes"] . $stats_data["comments"] . $stats_data["recruits"] . $stats_data["poll_votes"] . $stats_data["picture_game_votes"] . $stats_data["quiz_points"];
 
-		if ($total_value!=0) {
+		if ($total_value != 0) {
 			$output .= "<div class=\"user-section-heading\">
 				<div class=\"user-section-title\">
 					".wfMsg('user-stats-title')."
@@ -411,7 +418,7 @@ class UserProfilePage extends Article {
 		$similar_fans = Title::makeTitle(NS_SPECIAL, "SimilarFans");
 		$update_profile = Title::makeTitle(NS_SPECIAL, "UpdateProfile");
 		$watchlist = Title::makeTitle(NS_SPECIAL, "Watchlist");
-		$contributions = Title::makeTitle(NS_SPECIAL, "Contributions");
+		$contributions = SpecialPage::getTitleFor('Contributions', $user);
 		$send_message = Title::makeTitle(NS_SPECIAL, "UserBoard");
 		$upload_avatar = Title::makeTitle(NS_SPECIAL, "UploadAvatar");
 		$user_page = Title::makeTitle(NS_USER, $user);
@@ -470,9 +477,10 @@ class UserProfilePage extends Article {
 			if( $wgUserBoard ){
 				$output .= "<a href=\"".$send_message->escapeFullURL('user='.$wgUser->getName().'&conv='.$user_safe)."\" rel=\"nofollow\">".wfMsg('user-send-message')."</a> | ";
 			}
+			$output .= "<a href=\"".$give_gift->escapeFullURL('user='.$user_safe)."\" rel=\"nofollow\">".wfMsg('user-send-gift')."</a> |";
 		}
 
-		$output .= "<a href=\"".$contributions->escapeFullURL()."/{$user_safe}\" rel=\"nofollow\">".wfMsg('user-contributions')."</a> ";
+		$output .= "<a href=\"".$contributions->escapeFullURL()."\" rel=\"nofollow\">".wfMsg('user-contributions')."</a> ";
 
 		//Links to User:user_name  from User_profile:
 		if( $wgTitle->getNamespace() == NS_USER_PROFILE && $this->profile_data["user_id"] && $this->profile_data["user_page_type"] == 0){
@@ -528,6 +536,7 @@ class UserProfilePage extends Article {
 			}
 		}
 
+		$output = ""; // Prevent E_NOTICE
 
 		$count = 4;
 		$rel = new UserRelationship($user_name);
@@ -601,6 +610,164 @@ class UserProfilePage extends Article {
 		return $output;
 	}
 
+	function getGifts($user_name){
+		global $IP, $wgUser, $wgTitle, $wgMemc, $wgUserProfileDisplay, $wgUploadPath;
+
+		//If not enabled in site settings, don't display
+		if($wgUserProfileDisplay['gifts'] == false){
+			return "";
+		}
+
+		$output = "";
+
+		//USER TO USER GIFTS
+		$g = new UserGifts($user_name);
+		$user_safe = urlencode($user_name);
+
+		//try cache
+		$key = wfMemcKey( 'user', 'profile', 'gifts', "{$g->user_id}" );
+		$data = $wgMemc->get( $key );
+
+		if( !$data ){
+			wfDebug( "Got profile gifts for user {$user_name} from DB\n" );
+			$gifts = $g->getUserGiftList(0, 4);
+			$wgMemc->set( $key, $gifts, 60 * 60 * 4 );
+		} else {
+			wfDebug( "Got profile gifts for user {$user_name} from cache\n" );
+			$gifts = $data;
+		}
+
+		$gift_count = $g->getGiftCountByUsername($user_name);
+		$gift_link = Title::makeTitle(NS_SPECIAL, 'ViewGifts');
+		$per_row = 4;
+	
+		if ($gifts) {
+
+			$output .= "<div class=\"user-section-heading\">
+				<div class=\"user-section-title\">
+					".wfMsg('user-gifts-title')."
+				</div>
+				<div class=\"user-section-actions\">
+					<div class=\"action-right\">";
+						if($gift_count>4)$output .= "<a href=\"".$gift_link->escapeFullURL('user='.$user_safe)."\" rel=\"nofollow\">".wfMsg('user-view-all')."</a>";
+					$output .= "</div>
+					<div class=\"action-left\">";
+						if($gift_count>4) {
+							$output .= "4 ".wfMsg('user-count-separator')." {$gift_count}";
+						} else {
+							$output .= "{$gift_count} ".wfMsg('user-count-separator')." {$gift_count}";
+						}
+					$output .= "</div>
+					<div class=\"cleared\"></div>
+				</div>
+			</div>
+			<div class=\"cleared\"></div>
+			<div class=\"user-gift-container\">";
+
+				$x = 1;
+
+				foreach ($gifts as $gift) {
+
+					if($gift["status"] == 1 && $user_name==$wgUser->getName() ){
+						$g->clearUserGiftStatus($gift["id"]);
+						$wgMemc->delete( $key );
+						$g->decNewGiftCount( $wgUser->getID() );
+					}
+
+					$user = Title::makeTitle( NS_USER, $gift["user_name_from"] );
+					$gift_image = "<img src=\"{$wgUploadPath}/awards/" . Gifts::getGiftImage($gift["gift_id"], "ml") . "\" border=\"0\" alt=\"\" />";
+					$gift_link = $user = Title::makeTitle( NS_SPECIAL, 'ViewGift' );
+					$output .= "<a href=\"".$gift_link->escapeFullURL('gift_id='.$gift['id'])."\" ".(($gift["status"] == 1)?"class=\"user-page-new\"":"")." rel=\"nofollow\">{$gift_image}</a>";
+					if($x==count($gifts) || $x!=1 && $x%$per_row ==0)$output .= "<div class=\"cleared\"></div>";
+					$x++;
+
+				}
+
+			$output .= "</div>";
+		} 
+
+		return $output;
+	}
+
+	function getAwards($user_name){
+		global $IP, $wgUser, $wgTitle, $wgMemc, $wgUserProfileDisplay, $wgUploadPath;
+
+		//If not enabled in site settings, don't display
+		if($wgUserProfileDisplay['awards'] == false){
+			return "";
+		}
+ 
+		$output = "";
+
+		//SYSTEM GIFTS
+		$sg = new UserSystemGifts($user_name);
+
+		//try cache
+		$sg_key = wfMemcKey( 'user', 'profile', 'system_gifts', "{$sg->user_id}" );
+		$data = $wgMemc->get( $sg_key );
+		if( !$data ){
+			wfDebug( "Got profile awards for user {$user_name} from DB\n" );
+			$system_gifts = $sg->getUserGiftList(0, 4);
+			$wgMemc->set( $sg_key, $system_gifts, 60 * 60 * 4 );
+		} else {
+			wfDebug( "Got profile awards for user {$user_name} from cache\n" );
+			$system_gifts = $data;
+		}
+
+		$system_gift_count = $sg->getGiftCountByUsername($user_name);
+		$system_gift_link = Title::makeTitle(NS_SPECIAL, 'ViewSystemGifts');
+		$per_row = 4;
+	
+		if ($system_gifts) {
+
+			$x = 1;
+
+			$output .= "<div class=\"user-section-heading\">
+				<div class=\"user-section-title\">
+					".wfMsg('user-awards-title')."
+				</div>
+				<div class=\"user-section-actions\">
+					<div class=\"action-right\">";
+						if ($system_gift_count>4)$output .= "<a href=\"".$system_gift_link->escapeFullURL('user='.$user_name)."\" rel=\"nofollow\">".wfMsg('user-view-all')."</a>";
+					$output .= "</div>
+					<div class=\"action-left\">";
+						if($system_gift_count>4) {
+							$output .= "4 ".wfMsg('user-count-separator')." {$system_gift_count}";
+						} else {
+							$output .= "{$system_gift_count}&nbsp;".wfMsg('user-count-separator')."&nbsp;{$system_gift_count}";
+						}
+					$output .= "</div>
+					<div class=\"cleared\"></div>
+				</div>
+			</div>
+			<div class=\"cleared\"></div>
+			<div class=\"user-gift-container\">";
+
+				foreach ($system_gifts as $gift) {
+
+					if($gift["status"] == 1 && $user_name==$wgUser->getName() ){
+						$sg->clearUserGiftStatus($gift["id"]);
+						$wgMemc->delete( $sg_key );
+						$sg->decNewSystemGiftCount( $wgUser->getID() );
+					}
+
+					$gift_image = "<img src=\"{$wgUploadPath}/awards/" . SystemGifts::getGiftImage($gift["gift_id"],"ml") . "\" border=\"0\" alt=\"\" />";
+					$gift_link = $user =  Title::makeTitle( NS_SPECIAL, 'ViewSystemGift' );
+
+					$output .= "<a href=\"".$gift_link->escapeFullURL('gift_id='.$gift["id"])."\" ".(($gift["status"]==1)?"class=\"user-page-new\"":"")." rel=\"nofollow\">
+						{$gift_image}
+					</a>";
+
+					if($x==count($system_gifts) || $x!=1 && $x%$per_row ==0)$output .= "<div class=\"cleared\"></div>";
+					$x++;	
+				}
+
+			$output .= "</div>";
+		}
+
+		return $output;
+	}
+
 	function getUserBoard($user_id, $user_name){
 		global $IP, $wgMemc, $wgUser, $wgTitle, $wgOut, $wgUserProfileDisplay, $wgUserProfileScripts;
 		if($user_id == 0)return "";
@@ -608,6 +775,8 @@ class UserProfilePage extends Article {
 		if ($wgUserProfileDisplay['board'] == false) {
 			return "";
 		}
+
+		$output = ""; // Prevent E_NOTICE
 
 		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgUserProfileScripts}/UserProfilePage.js\"></script>\n");
 
@@ -619,7 +788,7 @@ class UserProfilePage extends Article {
 		$stats_data = $stats->getUserStats();
 		$total = $stats_data["user_board"];
 
-		if($wgUser->getName() == $user_name)$total=$total+$stats_data["user_board_priv"];
+		if($wgUser->getName() == $user_name)$total = $total+$stats_data["user_board_priv"];
 
 		$output .= "<div class=\"user-section-heading\">
 			<div class=\"user-section-title\">
@@ -670,6 +839,185 @@ class UserProfilePage extends Article {
 		$output .= $b->displayMessages($user_id, 0, 10);
 
 		$output .= "</div>";
+
+		return $output;
+	}
+
+	/**
+	 * Gets the user's fanboxes if $wgEnableUserBoxes = true; and $wgUserProfileDisplay['userboxes'] = true;
+	 * and FanBoxes extension is installed.
+	 */
+	function getFanBoxes( $user_name ){
+		global $wgOut, $IP, $wgUser, $wgTitle, $wgMemc, $wgUserProfileDisplay, $wgFanBoxScripts, $wgFanBoxDirectory, $wgEnableUserBoxes;
+
+		if ( !$wgEnableUserBoxes || $wgUserProfileDisplay['userboxes'] == false ) {
+			return "";
+		}
+
+		$wgOut->addScript("<script type=\"text/javascript\" src=\"{$wgFanBoxScripts}/FanBoxes.js\"></script>\n");
+		$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"{$wgFanBoxScripts}/FanBoxes.css\"/>\n");
+
+		wfLoadExtensionMessages('FanBox');
+
+		$f = new UserFanBoxes($user_name);
+		$user_safe = ($user_name);
+
+		//try cache
+		//$key = wfMemcKey( 'user', 'profile', 'fanboxes', "{$f->user_id}" );
+		//$data = $wgMemc->get( $key );
+
+		//if( !$data ){
+		//	wfDebug( "Got profile fanboxes for user {$user_name} from db\n" );
+		//	$fanboxes = $f->getUserFanboxes(0,10);
+		//	$wgMemc->set( $key, $fanboxes );
+		//} else {
+		//	wfDebug( "Got profile fanboxes for user {$user_name} from cache\n" );
+		//	$fanboxes = $data;
+		//}
+
+		$fanboxes = $f->getUserFanboxes(0, 10);
+
+		$fanbox_count = $f->getFanBoxCountByUsername($user_name);
+		$fanbox_link = Title::makeTitle(NS_SPECIAL, 'ViewUserBoxes');
+		$per_row = 1;
+
+		if ( $fanboxes ) {
+
+			$output .= "<div class=\"user-section-heading\">
+				<div class=\"user-section-title\">
+					".wfMsg('user-fanbox-title')."
+				</div>
+				<div class=\"user-section-actions\">
+					<div class=\"action-right\">";
+						if( $fanbox_count > 10 ) $output .= "<a href=\"".$fanbox_link->escapeFullURL('user='.$user_safe)."\" rel=\"nofollow\">".wfMsg('user-view-all')."</a>";
+					$output .= "</div>
+					<div class=\"action-left\">";
+						if( $fanbox_count > 10 ) {
+							$output .= "10 ".wfMsg('user-count-separator')." {$fanbox_count}";
+						} else {
+							$output .= "{$fanbox_count} ".wfMsg('user-count-separator')." {$fanbox_count}";
+						}
+					$output .= "</div>
+					<div class=\"cleared\"></div>
+
+				</div>
+			</div>
+			<div class=\"cleared\"></div>
+
+			<div class=\"user-fanbox-container clearfix\" >";
+
+				$x = 1;
+				$tagParser = new Parser();
+				foreach( $fanboxes as $fanbox ) {
+
+					$check_user_fanbox = $f->checkIfUserHasFanbox($fanbox["fantag_id"]);
+
+					if( $fanbox["fantag_image_name"] ){
+						$fantag_image_width = 45;
+						$fantag_image_height = 53;
+						$fantag_image = Image::newFromName( $fanbox["fantag_image_name"] );
+						$fantag_image_url = $fantag_image->createThumb($fantag_image_width, $fantag_image_height);
+						$fantag_image_tag = '<img alt="" src="' . $fantag_image_url . '"/>';
+					};
+
+					if ( $fanbox["fantag_left_text"] == "" ){
+						$fantag_leftside = $fantag_image_tag;
+					} else {
+						$fantag_leftside = $fanbox["fantag_left_text"];
+						$fantag_leftside = $tagParser->parse( $fantag_leftside, $wgTitle, $wgOut->parserOptions(), false );
+						$fantag_leftside = $fantag_leftside->getText();
+					}
+
+					if ( $fanbox["fantag_left_textsize"] == "mediumfont" ) {
+						$leftfontsize = "11px";
+					}
+
+					if ( $fanbox["fantag_left_textsize"] == "bigfont" ) {
+						$leftfontsize = "15px";
+					}
+
+					if ( $fanbox["fantag_right_textsize"] == "smallfont" ) {
+						$rightfontsize = "10px";
+					}
+
+					if ( $fanbox["fantag_right_textsize"] == "mediumfont" ) {
+						$rightfontsize = "11px";
+					}
+
+					//get permalink
+					$fantag_title = Title::makeTitle( NS_FANTAG, $fanbox["fantag_title"] );
+					$right_text = $fanbox["fantag_right_text"];
+					$right_text = $tagParser->parse( $right_text, $wgTitle, $wgOut->parserOptions(), false );
+					$right_text = $right_text->getText();
+
+					//output fanboxes
+					$output .= "<div class=\"fanbox-item\">
+						<div class=\"individual-fanbox\" id=\"individualFanbox".$fanbox["fantag_id"]."\">
+							<div class=\"show-message-container-profile\" id=\"show-message-container".$fanbox["fantag_id"]."\">
+								<a class=\"perma\" style=\"font-size:8px; color:".$fanbox["fantag_right_textcolor"]."\" href=\"".$fantag_title->escapeFullURL()."\" title=\"{$fanbox["fantag_title"]}\">".wfMsg('fanbox-perma')."</a>
+								<table  class=\"fanBoxTableProfile\" onclick=\"javascript:openFanBoxPopup('fanboxPopUpBox{$fanbox["fantag_id"]}', 'individualFanbox{$fanbox["fantag_id"]}')\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" >
+									<tr>
+										<td id=\"fanBoxLeftSideOutputProfile\" style=\"color:".$fanbox["fantag_left_textcolor"]."; font-size:$leftfontsize\" bgcolor=\"".$fanbox["fantag_left_bgcolor"]."\">".$fantag_leftside."</td> 
+										<td id=\"fanBoxRightSideOutputProfile\" style=\"color:".$fanbox["fantag_right_textcolor"]."; font-size:$rightfontsize\" bgcolor=\"".$fanbox["fantag_right_bgcolor"]."\">".$right_text."</td>
+									</tr>
+								</table>
+							</div>
+						</div>";
+
+				 		if( $wgUser->isLoggedIn() ) {
+							if( $check_user_fanbox == 0 ) {
+							$output .= "<div class=\"fanbox-pop-up-box-profile\" id=\"fanboxPopUpBox".$fanbox["fantag_id"]."\">
+								<table cellpadding=\"0\" cellspacing=\"0\" align=\"center\" >
+									<tr>
+										<td style=\"font-size:10px\">". wfMsgForContent( 'fanbox-add-fanbox' ) ."</td>
+									</tr>
+									<tr>
+										<td align=\"center\">
+										<input type=\"button\" value=\"".wfMsg('fanbox-add')."\" size=\"10\" onclick=\"closeFanboxAdd('fanboxPopUpBox{$fanbox["fantag_id"]}', 'individualFanbox{$fanbox["fantag_id"]}'); showAddRemoveMessageUserPage(1, {$fanbox["fantag_id"]}, 'show-addremove-message-half')\" />
+										<input type=\"button\" value=\"".wfMsg('cancel')."\" size=\"10\" onclick=\"closeFanboxAdd('fanboxPopUpBox{$fanbox["fantag_id"]}', 'individualFanbox{$fanbox["fantag_id"]}')\" />
+										</td>
+									</tr>
+								</table>
+							</div>";
+						} else {
+							$output .= "<div class=\"fanbox-pop-up-box-profile\" id=\"fanboxPopUpBox".$fanbox["fantag_id"]."\">
+								<table cellpadding=\"0\" cellspacing=\"0\" align=\"center\">
+									<tr>
+										<td style=\"font-size:10px\">". wfMsgForContent( 'fanbox-remove-fanbox' ) ."</td>
+									</tr>
+									<tr>
+										<td align=\"center\">
+											<input type=\"button\" value=\"".wfMsg('fanbox-remove')."\" size=\"10\" onclick=\"closeFanboxAdd('fanboxPopUpBox{$fanbox["fantag_id"]}', 'individualFanbox{$fanbox["fantag_id"]}'); showAddRemoveMessageUserPage(2, {$fanbox["fantag_id"]}, 'show-addremove-message-half')\" />
+											<input type=\"button\" value=\"".wfMsg('cancel')."\" size=\"10\" onclick=\"closeFanboxAdd('fanboxPopUpBox{$fanbox["fantag_id"]}', 'individualFanbox{$fanbox["fantag_id"]}')\" />
+										</td>
+									</tr>
+								</table>
+							</div>";
+						}
+					}
+
+					if( $wgUser->getID() == 0 ) {
+						$login = Title::makeTitle(NS_SPECIAL, 'UserLogin');
+						$output .= "<div class=\"fanbox-pop-up-box-profile\" id=\"fanboxPopUpBox".$fanbox["fantag_id"]."\">
+							<table cellpadding=\"0\" cellspacing=\"0\" align=\"center\">
+								<tr>
+									<td style=\"font-size:10px\">". wfMsgForContent( 'fanbox-add-fanbox-login' ) ."<a href=\"{$login->getFullURL()}\">". wfMsgForContent( 'fanbox-login' ) ."</a></td>
+								</tr>
+								<tr>
+									<td align=\"center\">
+										<input type=\"button\" value=\"".wfMsg('cancel')."\" size=\"10\" onclick=\"closeFanboxAdd('fanboxPopUpBox{$fanbox["fantag_id"]}', 'individualFanbox{$fanbox["fantag_id"]}')\" />
+									</td>
+								</tr>
+							</table>
+						</div>";
+					}
+
+				$output .= "</div>";
+
+				$x++;
+			}
+			$output .= "</div>";
+		}
 
 		return $output;
 	}

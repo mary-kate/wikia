@@ -11,6 +11,13 @@ $messages['en'] = array(
 	'poem-desc' => 'Adds <tt>&lt;poem&gt;</tt> tag for poem formatting',
 );
 
+/** Message documentation (Message documentation)
+ * @author Raimond Spekking
+ */
+$messages['qqq'] = array(
+	'poem-desc' => 'Extension description displayed on [[Special:Version]]',
+);
+
 /** Afrikaans (Afrikaans)
  * @author Naudefj
  */
@@ -32,6 +39,13 @@ $messages['ar'] = array(
 	'poem-desc' => 'يضيف الوسم <tt>&lt;poem&gt;</tt> لصياغة القصيدة',
 );
 
+/** Egyptian Spoken Arabic (مصرى)
+ * @author Ramsis II
+ */
+$messages['arz'] = array(
+	'poem-desc' => 'بيضيف تاج ال <tt>&lt;poem&gt;</tt> لصياغة القصيدة',
+);
+
 /** Asturian (Asturianu)
  * @author Esbardu
  */
@@ -51,6 +65,20 @@ $messages['bcc'] = array(
  */
 $messages['bg'] = array(
 	'poem-desc' => 'Добавя етикет <tt>&lt;poem&gt;</tt> за форматиране на стихове',
+);
+
+/** Bengali (বাংলা)
+ * @author Bellayet
+ */
+$messages['bn'] = array(
+	'poem-desc' => 'কবিতার ফরমেটিং এর জন্য <tt>&lt;poem&gt;</tt> ট্যাগ যোগ করুন',
+);
+
+/** Catalan (Català)
+ * @author Paucabot
+ */
+$messages['ca'] = array(
+	'poem-desc' => "Afegeix l'etiqueta <tt>&lt;poem&gt;</tt> per al formatatge  de poemes",
 );
 
 /** Czech (Česky)
@@ -79,6 +107,20 @@ $messages['dsb'] = array(
  */
 $messages['eo'] = array(
 	'poem-desc' => 'Aldonas <tt>&lt;poem&gt;</tt> etikedon por formatado de poezio.',
+);
+
+/** Spanish (Español)
+ * @author Muro de Aguas
+ */
+$messages['es'] = array(
+	'poem-desc' => 'Añade la etiqueta <tt>&lt;poem&gt;</tt> para dar el formato propio de un poema.',
+);
+
+/** Basque (Euskara)
+ * @author Theklan
+ */
+$messages['eu'] = array(
+	'poem-desc' => '<tt>&lt;poem&gt;</tt> etiketa gehitzen du olerkien formaturako',
 );
 
 /** Persian (فارسی)
@@ -128,6 +170,13 @@ $messages['hi'] = array(
 	'poem-desc' => 'कविता लिखने के लिये आवश्यक <tt>&lt;poem&gt;</tt> टॅग देता हैं',
 );
 
+/** Croatian (Hrvatski)
+ * @author Dalibor Bosits
+ */
+$messages['hr'] = array(
+	'poem-desc' => 'Dodaje <tt>&lt;poem&gt;</tt> oznaku za formatiranje pjesama',
+);
+
 /** Upper Sorbian (Hornjoserbsce)
  * @author Michawiki
  */
@@ -164,10 +213,11 @@ $messages['it'] = array(
 );
 
 /** Japanese (日本語)
+ * @author Aotake
  * @author JtFuruhata
  */
 $messages['ja'] = array(
-	'poem-desc' => '詩的な文章フォーマットで記述できる<tt>&lt;poem&gt;</tt>タグを追加する',
+	'poem-desc' => '詩の書式を整えるための <tt>&lt;poem&gt;</tt> タグを追加する',
 );
 
 /** Jutish (Jysk)
@@ -184,6 +234,14 @@ $messages['jv'] = array(
 	'poem-desc' => 'Nambahaké tag <tt>&lt;poem&gt;</tt> tag kanggo formatting tembang utawa puisi',
 );
 
+/** Khmer (ភាសាខ្មែរ)
+ * @author Lovekhmer
+ * @author Thearith
+ */
+$messages['km'] = array(
+	'poem-desc' => 'ដាក់ប្លាក <tt>&lt;poem&gt;</tt> សម្រាប់ទ្រង់ទ្រាយកំណាព្យ',
+);
+
 /** Korean (한국어)
  * @author ToePeu
  */
@@ -195,7 +253,7 @@ $messages['ko'] = array(
  * @author Purodha
  */
 $messages['ksh'] = array(
-	'poem-desc' => 'Brengk et <tt>&lt;poem&gt;</tt>-Kommando met, för Jedeeshte ze jeshtallde',
+	'poem-desc' => 'Brengk et <tt>&lt;poem&gt;</tt>-Kommando met, för Jedeeshte ze jeshtallde.',
 );
 
 /** Luxembourgish (Lëtzebuergesch)
@@ -217,6 +275,13 @@ $messages['li'] = array(
  */
 $messages['lt'] = array(
 	'poem-desc' => 'Prideda <tt>&lt;poema&gt;</tt> tagus poemų formatavimui',
+);
+
+/** Latvian (Latviešu)
+ * @author Xil
+ */
+$messages['lv'] = array(
+	'poem-desc' => 'Pievieno <tt>&lt;poem&gt;</tt> tagu dzejas formatēšanai',
 );
 
 /** Malayalam (മലയാളം)
@@ -265,7 +330,7 @@ $messages['no'] = array(
  * @author Cedric31
  */
 $messages['oc'] = array(
-	'poem-desc' => 'Apondís la balisa <tt>&lt;poem&gt;</tt> pel formatatge dels poèmas',
+	'poem-desc' => 'Apond la balisa <tt>&lt;poem&gt;</tt> pel formatatge dels poèmas',
 );
 
 /** Polish (Polski)
@@ -287,6 +352,13 @@ $messages['ps'] = array(
  */
 $messages['pt'] = array(
 	'poem-desc' => 'Adiciona a marca <tt>&lt;poem&gt;</tt> para formatação de poemas',
+);
+
+/** Romanian (Română)
+ * @author Mihai
+ */
+$messages['ro'] = array(
+	'poem-desc' => 'Adaugă eticheta <tt>&lt;poem&gt;</tt> pentru formatarea poem',
 );
 
 /** Russian (Русский)
@@ -331,7 +403,7 @@ $messages['te'] = array(
 	'poem-desc' => 'పద్యాల ఫార్మాటింగుకై <tt>&lt;poem&gt;</tt> అనే టాగుని చేరుస్తుంది',
 );
 
-/** Tajik (Cyrillic) (Тоҷикӣ/tojikī (Cyrillic))
+/** Tajik (Cyrillic) (Тоҷикӣ (Cyrillic))
  * @author Ibrahim
  */
 $messages['tg-cyrl'] = array(

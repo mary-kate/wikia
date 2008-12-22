@@ -69,12 +69,17 @@ $wgTaskExtensionTasksCachedTitle = '' ;
 # Integrating into the MediaWiki environment
 
 $wgExtensionCredits['Tasks'][] = array(
-        'name' => 'Tasks',
-        'description' => 'An extension to manage tasks.',
-        'author' => 'Magnus Manske'
+	'name'           => 'Tasks',
+	'description'    => 'An extension to manage tasks.',
+	'svn-date'       => '$LastChangedDate: 2008-12-20 09:32:47 +0000 (Sat, 20 Dec 2008) $',
+	'svn-revision'   => '$LastChangedRevision: 44839 $',
+	'author'         => 'Magnus Manske',
+	'descriptionmsg' => 'tasks_desc',
+	'url'            => 'http://www.mediawiki.org/wiki/Extension:Tasks',
 );
 
 $wgExtensionFunctions[] = 'wfTasksExtension';
+$wgExtensionMessagesFiles['Tasks'] = dirname( __FILE__ ) . '/Tasks.i18n.php';
 
 # Misc hooks
 $wgHooks['SkinTemplatePreventOtherActiveTabs'][] = 'wfTasksExtensionPreventOtherActiveTabs';
@@ -131,13 +136,7 @@ function wfTasksAddCache() { # Checked for HTML and MySQL insertion attacks
 	$wgTasksAddCache = true;
 	$wgUserTogglesEn[] = 'show_task_comments' ;
 
-	// Default language is english
-	require_once('language/en.php');
-
-	global $wgLang;
-	$filename = 'language/' . addslashes($wgLang->getCode()) . '.php' ;
-	// inclusion might fail :p
-	include( $filename );
+	wfLoadExtensionMessages('Tasks');
 }
 
 
@@ -209,11 +208,11 @@ function wfTaskExtensionHeaderSign() {
 
 	if( $wgTitle->isTalkPage() ) {
 		# No talk pages please
-		return;
+		return true;
 	}
 	if( $wgTitle->getNamespace() < 0 ) {
 		# No special pages please
-		return;
+		return true;
 	}
 
 	wfTasksAddCache();
@@ -221,7 +220,7 @@ function wfTaskExtensionHeaderSign() {
 	$tasks = $st->get_open_task_list( $wgTitle, true );
 	if( count( $tasks ) == 0 ) {
 		# No tasks	
-		return;
+		return true;
 	}
 	
 	$out = '';
@@ -274,11 +273,11 @@ function wfTasksExtensionAfterToolbox( &$tpl ) { # Checked for HTML and MySQL in
 	global $wgTitle;
 	if( $wgTitle->isTalkPage() ) {
 		# No talk pages please
-		return;
+		return true;
 	}
 	if( $wgTitle->getNamespace() < 0 ) {
 		# No special pages please
-		return;
+		return true;
 	}
 	
 	wfTasksAddCache();
@@ -286,7 +285,7 @@ function wfTasksExtensionAfterToolbox( &$tpl ) { # Checked for HTML and MySQL in
 	$tasks = $st->get_open_task_list( $wgTitle, true );
 	if( count( $tasks ) == 0 ) {
 		# No tasks	
-		return;
+		return true;
 	}
 
 ?>
@@ -471,11 +470,8 @@ function wfTasksExtensionAction( $action, $article ) { # Checked for HTML and My
 * The special page
 */
 function wfTasksExtension() { # Checked for HTML and MySQL insertion attacks
-	global $IP, $wgMessageCache;
+	global $IP;
 	wfTasksAddCache();
-
-	// FIXME : i18n
-	$wgMessageCache->addMessage( 'tasks', 'Tasks' );
 
 	require_once $IP.'/includes/SpecialPage.php';
 
@@ -1230,7 +1226,7 @@ function wfTasksExtension() { # Checked for HTML and MySQL insertion attacks
 				$wgOut->addHTML( $msg );
 			} else {
 				$this->setHeaders();
-				$wgOut->addHtml( $out );
+				$wgOut->addHTML( $out );
 			}
 		}
 		
@@ -1546,7 +1542,7 @@ function wfTasksExtension() { # Checked for HTML and MySQL insertion attacks
 				'href'	=> TASKS_CSS,
 			));
 			$this->setHeaders();
-			$wgOut->addHtml( $out );
+			$wgOut->addHTML( $out );
 		}
 		
 		/**
@@ -1564,7 +1560,7 @@ function wfTasksExtension() { # Checked for HTML and MySQL insertion attacks
 			if( $checked ) {
 				$attribs['checked'] = 'checked';
 			}
-			return wfElement( 'input', $attribs );
+			return Xml::element( 'input', $attribs );
 		}
 	} # end of class
 

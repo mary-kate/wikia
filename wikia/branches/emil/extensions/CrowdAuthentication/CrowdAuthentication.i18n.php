@@ -14,10 +14,26 @@ $messages['en'] = array(
 	'crowdauthentication-desc' => 'Authentication plugin for Atlassian Crowd',
 );
 
+/** Message documentation (Message documentation)
+ * @author Nike
+ * @author Raimond Spekking
+ */
+$messages['qqq'] = array(
+	'crowdauthentication-desc' => "Extension description displayed on [[Special:Version]].
+'''''Atlassian Crowd''''' is a proper noun and should not be translated.",
+);
+
 /** Arabic (العربية)
  * @author Meno25
  */
 $messages['ar'] = array(
+	'crowdauthentication-desc' => 'إضافة تأكيد لحشد الأتلاسيان',
+);
+
+/** Egyptian Spoken Arabic (مصرى)
+ * @author Meno25
+ */
+$messages['arz'] = array(
 	'crowdauthentication-desc' => 'إضافة تأكيد لحشد الأتلاسيان',
 );
 
@@ -33,6 +49,20 @@ $messages['cs'] = array(
  */
 $messages['de'] = array(
 	'crowdauthentication-desc' => 'Authentisierung-Erweiterung für Atlassian Crowd',
+);
+
+/** Lower Sorbian (Dolnoserbski)
+ * @author Michawiki
+ */
+$messages['dsb'] = array(
+	'crowdauthentication-desc' => 'Tykac awtentifikacije za Atlassian Crowd',
+);
+
+/** Spanish (Español)
+ * @author Sanbec
+ */
+$messages['es'] = array(
+	'crowdauthentication-desc' => 'Extensión de autenticación para Atlassian Crowd',
 );
 
 /** French (Français)
@@ -52,6 +82,13 @@ $messages['gl'] = array(
 	'crowdauthentication-desc' => 'Complemento de autentificación para Atlassian Crowd',
 );
 
+/** Hebrew (עברית)
+ * @author YaronSh
+ */
+$messages['he'] = array(
+	'crowdauthentication-desc' => 'תוסף אימות עבור Atlassian Crowd',
+);
+
 /** Hindi (हिन्दी)
  * @author Kaustubh
  */
@@ -66,6 +103,13 @@ $messages['hsb'] = array(
 	'crowdauthentication-desc' => 'Awtentifikaciski tykač za Atlassian Crowd',
 );
 
+/** Interlingua (Interlingua)
+ * @author McDutchie
+ */
+$messages['ia'] = array(
+	'crowdauthentication-desc' => 'Modulo de authentication pro Atlassian Crowd',
+);
+
 /** Italian (Italiano)
  * @author Pietrodn
  */
@@ -78,6 +122,13 @@ $messages['it'] = array(
  */
 $messages['ja'] = array(
 	'crowdauthentication-desc' => 'Atlassian社のCrowdシングルサインオンツールを利用する認証プラグイン',
+);
+
+/** Ripoarisch (Ripoarisch)
+ * @author Purodha
+ */
+$messages['ksh'] = array(
+	'crowdauthentication-desc' => 'Kann de Aanmeldunge fun <i lang="en">Atlassian Crowd</i> hee em Wiki benoze.',
 );
 
 /** Luxembourgish (Lëtzebuergesch)
@@ -127,6 +178,13 @@ $messages['pl'] = array(
  */
 $messages['pt'] = array(
 	'crowdauthentication-desc' => 'Plugin de autenticação para Atlassian Crowd',
+);
+
+/** Tarandíne (Tarandíne)
+ * @author Joetaras
+ */
+$messages['roa-tara'] = array(
+	'crowdauthentication-desc' => "plugin pe l'autendicazione pe Atlassian Crowd",
 );
 
 /** Russian (Русский)

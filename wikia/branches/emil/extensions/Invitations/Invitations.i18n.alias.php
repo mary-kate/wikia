@@ -11,82 +11,127 @@ $aliases = array();
  * @author Nike
  */
 $aliases['en'] = array(
-	'SpecialInvitations' => array( 'Invitations' ),
+	'Invitations' => array( 'Invitations' ),
 );
 
 /** Arabic (العربية)
  * @author Meno25
  */
 $aliases['ar'] = array(
-	'SpecialInvitations' => array( 'دعوات' ),
+	'Invitations' => array( 'دعوات' ),
 );
 
 /** Egyptian Spoken Arabic (مصرى)
  * @author Meno25
  */
 $aliases['arz'] = array(
-	'SpecialInvitations' => array( 'دعوات' ),
+	'Invitations' => array( 'دعوات' ),
+);
+
+/** Breton (Brezhoneg) */
+$aliases['br'] = array(
+	'Invitations' => array( 'Pedadennoù' ),
+);
+
+/** Bosnian (Bosanski) */
+$aliases['bs'] = array(
+	'Invitations' => array( 'Pozivi' ),
+);
+
+/** German (Deutsch) */
+$aliases['de'] = array(
+	'Invitations' => array( 'Einladungen' ),
+);
+
+/** Persian (فارسی) */
+$aliases['fa'] = array(
+	'Invitations' => array( 'دعوت‌ها' ),
 );
 
 /** Finnish (Suomi) */
 $aliases['fi'] = array(
-	'SpecialInvitations' => array( 'Kutsut' ),
+	'Invitations' => array( 'Kutsut' ),
 );
 
 /** Galician (Galego) */
 $aliases['gl'] = array(
-	'SpecialInvitations' => array( 'Invitacións' ),
+	'Invitations' => array( 'Invitacións' ),
+);
+
+/** Swiss German (Alemannisch) */
+$aliases['gsw'] = array(
+	'Invitations' => array( 'Yyladige' ),
 );
 
 /** Hebrew (עברית)
  * @author Rotem Liss
  */
 $aliases['he'] = array(
-	'SpecialInvitations' => array( 'הזמנות' ),
+	'Invitations' => array( 'הזמנות' ),
+);
+
+/** Upper Sorbian (Hornjoserbsce) */
+$aliases['hsb'] = array(
+	'Invitations' => array( 'Přeprošenja' ),
 );
 
 /** Haitian (Kreyòl ayisyen) */
 $aliases['ht'] = array(
-	'SpecialInvitations' => array( 'Envitasyon' ),
+	'Invitations' => array( 'Envitasyon' ),
 );
 
 /** Hungarian (Magyar) */
 $aliases['hu'] = array(
-	'SpecialInvitations' => array( 'Meghívók' ),
+	'Invitations' => array( 'Meghívók' ),
+);
+
+/** Indonesian (Bahasa Indonesia) */
+$aliases['id'] = array(
+	'Invitations' => array( 'Undangan' ),
 );
 
 /** Khmer (ភាសាខ្មែរ) */
 $aliases['km'] = array(
-	'SpecialInvitations' => array( 'ការអញ្ជើញ' ),
+	'Invitations' => array( 'ការអញ្ជើញ' ),
 );
 
 /** Luxembourgish (Lëtzebuergesch) */
 $aliases['lb'] = array(
-	'SpecialInvitations' => array( 'Invitatiounen' ),
+	'Invitations' => array( 'Invitatiounen' ),
 );
 
 /** Malay (Bahasa Melayu) */
 $aliases['ms'] = array(
-	'SpecialInvitations' => array( 'Jemputan' ),
+	'Invitations' => array( 'Jemputan' ),
+);
+
+/** Nedersaksisch (Nedersaksisch) */
+$aliases['nds-nl'] = array(
+	'Invitations' => array( 'Uutneudigingen' ),
 );
 
 /** Dutch (Nederlands) */
 $aliases['nl'] = array(
-	'SpecialInvitations' => array( 'Uitnodigingen' ),
+	'Invitations' => array( 'Uitnodigingen' ),
 );
 
 /** Norwegian (bokmål)‬ (‪Norsk (bokmål)‬) */
 $aliases['no'] = array(
-	'SpecialInvitations' => array( 'Invitasjoner' ),
+	'Invitations' => array( 'Invitasjoner' ),
 );
 
 /** Pashto (پښتو) */
 $aliases['ps'] = array(
-	'SpecialInvitations' => array( 'بلنې' ),
+	'Invitations' => array( 'بلنې' ),
 );
 
 /** Swedish (Svenska) */
 $aliases['sv'] = array(
-	'SpecialInvitations' => array( 'Inbjudningar' ),
+	'Invitations' => array( 'Inbjudningar' ),
+);
+
+/** Swahili (Kiswahili) */
+$aliases['sw'] = array(
+	'Invitations' => array( 'Mihaliko' ),
 );
 

@@ -14,6 +14,20 @@ $messages['en'] = array(
 	'editown-desc' => 'Users without the editall right can only edit pages they have created',
 );
 
+/** Message documentation (Message documentation)
+ * @author Purodha
+ */
+$messages['qqq'] = array(
+	'editown-desc' => 'Extension description displayed on [[Special:Version]].',
+);
+
+/** Old English (Anglo-Saxon)
+ * @author Wōdenhelm
+ */
+$messages['ang'] = array(
+	'editown-desc' => 'Brūcendas būton þæt eallādihtan riht mæȝ efne trametas ādihtan þe hīe macod',
+);
+
 /** Arabic (العربية)
  * @author Meno25
  */
@@ -21,11 +35,39 @@ $messages['ar'] = array(
 	'editown-desc' => 'المستخدمون بدون الصلاحية editall يمكنهم تعديل الصفحات التي قاموا بإنشائها فقط',
 );
 
+/** Egyptian Spoken Arabic (مصرى)
+ * @author Meno25
+ */
+$messages['arz'] = array(
+	'editown-desc' => 'المستخدمون بدون الصلاحية editall يمكنهم تعديل الصفحات التى قاموا بإنشائها فقط',
+);
+
+/** German (Deutsch)
+ * @author ChrisiPK
+ */
+$messages['de'] = array(
+	'editown-desc' => 'Benutzer ohne das editall-Recht können nur selbst erstelle Seiten bearbeiten',
+);
+
+/** Lower Sorbian (Dolnoserbski)
+ * @author Michawiki
+ */
+$messages['dsb'] = array(
+	'editown-desc' => 'Wužywarje bźez pšawa "editall" móžo jano boki wobźěłaś, kótarež su same napórali',
+);
+
 /** Esperanto (Esperanto)
  * @author Yekrats
  */
 $messages['eo'] = array(
 	'editown-desc' => "Uzantoj sen la ''editall'' rajto nur povas redakti paĝojn kiujn ili mem kreis",
+);
+
+/** Spanish (Español)
+ * @author Sanbec
+ */
+$messages['es'] = array(
+	'editown-desc' => "Los usuarios que no tengan el derecho ''editall'' sólo podrán editar las páginas que hayan creado.",
 );
 
 /** Finnish (Suomi)
@@ -49,6 +91,13 @@ $messages['gl'] = array(
 	'editown-desc' => 'Os usuarios sen o dereito de editar só poden editar as páxinas que crearon',
 );
 
+/** Hebrew (עברית)
+ * @author YaronSh
+ */
+$messages['he'] = array(
+	'editown-desc' => 'משתמשים שאין ברשותם את הרשאת העריכה הכללית (editall) יכולים לערוך אך ורק דפים שנוצרו על ידם',
+);
+
 /** Hindi (हिन्दी)
  * @author Kaustubh
  */
@@ -56,11 +105,25 @@ $messages['hi'] = array(
 	'editown-desc' => 'जिन सदस्योंको Editall अधिकार नहीं है वे सिर्फ खुद बनाये पन्ने ही संपादित कर सकतें हैं',
 );
 
+/** Croatian (Hrvatski)
+ * @author Dalibor Bosits
+ */
+$messages['hr'] = array(
+	'editown-desc' => 'Suradnici bez prava editall mogu uređivati samo stranice koje su sami napravili',
+);
+
 /** Upper Sorbian (Hornjoserbsce)
  * @author Michawiki
  */
 $messages['hsb'] = array(
 	'editown-desc' => 'Wužiwarjo, kotřiž nimaja prawo wšo wobdźěłować, móža jenož strony wobdźěłać, kotrež su sami wutworili.',
+);
+
+/** Interlingua (Interlingua)
+ * @author McDutchie
+ */
+$messages['ia'] = array(
+	'editown-desc' => 'Le usatores sin derecto "editall" pote solmente modificar le paginas que illes ha create',
 );
 
 /** Italian (Italiano)
@@ -75,6 +138,13 @@ $messages['it'] = array(
  */
 $messages['ja'] = array(
 	'editown-desc' => '全編集（editall）権限がない利用者に対し、自分の作成したページ以外は編集できないようにする',
+);
+
+/** Ripoarisch (Ripoarisch)
+ * @author Purodha
+ */
+$messages['ksh'] = array(
+	'editown-desc' => 'Metmaacher ohne et besönder <i lang="en">editall</i>-Rääsch künne nur Sigge ändere, di se sellver aanjelaat han.',
 );
 
 /** Luxembourgish (Lëtzebuergesch)
@@ -140,6 +210,13 @@ $messages['pt'] = array(
 	'editown-desc' => "Utilizadores sem o privilégio 'editall' só podem editar as páginas que os próprios criaram",
 );
 
+/** Tarandíne (Tarandíne)
+ * @author Joetaras
+ */
+$messages['roa-tara'] = array(
+	'editown-desc' => 'Utinde senza le deritte de cangià tutte cose ca ponne sulamende cangià le pàggene ca lore onne ccrejete',
+);
+
 /** Russian (Русский)
  * @author Александр Сигачёв
  */
@@ -155,8 +232,8 @@ $messages['sk'] = array(
 );
 
 /** Swedish (Svenska)
- * @author M.M.S.
  * @author Lejonel
+ * @author M.M.S.
  */
 $messages['sv'] = array(
 	'editown-desc' => "Användare utan ''editall''-rättigheter kan endast redigera sidor som de själva har skapat",

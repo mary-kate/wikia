@@ -7,17 +7,20 @@ if ( !defined( 'MEDIAWIKI' ) ) die();
  */
 class ConfigurationSettings {
 	protected $types, $initialized = false;
-	
+
 	// Core settings
-	protected $settings, $arrayDefs, $editRestricted, $viewRestricted,
-		$notEditableSettings, $settingsVersion;
+	protected $settings, $arrayDefs, $emptyValues, $editRestricted,
+		$viewRestricted, $notEditableSettings, $settingsVersion;
 
 	// Extension settings
 	protected $extensions;
 
-	public static function singleton( $types ){
+	// Cache
+	protected $cache = array();
+
+	public static function singleton( $types ) {
 		static $instances = array();
-		if( !isset( $instances[$types] ) )
+		if ( !isset( $instances[$types] ) )
 			$instances[$types] = new self( $types );
 		return $instances[$types];
 	}
@@ -26,21 +29,21 @@ class ConfigurationSettings {
 	 * Constructor
 	 * private, use ConfigurationSettings::sigleton() to get an instance
 	 */
-	protected function __construct( $types ){
+	protected function __construct( $types ) {
 		$this->types = $types;
 	}
 
 	/**
 	 * Load messages and initialise static variables
 	 */
-	protected function loadSettingsDefs(){
-		if( $this->initialized )
-			return;
+	protected function loadSettingsDefs() {
+		if ( $this->initialized ) return;
 		$this->initialized = true;
 
 		require( dirname( __FILE__ ) . '/Configure.settings-core.php' );
 		$this->settings = $settings;
 		$this->arrayDefs = $arrayDefs;
+		$this->emptyValues = $emptyValues;
 		$this->editRestricted = $editRestricted;
 		$this->viewRestricted = $viewRestricted;
 		$this->notEditableSettings = $notEditableSettings;
@@ -55,28 +58,29 @@ class ConfigurationSettings {
 	 *
 	 * @return array
 	 */
-	public function getAllExtensionsObjects(){
-		static $list = array();
-		if( !empty( $list ) )
-			return $list;
+	public function getAllExtensionsObjects() {
+		static $list;
+		if( isset($list) ) return $list;
+		wfProfileIn( __METHOD__ );
 		$this->loadSettingsDefs();
 		global $wgConfigureAdditionalExtensions;
 		$extensions = array_merge( $this->extensions, $wgConfigureAdditionalExtensions );
 		usort( $extensions, array( __CLASS__, 'compExt' ) );
-		foreach( $extensions as $ext ){
+		foreach( $extensions as $ext ) {
 			$ext = new WebExtension( $ext );
-			if( $ext->isInstalled() ){
+			#if( $ext->isInstalled() ) {
 				$list[] = $ext;
-			}
+			#}
 		}
+		wfProfileOut( __METHOD__ );
 		return $list;
 	}
 
 	/**
 	 * Callback to sort extensions
 	 */
-	public static function compExt( $e1, $e2 ){
-		return strcmp( $e1['name'], $e2['name'] );	
+	public static function compExt( $e1, $e2 ) {
+		return strcmp( $e1['name'], $e2['name'] );
 	}
 
 	/**
@@ -84,19 +88,22 @@ class ConfigurationSettings {
 	 *
 	 * @return array
 	 */
-	public function getSettings(){
+	public function getSettings() {
 		$this->loadSettingsDefs();
 		$ret = array();
-		if( ( $this->types & CONF_SETTINGS_CORE ) == CONF_SETTINGS_CORE ){
-			$ret += $this->settings;
+		if( ( $this->types & CONF_SETTINGS_CORE ) == CONF_SETTINGS_CORE ) {
+			$ret = $this->settings;
 		}
-		if( ( $this->types & CONF_SETTINGS_EXT ) == CONF_SETTINGS_EXT ){
+		if( ( $this->types & CONF_SETTINGS_EXT ) == CONF_SETTINGS_EXT ) {
 			static $extArr;
-			if( !isset( $extArr ) ){
-				foreach( $this->getAllExtensionsObjects() as $ext ){
-					$name = $ext->getName();
-					if( count( $ext->getSettings() ) )
-						$extArr['mw-extensions'][$name] = $ext->getSettings();
+			if( !isset($extArr) ) {
+				$extArr = array();
+				foreach( $this->getAllExtensionsObjects() as $ext ) {
+ 					$extSettings = $ext->getSettings();
+ 					if( $ext->useVariable() )
+ 						$extSettings[$ext->getVariable()] = 'bool';
+ 					if( count( $extSettings ) )
+ 						$extArr['mw-extensions'][$ext->getName()] = $extSettings;
 				}
 			}
 			$ret += $extArr;
@@ -109,18 +116,21 @@ class ConfigurationSettings {
 	 *
 	 * @return array
 	 */
-	public function getAllSettings(){
-		static $arr;
-		if( isset( $arr ) )
-			return $arr;
+	public function getAllSettings() {
+		if( isset( $this->cache['all'] ) ) {
+			return $this->cache['all'];
+		}
 		$this->loadSettingsDefs();
 		$arr = array();
-		foreach( $this->getSettings() as $section ){
-			foreach( $section as $group ){
-				$arr = array_merge( $arr, $group );
+		foreach( $this->getSettings() as $section ) {
+			foreach( $section as $group ) {
+				foreach( $group as $var => $type ) {
+					$arr[$var] = $type;
+				}
 			}
 		}
-		return $arr;
+		$this->cache['all'] = $arr;
+		return $this->cache['all'];
 	}
 
 	/**
@@ -128,14 +138,16 @@ class ConfigurationSettings {
 	 *
 	 * @return array
 	 */
-	public function getViewRestricted(){
+	public function getViewRestricted() {
 		$this->loadSettingsDefs();
 		$ret = array();
-		if( ( $this->types & CONF_SETTINGS_CORE ) == CONF_SETTINGS_CORE ){
+		if ( ( $this->types & CONF_SETTINGS_CORE ) == CONF_SETTINGS_CORE ) {
 			$ret += $this->viewRestricted;
 		}
-		if( ( $this->types & CONF_SETTINGS_EXT ) == CONF_SETTINGS_EXT ){
-			$ret += array(); // Nothing for extensions
+		if ( ( $this->types & CONF_SETTINGS_EXT ) == CONF_SETTINGS_EXT ) {
+			foreach ( $this->getAllExtensionsObjects() as $ext ) {
+				$ret = array_merge( $ret, $ext->getViewRestricted() );
+			}
 		}
 		return $ret;
 	}
@@ -145,14 +157,16 @@ class ConfigurationSettings {
 	 *
 	 * @return array
 	 */
-	public function getEditRestricted(){
+	public function getEditRestricted() {
 		$this->loadSettingsDefs();
 		$ret = array();
-		if( ( $this->types & CONF_SETTINGS_CORE ) == CONF_SETTINGS_CORE ){
+		if ( ( $this->types & CONF_SETTINGS_CORE ) == CONF_SETTINGS_CORE ) {
 			$ret += $this->editRestricted;
 		}
-		if( ( $this->types & CONF_SETTINGS_EXT ) == CONF_SETTINGS_EXT ){
-			$ret += array(); // Nothing for extensions
+		if ( ( $this->types & CONF_SETTINGS_EXT ) == CONF_SETTINGS_EXT ) {
+			foreach ( $this->getAllExtensionsObjects() as $ext ) {
+				$ret = array_merge( $ret, $ext->getEditRestricted() );
+			}
 		}
 		return $ret;
 	}
@@ -162,15 +176,17 @@ class ConfigurationSettings {
 	 *
 	 * @return array
 	 */
-	public function getNotEditableSettings(){
+	public function getUneditableSettings() {
 		$this->loadSettingsDefs();
 		$ret = array();
-		if( ( $this->types & CONF_SETTINGS_CORE ) == CONF_SETTINGS_CORE ){
+		if ( ( $this->types & CONF_SETTINGS_CORE ) == CONF_SETTINGS_CORE ) {
 			$ret += $this->notEditableSettings;
 		}
-		if( ( $this->types & CONF_SETTINGS_EXT ) == CONF_SETTINGS_EXT ){
+		if ( ( $this->types & CONF_SETTINGS_EXT ) == CONF_SETTINGS_EXT ) {
 			$ret += array(); // Nothing for extensions
 		}
+		global $wgConf;
+		$ret = array_merge( $ret, $wgConf->getUneditableSettings() );
 		return $ret;
 	}
 
@@ -179,20 +195,41 @@ class ConfigurationSettings {
 	 *
 	 * @return array
 	 */
-	public function getArrayDefs(){
-		static $list;
-		if( isset( $list ) )
-			return $list;
+	public function getArrayDefs() {
+		if ( isset( $this->cache['array'] ) )
+			return $this->cache['array'];
 		$list = array();
-		if( ( $this->types & CONF_SETTINGS_CORE ) == CONF_SETTINGS_CORE ){
+		$this->loadSettingsDefs();
+		if ( ( $this->types & CONF_SETTINGS_CORE ) == CONF_SETTINGS_CORE ) {
 			$list += $this->arrayDefs;
 		}
-		if( ( $this->types & CONF_SETTINGS_EXT ) == CONF_SETTINGS_EXT ){
-			foreach( $this->getAllExtensionsObjects() as $ext ){
+		if ( ( $this->types & CONF_SETTINGS_EXT ) == CONF_SETTINGS_EXT ) {
+			foreach ( $this->getAllExtensionsObjects() as $ext ) {
 				$list  += $ext->getArrayDefs();
 			}
 		}
-		return $list;
+		return $this->cache['array'] = $list;
+	}
+
+	/**
+	 * Get an array of settings which should have specific values when they're
+	 * empty
+	 *
+	 * @return array
+	 */
+	public function getEmptyValues() {
+		if ( isset( $this->cache['empty'] ) )
+			return $this->cache['empty'];
+		$list = array();
+		if ( ( $this->types & CONF_SETTINGS_CORE ) == CONF_SETTINGS_CORE ) {
+			$list += $this->emptyValues;
+		}
+		if ( ( $this->types & CONF_SETTINGS_EXT ) == CONF_SETTINGS_EXT ) {
+			foreach ( $this->getAllExtensionsObjects() as $ext ) {
+				$list += $ext->getEmptyValues();
+			}
+		}
+		return $this->cache['empty'] = $list;
 	}
 
 	/**
@@ -200,16 +237,16 @@ class ConfigurationSettings {
 	 *
 	 * @return bool
 	 */
-	public function isSettingAvailable( $setting ){
+	public function isSettingAvailable( $setting ) {
 		$this->loadSettingsDefs();
-		if( !array_key_exists( $setting, $this->getAllSettings() ) )
+		if ( !array_key_exists( $setting, $this->getAllSettings() ) )
 			return false;
-		if( !array_key_exists( $setting, $this->settingsVersion ) )
+		if ( !array_key_exists( $setting, $this->settingsVersion ) )
 			return true;
 		global $wgVersion;
-		foreach( $this->settingsVersion[$setting] as $test ){
+		foreach ( $this->settingsVersion[$setting] as $test ) {
 			list( $ver, $comp ) = $test;
-			if( !version_compare( $wgVersion, $ver, $comp ) )
+			if ( !version_compare( $wgVersion, $ver, $comp ) )
 				return false;
 		}
 		return true;
@@ -218,11 +255,12 @@ class ConfigurationSettings {
 	/**
 	 * Get the type of a setting
 	 *
+	 * @param $setting String: setting name
 	 * @return mixed
 	 */
-	public function getSettingType(){
+	public function getSettingType( $setting ) {
 		$settings = $this->getAllSettings();
-		if( isset( $settings[$setting] ) )
+		if ( isset( $settings[$setting] ) )
 			return $settings[$setting];
 		else
 			return false;
@@ -233,10 +271,9 @@ class ConfigurationSettings {
 	 *
 	 * @param $setting String: setting name
 	 */
-	public function getArrayType( $setting ){
+	public function getArrayType( $setting ) {
 		$arr = $this->getArrayDefs();
 		return isset( $arr[$setting] ) ?
-			$arr[$setting] :
-			null;
+			$arr[$setting] : null;
 	}
 }

@@ -1,45 +1,57 @@
 <?php
 
 class FlaggedRevision {
-	private $mRevId;
-	private $mPageId;
+	private $mTitle = null;
+	private $mRevId, $mPageId;
 	private $mTimestamp;
 	private $mComment;
 	private $mQuality;
 	private $mTags;
-	private $mText;
-	private $mRawDBText;
-	private $mFlags;
+	private $mText = null;
+	private $mRawDBText, $mFlags;
 	private $mUser;
-	private $mTitle;
 	private $mRevision;
-	private $mFileName;
-	private $mFileSha1;
-	private $mFileTimestamp;
+	private $mFileName, $mFileSha1, $mFileTimestamp;
 
 	/**
-	 * @param Title $title
 	 * @param Row $row (from database)
-	 * @access private
 	 */
-	function __construct( $title, $row ) {
-		$this->mTitle = $title;
-		$this->mRevId = intval( $row->fr_rev_id );
-		$this->mPageId = intval( $row->fr_page_id );
-		$this->mTimestamp = $row->fr_timestamp;
-		$this->mComment = $row->fr_comment;
-		$this->mQuality = intval( $row->fr_quality );
-		$this->mTags = self::expandRevisionTags( strval($row->fr_tags) );
-		# Image page revision relevant params
-		$this->mFileName = $row->fr_img_name ? $row->fr_img_name : null;
-		$this->mFileSha1 = $row->fr_img_sha1 ? $row->fr_img_sha1 : null;
-		$this->mFileTimestamp = $row->fr_img_timestamp ? $row->fr_img_timestamp : null;
-		# Optional fields
-		$this->mUser = isset($row->fr_user) ? $row->fr_user : 0;
-		$this->mFlags = isset($row->fr_flags) ? explode(',',$row->fr_flags) : null;
-		$this->mRawDBText = isset($row->fr_text) ? $row->fr_text : null;
-		# Deal with as it comes
-		$this->mText = null;
+	public function __construct( $row ) {
+		if( is_object($row) ) {
+			$this->mRevId = intval( $row->fr_rev_id );
+			$this->mPageId = intval( $row->fr_page_id );
+			$this->mTimestamp = $row->fr_timestamp;
+			$this->mComment = $row->fr_comment;
+			$this->mQuality = intval( $row->fr_quality );
+			$this->mTags = self::expandRevisionTags( strval($row->fr_tags) );
+			# Image page revision relevant params
+			$this->mFileName = $row->fr_img_name ? $row->fr_img_name : null;
+			$this->mFileSha1 = $row->fr_img_sha1 ? $row->fr_img_sha1 : null;
+			$this->mFileTimestamp = $row->fr_img_timestamp ? $row->fr_img_timestamp : null;
+			$this->mUser = intval( $row->fr_user );
+			# Optional fields
+			$this->mTitle = isset($row->page_namespace) && isset($row->page_title) ?
+				Title::makeTitleSafe( $row->page_namespace, $row->page_title ) : null;
+			$this->mFlags = isset($row->fr_flags) ? explode(',',$row->fr_flags) : null;
+			$this->mRawDBText = isset($row->fr_text) ? $row->fr_text : null;
+		} else if( is_array($row) ) {
+			$this->mRevId = intval( $row['fr_rev_id'] );
+			$this->mPageId = intval( $row['fr_page_id'] );
+			$this->mTimestamp = $row['fr_timestamp'];
+			$this->mComment = $row['fr_comment'];
+			$this->mQuality = intval( $row['fr_quality'] );
+			$this->mTags = self::expandRevisionTags( strval($row['fr_tags']) );
+			# Image page revision relevant params
+			$this->mFileName = $row['fr_img_name'] ? $row['fr_img_name'] : null;
+			$this->mFileSha1 = $row['fr_img_sha1'] ? $row['fr_img_sha1'] : null;
+			$this->mFileTimestamp = $row['fr_img_timestamp'] ? $row['fr_img_timestamp'] : null;
+			$this->mUser = intval( $row['fr_user'] );
+			# Optional fields
+			$this->mFlags = isset($row['fr_flags']) ? explode(',',$row['fr_flags']) : null;
+			$this->mRawDBText = isset($row['fr_text']) ? $row['fr_text'] : null;
+		} else {
+			throw new MWException( 'FlaggedRevision constructor passed invalid row format.' );
+		}
 	}
 	
 	/**
@@ -51,10 +63,19 @@ class FlaggedRevision {
 	 */
 	public static function newFromTitle( $title, $revId, $flags = 0 ) {
 		$columns = self::selectFields();
+		# If we want the text, then get the text flags too
 		if( $flags & FR_TEXT ) {
 			$columns += self::selectTextFields();
 		}
-		$db = $flags & FR_FOR_UPDATE ? wfGetDB( DB_MASTER ) : wfGetDB( DB_SLAVE );
+		$options = array();
+		# User master/slave as appropriate
+		if( $flags & FR_FOR_UPDATE || $flags & FR_MASTER ) {
+			$db = wfGetDB( DB_MASTER );
+			if( $flags & FR_FOR_UPDATE )
+				$options[] = 'FOR UPDATE';
+		} else {
+			$db = wfGetDB( DB_SLAVE );
+		}
 		$pageId = $title->getArticleID( $flags & FR_FOR_UPDATE ? GAID_FOR_UPDATE : 0 );
 		# Short-circuit query
 		if( !$pageId ) {
@@ -68,10 +89,13 @@ class FlaggedRevision {
 				'rev_id = fr_rev_id',
 				'rev_page = fr_page_id',
 				'rev_deleted & '.Revision::DELETED_TEXT => 0 ),
-			__METHOD__ );
+			__METHOD__,
+			$options );
 		# Sorted from highest to lowest, so just take the first one if any
 		if( $row ) {
-			return new FlaggedRevision( $title, $row );
+			$frev = new FlaggedRevision( $row );
+			$frev->mTitle = $title;
+			return $frev;
 		}
 		return null;
 	}
@@ -82,42 +106,49 @@ class FlaggedRevision {
 	 * @param int $flags
 	 * @returns mixed FlaggedRevision (null on failure)
 	 */
-	public static function newFromStable( $title, $flags=0 ) {
+	public static function newFromStable( $title, $flags = 0 ) {
 		$columns = self::selectFields();
+		# If we want the text, then get the text flags too
 		if( $flags & FR_TEXT ) {
 			$columns += self::selectTextFields();
 		}
+		$options = array();
 		$row = null;
 		# Short-circuit query
-		if( !$title->getArticleId() ) {
-			return $row;
+		$pageId = $title->getArticleID( $flags & FR_FOR_UPDATE ? GAID_FOR_UPDATE : 0 );
+		# Short-circuit query
+		if( !$pageId ) {
+			return null;
 		}
-		# If we want the text, then get the text flags too
-		if( !($flags & FR_FOR_UPDATE) ) {
+		# User master/slave as appropriate
+		if( !($flags & FR_FOR_UPDATE) && !($flags & FR_MASTER) ) {
 			$dbr = wfGetDB( DB_SLAVE );
 			$row = $dbr->selectRow( array('flaggedpages','flaggedrevs'),
 				$columns,
-				array( 'fp_page_id' => $title->getArticleId(),
-					'fr_page_id' => $title->getArticleId(),
+				array( 'fp_page_id' => $pageId,
+					'fr_page_id = fp_page_id',
 					'fp_stable = fr_rev_id' ),
 				__METHOD__  );
 			if( !$row )
 				return null;
 		} else {
+			if( $flags & FR_FOR_UPDATE )
+				$options[] = 'FOR UPDATE';
 			# Get visiblity settings...
-			$config = FlaggedRevs::getPageVisibilitySettings( $title, $flags & FR_FOR_UPDATE );
+			$config = FlaggedRevs::getPageVisibilitySettings( $title, true );
 			$dbw = wfGetDB( DB_MASTER );
+			$options['ORDER BY'] = 'fr_rev_id DESC';
 			# Look for the latest pristine revision...
 			if( FlaggedRevs::pristineVersions() && $config['select'] != FLAGGED_VIS_LATEST ) {
 				$prow = $dbw->selectRow( array('flaggedrevs','revision'),
 					$columns,
-					array( 'fr_page_id' => $title->getArticleID(),
+					array( 'fr_page_id' => $pageId,
 						'fr_quality = 2',
 						'rev_id = fr_rev_id',
 						'rev_page = fr_page_id',
 						'rev_deleted & '.Revision::DELETED_TEXT => 0),
 					__METHOD__,
-					array( 'ORDER BY' => 'fr_rev_id DESC') );
+					$options );
 				# Looks like a plausible revision
 				$row = $prow ? $prow : null;
 			}
@@ -129,39 +160,93 @@ class FlaggedRevision {
 					"fr_rev_id > {$row->fr_rev_id}" : "1 = 1";
 				$qrow = $dbw->selectRow( array('flaggedrevs','revision'),
 					$columns,
-					array( 'fr_page_id' => $title->getArticleID(),
+					array( 'fr_page_id' => $pageId,
 						'fr_quality = 1',
 						$newerClause,
 						'rev_id = fr_rev_id',
 						'rev_page = fr_page_id',
 						'rev_deleted & '.Revision::DELETED_TEXT => 0),
 					__METHOD__,
-					array( 'ORDER BY' => 'fr_rev_id DESC') );
+					$options );
 				$row = $qrow ? $qrow : $row;
 			}
 			# Do we have one? If not, try the latest reviewed revision...
 			if( !$row ) {
 				$row = $dbw->selectRow( array('flaggedrevs','revision'),
 					$columns,
-					array( 'fr_page_id' => $title->getArticleID(),
+					array( 'fr_page_id' => $pageId,
 						'rev_id = fr_rev_id',
 						'rev_page = fr_page_id',
 						'rev_deleted & '.Revision::DELETED_TEXT => 0),
 					__METHOD__,
-					array( 'ORDER BY' => 'fr_rev_id DESC' ) );
+					$options );
 				if( !$row )
 					return null;
 			}
 		}
-		return new FlaggedRevision( $title, $row );
+		$frev = new FlaggedRevision( $row );
+		$frev->mTitle = $title;
+		return $frev;
+	}
+	
+	/*
+	* Insert a FlaggedRevision object into the database
+	*
+	* @param string $fulltext expanded (pre-processed) text
+	* @param array $tmpRows template version rows
+	* @param array $fileRows file version rows
+	* @return bool success
+	*/
+	public function insertOn( $fulltext, $tmpRows, $fileRows ) {
+		global $wgRevisionCacheExpiry;
+		# Store/compress text as needed, and get the flags
+		$textFlags = FlaggedRevision::doSaveCompression( $fulltext );
+		$this->mRawDBText = $fulltext; // wikitext or ES url
+		$this->mFlags = explode(',',$textFlags);
+		$dbw = wfGetDB( DB_MASTER );
+		# Our review entry
+		$revRow = array(
+			'fr_page_id'       => $this->getPage(),
+			'fr_rev_id'	       => $this->getRevId(),
+			'fr_user'	       => $this->getUser(),
+			'fr_timestamp'     => $dbw->timestamp( $this->getTimestamp() ),
+			'fr_comment'       => $this->getComment(),
+			'fr_quality'       => $this->getQuality(),
+			'fr_tags'	       => self::flattenRevisionTags( $this->getTags() ),
+			'fr_text'	       => $fulltext, # Store expanded text for speed
+			'fr_flags'	       => $textFlags,
+			'fr_img_name'      => $this->getFileName(),
+			'fr_img_timestamp' => $this->getFileTimestamp(),
+			'fr_img_sha1'      => $this->getFileSha1()
+		);
+		# Update flagged revisions table
+		$dbw->replace( 'flaggedrevs', array( array('fr_page_id','fr_rev_id') ), $revRow, __METHOD__ );
+		# Clear out any previous garbage.
+		# We want to be able to use this for tracking...
+		$dbw->delete( 'flaggedtemplates', array( 'ft_rev_id' => $this->getRevId() ), __METHOD__ );
+		$dbw->delete( 'flaggedimages', array( 'fi_rev_id' => $this->getRevId() ), __METHOD__ );
+		# Update our versioning params
+		if( !empty($tmpRows) ) {
+			$dbw->insert( 'flaggedtemplates', $tmpRows, __METHOD__, 'IGNORE' );
+		}
+		if( !empty($fileRows) ) {
+			$dbw->insert( 'flaggedimages', $fileRows, __METHOD__, 'IGNORE' );
+		}
+		# Kill any text cache
+		if( $wgRevisionCacheExpiry ) {
+			global $wgMemc;
+			$key = wfMemcKey( 'flaggedrevisiontext', 'revid', $this->getRevId() );
+			$wgMemc->delete( $key );
+		}
+		return true;
 	}
 	
 	/**
 	 * @returns Array basic select fields (not including text/text flags)
 	 */
 	public static function selectFields() {
-		return array('fr_rev_id','fr_page_id','fr_user','fr_timestamp','fr_comment','fr_quality','fr_tags',
-			'fr_img_name', 'fr_img_sha1', 'fr_img_timestamp');
+		return array('fr_rev_id','fr_page_id','fr_user','fr_timestamp','fr_comment','fr_quality',
+			'fr_tags','fr_img_name', 'fr_img_sha1', 'fr_img_timestamp');
 	}
 	
 	/**
@@ -182,6 +267,9 @@ class FlaggedRevision {
 	 * @returns Title title
 	 */
 	public function getTitle() {
+		if( is_null($this->mTitle) ) {
+			$this->mTitle = Title::newFromId( $this->mPageId );
+		}
 		return $this->mTitle;
 	}
 
@@ -283,6 +371,35 @@ class FlaggedRevision {
 	public function userCanSetFlags() {
 		return RevisionReview::userCanSetFlags( $this->mTags );
 	}
+	
+	/**
+	 * @returns Array template versions (ns -> dbKey -> rev id)
+	 */	
+	public function getTemplateVersions() {
+		$templates = array();
+		$dbr = wfGetDB( DB_SLAVE );
+		$res = $dbr->select( 'flaggedtemplates', '*', array('ft_rev_id' => $this->getRevId()), __METHOD__ );
+		while( $row = $res->fetchObject() ) {
+			if( !isset($templates[$row->ft_namespace]) ) {
+				$templates[$row->ft_namespace] = array();
+			}
+			$templates[$row->ft_namespace][$row->ft_title] = $row->ft_tmp_rev_id;
+		}
+		return $templates;
+	}
+	
+	/**
+	 * @returns Array template versions (dbKey -> sha1)
+	 */	
+	public function getFileVersions() {
+		$files = array();
+		$dbr = wfGetDB( DB_SLAVE );
+		$res = $dbr->select( 'flaggedimages', '*', array('fi_rev_id' => $this->getRevId()), __METHOD__ );
+		while( $row = $res->fetchObject() ) {
+			$files[$row->fi_name] = $row->fi_img_sha1;
+		}
+		return $files;
+	}
 
 	/**
 	 * @returns mixed (string/false) expanded text
@@ -357,6 +474,10 @@ class FlaggedRevision {
 				$this->mFlags = explode(',',$row->fr_flags);
 			}
 		}
+		// Should the text actually be made dynamically?
+		if( in_array( 'dynamic', $this->mFlags ) ) {
+			return $this->getRevText();
+		}
 		// Check if fr_text is just some URL to external DB storage
 		if( in_array( 'external', $this->mFlags ) ) {
 			$url = $this->mRawDBText;
@@ -379,7 +500,47 @@ class FlaggedRevision {
 		return true;
 	}
 	
-		/**
+	/**
+	* @param string $fulltext
+	* @return string, flags
+	* Compress pre-processed text, passed by reference
+	* Accounts for various config options.
+	*/
+	public static function doSaveCompression( &$fulltext ) {
+		# Flag items that do not have text stored
+		global $wgUseStableTemplates;
+		if( $wgUseStableTemplates ) {
+			$fulltext = '';
+			$textFlags = 'utf-8,dynamic';
+		} else {
+			# Compress $fulltext, passed by reference
+			$textFlags = self::compressText( $fulltext );
+			# Write to external storage if required
+			$storage = FlaggedRevs::getExternalStorage();
+			if( $storage ) {
+				if( is_array($storage) ) {
+					# Distribute storage across multiple clusters
+					$store = $storage[mt_rand(0, count( $storage ) - 1)];
+				} else {
+					$store = $storage;
+				}
+				# Store and get the URL
+				$fulltext = ExternalStore::insert( $store, $fulltext );
+				if( !$fulltext ) {
+					# This should only happen in the case of a configuration error, where the external store is not valid
+					wfProfileOut( __METHOD__ );
+					throw new MWException( "Unable to store text to external storage $store" );
+				}
+				if( $textFlags ) {
+					$textFlags .= ',';
+				}
+				$textFlags .= 'external';
+			}
+		}
+		return $textFlags;
+	}
+	
+	/**
 	* @param string $text
 	* @return string, flags
 	* Compress pre-processed text, passed by reference

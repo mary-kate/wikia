@@ -44,7 +44,9 @@ function doSpecialEditData($query = '') {
 }
 
 function printEditForm($form_name, $target_name) {
-	global $wgOut, $wgRequest, $sfgScriptPath, $sfgFormPrinter, $sfgYUIBase;
+	global $wgOut, $wgRequest, $wgScriptPath, $sfgScriptPath, $sfgFormPrinter, $sfgYUIBase;
+
+	wfLoadExtensionMessages('SemanticForms');
 
 	$javascript_text = "";
 	// get contents of form definition file
@@ -87,6 +89,7 @@ function printEditForm($form_name, $target_name) {
 		list ($form_text, $javascript_text, $data_text, $form_page_title) =
 			$sfgFormPrinter->formHTML($form_definition, $form_submitted, $is_text_source, $edit_content, $page_title);
 		if ($form_submitted) {
+			$wgOut->setArticleBodyOnly( true );
 			$text = sffPrintRedirectForm($target_title, $data_text, $wgRequest->getVal('wpSummary'), $save_page, $preview_page, $diff_page, $wgRequest->getCheck('wpMinoredit'), $wgRequest->getCheck('wpWatchthis'), $wgRequest->getVal('wpStarttime'), $wgRequest->getVal('wpEdittime'));
 		} else {
 			// override the default title for this page if
@@ -133,10 +136,14 @@ END;
 	$wgOut->addScript('<script type="text/javascript" src="' .  $sfgYUIBase . 'get/get-min.js"></script>' . "\n");
 	$wgOut->addScript('<script type="text/javascript" src="' .  $sfgYUIBase . 'connection/connection-min.js"></script>' . "\n");
 	$wgOut->addScript('<script type="text/javascript" src="' .  $sfgYUIBase . 'json/json-min.js"></script>' . "\n");
+	$wgOut->addScript('<script type="text/javascript" src="' .  $sfgYUIBase . 'datasource/datasource-min.js"></script>' . "\n");
 	$wgOut->addScript('<script type="text/javascript" src="' .  $sfgYUIBase . 'autocomplete/autocomplete-min.js"></script>' . "\n");
 	$wgOut->addScript('<script type="text/javascript" src="' . $sfgScriptPath . '/libs/SF_yui_autocompletion.js"></script>' . "\n");
 	$wgOut->addScript('<script type="text/javascript" src="' . $sfgScriptPath . '/libs/floatbox.js"></script>' . "\n");
+	global $wgFCKEditorDir;
+	if ($wgFCKEditorDir)
+		$wgOut->addScript('<script type="text/javascript" src="' . "$wgScriptPath/$wgFCKEditorDir" . '/fckeditor.js"></script>' . "\n");
 	$wgOut->addScript('		<script type="text/javascript">' . "\n" . $javascript_text . '</script>' . "\n");
-	$wgOut->addMeta('robots','noindex,nofollow');
+	$wgOut->setRobotPolicy( 'noindex,nofollow' );
 	$wgOut->addHTML($text);
 }

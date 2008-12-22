@@ -14,6 +14,13 @@ $messages['en'] = array(
 	'titlekey-desc' => 'Title prefix search suggestion backend',
 );
 
+/** Message documentation (Message documentation)
+ * @author Mormegil
+ */
+$messages['qqq'] = array(
+	'titlekey-desc' => 'Description of the [[mw:Extension:TitleKey|TitleKey extension]], providing a case-insensitive title prefix search plugin',
+);
+
 /** Aragonese (Aragonés)
  * @author Juanpabl
  */
@@ -26,6 +33,20 @@ $messages['an'] = array(
  */
 $messages['ar'] = array(
 	'titlekey-desc' => 'نهاية اقتراح بحث عنوان البادئة',
+);
+
+/** Egyptian Spoken Arabic (مصرى)
+ * @author Ramsis II
+ */
+$messages['arz'] = array(
+	'titlekey-desc' => 'نهاية اقتراح التدوير على بريفيكس للعنوان',
+);
+
+/** Asturian (Asturianu)
+ * @author Esbardu
+ */
+$messages['ast'] = array(
+	'titlekey-desc' => 'Suxerencies de busca de prefixos de títulu',
 );
 
 /** Southern Balochi (بلوچی مکرانی)
@@ -63,6 +84,13 @@ $messages['eo'] = array(
 	'titlekey-desc' => 'Etendilo por serĉosugestoj laŭ titola prefikso',
 );
 
+/** Spanish (Español)
+ * @author Sanbec
+ */
+$messages['es'] = array(
+	'titlekey-desc' => 'Mecanismo para sugerir búsquedas por prefijo de título',
+);
+
 /** Persian (فارسی)
  * @author Huji
  */
@@ -70,11 +98,19 @@ $messages['fa'] = array(
 	'titlekey-desc' => 'پشتوانه پیشنهاد جستجو بر اساس پیشوند عنوان',
 );
 
+/** Finnish (Suomi)
+ * @author Crt
+ */
+$messages['fi'] = array(
+	'titlekey-desc' => 'Taustajärjestelmä otsikon alkuosaan perustuvan haun ennakoivalle tekstinsyötölle.',
+);
+
 /** French (Français)
  * @author Grondin
+ * @author McDutchie
  */
 $messages['fr'] = array(
-	'titlekey-desc' => "Retour vers la fin de la suggestion de recherche d'un préfixe de titre",
+	'titlekey-desc' => 'Méchanisme pour faire des suggestions de recherche par préfixe de titre',
 );
 
 /** Galician (Galego)
@@ -96,6 +132,13 @@ $messages['he'] = array(
  */
 $messages['hi'] = array(
 	'titlekey-desc' => 'शीर्षक उपपद खोज सजेशन बॅकएन्ड',
+);
+
+/** Croatian (Hrvatski)
+ * @author Dalibor Bosits
+ */
+$messages['hr'] = array(
+	'titlekey-desc' => 'Daje prijedlog traženja po prefiksu',
 );
 
 /** Upper Sorbian (Hornjoserbsce)
@@ -127,6 +170,13 @@ $messages['id'] = array(
 	'titlekey-desc' => 'Alat pemrosesan di belakang layar untuk pencarian awalan judul',
 );
 
+/** Italian (Italiano)
+ * @author Pietrodn
+ */
+$messages['it'] = array(
+	'titlekey-desc' => 'Backend dei suggerimenti per la ricerca dei prefissi dei titoli',
+);
+
 /** Japanese (日本語)
  * @author JtFuruhata
  */
@@ -141,11 +191,25 @@ $messages['jv'] = array(
 	'titlekey-desc' => 'Backend prosès panggolèkan irah-irahan préfiks',
 );
 
+/** Ripoarisch (Ripoarisch)
+ * @author Purodha
+ */
+$messages['ksh'] = array(
+	'titlekey-desc' => 'Deit em Hengerjrond noh de Aanfäng fun Sigge-Tittele söke un de jefonge Tittele vörschlare.',
+);
+
 /** Luxembourgish (Lëtzebuergesch)
  * @author Robby
  */
 $messages['lb'] = array(
 	'titlekey-desc' => 'Hannergrondprozess fir no Titelen ze sichen',
+);
+
+/** Limburgish (Limburgs)
+ * @author Matthias
+ */
+$messages['li'] = array(
+	'titlekey-desc' => 'Backend veur zeuksuggesties veur paginanaamveurvoegsels',
 );
 
 /** Marathi (मराठी)
@@ -169,6 +233,13 @@ $messages['nl'] = array(
 	'titlekey-desc' => 'Backend voor zoeksuggesties voor paginanaamvoorvoegsels',
 );
 
+/** Norwegian Nynorsk (‪Norsk (nynorsk)‬)
+ * @author Frokor
+ */
+$messages['nn'] = array(
+	'titlekey-desc' => 'Bakstykke for søk etter tittelprefiks',
+);
+
 /** Norwegian (bokmål)‬ (‪Norsk (bokmål)‬)
  * @author Jon Harald Søby
  */
@@ -180,7 +251,7 @@ $messages['no'] = array(
  * @author Cedric31
  */
 $messages['oc'] = array(
-	'titlekey-desc' => "Retorn vèrs la fin de la sugestion de recèrca d'un prefix de títol",
+	'titlekey-desc' => "Retorn cap a la fin de la suggestion de recèrca d'un prefix de títol",
 );
 
 /** Polish (Polski)
@@ -204,6 +275,13 @@ $messages['ru'] = array(
 	'titlekey-desc' => 'Движок поисковых подсказок по первым буквам названия',
 );
 
+/** Yakut (Саха тыла)
+ * @author HalanTul
+ */
+$messages['sah'] = array(
+	'titlekey-desc' => 'Көрдүүргэ сатабыллаах буоллун диэн аат бастакы буукубаларыгар эбэн этэн биэрии движога',
+);
+
 /** Slovak (Slovenčina)
  * @author Helix84
  */
@@ -223,6 +301,13 @@ $messages['sr-ec'] = array(
  */
 $messages['sv'] = array(
 	'titlekey-desc' => 'Bakstycke för sökning efter titelprefix',
+);
+
+/** Ukrainian (Українська)
+ * @author Ahonc
+ */
+$messages['uk'] = array(
+	'titlekey-desc' => 'Двигун пошукових підказок за першими літерами назви',
 );
 
 /** Vèneto (Vèneto)
