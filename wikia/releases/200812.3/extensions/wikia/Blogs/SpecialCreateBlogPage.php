@@ -71,17 +71,28 @@ class CreateBlogPage extends SpecialBlogPage {
 			$aPageProps['commenting'] = 1;
 		}
 
-		$this->mPostArticle->doEdit($sPostBody, "Blog post created or updated." );
-		if( count( $aPageProps ) ) {
-			// save extra properties
-			BlogListPage::saveProps( $this->mPostArticle->getId(), $aPageProps );
+//		$this->mPostArticle->doEdit($sPostBody, wfMsg('create-blog-updated') );
+
+		$editPage = new EditPage( $this->mPostArticle );
+		$editPage->textbox1 = $sPostBody;
+		$editpage->summary  = wfMsg('create-blog-updated');
+		$status = $editPage->internalAttemptSave( $result );
+		switch( $status ) {
+			case EditPage::AS_SUCCESS_UPDATE:
+			case EditPage::AS_SUCCESS_NEW_ARTICLE:
+				if( count( $aPageProps ) ) {
+					BlogArticle::setProps( $this->mPostArticle->getId(), $aPageProps );
+				}
+				self::invalidateCacheConnected( $this->mPostArticle );
+				$wgOut->redirect($this->mPostArticle->getTitle()->getFullUrl());
+				break;
+
+			default:
+				$this->mFormErrors[] = wfMsg('create-blog-spam');
+				$this->renderForm();
+				break;
 		}
 
-		$this->createListingPage();
-
-		self::invalidateCacheConnected( $this->mPostArticle );
-
-		$wgOut->redirect($this->mPostArticle->getTitle()->getFullUrl());
 	}
 
 	protected function parseFormData() {
@@ -106,7 +117,7 @@ class CreateBlogPage extends SpecialBlogPage {
 					$this->mFormErrors[] = wfMsg('create-blog-invalid-title-error');
 				}
 				else {
-					$this->mPostArticle = new BlogListPage($oPostTitle, 0);
+					$this->mPostArticle = new BlogArticle($oPostTitle, 0);
 					if($this->mPostArticle->exists() && !$this->mFormData['isExistingArticleEditAllowed']) {
 						$this->mFormErrors[] = wfMsg('create-blog-article-already-exists');
 					}
@@ -117,9 +128,9 @@ class CreateBlogPage extends SpecialBlogPage {
 			$isSysop = ( in_array('sysop', $wgUser->getGroups()) || in_array('staff', $wgUser->getGroups() ) );
 
 			$oPostTitle = Title::newFromID($this->mFormData['postId']);
-			$this->mPostArticle = new BlogListPage($oPostTitle, 0);
+			$this->mPostArticle = new BlogArticle($oPostTitle, 0);
 
-			if((strtolower($wgUser->getName()) != strtolower(BlogListPage::getOwner($oPostTitle))) && !$isSysop) {
+			if((strtolower($wgUser->getName()) != strtolower( BlogArticle::getOwner($oPostTitle))) && !$isSysop) {
 				$this->mFormErrors[] = wfMsg('create-blog-permission-denied');
 			}
 
@@ -173,7 +184,7 @@ class CreateBlogPage extends SpecialBlogPage {
 		$oTitle = Title::newFromText($sTitle, NS_BLOG_ARTICLE);
 		$oArticle = new Article($oTitle, 0);
 		$sArticleBody = $oArticle->getContent();
-		$aPageProps = BlogListPage::getProps($oArticle->getId());
+		$aPageProps = BlogArticle::getProps($oArticle->getId());
 		$aTitleParts = explode('/', $oTitle->getText(), 2);
 
 		$this->mFormData['postId'] = $oArticle->getId();
@@ -203,7 +214,7 @@ class CreateBlogPage extends SpecialBlogPage {
 	 * @author Krzysztof Krzyżaniak <eloy@wikia-inc.com>
 	 *
 	 */
-	static public function invalidateCacheConnected( BlogListPage $article ) {
+	static public function invalidateCacheConnected( BlogArticle $article ) {
 		$title = $article->getTitle();
 		$title->invalidateCache();
 		/**
