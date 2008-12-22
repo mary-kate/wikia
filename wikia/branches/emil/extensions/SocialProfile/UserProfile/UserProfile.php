@@ -7,12 +7,15 @@ define( 'NS_USER_WIKI', 200 );
 $wgUserPageChoice = true;
 $wgUserProfileDisplay['friends'] = false;
 $wgUserProfileDisplay['foes'] = false;
+$wgUserProfileDisplay['gifts'] = true;
+$wgUserProfileDisplay['awards'] = true;
 $wgUserProfileDisplay['profile'] = true;
 $wgUserProfileDisplay['board'] = false;
 $wgUserProfileDisplay['stats'] = false; //Display statistics on user profile pages?
 $wgUserProfileDisplay['interests'] = true;
 $wgUserProfileDisplay['custom'] = true;
 $wgUserProfileDisplay['personal'] = true;
+$wgUserProfileDisplay['userboxes'] = false; // If FanBoxes extension is installed, setting this to true will display the user's fanboxes on their profile page
 
 $wgUpdateProfileInRecentChanges = false; // Show a log entry in recent changes whenever a user updates their profile?
 $wgUploadAvatarInRecentChanges = false; //Same as above, but for avatar uploading

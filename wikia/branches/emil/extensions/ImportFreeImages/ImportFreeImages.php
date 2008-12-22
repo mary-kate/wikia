@@ -32,15 +32,17 @@ $wgIFI_ThumbType = "t"; // s for square t for thumbnail
 
 $wgExtensionCredits['specialpage'][] = array(
 	'name'           => 'ImportFreeImages',
-	'svn-date' => '$LastChangedDate: 2008-07-02 19:17:43 +0000 (Wed, 02 Jul 2008) $',
-	'svn-revision' => '$LastChangedRevision: 36940 $',
+	'svn-date' => '$LastChangedDate: 2008-09-04 14:56:36 +0000 (Thu, 04 Sep 2008) $',
+	'svn-revision' => '$LastChangedRevision: 40434 $',
 	'author'         => 'Travis Derouin',
 	'description'    => 'Provides a way of importing properly licensed photos from flickr.',
 	'descriptionmsg' => 'importfreeimages-desc',
 	'url'            => 'http://www.mediawiki.org/wiki/Extension:ImportFreeImages',
 );
 
-$wgExtensionMessagesFiles['ImportFreeImages'] = dirname(__FILE__) . '/ImportFreeImages.i18n.php';
+$dir = dirname(__FILE__) . '/';
+$wgExtensionMessagesFiles['ImportFreeImages'] = $dir . 'ImportFreeImages.i18n.php';
+$wgExtensionAliasesFiles['ImportFreeImages'] = $dir . 'ImportFreeImages.alias.php';
 $wgSpecialPages['ImportFreeImages'] = array( 'SpecialPage', 'ImportFreeImages' );
 
 # Note: we can't delay message loading currently, since we don't override SpecialPage::execute(),

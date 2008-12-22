@@ -7,10 +7,24 @@ $messages['en'] = array(
 	'psinotocnum-desc' => 'New magic word "<nowiki>__</nowiki>NOTOCNUM<nowiki>__</nowiki>"',
 );
 
+/** Message documentation (Message documentation)
+ * @author Purodha
+ */
+$messages['qqq'] = array(
+	'psinotocnum-desc' => 'Short description of the PsiNoTocNum extension, shown in [[Special:Version]]. Do not translate or change links.',
+);
+
 /** Arabic (العربية)
  * @author OsamaK
  */
 $messages['ar'] = array(
+	'psinotocnum-desc' => 'كلمة سحرية جديدة "<nowiki>__</nowiki>NOTOCNUM<nowiki>__</nowiki>"',
+);
+
+/** Egyptian Spoken Arabic (مصرى)
+ * @author Meno25
+ */
+$messages['arz'] = array(
 	'psinotocnum-desc' => 'كلمة سحرية جديدة "<nowiki>__</nowiki>NOTOCNUM<nowiki>__</nowiki>"',
 );
 
@@ -42,6 +56,20 @@ $messages['el'] = array(
 	'psinotocnum-desc' => 'Νέα μαγική λέξη "<nowiki>__</nowiki>NOTOCNUM<nowiki>__</nowiki>"',
 );
 
+/** Esperanto (Esperanto)
+ * @author Yekrats
+ */
+$messages['eo'] = array(
+	'psinotocnum-desc' => 'Nova magia vorto "<nowiki>__</nowiki>NOTOCNUM<nowiki>__</nowiki>"',
+);
+
+/** Spanish (Español)
+ * @author Sanbec
+ */
+$messages['es'] = array(
+	'psinotocnum-desc' => 'Nueva palabra mágica «<nowiki>__</nowiki>NOTOCNUM<nowiki>__</nowiki>»',
+);
+
 /** French (Français) */
 $messages['fr'] = array(
 	'psinotocnum-desc' => 'Nouveau mot magique « <nowiki>__</nowiki>NOTOCNUM<nowiki>__</nowiki> »',
@@ -54,11 +82,46 @@ $messages['gl'] = array(
 	'psinotocnum-desc' => 'Nova palabra máxica "<nowiki>__</nowiki>NOTOCNUM<nowiki>__</nowiki>"',
 );
 
+/** Upper Sorbian (Hornjoserbsce)
+ * @author Michawiki
+ */
+$messages['hsb'] = array(
+	'psinotocnum-desc' => 'Nowe magiske słowo "<nowiki>__</nowiki>NOTOCNUM<nowiki>__</nowiki>"',
+);
+
+/** Interlingua (Interlingua)
+ * @author McDutchie
+ */
+$messages['ia'] = array(
+	'psinotocnum-desc' => 'Un nove parola magic "<nowiki>__</nowiki>NOTOCNUM<nowiki>__</nowiki>"',
+);
+
 /** Indonesian (Bahasa Indonesia)
  * @author Rex
  */
 $messages['id'] = array(
 	'psinotocnum-desc' => 'Kata Magic baru "<nowiki>__</nowiki>NOTOCNUM<nowiki>__</nowiki>"',
+);
+
+/** Italian (Italiano)
+ * @author Darth Kule
+ */
+$messages['it'] = array(
+	'psinotocnum-desc' => 'Nuova parola magica "<nowiki>__</nowiki>NOTOCNUM<nowiki>__</nowiki>"',
+);
+
+/** Japanese (日本語)
+ * @author Mizusumashi
+ */
+$messages['ja'] = array(
+	'psinotocnum-desc' => '新しいマジックワード“<nowiki>__</nowiki>NOTOCNUM<nowiki>__</nowiki>”',
+);
+
+/** Khmer (ភាសាខ្មែរ)
+ * @author Lovekhmer
+ */
+$messages['km'] = array(
+	'psinotocnum-desc' => 'ពាក្យទិព្វថ្មី "<nowiki>__</nowiki>NOTOCNUM<nowiki>__</nowiki>"',
 );
 
 /** Ripoarisch (Ripoarisch)
@@ -86,7 +149,7 @@ $messages['mr'] = array(
  * @author Siebrand
  */
 $messages['nl'] = array(
-	'psinotocnum-desc' => 'Voegt het magische woord "<nowiki>__</nowiki>NOTOCNUM<nowiki>__</nowiki>" to',
+	'psinotocnum-desc' => 'Voegt het magische woord "<nowiki>__</nowiki>NOTOCNUM<nowiki>__</nowiki>" toe',
 );
 
 /** Norwegian (bokmål)‬ (‪Norsk (bokmål)‬)
@@ -101,6 +164,20 @@ $messages['no'] = array(
  */
 $messages['oc'] = array(
 	'psinotocnum-desc' => 'Mot magic novèl « <nowiki>__</nowiki>NOTOCNUM<nowiki>__</nowiki> »',
+);
+
+/** Portuguese (Português)
+ * @author Malafaya
+ */
+$messages['pt'] = array(
+	'psinotocnum-desc' => 'Nova palavra mágica "<nowiki>__</nowiki>NOTOCNUM<nowiki>__</nowiki>"',
+);
+
+/** Russian (Русский)
+ * @author Ferrer
+ */
+$messages['ru'] = array(
+	'psinotocnum-desc' => 'Новое волшебное слово «<nowiki>__</nowiki>NOTOCNUM<nowiki>__</nowiki>»',
 );
 
 /** Slovak (Slovenčina)

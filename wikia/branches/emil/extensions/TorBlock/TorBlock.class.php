@@ -23,6 +23,11 @@ class TorBlock {
 					return true;
 				}
 			}
+			
+			if (Block::isWhitelistedFromAutoblocks( wfGetIp() )) {
+				wfDebug( "-IP is in autoblock whitelist. Exempting from Tor blocks.\n" );
+				return true;
+			}
 
 			$ip = wfGetIp();
 			wfDebug( "-User detected as editing from Tor node. Adding Tor block to permissions errors\n" );
@@ -57,6 +62,7 @@ class TorBlock {
 
 		// We have to actually load from the server.
 
+		global $wgTorLoadNodes;
 		if (!$wgTorLoadNodes) {
 			// Disabled.
 			wfDebug( "Unable to load Tor exit node list: cold load disabled on page-views.\n" );

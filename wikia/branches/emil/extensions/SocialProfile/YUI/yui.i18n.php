@@ -1,13 +1,23 @@
 <?php
-
-/** Internationalization messages file for YUI extension
-  * @addgroup extension
-**/
+/**
+ * Internationalization messages file for YUI extension
+ *
+ * @file
+ * @ingroup Extensions
+ */
 
 $messages = array();
 
+/** English */
 $messages['en'] = array(
 	'yui-desc' => 'A set of utilities and controls, written in JavaScript',
+);
+
+/** Message documentation (Message documentation)
+ * @author Purodha
+ */
+$messages['qqq'] = array(
+	'yui-desc' => 'Short description of the Yui extension, shown in [[Special:Version]]. Do not translate or change links.',
 );
 
 /** Afrikaans (Afrikaans)
@@ -17,11 +27,39 @@ $messages['af'] = array(
 	'yui-desc' => 'Versameling hulpmiddels en kontroles wat in JavaScript geskryf is',
 );
 
+/** Arabic (العربية)
+ * @author Meno25
+ */
+$messages['ar'] = array(
+	'yui-desc' => 'مجموعة من الأدوات وأجهزة التحكم، مكتوبة بجافاسكريبت',
+);
+
+/** Egyptian Spoken Arabic (مصرى)
+ * @author Meno25
+ */
+$messages['arz'] = array(
+	'yui-desc' => 'مجموعة من الأدوات وأجهزة التحكم، مكتوبة بجافاسكريبت',
+);
+
+/** Asturian (Asturianu)
+ * @author Esbardu
+ */
+$messages['ast'] = array(
+	'yui-desc' => "Un conxuntu d'utilidaes y controles escritos en JavaScript",
+);
+
 /** Bulgarian (Български)
  * @author DCLXVI
  */
 $messages['bg'] = array(
 	'yui-desc' => 'Набор от инструменти и контроли, написани на Джаваскрипт',
+);
+
+/** Breton (Brezhoneg)
+ * @author Fulup
+ */
+$messages['br'] = array(
+	'yui-desc' => 'Un heuliad mavegoù ha kontroloù, skrivet e JavaSkript',
 );
 
 /** Czech (Česky)
@@ -31,11 +69,32 @@ $messages['cs'] = array(
 	'yui-desc' => 'Sada nástrojů napsaných v JavaScriptu.',
 );
 
+/** German (Deutsch)
+ * @author Revolus
+ */
+$messages['de'] = array(
+	'yui-desc' => 'Eine Sammlung in JavaScript geschriebener Werkzeuge und Steuerelemente',
+);
+
 /** Lower Sorbian (Dolnoserbski)
  * @author Michawiki
  */
 $messages['dsb'] = array(
 	'yui-desc' => 'Sajźba rědow a kontrolnych elementow napisanych w JavaScripśe',
+);
+
+/** Esperanto (Esperanto)
+ * @author Yekrats
+ */
+$messages['eo'] = array(
+	'yui-desc' => 'Aro da iloj kaj kontroliloj, verkita en JavaScript',
+);
+
+/** Spanish (Español)
+ * @author Sanbec
+ */
+$messages['es'] = array(
+	'yui-desc' => 'Un conjunto de utilidades y controles escritos en JavaScript',
 );
 
 /** French (Français)
@@ -52,6 +111,13 @@ $messages['gl'] = array(
 	'yui-desc' => 'Unha colección de utilidades e controis escritos en JavaScript',
 );
 
+/** Hebrew (עברית)
+ * @author Rotemliss
+ */
+$messages['he'] = array(
+	'yui-desc' => 'ערכת כלים ובקרים, שנכתבה ב־JavaScript',
+);
+
 /** Upper Sorbian (Hornjoserbsce)
  * @author Michawiki
  */
@@ -66,11 +132,32 @@ $messages['hu'] = array(
 	'yui-desc' => 'JavaScript nyelven írt eszközök és vezérlők gyűjteménye.',
 );
 
+/** Interlingua (Interlingua)
+ * @author McDutchie
+ */
+$messages['ia'] = array(
+	'yui-desc' => 'Un collection de utilitates e controlos, scribite in JavaScript',
+);
+
+/** Indonesian (Bahasa Indonesia)
+ * @author Rex
+ */
+$messages['id'] = array(
+	'yui-desc' => 'Sebuah set alat-alat dan pengendali, ditulis dalam JavaScript',
+);
+
 /** Icelandic (Íslenska)
  * @author S.Örvarr.S
  */
 $messages['is'] = array(
 	'yui-desc' => 'Sett af hjálparforritum og stjórntækjum, skrifum í JavaScript',
+);
+
+/** Japanese (日本語)
+ * @author Aotake
+ */
+$messages['ja'] = array(
+	'yui-desc' => 'JavaScriptで書かれた各種ユーティリティとコントロール',
 );
 
 /** Javanese (Basa Jawa)
@@ -101,6 +188,13 @@ $messages['li'] = array(
 	'yui-desc' => "'n Verzameling hölpmi-jjel en besturingsillemaenter in JavaSjrif",
 );
 
+/** Macedonian (Македонски)
+ * @author Brest
+ */
+$messages['mk'] = array(
+	'yui-desc' => 'Множество на алатки и контроли, напишани во JavaScript.',
+);
+
 /** Marathi (मराठी)
  * @author Mahitgar
  */
@@ -108,11 +202,25 @@ $messages['mr'] = array(
 	'yui-desc' => 'जावा स्क्रिप्टने लिहीलेल्या सुविधा आणि नियंत्रणांचा संच',
 );
 
+/** Nedersaksisch (Nedersaksisch)
+ * @author Servien
+ */
+$messages['nds-nl'] = array(
+	'yui-desc' => 'Een verzameling hulpmiddels en besturingselementen in Java',
+);
+
 /** Dutch (Nederlands)
  * @author Siebrand
  */
 $messages['nl'] = array(
 	'yui-desc' => 'Een verzameling hulpmiddelen en besturingselementen in JavaScript',
+);
+
+/** Norwegian Nynorsk (‪Norsk (nynorsk)‬)
+ * @author Frokor
+ */
+$messages['nn'] = array(
+	'yui-desc' => 'Ei rekkje verktøy og kontrollar skrive i JavaScript',
 );
 
 /** Norwegian (bokmål)‬ (‪Norsk (bokmål)‬)
@@ -130,14 +238,23 @@ $messages['oc'] = array(
 );
 
 /** Polish (Polski)
+ * @author Derbeth
  * @author Wpedzich
  */
 $messages['pl'] = array(
-	'yui-desc' => 'Zestaw narzędzi i elementów kontrolnych napisanych w jezyku JavaScript',
+	'yui-desc' => 'Zestaw narzędzi i elementów kontrolnych napisanych w JavaScripcie',
+);
+
+/** Pashto (پښتو)
+ * @author Ahmed-Najib-Biabani-Ibrahimkhel
+ */
+$messages['ps'] = array(
+	'yui-desc' => 'په جاواسکرېپټ کې ليکل شوی، د اوزارونو او مهارولو يوه ټولګه',
 );
 
 /** Portuguese (Português)
  * @author Malafaya
+ * @author Vanessa Sabino
  */
 $messages['pt'] = array(
 	'yui-desc' => 'Um conjunto de utilitários e controlos, escritos em JavaScript',
@@ -148,6 +265,13 @@ $messages['pt'] = array(
  */
 $messages['ro'] = array(
 	'yui-desc' => 'O serie de utilitzare şi controale, în JavaScript',
+);
+
+/** Tarandíne (Tarandíne)
+ * @author Joetaras
+ */
+$messages['roa-tara'] = array(
+	'yui-desc' => "'N'inzieme de utilità e condrolle, scritte in Javascript",
 );
 
 /** Russian (Русский)
@@ -164,6 +288,13 @@ $messages['sk'] = array(
 	'yui-desc' => 'Sada nástrojov napísaných v JavaScripte',
 );
 
+/** Sundanese (Basa Sunda)
+ * @author Irwangatot
+ */
+$messages['su'] = array(
+	'yui-desc' => 'Set ti pakakas sarta pangaturan, ditulis dina JavaScript',
+);
+
 /** Swedish (Svenska)
  * @author M.M.S.
  * @author Sannab
@@ -172,11 +303,18 @@ $messages['sv'] = array(
 	'yui-desc' => 'En serie av verktyg och kontroller, skrivna i JavaScript',
 );
 
-/** Tajik (Cyrillic) (Тоҷикӣ/tojikī (Cyrillic))
+/** Tajik (Cyrillic) (Тоҷикӣ (Cyrillic))
  * @author Ibrahim
  */
 $messages['tg-cyrl'] = array(
 	'yui-desc' => 'Маҷмӯъи барномаҳои судманд ва танзимот, ки дар ҶаваСкрипт навишта шудаанд',
+);
+
+/** Ukrainian (Українська)
+ * @author Ahonc
+ */
+$messages['uk'] = array(
+	'yui-desc' => 'Набір засобів і керуючих елементів, написаних на JavaScript',
 );
 
 /** Vèneto (Vèneto)

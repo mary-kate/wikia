@@ -27,6 +27,7 @@ $wgExtensionCredits['specialpage'][] = array(
 );
 
 /* special page init */
+$wgSpecialPageGroups['Regexblock'] = 'users';
 function wfRegexBlockSetup() {
 	global $IP;
 	if (!wfSimplifiedRegexCheckSharedDB())

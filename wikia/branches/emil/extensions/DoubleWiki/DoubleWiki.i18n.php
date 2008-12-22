@@ -11,6 +11,13 @@ $messages['en'] = array(
 	'doublewiki-desc' => 'Displays a page and its translation from another wiki on two columns of the same page',
 );
 
+/** Message documentation (Message documentation)
+ * @author Raimond Spekking
+ */
+$messages['qqq'] = array(
+	'doublewiki-desc' => 'Extension description displayed on [[Special:Version]]',
+);
+
 /** Aragonese (Aragonés)
  * @author Juanpabl
  */
@@ -23,6 +30,14 @@ $messages['an'] = array(
  */
 $messages['ar'] = array(
 	'doublewiki-desc' => 'يعرض صفحة وترجمتها من ويكي أخرى على عمودين من نفس الصفحة',
+);
+
+/** Egyptian Spoken Arabic (مصرى)
+ * @author Meno25
+ * @author Ramsis II
+ */
+$messages['arz'] = array(
+	'doublewiki-desc' => 'بيعرض صفحة و الترجمة بتاعتها من ويكى تانية على عمودين فى نفس الصفحة',
 );
 
 /** Asturian (Asturianu)
@@ -39,6 +54,13 @@ $messages['bcc'] = array(
 	'doublewiki-desc' => 'پیشداریت یک صفحه ای و آیی ترجمه یا چه یک دگه ویکیء ته دو ستون یک صفحه ای',
 );
 
+/** Belarusian (Taraškievica orthography) (Беларуская (тарашкевіца))
+ * @author Red Winged Duck
+ */
+$messages['be-tarask'] = array(
+	'doublewiki-desc' => 'Паказвае старонку і яе пераклад зь іншай вікі ў выглядзе двух слупкоў',
+);
+
 /** Bulgarian (Български)
  * @author DCLXVI
  */
@@ -51,6 +73,13 @@ $messages['bg'] = array(
  */
 $messages['br'] = array(
 	'doublewiki-desc' => 'Diskouez a ra, war daou vann ha war an hevelep pajenn, ur bajenn hag he zroidigezh adal ur wiki all',
+);
+
+/** Bosnian (Bosanski)
+ * @author CERminator
+ */
+$messages['bs'] = array(
+	'doublewiki-desc' => 'Prikazuje stranicu i njen prijevod s drugog wiki projekta u dva stupca na istoj stranici',
 );
 
 /** Catalan (Català)
@@ -74,11 +103,25 @@ $messages['de'] = array(
 	'doublewiki-desc' => 'Zeigt eine Seite und ihre Übersetzung aus einem anderen Wiki zweispaltig auf derselben Seite an',
 );
 
+/** Lower Sorbian (Dolnoserbski)
+ * @author Michawiki
+ */
+$messages['dsb'] = array(
+	'doublewiki-desc' => 'Zwobraznja bok a jogo pśełožk z drugego wikija w dwěma słupikoma samkego boka',
+);
+
 /** Esperanto (Esperanto)
  * @author Yekrats
  */
 $messages['eo'] = array(
 	'doublewiki-desc' => 'Montras paĝon kaj ties tradukon de aliaj vikio kun du kolumnoj en la sama paĝo',
+);
+
+/** Spanish (Español)
+ * @author Sanbec
+ */
+$messages['es'] = array(
+	'doublewiki-desc' => 'Muestra una página y su traducción de otra wiki en dos columnas de la misma página',
 );
 
 /** Persian (فارسی)
@@ -128,6 +171,13 @@ $messages['he'] = array(
  */
 $messages['hi'] = array(
 	'doublewiki-desc' => 'एक लेख और उसका अन्य विकिपर उपलब्ध अनुवाद उसी पन्नेपर दो विभागोंमें दर्शाता हैं',
+);
+
+/** Croatian (Hrvatski)
+ * @author Dalibor Bosits
+ */
+$messages['hr'] = array(
+	'doublewiki-desc' => 'Pokazuje stranicu i njen prijevod s drugog wikija u dva stupca na istoj stranici',
 );
 
 /** Upper Sorbian (Hornjoserbsce)
@@ -181,9 +231,17 @@ $messages['jv'] = array(
 
 /** Khmer (ភាសាខ្មែរ)
  * @author Chhorran
+ * @author Lovekhmer
  */
 $messages['km'] = array(
-	'doublewiki-desc' => 'បង្ហាញ ទំព័រ និង បំរែសំរួលរបស់វា ពី វិគីផ្សេង លើ ពីរ ជួរឈរ នៃ​ ទំព័រតែមួយ',
+	'doublewiki-desc' => 'បង្ហាញទំព័រនិងការបកប្រែរបស់វាពីវិគីផ្សេងទៀតជាពីរជួរឈរនៃ​ទំព័រដូចគ្នា',
+);
+
+/** Ripoarisch (Ripoarisch)
+ * @author Purodha
+ */
+$messages['ksh'] = array(
+	'doublewiki-desc' => 'En Hölp för et Övversäze — zeijsh en zwei Sigge en zwei Shprooche us zwei Wikkis en zwei Shpallde nevvenannder aan.',
 );
 
 /** Luxembourgish (Lëtzebuergesch)
@@ -263,6 +321,13 @@ $messages['pt'] = array(
 	'doublewiki-desc' => 'Apresenta uma página e a sua tradução de outro wiki em duas colunas da mesma página',
 );
 
+/** Tarandíne (Tarandíne)
+ * @author Joetaras
+ */
+$messages['roa-tara'] = array(
+	'doublewiki-desc' => "Fà vedè 'na pàgene e le traduziune sue da n'otra Uicchi sus a doje culonne d'a stessa pàgene",
+);
+
 /** Russian (Русский)
  * @author Александр Сигачёв
  */
@@ -312,7 +377,7 @@ $messages['te'] = array(
 	'doublewiki-desc' => 'పేజీని, మరో వికీలో దాని అనువాదాన్ని ఒకే పేజీలో రెండు నిలువు వరుసల్లో చూపించు',
 );
 
-/** Tajik (Cyrillic) (Тоҷикӣ/tojikī (Cyrillic))
+/** Tajik (Cyrillic) (Тоҷикӣ (Cyrillic))
  * @author Ibrahim
  */
 $messages['tg-cyrl'] = array(

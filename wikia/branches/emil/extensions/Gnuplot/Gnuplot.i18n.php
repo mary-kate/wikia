@@ -11,6 +11,27 @@ $messages['en'] = array(
 	'gnuplot-desc' => 'Adds the tag <code><nowiki><gnuplot></nowiki></code> to use Gnuplot',
 );
 
+/** Message documentation (Message documentation)
+ * @author Purodha
+ */
+$messages['qqq'] = array(
+	'gnuplot-desc' => 'Shown in [[Special:Version]].',
+);
+
+/** Arabic (العربية)
+ * @author Meno25
+ */
+$messages['ar'] = array(
+	'gnuplot-desc' => 'يضيف الوسم <code><nowiki><gnuplot></nowiki></code> لاستخدام جنو بلوت',
+);
+
+/** Egyptian Spoken Arabic (مصرى)
+ * @author Meno25
+ */
+$messages['arz'] = array(
+	'gnuplot-desc' => 'يضيف الوسم <code><nowiki><gnuplot></nowiki></code> لاستخدام جنو بلوت',
+);
+
 /** Bulgarian (Български)
  * @author DCLXVI
  */
@@ -18,11 +39,30 @@ $messages['bg'] = array(
 	'gnuplot-desc' => 'Добавя етикет <code><nowiki><gnuplot></nowiki></code> за използване на Gnuplot',
 );
 
+/** German (Deutsch) */
+$messages['de'] = array(
+	'gnuplot-desc' => 'Fügt den <code><nowiki><gnuplot></nowiki></code>-Tag hinzu, um Gnuplot zu verwenden',
+);
+
+/** Lower Sorbian (Dolnoserbski)
+ * @author Michawiki
+ */
+$messages['dsb'] = array(
+	'gnuplot-desc' => 'Pśidawa toflicku <code><nowiki><gnuplot></nowiki></code>, aby se Gnuplot wužywał',
+);
+
 /** Esperanto (Esperanto)
  * @author Yekrats
  */
 $messages['eo'] = array(
 	'gnuplot-desc' => 'Aldonas etikedon <code><nowiki><gnuplot></nowiki></code> por uzi Gnuplot',
+);
+
+/** Spanish (Español)
+ * @author Sanbec
+ */
+$messages['es'] = array(
+	'gnuplot-desc' => 'Añade la etiqueta <code><nowiki><gnuplot></nowiki></code> para usar Gnuplot',
 );
 
 /** French (Français)
@@ -39,6 +79,13 @@ $messages['gl'] = array(
 	'gnuplot-desc' => 'Engade a etiqueta <code><nowiki><gnuplot></nowiki></code> para usar Gnuplot',
 );
 
+/** Hebrew (עברית)
+ * @author Rotemliss
+ */
+$messages['he'] = array(
+	'gnuplot-desc' => 'הוספת את התגית <code><nowiki><gnuplot></nowiki></code> לשימוש ב־Gnuplot',
+);
+
 /** Hindi (हिन्दी)
  * @author Kaustubh
  */
@@ -53,11 +100,46 @@ $messages['hsb'] = array(
 	'gnuplot-desc' => 'Přidawa tafličku <code><nowiki><gnuplot></nowiki></code> za wužiwanje rozšěrjenja Gnuplot',
 );
 
+/** Interlingua (Interlingua)
+ * @author McDutchie
+ */
+$messages['ia'] = array(
+	'gnuplot-desc' => 'Adde le etiquetta <code><nowiki><gnuplot></nowiki></code> pro usar Gnuplot',
+);
+
+/** Italian (Italiano)
+ * @author Darth Kule
+ */
+$messages['it'] = array(
+	'gnuplot-desc' => 'Aggiunge il tag <code><nowiki><gnuplot></nowiki></code> per usare Gnuplot',
+);
+
+/** Japanese (日本語)
+ * @author Fryed-peach
+ */
+$messages['ja'] = array(
+	'gnuplot-desc' => 'Gnuplot を利用するために<code><nowiki><gnuplot></nowiki></code>タグを追加する',
+);
+
 /** Javanese (Basa Jawa)
  * @author Meursault2004
  */
 $messages['jv'] = array(
 	'gnuplot-desc' => 'Nambahaké tag <code><nowiki><gnuplot></nowiki></code> kanggo nrapaké Gnuplot',
+);
+
+/** Khmer (ភាសាខ្មែរ)
+ * @author Lovekhmer
+ */
+$messages['km'] = array(
+	'gnuplot-desc' => 'ដាក់បន្ថែមប្លាក<code><nowiki><gnuplot></nowiki></code>ដើម្បីប្រើប្រាស់ Gnuplot',
+);
+
+/** Ripoarisch (Ripoarisch)
+ * @author Purodha
+ */
+$messages['ksh'] = array(
+	'gnuplot-desc' => 'Deiht dä Befähl <code><nowiki><gnuplot></nowiki></code> en et Wiki dobei, öm <i lang="en">Gnuplot</i> ze bruche.',
 );
 
 /** Luxembourgish (Lëtzebuergesch)
@@ -92,7 +174,7 @@ $messages['no'] = array(
  * @author Cedric31
  */
 $messages['oc'] = array(
-	'gnuplot-desc' => 'Apondís la balisa <code><nowiki><gnuplot></nowiki></code> per poder utilizar Gnuplot',
+	'gnuplot-desc' => 'Apond la balisa <code><nowiki><gnuplot></nowiki></code> per poder utilizar Gnuplot',
 );
 
 /** Polish (Polski)
@@ -108,6 +190,13 @@ $messages['pl'] = array(
  */
 $messages['pt'] = array(
 	'gnuplot-desc' => 'Adiciona a marca <code><nowiki><gnuplot></nowiki></code> para utilizar o Gnuplot',
+);
+
+/** Tarandíne (Tarandíne)
+ * @author Joetaras
+ */
+$messages['roa-tara'] = array(
+	'gnuplot-desc' => "Aggiunge 'u tag <code><nowiki><gnuplot></nowiki></code> pe ausà Gnuplot",
 );
 
 /** Russian (Русский)

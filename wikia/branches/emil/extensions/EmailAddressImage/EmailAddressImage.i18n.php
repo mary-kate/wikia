@@ -14,6 +14,13 @@ $messages['en'] = array(
 	'emailaddressimage-desc' => 'Adds <tt>&lt;email&gt;</tt> to display an e-mail address as image',
 );
 
+/** Message documentation (Message documentation)
+ * @author Purodha
+ */
+$messages['qqq'] = array(
+	'emailaddressimage-desc' => 'Shown in [[Special:Version]] as a short description of this extension. Do not translate links.',
+);
+
 /** Arabic (العربية)
  * @author Meno25
  */
@@ -21,11 +28,30 @@ $messages['ar'] = array(
 	'emailaddressimage-desc' => 'يضيف <tt>&lt;email&gt;</tt> لعرض عنوان بريد إلكتروني كصورة',
 );
 
+/** Egyptian Spoken Arabic (مصرى)
+ * @author Meno25
+ */
+$messages['arz'] = array(
+	'emailaddressimage-desc' => 'يضيف <tt>&lt;email&gt;</tt> لعرض عنوان بريد إلكترونى كصورة',
+);
+
 /** Bulgarian (Български)
  * @author DCLXVI
  */
 $messages['bg'] = array(
 	'emailaddressimage-desc' => 'Добавя <tt>&lt;email&gt;</tt> за показване на адреси за е-поща като картинки',
+);
+
+/** Czech (Česky)
+ * @author Li-sung
+ */
+$messages['cs'] = array(
+	'emailaddressimage-desc' => 'Přidává značku <tt>&lt;email&gt;</tt> zajišťující zobrazení e-mailové adresy jako obrázku',
+);
+
+/** German (Deutsch) */
+$messages['de'] = array(
+	'emailaddressimage-desc' => 'Ergänzt das <tt>&lt;email&gt;</tt>-Tag, um eine E-Mail-Adresse als Bild darzustellen',
 );
 
 /** Lower Sorbian (Dolnoserbski)
@@ -40,6 +66,13 @@ $messages['dsb'] = array(
  */
 $messages['eo'] = array(
 	'emailaddressimage-desc' => 'Aldonas <tt>&lt;retpoŝton&gr;</tt> montri retpoŝtan adreson kiel bildon',
+);
+
+/** Spanish (Español)
+ * @author Sanbec
+ */
+$messages['es'] = array(
+	'emailaddressimage-desc' => 'Añade la etiqueta <tt>&lt;email&gt;</tt> que muestra una dirección de correo electrónico como imagen.',
 );
 
 /** French (Français)
@@ -78,6 +111,13 @@ $messages['hsb'] = array(
 	'emailaddressimage-desc' => 'Přidawa <tt>&lt;email&gt;</tt>, zo by e-mejlowu adresu jako wobraz zwobrazniło',
 );
 
+/** Interlingua (Interlingua)
+ * @author McDutchie
+ */
+$messages['ia'] = array(
+	'emailaddressimage-desc' => 'Adde <tt>&lt;email&gt;</tt> pro monstrar un adresse de e-mail como imagine',
+);
+
 /** Japanese (日本語)
  * @author JtFuruhata
  */
@@ -91,6 +131,13 @@ $messages['ja'] = array(
  */
 $messages['km'] = array(
 	'emailaddressimage-desc' => 'បន្ថែម<tt>&lt;email&gt;</tt>ដើម្បីបង្ហាញអាសយដ្ឋាន​អ៊ីមែលជារូបភាព',
+);
+
+/** Ripoarisch (Ripoarisch)
+ * @author Purodha
+ */
+$messages['ksh'] = array(
+	'emailaddressimage-desc' => '<tt> &lt;email&gt; </tt> määt et müjjelesch, <i lang="en">e-mail</i> Addresse als e Belldsche ußzejävve.',
 );
 
 /** Luxembourgish (Lëtzebuergesch)
@@ -139,7 +186,7 @@ $messages['no'] = array(
  * @author Cedric31
  */
 $messages['oc'] = array(
-	'emailaddressimage-desc' => 'Apondís <tt>&lt;email&gt;</tt> per afichar una adreça de corrièr electronic coma imatge',
+	'emailaddressimage-desc' => 'Apond <tt>&lt;email&gt;</tt> per afichar una adreça de corrièr electronic coma imatge',
 );
 
 /** Polish (Polski)
@@ -149,11 +196,25 @@ $messages['pl'] = array(
 	'emailaddressimage-desc' => 'Dodaje znacznik <tt>&lt;email&gt;</tt> pozwalający wyświetlić adres e-mail jako obrazek.',
 );
 
+/** Pashto (پښتو)
+ * @author Ahmed-Najib-Biabani-Ibrahimkhel
+ */
+$messages['ps'] = array(
+	'emailaddressimage-desc' => 'د انځور په توګه د برېښليک پتې د ښکاره کولو لپاره د <tt>&lt;برېښليک&gt;</tt> وييکه ورګډوي',
+);
+
 /** Portuguese (Português)
  * @author Malafaya
  */
 $messages['pt'] = array(
 	'emailaddressimage-desc' => 'Adiciona <tt>&lt;email&gt;</tt> para apresentar um endereço de e-mail como imagem',
+);
+
+/** Tarandíne (Tarandíne)
+ * @author Joetaras
+ */
+$messages['roa-tara'] = array(
+	'emailaddressimage-desc' => "Aggiunge <tt>&lt;email&gt;</tt> pe fà vedè 'n'indirizze e-mail cumme immaggine.",
 );
 
 /** Russian (Русский)
@@ -184,7 +245,7 @@ $messages['te'] = array(
 	'emailaddressimage-desc' => 'ఈ-మెయిల్ చిరునామాని బొమ్మగా చూపించడానికి <tt>&lt;email&gt;</tt>ని చేరుస్తుంది',
 );
 
-/** Tajik (Cyrillic) (Тоҷикӣ/tojikī (Cyrillic))
+/** Tajik (Cyrillic) (Тоҷикӣ (Cyrillic))
  * @author Ibrahim
  */
 $messages['tg-cyrl'] = array(

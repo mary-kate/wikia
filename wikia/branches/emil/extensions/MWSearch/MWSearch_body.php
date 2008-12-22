@@ -55,11 +55,21 @@ class LuceneSearch extends SearchEngine {
 		global $wgContLang, $wgLuceneUseRelated;
 		$fname = 'LuceneSearch::replacePrefixes';
 		wfProfileIn($fname);
-		$qlen = strlen($query);
 		$start = 0; $len = 0; // token start pos and length
 		$rewritten = ''; // rewritten query
 		$rindex = 0; // point to last rewritten character
 		$inquotes = false;
+		
+		// "search everything" keyword
+		$allkeyword = wfMsgForContent('searchall');		
+		
+		// if all namespaces are set, convert to prefixed all: syntax which is more quickly handled by backend
+		$nsAllSet = array_keys( SearchEngine::searchableNamespaces() );
+		if( $this->namespaces ==  $nsAllSet && strncmp($query, $allkeyword, strlen($allkeyword)) != 0){
+			$query = $allkeyword.':'.$query;
+		}
+		
+		$qlen = strlen($query);
 		
 		// quick check, most of the time we don't need any rewriting
 		if(strpos($query,':')===false){ 
@@ -75,10 +85,6 @@ class LuceneSearch extends SearchEngine {
 			wfProfileOut($fname);
 			return trim($ret);
 		}
-		
-		// "search everything"
-		//  might not be at the beginning for complex queries
-		$allkeyword = wfMsgForContent('searchall');		
 		
 		for($i = 0 ; $i < $qlen ; $i++){
 			$c = $query[$i];
@@ -151,6 +157,10 @@ class LuceneSearch extends SearchEngine {
 		$rewritten .= substr($query,$rindex,$qlen-$rindex);
 		wfProfileOut($fname);
 		return $rewritten;
+	}
+	
+	function acceptListRedirects() {
+		return false;
 	}
 }
 
@@ -248,6 +258,9 @@ class LuceneResult extends SearchResult {
 		
 		if($this->mInterwiki == '')
 			$this->mRevision = Revision::newFromTitle( $this->mTitle );
+			
+		if(!is_null($this->mTitle) && $this->mTitle->getNamespace() == NS_IMAGE)
+			$this->mImage = wfFindFile( $this->mTitle );	
 	}
 	
 	/**
@@ -434,6 +447,7 @@ class LuceneSearchSet extends SearchResultSet {
 		
 		global $wgLuceneHost, $wgLucenePort, $wgDBname, $wgMemc;
 		global $wgLuceneSearchVersion, $wgLuceneSearchCacheExpiry;
+		global $wgLuceneSearchTimeout;
 		
 		if( is_array( $wgLuceneHost ) ) {
 			$pick = mt_rand( 0, count( $wgLuceneHost ) - 1 );
@@ -466,7 +480,7 @@ class LuceneSearchSet extends SearchResultSet {
 		wfDebug( "Fetching search data from $searchUrl\n" ); 
 		wfSuppressWarnings();
 		wfProfileIn( $fname.'-contact-'.$host );
-		$data = Http::get( $searchUrl );
+		$data = Http::get( $searchUrl, $wgLuceneSearchTimeout );
 		wfProfileOut( $fname.'-contact-'.$host );
 		wfRestoreWarnings();
 		if( $data === false ) {
@@ -604,10 +618,33 @@ class LuceneSearchSet extends SearchResultSet {
 	function termMatches() {		
 		$resq = preg_replace( "/\\[.*?\\]:/", " ", $this->mQuery ); # generic prefixes
 		$resq = preg_replace( "/all:/", " ", $resq ); 
-		$resq = trim( preg_replace( "/[ |\\[\\]()\"{}+\\-_@!?%&*=\\|:;><,.\\/]+/", " ", $resq ) );
-		$terms = array_map( array( &$this, 'regexQuote' ),
-			explode( ' ', $resq ) );
-		return $terms;
+		
+		// Fixme: this is ripped from SearchMySQL and probably kind of sucks,
+		// but it handles quoted phrase searches more or less correctly.
+		// Should encapsulate this stuff better.
+		
+		// FIXME: This doesn't handle parenthetical expressions.
+		$regexes = array();
+		$m = array();
+		$lc = SearchEngine::legalSearchChars();
+		if( preg_match_all( '/([-+<>~]?)(([' . $lc . ']+)(\*?)|"[^"]*")/',
+			  $resq, $m, PREG_SET_ORDER ) ) {
+			foreach( $m as $terms ) {
+				if( !empty( $terms[3] ) ) {
+					// Match individual terms in result highlighting...
+					$regexp = preg_quote( $terms[3], '/' );
+					if( $terms[4] ) $regexp .= "[0-9A-Za-z_]+";
+				} else {
+					// Match the quoted term in result highlighting...
+					$regexp = preg_quote( str_replace( '"', '', $terms[2] ), '/' );
+				}
+				$regexes[] = $regexp;
+			}
+			wfDebug( __METHOD__ . ': Match with /' . implode( '|', $regexes ) . "/\n" );
+		} else {
+			wfDebug( "Can't understand search query '{$resq}'\n" );
+		}
+		return $regexes;
 	}
 	
 	/**

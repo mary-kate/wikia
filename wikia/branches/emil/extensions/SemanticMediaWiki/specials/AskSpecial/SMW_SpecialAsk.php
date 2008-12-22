@@ -1,4 +1,9 @@
 <?php
+/**
+ * @file
+ * @ingroup SMWSpecialPage
+ * @ingroup SpecialPage
+ */
 
 /**
  * @author Markus Krötzsch
@@ -6,7 +11,8 @@
  * This special page for MediaWiki implements a customisable form for
  * executing queries outside of articles.
  *
- * @note AUTOLOAD
+ * @ingroup SMWSpecialPage
+ * @ingroup SpecialPage
  */
 class SMWAskPage extends SpecialPage {
 
@@ -20,17 +26,15 @@ class SMWAskPage extends SpecialPage {
 	 */
 	public function __construct() {
 		parent::__construct('Ask');
-		//the key defining the group name in the language files is specialpages-group-smw_group
-		if (method_exists('SpecialPage', 'setGroup')) { 
-			parent::setGroup('Ask', 'smw_group');	
-		}
+		wfLoadExtensionMessages('SemanticMediaWiki');
 	}
 
-	function execute($p = '') {
+	function execute( $p ) {
 		global $wgOut, $wgRequest, $smwgQEnabled, $smwgRSSEnabled;
 		wfProfileIn('doSpecialAsk (SMW)');
 		if ( ($wgRequest->getVal( 'query' ) != '') ) { // old processing
 			$this->executeSimpleAsk();
+			SMWOutputs::commitToOutputPage($wgOut); // make sure locally collected output data is pushed to the output!
 			wfProfileOut('doSpecialAsk (SMW)');
 			return;
 		}
@@ -40,6 +44,7 @@ class SMWAskPage extends SpecialPage {
 			$this->extractQueryParameters($p);
 			$this->makeHTMLResult();
 		}
+		SMWOutputs::commitToOutputPage($wgOut); // make sure locally collected output data is pushed to the output!
 		wfProfileOut('doSpecialAsk (SMW)');
 	}
 
@@ -173,7 +178,7 @@ class SMWAskPage extends SpecialPage {
 					$this->m_params[$titlekey] = $concept->getText();
 				}
 				if ( !isset($this->m_params[$desckey]) ) {
-					$dv = end(smwfGetStore()->getSpecialValues($concept, SMW_SP_CONCEPT_DESC));
+					$dv = end(smwfGetStore()->getPropertyValues(SMWWikiPageValue::makePageFromTitle($concept), SMWPropertyValue::makeProperty('_CONC')));
 					if ($dv instanceof SMWConceptValue) {
 						$this->m_params[$desckey] = $dv->getDocu();
 					}

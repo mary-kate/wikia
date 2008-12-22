@@ -1,5 +1,5 @@
 <?php
-/* $Id: Asksql.php 34773 2008-05-14 00:38:28Z tstarling $ */
+/* $Id: Asksql.php 39079 2008-08-10 19:29:02Z siebrand $ */
 
 /**
  * If enabled through $wgAllowSysopQueries = true, this class
@@ -16,8 +16,8 @@ if (!defined('MEDIAWIKI'))
 
 $wgExtensionCredits['specialpage'][] = array(
 	'name' => 'Ask SQL',
-	'svn-date' => '$LastChangedDate: 2008-05-14 00:38:28 +0000 (Wed, 14 May 2008) $',
-	'svn-revision' => '$LastChangedRevision: 34773 $',
+	'svn-date' => '$LastChangedDate: 2008-08-10 19:29:02 +0000 (Sun, 10 Aug 2008) $',
+	'svn-revision' => '$LastChangedRevision: 39079 $',
 	'description' => 'Do SQL queries through a [[Special:Asksql|special page]]',
 	'descriptionmsg' => 'asksql-desc',
 	'author' => 'Brion Vibber',
@@ -40,5 +40,6 @@ $wgAvailableRights[] = 'asksql';
 
 $dir = dirname(__FILE__) . '/';
 $wgExtensionMessagesFiles['Asksql'] = $dir . 'Asksql.i18n.php';
+$wgExtensionAliasesFiles['Asksql'] = $dir . 'Asksql.alias.php';
 $wgAutoloadClasses['SpecialAsksql'] = $dir . 'Asksql_body.php';
 $wgSpecialPages['Asksql'] = 'SpecialAsksql';
