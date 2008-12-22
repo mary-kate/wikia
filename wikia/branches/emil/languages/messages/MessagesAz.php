@@ -5,6 +5,7 @@
  * @file
  *
  * @author PrinceValiant
+ * @author Sysops of az.wikipedia.org (imported 2008-08-31)
  * @author לערי ריינהארט
  */
 
@@ -17,8 +18,8 @@ $namespaceNames = array(
 	NS_USER_TALK        => 'İstifadəçi_müzakirəsi',
 	# NS_PROJECT set by $wgMetaNamespace
 	NS_PROJECT_TALK     => '$1_müzakirəsi',
-	NS_IMAGE            => 'Şəkil',
-	NS_IMAGE_TALK       => 'Şəkil_müzakirəsi',
+	NS_FILE             => 'Şəkil',
+	NS_FILE_TALK        => 'Şəkil_müzakirəsi',
 	NS_MEDIAWIKI        => 'MediyaViki',
 	NS_MEDIAWIKI_TALK   => 'MediyaViki_müzakirəsi',
 	NS_TEMPLATE         => 'Şablon',
@@ -70,8 +71,6 @@ $messages = array(
 'underline-always'  => 'Həmişə',
 'underline-never'   => 'Heç zaman',
 'underline-default' => 'Susmaya görə brouzer',
-
-'skinpreview' => '(Sınaq göstərişi)',
 
 # Dates
 'sunday'        => 'Bazar',
@@ -148,7 +147,7 @@ $messages = array(
 'mytalk'         => 'Danişiqlarım',
 'anontalk'       => 'Bu IP-yə aid müzakirə',
 'navigation'     => 'Rəhbər',
-'and'            => 'və',
+'and'            => '&#32;və',
 
 'errorpagetitle'    => 'Xəta',
 'returnto'          => '$1 səhifəsinə qayıt.',
@@ -310,6 +309,9 @@ Xahiş edirik, e-məktubu aldıqdan sonra yenidən daxil olasınız.',
 
 # Password reset dialog
 'resetpass_text' => '<!-- Şərhinizi bura daxil edin -->',
+'oldpassword'    => 'Köhne parol:',
+'newpassword'    => 'Yeni parol:',
+'retypenew'      => 'Yeni parolu təkrar yazın:',
 
 # Edit page toolbar
 'bold_sample'     => 'Qalın mətn',
@@ -375,9 +377,6 @@ Xahiş edirik, e-məktubu aldıqdan sonra yenidən daxil olasınız.',
 Bu səhifə üçün silmə qeydləri aşağıda göstərilmişdir:",
 
 # History pages
-'revnotfound'         => 'Versiya tapıla bilmir',
-'revnotfoundtext'     => 'Səhifənin istədiyiniz köhnə versiyası tapıla bilmir.
-Xahiş edirik, URL ünvanını yoxlayasınız.',
 'currentrev'          => 'Hal-hazırkı versiya',
 'revisionasof'        => '$1 versiyası',
 'previousrevision'    => '←Əvvəlki versiya',
@@ -416,6 +415,7 @@ Açıqlama: (hh) = hal-hazırkı versiya ilə olan fərqlər,
 'prevn'              => 'əvvəlki $1',
 'nextn'              => 'sonrakı $1',
 'viewprevnext'       => 'Göstər ($1) ($2) ($3).',
+'searchhelp-url'     => 'Help:Mündəricət',
 'nonefound'          => "'''Qeyd''': Əksərən uğursuz axtarışlara indeksləşdirilməyən, geniş işlənən \"var\", \"və\" tipli sözlər və ya axtarışa bir sözdən artıq söz verildikdə (yalnız məzmununda bütün verilmiş sözlər olan səhifələr göstərilir) səbəb olur.",
 'powersearch'        => 'Axtar',
 'powersearch-legend' => 'Təkmil axtarış',
@@ -426,6 +426,7 @@ Açıqlama: (hh) = hal-hazırkı versiya ilə olan fərqlər,
 'prefs-edits'           => 'Redaktələrin sayı:',
 'changepassword'        => 'Parol dəyiş',
 'skin'                  => 'Üzlük',
+'skin-preview'          => 'Sınaq göstərişi',
 'math'                  => 'Riyaziyyat',
 'dateformat'            => 'Tarix formatı',
 'datedefault'           => 'Tərcih yox',
@@ -441,9 +442,6 @@ Açıqlama: (hh) = hal-hazırkı versiya ilə olan fərqlər,
 'prefs-misc'            => 'Digər tərcihlər',
 'saveprefs'             => 'Qeyd et',
 'resetprefs'            => 'Reset',
-'oldpassword'           => 'Köhne parol:',
-'newpassword'           => 'Yeni parol:',
-'retypenew'             => 'Yeni parolu təkrar yazın:',
 'textboxsize'           => 'Redaktə',
 'rows'                  => 'Sıralar:',
 'searchresultshead'     => 'Axtar',
@@ -560,13 +558,13 @@ Bu səhifə üçün silmə qeydləri aşağıda göstərilmişdir:",
 'license'   => 'Lisenziya',
 'nolicense' => 'Heç biri seçilməmişdir',
 
-# Special:ImageList
+# Special:FileList
 'imagelist'      => 'Fayl siyahısı',
 'imagelist_date' => 'Tarix',
 'imagelist_name' => 'Ad',
 'imagelist_user' => 'İstifadəçi',
 
-# Image description page
+# File description page
 'imagelinks'                     => 'İstifadə edilən səhifələr',
 'shareduploadwiki-linktext'      => 'fayl təsvir səhifəsi',
 'shareduploadduplicate-linktext' => 'başqa fayl',
@@ -608,19 +606,8 @@ Bu səhifə üçün silmə qeydləri aşağıda göstərilmişdir:",
 'randomredirect' => 'İxtiyari istiqamətləndirmə',
 
 # Statistics
-'statistics'    => 'Statistika',
-'sitestats'     => '{{SITENAME}} statistika',
-'userstats'     => 'İstifadəçi statistika',
-'sitestatstext' => "{{SITENAME}}-da hal-hazırda məqalələrin sayı: '''$2'''
-
-Verilənlər bazasında yekun '''$1''' səhifə var. Buna müzakirələr, istifadəçi səhifələri, köməklər, wikipedia lahiye səhifələri, xüsusi səhifələr, istiqamətləndirmə səhifələri, boş səhifələr ilə fayllar v əşablonlar daxildir.
-
-There have been a total of '''$3''' page views, and '''$4''' page edits
-since the wiki was setup.
-That comes to '''$5''' average edits per page, and '''$6''' views per edit.
-
-Hal-hazırda [http://www.mediawiki.org/wiki/Manual:Job_queue job queue] sayı: '''$7'''.",
-'userstatstext' => "Hal-hazırdakı '''$1''' istifadəçidən '''$2''' (və ya '''4%''') nəfər $5dir",
+'statistics'              => 'Statistika',
+'statistics-header-users' => 'İstifadəçi statistika',
 
 'disambiguations'      => 'Dəqiqləşdirmə səhifələri',
 'disambiguationspage'  => 'Şablon:dəqiqləşdirmə',
@@ -755,12 +742,6 @@ Səhifəni izləmə sıyahınızdan çıxarmaq üçün yan lovhədəki "izləmə
 'watchlistcontains'    => 'İzləmə siyahınızda $1 səhifə var.',
 'wlnote'               => "Aşağıdakılar son '''$2''' saatdakı son $1 dəyişiklikdir.",
 'wlshowlast'           => 'Bunları göstər: son $1 saatı $2 günü $3',
-'watchlist-show-bots'  => 'Bot redaktələrini göstər',
-'watchlist-hide-bots'  => 'Bot redaktələrini gizlət',
-'watchlist-show-own'   => 'Mənim redaktələrimi göstər',
-'watchlist-hide-own'   => 'Mənim redaktələrimi gizlət',
-'watchlist-show-minor' => 'Kiçik redaktələri göstər',
-'watchlist-hide-minor' => 'Kiçik redaktələri gizlət',
 
 # Displayed when you click the "watch" button and it is in the process of watching
 'watching'   => 'İzlənilir...',
@@ -771,40 +752,45 @@ Səhifəni izləmə sıyahınızdan çıxarmaq üçün yan lovhədəki "izləmə
 'changed'            => 'dəyişdi',
 'created'            => 'yaradıldı',
 
-# Delete/protect/revert
-'deletepage'                  => 'Səhifəni sil',
-'confirm'                     => 'Təsdiq et',
-'excontent'                   => "Köhnə məzmun: '$1'",
-'excontentauthor'             => "Tərkib: '$1' (və tarixçədə fəaliyyəti qeyd edilən yeganə istifadəçi '[[Xüsusi:Contributions/$2|$2]]')",
-'exbeforeblank'               => "Silinmədən əvvəlki məzmun: '$1'",
-'exblank'                     => 'səhifə boş',
-'delete-confirm'              => 'Silinən səhifə: "$1"',
-'historywarning'              => 'Xəbərdarlıq: Silinəcək səhifənin tarixçəsində qeyd olunmuş redaktələr var',
-'confirmdeletetext'           => 'Bu səhifə və ya fayl bütün tarixçəsi ilə birlikdə birdəfəlik silinəcək. Bunu nəzərdə tutduğunuzu və bu əməliyyatın nəticələrini başa düşdüyünüzü təsdiq edin.',
-'actioncomplete'              => 'Fəaliyyət tamamlandı',
-'deletedarticle'              => 'silindi "[[$1]]"',
-'dellogpage'                  => 'Silmə qeydləri',
-'dellogpagetext'              => 'Ən son silinmiş səhifələrin siyahısı.',
-'deletionlog'                 => 'Silmə jurnal qeydləri',
-'reverted'                    => 'Daha əvvəlki versiya bərpa edildi',
-'deletecomment'               => 'Silmə səbəbi',
-'deleteotherreason'           => 'Digər/əlavə səbəb:',
-'deletereasonotherlist'       => 'Digər səbəb',
-'deletereason-dropdown'       => '*Əsas silmə səbəbi
+# Delete
+'deletepage'             => 'Səhifəni sil',
+'confirm'                => 'Təsdiq et',
+'excontent'              => "Köhnə məzmun: '$1'",
+'excontentauthor'        => "Tərkib: '$1' (və tarixçədə fəaliyyəti qeyd edilən yeganə istifadəçi '[[Xüsusi:Contributions/$2|$2]]')",
+'exbeforeblank'          => "Silinmədən əvvəlki məzmun: '$1'",
+'exblank'                => 'səhifə boş',
+'delete-confirm'         => 'Silinən səhifə: "$1"',
+'historywarning'         => 'Xəbərdarlıq: Silinəcək səhifənin tarixçəsində qeyd olunmuş redaktələr var',
+'confirmdeletetext'      => 'Bu səhifə və ya fayl bütün tarixçəsi ilə birlikdə birdəfəlik silinəcək. Bunu nəzərdə tutduğunuzu və bu əməliyyatın nəticələrini başa düşdüyünüzü təsdiq edin.',
+'actioncomplete'         => 'Fəaliyyət tamamlandı',
+'deletedarticle'         => 'silindi "[[$1]]"',
+'dellogpage'             => 'Silmə qeydləri',
+'dellogpagetext'         => 'Ən son silinmiş səhifələrin siyahısı.',
+'deletionlog'            => 'Silmə jurnal qeydləri',
+'reverted'               => 'Daha əvvəlki versiya bərpa edildi',
+'deletecomment'          => 'Silmə səbəbi',
+'deleteotherreason'      => 'Digər/əlavə səbəb:',
+'deletereasonotherlist'  => 'Digər səbəb',
+'deletereason-dropdown'  => '*Əsas silmə səbəbi
 ** Müəllif istəyi
 ** Müəllif hüququ pozuntusu
 ** Vandalizm',
-'delete-edit-reasonlist'      => 'Silmə səbəblərinin redaktəsi',
-'rollback'                    => 'Əvvəlki versiya',
-'rollbacklink'                => 'əvvəlki halına qaytar',
-'cantrollback'                => 'Redaktə geri qaytarıla bilməz; axırıncı redaktə səhifədə olan yeganə fəaliyyətdir.',
-'revertpage'                  => '[[User:$2|$2]] tərəfindən edilmiş redaktələr geri qaytarılaraq [[User:$1|$1]] tərəfindən yaradılan sonuncu versiya bərpa olundu.', # Additional available: $3: revid of the revision reverted to, $4: timestamp of the revision reverted to, $5: revid of the revision reverted from, $6: timestamp of the revision reverted from
-'rollback-success'            => '$1 tərəfindən edilmiş redaktələr geri qaytarıldı; $2 tərəfindən yaradılmış son versiya bərpa olundu.',
+'delete-edit-reasonlist' => 'Silmə səbəblərinin redaktəsi',
+
+# Rollback
+'rollback'         => 'Əvvəlki versiya',
+'rollbacklink'     => 'əvvəlki halına qaytar',
+'cantrollback'     => 'Redaktə geri qaytarıla bilməz; axırıncı redaktə səhifədə olan yeganə fəaliyyətdir.',
+'revertpage'       => '[[User:$2|$2]] tərəfindən edilmiş redaktələr geri qaytarılaraq [[User:$1|$1]] tərəfindən yaradılan sonuncu versiya bərpa olundu.', # Additionally available: $3: revid of the revision reverted to, $4: timestamp of the revision reverted to, $5: revid of the revision reverted from, $6: timestamp of the revision reverted from
+'rollback-success' => '$1 tərəfindən edilmiş redaktələr geri qaytarıldı; $2 tərəfindən yaradılmış son versiya bərpa olundu.',
+
+# Protect
 'protectlogpage'              => 'Mühafizə etmə qeydləri',
 'protectedarticle'            => 'mühafizə edildi "[[$1]]"',
 'modifiedarticleprotection'   => '"[[$1]]" səhifəsi üçün qorunma səviyyəsi dəyişildi',
 'unprotectedarticle'          => 'mühafizə kənarlaşdırdı "[[$1]]"',
 'protect-title'               => '"$1" üçün mühafizə səviyyəsinin dəyişdirilməsi',
+'prot_1movedto2'              => '[[$1]] adı dəyişildi. Yeni adı: [[$2]]',
 'protect-legend'              => 'Qorumayı təsdiq et',
 'protectcomment'              => 'Şərh:',
 'protectexpiry'               => 'Vaxtı bitib',
@@ -823,6 +809,7 @@ Səhifəni izləmə sıyahınızdan çıxarmaq üçün yan lovhədəki "izləmə
 'protect-summary-cascade'     => 'kaskad mühafizə',
 'protect-expiring'            => '$1 (UTC)- tarixində vaxtı bitir',
 'protect-cascade'             => 'Kaskad mühafizəsi - bu səhifəyə daxil bütün səhifələri qoru',
+'protect-expiry-options'      => '15 dəqiqə:15 minutes,1 saat:1 hour,3 saat:3 hours,24 saat:24 hours,48 saat:48 hours,1 həftə:1 week,1 ay:1 month,qeyri-müəyyən:indefinite', # display1:time1,display2:time2,...
 'pagesize'                    => '(baytlar)',
 
 # Restrictions (nouns)
@@ -868,7 +855,6 @@ Məqalələrin bərpa edilməsi və silinməsi haqqında son dəyişiklikləri n
 
 # What links here
 'whatlinkshere'       => 'Bu səhifəyə bağlantılar',
-'linklistsub'         => '(Bağlantılar siyahı)',
 'isredirect'          => 'İstiqamətləndirmə səhifəsi',
 'istemplate'          => 'daxil olmuş',
 'whatlinkshere-prev'  => '{{PLURAL:$1|əvvəlki|əvvəlki $1}}',
@@ -1034,7 +1020,7 @@ $1',
 'file-info-size' => '($1 × $2 piksel, fayl həcmi: $3, MIME növü: $4)',
 'file-nohires'   => '<small>Daha dəqiq versiyası yoxdur.</small>',
 
-# Special:NewImages
+# Special:NewFiles
 'newimages'    => 'Yeni faylların siyahısı',
 'showhidebots' => '($1 bot redaktə)',
 'ilsubmit'     => 'Axtar',
@@ -1076,9 +1062,7 @@ $1',
 'deletedwhileediting' => 'Bu səhifə siz redaktə etməyə başladıqdan sonra silinmişdir!',
 
 # action=purge
-'confirm_purge' => 'Bu səhifə keşdən (cache) silinsin?
-
-$1',
+'confirm-purge-top' => 'Bu səhifə keşdən (cache) silinsin?',
 
 # Multipage image navigation
 'imgmultipageprev' => '&larr; əvvəlki səhifə',

@@ -10,6 +10,7 @@
  * @author לערי ריינהארט
  */
 
+$fallback8bitEncoding = 'windows-1256';
 $rtl = true;
 $defaultUserOptionOverrides = array(
 	# Swap sidebar to right side by default
@@ -27,8 +28,8 @@ $namespaceNames = array(
 	NS_USER_TALK => 'تبادلۂ_خیال_صارف',
 	# NS_PROJECT set by $wgMetaNamespace
 	NS_PROJECT_TALK => 'تبادلۂ_خیال_$1',
-	NS_IMAGE => 'تصویر',
-	NS_IMAGE_TALK => 'تبادلۂ_خیال_تصویر',
+	NS_FILE => 'تصویر',
+	NS_FILE_TALK => 'تبادلۂ_خیال_تصویر',
 	NS_MEDIAWIKI => 'میڈیاوکی',
 	NS_MEDIAWIKI_TALK => 'تبادلۂ_خیال_میڈیاوکی',
 	NS_TEMPLATE => 'سانچہ',
@@ -97,7 +98,7 @@ $messages = array(
 'mytalk'        => 'میری گفتگو',
 'anontalk'      => 'اس IP کیلیے بات چیت',
 'navigation'    => 'رہنمائی',
-'and'           => 'اور',
+'and'           => '&#32;اور',
 
 'returnto'          => 'واپس $1۔',
 'tagline'           => '{{SITENAME}} سے',
@@ -204,7 +205,6 @@ $messages = array(
 'yourpasswordagain'          => 'کلمۂ شناخت دوبارہ لکھیں',
 'remembermypassword'         => 'مجھے یاد رکھیں',
 'yourdomainname'             => 'آپکا ڈومین',
-'loginproblem'               => '<b>داخلے میں کوئی مسلہ درپیش ہے</b><br />دوبارہ اندراج کیجیۓ!',
 'login'                      => 'داخل ہوں',
 'nav-login-createaccount'    => 'کھاتہ بنائیں یا اندراج کریں',
 'loginprompt'                => '{{SITENAME}} میں داخلے کیلۓ آپکے پاس قند (کوکیز) مجازہوناچاہیں۔',
@@ -240,6 +240,11 @@ $messages = array(
 'emailauthenticated'         => 'آپ کے برقی خط کے پتے کی تصدیق $1 کو کی گئی۔',
 'accountcreated'             => 'تخلیقِ کھاتہ',
 'accountcreatedtext'         => 'تخیلقِ کھاتۂ صارف براۓ $1۔',
+
+# Password reset dialog
+'oldpassword' => 'پرانا کلمۂ شناخت:',
+'newpassword' => 'نیا کلمۂ شناخت',
+'retypenew'   => 'نیا کلمۂ شناخت دوبارہ درج کریں:',
 
 # Edit page toolbar
 'headline_sample' => 'شہ سرخی',
@@ -307,6 +312,7 @@ $messages = array(
 'prevn'                 => 'پچھلے $1',
 'nextn'                 => 'اگلے $1',
 'viewprevnext'          => 'دیکھیں($1) ($2) ($3)۔',
+'searchhelp-url'        => 'Help:فہرست',
 'powersearch'           => 'تلاش کریں',
 
 # Preferences page
@@ -319,9 +325,6 @@ $messages = array(
 'prefs-rc'          => 'حالیہ تبدیلیاں',
 'prefs-misc'        => 'دیگر',
 'saveprefs'         => 'محفوظ',
-'oldpassword'       => 'پرانا کلمۂ شناخت:',
-'newpassword'       => 'نیا کلمۂ شناخت',
-'retypenew'         => 'نیا کلمۂ شناخت دوبارہ درج کریں:',
 'rows'              => 'قـطاریں:',
 'searchresultshead' => 'تلاش',
 'savedprefs'        => 'آپ کی ترجیہات محفوظ کر لی گئی ہیں۔',
@@ -380,7 +383,7 @@ $messages = array(
  
 جب کوئی صارف مستقل ایسی ملف زبراثقال کرتا رہے کہ جس کے اجازہ کے بارے میں غلط بیانی کی گئی ہو یا وہ مستقل ایسے عکس زبراثقال کرتا رہے کہ جنکے بارے میں کوئی بیان تحریر نہ کیا گیا ہو تو ایسی صورت میں پابندی لگاۓ جانے کا قوی امکان موجود ہے۔ 
 
-مِلَف (فائل) بھیجنے کیلیے درج ذیل ورقہ (فارم) استعمال کیجیے، اگر آپ اب تک ارسال کردہ تصاویر کو دیکھنا یا تلاش کرنا چاہتے ہیں تو [[Special:ImageList|ارسال کردہ تصاویر]] کے ربط پر جائیے۔ <br /> تمام ارسال و حذف کی گئی تصاویر کو [[Special:Log/upload|نوشتۂ منتقلی]] میں درج کر لیا جاتا ہے۔
+مِلَف (فائل) بھیجنے کیلیے درج ذیل ورقہ (فارم) استعمال کیجیے، اگر آپ اب تک ارسال کردہ تصاویر کو دیکھنا یا تلاش کرنا چاہتے ہیں تو [[Special:FileList|ارسال کردہ تصاویر]] کے ربط پر جائیے۔ <br /> تمام ارسال و حذف کی گئی تصاویر کو [[Special:Log/upload|نوشتۂ منتقلی]] میں درج کر لیا جاتا ہے۔
 
 تصویر کی منتقلی کے بعد، اسکو کسی صفحہ پر رکھنے کیلیے مندرجہ ذیل صورت میں رمـز (کوڈ) استعمال کیجیۓ۔
 
@@ -408,10 +411,10 @@ $messages = array(
 'destfilename'      => 'تعین شدہ اسم ملف:',
 'watchthisupload'   => 'یہ صفحہ زیر نظر کیجیۓ',
 
-# Special:ImageList
+# Special:FileList
 'imagelist' => 'فہرست فائل',
 
-# Image description page
+# File description page
 'imagelinks'     => 'روابط',
 'linkstoimage'   => 'اس ملف (فائل) سے درج ذیل صفحات رابطہ رکھتے ہیں:',
 'nolinkstoimage' => 'ایسے کوئی صفحات نہیں جو اس ملف (فائل) سے رابطہ رکھتے ہوں۔',
@@ -429,13 +432,8 @@ $messages = array(
 'randompage' => 'بےترتیب صفحہ',
 
 # Statistics
-'statistics'    => 'اعداد و شمار',
-'sitestats'     => '{{SITENAME}} کے اعدادوشمار',
-'userstats'     => 'ارکان کے اعداد و شمار',
-'sitestatstext' => "{{SITENAME}}ا کے ذخیرے میں اب تک کل  '''$1''' صفحات ہیں۔ انمیں تبادلہءخیال صفحات ، {{SITENAME}}ا کے بارے میں صفحات ، سٹب صفحات ، پلٹائے گۓ صفحات اور چند دیگر ایسے صفحات شامل ہیں جو کہ ممکنہ طور پر مقالات یا مضامین نہیں کہے جاسکتے۔ ان تمام کو نکال کر  '''$2''' ایسے صفحات ہیں جو کہ بجاطور پر مقالات کے زمرے میں شامل کیۓ جاسکتے ہیں۔ 
-
-اگر صفحات کے تناسب سے دیکھا جاۓ تو ، {{SITENAME}}ا کی ابتداء سے اب تک کل '''$4''' صفحات صارفین کی جانب سے  مرتب کیۓ گۓ۔ گویا فی صفحہ '''$5''' بار تدوین ہوئی۔",
-'userstatstext' => "{{SITENAME}} میں '''$1''' مـثـبوت (رجسٹرڈ) صارف ہیں ، جنمیں  '''$2''' (یعنی '''$4%''') منتظمین میں شامل ہیں ، (دیکھیۓ $3) ۔",
+'statistics'              => 'اعداد و شمار',
+'statistics-header-users' => 'ارکان کے اعداد و شمار',
 
 'disambiguations' => 'ضد ابہام صفحات',
 
@@ -490,6 +488,11 @@ $messages = array(
 'categories'         => 'زمرہ',
 'categoriespagetext' => 'مندرجہ ذیل زمرہ جات اس وکی میں موجود ہیں۔',
 
+# Special:Log/newusers
+'newuserlogpage'          => 'نوشتۂ آمد صارف',
+'newuserlogpagetext'      => 'یہ نۓ صارفوں کی آمد کا نوشتہ ہے',
+'newuserlog-create-entry' => 'صارف جدید',
+
 # E-mail user
 'mailnologintext' => 'دیگر ارکان کو برقی خط ارسال کرنے کیلیۓ لازم ہے کہ آپ [[Special:UserLogin|داخل شدہ]] حالت میں ہوں اور آپ کی [[Special:Preferences|ترجیحات]] ایک درست برقی خط کا پتا درج ہو۔',
 'emailuser'       => 'صارف کو برقی خط لکھیں',
@@ -518,30 +521,35 @@ $messages = array(
 'changed'            => 'تبدیل کردیاگیا',
 'created'            => 'بنا دیا گیا',
 
-# Delete/protect/revert
-'deletepage'          => 'صفحہ ضائع کریں',
-'confirm'             => 'یقین',
-'excontent'           => "'$1':مواد تھا",
-'excontentauthor'     => "حذف شدہ مواد: '$1' (اور صرف '[[Special:Contributions/$2|$2]]' نے حصہ ڈالا)",
-'exblank'             => 'صفحہ خالی تھا',
-'historywarning'      => 'انتباہ: جو صفحہ آپ حذف کرنے جارہے ہیں اس سے ایک تاریخچہ منسلک ہے۔',
-'confirmdeletetext'   => 'آپ نے اس صفحے کو اس سے ملحقہ تاریخچہ سمیت حذف کرنے کا ارادہ کیا ہے۔ براۓ مہربانی تصدیق کرلیجیۓ کہ آپ اس عمل کے نتائج سے بخوبی آگاہ ہیں، اور یہ بھی یقین کرلیجیۓ کہ آپ ایسا [[{{MediaWiki:Policy-url}}|ویکیپیڈیا کی حکمت عملی]] کے دائرے میں رہ کر کر رہے ہیں۔',
-'actioncomplete'      => 'اقدام تکمیل کو پہنچا',
-'deletedtext'         => '"<nowiki>$1</nowiki>" کو حذف کر دیا گیا ہے ۔
+# Delete
+'deletepage'        => 'صفحہ ضائع کریں',
+'confirm'           => 'یقین',
+'excontent'         => "'$1':مواد تھا",
+'excontentauthor'   => "حذف شدہ مواد: '$1' (اور صرف '[[Special:Contributions/$2|$2]]' نے حصہ ڈالا)",
+'exblank'           => 'صفحہ خالی تھا',
+'historywarning'    => 'انتباہ: جو صفحہ آپ حذف کرنے جارہے ہیں اس سے ایک تاریخچہ منسلک ہے۔',
+'confirmdeletetext' => 'آپ نے اس صفحے کو اس سے ملحقہ تاریخچہ سمیت حذف کرنے کا ارادہ کیا ہے۔ براۓ مہربانی تصدیق کرلیجیۓ کہ آپ اس عمل کے نتائج سے بخوبی آگاہ ہیں، اور یہ بھی یقین کرلیجیۓ کہ آپ ایسا [[{{MediaWiki:Policy-url}}|ویکیپیڈیا کی حکمت عملی]] کے دائرے میں رہ کر کر رہے ہیں۔',
+'actioncomplete'    => 'اقدام تکمیل کو پہنچا',
+'deletedtext'       => '"<nowiki>$1</nowiki>" کو حذف کر دیا گیا ہے ۔
 حالیہ حذف شدگی کے تاریخ نامہ کیلیۓ  $2  دیکھیۓ',
-'deletedarticle'      => 'حذف شدہ "[[$1]]"',
-'dellogpage'          => 'نوشتۂ حذف شدگی',
-'dellogpagetext'      => 'حالیہ حذف شدگی کی فہرست درج ذیل ہے۔',
-'deletionlog'         => 'نوشتۂ حذف شدگی',
-'deletecomment'       => 'حذف کرنے کی وجہ',
-'rollback'            => 'ترمیمات سابقہ حالت پرواپس',
-'rollback_short'      => 'واپس سابقہ حالت',
-'rollbacklink'        => 'واپس سابقہ حالت',
-'rollbackfailed'      => 'سابقہ حالت پر واپسی ناکام',
-'cantrollback'        => 'تدوین ثانی کا اعادہ نہیں کیا جاسکتا؛ کیونکہ اس میں آخری بار حصہ لینے والا ہی اس صفحہ کا واحد کاتب ہے۔',
+'deletedarticle'    => 'حذف شدہ "[[$1]]"',
+'dellogpage'        => 'نوشتۂ حذف شدگی',
+'dellogpagetext'    => 'حالیہ حذف شدگی کی فہرست درج ذیل ہے۔',
+'deletionlog'       => 'نوشتۂ حذف شدگی',
+'deletecomment'     => 'حذف کرنے کی وجہ',
+
+# Rollback
+'rollback'       => 'ترمیمات سابقہ حالت پرواپس',
+'rollback_short' => 'واپس سابقہ حالت',
+'rollbacklink'   => 'واپس سابقہ حالت',
+'rollbackfailed' => 'سابقہ حالت پر واپسی ناکام',
+'cantrollback'   => 'تدوین ثانی کا اعادہ نہیں کیا جاسکتا؛ کیونکہ اس میں آخری بار حصہ لینے والا ہی اس صفحہ کا واحد کاتب ہے۔',
+
+# Protect
 'protectlogpage'      => 'نوشتۂ محفوظ شدگی',
 'protectedarticle'    => '"[[$1]]" کومحفوظ کردیا',
 'unprotectedarticle'  => '"[[$1]]" کوغیر محفوظ کیا',
+'prot_1movedto2'      => '[[$1]] بجانب [[$2]] منتقل',
 'protectcomment'      => 'محفوظ کرنے کی وجہ',
 'protect-default'     => '(طے شدہ)',
 'protect-level-sysop' => 'صرف منتظمین',
@@ -569,7 +577,6 @@ $messages = array(
 
 # What links here
 'whatlinkshere' => 'ادھر کس کا جوڑ ہے',
-'linklistsub'   => '(فہرست روابط)',
 'linkshere'     => 'یہاں درج ذیل صفحات رابطہ رکھتے ہیں:',
 'nolinkshere'   => 'یہاں کسی صفحہ کا ربط نہیں۔',
 
@@ -634,7 +641,7 @@ $messages = array(
 'previousdiff' => '> گذشتہ فرق',
 'nextdiff'     => '< اگلا فرق',
 
-# Special:NewImages
+# Special:NewFiles
 'newimages'    => 'نئی فائلوں کی گیلری',
 'showhidebots' => '($1 بوٹ)',
 'ilsubmit'     => 'تلاش',
@@ -653,16 +660,8 @@ $messages = array(
 # Delete conflict
 'deletedwhileediting' => 'انتباہ: آپ کے ترمیم شروع کرنے کے بعد یہ صفحہ حذف کیا جا چکا ہے!',
 
-# HTML dump
-'redirectingto' => 'کی جانب پلٹایا گیا [[:$1]]...',
-
 # action=purge
 'confirm_purge_button' => 'جی!',
-
-# AJAX search
-'searchnamed'   => "مضمون بنام ''$1'' کیلیۓ تلاش۔",
-'articletitles' => "''$1'' سے شروع ہونے والے مضامین",
-'hideresults'   => 'نتیجہ چھپائیں',
 
 # Auto-summaries
 'autosumm-blank'   => 'تمام مندرجات حذف',

@@ -27,38 +27,36 @@
   * http://forum.pasok.gr
   * version 1.0 (initial release)
   *
-  *The project for the translation of MediaWiki into Greek
-  *was undertaken by a group of ICT volunteers working under
-  *the auspices of the Greek political party PASOK.
+  * The project for the translation of MediaWiki into Greek
+  * was undertaken by a group of ICT volunteers working under
+  * the auspices of the Greek political party PASOK.
   *
-  *The idea behind this effort was  to provide an extensible,
-  *easy-to-use and non-intimidating tool for content development
-  *and project management, to be used throughout the administrative
-  *and political structure of PASOK by staff, volunteers, party members
-  *and elected officials (all of whom possess varying degrees of ICT skills).
+  * The idea behind this effort was  to provide an extensible,
+  * easy-to-use and non-intimidating tool for content development
+  * and project management, to be used throughout the administrative
+  * and political structure of PASOK by staff, volunteers, party members
+  * and elected officials (all of whom possess varying degrees of ICT skills).
   *
-  *The PASOK ICT team and the volunteers who worked on this project are
-  *now returning the translated interface to the Open-Source Community
-  *with over 98% of the messages translated into user-friendly Greek.
+  * The PASOK ICT team and the volunteers who worked on this project are
+  * now returning the translated interface to the Open-Source Community
+  * with over 98% of the messages translated into user-friendly Greek.
   *
-  *We hope that it will be used as a tool by other civil society organizations
-  *in Greece, and that it will enhance the collective creation and the dissemination
-  *of knowledge - an essential component of the democratic process.
+  * We hope that it will be used as a tool by other civil society organizations
+  * in Greece, and that it will enhance the collective creation and the dissemination
+  * of knowledge - an essential component of the democratic process.
   */
 
 $namespaceNames = array(
-	NS_MEDIA            => 'Μέσον',
+	NS_MEDIA            => 'Μέσο',
 	NS_SPECIAL          => 'Ειδικό',
-	NS_MAIN	            => '',
-	NS_TALK	            => 'Συζήτηση',
+	NS_TALK             => 'Συζήτηση',
 	NS_USER             => 'Χρήστης',
 	NS_USER_TALK        => 'Συζήτηση_χρήστη',
-	# NS_PROJECT set by $wgMetaNamespace
 	NS_PROJECT_TALK     => '$1_συζήτηση',
-	NS_IMAGE            => 'Εικόνα',
-	NS_IMAGE_TALK       => 'Συζήτηση_εικόνας',
+	NS_FILE             => 'Αρχείο',
+	NS_FILE_TALK        => 'Συζήτηση_αρχείου',
 	NS_MEDIAWIKI        => 'MediaWiki',
-	NS_MEDIAWIKI_TALK   => 'MediaWiki_talk',
+	NS_MEDIAWIKI_TALK   => 'Συζήτηση_MediaWiki',
 	NS_TEMPLATE         => 'Πρότυπο',
 	NS_TEMPLATE_TALK    => 'Συζήτηση_προτύπου',
 	NS_HELP             => 'Βοήθεια',
@@ -66,6 +64,99 @@ $namespaceNames = array(
 	NS_CATEGORY         => 'Κατηγορία',
 	NS_CATEGORY_TALK    => 'Συζήτηση_κατηγορίας',
 );
+
+$namespaceAliases = array(
+	'Μέσον' => NS_MEDIA,
+	'Εικόνα' => NS_FILE,
+	'Συζήτηση_εικόνας' => NS_FILE_TALK,
+);
+
+$specialPageAliases = array(
+	'DoubleRedirects'           => array( 'ΔιπλέςΑνακατευθύνσεις' ),
+	'BrokenRedirects'           => array( 'ΛανθασμένεςΑνακατευθύνσεις' ),
+	'Disambiguations'           => array( 'Αποσαφηνίσεις' ),
+	'Userlogin'                 => array( 'ΣύνδεσηΧρήστη' ),
+	'Userlogout'                => array( 'ΑποσύνδεσηΧρήστη' ),
+	'CreateAccount'             => array( 'ΔημιουργίαΛογαριασμού' ),
+	'Preferences'               => array( 'Προτιμήσεις' ),
+	'Watchlist'                 => array( 'ΛίσταΠαρακολούθησης' ),
+	'Recentchanges'             => array( 'ΠρόσφατεςΑλλαγές' ),
+	'Upload'                    => array( 'Επιφόρτωση' ),
+	'Imagelist'                 => array( 'ΚατάλογοςΑρχείων' ),
+	'Newimages'                 => array( 'ΝέαΑρχεία' ),
+	'Listusers'                 => array( 'ΚατάλογοςΧρηστών' ),
+	'Listgrouprights'           => array( 'ΚατάλογοςΔικαιωμάτωνΧρηστών' ),
+	'Statistics'                => array( 'Στατιστικά' ),
+	'Randompage'                => array( 'Τυχαία' ),
+	'Lonelypages'               => array( 'ΟρφανέςΣελίδες' ),
+	'Uncategorizedpages'        => array( 'ΣελίδεςΧωρίςΚατηγορία' ),
+	'Uncategorizedcategories'   => array( 'ΚατηγορίεςΧωρίςΚατηγορία' ),
+	'Uncategorizedimages'       => array( 'ΑρχείαΧωρίςΚατηγορία' ),
+	'Uncategorizedtemplates'    => array( 'ΠρότυπαΧωρίςΚατηγορία' ),
+	'Unusedcategories'          => array( 'ΑχρησιμοποίητεςΚατηγορίες' ),
+	'Unusedimages'              => array( 'ΑχρησιμοποίηταΑρχεία' ),
+	'Wantedpages'               => array( 'ΕπιθυμητέςΣελίδες' ),
+	'Wantedcategories'          => array( 'ΕπιθυμητέςΚατηγορίες' ),
+	'Wantedfiles'               => array( 'ΕπιθυμητάΑρχεία' ),
+	'Mostlinked'                => array( 'ΠερισσότεροΣυνδεδεμένες' ),
+	'Mostlinkedcategories'      => array( 'ΠολυχρησιμοποιημένεςΚατηγορίες' ),
+	'Mostlinkedtemplates'       => array( 'ΠολυχρησιμοποιημέναΠρότυπα' ),
+	'Mostimages'                => array( 'ΠολυχρησιμοποιημέναΑρχεία' ),
+	'Mostcategories'            => array( 'ΠερισσότερεςΚατηγορίες' ),
+	'Mostrevisions'             => array( 'ΠερισσότερεςΕπεξεργασίες' ),
+	'Fewestrevisions'           => array( 'ΛιγότερεςΕπεξεργασίες' ),
+	'Shortpages'                => array( 'ΜικρέςΣελίδες' ),
+	'Longpages'                 => array( 'ΜακριέςΣελίδες' ),
+	'Newpages'                  => array( 'ΝέεςΣελίδες' ),
+	'Ancientpages'              => array( 'ΑρχαίεςΣελίδες' ),
+	'Deadendpages'              => array( 'ΑδιέξοδεςΣελίδες' ),
+	'Protectedpages'            => array( 'ΠροστατευμένεςΣελίδες' ),
+	'Protectedtitles'           => array( 'ΠροστετευμένοιΤίτλοι' ),
+	'Allpages'                  => array( 'ΌλεςΟιΣελίδες' ),
+	'Prefixindex'               => array( 'ΕυρετήριοΠροθεμάτων' ),
+	'Ipblocklist'               => array( 'ΚατάλογοςΦραγώνIP' ),
+	'Specialpages'              => array( 'ΕιδικέςΣελίδες' ),
+	'Contributions'             => array( 'Συνεισφορές' ),
+	'Emailuser'                 => array( 'EmailΧρήστη' ),
+	'Confirmemail'              => array( 'ΕπιβεβαίωσηEmail' ),
+	'Whatlinkshere'             => array( 'ΤιΣυνδέειΕδώ' ),
+	'Recentchangeslinked'       => array( 'ΣχετικέςΑλλαγές' ),
+	'Movepage'                  => array( 'ΜετακίνησηΣελίδας' ),
+	'Blockme'                   => array( 'ΦραγήΣεΜένα' ),
+	'Booksources'               => array( 'ΠηγέςΒιβλίων' ),
+	'Categories'                => array( 'Κατηγορίες' ),
+	'Export'                    => array( 'Εξαγωγή' ),
+	'Version'                   => array( 'Έκδοση' ),
+	'Allmessages'               => array( 'ΌλαΤαΜηνύματα' ),
+	'Log'                       => array( 'Μητρώο' ),
+	'Blockip'                   => array( 'ΦραγήIP' ),
+	'Undelete'                  => array( 'ΑναίρεσηΔιαγραφής' ),
+	'Import'                    => array( 'Εισαγωγή' ),
+	'Lockdb'                    => array( 'ΚλείδωμαΒάσης' ),
+	'Unlockdb'                  => array( 'ΞεκλείδωμαΒάσης' ),
+	'Userrights'                => array( 'ΔικαιώματαΧρηστών' ),
+	'MIMEsearch'                => array( 'ΑναζήτησηMIME' ),
+	'FileDuplicateSearch'       => array( 'ΑναζήτησηΔιπλώνΑρχείων' ),
+	'Unwatchedpages'            => array( 'ΜηΠαρακολουθούμενεςΣελίδες' ),
+	'Listredirects'             => array( 'ΚατάλογοςΑνακατευθύνσεων' ),
+	'Revisiondelete'            => array( 'ΔιαγραφήΈκδοσης' ),
+	'Unusedtemplates'           => array( 'ΜηΧρησιμοποιούμεναΠρότυπα' ),
+	'Randomredirect'            => array( 'ΤυχαίαΑνακατεύθυνση' ),
+	'Mypage'                    => array( 'ΗΣελίδαΜου' ),
+	'Mytalk'                    => array( 'ΗΣυζήτησήΜου' ),
+	'Mycontributions'           => array( 'ΟιΣυνεισφορέςΜου' ),
+	'Listadmins'                => array( 'ΚατάλογοςΔιαχειριστών' ),
+	'Listbots'                  => array( 'ΚατάλογοςBot' ),
+	'Popularpages'              => array( 'ΔημοφιλείςΣελίδες' ),
+	'Search'                    => array( 'Αναζήτηση' ),
+	'Resetpass'                 => array( 'ΑρχικοποίησηΚωδικού' ),
+	'Withoutinterwiki'          => array( 'ΧωρίςInterwiki' ),
+	'MergeHistory'              => array( 'ΣυγχώνευσηΙστορικού' ),
+	'Filepath'                  => array( 'ΔιεύθυνσηΑρχείου' ),
+	'Blankpage'                 => array( 'ΚενήΣελίδα' ),
+	'DeletedContributions'      => array( 'ΔιαγραμμένεςΣυνεισφορές' ),
+);
+
 $fallback8bitEncoding = 'iso-8859-7';
 $separatorTransformTable = array(',' => '.', '.' => ',' );
 $linkTrail = '/^([a-z]+)(.*)$/sD';
@@ -270,6 +361,8 @@ $messages = array(
 'tog-watchlisthideown'        => 'Απόκρυψε τις επεξεργασίες μου απο τη λίστα παρακολούθησης',
 'tog-watchlisthidebots'       => 'Απόκρυψε τις επεξεργασίες των bots από τη λίστα παρακολούθησης',
 'tog-watchlisthideminor'      => 'Απόκρυψε τις μικρής σημασίας επεξεργασίες από τη λίστα παρακολούθησης',
+'tog-watchlisthideliu'        => 'Απόκρυψη επεξεργασιών συνδεδεμένων χρηστών από τη λίστα παρακολούθησης',
+'tog-watchlisthideanons'      => 'Απόκρυψη επεξεργασιών ανωνύμων χρηστών από τη λίστα παρακολούθησης',
 'tog-nolangconversion'        => 'Απενεργοποίησε τη μετατροπή μεταβλητών',
 'tog-ccmeonemails'            => 'Στείλε μου αντίγραφα των μηνυμάτων ηλεκτρονικού ταχυδρομείου που στέλνω σε άλλους χρήστες',
 'tog-diffonly'                => 'Μην εμφανίζεις το περιεχόμενο της σελίδας κάτω από τις διαφορές των εκδόσεων',
@@ -278,8 +371,6 @@ $messages = array(
 'underline-always'  => 'Πάντα',
 'underline-never'   => 'Ποτέ',
 'underline-default' => 'Όπως ορίζεται από τον browser σας.',
-
-'skinpreview' => '(προεπισκόπηση)',
 
 # Dates
 'sunday'        => 'Κυριακή',
@@ -368,7 +459,7 @@ $messages = array(
 'mytalk'         => 'Οι συζητήσεις μου',
 'anontalk'       => 'Οι συζητήσεις αυτής της διεύθυνσης IP',
 'navigation'     => 'Πλοήγηση',
-'and'            => 'και',
+'and'            => '&#32;και',
 
 # Metadata in edit box
 'metadata_help' => 'Μεταδεδομένα:',
@@ -455,9 +546,7 @@ $messages = array(
 
 'badaccess'        => 'Ακατάλληλη άδεια',
 'badaccess-group0' => 'Δεν επιτρέπεται να εκτελέσετε την ενέργεια που ζητήσατε.',
-'badaccess-group1' => 'Η ενέργεια που ζητήσατε είναι περιορισμένη σε χρήστες της ομάδας $1.',
-'badaccess-group2' => 'Η ενέργεια που ζητήσατε είναι περιορισμένη σε χρήστες σε μία από τις ομάδες $1.',
-'badaccess-groups' => 'Η ενέργεια που ζητήσατε είναι περιορισμένη σε χρήστες σε μία από τις ομάδες $1.',
+'badaccess-groups' => 'Η ενέργεια που ζητήσατε είναι περιορισμένη σε χρήστες σε {{PLURAL:$2|μία ομάδα|μία από τις ομάδες}}: $1.',
 
 'versionrequired'     => 'Απαιτείται η έκδοση $1 του MediaWiki.',
 'versionrequiredtext' => 'Για να χρησιμοποιήσετε αυτή τη σελίδα απαιτείται η έκδοση $1 του MediaWiki . Βλ. [[Special:Έκδοση]]',
@@ -471,6 +560,8 @@ $messages = array(
 'editsection'             => 'επεξεργασία',
 'editold'                 => 'επεξεργασία',
 'viewsourceold'           => 'εμφάνιση κώδικα',
+'editlink'                => 'επεξεργασία',
+'viewsourcelink'          => 'εμφάνιση κώδικα',
 'editsectionhint'         => 'Επεξεργασία ενότητας: $1',
 'toc'                     => 'Πίνακας περιεχομένων',
 'showtoc'                 => 'εμφάνιση',
@@ -543,7 +634,6 @@ $1',
 'cannotdelete'         => 'Αδύνατη η διαγραφή της συγκεκριμένης σελίδας ή εικόνας (Ενδεχομένως να έχει ήδη διαγραφεί από άλλο χρήστη.)',
 'badtitle'             => 'Ακατάλληλος τίτλος',
 'badtitletext'         => 'Ο τίτλος της σελίδας που ζητήσατε είναι άκυρος ή κενός ή πρόκειται για έναν εσφαλμένα συνδεδεμένο διαγλωσσικό τίτλο (ή εσφαλμένα συνδεδεμένο τίτλο ανάμεσα σε διαφορετικά Wiki).',
-'perfdisabled'         => 'Λυπούμαστε! Αυτή η λειτουργία έχει προσωρινά απενεργοποιηθεί επειδή επιβραδύνει τη βάση δεδομένων σε βαθμό που κανένας χρήστης δεν μπορεί να χρησιμοποιήσει το Wiki.',
 'perfcached'           => 'Τα δεδομένα που ακολουθούν είναι cached και είνα πιθανόν να μην είναι πλήρως ενημερωμένα:',
 'perfcachedts'         => 'Τα ακόλουθα δεδομένα είναι καταχωρημένα στη λανθάνουσα μνήμη, και ενημερώθηκαν τελευταία στις $1.',
 'querypage-no-updates' => 'Οι ενημερώσεις για αυτή τη σελίδα είναι απενεργοποιημένες. Τα δεδομένα εδώ δεν θα ανανεωθούν προς το παρόν.',
@@ -586,7 +676,6 @@ $2',
 'remembermypassword'         => 'Διατήρηση του κωδικού πρόσβασης σε αυτόν τον υπολογιστή',
 'yourdomainname'             => 'Το domain σας:',
 'externaldberror'            => 'Συνέβη εξωτερικό σφάλμα πιστοποίησης στη βάση δεδομένων ή δεν σας έχει επιτραπεί να ενημερώσετε τον εξωτερικό σας λογαριασμό.',
-'loginproblem'               => '<b>Εμφανίστηκε πρόβλημα κατά την είσοδό σας.</b><br />Παρακαλούμε δοκιμάστε ξανά!',
 'login'                      => 'Είσοδος',
 'nav-login-createaccount'    => 'Δημιουργία Λογαριασμού/Είσοδος',
 'loginprompt'                => 'Πρέπει να έχετε ενεργοποιήσει τα cookies για να συνδεθείτε στο {{SITENAME}}.',
@@ -646,8 +735,9 @@ $2',
 'throttled-mailpassword'     => 'Μια υπενθύμιση για τον κωδικό πρόσβασης έχει ήδη σταλεί, μέσα {{PLURAL:$1|στην τελευταία ώρα|στις τελευταίες $1 ώρες}}. 
 Για την αποφυγή κατάχρησης, μόνο μια υπενθύμιση για τον κωδικό πρόσβασης θα στέλνεται ανά {{PLURAL:$1|ώρα|$1 ώρες}}.',
 'mailerror'                  => 'Σφάλμα στην αποστολή του μηνύματος: $1',
-'acct_creation_throttle_hit' => 'Λυπούμαστε, έχετε ήδη δημιουργήσει $1 λογαριασμούς και δεν μπορείτε να δημιουργήσετε άλλους.',
-'emailauthenticated'         => 'Η ηλεκτρονική σας διεύθυνση επιβεβαιώθηκε στις $1.',
+'acct_creation_throttle_hit' => 'Λυπούμαστε, έχετε ήδη δημιουργήσει {{PLURAL:$1|ένα λογαριασμό|$1 λογαριασμούς}}. 
+Δεν μπορείτε να δημιουργήσετε άλλους.',
+'emailauthenticated'         => 'Η ηλεκτρονική σας διεύθυνση επιβεβαιώθηκε την $2, ώρα $3.',
 'emailnotauthenticated'      => 'Η ηλεκτρονική σας διεύθυνση δεν έχει επαληθευτεί ακόμα. 
 Κανένα μήνυμα ηλεκτρονικού ταχυδρομείου δεν θα σταλεί για τις ακόλουθες λειτουργίες.',
 'noemailprefs'               => '<strong>Δεν έχει ορισθεί ηλεκτρονική διεύθυνση</strong>, οι λειτουργίες που ακολουθούν δεν θα είναι δυνατόν να ολοκληρωθούν.',
@@ -659,6 +749,8 @@ $2',
 'createaccount-text'         => 'Κάποιος δημιούργησε έναν λογαριασμό για τη διεύθυνση email σας στο {{SITENAME}} ($4) με το όνομα "$2", με κωδικό πρόσβασης "$3". Θα πρέπει να συνδεθείτε και να αλλάξετε τον κωδικό πρόσβασής σας τώρα.
 
 Μπορείτε να αγνοήσετε αυτό το μήνυμα, αν αυτός ο λογαριασμός δημιουργήθηκε εσφαλμένα.',
+'login-throttled'            => 'Τελευταία κάνατε πάρα πολλές δοκιμές πάνω στον κωδικό αυτού του λογαριασμού.
+Παρακαλούμε περιμένετε προτού ξαναδοκιμάσετε.',
 'loginlanguagelabel'         => 'Γλώσσα: $1',
 
 # Password reset dialog
@@ -666,11 +758,13 @@ $2',
 'resetpass_announce'      => 'Συνδεθήκατε με ένα προσωρινό κωδικό, σταλμένο με e-mail. Για να ολοκληρώσετε την σύνδεση, πρέπει να στείλετε ένα νέο κωδικό εδώ:',
 'resetpass_text'          => '<!-- Προσθέστε κείμενο εδώ -->',
 'resetpass_header'        => 'Επαναφορά κωδικού πρόσβασης',
+'oldpassword'             => 'Παλιός κωδικός',
+'newpassword'             => 'Νέος κωδικός πρόσβασης',
+'retypenew'               => 'Πληκτρολογήστε ξανά το νέο κωδικό.',
 'resetpass_submit'        => 'Δώστε κωδικό πρόσβασης και συνδεθείτε',
 'resetpass_success'       => 'Ο κωδικός πρόσβασής σας άλλαξε επιτυχώς! Τώρα σας συνδέουμε...',
 'resetpass_bad_temporary' => 'Άκυρος προσωρινός κωδικός πρόσβασης. Μπορεί ήδη να έχετε αλλάξει επιτυχώς τον κωδικό πρόσβασής σας ή να έχετε ζητήσει ένα νέο προσωρινό κωδικό πρόσβασης.',
 'resetpass_forbidden'     => 'Οι κωδικοί πρόσβασης δεν μπορούν να αλλαχθούν',
-'resetpass_missing'       => 'Η φόρμα δεν περιέχει δεδομένα.',
 
 # Edit page toolbar
 'bold_sample'     => 'Έντονο κείμενο',
@@ -797,7 +891,9 @@ $2',
 'longpagewarning'                  => 'ΠΡΟΕΙΔΟΠΟΙΗΣΗ: Η σελίδα έχει μέγεθος $1 kb. Είναι πιθανόν μερικοί browser να παρουσιάσουν προβλήματα στην επεξεργασία σελίδων της τάξης των 32 kb και άνω. Μπορείτε να αποφύγετε το πρόβλημα κόβοντας τη σελίδα σε μικρότερα τμήματα.<br />',
 'longpageerror'                    => '<strong>ΣΦΑΛΜΑ: Το κείμενο που αποστείλατε έχει μήκος $1 κιλομπάιτ,
 το οποίο είναι μεγαλύτερο από το μέγιστο των $2 κιλομπάιτ. Δεν μπορεί να αποθηκευτεί.</strong>',
-'readonlywarning'                  => 'ΠΡΟΕΙΔΟΠΟΙΗΣΗ: Η βάση δεδομένων έχει κλειδωθεί προσωρινά για συντήρηση και δεν θα μπορέσετε να αποθηκεύσετε αυτά που έχετε επεξεργαστεί.  Μπορείτε αν θέλετε να αποθηκεύσετε το κείμενο στον υπολογιστή σας (με αποκοπή-και-επικόλληση) και να το ξαναχρησιμοποιήσετε αργότερα όταν η συντήρηση θα έχει ολοκληρωθεί.',
+'readonlywarning'                  => '<strong>ΠΡΟΕΙΔΟΠΟΙΗΣΗ: Η βάση δεδομένων έχει κλειδωθεί για συντήρηση, έτσι δεν θα μπορέσετε να αποθηκεύσετε αυτά που έχετε επεξεργαστεί. Μπορείτε αν θέλετε να αποθηκεύσετε το κείμενο σε αρχείο κειμένου (με αποκοπή-και-επικόλληση) για να το χρησιμοποιήσετε αργότερα.</strong>
+
+Ο διαχειριστής που την κλείδωσε έδωσε την εξής εξήγηση: $1',
 'protectedpagewarning'             => 'ΠΡΟΕΙΔΟΠΟΙΗΣΗ:  Η σελίδα αυτή έχει κλειδωθεί -η οποιαδήποτε επεξεργασία της μπορεί να γίνει μόνον από διαχειριστές. Βεβαιωθείτε πως ακολουθείτε [[{{ns:project}}:Σελίδες_υπό_προστασία|τους κανόνες για τις υπό προστασία σελίδες]].<br />',
 'semiprotectedpagewarning'         => "'''Σημείωση:''' Αυτή η σελίδα έχει κλειδωθεί ώστε μόνο εγγεγραμμένοι χρήστες να μπορούν να την επεξεργαστούν.",
 'cascadeprotectedwarning'          => "'''Προσοχή:''' Αυτή η σελίδα έχει κλειδωθεί ώστε μόνο χρήστες με δικαιώματα διαχειριστή συστήματος (sysop) να μπορούν να την επεξεργαστούν, επειδή περιλαμβάνεται {{PLURAL:$1|στην|στις}} {{PLURAL:$1|ακόλουθη|ακόλουθες}} διαδοχικά (cascaded) {{PLURAL:$1|προστατευμένη|προστατευμένες}} {{PLURAL:$1|σελίδα|σελίδες}}:",
@@ -820,6 +916,17 @@ $2',
 
 Θα πρέπει να σκεφτείτε αν θα έπρεπε να συνεχίσετε να επεξεργάζεστε αυτή τη σελίδα.
 Το αρχείο διαγραφής δίνεται εδώ για διευκόλυνση:",
+'deleted-notice'                   => 'Αυτή η σελίδα έχει διαγραφεί.
+Το αρχείο διαγραφών της σελίδας παρέχεται παρακάτω για παραπομπή.',
+'deletelog-fulllog'                => 'Δείτε το πλήρες αρχείο',
+'edit-hook-aborted'                => 'Η επεξεργασία ματαιώθηκε από το hook.
+Δεν έδωσε εξήγηση.',
+'edit-gone-missing'                => 'Δεν ήταν εφικτό να ενημερωθεί η σελίδα.
+Εμφανίζεται ότι έχει διαγραφεί.',
+'edit-conflict'                    => 'Σύγκρουση επεξεργασιών.',
+'edit-no-change'                   => 'Η επεξεργασία σας αγνοήθηκε, επειδή δεν έγινε καμία αλλαγή στο κείμενο.',
+'edit-already-exists'              => 'Δεν ήταν εφικτό να δημιουργηθεί η νέα σελίδα.
+Υπάρχει ήδη.',
 
 # "Undo" feature
 'undo-success' => 'Η επεξεργασία μπορεί να αναστραφεί. Παρακαλώ ελέγξτε την σύγκριση παρακάτω για να επιβεβαιώσετε ότι αυτό είναι το οποίο θέλετε να κάνετε, και έπειτα αποθηκεύστε τις αλλαγές παρακάτω για να τελειώσετε την αναστροφή της επεξεργασίας.',
@@ -834,29 +941,29 @@ $2',
 Ο λόγος που δόθηκε από τον $3 είναι ''$2''",
 
 # History pages
-'viewpagelogs'        => 'Δείτε τα αρχεία καταγραφών για αυτή τη σελίδα',
-'nohistory'           => 'Δεν υπάρχει ιστορικό επεξεργασίας για αυτή τη σελίδα.',
-'revnotfound'         => 'Η αναθεώρηση δεν βρέθηκε.',
-'revnotfoundtext'     => 'Η παλιά αναθεώρηση της σελίδας που ζητήσατε δεν ήταν δυνατόν να βρεθεί. Παρακαλούμε ελέγξτε τo URL που χρησιμοποιήσατε για να φτάσετε σε αυτήν τη σελίδα.',
-'currentrev'          => 'Τρέχουσα αναθεώρηση',
-'revisionasof'        => 'Αναθεώρηση της $1',
-'revision-info'       => 'Έκδοση στις $1 υπό τον/την $2',
-'previousrevision'    => '&larr;Παλιότερη αναθεώρηση',
-'nextrevision'        => 'Νεώτερη αναθεώρηση&rarr;',
-'currentrevisionlink' => 'εμφάνιση της τρέχουσας αναθεώρησης',
-'cur'                 => 'τρέχουσα',
-'next'                => 'επόμενη',
-'last'                => 'τελευταία',
-'page_first'          => 'πρώτη',
-'page_last'           => 'τελευταία',
-'histlegend'          => 'Σύγκριση διαφορών: Επιλέξτε τις εκδόσεις που θέλετε να συγκρίνετε και πατήστε enter ή κάντε κλικ στην μπάρα "Σύγκριση...". <br />
+'viewpagelogs'           => 'Δείτε τα αρχεία καταγραφών για αυτή τη σελίδα',
+'nohistory'              => 'Δεν υπάρχει ιστορικό επεξεργασίας για αυτή τη σελίδα.',
+'currentrev'             => 'Τρέχουσα αναθεώρηση',
+'currentrev-asof'        => 'Παρούσα αναθεώρηση της $1',
+'revisionasof'           => 'Αναθεώρηση της $1',
+'revision-info'          => 'Έκδοση στις $1 υπό τον/την $2', # Additionally available: $3: revision id
+'previousrevision'       => '&larr;Παλιότερη αναθεώρηση',
+'nextrevision'           => 'Νεώτερη αναθεώρηση&rarr;',
+'currentrevisionlink'    => 'εμφάνιση της τρέχουσας αναθεώρησης',
+'cur'                    => 'τρέχουσα',
+'next'                   => 'επόμενη',
+'last'                   => 'τελευταία',
+'page_first'             => 'πρώτη',
+'page_last'              => 'τελευταία',
+'histlegend'             => 'Σύγκριση διαφορών: Επιλέξτε τις εκδόσεις που θέλετε να συγκρίνετε και πατήστε enter ή κάντε κλικ στην μπάρα "Σύγκριση...". <br />
 Υπόμνημα: (τρέχον) = διαφορές με την τρέχουσα έκδοση,
 (τελευταίο) = διαφορές με την προηγούμενη έκδοση, μ = αλλαγές μικρής κλίμακας.',
-'deletedrev'          => '[διαγράφτηκε]',
-'histfirst'           => 'Η πιο παλιά',
-'histlast'            => 'Η πιο πρόσφατη',
-'historysize'         => '({{PLURAL:$1|1 byte|$1 bytes}})',
-'historyempty'        => '(άδειο)',
+'history-fieldset-title' => 'Ψάξτε στο ιστορικό',
+'deletedrev'             => '[διαγράφτηκε]',
+'histfirst'              => 'Η πιο παλιά',
+'histlast'               => 'Η πιο πρόσφατη',
+'historysize'            => '({{PLURAL:$1|1 byte|$1 bytes}})',
+'historyempty'           => '(άδειο)',
 
 # Revision feed
 'history-feed-title'          => 'Ιστορικό εκδόσεων',
@@ -949,11 +1056,26 @@ $2',
 'difference'              => '(Διαφορές μεταξύ αναθεωρήσεων)',
 'lineno'                  => 'Γραμμή $1:',
 'compareselectedversions' => 'Σύγκριση των εκδόσεων που έχουν επιλεγεί',
+'visualcomparison'        => 'Οπτική σύγκριση',
+'wikicodecomparison'      => 'Σύγκριση wikitext',
 'editundo'                => 'αναίρεση',
 'diff-multi'              => '({{PLURAL:$1|Μία ενδιάμεση αναθεώρηση|$1 ενδιάμεσες αναθεωρήσεις}} δεν εμφανίζονται.)',
+'diff-movedto'            => 'μετακινήθηκε στο $1',
+'diff-added'              => '$1 προστέθηκε',
+'diff-changedto'          => 'άλλαξε σε $1',
+'diff-removed'            => 'Το $1 αφαιρέθηκε',
+'diff-src'                => 'πηγή',
+'diff-width'              => 'πλάτος',
+'diff-height'             => 'ύψος',
+'diff-h1'                 => "μία '''επικεφαλίδα (επιπέδου 1)'''",
+'diff-h2'                 => "μία '''επικεφαλίδα (επιπέδου 2)'''",
+'diff-h3'                 => "μία '''επικεφαλίδα (επιπέδου 3)'''",
+'diff-h4'                 => "μία '''επικεφαλίδα (επιπέδου 4)'''",
+'diff-h5'                 => "μία '''επικεφαλίδα (επιπέδου 5)'''",
 
 # Search results
 'searchresults'             => 'Αποτελέσματα αναζήτησης',
+'searchresults-title'       => 'Αποτελέσματα αναζήτησης για "$1"',
 'searchresulttext'          => 'Για περισσότερες πληροφορίες σχετικά με την αναζήτηση στο {{SITENAME}}, βλ. [[{{MediaWiki:Helppage}}|{{int:help}}]].',
 'searchsubtitle'            => 'Κριτήρια αναζήτησης: "[[:$1]]"',
 'searchsubtitleinvalid'     => 'Κριτήρια αναζήτησης: "$1"',
@@ -967,6 +1089,8 @@ $2',
 'prevn'                     => '$1 προηγουμένων',
 'nextn'                     => '$1 επομένων',
 'viewprevnext'              => 'Εμφάνιση ($1) ($2) ($3).',
+'searchhelp-url'            => 'Help:Περιεχόμενα',
+'searchprofile-images'      => 'Αρχεία',
 'search-result-size'        => '$1 ({{PLURAL:$2|1 λέξη|$2 λέξεις}})',
 'search-result-score'       => 'Σχετικότητα: $1%',
 'search-suggest'            => 'Μήπως εννοούσατε: $1',
@@ -1002,6 +1126,7 @@ $2',
 'qbsettings-floatingright' => 'Πλανώμενα δεξιά',
 'changepassword'           => 'Αλλαγή κωδικού',
 'skin'                     => 'Οπτική οργάνωση (skin)',
+'skin-preview'             => 'προεπισκόπηση',
 'math'                     => 'Απόδοση μαθηματικών',
 'dateformat'               => 'Μορφή ημερομηνίας',
 'datedefault'              => 'Χωρίς προτίμηση',
@@ -1023,9 +1148,6 @@ $2',
 'prefs-misc'               => 'Διάφορες ρυθμίσεις',
 'saveprefs'                => 'Αποθηκεύστε',
 'resetprefs'               => 'Επαναφορά προτιμήσεων',
-'oldpassword'              => 'Παλιός κωδικός',
-'newpassword'              => 'Νέος κωδικός πρόσβασης',
-'retypenew'                => 'Πληκτρολογήστε ξανά το νέο κωδικό.',
 'textboxsize'              => 'Επεξεργασία',
 'rows'                     => 'Σειρές',
 'columns'                  => 'Στήλες',
@@ -1119,6 +1241,27 @@ $2',
 'rightslogentry' => 'η ιδιότητα μέλους ομάδας για τον/την $1 από $2 σε $3 άλλαξε',
 'rightsnone'     => '(κανένα)',
 
+# Associated actions - in the sentence "You do not have permission to X"
+'action-read'           => 'να διαβάσετε αυτή τη σελίδα',
+'action-edit'           => 'να επεξεργαστείτε αυτή τη σελίδα',
+'action-createpage'     => 'να δημιουργήσετε σελίδες',
+'action-createtalk'     => 'να δημιουργήσετε σελίδες συζήτησης',
+'action-createaccount'  => 'να δημιουργήσετε αυτό το λογαριασμό χρήστη',
+'action-minoredit'      => 'να σημειώσετε αυτή την επεξεργασία σαν «μικρής κλίμακας»',
+'action-move'           => 'να μετακινήσετε αυτή τη σελίδα',
+'action-move-subpages'  => 'να μετακινήσετε αυτή τη σελίδα, καθώς και τις υποσελίδες της',
+'action-upload'         => 'να επιφορτώσετε αυτό το αρχείο',
+'action-upload_by_url'  => 'να επιφορτώσετε αυτό το αρχείο από μια διεύθυνση URL',
+'action-delete'         => 'να διαγράψετε αυτή τη σελίδα',
+'action-deletedhistory' => 'να δείτε το διαγραμμένο ιστορικό αυτής της σελίδας',
+'action-browsearchive'  => 'να ερευνήσετε για διαγραμμένες σελίδες',
+'action-undelete'       => 'να ακυρώσετε τη διαγραφή αυτής της σελίδας',
+'action-suppressionlog' => 'να δείτε αυτόν τον ιδιωτικό κατάλογο',
+'action-block'          => 'να φράξετε τις επεξεργασίες αυτού του χρήστη',
+'action-protect'        => 'να αλλάξετε τα επίπεδα προστασίας για αυτή τη σελίδα',
+'action-import'         => 'να εισάγετε αυτή τη σελίδα από άλλο wiki',
+'action-importupload'   => 'να εισάγετε αυτή τη σελίδα από φόρτωση αρχείου',
+
 # Recent changes
 'nchanges'                          => '$1 {{PLURAL:$1|αλλαγή|αλλαγές}}',
 'recentchanges'                     => 'Πρόσφατες αλλαγές',
@@ -1165,7 +1308,7 @@ $2',
 'uploaderror'                 => 'Σφάλμα στη φόρτωση αρχείου',
 'uploadtext'                  => "Πριν προχωρήσετε στη φόρτωση αρχείων σε αυτό το χώρο βεβαιωθείτε πως διαβάσατε και πως ακολουθείτε τους [[{{ns:project}}:Κανόνες_χρήσης_εικόνων|Κανόνες χρήσης εικόνων]].
 
-Μπορείτε να δείτε ή να αναζητήσετε εικόνες που έχουν φορτωθεί κατά το παρελθόν κάτω από το σύνδεσμο [[Special:ImageList|Κατάλογος εικόνων που έχουν φορτωθεί]].
+Μπορείτε να δείτε ή να αναζητήσετε εικόνες που έχουν φορτωθεί κατά το παρελθόν κάτω από το σύνδεσμο [[Special:FileList|Κατάλογος εικόνων που έχουν φορτωθεί]].
 Οι φορτώσεις και οι διαγραφές έχουν καταγραφεί στη σελίδα
 [[{{ns:project}}:Καταγραφές_φόρτωσης|Καταγραφές φόρτωσης]].
 
@@ -1177,8 +1320,8 @@ $2',
 Οι προτιμώμενες μορφές αρχείου είναι: JPEG για φωτογραφίες, PNG για σχήματα και άλλες εικόνες και OGG για αρχεία ήχου. Δώστε περιγραφικά ονόματα στα αρχεία σας για να αποφευχθεί τυχόν σύγχυση.
 
 Για να συμπεριληφθεί μια εικόνα σε μια σελίδα, χρησιμοποιήστε συνδέσμους της μορφής
-'''<nowiki>[[</nowiki>{{ns:image}}<nowiki>:file.jpg]]</nowiki>''' ή
-'''<nowiki>[[</nowiki>{{ns:image}}<nowiki>:file.png|alt text]]</nowiki>''' ή
+'''<nowiki>[[</nowiki>{{ns:file}}<nowiki>:file.jpg]]</nowiki>''' ή
+'''<nowiki>[[</nowiki>{{ns:file}}<nowiki>:file.png|alt text]]</nowiki>''' ή
 '''<nowiki>[[</nowiki>{{ns:media}}<nowiki>:file.ogg]]</nowiki>''' για αρχεία ήχου.
 
 Σας παρακαλούμε να λάβετε υπ΄όψη σας ότι, ακριβώς όπως συμβαίνει με τις σελίδες Wiki, είναι δυνατόν άλλοι χρήστες να επεξεργαστούν ή να διαγράψουν κατά την κρίση τους αρχεία που έχετε φορτώσει. Έχετε επίσης υπ΄όψη σας πως είναι δυνατόν να υποστείτε φραγή σαν χρήστης αν διαπιστωθεί πως έχετε κάνει κατάχρηση του συστήματος.<br />",
@@ -1187,7 +1330,7 @@ $2',
 'upload-prohibited'           => 'Απαγορευμένοι τύποι αρχείου: $1.',
 'uploadlog'                   => 'Μητρώο επιφορτώσεων',
 'uploadlogpage'               => 'Καταγραφές φόρτωσης',
-'uploadlogpagetext'           => 'Παρακάτω είναι ο κατάλογος με τις πιο πρόσφατες αποθηκεύσεις αρχείων. Επισκεφθείτε τον [[Special:NewImages|πίνακα νέων αρχείων]] για μία πιο οπτική επισκόπηση.',
+'uploadlogpagetext'           => 'Παρακάτω είναι ο κατάλογος με τις πιο πρόσφατες αποθηκεύσεις αρχείων. Επισκεφθείτε τον [[Special:NewFiles|πίνακα νέων αρχείων]] για μία πιο οπτική επισκόπηση.',
 'filename'                    => 'Όνομα αρχείου',
 'filedesc'                    => 'Σύνοψη',
 'fileuploadsummary'           => 'Περιγραφή:',
@@ -1219,9 +1362,9 @@ $2',
 'file-thumbnail-no'           => 'Το όνομα αρχείου αρχίζει με <strong><tt>$1</tt></strong>.
 Φαίνεται πως είναι μια εικόνα μειωμένου μεγέθους <i>(μικρογραφία)</i>.
 Αν έχετε αυτή την εικόνα σε πλήρη ανάλυση, επιφορτώστε τη, αλλιώς αλλάξτε παρακαλώ το όνομα του αρχείου.',
-'fileexists-forbidden'        => 'Ένα αρχείο με αυτό το όνομα υπάρχει ήδη˙ παρακαλώ πηγαίνετε πίσω και επιφορτώστε αυτό το αρχείο υπό ένα νέο όνομα. [[Image:$1|thumb|center|$1]]',
+'fileexists-forbidden'        => 'Ένα αρχείο με αυτό το όνομα υπάρχει ήδη˙ παρακαλώ πηγαίνετε πίσω και επιφορτώστε αυτό το αρχείο υπό ένα νέο όνομα. [[File:$1|thumb|center|$1]]',
 'fileexists-shared-forbidden' => "Ένα αρχείο με αυτό το όνομα υπάρχει ήδη στο χώρο φύλαξης κοινών αρχείων.
-Εάν θέλετε παρ' όλ' αυτά να επιφορτώσετε το δικό σας αρχείο, παρακαλούμε πηγαίνετε πίσω και χρησιμοποιήστε ένα νέο όνομα. [[Image:$1|thumb|center|$1]]",
+Εάν θέλετε παρ' όλ' αυτά να επιφορτώσετε το δικό σας αρχείο, παρακαλούμε πηγαίνετε πίσω και χρησιμοποιήστε ένα νέο όνομα. [[File:$1|thumb|center|$1]]",
 'successfulupload'            => 'Επιτυχής φόρτωση',
 'uploadwarning'               => 'Προειδοποίηση φόρτωσης',
 'savefile'                    => 'Αποθήκευση αρχείου',
@@ -1265,7 +1408,7 @@ $2',
 'upload_source_url'  => ' (ένα έγκυρο, δημόσια προσβάσιμο URL)',
 'upload_source_file' => ' (ένα αρχείο στον υπολογιστή σας)',
 
-# Special:ImageList
+# Special:FileList
 'imagelist-summary'     => 'Αυτή η ειδική σελίδα δείχνει όλα τα ανεβασμένα αρχεία.
 Τα πιο πρόσφατα είναι στην κορυφή της λίστας.
 Πατήστε στην επικεφαλίδα μιας σειράς για αλλάξει η ιεράρχηση.',
@@ -1278,7 +1421,7 @@ $2',
 'imagelist_size'        => 'Μέγεθος',
 'imagelist_description' => 'Περιγραφή',
 
-# Image description page
+# File description page
 'filehist'                       => 'Ιστορικό αρχείου',
 'filehist-help'                  => 'Πατήστε σε μια ημερομηνία/ώρα για να δείτε το αρχείο όπως εμφανιζόταν εκείνη την ώρα.',
 'filehist-deleteall'             => 'διαγραφή όλων',
@@ -1325,7 +1468,6 @@ $2',
 'filedelete-success-old'      => "Η έκδοση του '''[[Media:$1|$1]]''' από την $3, $2 έχει διαγραφεί.",
 'filedelete-nofile'           => "Το '''$1''' δεν υπάρχει.",
 'filedelete-nofile-old'       => "Δεν υπάρχει καταγεγραμμένη έκδοση του '''$1''' με τα συγκεκριμένα χαρακτηριστικά.",
-'filedelete-iscurrent'        => 'Προσπαθείτε να διαγράψετε την πιο πρόσφατη έκδοση αυτού του αρχείου. Παρακαλούμε επαναφέρετε το αρχείο σε μια παλαιότερη έκδοση πρώτα.',
 'filedelete-otherreason'      => 'Άλλος/πρόσθετος λόγος:',
 'filedelete-reason-otherlist' => 'Άλλος λόγος',
 'filedelete-reason-dropdown'  => '*Συχνοί λόγοι διαγραφής
@@ -1359,22 +1501,19 @@ $2',
 'randomredirect-nopages' => 'Δεν υπάρχουν ανακατευθύνσεις σε αυτή την περιοχή ονόματος.',
 
 # Statistics
-'statistics'             => 'Στατιστικές',
-'sitestats'              => 'Στατιστικές ιστοχώρου',
-'userstats'              => 'Στατιστικές χρηστών',
-'sitestatstext'          => "Συνολικά {{PLURAL:\$1|υπάρχει '''1''' σελίδα|υπάρχουν '''\$1''' σελίδες}} στη βάση δεδομένων.
-Συμπεριλαμβάνονται σελίδες \"συζήτησης\", σελίδες για τον ιστότοπο {{SITENAME}}, πολύ μικρές σελίδες, ανακατευθύνσεις, και άλλες που πιθανώς να μην πληρούν τις προϋποθέσεις για να χαρακτηρίζονται σελίδες με \"ουσιώδες περιεχόμενο\".
-Αποκλείοντας αυτές, {{PLURAL:\$2|υπάρχει '''1''' σελίδα η οποία|υπάρχουν  '''\$2''' σελίδες οι οποίες}} είναι πιθανώς θεμιτές {{PLURAL:\$2|σελίδα|σελίδες}} περιεχομένου.
-
-'''\$8''' {{PLURAL:\$8|αρχείο|αρχεία}} έχουν φορτωθεί.
-
-Έχουν καταγραφεί συνολικά '''\$3''' {{PLURAL:\$3|επίσκεψη σε σελίδα|επισκέψεις σε σελίδες}}, και '''\$4''' {{PLURAL:\$4|επεξεργασία σελίδας|επεξεργασίες σελίδων}}
-από τότε που ο ιστότοπος {{SITENAME}} δημιουργήθηκε.
-Αυτό αναλογεί σε '''\$5''' κατά μέσο όρο επεξεργασίες ανά σελίδα, και σε '''\$6''' επισκέψεις ανά επεξεργασία.
-
-Το μέγεθος της [http://www.mediawiki.org/wiki/Manual:Job_queue ουράς εργασιών] είναι '''\$7'''.",
-'userstatstext'          => "{{PLURAL:$1|Υπάρχει '''1''' εγγεγραμένος χρήστης|Υπάρχουν '''$1''' εγγεγραμένοι χρήστες}}, από τους οποίους '''$2''' (ή το '''$4%''') {{PLURAL:$2|έχει|έχουν}} δικαιώματα της ομάδας $5.",
-'statistics-mostpopular' => 'Οι πιο δημοφιλείς σελίδες',
+'statistics'               => 'Στατιστικές',
+'statistics-header-pages'  => 'Στατιστικές σελίδων',
+'statistics-header-edits'  => 'Στατιστικές επεξεργασιών',
+'statistics-header-users'  => 'Στατιστικές χρηστών',
+'statistics-articles'      => 'Σελίδες περιεχομένου',
+'statistics-pages'         => 'Σελίδες',
+'statistics-files'         => 'Αρχεία που έχουν επιφορτωθεί',
+'statistics-edits'         => 'Επεξεργασίες σελίδων από τη δημιουργία του εγχειρήματος {{SITENAME}}',
+'statistics-edits-average' => 'Μέσος όρος επεξεργασιών ανά σελίδα',
+'statistics-jobqueue'      => 'Μήκος [http://www.mediawiki.org/wiki/Manual:Job_queue Job queue]',
+'statistics-users'         => 'Εγγεγραμμένοι [[Special:ListUsers|χρήστες]]',
+'statistics-users-active'  => 'Ενεργοί χρήστες',
+'statistics-mostpopular'   => 'Οι πιο δημοφιλείς σελίδες',
 
 'disambiguations'      => 'Σελίδες αποσαφήνισης',
 'disambiguationspage'  => 'Project:Σύνδεσμοι_προς_τις_σελίδες_αποσαφήνισης',
@@ -1417,7 +1556,7 @@ $2',
 'popularpages'            => 'Δημοφιλείς σελίδες',
 'wantedcategories'        => 'Ζητούμενες κατηγορίες',
 'wantedpages'             => 'Σελίδες σε ζήτηση',
-'missingfiles'            => 'Αρχεία που λείπουν',
+'wantedfiles'             => 'Ζητούμενα αρχεία',
 'mostlinked'              => 'Οι σελίδες με τις περισσότερες αναφορές',
 'mostlinkedcategories'    => 'Περισσότερο χρησιμοποιούμενες κατηγορίες',
 'mostlinkedtemplates'     => 'Περισσότερο χρησιμοποιούμενα πρότυπα',
@@ -1459,8 +1598,6 @@ $2',
 'speciallogtitlelabel' => 'Τίτλος:',
 'log'                  => 'Καταγραφές γεγονότων',
 'all-logs-page'        => 'Όλες οι καταγραφές γεγονότων',
-'log-search-legend'    => 'Αναζήτηση για αρχεία καταγραφών',
-'log-search-submit'    => 'Πήγαινε',
 'alllogstext'          => 'Εποπτική εμφάνιση όλων των ενεργειών φόρτωσης αρχείων, διαγραφής, προστασίας, φραγής και όλων των καταγραφών των διαχειριστών στο αρχείο γεγονότων του {{SITENAME}}. Μπορείτε να περιορίσετε τα αποτελέσματα που εμφανίζονται επιλέγοντας συγκεκριμένο είδος γεγονότων, όνομα χρήστη ή τη σελίδα που επηρεάστηκε.',
 'logempty'             => 'Δεν υπάρχουν στοιχεία που να ταιριάζουν στο αρχείο καταγραφών.',
 'log-title-wildcard'   => 'Αναζήτησε τίτλους που αρχίζουν με αυτό το κείμενο',
@@ -1471,6 +1608,7 @@ $2',
 'nextpage'          => 'Επόμενη σελίδα ($1)',
 'prevpage'          => 'Προηγούμενη σελίδα ($1)',
 'allpagesfrom'      => 'Εμφάνιση σελίδων που αρχίζουν από:',
+'allpagesto'        => 'Εμφάνιση σελίδων που λήγουν σε:',
 'allarticles'       => 'Όλα τα άρθρα',
 'allinnamespace'    => 'Όλες οι σελίδες (στην περιοχή $1)',
 'allnotinnamespace' => 'Όλες οι σελίδες (που δεν βρίσκονται στην περιοχή $1)',
@@ -1489,10 +1627,22 @@ $2',
 'special-categories-sort-count' => 'ταξινόμηση κατά απαρίθμηση',
 'special-categories-sort-abc'   => 'αλφαβητική ταξινόμηση',
 
+# Special:DeletedContributions
+'deletedcontributions' => 'Διαγραμμένες συνεισφορές χρήστη',
+
+# Special:LinkSearch
+'linksearch-ok' => 'Αναζήτηση',
+
 # Special:ListUsers
 'listusersfrom'      => 'Προβολή χρηστών ξεκινώντας από:',
 'listusers-submit'   => 'Δείξε',
 'listusers-noresult' => 'Δεν βρέθηκε χρήστης.',
+
+# Special:Log/newusers
+'newuserlogpage'           => 'Αρχείο δημιουργίας χρηστών',
+'newuserlogpagetext'       => 'Αυτό είναι το αρχείο δημιουργίας χρηστών.',
+'newuserlog-create-entry'  => 'Νέος χρήστης',
+'newuserlog-create2-entry' => 'δημιουργία λογαριασμού: $1',
 
 # Special:ListGroupRights
 'listgrouprights'          => 'Δικαιώματα ομάδων χρηστών',
@@ -1555,12 +1705,7 @@ $2',
 'iteminvalidname'      => 'Πρόβλημα με το στοιχείο "$1", άκυρο όνομα...',
 'wlnote'               => "Ακολουθούν {{PLURAL:$1|η πιο πρόσφατη αλλαγή|οι '''$1''' πιο πρόσφατες αλλαγές}} κατά τη διάρκεια {{PLURAL:$2|της τελευταίας ώρας|των '''$2''' τελευταίων ωρών}}.",
 'wlshowlast'           => 'Εμφάνιση των τελευταίων $1 ωρών $2 ημερών $3',
-'watchlist-show-bots'  => 'Δείξε τις επεξεργασίες από bots',
-'watchlist-hide-bots'  => 'Κρύψε τις επεξεργασίες από bots',
-'watchlist-show-own'   => 'Δείξε τις επεξεργασίες μου',
-'watchlist-hide-own'   => 'Κρύψε τις επεξεργασίες μου',
-'watchlist-show-minor' => 'Δείξε τις μικρής σημασίας επεξεργασίες',
-'watchlist-hide-minor' => 'Κρύψε τις μικρής σημασίας επεξεργασίες',
+'watchlist-options'    => 'Επιλογές λίστας παρακολούθησης',
 
 # Displayed when you click the "watch" button and it is in the process of watching
 'watching'   => 'Παρακολούθηση...',
@@ -1600,56 +1745,62 @@ Tο σύστημα ειδοποίησης του {{SITENAME}}
 Ερωτήσεις και περισσότερες πληροφορίες:
 {{fullurl:{{MediaWiki:Helppage}}}}',
 
-# Delete/protect/revert
-'deletepage'                  => 'Διαγραφή σελίδας',
-'confirm'                     => 'Επιβεβαίωση',
-'excontent'                   => "το περιεχόμενο ήταν: '$1'",
-'excontentauthor'             => "το περιεχόμενο ήταν: '$1' (και οι μοναδικές συνεισφορές ήταν του '$2')",
-'exbeforeblank'               => "το περιεχόμενο πριν απο την εκκαθάριση ήταν: '$1'",
-'exblank'                     => 'η σελίδα ήταν κενή',
-'delete-confirm'              => 'Διαγραφή του "$1"',
-'delete-legend'               => 'Διαγραφή',
-'historywarning'              => 'ΠΡΟΕΙΔΟΠΟΙΗΣΗ! Η σελίδα που πρόκειται να διαγράψετε έχει ιστορικό.<br />',
-'confirmdeletetext'           => 'Πρόκειται να διαγράψετε οριστικά από τη βάση δεδομένων μια σελίδα (ή μια εικόνα) μαζί με το ιστορικό της. Παρακαλούμε επιβεβαιώστε ότι θέλετε πραγματικά να το κάνετε, ότι αντιλαμβάνεσθε τις συνέπειες και ότι το κάνετε σύμφωνα με τους [[{{ns:project}}:Κανόνες|Κανόνες]].',
-'actioncomplete'              => 'Η ενέργεια ολοκληρώθηκε.',
-'deletedtext'                 => 'Η "<nowiki>$1</nowiki>" έχει διαγραφεί.
+# Delete
+'deletepage'             => 'Διαγραφή σελίδας',
+'confirm'                => 'Επιβεβαίωση',
+'excontent'              => "το περιεχόμενο ήταν: '$1'",
+'excontentauthor'        => "το περιεχόμενο ήταν: '$1' (και οι μοναδικές συνεισφορές ήταν του '$2')",
+'exbeforeblank'          => "το περιεχόμενο πριν απο την εκκαθάριση ήταν: '$1'",
+'exblank'                => 'η σελίδα ήταν κενή',
+'delete-confirm'         => 'Διαγραφή του "$1"',
+'delete-legend'          => 'Διαγραφή',
+'historywarning'         => 'ΠΡΟΕΙΔΟΠΟΙΗΣΗ! Η σελίδα που πρόκειται να διαγράψετε έχει ιστορικό.<br />',
+'confirmdeletetext'      => 'Πρόκειται να διαγράψετε οριστικά από τη βάση δεδομένων μια σελίδα (ή μια εικόνα) μαζί με το ιστορικό της. Παρακαλούμε επιβεβαιώστε ότι θέλετε πραγματικά να το κάνετε, ότι αντιλαμβάνεσθε τις συνέπειες και ότι το κάνετε σύμφωνα με τους [[{{ns:project}}:Κανόνες|Κανόνες]].',
+'actioncomplete'         => 'Η ενέργεια ολοκληρώθηκε.',
+'deletedtext'            => 'Η "<nowiki>$1</nowiki>" έχει διαγραφεί.
 Για το ιστορικό των πρόσφατων διαγραφών ανατρέξτε στο σύνδεσμο $2',
-'deletedarticle'              => 'Η $1 διαγράφτηκε.',
-'dellogpage'                  => 'Καταγραφές διαγραφών',
-'dellogpagetext'              => 'Λίστα των πιο πρόσφατων διαγραφών',
-'deletionlog'                 => 'Καταγραφές διαγραφών',
-'reverted'                    => 'Επαναφορά σε προηγούμενη αναθεώρηση',
-'deletecomment'               => 'Αιτιολογία διαγραφής',
-'deleteotherreason'           => 'Άλλος/πρόσθετος λόγος:',
-'deletereasonotherlist'       => 'Άλλος λόγος',
-'deletereason-dropdown'       => '*Συνηθισμένοι λόγοι διαγραφής
+'deletedarticle'         => 'Η $1 διαγράφτηκε.',
+'dellogpage'             => 'Καταγραφές διαγραφών',
+'dellogpagetext'         => 'Λίστα των πιο πρόσφατων διαγραφών',
+'deletionlog'            => 'Καταγραφές διαγραφών',
+'reverted'               => 'Επαναφορά σε προηγούμενη αναθεώρηση',
+'deletecomment'          => 'Αιτιολογία διαγραφής',
+'deleteotherreason'      => 'Άλλος/πρόσθετος λόγος:',
+'deletereasonotherlist'  => 'Άλλος λόγος',
+'deletereason-dropdown'  => '*Συνηθισμένοι λόγοι διαγραφής
 ** Αίτηση του δημιουργού της
 ** Παραβίαση των πνευματικών δικαιωμάτων
 ** Βανδαλισμός',
-'delete-edit-reasonlist'      => 'Επεξεργασία λόγων διαγραφής',
-'delete-toobig'               => 'Αυτή η σελίδα έχει μεγάλο ιστορικό τροποποιήσεων, πάνω από $1 {{PLURAL:$1|τροποποίηση|τροποποιήσεις}}.
+'delete-edit-reasonlist' => 'Επεξεργασία λόγων διαγραφής',
+'delete-toobig'          => 'Αυτή η σελίδα έχει μεγάλο ιστορικό τροποποιήσεων, πάνω από $1 {{PLURAL:$1|τροποποίηση|τροποποιήσεις}}.
 Η διαγραφή τέτοιων σελίδων έχει περιοριστεί για την αποφυγή τυχαίας αναστάτωσης του {{SITENAME}}.',
-'delete-warning-toobig'       => 'Αυτή η σελίδα έχει μεγάλο ιστορικό τροποποιήσεων, πάνω από $1 {{PLURAL:$1|τροποποίηση|τροποποιήσεις}}.
+'delete-warning-toobig'  => 'Αυτή η σελίδα έχει μεγάλο ιστορικό τροποποιήσεων, πάνω από $1 {{PLURAL:$1|τροποποίηση|τροποποιήσεις}}.
 Η διαγραφή της μπορεί να αναστατώσει τη λειτουργία της βάσης δεδομένων του {{SITENAME}}. Συνιστούμε μεγάλη προσοχή.',
-'rollback'                    => 'Επαναφορά επεξεργασιών',
-'rollback_short'              => 'Επαναφορά',
-'rollbacklink'                => 'Επαναφορά στην προηγούμενη',
-'rollbackfailed'              => 'Η επαναφορά απέτυχε.',
-'cantrollback'                => 'Δεν είναι δυνατή η αναίρεση αυτής της αλλαγής, πρόκειται για την αρχική ενέργεια δημιουργίας της σελίδας.',
-'alreadyrolled'               => 'Αδύνατον να αναιρεθεί η τελευταία αλλαγή της σελίδας [[:$1]] από το χρήστη ([[User:$2|$2]] ([[User talk:$2|Συζήτηση]]) | [[Special:Contributions/$2|{{int:contribslink}}]]), διότι κάποιος έχει ήδη αναιρέσει την αλλαγή ή έχει αλλάξει εκ νέου τη σελίδα.
+
+# Rollback
+'rollback'         => 'Επαναφορά επεξεργασιών',
+'rollback_short'   => 'Επαναφορά',
+'rollbacklink'     => 'Επαναφορά στην προηγούμενη',
+'rollbackfailed'   => 'Η επαναφορά απέτυχε.',
+'cantrollback'     => 'Δεν είναι δυνατή η αναίρεση αυτής της αλλαγής, πρόκειται για την αρχική ενέργεια δημιουργίας της σελίδας.',
+'alreadyrolled'    => 'Αδύνατον να αναιρεθεί η τελευταία αλλαγή της σελίδας [[:$1]] από το χρήστη ([[User:$2|$2]] ([[User talk:$2|Συζήτηση]]) | [[Special:Contributions/$2|{{int:contribslink}}]]), διότι κάποιος έχει ήδη αναιρέσει την αλλαγή ή έχει αλλάξει εκ νέου τη σελίδα.
 
 Τελευταία αλλαγή από το χρήστη ([[User:$3|$3]] ([[User talk:$3|Συζήτηση]]) | [[Special:Contributions/$3|{{int:contribslink}}]]).',
-'editcomment'                 => 'Το σχόλιο της επεξεργασίας ήταν: "<i>$1</i>".', # only shown if there is an edit comment
-'revertpage'                  => 'Ανάκληση των αλλαγών $2 (επιστροφή στην προηγούμενη αναθεώρηση $1)', # Additional available: $3: revid of the revision reverted to, $4: timestamp of the revision reverted to, $5: revid of the revision reverted from, $6: timestamp of the revision reverted from
-'rollback-success'            => 'Ανεστραμμένες εκδόσεις από $1, αλλάχθηκαν στην προηγούμενη έκδοση από $2.',
-'sessionfailure'              => 'Υπάρχει πρόβλημα με τη σύνδεσή σας -η ενέργεια αυτή ακυρώθηκε προληπτικά για την αντιμετώπιση τυχόν πειρατείας συνόδου (session hijacking). Παρακαλoύμε πατήστε "Επιστροφή", ξαναφορτώστε τη σελίδα από την οποία φθάσατε εδώ και προσπαθήστε ξανά.',
+'editcomment'      => 'Το σχόλιο της επεξεργασίας ήταν: "<i>$1</i>".', # only shown if there is an edit comment
+'revertpage'       => 'Ανάκληση των αλλαγών $2 (επιστροφή στην προηγούμενη αναθεώρηση $1)', # Additionally available: $3: revid of the revision reverted to, $4: timestamp of the revision reverted to, $5: revid of the revision reverted from, $6: timestamp of the revision reverted from
+'rollback-success' => 'Ανεστραμμένες εκδόσεις από $1, αλλάχθηκαν στην προηγούμενη έκδοση από $2.',
+'sessionfailure'   => 'Υπάρχει πρόβλημα με τη σύνδεσή σας -η ενέργεια αυτή ακυρώθηκε προληπτικά για την αντιμετώπιση τυχόν πειρατείας συνόδου (session hijacking). Παρακαλoύμε πατήστε "Επιστροφή", ξαναφορτώστε τη σελίδα από την οποία φθάσατε εδώ και προσπαθήστε ξανά.',
+
+# Protect
 'protectlogpage'              => 'Καταγραφές προστασίας (κλειδώματος)',
 'protectlogtext'              => 'Ακολουθεί κατάλογος ενεργειών κλειδώματος και ξεκλειδώματος σελίδων.
 (Βλ. [[{{ns:project}}:Σελίδες_υπό_προστασία]] για περισσότερες πληροφορίες).',
 'protectedarticle'            => 'κλείδωσε το $1',
 'modifiedarticleprotection'   => 'αλλαγή επιπέδου προστασίας για "[[$1]]"',
 'unprotectedarticle'          => 'έχει αρθεί η προστασία του $1',
+'movedarticleprotection'      => 'μετακινήθηκαν οι ρυθμίσεις προστασίας από "[[$2]]" σε "[[$1]]"',
 'protect-title'               => 'Κλειδώνεται η "$1"',
+'prot_1movedto2'              => 'Η [[$1]] μετακινήθηκε στη θέση [[$2]]',
 'protect-legend'              => 'Επιβεβαίωση κλειδώματος',
 'protectcomment'              => 'Αιτιολογία προστασίας',
 'protectexpiry'               => 'Λήξη',
@@ -1670,8 +1821,20 @@ Tο σύστημα ειδοποίησης του {{SITENAME}}
 'protect-level-sysop'         => 'Μόνο διαχειριστές',
 'protect-summary-cascade'     => 'διαδοχική',
 'protect-expiring'            => 'λήγει στις $1 (UTC)',
+'protect-expiry-indefinite'   => "επ' αόριστο",
 'protect-cascade'             => 'Διαδοχική προστασία - προστάτευσε όποιες σελίδες περιλαμβάνονται σε αυτή τη σελίδα.',
 'protect-cantedit'            => 'Δεν μπορείτε να αλλάξετε τα επίπεδα προστασίας αυτής της σελίδας, διότι δεν έχετε την άδεια να την επεξεργαστείτε.',
+'protect-othertime'           => 'Άλλο χρονικό διάστημα:',
+'protect-existing-expiry'     => 'Υπάρχουσα λήξη προθεσμίας: $3, $2',
+'protect-otherreason'         => 'Άλλος/πρόσθετος λόγος:',
+'protect-otherreason-op'      => 'άλλος/πρόσθετος λόγος',
+'protect-dropdown'            => '*Συνήθεις λόγοι προστασίας
+** Υπερβολικός βανδαλισμός
+** Υπερβολικό spamming
+** Αντιπαραγωγική μάχη επεξεργασιών
+** Σελίδα μεγάλης κίνησης',
+'protect-edit-reasonlist'     => 'Επεξεργασία λόγων προστασίας',
+'protect-expiry-options'      => '2 ώρες:2 hours,1 ημέρα:1 day,3 ημέρες:3 days,1 εβδομάδα:1 week,2 εβδομάδες:2 weeks,1 μήνα:1 month,3 μήνες:3 months,6 μήνες:6 months,1 χρόνο:1 year,αόριστα:infinite', # display1:time1,display2:time2,...
 'restriction-type'            => 'Δικαίωμα:',
 'restriction-level'           => 'Επίπεδο περιορισμού:',
 'minimum-size'                => 'Ελάχιστο μέγεθος',
@@ -1708,13 +1871,14 @@ Tο σύστημα ειδοποίησης του {{SITENAME}}
 'undeletehistorynoadmin'       => 'Αυτό το άρθρο έχει διαγραφεί. Ο λόγος για τη διαγραφή φαίνεται
 στη σύνοψη παρακάτω, μαζί με λεπτομέρειες των χρηστών που επεξεργάστηκαν τη σελίδα
 πριν τη διαγραφή. Το αρχικό κείμενο αυτών των διεγραμμένων αναθεωρήσεων είναι διαθέσιμο μόνο στους διαχειριστές.',
-'undelete-revision'            => 'Διαγραμμένη αναθεώρηση του $1 (από $2) από $3:',
+'undelete-revision'            => 'Διαγραμμένη αναθεώρηση του $1 (από $2, στις $5) από $3:',
 'undeleterevision-missing'     => 'Άκυρη ή ανύπαρκτη αναθεώρηση. Μπορεί να έχετε έναν κακό σύνδεσμο, ή η
 αναθεώρηση μπορεί να έχει επαναφερθεί ή αφαιρεθεί από το αρχείο.',
 'undelete-nodiff'              => 'Δεν βρέθηκε προηγούμενη αναθεώρηση.',
 'undeletebtn'                  => 'Επαναφορά',
 'undeletelink'                 => 'επαναφορά',
 'undeletereset'                => 'Ανανέωση',
+'undeleteinvert'               => 'Ανατροπή επιλογής',
 'undeletecomment'              => 'Σχόλιο:',
 'undeletedarticle'             => 'αποκατάσταση "$1"',
 'undeletedrevisions'           => '{{PLURAL:$1|τροποποίηση|τροποποιήσεις}} αποκαταστάθηκαν',
@@ -1744,26 +1908,27 @@ $1',
 'blanknamespace' => '(Αρχική περιοχή)',
 
 # Contributions
-'contributions' => 'Συνεισφορές χρήστη',
-'mycontris'     => 'Οι προσθήκες μου',
-'contribsub2'   => 'Για τον/την $1 ($2)',
-'nocontribs'    => 'Δεν βρέθηκαν αλλαγές με αυτά τα κριτήρια.',
-'uctop'         => '(τελευταία)',
-'month'         => 'Από τον μήνα (και νωρίτερα):',
-'year'          => 'Από τη χρονιά (και νωρίτερα):',
+'contributions'       => 'Συνεισφορές χρήστη',
+'contributions-title' => 'Συνεισφορές του χρήστη $1',
+'mycontris'           => 'Οι προσθήκες μου',
+'contribsub2'         => 'Για τον/την $1 ($2)',
+'nocontribs'          => 'Δεν βρέθηκαν αλλαγές με αυτά τα κριτήρια.',
+'uctop'               => '(τελευταία)',
+'month'               => 'Από τον μήνα (και νωρίτερα):',
+'year'                => 'Από τη χρονιά (και νωρίτερα):',
 
-'sp-contributions-newbies'     => 'Εμφάνισε τις συνεισφορές μόνο των νέων λογαριασμών',
-'sp-contributions-newbies-sub' => 'Για νέους λογαριασμούς',
-'sp-contributions-blocklog'    => 'Αρχείο καταγραφής φραγών',
-'sp-contributions-search'      => 'Αναζήτηση για συνεισφορές',
-'sp-contributions-username'    => 'Διεύθυνση IP ή όνομα χρήστη:',
-'sp-contributions-submit'      => 'Αναζήτηση',
+'sp-contributions-newbies'       => 'Εμφάνισε τις συνεισφορές μόνο των νέων λογαριασμών',
+'sp-contributions-newbies-sub'   => 'Για νέους λογαριασμούς',
+'sp-contributions-newbies-title' => 'Συνεισφορές χρηστών για νέους λογαριασμούς',
+'sp-contributions-blocklog'      => 'Αρχείο καταγραφής φραγών',
+'sp-contributions-search'        => 'Αναζήτηση για συνεισφορές',
+'sp-contributions-username'      => 'Διεύθυνση IP ή όνομα χρήστη:',
+'sp-contributions-submit'        => 'Αναζήτηση',
 
 # What links here
 'whatlinkshere'            => 'Αναφορές στη σελίδα',
 'whatlinkshere-title'      => 'Σελίδες που συνδέουν στη σελίδα "$1"',
 'whatlinkshere-page'       => 'Σελίδα:',
-'linklistsub'              => '(Κατάλογος συνδέσμων)',
 'linkshere'                => "Οι ακόλουθες σελίδες συνδέουν στη σελίδα '''[[:$1]]''':",
 'nolinkshere'              => "Δεν υπάρχουν σελίδες που να συνδέουν στη σελίδα '''[[:$1]]'''.",
 'nolinkshere-ns'           => "Καμία σελίδα δεν συνδέει στο '''[[:$1]]''' στη επιλεγμένη περιοχή ονομάτων.",
@@ -1808,6 +1973,7 @@ $1',
 'ipbotherreason'                  => 'Άλλος/επιπλέον λόγος:',
 'ipbhidename'                     => 'Απόκρυψη ονόματος χρήστη από το αρχείο καταγραφής φραγών, την ενεργή λίστα φραγών και τη λίστα χρηστών.',
 'ipbwatchuser'                    => "Παρακολούθηση των σελίδων 'χρήστη' και 'συζήτησης χρήστη' αυτού του χρήστη",
+'ipballowusertalk'                => "Επιτρέψτε σ' αυτόν τον χρήστη να επεξεργαστεί την προσωπική του σελίδα συζήτησης ενώ είναι φραγμένος",
 'badipaddress'                    => 'Άκυρη διεύθυνση IP.',
 'blockipsuccesssub'               => 'Η φραγή ολοκληρώθηκε επιτυχώς.',
 'blockipsuccesstext'              => 'Η διεύθυνση "$1" έχει υποστεί φραγή. <br />Δείτε τη [[Special:IPBlockList|λίστα διευθύνσεων IP που έχουν υποστεί φραγή]] για να το επιβεβαιώσετε.',
@@ -1816,6 +1982,7 @@ $1',
 'ipb-unblock'                     => 'Τερμάτισε τη φραγή για ένα όνομα χρήστη ή μια διεύθυνση IP',
 'ipb-blocklist-addr'              => 'Δες τις υπάρχουσες φραγές για $1',
 'ipb-blocklist'                   => 'Δες τις υπάρχουσες φραγές',
+'ipb-blocklist-contribs'          => 'Συνεισφορές για τον/την $1',
 'unblockip'                       => 'Άρση φραγής χρήστη',
 'unblockiptext'                   => 'Χρησιμοποιήστε την παρακάτω φόρμα για να αποκαταστήσετε την πρόσβαση σε επεξεργασία, σε μια διεύθυνση IP ή σε ένα χρήστη που είχε αποκλειστεί με φραγή.',
 'ipusubmit'                       => 'Άρση φραγής αυτής της διεύθυνσης',
@@ -1824,6 +1991,8 @@ $1',
 'ipblocklist'                     => 'Φραγμένες διευθύνσεις IP και ονόματα χρηστών.',
 'ipblocklist-legend'              => 'Εύρεση ενός χρήστη που έχει υποστεί φραγή',
 'ipblocklist-username'            => 'Όνομα χρήστη ή διεύθυνση IP:',
+'ipblocklist-sh-userblocks'       => 'Φραγές του λογαριασμού $1',
+'ipblocklist-sh-tempblocks'       => 'Προσωρινές φραγές του λογαριασμού $1',
 'ipblocklist-submit'              => 'Αναζήτηση',
 'blocklistline'                   => 'Φραγή του/της $3 από τους $1, $2 (λήγει $4)',
 'infiniteblock'                   => 'αόριστη',
@@ -1839,6 +2008,7 @@ $1',
 'contribslink'                    => 'Συνεισφορές/Προσθήκες',
 'autoblocker'                     => 'Έχετε υποστεί αυτόματα φραγή από το σύστημα επειδή χρησιμοποιείτε την ίδια διεύθυνση IP με το χρήστη "$1". Αιτιολογία "$2".',
 'blocklogpage'                    => 'Αρχείο καταγραφής φραγών',
+'blocklog-fulllog'                => 'Πλήρης κατάλογος φραγών',
 'blocklogentry'                   => 'O/H "[[$1]]" φράχθηκε με χρόνο λήξης $2 $3',
 'blocklogtext'                    => 'Σε αυτή τη σελίδα υπάρχουν οι καταγραφές φραγής και κατάργησης φραγής των χρηστών (αρχείο γεγονότων).
 
@@ -1862,6 +2032,7 @@ $1',
 'proxyblocksuccess'               => 'Ολοκληρώθηκε!',
 'sorbsreason'                     => 'Η διεύθνυση IP σας έχει χαρακτηρισθεί ως open proxy στο DNSBL.',
 'sorbs_create_account_reason'     => 'Η διεύθυνση IP σας έχει χαρακτηρισθεί open proxy στο DNSBL. Δεν μπορείτε να δημιουργήσετε λογαριασμό χρήστη.',
+'cant-block-while-blocked'        => 'Δεν μπορείτε να φράξετε άλλους χρήστες ενώ είστε φραγμένος/η.',
 
 # Developer tools
 'lockdb'              => 'Κλείδωμα βάσης δεδομένων',
@@ -1882,9 +2053,9 @@ $1',
 'databasenotlocked'   => 'Η βάση δεδομένων δεν είναι κλειδωμένη.',
 
 # Move page
-'move-page'               => 'Μετακίνηση $1',
-'move-page-legend'        => 'Μετακίνηση σελίδας',
-'movepagetext'            => "Χρησιμοποιώντας τη φόρμα που ακολουθεί μπορείτε να μετονομάσετε σελίδες και να μεταφέρετε όλο το ιστορικό τους στο νέο όνομα.
+'move-page'                 => 'Μετακίνηση $1',
+'move-page-legend'          => 'Μετακίνηση σελίδας',
+'movepagetext'              => "Χρησιμοποιώντας τη φόρμα που ακολουθεί μπορείτε να μετονομάσετε σελίδες και να μεταφέρετε όλο το ιστορικό τους στο νέο όνομα.
 Ο παλιός τίτλος της σελίδας θα γίνει μια σελίδα ανακατεύθυνσης στο νέο τίτλο.
 Μπορείτε να ενημερώσετε τις ανακατευθύνσεις που οδηγούν στον αρχικό τίτλο αυτόματα.
 Αν επιλέξετε να μην γίνει, θα πρέπει να ελέγξετε τις [[Special:DoubleRedirects|διπλές]] και τις [[Special:BrokenRedirects|κατεστραμμένες ανακατευθύνσεις]].
@@ -1896,43 +2067,50 @@ $1',
 '''ΠΡΟΣΟΧΗ!'''
 Η μετονομασία σελίδας είναι μια αιφνίδια και δραστική αλλαγή όταν πρόκειται για δημοφιλείς σελίδες.
 Παρακαλούμε, πριν το αποφασίσετε, να εξετάσετε προσεκτικά τις πιθανές επιπτώσεις αυτής της ενέργειας.",
-'movepagetalktext'        => "Η σελίδα συζήτησης που αντιστοιχεί, εάν υπάρχει, θα μετακινηθεί αυτόματα μαζί με αυτήν '''έκτός αν:'''
+'movepagetalktext'          => "Η σελίδα συζήτησης που αντιστοιχεί, εάν υπάρχει, θα μετακινηθεί αυτόματα μαζί με αυτήν '''έκτός αν:'''
 *Μετακινείτε τη σελίδα σε διαφορετική περιοχή (namespace),
 *Υπάρχει κάτω από το νέο όνομα μια σελίδα συζήτησης που δεν είναι κενή, ή
 *Έχετε αφαιρέσει τη σημείωση (check) από το κουτάκι που υπάρχει παρακάτω.
 
 Σε αυτές τις περιπτώσεις, θα πρέπει να μετακινήσετε (ή να ενσωματώσετε αν το θέλετε) τη σελίδα με αντιγραφή-και-επικόλληση.",
-'movearticle'             => 'Μετακίνηση σελίδας',
-'movenotallowed'          => 'Δεν έχετε άδεια να μετακινείτε σελίδες.',
-'newtitle'                => 'νέος τίτλος',
-'move-watch'              => 'Παρακολούθησε αυτή τη σελίδα',
-'movepagebtn'             => 'Μετακίνηση σελίδας',
-'pagemovedsub'            => 'Η μετακίνηση ήταν επιτυχής',
-'movepage-moved'          => '<big>\'\'\'"$1" μεταφέρθηκε στο "$2"\'\'\'</big>', # The two titles are passed in plain text as $3 and $4 to allow additional goodies in the message.
-'articleexists'           => 'Υπάρχει ήδη σελίδα με αυτό το όνομα. Παρακαλούμε δώστε άλλο όνομα στη σελίδα.',
-'cantmove-titleprotected' => "Δεν μπορείτε να μετακινήσετε μια σελίδα σ' αυτή τη θέση διότι έχει απαγορευθεί η δημιουργία αυτού του τίτλου",
-'talkexists'              => "Η ίδια η σελίδα μετακινήθηκε επιτυχώς αλλά όχι και η σελίδα συζήτησης, λόγω του ότι υπάρχει ήδη άλλη σελίδα συζήτησης κάτω από το νέο τίτλο. Παρακαλούμε ενοποιήστε τις δύο σελίδες με 'αντιγραφή-και-επικόλληση'.",
-'movedto'                 => 'Μετακινήθηκε στο',
-'movetalk'                => 'Μετακίνηση της σελίδας "συζήτηση" (εάν υπάρχει)',
-'move-subpages'           => 'Μετακινήστε όλες τις υποσελίδες, εάν υπάρχουν',
-'move-talk-subpages'      => 'Μετακινήστε όλες τις υποσελίδες μιας σελίδας συζήτησης, εάν υπάρχουν',
-'movepage-page-moved'     => 'Η σελίδα $1 μετακινήθηκε στο $2.',
-'movepage-page-unmoved'   => 'Η σελίδα $1 δεν μπόρεσε να μετακινηθεί στο $2.',
-'1movedto2'               => 'Η [[$1]] μετακινήθηκε στη θέση [[$2]]',
-'1movedto2_redir'         => 'Η $1 μετακινήθηκε στη θέση $2 (με ανακατεύθυνση)',
-'movelogpage'             => 'Αρχείο καταγραφής μετακινήσεων',
-'movelogpagetext'         => 'Ακολουθεί η λίστα με τις σελίδες που έχουν μετακινηθεί.',
-'movereason'              => 'Αιτιολογία',
-'revertmove'              => 'επαναφορά',
-'delete_and_move'         => 'Διαγραφή και μετακίνηση',
-'delete_and_move_text'    => '==Χρειάζεται διαγραφή.==
+'movearticle'               => 'Μετακίνηση σελίδας',
+'movenologin'               => 'Δεν έχετε συνδεθεί.',
+'movenologintext'           => 'Για να μετακινήσετε μια σελίδα πρέπει να είστε εγγεγραμένος χρήστης και [[Special:UserLogin|να έχετε συνδεθεί]] στο Wiκi.',
+'movenotallowed'            => 'Δεν έχετε άδεια να μετακινείτε σελίδες.',
+'cant-move-user-page'       => 'Δεν έχετε άδεια για να μετακινήσετε σελίδες χρηστών (παρά μόνο υποσελίδες).',
+'cant-move-to-user-page'    => 'Δεν έχετε άδεια για να μετακινήσετε μια σελίδα σε σελίδα χρήστη (παρά μόνο σε υποσελίδα χρήστη).',
+'newtitle'                  => 'νέος τίτλος',
+'move-watch'                => 'Παρακολούθησε αυτή τη σελίδα',
+'movepagebtn'               => 'Μετακίνηση σελίδας',
+'pagemovedsub'              => 'Η μετακίνηση ήταν επιτυχής',
+'movepage-moved'            => '<big>\'\'\'"$1" μεταφέρθηκε στο "$2"\'\'\'</big>', # The two titles are passed in plain text as $3 and $4 to allow additional goodies in the message.
+'articleexists'             => 'Υπάρχει ήδη σελίδα με αυτό το όνομα. Παρακαλούμε δώστε άλλο όνομα στη σελίδα.',
+'cantmove-titleprotected'   => "Δεν μπορείτε να μετακινήσετε μια σελίδα σ' αυτή τη θέση διότι έχει απαγορευθεί η δημιουργία αυτού του τίτλου",
+'talkexists'                => "Η ίδια η σελίδα μετακινήθηκε επιτυχώς αλλά όχι και η σελίδα συζήτησης, λόγω του ότι υπάρχει ήδη άλλη σελίδα συζήτησης κάτω από το νέο τίτλο. Παρακαλούμε ενοποιήστε τις δύο σελίδες με 'αντιγραφή-και-επικόλληση'.",
+'movedto'                   => 'Μετακινήθηκε στο',
+'movetalk'                  => 'Μετακίνηση της σελίδας "συζήτηση" (εάν υπάρχει)',
+'move-subpages'             => 'Μετακινήστε όλες τις υποσελίδες, εάν υπάρχουν',
+'move-talk-subpages'        => 'Μετακινήστε όλες τις υποσελίδες μιας σελίδας συζήτησης, εάν υπάρχουν',
+'movepage-page-moved'       => 'Η σελίδα $1 μετακινήθηκε στο $2.',
+'movepage-page-unmoved'     => 'Η σελίδα $1 δεν μπόρεσε να μετακινηθεί στο $2.',
+'1movedto2'                 => 'Η [[$1]] μετακινήθηκε στη θέση [[$2]]',
+'1movedto2_redir'           => 'Η $1 μετακινήθηκε στη θέση $2 (με ανακατεύθυνση)',
+'movelogpage'               => 'Αρχείο καταγραφής μετακινήσεων',
+'movelogpagetext'           => 'Ακολουθεί η λίστα με τις σελίδες που έχουν μετακινηθεί.',
+'movereason'                => 'Αιτιολογία',
+'revertmove'                => 'επαναφορά',
+'delete_and_move'           => 'Διαγραφή και μετακίνηση',
+'delete_and_move_text'      => '==Χρειάζεται διαγραφή.==
 
 Το άρθρο [[:$1]] υπάρχει ήδη. Θέλετε να το διαγράψετε για να εκτελεσθεί η μετακίνηση;',
-'delete_and_move_confirm' => 'Ναι, διέγραψε τη σελίδα',
-'delete_and_move_reason'  => 'Διαγράφηκε για να εκτελεσθεί μετακίνηση.',
-'selfmove'                => 'Ο τίτλος προέλευσης είναι ο ίδιος με τον τίτλο προορισμού -δεν είναι δυνατόν να μετακινηθεί μια σελίδα προς τον εαυτό της.',
-'immobile_namespace'      => 'Ο τίτλος του προορισμού είναι ειδικού τύπου -δεν είναι δυνατή η μετακίνηση σελίδων σε εκείνη την περιοχή.',
-'fix-double-redirects'    => 'Ενημερώστε όποια ανακατεύθυνση σκοπεύει προς τον αρχικό τίτλο',
+'delete_and_move_confirm'   => 'Ναι, διέγραψε τη σελίδα',
+'delete_and_move_reason'    => 'Διαγράφηκε για να εκτελεσθεί μετακίνηση.',
+'selfmove'                  => 'Ο τίτλος προέλευσης είναι ο ίδιος με τον τίτλο προορισμού -δεν είναι δυνατόν να μετακινηθεί μια σελίδα προς τον εαυτό της.',
+'immobile-source-namespace' => 'Δεν μπορούν να μετακινηθούν σελίδες στο namespace "$1"',
+'immobile-source-page'      => 'Αυτή η σελίδα δεν είναι δυνατό να μετακινηθεί.',
+'immobile-target-page'      => 'Δεν μπορεί να μετακινηθεί σε αυτόν τον τίτλο.',
+'fix-double-redirects'      => 'Ενημερώστε όποια ανακατεύθυνση σκοπεύει προς τον αρχικό τίτλο',
+'move-leave-redirect'       => 'Αφήστε πίσω μια ανακατεύθυνση',
 
 # Export
 'export'            => 'Εξαγωγή σελίδων',
@@ -1978,6 +2156,7 @@ $1',
 'import-interwiki-history'   => 'Αντέγραψε όλες τις εκδόσεις του ιστορικού για αυτή τη σελίδα',
 'import-interwiki-submit'    => 'Εισαγωγή',
 'import-interwiki-namespace' => 'Μετέφερε τις σελίδες στην περιοχή ονομάτων:',
+'import-comment'             => 'Σχόλιο:',
 'importtext'                 => 'Παρακαλούμε εξάγετε το αρχείο από το πηγαίο Wiki (χρησιμοποιώντας Special:Export), αποθηκεύστε το στο δίσκο του υπολογιστή σας και φορτώστε το από εκεί.',
 'importstart'                => 'Η εισαγωγή των σελίδων είναι σε εξέλιξη...',
 'import-revision-count'      => '$1 {{PLURAL:$1|αναθεώρηση|αναθεωρήσεις}}',
@@ -2083,12 +2262,12 @@ $1',
 'notacceptable'     => 'Ο server του Wiki δεν μπορεί να αποδώσει δεδομένα σε μορφή που να μπορεί να διαβάσει ο client σας.',
 
 # Attribution
-'anonymous'        => 'Ανώνυμος(-οι) χρήστης(-ες) του {{SITENAME}}',
+'anonymous'        => '{{PLURAL:$1|Ανώνυμος χρήστης|Ανώνυμοι χρήστες}} του {{SITENAME}}',
 'siteuser'         => '{{SITENAME}} χρήστης $1',
 'lastmodifiedatby' => 'Η σελίδα αυτή τροποποιήθηκε τελευταία φορά στις  $2, $1 από το χρήστη $3.', # $1 date, $2 time, $3 user
 'othercontribs'    => 'Βασισμένο στη δουλειά του/των $1',
 'others'           => 'άλλοι',
-'siteusers'        => 'χρηστών του ιστοχώρου $1',
+'siteusers'        => '{{SITENAME}} {{PLURAL:$2|χρηστή|χρηστών}} του ιστοχώρου $1',
 'creditspage'      => 'Αναγνώριση συνεισφοράς στη σελίδα',
 'nocredits'        => 'Δεν υπάρχουν πληροφορίες σχετικά με την αναγνώριση συνεισφοράς σε αυτή τη σελίδα.',
 
@@ -2147,6 +2326,9 @@ $1',
 'previousdiff' => '&larr; Προηγούμενη επεξεργασία',
 'nextdiff'     => 'Επόμενη επεξεργασία &rarr;',
 
+# Visual comparison
+'visual-comparison' => 'Οπτική σύγκριση',
+
 # Media information
 'mediawarning'         => "'''Προειδοποίηση''': Το αρχείο αυτό μπορεί να περιέχει κακοπροαίρετο κώδικα που μπορεί να βλάψει το σύστημα του υπολογιστή σας.
 
@@ -2161,10 +2343,11 @@ $1',
 'show-big-image'       => 'Πλήρης ανάλυση',
 'show-big-image-thumb' => '<small>Μέγεθος αυτής της προεπισκόπησης: $1 × $2 εικονοστοιχεία</small>',
 
-# Special:NewImages
+# Special:NewFiles
 'newimages'             => 'Πινακοθήκη νέων εικόνων',
 'imagelisttext'         => "Ακολουθεί κατάλογος '''$1''' {{PLURAL:$1|αρχείου|αρχείων}} ταξινομημένων κατά σειρά $2.",
 'newimages-summary'     => 'Αυτή η ειδική σελίδα δείχνει τα πιο πρόσφατα φορτωμένα αρχεία.',
+'newimages-legend'      => 'Φίλτρο',
 'showhidebots'          => '($1 bots)',
 'noimages'              => 'Δεν υπάρχουν εικόνες.',
 'ilsubmit'              => 'Αναζήτηση',
@@ -2512,21 +2695,9 @@ $1
 Παρακαλώ επιβεβαιώστε ότι θέλετε πραγματικά να ξαναδημιουργήσετε αυτή τη σελίδα.",
 'recreate'            => 'Επαναδημιουργία',
 
-# HTML dump
-'redirectingto' => 'Ανακατεύθυνση στη σελίδα [[:$1]]...',
-
 # action=purge
-'confirm_purge'        => 'Καθαρισμός της λανθάνουσας μνήμης αυτής της σελίδας;
-
-$1',
 'confirm_purge_button' => 'Εντάξει',
-
-# AJAX search
-'searchcontaining' => "Αναζήτηση για άρθρα που περιέχουν ''$1''.",
-'searchnamed'      => "Αναζήτηση για άρθρα με την ονομασία ''$1''.",
-'articletitles'    => "Άρθρα που αρχίζουν από ''$1''",
-'hideresults'      => 'Απόκρυψη αποτελεσμάτων',
-'useajaxsearch'    => 'Χρησιμοποίηση της αναζήτησης AJAX',
+'confirm-purge-top'    => 'Καθαρισμός της λανθάνουσας μνήμης αυτής της σελίδας.',
 
 # Multipage image navigation
 'imgmultipageprev' => '← προηγούμενη σελίδα',
@@ -2611,7 +2782,7 @@ $1',
 'filepath-summary' => 'Αυτή η ειδική σελίδα επιστρέφει το πλήρες path ενός αρχείου.
 Οι εικόνες εμφανίζονται σε πλήρη ανάλυση, άλλοι τύποι αρχείων ανοίγονται αμέσως με το αντίστοιχο πρόγραμμα.
 
-Εισάγετε το όνομα του αρχείου χωρίς το πρόθημα "{{ns:image}}\'".',
+Εισάγετε το όνομα του αρχείου χωρίς το πρόθημα "{{ns:file}}\'".',
 
 # Special:FileDuplicateSearch
 'fileduplicatesearch'          => 'Αναζήτηση για διπλά αρχεία',
@@ -2638,5 +2809,14 @@ $1',
 # Special:BlankPage
 'blankpage'              => 'Κενή σελίδα',
 'intentionallyblankpage' => 'Αυτή η σελίδα έχει αφεθεί σκοπίμως κενή',
+
+# External image whitelist
+'external_image_whitelist' => ' #Αφήστε αυτή τη γραμμή ακριβώς όπως είναι<pre>
+#Put regular expression fragments (just the part that goes between the //) below
+#These will be matched with the URLs of external (hotlinked) images
+#Those that match will be displayed as images, otherwise only a link to the image will be shown
+#Lines beginning with # are treated as comments
+
+#Put all regex fragments above this line. Leave this line exactly as it is</pre>',
 
 );

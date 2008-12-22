@@ -8,8 +8,6 @@
  */
 
 $messages = array(
-'skinpreview' => '(Ndzinganiso)',
-
 # Dates
 'sunday'    => 'Sonto',
 'mon'       => 'Musombhunuko',
@@ -43,7 +41,7 @@ $messages = array(
 'mypage'         => 'Tluka ramina',
 'mytalk'         => 'Mbulavulo namina',
 'anontalk'       => 'Vulavula na IP leyi',
-'and'            => 'nakambe',
+'and'            => '&#32;nakambe',
 
 'errorpagetitle'   => 'Xihoxo',
 'returnto'         => 'Thlelela e $1.',
@@ -90,8 +88,6 @@ $messages = array(
 
 'badaccess'        => 'Xihoxo hita mpfumelelo',
 'badaccess-group0' => 'U hava mpumelelo wo endla xikombelo lexi.',
-'badaccess-group1' => 'The action you have requested is limited to users in the group $1.',
-'badaccess-group2' => 'The action you have requested is limited to users in one of the groups $1.',
 'badaccess-groups' => 'The action you have requested is limited to users in one of the groups $1.',
 
 'versionrequired'     => 'Version $1 of MediaWiki required',
@@ -192,7 +188,6 @@ It may have already been deleted by someone else.',
 'badtitle'             => 'Bad title',
 'badtitletext'         => 'The requested page title was invalid, empty, or an incorrectly linked inter-language or inter-wiki title.
 It may contain one or more characters which cannot be used in titles.',
-'perfdisabled'         => 'Sorry! This feature has been temporarily disabled because it slows the database down to the point that no one can use the wiki.',
 'perfcached'           => 'The following data is cached and may not be up to date.',
 'perfcachedts'         => 'The following data is cached, and was last updated $1.',
 'querypage-no-updates' => 'Updates for this page are currently disabled.
@@ -240,6 +235,7 @@ U hi tshembisa nakambe leswaku hi wena mutsari wa leswi nyikeriwaka laha, kumbe 
 'deletedhist'  => 'Matimu lamasuriweke',
 
 # Search results
+'searchhelp-url'        => 'Help:Leswinga ndzeni',
 'search-interwiki-more' => '(Leswi engetelekeke)',
 'search-relatedarticle' => 'Leswi yelanaka',
 'searchrelated'         => 'Yelanaka',
@@ -249,6 +245,7 @@ U hi tshembisa nakambe leswaku hi wena mutsari wa leswi nyikeriwaka laha, kumbe 
 # Preferences page
 'mypreferences'   => 'Minhlawulo ya mina',
 'prefs-edits'     => 'Ntsengo wa mindzulamiso:',
+'skin-preview'    => 'Ndzinganiso',
 'datetime'        => 'Siku na nkarhi',
 'prefs-watchlist' => 'Nxaxamelo wa Leswivoniwaka',
 'saveprefs'       => 'Hlayisa',
@@ -272,13 +269,13 @@ U hi tshembisa nakambe leswaku hi wena mutsari wa leswi nyikeriwaka laha, kumbe 
 # Upload
 'upload' => 'Khandziyisa fayili',
 
-# Special:ImageList
+# Special:FileList
 'imgfile'        => 'fayili',
 'imagelist'      => 'Nxaxamelo wa tifayili',
 'imagelist_date' => 'Siku',
 'imagelist_name' => 'vito',
 
-# Image description page
+# File description page
 'filehist-deleteall' => 'sula hinkwaswo',
 'filehist-deleteone' => 'Dlaya',
 'filehist-revert'    => 'thlerisela',
@@ -295,6 +292,12 @@ U hi tshembisa nakambe leswaku hi wena mutsari wa leswi nyikeriwaka laha, kumbe 
 # Special:AllPages
 'allpages'    => 'Matluka hinkwawo',
 'allarticles' => 'Matluka hinkwawo',
+
+# Special:LinkSearch
+'linksearch-ok' => 'Lava',
+
+# Special:Log/newusers
+'newuserlog-create-entry' => 'Mutirhisi muntswa',
 
 # E-mail user
 'emailuser' => 'rhumela mutirhisi loyi E-mail',

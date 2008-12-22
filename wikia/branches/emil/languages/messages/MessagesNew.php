@@ -16,8 +16,8 @@ $namespaceNames = array(
 	NS_USER_TALK        => 'छ्येलेमि_खँलाबँला',
 	# NS_PROJECT set by $wgMetaNamespace
 	NS_PROJECT_TALK     => '$1_खँलाबँला',
-	NS_IMAGE            => 'किपा',
-	NS_IMAGE_TALK       => 'किपा_खँलाबँला',
+	NS_FILE             => 'किपा',
+	NS_FILE_TALK        => 'किपा_खँलाबँला',
 	NS_MEDIAWIKI        => 'मिडियाविकि',
 	NS_MEDIAWIKI_TALK   => 'मिडियाविकि_खँलाबँला',
 	NS_HELP             => 'ग्वाहालि',
@@ -77,10 +77,13 @@ $messages = array(
 'tog-watchlisthideown'        => 'जिगु सम्पादन वाचलिस्टय् सुचुकादिसँ',
 'tog-watchlisthidebots'       => 'वाचलिस्टं बोत सम्पादन सुचुकादिसँ',
 'tog-watchlisthideminor'      => 'वाचलिस्टं चीधंगु सम्पादन सुचुकादिसँ',
+'tog-watchlisthideliu'        => 'वाचलिस्टं लग्ड इन छ्यलामितेगु सम्पादन सुचुकादिसँ',
+'tog-watchlisthideanons'      => 'वाचलिस्टं अज्ञात छ्यलामिया सम्पादन सुचुकादिसँ',
 'tog-nolangconversion'        => 'भेरियन्ट (variant) कन्भर्जन डिसेबल यानादिसँ',
 'tog-ccmeonemails'            => 'जिं मेपिं छ्यलामितेगु छ्वइगु इ-मेलतेगु कपि जित नं छ्वयादिसँ',
 'tog-diffonly'                => 'पाःगु (diffs) स्वया क्वेया पौया कण्टेण्ट क्यनादिमते',
 'tog-showhiddencats'          => 'सुचुकातगु पुचःत क्यनादिसँ',
+'tog-noconvertlink'           => 'लिङ्क शिर्षक हिलेज्या डिजेबल यानादिसँ',
 
 'underline-always'  => 'न्ह्याबिलें',
 'underline-never'   => 'नेभर',
@@ -160,7 +163,7 @@ $messages = array(
 'mypage'        => 'जिगु पौ',
 'mytalk'        => 'जिगु खं',
 'navigation'    => 'परिवहन',
-'and'           => 'व',
+'and'           => '&#32;व',
 
 'help'             => 'ग्वहालि',
 'search'           => 'मालादिसं',
@@ -212,6 +215,7 @@ $messages = array(
 
 'badaccess'        => 'पर्मिसन इरर',
 'badaccess-group0' => 'छिं अनुरोध यानादिगु ज्या छिं याये मछिं।',
+'badaccess-groups' => 'छिं अनुरोध यानादिगु ज्या {{PLURAL:$2|पुचः|पुचःतः}}: $1या छ्यलामिं जक्क याये दु।',
 
 'versionrequired'     => 'मिडियाविकिया $1 संस्करण माःगु',
 'versionrequiredtext' => 'थ्व पौ छ्यले यात मिडियाविकिया $1 संस्करण माः।
@@ -290,10 +294,16 @@ $messages = array(
 'revisionasof'     => '$1 तक्कया संस्करण',
 'previousrevision' => '←पुलांगु संस्करण',
 
+# Diffs
+'diff-i'      => "'''ब्यक्वःगु'''",
+'diff-b'      => "'''गाढा'''",
+'diff-strong' => "'''कडा'''",
+
 # Search results
-'searchrelated' => 'स्वापू दुःगु',
-'searchall'     => 'सकल',
-'powersearch'   => 'मालादिसँ',
+'searchhelp-url' => 'Help:धलःपौ',
+'searchrelated'  => 'स्वापू दुःगु',
+'searchall'      => 'सकल',
+'powersearch'    => 'मालादिसँ',
 
 # Preferences page
 'mypreferences'  => 'जिगु प्राथमिकता',
@@ -318,7 +328,7 @@ $messages = array(
 # Upload
 'upload' => 'फाइल अपलोड',
 
-# Image description page
+# File description page
 'filehist-user' => 'छ्य्‌लामि',
 
 # Random page
@@ -340,6 +350,9 @@ $messages = array(
 
 # Special:Categories
 'categories' => 'पुचःत',
+
+# Special:Log/newusers
+'newuserlog-create-entry' => 'न्हुम्ह छ्येलेमि',
 
 # Restrictions (nouns)
 'restriction-edit' => 'सम्पादन',
@@ -392,6 +405,9 @@ $messages = array(
 'tooltip-watch'                   => 'थ्व पौयात छिगु वाचलिस्टय् तनादिसँ',
 'tooltip-recreate'                => 'थ्व पौ हुयाछ्वेधुंकुगु जुसां पुनर्निर्माण यानादिसँ',
 'tooltip-upload'                  => 'अपलोड न्ह्यथनादिसँ',
+'tooltip-rollback'                => '"रोलब्याकं" छगू क्लिकय् थ्व पौयात न्हापाया छ्य्‌लामिं याःगु परिवर्तनय् हिलाछ्वइ।',
+'tooltip-undo'                    => '"Undo" नं थ्व सम्पादनयात खारेज याना सम्पादन फर्म यात प्रिभ्यु मोडय् चायेकी।
+थुकिलिं सारांशय् कारण तनेछिंकी।',
 
 # Stylesheets
 'common.css'      => '/* थन तःगु CSS सकल स्किनय् छ्य्‌लिगु जुइ */',
@@ -403,6 +419,8 @@ $messages = array(
 'chick.css'       => '/* थन तःगु CSS नं चिक स्किनया छ्य्‌लामितेत असर याइ */',
 'simple.css'      => '/* थन तःगु CSS नं सिम्पल स्किनया छ्य्‌लामितेत असर याइ */',
 'modern.css'      => '/* थन तःगु CSS नं मोडर्न स्किनया छ्य्‌लामितेत असर याइ */',
+'print.css'       => '/* थन तःगु CSS नं प्रिन्ट आउटपुटयात असर याइ */',
+'handheld.css'    => '/* थन तःगु CSS नं $wgHandheldStyle आधारित ह्याण्डहेल्ड यन्त्रयात असर याइ */',
 
 # Attribution
 'others' => 'मेमेगु',

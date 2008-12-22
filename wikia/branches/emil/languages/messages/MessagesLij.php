@@ -13,6 +13,112 @@
 
 $fallback = 'it';
 
+$namespaceNames = array(
+	NS_MEDIA            => 'Media',
+	NS_SPECIAL          => 'Speçiale',
+	NS_TALK             => 'Discûscion',
+	NS_USER             => 'Utente',
+	NS_USER_TALK        => 'Discûscioîn_ûtente',
+	NS_PROJECT_TALK     => 'Discûscioîn_$1',
+	NS_FILE             => 'Immaggine',
+	NS_FILE_TALK        => 'Discûscioîn_immaggine',
+	NS_MEDIAWIKI_TALK   => 'Discûscioîn_MediaWiki',
+	NS_TEMPLATE_TALK    => 'Discûscioîn_template',
+	NS_HELP             => 'Agiûtto',
+	NS_HELP_TALK        => 'Discûscioîn_agiûtto',
+	NS_CATEGORY         => 'Categorîa',
+	NS_CATEGORY_TALK    => 'Discûscioîn_categorîa',
+);
+
+$namespaceAliases = array(
+	'Speciale' => NS_SPECIAL,
+	'Discussione' => NS_TALK,
+	'Discussioni_utente' => NS_USER_TALK,
+	'Discussioni_$1' => NS_PROJECT_TALK,
+	'Immagine' => NS_FILE,
+	'Discussioni_immagine' => NS_FILE_TALK,
+	'Discussioni_MediaWiki' => NS_MEDIAWIKI_TALK,
+	'Discussioni_template' => NS_TEMPLATE_TALK,
+	'Aiuto' => NS_HELP,
+	'Discussioni_aiuto' => NS_HELP_TALK,
+	'Categoria' => NS_CATEGORY,
+	'Discussioni_categoria' => NS_CATEGORY_TALK,
+);
+
+$specialPageAliases = array(
+	'Userlogin'                 => array( 'Intra', 'Registrate' ),
+	'Userlogout'                => array( 'Sciorti' ),
+	'Preferences'               => array( 'Preferense' ),
+	'Watchlist'                 => array( 'Osservæ speçiali' ),
+	'Recentchanges'             => array( 'Ûrtime modiffiche' ),
+	'Upload'                    => array( 'Carrega' ),
+	'Imagelist'                 => array( 'Immaggini' ),
+	'Newimages'                 => array( 'Immaggini reçenti' ),
+	'Listusers'                 => array( 'Utenti' ),
+	'Statistics'                => array( 'Statistighe' ),
+	'Randompage'                => array( 'Paggina a brettio' ),
+	'Lonelypages'               => array( 'Paggine orfane' ),
+	'Uncategorizedpages'        => array( 'Paggine sensa categorîa' ),
+	'Uncategorizedcategories'   => array( 'Categorîe sensa categorîa' ),
+	'Uncategorizedimages'       => array( 'Immaggini sensa categorîa' ),
+	'Uncategorizedtemplates'    => array( 'Template sensa categorîa' ),
+	'Unusedcategories'          => array( 'Categorîe sensa ûso' ),
+	'Unusedimages'              => array( 'Immaggini sensa ûso' ),
+	'Wantedpages'               => array( 'Paggine domandæ' ),
+	'Wantedcategories'          => array( 'Categorîe domandæ' ),
+	'Mostlinked'                => array( 'Paggine ciû domandæ' ),
+	'Mostlinkedcategories'      => array( 'Categorîe ciû domandæ' ),
+	'Mostlinkedtemplates'       => array( 'Template ciû domandæ' ),
+	'Mostcategories'            => array( 'Paggine con ciû categorîe' ),
+	'Mostimages'                => array( 'Immaggini ciû domandæ' ),
+	'Mostrevisions'             => array( 'Paggine con ciû revixoîn' ),
+	'Fewestrevisions'           => array( 'Paggine con meno revixoîn' ),
+	'Shortpages'                => array( 'Paggine ciû cûrte' ),
+	'Longpages'                 => array( 'Paggine ciû longhe' ),
+	'Newpages'                  => array( 'Paggine ciû reçenti' ),
+	'Ancientpages'              => array( 'Paggine meno reçenti' ),
+	'Deadendpages'              => array( 'Paggine sensa sciortîa' ),
+	'Protectedpages'            => array( 'Paggine protezûe' ),
+	'Protectedtitles'           => array( 'Tittoli protezûi' ),
+	'Allpages'                  => array( 'Tûtte e paggine' ),
+	'Prefixindex'               => array( 'Prefisci' ),
+	'Ipblocklist'               => array( 'IP bloccæ' ),
+	'Specialpages'              => array( 'Paggine speçiali' ),
+	'Contributions'             => array( 'Contribûti' ),
+	'Emailuser'                 => array( 'Mandighe \'n\'e-mail' ),
+	'Confirmemail'              => array( 'Comferma l\'e-mail' ),
+	'Whatlinkshere'             => array( 'Cose appunta chì' ),
+	'Recentchangeslinked'       => array( 'Modiffiche correlæ' ),
+	'Movepage'                  => array( 'Sposta' ),
+	'Blockme'                   => array( 'BloccaProxy' ),
+	'Booksources'               => array( 'RiçercaISBN' ),
+	'Categories'                => array( 'Categorîe' ),
+	'Export'                    => array( 'Esporta' ),
+	'Version'                   => array( 'Verscion' ),
+	'Allmessages'               => array( 'Messaggi' ),
+	'Log'                       => array( 'Registri', 'Registro' ),
+	'Blockip'                   => array( 'Blocca' ),
+	'Import'                    => array( 'Importa' ),
+	'Lockdb'                    => array( 'BloccaDB' ),
+	'Unlockdb'                  => array( 'SbloccaDB' ),
+	'Userrights'                => array( 'Permissi utente' ),
+	'MIMEsearch'                => array( 'RiçercaMIME' ),
+	'Unwatchedpages'            => array( 'Paggine no osservæ' ),
+	'Listredirects'             => array( 'Rediression' ),
+	'Revisiondelete'            => array( 'Scassa revixon' ),
+	'Unusedtemplates'           => array( 'Template sensa ûso' ),
+	'Randomredirect'            => array( 'Rediression a brettio' ),
+	'Mypage'                    => array( 'Mæ Paggina Utente' ),
+	'Mytalk'                    => array( 'Mæ Discûscioîn' ),
+	'Mycontributions'           => array( 'Mæ Contribûti' ),
+	'Listadmins'                => array( 'Amministratoî' ),
+	'Listbots'                  => array( 'Bot' ),
+	'Popularpages'              => array( 'Paggine ciû viscitæ' ),
+	'Search'                    => array( 'Riçerca', 'Çerca' ),
+	'Resetpass'                 => array( 'Rimposta paròlla d\'ordine' ),
+	'Withoutinterwiki'          => array( 'Sensa Interwiki' ),
+);
+
 $messages = array(
 # User preference toggles
 'tog-underline'            => 'Sottolineâ i collegamenti',
@@ -28,8 +134,6 @@ $messages = array(
 
 'underline-always' => 'Sempre',
 'underline-never'  => 'Mâi',
-
-'skinpreview' => '(Anteprimma)',
 
 # Dates
 'sunday'        => 'Domenega',
@@ -109,7 +213,7 @@ $messages = array(
 'mytalk'         => 'Mæ discuscioin',
 'anontalk'       => 'Discuscion pe questo indirisso IP',
 'navigation'     => 'Navegaçion',
-'and'            => 'e',
+'and'            => '&#32;e',
 
 'errorpagetitle'    => 'Errô',
 'returnto'          => 'Tornâ a $1.',
@@ -181,8 +285,6 @@ $messages = array(
 
 'badaccess'        => "No ti g'hæ o permisso",
 'badaccess-group0' => "No ti g'hæ o permisso pe fâ quest'assion.",
-'badaccess-group1' => "L'assion che ti vêu fâ a l'è permissa solo a i ûtenti de ûn di grûppi $1.",
-'badaccess-group2' => "L'assion che ti vêu fâ a l'è permissa solo a i ûtenti de ûn di grûppi $1.",
 'badaccess-groups' => "L'assion che ti vêu fâ a l'è permissa solo a i ûtenti de ûn di grûppi $1.",
 
 'ok'                      => "D'accòrdio",
@@ -301,6 +403,7 @@ Pe abilitâ l'invîo de messaggi e-mail pe quest'accesso, o se deive seguî l'is
 # Password reset dialog
 'resetpass'           => 'Reverti a pòula segretta',
 'resetpass_header'    => 'Reverti a pòula segretta',
+'retypenew'           => "Ripette a nêuva paròlla d'ordine:",
 'resetpass_forbidden' => "E paròlle d'ordine no se pêuan cangiâ in {{SITENAME}}",
 
 # Edit page toolbar
@@ -410,7 +513,7 @@ A razon dæta a l'è ''$2''",
 'viewpagelogs'        => "Veddi i log relativi a 'sta paggina.",
 'currentrev'          => 'Verscion attuâle',
 'revisionasof'        => 'Verscion do $1',
-'revision-info'       => 'Verscion do $1, outô: $2',
+'revision-info'       => 'Verscion do $1, outô: $2', # Additionally available: $3: revision id
 'previousrevision'    => '← Verscion meno reçente',
 'nextrevision'        => 'Revixon ciû nêuva →',
 'currentrevisionlink' => 'Ûrtima revixon',
@@ -446,16 +549,17 @@ Leggenda: (corr) = differense co-a verscion corrente, (prec) = differense co-a v
 'prevn'                 => 'Preçedenti $1',
 'nextn'                 => 'Proscima $1',
 'viewprevnext'          => 'Veddi ($1) ($2) ($3).',
+'searchhelp-url'        => 'Help:Contegnûi',
 'powersearch'           => 'Çerca',
 
 # Preferences page
 'preferences'       => 'Preferençe',
 'mypreferences'     => 'Mæ preferense',
 'changepassword'    => 'Cangiâ a pòula segretta',
+'skin-preview'      => 'Anteprimma',
 'dateformat'        => 'Formato da a data',
 'datetime'          => 'Data e oùa',
 'saveprefs'         => 'Sarva',
-'retypenew'         => "Ripette a nêuva paròlla d'ordine:",
 'textboxsize'       => 'Cangia',
 'searchresultshead' => 'Çerca',
 'timezonelegend'    => 'Oùa',
@@ -510,7 +614,7 @@ E paggine in osservassion son dipinte in '''grascietto'''.",
 'uploadedfiles'        => 'Papê caregæ',
 'badfilename'          => 'O nomme do papê o l\'è stæto cangioö in "$1".',
 'fileexists'           => "Un papê co sto nomme o existe de zà, pe piaxei da unn'euggiâ a <strong><tt>$1</tt></strong> se non ti tei seguo de voleilo cangiâ.",
-'fileexists-forbidden' => 'Un papê co sto nomme o existe de zà, pe piaxei vanni in derrê e carega sto papê co un ätro nomme. [[Image:$1|thumb|center|$1]]',
+'fileexists-forbidden' => 'Un papê co sto nomme o existe de zà, pe piaxei vanni in derrê e carega sto papê co un ätro nomme. [[File:$1|thumb|center|$1]]',
 'savefile'             => 'Sarva o papê',
 'uploadedimage'        => 'O s\'ha caregòu "[[$1]]"',
 'uploaddisabledtext'   => 'In {{SITENAME}} non se peu caregâ de papê.',
@@ -524,13 +628,13 @@ E paggine in osservassion son dipinte in '''grascietto'''.",
 'license'   => 'Permisso:',
 'nolicense' => 'Nisciûnn-a liçensa indicâa',
 
-# Special:ImageList
+# Special:FileList
 'imagelist_search_for' => "Çerca pe nomme de l'imàgine:",
 'imgfile'              => 'papê',
 'imagelist'            => "Lista d'archivvi",
 'imagelist_date'       => 'Dæta',
 
-# Image description page
+# File description page
 'filehist'                  => "Cronologîa de l'archivvio",
 'filehist-help'             => "Sciacca inscie 'n grûppo data/ôa pe vedde l'archivvio comme o se presentâva into momento indicòu.",
 'filehist-current'          => 'Corrente',
@@ -626,7 +730,6 @@ E paggine in osservassion son dipinte in '''grascietto'''.",
 'speciallogtitlelabel' => 'Tittolo:',
 'log'                  => 'Log',
 'all-logs-page'        => 'Tûtti i registri',
-'log-search-submit'    => 'Vanni',
 'alllogstext'          => 'Presentaçion unega de tutti i registri do scito {{SITENAME}}.
 Ti te peu strinza a vista se ti te çerni un tipo de registro, un nomme de un utente o de pagina.',
 
@@ -670,27 +773,21 @@ Ti te peu strinza a vista se ti te çerni un tipo de registro, un nomme de un ut
 'emailsenttext'   => "A teua lettìa elettronega a l'è stæta spèdïa.",
 
 # Watchlist
-'watchlist'            => 'A mæ lista in osservassion',
-'mywatchlist'          => 'Lista in osservaçion',
-'watchlistfor'         => "(pe '''$1''')",
-'watchnologin'         => "Non ti t'æ entroö",
-'watchnologintext'     => 'Devvi [[Special:UserLogin|entrâ]] pe cangiâ a toa lista in osservaçion.',
-'addedwatch'           => 'Azzonto a a lista in osservaçion',
-'addedwatchtext'       => "A paggina \"[[:\$1]]\" a l'è stæta azzonta a-a pròpia [[Special:Watchlist|lista in osservaçion]]. De chì in avanti, i cangiamenti fæti a-a paggina e a-a sêu discûxon sajàn missi in lista lì; o tittolo da paggina o sajà scrîo in '''grascietto''' inta paggina di [[Special:RecentChanges|ûrtimi cangiamenti]] coscì ti o veddi megio. Se ti vêu eliminâla da-a lista in osservaçion ciû târdi, sciacca \"no seguî\" inscia barra de d'âto.",
-'removedwatch'         => 'Scassæ da a lista in osservaçion',
-'removedwatchtext'     => 'A paggina "[[:$1]]" a l\'è stæta scassâa da-a têu lista in osservaçion.',
-'watch'                => 'Inta lista in osservaçion',
-'watchthispage'        => "Vigilâ 'sta paggina",
-'unwatch'              => 'No seguî',
-'watchlist-details'    => "A lista d'osservassion speçiâ a contegne {{PLURAL:$1|ûnn-a paggina (e a sêu paggina de discûxon)|$1 paggine (e e rispettive paggine de discûxon)}}.",
-'watchlistcontains'    => "A lista in osservaçion g'ha $1 {{PLURAL:$1|pagine|pagina}}.",
-'wlshowlast'           => 'Famme vedde e ûrtime $1 ôe $2 giorni $3',
-'watchlist-show-bots'  => 'Fanni vedde i cangiamenti de i bot',
-'watchlist-hide-bots'  => 'Ascondi i cangiamenti di bot',
-'watchlist-show-own'   => 'Fanni vedde i mæ cangiamenti',
-'watchlist-hide-own'   => 'Ascondi i mæ cangiamenti',
-'watchlist-show-minor' => 'Fanni vedde i cangiamenti minô',
-'watchlist-hide-minor' => 'Ascondi i cangiamenti minoî',
+'watchlist'         => 'A mæ lista in osservassion',
+'mywatchlist'       => 'Lista in osservaçion',
+'watchlistfor'      => "(pe '''$1''')",
+'watchnologin'      => "Non ti t'æ entroö",
+'watchnologintext'  => 'Devvi [[Special:UserLogin|entrâ]] pe cangiâ a toa lista in osservaçion.',
+'addedwatch'        => 'Azzonto a a lista in osservaçion',
+'addedwatchtext'    => "A paggina \"[[:\$1]]\" a l'è stæta azzonta a-a pròpia [[Special:Watchlist|lista in osservaçion]]. De chì in avanti, i cangiamenti fæti a-a paggina e a-a sêu discûxon sajàn missi in lista lì; o tittolo da paggina o sajà scrîo in '''grascietto''' inta paggina di [[Special:RecentChanges|ûrtimi cangiamenti]] coscì ti o veddi megio. Se ti vêu eliminâla da-a lista in osservaçion ciû târdi, sciacca \"no seguî\" inscia barra de d'âto.",
+'removedwatch'      => 'Scassæ da a lista in osservaçion',
+'removedwatchtext'  => 'A paggina "[[:$1]]" a l\'è stæta scassâa da-a têu lista in osservaçion.',
+'watch'             => 'Inta lista in osservaçion',
+'watchthispage'     => "Vigilâ 'sta paggina",
+'unwatch'           => 'No seguî',
+'watchlist-details' => "A lista d'osservassion speçiâ a contegne {{PLURAL:$1|ûnn-a paggina (e a sêu paggina de discûxon)|$1 paggine (e e rispettive paggine de discûxon)}}.",
+'watchlistcontains' => "A lista in osservaçion g'ha $1 {{PLURAL:$1|pagine|pagina}}.",
+'wlshowlast'        => 'Famme vedde e ûrtime $1 ôe $2 giorni $3',
 
 # Displayed when you click the "watch" button and it is in the process of watching
 'watching'   => 'Inti osservæ speçiâli...',
@@ -699,29 +796,34 @@ Ti te peu strinza a vista se ti te çerni un tipo de registro, un nomme de un ut
 'changed'            => 'cangiâ',
 'enotif_anon_editor' => 'ûtente anònnimo $1',
 
-# Delete/protect/revert
-'deletepage'                  => 'Scassa a paggina',
-'exblank'                     => "a paggina a l'ea vêua",
-'delete-confirm'              => 'Scassa "$1"',
-'delete-legend'               => 'Scassa',
-'historywarning'              => "Attension: A paggina c'a se sta pe scassâ a g'ha 'na cronologîa:",
-'confirmdeletetext'           => "Ti stæ pe scassâ pe sempre da-o database 'na paggina ò 'n'immaggine, assemme a tûtta a sêu cronologîa. Pe cortexia, conferma che davvei ti vêu andâ avanti con quella cancellassion, che ti capisci perfettamente e conseguense de 'st'assion e che a s'adatta a-e linnie guidda stabilîe in [[{{MediaWiki:Policy-url}}]].",
-'actioncomplete'              => 'Açion finïa',
-'deletedtext'                 => 'A paggina "<nowiki>$1</nowiki>" a l\'è stæta scassâa. Consûltâ o $2 pe \'na lista de-e paggine scassæ de reçente.',
-'deletedarticle'              => 'O s\'ha scassòu "[[$1]]"',
-'dellogpage'                  => 'Registro de-e cose scassæ',
-'deletecomment'               => 'Raxon pe scassâ',
-'deleteotherreason'           => 'Ûn âtro motivo',
-'deletereasonotherlist'       => "Ûnn'âtra raxon",
-'rollbacklink'                => 'rollback',
-'cantrollback'                => "O no se pêu tornâ inderê; l'ûtente ch'à fæto quelle modiffiche o l'è stæto l'ûnico contribûente.",
-'alreadyrolled'               => "O no se peû tornâ inderê a-i ûrtimi cangiamenti da pagina [[:$1]]
+# Delete
+'deletepage'            => 'Scassa a paggina',
+'exblank'               => "a paggina a l'ea vêua",
+'delete-confirm'        => 'Scassa "$1"',
+'delete-legend'         => 'Scassa',
+'historywarning'        => "Attension: A paggina c'a se sta pe scassâ a g'ha 'na cronologîa:",
+'confirmdeletetext'     => "Ti stæ pe scassâ pe sempre da-o database 'na paggina ò 'n'immaggine, assemme a tûtta a sêu cronologîa. Pe cortexia, conferma che davvei ti vêu andâ avanti con quella cancellassion, che ti capisci perfettamente e conseguense de 'st'assion e che a s'adatta a-e linnie guidda stabilîe in [[{{MediaWiki:Policy-url}}]].",
+'actioncomplete'        => 'Açion finïa',
+'deletedtext'           => 'A paggina "<nowiki>$1</nowiki>" a l\'è stæta scassâa. Consûltâ o $2 pe \'na lista de-e paggine scassæ de reçente.',
+'deletedarticle'        => 'O s\'ha scassòu "[[$1]]"',
+'dellogpage'            => 'Registro de-e cose scassæ',
+'deletecomment'         => 'Raxon pe scassâ',
+'deleteotherreason'     => 'Ûn âtro motivo',
+'deletereasonotherlist' => "Ûnn'âtra raxon",
+
+# Rollback
+'rollbacklink'  => 'rollback',
+'cantrollback'  => "O no se pêu tornâ inderê; l'ûtente ch'à fæto quelle modiffiche o l'è stæto l'ûnico contribûente.",
+'alreadyrolled' => "O no se peû tornâ inderê a-i ûrtimi cangiamenti da pagina [[:$1]]
 da [[User:$2|$2]] ([[User talk:$2|Ciæti]]); quarche âtro 
 o l'à cangiâ ò o l'è zà tornòu inderê.
 L'ûrtimo cangiamento o ghe l'à fæto [[User:$3|$3]] ([[User talk:$3|Ciæti]]).",
-'revertpage'                  => 'E modificaçioin de [[Special:Contributions/$2|$2]] ([[User talk:$2|Ciæti]]) son stæte eliminæ; riportæ a verscion de primma de [[User:$1|$1]]', # Additional available: $3: revid of the revision reverted to, $4: timestamp of the revision reverted to, $5: revid of the revision reverted from, $6: timestamp of the revision reverted from
+'revertpage'    => 'E modificaçioin de [[Special:Contributions/$2|$2]] ([[User talk:$2|Ciæti]]) son stæte eliminæ; riportæ a verscion de primma de [[User:$1|$1]]', # Additionally available: $3: revid of the revision reverted to, $4: timestamp of the revision reverted to, $5: revid of the revision reverted from, $6: timestamp of the revision reverted from
+
+# Protect
 'protectlogpage'              => 'Protessioîn',
 'protectedarticle'            => 'o s\'ha protezûo "[[$1]]"',
+'prot_1movedto2'              => '[[$1]] mesciòu a [[$2]]',
 'protect-legend'              => 'Confermâ protession',
 'protectcomment'              => 'Motivo da protession:',
 'protectexpiry'               => 'Scadensa:',
@@ -740,6 +842,7 @@ Queste son e impostassioîn correnti pe 'sta paggina (<strong>$1</strong>):",
 'protect-expiring'            => 'scadensa: $1 (UTC)',
 'protect-cascade'             => 'Protession recorsciva (estende a protession a tûtte e paggine inclûse in questa chì).',
 'protect-cantedit'            => "Ti no ti pêu modificâ i livelli de protession pe-a paggina se no ti g'hæ i permissi pe modificâ a paggina mæxima.",
+'protect-expiry-options'      => '2 ôe:2 hours,1 giorno:1 day,3 giorni:3 days,1 settemann-a:1 week,2 settemann-e:2 weeks,1 meise:1 month,3 meixi:3 months,6 meixi:6 months,1 anno:1 year,infinîo:infinite', # display1:time1,display2:time2,...
 'restriction-type'            => 'Permisso',
 'restriction-level'           => 'Livello de restrission',
 
@@ -781,7 +884,6 @@ $1',
 # What links here
 'whatlinkshere'       => 'Cose appunta chì',
 'whatlinkshere-title' => "Paggine c'appuntan a $1",
-'linklistsub'         => "(Lista de l'ingançi)",
 'linkshere'           => "E paggine seguenti appontan a '''[[:$1]]''':",
 'nolinkshere'         => "Nisciûnn-a paggina a se collega con '''[[:$1]]'''.",
 'isredirect'          => 'Rindirissâ',
@@ -942,7 +1044,7 @@ Inte 'sti câxi, se o se vêu fâ coscì, o se deive stramûâ ò azzonze manual
 'show-big-image'       => "Verscion d'ærta resolûxon",
 'show-big-image-thumb' => "<small>Dimensioîn de 'st'anteprimma: $1 × $2 pixel</small>",
 
-# Special:NewImages
+# Special:NewFiles
 'newimages' => 'Gallerîa de nêuvi archivvi',
 'ilsubmit'  => 'Çerca',
 'bydate'    => 'pe dâta',
@@ -980,10 +1082,6 @@ L'ingançi succescivi, inscia mæxima riga, van conscideræ comme eccescioîn (p
 'watchlistall2' => 'Tùtti',
 'namespacesall' => 'Tûtti',
 'monthsall'     => 'Tûtti',
-
-# AJAX search
-'articletitles' => "Pagine che comensan con ''$1''",
-'hideresults'   => 'Ascondi i resultæ',
 
 # Multipage image navigation
 'imgmultipageprev' => '← Pagina de primma',

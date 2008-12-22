@@ -193,6 +193,7 @@ $messages = array(
 # Move page
 'move-page-legend' => "Si'i le itulau",
 'movearticle'      => "Si'i le itulau",
+'movenologin'      => "Le'i fa'aolaina",
 'newtitle'         => "'I le ulutala fou",
 'move-watch'       => 'Matau lenei itulau',
 'movepagebtn'      => "Si'i le itulau",
@@ -202,7 +203,7 @@ $messages = array(
 # Namespace 8 related
 'allmessagesname' => 'Igoa',
 
-# Special:NewImages
+# Special:NewFiles
 'ilsubmit' => "Su'e",
 
 # 'all' in various places, this might be different for inflected languages

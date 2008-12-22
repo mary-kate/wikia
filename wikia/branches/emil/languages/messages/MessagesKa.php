@@ -5,6 +5,7 @@
  * @file
  *
  * @author Alsandro
+ * @author Dato deutschland
  * @author Malafaya
  * @author Sopho
  * @author ka.wikipedia.org sysops
@@ -14,35 +15,69 @@
 $namespaceNames = array(
 	NS_MEDIA            => 'მედია',
 	NS_SPECIAL          => 'სპეციალური',
-	NS_MAIN             => '',
 	NS_TALK             => 'განხილვა',
 	NS_USER             => 'მომხმარებელი',
-	NS_USER_TALK        => 'მომხმარებელი_განხილვა',
-	# NS_PROJECT set by $wgMetaNamespace
+	NS_USER_TALK        => 'მომხმარებლის_განხილვა',
 	NS_PROJECT_TALK     => '$1_განხილვა',
-	NS_IMAGE            => 'სურათი',
-	NS_IMAGE_TALK       => 'სურათი_განხილვა',
+	NS_FILE             => 'ფაილი',
+	NS_FILE_TALK        => 'ფაილის_განხილვა',
 	NS_MEDIAWIKI        => 'მედიავიკი',
-	NS_MEDIAWIKI_TALK   => 'მედიავიკი_განხილვა',
+	NS_MEDIAWIKI_TALK   => 'მედიავიკის_განხილვა',
 	NS_TEMPLATE         => 'თარგი',
-	NS_TEMPLATE_TALK    => 'თარგი_განხილვა',
+	NS_TEMPLATE_TALK    => 'თარგის_განხილვა',
 	NS_HELP             => 'დახმარება',
-	NS_HELP_TALK        => 'დახმარება_განხილვა',
+	NS_HELP_TALK        => 'დახმარების_განხილვა',
 	NS_CATEGORY         => 'კატეგორია',
-	NS_CATEGORY_TALK    => 'კატეგორია_განხილვა'
+	NS_CATEGORY_TALK    => 'კატეგორიის_განხილვა',
 );
 
-$linkPrefixExtension = true;
+$namespaceAliases = array(
+	'მომხმარებელი_განხილვა' => NS_USER_TALK,
+	'სურათი' => NS_FILE,
+	'სურათი_განხილვა' => NS_FILE_TALK,
+	'მედიავიკი_განხილვა' => NS_MEDIAWIKI_TALK,
+	'თარგი_განხილვა' => NS_TEMPLATE_TALK,
+	'დახმარება_განხილვა' => NS_HELP_TALK,
+	'კატეგორია_განხილვა' => NS_CATEGORY_TALK,
+);
 
-$linkTrail = '/^([a-zაბგდევზთიკლმნოპჟრსტუფქღყშჩცძწჭხჯჰ“»]+)(.*)$/sDu';
+$specialPageAliases = array(
+	'DoubleRedirects'           => array( 'ორმაგიგადამისამართება' ),
+	'BrokenRedirects'           => array( 'გაწყვეტილიგადამისამართება' ),
+	'Disambiguations'           => array( 'მრავალმნიშვნელოვნება' ),
+	'Preferences'               => array( 'კონფიგურაცია' ),
+	'Watchlist'                 => array( 'კონტროლსია' ),
+	'Recentchanges'             => array( 'ბოლოცვლილებები' ),
+	'Upload'                    => array( 'ატვირთვა' ),
+	'Imagelist'                 => array( 'სურსია' ),
+	'Newimages'                 => array( 'ახსურათები' ),
+	'Statistics'                => array( 'სტატისტიკა' ),
+	'Randompage'                => array( 'შემთხვევით', 'შემთხვევითიგვერდი' ),
+	'Lonelypages'               => array( 'ობოლიგვერდები' ),
+	'Uncategorizedpages'        => array( 'უკატეგორიოგვერდები' ),
+	'Unusedcategories'          => array( 'გამოუყკატეგორიები' ),
+	'Unusedimages'              => array( 'გამოუყსურათები' ),
+	'Wantedcategories'          => array( 'მოთხოვნილიკატეგორიები' ),
+	'Shortpages'                => array( 'მოკლეგვერდები' ),
+	'Longpages'                 => array( 'გრძელიგვერდები' ),
+	'Newpages'                  => array( 'ახალიგვერდები' ),
+	'Ancientpages'              => array( 'მხცოვანიგვერდები' ),
+	'Allpages'                  => array( 'ყველაგვერდი' ),
+	'Categories'                => array( 'კატეგორიები' ),
+	'Version'                   => array( 'ვერსია' ),
+	'Undelete'                  => array( 'აღდგენა' ),
+	'Mypage'                    => array( 'ჩემიგვერდი' ),
+	'Popularpages'              => array( 'პოპგვერდები' ),
+	'Search'                    => array( 'ძიება' ),
+	'Withoutinterwiki'          => array( 'ინტერვიკისგარეშე' ),
+);
 
-# Note to translators:
-#   Please include the English words as synonyms.  This allows people
-#   from other wikis to contribute more easily.
-#
 $magicWords = array(
 	'redirect' => array( 0   , '#REDIRECT', '#გადამისამართება' ),
 );
+
+$linkPrefixExtension = true;
+$linkTrail = '/^([a-zაბგდევზთიკლმნოპჟრსტუფქღყშჩცძწჭხჯჰ“»]+)(.*)$/sDu';
 
 $messages = array(
 # User preference toggles
@@ -87,8 +122,6 @@ $messages = array(
 'underline-always'  => 'მუდამ',
 'underline-never'   => 'არასდროს',
 'underline-default' => 'ბრაუზერის უპირობო არჩევანი',
-
-'skinpreview' => '(წინასწარი გადახედვა)',
 
 # Dates
 'sunday'        => 'კვირა',
@@ -179,7 +212,7 @@ $messages = array(
 'mytalk'         => 'ჩემი განხილვა',
 'anontalk'       => 'ამ IP-ს განხილვა',
 'navigation'     => 'ნავიგაცია',
-'and'            => 'და',
+'and'            => '&#32;და',
 
 # Metadata in edit box
 'metadata_help' => 'მეტამონაცემები (იხ. [[Project:მეტამონაცემები|მეტამონაცემები]] განმარტებისთვის):',
@@ -265,8 +298,6 @@ $messages = array(
 
 'badaccess'        => 'ნებართვის შეცდომა',
 'badaccess-group0' => 'თქვენ არ გაქვთ მოთხოვნილი მოქმედების შესრულების უფლება',
-'badaccess-group1' => 'მოთხოვნილი მოქმედების შესრულება შეუძლიათ $1 ჯგუფის მომხმარებლებს.',
-'badaccess-group2' => 'მოთხოვნილი მოქმედების შესრულება შეუძლიათ $1 ჯგუფებიდან ერთერთში მყოფ მომხმარებლებს.',
 'badaccess-groups' => 'მოთხოვნილი მოქმედების შესრულება შეუძლიათ $1 ჯგუფებიდან ერთერთში მყოფ მომხმარებლებს.',
 
 'versionrequired'     => 'საჭიროა მედიავიკის ვერსია $1',
@@ -281,6 +312,7 @@ $messages = array(
 'editsection'             => 'რედაქტირება',
 'editold'                 => 'რედაქტირება',
 'viewsourceold'           => 'წყაროს ჩვენება',
+'editlink'                => 'რედაქტირება',
 'editsectionhint'         => 'სექციის რედაქტირება: $1',
 'toc'                     => 'სარჩევი',
 'showtoc'                 => 'ჩვენება',
@@ -352,7 +384,6 @@ $1',
 'cannotdelete'         => 'აღნიშნული გვერდის ან ფაილის წაშლა შეუძლებელია (შესაძლოა, იგი უკვე წაშალა სხვა ადმინისტრატორმა).',
 'badtitle'             => 'არასწორი სათაური',
 'badtitletext'         => 'მოთხოვნილი გვერდის სათაური იყო არასწორი, ცარიელი, ან წარმოადგენდა შეცდომით გაკეთებულ ბმულს ენათაშორისი ან ინტერ-ვიკი სათაურიდან.',
-'perfdisabled'         => 'უკაცრავად! ეს ფუნქცია დროებით შეჩერებულია, ვინაიდან ის იმდენად ანელებს მონაცემთა ბაზას, რომ ვიკის გამოყენება შეუძლებელი ხდება.',
 'wrong_wfQuery_params' => 'არასწორი პარამეტრები ფუნქციისათვის wfQuery()<br />
 ფუნქცია: $1<br />
 მოთხოვნა: $2',
@@ -384,7 +415,6 @@ $2',
 'yourpasswordagain'          => 'ხელმეორედ შეიყვანეთ პაროლი',
 'remembermypassword'         => 'დამიმახსოვრე',
 'yourdomainname'             => 'თქვენი დომენი',
-'loginproblem'               => '<b>თქვენი რეგისტრაცია ვერ მოხერხდა.</b><br />სცადეთ ხელმეორედ!',
 'login'                      => 'შესვლა',
 'nav-login-createaccount'    => 'შესვლა',
 'loginprompt'                => '{{SITENAME}}-ში შესასვლელად საჭიროა კუკის (cookies) გააქტიურება.',
@@ -449,7 +479,8 @@ $2',
 ბოროტად გამოყენების თავიდან აცილებისთვის, მხოლოდ ერთი შეხსენება იგზავნება ყოველ
 $1 საათში.',
 'mailerror'                  => 'შეცდომა ფოსტის გაგზავნაში: $1',
-'acct_creation_throttle_hit' => 'თქვენ უკვე შექმენით $1 ანგარიში. მეტის შექმნა არ შეგიძლიათ.',
+'acct_creation_throttle_hit' => 'თქვენ უკვე შექმენით $1 ანგარიში.
+მეტის შექმნა არ შეგიძლიათ.',
 'emailauthenticated'         => 'თქვენი ელ. ფოსტის მისამართი გადამოწმებულია $1-ზე.',
 'emailnotauthenticated'      => 'თქვენი ელ. ფოსტის მისამართი ჯერ არ არის გადამოწმებული. შემდეგი ფუნქციები გამორთულია.',
 'noemailprefs'               => '<strong>თქვენ არ გაქვთ ელ. ფოსტის მისამართი მითითებული,</strong>აღნიშნული ფუნქციები ამის გამო არ დროისთვის შეუძლებელია.',
@@ -469,6 +500,9 @@ $1 საათში.',
 'resetpass_announce'  => 'თქვენ შემოხვედით დროებით ელ-ფოსტის კოდით. რეგისტრაციის დასრულებისთვის, უნდა შექმნათ ახალი პაროლი აქ:',
 'resetpass_text'      => '<!-- დამატებითი ტექსტი აქ -->',
 'resetpass_header'    => 'გაიმეორეთ პაროლი',
+'oldpassword'         => 'ძველი პაროლი:',
+'newpassword'         => 'ახალი პაროლი:',
+'retypenew'           => 'ახალი პაროლი განმეორებით:',
 'resetpass_submit'    => 'მიუთითეთ პაროლი და დარეგისტრირდით',
 'resetpass_success'   => 'თქვენი პაროლი წარმატებით შეიცვალა! ამჟამად რეგისტრირდებით...',
 'resetpass_forbidden' => 'პაროლის შეცვლა შეუძლებელია',
@@ -624,28 +658,28 @@ $1 საათში.',
 'cantcreateaccounttitle' => 'ანგარიშის შექმნა ვერ ხერხდება',
 
 # History pages
-'viewpagelogs'        => 'ამ გვერდისთვის სარეგისტრაციო ჟურნალების ჩვენება',
-'nohistory'           => 'ამ გვერდს განხილვის გვერდი ცარიელი აქვს.',
-'revnotfound'         => 'ცვლილება ვერ ვიპოვეთ',
-'currentrev'          => 'მიმდინარე შესწორება',
-'revisionasof'        => '$1-ის ვერსია',
-'revision-info'       => '$1-ის ვერსია, შეტანილი $2-ის მიერ',
-'previousrevision'    => '←წინა ვერსია',
-'nextrevision'        => 'შემდეგი ვერსია→',
-'currentrevisionlink' => 'მიმდინარე ვერსია',
-'cur'                 => 'მიმდ.',
-'next'                => 'შემდეგი',
-'last'                => 'ბოლო',
-'page_first'          => 'პირველი',
-'page_last'           => 'ბოლო',
-'histlegend'          => '*ვერსიის დათვალიერება: დააწკაპუნეთ სასურველი ვერსიის თარიღზე მის დასათვალიერებლად.
+'viewpagelogs'           => 'ამ გვერდისთვის სარეგისტრაციო ჟურნალების ჩვენება',
+'nohistory'              => 'ამ გვერდს განხილვის გვერდი ცარიელი აქვს.',
+'currentrev'             => 'მიმდინარე შესწორება',
+'revisionasof'           => '$1-ის ვერსია',
+'revision-info'          => '$1-ის ვერსია, შეტანილი $2-ის მიერ', # Additionally available: $3: revision id
+'previousrevision'       => '←წინა ვერსია',
+'nextrevision'           => 'შემდეგი ვერსია→',
+'currentrevisionlink'    => 'მიმდინარე ვერსია',
+'cur'                    => 'მიმდ.',
+'next'                   => 'შემდეგი',
+'last'                   => 'ბოლო',
+'page_first'             => 'პირველი',
+'page_last'              => 'ბოლო',
+'histlegend'             => '*ვერსიის დათვალიერება: დააწკაპუნეთ სასურველი ვერსიის თარიღზე მის დასათვალიერებლად.
 *ვერსიების შედარება: აირჩიეთ სასურველი ვერსიები რადიო-რგოლების მონიშვნით და დააწკაპუნეთ შედარების ღილაკზე.
 *შემოკლებები: (მიმდ.) = სხვაობა მიმდინარე ვერსიასთან, (ბოლო) = სხვაობა წინა ვერსიასთან, მ = მცირე შესწორება.',
-'deletedrev'          => '[წაშლილია]',
-'histfirst'           => 'პირველი',
-'histlast'            => 'უკანასკნელი',
-'historysize'         => '($1 ბაიტი)',
-'historyempty'        => '(ცარიელი)',
+'history-fieldset-title' => 'დათვალიერების ისტორია',
+'deletedrev'             => '[წაშლილია]',
+'histfirst'              => 'პირველი',
+'histlast'               => 'უკანასკნელი',
+'historysize'            => '($1 ბაიტი)',
+'historyempty'           => '(ცარიელი)',
 
 # Revision feed
 'history-feed-title'          => 'რედაქტირების ისტორია',
@@ -685,6 +719,8 @@ $1 საათში.',
 'compareselectedversions' => 'არჩეული ვერსიების შედარება',
 'editundo'                => 'გაუქმება',
 'diff-multi'              => '({{PLURAL:$1|ერთი|$1}} შუა ვერსია არ არის ნაჩვენები.)',
+'diff-src'                => 'წყარო',
+'diff-big'                => "'''დიდი'''",
 
 # Search results
 'searchresults'         => 'ძიების შედეგები',
@@ -700,6 +736,7 @@ $1 საათში.',
 'prevn'                 => 'წინა $1',
 'nextn'                 => 'შემდეგი $1',
 'viewprevnext'          => 'იხილე  ($1) ($2) ($3).',
+'searchhelp-url'        => 'Help:დახმარება',
 'search-result-size'    => '$1 ($2 სიტყვა)',
 'searchall'             => 'ყველა',
 'showingresults'        => 'ქვემოთ იხილეთ <b>$1</b>-მდე შედეგი დაწყებული #<b>$2</b>-იდან.',
@@ -722,6 +759,7 @@ $1 საათში.',
 'qbsettings-floatingright' => 'მარჯვნივ მცურავი',
 'changepassword'           => 'პაროლის შეცვლა',
 'skin'                     => 'გარეკანი',
+'skin-preview'             => 'წინასწარი გადახედვა',
 'math'                     => 'მათემატიკა',
 'dateformat'               => 'თარიღის ფორმატი',
 'datedefault'              => 'წყარო მითითებული არაა',
@@ -737,9 +775,6 @@ $1 საათში.',
 'prefs-misc'               => 'სხვადასხვა',
 'saveprefs'                => 'შენახვა',
 'resetprefs'               => 'გადატვირთვა',
-'oldpassword'              => 'ძველი პაროლი:',
-'newpassword'              => 'ახალი პაროლი:',
-'retypenew'                => 'ახალი პაროლი განმეორებით:',
 'textboxsize'              => 'რედაქტირება',
 'rows'                     => 'რიგები:',
 'columns'                  => 'სვეტები',
@@ -812,9 +847,20 @@ $1 საათში.',
 'rightslog'  => 'მომხმარებლის უფლებების ჟურნალი',
 'rightsnone' => '(არცერთი)',
 
+# Associated actions - in the sentence "You do not have permission to X"
+'action-edit'          => 'ამ გვერდის რედაქტირება',
+'action-createpage'    => 'გვერდების შექმნა',
+'action-createtalk'    => 'განხილვის გვერდების შექმნა',
+'action-createaccount' => 'ამ ანგარიშის შექმნა',
+'action-minoredit'     => 'მონიშვნა, როგორც მცირე რედაქტირება',
+'action-delete'        => 'ამ გვერდის წაშლა',
+'action-block'         => 'ამ მომხმარებლისთვის რედაქტირების დაბლოკვა',
+'action-autopatrol'    => 'თქვენი ცვლილების მონიშვნა პატრულირებადით',
+
 # Recent changes
 'nchanges'                          => '$1 ცვლილება',
 'recentchanges'                     => 'ბოლო ცვლილებები',
+'recentchanges-legend'              => 'ბოლო ცვლილებების პარამეტრები',
 'recentchangestext'                 => 'უთვალთვალეთ ვიკიში ბოლო ცვლილებებს ამ გვერდზე.',
 'recentchanges-feed-description'    => 'ვიკის უახლესი ცვლილებების მეთვალყურეობა ამ არხში.',
 'rcnote'                            => "ქვემოთ იხილეთ ბოლო '''$1''' ცვლილება უკანასკნელი '''$2''' დღის მანძილზე, $5, $4 მდგომარეობით.",
@@ -895,7 +941,7 @@ $1 საათში.',
 გთხოვთ განსხვავებული სახელი აირჩიოთ.',
 'fileexists-thumb'            => "'''<center>არსებული სურათი</center>'''",
 'fileexists-forbidden'        => 'ფაილი ამ სახელით უკვე არსებობს; გთხოვთ დაბრუნდეთ უკან და ატვირთოთ ფაილი ახალი სახელით. [[სურათი:$1|thumb|center|$1]]',
-'fileexists-shared-forbidden' => 'ფაილი ამ სახელწოდებით უკვე არსებობს ფაილების საერთო საცავში. თუ შეიძლება, უკან დაბრუნდით და ჩატვირთეთ ფაილი სხვა სახელწოდებით. [[Image:$1|thumb|center|$1]]',
+'fileexists-shared-forbidden' => 'ფაილი ამ სახელწოდებით უკვე არსებობს ფაილების საერთო საცავში. თუ შეიძლება, უკან დაბრუნდით და ჩატვირთეთ ფაილი სხვა სახელწოდებით. [[File:$1|thumb|center|$1]]',
 'successfulupload'            => 'წარმატებული გადატვირთვა',
 'uploadwarning'               => 'გადატვირთვის შეხსენება',
 'savefile'                    => 'ფაილის შენახვა',
@@ -928,7 +974,7 @@ $1 საათში.',
 'nolicense'          => 'არაფერი არის მონიშნული',
 'upload_source_file' => ' (ფაილი შენს კომპიუტერზე)',
 
-# Special:ImageList
+# Special:FileList
 'imagelist_search_for'  => 'ძიება სურათის სახელის მიხედვით:',
 'imgfile'               => 'ფაილი',
 'imagelist'             => 'სურათების სია',
@@ -938,7 +984,7 @@ $1 საათში.',
 'imagelist_size'        => 'ზომა (ბაიტები)',
 'imagelist_description' => 'აღწერილობა',
 
-# Image description page
+# File description page
 'filehist'                       => 'ფაილის ისტორია',
 'filehist-help'                  => 'დააწკაპუნეთ თარიღზე/დროზე, რათა იხილოთ ფაილი, როგორც ის მაშინ გამოიყურებოდა.',
 'filehist-deleteall'             => 'წაშალე ყველა',
@@ -980,7 +1026,6 @@ $1 საათში.',
 'filedelete-success'          => "'''$1''' წაშლილია.",
 'filedelete-nofile'           => "'''$1''' არ არსებობს.",
 'filedelete-nofile-old'       => "მითითებული ატრიბუტებით '''$1'''-ის არქივირებული ვერსია არ არსებობს.",
-'filedelete-iscurrent'        => 'თქვენ ცდილობთ ამ ფაილის ყველაზე ახალი ვერსიის წაშლას. გთხოვთ, ის ჯერ წინა ვერსიაზე გადაიტანოთ.',
 'filedelete-otherreason'      => 'სხვა/დამატებითი მიზეზი:',
 'filedelete-reason-otherlist' => 'სხვა მიზეზი',
 'filedelete-edit-reasonlist'  => 'წაშლის მიზეზების რედაქტირება',
@@ -1010,18 +1055,9 @@ $1 საათში.',
 'randomredirect-nopages' => 'ამ სახელთა სივრცეში გადამისამართებები არ არის.',
 
 # Statistics
-'statistics'             => 'სტატისტიკა',
-'sitestats'              => 'საიტის სტატისტიკა',
-'userstats'              => 'მომხმარებლის სტატისტიკა',
-'sitestatstext'          => "მონაცემთა ბაზაში სულ არის '''$1''' გვერდი. მასში შედის: სტატიების ''განხილვის'' გვერდები, გვერდები {{SITENAME}} შესახებ, გადამისამართების გვერდები, აგრეთვე სხვები, რომლებიც  შესაძლოა არ წარმოადგენს ”ენციკლოპედიურ გვერდებს”. ამის გათვალისწინებით, სრულფასოვნად მიჩნეულია  '''$2''' გვერდი.
-
-ატვირთულია '''$8''' ფაილი.
-
-ვიკის დაარსებიდან დღემდე გვერდები დათვალიერებულ იქნა '''$3'''-ჯერ, ხოლო რედაქტირება განხორციელდა '''$4'''-ჯერ. ეს ნიშნავს, რომ ყოველ გვერდზე საშუალოდ მოდის '''$6''' დათვალიერება და '''$5''' რედაქტირება.
-
-[http://www.mediawiki.org/wiki/Manual:Job_queue დავალებათა რიგის] სიგრძეა '''$7'''.",
-'userstatstext'          => "არსებობენ '''$1''' რეგისტრირებული მომხმარებელი, რომელთა შორის '''$2''' (ან '''$4%''') ადმინისტრატორია. (იხილეთ $3).",
-'statistics-mostpopular' => 'ყველზე ხშირად ხილვადი გვერდები',
+'statistics'              => 'სტატისტიკა',
+'statistics-header-users' => 'მომხმარებლის სტატისტიკა',
+'statistics-mostpopular'  => 'ყველზე ხშირად ხილვადი გვერდები',
 
 'disambiguations'     => 'მრავალმნიშვნელოვანი გვერდები',
 'disambiguationspage' => 'Template:მრავალმნიშვნელოვანი',
@@ -1097,7 +1133,6 @@ $1 საათში.',
 'speciallogtitlelabel' => 'სათაური:',
 'log'                  => 'ჟურნალები',
 'all-logs-page'        => 'ყველა ჟურნალი',
-'log-search-submit'    => 'ძიება',
 'alllogstext'          => 'ატვირთვის, წაშლის, დაცვის, ბლოკირების და ადმინისტრატორის ჟურნალის კომბინირებული ასახვა. შეგიძლიათ გაფილტროთ ჟურნალის ტიპით, მომხმარებლის სახელით ან სტატიის მიხედვით.',
 'logempty'             => 'რეზულტატები არ არის სიაში.',
 
@@ -1122,9 +1157,18 @@ $1 საათში.',
 'categoriespagetext'          => 'ვიკიპედიაში შემდეგი კატეგორიებია.',
 'special-categories-sort-abc' => 'ანბანზე დალაგება',
 
+# Special:LinkSearch
+'linksearch-ns' => 'სახელთა სივრცე:',
+
 # Special:ListUsers
 'listusers-submit'   => 'ჩვენება',
 'listusers-noresult' => 'მომხმარებელი ვერ ვიპოვეთ.',
+
+# Special:Log/newusers
+'newuserlogpage'              => 'მომხმარებლის რეგისტრაციის ჟურნალი',
+'newuserlog-byemail'          => 'პაროლი ელ-ფოსტითაა გამოგზავნილი',
+'newuserlog-create-entry'     => 'ახალი მომხმარებელი',
+'newuserlog-autocreate-entry' => 'ავტომატურად შექმნილი ანგარიში',
 
 # Special:ListGroupRights
 'listgrouprights-group'    => 'ჯგუფი',
@@ -1181,12 +1225,6 @@ $1 საათში.',
 'iteminvalidname'      => "'$1' - პრობლემა აქვს, სახელი არასწორია...",
 'wlnote'               => 'ქვემოთ მოყვანილია ბოლო $1 ცვლილება უკანასკნელი <b>$2</b> საათის განმავლობაში.',
 'wlshowlast'           => 'აჩვენე ბოლო $1 საათის $2 დღის $3',
-'watchlist-show-bots'  => 'აჩვენე რობოტის ცვლილებები',
-'watchlist-hide-bots'  => 'რობოტის ცვლილებების დამალვა',
-'watchlist-show-own'   => 'აჩვენე ჩემი ცვლილებები',
-'watchlist-hide-own'   => 'ჩემი რედაქტირების დამალვა',
-'watchlist-show-minor' => 'აჩვენე მცირე ცვლილებები',
-'watchlist-hide-minor' => 'მცირე რედაქტირებების დამალვა',
 
 # Displayed when you click the "watch" button and it is in the process of watching
 'watching'   => 'კონტროლებადი...',
@@ -1225,45 +1263,50 @@ $NEWPAGE
 შემდგომი დახმარება:
 {{SERVER}}{{localurl:Help:Contents}}',
 
-# Delete/protect/revert
-'deletepage'                  => 'გვერდის წაშლა',
-'confirm'                     => 'დადასტურება',
-'excontent'                   => "შინაარსი იყო: '$1'",
-'excontentauthor'             => "შინაარსი იყო: '$1' (და ერთადერთი ავტორი იყო '$2')",
-'exbeforeblank'               => "გვერდის შინაარსი წაშლამდე იყო შემდეგი: '$1'",
-'exblank'                     => 'გვერდი ცარიელი იყო',
-'delete-confirm'              => '"$1"-ის წაშლა',
-'delete-legend'               => 'წაშლა',
-'historywarning'              => 'ყურადღება: გვერდს, რომლის წაშლასაც აპირებთ, აქვს ისტორია:',
-'confirmdeletetext'           => 'თქვენ აპირებთ გვერდის ან გამოსახულების მისი ისტორიით მონაცემთა ბაზიდან სამუდამოდ წაშლას. გთხოვთ დაადასტუროთ რომ გესმით ამის შედეგები და აკეთებთ ამას [[{{ns:project}}:წესები]] თანახმად.',
-'actioncomplete'              => 'მოქმედება შესრულებულია',
-'deletedtext'                 => '"<nowiki>$1</nowiki>" წაშლილია. ბოლო წაშლილი გვერდების სია იხილეთ $2-ში.',
-'deletedarticle'              => 'წაშლილია "[[$1]]"',
-'dellogpage'                  => 'წაშლილთა_სია',
-'dellogpagetext'              => 'ქვემოთ იხილეთ ახლად წაშლილთა სია.',
-'deletionlog'                 => 'წაშლილთა სია',
-'reverted'                    => 'დაბრუნდა წინა ვერსიაზე',
-'deletecomment'               => 'წაშლის მიზეზი',
-'deleteotherreason'           => 'სხვა/დამატებითი მიზეზი:',
-'deletereasonotherlist'       => 'სხვა მიზეზი',
-'deletereason-dropdown'       => '* წაშლის ხშირი მიზეზები
+# Delete
+'deletepage'             => 'გვერდის წაშლა',
+'confirm'                => 'დადასტურება',
+'excontent'              => "შინაარსი იყო: '$1'",
+'excontentauthor'        => "შინაარსი იყო: '$1' (და ერთადერთი ავტორი იყო '$2')",
+'exbeforeblank'          => "გვერდის შინაარსი წაშლამდე იყო შემდეგი: '$1'",
+'exblank'                => 'გვერდი ცარიელი იყო',
+'delete-confirm'         => '"$1"-ის წაშლა',
+'delete-legend'          => 'წაშლა',
+'historywarning'         => 'ყურადღება: გვერდს, რომლის წაშლასაც აპირებთ, აქვს ისტორია:',
+'confirmdeletetext'      => 'თქვენ აპირებთ გვერდის ან გამოსახულების მისი ისტორიით მონაცემთა ბაზიდან სამუდამოდ წაშლას. გთხოვთ დაადასტუროთ რომ გესმით ამის შედეგები და აკეთებთ ამას [[{{ns:project}}:წესები]] თანახმად.',
+'actioncomplete'         => 'მოქმედება შესრულებულია',
+'deletedtext'            => '"<nowiki>$1</nowiki>" წაშლილია. ბოლო წაშლილი გვერდების სია იხილეთ $2-ში.',
+'deletedarticle'         => 'წაშლილია "[[$1]]"',
+'dellogpage'             => 'წაშლილთა_სია',
+'dellogpagetext'         => 'ქვემოთ იხილეთ ახლად წაშლილთა სია.',
+'deletionlog'            => 'წაშლილთა სია',
+'reverted'               => 'დაბრუნდა წინა ვერსიაზე',
+'deletecomment'          => 'წაშლის მიზეზი',
+'deleteotherreason'      => 'სხვა/დამატებითი მიზეზი:',
+'deletereasonotherlist'  => 'სხვა მიზეზი',
+'deletereason-dropdown'  => '* წაშლის ხშირი მიზეზები
 ** ავტორის თხოვნით
 ** საავტორო უფლების დარღვევა
 ** ვანდალიზმი',
-'delete-edit-reasonlist'      => 'წაშლის მიზეზების რედაქტირება',
-'rollback'                    => 'რედაქტირების გაუქმება',
-'rollback_short'              => 'გაუქმება',
-'rollbacklink'                => 'გაუქმება',
-'cantrollback'                => 'შეუძლებელია უწინდელი რედაქციის აღდგენა; ის, ვინც უკანასკნელი ცვლილებები შეიტანა, ამ სტატიის ერთადერთი ავტორია.',
-'alreadyrolled'               => '[[:$1]]-ს უკანასკნელი რედაქტირების უკუქცევა შეუძლებელია [[User:$2|$2]] ([[User talk:$2|Talk]]); ვიღაცამ უკვე დაარედაქტირა ან უკუაქცია გვერდი. უკანასკნელი რედაქტორი [[User:$3|$3]] ([[User talk:$3|Talk]]).',
-'editcomment'                 => 'რედაქტირება განმარტებული იყო შემდეგნაირად: "<i>$1</i>".', # only shown if there is an edit comment
-'revertpage'                  => '[[Special:Contributions/$2|$2]]-ის რედაქტირება გაუქმდა; აღდგა ბოლოს [[User:$1|$1]]-ის მიერ რედაქტირებული ვერსია', # Additional available: $3: revid of the revision reverted to, $4: timestamp of the revision reverted to, $5: revid of the revision reverted from, $6: timestamp of the revision reverted from
-'sessionfailure'              => 'ჩანს, რომ პრობლემაა თქვენი რეგისტრაციის სესიისათვის;
+'delete-edit-reasonlist' => 'წაშლის მიზეზების რედაქტირება',
+
+# Rollback
+'rollback'       => 'რედაქტირების გაუქმება',
+'rollback_short' => 'გაუქმება',
+'rollbacklink'   => 'გაუქმება',
+'cantrollback'   => 'შეუძლებელია უწინდელი რედაქციის აღდგენა; ის, ვინც უკანასკნელი ცვლილებები შეიტანა, ამ სტატიის ერთადერთი ავტორია.',
+'alreadyrolled'  => '[[:$1]]-ს უკანასკნელი რედაქტირების უკუქცევა შეუძლებელია [[User:$2|$2]] ([[User talk:$2|Talk]]); ვიღაცამ უკვე დაარედაქტირა ან უკუაქცია გვერდი. უკანასკნელი რედაქტორი [[User:$3|$3]] ([[User talk:$3|Talk]]).',
+'editcomment'    => 'რედაქტირება განმარტებული იყო შემდეგნაირად: "<i>$1</i>".', # only shown if there is an edit comment
+'revertpage'     => '[[Special:Contributions/$2|$2]]-ის რედაქტირება გაუქმდა; აღდგა ბოლოს [[User:$1|$1]]-ის მიერ რედაქტირებული ვერსია', # Additionally available: $3: revid of the revision reverted to, $4: timestamp of the revision reverted to, $5: revid of the revision reverted from, $6: timestamp of the revision reverted from
+'sessionfailure' => 'ჩანს, რომ პრობლემაა თქვენი რეგისტრაციის სესიისათვის;
 ეს მოქმედება შეჩერდა თქვენი სესიაში შემოჭრის თავიდან ასაცილებლად.
 გთხოვთ, დააწკაპუნოთ ღილაკს "უკან" და თავიდან ჩართოთ გვერდი, რომლიდანაც შემოხვედით და სცადოთ განმეორებით.',
+
+# Protect
 'protectlogpage'              => 'დაცვის ისტორია',
 'protectedarticle'            => 'დაცულია "[[$1]]"',
 'unprotectedarticle'          => 'დაცვა მოხსნილია "[[$1]]"',
+'prot_1movedto2'              => '[[$1]] გადატანილია გვერდზე [[$2]]',
 'protect-legend'              => 'დაცვის დადასტურება',
 'protectcomment'              => 'კომენტარი:',
 'protectexpiry'               => 'ვადა',
@@ -1281,8 +1324,10 @@ $NEWPAGE
 'protect-level-sysop'         => 'მხოლოდ ადმინისტრატორები',
 'protect-summary-cascade'     => 'იერარქიული',
 'protect-expiring'            => 'ვადა გასდის: $1 (UTC)',
+'protect-expiry-indefinite'   => 'განუსაზღვრელი',
 'protect-cascade'             => 'ამ გვერდში ჩართული გვერდების დაცვა (იერარქიული დაცვა)',
 'protect-cantedit'            => 'თქვენ არ შეგიძლიათ ამ გვერდის დაცვის დონის შეცვლა, ვინაიდან არ გაქვთ მისი რედაქტირების ნებართვა.',
+'protect-expiry-options'      => '2 საათი:2 hours,1 დღე:1 day,3 დღე:3 days,1 კვირა:1 week,2 კვირა:2 weeks,1 თვე:1 month,3 თვე:3 months,6 თვე:6 months,1 წელი:1 year,განუსაზღვრელი ვადით:infinite', # display1:time1,display2:time2,...
 'restriction-type'            => 'უფლება',
 'restriction-level'           => 'შეზღუდვის დონე:',
 'minimum-size'                => 'მინ ზომა',
@@ -1352,7 +1397,6 @@ $NEWPAGE
 'whatlinkshere'            => 'სადაა მითითებული ეს გვერდი',
 'whatlinkshere-title'      => 'გვერდები, რომლებიც შეიცავენ ბმულებს "$1"-ზე',
 'whatlinkshere-page'       => 'გვერდი:',
-'linklistsub'              => '(ბმულების სია)',
 'linkshere'                => "მომდევნო გვერდები შეიცავენ ბმულებს '''[[:$1]]'''-ზე:",
 'nolinkshere'              => "'''[[:$1]]'''-ზე ბმული არ არის.",
 'isredirect'               => 'გადამისამართების გვერდი',
@@ -1451,6 +1495,7 @@ $NEWPAGE
 
 ამ შემთხვევებში, თქვენ თავად მოგიწევთ ამ გვერდის გადატანა, სურვილისამებრ.",
 'movearticle'             => 'გვერდის გადატანა',
+'movenologin'             => 'რეგისტრაცია ვერ გაიარა',
 'movenotallowed'          => 'თქვენ არ გაქვთ {{SITENAME}}-ში გვერდების გადატანის უფლება.',
 'newtitle'                => 'ახალი სათაური',
 'move-watch'              => 'ამ გვერდის კონტროლი',
@@ -1501,6 +1546,7 @@ $NEWPAGE
 'import'                     => 'გვერდების იმპორტი',
 'import-interwiki-submit'    => 'იმპორტირება',
 'import-interwiki-namespace' => 'გვერდების გადატანა სახელთა სივრცეში:',
+'import-comment'             => 'კომენტარი:',
 'importstart'                => 'გვერდების იმპორტი...',
 'import-revision-count'      => '$1 ცვლილება',
 'importnopages'              => 'იმპორტისთვის გვერდები არ არის.',
@@ -1576,12 +1622,12 @@ $NEWPAGE
 'nocreativecommons' => 'Creative Commons RDF მეტამონაცემები ამ სერვერისთვის გამორთულია.',
 
 # Attribution
-'anonymous'        => 'ვიკიპედიის ანონიმური მომხმარებლები',
+'anonymous'        => '{{SITENAME}}-ის ანონიმური {{PLURAL:$1|მომხმარებელი|მომხმარებლები}}',
 'siteuser'         => '{{SITENAME}} მომხმარებელი $1',
 'lastmodifiedatby' => 'ეს გვერდი ბოლოს შეიცვალა $2, $1  $3-ით.', # $1 date, $2 time, $3 user
 'othercontribs'    => '$1-ს ნამუშევრის მიხედვით.',
 'others'           => 'სხვები',
-'siteusers'        => '{{SITENAME}} მომხმარებელი $1',
+'siteusers'        => '{{SITENAME}}-ის {{PLURAL:$2|მომხმარებელი|მომხმარებლები|}} $1',
 'creditspage'      => 'წვლილი',
 'nocredits'        => 'აქ ამ გვერდისთვის ხელმისაწვდომი ინფორმაცია არ არსებობს.',
 
@@ -1630,7 +1676,7 @@ $NEWPAGE
 'show-big-image'       => 'სრული გარჩევადობა',
 'show-big-image-thumb' => '<small>ზომა წინასწარი გადახედვისას: $1 × $2 პიქსელი</small>',
 
-# Special:NewImages
+# Special:NewFiles
 'newimages'             => 'ახალი სურათები',
 'imagelisttext'         => "ქვემოთ მოცემულია '''$1''' ფაილის სია დახარისხებული მომხმარებლის $2 მიერ.",
 'showhidebots'          => '(რობოტების $1)',
@@ -1653,8 +1699,8 @@ $NEWPAGE
 'metadata-collapse' => 'დეტალების დამალვა',
 'metadata-fields'   => 'EXIF მეტამონაცემების ჩამონათვალი ამ შეტყობინებაში დამატებული იქნება სურათის გვერდზე, როცა მეტამონაცემების ცხრილი გახსნილია.
 სხვები უპირობოდ დამალული იქნება.
-* მწარმოებელი
-* მოდელი
+* make
+* model
 * datetimeoriginal
 * exposuretime
 * fnumber
@@ -1843,20 +1889,9 @@ $1
 გთხოვთ დაადასტუროთ, რომ ნამდვილად გსურთ ამ გვერდის აღდგენა.",
 'recreate'            => 'აღადგინე',
 
-# HTML dump
-'redirectingto' => 'გადამისამართდება [[:$1]]-ზე...',
-
 # action=purge
-'confirm_purge'        => 'გსურთ ამ გვერდის ქეშის წაშლა?
-
-$1',
 'confirm_purge_button' => 'კარგი',
-
-# AJAX search
-'searchcontaining' => "მოძებნე სტატიები, რომლებიც შეიცავს ''$1''.",
-'searchnamed'      => "მოძებნე სტატიები სახელით ''$1''.",
-'articletitles'    => "სტატიები, რომლებიც იწყება ''$1''-ით",
-'hideresults'      => 'დამალე შედეგები',
+'confirm-purge-top'    => 'გსურთ ამ გვერდის ქეშის წაშლა?',
 
 # Multipage image navigation
 'imgmultipageprev' => '&larr; წინა გვერდი',

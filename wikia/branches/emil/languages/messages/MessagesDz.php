@@ -207,6 +207,9 @@ $messages = array(
 'eauthentsent'            => 'ངེས་དཔྱད་གློག་འཕྲིན་འདི་ གདམ་ཁ་བརྐྱབས་ཡོད་པའི་གློག་འཕྲིན་ཁ་བྱང་ལུ་ བཏང་ཡོདཔ།
 གཞན་གློག་འཕྲིན་གང་རུང་ རྩིས་ཐོ་ནང་མ་གཏང་པའི་ཧེ་མ་ རྩིས་ཐོ་འདི་ཁྱོད་ར་གི་ཨིན་པའི་ངེས་དཔྱད་འབད་ནི་ལུ་ གློག་འཕྲིན་ནང་གི་བཀོད་རྒྱ་དང་འཁྲིལ་དགོཔ་ཨིན།',
 
+# Password reset dialog
+'retypenew' => 'ཆོག་ཡིག་གསརཔ་ལོག་ཡིག་དཔར་རྐྱབས:',
+
 # Edit page toolbar
 'bold_sample'     => 'ཚིག་ཡིག་རྒྱགས་པ།',
 'bold_tip'        => 'ཚིག་ཡིག་རྒྱགས་པ།',
@@ -278,7 +281,7 @@ $messages = array(
 'viewpagelogs'        => 'ཤོག་ལེབ་འདི་གི་ལོགསི་སྟོན།',
 'currentrev'          => 'ད་ལྟོའི་བསྐྱར་ཞིབ།',
 'revisionasof'        => '$1 གི་བསྐྱར་ཞིབ།',
-'revision-info'       => '$2 གིས་ $1 ཚུན་གྱི་བསྐྱར་ཞིབ།',
+'revision-info'       => '$2 གིས་ $1 ཚུན་གྱི་བསྐྱར་ཞིབ།', # Additionally available: $3: revision id
 'previousrevision'    => '←བསྐྱར་ཞིབ་རྙིངམ།',
 'nextrevision'        => 'བསྐྱར་ཞིབ་གསརཔ་→',
 'currentrevisionlink' => 'ད་ལྟོའི་བསྐྱར་ཞིབ།',
@@ -304,17 +307,17 @@ $messages = array(
 'diff-multi'              => '({{PLURAL:$1|བར་ནའི་བསྐྱར་ཞིབ་གཅིག་|$1 བར་ནའི་བསྐྱར་ཞིབ་ཚུ་}} མ་སྟོན་པས།)',
 
 # Search results
-'noexactmatch' => "'''མགོ་མིང་ \"\$1\" ཅན་མའི་ཤོག་ལེབ་མེད།'''
+'noexactmatch'   => "'''མགོ་མིང་ \"\$1\" ཅན་མའི་ཤོག་ལེབ་མེད།'''
 ཁྱོད་ཀྱིས་ [[:\$1|ཤོག་ལེབ་འདི་ གསརཔ་བཟོ་ཚུགས།]]",
-'prevn'        => 'ཧེ་མའི་ $1',
-'nextn'        => 'ཤུལ་མའི་ $1',
-'viewprevnext' => '($1) ($2) ($3) སྟོན།',
-'powersearch'  => 'མཐོ་རིམ་ཅན་གྱི་འཚོལ་ཞིབ།',
+'prevn'          => 'ཧེ་མའི་ $1',
+'nextn'          => 'ཤུལ་མའི་ $1',
+'viewprevnext'   => '($1) ($2) ($3) སྟོན།',
+'searchhelp-url' => 'Help:ནང་དོན།',
+'powersearch'    => 'མཐོ་རིམ་ཅན་གྱི་འཚོལ་ཞིབ།',
 
 # Preferences page
 'preferences'   => 'དགའ་གདམ།',
 'mypreferences' => 'ངེ་གི་དགའ་གདམ།',
-'retypenew'     => 'ཆོག་ཡིག་གསརཔ་ལོག་ཡིག་དཔར་རྐྱབས:',
 
 'grouppage-sysop' => '{{ns:project}}:བདག་སྐྱོང་པ།',
 
@@ -356,10 +359,10 @@ $messages = array(
 'uploadlogpage' => 'ལོག་སྐྱེལ་བཙུགས་འབད།',
 'uploadedimage' => '"[[$1]]" སྐྱེལ་བཙུགས་འབད་ཡོདཔ།',
 
-# Special:ImageList
+# Special:FileList
 'imagelist' => 'ཡིག་སྣོད་ཐོ་ཡིག།',
 
-# Image description page
+# File description page
 'filehist'                  => 'ཡིག་སྣོད་སྤྱོད་ཤུལ།',
 'filehist-help'             => 'ཡིག་སྣོད་འདི་ དེ་བསྒང་སྟོན་དོ་བཟུམ་སྦེ་ བལྟ་ནི་གི་དོན་ལུ་ ཚེས་གྲངས་/ཆུ་ཚོད་གུ་ ཨེབ་གཏང་འབད།',
 'filehist-current'          => 'ད་ལྟོ།',
@@ -460,42 +463,44 @@ $messages = array(
 'emailuser' => 'ལག་ལེན་པ་ལུ་ གློག་འཕྲིན་གཏང་',
 
 # Watchlist
-'watchlist'            => 'ངེ་གི་བལྟ་ཞིབ་ཐོ་ཡིག།',
-'mywatchlist'          => 'ངེ་གི་བལྟ་ཞིབ་ཐོ་ཡིག།',
-'watchlistfor'         => "('''$1''' གི་དོན་ལུ་)",
-'addedwatch'           => 'བལྟ་ཞིབ་ཐོ་ཡིག་ལུ་ཁ་སྐོང་རྐྱབ་ཅི།',
-'addedwatchtext'       => "ཤོག་ལེབ་  \"[[:\$1]]\" འདི་ ཁྱོད་རའི་ [[Special:Watchlist|watchlist]] ལུ་ ཁ་སྐོང་བརྐྱབས་ནུག།\\n
+'watchlist'         => 'ངེ་གི་བལྟ་ཞིབ་ཐོ་ཡིག།',
+'mywatchlist'       => 'ངེ་གི་བལྟ་ཞིབ་ཐོ་ཡིག།',
+'watchlistfor'      => "('''$1''' གི་དོན་ལུ་)",
+'addedwatch'        => 'བལྟ་ཞིབ་ཐོ་ཡིག་ལུ་ཁ་སྐོང་རྐྱབ་ཅི།',
+'addedwatchtext'    => "ཤོག་ལེབ་  \"[[:\$1]]\" འདི་ ཁྱོད་རའི་ [[Special:Watchlist|watchlist]] ལུ་ ཁ་སྐོང་བརྐྱབས་ནུག།\\n
 ཤོག་ལེབ་དེ་ལུ་མ་འོངས་བསྒྱུར་བཅོས་དང་ དེ་གི་འབྲེལ་ཡོད་བློ་ཤོག་འདི་ དེ་ཁར་ཐོ་བཀོད་འབད་ནི་དང་ འཇམ་ཏོང་ཏོ་སྦེ་གདམ་ཁ་བརྐྱབ་ཚུགས་ནི་གི་དོན་ལུ་  ཤོག་ལེབ་འདི་ [[Special:RecentChanges|list of recent changes]] ནང་ལུ་ '''མངོན་གསལ་''' སྦེ་འབྱུང་འོང་།",
-'removedwatch'         => 'བལྟ་ཞིབ་ཐོ་ཡིག་ནང་ལས་བཏོན་བཀོག་ཡོདཔ།',
-'removedwatchtext'     => 'ཤོག་ལེབ་  "[[:$1]]" འདི་ ཁྱོད་རའི་བལྟ་ཞིབ་ཐོ་ཡིག་ནང་ལས་ བཏོན་བཀོག་ནུག།',
-'watch'                => 'བལྟ་ཞིབ་འབད།',
-'watchthispage'        => 'ཤོག་ལེབ་འདི་ལྟ།',
-'unwatch'              => 'བལྟ་བཤོལ།',
-'watchlist-details'    => '{{PLURAL:$1|$1 ཤོག་ལེབ་|$1 ཤོག་ལེབ་ཚུ་}} ཁག་ཆེ་བའི་བློ་ཤོག་ བལྟ་ཞིབ་མ་འབད་བས།',
-'wlshowlast'           => 'མཇུག་གི་ ཆུ་ཚོད་ $1 ཉིནམ་ $2  $3 སྟོན་',
-'watchlist-hide-bots'  => 'བོཊི་ཞུན་དག་ཚུ་སྦ།',
-'watchlist-hide-own'   => 'ངེ་གི་ཞུན་དག་ཚུ་སྦ།',
-'watchlist-hide-minor' => 'གལ་གནད་ཆུང་བའི་ཞུན་དག་ཚུ་སྦ།',
+'removedwatch'      => 'བལྟ་ཞིབ་ཐོ་ཡིག་ནང་ལས་བཏོན་བཀོག་ཡོདཔ།',
+'removedwatchtext'  => 'ཤོག་ལེབ་  "[[:$1]]" འདི་ ཁྱོད་རའི་བལྟ་ཞིབ་ཐོ་ཡིག་ནང་ལས་ བཏོན་བཀོག་ནུག།',
+'watch'             => 'བལྟ་ཞིབ་འབད།',
+'watchthispage'     => 'ཤོག་ལེབ་འདི་ལྟ།',
+'unwatch'           => 'བལྟ་བཤོལ།',
+'watchlist-details' => '{{PLURAL:$1|$1 ཤོག་ལེབ་|$1 ཤོག་ལེབ་ཚུ་}} ཁག་ཆེ་བའི་བློ་ཤོག་ བལྟ་ཞིབ་མ་འབད་བས།',
+'wlshowlast'        => 'མཇུག་གི་ ཆུ་ཚོད་ $1 ཉིནམ་ $2  $3 སྟོན་',
 
 # Displayed when you click the "watch" button and it is in the process of watching
 'watching'   => 'བལྟ་ཞིབ་འབད་དོ་་་',
 'unwatching' => 'བལྟ་ཞིབ་འབད་བཤོལ་དོ་་་',
 
-# Delete/protect/revert
-'deletepage'                  => 'ཤོག་ལེབ་བཏོན་གཏང་།',
-'historywarning'              => 'ཉེན་བརྡ་: ཁྱོད་ཀྱིས་ བཏོན་བཀོག་ནི་འབད་མི་ཤོག་ལེབ་ནང་སྤྱོད་ཤུལ་འདུག་:',
-'confirmdeletetext'           => 'ཁྱོད་ཀྱིས་ ཤོག་ལེབ་དང་དེའི་སྤྱོད་ཤུལ་ བཏོན་གཏང་ནི་འབད་དོ།
+# Delete
+'deletepage'            => 'ཤོག་ལེབ་བཏོན་གཏང་།',
+'historywarning'        => 'ཉེན་བརྡ་: ཁྱོད་ཀྱིས་ བཏོན་བཀོག་ནི་འབད་མི་ཤོག་ལེབ་ནང་སྤྱོད་ཤུལ་འདུག་:',
+'confirmdeletetext'     => 'ཁྱོད་ཀྱིས་ ཤོག་ལེབ་དང་དེའི་སྤྱོད་ཤུལ་ བཏོན་གཏང་ནི་འབད་དོ།
 ཁྱོད་ཀྱིས་འདི་འབད་ནི་དང་ དེ་འབད་བ་ཅིན་ དེ་གི་འབྲེལ་འབྱུང་ དེ་ལས་ ཁྱོད་ཀྱིས་འབད་མི་འདི་  [[{{MediaWiki:Policy-url}}| སྲིད་བྱུས་]] དང་འཁྲིལ་ཏེ་ཨིན་པའི་ངེས་དཔྱད་འབད་གནང་།',
-'actioncomplete'              => 'བྱ་ལས་མཇུག་བསྡུ།',
-'deletedtext'                 => '"<nowiki>$1</nowiki>" འདི་ བཏོན་བཀོག་ནུག།
+'actioncomplete'        => 'བྱ་ལས་མཇུག་བསྡུ།',
+'deletedtext'           => '"<nowiki>$1</nowiki>" འདི་ བཏོན་བཀོག་ནུག།
 འཕྲལ་ཁམས་ལུ་བཏོན་བཀོག་མི་ཐོ་གི་དོན་ལུ་ $2 ལུ་བལྟ།',
-'deletedarticle'              => '"[[$1]]" བཏོན་གཏང་ཡོདཔ།',
-'dellogpage'                  => 'བཏོན་གཏང་ཡོད་པའི་ལོག།',
-'deletecomment'               => 'བཏོན་བཏང་དགོ་པའི་རྒྱུ་མཚན་:',
-'deleteotherreason'           => 'གཞན་/ཁ་སྐོང་ཅན་གྱི་རྒྱུ་མཚན།',
-'deletereasonotherlist'       => 'རྒྱུ་མཚན་གཞན།',
-'rollbacklink'                => 'རྒྱབ་སྒྲིལ།',
+'deletedarticle'        => '"[[$1]]" བཏོན་གཏང་ཡོདཔ།',
+'dellogpage'            => 'བཏོན་གཏང་ཡོད་པའི་ལོག།',
+'deletecomment'         => 'བཏོན་བཏང་དགོ་པའི་རྒྱུ་མཚན་:',
+'deleteotherreason'     => 'གཞན་/ཁ་སྐོང་ཅན་གྱི་རྒྱུ་མཚན།',
+'deletereasonotherlist' => 'རྒྱུ་མཚན་གཞན།',
+
+# Rollback
+'rollbacklink' => 'རྒྱབ་སྒྲིལ།',
+
+# Protect
 'protectlogpage'              => 'ཉེན་སྐྱོབ་ལོག།',
+'prot_1movedto2'              => '[[$1]] འདི་ [[$2]] ལུ་སྤོ་བཤུད་འབད་ཡོདཔ།',
 'protectcomment'              => 'བསམ་བཀོད:',
 'protectexpiry'               => 'དུས་ཡོལ:',
 'protect_expiry_invalid'      => 'དུས་ཡོལ་དུས་ཚོད་འདི་ ནུས་མེད་ཨིན་པས།',
@@ -514,6 +519,7 @@ $messages = array(
 'protect-expiring'            => '$1 (UTC) དུས་ཡོལཝ་ཨིན།',
 'protect-cascade'             => 'ཤོག་ལེབ་(ཀེསི་ཀེ་ཌིང་ཉེན་སྐྱོབ་) ཀྱི་གྲངས་སུ་ཚུད་མི་ཉེན་སྐྱོབ་ཤོག་ལེབ།',
 'protect-cantedit'            => 'ཁྱོད་ལུ་ ཞུན་དག་གི་གནང་བ་མེདཔ་ལས་ ཤོག་ལེབ་འདི་གི་ཉེན་སྐྱོབ་གནས་རིམ་བསྒྱུར་མི་ཚུགས།',
+'protect-expiry-options'      => 'ཆུ་ཚོད་ ༢:2 hours,ཉིནམ་ ༡:1 day,ཉིནམ་ ༣:3 days,བདུན་ཕྲག་ ༡:1 week,བདུན་ཕྲག་ ༢:2 weeks,ཟླཝ་ ༡:1 month,ཟླཝ་ ༣:3 months,ཟླཝ་ ༦:6 months,ལོ་ ༡:1 year,ཚད་ལས་འདས་པ་:infinite', # display1:time1,display2:time2,...
 'restriction-type'            => 'གནང་བ:',
 'restriction-level'           => 'མི་ཆོག་པའི་གནས་རིམ:',
 
@@ -539,7 +545,6 @@ $messages = array(
 # What links here
 'whatlinkshere'       => 'ནཱ་ལུ་ ག་ཅི་འབྲེལ་མཐུད་འོང་ནི་མས།',
 'whatlinkshere-title' => '$1 དང་འབྲེལ་མཐུད་ཡོད་པའི་ཤོག་ལེབ།',
-'linklistsub'         => '(འབྲེལ་ལམ་ཐོ་ཡིག།)',
 'linkshere'           => "འོག་གི་ཤོག་ལེབ་ཚུ་ '''[[:$1]]''' ལུ་ འབྲེལ་མཐུད་འབད་ཨིན:",
 'nolinkshere'         => "'''[[:$1]]''' ལུ་ ཤོག་ལེབ་འབྲེལ་མཐུད་མིན་འདུག།",
 'isredirect'          => 'སླར་ལོག་ཤོག་ལེབ།',
@@ -656,7 +661,7 @@ $messages = array(
 'show-big-image'       => 'ཧུམ་ཆ་གང་།',
 'show-big-image-thumb' => '<small>སྔོན་ལྟའི་ཚད་: $1 × $2 པིག་སེལསི་</small>',
 
-# Special:NewImages
+# Special:NewFiles
 'newimages' => 'ཡིག་སྣོད་གསར་པའི་སྟོན་ཁང་།',
 
 # Bad image list

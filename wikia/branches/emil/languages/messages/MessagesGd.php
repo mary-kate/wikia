@@ -29,7 +29,7 @@ $messages = array(
 'moredotdotdot'  => 'Barrachd...',
 'mypage'         => 'Mo dhuilleag',
 'anontalk'       => 'Labhairt air an IP seo',
-'and'            => 'agus',
+'and'            => '&#32;agus',
 
 'errorpagetitle'    => 'Mearachd',
 'returnto'          => 'Till gu $1.',
@@ -104,7 +104,6 @@ $1",
 'readonly'        => 'Stor-dàta glaiste',
 'badarticleerror' => 'Cha ghabh an gnìomh seo a dhèanamh air an duilleig seo.',
 'badtitle'        => 'Droch thiotal',
-'perfdisabled'    => "Tha sinn duilich! Tha an goireas seo air a chur bho fheum gu sealadach o chionns gum bi e a'slaodadh an stòr-dàta gus nach urrain do neach sam bith an wiki a chleachdadh.",
 
 # Login and logout pages
 'yourname'                   => 'An t-ainm-cleachdair agaibh',
@@ -120,7 +119,12 @@ $1",
 'noname'                     => 'Chan eil sibh air ainm-cleachdair iomchaidh a chomharrachadh.',
 'nosuchusershort'            => 'Chan eil cleachdair leis an ainm "<nowiki>$1</nowiki>" ann; sgrùdaibh an litreachadh agaibh no cleachaibh am billeag gu h-ìseal gus cùnntas ùr a chrùthachadh.',
 'wrongpassword'              => "Chan eil am facal-faire a sgrìobh sibh a-steach ceart. Feuchaibh a-rithis, ma's e ur toil e.",
-'acct_creation_throttle_hit' => 'Tha sinn duilich; tha sibh air $1 cùnntasan a chruthachadh cheana agus chan fhaod sibh barrachd a dhèanamh.',
+'acct_creation_throttle_hit' => 'Tha sinn duilich; tha sibh air {{PLURAL:$1|1 cùnntas|$1 cùnntasan}} a chruthachadh cheana agus chan fhaod sibh barrachd a dhèanamh.',
+
+# Password reset dialog
+'oldpassword' => 'Seann fhacal-faire',
+'newpassword' => 'Facal-faire ùr',
+'retypenew'   => 'Ath-sgrìobh facal-faire ùr',
 
 # Edit page toolbar
 'italic_sample'   => 'Teacsa eadailteach',
@@ -170,6 +174,7 @@ $1",
 'prevn'             => '$1 mu dheireadh',
 'nextn'             => 'an ath $1',
 'viewprevnext'      => 'Seall ($1) ($2) ($3).',
+'searchhelp-url'    => 'Help:Cuideachadh',
 'showingresults'    => "A'nochdadh {{PLURAL:$1|'''1''' toradh|'''$1''' toraidhean}} gu h-ìosal a'tòiseachadh le #'''$2'''.",
 'showingresultsnum' => "A'nochdadh {{PLURAL:$3|'''1''' toradh|'''$3''' toraidhean}} gu h-ìosal a'tòiseachadh le #'''$2'''.",
 'powersearch'       => 'Rannsaich',
@@ -183,9 +188,6 @@ $1",
 'prefs-personal'     => "Dàta a'chleachdair",
 'saveprefs'          => 'Sàbhail roghainnean',
 'resetprefs'         => 'Ath-shuidhich taghaidhean',
-'oldpassword'        => 'Seann fhacal-faire',
-'newpassword'        => 'Facal-faire ùr',
-'retypenew'          => 'Ath-sgrìobh facal-faire ùr',
 'rows'               => 'Sreathan',
 'columns'            => 'Colbhan',
 'savedprefs'         => 'Tha na roghainnean agaibh air an sàbhaladh.',
@@ -219,21 +221,11 @@ $1",
 'fileexists'    => 'Tha faidhle leis an ainm seo ann cheana; nach faigh sibh cinnt air <strong><tt>$1</tt></strong> gu bheil sibh ag iarraidh atharrachadh.',
 'savefile'      => 'Sàbhail faidhle',
 
-# Special:ImageList
+# Special:FileList
 'imagelist' => 'Liosta nan ìomhaigh',
 
 # Random page
 'randompage' => 'Duilleag thuairmeach',
-
-# Statistics
-'sitestatstext' => "Tha {{PLURAL:\$1|'''1''' duilleag|'''\$1''' duilleagan gu lèir}} anns an stor-dàta, a'cur san àireamh duilleagan-làbhairt, duilleagan mu dheidhinn a'{{SITENAME}} fhèin, duilleagan \"bun\", ath-stiùireidhean, agus feadhainn eile nach eil nan duilleag brìgheil. As aonais sin, tha '''\$2''' duilleagan ann le brìgh.
-
-'''\$8''' {{PLURAL:\$8|fhaidhl|fhaidhle}} a cuir ri.
-
-Tha na duilleagan air an sealladh '''\$3''' {{PLURAL:\$3|uair|uairean}}, agus air an deasaicheadh '''\$4''' {{PLURAL:\$4|uair|uairean}} o'n deach an wiki a shuidheachadh.
-Thig sin ri '''\$5''' deasaicheidhean anns a'mheadhan gach duilleag, agus '''\$6''' seallaidhean gach duilleag.
-
-Tha feadh an [http://www.mediawiki.org/wiki/Manual:Job_queue queue tùrn] na '''\$7'''.",
 
 'doubleredirects' => 'Ath-stiùreidhean dùbailte',
 
@@ -281,18 +273,23 @@ Ma bu toil leibh a dhubh a'dhuilleag as ur faire agaibh nas fadalache, cnap air 
 'watchlistcontains'  => 'Tha $1 {{PLURAL:$1|duilleag|duilleagan}} air an liosta-faire agaibh.',
 'wlshowlast'         => 'Nochd $1 uairean $2 laithean mu dheireadh $3',
 
-# Delete/protect/revert
-'deletepage'         => 'Dubh às duilleag',
-'confirm'            => 'Daingnich',
-'excontent'          => "stuth a bh'ann: '$1'",
-'exblank'            => 'bha duilleag falamh',
-'actioncomplete'     => 'Gnìomh coileanta',
-'reverted'           => 'Tillte ri lethbhreac as ùire',
-'editcomment'        => 'Bha mìneachadh an deasaicheidh: "<i>$1</i>".', # only shown if there is an edit comment
-'revertpage'         => 'Tillte deasachadh aig [[Special:Contributions/$2|$2]] ([[User talk:$2|Deasbaireachd]]) ais ri lethbhreac mu dheireadh le [[User:$1|$1]]', # Additional available: $3: revid of the revision reverted to, $4: timestamp of the revision reverted to, $5: revid of the revision reverted from, $6: timestamp of the revision reverted from
+# Delete
+'deletepage'     => 'Dubh às duilleag',
+'confirm'        => 'Daingnich',
+'excontent'      => "stuth a bh'ann: '$1'",
+'exblank'        => 'bha duilleag falamh',
+'actioncomplete' => 'Gnìomh coileanta',
+'reverted'       => 'Tillte ri lethbhreac as ùire',
+
+# Rollback
+'editcomment' => 'Bha mìneachadh an deasaicheidh: "<i>$1</i>".', # only shown if there is an edit comment
+'revertpage'  => 'Tillte deasachadh aig [[Special:Contributions/$2|$2]] ([[User talk:$2|Deasbaireachd]]) ais ri lethbhreac mu dheireadh le [[User:$1|$1]]', # Additionally available: $3: revid of the revision reverted to, $4: timestamp of the revision reverted to, $5: revid of the revision reverted from, $6: timestamp of the revision reverted from
+
+# Protect
 'protectedarticle'   => 'dìonta "[[$1]]"',
 'unprotectedarticle' => '"[[$1]]" neo-dhìonta',
 'protect-title'      => 'A\'dìonadh "$1"',
+'prot_1movedto2'     => '[[$1]] gluaiste ri [[$2]]',
 'protect-legend'     => 'Daingnich dìonadh',
 'protectcomment'     => 'Aobhar airson dìonaidh',
 
@@ -369,7 +366,7 @@ Ma bu toil leibh a dhubh a'dhuilleag as ur faire agaibh nas fadalache, cnap air 
 'infosubtitle' => 'Fiosrachadh air duilleig',
 'numwatchers'  => 'Aireamh luchd-faire: $1',
 
-# Special:NewImages
+# Special:NewFiles
 'ilsubmit' => 'Rannsaich',
 'bydate'   => 'air ceann-latha',
 

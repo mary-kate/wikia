@@ -47,10 +47,8 @@ wfProfileIn( 'main-misc-setup' );
 OutputPage::setEncodings(); # Not really used yet
 
 $maxLag = $wgRequest->getVal( 'maxlag' );
-if ( !is_null( $maxLag ) ) {
-	if ( !$mediaWiki->checkMaxLag( $maxLag ) ) {
-		exit;
-	}
+if( !is_null($maxLag) && !$mediaWiki->checkMaxLag( $maxLag ) ) {
+	exit;
 }
 
 # Query string fields
@@ -58,7 +56,7 @@ $action = $wgRequest->getVal( 'action', 'view' );
 $title = $wgRequest->getVal( 'title' );
 
 $wgTitle = $mediaWiki->checkInitialQueries( $title, $action );
-if ($wgTitle == NULL) {
+if( $wgTitle === NULL ) {
 	unset( $wgTitle );
 }
 
@@ -67,7 +65,7 @@ wfProfileOut( 'main-misc-setup' );
 #
 # Send Ajax requests to the Ajax dispatcher.
 #
-if ( $wgUseAjax && $action == 'ajax' ) {
+if( $wgUseAjax && $action == 'ajax' ) {
 	require_once( $IP . '/includes/AjaxDispatcher.php' );
 
 	$dispatcher = new AjaxDispatcher();
@@ -91,7 +89,7 @@ $mediaWiki->setVal( 'UseExternalEditor', $wgUseExternalEditor );
 $mediaWiki->setVal( 'UsePathInfo', $wgUsePathInfo );
 
 $mediaWiki->initialize( $wgTitle, $wgArticle, $wgOut, $wgUser, $wgRequest );
-$mediaWiki->finalCleanup ( $wgDeferredUpdateList, $wgOut );
+$mediaWiki->finalCleanup( $wgDeferredUpdateList, $wgOut );
 
 # Not sure when $wgPostCommitUpdateList gets set, so I keep this separate from finalCleanup
 $mediaWiki->doUpdates( $wgPostCommitUpdateList );

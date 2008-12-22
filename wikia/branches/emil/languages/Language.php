@@ -39,7 +39,7 @@ class FakeConverter {
 	function parserConvert($t, $p) {return $t;}
 	function getVariants() { return array( $this->mLang->getCode() ); }
 	function getPreferredVariant() {return $this->mLang->getCode(); }
-	function findVariantLink(&$l, &$n) {}
+	function findVariantLink(&$l, &$n, $forTemplate = false) {}
 	function getExtraHashOptions() {return '';}
 	function getParsedTitle() {return '';}
 	function markNoConversion($text, $noParse=false) {return $text;}
@@ -74,6 +74,7 @@ class Language {
 	static public $mMergeableAliasListKeys = array( 'specialPageAliases' );
 
 	static public $mLocalisationCache = array();
+	static public $mLangObjCache = array();
 
 	static public $mWeekdayMsgs = array(
 		'sunday', 'monday', 'tuesday', 'wednesday', 'thursday',
@@ -130,12 +131,25 @@ class Language {
 	);
 
 	/**
-	 * Create a language object for a given language code
+	 * Get a cached language object for a given language code
 	 */
 	static function factory( $code ) {
+		if ( !isset( self::$mLangObjCache[$code] ) ) {
+			if( count( self::$mLangObjCache ) > 10 ) {
+				// Don't keep a billion objects around, that's stupid.
+				self::$mLangObjCache = array();
+			}
+			self::$mLangObjCache[$code] = self::newFromCode( $code );
+		}
+		return self::$mLangObjCache[$code];
+	}
+
+	/**
+	 * Create a language object for a given language code
+	 */
+	protected static function newFromCode( $code ) {
 		global $IP;
 		static $recursionLevel = 0;
-
 		if ( $code == 'en' ) {
 			$class = 'Language';
 		} else {
@@ -156,13 +170,12 @@ class Language {
 		if( ! class_exists( $class ) ) {
 			$fallback = Language::getFallbackFor( $code );
 			++$recursionLevel;
-			$lang = Language::factory( $fallback );
+			$lang = Language::newFromCode( $fallback );
 			--$recursionLevel;
 			$lang->setCode( $code );
 		} else {
 			$lang = new $class;
 		}
-
 		return $lang;
 	}
 
@@ -173,6 +186,15 @@ class Language {
 			$this->mCode = 'en';
 		} else {
 			$this->mCode = str_replace( '_', '-', strtolower( substr( get_class( $this ), 8 ) ) );
+		}
+	}
+
+	/**
+	 * Reduce memory usage
+	 */
+	function __destruct() {
+		foreach ( $this as $name => $value ) {
+			unset( $this->$name );
 		}
 	}
 
@@ -393,21 +415,13 @@ class Language {
 	}
 
 	/**
-	 * Ugly hack to get a message maybe from the MediaWiki namespace, if this
-	 * language object is the content or user language.
+	 * Get a message from the MediaWiki namespace.
+	 *
+	 * @param $msg String: message name
+	 * @return string
 	 */
 	function getMessageFromDB( $msg ) {
-		global $wgContLang, $wgLang;
-		if ( $wgContLang->getCode() == $this->getCode() ) {
-			# Content language
-			return wfMsgForContent( $msg );
-		} elseif ( $wgLang->getCode() == $this->getCode() ) {
-			# User language
-			return wfMsg( $msg );
-		} else {
-			# Neither, get from localisation
-			return $this->getMessage( $msg );
-		}
+		return wfMsgExt( $msg, array( 'parsemag', 'language' => $this ) );
 	}
 
 	function getLanguageName( $code ) {
@@ -911,6 +925,9 @@ class Language {
 	 * (abu-mami@kaluach.net, http://www.kaluach.net), who permitted
 	 * to translate the relevant functions into PHP and release them under
 	 * GNU GPL.
+	 *
+	 * The months are counted from Tishrei = 1. In a leap year, Adar I is 13
+	 * and Adar II is 14. In a non-leap year, Adar is 6.
 	 */
 	private static function tsToHebrew( $ts ) {
 		# Parse date
@@ -1510,24 +1527,71 @@ class Language {
 			return $string;
 		}
 
-		# MySQL fulltext index doesn't grok utf-8, so we
-		# need to fold cases and convert to hex
 
 		wfProfileIn( __METHOD__ );
-		if( function_exists( 'mb_strtolower' ) ) {
+		
+		// MySQL fulltext index doesn't grok utf-8, so we
+		// need to fold cases and convert to hex
+		$out = preg_replace_callback(
+			"/([\\xc0-\\xff][\\x80-\\xbf]*)/",
+			array( $this, 'stripForSearchCallback' ),
+			$this->lc( $string ) );
+		
+		// And to add insult to injury, the default indexing
+		// ignores short words... Pad them so we can pass them
+		// through without reconfiguring the server...
+		$minLength = $this->minSearchLength();
+		if( $minLength > 1 ) {
+			$n = $minLength-1;
 			$out = preg_replace(
-				"/([\\xc0-\\xff][\\x80-\\xbf]*)/e",
-				"'U8' . bin2hex( \"$1\" )",
-				mb_strtolower( $string ) );
-		} else {
-			list( , $wikiLowerChars ) = self::getCaseMaps();
-			$out = preg_replace(
-				"/([\\xc0-\\xff][\\x80-\\xbf]*)/e",
-				"'U8' . bin2hex( strtr( \"\$1\", \$wikiLowerChars ) )",
-				$string );
+				"/\b(\w{1,$n})\b/",
+				"$1U800",
+				$out );
 		}
+		
+		// Periods within things like hostnames and IP addresses
+		// are also important -- we want a search for "example.com"
+		// or "192.168.1.1" to work sanely.
+		//
+		// MySQL's search seems to ignore them, so you'd match on
+		// "example.wikipedia.com" and "192.168.83.1" as well.
+		$out = preg_replace(
+			"/(\w)\.(\w|\*)/u",
+			"$1U82e$2",
+			$out );
+		
 		wfProfileOut( __METHOD__ );
 		return $out;
+	}
+	
+	/**
+	 * Armor a case-folded UTF-8 string to get through MySQL's
+	 * fulltext search without being mucked up by funny charset
+	 * settings or anything else of the sort.
+	 */
+	protected function stripForSearchCallback( $matches ) {
+		return 'U8' . bin2hex( $matches[1] );
+	}
+	
+	/**
+	 * Check MySQL server's ft_min_word_len setting so we know
+	 * if we need to pad short words...
+	 */
+	protected function minSearchLength() {
+		if( !isset( $this->minSearchLength ) ) {
+			$sql = "show global variables like 'ft\\_min\\_word\\_len'";
+			$dbr = wfGetDB( DB_SLAVE );
+			$result = $dbr->query( $sql );
+			$row = $result->fetchObject();
+			$result->free();
+			
+			if( $row && $row->Variable_name == 'ft_min_word_len' ) {
+				$this->minSearchLength = intval( $row->Value );
+			} else {
+				$this->minSearchLength = 0;
+			}
+		}
+		return $this->minSearchLength;
 	}
 
 	function convertForSearchResult( $termsArray ) {
@@ -1686,7 +1750,9 @@ class Language {
 			} else {
 				# Fall back to English if local list is incomplete
 				$magicWords =& Language::getMagicWords();
-				if ( !isset($magicWords[$mw->mId]) ) { throw new MWException("Magic word not found" ); }
+				if ( !isset($magicWords[$mw->mId]) ) {
+					throw new MWException("Magic word '{$mw->mId}' not found" ); 
+				}
 				$rawEntry = $magicWords[$mw->mId];
 			}
 		}
@@ -1738,14 +1804,14 @@ class Language {
 
 				// Fail fast
 				if ( !file_exists($file) )
-					throw new MWException( 'Aliases file does not exist' );
+					throw new MWException( "Aliases file does not exist: $file" );
 
 				$aliases = array();
 				require($file);
 
 				// Check the availability of aliases
 				if ( !isset($aliases['en']) )
-					throw new MWException( 'Malformed aliases file' );
+					throw new MWException( "Malformed aliases file: $file" );
 
 				// Merge all aliases in fallback chain
 				$code = $this->getCode();
@@ -1755,7 +1821,7 @@ class Language {
 					$aliases[$code] = $this->fixSpecialPageAliases( $aliases[$code] );
 					/* Merge the aliases, THIS will break if there is special page name
 					* which looks like a numerical key, thanks to PHP...
-					* See the comments for wfArrayMerge in GlobalSettings.php. */
+					* See the array_merge_recursive manual entry */
 					$this->mExtendedSpecialPageAliases = array_merge_recursive(
 						$this->mExtendedSpecialPageAliases, $aliases[$code] );
 
@@ -1807,10 +1873,11 @@ class Language {
 	  * </code>
 	  *
 	  * See LanguageGu.php for the Gujarati implementation and
-	  * LanguageIs.php for the , => . and . => , implementation.
+	  * $separatorTransformTable on MessageIs.php for
+	  * the , => . and . => , implementation.
 	  *
 	  * @todo check if it's viable to use localeconv() for the decimal
-	  *       seperator thing.
+	  *       separator thing.
 	  * @param $number Mixed: the string to be formatted, should be an integer
 	  *        or a floating point number.
 	  * @param $nocommafy Bool: set to true for special numbers like dates
@@ -1877,12 +1944,35 @@ class Language {
 			if ($i == $m) {
 				$s = $l[$i];
 			} else if ($i == $m - 1) {
-				$s = $l[$i] . ' ' . $this->getMessageFromDB( 'and' ) . ' ' . $s;
+				$s = $l[$i] . $this->getMessageFromDB( 'and' ) . $this->getMessageFromDB( 'word-separator' ) . $s;
 			} else {
-				$s = $l[$i] . ', ' . $s;
+				$s = $l[$i] . $this->getMessageFromDB( 'comma-separator' ) . $s;
 			}
 		}
 		return $s;
+	}
+	
+	/**
+	 * Take a list of strings and build a locale-friendly comma-separated
+	 * list, using the local comma-separator message.
+	 * @param $list array of strings to put in a comma list
+	 * @return string
+	 */
+	function commaList( $list, $forContent = false ) {
+		return implode(
+			$list,
+			wfMsgExt( 'comma-separator', array( 'escapenoentities', 'language' => $this ) ) );
+	}
+	
+	/**
+	 * Same as commaList, but separate it with the pipe instead.
+	 * @param $list array of strings to put in a pipe list
+	 * @return string
+	 */
+	function pipeList( $list ) {
+		return implode(
+			$list,
+			wfMsgExt( 'pipe-separator', array( 'escapenoentities', 'language' => $this ) ) );
 	}
 
 	/**
@@ -1967,7 +2057,7 @@ class Language {
 		if ( !count($forms) ) { return ''; }
 		$forms = $this->preConvertPlural( $forms, 2 );
 
-		return ( abs($count) == 1 ) ? $forms[0] : $forms[1];
+		return ( $count == 1 ) ? $forms[0] : $forms[1];
 	}
 
 	/**
@@ -2093,8 +2183,8 @@ class Language {
 	 * @param $nt Mixed: the title object of the link
 	 * @return null the input parameters may be modified upon return
 	 */
-	function findVariantLink( &$link, &$nt ) {
-		$this->mConverter->findVariantLink($link, $nt);
+	function findVariantLink( &$link, &$nt, $forTemplate = false ) {
+		$this->mConverter->findVariantLink($link, $nt, $forTemplate );
 	}
 
 	/**
@@ -2193,7 +2283,7 @@ class Language {
 	 */
 	static function loadLocalisation( $code, $disableCache = false ) {
 		static $recursionGuard = array();
-		global $wgMemc, $wgCheckSerialized;
+		global $wgMemc, $wgEnableSerializedMessages, $wgCheckSerialized;
 
 		if ( !$code ) {
 			throw new MWException( "Invalid language code requested" );
@@ -2208,16 +2298,18 @@ class Language {
 			wfProfileIn( __METHOD__ );
 
 			# Try the serialized directory
-			$cache = wfGetPrecompiledData( self::getFileName( "Messages", $code, '.ser' ) );
-			if ( $cache ) {
-				if ( $wgCheckSerialized && self::isLocalisationOutOfDate( $cache ) ) {
-					$cache = false;
-					wfDebug( "Language::loadLocalisation(): precompiled data file for $code is out of date\n" );
-				} else {
-					self::$mLocalisationCache[$code] = $cache;
-					wfDebug( "Language::loadLocalisation(): got localisation for $code from precompiled data file\n" );
-					wfProfileOut( __METHOD__ );
-					return self::$mLocalisationCache[$code]['deps'];
+			if( $wgEnableSerializedMessages ) {
+				$cache = wfGetPrecompiledData( self::getFileName( "Messages", $code, '.ser' ) );
+				if ( $cache ) {
+					if ( $wgCheckSerialized && self::isLocalisationOutOfDate( $cache ) ) {
+						$cache = false;
+						wfDebug( "Language::loadLocalisation(): precompiled data file for $code is out of date\n" );
+					} else {
+						self::$mLocalisationCache[$code] = $cache;
+						wfDebug( "Language::loadLocalisation(): got localisation for $code from precompiled data file\n" );
+						wfProfileOut( __METHOD__ );
+						return self::$mLocalisationCache[$code]['deps'];
+					}
 				}
 			}
 

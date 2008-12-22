@@ -189,9 +189,10 @@ Te rog notari la din kontribuţi al {{SITENAME}} sunt konsideraere relesavat sup
 'editundo'                => 'anulizăe',
 
 # Search results
-'noexactmatch' => "'''N'pažu vec l'nom \"\$1\" n'ķsistst.''' Pute [[:\$1|kreare ce pažu]].",
-'viewprevnext' => 'Vu ($1) ($2) ($3)',
-'powersearch'  => 'kaută avansata',
+'noexactmatch'   => "'''N'pažu vec l'nom \"\$1\" n'ķsistst.''' Pute [[:\$1|kreare ce pažu]].",
+'viewprevnext'   => 'Vu ($1) ($2) ($3)',
+'searchhelp-url' => 'Help:Ajutor',
+'powersearch'    => 'kaută avansata',
 
 # Preferences page
 'mypreferences' => 'Maj prefirenţu',
@@ -220,7 +221,7 @@ $3',
 # Upload
 'upload' => 'trimiţe fişirul',
 
-# Image description page
+# File description page
 'filehist'            => 'Historia fişirulu',
 'filehist-current'    => 'kurentu',
 'filehist-datetime'   => 'Data/Temp',
@@ -258,9 +259,11 @@ $3',
 'watching'   => 'O klăaere...',
 'unwatching' => 'O deklăaere...',
 
-# Delete/protect/revert
+# Delete
 'deletedarticle' => 'delǎraj "[[$1]]"',
-'rollbacklink'   => 'revenire',
+
+# Rollback
+'rollbacklink' => 'revenire',
 
 # Namespace form on various pages
 'namespace'      => 'lSpaţi:',
@@ -276,7 +279,6 @@ $3',
 # What links here
 'whatlinkshere'       => 'Legǎtul a ce pažu',
 'whatlinkshere-title' => 'Paži legǎtulent a $1',
-'linklistsub'         => '(Lista de legătul)',
 'nolinkshere'         => "Paži ne legǎtent a '''[[:$1]]'''.",
 'istemplate'          => 'vikulabe',
 'whatlinkshere-links' => '← legătuls',

@@ -9,6 +9,8 @@
  * @author Si Gam Acèh
  */
 
+$fallback = 'id';
+
 $messages = array(
 # Dates
 'sun'           => 'Aleu',
@@ -183,6 +185,9 @@ Droëneuh geupeusaran keu neutamong sigra, lheuëh nyan neugantoë lageuëm rahs
 'passwordsent'            => 'Lageuëm rahsia barô ka geukirém u surat-e nyang geupeudapeuta keu "$1". Neutamong teuma lheuëh neuteurimong surat-e nyan.',
 'eauthentsent'            => 'Saboh surat èlèktronik keu peunyoë ka geukirém u alamat surat èlèktronik Droëneuh. Droëneuh beuneuseutöt préntah lam surat nyan keu neupeunyoë meunyo alamat nyan nakeuh beutôy atra Droëneuh. {{SITENAME}} h‘an geupeuudép surat Droëneuh meunyo langkah nyoë hana neupeulaku lom.',
 
+# Password reset dialog
+'retypenew' => 'Pasoë keulayi lageuëm rahsia barô:',
+
 # Edit page toolbar
 'bold_sample'     => 'Citak teubay naseukah nyoë',
 'bold_tip'        => 'Citak teubay',
@@ -247,20 +252,21 @@ Neutimang-timang dilèë peuë ék patôt neupeulanjut atra nyang teungoh neu’
 Nyoë pat nakeuh log seunampôh nibak ôn nyoë:",
 
 # History pages
-'viewpagelogs'        => 'Eu log ôn nyoë',
-'currentrev'          => 'Geunantoë jinoë',
-'revisionasof'        => 'Gantoë tiëp $1',
-'revision-info'       => 'Geunantoë tiëp $1; $2',
-'previousrevision'    => '←Geunantoë sigohlomjih',
-'nextrevision'        => 'Geunantoë lheuëh nyan→',
-'currentrevisionlink' => 'Geunantoë jinoë',
-'cur'                 => 'jin',
-'last'                => 'akhé',
-'page_first'          => 'phôn',
-'page_last'           => 'keuneulheuëh',
-'histlegend'          => "Piléh duwa teuneugön radiô, lheuëh nyan teugön teuneugön ''peubandéng'' keu peubandéng seunalén. Teugön saboh tanggay keu eu seunalén ôn bak tanggay nyan.<br />(skr) = bida ngön seunalén jinoë, (akhé) = bida ngön seunalén sigohlomjih. '''b''' = andam bacut, '''b''' = andam bot, → = andam bideuëng, ← = reuningkah keudroë",
-'histfirst'           => 'Paléng trép',
-'histlast'            => 'Paléng barô',
+'viewpagelogs'           => 'Eu log ôn nyoë',
+'currentrev'             => 'Geunantoë jinoë',
+'revisionasof'           => 'Gantoë tiëp $1',
+'revision-info'          => 'Geunantoë tiëp $1; $2', # Additionally available: $3: revision id
+'previousrevision'       => '←Geunantoë sigohlomjih',
+'nextrevision'           => 'Geunantoë lheuëh nyan→',
+'currentrevisionlink'    => 'Geunantoë jinoë',
+'cur'                    => 'jin',
+'last'                   => 'akhé',
+'page_first'             => 'phôn',
+'page_last'              => 'keuneulheuëh',
+'histlegend'             => "Piléh duwa teuneugön radiô, lheuëh nyan teugön teuneugön ''peubandéng'' keu peubandéng seunalén. Teugön saboh tanggay keu eu seunalén ôn bak tanggay nyan.<br />(skr) = bida ngön seunalén jinoë, (akhé) = bida ngön seunalén sigohlomjih. '''b''' = andam bacut, '''b''' = andam bot, → = andam bideuëng, ← = reuningkah keudroë",
+'history-fieldset-title' => 'Jeulajah riwayat away',
+'histfirst'              => 'Paléng trép',
+'histlast'               => 'Paléng barô',
 
 # Revision feed
 'history-feed-item-nocomment' => '$1 bak $2', # user at time
@@ -274,16 +280,16 @@ Nyoë pat nakeuh log seunampôh nibak ôn nyoë:",
 'diff-multi'              => '({{PLURAL:$1|Sa|$1}} geunantoë antara hana geupeuleumah.)',
 
 # Search results
-'noexactmatch' => "'''Hana ôn nyang nanjih ''$1''. ''' Droëneuh   jeuët [[:$1|peugèt ôn nyoë]].",
-'prevn'        => '$1 sigohlomjih',
-'nextn'        => '$1 lheuëh nyan',
-'viewprevnext' => 'Eu ($1)($2)($3)',
-'powersearch'  => 'Mita lanjut',
+'noexactmatch'   => "'''Hana ôn nyang nanjih ''$1''. ''' Droëneuh   jeuët [[:$1|peugèt ôn nyoë]].",
+'prevn'          => '$1 sigohlomjih',
+'nextn'          => '$1 lheuëh nyan',
+'viewprevnext'   => 'Eu ($1)($2)($3)',
+'searchhelp-url' => 'Help:Asoë',
+'powersearch'    => 'Mita lanjut',
 
 # Preferences page
 'preferences'   => 'Geunalak',
 'mypreferences' => 'Geunalak lôn',
-'retypenew'     => 'Pasoë keulayi lageuëm rahsia barô:',
 
 'grouppage-sysop' => '{{ns:project}}:Nyang urôh',
 
@@ -324,10 +330,10 @@ Nyoë pat nakeuh log seunampôh nibak ôn nyoë:",
 'uploadlogpage' => 'Log peutamong',
 'uploadedimage' => 'peutamong "[[$1]]"',
 
-# Special:ImageList
+# Special:FileList
 'imagelist' => 'Dapeuta beureukah',
 
-# Image description page
+# File description page
 'filehist'                  => 'Riwayat beureukah',
 'filehist-help'             => 'Teugon bak tanggay/watèë keu eu beureukah nyoë ‘oh watèë nyan.',
 'filehist-current'          => 'jinoë hat',
@@ -430,39 +436,41 @@ Nyoë pat nakeuh log seunampôh nibak ôn nyoë:",
 'emailuser' => 'Surat-e nyang nguy',
 
 # Watchlist
-'watchlist'            => 'Dapeuta keunalön lôn',
-'mywatchlist'          => 'Keunalön lôn',
-'watchlistfor'         => "(keu '''$1''')",
-'addedwatch'           => 'Ka geupeutamah u dapeuta kalön',
-'addedwatchtext'       => "Ôn \"[[:\$1]]\" ka geupeutamah u [[Special:Watchlist|dapeuta keunalön]] Droëneuh. Neu’ubah-neu’ubah bak masa u keuë bak ôn nyan ngön bak ôn peugah habajih, euntreuk leumah nyoë pat. Ôn nyan euntreuk geupeuleumah ''teubay'' bak [[Special:RecentChanges|dapeuta neu’ubah paléng barô]] mangat leubèh mudah leumah.",
-'removedwatch'         => 'Ka geusampôh nibak dapeuta keunalön',
-'removedwatchtext'     => 'Ôn "<nowiki>$1</nowiki>" ka geusampôh bak dapeuta kalön.',
-'watch'                => 'Kalön',
-'watchthispage'        => 'Kalön ôn nyoë',
-'unwatch'              => 'Bateuë kalön',
-'watchlist-details'    => '{{PLURAL:$1|$1 ôn|$1 ôn}} geukalön, hana kira ôn peugah haba.',
-'wlshowlast'           => 'Peuleumah $1 jeum $2 uroë $3 keuneulheuëh',
-'watchlist-hide-bots'  => 'Peusom andam bot',
-'watchlist-hide-own'   => 'Peusom andam lôn',
-'watchlist-hide-minor' => 'Peusom andam bacut',
+'watchlist'         => 'Dapeuta keunalön lôn',
+'mywatchlist'       => 'Keunalön lôn',
+'watchlistfor'      => "(keu '''$1''')",
+'addedwatch'        => 'Ka geupeutamah u dapeuta kalön',
+'addedwatchtext'    => "Ôn \"[[:\$1]]\" ka geupeutamah u [[Special:Watchlist|dapeuta keunalön]] Droëneuh. Neu’ubah-neu’ubah bak masa u keuë bak ôn nyan ngön bak ôn peugah habajih, euntreuk leumah nyoë pat. Ôn nyan euntreuk geupeuleumah ''teubay'' bak [[Special:RecentChanges|dapeuta neu’ubah paléng barô]] mangat leubèh mudah leumah.",
+'removedwatch'      => 'Ka geusampôh nibak dapeuta keunalön',
+'removedwatchtext'  => 'Ôn "<nowiki>$1</nowiki>" ka geusampôh bak dapeuta kalön.',
+'watch'             => 'Kalön',
+'watchthispage'     => 'Kalön ôn nyoë',
+'unwatch'           => 'Bateuë kalön',
+'watchlist-details' => '{{PLURAL:$1|$1 ôn|$1 ôn}} geukalön, hana kira ôn peugah haba.',
+'wlshowlast'        => 'Peuleumah $1 jeum $2 uroë $3 keuneulheuëh',
 
 # Displayed when you click the "watch" button and it is in the process of watching
 'watching'   => 'Kalön...',
 'unwatching' => 'Hana kalön...',
 
-# Delete/protect/revert
-'deletepage'                  => 'Sampôh ôn',
-'historywarning'              => 'Ingat: Ôn nyang hawa neusampôh na riwayat:',
-'confirmdeletetext'           => 'Droëneuh neuk neusampôh ôn atawa beureukah nyoë keu sabé. Meunan cit ban mandum riwayatjih nibak basis data. Neupeupaseuti meunyo Droëneuh cit keubiët meung neusampôh, neutupeuë ban mandum akébatjih, ngön peuë nyang neupeulaku nyoë nakeuh meunurôt [[{{MediaWiki:Policy-url}}|kebijakan{{SITENAME}}]].',
-'actioncomplete'              => 'Proses seuleusoë',
-'deletedtext'                 => '"<nowiki>$1</nowiki>" ka geusampôh. Eu $2 keu log paléng barô bak ôn nyang ka geusampôh.',
-'deletedarticle'              => 'sampôh "[[$1]]"',
-'dellogpage'                  => 'Log seunampoh',
-'deletecomment'               => 'Choë sampôh',
-'deleteotherreason'           => 'Nyang la’én/choë la’én:',
-'deletereasonotherlist'       => 'Choë la’én',
-'rollbacklink'                => 'pulang',
+# Delete
+'deletepage'            => 'Sampôh ôn',
+'historywarning'        => 'Ingat: Ôn nyang hawa neusampôh na riwayat:',
+'confirmdeletetext'     => 'Droëneuh neuk neusampôh ôn atawa beureukah nyoë keu sabé. Meunan cit ban mandum riwayatjih nibak basis data. Neupeupaseuti meunyo Droëneuh cit keubiët meung neusampôh, neutupeuë ban mandum akébatjih, ngön peuë nyang neupeulaku nyoë nakeuh meunurôt [[{{MediaWiki:Policy-url}}|kebijakan{{SITENAME}}]].',
+'actioncomplete'        => 'Proses seuleusoë',
+'deletedtext'           => '"<nowiki>$1</nowiki>" ka geusampôh. Eu $2 keu log paléng barô bak ôn nyang ka geusampôh.',
+'deletedarticle'        => 'sampôh "[[$1]]"',
+'dellogpage'            => 'Log seunampoh',
+'deletecomment'         => 'Choë sampôh',
+'deleteotherreason'     => 'Nyang la’én/choë la’én:',
+'deletereasonotherlist' => 'Choë la’én',
+
+# Rollback
+'rollbacklink' => 'pulang',
+
+# Protect
 'protectlogpage'              => 'Log lindông',
+'prot_1movedto2'              => 'peupinah [[$1]] u [[$2]]',
 'protectcomment'              => 'Bri peunapat:',
 'protectexpiry'               => 'Maté tanggay:',
 'protect_expiry_invalid'      => 'Watèë maté tanggay hana sah.',
@@ -480,6 +488,7 @@ Droëneuh jeuët neugantoë tingkat lindông keu ôn nyoë, tapi nyan hana peung
 'protect-expiring'            => 'maté tanggay $1 (UTC)',
 'protect-cascade'             => 'Peulindông ban mandum ôn nyang rôh lam ôn nyoë (lindông meuturôt).',
 'protect-cantedit'            => 'Droëneuh h‘an jeuët neu’ubah tingkat lindông ôn nyoë kareuna Droëneuh hana hak keu neupeulaku nyan.',
+'protect-expiry-options'      => '2 jeum:2 hours,1 uroë:1 day,3 uroë:3 days,1 minggu:1 week,2 minggu:2 weeks,1 buleuën:1 month,3 buleuën:3 months,6 buleuën:6 months,1 thôn:1 year,sabé:infinite', # display1:time1,display2:time2,...
 'restriction-type'            => 'Lindông:',
 'restriction-level'           => 'Tingkat:',
 
@@ -620,7 +629,7 @@ Droëneuh cuman jeuët neu’eu nèjih.',
 'show-big-image'       => 'Resolusi peunoh',
 'show-big-image-thumb' => '<small>Rayek atra nyoë: $1 x $2 piksel</small>',
 
-# Special:NewImages
+# Special:NewFiles
 'newimages' => 'Beureukah barô',
 
 # Bad image list

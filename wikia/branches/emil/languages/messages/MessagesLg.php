@@ -204,6 +204,11 @@ olwa 'yogera nange' nga ggwe tewetaaze kulaga bikufaako.",
 'accountcreated'             => 'Akawunti ekoleddwa',
 'accountcreatedtext'         => "Akawunti ey'obwa memba eya $1 ekoleddwa.",
 
+# Password reset dialog
+'oldpassword' => 'Ekigambo ekikuumi ekikadde:',
+'newpassword' => 'Ekigambo ekikuumi ekipya:',
+'retypenew'   => 'Ddamu ekikagambo ekikuumi ekipya ekyo:',
+
 # Edit page toolbar
 'bold_sample'     => "Ennukuta z'owandiika wano zonna ziba nziggumivu",
 'bold_tip'        => "Bw'onyiga kano, ofuna w'oyinza okuwandiikira ennukuta ezo ne zivaamu nga nziggumivu",
@@ -298,20 +303,18 @@ oba ku gano agali ku lupapula luno.<br />
 'editundo'                => 'julula enkyukakyuka',
 
 # Search results
-'noexactmatch' => "'''Tewali lupapula lwa \"\$1\".''' Ob'oyagala, [[:\$1|olupapula olwo gwe osobola okulukolawo]].",
-'prevn'        => '$1 ezikulembedde zino',
-'nextn'        => '$1 eziddako',
-'viewprevnext' => 'Laga ($1) ($2) ($3).',
-'powersearch'  => 'Noonya',
+'noexactmatch'   => "'''Tewali lupapula lwa \"\$1\".''' Ob'oyagala, [[:\$1|olupapula olwo gwe osobola okulukolawo]].",
+'prevn'          => '$1 ezikulembedde zino',
+'nextn'          => '$1 eziddako',
+'viewprevnext'   => 'Laga ($1) ($2) ($3).',
+'searchhelp-url' => 'Help:Endagiriro',
+'powersearch'    => 'Noonya',
 
 # Preferences page
 'mypreferences'     => 'Enteekateeka yange',
 'prefs-personal'    => 'Ebikufaako',
 'saveprefs'         => 'Bino bikaze',
 'resetprefs'        => 'Gyawo enkyukakyuka ze sinnakaza',
-'oldpassword'       => 'Ekigambo ekikuumi ekikadde:',
-'newpassword'       => 'Ekigambo ekikuumi ekipya:',
-'retypenew'         => 'Ddamu ekikagambo ekikuumi ekipya ekyo:',
 'searchresultshead' => 'Noonya',
 'savedprefs'        => 'Enteekateeka yo ekazidwa.',
 'allowemail'        => 'Kkiriza bamemba abalala okukusindikira e-mail',
@@ -346,10 +349,10 @@ oba ku gano agali ku lupapula luno.<br />
 'upload'        => 'Teekayo fayiro',
 'uploadlogpage' => 'Likooda eya fayiro eziteekedwa ku wiki',
 
-# Special:ImageList
+# Special:FileList
 'imagelist_user' => 'Memba',
 
-# Image description page
+# File description page
 'filehist'            => 'Ebyafaayo ebya fayiro eno',
 'filehist-help'       => "Bw'onyiga ku nnaku n'essaawa, ojjakulaba fayiro nga bwe yali efaanana ku kiseera ekyo.",
 'filehist-datetime'   => "Ennaku n'obudde",
@@ -411,11 +414,14 @@ Bw\'oba oyagala okulekerawo okulugoberera, nyiga ku kigambo "Suula" awo ku bbali
 'watching'   => 'Kikolebwako...',
 'unwatching' => 'Kikolebwako...',
 
-# Delete/protect/revert
+# Delete
 'confirm'        => 'Kakasa',
 'actioncomplete' => 'Kiwedde',
 'deletedarticle' => 'olupapula olwa "[[$1]]" lugyidwawo',
 'dellogpage'     => 'Ebigyidwawo',
+
+# Protect
+'protect-expiry-options' => 'saawa 2:2 hours,lunaku 1:1 day,nnaku 3:3 days,sande 1:1 week,sande 2:2 weeks,mwezi 1:1 month,myezi 3:3 months,myezi 6:6 months,mwaka 1:1 year,okutali kkomo:infinite', # display1:time1,display2:time2,...
 
 # Restrictions (nouns)
 'restriction-edit' => 'Kyuusa',
@@ -439,7 +445,6 @@ Bw\'oba oyagala okulekerawo okulugoberera, nyiga ku kigambo "Suula" awo ku bbali
 # What links here
 'whatlinkshere'       => 'Empapula ezikuggusa ku luno',
 'whatlinkshere-title' => 'Empapula eziriko enyunzi ezigguka ku $1',
-'linklistsub'         => "(Olukalala olw'empapula eziriko enyunzi ezigguka wano)",
 'linkshere'           => "Zino z'empapula eziriko enyunzi ezigguka ku '''[[:$1]]''':",
 'nolinkshere'         => "Tewali mpapula eziriko enyunzi ezigguka ku '''[[:$1]]'''.",
 'whatlinkshere-prev'  => '{{PLURAL:$1|olukulembera|$1 ezikulembera}}',

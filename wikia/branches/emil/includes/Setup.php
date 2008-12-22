@@ -22,7 +22,7 @@ $fname = 'Setup.php';
 wfProfileIn( $fname );
 
 // Check to see if we are at the file scope
-if ( !isset( $wgVersion ) ) {
+if( !isset( $wgVersion ) ) {
 	echo "Error, Setup.php must be included from the file scope, after DefaultSettings.php\n";
 	die( 1 );
 }
@@ -33,9 +33,9 @@ if( $wgRedirectScript === false ) $wgRedirectScript = "$wgScriptPath/redirect$wg
 
 if( $wgArticlePath === false ) {
 	if( $wgUsePathInfo ) {
-		$wgArticlePath      = "$wgScript/$1";
+		$wgArticlePath = "$wgScript/$1";
 	} else {
-		$wgArticlePath      = "$wgScript?title=$1";
+		$wgArticlePath = "$wgScript?title=$1";
 	}
 }
 
@@ -54,14 +54,31 @@ if( $wgTmpDirectory === false ) $wgTmpDirectory = "{$wgUploadDirectory}/tmp";
 if( $wgReadOnlyFile === false ) $wgReadOnlyFile = "{$wgUploadDirectory}/lock_yBgMBwiR";
 if( $wgFileCacheDirectory === false ) $wgFileCacheDirectory = "{$wgUploadDirectory}/cache";
 
-if ( empty( $wgFileStore['deleted']['directory'] ) ) {
+if( empty( $wgFileStore['deleted']['directory'] ) ) {
 	$wgFileStore['deleted']['directory'] = "{$wgUploadDirectory}/deleted";
 }
 
 /**
+ * Unconditional protection for NS_MEDIAWIKI since otherwise it's too easy for a 
+ * sysadmin to set $wgNamespaceProtection incorrectly and leave the wiki insecure. 
+ *
+ * Note that this is the definition of editinterface and it can be granted to 
+ * all users if desired.
+ */
+$wgNamespaceProtection[NS_MEDIAWIKI] = 'editinterface';
+
+/**
+ * The canonical names of namespaces 6 and 7 are, as of v1.14, "File"
+ * and "File_talk".  The old names "Image" and "Image_talk" are
+ * retained as aliases for backwards compatibility.
+ */
+$wgNamespaceAliases['Image'] = NS_FILE;
+$wgNamespaceAliases['Image_talk'] = NS_FILE_TALK;
+
+/**
  * Initialise $wgLocalFileRepo from backwards-compatible settings
  */
-if ( !$wgLocalFileRepo ) {
+if( !$wgLocalFileRepo ) {
 	$wgLocalFileRepo = array(
 		'class' => 'LocalRepo',
 		'name' => 'local',
@@ -78,8 +95,8 @@ if ( !$wgLocalFileRepo ) {
 /**
  * Initialise shared repo from backwards-compatible settings
  */
-if ( $wgUseSharedUploads ) {
-	if ( $wgSharedUploadDBname ) {
+if( $wgUseSharedUploads ) {
+	if( $wgSharedUploadDBname ) {
 		$wgForeignFileRepos[] = array(
 			'class' => 'ForeignDBRepo',
 			'name' => 'shared',
@@ -113,9 +130,7 @@ if ( $wgUseSharedUploads ) {
 		);
 	}
 }
-if ( !class_exists( 'AutoLoader' ) ) {
-	require_once( "$IP/includes/AutoLoader.php" );
-}
+require_once( "$IP/includes/AutoLoader.php" );
 
 wfProfileIn( $fname.'-exception' );
 require_once( "$IP/includes/Exception.php" );
@@ -137,17 +152,11 @@ wfProfileIn( $fname.'-misc1' );
 $wgIP = false; # Load on demand
 # Can't stub this one, it sets up $_GET and $_REQUEST in its constructor
 $wgRequest = new WebRequest;
-if ( function_exists( 'posix_uname' ) ) {
-	$wguname = posix_uname();
-	$wgNodeName = $wguname['nodename'];
-} else {
-	$wgNodeName = '';
-}
 
 # Useful debug output
-if ( $wgCommandLineMode ) {
+if( $wgCommandLineMode ) {
 	wfDebug( "\n\nStart command line script $self\n" );
-} elseif ( function_exists( 'getallheaders' ) ) {
+} elseif( function_exists( 'getallheaders' ) ) {
 	wfDebug( "\n\nStart request\n" );
 	wfDebug( $_SERVER['REQUEST_METHOD'] . ' ' . $_SERVER['REQUEST_URI'] . "\n" );
 	$headers = getallheaders();
@@ -172,13 +181,13 @@ if( $wgRCFilterByAge ) {
 	}
 }
 
-if ( $wgSkipSkin ) {
+if( $wgSkipSkin ) {
 	$wgSkipSkins[] = $wgSkipSkin;
 }
 
 $wgUseEnotif = $wgEnotifUserTalk || $wgEnotifWatchlist;
 
-if($wgMetaNamespace === FALSE) {
+if( $wgMetaNamespace === FALSE ) {
 	$wgMetaNamespace = str_replace( ' ', '_', $wgSitename );
 }
 
@@ -198,15 +207,19 @@ wfDebug( 'Main cache: ' . get_class( $wgMemc ) .
 	"\nParser cache: " . get_class( $parserMemc ) . "\n" );
 
 wfProfileOut( $fname.'-memcached' );
+
+## Most of the config is out, some might want to run hooks here.
+wfRunHooks( 'SetupAfterCache' );
+
 wfProfileIn( $fname.'-SetupSession' );
 
 # Set default shared prefix
 if( $wgSharedPrefix === false ) $wgSharedPrefix = $wgDBprefix;
 
 if( !$wgCookiePrefix ) {
-	if ( in_array('user', $wgSharedTables) && $wgSharedDB && $wgSharedPrefix ) {
+	if ( $wgSharedDB && $wgSharedPrefix && in_array('user',$wgSharedTables) ) {
 		$wgCookiePrefix = $wgSharedDB . '_' . $wgSharedPrefix;
-	} elseif ( in_array('user', $wgSharedTables) && $wgSharedDB ) {
+	} elseif ( $wgSharedDB && in_array('user',$wgSharedTables) ) {
 		$wgCookiePrefix = $wgSharedDB;
 	} elseif ( $wgDBprefix ) {
 		$wgCookiePrefix = $wgDBname . '_' . $wgDBprefix;
@@ -221,7 +234,7 @@ $wgCookiePrefix = strtr($wgCookiePrefix, "=,; +.\"'\\[", "__________");
 if( !wfIniGetBool( 'session.auto_start' ) )
 	session_name( $wgSessionName ? $wgSessionName : $wgCookiePrefix . '_session' );
 
-if( !$wgCommandLineMode && ( $wgRequest->checkSessionCookie() || isset( $_COOKIE[$wgCookiePrefix.'Token'] ) ) ) {
+if( !$wgCommandLineMode && ( $wgRequest->checkSessionCookie() || isset($_COOKIE[$wgCookiePrefix.'Token']) ) ) {
 	wfIncrStats( 'request_with_session' );
 	wfSetupSession();
 	$wgSessionStarted = true;
@@ -253,7 +266,7 @@ wfProfileIn( $fname.'-User' );
 # Entries can be added to this variable during the inclusion
 # of the extension file. Skins can then perform any necessary initialisation.
 #
-foreach ( $wgSkinExtensionFunctions as $func ) {
+foreach( $wgSkinExtensionFunctions as $func ) {
 	call_user_func( $func );
 }
 
@@ -269,9 +282,8 @@ wfProfileIn( $fname.'-misc2' );
 $wgDeferredUpdateList = array();
 $wgPostCommitUpdateList = array();
 
-if ( $wgAjaxSearch ) $wgAjaxExportList[] = 'wfSajaxSearch';
-if ( $wgAjaxWatch ) $wgAjaxExportList[] = 'wfAjaxWatch';
-if ( $wgAjaxUploadDestCheck ) $wgAjaxExportList[] = 'UploadForm::ajaxGetExistsWarning';
+if( $wgAjaxWatch ) $wgAjaxExportList[] = 'wfAjaxWatch';
+if( $wgAjaxUploadDestCheck ) $wgAjaxExportList[] = 'UploadForm::ajaxGetExistsWarning';
 if( $wgAjaxLicensePreview )
 	$wgAjaxExportList[] = 'UploadForm::ajaxGetLicensePreview';
 
@@ -286,7 +298,7 @@ wfProfileIn( $fname.'-extensions' );
 # Entries should be added to this variable during the inclusion
 # of the extension file. This allows the extension to perform
 # any necessary initialisation in the fully initialised environment
-foreach ( $wgExtensionFunctions as $func ) {
+foreach( $wgExtensionFunctions as $func ) {
 	$profName = $fname.'-extensions-'.strval( $func );
 	wfProfileIn( $profName );
 	call_user_func( $func );
@@ -299,6 +311,16 @@ wfRunHooks( 'LogPageLogName', array( &$wgLogNames ) );
 wfRunHooks( 'LogPageLogHeader', array( &$wgLogHeaders ) );
 wfRunHooks( 'LogPageActionText', array( &$wgLogActions ) );
 
+if( !empty($wgNewUserLog) ) {
+	# Add a new log type
+	$wgLogTypes[]                        = 'newusers';
+	$wgLogNames['newusers']              = 'newuserlogpage';
+	$wgLogHeaders['newusers']            = 'newuserlogpagetext';
+	$wgLogActions['newusers/newusers']   = 'newuserlogentry'; // For compatibility with older log entries
+	$wgLogActions['newusers/create']     = 'newuserlog-create-entry';
+	$wgLogActions['newusers/create2']    = 'newuserlog-create2-entry';
+	$wgLogActions['newusers/autocreate'] = 'newuserlog-autocreate-entry';
+}
 
 wfDebug( "Fully initialised\n" );
 $wgFullyInitialised = true;
