@@ -62,8 +62,8 @@ function wfJSPager(total,link,page,limit,func) {
 
 	var selectStyle = "font-size:8.5pt;font-weight:normal;";
 	var tdStyle = "";
-	var tableStyle = "font-size:8.5pt;font-weight:normal;";
-	var linkStyle = "";
+	var tableStyle = "font-size:8.5pt;font-weight:normal;margin:5px;";
+	var linkStyle = "background-color:#FFFFFF;border:1px solid #CBCBCB;padding:2px 6px;";
 
 	limit = typeof(limit) != 'undefined' ?limit : 20;
 	page = typeof(page) != 'undefined' ? page : 0;
@@ -78,15 +78,8 @@ function wfJSPager(total,link,page,limit,func) {
 	var i = 0;
 	var to = 0;
 
-	var paramNbr = wfJSPager.arguments.length;
-	var func_param = "";
-	for (n = 5; n < paramNbr; n++) {
-		func_param += "'" + wfJSPager.arguments[n] + "'";
-		if (n < (paramNbr-1)) func_param += ",";
-	}
-
 	var nbr_result = "<select id=\"wcLUselect\" style=\"" + selectStyle + "\" ";
-	nbr_result += __makeClickFunc("onChange", func, func_param, "this.value", 0);
+	nbr_result += __makeClickFunc("onChange", func, "this.value", 0);
 	for (k = 0; k <= 9; k++) {
 		selected = (limit == (5*(parseInt(k)+1))) ? "selected" : "";
 		nbr_result += "<option " + selected + " value=\""+(5*(parseInt(k)+1))+"\">" + (5*(parseInt(k)+1)) + "</option>";
@@ -100,7 +93,7 @@ function wfJSPager(total,link,page,limit,func) {
 
 	if (page_count > 1) {
 		if (page != 0) {
-			pager += "<a style=\"" + linkStyle + "\" " + __makeClickFunc("onclick", func, func_param, limit, (parseInt(page)-1));
+			pager += "<a style=\"" + linkStyle + "\" " + __makeClickFunc("onclick", func, limit, (parseInt(page)-1));
 			pager += "href=\"" + link + "&page=" + (parseInt(page)-1) + "\">" + lL_ARROW + " " + lPREVIOUS + "</a>&nbsp;&nbsp;";
 		}
 
@@ -111,12 +104,12 @@ function wfJSPager(total,link,page,limit,func) {
 		}
 
 		if ( i > 0 ) {
-			pager += "<a style=\"" + linkStyle + "\" " + __makeClickFunc("onclick", func, func_param, limit, 0) + " href=\"" + link + "&page=0\">1</a>&nbsp;";
+			pager += "<a style=\"" + linkStyle + "\" " + __makeClickFunc("onclick", func, limit, 0) + " href=\"" + link + "&page=0\">1</a>&nbsp;";
 			if ( i != 1) pager += "&nbsp;...&nbsp;&nbsp;";
 		}
 
 		for (k = i; k < page; k++) {
-			pager += "<a style=\"" + linkStyle + "\" " + __makeClickFunc("onclick", func, func_param, limit, parseInt(k));
+			pager += "<a style=\"" + linkStyle + "\" " + __makeClickFunc("onclick", func, limit, parseInt(k));
 			pager += " href=\"" + link + "&page=" + parseInt(k) + "\">" + (parseInt(k)+1) + "</a>&nbsp;&nbsp;";
 		}
 
@@ -129,18 +122,18 @@ function wfJSPager(total,link,page,limit,func) {
 		}
 
 		for (i = parseInt(page)+1; i < to; i++) {
-			pager += "<a style=\"" + linkStyle + "\" " + __makeClickFunc("onclick", func, func_param, limit, parseInt(i));
+			pager += "<a style=\"" + linkStyle + "\" " + __makeClickFunc("onclick", func, limit, parseInt(i));
 			pager += " href=\"" + link + "&page=" + parseInt(i) + "\">" + (parseInt(i)+1) + "</a>&nbsp;&nbsp;";
 		}
 
 		if ( to < page_count ) {
 			if ( to != page_count-1 ) pager += "&nbsp;...&nbsp;&nbsp;";
-			pager += "<a style=\"" + linkStyle + "\" " + __makeClickFunc("onclick", func, func_param, limit, parseInt(page_count)-1);
+			pager += "<a style=\"" + linkStyle + "\" " + __makeClickFunc("onclick", func, limit, parseInt(page_count)-1);
 			pager += "href=\"" + link + "&page=" + (parseInt(page_count)-1) + "\">" + page_count + "</a>";
 		}
 
 		if ( (parseInt(page) + 1) != parseInt(page_count) ) {
-			pager += "&nbsp;&nbsp;<a style=\"" + linkStyle + "\" " + __makeClickFunc("onclick", func, func_param, limit, (parseInt(page)+1));
+			pager += "&nbsp;&nbsp;<a style=\"" + linkStyle + "\" " + __makeClickFunc("onclick", func, limit, (parseInt(page)+1));
 			pager += " href=\"" + link + "&page=" + (parseInt(page)+1) + "\">" + lNEXT + " " + lR_ARROW + "</a>";
 		}
 	} else {
@@ -175,7 +168,7 @@ function wkLUshowDetails(limit, offset)
 			if ( (!resData) || (resData['nbr_records'] == 0) ) {
 				records.innerHTML = "<div style=\"clear:both;border:1px dashed #D5DDF2;margin:0px 5px 0px 15px;padding:5px;\"><?=wfMsg('listusersnodata')?></div>";
 			} else { 
-				page = resData['offset'];
+				page = resData['page'];
 				limit = resData['limit'];
 				//
 				div_details.innerHTML = foundText.replace("CNT", resData['nbr_records']);
@@ -226,6 +219,8 @@ function wkLUshowDetails(limit, offset)
 		var params = "&rsargs[0]=" + target;
 		params += "&rsargs[1]=" + userText.value;
 		params += "&rsargs[2]=" + contributed.value;
+		params += "&rsargs[3]=" + limit;
+		params += "&rsargs[4]=" + offset;
 		//---
 		YAHOO.util.Event.preventDefault(e);
 		div_details.innerHTML="<img src=\"<?=$wgExtensionsPath?>/wikia/Listusers/images/ajax-loader-s.gif\" />";
@@ -256,7 +251,7 @@ YAHOO.util.Event.onDOMReady(function () {
 <? if ( !empty($groupList) && (!empty($aGroups)) ) { ?>
 	<? foreach ($aGroups as $groupName => $userGroupName) { ?>
 		<? $found += (in_array($groupName, $mGroup) && isset($groupList[$groupName])) ? $groupList[$groupName] : 0 ?>
-		<div style="margin:4px 10px">
+		<div style="margin:4px 5px">
 		<span style="vertical-align: middle"><input type="checkbox" name="lu_target" id="lu_target" value="<?=$groupName?>" "<?=(in_array($groupName, $mGroup))?"checked":""?>"></span>
 		<span style="vertical-align: middle"><strong><?=$wgContLang->ucfirst($userGroupName)?></strong> (<?= wfMsg('listuserscount', (isset($groupList[$groupName]))?$groupList[$groupName]:0 ) ?>)</span>
 		</div>

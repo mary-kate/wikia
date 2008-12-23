@@ -136,7 +136,7 @@ class ListUsers extends SpecialPage {
 			if (!is_null($dbs)) {
 				$aQuery = array();
 				if (!empty($aGroups) && is_array($aGroups)) {
-					$aQuery[] = "select '' as groupName, count(*) as cnt from `dataware`.`city_local_users` where lu_wikia_id = {$wgCityId} ";
+					$aQuery[] = "select '' as groupName, count(*) as cnt from `dataware`.`city_local_users` where lu_wikia_id = {$wgCityId} and lu_numgroups = 0 ";
 					foreach ($aGroups as $groupName => $userGroupName) {
 						$aQuery[] = "select '{$groupName}' as groupName, count(*) as cnt from `dataware`.`city_local_users` where lu_wikia_id = {$wgCityId} and lu_allgroups like '%{$groupName}%' group by groupName";
 					}
@@ -162,7 +162,7 @@ class ListUsers extends SpecialPage {
 	
 	private function getAllGroups() {
 		wfProfileIn( __METHOD__ );
-		$aResult = array('all' => wfMsg('listusersallusers'));
+		$aResult = array('all' => wfMsg('listusersnogroup'));
 		foreach( User::getAllGroups() as $group ) {
 			$aResult[$group] = User::getGroupName($group);
 		}
@@ -229,7 +229,7 @@ class ListUsers extends SpecialPage {
 					$oUser = User::newFromName($oRow->lu_user_name);
 					$__groups = explode(";", $oRow->lu_allgroups);
 					$sGroups = "<i>".wfMsg('listusers-nonegroup')."</i>";
-					if (!empty($__groups)) {
+					if ( !empty($__groups) && is_array($__groups) ) {
 						$sGroups = implode(", ", $__groups);
 					}
 					$aUsers['data'][$oRow->lu_user_id] = array(
@@ -329,13 +329,13 @@ class ListUsers extends SpecialPage {
 		
 		$result = array('nbr_records' => 0, 'limit' => $limit, 'page' => $page) ;
 		$aUsers = self::__getUsersFromDB($groups, $userSearch, $contrib, $limit, $page);
-		error_log ("aUsers = ".print_r($aUsers, true) . "\n", 3, "/tmp/moli.log");
 		
 		if (!empty($aUsers) && is_array($aUsers)) {
 			$result['nbr_records'] = (isset($aUsers['cnt'])) ? intval($aUsers['cnt']) : 0;
 			$result['data'] = (isset($aUsers['data'])) ? $aUsers['data'] : "";
 		}
 
+		error_log ("result = ".print_r($result, true) . "\n", 3, "/tmp/moli.log");
 /*        $oTmpl = new EasyTemplate( dirname( __FILE__ ) . "/templates/" );
         $oTmpl->set_vars( array(
             "aUsers"  		=> $aUsers,
