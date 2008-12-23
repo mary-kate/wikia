@@ -46,9 +46,6 @@ class ListUsers extends SpecialPage {
 		$wgOut->setArticleRelated( false );
 		$target = $wgRequest->getVal('target');
 
-		error_log ("subpage = ".print_r($subpage, true)." \n", 3, "/tmp/moli.log");
-		error_log ("target = ".print_r($target, true)." \n", 3, "/tmp/moli.log");
-
 		if (!empty($target)) { 
 			if ( strpos($target, ",") !== false )  {
 				$this->mGroup = explode(",", $target);
@@ -128,7 +125,6 @@ class ListUsers extends SpecialPage {
 		global $wgCityId;
         wfProfileIn( __METHOD__ );
 		$aResult = array();
-		error_log ("aGroups = ".print_r($aGroups, true)."\n", 3, "/tmp/moli.log");
 		$memkey = wfForeignMemcKey( $wgSharedDB, null, "getGroupList");
 		$cached = "";#$wgMemc->get($memkey);
 		if (!is_array ($cached)) { 
@@ -143,7 +139,6 @@ class ListUsers extends SpecialPage {
 				}
 				if (!empty($aQuery)) {
 					$query = implode(' union ', $aQuery);
-					error_log ("SQL: $query \n", 3, "/tmp/moli.log");
 					$res = $dbs->query ($query);
 					while ($row = $dbs->fetchObject($res)) {
 						$aResult[(empty($row->groupName)) ? "all" : $row->groupName] = $row->cnt;
@@ -209,7 +204,7 @@ class ListUsers extends SpecialPage {
 				}
 				
 				if (!empty($text)) {
-					$aWhere[] = " lu_username like '".$dbs->escapeLike($text)."%' ";
+					$aWhere[] = " lu_user_name like '".$dbs->escapeLike($text)."%' ";
 				}
 
 				if (!empty($contrib)) {
@@ -232,6 +227,14 @@ class ListUsers extends SpecialPage {
 					if ( !empty($__groups) && is_array($__groups) ) {
 						$sGroups = implode(", ", $__groups);
 					}
+					
+					$aLinks = array (
+						0 => $sk->makeLinkObj(Title::newFromText('Contributions', NS_SPECIAL), wfMsg('listuserscontribs'), "target={$oUser->getName()}"),
+						1 => $sk->makeLinkObj(Title::newFromText("Editcount/{$oUser->getName()}", NS_SPECIAL), wfMsg('listusersedits'), ""),
+						2 => $sk->makeLinkObj(Title::newFromText("BlockIP/{$oUser->getName()}", NS_SPECIAL), wfMsg('listusersblock')),
+						3 => $sk->makeLinkObj(Title::newFromText('UserRights', NS_SPECIAL), wfMsg('listusersrights'), "user={$oUser->getName()}"),
+					);
+					
 					$aUsers['data'][$oRow->lu_user_id] = array(
 						'user_id' 		=> $oRow->lu_user_id,
 						'user_name' 	=> $oRow->lu_user_name,
@@ -240,7 +243,7 @@ class ListUsers extends SpecialPage {
 						'groups' 		=> $sGroups,
 						'rev_cnt' 		=> $oRow->lu_rev_cnt,
 						'blcked'		=> $oRow->lu_blocked,
-						'contribs'		=> $sk->makeLinkObj(Title::newFromText('Contributions', NS_SPECIAL), wfMsg('listuserscontribs'), "target={$oUser->getName()}"),
+						'links'			=> implode(" - ", $aLinks),
 					);
 				}
 				$dbs->freeResult( $res );
@@ -305,7 +308,6 @@ class ListUsers extends SpecialPage {
 		global $wgContLang;
 		
         wfProfileIn( __METHOD__ );
-		error_log (	"ListUsers::axShowUsers ( $groups, $userSearch, $contrib )\n", 3, "/tmp/moli.log");
 
 		if (empty($wgUser)) { 
 			return false;
@@ -335,16 +337,8 @@ class ListUsers extends SpecialPage {
 			$result['data'] = (isset($aUsers['data'])) ? $aUsers['data'] : "";
 		}
 
-		error_log ("result = ".print_r($result, true) . "\n", 3, "/tmp/moli.log");
-/*        $oTmpl = new EasyTemplate( dirname( __FILE__ ) . "/templates/" );
-        $oTmpl->set_vars( array(
-            "aUsers"  		=> $aUsers,
-            "wgContLang" 	=> $wgContLang,
-            "skin"			=> $wgUser->getSkin()
-        ));
-        $result = $oTmpl->execute("users-list");
-		
-		error_log ("aUsers = ".print_r($aUsers, true) . "\n", 3, "/tmp/moli.log");*/
+		#error_log ("result = ".print_r($result, true) . "\n", 3, "/tmp/moli.log");
+
         wfProfileOut( __METHOD__ );
 
 		if (!function_exists('json_encode')) {
