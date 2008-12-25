@@ -526,36 +526,48 @@ Working::Daemon - Perl extension for blah blah blah
 =head1 SYNOPSIS
 
   use Working::Daemon;
-  blah blah blah
+  our $VERSION = 0.45;
+  my $daemon = Working::Daemon->new();
+  $daemon->name("testdaemon");
+  $daemon->standard("bool"      => "Test if you can set bools",
+                    "integer=i" => "Integer settings",
+                    "string=s"  => "String setting",
+                    "multi=s%"  => "Multiset variable");
+
+Or
+
+  use Working::Daemon;
+  our $VERSION = 0.45;
+  my $daemon = Working::Daemon->new();
+  $daemon->name("testdaemon");
+  $daemon->user("foo");
+  $daemon->parse_options("myoption" => "sets myoption!");
+  $daemon->do_action;
+
+  # only the worker continues to from here
+  $self->change_root;
+  $self->drop_privs;
+
+  # your app codefrom here
 
 =head1 DESCRIPTION
 
-Stub documentation for Working::Daemon, created by h2xs. It looks like the
-author of the extension was negligent enough to leave the stub
-unedited.
+This is a modular Daemon wrapper. It handles forking, master session, chroot
+pidfiles, and command line parsing.
 
-Blah blah blah.
+While it isn't perfect yet, it works better than any existing
+on CPAN. Notably it doesn't force itself on you unconditionally.
 
-=head2 EXPORT
+The commandline parsing uses Getopt::Long
 
-None by default.
-
-
+It also supports start,stop,status and restart. So you can symlink your
+daemon directly into init.d
 
 =head1 SEE ALSO
 
-Mention other useful documentation such as the documentation of
-related modules or operating system documentation (such as man pages
-in UNIX), or any relevant external documentation such as RFCs or
-standards.
-
-If you have a mailing list set up for your module, mention it here.
-
-If you have a web site set up for your module, mention it here.
-
 =head1 AUTHOR
 
-Artur Bergman, E<lt>cpan@crucially.net@E<gt>
+Artur Bergman, E<lt>sky+cpan@crucially.net@E<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
