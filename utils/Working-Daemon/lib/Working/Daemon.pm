@@ -92,6 +92,7 @@ sub show_help {
         }
     }
     $max_length += 4;
+    print STDERR "[start | stop | restart | status]\n";
     foreach my $command (@commands) {
         my $cmd = sprintf("  --%-${max_length}s", $command);
         my $desc = shift @desc;
@@ -203,7 +204,8 @@ sub action_start {
         $self->exit_error;
     }
     $self->log(0, 'info', "Starting '$name'");
-    $self->spawn_child;
+    $self->daemonize;
+    $self->spawn_worker_child;
 }
 
 sub spawn_worker_child {
@@ -221,7 +223,7 @@ sub spawn_worker_child {
         $self->log(1, 'info', "started master session $name - child is $pid");
         $SIG{INT} = sub { kill(2,$pid) };
         $0 = "$name - waiting for child $pid";
-        $self->wait_for_worker_child;
+        $self->wait_for_worker_child($pid);
         $self->log(1, 'info', "exiting master session $name - child is $pid");
 
         $self->cleanup_chroot;
@@ -238,44 +240,48 @@ sub wait_for_worker_child {
     waitpid($pid, 0);
 }
 
-sub restart {
+sub action_restart {
     my $self = shift;
     if ($self->is_running) {
-        $self->stop
+        $self->action_stop
     }
-    $self->start;
+    $self->action_start;
 }
 
-sub status {
+sub action_status {
     my $self = shift;
-    if ($self->is_running) {
-        $self->exit_success;
+    if (my $pid = $self->is_running) {
+        print STDERR $self->name . " is running on $pid\n";
+        return 0;
     } else {
-        $self->exit_error;
+        print STDERR $self->name . " is not running\n";
+        return 1;
     }
 }
 
-sub stop {
+sub action_stop {
     my $self = shift;
-    $self->stop if ($self->is_running);
-    $self->exit_success;
-}
-
-sub stop_old {
-    my $self = shift;
-    die;
-    if(my $pid = $self->get_pid()) {
-        while($self->check_pid($pid)) {
+    my $pid = $self->is_running;
+    if ($pid) {
+        while($self->is_running) {
             kill(2, $pid);
             $self->log(0, 'info', "sent SIGINT to $pid - waiting on stopped pid $pid");
             sleep 1;
         }
         $self->log(0, 'info',"Stopped " . $self->name . " on $pid");
-        return $pid;
+    } else {
+        $self->log(0, 'info', $self->name . " is not running");
     }
     return 0;
 }
 
+sub is_running {
+    my $self = shift;
+    my $pid = $self->get_pid;
+    return $pid
+        if($self->check_pid($pid));
+    return 0;
+}
 
 sub openlog {
 #        openlog("$config{name}", 'ndelay,pid', LOG_DAEMON) if($config{syslog});}
@@ -303,10 +309,14 @@ sub get_pid {
 sub check_pid {
     my $self = shift;
     my $pid  = shift;
+    return 0 unless $pid;
     my $grep = "/bin/grep";
     $grep = "/usr/bin/grep" if ($^O eq 'darwin');
     my $name = $self->name;
-    return !system("/bin/ps aux | $grep $pid | $grep -v grep | $grep $name");
+    my $rv = qx{/bin/ps ax | $grep $pid | $grep -v grep | $grep $name};
+    $rv =~s/\s+$//;
+    print STDERR "$rv\n";
+    return !$?;
 }
 
 
