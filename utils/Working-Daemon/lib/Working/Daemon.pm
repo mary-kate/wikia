@@ -58,7 +58,8 @@ sub do_action {
     my $action_method = "action_$action";
     $self->print_version if($self->options->{version});
     if($self->can($action_method)) {
-        $self->$action_method;
+        my $exit_value = $self->$action_method;
+        exit $exit_value unless ($action eq 'start');
     } else {
         print STDERR "Unknown command '$action'\n";
         $self->show_help;
