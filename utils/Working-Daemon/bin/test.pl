@@ -12,13 +12,14 @@ $daemon->parse_options("bool"      => "Test if you can set bools",
                        "string=s"  => "String setting",
                        "multi=s%"  => "Multiset variable");
 $daemon->chroot(0);
-$daemon->daemon(0);
+#$daemon->daemon(0);
 $daemon->user("sky");
 $daemon->group("sky");
 $daemon->name("testdaemon");
+
+$daemon->do_action();
 $daemon->change_root();
 $daemon->drop_privs();
 
-$daemon->do_action();
 sleep 10;
 1;
