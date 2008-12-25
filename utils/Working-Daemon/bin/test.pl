@@ -6,8 +6,11 @@ use warnings;
 use Working::Daemon;
 use Data::Dumper;
 my $daemon = Working::Daemon->new();
-
-$daemon->parse_options("bool","integer=i","string=s","multi=s%");
+our $VERSION = 0.45;
+$daemon->parse_options("bool"      => "Test if you can set bools",
+                       "integer=i" => "Integer settings",
+                       "string=s"  => "String setting",
+                       "multi=s%"  => "Multiset variable");
 $daemon->chroot(0);
 $daemon->daemon(0);
 $daemon->user("sky");
@@ -17,5 +20,5 @@ $daemon->change_root();
 $daemon->drop_privs();
 
 $daemon->do_action();
-
+sleep 10;
 1;
