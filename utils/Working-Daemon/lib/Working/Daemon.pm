@@ -9,6 +9,7 @@ use Getopt::Long;
 use Carp;
 
 our $VERSION = 0.29;
+our $SVN = 4677;
 our %config;
 
 #these are all default configs
@@ -521,7 +522,7 @@ __END__
 
 =head1 NAME
 
-Working::Daemon - Perl extension for blah blah blah
+Working::Daemon - Perl extension for turning your script inta daemon.
 
 =head1 SYNOPSIS
 
