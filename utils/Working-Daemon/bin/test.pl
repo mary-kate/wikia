@@ -2,12 +2,11 @@
 
 use strict;
 use warnings;
+use Data::Dumper;
 
 use Working::Daemon;
-use Data::Dumper;
-my $daemon = Working::Daemon->new();
 our $VERSION = 0.45;
-
+my $daemon = Working::Daemon->new();
 $daemon->name("testdaemon");
 $daemon->standard("bool"      => "Test if you can set bools",
                   "integer=i" => "Integer settings",
