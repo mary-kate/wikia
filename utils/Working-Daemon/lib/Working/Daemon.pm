@@ -121,9 +121,12 @@ sub parse_options {
     $self->options(\%options);
     $self->options_desc(\%option_keys);
     $self->assign_options(qw(user group name chroot foreground daemon pidfile));
+    $self->init();
     return \%options;
 
 }
+
+sub init {}
 
 sub print_version {
     my $self = shift;
