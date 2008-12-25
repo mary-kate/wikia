@@ -45,6 +45,14 @@ sub tmpdir {
 
 # end of config methods
 
+sub standard {
+    my $self = shift;
+    $self->parse_options(@_);
+    $self->do_action();
+    $self->change_root();
+    $self->drop_privs();
+}
+
 sub new {
     my $class = shift;
     my $self = bless {}, $class;
@@ -59,7 +67,7 @@ sub do_action {
     $self->print_version if($self->options->{version});
     if($self->can($action_method)) {
         my $exit_value = $self->$action_method;
-        exit $exit_value unless ($action eq 'start');
+        exit $exit_value unless ($action eq 'start' || $action eq 'restart');
     } else {
         print STDERR "Unknown command '$action'\n";
         $self->show_help;
