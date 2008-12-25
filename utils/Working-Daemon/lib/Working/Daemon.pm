@@ -8,7 +8,7 @@ use File::Copy;
 use Getopt::Long;
 use Carp;
 
-
+our $VERSION = 0.29;
 our %config;
 
 #these are all default configs
@@ -18,13 +18,24 @@ sub chroot_files { return ("/etc/protocols") }
 
 sub chroot_dirs { return ("/etc/") }
 
-sub default_options { return ("loglevel=i","daemon!","chroot!","foreground","user=s","group=s","pidfile=s") }
-
 sub default_action { return "start" }
 
 sub exit_success { exit(0) }
 
 sub exit_error { exit(1) }
+
+sub default_options { return (
+                          "help"       => "This help",
+                          "version"    => "Version number",
+                          "loglevel=i" =>"The higher the loglevel, the more detailed messages. Default to 0",
+                          "daemon!"    => "Set to --no-daemon if you don't want it to daemonize. Default is true",
+                          "chroot!"    => "Set to --no-chroot if you don't want it to chroot. Default is true",
+                          "foreground" => "Inverse of daemonize, default is off",
+                          "user=s"     => "User to run this app as. Default is 'nobody'",
+                          "group=s"    => "Group to run this app as. Default is 'nobody'",
+                          "pidfile=s"  => "Where to store the pidfile. Default is /var/run/\$name.pid",
+                          "name=s"     => "Name of this app") }
+
 
 sub tmpdir {
     my $self = shift;
@@ -44,19 +55,71 @@ sub new {
 sub do_action {
     my $self = shift;
     my $action = shift @ARGV || $self->default_action;
+    my $action_method = "action_$action";
+    $self->print_version if($self->options->{version});
+    if($self->can($action_method)) {
+        $self->$action_method;
+    } else {
+        print STDERR "Unknown command '$action'\n";
+        $self->show_help;
+    }
+}
 
-    $self->$action();
+sub show_help {
+    my $self = shift;
+    my %options_desc = %{$self->options_desc};
+    %options_desc = $self->default_options if (!%options_desc);
+    my $max_length = 0;
+    my @commands;
+    my @desc;
+    my @values;
+    foreach my $option (keys %options_desc) {
+        my $command = $option;
+        if($command =~s/\=(.)%?//g) {
+            $command .= "=str" if($1 eq 's');
+            $command .= "=int" if($1 eq 'i');
+        }
+        $command = "no-$command" if($command =~s/\!$//);
+        $max_length = length($command) if(length($command) > $max_length);
+        push @commands, $command;
+        push @desc, $options_desc{$option};
+        $option =~s/(\w+)/$1/;
+        my $raw_option = $1;
+        if ($self->can($raw_option)) {
+            push @values, $self->$raw_option;
+        } else {
+            push @values, ($self->options->{$raw_option}||"");
+        }
+    }
+    $max_length += 4;
+    foreach my $command (@commands) {
+        my $cmd = sprintf("  --%-${max_length}s", $command);
+        my $desc = shift @desc;
+        my $value = shift @values;
+        print STDERR "$cmd$desc: $value\n";
+    }
+    exit;
 }
 
 sub parse_options {
     my $self = shift;
-    my @args = @_;
+    my %args = @_;
+    my %default = $self->default_options;
+    my %option_keys = (%default, %args);
     my %options;
-    GetOptions(\%options, @args, $self->default_options);
+    GetOptions(\%options, keys %option_keys);
     $self->options(\%options);
+    $self->options_desc(\%option_keys);
     $self->assign_options(qw(user group name chroot foreground daemon pidfile));
     return \%options;
 
+}
+
+sub print_version {
+    my $self = shift;
+    my $name = $self->name;
+    my $version = $self->version;
+    print STDERR "$name $version (Working::Daemon: $VERSION)\n";
 }
 
 
@@ -80,13 +143,17 @@ sub change_root {
     chown($self->uid,$self->gid, $tmpdir)
         || croak("Cannot chown $tmpdir to (". $self->uid . ":". $self->gid . "): $!");
 
+    my $dirs  = $self->{__PACKAGE__}->{chroot_clean_dirs} = [];
+    my $files = $self->{__PACKAGE__}->{chroot_clean_files} = [];
 
     foreach my $dir ($self->chroot_dirs) {
+        push @$dirs, "$tmpdir/$dir";
         mkdir("$tmpdir/$dir")
             || croak "Cannot create $tmpdir/$dir: $!";
     }
 
     foreach my $file_to_copy ($self->chroot_files) {
+        push @$files, "$tmpdir/$file_to_copy";
         copy("$file_to_copy", "$tmpdir/$file_to_copy")
             || croak "Cannot copy $file_to_copy -> $tmpdir/$file_to_copy: $!";
     }
@@ -97,6 +164,14 @@ sub change_root {
         || croak ("Can't chdir to '/': $!");
 }
 
+sub version {
+    my $self = shift;
+    my $caller = caller(2);
+    no strict 'refs';
+    my $varname = "${caller}::VERSION";
+    my $version = $$varname;
+    return $version || "";
+}
 
 sub write_pidfile {
     my $self = shift;
@@ -120,7 +195,7 @@ sub cleanup_chroot {
 #    unlink($config{pidfile}) || die $!;
 }
 
-sub start {
+sub action_start {
     my $self = shift;
     my $name = $self->name;
     if(my $pid = $self->get_pid) {
@@ -128,9 +203,13 @@ sub start {
         $self->exit_error;
     }
     $self->log(0, 'info', "Starting '$name'");
+    $self->spawn_child;
+}
 
+sub spawn_worker_child {
+    my $self = shift;
     if(my $pid = fork()) {
-
+        my $name = $self->name;
         # this is the master session
         # it makes sure to cleanup from the slave
         # it stays as superuser
@@ -142,7 +221,7 @@ sub start {
         $self->log(1, 'info', "started master session $name - child is $pid");
         $SIG{INT} = sub { kill(2,$pid) };
         $0 = "$name - waiting for child $pid";
-        waitpid($pid, 0);
+        $self->wait_for_worker_child;
         $self->log(1, 'info', "exiting master session $name - child is $pid");
 
         $self->cleanup_chroot;
@@ -152,6 +231,11 @@ sub start {
     }
 
     return 1;
+}
+
+sub wait_for_worker_child {
+    my ($self, $pid) = @_;
+    waitpid($pid, 0);
 }
 
 sub restart {
@@ -384,6 +468,17 @@ sub options {
         return $self->{__PACKAGE__}->{options} = shift;
     } elsif (exists($self->{__PACKAGE__}->{options})) {
         return $self->{__PACKAGE__}->{options};
+    } else {
+        return {};
+    }
+}
+
+sub options_desc {
+    my $self = shift;
+    if (@_) {
+        return $self->{__PACKAGE__}->{options_desc} = shift;
+    } elsif (exists($self->{__PACKAGE__}->{options_desc})) {
+        return $self->{__PACKAGE__}->{options_desc};
     } else {
         return {};
     }
