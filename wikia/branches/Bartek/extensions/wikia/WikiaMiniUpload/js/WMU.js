@@ -150,7 +150,7 @@ function WMU_readjustSlider( value ) {
 			}
 			var fixed_width = Math.min( 400, WMU_width );
 			value = Math.max(2, Math.round( ( value * 200 ) / fixed_width ) );	
-			WMU_slider.setValue(value, true);		
+			$( 'ImageUploadSliderThumb' ).style.left = value + 'px';
 		}		
 }
 
