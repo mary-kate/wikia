@@ -134,14 +134,18 @@ function WMU_manualWidthInput( elem ) {
 		image.width = val;
 		WMU_thumbSize = [image.width, image.height];
 		$( 'ImageUploadManualWidth' ).value = val;
-
+		//WMU_readjustSlider( image.width );
 		WMU_shownMax = false;			
 	}
 }
 
 function WMU_readjustSlider( value ) {
-	value = Math.max(2, Math.round( ( value * 200 ) / WMU_width ) );	
-	WMU_slider.setValue(value, true);
+		if ( 400 < value ) { // too big, hide slider
+			$( 'ImageUploadSliderThumb' ).style.visibility = 'hidden';	
+		}
+
+		value = Math.max(2, Math.round( ( value * 200 ) / WMU_width ) );	
+		WMU_slider.setValue(value, true);
 }
 
 function WMU_show(e) {
