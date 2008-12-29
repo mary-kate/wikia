@@ -134,7 +134,7 @@ function WMU_manualWidthInput( elem ) {
 		image.width = val;
 		WMU_thumbSize = [image.width, image.height];
 		$( 'ImageUploadManualWidth' ).value = val;
-		//WMU_readjustSlider( image.width );
+		WMU_readjustSlider( val );
 		WMU_shownMax = false;			
 	}
 }
@@ -148,10 +148,10 @@ function WMU_readjustSlider( value ) {
 			if ( 'hidden' == $( 'ImageUploadSliderThumb' ).style.visibility ) {
 				$( 'ImageUploadSliderThumb' ).style.visibility = 'visible';				
 			}
-		}
-
-		value = Math.max(2, Math.round( ( value * 200 ) / WMU_width ) );	
-		WMU_slider.setValue(value, true);
+			var fixed_width = Math.min( 400, WMU_width );
+			value = Math.max(2, Math.round( ( value * 200 ) / fixed_width ) );	
+			WMU_slider.setValue(value, true);		
+		}		
 }
 
 function WMU_show(e) {
