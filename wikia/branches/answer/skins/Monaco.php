@@ -1291,6 +1291,7 @@ if ($wgOut->isArticle()){
 					if (ArticleAdLogic::isMainPage() || !$topAdCodeDisplayed){
 						echo $topAdCode;
 					}
+					wfRunHooks('MonacoBodyContentTop');
 					?>
 					<!-- start content -->
 					<?php $this->html('bodytext') ?>
