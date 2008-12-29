@@ -337,15 +337,15 @@ class ListUsers extends SpecialPage {
 			$result['data'] = (isset($aUsers['data'])) ? $aUsers['data'] : "";
 		}
 
-		#error_log ("result = ".print_r($result, true) . "\n", 3, "/tmp/moli.log");
-
         wfProfileOut( __METHOD__ );
 
+        $__json = "";
 		if (!function_exists('json_encode')) {
 			$oJson = new Services_JSON();
-			return $oJson->encode($result);
+			$__json = $oJson->encode($result);
 		} else {
-			return json_encode($result);
+			$__json = json_encode($result);
 		}
+		return $__json;
 	}
 }
