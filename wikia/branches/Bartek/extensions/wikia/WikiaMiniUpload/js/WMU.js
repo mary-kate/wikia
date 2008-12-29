@@ -139,6 +139,8 @@ function WMU_manualWidthInput( elem ) {
 }
 
 function WMU_readjustSlider( value ) {
+
+	// if value is larger than slider can show, then no can do, and the slider must go...
 	value = Math.max(2, Math.round( ( value * 200 ) / WMU_width ) );	
 	WMU_slider.setValue(value, true);
 }

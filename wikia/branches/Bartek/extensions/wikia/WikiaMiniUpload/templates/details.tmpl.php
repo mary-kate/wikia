@@ -55,7 +55,7 @@ if(isset($props['name'])) {
 if($props['file']->media_type == 'BITMAP' || $props['file']->media_type == 'DRAWING') {
 ?>
 <div style="position: absolute; z-index: 4; left: 0; width: 420px; height: 400px; background: #FFF; opacity: .9; filter: alpha(opacity=90);"></div>
-<div id="ImageUploadThumb" style="text-align: right; position: absolute; z-index: 3; right: 15px; height: <?= isset($props['name']) ? '255' : '370' ?>px;"><?= $props['file']->getThumbnail(min($props['file']->getWidth(), 400))->toHTML() ?></div>
+<div id="ImageUploadThumb" style="text-align: right; position: absolute; z-index: 3; right: 15px; height: <?= isset($props['name']) ? '255' : '370' ?>px;"><?= $props['file']->getThumbnail(min($props['file']->getWidth(), 1000))->toHTML() ?></div>
 <?php
 }
 echo '<div style="position: relative; z-index: 5;">';
