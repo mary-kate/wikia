@@ -141,7 +141,13 @@ function WMU_manualWidthInput( elem ) {
 
 function WMU_readjustSlider( value ) {
 		if ( 400 < value ) { // too big, hide slider
-			$( 'ImageUploadSliderThumb' ).style.visibility = 'hidden';	
+			if ( 'hidden' != $( 'ImageUploadSliderThumb' ).style.visibility ) {
+				$( 'ImageUploadSliderThumb' ).style.visibility = 'hidden';				
+			}
+		} else {
+			if ( 'hidden' == $( 'ImageUploadSliderThumb' ).style.visibility ) {
+				$( 'ImageUploadSliderThumb' ).style.visibility = 'visible';				
+			}
 		}
 
 		value = Math.max(2, Math.round( ( value * 200 ) / WMU_width ) );	
