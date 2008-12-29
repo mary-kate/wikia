@@ -124,6 +124,7 @@ function WMU_manualWidthInput( elem ) {
 			image.height = WMU_width / WMU_ratio;
 			WMU_thumbSize = [image.width, image.height];
 			$( 'ImageUploadManualWidth' ).value = image.width;
+			WMU_readjustSlider( image.width );
 			WMU_shownMax = true;
 			alert (wmu_max_thumb);
 		}
@@ -139,8 +140,6 @@ function WMU_manualWidthInput( elem ) {
 }
 
 function WMU_readjustSlider( value ) {
-
-	// if value is larger than slider can show, then no can do, and the slider must go...
 	value = Math.max(2, Math.round( ( value * 200 ) / WMU_width ) );	
 	WMU_slider.setValue(value, true);
 }
