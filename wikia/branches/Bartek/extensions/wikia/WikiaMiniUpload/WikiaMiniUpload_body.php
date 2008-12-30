@@ -231,7 +231,7 @@ class WikiaMiniUpload {
 		$name = $wgRequest->getVal('name');
 		$mwname = $wgRequest->getVal('mwname');
 		$extraId = $wgRequest->getVal('extraId');
-		$newFile =  false;
+		$newFile =  true;
 
 		if($name !== NULL) {
 			if($name == '') {
@@ -290,7 +290,7 @@ class WikiaMiniUpload {
 
 						$file_name->upload($file_mwname->getPath(), '', $caption);
 						$file_mwname->delete('');
-						$newFile = true;
+						$newFile = false;
 					} else if($type == 'existing') {
 						header('X-screen-type: existing');
 						$file = wfFindFile(Title::newFromText($name, 6));
