@@ -264,7 +264,10 @@ abstract class MediaHandler {
 				wfDebugLog( 'thumbnail',
 					sprintf( 'Removing bad %d-byte thumbnail "%s"',
 						$thumbstat['size'], $dstPath ) );
-				unlink( $dstPath );
+				error_log( sprintf( 'Removing bad %d-byte thumbnail "%s"',
+						$thumbstat['size'], $dstPath ) );
+				$result = unlink( $dstPath );
+				error_log(print_r(array('unlink' => $result), true));
 				return true;
 			}
 		}
