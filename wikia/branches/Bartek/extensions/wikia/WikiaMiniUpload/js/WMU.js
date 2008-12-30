@@ -143,6 +143,7 @@ function WMU_readjustSlider( value ) {
 		if ( 400 < value ) { // too big, hide slider
 			if ( 'hidden' != $( 'ImageUploadSliderThumb' ).style.visibility ) {
 				$( 'ImageUploadSliderThumb' ).style.visibility = 'hidden';				
+				WMU_slider.setValue( 200, true, true, true );
 			}
 		} else {
 			if ( 'hidden' == $( 'ImageUploadSliderThumb' ).style.visibility ) {
@@ -150,7 +151,7 @@ function WMU_readjustSlider( value ) {
 			}
 			var fixed_width = Math.min( 400, WMU_width );
 			value = Math.max(2, Math.round( ( value * 200 ) / fixed_width ) );	
-			$( 'ImageUploadSliderThumb' ).style.left = value + 'px';
+			WMU_slider.setValue( value, true, true, true );
 		}		
 }
 
@@ -477,6 +478,9 @@ function WMU_displayDetails(responseText) {
 			return Math.max(2, Math.round(this.getValue() * (thumbSize[0] / 200)));
 		}
 		WMU_slider.subscribe("change", function(offsetFromStart) {
+			if ( 'hidden' == $( 'ImageUploadSliderThumb' ).style.visibility ) {
+				$( 'ImageUploadSliderThumb' ).style.visibility = 'visible';				
+			}			
 			if (WMU_slider.initialRound) {
 				$('ImageUploadManualWidth').value = '';
 				WMU_slider.initialRound = false;	
