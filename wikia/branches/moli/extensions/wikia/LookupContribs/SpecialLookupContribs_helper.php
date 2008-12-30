@@ -126,7 +126,7 @@ class LookupContribsCore {
 		
 		return $userActivity;
 	}
-	
+
 	function checkUserActivityExternal($username) {
 		global $wgMemc, $wgSharedDB, $wgDBStats, $wgContLang;
 		$userActivity = array();
@@ -138,11 +138,11 @@ class LookupContribsCore {
 		$iUserId = $oUser->getId();
 		$memkey = wfForeignMemcKey( $wgSharedDB, null, "LookupContribs", "UserActivityExt", $iUserId );
 		$cached = $wgMemc->get($memkey);
-		if (!is_array ($cached) || LOOKUPCONTRIBS_NO_CACHE) { 
+		if (!is_array ($cached) || LOOKUPCONTRIBS_NO_CACHE) {
 			$dbext =& wfGetDBExt();
 			if (!is_null($dbext)) {
 				$query = "select rev_wikia_id, max(rev_timestamp) as max_activity, unix_timestamp(rev_timestamp) as max_timestamp ";
-				$query .= "from `dataware`.`blobs` where rev_user = ".intval($iUserId)." and rev_wikia_id > 0 ";
+				$query .= "from `dataware`.`blobs` where rev_user = ".intval($iUserId)." and rev_wikia_id > 0 and rev_user > 0 ";
 				//$query .= "and rev_status = 'active' and blob_text is not null ";
 				$query .= "group by rev_wikia_id";
 				$res = $dbext->query ($query);
@@ -151,16 +151,16 @@ class LookupContribsCore {
 				}
 				if (!empty($userActivity)) {
 					krsort($userActivity);
-				}				
+				}
 				$dbext->freeResult($res);
 				if (!LOOKUPCONTRIBS_NO_CACHE) {
 					$wgMemc->set( $memkey, $userActivity, 60*3 );
 				}
 			}
-		} else { 
+		} else {
 			$userActivity = $cached;
 		}
-		
+
 		return $userActivity;
 	}
 
