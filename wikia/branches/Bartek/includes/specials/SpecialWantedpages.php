@@ -47,9 +47,8 @@ class WantedPagesPage extends QueryPage {
 			 GROUP BY pl_namespace, pl_title
 			 HAVING COUNT(*) > $count";
 
-		wfRunHooks( 'WantedPages::getSQL', array( &$sql ) ); // wikia: Bartek
+		wfRunHooks( 'WantedPages::getSQL', array( &$this, &$sql ) ); // wikia: Bartek
 		return $sql;
-
 	}
 
 	/**
