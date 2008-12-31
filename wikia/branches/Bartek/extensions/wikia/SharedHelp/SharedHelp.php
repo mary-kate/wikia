@@ -23,6 +23,7 @@ $wgHooks['OutputPageBeforeHTML'][] = 'SharedHelpHook';
 $wgHooks['EditPage::showEditForm:initial'][] = 'SharedHelpEditPageHook';
 $wgHooks['SearchBeforeResults'][] = 'SharedHelpSearchHook';
 $wgHooks['BrokenLink'][] = 'SharedHelpBrokenLink';
+$wgHooks['WantedPages::getSQL'][] = 'SharedHelpWantedPagesSql';
 
 class SharedHttp extends Http {
 
@@ -250,6 +251,33 @@ function SharedHelpBrokenLink( $linker, $nt, $query, $u, $style, $prefix, $text,
 		$u = str_replace( "?action=edit&amp;redlink=1&amp;", "?", $u );
 		$u = str_replace( "?action=edit&amp;redlink=1", "", $u );	
 	}
+	return true;
+}
+
+function SharedHelpWantedPagesSql( $sql ) {
+	global $wgWantedPagesThreshold;
+	$count = $wgWantedPagesThreshold - 1;
+	$dbr = wfGetDB( DB_SLAVE );
+	$pagelinks = $dbr->tableName( 'pagelinks' );
+	$page      = $dbr->tableName( 'page' );
+
+	// todo actually modify the query here
+	$sql =   "SELECT 'Wantedpages' AS type,
+		pl_namespace AS namespace,
+		pl_title AS title,
+		COUNT(*) AS value
+			FROM $pagelinks
+			LEFT JOIN $page AS pg1
+			ON pl_namespace = pg1.page_namespace AND pl_title = pg1.page_title
+			LEFT JOIN $page AS pg2
+			ON pl_from = pg2.page_id
+			WHERE pg1.page_namespace IS NULL
+			AND pl_namespace NOT IN ( 2, 3 )
+			AND pg2.page_namespace != 8
+			$this->excludetitles
+			GROUP BY pl_namespace, pl_title
+			HAVING COUNT(*) > $count";
+
 	return true;
 }
 
