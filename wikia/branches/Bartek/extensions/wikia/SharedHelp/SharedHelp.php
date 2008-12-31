@@ -254,7 +254,7 @@ function SharedHelpBrokenLink( $linker, $nt, $query, $u, $style, $prefix, $text,
 	return true;
 }
 
-function SharedHelpWantedPagesSql( $sql ) {
+function SharedHelpWantedPagesSql( $page, $sql ) {
 	global $wgWantedPagesThreshold;
 	$count = $wgWantedPagesThreshold - 1;
 	$dbr = wfGetDB( DB_SLAVE );
@@ -274,7 +274,7 @@ function SharedHelpWantedPagesSql( $sql ) {
 			WHERE pg1.page_namespace IS NULL
 			AND pl_namespace NOT IN ( 2, 3 )
 			AND pg2.page_namespace != 8
-			$this->excludetitles
+			$page->excludetitles
 			GROUP BY pl_namespace, pl_title
 			HAVING COUNT(*) > $count";
 
