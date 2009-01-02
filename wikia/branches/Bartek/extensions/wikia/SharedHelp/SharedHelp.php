@@ -255,20 +255,20 @@ function SharedHelpBrokenLink( $linker, $nt, $query, $u, $style, $prefix, $text,
 }
 
 function SharedHelpWantedPagesSql( $page, $sql ) {
-	global $wgWantedPagesThreshold, $wgHelpWikiId;
+	global $wgWantedPagesThreshold, $wgHelpWikiId, $wgDBname;
 	$count = $wgWantedPagesThreshold - 1;
 
 	// get the dbname from supplied id
 	$dbr = wfGetDB( DB_SLAVE );
 	$helpdb = WikiFactory::IDtoDB( $wgHelpWikiId  );
 
-	$pagelinks = $dbr->tableName( 'pagelinks' );
-	$page      = $dbr->tableName( 'page' );
+	$pagelinks = "`$wgDBname`." . $dbr->tableName( 'pagelinks' );
+	$page      = "`$wgDBname`." . $dbr->tableName( 'page' );
 
 	// todo actually modify the query here
 	$sql =   "SELECT 'Wantedpages' AS type,
-		pl_namespace AS namespace,
-		pl_title AS title,
+		$pagelinks.pl_namespace AS namespace,
+		$pagelinks.pl_title AS title,
 		COUNT(*) AS value
 			FROM $pagelinks
 			LEFT JOIN $page AS pg1
