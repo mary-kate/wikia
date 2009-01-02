@@ -403,7 +403,7 @@ class WikiaMiniUpload {
 class FakeLocalFile extends LocalFile {
 	// change on production!
 	var $tempFolder = "/images/metalgear";
-/*
+
 	function upload( $srcPath, $comment, $pageText, $flags = 0, $props = false, $timestamp = false ) {
 		global $wgServer;
 		$oldrepo = $this->repo;
@@ -441,7 +441,7 @@ class FakeLocalFile extends LocalFile {
 
 		return $status;
 	}
-*/
+
 	function recordUpload2( $oldver, $comment, $pageText, $props = false, $timestamp = false ) {
 		global $wgUser;
 		$dbw = $this->repo->getMasterDB();
