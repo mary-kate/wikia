@@ -255,9 +255,13 @@ function SharedHelpBrokenLink( $linker, $nt, $query, $u, $style, $prefix, $text,
 }
 
 function SharedHelpWantedPagesSql( $page, $sql ) {
-	global $wgWantedPagesThreshold;
+	global $wgWantedPagesThreshold, $wgHelpWikiId;
 	$count = $wgWantedPagesThreshold - 1;
+
+	// get the dbname from supplied id
 	$dbr = wfGetDB( DB_SLAVE );
+	$helpdb = WikiFactory::IDtoDB( $wgHelpWikiId  );
+
 	$pagelinks = $dbr->tableName( 'pagelinks' );
 	$page      = $dbr->tableName( 'page' );
 
