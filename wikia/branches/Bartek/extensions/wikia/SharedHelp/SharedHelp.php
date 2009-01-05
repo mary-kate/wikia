@@ -263,7 +263,9 @@ function SharedHelpWantedPagesSql( $page, $sql ) {
 	$helpdb = WikiFactory::IDtoDB( $wgHelpWikiId  );
 
 	$pagelinks = "`$wgDBname`." . $dbr->tableName( 'pagelinks' );
-	$page      = "`$wgDBname`." . $dbr->tableName( 'page' );
+	$page_table = $dbr->tableName( 'page' );
+	$page      = "`$wgDBname`." . $page_table;
+	$helppage  = "`$helpdb`." . $page_table;
 
 	// todo actually modify the query here
 	$sql =   "SELECT 'Wantedpages' AS type,
@@ -275,8 +277,11 @@ function SharedHelpWantedPagesSql( $page, $sql ) {
 			ON pl_namespace = pg1.page_namespace AND pl_title = pg1.page_title
 			LEFT JOIN $page AS pg2
 			ON pl_from = pg2.page_id
+			LEFT JOIN $helppage AS pg3
+			ON pg2.page_id = pg3.page_id
 			WHERE pg1.page_namespace IS NULL
-			AND pl_namespace NOT IN ( 2, 3 )
+			AND (pl_namespace NOT IN ( 2, 3, 12 )
+			OR (pl_namespace = 12 AND pl_title!= pg3.page_title))
 			AND pg2.page_namespace != 8
 			$page->excludetitles
 			GROUP BY pl_namespace, pl_title
