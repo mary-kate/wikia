@@ -108,7 +108,7 @@ class CreateBlogListingPage extends SpecialBlogPage {
 			'cloud' => new TagCloud(10, $sQuery),
 			'cols' => 10,
 			'cloudNo' => 1,
-			'textCategories' => $this->mFormData['listingCategories'] )
+			'textCategories' => (isset($this->mFormData['listingCategories'])) ? $this->mFormData['listingCategories'] : "" )
 		);
 
 		$sBlogCategoryCloud = $oTmpl->execute("createPostCategoryCloud");
@@ -118,7 +118,7 @@ class CreateBlogListingPage extends SpecialBlogPage {
 			'cloud' => new TagCloud(),
 			'cols' => 10,
 			'cloudNo' => 2,
-			'textCategories' => $this->mFormData['listingPageCategories'] )
+			'textCategories' => (isset($this->mFormData['listingPageCategories'])) ? $this->mFormData['listingPageCategories'] : "")
 		);
 
 		$sPageCategoryCloud = $oTmpl->execute("createPostCategoryCloud");
@@ -213,18 +213,28 @@ class CreateBlogListingPage extends SpecialBlogPage {
 		$aListingCategories = explode('|', $this->mFormData['listingCategories']);
 		$aListingAuthors = explode(',', $this->mFormData['listingAuthors']);
 
-		$this->mTagBody .= "<title>" . $this->mFormData['listingTitle'] . "</title>\n";
-		$this->mTagBody .= "<type>" . $this->mFormData['listingType'] . "</type>\n";
-		$this->mTagBody .= "<order>" . $this->mFormData['listingSortBy'] . "</order>\n";
+		if (isset($this->mFormData['listingTitle'])) {
+			$this->mTagBody .= "<title>" . $this->mFormData['listingTitle'] . "</title>\n";
+		}
+		if (isset($this->mFormData['listingType'])) {
+			$this->mTagBody .= "<type>" . $this->mFormData['listingType'] . "</type>\n";
+		}
+		if (isset($this->mFormData['listingSortBy'])) {
+			$this->mTagBody .= "<order>" . $this->mFormData['listingSortBy'] . "</order>\n";
+		}
 
-		foreach($aListingCategories as $sCategoryName) {
-			if(!empty($sCategoryName)) {
-				$this->mTagBody .= "<category>" . $sCategoryName . "</category>\n";
+		if (!empty($aListingCategories) && is_array($aListingCategories)) {
+			foreach($aListingCategories as $sCategoryName) {
+				if(!empty($sCategoryName)) {
+					$this->mTagBody .= "<category>" . $sCategoryName . "</category>\n";
+				}
 			}
 		}
-		foreach($aListingAuthors as $sAuthorName) {
-			if(!empty($sAuthorName)) {
-				$this->mTagBody .= "<author>" . trim($sAuthorName) . "</author>\n";
+		if (!empty($aListingAuthors) && is_array($aListingAuthors)) {
+			foreach($aListingAuthors as $sAuthorName) {
+				if(!empty($sAuthorName)) {
+					$this->mTagBody .= "<author>" . trim($sAuthorName) . "</author>\n";
+				}
 			}
 		}
 
