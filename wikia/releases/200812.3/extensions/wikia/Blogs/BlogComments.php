@@ -21,6 +21,8 @@ class BlogComment {
 	public
 		$mProps,
 		$mTitle,
+		$mLastRevId,
+		$mFirstRevId,
 		$mLastRevision,  ### for displaying text
 		$mFirstRevision, ### for author & time
 		$mUser,	         ### comment creator
@@ -83,44 +85,74 @@ class BlogComment {
 		return new BlogComment( $Title );
 	}
 
+
 	/**
 	 * load -- set variables, load data from database
 	 *
 	 * @access private
 	 */
 	private function load() {
+		wfProfileIn( __METHOD__ );
+
+		$result = true;
+
 		if( $this->mTitle ) {
 			/**
 			 * if we lucky we got only one revision, we check slave first
 			 * then if no answer we check master
 			 */
 			$firstRev = $this->getFirstRevID();
-			if( !$firstRev ) {
-				 $firstRev = $this->getFirstRevID( GAID_FOR_UPDATE );
+			if( !$this->mFirstRevId ) {
+				 $this->mFirstRevId = $this->getFirstRevID( GAID_FOR_UPDATE );
 			}
-			$lastRev = $this->mTitle->getLatestRevID();
-			if( !$lastRev ) {
-				$this->mTitle->getLatestRevID( GAID_FOR_UPDATE );
+			if( !$this->mLastRevId ) {
+				$this->mLastRevId = $this->mTitle->getLatestRevID();
 			}
-			if( $lastRev != $firstRev ) {
-				$this->mLastRevision = Revision::newFromId( $lastRev );
-				$this->mFirstRevision = Revision::newFromId( $firstRev );
+			/**
+			 * still not defined?
+			 */
+			if( !$this->mLastRevId ) {
+				$this->mLastRevId = $this->mTitle->getLatestRevID( GAID_FOR_UPDATE );
+			}
+			if( $this->mLastRevId != $this->mFirstRevId ) {
+				if( $this->mLastRevId && $this->mFirstRevId ) {
+					$this->mLastRevision = Revision::newFromId( $this->mLastRevId );
+					$this->mFirstRevision = Revision::newFromId( $this->mFirstRevId );
+					Wikia::log( __METHOD__, "ne", "{$this->mLastRevId} ne {$this->mFirstRevId}" );
+				}
+				else {
+					$this->mFirstRevision = Revision::newFromId( $this->mFirstRevId );
+					$this->mLastRevision = $this->mFirstRevision;
+					$this->mLastRevId = $this->mFirstRevId;
+					Wikia::log( __METHOD__, "ne", "getting {$this->mFirstRevId} as lastRev" );
+				}
 			}
 			else {
-				if( $firstRev ) {
-					$this->mFirstRevision = Revision::newFromId( $firstRev );
+				Wikia::log( __METHOD__, "eq" );
+				if( $this->mFirstRevId ) {
+					$this->mFirstRevision = Revision::newFromId( $this->mFirstRevId );
 					$this->mLastRevision = $this->mFirstRevision;
-					$this->mUser = User::newFromId( $this->mFirstRevision->getUser() );
+					Wikia::log( __METHOD__, "eq", "{$this->mLastRevId} eq {$this->mFirstRevId}" );
+				}
+				else {
+					$result = false;
 				}
 			}
 
 			$this->getProps();
+			$this->mUser = User::newFromId( $this->mFirstRevision->getUser() );
 			/**
 			 * set blog owner
 			 */
 			$owner = BlogArticle::getOwner( $this->mTitle );
 			$this->mOwner = User::newFromName( $owner );
 		}
+		else {
+			$result = false;
+		}
+		wfProfileOut( __METHOD__ );
+
+		return $result;
 	}
 
 	/**
@@ -159,23 +191,6 @@ class BlogComment {
 	}
 
 	/**
-	 * isDeleted -- checks (of course) is deleted
-	 *
-	 * @access public
-	 */
-	public function isDeleted() {
-		$this->load();
-		if( $this->mLastRevision ) {
-			$deleted = $this->mLastRevision->isDeleted( Revision::DELETED_TEXT );
-		}
-		else {
-			$deleted = true;
-		}
-
-		return $deleted;
-	}
-
-	/**
 	 * render -- generate HTML for displaying comment
 	 *
 	 * @return String -- generated HTML text
@@ -186,9 +201,14 @@ class BlogComment {
 		wfProfileIn( __METHOD__ );
 
 		$text = false;
-		if( !$this->isDeleted() ) {
+		if( $this->load() ) {
 			$canDelete = $wgUser->isAllowed( "delete" );
-
+			if ( ! $wgParser ) {
+				$Parser = new Parser();
+			}
+			else {
+				$Parser = $wgParser;
+			}
 			$Options = new ParserOptions( );
 			$Options->initialiseFromUser( $this->mUser );
 
@@ -197,7 +217,7 @@ class BlogComment {
 			 */
 			$this->getProps();
 
-			$text     = $wgParser->parse( $this->mLastRevision->getText(), $this->mTitle, $Options, true, false )->getText();
+			$text     = $Parser->parse( $this->mLastRevision->getText(), $this->mTitle, $Options, true, false )->getText();
 			$anchor   = explode( "/", $this->mTitle->getDBkey(), 3 );
 			$sig      = ( $this->mUser->isAnon() )
 				? wfMsg("blog-comments-anonymous")
@@ -381,6 +401,7 @@ class BlogComment {
 				$comment = BlogComment::newFromArticle( $article );
 				$text = $comment->render();
 				$message = false;
+				Wikia::log( __METHOD__, "render", $text );
 				break;
 			default:
 				Wikia::log( __METHOD__, "error", "No article created" );
