@@ -254,11 +254,11 @@ function SharedHelpBrokenLink( $linker, $nt, $query, $u, $style, $prefix, $text,
 	return true;
 }
 
+// basically modify the Wantedpages query to exclude pages that appear on the help wiki, as per #5866
 function SharedHelpWantedPagesSql( $page, $sql ) {
 	global $wgWantedPagesThreshold, $wgHelpWikiId, $wgDBname;
 	$count = $wgWantedPagesThreshold - 1;
 
-	// get the dbname from supplied id
 	$dbr = wfGetDB( DB_SLAVE );
 	$helpdb = WikiFactory::IDtoDB( $wgHelpWikiId  );
 
@@ -267,7 +267,6 @@ function SharedHelpWantedPagesSql( $page, $sql ) {
 	$page      = "`$wgDBname`." . $page_table;
 	$helppage  = "`$helpdb`." . $page_table;
 
-	// todo actually modify the query here
 	$sql =   "SELECT 'Wantedpages' AS type,
 		$pagelinks.pl_namespace AS namespace,
 		$pagelinks.pl_title AS title,
