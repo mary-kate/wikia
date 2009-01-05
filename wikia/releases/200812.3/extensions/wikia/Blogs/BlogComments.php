@@ -203,21 +203,23 @@ class BlogComment {
 		$text = false;
 		if( $this->load() ) {
 			$canDelete = $wgUser->isAllowed( "delete" );
-			if ( ! $wgParser ) {
+#			if ( ! $wgParser ) {
 				$Parser = new Parser();
-			}
-			else {
-				$Parser = $wgParser;
-			}
+				$start = true;
+#			}
+#			else {
+#				$Parser = $wgParser;
+#				$start = false;
+#			}
 			$Options = new ParserOptions( );
-			$Options->initialiseFromUser( $this->mUser );
+			$Options->initialiseFromUser( $wgUser );
 
 			/**
 			 * if $props are not cache we read them from database
 			 */
 			$this->getProps();
 
-			$text     = $Parser->parse( $this->mLastRevision->getText(), $this->mTitle, $Options, true, false )->getText();
+			$text     = $Parser->parse( $this->mLastRevision->getText(), $this->mTitle, $Options, true, $start )->getText();
 			$anchor   = explode( "/", $this->mTitle->getDBkey(), 3 );
 			$sig      = ( $this->mUser->isAnon() )
 				? wfMsg("blog-comments-anonymous")
