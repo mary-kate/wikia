@@ -22,7 +22,7 @@ $wgHooks['EditPage::showEditForm:initial2'][] = 'VETSetup';
 function VETSetup($editform) {
 	global $wgOut, $wgStylePath, $wgExtensionsPath, $wgStyleVersion, $wgHooks, $wgUser;
 	if(get_class($wgUser->getSkin()) == 'SkinMonaco') {
-		wfLoadExtensionMessages('VideoEmbedTools');
+		wfLoadExtensionMessages('VideoEmbedTool');
 		$wgHooks['ExtendJSGlobalVars'][] = 'VETSetupVars';
 		$wgOut->addScript('<script type="text/javascript" src="'.$wgStylePath.'/common/yui_2.5.2/slider/slider-min.js?'.$wgStyleVersion.'"></script>');
 		$wgOut->addScript('<script type="text/javascript" src="'.$wgExtensionsPath.'/wikia/VideoEmbedTool/js/VET.js?'.$wgStyleVersion.'"></script>');
@@ -40,7 +40,7 @@ function VETSetup($editform) {
 	return true;
 }
 
-function WMUSetupVars($vars) {
+function VETSetupVars($vars) {
 	global $wgFileBlacklist, $wgCheckFileExtensions, $wgStrictFileExtensions, $wgFileExtensions;
 
 	$vars['wmu_back'] = wfMsg('wmu-back');
