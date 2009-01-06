@@ -24,36 +24,36 @@ var VET_ratio = 1;
 var VET_shownMax = false;
 
 function VET_loadDetails() {
-	YAHOO.util.Dom.setStyle('ImageUploadMain', 'display', 'none');
+	YAHOO.util.Dom.setStyle('VideoEmbedMain', 'display', 'none');
 	VET_indicator(1, true);
 
 	var callback = {
 		success: function(o) {
 			VET_displayDetails(o.responseText);
 
-			$('ImageUploadBack').style.display = 'none';
+			$('VideoEmbedBack').style.display = 'none';
 
 			setTimeout(function() {
 				if(!FCK.wysiwygData[VET_refid].thumb) {
-					$('ImageUploadFullOption').click();
+					$('VideoEmbedFullOption').click();
 				}
 				if(FCK.wysiwygData[VET_refid].align && FCK.wysiwygData[VET_refid].align == 'left') {
-					$('ImageUploadLayoutLeft').click();
+					$('VideoEmbedLayoutLeft').click();
 				}
 				if(FCK.wysiwygData[VET_refid].width) {
 					VET_slider.setValue(FCK.wysiwygData[VET_refid].width / (VET_slider.getRealValue() / VET_slider.getValue()), true);
 					VET_width = FCK.wysiwygData[VET_refid].width;
 					MWU_imageWidthChanged( VET_width );
-					$( 'ImageUploadSlider' ).style.visibility = 'visible';
-					$( 'ImageUploadInputWidth' ).style.visibility = 'visible';
-					$( 'ImageUploadWidthCheckbox' ).checked = true;
-					$( 'ImageUploadManualWidth' ).value = VET_width;
-					VET_manualWidthInput( $( 'ImageUploadManualWidth' ) );
+					$( 'VideoEmbedSlider' ).style.visibility = 'visible';
+					$( 'VideoEmbedInputWidth' ).style.visibility = 'visible';
+					$( 'VideoEmbedWidthCheckbox' ).checked = true;
+					$( 'VideoEmbedManualWidth' ).value = VET_width;
+					VET_manualWidthInput( $( 'VideoEmbedManualWidth' ) );
 				}
 			}, 200);
 
 			if(FCK.wysiwygData[VET_refid].caption) {
-				$('ImageUploadCaption').value = FCK.wysiwygData[VET_refid].caption;
+				$('VideoEmbedCaption').value = FCK.wysiwygData[VET_refid].caption;
 			}
 		}
 	}
@@ -72,8 +72,8 @@ function VET_loadDetails() {
  */
 if(mwCustomEditButtons) {
 	mwCustomEditButtons[mwCustomEditButtons.length] = {
-		"imageFile": stylepath + '/../extensions/wikia/WikiaMiniUpload/images/button_vet.png',
-		"speedTip": wmu_imagebutton,
+		"imageFile": stylepath + '/../extensions/wikia/VideoEmbedTool/images/button_vet.png',
+		"speedTip": vet_imagebutton,
 		"tagOpen": "",
 		"tagClose": "",
 		"sampleText": "",
@@ -98,7 +98,7 @@ function VET_addHandler() {
 }
 
 function VET_licenseSelVETorCheck() {
-	var selector = document.getElementById( "ImageUploadLicense" );
+	var selector = document.getElementById( "VideoEmbedLicense" );
 	var selection = selector.options[selector.selectedIndex].value;
 	if( selector.selectedIndex > 0 ) {
 		if( selection == "" ) {
@@ -110,7 +110,7 @@ function VET_licenseSelVETorCheck() {
 }
 
 function VET_manualWidthInput( elem ) {
-	var image = $( 'ImageUploadThumb' ).firstChild;
+	var image = $( 'VideoEmbedThumb' ).firstChild;
 	var val = parseInt( elem.value );
 	if ( isNaN( val ) ) {
 		return false;
@@ -124,7 +124,7 @@ function VET_manualWidthInput( elem ) {
 			image.width = VET_width;
 			image.height = VET_width / VET_ratio;
 			VET_thumbSize = [image.width, image.height];
-			$( 'ImageUploadManualWidth' ).value = image.width;
+			$( 'VideoEmbedManualWidth' ).value = image.width;
 			VET_readjustSlider( image.width );
 			VET_shownMax = true;
 			alert (vet_max_thumb);
@@ -133,7 +133,7 @@ function VET_manualWidthInput( elem ) {
 		image.height = val / VET_ratio;
 		image.width = val;
 		VET_thumbSize = [image.width, image.height];
-		$( 'ImageUploadManualWidth' ).value = val;
+		$( 'VideoEmbedManualWidth' ).value = val;
 		VET_readjustSlider( val );
 		VET_shownMax = false;			
 	}
@@ -141,13 +141,13 @@ function VET_manualWidthInput( elem ) {
 
 function VET_readjustSlider( value ) {
 		if ( 400 < value ) { // too big, hide slider
-			if ( 'hidden' != $( 'ImageUploadSliderThumb' ).style.visibility ) {
-				$( 'ImageUploadSliderThumb' ).style.visibility = 'hidden';				
+			if ( 'hidden' != $( 'VideoEmbedSliderThumb' ).style.visibility ) {
+				$( 'VideoEmbedSliderThumb' ).style.visibility = 'hidden';				
 				VET_slider.setValue( 200, true, true, true );
 			}
 		} else {
-			if ( 'hidden' == $( 'ImageUploadSliderThumb' ).style.visibility ) {
-				$( 'ImageUploadSliderThumb' ).style.visibility = 'visible';				
+			if ( 'hidden' == $( 'VideoEmbedSliderThumb' ).style.visibility ) {
+				$( 'VideoEmbedSliderThumb' ).style.visibility = 'visible';				
 			}
 			var fixed_width = Math.min( 400, VET_width );
 			value = Math.max(2, Math.round( ( value * 200 ) / fixed_width ) );	
@@ -198,17 +198,17 @@ function VET_show(e) {
 	}
 
 	var html = '';
-	html += '<div class="reset" id="ImageUpload">';
-	html += '	<div id="ImageUploadBorder"></div>';
-	html += '	<div id="ImageUploadProgress1" class="ImageUploadProgress"></div>';
-	html += '	<div id="ImageUploadBack"><div></div><a href="#">' + vet_back + '</a></div>';
-	html += '	<div id="ImageUploadClose"><div></div><a href="#">' + vet_close + '</a></div>';
-	html += '	<div id="ImageUploadBody">';
-	html += '		<div id="ImageUploadError"></div>';
-	html += '		<div id="ImageUploadMain"></div>';
-	html += '		<div id="ImageUploadDetails" style="display: none;"></div>';
-	html += '		<div id="ImageUploadConflict" style="display: none;"></div>';
-	html += '		<div id="ImageUploadSummary" style="display: none;"></div>';
+	html += '<div class="reset" id="VideoEmbed">';
+	html += '	<div id="VideoEmbedBorder"></div>';
+	html += '	<div id="VideoEmbedProgress1" class="VideoEmbedProgress"></div>';
+	html += '	<div id="VideoEmbedBack"><div></div><a href="#">' + vet_back + '</a></div>';
+	html += '	<div id="VideoEmbedClose"><div></div><a href="#">' + vet_close + '</a></div>';
+	html += '	<div id="VideoEmbedBody">';
+	html += '		<div id="VideoEmbedError"></div>';
+	html += '		<div id="VideoEmbedMain"></div>';
+	html += '		<div id="VideoEmbedDetails" style="display: none;"></div>';
+	html += '		<div id="VideoEmbedConflict" style="display: none;"></div>';
+	html += '		<div id="VideoEmbedSummary" style="display: none;"></div>';
 	html += '	</div>';
 	html += '</div>';
 
@@ -238,20 +238,20 @@ function VET_show(e) {
 		VET_loadMain();
 	}
 
-	YAHOO.util.Event.addListener('ImageUploadBack', 'click', VET_back);
-	YAHOO.util.Event.addListener('ImageUploadClose', 'click', VET_close);
+	YAHOO.util.Event.addListener('VideoEmbedBack', 'click', VET_back);
+	YAHOO.util.Event.addListener('VideoEmbedClose', 'click', VET_close);
 }
 
 function VET_loadMain() {
 	var callback = {
 		success: function(o) {
-			$('ImageUploadMain').innerHTML = o.responseText;
+			$('VideoEmbedMain').innerHTML = o.responseText;
 			VET_indicator(1, false);
 			if($('ImageQuery') && VET_panel.element.style.visibility == 'visible') $('ImageQuery').focus();
 			var cookieMsg = document.cookie.indexOf("vetmainmesg=");
 			if (cookieMsg > -1 && document.cookie.charAt(cookieMsg + 12) == 0) {
-				$('ImageUploadTextCont').style.display = 'none';
-		                $('ImageUploadMessageLink').innerHTML = '[' + vet_show_message  + ']';
+				$('VideoEmbedTextCont').style.display = 'none';
+		                $('VideoEmbedMessageLink').innerHTML = '[' + vet_show_message  + ']';
 			}
 		}
 	}
@@ -265,7 +265,7 @@ function VET_loadMain() {
 function VET_loadLicense( license ) {
 	var callback = {
 		success: function(o) {			
-			$('ImageUploadLicenseText').innerHTML = o.responseText;
+			$('VideoEmbedLicenseText').innerHTML = o.responseText;
 			VET_indicator(1, false);
 		}
 	}
@@ -354,15 +354,15 @@ function VET_sendQuery(query, page, sourceId, pagination) {
 function VET_indicator(id, show) {
 	if(show) {
 		if(id == 1) {
-			$('ImageUploadProgress1').style.display = 'block';
+			$('VideoEmbedProgress1').style.display = 'block';
 		} else if(id == 2) {
-			$('ImageUploadProgress2').style.visibility = 'visible';
+			$('VideoEmbedProgress2').style.visibility = 'visible';
 		}
 	} else {
 		if(id == 1) {
-			$('ImageUploadProgress1').style.display = '';
+			$('VideoEmbedProgress1').style.display = '';
 		} else if(id == 2) {
-			$('ImageUploadProgress2').style.visibility = 'hidden';
+			$('VideoEmbedProgress2').style.visibility = 'hidden';
 		}
 	}
 }
@@ -381,12 +381,12 @@ function VET_chooseImage(sourceId, itemId) {
 }
 
 function VET_upload(e) {
-	if($('ImageUploadFile').value == '') {
+	if($('VideoEmbedFile').value == '') {
 		VET_track('upload/undefined'); // tracking
 		alert(vet_warn2);
 		return false;
 	} else {
-		if (VET_initialCheck( $('ImageUploadFile').value )) {
+		if (VET_initialCheck( $('VideoEmbedFile').value )) {
 			VET_track('upload/defined'); // tracking
 			VET_indicator(1, true);
 			return true;
@@ -459,36 +459,36 @@ function VET_initialCheck( checkedName ) {
 function VET_displayDetails(responseText) {
 	VET_switchScreen('Details');
 	VET_width = null;
-	$('ImageUploadBack').style.display = 'inline';
+	$('VideoEmbedBack').style.display = 'inline';
 
-	$('ImageUpload' + VET_curScreen).innerHTML = responseText;
+	$('VideoEmbed' + VET_curScreen).innerHTML = responseText;
 
-	if($('ImageUploadThumb')) {
+	if($('VideoEmbedThumb')) {
 		VET_orgThumbSize = null;
-		var image = $('ImageUploadThumb').firstChild;
+		var image = $('VideoEmbedThumb').firstChild;
 		if ( null == VET_width ) {
 			VET_width = $( 'ImageRealWidth' ).value;
 			VET_height = $( 'ImageRealHeight' ).value;
 		}
 		var thumbSize = [image.width, image.height];
 		VET_orgThumbSize = null;
-		VET_slider = YAHOO.widget.Slider.getHorizSlider('ImageUploadSlider', 'ImageUploadSliderThumb', 0, 200);
+		VET_slider = YAHOO.widget.Slider.getHorizSlider('VideoEmbedSlider', 'VideoEmbedSliderThumb', 0, 200);
 		VET_slider.initialRound = true;
 		VET_slider.getRealValue = function() {
 			return Math.max(2, Math.round(this.getValue() * (thumbSize[0] / 200)));
 		}
 		VET_slider.subscribe("change", function(offsetFromStart) {
-			if ( 'hidden' == $( 'ImageUploadSliderThumb' ).style.visibility ) {
-				$( 'ImageUploadSliderThumb' ).style.visibility = 'visible';				
+			if ( 'hidden' == $( 'VideoEmbedSliderThumb' ).style.visibility ) {
+				$( 'VideoEmbedSliderThumb' ).style.visibility = 'visible';				
 			}			
 			if (VET_slider.initialRound) {
-				$('ImageUploadManualWidth').value = '';
+				$('VideoEmbedManualWidth').value = '';
 				VET_slider.initialRound = false;	
 			} else {
-				$('ImageUploadManualWidth').value = VET_slider.getRealValue();
+				$('VideoEmbedManualWidth').value = VET_slider.getRealValue();
 			}
 			image.width = VET_slider.getRealValue();
-			$('ImageUploadManualWidth').value = image.width;			
+			$('VideoEmbedManualWidth').value = image.width;			
 			image.height = image.width / (thumbSize[0] / thumbSize[1]);
 			if(VET_orgThumbSize == null) {
 				VET_orgThumbSize = [image.width, image.height];
@@ -506,14 +506,14 @@ function VET_displayDetails(responseText) {
 	if ($( 'VET_error_box' )) {
 		alert( $( 'VET_error_box' ).innerHTML );
 	}
-	$( 'ImageUploadSlider' ).style.visibility = 'hidden';
-	$( 'ImageUploadInputWidth' ).style.visibility = 'hidden';
+	$( 'VideoEmbedSlider' ).style.visibility = 'hidden';
+	$( 'VideoEmbedInputWidth' ).style.visibility = 'hidden';
 
-	if ( $( 'ImageUploadLicenseText' ) ) {
+	if ( $( 'VideoEmbedLicenseText' ) ) {
 		var cookieMsg = document.cookie.indexOf("vetlicensemesg=");
 		if (cookieMsg > -1 && document.cookie.charAt(cookieMsg + 15) == 0) {
-			$('ImageUploadLicenseText').style.display = 'none';
-			$('ImageUploadLicenseLink').innerHTML = '[' + vet_show_license_message  + ']';
+			$('VideoEmbedLicenseText').style.display = 'none';
+			$('VideoEmbedLicenseLink').innerHTML = '[' + vet_show_license_message  + ']';
 		}
 	}
 	VET_indicator(1, false);
@@ -526,32 +526,32 @@ function VET_insertImage(e, type) {
 
 	var params = Array();
 	params.push('type='+type);
-	params.push('mwname='+$('ImageUploadMWname').value);
+	params.push('mwname='+$('VideoEmbedMWname').value);
 
 	if(type == 'overwrite') {
-		params.push('name='+$('ImageUploadExistingName').value);
+		params.push('name='+$('VideoEmbedExistingName').value);
 	} else if(type == 'rename') {
-		params.push('name='+$('ImageUploadRenameName').value);
+		params.push('name='+$('VideoEmbedRenameName').value);
 	} else {
-		if($('ImageUploadName')) {
-			params.push('name='+$('ImageUploadName').value + '.' + $('ImageUploadExtension').value);
+		if($('VideoEmbedName')) {
+			params.push('name='+$('VideoEmbedName').value + '.' + $('VideoEmbedExtension').value);
 		}
 	}
 
-	if($('ImageUploadLicense')) {
-		params.push('ImageUploadLicense='+$('ImageUploadLicense').value);
+	if($('VideoEmbedLicense')) {
+		params.push('VideoEmbedLicense='+$('VideoEmbedLicense').value);
 	}
 
-	if($('ImageUploadExtraId')) {
-		params.push('extraId='+$('ImageUploadExtraId').value);
+	if($('VideoEmbedExtraId')) {
+		params.push('extraId='+$('VideoEmbedExtraId').value);
 	}
 
-	if($('ImageUploadThumb')) {
-		params.push('size=' + ($('ImageUploadThumbOption').checked ? 'thumb' : 'full'));
-		params.push( 'width=' + $( 'ImageUploadManualWidth' ).value + 'px' );
-		params.push('layout=' + ($('ImageUploadLayoutLeft').checked ? 'left' : 'right'));
-		params.push('caption=' + $('ImageUploadCaption').value);
-		params.push('slider=' + $('ImageUploadWidthCheckbox').checked);
+	if($('VideoEmbedThumb')) {
+		params.push('size=' + ($('VideoEmbedThumbOption').checked ? 'thumb' : 'full'));
+		params.push( 'width=' + $( 'VideoEmbedManualWidth' ).value + 'px' );
+		params.push('layout=' + ($('VideoEmbedLayoutLeft').checked ? 'left' : 'right'));
+		params.push('caption=' + $('VideoEmbedCaption').value);
+		params.push('slider=' + $('VideoEmbedWidthCheckbox').checked);
 	}
 
 	var callback = {
@@ -567,34 +567,34 @@ function VET_insertImage(e, type) {
 					break;
 				case 'conflict':
 					VET_switchScreen('Conflict');
-					$('ImageUpload' + VET_curScreen).innerHTML = o.responseText;
+					$('VideoEmbed' + VET_curScreen).innerHTML = o.responseText;
 					break;
 				case 'summary':
 					VET_switchScreen('Summary');
-					$('ImageUploadBack').style.display = 'none';
-					$('ImageUpload' + VET_curScreen).innerHTML = o.responseText;
+					$('VideoEmbedBack').style.display = 'none';
+					$('VideoEmbed' + VET_curScreen).innerHTML = o.responseText;
 					if(VET_refid == null) {
-						insertTags($('ImageUploadTag').innerHTML, '', '');
+						insertTags($('VideoEmbedTag').innerHTML, '', '');
 					} else {
-						var wikitag = YAHOO.util.Dom.get('ImageUploadTag').innerHTML;
+						var wikitag = YAHOO.util.Dom.get('VideoEmbedTag').innerHTML;
 						var options = {};
 
-						if($('ImageUploadThumbOption').checked) {
+						if($('VideoEmbedThumbOption').checked) {
 							options.thumb = 1;
 						} else {
 							options.thumb = null;
 						}
-						if($('ImageUploadWidthCheckbox').checked) {
+						if($('VideoEmbedWidthCheckbox').checked) {
 							options.width = VET_slider.getRealValue();
 						} else {
 							options.width = null;
 						}
-						if($('ImageUploadLayoutLeft').checked) {
+						if($('VideoEmbedLayoutLeft').checked) {
 							options.align = 'left';
 						} else {
 							options.align = null;
 						}
-						options.caption = $('ImageUploadCaption').value;
+						options.caption = $('VideoEmbedCaption').value;
 
 						if(VET_refid != -1) {
 							FCK.ProtectImageUpdate(VET_refid, wikitag, options);
@@ -617,18 +617,18 @@ function VET_insertImage(e, type) {
 }
 
 function MWU_imageWidthChanged(changes) {
-	var image = $('ImageUploadThumb').firstChild;
-	if( !$( 'ImageUploadWidthCheckbox' ).checked ) {
-		$('ImageUploadManualWidth').value = '';
-		$('ImageUploadSlider').style.visibility = 'hidden';
-		$('ImageUploadInputWidth').style.visibility = 'hidden';
+	var image = $('VideoEmbedThumb').firstChild;
+	if( !$( 'VideoEmbedWidthCheckbox' ).checked ) {
+		$('VideoEmbedManualWidth').value = '';
+		$('VideoEmbedSlider').style.visibility = 'hidden';
+		$('VideoEmbedInputWidth').style.visibility = 'hidden';
 		image.width = VET_orgThumbSize[0];
 		image.height = VET_orgThumbSize[1];
 		VET_track('slider/disable'); // tracking
 	} else {
-		$('ImageUploadManualWidth').value = VET_slider.getRealValue();
-		$('ImageUploadSlider').style.visibility = 'visible';
-		$('ImageUploadInputWidth').style.visibility = 'visible';
+		$('VideoEmbedManualWidth').value = VET_slider.getRealValue();
+		$('VideoEmbedSlider').style.visibility = 'visible';
+		$('VideoEmbedInputWidth').style.visibility = 'visible';
 		image.width = VET_thumbSize[0];
 		image.height = VET_thumbSize[1];
 		VET_track('slider/enable'); // tracking
@@ -638,30 +638,30 @@ function MWU_imageWidthChanged(changes) {
 function MWU_imageSizeChanged(size) {
 	VET_track('size/' + size); // tracking
 	YAHOO.util.Dom.setStyle(['ImageWidthRow', 'ImageLayoutRow'], 'display', size == 'thumb' ? '' : 'none');
-	if($('ImageUploadThumb')) {
-		var image = $('ImageUploadThumb').firstChild;
+	if($('VideoEmbedThumb')) {
+		var image = $('VideoEmbedThumb').firstChild;
 		if(size == 'thumb') {
 			image.width = VET_thumbSize[0];
 			image.height = VET_thumbSize[1];
-			$('ImageUploadManualWidth').value = VET_thumbSize[0];
+			$('VideoEmbedManualWidth').value = VET_thumbSize[0];
 		} else {
 			image.width = VET_orgThumbSize[0];
 			image.height = VET_orgThumbSize[1];
-			$('ImageUploadManualWidth').value = VET_orgThumbSize[0];
+			$('VideoEmbedManualWidth').value = VET_orgThumbSize[0];
 		}
 	}
 }
 
 function VET_toggleMainMesg(e) {
 	YAHOO.util.Event.preventDefault(e);
-	if ('none' == $('ImageUploadTextCont').style.display) {
-		$('ImageUploadTextCont').style.display = '';
-		$('ImageUploadMessageLink').innerHTML = '[' + vet_hide_message  + ']';
+	if ('none' == $('VideoEmbedTextCont').style.display) {
+		$('VideoEmbedTextCont').style.display = '';
+		$('VideoEmbedMessageLink').innerHTML = '[' + vet_hide_message  + ']';
 		VET_track( 'mainMessage/show' ); // tracking
 		document.cookie = "vetmainmesg=1";
 	} else {
-		$('ImageUploadTextCont').style.display = 'none';
-		$('ImageUploadMessageLink').innerHTML = '[' + vet_show_message  + ']';
+		$('VideoEmbedTextCont').style.display = 'none';
+		$('VideoEmbedMessageLink').innerHTML = '[' + vet_show_message  + ']';
 		VET_track( 'mainMessage/hide' ); // tracking
 		document.cookie = "vetmainmesg=0";
 	}
@@ -669,14 +669,14 @@ function VET_toggleMainMesg(e) {
 
 function VET_toggleLicenseMesg(e) {
 	YAHOO.util.Event.preventDefault(e);
-	if ('none' == $('ImageUploadLicenseText').style.display) {
-		$('ImageUploadLicenseText').style.display = '';
-		$('ImageUploadLicenseLink').innerHTML = '[' + vet_hide_license_message  + ']';
+	if ('none' == $('VideoEmbedLicenseText').style.display) {
+		$('VideoEmbedLicenseText').style.display = '';
+		$('VideoEmbedLicenseLink').innerHTML = '[' + vet_hide_license_message  + ']';
 		VET_track( 'licenseText/show' ); // tracking
 		document.cookie = "vetlicensemesg=1";
 	} else {
-		$('ImageUploadLicenseText').style.display = 'none';
-		$('ImageUploadLicenseLink').innerHTML = '[' + vet_show_license_message  + ']';
+		$('VideoEmbedLicenseText').style.display = 'none';
+		$('VideoEmbedLicenseLink').innerHTML = '[' + vet_show_license_message  + ']';
 		VET_track( 'licenseText/hide' ); // tracking
 		document.cookie = "vetlicensemesg=0";
 	}
@@ -685,13 +685,13 @@ function VET_toggleLicenseMesg(e) {
 function VET_switchScreen(to) {
 	VET_prevScreen = VET_curScreen;
 	VET_curScreen = to;
-	$('ImageUpload' + VET_prevScreen).style.display = 'none';
-	$('ImageUpload' + VET_curScreen).style.display = '';
+	$('VideoEmbed' + VET_prevScreen).style.display = 'none';
+	$('VideoEmbed' + VET_curScreen).style.display = '';
 	if(VET_curScreen == 'Main') {
-		$('ImageUploadBack').style.display = 'none';
+		$('VideoEmbedBack').style.display = 'none';
 	}
-	if((VET_prevScreen == 'Details' || VET_prevScreen == 'Conflict') && VET_curScreen == 'Main' && $('ImageUploadName')) {
-		YAHOO.util.Connect.asyncRequest('GET', wgScriptPath + '/index.php?action=ajax&rs=VET&method=clean&mwname=' + $('ImageUploadMWname').value);
+	if((VET_prevScreen == 'Details' || VET_prevScreen == 'Conflict') && VET_curScreen == 'Main' && $('VideoEmbedName')) {
+		YAHOO.util.Connect.asyncRequest('GET', wgScriptPath + '/index.php?action=ajax&rs=VET&method=clean&mwname=' + $('VideoEmbedMWname').value);
 	}
 }
 
