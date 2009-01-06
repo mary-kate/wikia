@@ -43,22 +43,22 @@ function VETSetup($editform) {
 function VETSetupVars($vars) {
 	global $wgFileBlacklist, $wgCheckFileExtensions, $wgStrictFileExtensions, $wgFileExtensions;
 
-	$vars['wmu_back'] = wfMsg('wmu-back');
-	$vars['wmu_imagebutton'] = wfMsg('wmu-imagebutton') ;
-	$vars['wmu_close'] = wfMsg('wmu-close');
-	$vars['wmu_warn1'] = wfMsg('wmu-warn1');
-	$vars['wmu_warn2'] = wfMsg('wmu-warn2');
-	$vars['wmu_bad_extension'] = wfMsg('wmu-bad-extension');
+	$vars['vet_back'] = wfMsg('wmu-back');
+	$vars['vet_imagebutton'] = wfMsg('wmu-imagebutton') ;
+	$vars['vet_close'] = wfMsg('wmu-close');
+	$vars['vet_warn1'] = wfMsg('wmu-warn1');
+	$vars['vet_warn2'] = wfMsg('wmu-warn2');
+	$vars['vet_bad_extension'] = wfMsg('wmu-bad-extension');
 	$vars['filetype_missing'] = wfMsg('filetype-missing');
 	$vars['file_extensions'] = $wgFileExtensions;
 	$vars['file_blacklist'] = $wgFileBlacklist;
 	$vars['check_file_extensions'] = $wgCheckFileExtensions;
 	$vars['strict_file_extensions'] = $wgStrictFileExtensions;
-	$vars['wmu_show_message'] = wfMsg('wmu-show-message');
-	$vars['wmu_hide_message'] = wfMsg('wmu-hide-message');
-	$vars['wmu_show_license_message'] = wfMsg('wmu-show-license-msg');
-	$vars['wmu_hide_license_message'] = wfMsg('wmu-hide-license-msg');
-	$vars['wmu_max_thumb'] = wfMsg('wmu-max-thumb');
+	$vars['vet_show_message'] = wfMsg('wmu-show-message');
+	$vars['vet_hide_message'] = wfMsg('wmu-hide-message');
+	$vars['vet_show_license_message'] = wfMsg('wmu-show-license-msg');
+	$vars['vet_hide_license_message'] = wfMsg('wmu-hide-license-msg');
+	$vars['vet_max_thumb'] = wfMsg('wmu-max-thumb');
 
 	return true;
 }
