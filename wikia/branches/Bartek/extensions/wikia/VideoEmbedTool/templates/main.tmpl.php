@@ -9,7 +9,6 @@
 <table cellspacing="0" style="width: 100%;" id="VideoEmbedInputTable">
 	<tr id="VideoEmbedTextCont">
 		<td colspan="2">
-			<div id="VideoEmbedMessage"><?= $uploadmesg ?></div>
 		</td>
 	</tr>
 
@@ -42,8 +41,10 @@ if( !$wgUser->isAllowed( 'upload' ) ) {
 		</td>
 	</tr>
 	<tr id="VideoEmbedFind">
-		<td><h1><?= wfMsg('vet-find') ?></h1></td>
-		<td>
+		<td colspan="2"><h1><?= wfMsg('vet-find') ?></h1></td>
+	</tr>
+	<tr>
+		<td colspan="2">
 <?php
 if( ( $wgUser->isLoggedIn() ) && ( $wgUser->isAllowed( 'upload' ) ) ) {
 ?>

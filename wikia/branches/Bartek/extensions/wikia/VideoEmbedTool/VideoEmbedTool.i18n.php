@@ -3,7 +3,7 @@ $messages = array();
 $messages['en'] = array(
 	'vet-upload' => 'Upload',
 	'vet-notlogged' => 'Log in or register to upload images from your computer',
-	'vet-find' => 'Find',
+	'vet-find' => 'Find a video on the web',
 	'vet-thiswiki' => 'This Wiki',
 	'vet-flickr' => 'Flickr',
 	'vet-upload-btn' => 'Upload',
@@ -53,4 +53,5 @@ $messages['en'] = array(
 	'vet-show-license-msg' => 'show license text',
 	'vet-max-thumb' => 'maximum thumbnail size exceeded, reverting to original size',
 	'vet-notallowed' => 'You cannot upload images on this wiki',
+	'vet-title' => 'Add a video to your article',
 );
