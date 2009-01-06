@@ -4,6 +4,8 @@
  * @author Bartek Łapiński
  */
 
+global $IP;
+
 require_once( $IP . '/extensions/wikia/WikiaMiniUpload/WikiaMiniUpload_body.php');
 class VideoEmbedTool extends WikiaMiniUpload {
 
