@@ -1,5 +1,4 @@
 <div id="VideoEmbedError"></div>
-<div id="VideoEmbedMessageControl"><a id="VideoEmbedMessageLink" href="#" onclick="VET_toggleMainMesg(event);" >[<?= wfMsg( 'vet-hide-message' ) ?>]</a></div>
 <?php
 	$uploadmesg = wfMsgExt( 'vet-uploadtext', 'parse' );
 	$uploadmesg = preg_replace( '/(<a[^>]+)/', '$1 target="_new" ', $uploadmesg );
@@ -12,12 +11,33 @@
 		</td>
 	</tr>
 
+	<tr id="VideoEmbedFind">
+		<td colspan="2"><h1><?= wfMsg('vet-find') ?></h1></td>
+	</tr>
+	<tr>
+		<td colspan="2">
+<?php
+
+global $wgStylePath, $wgUser, $wgScriptPath;
+
+if( ( $wgUser->isLoggedIn() ) && ( $wgUser->isAllowed( 'upload' ) ) ) {
+?>
+			<div onclick="VET_changeSource(event);" style="font-size: 9pt; float: right; margin-top: 5px;">
+				<a id="VET_source_0" href="#" style="font-weight: bold;"><?= wfMsg('vet-thiswiki') ?></a> |
+				<a id="VET_source_1" href="#"><?= wfMsg('vet-flickr') ?></a>
+			</div>
+<?php
+}
+?>
+			<input onkeydown="VET_trySendQuery(event);" type="text" id="ImageQuery" />
+			<input onclick="VET_trySendQuery(event);" type="button" value="<?= wfMsg('vet-find-btn') ?>" />
+			<img src="<?= $wgStylePath; ?>/monaco/images/widget_loading.gif" id="VideoEmbedProgress2" style="visibility: hidden;"/>
+		</td>
+	</tr>
 	<tr id="VideoEmbedUpload">
 		<td><h1><?= wfMsg('vet-upload') ?></h1></td>
 		<td>
 <?php
-global $wgStylePath, $wgUser, $wgScriptPath;
-
 if( !$wgUser->isAllowed( 'upload' ) ) {
 	if( !$wgUser->isLoggedIn() ) {
 		echo wfMsg( 'vet-notlogged' );
@@ -40,26 +60,7 @@ if( !$wgUser->isAllowed( 'upload' ) ) {
 ?>
 		</td>
 	</tr>
-	<tr id="VideoEmbedFind">
-		<td colspan="2"><h1><?= wfMsg('vet-find') ?></h1></td>
-	</tr>
-	<tr>
-		<td colspan="2">
-<?php
-if( ( $wgUser->isLoggedIn() ) && ( $wgUser->isAllowed( 'upload' ) ) ) {
-?>
-			<div onclick="VET_changeSource(event);" style="font-size: 9pt; float: right; margin-top: 5px;">
-				<a id="VET_source_0" href="#" style="font-weight: bold;"><?= wfMsg('vet-thiswiki') ?></a> |
-				<a id="VET_source_1" href="#"><?= wfMsg('vet-flickr') ?></a>
-			</div>
-<?php
-}
-?>
-			<input onkeydown="VET_trySendQuery(event);" type="text" id="ImageQuery" />
-			<input onclick="VET_trySendQuery(event);" type="button" value="<?= wfMsg('vet-find-btn') ?>" />
-			<img src="<?= $wgStylePath; ?>/monaco/images/widget_loading.gif" id="VideoEmbedProgress2" style="visibility: hidden;"/>
-		</td>
-	</tr>
+
 </table>
 
 <div id="VET_results_0">
