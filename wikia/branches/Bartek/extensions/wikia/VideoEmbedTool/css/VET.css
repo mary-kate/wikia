@@ -1,10 +1,10 @@
-#ImageUpload {
+#VideoEmbed {
 	height: 507px;
 	padding: 25px 10px 10px;
 	position: relative;
 	width: 722px;
 }
-#ImageUploadBorder {
+#VideoEmbedBorder {
 	background-color: #000;
 	border: 1px solid #FFF;
 	filter: alpha(opacity=60);
@@ -15,7 +15,7 @@
 	top: 0;
 	width: 720px;
 }
-#ImageUploadBody {
+#VideoEmbedBody {
 	background: #FFF;
 	height: 440px;
 	opacity: 1;
@@ -25,27 +25,27 @@
 	width: 670px;
 	color: #000 !important;
 }
-#ImageUpload h1 {
+#VideoEmbed h1 {
 	color: #222;
 	font-weight: bold;
 	font-size: 19pt;
 	letter-spacing: -1px;
 }
-#ImageUpload h2 {
+#VideoEmbed h2 {
 	font-size: 12pt;
 	font-weight: bold;
 }
-#ImageUploadBack {
+#VideoEmbedBack {
 	left: 10px;
 	padding-left: 18px;
 	position: absolute;
 	top: 5px;
 	display: none;
 }
-#ImageUploadBack a {
+#VideoEmbedBack a {
 	color: #FFF;
 }
-#ImageUploadBack div {
+#VideoEmbedBack div {
 	background: url(../../../../skins/monaco/images/sprite.png);
 	clip: rect(0px 304px 16px 288px);
 	height: 16px;
@@ -54,20 +54,20 @@
 	width: 320px;
 	cursor: pointer;
 }
-* html #ImageUploadBack div {
+* html #VideoEmbedBack div {
 	background: none;
 	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://images.wikia.com/common/skins/monaco/images/sprite.png', sizingMethod='crop');
 }
-#ImageUploadClose {
+#VideoEmbedClose {
 	right: 30px;
 	padding-left: 18px;
 	position: absolute;
 	top: 5px;
 }
-#ImageUploadClose a {
+#VideoEmbedClose a {
 	color: #FFF;
 }
-#ImageUploadClose div {
+#VideoEmbedClose div {
 	background: url(../../../../skins/monaco/images/sprite.png);
 	clip: rect(0px 320px 16px 304px);
 	height: 16px;
@@ -76,16 +76,16 @@
 	width: 320px;
 	cursor: pointer;
 }
-* html #ImageUploadClose div {
+* html #VideoEmbedClose div {
 	background: none;
 	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://images.wikia.com/common/skins/monaco/images/sprite.png', sizingMethod='crop');
 }
-.ImageUploadProgress {
+.VideoEmbedProgress {
 	background: url(../../../../skins/monaco/images/widget_loading.gif) no-repeat;
 	height: 11px;
 	width: 70px;
 }
-#ImageUploadProgress1 {
+#VideoEmbedProgress1 {
 	position: absolute;
 	left: 326px;
 	top: 9px;
@@ -93,65 +93,65 @@
 }
 
 /*** CONFLICT ***/
-#ImageUploadConflictTable {
+#VideoEmbedConflictTable {
 	margin: 15px 0 10px;
 	width: 100%;
 }
-#ImageUploadConflictTable td {
+#VideoEmbedConflictTable td {
 	padding: 5px 20px 10px;
 	text-align: center;
 	vertical-align: top;
 	width: 50%;
 }
-#ImageUploadCompare td {
+#VideoEmbedCompare td {
 	background: url(../images/conflict_background.png) center center no-repeat;
 	height: 220px;
 	padding: 0;
 	vertical-align: middle;
 }
-* html #ImageUploadCompare td {
+* html #VideoEmbedCompare td {
 	background: none;
 }
-#ImageUploadCompare img {
+#VideoEmbedCompare img {
 	line-height: 280px;
 }
 
 /*** UPLOAD/FIND ***/
-#ImageUploadPagination {
+#VideoEmbedPagination {
 	font-size: 9pt;
 	float: right;
 }
-#ImageUploadHeadline {
+#VideoEmbedHeadline {
 	margin: 6px 0 5px;
 }
-#ImageUploadInputTable {
+#VideoEmbedInputTable {
 	margin-top: -5px;
 }
-#ImageUploadInputTable td {
+#VideoEmbedInputTable td {
 	border-bottom: 1px solid #CCC;
 	padding: 8px 0;
 }
-#ImageUploadUpload td {
+#VideoEmbedUpload td {
 	padding-top: 8px;
 }
-#ImageUploadFindTable {
+#VideoEmbedFindTable {
 	background: #EEE;
 	margin: 0 0 5px;
 	width: 100%;
 }
-#ImageUploadFindTable td {
+#VideoEmbedFindTable td {
 	font-size: 8pt;
 	font-weight: bold;
 	text-align: center;
 }
-#ImageUploadFindTable tr.ImageUploadFindImages td {
+#VideoEmbedFindTable tr.VideoEmbedFindImages td {
 	padding-top: 10px;
 	vertical-align: bottom;
 }
-#ImageUploadFindTable tr.ImageUploadFindLinks td {
+#VideoEmbedFindTable tr.VideoEmbedFindLinks td {
 	padding: 5px 0 10px;
 }
-#ImageUploadFindTable img {
+#VideoEmbedFindTable img {
 	display: block;
 	margin: 0 auto;
 	max-height: 90px;
@@ -159,50 +159,50 @@
 	/*height: expression(this.height > this.width && this.height > 90 ? '90px' : 'auto');*/
 	/*width: expression(this.height < this.width && this.width > 120 ? '120px' : true);*/
 }
-#ImageUploadFindNext {
+#VideoEmbedFindNext {
 	float: right;
 }
 
 /***INSERT OPTIONS***/
-.ImageUploadOptionsTable {
+.VideoEmbedOptionsTable {
 	color: #000;
 }
-.ImageUploadOptionsTable th {
+.VideoEmbedOptionsTable th {
 	font-weight: bold;
 	font-size: 11pt;
 }
-.ImageUploadOptionsTable td, .ImageUploadOptionsTable th {
+.VideoEmbedOptionsTable td, .VideoEmbedOptionsTable th {
 	border-bottom: 1px solid #CCC;
 	padding: 5px 5px;
 }
-ImageUploadOptionsTable img {
+VideoEmbedOptionsTable img {
 	vertical-align: middle;
 }
-.ImageUploadOptionsTable label {
+.VideoEmbedOptionsTable label {
 	margin-right: 10px;
 }
-.ImageUploadNoBorder td, .ImageUploadNoBorder th {
+.VideoEmbedNoBorder td, .VideoEmbedNoBorder th {
 	border: 0 !important;
 }
-.ImageUploadNoSpace td, .ImageUploadNoSpace th {
+.VideoEmbedNoSpace td, .VideoEmbedNoSpace th {
 	padding: 0 !important;
 }
 
-.ImageUploadThin td, .ImageUploadThin th {
+.VideoEmbedThin td, .VideoEmbedThin th {
 	padding: 10px 5px 2px 2px !important;
 }
 
-#ImageUploadSection {
+#VideoEmbedSection {
 	background: #EEE;
 	border-bottom: 1px solid #CCC;
 	margin-bottom: 15px;
 	padding: 5px;
 }
-#ImageUploadWidthCheckbox {
+#VideoEmbedWidthCheckbox {
 	float: left;
 	margin-right: 5px;
 }
-#ImageUploadSlider {
+#VideoEmbedSlider {
 	background: url(../images/slider_groove.png) center center repeat-x;
 	height: 16px;
 	float: left;
@@ -210,11 +210,11 @@ ImageUploadOptionsTable img {
 	position: relative;
 	width: 208px;
 }
-#ImageUploadSliderThumb {
+#VideoEmbedSliderThumb {
 	position: absolute;
 }
 
-#ImageUploadError {
+#VideoEmbedError {
 	background: #252525;
 	color: #FFF;
 	font-size: 11pt;
@@ -227,56 +227,56 @@ ImageUploadOptionsTable img {
 	width: 656px;
 	display: none;
 }
-#ImageUploadError a {
+#VideoEmbedError a {
 	color: #EEE;
 	text-decoration: underline;
 }
 
-#WMU_div {
+#VET_div {
     background: transparent;
     border: 0;
 }
 
-.ImageUploadSourceNote {
+.VideoEmbedSourceNote {
 	color: #666;
 	font-size: 11pt;
 	margin-top: 10px !important;
 }
 
-#WMU_error_box {
+#VET_error_box {
 	display: none;
 }
 
-#ImageUploadMessage p {
+#VideoEmbedMessage p {
 	line-height:1.5em !important;
 	margin:0.4em 0 0.5em !important;
 }
 
-#ImageUploadLicenseSpan {
+#VideoEmbedLicenseSpan {
 	font-size: 8pt;
 }
 
-#ImageUploadMessageControl {
+#VideoEmbedMessageControl {
 	position: absolute;
 	font-size: 9pt;
 	right: 24px;
 	top: 6px;
 }
 
-#ImageUploadTextCont td {
+#VideoEmbedTextCont td {
 	padding-top: 0;
 }
 
-#ImageUploadLicenseControl, #ImageUploadLicenseText {
+#VideoEmbedLicenseControl, #VideoEmbedLicenseText {
 	font-size: 9pt;
 }
 
-#ImageUploadLicenseLink {
+#VideoEmbedLicenseLink {
 	margin-left: 4px;
 }
 
 
-#ImageUploadManualWidth {
+#VideoEmbedManualWidth {
 	width: 36px;
 	height: 16px;
 }

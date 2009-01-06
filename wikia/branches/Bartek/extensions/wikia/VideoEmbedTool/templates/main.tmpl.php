@@ -1,74 +1,74 @@
-<div id="ImageUploadError"></div>
-<div id="ImageUploadMessageControl"><a id="ImageUploadMessageLink" href="#" onclick="WMU_toggleMainMesg(event);" >[<?= wfMsg( 'wmu-hide-message' ) ?>]</a></div>
+<div id="VideoEmbedError"></div>
+<div id="VideoEmbedMessageControl"><a id="VideoEmbedMessageLink" href="#" onclick="VET_toggleMainMesg(event);" >[<?= wfMsg( 'vet-hide-message' ) ?>]</a></div>
 <?php
-	$uploadmesg = wfMsgExt( 'wmu-uploadtext', 'parse' );
+	$uploadmesg = wfMsgExt( 'vet-uploadtext', 'parse' );
 	$uploadmesg = preg_replace( '/(<a[^>]+)/', '$1 target="_new" ', $uploadmesg );
 
 ?>
 
-<table cellspacing="0" style="width: 100%;" id="ImageUploadInputTable">
-	<tr id="ImageUploadTextCont">
+<table cellspacing="0" style="width: 100%;" id="VideoEmbedInputTable">
+	<tr id="VideoEmbedTextCont">
 		<td colspan="2">
-			<div id="ImageUploadMessage"><?= $uploadmesg ?></div>
+			<div id="VideoEmbedMessage"><?= $uploadmesg ?></div>
 		</td>
 	</tr>
 
-	<tr id="ImageUploadUpload">
-		<td><h1><?= wfMsg('wmu-upload') ?></h1></td>
+	<tr id="VideoEmbedUpload">
+		<td><h1><?= wfMsg('vet-upload') ?></h1></td>
 		<td>
 <?php
 global $wgStylePath, $wgUser, $wgScriptPath;
 
 if( !$wgUser->isAllowed( 'upload' ) ) {
 	if( !$wgUser->isLoggedIn() ) {
-		echo wfMsg( 'wmu-notlogged' );
+		echo wfMsg( 'vet-notlogged' );
 	} else {
-		echo wfMsg( 'wmu-notallowed' ); 
+		echo wfMsg( 'vet-notallowed' ); 
 	}
 } else {
 	if ($error) {
 		?>
-			<span id="WMU_error_box"><?= $error ?></span>
+			<span id="VET_error_box"><?= $error ?></span>
 			<?php
 	}
 	?>
-			<form onsubmit="return AIM.submit(this, WMU_uploadCallback)" action="<?= $wgScriptPath ?>/index.php?action=ajax&rs=WMU&method=uploadImage" id="ImageUploadForm" method="POST" enctype="multipart/form-data">
-				<input id="ImageUploadFile" name="wpUploadFile" type="file" size="32" />
-				<input type="submit" value="<?= wfMsg('wmu-upload-btn') ?>" onclick="return WMU_upload(event);" />
+			<form onsubmit="return AIM.submit(this, VET_uploadCallback)" action="<?= $wgScriptPath ?>/index.php?action=ajax&rs=VET&method=uploadImage" id="VideoEmbedForm" method="POST" enctype="multipart/form-data">
+				<input id="VideoEmbedFile" name="wpUploadFile" type="file" size="32" />
+				<input type="submit" value="<?= wfMsg('vet-upload-btn') ?>" onclick="return VET_upload(event);" />
 			</form>
 	<?php
 }
 ?>
 		</td>
 	</tr>
-	<tr id="ImageUploadFind">
-		<td><h1><?= wfMsg('wmu-find') ?></h1></td>
+	<tr id="VideoEmbedFind">
+		<td><h1><?= wfMsg('vet-find') ?></h1></td>
 		<td>
 <?php
 if( ( $wgUser->isLoggedIn() ) && ( $wgUser->isAllowed( 'upload' ) ) ) {
 ?>
-			<div onclick="WMU_changeSource(event);" style="font-size: 9pt; float: right; margin-top: 5px;">
-				<a id="WMU_source_0" href="#" style="font-weight: bold;"><?= wfMsg('wmu-thiswiki') ?></a> |
-				<a id="WMU_source_1" href="#"><?= wfMsg('wmu-flickr') ?></a>
+			<div onclick="VET_changeSource(event);" style="font-size: 9pt; float: right; margin-top: 5px;">
+				<a id="VET_source_0" href="#" style="font-weight: bold;"><?= wfMsg('vet-thiswiki') ?></a> |
+				<a id="VET_source_1" href="#"><?= wfMsg('vet-flickr') ?></a>
 			</div>
 <?php
 }
 ?>
-			<input onkeydown="WMU_trySendQuery(event);" type="text" id="ImageQuery" />
-			<input onclick="WMU_trySendQuery(event);" type="button" value="<?= wfMsg('wmu-find-btn') ?>" />
-			<img src="<?= $wgStylePath; ?>/monaco/images/widget_loading.gif" id="ImageUploadProgress2" style="visibility: hidden;"/>
+			<input onkeydown="VET_trySendQuery(event);" type="text" id="ImageQuery" />
+			<input onclick="VET_trySendQuery(event);" type="button" value="<?= wfMsg('vet-find-btn') ?>" />
+			<img src="<?= $wgStylePath; ?>/monaco/images/widget_loading.gif" id="VideoEmbedProgress2" style="visibility: hidden;"/>
 		</td>
 	</tr>
 </table>
 
-<div id="WMU_results_0">
+<div id="VET_results_0">
 	<?= $result ?>
 </div>
 
-<div id="WMU_results_1" style="display: none;">
+<div id="VET_results_1" style="display: none;">
 	<br/><br/><br/><br/><br/>
 	<div style="text-align: center;">
-		<img src="<?= $wgStylePath ?>/../extensions/wikia/WikiaMiniUpload/images/flickr_logo.gif" />
-		<div class="ImageUploadSourceNote"><?= wfMsg('wmu-flickr-inf') ?></div>
+		<img src="<?= $wgStylePath ?>/../extensions/wikia/VideoEmbedTool/images/flickr_logo.gif" />
+		<div class="VideoEmbedSourceNote"><?= wfMsg('vet-flickr-inf') ?></div>
 	</div>
 </div>

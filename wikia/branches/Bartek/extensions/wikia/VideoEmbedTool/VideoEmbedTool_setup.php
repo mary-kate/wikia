@@ -8,7 +8,7 @@ if(!defined('MEDIAWIKI')) {
 }
 
 
-// for now it's more a copy of WikiaMiniUpload files
+// for now it's more a copy of VideoEmbedTool files
 $wgExtensionCredits['other'][] = array(
         'name' => 'Video Embed Tool',
         'author' => 'Bartek Łapiński',
@@ -35,7 +35,7 @@ function VETSetup($editform) {
 			$marg =  'clear: both;' ;
 			$editform->ImageSeparator = ' - ' ;
 		}
-		$wgOut->addHtml('<div id="wmuLinkDiv" style="float: left; margin-top: 20px;' . $marg .'">' . $sep . '<a href="#" id="wmuLink">' . wfMsg ('wmu-imagelink') . '</a></div>');
+		$wgOut->addHtml('<div id="vetLinkDiv" style="float: left; margin-top: 20px;' . $marg .'">' . $sep . '<a href="#" id="vetLink">' . wfMsg ('vet-imagelink') . '</a></div>');
 	}
 	return true;
 }
@@ -43,22 +43,22 @@ function VETSetup($editform) {
 function VETSetupVars($vars) {
 	global $wgFileBlacklist, $wgCheckFileExtensions, $wgStrictFileExtensions, $wgFileExtensions;
 
-	$vars['vet_back'] = wfMsg('wmu-back');
-	$vars['vet_imagebutton'] = wfMsg('wmu-imagebutton') ;
-	$vars['vet_close'] = wfMsg('wmu-close');
-	$vars['vet_warn1'] = wfMsg('wmu-warn1');
-	$vars['vet_warn2'] = wfMsg('wmu-warn2');
-	$vars['vet_bad_extension'] = wfMsg('wmu-bad-extension');
+	$vars['vet_back'] = wfMsg('vet-back');
+	$vars['vet_imagebutton'] = wfMsg('vet-imagebutton') ;
+	$vars['vet_close'] = wfMsg('vet-close');
+	$vars['vet_warn1'] = wfMsg('vet-warn1');
+	$vars['vet_warn2'] = wfMsg('vet-warn2');
+	$vars['vet_bad_extension'] = wfMsg('vet-bad-extension');
 	$vars['filetype_missing'] = wfMsg('filetype-missing');
 	$vars['file_extensions'] = $wgFileExtensions;
 	$vars['file_blacklist'] = $wgFileBlacklist;
 	$vars['check_file_extensions'] = $wgCheckFileExtensions;
 	$vars['strict_file_extensions'] = $wgStrictFileExtensions;
-	$vars['vet_show_message'] = wfMsg('wmu-show-message');
-	$vars['vet_hide_message'] = wfMsg('wmu-hide-message');
-	$vars['vet_show_license_message'] = wfMsg('wmu-show-license-msg');
-	$vars['vet_hide_license_message'] = wfMsg('wmu-hide-license-msg');
-	$vars['vet_max_thumb'] = wfMsg('wmu-max-thumb');
+	$vars['vet_show_message'] = wfMsg('vet-show-message');
+	$vars['vet_hide_message'] = wfMsg('vet-hide-message');
+	$vars['vet_show_license_message'] = wfMsg('vet-show-license-msg');
+	$vars['vet_hide_license_message'] = wfMsg('vet-hide-license-msg');
+	$vars['vet_max_thumb'] = wfMsg('vet-max-thumb');
 
 	return true;
 }
@@ -78,9 +78,9 @@ function VET() {
 	require_once($dir.'VideoEmbedTool_body.php');
 
 	$method = $wgRequest->getVal('method');
-	$wmu = new VideoEmbedTool();
+	$vet = new VideoEmbedTool();
 
-	$html = $wmu->$method();
+	$html = $vet->$method();
 	$domain = $wgRequest->getVal('domain', null);
 	if(!empty($domain)) {
 		$html .= '<script type="text/javascript">document.domain = "' . $domain  . '"</script>';
