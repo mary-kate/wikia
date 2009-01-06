@@ -78,7 +78,7 @@ function VET() {
 	require_once($dir.'VideoEmbedTool_body.php');
 
 	$method = $wgRequest->getVal('method');
-	$wmu = new WikiaMiniUpload();
+	$wmu = new VideoEmbedTool();
 
 	$html = $wmu->$method();
 	$domain = $wgRequest->getVal('domain', null);
