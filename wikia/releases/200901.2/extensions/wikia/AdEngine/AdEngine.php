@@ -108,14 +108,11 @@ class AdEngine {
 
 		$out = "<!-- #### BEGIN " . __CLASS__ . '::' . __METHOD__ . " ####-->\n";
 		
-		/*
-		global $wgExtensionsPath;
-		$out .= '<script type="text/javascript" src="' . $wgExtensionsPath . '/wikia/AdEngine/AdEngine.js?' . self::cacheKeyVersion . '"></script>'. "\n";
-		*/
-
 		// If loading the ads inline, call the set up html for each provider.
 		// If loading delayed, this is done in getDelayedAdLoading method instead.
 		if ($this->loadType == 'inline'){
+			global $wgExtensionsPath;
+			$out .= '<script type="text/javascript" src="' . $wgExtensionsPath . '/wikia/AdEngine/AdEngine.js?' . self::cacheKeyVersion . '"></script>'. "\n";
 			foreach($this->slots as $slotname => $slot) {
                         	$AdProvider = $this->getAdProvider($slotname);        
                         	// Get setup HTML for each provider. May be empty.
@@ -401,8 +398,9 @@ class AdEngine {
 		$this->placeholders = array_reverse($this->placeholders);
 
 		$out = "<!-- #### BEGIN " . __CLASS__ . '::' . __METHOD__ . " ####-->\n";
-
-		$out .= '<script type="text/javascript" src="' . $wgExtensionsPath . '/wikia/AdEngine/AdEngine.js?' . self::cacheKeyVersion . '"></script>'. "\n";
+		if($this->loadType != 'inline'){
+			$out .= '<script type="text/javascript" src="' . $wgExtensionsPath . '/wikia/AdEngine/AdEngine.js?' . self::cacheKeyVersion . '"></script>'. "\n";
+		}
 
 		$out .=  $this->getBucketTestingCode();
 		global $wgCityId;
