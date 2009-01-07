@@ -12,6 +12,7 @@ if(!defined('MEDIAWIKI')) {
 $wgExtensionCredits['other'][] = array(
         'name' => 'Video Embed Tool',
         'author' => 'Bartek Łapiński',
+	'version' => '0.11',
 );
 
 $dir = dirname(__FILE__).'/';
