@@ -115,7 +115,8 @@ $MF['monaco_loggedin_js']['source'] = array(
 	'common/widgets/js/widgetsConfig.js',
 	'common/widgets/js/widgetsFramework.js',
 	'../extensions/wikia/ProblemReports/js/ProblemReports-loader.js',
-	'../extensions/wikia/FAST/FAST.js',
+	'../extensions/wikia/AdEngine/AdEngine.js',
+	//'../extensions/wikia/FAST/FAST.js',
 	'../extensions/wikia/TieDivLibrary/TieDivLibrary.js',
 );
 $MF['monaco_loggedin_js']['source'] = array_merge($MF['monaco_loggedin_js']['source'], $widgetsAssets['js']);
@@ -144,7 +145,8 @@ $MF['monaco_non_loggedin_js']['source'] = array(
 	'common/widgets/js/widgetsFramework.js',
 	'../extensions/wikia/AjaxLogin/AjaxLogin.js',
 	'../extensions/wikia/ProblemReports/js/ProblemReports-loader.js',
-	'../extensions/wikia/FAST/FAST.js',
+	'../extensions/wikia/AdEngine/AdEngine.js',
+	//'../extensions/wikia/FAST/FAST.js',
 	'../extensions/wikia/Userengagement/Userengagement.js',
 	'../extensions/wikia/TieDivLibrary/TieDivLibrary.js',
 );
