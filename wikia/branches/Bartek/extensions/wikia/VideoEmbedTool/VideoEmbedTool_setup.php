@@ -60,6 +60,7 @@ function VETSetupVars($vars) {
 	$vars['vet_show_license_message'] = wfMsg('vet-show-license-msg');
 	$vars['vet_hide_license_message'] = wfMsg('vet-hide-license-msg');
 	$vars['vet_max_thumb'] = wfMsg('vet-max-thumb');
+	$vars['vet_title'] = wfMsg('vet-title');
 
 	return true;
 }

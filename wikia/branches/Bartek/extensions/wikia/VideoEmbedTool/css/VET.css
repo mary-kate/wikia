@@ -67,6 +67,11 @@
 #VideoEmbedClose a {
 	color: #FFF;
 }
+
+#VideoEmbedTitle {
+	color: #FFF;
+}
+
 #VideoEmbedClose div {
 	background: url(../../../../skins/monaco/images/sprite.png);
 	clip: rect(0px 320px 16px 304px);
