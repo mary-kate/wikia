@@ -401,9 +401,6 @@ class AdEngine {
 		$this->placeholders = array_reverse($this->placeholders);
 
 		$out = "<!-- #### BEGIN " . __CLASS__ . '::' . __METHOD__ . " ####-->\n";
-		if($this->loadType != 'inline'){
-			$out .= '<script type="text/javascript" src="' . $wgExtensionsPath . '/wikia/AdEngine/AdEngine.js?' . self::cacheKeyVersion . '"></script>'. "\n";
-		}
 
 		$out .=  $this->getBucketTestingCode();
 		global $wgCityId;
