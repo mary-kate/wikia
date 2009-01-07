@@ -107,12 +107,11 @@ class AdEngine {
 	public function getSetupHtml(){
 
 		$out = "<!-- #### BEGIN " . __CLASS__ . '::' . __METHOD__ . " ####-->\n";
-
-		/* TODO move this to allinone, and find a better spot for this code after I talk to Christian.
-                         This is an experiment to see if moving it higher on the page makes it better */
+		
+		/*
 		global $wgExtensionsPath;
-		//$wgExtensionsPath='/extensions';
 		$out .= '<script type="text/javascript" src="' . $wgExtensionsPath . '/wikia/AdEngine/AdEngine.js?' . self::cacheKeyVersion . '"></script>'. "\n";
+		*/
 
 		// If loading the ads inline, call the set up html for each provider.
 		// If loading delayed, this is done in getDelayedAdLoading method instead.
@@ -402,6 +401,8 @@ class AdEngine {
 		$this->placeholders = array_reverse($this->placeholders);
 
 		$out = "<!-- #### BEGIN " . __CLASS__ . '::' . __METHOD__ . " ####-->\n";
+
+		$out .= '<script type="text/javascript" src="' . $wgExtensionsPath . '/wikia/AdEngine/AdEngine.js?' . self::cacheKeyVersion . '"></script>'. "\n";
 
 		$out .=  $this->getBucketTestingCode();
 		global $wgCityId;
