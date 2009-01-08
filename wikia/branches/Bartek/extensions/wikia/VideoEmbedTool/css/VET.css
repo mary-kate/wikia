@@ -42,6 +42,12 @@
 	top: 5px;
 	display: none;
 }
+
+#VideoQuery {
+	height: 35px;
+	width: 300px;
+}
+
 #VideoEmbedBack a {
 	color: #FFF;
 }

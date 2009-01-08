@@ -14,7 +14,7 @@
 	<tr id="VideoEmbedFind">
 		<td colspan="2"><h1><?= wfMsg('vet-find') ?></h1></td>
 	</tr>
-	<tr>
+	<tr id="VideoEmbedSearch">
 		<td colspan="2">
 <?php
 
@@ -29,7 +29,7 @@ if( ( $wgUser->isLoggedIn() ) && ( $wgUser->isAllowed( 'upload' ) ) ) {
 <?php
 }
 ?>
-			<input onkeydown="VET_trySendQuery(event);" type="text" id="ImageQuery" />
+			<textarea onkeydown="VET_trySendQuery(event);" type="text" id="VideoQuery"></textarea>
 			<input onclick="VET_trySendQuery(event);" type="button" value="<?= wfMsg('vet-find-btn') ?>" />
 			<img src="<?= $wgStylePath; ?>/monaco/images/widget_loading.gif" id="VideoEmbedProgress2" style="visibility: hidden;"/>
 		</td>
