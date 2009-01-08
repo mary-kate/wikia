@@ -6,11 +6,11 @@ define( 'NS_VIDEO', 400 );
 class Video {
 	var 	$id,
 		$provider,
+		$exists,
 		$url,
 		$title,
-		$height,
-		$width;
-			
+		$width,
+		$ratio;			
 
 	public function __construct( $title ) {
 
