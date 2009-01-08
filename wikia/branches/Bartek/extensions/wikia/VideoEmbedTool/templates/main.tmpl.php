@@ -22,8 +22,29 @@
 			<textarea onkeydown="VET_trySendQuery(event);" type="text" id="VideoQuery"></textarea>
 			<input onclick="VET_trySendQuery(event);" type="button" value="<?= wfMsg('vet-find-btn') ?>" />
 			<img src="<?= $wgStylePath; ?>/monaco/images/widget_loading.gif" id="VideoEmbedProgress2" style="visibility: hidden;"/>
-		</td>
-		<td>
+			<?php
+			if( !$wgUser->isAllowed( 'upload' ) ) {
+				if( !$wgUser->isLoggedIn() ) {
+					echo wfMsg( 'vet-notlogged' );
+				} else {
+					echo wfMsg( 'vet-notallowed' ); 
+				}
+			} else {
+				if ($error) {
+					?>
+						<span id="VET_error_box"><?= $error ?></span>
+						<?php
+				}
+				?>
+					<form onsubmit="return AIM.submit(this, VET_uploadCallback)" action="<?= $wgScriptPath ?>/index.php?action=ajax&rs=VET&method=uploadImage" id="VideoEmbedForm" method="POST" enctype="multipart/form-data">
+					<label for="VideoEmbedFile"><?= wfMsg('vet-upload') ?></label><input id="VideoEmbedFile" name="wpUploadFile" type="text" size="32" />
+					<input type="submit" value="<?= wfMsg('vet-upload-btn') ?>" onclick="return VET_upload(event);" />
+					</form>
+					<?php
+			}
+?>
+</td>
+<td>
 <?php
 
 if( ( $wgUser->isLoggedIn() ) && ( $wgUser->isAllowed( 'upload' ) ) ) {
@@ -36,32 +57,6 @@ if( ( $wgUser->isLoggedIn() ) && ( $wgUser->isAllowed( 'upload' ) ) ) {
 }
 ?>
 	</tr>
-	<tr id="VideoEmbedUpload">
-		<td colspan="2">
-<?php
-if( !$wgUser->isAllowed( 'upload' ) ) {
-	if( !$wgUser->isLoggedIn() ) {
-		echo wfMsg( 'vet-notlogged' );
-	} else {
-		echo wfMsg( 'vet-notallowed' ); 
-	}
-} else {
-	if ($error) {
-		?>
-			<span id="VET_error_box"><?= $error ?></span>
-			<?php
-	}
-	?>
-			<form onsubmit="return AIM.submit(this, VET_uploadCallback)" action="<?= $wgScriptPath ?>/index.php?action=ajax&rs=VET&method=uploadImage" id="VideoEmbedForm" method="POST" enctype="multipart/form-data">
-				<label for="VideoEmbedFile"><?= wfMsg('vet-upload') ?></label><input id="VideoEmbedFile" name="wpUploadFile" type="text" size="32" />
-				<input type="submit" value="<?= wfMsg('vet-upload-btn') ?>" onclick="return VET_upload(event);" />
-			</form>
-	<?php
-}
-?>
-		</td>
-	</tr>
-
 </table>
 
 <div id="VET_results_0">
