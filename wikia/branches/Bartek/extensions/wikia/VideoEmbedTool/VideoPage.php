@@ -28,7 +28,26 @@ class VideoPage extends Article {
 
 	}
 
+	function videoHistory() {
+
+
+	}
+
+	function videoLinks() {
+
+
+	}
+
 }
+
+class VideoHistoryList {
+
+
+
+
+
+}
+
 
 ?>
 
