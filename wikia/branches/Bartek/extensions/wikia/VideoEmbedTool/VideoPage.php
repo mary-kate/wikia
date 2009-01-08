@@ -2,7 +2,7 @@
 
 
 // main video page class
-class VidePage extends Article {
+class VideoPage extends Article {
 
         function __construct (&$title){
                 parent::__construct(&$title);
