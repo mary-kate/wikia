@@ -52,7 +52,7 @@ if( !$wgUser->isAllowed( 'upload' ) ) {
 	}
 	?>
 			<form onsubmit="return AIM.submit(this, VET_uploadCallback)" action="<?= $wgScriptPath ?>/index.php?action=ajax&rs=VET&method=uploadImage" id="VideoEmbedForm" method="POST" enctype="multipart/form-data">
-				<input id="VideoEmbedFile" name="wpUploadFile" type="file" size="32" />
+				<input id="VideoEmbedFile" name="wpUploadFile" type="text" size="32" />
 				<input type="submit" value="<?= wfMsg('vet-upload-btn') ?>" onclick="return VET_upload(event);" />
 			</form>
 	<?php

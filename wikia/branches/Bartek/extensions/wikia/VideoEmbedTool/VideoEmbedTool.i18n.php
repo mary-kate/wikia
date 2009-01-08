@@ -1,12 +1,12 @@
 <?php
 $messages = array();
 $messages['en'] = array(
-	'vet-upload' => 'Upload',
+	'vet-upload' => 'URL',
 	'vet-notlogged' => 'Log in or register to upload images from your computer',
 	'vet-find' => 'Find a video on the web',
 	'vet-thiswiki' => 'This Wiki',
 	'vet-flickr' => 'Flickr',
-	'vet-upload-btn' => 'Upload',
+	'vet-upload-btn' => 'ADD',
 	'vet-find-btn' => 'Search',
 	'vet-flickr-inf' => 'Search properly licensed free photos from Flickr and import them into your wiki.',
 	'vet-conflict-inf' => '<h1>Oops, a file with that name already exists.</h1>What do you want to do about <b>$1</b>?',
