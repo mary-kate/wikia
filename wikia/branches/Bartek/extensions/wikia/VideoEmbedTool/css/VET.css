@@ -6,7 +6,6 @@
 }
 #VideoEmbedBorder {
 	background-color: #000;
-	border: 1px solid #FFF;
 	filter: alpha(opacity=60);
 	height: 505px;
 	left: 0;
@@ -139,7 +138,6 @@
 	margin-top: -5px;
 }
 #VideoEmbedInputTable td {
-	border-bottom: 1px solid #CCC;
 	padding: 8px 0;
 }
 #VideoEmbedUpload td {
