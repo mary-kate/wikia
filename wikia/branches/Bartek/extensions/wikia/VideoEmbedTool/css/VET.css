@@ -27,7 +27,7 @@
 #VideoEmbed h1 {
 	color: #222;
 	font-weight: bold;
-	font-size: 12pt;
+	font-size: 14pt;
 	letter-spacing: -1px;
 }
 #VideoEmbed h2 {
@@ -70,10 +70,6 @@
 	top: 5px;
 }
 #VideoEmbedClose a {
-	color: #FFF;
-}
-
-#VideoEmbedTitle {
 	color: #FFF;
 }
 
@@ -138,11 +134,17 @@
 	margin-top: -5px;
 }
 #VideoEmbedInputTable td {
+	padding: 4px 0;
+}
+
+#VideoEmbedTitle td {
 	padding: 8px 0;
 }
+
 #VideoEmbedUpload td {
 	padding-top: 8px;
 }
+
 #VideoEmbedFindTable {
 	background: #EEE;
 	margin: 0 0 5px;
