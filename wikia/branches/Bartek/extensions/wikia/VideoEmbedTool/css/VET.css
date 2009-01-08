@@ -27,7 +27,7 @@
 #VideoEmbed h1 {
 	color: #222;
 	font-weight: bold;
-	font-size: 14pt;
+	font-size: 15pt;
 	letter-spacing: -1px;
 }
 #VideoEmbed h2 {
@@ -139,6 +139,10 @@
 
 #VideoEmbedTitle td {
 	padding: 8px 0;
+}
+
+#VideoEmbedFind td, #VideoEmbedUpload td {
+	font-weight: bold;
 }
 
 #VideoEmbedUpload td {
