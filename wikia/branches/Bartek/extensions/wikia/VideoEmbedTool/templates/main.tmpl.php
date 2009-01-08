@@ -14,28 +14,30 @@
 	<tr id="VideoEmbedFind">
 		<td colspan="2"><?= wfMsg('vet-find') ?></td>
 	</tr>
-	<tr id="VideoEmbedSearch">
-		<td colspan="2">
 <?php
-
-global $wgStylePath, $wgUser, $wgScriptPath;
+	global $wgStylePath, $wgUser, $wgScriptPath;
+?>
+	<tr id="VideoEmbedSearch">
+		<td>
+			<textarea onkeydown="VET_trySendQuery(event);" type="text" id="VideoQuery"></textarea>
+			<input onclick="VET_trySendQuery(event);" type="button" value="<?= wfMsg('vet-find-btn') ?>" />
+			<img src="<?= $wgStylePath; ?>/monaco/images/widget_loading.gif" id="VideoEmbedProgress2" style="visibility: hidden;"/>
+		</td>
+		<td>
+<?php
 
 if( ( $wgUser->isLoggedIn() ) && ( $wgUser->isAllowed( 'upload' ) ) ) {
 ?>
 			<div id="VideoEmbedSupported">
 				<?= wfMsg( 'vet-supported' ) ?>
 			</div>
+		</td>
 <?php
 }
 ?>
-			<textarea onkeydown="VET_trySendQuery(event);" type="text" id="VideoQuery"></textarea>
-			<input onclick="VET_trySendQuery(event);" type="button" value="<?= wfMsg('vet-find-btn') ?>" />
-			<img src="<?= $wgStylePath; ?>/monaco/images/widget_loading.gif" id="VideoEmbedProgress2" style="visibility: hidden;"/>
-		</td>
 	</tr>
 	<tr id="VideoEmbedUpload">
-		<td><?= wfMsg('vet-upload') ?></td>
-		<td>
+		<td colspan="2">
 <?php
 if( !$wgUser->isAllowed( 'upload' ) ) {
 	if( !$wgUser->isLoggedIn() ) {
@@ -51,7 +53,7 @@ if( !$wgUser->isAllowed( 'upload' ) ) {
 	}
 	?>
 			<form onsubmit="return AIM.submit(this, VET_uploadCallback)" action="<?= $wgScriptPath ?>/index.php?action=ajax&rs=VET&method=uploadImage" id="VideoEmbedForm" method="POST" enctype="multipart/form-data">
-				<input id="VideoEmbedFile" name="wpUploadFile" type="text" size="32" />
+				<label for="VideoEmbedFile"><?= wfMsg('vet-upload') ?></label><input id="VideoEmbedFile" name="wpUploadFile" type="text" size="32" />
 				<input type="submit" value="<?= wfMsg('vet-upload-btn') ?>" onclick="return VET_upload(event);" />
 			</form>
 	<?php

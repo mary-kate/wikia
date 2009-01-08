@@ -123,10 +123,10 @@
 }
 
 #VideoEmbedSupported {
-	font-size: 13pt;
+	float: left:
+	font-size: 11pt;
+	font-weight: bold;
 	text-align: center;
-	float: right;
-	margin-right: 10px;
 	width: 200px;
 	height: 75px;
 	background-color: #e3f2f3;	

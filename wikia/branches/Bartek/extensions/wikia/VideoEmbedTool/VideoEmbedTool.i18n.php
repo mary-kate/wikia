@@ -54,5 +54,5 @@ $messages['en'] = array(
 	'vet-max-thumb' => 'maximum thumbnail size exceeded, reverting to original size',
 	'vet-notallowed' => 'You cannot upload images on this wiki',
 	'vet-title' => 'Add a video to your article',
-	'vet-supported' => 'Suported video sites:',
+	'vet-supported' => 'Supported video sites:',
 );
