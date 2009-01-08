@@ -19,6 +19,7 @@ $dir = dirname(__FILE__).'/';
 
 $wgExtensionMessagesFiles['VideoEmbedTool'] = $dir.'/VideoEmbedTool.i18n.php';
 $wgHooks['EditPage::showEditForm:initial2'][] = 'VETSetup';
+$wgHooks['ArticleFromTitle'][] = 'VETArticleFromTitle';
 
 function VETSetup($editform) {
 	global $wgOut, $wgStylePath, $wgExtensionsPath, $wgStyleVersion, $wgHooks, $wgUser;
@@ -40,6 +41,20 @@ function VETSetup($editform) {
 	}
 	return true;
 }
+
+function VETArticleFromTitle( $title, $article  ) {
+	global $wgUser, $IP;
+	
+	require_once( "$IP/extensions/wikia/VideoEmbedTool/Video.php" );
+        require_once( "$IP/extensions/wikia/VideoEmbedTool/VideoPage.php" );
+
+	if (NS_VIDEO == $title->getNamespace() ) {
+		//todo for edit
+		$article = new VideoPage( $title );
+	}	
+	return true;
+}
+
 
 function VETSetupVars($vars) {
 	global $wgFileBlacklist, $wgCheckFileExtensions, $wgStrictFileExtensions, $wgFileExtensions;

@@ -18,7 +18,7 @@ class VideoPage extends Article {
 	function getContent() {
 
 
-		return Article:getContent();
+		return Article::getContent();
 	}
 
 
