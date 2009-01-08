@@ -10,9 +10,13 @@
 		<td colspan="2">
 		</td>
 	</tr>
-
+	<tr>
+		<td colspan="2">
+			<div id="VideoEmbedTitle"><h1><?= wfMsg( 'vet-title' ) ?></h1></div>
+		</td>
+	</tr>
 	<tr id="VideoEmbedFind">
-		<td colspan="2"><h1><?= wfMsg('vet-find') ?></h1></td>
+		<td colspan="2"><?= wfMsg('vet-find') ?></td>
 	</tr>
 	<tr id="VideoEmbedSearch">
 		<td colspan="2">

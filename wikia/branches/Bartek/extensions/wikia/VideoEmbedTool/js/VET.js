@@ -202,7 +202,6 @@ function VET_show(e) {
 	html += '	<div id="VideoEmbedBorder"></div>';
 	html += '	<div id="VideoEmbedProgress1" class="VideoEmbedProgress"></div>';
 	html += '	<div id="VideoEmbedBack"><div></div><a href="#">' + vet_back + '</a></div>';
-	html += '	<div id="VideoEmbedTitle"><div></div>' + vet_title + '</div>';
 	html += '	<div id="VideoEmbedClose"><div></div><a href="#">' + vet_close + '</a></div>';
 	html += '	<div id="VideoEmbedBody">';
 	html += '		<div id="VideoEmbedError"></div>';
