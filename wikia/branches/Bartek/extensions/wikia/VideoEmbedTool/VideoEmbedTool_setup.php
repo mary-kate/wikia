@@ -17,10 +17,25 @@ $wgExtensionCredits['other'][] = array(
 
 $dir = dirname(__FILE__).'/';
 
+$wgExtensionFunctions[] = "VETSetupHook";
 $wgExtensionMessagesFiles['VideoEmbedTool'] = $dir.'/VideoEmbedTool.i18n.php';
 $wgHooks['EditPage::showEditForm:initial2'][] = 'VETSetup';
 $wgHooks['ArticleFromTitle'][] = 'VETArticleFromTitle';
 $wgHooks['ParserBeforeStrip'][] = 'VETParserBeforeStrip';
+
+
+function VETSetupHook() {
+	global $wgParser;
+		
+	$wgParser->setHook( "video", "VETParserHook" );
+	return true;
+}
+
+function VETParserHook( $input, $argv, $parser ) {
+	// todo get video name, get embed code, display that code
+	$output = "";
+	return $output;
+}
 
 function VETSetup($editform) {
 	global $wgOut, $wgStylePath, $wgExtensionsPath, $wgStyleVersion, $wgHooks, $wgUser;
