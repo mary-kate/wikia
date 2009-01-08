@@ -122,6 +122,16 @@
 	line-height: 280px;
 }
 
+#VideoEmbedSupported {
+	font-size: 13pt;
+	text-align: center;
+	float: right;
+	margin-right: 10px;
+	width: 200px;
+	height: 75px;
+	background-color: #e3f2f3;	
+}
+
 /*** UPLOAD/FIND ***/
 #VideoEmbedPagination {
 	font-size: 9pt;
