@@ -22,9 +22,8 @@ global $wgStylePath, $wgUser, $wgScriptPath;
 
 if( ( $wgUser->isLoggedIn() ) && ( $wgUser->isAllowed( 'upload' ) ) ) {
 ?>
-			<div onclick="VET_changeSource(event);" style="font-size: 9pt; float: right; margin-top: 5px;">
-				<a id="VET_source_0" href="#" style="font-weight: bold;"><?= wfMsg('vet-thiswiki') ?></a> |
-				<a id="VET_source_1" href="#"><?= wfMsg('vet-flickr') ?></a>
+			<div id="VideoEmbedSupported">
+				<?= wfMsg( 'vet-supported' ) ?>
 			</div>
 <?php
 }
