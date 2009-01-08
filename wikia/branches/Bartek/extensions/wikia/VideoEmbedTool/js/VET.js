@@ -192,7 +192,7 @@ function VET_show(e) {
 		if(VET_refid != null && VET_wysiwygStart == 2) {
 			VET_loadDetails();
 		} else {
-			if($('ImageQuery')) $('ImageQuery').focus();
+			if($('VideoQuery')) $('VideoQuery').focus();
 		}
 		return;
 	}
@@ -248,7 +248,7 @@ function VET_loadMain() {
 		success: function(o) {
 			$('VideoEmbedMain').innerHTML = o.responseText;
 			VET_indicator(1, false);
-			if($('ImageQuery') && VET_panel.element.style.visibility == 'visible') $('ImageQuery').focus();
+			if($('VideoQuery') && VET_panel.element.style.visibility == 'visible') $('VideoQuery').focus();
 			var cookieMsg = document.cookie.indexOf("vetmainmesg=");
 			if (cookieMsg > -1 && document.cookie.charAt(cookieMsg + 12) == 0) {
 				$('VideoEmbedTextCont').style.display = 'none';
@@ -302,7 +302,7 @@ function VET_changeSource(e) {
 
 			VET_track('changeSource/src-'+sourceId); // tracking
 
-			if($('ImageQuery')) $('ImageQuery').focus();
+			if($('VideoQuery')) $('VideoQuery').focus();
 
 			VET_curSourceId = sourceId;
 			VET_trySendQuery();
@@ -315,12 +315,12 @@ function VET_trySendQuery(e) {
 		if(e.keyCode != 13) {
 			return;
 		}
-		VET_track('find/enter/' + $('ImageQuery').value); // tracking
+		VET_track('find/enter/' + $('VideoQuery').value); // tracking
 	} else if(e) {
-		VET_track('find/click/' + $('ImageQuery').value); // tracking
+		VET_track('find/click/' + $('VideoQuery').value); // tracking
 	}
 
-	var query = $('ImageQuery').value;
+	var query = $('VideoQuery').value;
 
 	if(!e && VET_lastQuery[VET_curSourceId] == query) {
 		return;
