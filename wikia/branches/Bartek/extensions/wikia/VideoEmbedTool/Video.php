@@ -7,16 +7,24 @@ class Video {
 	var 	$id,
 		$provider,
 		$url,
-		$name,
+		$title,
 		$height,
 		$width;
 			
 
-	public function __construct( $id, $provider ) {
+	public function __construct( $title ) {
 
 		
 	}
 
+	public static function newFromName( $name ) {
+		$title = Title::makeTitleSafe( NS_VIDEO, $name );
+		if ( is_object( $title ) ) {
+			return new Video( $title );
+		} else {
+			return NULL;
+		}
+	}
 }
 
 ?>

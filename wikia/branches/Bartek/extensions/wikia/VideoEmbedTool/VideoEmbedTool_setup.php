@@ -12,7 +12,7 @@ if(!defined('MEDIAWIKI')) {
 $wgExtensionCredits['other'][] = array(
         'name' => 'Video Embed Tool',
         'author' => 'Bartek Łapiński',
-	'version' => '0.11',
+	'version' => '0.18',
 );
 
 $dir = dirname(__FILE__).'/';
@@ -20,6 +20,7 @@ $dir = dirname(__FILE__).'/';
 $wgExtensionMessagesFiles['VideoEmbedTool'] = $dir.'/VideoEmbedTool.i18n.php';
 $wgHooks['EditPage::showEditForm:initial2'][] = 'VETSetup';
 $wgHooks['ArticleFromTitle'][] = 'VETArticleFromTitle';
+$wgHooks['ParserBeforeStrip'][] = 'VETParserBeforeStrip';
 
 function VETSetup($editform) {
 	global $wgOut, $wgStylePath, $wgExtensionsPath, $wgStyleVersion, $wgHooks, $wgUser;
@@ -55,6 +56,23 @@ function VETArticleFromTitle( $title, $article  ) {
 	return true;
 }
 
+function VETParserBeforeStrip( $parser, $text, $strip_state  ) {
+	$pattern = "@(\[\[Video:)([^\]]*?)].*?\]@si";
+        $text = preg_replace_callback($pattern, 'VETRenderVideo', $text);
+
+        return true;
+}
+
+function VETRenderVideo( $matches ) {
+	global $IP, $wgOut;
+	require_once( "$IP/extensions/wikia/VideoEmbedTool/Video.php" );
+	$name = $matches[2];
+	$params = explode("|",$name);
+	$video_name = $params[0];
+	$video =  Video::newFromName( $video_name );
+	//todo actually return something here
+	return "";
+}
 
 function VETSetupVars($vars) {
 	global $wgFileBlacklist, $wgCheckFileExtensions, $wgStrictFileExtensions, $wgFileExtensions;

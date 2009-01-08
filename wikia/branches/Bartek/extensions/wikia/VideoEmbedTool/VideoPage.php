@@ -3,6 +3,7 @@
 
 // main video page class
 class VideoPage extends Article {
+	var $video;
 
         function __construct (&$title){
                 parent::__construct(&$title);
