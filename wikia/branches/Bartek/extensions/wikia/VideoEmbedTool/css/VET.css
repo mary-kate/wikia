@@ -122,6 +122,15 @@
 	line-height: 280px;
 }
 
+#VideoEmbedSearch label {
+	margin-right: 6px;
+	font-weight: bold;
+}
+
+#VideoEmbedFile {
+	width: 264px;
+}
+
 #VideoEmbedSupported {
 	float: left:
 	font-size: 11pt;
