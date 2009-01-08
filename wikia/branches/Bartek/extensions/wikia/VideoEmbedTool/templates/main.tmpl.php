@@ -6,11 +6,7 @@
 ?>
 
 <table cellspacing="0" style="width: 100%;" id="VideoEmbedInputTable">
-	<tr id="VideoEmbedTextCont">
-		<td colspan="2">
-		</td>
-	</tr>
-	<tr>
+	<tr id="VideoEmbedTitle">
 		<td colspan="2">
 			<div id="VideoEmbedTitle"><h1><?= wfMsg( 'vet-title' ) ?></h1></div>
 		</td>
