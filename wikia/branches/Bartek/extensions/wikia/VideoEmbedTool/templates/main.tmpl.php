@@ -35,7 +35,7 @@ if( ( $wgUser->isLoggedIn() ) && ( $wgUser->isAllowed( 'upload' ) ) ) {
 		</td>
 	</tr>
 	<tr id="VideoEmbedUpload">
-		<td><h1><?= wfMsg('vet-upload') ?></h1></td>
+		<td><?= wfMsg('vet-upload') ?></td>
 		<td>
 <?php
 if( !$wgUser->isAllowed( 'upload' ) ) {
