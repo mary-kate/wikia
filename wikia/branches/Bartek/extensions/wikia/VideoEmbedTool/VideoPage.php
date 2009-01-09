@@ -1,6 +1,5 @@
 <?php
 
-
 // main video page class
 class VideoPage extends Article {
 	var $video;
@@ -14,7 +13,19 @@ class VideoPage extends Article {
 		global $wgOut, $wgUser, $wgRequest;
 		
 		$this->video = new Video( $this->getTitle() );
-		
+
+		$this->openShowVideo();
+
+		if ( $this->getID() ) {
+			Article::view();
+		} else {
+			# Just need to set the right headers
+			$wgOut->setArticleFlag( true );
+			$wgOut->setRobotpolicy( 'noindex,nofollow' );
+			$wgOut->setPageTitle( $this->mTitle->getPrefixedText() );
+			$this->viewUpdates();
+		}
+	
 
 	}
 
@@ -36,6 +47,11 @@ class VideoPage extends Article {
 	}
 
 	function videoLinks() {
+
+
+	}
+
+	function openShowVideo() {
 
 
 	}
