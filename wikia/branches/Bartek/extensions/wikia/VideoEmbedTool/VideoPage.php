@@ -8,6 +8,12 @@ class VideoPage extends Article {
                 parent::__construct(&$title);
         }
 
+        function render() {
+                global $wgOut;
+                $wgOut->setArticleBodyOnly( true );
+                parent::view();
+        }
+
 
 	function view() {
 		global $wgOut, $wgUser, $wgRequest;
@@ -28,6 +34,18 @@ class VideoPage extends Article {
 	
 
 	}
+
+        function showTOC( $metadata ) {
+                global $wgLang;
+                $r = '<ul id="filetoc">
+                        <li><a href="#file">' . $wgLang->getNsText( NS_IMAGE ) . '</a></li>
+                        <li><a href="#filehistory">' . wfMsgHtml( 'filehist' ) . '</a></li>
+                        <li><a href="#filelinks">' . wfMsgHtml( 'imagelinks' ) . '</a></li>' .
+                        ($metadata ? ' <li><a href="#metadata">' . wfMsgHtml( 'metadata' ) . '</a></li>' : '') . '
+                </ul>';
+                return $r;
+        }
+
 
 	function getContent() {
 
