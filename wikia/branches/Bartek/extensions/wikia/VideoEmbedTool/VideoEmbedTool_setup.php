@@ -91,24 +91,28 @@ function VETRenderVideo( $matches ) {
 
 	$x = 1;
 
+	$width = 300;
+	$align = 'left';
+	$caption = '';
+
         foreach($params as $param){
                 if($x > 1){
                         $width_check = preg_match("/px/i", $param );
 
                         if($width_check){
                                 $width = preg_replace("/px/i", "", $param);
-                        }else{
+                        } else if ($x == 3){
                                 $align = $param;
-                        }
+                        } else if ($x == 4) {
+				$caption = $param;
+			}
                 }
                 $x++;
         }
 
 	if ( is_object( $video ) ) {
-		if( $video->exists() ){
-			$output = "<video name=\"{$video->getName()}\" width=\"{$width}\" align=\"{$align}\"></video>";
+			$output = "<video name=\"{$video->getName()}\" width=\"{$width}\" align=\"{$align}\" caption=\"{$caption}\"></video>";
 			return $output;
-		}
 	}
 	return $matches[0];
 }
