@@ -41,6 +41,10 @@ class Video {
 		return $this->id;
 	}
 
+	public function getName() {
+
+	}
+
 	public function getProvider() {
 		$this->load();
 		return $this->provider;
@@ -50,20 +54,14 @@ class Video {
 
 	}
 
-	public function extractID( $url ) {
-
-	}
-}
-
-class Metacafe extends Video {
-	public function getEmbedCode() {
-
-
+	public function extractProvider( $url ) {
+	
 	}
 
 	public function extractID( $url ) {
-		
 
+		// look for provider
+		$this->extractProvider();
 	}
 }
 
