@@ -13,7 +13,8 @@ class Video {
 		$ratio;			
 
 	public function __construct( $title ) {
-
+		$this->width = 300;
+		
 		
 	}
 
@@ -24,6 +25,36 @@ class Video {
 		} else {
 			return NULL;
 		}
+	}
+
+	public function addVideo( $id, $provider, $desc ) {
+			
+
+	}
+
+	public function load() {
+
+	}
+
+	public function getID() {
+		$this->load();
+		return $this->id;
+	}
+
+	public function getProvider() {
+		$this->load();
+		return $this->provider;
+	}
+
+	public function getEmbedCode() {
+
+	}
+}
+
+class Metacafe extends Video {
+	public function getEmbedCode() {
+
+
 	}
 }
 
