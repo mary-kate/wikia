@@ -12,10 +12,13 @@ if(!defined('MEDIAWIKI')) {
 $wgExtensionCredits['other'][] = array(
         'name' => 'Video Embed Tool',
         'author' => 'Bartek Łapiński',
-	'version' => '0.18',
+	'version' => '0.19',
 );
 
 $dir = dirname(__FILE__).'/';
+
+$wgExtraNamespaces[400] = "Video";
+$wgExtraNamespaces[401] = "Video_talk";
 
 $wgExtensionFunctions[] = "VETSetupHook";
 $wgExtensionMessagesFiles['VideoEmbedTool'] = $dir.'/VideoEmbedTool.i18n.php';
@@ -86,7 +89,7 @@ function VETRenderVideo( $matches ) {
 	$video_name = $params[0];
 	$video =  Video::newFromName( $video_name );
 	//todo actually return something here
-	return "";
+	return "Video";
 }
 
 function VETSetupVars($vars) {
