@@ -36,7 +36,31 @@ function VETSetupHook() {
 
 function VETParserHook( $input, $argv, $parser ) {
 	// todo get video name, get embed code, display that code
-	$output = "";
+
+	$name = '';
+	$width = 300;
+	$width_max = 600;
+	$height_max = 600;
+	$align = 'left';
+	$caption = '';
+
+	if (!empty($argv['name'])) {
+                $name = $argv['name'];
+        }
+	if (!empty($argv['align'])) {
+                $name = $argv['align'];
+        }
+	if (!empty($argv['caption'])) {
+                $name = $argv['caption'];
+        }
+	$video = new Video( $name );
+        if (!empty($argv['width']) && settype($argv['width'], 'integer') && ($width_max >= $argv['width']))
+        {
+                $width = $argv['width'];
+        }
+
+
+	$output = $video->getEmbedCode( $width, $align, $caption );	
 	return $output;
 }
 
