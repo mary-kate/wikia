@@ -49,11 +49,20 @@ class Video {
 	public function getEmbedCode() {
 
 	}
+
+	public function extractID( $url ) {
+
+	}
 }
 
 class Metacafe extends Video {
 	public function getEmbedCode() {
 
+
+	}
+
+	public function extractID( $url ) {
+		
 
 	}
 }
