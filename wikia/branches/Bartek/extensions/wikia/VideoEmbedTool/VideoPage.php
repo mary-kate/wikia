@@ -11,8 +11,10 @@ class VideoPage extends Article {
 
 
 	function view() {
-
-
+		global $wgOut, $wgUser, $wgRequest;
+		
+		$this->video = new Video( $this->getTitle() );
+		
 
 	}
 
