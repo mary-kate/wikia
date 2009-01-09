@@ -88,8 +88,29 @@ function VETRenderVideo( $matches ) {
 	$params = explode("|",$name);
 	$video_name = $params[0];
 	$video =  Video::newFromName( $video_name );
-	//todo actually return something here
-	return "Video";
+
+	$x = 1;
+
+        foreach($params as $param){
+                if($x > 1){
+                        $width_check = preg_match("/px/i", $param );
+
+                        if($width_check){
+                                $width = preg_replace("/px/i", "", $param);
+                        }else{
+                                $align = $param;
+                        }
+                }
+                $x++;
+        }
+
+	if ( is_object( $video ) ) {
+		if( $video->exists() ){
+			$output = "<video name=\"{$video->getName()}\" width=\"{$width}\" align=\"{$align}\"></video>";
+			return $output;
+		}
+	}
+	return $matches[0];
 }
 
 function VETSetupVars($vars) {
