@@ -41,6 +41,12 @@ class Video {
 		return $this->id;
 	}
 
+	public function getHeight( $width ) {
+		$this->load();
+		return $width * $this->ratio;
+	}
+
+
 	public function getName() {
 
 	}
