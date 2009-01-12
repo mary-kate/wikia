@@ -5,7 +5,11 @@ define( 'NS_VIDEO', 400 );
 
 // main video page class
 class VideoPage extends Article {
-	var $video, $dataline;
+	var	$id,
+		$provider,
+		$url,
+		$video,
+		$dataline;
 
         function __construct (&$title){
                 parent::__construct(&$title);
@@ -21,8 +25,6 @@ class VideoPage extends Article {
 	function view() {
 		global $wgOut, $wgUser, $wgRequest;
 		
-		$this->video = new Video( $this->getTitle() );
-
 		if ( $this->getID() ) {
 			$this->openShowVideo();
 			Article::view();
@@ -65,11 +67,9 @@ class VideoPage extends Article {
 		$id = preg_match( "/<id>.+<\/id>/", $this->dataline, $idmatch );
 		$url = preg_match( "/<url>.+<\/url>/", $this->dataline, $urlmatch );
 		$provider = preg_match( "/<provider>.+<\/provider>/", $this->dataline, $prmatch );
-		return array(
-				'id'		=> substr( $idmatch[0], 4, -5 ),
-				'url'		=> substr( $urlmatch[0], 5, -6 ),
-				'provider'	=> substr( $prmatch[0], 10, -11 )
-		);
+		$this->id	= substr( $idmatch[0], 4, -5 );
+		$this->url	= substr( $urlmatch[0], 5, -6 );
+		$this->provider	= substr( $prmatch[0], 10, -11 );
 	}
 
 	function revert() {
@@ -87,11 +87,24 @@ class VideoPage extends Article {
 
 	}
 
+        function getEmbedCode() {
+                $embed = "";
+                switch( $this->provider ) {
+                        case "metacafe":
+
+                                $embed = "<embed src=\"{$this->url}\" width=\"400\" height=\"345\" wmode=\"transparent\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" type=\"application/x-shockwave-flash\"> </embed>";
+                                break;
+                        default: break;
+                }
+                return $embed;
+        }
+
+
 	function openShowVideo() {
 		global $wgOut;
 		$this->getContent();
-		$this->video->loadFromPage( $this->parseDataline() );	
-		$wgOut->addHTML( $this->video->getEmbedCode() );
+		$this->parseDataline();	
+		$wgOut->addHTML( $this->getEmbedCode() );
 	}
 
 }
