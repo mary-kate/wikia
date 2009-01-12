@@ -25,12 +25,20 @@ $wgExtensionMessagesFiles['VideoEmbedTool'] = $dir.'/VideoEmbedTool.i18n.php';
 $wgHooks['EditPage::showEditForm:initial2'][] = 'VETSetup';
 $wgHooks['ArticleFromTitle'][] = 'VETArticleFromTitle';
 $wgHooks['ParserBeforeStrip'][] = 'VETParserBeforeStrip';
+$wgHooks['ArticleSave'][] = 'VETArticleSave';
 
 
 function VETSetupHook() {
 	global $wgParser;
 		
 	$wgParser->setHook( "video", "VETParserHook" );
+	return true;
+}
+
+function VETArticleSave( $article, $user, $text, $summary) {
+	if (NS_VIDEO == $article->mTitle->getNamespace()) {
+		$text = $article->dataline . $text;
+	}
 	return true;
 }
 

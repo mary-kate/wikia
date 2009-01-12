@@ -46,7 +46,6 @@ class VideoPage extends Article {
                 return $r;
         }
 
-
 	function getContent() {
 		$content = Article::getContent();
 		if (!$this->dataline) {
