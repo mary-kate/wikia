@@ -59,7 +59,6 @@ class VideoPage extends Article {
 				$this->dataline = $matches[0];
 			} 
 		}
-
 		$content = preg_replace( "/^[^\n]+/", "", $content ) ;	
 		return $content;	
 	}
@@ -92,6 +91,7 @@ class VideoPage extends Article {
                 $embed = "";
                 switch( $this->provider ) {
                         case "metacafe":
+				$url = 'http://www.metacafe.com/fplayer/' . $this->id . '/' . $this->url;
                                 $embed = "<embed src=\"{$this->url}\" width=\"400\" height=\"345\" wmode=\"transparent\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" type=\"application/x-shockwave-flash\"> </embed>";
                                 break;
                         default: break;
