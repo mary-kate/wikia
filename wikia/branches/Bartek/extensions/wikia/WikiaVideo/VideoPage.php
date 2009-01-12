@@ -42,7 +42,7 @@ class VideoPage extends Article {
 
         function showTOC( $metadata ) {
                 global $wgLang;
-                $r = '<ul id="videotoc">
+                $r = '<ul id="filetoc">
                         <li><a href="#file">' . $wgLang->getNsText( NS_VIDEO ) . '</a></li>
                         <li><a href="#filehistory">' . wfMsgHtml( 'filehist' ) . '</a></li>
                         <li><a href="#filelinks">' . wfMsgHtml( 'imagelinks' ) . '</a></li>' .
