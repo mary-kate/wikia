@@ -2,7 +2,7 @@
 
 // main video page class
 class VideoPage extends Article {
-	var $video;
+	var $video, $dataline;
 
         function __construct (&$title){
                 parent::__construct(&$title);
@@ -37,8 +37,8 @@ class VideoPage extends Article {
 
         function showTOC( $metadata ) {
                 global $wgLang;
-                $r = '<ul id="filetoc">
-                        <li><a href="#file">' . $wgLang->getNsText( NS_IMAGE ) . '</a></li>
+                $r = '<ul id="videotoc">
+                        <li><a href="#file">' . $wgLang->getNsText( NS_VIDEO ) . '</a></li>
                         <li><a href="#filehistory">' . wfMsgHtml( 'filehist' ) . '</a></li>
                         <li><a href="#filelinks">' . wfMsgHtml( 'imagelinks' ) . '</a></li>' .
                         ($metadata ? ' <li><a href="#metadata">' . wfMsgHtml( 'metadata' ) . '</a></li>' : '') . '
@@ -48,9 +48,15 @@ class VideoPage extends Article {
 
 
 	function getContent() {
-
-
-		return Article::getContent();
+		$content = Article::getContent();
+		if (!$this->dataline) {
+			$this->dataline = preg_match("/^[^\n]+/", $content, $matches);
+			if( is_array( $matches ) ) {
+				$this->dataline = $matches[0];
+			} 
+		}
+		$content = preg_replace( "/^[^\n]+/", "", $content ) ;	
+		return $content;	
 	}
 
 
