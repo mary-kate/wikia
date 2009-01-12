@@ -1,0 +1,77 @@
+<?php
+/**
+ * @author Maciej Brencz
+ * */
+if(!defined('MEDIAWIKI')) {
+	die(1);
+}
+
+global $wgWidgets;
+$wgWidgets['WidgetLastWikis'] = array(
+	'callback' => 'WidgetLastWikis',
+	'title' => array(
+		'en' => 'Last Wikis',
+		'pl' => 'Ostatnio odwiedzone',
+		'hu' => 'Legutóbbi wikik'
+	),
+	'desc' => array(
+		'en' => 'Quickly jump back to wikis that you\'ve visited in the past', 
+		'pl' => 'Lista ostatnio odwiedzonych Wikii',
+		'hu' => 'Gyors visszalépés a korábban látogatott wikikre.'
+    ),
+    'closeable' => true,
+    'editable' => false,
+);
+
+function WidgetLastWikis($id, $params) {
+	wfProfileIn(__METHOD__);
+	
+	global $wgSitename, $wgCookiePrefix;
+
+	$cookie = isset($_COOKIE["{$wgCookiePrefix}recentlyvisited"]) ? $_COOKIE["{$wgCookiePrefix}recentlyvisited"] : false;
+	$server = $_SERVER['SERVER_NAME'];
+	$found = false;
+	$count = 0;
+	$urls = !empty( $cookie ) ? unserialize( $cookie ) : array();
+
+	// first, prepare the existing rank
+	$items  = array();
+
+	if ( is_array($urls) && count($urls) > 0 ) {
+	    for ( $index = 0; $index < 6; $index++ ) {
+		$url  = isset($urls[$index]['url']) ? $urls[$index]['url'] : '';
+		$name = isset($urls[$index]['name']) ? $urls[$index]['name'] : '';
+
+		if ( $url == $server ) {
+		    $found = true;
+		} elseif ( $url != '' ) {
+		    $items[] = array( 'href' => "http://" . $url, 'name' => $name );
+		    $count++;
+		}
+	    }
+	}	
+
+	// next, add the current Wikia into the list, if it's not already there
+	if ( !$found ) {
+
+		if ( count($urls) == 5) {
+			array_pop ( $urls );
+		}
+
+		array_unshift ( $urls, array( 'url' => $server, 'name' => $wgSitename ) );		
+
+		$expire = time()+3600*24*7;
+		WebResponse::setcookie($wgCookiePrefix.'recentlyvisited', serialize( $urls ), $expire);
+	}
+
+	wfProfileOut( __METHOD__ );
+	
+	if (count($items) > 0) {
+		$ret = WidgetFrameworkWrapLinks($items);
+	} else {
+		global $wgOut;
+		$ret = $wgOut->parse(wfMsg('wt_lastwikis_noresults'));
+	}
+
+	return $ret;
+}
