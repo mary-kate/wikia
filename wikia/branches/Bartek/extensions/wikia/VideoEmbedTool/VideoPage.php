@@ -70,9 +70,9 @@ class VideoPage extends Article {
 		$url = preg_match( "/<url>.+<\/url>/", $this->dataline, $urlmatch );
 		$provider = preg_match( "/<provider>.+<\/provider>/", $this->dataline, $prmatch );
 		return array(
-				'id'		=> $idmatch,
-				'url'		=> $urlmatch,
-				'provider'	=> $prmatch
+				'id'		=> substr( $idmatch[0], 4, -5 ),
+				'url'		=> substr( $urlmatch[0], 5, -6 ),
+				'provider'	=> substr( $prmatch[0], 10, -11 )
 		);
 	}
 
@@ -94,8 +94,8 @@ class VideoPage extends Article {
 	function openShowVideo() {
 		global $wgOut;
 		$this->getContent();
-		$wgOut->addHTML( $this->video->getEmbedCode( $this->parseDataline() ) );
-
+		$this->video->loadFromPage( $this->parseDataline() );	
+		$wgOut->addHTML( $this->video->getEmbedCode() );
 	}
 
 }

@@ -56,8 +56,21 @@ class Video {
 		return $this->provider;
 	}
 
-	public function getEmbedCode() {
+	public function loadFromPage( $data ) {
+		$this->id = $data['id'];
+		$this->url = $data['url'];
+		$this->provider = $data['provider'];		
+	}
 
+	public function getEmbedCode() {
+		$embed = "";
+		switch( $this->provider ) {
+			case "metacafe":
+				$embed = "<embed src=\"{$this->url}\" width=\"400\" height=\"345\" wmode=\"transparent\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" type=\"application/x-shockwave-flash\"> </embed>";
+				break;			
+			default: break;
+		}
+		return $embed;
 	}
 
 	public function extractProvider( $url ) {
