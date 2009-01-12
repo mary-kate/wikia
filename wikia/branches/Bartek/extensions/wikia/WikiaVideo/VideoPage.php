@@ -1,11 +1,7 @@
 <?php
-/*
-	function doEdit( $text, $summary, $flags = 0, $baseRevId = false ) {
-		$text = $this->dataline . $text;
-		Article::doEdit($text, $summary, $flags, $baseRevId);
-	}
-*/
 
+// use the same namespace as in old NY extension
+define( 'NS_VIDEO', 400 );
 
 // main video page class
 class VideoPage extends Article {
