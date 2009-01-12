@@ -26,6 +26,7 @@ class VideoPage extends Article {
 		global $wgOut, $wgUser, $wgRequest;
 		
 		if ( $this->getID() ) {
+			$wgOut->addHTML( $this->showTOC('') );
 			$this->openShowVideo();
 			Article::view();
 		} else {
@@ -91,7 +92,6 @@ class VideoPage extends Article {
                 $embed = "";
                 switch( $this->provider ) {
                         case "metacafe":
-
                                 $embed = "<embed src=\"{$this->url}\" width=\"400\" height=\"345\" wmode=\"transparent\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" type=\"application/x-shockwave-flash\"> </embed>";
                                 break;
                         default: break;
@@ -99,14 +99,12 @@ class VideoPage extends Article {
                 return $embed;
         }
 
-
 	function openShowVideo() {
 		global $wgOut;
 		$this->getContent();
 		$this->parseDataline();	
 		$wgOut->addHTML( $this->getEmbedCode() );
 	}
-
 }
 
 class VideoHistoryList {
