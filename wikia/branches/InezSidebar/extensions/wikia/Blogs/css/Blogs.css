@@ -1,0 +1,387 @@
+#blogPostForm label {
+	color: #cc4d33;
+	display: block;
+	float: left;
+	padding-right: 1em;
+	font-size: 12pt;
+}
+
+#blogPostForm div.formErrors {
+	color: red;
+	font-weight: bold;
+}
+
+#blogPostForm div.formBlock {
+	border-bottom: 1px dashed #AAA;
+	clear: left;
+	float: left;
+	padding: 15px 0;
+	width: 100%;
+}
+
+#blogPostForm div.formLastBlock {
+	width: 100%;
+	clear: left;
+	float: left;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	padding-bottom: 20px;
+}
+
+#blogPostForm #blogPostTitle {
+	clear: left;
+	float: left;
+	display: block;
+}
+
+#blogPostROTitle {
+	clear: left;
+	float: left;
+	display: block;
+	font-weight: bold;
+	padding: 5px;
+	margin-right: 15px;
+
+}
+
+#CreateWikiForm div.row {
+	padding: 0.8em;
+	display: block !important;
+	clear: both;
+}
+
+.categoryCloudSection {
+	border: 1px solid lightgray;
+	padding: 15px 15px 15px 15px;
+}
+
+.wpCategoryTextarea {
+	display: none ;
+}
+
+#wpCategoryInput, #wpCategoryButton {
+	margin: 4px 2px 0 2px ;
+}
+
+.wpCategoryInput {
+	width: 230px ;
+}
+
+#blogPostCategoriesTitle {
+	color: #cc4d33;
+	padding-right: 1em;
+	font-size: 12pt;
+}
+
+.matches-info {
+	color: #060;
+	font-style: italic;
+	font-weight: bold;
+	margin-right: 1em;
+}
+
+/**
+ *  Blog template
+ */
+div.wk_blogs_panel {
+	border: 1px solid #CCC;
+	font-family: "Arial", sans-serif;
+	font-size: 10pt;
+	padding: 2px;
+	width: 294px;
+	margin: 0 5px 0 5px;
+}
+div.wk_blogs_panel ul.list {
+	margin-top: 5px;
+}
+div.wk_blogs_panel ul.list li {
+	padding: 1px 3px;
+	margin-bottom: 2px;
+}
+div.wk_blogs_panel .wk_blogs_title {
+	font-weight: bold;
+	padding: 3px 5px;
+}
+div.wk_blogs_title_refresh {
+	float:right;
+	margin: -15px 0px 0px 0px;
+}
+div.wk_blogs_panel .wk_blogs_link {
+	font-weight: bold;
+	padding: 1px 0px;
+}
+div.wk_blogs_panel .wk_blogs_details {
+	font-size: 8pt;
+}
+div.wk_blogs_panel .wk_blogs_details span {
+	margin-right: 5px;
+}
+div.wk_blogs_panel .wk_blogs_date {
+	font-weight: bold;
+}
+div.wk_blogs_panel .wk_blogs_summary {
+	color: #333;
+	font-size: 9pt;
+	margin-top: 3px;
+}
+div.wk_blogs_panel .wk_blogs_comments {
+	font-size: 8.5pt;
+	margin-top: 3px;
+	text-align: right;
+	margin-bottom: 5px;
+	clear: both;
+}
+
+/**
+ * Blog page
+ */
+h2.wikia_header {
+	background: #F9F9F9;
+	border-bottom: 1px solid #AAA;
+	border-top: 1px solid #AAA;
+	clear: both;
+	color: #36C;
+	font-family: "Arial", sans-serif;
+	font-size: 12pt;
+	font-weight: bold;
+	margin: 0 !important;
+	padding: 3px 10px;
+	text-transform: uppercase;
+}
+#blog-comments-ul li {
+	border-bottom: 1px solid #DDD;
+	padding: 15px 10px;
+}
+#blog-comments .comment_avatar {
+	float: left;
+}
+img.avatar {
+	background: #FFF;
+	border: 1px solid #666;
+	padding: 2px;
+}
+#blog-comments .comment {
+	margin-left: 65px;
+}
+#blog-comments .details {
+	margin: 4px 0 7px;
+}
+#blog-comments .comment strong {
+	font-weight: bold;
+}
+#blog-comments span.timestamp {
+	font-style: italic;
+}
+
+div.blog-comm-input-avatar {
+	float: left;
+}
+div.blog-comm-input-text {
+	margin-left: 65px;
+}
+div.blog-comm-input-text textarea {
+	height: 100px;
+	margin-bottom: 5px;
+	padding: 3px;
+	width: 450px;
+}
+div.wk_blogs_post {
+	width:100%;
+}
+div.wk_blogs_post .wk_blogs_link {
+	padding: 1px 0px;
+	font-weight: bold;
+	font-size: 110%;
+}
+div.wk_blogs_post ul.list {
+	margin: 0;
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+	list-style: none;
+}
+div.wk_blogs_post ul.list li.list {
+	padding: 5px 0px 3px 0px;
+	border-bottom: 1px solid #DFDFDF;
+	margin: 0 0 10px
+}
+div.wk_blogs_post .wk_date {
+	display: inline;
+	margin: 0px 0.1em;
+	padding: 0px 5px 2px 0px;
+	clear: both;
+	font-size: 90%;
+}
+div.wk_blogs_post .wk_date span.left {
+	clear: left;
+}
+div.wk_blogs_post .wk_date span.right {
+	clear: right;
+	padding-left:7px;
+	padding-right:2px;
+}
+div.wk_blogs_post .wk_blogs_summary {
+	width: auto;
+	font-weight: normal;
+	margin: 0px 0.1em;
+	padding: 3px 3px 2px;
+}
+div.wk_blogs_post .wk_blogs_summary p {
+	margin: 0.3em 0 0.6em;
+}
+div.wk_blogs_post .wk_blogs_comments {
+	width: auto;
+	font-weight: normal;
+	padding: 0px 5px 5px 0px;
+	text-align:left;
+	#clear: both;
+}
+div.wk_blogs_post .wk_blogs_comments ul.links {
+	margin: 0.3em 0 0.5em 0;
+	list-style: none;
+	height: 20px;
+}
+div.wk_blogs_post .wk_blogs_comments ul.links li {
+	border: 0;
+	clear: right;
+	#float: left;
+	padding: 3px 0.2em 0 0.2em;
+	color: #DFDFDF;
+	display:inline;
+}
+div.wk_blogs_post .wk_blogs_pager {
+	float:right;
+	white-space:nowrap;
+}
+
+ul.star-rating {
+	float:none;
+	display: inline;
+	position: absolute;
+}
+
+li.wk_star_list {
+	padding: 0px 80px 0px 0px !important;
+}
+
+#control_listing-create-blog-post-tab div {
+	clip:rect(0px, 16px, 16px, 0px);
+	left:0px;
+}
+
+#control_listing-create-tab div {
+	clip:rect(0px, 16px, 16px, 0px);
+	left:0px;
+}
+
+#control_listing-refresh-tab div {
+	clip:rect(0px, 336px, 16px, 320px);
+	left:-320px;
+}
+
+div.blog-comment_input {
+	background: #e0e0e;
+}
+
+#blog-footer ul {
+	margin: 0;
+	margin-top: 1.5em;
+	margin-bottom: 0.5em;
+	list-style: none;
+}
+#blog-footer ul li { float: left; margin-right: 10px }
+#blog-footer #star-rating {top: -20px;}
+
+#blog-comm-form-select select {
+	margin: 0;
+	float: right;
+}
+#user_masthead {
+	background: #d2d2b6;
+	font-size: 10pt;
+	margin: 2px 2px 0;
+	padding: 4px;
+}
+#user_masthead .avatar {
+	background: #FFF;
+	border: 1px solid #666;
+	float: left;
+	height: 50px;
+	margin-right: 5px;
+	padding: 2px;
+	width: 50px;
+}
+#user_masthead h2 {
+	font-size: 14pt;
+	margin: 7px 0 3px;
+}
+#user_masthead li {
+	float: left;
+	font-size: 9pt;
+	font-weight: bold;
+	padding: 5px;
+}
+#user_masthead li.selected {
+	background: #f2f2da;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+#user_masthead li a {
+	color: #333;
+}
+#user_masthead li a.new {
+	color: inherit;
+}
+
+div.blog-comm-input {
+	background: #d2d2b6;
+	padding: 10px;
+}
+
+div.blog-comment {
+	margin: 2px 2px 0;
+	padding: 4px;
+}
+
+div.blog-comment p {
+	margin-bottom: 1em;
+}
+
+div.blog-comment .blog-comment-hidden {
+	font-style: italic;
+	border: 1px dotted #AAA;
+	padding: 1em;
+	text-align: left;
+}
+
+div.blog-comment .avatar {
+	background: #FFF;
+	border: 1px solid #666;
+	float: left;
+	height: 50px;
+	margin-right: 5px;
+	padding: 2px;
+	width: 50px;
+}
+
+div.blog-comment strong {
+	font-weight: bold;
+	font-size: 10pt;
+}
+
+avatarOverlayRight {
+	right:5px;
+	top:5px;
+}
+
+.avatarOverlay {
+	border: 1px solid #000;
+	margin: 6px -6px;
+	padding: 3px;
+	position: absolute;
+	top:0;
+}
+
+.avatarOverlay span {
+	cursor:pointer;
+	margin:0 3px;
+}
