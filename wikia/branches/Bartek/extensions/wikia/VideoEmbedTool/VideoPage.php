@@ -1,4 +1,11 @@
 <?php
+/*
+	function doEdit( $text, $summary, $flags = 0, $baseRevId = false ) {
+		$text = $this->dataline . $text;
+		Article::doEdit($text, $summary, $flags, $baseRevId);
+	}
+*/
+
 
 // main video page class
 class VideoPage extends Article {
@@ -20,9 +27,8 @@ class VideoPage extends Article {
 		
 		$this->video = new Video( $this->getTitle() );
 
-		$this->openShowVideo();
-
 		if ( $this->getID() ) {
+			$this->openShowVideo();
 			Article::view();
 		} else {
 			# Just need to set the right headers
@@ -54,10 +60,21 @@ class VideoPage extends Article {
 				$this->dataline = $matches[0];
 			} 
 		}
+
 		$content = preg_replace( "/^[^\n]+/", "", $content ) ;	
 		return $content;	
 	}
 
+	function parseDataline() {
+		$id = preg_match( "/<id>.+<\/id>/", $this->dataline, $idmatch );
+		$url = preg_match( "/<url>.+<\/url>/", $this->dataline, $urlmatch );
+		$provider = preg_match( "/<provider>.+<\/provider>/", $this->dataline, $prmatch );
+		return array(
+				'id'		=> $idmatch,
+				'url'		=> $urlmatch,
+				'provider'	=> $prmatch
+		);
+	}
 
 	function revert() {
 
@@ -75,7 +92,9 @@ class VideoPage extends Article {
 	}
 
 	function openShowVideo() {
-
+		global $wgOut;
+		$this->getContent();
+		$wgOut->addHTML( $this->video->getEmbedCode( $this->parseDataline() ) );
 
 	}
 
