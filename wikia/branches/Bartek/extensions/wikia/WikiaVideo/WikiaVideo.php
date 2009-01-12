@@ -10,6 +10,7 @@ $wgHooks['ArticleFromTitle'][] = 'WikiaVideoArticleFromTitle';
 
 function WikiaVideoParserBeforeStrip($parser, $text, $strip_state) {
 	// TODO
+	return true;
 }
 
 function WikiaVideoRenderVideo( $matches ) {
