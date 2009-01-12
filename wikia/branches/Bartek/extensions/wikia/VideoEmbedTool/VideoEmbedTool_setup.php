@@ -19,14 +19,11 @@ $dir = dirname(__FILE__).'/';
 
 $wgExtraNamespaces[400] = "Video";
 $wgExtraNamespaces[401] = "Video_talk";
+require_once( "$IP/extensions/wikia/WikiaVideo/WikiaVideo.php" );
 
 $wgExtensionFunctions[] = "VETSetupHook";
 $wgExtensionMessagesFiles['VideoEmbedTool'] = $dir.'/VideoEmbedTool.i18n.php';
 $wgHooks['EditPage::showEditForm:initial2'][] = 'VETSetup';
-$wgHooks['ArticleFromTitle'][] = 'VETArticleFromTitle';
-$wgHooks['ParserBeforeStrip'][] = 'VETParserBeforeStrip';
-$wgHooks['ArticleSave'][] = 'VETArticleSave';
-
 
 function VETSetupHook() {
 	global $wgParser;
@@ -91,62 +88,6 @@ function VETSetup($editform) {
 		$wgOut->addHtml('<div id="vetLinkDiv" style="float: left; margin-top: 20px;' . $marg .'">' . $sep . '<a href="#" id="vetLink">' . wfMsg ('vet-imagelink') . '</a></div>');
 	}
 	return true;
-}
-
-function VETArticleFromTitle( $title, $article  ) {
-	global $wgUser, $IP;
-	
-	require_once( "$IP/extensions/wikia/VideoEmbedTool/Video.php" );
-        require_once( "$IP/extensions/wikia/VideoEmbedTool/VideoPage.php" );
-
-	if (NS_VIDEO == $title->getNamespace() ) {
-		//todo for edit
-		$article = new VideoPage( $title );
-	}	
-	return true;
-}
-
-function VETParserBeforeStrip( $parser, $text, $strip_state  ) {
-	$pattern = "@(\[\[Video:)([^\]]*?)].*?\]@si";
-        $text = preg_replace_callback($pattern, 'VETRenderVideo', $text);
-
-        return true;
-}
-
-function VETRenderVideo( $matches ) {
-	global $IP, $wgOut;
-	require_once( "$IP/extensions/wikia/VideoEmbedTool/Video.php" );
-	$name = $matches[2];
-	$params = explode("|",$name);
-	$video_name = $params[0];
-	$video =  Video::newFromName( $video_name );
-
-	$x = 1;
-
-	$width = 300;
-	$align = 'left';
-	$caption = '';
-
-        foreach($params as $param){
-                if($x > 1){
-                        $width_check = preg_match("/px/i", $param );
-
-                        if($width_check){
-                                $width = preg_replace("/px/i", "", $param);
-                        } else if ($x == 3){
-                                $align = $param;
-                        } else if ($x == 4) {
-				$caption = $param;
-			}
-                }
-                $x++;
-        }
-
-	if ( is_object( $video ) ) {
-			$output = "<video name=\"{$video->getName()}\" width=\"{$width}\" align=\"{$align}\" caption=\"{$caption}\"></video>";
-			return $output;
-	}
-	return $matches[0];
 }
 
 function VETSetupVars($vars) {
