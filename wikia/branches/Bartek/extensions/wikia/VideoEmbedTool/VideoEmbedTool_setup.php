@@ -21,6 +21,14 @@ $wgExtraNamespaces[400] = "Video";
 $wgExtraNamespaces[401] = "Video_talk";
 require_once( "$IP/extensions/wikia/WikiaVideo/WikiaVideo.php" );
 
+#--- register special page (MW 1.1x way)
+if ( !function_exists( 'extAddSpecialPage' ) ) {
+    require( "$IP/extensions/ExtensionFunctions.php" );
+}
+
+extAddSpecialPage( dirname(__FILE__) . '/QuickVideoAdd_body.php', 'QuickVideoAdd', 'QuickVideoAddForm' );
+
+
 $wgExtensionFunctions[] = "VETSetupHook";
 $wgExtensionMessagesFiles['VideoEmbedTool'] = $dir.'/VideoEmbedTool.i18n.php';
 $wgHooks['EditPage::showEditForm:initial2'][] = 'VETSetup';
