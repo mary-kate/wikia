@@ -52,15 +52,7 @@ class VideoPage extends Article {
         }
 
 	function getContent() {
-		$content = Article::getContent();
-		if (!$this->dataline) {
-			$this->dataline = preg_match("/^[^\n]+/", $content, $matches);
-			if( is_array( $matches ) ) {
-				$this->dataline = $matches[0];
-			} 
-		}
-		$content = preg_replace( "/^[^\n]+/", "", $content ) ;	
-		return $content;	
+		return Article::getContent();
 	}
 
 	function load() {

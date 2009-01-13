@@ -3,7 +3,6 @@ if(!defined('MEDIAWIKI')) {
 	exit(1);
 }
 
-$wgHooks['ArticleSave'][] = 'WikiaVideoArticleSave';
 $wgHooks['ParserBeforeStrip'][] = 'WikiaVideoParserBeforeStrip';
 $wgHooks['ArticleFromTitle'][] = 'WikiaVideoArticleFromTitle';
 
@@ -57,13 +56,6 @@ function WikiaVideoArticleFromTitle( $title, $article ) {
         if( NS_VIDEO == $title->getNamespace() ) {
                 //todo for edit
                 $article = new VideoPage( $title );
-        }
-        return true;
-}
-
-function WikiaVideoArticleSave( $article, $user, $text, $summary) {
-        if (NS_VIDEO == $article->mTitle->getNamespace()) {
-                $text = $article->dataline . $text;
         }
         return true;
 }
