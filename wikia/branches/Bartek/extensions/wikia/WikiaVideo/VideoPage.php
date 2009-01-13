@@ -55,7 +55,7 @@ class VideoPage extends Article {
 	public function parseUrl( $url, $load = true ) {
 		$provider = '';
 		$id = '';
-		$data = new array();
+		$data = array();
 
 		$text = preg_match("/metacafe\.com/i", $url );
                 if( $text ) { // metacafe
