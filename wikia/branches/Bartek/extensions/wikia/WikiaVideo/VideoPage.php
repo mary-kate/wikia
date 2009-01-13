@@ -21,7 +21,6 @@ class VideoPage extends Article {
                 parent::view();
         }
 
-
 	function view() {
 		global $wgOut, $wgUser, $wgRequest;
 		
@@ -36,8 +35,6 @@ class VideoPage extends Article {
 			$wgOut->setPageTitle( $this->mTitle->getPrefixedText() );
 			$this->viewUpdates();
 		}
-	
-
 	}
 
         function showTOC( $metadata ) {
@@ -53,6 +50,18 @@ class VideoPage extends Article {
 
 	function getContent() {
 		return Article::getContent();
+	}
+
+	function loadFromPars( $provider, $id, $data ) {
+		$this->provider = $provider;
+		$this->id = $id;
+		$this->data = $data;		
+	}
+
+	function save() {
+
+
+
 	}
 
 	function load() {
