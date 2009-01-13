@@ -64,6 +64,8 @@ class QuickVideoAddForm extends SpecialPage {
 			$title = Title::makeTitle( NS_SPECIAL, $this->mName );
 			if ( $title instanceof Title ) {
 				$video = new VideoPage( $title );	
+				$video->parseUrl( $url );
+				$video->save();				
 			}
 			$wgOut->addHTML( "Video page added successfully." );
 		} else {
