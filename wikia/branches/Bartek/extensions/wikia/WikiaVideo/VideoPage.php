@@ -7,7 +7,7 @@ define( 'NS_VIDEO', 400 );
 class VideoPage extends Article {
 	var	$id,
 		$provider,
-		$url,
+		$xtras,
 		$video,
 		$dataline;
 
@@ -63,13 +63,28 @@ class VideoPage extends Article {
 		return $content;	
 	}
 
-	function parseDataline() {
-		$id = preg_match( "/<id>.+<\/id>/", $this->dataline, $idmatch );
-		$url = preg_match( "/<url>.+<\/url>/", $this->dataline, $urlmatch );
-		$provider = preg_match( "/<provider>.+<\/provider>/", $this->dataline, $prmatch );
-		$this->id	= substr( $idmatch[0], 4, -5 );
-		$this->url	= substr( $urlmatch[0], 5, -6 );
-		$this->provider	= substr( $prmatch[0], 10, -11 );
+	function load() {
+		$fname = get_class( $this ) . '::' . __FUNCTION__;
+		$dbr = wfGetDB( DB_SLAVE );		
+		$row = $dbr->selectRow(
+			'image',
+			'img_metadata',
+			array( 'img_name' => $this->mTitle->getPrefixedText() ),
+			$fname	
+		);	
+		if ($row) {
+			$metadata = split( ",", $row->img_metadata ); 	
+			if ( is_array( $metadata ) ) {
+				$this->provider = $metadata[0];
+				$this->id = $metadata[1];
+				array_splice( $metadata, 0, 2 );
+				if ( count( $metadata ) > 0 ) {
+					foreach( $metadata as $data  ) {
+						$this->extras[] = $data;						
+					}
+				}
+			}
+		}
 	}
 
 	function revert() {
@@ -91,7 +106,7 @@ class VideoPage extends Article {
                 $embed = "";
                 switch( $this->provider ) {
                         case "metacafe":
-				$url = 'http://www.metacafe.com/fplayer/' . $this->id . '/' . $this->url;
+				$url = 'http://www.metacafe.com/fplayer/' . $this->id . '/' . $this->extras[0];
                                 $embed = "<embed src=\"{$url}\" width=\"400\" height=\"345\" wmode=\"transparent\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" type=\"application/x-shockwave-flash\"> </embed>";
                                 break;
                         default: break;
@@ -102,7 +117,7 @@ class VideoPage extends Article {
 	function openShowVideo() {
 		global $wgOut;
 		$this->getContent();
-		$this->parseDataline();	
+		$this->load();	
 		$wgOut->addHTML( $this->getEmbedCode() );
 	}
 }
