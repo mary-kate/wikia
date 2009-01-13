@@ -15,7 +15,12 @@ class QuickVideoAddForm extends SpecialPage
 	}
 
 	public function execute( $subpage ) {
-		global $wgRequest;
+		global $wgOut, $wgRequest;
+
+		$this->mTitle = Title::makeTitle( NS_SPECIAL, 'QuickVideoAdd' );
+		$wgOut->setRobotpolicy( 'noindex,nofollow' );
+		$wgOut->setPageTitle( "QuickVideoAdd" );
+		$wgOut->setArticleRelated( false );
 
 		$this->mAction = $wgRequest->getVal( "action" );
 		$this->mPosted = $wgRequest->wasPosted();
@@ -28,7 +33,7 @@ class QuickVideoAddForm extends SpecialPage
 				break;
 			default:
 				$this->showForm();
-				
+
 				break;
 
 
@@ -38,9 +43,23 @@ class QuickVideoAddForm extends SpecialPage
 
 	public function showForm() {
 		global $wgOut;
-		
+		$titleObj = Title::makeTitle( NS_SPECIAL, 'RegexBlock' );
+		$action = $titleObj->escapeLocalURL( "action=submit" );
+
+		$oTmpl = new EasyTemplate( dirname( __FILE__ ) . "/templates/" );
+		$oTmpl->set_vars( array(
+					"out"		=> 	$wgOut,
+					"action"	=>	$action,
+				       ) );
+		$wgOut->addHTML( $oTmpl->execute("quickform") );
+	
 
 	}
 
+	public function doSubmit() {
+		global $wgOut, $wgRequest;
+		
+
+	}
 }
 
