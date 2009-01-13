@@ -52,19 +52,39 @@ class VideoPage extends Article {
 		return Article::getContent();
 	}
 
+	public function parseUrl( $url, $load = true ) {
+		$provider = '';
+		$id = '';
+		$data = new array();
+
+		$text = preg_match("/metacafe\.com/i", $url );
+                if( $text ) { // metacafe
+			$provider = "metacafe";                        	
+			$standard_url = strpos( strtoupper( $url ), "HTTP://WWW.METACAFE.COM/WATCH/" );
+			if (false !== $standard_url) {
+				$id = substr( $url , $standard_url+ strlen("HTTP://WWW.METACAFE.COM/WATCH/") , strlen($url) );				
+				// todo safeguard better
+													
+
+			}
+                }
+	
+
+	}
+
 	function loadFromPars( $provider, $id, $data ) {
 		$this->provider = $provider;
 		$this->id = $id;
 		$this->data = $data;		
 	}
 
-	function save() {
+	public function save() {
 
 
 
 	}
 
-	function load() {
+	public function load() {
 		$fname = get_class( $this ) . '::' . __FUNCTION__;
 		$dbr = wfGetDB( DB_SLAVE );		
 		$row = $dbr->selectRow(
@@ -104,7 +124,7 @@ class VideoPage extends Article {
 
 	}
 
-        function getEmbedCode() {
+        public function getEmbedCode() {
                 $embed = "";
                 switch( $this->provider ) {
                         case "metacafe":
