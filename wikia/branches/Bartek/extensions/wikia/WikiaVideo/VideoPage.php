@@ -7,7 +7,7 @@ define( 'NS_VIDEO', 400 );
 class VideoPage extends Article {
 	var	$id,
 		$provider,
-		$xtras,
+		$data,
 		$video,
 		$dataline;
 
@@ -72,7 +72,7 @@ class VideoPage extends Article {
 				array_splice( $metadata, 0, 2 );
 				if ( count( $metadata ) > 0 ) {
 					foreach( $metadata as $data  ) {
-						$this->extras[] = $data;						
+						$this->data[] = $data;						
 					}
 				}
 			}
@@ -85,7 +85,8 @@ class VideoPage extends Article {
 	}
 
 	function videoHistory() {
-
+		global $wgOut;
+		$list = new VideoHistoryList( $this );
 
 	}
 
@@ -98,7 +99,7 @@ class VideoPage extends Article {
                 $embed = "";
                 switch( $this->provider ) {
                         case "metacafe":
-				$url = 'http://www.metacafe.com/fplayer/' . $this->id . '/' . $this->extras[0];
+				$url = 'http://www.metacafe.com/fplayer/' . $this->id . '/' . $this->data[0];
                                 $embed = "<embed src=\"{$url}\" width=\"400\" height=\"345\" wmode=\"transparent\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" type=\"application/x-shockwave-flash\"> </embed>";
                                 break;
                         default: break;
