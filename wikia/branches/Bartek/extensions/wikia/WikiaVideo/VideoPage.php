@@ -110,10 +110,9 @@ class VideoPage extends Article {
 
                 $dbw->insert( 'image',
                         array(
-                                'img_name' => $this->mName,
+                                'img_name' => $this->mTitle->getPrefixedText(),
                                 'img_size' => 300,
                                 'img_description' => '',
-                                'img_name' => $this->mName,
                                 'img_user' => $wgUser->getID(),
                                 'img_user_text' => $wgUser->getName(),
                                 'img_timestamp' => $now,
