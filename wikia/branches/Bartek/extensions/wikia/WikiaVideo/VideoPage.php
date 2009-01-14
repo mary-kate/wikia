@@ -61,18 +61,23 @@ class VideoPage extends Article {
 			$provider = "metacafe";                        	
 			// reuse some NY stuff for now
 			$standard_url = strpos( strtoupper( $url ), "HTTP://WWW.METACAFE.COM/WATCH/" );
-			if (false !== $standard_url) {
+			if( false !== $standard_url ) {
 				$id = substr( $url , $standard_url+ strlen("HTTP://WWW.METACAFE.COM/WATCH/") , strlen($url) );				
 				$last_char = substr( $id,-1 ,1 );
 
 				if($last_char == "/"){
 					$id = substr( $id , 0 , strlen($id)-1 );
 				}
+				
+				if ( !( false !== strpos( $id, ".SWF" ) ) ) {
+					$id .= ".swf";
+				}
+				
 				$data = split( "/", $id );
 				if (is_array( $data ) ) {
 					$this->mProvider = $provider;
 					$this->mId = $data[0];
-					$this->mUrl = $data[1];
+					$this->mData = array( $data[1] );
 				}
 			}
 		}
@@ -99,8 +104,6 @@ class VideoPage extends Article {
 
                 $dbw = wfGetDB( DB_MASTER );
                 $now = $dbw->timestamp();
-
-		
 	
 		switch( $this->mProvider ) {
 			case 'metacafe':		
