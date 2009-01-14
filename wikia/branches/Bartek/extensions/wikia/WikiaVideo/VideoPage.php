@@ -137,7 +137,7 @@ class VideoPage extends Article {
 			                        $dbw->insertSelect( 'oldimage', 'image',
                                 array(
                                         'oi_name' => 'img_name',
-                                        'oi_archive_name' => '',
+                                        'oi_archive_name' => 'img_name',
                                         'oi_size' => 'img_size',
                                         'oi_width' => 'img_width',
                                         'oi_height' => 'img_height',
