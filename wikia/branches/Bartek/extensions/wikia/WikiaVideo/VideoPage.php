@@ -89,13 +89,54 @@ class VideoPage extends Article {
 	}
 
 	public function save() {
+		global $wgUser;
+
 		// todo save the video page data to image table
 		// and update oldimage if it's a real update
 
-
 		$this->mTitle = Title::makeTitle( NS_VIDEO, $this->mName );
 		$desc = "added video [[" . $this->mTitle->getPrefixedText() . "]]";			
+
+                $dbr = wfGetDB( DB_MASTER );
+                $now = $dbr->timestamp();
+	
+		switch( $this->mProvider ) {
+			case 'metacafe':
+				$metadata = $this->mProvider . ',' . $this->mId . ',' . $this->mData[0];
+			default: 
+				$metadata = '';
+				break;
+		}
+
+                $dbw->insert( 'image',
+                        array(
+                                'img_name' => $this->mName,
+                                'img_size' => 300,
+                                'img_description' => '',
+                                'img_name' => $this->mName,
+                                'img_user_id' => $wgUser->getID(),
+                                'img_user_text' => $wgUser->getName(),
+                                'img_timestamp' => $now,
+				'img_metadata'	=> $metadata,										
+                                'img_type' => 'VIDEO',
+				'img_major_mime' => 'video',
+				'img_minor_mime' => 'swf',					
+                        ),
+                        __METHOD__,
+                        'IGNORE'
+                );
+
+                if( $dbw->affectedRows() == 0 ) {
+			// todo update stuff
+                        $desc = "updated video [[" . $this->mTitle->getPrefixedText() . "]]";
+		
+		}
+		
+		// todo make those categories more flexible
 		$this->doEdit( "[[Category:Videos]]", $desc, EDIT_SUPPRESS_RC );			
+
+		$dbw->immediateCommit();
+		
 	}
 
 	public function load() {
