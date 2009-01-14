@@ -8,7 +8,10 @@ $wgHooks['ArticleFromTitle'][] = 'WikiaVideoArticleFromTitle';
 
 
 function WikiaVideoParserBeforeStrip($parser, $text, $strip_state) {
-	// TODO
+	// TODO change this to accomodate more cases ie parser inside, links and all
+	// MW parser stuff 
+      	$pattern = "@(\[\[Video:)([^\]]*?)].*?\]@si";   	 	 
+	$text = preg_replace_callback($pattern, 'WikiaVideoRenderVideo', $text);
 	return true;
 }
 
@@ -18,7 +21,7 @@ function WikiaVideoRenderVideo( $matches ) {
         $name = $matches[2];
         $params = explode("|",$name);
         $video_name = $params[0];
-        $video =  Video::newFromName( $video_name );
+//        $video =  VideoPage;
 
         $x = 1;
 
@@ -42,7 +45,7 @@ function WikiaVideoRenderVideo( $matches ) {
         }
 
         if ( is_object( $video ) ) {
-                        $output = "<video name=\"{$video->getName()}\" width=\"{$width}\" align=\"{$align}\" caption=\"{$caption}\"></video>";
+                        $output = "<video name=\"{}\" width=\"{$width}\" align=\"{$align}\" caption=\"{$caption}\"></video>";
                         return $output;
         }
         return $matches[0];
