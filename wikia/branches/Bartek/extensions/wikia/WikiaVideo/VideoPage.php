@@ -99,10 +99,13 @@ class VideoPage extends Article {
 
                 $dbw = wfGetDB( DB_MASTER );
                 $now = $dbw->timestamp();
+
+		
 	
 		switch( $this->mProvider ) {
-			case 'metacafe':
+			case 'metacafe':		
 				$metadata = $this->mProvider . ',' . $this->mId . ',' . $this->mData[0];
+				break;
 			default: 
 				$metadata = '';
 				break;
