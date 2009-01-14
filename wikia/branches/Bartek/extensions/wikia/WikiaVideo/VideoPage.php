@@ -132,9 +132,43 @@ class VideoPage extends Article {
                 );
 
                 if( $dbw->affectedRows() == 0 ) {
-			// todo update stuff
+			// we are updating
                         $desc = "updated video [[" . $this->mTitle->getPrefixedText() . "]]";
-		
+			                        $dbw->insertSelect( 'oldimage', 'image',
+                                array(
+                                        'oi_name' => 'img_name',
+                                        'oi_archive_name' => '',
+                                        'oi_size' => 'img_size',
+                                        'oi_width' => 'img_width',
+                                        'oi_height' => 'img_height',
+                                        'oi_bits' => 'img_bits',
+                                        'oi_timestamp' => 'img_timestamp',
+                                        'oi_description' => 'img_description',
+                                        'oi_user' => 'img_user',
+                                        'oi_user_text' => 'img_user_text',
+                                        'oi_metadata' => 'img_metadata',
+                                        'oi_media_type' => 'img_media_type',
+                                        'oi_major_mime' => 'img_major_mime',
+                                        'oi_minor_mime' => 'img_minor_mime',
+                                        'oi_sha1' => 'img_sha1'
+                                ), array( 'img_name' => $this->mTitle->getPrefixedText() ), __METHOD__
+                        );
+
+		        // update the current image row
+                        $dbw->update( 'image',
+                                array( /* SET */
+                                        'img_timestamp' => $now,
+                                        'img_user' => $wgUser->getID(),
+                                        'img_user_text' => $wgUser->getName(),
+                                        'img_metadata' => $metadata,
+                                ), array( /* WHERE */
+                                        'img_name' => $this->mTitle->getPrefixedText()
+                                ), __METHOD__
+                        );
+	
+	
+			
+
 		}
 		
 		// todo make those categories more flexible
