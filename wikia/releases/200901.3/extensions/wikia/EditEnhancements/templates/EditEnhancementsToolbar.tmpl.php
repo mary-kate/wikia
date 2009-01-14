@@ -3,6 +3,23 @@
 		margin: 5px 0;
 		padding: 5px;
 	}
+	.edit_enhancements_toolbar_fixed {
+		position: fixed;
+		bottom: 0px;
+		margin: 0px !important;
+		z-index: 500;
+	}
+
+	* html .edit_enhancements_toolbar_fixed {
+		position: absolute;
+		top: expression( ((e=document.documentElement.scrollTop+document.documentElement.clientHeight)?e:document.body.scrollTop+document.documentElement.clientHeight) - 100  +'px') !important;
+		left: 0 !important;
+	}
+
+	.edit_enhancements_toolbar_static {
+		position: static;
+		width: auto;
+	}
 	#edit_enhancements_toolbar ul {
 		margin: 0;
 	}
@@ -21,14 +38,11 @@
 </style>
 
 <div class="color1 clearfix" id="edit_enhancements_toolbar">
-	<?
-	global $EditEnhancementsButtons, $EditEnhancementsCheckboxes, $EditEnhancementsSummaryBox;
-	?>
 	<ul>
-		<li><?=$EditEnhancementsSummaryBox .'</div>';?></li>
-		<li><?=$EditEnhancementsButtons['save'];?></li>
-		<li><?=$EditEnhancementsButtons['preview'];?></li>
-		<li><?=$EditEnhancementsCheckboxes['minor'];?></li>
-		<li><?=$EditEnhancementsCheckboxes['watch'];?></li>
+		<li><?=$summary ?></div></li>
+		<li><?=$buttons['save'] ?></li>
+		<li><?=$buttons['preview'] ?></li>
+		<li><?=$checkboxes['minor'] ?></li>
+		<li><?=$checkboxes['watch'] ?></li>
 	</ul>
 </div>
