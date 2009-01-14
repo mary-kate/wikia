@@ -5,7 +5,8 @@ define( 'NS_VIDEO', 400 );
 
 // main video page class
 class VideoPage extends Article {
-	var	$mId,
+	var	$mName,
+		$mId,
 		$mProvider,
 		$mData,
 		$mDataline;
@@ -83,14 +84,18 @@ class VideoPage extends Article {
 		$this->mData = $data;		
 	}
 
+	public function setName( $name ) {
+		$this->mName = $name;
+	}
+
 	public function save() {
-		// save the video page data to image table
-
-			
-
+		// todo save the video page data to image table
+		// and update oldimage if it's a real update
 
 
-
+		$this->mTitle = Title::makeTitle( NS_VIDEO, $this->mName );
+		$desc = "added video [[" . $this->mTitle->getPrefixedText() . "]]";			
+		$this->doEdit( "[[Category:Videos]]", $desc, EDIT_SUPPRESS_RC );			
 	}
 
 	public function load() {
