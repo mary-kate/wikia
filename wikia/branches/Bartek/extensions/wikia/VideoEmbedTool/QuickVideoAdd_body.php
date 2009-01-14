@@ -65,6 +65,7 @@ class QuickVideoAddForm extends SpecialPage {
 			if ( $title instanceof Title ) {
 				$video = new VideoPage( $title );	
 				$video->parseUrl( $this->mUrl );
+				$video->setName( $this->mName );
 				$video->save();				
 			}
 			$wgOut->addHTML( "Video page added successfully." );
