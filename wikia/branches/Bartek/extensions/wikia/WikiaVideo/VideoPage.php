@@ -55,21 +55,27 @@ class VideoPage extends Article {
 	public function parseUrl( $url, $load = true ) {
 		$provider = '';
 		$id = '';
-		$data = array();
 
 		$text = preg_match("/metacafe\.com/i", $url );
-                if( $text ) { // metacafe
+		if( $text ) { // metacafe
 			$provider = "metacafe";                        	
+			// reuse some NY stuff for now
 			$standard_url = strpos( strtoupper( $url ), "HTTP://WWW.METACAFE.COM/WATCH/" );
 			if (false !== $standard_url) {
 				$id = substr( $url , $standard_url+ strlen("HTTP://WWW.METACAFE.COM/WATCH/") , strlen($url) );				
-				// todo safeguard better
-													
+				$last_char = substr( $id,-1 ,1 );
 
+				if($last_char == "/"){
+					$id = substr( $id , 0 , strlen($id)-1 );
+				}
+				$data = split( "/", $id );
+				if (is_array( $data ) ) {
+					$this->provider = $provider;
+					$this->id = $data[0];
+					$this->url = $data[1];
+				}
 			}
-                }
-	
-
+		}
 	}
 
 	function loadFromPars( $provider, $id, $data ) {
