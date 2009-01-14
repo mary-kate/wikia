@@ -5,11 +5,10 @@ define( 'NS_VIDEO', 400 );
 
 // main video page class
 class VideoPage extends Article {
-	var	$id,
-		$provider,
-		$data,
-		$video,
-		$dataline;
+	var	$mId,
+		$mProvider,
+		$mData,
+		$mDataline;
 
         function __construct (&$title){
                 parent::__construct(&$title);
@@ -70,21 +69,25 @@ class VideoPage extends Article {
 				}
 				$data = split( "/", $id );
 				if (is_array( $data ) ) {
-					$this->provider = $provider;
-					$this->id = $data[0];
-					$this->url = $data[1];
+					$this->mProvider = $provider;
+					$this->mId = $data[0];
+					$this->mUrl = $data[1];
 				}
 			}
 		}
 	}
 
 	function loadFromPars( $provider, $id, $data ) {
-		$this->provider = $provider;
-		$this->id = $id;
-		$this->data = $data;		
+		$this->mProvider = $provider;
+		$this->mId = $id;
+		$this->mData = $data;		
 	}
 
 	public function save() {
+		// save the video page data to image table
+
+			
+
 
 
 
@@ -102,12 +105,12 @@ class VideoPage extends Article {
 		if ($row) {
 			$metadata = split( ",", $row->img_metadata ); 	
 			if ( is_array( $metadata ) ) {
-				$this->provider = $metadata[0];
-				$this->id = $metadata[1];
+				$this->mProvider = $metadata[0];
+				$this->mId = $metadata[1];
 				array_splice( $metadata, 0, 2 );
 				if ( count( $metadata ) > 0 ) {
 					foreach( $metadata as $data  ) {
-						$this->data[] = $data;						
+						$this->mData[] = $data;						
 					}
 				}
 			}
@@ -132,9 +135,9 @@ class VideoPage extends Article {
 
         public function getEmbedCode() {
                 $embed = "";
-                switch( $this->provider ) {
+                switch( $this->mProvider ) {
                         case "metacafe":
-				$url = 'http://www.metacafe.com/fplayer/' . $this->id . '/' . $this->data[0];
+				$url = 'http://www.metacafe.com/fplayer/' . $this->mId . '/' . $this->mData[0];
                                 $embed = "<embed src=\"{$url}\" width=\"400\" height=\"345\" wmode=\"transparent\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" type=\"application/x-shockwave-flash\"> </embed>";
                                 break;
                         default: break;
