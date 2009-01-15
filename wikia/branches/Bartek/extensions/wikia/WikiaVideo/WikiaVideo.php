@@ -17,11 +17,10 @@ function WikiaVideoParserBeforeStrip($parser, $text, $strip_state) {
 
 function WikiaVideoRenderVideo( $matches ) {
         global $IP, $wgOut;
-        require_once( "$IP/extensions/wikia/VideoEmbedTool/Video.php" );
+        require_once( "$IP/extensions/wikia/WikiaVideo/VideoPage.php" );
         $name = $matches[2];
-        $params = explode("|",$name);
+        $params = explode( "|", $name );
         $video_name = $params[0];
-//        $video =  VideoPage;
 
         $x = 1;
 
@@ -30,14 +29,13 @@ function WikiaVideoRenderVideo( $matches ) {
         $caption = '';
 
         foreach($params as $param){
-                if($x > 1){
-                        $width_check = preg_match("/px/i", $param );
-
-                        if($width_check){
-                                $width = preg_replace("/px/i", "", $param);
-                        } else if ($x == 3){
+                if($x > 1) {
+                        $width_check = strpos( "px", $param );
+                        if( false !== $width_check ) {
+                                $width = str_replace("px", "", $param);
+                        } else if ( ( 'left' == $param ) || ( 'right' == $param ) ) {
                                 $align = $param;
-                        } else if ($x == 4) {
+                        } else {
                                 $caption = $param;
                         }
                 }
@@ -45,7 +43,7 @@ function WikiaVideoRenderVideo( $matches ) {
         }
 
         if ( is_object( $video ) ) {
-                        $output = "<video name=\"{}\" width=\"{$width}\" align=\"{$align}\" caption=\"{$caption}\"></video>";
+                        $output = "<video name=\"{$video_name}\" width=\"{$width}\" align=\"{$align}\" caption=\"{$caption}\"></video>";
                         return $output;
         }
         return $matches[0];
