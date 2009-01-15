@@ -160,11 +160,11 @@ class VideoPage extends Article {
 		$text = strpos( $url, "sevenload.com" );
 		if( false !== $text ) { // youtube
 			$provider = self::V_SEVENLOAD;
-			$standard_url = strtoupper( $url );	
-			$parsed = split( "/", $standard_url );
+			$parsed = split( "/", $url );
 			$id = array_pop( $parsed );
 			$parsed_id = split( "-", $id );
 			if( is_array( $parsed_id ) ) {
+				$this->mProvider = $provider;
 				$this->mId = $parsed_id[0];
 				array_shift( $parsed_id );
 				$this->mData = array(
@@ -184,6 +184,9 @@ class VideoPage extends Article {
 				return (425 / 355);
 				break;
 
+			case "sevenload":
+				return (500 / 408);
+				break;
 			default:
 				return 1;
 				break;
@@ -217,6 +220,9 @@ class VideoPage extends Article {
 			case 'youtube':		
 				$metadata = $this->mProvider . ',' . $this->mId . ',';
 				break;
+			case 'sevenload':		
+				$metadata = $this->mProvider . ',' . $this->mId . ',' . $this->mData[0];
+				break;			
 			default: 
 				$metadata = '';
 				break;
