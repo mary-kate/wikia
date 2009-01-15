@@ -202,15 +202,11 @@ class VideoPage extends Article {
 
 	function videoHistory() {
 		global $wgOut;
+		$dbr = wfGetDB( DB_SLAVE );
 		$list = new VideoHistoryList( $this );
 		$s = $list->beginVideoHistoryList();
-		$first_line = $list->videoHistoryLine( true );
-		$s .= $list->displayHistoryLine( $first_line );
-		
-		//while ( $line = $list->videoHistoryLine() ) {
-									
-		//}
-
+		$s .= $list->videoHistoryLine( true );
+		$s .= $list->videoHistoryLine();
 		$s .= $list->endVideoHistoryList();
 		$wgOut->addHTML( $s );
 	}
@@ -247,7 +243,6 @@ class VideoHistoryList {
 		$this->mTitle = $article->mTitle;
         }
 
-
         public function beginVideoHistoryList() {
                 global $wgOut, $wgUser;
                 return Xml::element( 'h2', array( 'id' => 'filehistory' ), wfMsg( 'filehist' ) )
@@ -258,12 +253,6 @@ class VideoHistoryList {
                         . '<th>' . wfMsgHtml( 'filehist-user' ) . '</th>'
                         . "</tr>\n";
         }
-
-	public function displayHistoryLine( $line ) {
-		$provider = $line->img_metadata;		
-		$s = '<tr>' . '<td>' . $line->img_timestamp . '</td>' . '<td>' . $line->img_user_text .'</td></tr>';	
-		return $s;	
-	}
 
 	public function videoHistoryLine( $iscur = false ) {
 		global $wgOut, $wgUser;
@@ -286,8 +275,12 @@ class VideoHistoryList {
 					__METHOD__
 					);
 			if ( 0 == $dbr->numRows( $history ) ) {
-				return FALSE;
-			}
+				return '';
+			} else {
+				$s = '';				
+				$row = $dbr->fetchObject( $history );
+				return '<tr>' . '<td>' . $row->img_timestamp . '</td>' . '<td>' . $row->img_user_text .'</td></tr>';
+			}			
 		} else {
 			// load from old video db
 			$history = $dbr->select( 'oldimage',
@@ -303,8 +296,12 @@ class VideoHistoryList {
 					__METHOD__,
 					array( 'ORDER BY' => 'oi_timestamp DESC' )
 					);
+			$s = '';
+			while( $row = $dbr->fetchObject( $history ) ) {
+				$s .= '<tr>' . '<td>' . $row->img_timestamp . '</td>' . '<td>' . $row->img_user_text .'</td></tr>';	
+			}			
+			return $s;
 		}
-		return $dbr->fetchObject( $history );
 	}
 
         public function endVideoHistoryList() {
