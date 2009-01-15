@@ -156,6 +156,22 @@ class VideoPage extends Article {
 			$this->mId = $id;
 			$this->mData = array();
 		}
+
+		$text = strpos( $url, "sevenload.com" );
+		if( false !== $text ) { // youtube
+			$provider = self::V_SEVENLOAD;
+			$standard_url = strtoupper( $url );	
+			$parsed = split( "/", $standard_url );
+			$id = array_pop( $parsed );
+			$parsed_id = split( "-", $id );
+			if( is_array( $parsed_id ) ) {
+				$this->mId = $parsed_id[0];
+				array_shift( $parsed_id );
+				$this->mData = array(
+					'-' . implode( "-", $parsed_id )
+				);					
+			}
+		}
 	}
 
 	public function getRatio() {
@@ -313,6 +329,7 @@ class VideoPage extends Article {
 
         public function getEmbedCode( $width = 300 ) {
                 $embed = "";
+		$code = 'standard';
 		$height = round( $width / $this->getRatio() );
                 switch( $this->mProviders[$this->mProvider] ) {
                         case "metacafe":
@@ -321,9 +338,15 @@ class VideoPage extends Article {
                         case "youtube":
 				$url = 'http://www.youtube.com/v/' . $this->mId;
                                 break;
+			case "sevenload":
+				$code = 'custom';
+				$embed = '<script type="text/javascript" src="http://en.sevenload.com/pl/'.$this->mId.'/'.$width.'x'.$height.'"></script>';
                         default: break;
-                }
+                }	
+			if( 'custom' != $code ) { 
                                 $embed = "<embed src=\"{$url}\" width=\"{$width}\" height=\"{$height}\" wmode=\"transparent\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" type=\"application/x-shockwave-flash\"> </embed>";
+			}
+
                 return $embed;
         }
 
