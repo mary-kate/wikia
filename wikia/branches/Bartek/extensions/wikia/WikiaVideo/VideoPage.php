@@ -69,7 +69,7 @@ class VideoPage extends Article {
 				'<img src="'.$wgStylePath.'/common/images/magnify-clip.png" ' .
 				'width="15" height="11" alt="" /></a></div>';
 		}
-		$s .= '  <div class="thumbcaption">'.$zoomicon.$caption."</div></div>";
+		$s .= '  <div class="thumbcaption">'.$zoomicon.$caption."</div></div></div>";
 		return str_replace("\n", ' ', $s);
 	}
 
