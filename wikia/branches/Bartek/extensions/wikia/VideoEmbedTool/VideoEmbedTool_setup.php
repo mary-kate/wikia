@@ -12,7 +12,7 @@ if(!defined('MEDIAWIKI')) {
 $wgExtensionCredits['other'][] = array(
         'name' => 'Video Embed Tool',
         'author' => 'Bartek Łapiński',
-	'version' => '0.22',
+	'version' => '0.25',
 );
 
 $dir = dirname(__FILE__).'/';
@@ -34,8 +34,7 @@ $wgExtensionMessagesFiles['VideoEmbedTool'] = $dir.'/VideoEmbedTool.i18n.php';
 $wgHooks['EditPage::showEditForm:initial2'][] = 'VETSetup';
 
 function VETSetupHook() {
-	global $wgParser;
-		
+	global $wgParser;		
 	$wgParser->setHook( "video", "VETParserHook" );
 	return true;
 }
@@ -49,13 +48,13 @@ function VETArticleSave( $article, $user, $text, $summary) {
 
 function VETParserHook( $input, $argv, $parser ) {
 	// todo get video name, get embed code, display that code
-
 	$name = '';
 	$width = 300;
 	$width_max = 600;
 	$height_max = 600;
 	$align = 'left';
 	$caption = '';
+	$thumb = 'false';
 
 	if (!empty($argv['name'])) {
                 $name = $argv['name'];
@@ -65,6 +64,9 @@ function VETParserHook( $input, $argv, $parser ) {
         }
 	if (!empty($argv['caption'])) {
                 $caption = $argv['caption'];
+        }
+	if (!empty($argv['thumb'])) {
+                $thumb = $argv['thumb'];
         }
 
 	$title = Title::makeTitle( NS_VIDEO, $name );
@@ -77,7 +79,7 @@ function VETParserHook( $input, $argv, $parser ) {
                 $width = $argv['width'];
         }
 
-	$output = $video->generateWindow( $align, $width, $caption );
+	$output = $video->generateWindow( $align, $width, $caption, $thumb );
 	return $output;
 }
 
