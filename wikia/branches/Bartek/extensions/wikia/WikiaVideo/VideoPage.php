@@ -96,9 +96,6 @@ class VideoPage extends Article {
 	public function save() {
 		global $wgUser;
 
-		// todo save the video page data to image table
-		// and update oldimage if it's a real update
-
 		$this->mTitle = Title::makeTitle( NS_VIDEO, $this->mName );
 		$desc = "added video [[" . $this->mTitle->getPrefixedText() . "]]";			
 
@@ -252,7 +249,7 @@ class VideoHistoryList {
         }
 
         public function endVideoHistoryList() {
-                return "<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr></table>\n";
+                return "</table>\n";
         }
 
 
