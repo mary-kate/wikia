@@ -58,7 +58,7 @@ class VideoPage extends Article {
 		if ( 'false' == $thumb ) {
 			return $code;
 		}
-		$s = "<div$ class=\"thumb t{$align}\"><div class=\"thumbinner\" style=\"width:{$width}px;\">";
+		$s = "<div class=\"thumb t{$align}\"><div class=\"thumbinner\" style=\"width:{$width}px;\">";
 		$s .= $code;
 
 		if ( isset( $fp['framed'] ) ) {
