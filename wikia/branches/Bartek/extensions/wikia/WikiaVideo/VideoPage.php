@@ -114,7 +114,7 @@ class VideoPage extends Article {
 
 		$text = preg_match("/metacafe\.com/i", $url );
 		if( $text ) { // metacafe
-			$provider = V_METACAFE;                        	
+			$provider = self::V_METACAFE;                        	
 			// reuse some NY stuff for now
 			$standard_url = strpos( strtoupper( $url ), "HTTP://WWW.METACAFE.COM/WATCH/" );
 			if( false !== $standard_url ) {
