@@ -22,11 +22,11 @@ class VideoPage extends Article {
         }
 
 	function view() {
-		global $wgOut, $wgUser, $wgRequest;
-		
+		global $wgOut, $wgUser, $wgRequest;		
 		if ( $this->getID() ) {
 			$wgOut->addHTML( $this->showTOC('') );
 			$this->openShowVideo();
+			$this->videoHistory();
 			Article::view();
 		} else {
 			# Just need to set the right headers
@@ -165,10 +165,6 @@ class VideoPage extends Article {
                                         'img_name' => $this->mTitle->getPrefixedText()
                                 ), __METHOD__
                         );
-	
-	
-			
-
 		}
 		
 		// todo make those categories more flexible
@@ -210,7 +206,9 @@ class VideoPage extends Article {
 	function videoHistory() {
 		global $wgOut;
 		$list = new VideoHistoryList( $this );
-
+		$s = $list->beginVideoHistoryList();
+		$s .= $list->endVideoHistoryList();
+		$wgOut->addHTML( $s );
 	}
 
 	function videoLinks() {
@@ -240,7 +238,22 @@ class VideoPage extends Article {
 
 class VideoHistoryList {
 
+        public function beginVideoHistoryList() {
+                global $wgOut, $wgUser;
+                return Xml::element( 'h2', array( 'id' => 'filehistory' ), wfMsg( 'filehist' ) )
+                        . $wgOut->parse( wfMsgNoTrans( 'filehist-help' ) )
+                        . Xml::openElement( 'table', array( 'class' => 'filehistory' ) ) . "\n"
+                        . '<tr>'
+                        . '<th>' . wfMsgHtml( 'filehist-datetime' ) . '</th>'
+                        . '<th>' . wfMsgHtml( 'filehist-dimensions' ) . '</th>'
+                        . '<th>' . wfMsgHtml( 'filehist-user' ) . '</th>'
+                        . '<th>' . wfMsgHtml( 'filehist-comment' ) . '</th>'
+                        . "</tr>\n";
+        }
 
+        public function endVideoHistoryList() {
+                return "<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr></table>\n";
+        }
 
 
 
