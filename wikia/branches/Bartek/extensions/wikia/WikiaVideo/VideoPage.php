@@ -5,11 +5,47 @@ define( 'NS_VIDEO', 400 );
 
 // main video page class
 class VideoPage extends Article {
+
+	const V_GAMETRAILERS = 0;
+	const V_GAMEVIDEOS = 1;
+	const V_GAMESPOT = 2;
+	const V_MTVGAMES = 3;
+	const V_5MIN = 4;
+	const V_YOUTUBE = 5;
+	const V_HULU = 6;
+	const V_VEOH = 7;
+	const V_FANCAST = 8;
+	const V_IN2TV = 9;
+	const V_BLIPTV = 10;
+	const V_METACAFE = 11;
+	const V_SEVENLOAD = 12;
+	const V_VIMEO = 13;
+	const V_CLIPFISH = 14;
+	const V_MYVIDEO = 15;
+
 	var	$mName,
 		$mId,
 		$mProvider,
 		$mData,
-		$mDataline;
+		$mDataline,
+		$mProviders = array(
+			'0' => 'gametrailers',
+			'1' => 'gamevideos',
+			'2' => 'gamespot',
+			'3' => 'mtvgames',
+			'4' => '5min',
+			'5' => 'youtube',
+			'6' => 'hulu',
+			'7' => 'veoh',
+			'8' => 'fancast',
+			'9' => 'in2tv',
+			'10' => 'bliptv',
+			'11' => 'metacafe',
+			'12' => 'sevenload',
+			'13' => 'vimeo',
+			'14' => 'clipfish',
+			'15' => 'myvideo'	
+		);
 
         function __construct (&$title){
                 parent::__construct(&$title);
@@ -41,8 +77,7 @@ class VideoPage extends Article {
                 global $wgLang;
                 $r = '<ul id="filetoc">
                         <li><a href="#file">' . $wgLang->getNsText( NS_VIDEO ) . '</a></li>
-                        <li><a href="#filehistory">' . wfMsgHtml( 'filehist' ) . '</a></li>
-                        <li><a href="#filelinks">' . wfMsgHtml( 'imagelinks' ) . '</a></li>' .
+                        <li><a href="#filehistory">' . wfMsgHtml( 'filehist' ) . '</a></li>' .
                         ($metadata ? ' <li><a href="#metadata">' . wfMsgHtml( 'metadata' ) . '</a></li>' : '') . '
                 </ul>';
                 return $r;
@@ -79,7 +114,7 @@ class VideoPage extends Article {
 
 		$text = preg_match("/metacafe\.com/i", $url );
 		if( $text ) { // metacafe
-			$provider = "metacafe";                        	
+			$provider = V_METACAFE;                        	
 			// reuse some NY stuff for now
 			$standard_url = strpos( strtoupper( $url ), "HTTP://WWW.METACAFE.COM/WATCH/" );
 			if( false !== $standard_url ) {
@@ -105,7 +140,7 @@ class VideoPage extends Article {
 	}
 
 	public function getRatio() {
-		switch( $this->mProvider ) {
+		switch( $this->mProviders[$this->mProvider] ) {
 			case "metacafe": 
 				return (40 / 35);
 				break;
@@ -118,7 +153,7 @@ class VideoPage extends Article {
 	}
 
 	function loadFromPars( $provider, $id, $data ) {
-		$this->mProvider = $provider;
+		$this->mProvider = key( $provider );
 		$this->mId = $id;
 		$this->mData = $data;		
 	}
@@ -136,7 +171,7 @@ class VideoPage extends Article {
                 $dbw = wfGetDB( DB_MASTER );
                 $now = $dbw->timestamp();
 	
-		switch( $this->mProvider ) {
+		switch( $this->mProviders[$this->mProvider] ) {
 			case 'metacafe':		
 				$metadata = $this->mProvider . ',' . $this->mId . ',' . $this->mData[0];
 				break;
@@ -253,7 +288,7 @@ class VideoPage extends Article {
         public function getEmbedCode( $width = 300 ) {
                 $embed = "";
 		$height = round( $width / $this->getRatio() );
-                switch( $this->mProvider ) {
+                switch( $this->mProviders[$this->mProvider] ) {
                         case "metacafe":
 				$url = 'http://www.metacafe.com/fplayer/' . $this->mId . '/' . $this->mData[0];
                                 $embed = "<embed src=\"{$url}\" width=\"{$width}\" height=\"{$height}\" wmode=\"transparent\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" type=\"application/x-shockwave-flash\"> </embed>";
