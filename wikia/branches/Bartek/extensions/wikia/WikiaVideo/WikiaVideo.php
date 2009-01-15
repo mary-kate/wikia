@@ -42,11 +42,8 @@ function WikiaVideoRenderVideo( $matches ) {
                 $x++;
         }
 
-        if ( is_object( $video ) ) {
-                        $output = "<video name=\"{$video_name}\" width=\"{$width}\" align=\"{$align}\" caption=\"{$caption}\"></video>";
-                        return $output;
-        }
-        return $matches[0];
+	$output = "<video name=\"{$video_name}\" width=\"{$width}\" align=\"{$align}\" caption=\"{$caption}\"></video>";
+	return $output;
 }
 
 function WikiaVideoArticleFromTitle( $title, $article ) {
@@ -55,7 +52,6 @@ function WikiaVideoArticleFromTitle( $title, $article ) {
         require_once( "$IP/extensions/wikia/WikiaVideo/VideoPage.php" );
 
         if( NS_VIDEO == $title->getNamespace() ) {
-                //todo for edit
                 $article = new VideoPage( $title );
         }
         return true;
