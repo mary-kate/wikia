@@ -26,8 +26,8 @@ class VideoPage extends Article {
 		if ( $this->getID() ) {
 			$wgOut->addHTML( $this->showTOC('') );
 			$this->openShowVideo();
-			$this->videoHistory();
 			Article::view();
+			$this->videoHistory();
 		} else {
 			# Just need to set the right headers
 			$wgOut->setArticleFlag( true );
@@ -204,6 +204,13 @@ class VideoPage extends Article {
 		global $wgOut;
 		$list = new VideoHistoryList( $this );
 		$s = $list->beginVideoHistoryList();
+		$first_line = $list->videoHistoryLine( true );
+		$s .= $list->displayHistoryLine( $first_line );
+		
+		//while ( $line = $list->videoHistoryLine() ) {
+									
+		//}
+
 		$s .= $list->endVideoHistoryList();
 		$wgOut->addHTML( $s );
 	}
@@ -213,7 +220,7 @@ class VideoPage extends Article {
 
 	}
 
-        public function getEmbedCode() {
+        public function getEmbedCode( $width = false, $height = false ) {
                 $embed = "";
                 switch( $this->mProvider ) {
                         case "metacafe":
@@ -234,6 +241,12 @@ class VideoPage extends Article {
 }
 
 class VideoHistoryList {
+	var $mTitle;
+
+        function __construct( $article ) {
+		$this->mTitle = $article->mTitle;
+        }
+
 
         public function beginVideoHistoryList() {
                 global $wgOut, $wgUser;
@@ -242,20 +255,62 @@ class VideoHistoryList {
                         . Xml::openElement( 'table', array( 'class' => 'filehistory' ) ) . "\n"
                         . '<tr>'
                         . '<th>' . wfMsgHtml( 'filehist-datetime' ) . '</th>'
-                        . '<th>' . wfMsgHtml( 'filehist-dimensions' ) . '</th>'
                         . '<th>' . wfMsgHtml( 'filehist-user' ) . '</th>'
-                        . '<th>' . wfMsgHtml( 'filehist-comment' ) . '</th>'
                         . "</tr>\n";
         }
+
+	public function displayHistoryLine( $line ) {
+		$provider = $line->img_metadata;		
+		$s = '<tr>' . '<td>' . $line->img_timestamp . '</td>' . '<td>' . $line->img_user_text .'</td></tr>';	
+		return $s;	
+	}
+
+	public function videoHistoryLine( $iscur = false ) {
+		global $wgOut, $wgUser;
+		
+		$dbr = wfGetDB( DB_SLAVE );		
+
+		if ( $iscur ) {
+			// load from current db
+			$history = $dbr->select( 'image',
+					array(
+						'img_metadata',
+						'img_name',
+						'img_user',
+						'img_user_text',
+						'img_timestamp',
+						'img_description',
+						"'' AS ov_archive_name"
+					     ),
+					array( 'img_name' => $this->mTitle->getPrefixedText() ),
+					__METHOD__
+					);
+			if ( 0 == $dbr->numRows( $history ) ) {
+				return FALSE;
+			}
+		} else {
+			// load from old video db
+			$history = $dbr->select( 'oldimage',
+					array(
+						'oi_metadata AS img_metadata',
+						'oi_name AS img_name',
+						'oi_user AS img_user',
+						'oi_user_text AS img_user_text',
+						'oi_timestamp AS img_timestamp',
+						'oi_description AS img_description',
+					     ),
+					array( 'oi_name' => $this->mTitle->getPrefixedText() ),
+					__METHOD__,
+					array( 'ORDER BY' => 'oi_timestamp DESC' )
+					);
+		}
+		return $dbr->fetchObject( $history );
+	}
 
         public function endVideoHistoryList() {
                 return "</table>\n";
         }
-
-
-
 }
-
 
 ?>
 
