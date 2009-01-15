@@ -30,7 +30,7 @@ function WikiaVideoRenderVideo( $matches ) {
 
         foreach($params as $param){
                 if($x > 1) {
-                        $width_check = strpos( "px", $param );
+                        $width_check = strpos( $param, "px" );
                         if( false !== $width_check ) {
                                 $width = str_replace("px", "", $param);
                         } else if ( ( 'left' == $param ) || ( 'right' == $param ) ) {

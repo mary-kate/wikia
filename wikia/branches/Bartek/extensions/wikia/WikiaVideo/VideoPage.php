@@ -54,7 +54,7 @@ class VideoPage extends Article {
 
 	public function generateWindow( $align = 'left', $width = 400, $caption = '', $frame = false ) {
 		global $wgStylePath;
-		$code = $this->getEmbedCode();
+		$code = $this->getEmbedCode( $width );
 		$s = "<div$ class=\"thumb t{$align}\"><div class=\"thumbinner\" style=\"width:{$width}px;\">";
 		$s .= $code;
 
@@ -99,6 +99,19 @@ class VideoPage extends Article {
 				}
 			}
 		}
+	}
+
+	public function getRatio() {
+		switch( $this->mProvider ) {
+			case "metacafe": 
+				return (40 / 35);
+				break;
+
+			default:
+				return 1;
+				break;
+		}
+
 	}
 
 	function loadFromPars( $provider, $id, $data ) {
@@ -234,12 +247,13 @@ class VideoPage extends Article {
 
 	}
 
-        public function getEmbedCode( $width = false, $height = false ) {
+        public function getEmbedCode( $width = 300 ) {
                 $embed = "";
+		$height = round( $width / $this->getRatio() );
                 switch( $this->mProvider ) {
                         case "metacafe":
 				$url = 'http://www.metacafe.com/fplayer/' . $this->mId . '/' . $this->mData[0];
-                                $embed = "<embed src=\"{$url}\" width=\"400\" height=\"345\" wmode=\"transparent\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" type=\"application/x-shockwave-flash\"> </embed>";
+                                $embed = "<embed src=\"{$url}\" width=\"{$width}\" height=\"{$height}\" wmode=\"transparent\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" type=\"application/x-shockwave-flash\"> </embed>";
                                 break;
                         default: break;
                 }
