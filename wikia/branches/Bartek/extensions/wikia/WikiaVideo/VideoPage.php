@@ -246,7 +246,6 @@ class VideoHistoryList {
         public function beginVideoHistoryList() {
                 global $wgOut, $wgUser;
                 return Xml::element( 'h2', array( 'id' => 'filehistory' ), wfMsg( 'filehist' ) )
-                        . $wgOut->parse( wfMsgNoTrans( 'filehist-help' ) )
                         . Xml::openElement( 'table', array( 'class' => 'filehistory' ) ) . "\n"
                         . '<tr>'
                         . '<th>' . wfMsgHtml( 'filehist-datetime' ) . '</th>'
