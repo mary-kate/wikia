@@ -61,19 +61,23 @@ function VETParserHook( $input, $argv, $parser ) {
                 $name = $argv['name'];
         }
 	if (!empty($argv['align'])) {
-                $name = $argv['align'];
+                $align = $argv['align'];
         }
 	if (!empty($argv['caption'])) {
-                $name = $argv['caption'];
+                $caption = $argv['caption'];
         }
-	$video = new Video( $name );
+
+	$title = Title::makeTitle( NS_VIDEO, $name );
+
+	$video = new VideoPage( $title );
+	$video->load();
+
         if (!empty($argv['width']) && settype($argv['width'], 'integer') && ($width_max >= $argv['width']))
         {
                 $width = $argv['width'];
         }
 
-
-	$output = $video->getEmbedCode( $width, $align, $caption );	
+	$output = $video->getEmbedCode();	
 	return $output;
 }
 
