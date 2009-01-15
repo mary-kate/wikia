@@ -52,6 +52,24 @@ class VideoPage extends Article {
 		return Article::getContent();
 	}
 
+	public function generateWindow( $align = 'left', $width = 400, $caption = '', $frame = false ) {
+		global $wgStylePath;
+		$code = $this->getEmbedCode();
+		$s = "<div$ class=\"thumb t{$align}\"><div class=\"thumbinner\" style=\"width:{$width}px;\">";
+		$s .= $code;
+
+		if ( isset( $fp['framed'] ) ) {
+			$zoomicon="";
+		} else {
+			$zoomicon =  '<div class="magnify">'.
+				'<a href="'.'#'.'" class="internal" title="'.$caption.'">'.
+				'<img src="'.$wgStylePath.'/common/images/magnify-clip.png" ' .
+				'width="15" height="11" alt="" /></a></div>';
+		}
+		$s .= '  <div class="thumbcaption">'.$zoomicon.$caption."</div></div>";
+		return str_replace("\n", ' ', $s);
+	}
+
 	public function parseUrl( $url, $load = true ) {
 		$provider = '';
 		$id = '';
