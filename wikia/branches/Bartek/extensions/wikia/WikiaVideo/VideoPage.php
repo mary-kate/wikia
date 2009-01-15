@@ -52,9 +52,12 @@ class VideoPage extends Article {
 		return Article::getContent();
 	}
 
-	public function generateWindow( $align = 'left', $width = 400, $caption = '', $frame = false ) {
+	public function generateWindow( $align = 'left', $width = 400, $caption = '', $thumb ) {
 		global $wgStylePath;
 		$code = $this->getEmbedCode( $width );
+		if ( 'false' == $thumb ) {
+			return $code;
+		}
 		$s = "<div$ class=\"thumb t{$align}\"><div class=\"thumbinner\" style=\"width:{$width}px;\">";
 		$s .= $code;
 
