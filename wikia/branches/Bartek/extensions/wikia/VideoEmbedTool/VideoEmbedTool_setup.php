@@ -77,7 +77,7 @@ function VETParserHook( $input, $argv, $parser ) {
                 $width = $argv['width'];
         }
 
-	$output = $video->getEmbedCode();	
+	$output = $video->generateWindow( $align, $width, $caption );
 	return $output;
 }
 
