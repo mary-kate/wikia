@@ -27,12 +27,17 @@ function WikiaVideoRenderVideo( $matches ) {
         $width = 300;
         $align = 'left';
         $caption = '';
+	$thumb = '';
 
         foreach($params as $param){
                 if($x > 1) {
-                        $width_check = strpos( $param, "px" );
+                        $width_check = strpos( $param, "px" );				
                         if( false !== $width_check ) {
                                 $width = str_replace("px", "", $param);
+			} else if ('thumb' == $param) {
+				$thumb = 'thumb';
+				
+
                         } else if ( ( 'left' == $param ) || ( 'right' == $param ) ) {
                                 $align = $param;
                         } else {
@@ -42,7 +47,7 @@ function WikiaVideoRenderVideo( $matches ) {
                 $x++;
         }
 
-	$output = "<video name=\"{$video_name}\" width=\"{$width}\" align=\"{$align}\" caption=\"{$caption}\"></video>";
+	$output = "<video name=\"{$video_name}\" width=\"{$width}\" align=\"{$align}\" caption=\"{$caption}\" thumb=\"{$thumb}\"></video>";
 	return $output;
 }
 
