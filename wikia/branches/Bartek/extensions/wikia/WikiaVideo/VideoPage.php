@@ -112,8 +112,8 @@ class VideoPage extends Article {
 		$provider = '';
 		$id = '';
 
-		$text = preg_match("/metacafe\.com/i", $url );
-		if( $text ) { // metacafe
+		$text = strpos( $url, "metacafe.com" );
+		if( false !== $text ) { // metacafe
 			$provider = self::V_METACAFE;                        	
 			// reuse some NY stuff for now
 			$standard_url = strpos( strtoupper( $url ), "HTTP://WWW.METACAFE.COM/WATCH/" );
@@ -137,12 +137,35 @@ class VideoPage extends Article {
 				}
 			}
 		}
+		$text = strpos( $url, "youtube.com" );
+		if( false !== $text ) { // youtube
+			$provider = self::V_YOUTUBE;                        	
+			// reuse some NY stuff for now
+			$standard_url = strpos( strtoupper( $url ), "WATCH?V=");
+
+			if( $standard_url !== false){
+				$id = substr( $url , $standard_url+8, strlen($url) );
+			}
+			if(!$id){
+				$id_test = str_replace("http://www.youtube.com/v/","",$url);
+				if( $id_test != $url ){
+					$id = $id_test;
+				}
+			}
+			$this->mProvider = $provider;
+			$this->mId = $id;
+			$this->mData = array();
+		}
 	}
 
 	public function getRatio() {
 		switch( $this->mProviders[$this->mProvider] ) {
 			case "metacafe": 
 				return (40 / 35);
+				break;
+			
+			case "youtube": 
+				return (425 / 355);
 				break;
 
 			default:
@@ -174,6 +197,9 @@ class VideoPage extends Article {
 		switch( $this->mProviders[$this->mProvider] ) {
 			case 'metacafe':		
 				$metadata = $this->mProvider . ',' . $this->mId . ',' . $this->mData[0];
+				break;
+			case 'youtube':		
+				$metadata = $this->mProvider . ',' . $this->mId . ',';
 				break;
 			default: 
 				$metadata = '';
@@ -291,10 +317,13 @@ class VideoPage extends Article {
                 switch( $this->mProviders[$this->mProvider] ) {
                         case "metacafe":
 				$url = 'http://www.metacafe.com/fplayer/' . $this->mId . '/' . $this->mData[0];
-                                $embed = "<embed src=\"{$url}\" width=\"{$width}\" height=\"{$height}\" wmode=\"transparent\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" type=\"application/x-shockwave-flash\"> </embed>";
+                                break;
+                        case "youtube":
+				$url = 'http://www.youtube.com/v/' . $this->mId;
                                 break;
                         default: break;
                 }
+                                $embed = "<embed src=\"{$url}\" width=\"{$width}\" height=\"{$height}\" wmode=\"transparent\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" type=\"application/x-shockwave-flash\"> </embed>";
                 return $embed;
         }
 
