@@ -8,29 +8,12 @@ if(isset($props['name'])) {
 		<tr class="VideoEmbedNoBorder">
 			<th><?= wfMsg('vet-name') ?></th>
 			<td>
-			<input id="VideoEmbedName" type="text" size="30" value="<?= $props['partname'] ?>" />
-			<label for="VideoEmbedName">.<?= $props['extension'] ?></label>
-			<input id="VideoEmbedExtension" type="hidden" value="<?= $props['extension'] ?>" />
+			<input id="VideoEmbedName" type="text" size="30" value="" />
 			</td>
 		</tr>
 		<?php
 			if(!empty($props['upload'])) {
 		?>
-		<tr class="VideoEmbedNoBorder VideoEmbedThin">
-			<th><?= wfMsg('license') ?></th>
-			<td>
-			<span id="VideoEmbedLicenseSpan">
-			<?php
-				$licenses = new Licenses();
-				$licensehtml = $licenses->getHtml();	
-			?>
-				<select name="VideoEmbedLicense" id="VideoEmbedLicense" onchange="VET_licenseSelectorCheck()" />
-					<option><?= wfMsg( 'nolicense' ) ?></option>
-					<?= $licensehtml ?>
-				</select>
-			</span>
-			</td>
-		</tr>		
 		<tr class="VideoEmbedNoBorder VideoEmbedNoSpace">
 			<th>&nbsp;</th>	
 			<td>
@@ -51,26 +34,21 @@ if(isset($props['name'])) {
 <?php
 }
 ?>
-<?php
-if($props['file']->media_type == 'BITMAP' || $props['file']->media_type == 'DRAWING') {
-?>
 <div style="position: absolute; z-index: 4; left: 0; width: 420px; height: 400px; background: #FFF; opacity: .9; filter: alpha(opacity=90);"></div>
-<div id="VideoEmbedThumb" style="text-align: right; position: absolute; z-index: 3; right: 15px; height: <?= isset($props['name']) ? '255' : '370' ?>px;"><?= $props['file']->getThumbnail(min($props['file']->getWidth(), 400))->toHTML() ?></div>
+<div id="VideoEmbedThumb" style="text-align: right; position: absolute; z-index: 3; right: 15px; height: <?= isset($props['name']) ? '255' : '370' ?>px;"></div>
 <?php
-}
 echo '<div style="position: relative; z-index: 5;">';
 echo wfMsg('vet-details-inf2')
 ?>
 <table class="VideoEmbedOptionsTable">
 <?php
-if($props['file']->media_type == 'BITMAP' || $props['file']->media_type == 'DRAWING') {
 ?>
 	<tr>
 		<th><?= wfMsg('vet-size') ?></th>
 		<td>
 			<input onclick="MWU_imageSizeChanged('thumb');" type="radio" name="fullthumb" id="VideoEmbedThumbOption" checked=checked /> <label for="VideoEmbedThumbOption" onclick="MWU_imageSizeChanged('thumb');"><?= wfMsg('vet-thumbnail') ?></label>
 			&nbsp;
-			<input onclick="MWU_imageSizeChanged('full');" type="radio" name="fullthumb" id="VideoEmbedFullOption" /> <label for="VideoEmbedFullOption" onclick="MWU_imageSizeChanged('full');"><?= wfMsg('vet-fullsize', $props['file']->width, $props['file']->height) ?></label>
+			<input onclick="MWU_imageSizeChanged('full');" type="radio" name="fullthumb" id="VideoEmbedFullOption" /> <label for="VideoEmbedFullOption" onclick="MWU_imageSizeChanged('full');"></label>
 		</td>
 	</tr>
 	<tr id="ImageWidthRow">
@@ -94,9 +72,6 @@ if($props['file']->media_type == 'BITMAP' || $props['file']->media_type == 'DRAW
 			<label for="VideoEmbedLayoutRight"><img src="<?= $wgExtensionsPath.'/wikia/VideoEmbedTool/images/image_upload_right.png' ?>" /></label>
 		</td>
 	</tr>
-<?php
-}
-?>
 	<tr>
 		<th><?= wfMsg('vet-caption') ?></th>
 		<td><input id="VideoEmbedCaption" type="text" /><?= wfMsg('vet-optional') ?></td>
@@ -110,6 +85,4 @@ if($props['file']->media_type == 'BITMAP' || $props['file']->media_type == 'DRAW
 </table>
 <input id="VideoEmbedExtraId" type="hidden" value="<?= isset($props['extraId']) ? urlencode($props['extraId']) : '' ?>" />
 <input id="VideoEmbedMWname" type="hidden" value="<?= urlencode($props['mwname']) ?>" />
-<input id="ImageRealWidth" type="hidden" value="<?= $props['file']->getWidth() ?>" />
-<input id="ImageRealHeight" type="hidden" value="<?= $props['file']->getHeight() ?>" />
 </div>
