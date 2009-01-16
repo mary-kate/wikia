@@ -29,22 +29,22 @@ class VideoPage extends Article {
 		$mData,
 		$mDataline,
 		$mProviders = array(
-			'0' => 'gametrailers',
-			'1' => 'gamevideos',
-			'2' => 'gamespot',
-			'3' => 'mtvgames',
-			'4' => '5min',
-			'5' => 'youtube',
-			'6' => 'hulu',
-			'7' => 'veoh',
-			'8' => 'fancast',
-			'9' => 'in2tv',
-			'10' => 'bliptv',
-			'11' => 'metacafe',
-			'12' => 'sevenload',
-			'13' => 'vimeo',
-			'14' => 'clipfish',
-			'15' => 'myvideo'	
+			self::V_GAMETRAILERS => 'gametrailers',
+			self::V_GAMEVIDEOS => 'gamevideos',
+			self::V_GAMESPOT => 'gamespot',
+			self::V_MTVGAMES => 'mtvgames',
+			self::V_5MIN => '5min',
+			self::V_YOUTUBE => 'youtube',
+			self::V_HULU => 'hulu',
+			self::V_VEOH => 'veoh',
+			self::V_FANCAST => 'fancast',
+			self::V_IN2TV => 'in2tv',
+			self::V_BLIPTV => 'bliptv',
+			self::V_METACAFE => 'metacafe',
+			self::V_SEVENLOAD => 'sevenload',
+			self::V_VIMEO => 'vimeo',
+			self::V_CLIPFISH => 'clipfish',
+			self::V_MYVIDEO => 'myvideo'	
 		);
 
         function __construct (&$title){
