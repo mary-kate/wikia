@@ -252,12 +252,7 @@ class RecentChange
 		}
 		if(!empty($eventType)) {
 			global $wgMemc;
-
-			$key = $eventType.date('Ymd_Hi00');
-
-			if($wgMemc->incr($key) === false) {
-				$wgMemc->set($key, 1, 60 * 5);
-			}
+			$wgMemc->incr($eventType.date('Ymd_Hi00'));
 		}
 		// temporary code end
 
