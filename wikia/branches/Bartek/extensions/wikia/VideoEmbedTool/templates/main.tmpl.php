@@ -11,16 +11,11 @@
 			<div id="VideoEmbedTitle"><h1><?= wfMsg( 'vet-title' ) ?></h1></div>
 		</td>
 	</tr>
-	<tr id="VideoEmbedFind">
-		<td colspan="2"><?= wfMsg('vet-find') ?></td>
-	</tr>
 <?php
 	global $wgStylePath, $wgUser, $wgScriptPath;
 ?>
 	<tr id="VideoEmbedSearch">
 		<td>
-			<textarea onkeydown="VET_trySendQuery(event);" type="text" id="VideoQuery"></textarea>
-			<input onclick="VET_trySendQuery(event);" type="button" value="<?= wfMsg('vet-find-btn') ?>" />
 			<img src="<?= $wgStylePath; ?>/monaco/images/widget_loading.gif" id="VideoEmbedProgress2" style="visibility: hidden;"/>
 			<?php
 			if( !$wgUser->isAllowed( 'upload' ) ) {
