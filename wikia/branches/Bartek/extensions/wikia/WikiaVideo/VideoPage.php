@@ -112,6 +112,8 @@ class VideoPage extends Article {
 		$provider = '';
 		$id = '';
 
+		// todo make sure to check just http://something.else/ part, omit whatever follows
+
 		$text = strpos( $url, "metacafe.com" );
 		if( false !== $text ) { // metacafe
 			$provider = self::V_METACAFE;                        	
@@ -204,6 +206,18 @@ class VideoPage extends Article {
 		$this->mName = $name;
 	}
 
+	public function getProvider() {
+		return $this->mProvider;		
+	}
+
+	public function getId() {
+		return $this->mId;		
+	}
+
+	public function getData() {
+		return $this->mData;		
+	}
+	
 	public function save() {
 		global $wgUser;
 
