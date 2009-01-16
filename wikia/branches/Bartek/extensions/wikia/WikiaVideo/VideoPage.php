@@ -382,7 +382,7 @@ class VideoHistoryList {
         }
 
 	public function videoHistoryLine( $iscur = false ) {
-		global $wgOut, $wgUser;
+		global $wgOut, $wgUser, $wgLang;
 		
 		$dbr = wfGetDB( DB_SLAVE );		
 
@@ -406,7 +406,7 @@ class VideoHistoryList {
 			} else {
 				$s = '';				
 				$row = $dbr->fetchObject( $history );
-				return '<tr>' . '<td>' . $row->img_timestamp . '</td>' . '<td>' . $row->img_user_text .'</td></tr>';
+				return '<tr>' . '<td>' . $wgLang->timeAndDate( $row->img_timestamp, true ) . '</td>' . '<td>' . $row->img_user_text .'</td></tr>';
 			}			
 		} else {
 			// load from old video db
@@ -425,7 +425,7 @@ class VideoHistoryList {
 					);
 			$s = '';
 			while( $row = $dbr->fetchObject( $history ) ) {
-				$s .= '<tr>' . '<td>' . $row->img_timestamp . '</td>' . '<td>' . $row->img_user_text .'</td></tr>';	
+				$s .= '<tr>' . '<td>' . $wgLang->timeAndDate( $row->img_timestamp, true ) . '</td>' . '<td>' . $row->img_user_text .'</td></tr>';	
 			}			
 			return $s;
 		}
