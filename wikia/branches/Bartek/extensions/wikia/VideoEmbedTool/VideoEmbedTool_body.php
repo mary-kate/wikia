@@ -183,7 +183,7 @@ class VideoEmbedTool {
 
 	function insertVideo() {
 		global $IP, $wgRequest, $wgUser;
-
+		require_once( "$IP/extensions/wikia/WikiaVideo/VideoPage.php" );
 		$url = $wgRequest->getVal( 'wpVideoEmbedUrl' );			
 		$tempname = 'Temp_video_'.$wgUser->getID().'_'.rand(0, 1000);
 		$title = Title::makeTitle( NS_VIDEO, $tempname );
@@ -200,26 +200,8 @@ class VideoEmbedTool {
 	}
 
 	function detailsPage($props) {
-		$data = array('wpUpload' => 1, 'wpSourceType' => 'web', 'wpUploadFileURL' => '');
-		$form = new UploadForm(new FauxRequest($data, true), '');
-
 		$tmpl = new EasyTemplate(dirname(__FILE__).'/templates/');
-		list( $partname, $ext ) = $form->splitExtensions( $props['name'] );
 
-		if( count( $ext ) ) {
-			$finalExt = $ext[count( $ext ) - 1];
-		} else {
-			$finalExt = '';
-		}
-
-		// for more than one "extension"
-		if( count( $ext ) > 1 ) {
-			for( $i = 0; $i < count( $ext ) - 1; $i++ )
-				$partname .= '.' . $ext[$i];
-		}
-	
-		$props['partname'] = $partname;
-		$props['extension'] = strtolower( $finalExt );
 		$tmpl->set_vars(array('props' => $props));	
 		return $tmpl->execute('details');
 	}
