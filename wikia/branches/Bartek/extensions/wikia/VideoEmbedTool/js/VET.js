@@ -381,13 +381,13 @@ function VET_chooseImage(sourceId, itemId) {
 }
 
 function VET_upload(e) {
-	if($('VideoEmbedFile').value == '') {
-		VET_track('upload/undefined'); // tracking
+	if($('VideoEmbedUrl').value == '') {
+		VET_track('insert/undefined'); // tracking
 		alert(vet_warn2);
 		return false;
 	} else {
-		if (VET_initialCheck( $('VideoEmbedFile').value )) {
-			VET_track('upload/defined'); // tracking
+		if (VET_initialCheck( $('VideoEmbedUrl').value )) {
+			VET_track('insert/defined'); // tracking
 			VET_indicator(1, true);
 			return true;
 		} else {
@@ -425,33 +425,9 @@ function VET_checkFileExtensionList( ext, list ) {
 }
 
 function VET_initialCheck( checkedName ) {
-	var list_array = VET_splitExtensions( checkedName );
-	var partname = list_array[0];
-	var ext = list_array[1];
-	if (ext.length > 0) {
-		var finalExt = ext[ext.length -1];
-	} else {
-		var finalExt = '';
-	}
-
-	if (ext.lenght > 1) {
-		for (i=0; i< ext.length; i++ ) {
-			partname += '.' + ext[i];
-		}
-	}
-
-	if (partname.lenght < 1) {
-		alert (minlength1);
-		return false;
-	}
-	if (finalExt == '') {
-		alert (filetype_missing) ;
-		return false;
-	} else if (VET_checkFileExtensionList( ext, file_blacklist ) || ( check_file_extensions
-			&& strict_file_extensions && !VET_checkFileExtension( finalExt, file_extensions ) )  ) {
-			alert (vet_bad_extension);
-			return false;
-	}
+	// todo this is to be completely rewritten
+	// we can check if we have a valid url here, and
+	// if we have any of the supported providers
 
 	return true;
 }

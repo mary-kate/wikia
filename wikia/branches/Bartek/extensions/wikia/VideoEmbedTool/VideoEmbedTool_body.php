@@ -181,23 +181,22 @@ class VideoEmbedTool {
 		}
 	}
 
-	function uploadImage() {
+	function insertVideo() {
 		global $IP, $wgRequest, $wgUser;
 
-		$check_result = $this->checkImage() ;
-		if (UploadForm::SUCCESS == $check_result) {
-			$tempname = 'Temp_file_'.$wgUser->getID().'_'.rand(0, 1000);
-			$file = new FakeLocalFile(Title::newFromText($tempname, 6), RepoGroup::singleton()->getLocalRepo());
-			$file->upload($wgRequest->getFileTempName('wpUploadFile'), '', '');
-			$props = array();
-			$props['file'] = $file;
-			$props['name'] = stripslashes($wgRequest->getFileName('wpUploadFile'));
-			$props['mwname'] = $tempname;
-			$props['upload'] = true;
-			return $this->detailsPage($props);
-		} else {
-			return $this->loadMain( $this->translateError( $check_result ) );
-		}
+		$url = $wgRequest->getVal( 'wpVideoEmbedUrl' );			
+		$tempname = 'Temp_video_'.$wgUser->getID().'_'.rand(0, 1000);
+		$title = Title::makeTitle( NS_VIDEO, $tempname );
+		$video = new VideoPage( $title );
+
+		// todo some safeguard here to take care of bad urls
+		$video->parseUrl( $url );
+			
+		$props['provider'] = $video->getProvider();
+		$props['id'] = $video->getId();
+		$props['metadata'] = $video->getData();
+			
+		return $this->detailsPage($props);
 	}
 
 	function detailsPage($props) {
