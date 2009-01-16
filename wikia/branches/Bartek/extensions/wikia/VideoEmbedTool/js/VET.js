@@ -442,10 +442,6 @@ function VET_displayDetails(responseText) {
 	if($('VideoEmbedThumb')) {
 		VET_orgThumbSize = null;
 		var image = $('VideoEmbedThumb').firstChild;
-		if ( null == VET_width ) {
-			VET_width = $( 'ImageRealWidth' ).value;
-			VET_height = $( 'ImageRealHeight' ).value;
-		}
 		var thumbSize = [image.width, image.height];
 		VET_orgThumbSize = null;
 		VET_slider = YAHOO.widget.Slider.getHorizSlider('VideoEmbedSlider', 'VideoEmbedSliderThumb', 0, 200);
