@@ -498,16 +498,20 @@ function VET_insertImage(e, type) {
 
 	var params = Array();
 	params.push('type='+type);
-	params.push('mwname='+$('VideoEmbedMWname').value);
+
+	if(!$('VideoEmbedName')) {
+		alert( 'vet_warn3');
+		return false;
+	}
+
+	params.push('mwname='+$('VideoEmbedName').value);
 
 	if(type == 'overwrite') {
 		params.push('name='+$('VideoEmbedExistingName').value);
 	} else if(type == 'rename') {
 		params.push('name='+$('VideoEmbedRenameName').value);
 	} else {
-		if($('VideoEmbedName')) {
-			params.push('name='+$('VideoEmbedName').value + '.' + $('VideoEmbedExtension').value);
-		}
+		params.push('name='+$('VideoEmbedName').value);
 	}
 
 	if($('VideoEmbedLicense')) {
