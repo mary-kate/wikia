@@ -35,7 +35,9 @@ if(isset($props['name'])) {
 }
 ?>
 <div style="position: absolute; z-index: 4; left: 0; width: 420px; height: 400px; background: #FFF; opacity: .9; filter: alpha(opacity=90);"></div>
-<div id="VideoEmbedThumb" style="text-align: right; position: absolute; z-index: 3; right: 15px; height: <?= isset($props['name']) ? '255' : '370' ?>px;"></div>
+<div id="VideoEmbedThumb" style="text-align: right; position: absolute; z-index: 3; right: 15px; height: <?= isset($props['name']) ? '255' : '370' ?>px;">
+<?= $props['code'] ?>
+</div>
 <?php
 echo '<div style="position: relative; z-index: 5;">';
 echo wfMsg('vet-details-inf2')
