@@ -203,22 +203,8 @@ class VideoEmbedTool {
 				header('X-screen-type: error');
 				return 'You need to specify file name first!';
 			} else {
-				$name = preg_replace("/[^".Title::legalChars()."]|:/", '-', $name);
-				// did they give no extension at all when they changed the name?
-				$ext = explode( '.', $name );
-				array_shift( $ext );
-				if( count( $ext ) ) {
-					$finalExt = $ext[count( $ext ) - 1];
-				} else {
-					$finalExt = '';
-				}
 
-				if( '' == $finalExt ) {
-					header('X-screen-type: error');
-					return wfMsg( 'wmu-filetype-missing' );
-				}
-
-				$title = Title::makeTitleSafe(NS_IMAGE, $name);
+				$title = Title::makeTitleSafe(NS_VIDEO, $name);
 				if(is_null($title)) {
 					header('X-screen-type: error');
 					return wfMsg ( 'wmu-filetype-incorrect' ); 
@@ -277,42 +263,12 @@ class VideoEmbedTool {
 
 					if( $permErrors || $permErrorsUpload || $permErrorsCreate ) {
 						header('X-screen-type: error');
-						return 'This image is protected';
+						// todo messagize
+						return 'This video is protected';
 					}
 
-					$temp_file = new LocalFile(Title::newFromText($mwname, 6), RepoGroup::singleton()->getLocalRepo());
-					$file = new LocalFile($title, RepoGroup::singleton()->getLocalRepo());
-
-					if(!empty($extraId)) {
-						require_once($IP.'/extensions/3rdparty/ImportFreeImages/phpFlickr-2.2.0/phpFlickr.php');
-						$flickrAPI = new phpFlickr('bac0bd138f5d0819982149f67c0ca734');
-						$flickrResult = $flickrAPI->photos_getInfo($extraId);
-
-						$nsid = $flickrResult['owner']['nsid']; // e.g. 49127042@N00
-						$username = $flickrResult['owner']['username']; // e.g. bossa67
-						$license = $flickrResult['license'];
-
-						$caption = '{{MediaWiki:Flickr'.intval($license).'|1='.wfEscapeWikiText($extraId).'|2='.wfEscapeWikiText($nsid).'|3='.wfEscapeWikiText($username).'}}';
-					} else {
-						// get the supplied license value
-						$license = $wgRequest->getVal( 'ImageUploadLicense' );
-						
-						if ( $license != '' ) {
-							$caption = '== ' . wfMsgForContent( 'license' ) . " ==\n" . '{{' . $license . '}}' . "\n";
-						} else {
-							$caption = "";
-						}						 
-					}
-
-					$file->upload($temp_file->getPath(), '', $caption);
-					$temp_file->delete('');
+					$temp_file = new VideoPage( $title );
 				}
-
-				if( $wgUser->getOption( 'watchdefault' ) || ( $newFile && $wgUser->getOption( 'watchcreations' ) ) ) {
-					$wgUser->addWatch($title);
-				}
-				$db =& wfGetDB(DB_MASTER);
-				$db->commit();
 			}
 		} else {
 			$title = Title::newFromText($mwname, 6);
