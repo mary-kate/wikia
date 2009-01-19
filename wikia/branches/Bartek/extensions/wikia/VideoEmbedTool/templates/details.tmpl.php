@@ -46,6 +46,12 @@ echo wfMsg('vet-details-inf2')
 <?php
 ?>
 	<tr>
+		<th><?= wfMsg( 'vet-name' ) ?></th>
+		<td>
+			<input type="text" id="VideoEmbedName" name="wpVideoEmbedName" />
+		</td>
+	</tr>
+	<tr>
 		<th><?= wfMsg('vet-size') ?></th>
 		<td>
 			<input onclick="MWU_imageSizeChanged('thumb');" type="radio" name="fullthumb" id="VideoEmbedThumbOption" checked=checked /> <label for="VideoEmbedThumbOption" onclick="MWU_imageSizeChanged('thumb');"><?= wfMsg('vet-thumbnail') ?></label>
