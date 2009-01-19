@@ -210,7 +210,7 @@ class VideoPage extends Article {
 		return $this->mProvider;		
 	}
 
-	public function getId() {
+	public function getVideoId() {
 		return $this->mId;		
 	}
 
