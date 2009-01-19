@@ -514,14 +514,6 @@ function VET_insertImage(e, type) {
 		params.push('name='+$('VideoEmbedName').value);
 	}
 
-	if($('VideoEmbedLicense')) {
-		params.push('VideoEmbedLicense='+$('VideoEmbedLicense').value);
-	}
-
-	if($('VideoEmbedExtraId')) {
-		params.push('extraId='+$('VideoEmbedExtraId').value);
-	}
-
 	if($('VideoEmbedThumb')) {
 		params.push('size=' + ($('VideoEmbedThumbOption').checked ? 'thumb' : 'full'));
 		params.push( 'width=' + $( 'VideoEmbedManualWidth' ).value + 'px' );
