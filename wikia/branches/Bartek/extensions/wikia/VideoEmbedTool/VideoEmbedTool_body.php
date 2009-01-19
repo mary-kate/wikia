@@ -67,31 +67,14 @@ class VideoEmbedTool {
 	}
 
 	function chooseImage() {
+
 		global $wgRequest, $wgUser, $IP;
 		$itemId = $wgRequest->getVal('itemId');
 		$sourceId = $wgRequest->getInt('sourceId');
 
-		if($sourceId == 0) {
-			$file = wfFindFile(Title::newFromText($itemId, 6));
-			$props = array();
-			$props['file'] = $file;
-			$props['mwname'] = $itemId;
-		} else if($sourceId == 1) {
-			require_once($IP.'/extensions/3rdparty/ImportFreeImages/phpFlickr-2.2.0/phpFlickr.php');
-			$flickrAPI = new phpFlickr('bac0bd138f5d0819982149f67c0ca734');
-			$flickrResult = $flickrAPI->photos_getInfo($itemId);
-			$url = "http://farm{$flickrResult['farm']}.static.flickr.com/{$flickrResult['server']}/{$flickrResult['id']}_{$flickrResult['secret']}.jpg";
-			$data = array('wpUpload' => 1, 'wpSourceType' => 'web', 'wpUploadFileURL' => $url);
-			$form = new UploadForm(new FauxRequest($data, true), '');
-			$tempname = 'Temp_file_'.$wgUser->getID().'_'.rand(0, 1000);
-			$file = new FakeLocalFile(Title::newFromText($tempname, 6), RepoGroup::singleton()->getLocalRepo());
-			$file->upload($form->mTempPath, '', '');
-			$props = array();
-			$props['file'] = $file;
-			$props['name'] = preg_replace("/[^".Title::legalChars()."]|:/", '-', trim($flickrResult['title']).'.jpg');
-			$props['mwname'] = $tempname;
-			$props['extraId'] = $itemId;
-		}
+		// todo this is unused now, since there is currently now search
+		// to be applied later
+
 		return $this->detailsPage($props);
 	}
 
@@ -195,6 +178,7 @@ class VideoEmbedTool {
 		$props['provider'] = $video->getProvider();
 		$props['id'] = $video->getId();
 		$props['metadata'] = $video->getData();
+		$props['code'] = $video->getEmbedCode();
 			
 		return $this->detailsPage($props);
 	}
