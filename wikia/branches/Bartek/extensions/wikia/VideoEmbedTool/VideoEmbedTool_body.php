@@ -9,7 +9,7 @@ class VideoEmbedTool {
 	function loadMain( $error = false ) {
 		$tmpl = new EasyTemplate(dirname(__FILE__).'/templates/');
 		$tmpl->set_vars(array(
-				'result' => $this->recentlyUploaded(),
+				'result' => '',
 				'error'  => $error
 				)
 		);
