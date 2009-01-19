@@ -38,6 +38,7 @@ $messages['en'] = array(
 	'vet-close' => 'close',
 	'vet-warn1' => 'You need to specify query first!',
 	'vet-warn2' => 'Please supply url of the video you like to add',
+	'vet-warn3' => 'Please supply name of the video you like to add',
 	'vet-imagelink' => '<b>New!</b> Add Images',
 	'vet-imagebutton' => 'Add Images' ,
 	'vet-license-cc' => 'Licenced under Creative Commons Attribution-Share Alike 3.0',
