@@ -32,7 +32,7 @@
 				}
 				?>
 					<form onsubmit="return AIM.submit(this, VET_uploadCallback)" action="<?= $wgScriptPath ?>/index.php?action=ajax&rs=VET&method=insertVideo" id="VideoEmbedForm" method="POST" enctype="multipart/form-data">
-					<label for="VideoEmbedUrl"><?= wfMsg('vet-upload') ?></label><input id="VideoEmbedUrl" name="VideoEmbedUrl" type="text" size="32" />
+					<label for="VideoEmbedUrl"><?= wfMsg('vet-upload') ?></label><input id="VideoEmbedUrl" name="wpVideoEmbedUrl" type="text" size="32" />
 					<input type="submit" value="<?= wfMsg('vet-upload-btn') ?>" onclick="return VET_upload(event);" />
 					</form>
 					<?php
