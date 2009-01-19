@@ -179,7 +179,7 @@ class VideoEmbedTool {
 		$props['id'] = $video->getId();
 		$props['metadata'] = $video->getData();
 		$props['code'] = $video->getEmbedCode();
-			
+
 		return $this->detailsPage($props);
 	}
 
