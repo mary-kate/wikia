@@ -176,7 +176,7 @@ class VideoEmbedTool {
 		$video->parseUrl( $url );
 			
 		$props['provider'] = $video->getProvider();
-		$props['id'] = $video->getId();
+		$props['id'] = $video->getVideoId();
 		$props['metadata'] = $video->getData();
 		$props['code'] = $video->getEmbedCode();
 
