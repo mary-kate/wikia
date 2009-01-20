@@ -95,12 +95,14 @@ class VideoPage extends Article {
 		}
 		$s = "<div class=\"thumb t{$align}\"><div class=\"thumbinner\" style=\"width:{$width}px;\">";
 		$s .= $code;
+				
+		$url = $this->mTitle->getLocalURL( '' );
 
 		if ( isset( $fp['framed'] ) ) {
 			$zoomicon="";
 		} else {
 			$zoomicon =  '<div class="magnify">'.
-				'<a href="'.'#'.'" class="internal" title="'.$caption.'">'.
+				'<a href="'.$url.'" class="internal" title="'.$caption.'">'.
 				'<img src="'.$wgStylePath.'/common/images/magnify-clip.png" ' .
 				'width="15" height="11" alt="" /></a></div>';
 		}
