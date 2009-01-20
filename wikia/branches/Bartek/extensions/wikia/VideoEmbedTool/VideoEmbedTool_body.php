@@ -178,7 +178,7 @@ class VideoEmbedTool {
 		$props['provider'] = $video->getProvider();
 		$props['id'] = $video->getVideoId();
 		$props['metadata'] = implode( ",", $video->getData() );
-		$props['code'] = $video->getEmbedCode();
+		$props['code'] = $video->getEmbedCode( '250' );
 
 		return $this->detailsPage($props);
 	}
