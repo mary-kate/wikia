@@ -299,7 +299,7 @@ class VideoEmbedTool {
 		$ns_img = $wgContLang->getFormattedNsText( NS_VIDEO );
 
 		$tag = '[[' . $ns_img . ':'.$title->getDBkey();
-		if($size != 'full' && ($file->getMediaType() == 'BITMAP' || $file->getMediaType() == 'DRAWING')) {
+		if($size != 'full') {
 			$tag .= '|thumb';
 			if($layout != 'right') {
 				$tag .= '|'.$layout;
