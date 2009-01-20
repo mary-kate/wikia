@@ -208,7 +208,7 @@ class VideoPage extends Article {
 	}
 
 	function loadFromPars( $provider, $id, $data ) {
-		$this->mProvider = key( $provider );
+		$this->mProvider = $provider;
 		$this->mId = $id;
 		$this->mData = $data;		
 	}
