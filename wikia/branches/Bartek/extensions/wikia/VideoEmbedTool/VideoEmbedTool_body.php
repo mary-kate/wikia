@@ -192,9 +192,14 @@ class VideoEmbedTool {
 
 	function insertFinalVideo() {
 		global $wgRequest, $wgUser, $wgContLang, $IP;
+		require_once( "$IP/extensions/wikia/WikiaVideo/VideoPage.php" );
+
 		$type = $wgRequest->getVal('id');
 		$mwname = $wgRequest->getVal('provider');
 		$name = $wgRequest->getVal('name');
+
+		$title = Title::makeTitle( NS_VIDEO, $name );
+					
 		$extra = 0;
 		$metadata = array();
 		while( '' != $wgRequest->getVal( 'metadata' + $extra ) ) {
@@ -271,9 +276,11 @@ class VideoEmbedTool {
 						return 'This video is protected';
 					}
 
-					$temp_file = new VideoPage( $title );
-					$video->loadFromPars( $id, $provider, $metadata );
-					$video->save();					
+					$video = new VideoPage( $title );
+					if ($video instanceof VideoPage) {
+						$video->loadFromPars( $id, $provider, $metadata );
+						$video->save();					
+					}
 				}
 			}
 		} else {
