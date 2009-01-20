@@ -147,6 +147,7 @@ class VideoPage extends Article {
 					$this->mProvider = $provider;
 					$this->mId = $data[0];
 					$this->mData = array( $data[1] );
+					return true;
 				}
 			}
 		}
@@ -168,6 +169,7 @@ class VideoPage extends Article {
 			$this->mProvider = $provider;
 			$this->mId = $id;
 			$this->mData = array();
+			return true;
 		}
 
 		$text = strpos( $fixed_url, "SEVENLOAD.COM" );
@@ -183,8 +185,10 @@ class VideoPage extends Article {
 				$this->mData = array(
 					'-' . implode( "-", $parsed_id )
 				);					
+				return true;
 			}
 		}
+		return false;
 	}
 
 	public function getRatio() {
