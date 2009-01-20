@@ -190,7 +190,7 @@ class VideoEmbedTool {
 		return $tmpl->execute('details');
 	}
 
-	function insertVideo() {
+	function insertFinalVideo() {
 		global $wgRequest, $wgUser, $wgContLang, $IP;
 		$type = $wgRequest->getVal('id');
 		$mwname = $wgRequest->getVal('provider');
