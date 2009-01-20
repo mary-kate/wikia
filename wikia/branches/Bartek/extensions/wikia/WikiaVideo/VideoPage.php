@@ -115,8 +115,17 @@ class VideoPage extends Article {
 		$id = '';
 
 		// todo make sure to check just http://something.else/ part, omit whatever follows
+		$fixed_url = strtoupper( $url );
+		$test = strpos( $fixed_url, "HTTP://" );
+		if( !false === $test ) {
+			return false;
+		}
+		
+		$fixed_url = str_replace( "HTTP://", "", $fixed_url );
+		$fixed_parts = split( "/", $fixed_url );
+		$fixed_url = $fixed_parts[0];
 
-		$text = strpos( $url, "metacafe.com" );
+		$text = strpos( $fixed_url, "METACAFE.COM" );
 		if( false !== $text ) { // metacafe
 			$provider = self::V_METACAFE;                        	
 			// reuse some NY stuff for now
@@ -141,7 +150,7 @@ class VideoPage extends Article {
 				}
 			}
 		}
-		$text = strpos( $url, "youtube.com" );
+		$text = strpos( $fixed_url, "YOUTUBE.COM" );
 		if( false !== $text ) { // youtube
 			$provider = self::V_YOUTUBE;                        	
 			// reuse some NY stuff for now
@@ -161,7 +170,7 @@ class VideoPage extends Article {
 			$this->mData = array();
 		}
 
-		$text = strpos( $url, "sevenload.com" );
+		$text = strpos( $fixed_url, "SEVENLOAD.COM" );
 		if( false !== $text ) { // youtube
 			$provider = self::V_SEVENLOAD;
 			$parsed = split( "/", $url );
