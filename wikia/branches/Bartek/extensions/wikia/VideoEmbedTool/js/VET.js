@@ -47,7 +47,6 @@ function VET_loadDetails() {
 					$( 'VideoEmbedInputWidth' ).style.visibility = 'visible';
 					$( 'VideoEmbedWidthCheckbox' ).checked = true;
 					$( 'VideoEmbedManualWidth' ).value = VET_width;
-					VET_manualWidthInput( $( 'VideoEmbedManualWidth' ) );
 				}
 			}, 200);
 
@@ -106,34 +105,6 @@ function VET_licenseSelVETorCheck() {
 	}
 	VET_track('loadLicense/' + selection); // tracking
 	VET_loadLicense( selection );
-}
-
-function VET_manualWidthInput( elem ) {
-	var image = $( 'VideoEmbedThumb' ).firstChild;
-	var val = parseInt( elem.value );
-	if ( isNaN( val ) ) {
-		return false;
-	}
-
-	if( VET_orgThumbSize == null ) {
-		var VET_orgThumbSize = [image.width, image.height];
-	}
-	if ( val > VET_width ) {
-		if (!VET_shownMax) {
-			image.width = VET_width;
-			image.height = VET_width / VET_ratio;
-			VET_thumbSize = [image.width, image.height];
-			$( 'VideoEmbedManualWidth' ).value = image.width;
-			VET_shownMax = true;
-			alert (vet_max_thumb);
-		}
-	} else {
-		image.height = val / VET_ratio;
-		image.width = val;
-		VET_thumbSize = [image.width, image.height];
-		$( 'VideoEmbedManualWidth' ).value = val;
-		VET_shownMax = false;			
-	}
 }
 
 function VET_readjustSlider( value ) {
