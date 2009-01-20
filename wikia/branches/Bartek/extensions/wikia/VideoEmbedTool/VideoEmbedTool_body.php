@@ -192,11 +192,14 @@ class VideoEmbedTool {
 
 	function insertVideo() {
 		global $wgRequest, $wgUser, $wgContLang, $IP;
-		$type = $wgRequest->getVal('type');
+		$type = $wgRequest->getVal('id');
+		$mwname = $wgRequest->getVal('provider');
 		$name = $wgRequest->getVal('name');
-		$mwname = $wgRequest->getVal('mwname');
-		$extraId = $wgRequest->getVal('extraId');
-		$newFile =  true;
+		$extra = 0;
+		$metadata = array();
+		while( '' != $wgRequest->getVal( 'metadata' + $extra ) ) {
+			$metadata[] = $wgRequest->getVal( 'metadata' + $extra );
+		}
 
 		if($name !== NULL) {
 			if($name == '') {
@@ -269,18 +272,14 @@ class VideoEmbedTool {
 					}
 
 					$temp_file = new VideoPage( $title );
-					
+					$video->loadFromPars( $id, $provider, $metadata );
+					$video->save();					
 				}
 			}
 		} else {
 			$title = Title::newFromText($mwname, 6);
 		}
 
-		$file = wfFindFile($title);
-		if (!is_object($file)) {
-			header('X-screen-type: error');
-			return 'File was not found!';
-		}
 
 		header('X-screen-type: summary');
 
