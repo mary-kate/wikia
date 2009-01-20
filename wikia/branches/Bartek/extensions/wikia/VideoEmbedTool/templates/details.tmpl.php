@@ -87,7 +87,7 @@ echo wfMsg('vet-details-inf2')
 	<tr class="VideoEmbedNoBorder">
 		<td>&nbsp;</td>
 		<td>
-			<input type="submit" value="<?= wfMsg('vet-insert2') ?>" onclick="VET_insertImage(event, 'details');" />
+			<input type="submit" value="<?= wfMsg('vet-insert2') ?>" onclick="VET_insertVideoevent, 'details');" />
 		</td>
 	</tr>
 </table>
