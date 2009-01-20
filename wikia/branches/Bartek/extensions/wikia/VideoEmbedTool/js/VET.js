@@ -491,7 +491,7 @@ function VET_displayDetails(responseText) {
 	VET_indicator(1, false);
 }
 
-function VET_insertVideo(e, type) {
+function VET_insertFinalVideo(e, type) {
 	VET_track('insertVideo/' + type); // tracking
 
 	YAHOO.util.Event.preventDefault(e);
@@ -581,7 +581,7 @@ function VET_insertVideo(e, type) {
 
 	VET_indicator(1, true);
 	YAHOO.util.Connect.abort(VET_asyncTransaction);
-	VET_asyncTransaction = YAHOO.util.Connect.asyncRequest('GET', wgScriptPath + '/index.php?action=ajax&rs=VET&meVideoinsertVideo&' + params.join('&'), callback);
+	VET_asyncTransaction = YAHOO.util.Connect.asyncRequest('GET', wgScriptPath + '/index.php?action=ajax&rs=VET&method=insertFinalVideo&' + params.join('&'), callback);
 }
 
 function MWU_imageWidthChanged(changes) {
