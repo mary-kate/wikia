@@ -1,7 +1,5 @@
 <?php
 
-
-
 class QuickVideoAddForm extends SpecialPage {
 
 	var	$mAction,
