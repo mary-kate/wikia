@@ -177,7 +177,7 @@ class VideoEmbedTool {
 			
 		$props['provider'] = $video->getProvider();
 		$props['id'] = $video->getVideoId();
-		$props['metadata'] = $video->getData();
+		$props['metadata'] = implode( ",", $video->getData() );
 		$props['code'] = $video->getEmbedCode();
 
 		return $this->detailsPage($props);
@@ -194,8 +194,8 @@ class VideoEmbedTool {
 		global $wgRequest, $wgUser, $wgContLang, $IP;
 		require_once( "$IP/extensions/wikia/WikiaVideo/VideoPage.php" );
 
-		$type = $wgRequest->getVal('id');
-		$mwname = $wgRequest->getVal('provider');
+		$id = $wgRequest->getVal('id');
+		$provider = $wgRequest->getVal('provider');
 		$name = $wgRequest->getVal('name');
 
 		$title = Title::makeTitle( NS_VIDEO, $name );
@@ -278,7 +278,8 @@ class VideoEmbedTool {
 
 					$video = new VideoPage( $title );
 					if ($video instanceof VideoPage) {
-						$video->loadFromPars( $id, $provider, $metadata );
+						$video->loadFromPars( $provider, $id, $metadata );
+						$video->setName( $name );
 						$video->save();					
 					}
 				}

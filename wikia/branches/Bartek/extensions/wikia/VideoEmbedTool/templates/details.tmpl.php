@@ -91,6 +91,8 @@ echo wfMsg('vet-details-inf2')
 		</td>
 	</tr>
 </table>
-<input id="VideoEmbedExtraId" type="hidden" value="<?= isset($props['extraId']) ? urlencode($props['extraId']) : '' ?>" />
-<input id="VideoEmbedMWname" type="hidden" value="<?= urlencode($props['mwname']) ?>" />
+<input id="VideoEmbedId" type="hidden" value="<?= isset($props['id']) ? urlencode($props['id']) : '' ?>" />
+<input id="VideoEmbedProvider" type="hidden" value="<?= urlencode($props['provider']) ?>" />
+<input id="VideoEmbedMetadata" type="hidden" value="<?= isset($props['metadata']) ? urlencode($props['metadata']) : '' ?>" />
+
 </div>
