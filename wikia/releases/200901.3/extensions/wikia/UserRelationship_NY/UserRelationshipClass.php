@@ -39,6 +39,12 @@ class UserRelationship {
 	
 	public function addRelationshipRequest($user_to,$type,$message, $email=true, $trust=0){
 		$user_id_to = User::idFromName($user_to);
+		if( !$user_id_to ){ //in case auto friending is on, slave might not have id yet in idFromName immediately after registering
+			$dbr = wfGetDB( DB_MASTER );
+			$s = $dbr->selectRow( 'user', array( 'user_id' ), array( 'user_name' => $user_to ), __METHOD__ );
+			$user_id_to = $s->user_id;
+		}
+		if( !$user_id_to )return false;
 		
 		$dbr =& wfGetDB( DB_MASTER );
 		
