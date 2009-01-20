@@ -173,11 +173,19 @@ class VideoEmbedTool {
 		$video = new VideoPage( $title );
 
 		// todo some safeguard here to take care of bad urls
-		$video->parseUrl( $url );
+		if( !$video->parseUrl( $url ) ) {
+			header('X-screen-type: error');
+			return wfMsg( 'vet-bad-url' );
+		}
 			
 		$props['provider'] = $video->getProvider();
 		$props['id'] = $video->getVideoId();
-		$props['metadata'] = implode( ",", $video->getData() );
+		$data = $video->getData();
+		if (is_array( $data ) ) {
+			$props['metadata'] = implode( ",", $video->getData() );
+		} else {
+			$props['metadata'] = '';		
+		}
 		$props['code'] = $video->getEmbedCode( '250' );
 
 		return $this->detailsPage($props);

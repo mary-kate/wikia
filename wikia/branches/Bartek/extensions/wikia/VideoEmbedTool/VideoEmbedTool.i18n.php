@@ -56,5 +56,6 @@ $messages['en'] = array(
 	'vet-notallowed' => 'You cannot upload images on this wiki',
 	'vet-title' => 'Add a video to your article',
 	'vet-supported' => 'Supported video sites:',
-	'vet-preview' => '<i>this is just a scaled down preview</i>'
+	'vet-preview' => '<i>this is just a scaled down preview</i>',
+	'vet-bad-url' => 'the supplied url is invalid',
 );
