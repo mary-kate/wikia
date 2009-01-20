@@ -201,6 +201,7 @@ class VideoEmbedTool {
 		if($name !== NULL) {
 			if($name == '') {
 				header('X-screen-type: error');
+				// todo messagize
 				return 'You need to specify file name first!';
 			} else {
 
@@ -268,6 +269,7 @@ class VideoEmbedTool {
 					}
 
 					$temp_file = new VideoPage( $title );
+					
 				}
 			}
 		} else {
@@ -288,7 +290,7 @@ class VideoEmbedTool {
 		$caption = $wgRequest->getVal('caption');
 		$slider = $wgRequest->getVal('slider');
 
-		$ns_img = $wgContLang->getFormattedNsText( NS_IMAGE );
+		$ns_img = $wgContLang->getFormattedNsText( NS_VIDEO );
 
 		$tag = '[[' . $ns_img . ':'.$title->getDBkey();
 		if($size != 'full' && ($file->getMediaType() == 'BITMAP' || $file->getMediaType() == 'DRAWING')) {
@@ -321,21 +323,3 @@ class VideoEmbedTool {
 	}
 }
 
-class FakeLocalFile extends LocalFile {
-
-	function recordUpload2( $oldver, $comment, $pageText, $props = false, $timestamp = false ) {
-		global $wgUser;
-		$dbw = $this->repo->getMasterDB();
-		if ( !$props ) {
-			$props = $this->repo->getFileProps( $this->getVirtualUrl() );
-		}
-		$this->setProps( $props );
-		$this->purgeThumbnails();
-		$this->saveToCache();
-		return true;
-	}
-
-	function upgradeRow() {}
-
-	function doDBInserts() {}
-}
