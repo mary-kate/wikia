@@ -44,7 +44,6 @@ function VET_loadDetails() {
 					VET_slider.setValue(FCK.wysiwygData[VET_refid].width / (VET_slider.getRealValue() / VET_slider.getValue()), true);
 					VET_width = FCK.wysiwygData[VET_refid].width;
 					MWU_imageWidthChanged( VET_width );
-					$( 'VideoEmbedSlider' ).style.visibility = 'visible';
 					$( 'VideoEmbedInputWidth' ).style.visibility = 'visible';
 					$( 'VideoEmbedWidthCheckbox' ).checked = true;
 					$( 'VideoEmbedManualWidth' ).value = VET_width;
@@ -125,7 +124,6 @@ function VET_manualWidthInput( elem ) {
 			image.height = VET_width / VET_ratio;
 			VET_thumbSize = [image.width, image.height];
 			$( 'VideoEmbedManualWidth' ).value = image.width;
-			VET_readjustSlider( image.width );
 			VET_shownMax = true;
 			alert (vet_max_thumb);
 		}
@@ -134,7 +132,6 @@ function VET_manualWidthInput( elem ) {
 		image.width = val;
 		VET_thumbSize = [image.width, image.height];
 		$( 'VideoEmbedManualWidth' ).value = val;
-		VET_readjustSlider( val );
 		VET_shownMax = false;			
 	}
 }
@@ -444,42 +441,10 @@ function VET_displayDetails(responseText) {
 		var image = $('VideoEmbedThumb').firstChild;
 		var thumbSize = [image.width, image.height];
 		VET_orgThumbSize = null;
-		VET_slider = YAHOO.widget.Slider.getHorizSlider('VideoEmbedSlider', 'VideoEmbedSliderThumb', 0, 200);
-		VET_slider.initialRound = true;
-		VET_slider.getRealValue = function() {
-			return Math.max(2, Math.round(this.getValue() * (thumbSize[0] / 200)));
-		}
-		VET_slider.subscribe("change", function(offsetFromStart) {
-			if ( 'hidden' == $( 'VideoEmbedSliderThumb' ).style.visibility ) {
-				$( 'VideoEmbedSliderThumb' ).style.visibility = 'visible';				
-			}			
-			if (VET_slider.initialRound) {
-				$('VideoEmbedManualWidth').value = '';
-				VET_slider.initialRound = false;	
-			} else {
-				$('VideoEmbedManualWidth').value = VET_slider.getRealValue();
-			}
-			image.width = VET_slider.getRealValue();
-			$('VideoEmbedManualWidth').value = image.width;			
-			image.height = image.width / (thumbSize[0] / thumbSize[1]);
-			if(VET_orgThumbSize == null) {
-				VET_orgThumbSize = [image.width, image.height];
-				VET_ratio = VET_width / VET_height;
-			}
-			VET_thumbSize = [image.width, image.height];
-		});
-		
-		if(image.width < 250) {
-			VET_slider.setValue(200, true);
-		} else {
-			VET_slider.setValue(125, true);
-		}		
 	}
 	if ($( 'VET_error_box' )) {
 		alert( $( 'VET_error_box' ).innerHTML );
 	}
-	$( 'VideoEmbedSlider' ).style.visibility = 'hidden';
-	$( 'VideoEmbedInputWidth' ).style.visibility = 'hidden';
 
 	if ( $( 'VideoEmbedLicenseText' ) ) {
 		var cookieMsg = document.cookie.indexOf("vetlicensemesg=");
@@ -528,7 +493,6 @@ function VET_insertFinalVideo(e, type) {
 		params.push( 'width=' + $( 'VideoEmbedManualWidth' ).value + 'px' );
 		params.push('layout=' + ($('VideoEmbedLayoutLeft').checked ? 'left' : 'right'));
 		params.push('caption=' + $('VideoEmbedCaption').value);
-		params.push('slider=' + $('VideoEmbedWidthCheckbox').checked);
 	}
 
 	var callback = {
@@ -561,11 +525,6 @@ function VET_insertFinalVideo(e, type) {
 						} else {
 							options.thumb = null;
 						}
-						if($('VideoEmbedWidthCheckbox').checked) {
-							options.width = VET_slider.getRealValue();
-						} else {
-							options.width = null;
-						}
 						if($('VideoEmbedLayoutLeft').checked) {
 							options.align = 'left';
 						} else {
@@ -597,15 +556,11 @@ function MWU_imageWidthChanged(changes) {
 	var image = $('VideoEmbedThumb').firstChild;
 	if( !$( 'VideoEmbedWidthCheckbox' ).checked ) {
 		$('VideoEmbedManualWidth').value = '';
-		$('VideoEmbedSlider').style.visibility = 'hidden';
-		$('VideoEmbedInputWidth').style.visibility = 'hidden';
 		image.width = VET_orgThumbSize[0];
 		image.height = VET_orgThumbSize[1];
 		VET_track('slider/disable'); // tracking
 	} else {
 		$('VideoEmbedManualWidth').value = VET_slider.getRealValue();
-		$('VideoEmbedSlider').style.visibility = 'visible';
-		$('VideoEmbedInputWidth').style.visibility = 'visible';
 		image.width = VET_thumbSize[0];
 		image.height = VET_thumbSize[1];
 		VET_track('slider/enable'); // tracking

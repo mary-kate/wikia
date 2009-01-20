@@ -63,10 +63,6 @@ echo wfMsg('vet-details-inf2')
 	<tr id="ImageWidthRow">
 		<th><?= wfMsg('vet-width') ?></th>
 		<td>
-			<input onclick="MWU_imageWidthChanged(VET_widthChanges++);" type="checkbox" id="VideoEmbedWidthCheckbox" />
-			<div id="VideoEmbedSlider">
-				<img src="<?= $wgExtensionsPath.'/wikia/VideoEmbedTool/images/slider_thumb_bg.png' ?>" id="VideoEmbedSliderThumb" />
-			</div>
 			<span id="VideoEmbedInputWidth">
 				<input type="text" id="VideoEmbedManualWidth" name="VideoEmbedManualWidth" value="" onchange="VET_manualWidthInput(this)" onkeyup="VET_manualWidthInput(this)" /> px
 			<span>
