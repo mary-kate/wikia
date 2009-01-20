@@ -504,7 +504,16 @@ function VET_insertFinalVideo(e, type) {
 		return false;
 	}
 
-	params.push('mwname='+$('VideoEmbedName').value);
+	params.push('id='+$('VideoEmbedId').value);
+	params.push('provider='+$('VideoEmbedProvider').value);
+
+	if( $(' VideoEmbedMetadata' ) ) {
+		var metadata = Array();
+		metadata = $(' VideoEmbedMetadata' ).value.split( "," );	
+		for( var i=0; i <= metadata.length; i++ ) {
+			params.push( 'metadata' + i  + '=' + metadata[i] );
+		}
+	}
 
 	if(type == 'overwrite') {
 		params.push('name='+$('VideoEmbedExistingName').value);
