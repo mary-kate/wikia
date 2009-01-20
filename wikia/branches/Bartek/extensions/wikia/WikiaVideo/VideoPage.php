@@ -171,7 +171,7 @@ class VideoPage extends Article {
 		}
 
 		$text = strpos( $fixed_url, "SEVENLOAD.COM" );
-		if( false !== $text ) { // youtube
+		if( false !== $text ) { // sevenload
 			$provider = self::V_SEVENLOAD;
 			$parsed = split( "/", $url );
 			$id = array_pop( $parsed );
