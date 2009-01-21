@@ -415,7 +415,7 @@ function VET_displayDetails(responseText) {
 		VET_orgThumbSize = null;
 	}
 
-                VET_slider = YAHOO.widget.Slider.getHorizSlider('VideoEmbedSlider', 'VideoEmbedSliderThumb', 100, 300);
+                VET_slider = YAHOO.widget.Slider.getHorizSlider('VideoEmbedSlider', 'VideoEmbedSliderThumb', 0, 200);
                 VET_slider.initialRound = true;
                 VET_slider.getRealValue = function() {
                         return Math.max(2, Math.round(this.getValue() * (thumbSize[0] / 200)));
@@ -616,9 +616,6 @@ function VET_switchScreen(to) {
 	$('VideoEmbed' + VET_curScreen).style.display = '';
 	if(VET_curScreen == 'Main') {
 		$('VideoEmbedBack').style.display = 'none';
-	}
-	if((VET_prevScreen == 'Details' || VET_prevScreen == 'Conflict') && VET_curScreen == 'Main' && $('VideoEmbedName')) {
-		YAHOO.util.Connect.asyncRequest('GET', wgScriptPath + '/index.php?action=ajax&rs=VET&method=clean&mwname=' + $('VideoEmbedMWname').value);
 	}
 }
 
