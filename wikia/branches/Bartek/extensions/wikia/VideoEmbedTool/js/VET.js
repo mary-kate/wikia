@@ -431,7 +431,7 @@ function VET_displayDetails(responseText) {
                                 $('VideoEmbedManualWidth').value = VET_slider.getRealValue();
                         }
 			// set the start value
-                        $('ImageUploadManualWidth').value = 300;
+                        $('VideoEmbedManualWidth').value = 300;
 			// get ratio for that video provider
                 });
 
