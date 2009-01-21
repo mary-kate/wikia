@@ -469,7 +469,7 @@ function VET_insertFinalVideo(e, type) {
 	if( $( 'VideoEmbedMetadata' ) ) {
 		var metadata = Array();
 		metadata = $( 'VideoEmbedMetadata' ).value.split( "," );	
-		for( var i=0; i <= metadata.length; i++ ) {
+		for( var i=0; i < metadata.length; i++ ) {
 			params.push( 'metadata' + i  + '=' + metadata[i] );
 		}
 	}
