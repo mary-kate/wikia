@@ -417,7 +417,7 @@ function VET_displayDetails(responseText) {
 
                 VET_slider = YAHOO.widget.Slider.getHorizSlider('VideoEmbedSlider', 'VideoEmbedSliderThumb', 100, 300);
                 VET_slider.initialRound = true;
-                VEt_slider.getRealValue = function() {
+                VET_slider.getRealValue = function() {
                         return Math.max(2, Math.round(this.getValue() * (thumbSize[0] / 200)));
                 }
                 VET_slider.subscribe("change", function(offsetFromStart) {
