@@ -1,15 +1,21 @@
 <input id="VideoEmbedExtraId" type="hidden" value="<?= urlencode($extraId) ?>" />
 <?php
-$file_mwname = new FakeLocalFile(Title::newFromText($mwname, 6), RepoGroup::singleton()->getLocalRepo());
-$file_name = new LocalFile(Title::newFromText($name, 6), RepoGroup::singleton()->getLocalRepo());
-echo wfMsg('vet-conflict-inf', $file_name->getName());
+
+$title = Title::newFromText( $name, NS_VIDEO );
+$video_fake = new VideoPage( $title );
+$video_real = new VideoPage( $title );
+
+$video_fake->loadFromPars( $provider, $id, $data );
+$video_real->load();
+
+echo wfMsg( 'vet-conflict-inf', $name );
 ?>
 <table cellspacing="0" id="VideoEmbedConflictTable">
 	<tr>
 		<td style="border-right: 1px solid #CCC;">
 			<h2><?= wfMsg('vet-rename') ?></h2>
 			<div style="margin: 5px 0;">
-				<input type="text" id="VideoEmbedRenameName" value="<?= $file_name->getName() ?>" />
+				<input type="text" id="VideoEmbedRenameName" value="<?= $name ?>" />
 				<input type="button" value="<?= wfMsg('vet-insert') ?>" onclick="VET_insertImage(event, 'rename');" />
 			</div>
 		</td>
@@ -22,11 +28,11 @@ echo wfMsg('vet-conflict-inf', $file_name->getName());
 	</tr>
 	<tr id="VideoEmbedCompare">
 		<td style="border-right: 1px solid #CCC;">
-			<?= $file_mwname->getThumbnail(265, 205)->toHtml() ?>
+			<?= $video_fake->getEmbedCode( '200' ) ?>
 		</td>
 		<td>
-			<input type="hidden" id="VideoEmbedExistingName" value="<?= $file_name->getName() ?>" />
-			<?= $file_name->getThumbnail(265, 205)->toHtml() ?>
+			<input type="hidden" id="VideoEmbedExistingName" value="<?= $name ?>" />
+			<?= $video_real->getEmbedCode( '200' ) ?>
 		</td>
 	</tr>
 </table>
