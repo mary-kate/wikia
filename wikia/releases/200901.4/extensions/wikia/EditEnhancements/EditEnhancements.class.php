@@ -11,14 +11,8 @@ class EditEnhancements {
 	function __construct($action) {
 		global $wgHooks;
 
-		if ($action == 'edit') {
-			$wgHooks['GetHTMLAfterBody'][] = array(&$this, 'editPageJS');
-		} else if ($action == 'submit') {
-			$wgHooks['GetHTMLAfterBody'][] = array(&$this, 'previewJS');
-		}
+		$this->action = $action;
 
-		$wgHooks['EditForm::MultiEdit:Form'][] = array(&$this, 'showToolbar');
-		$wgHooks['EditPageBeforeEditButtons'][] = array(&$this, 'showButtons');
 		$wgHooks['EditPage::showEditForm:checkboxes'][] = array(&$this, 'showCheckboxes');
 		$wgHooks['EditPageSummaryBox'][] = array(&$this, 'summaryBox');
 
@@ -68,10 +62,23 @@ class EditEnhancements {
 	}
 
 	function showCheckboxes($EditPage, &$checkboxes) {
-		$this->checkboxes = $checkboxes;
-	
-		// Change it to hide
-		$checkboxes['minor'] = $checkboxes['watch'] = '';
+		global $wgUser, $wgHooks;
+		if(get_class($wgUser->getSkin()) == 'SkinMonaco') {
+
+			if($this->action == 'edit') {
+				$wgHooks['GetHTMLAfterBody'][] = array(&$this, 'editPageJS');
+			} else if ($action == 'submit') {
+				$wgHooks['GetHTMLAfterBody'][] = array(&$this, 'previewJS');
+			}
+			
+			$wgHooks['EditForm::MultiEdit:Form'][] = array(&$this, 'showToolbar');
+			$wgHooks['EditPageBeforeEditButtons'][] = array(&$this, 'showButtons');
+
+			$this->checkboxes = $checkboxes;
+
+			// Change it to hide
+			$checkboxes['minor'] = $checkboxes['watch'] = '';
+		}
 		return true;
 	}
 }
