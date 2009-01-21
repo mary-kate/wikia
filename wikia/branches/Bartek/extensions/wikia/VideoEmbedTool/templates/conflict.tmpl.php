@@ -5,7 +5,7 @@ $title = Title::newFromText( $name, NS_VIDEO );
 $video_fake = new VideoPage( $title );
 $video_real = new VideoPage( $title );
 
-$video_fake->loadFromPars( $provider, $id, $data );
+$video_fake->loadFromPars( $provider, $id, $metadata );
 $video_real->load();
 
 echo wfMsg( 'vet-conflict-inf', $name );
