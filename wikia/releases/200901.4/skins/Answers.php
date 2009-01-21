@@ -56,7 +56,9 @@ class AnswersTemplate extends MonacoTemplate {
 		global $wgRequest, $wgUser, $wgStyleVersion, $wgStylePath, $wgTitle;
 		$this->skin = $skin = $this->data['skin'];
 		$action = $wgRequest->getText( 'action' );
-		(Answer::isQuestion()) ? $question_mark = '?' : $question_mark = '';
+		$answer_page = Answer::newFromTitle( $wgTitle );
+		$is_question = $answer_page->isQuestion();
+		($is_question) ? $question_mark = '?' : $question_mark = '';
 
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="<?php $this->text('xhtmldefaultnamespace') ?>" <?php
@@ -68,7 +70,7 @@ class AnswersTemplate extends MonacoTemplate {
 		<?php $this->html('headlinks') ?>
 	        <link rel="stylesheet" type="text/css" href="<?=$wgStylePath?>/answers/css/monobook_modified.css?<?=$wgStyleVersion?>" />
 	        <link rel="stylesheet" type="text/css" href="<?=$wgStylePath?>/answers/css/reset_modified.css?<?=$wgStyleVersion?>" />
-		<?/*<script type="text/javascript" src="/skins/common/jquery-1.2.6.min.js"></script>*/?>
+		<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.5.2/build/yahoo-dom-event/yahoo-dom-event.js"></script> 
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3/jquery.min.js"></script>
 		<script type="text/javascript" src="<?=$wgStylePath?>/answers/js/main.js?<?=$wgStyleVersion?>"></script>
 		
@@ -103,6 +105,12 @@ class AnswersTemplate extends MonacoTemplate {
 <?php if($this->data['body_onload']) { ?> onload="<?php $this->text('body_onload') ?>"<?php } ?>
  class="mediawiki <?php $this->text('dir') ?> <?php $this->text('pageclass') ?> <?php $this->text('skinnameclass') ?>">
 
+<!--GetHTMLAfterBody-->
+<?
+wfRunHooks('GetHTMLAfterBody', array (&$this));
+?>
+<!--GetHTMLAfterBody-->
+
 	<!-- ##### Begin main content #### -->
         <div id="answers_header" class="reset">
 		<a href="/" id="wikianswers_logo"><img src="/skins/answers/images/wikianswers_logo.png" /></a>
@@ -121,7 +129,7 @@ class AnswersTemplate extends MonacoTemplate {
 	<div id="answers_page">
 		<?php
 		if ( 
-			(!Answer::isQuestion() || in_array( 'staff', $wgUser->getGroups() ) || in_array( 'admin', $wgUser->getGroups() ) ) &&
+			(!$is_question || in_array( 'staff', $wgUser->getGroups() ) || in_array( 'admin', $wgUser->getGroups() ) ) &&
 			$wgTitle->getNamespace() != NS_CATEGORY
 		) {
 		?>
@@ -165,8 +173,8 @@ class AnswersTemplate extends MonacoTemplate {
 		<?php if($this->data['sitenotice']) { ?><div id="siteNotice"><?php $this->html('sitenotice') ?></div><?php } ?>
 
 		<?php
-		if (Answer::isQuestion()) {
-			$author = Answer::getOriginalAuthor();
+		if ($is_question) {
+			$author = $answer_page->getOriginalAuthor();
 			
 			$category_text = array();
 			global $wgOut;
@@ -220,7 +228,7 @@ class AnswersTemplate extends MonacoTemplate {
 		
 		<?
 		global $wgTitle;
-		if ( Answer::isQuestion() && Answer::isArticleAnswered() ) {
+		if ( $is_question && $answer_page->isArticleAnswered() ) {
 			echo '<div class="sectionedit">[<a href="'. $this->data['content_actions']['edit']['href'] .'">'. wfMsg('editsection') .'</a>]</div>';
 			echo '<div id="answer_title">'. wfMsg("answer_title") .'</div>';
 			$bodyContentClass = ' class="question"';
@@ -246,7 +254,7 @@ class AnswersTemplate extends MonacoTemplate {
 
 		<?php
 		global $wgTitle;
-		if ($wgUser->isAnon() && !Answer::isArticleAnswered() && $_GET['state'] == 'asked') {
+		if ($wgUser->isAnon() && !$answer_page->isArticleAnswered() && $_GET['state'] == 'asked') {
 			$submit_title = SpecialPage::getTitleFor( 'Userlogin' );
 			$submit_url = $submit_title->escapeFullURL("type=signup&action=submitlogin");
 			
@@ -291,12 +299,17 @@ class AnswersTemplate extends MonacoTemplate {
 			</div>
 			<?php
 		}
-		if (Answer::isQuestion()) {
+		if ($is_question) {
 		?>
-		<div id="google_ad_1" class="google_ad"></div>
+		<table id="bottom_ads"> 
+		<tr>
+			<td id="google_ad_1" class="google_ad"></td>
+			<td id="google_ad_2" class="google_ad"></td> 
+		</tr>
+		</table> 
 		
 		<div id="huge_buttons" class="clearfix">
-			<? if ( Answer::isArticleAnswered() ) { ?>
+			<? if ( $answer_page->isArticleAnswered() ) { ?>
 			<a href="<?= $wgTitle->getEditURL() ?>" class="huge_button edit"><div></div><?= wfMsg("improve_this_answer") ?></a>	
 			<a href="<?= $wgTitle->escapeFullURL("action=watch") ?>" class="huge_button watchlist"><div></div><?= wfMsg("notify_improved") ?></a>
 			<? } else { ?>
@@ -311,12 +324,12 @@ class AnswersTemplate extends MonacoTemplate {
 		<!-- XIAN: Pull content that is now in "AnswersAfterArticle" hook -->
 
                 <!-- NICK: Related answered questions -->
-		<? if ( Answer::isQuestion() ) { ?>
+		<? if ( $is_question ) { ?>
 		<div id="related_questions" class="reset widget">
 			<h2><?= wfMsg("related_answered_questions") ?></h2>
 			<ul id="related_answered_questions">
 			</ul>
-			<div id="google_ad_4" class="google_ad"></div>
+			<div id="google_ad_5" class="google_ad"></div>
 		</div>
 		<? } ?>
 		</div><?/*answers_article*/?>
@@ -421,8 +434,8 @@ class AnswersTemplate extends MonacoTemplate {
 			<h2><?= wfMsg("recent_unanswered_questions") ?></h2>
 			<ul id="recent_unanswered_questions">
 				<? 
-				if (Answer::isQuestion()) {	
-				echo '<li><div id="google_ad_2" class="google_ad"></div></li>';
+				if ($is_question) {	
+				echo '<li><div id="google_ad_3" class="google_ad"></div></li>';
 				} 
 				?>
 			</ul>
@@ -432,8 +445,8 @@ class AnswersTemplate extends MonacoTemplate {
 			<h2><?= wfMsg("popular_categories") ?></h2>
 			<ul id="popular_categories">
 				<? 
-				if (Answer::isQuestion()) {	
-				echo '<li><div id="google_ad_3" class="google_ad"></div></li>';
+				if ($is_question) {	
+				echo '<li><div id="google_ad_4" class="google_ad"></div></li>';
 				}
 				?>
 			</ul>
@@ -632,5 +645,6 @@ echo 'google_hints = \''. implode(', ', $category_text) .'\';';
 		}
         }
 } // end of class
+
 
 
