@@ -228,7 +228,6 @@ class VideoEmbedTool {
 				}
 				if($title->exists()) {
 					if($type == 'overwrite') {
-						$title = Title::newFromText($name, 6);
 						// is the target protected?
 						$permErrors = $title->getUserPermissionsErrors( 'edit', $wgUser );
 						$permErrorsUpload = $title->getUserPermissionsErrors( 'upload', $wgUser );
@@ -236,29 +235,16 @@ class VideoEmbedTool {
 
 						if( $permErrors || $permErrorsUpload || $permErrorsCreate ) {
 							header('X-screen-type: error');
+							// todo messagize
 							return 'This image is protected';
 						}
 
-						$file_name = new LocalFile($title, RepoGroup::singleton()->getLocalRepo());
-						$file_mwname = new FakeLocalFile(Title::newFromText($mwname, 6), RepoGroup::singleton()->getLocalRepo());
-
-						if(!empty($extraId)) {
-							require_once($IP.'/extensions/3rdparty/ImportFreeImages/phpFlickr-2.2.0/phpFlickr.php');
-							$flickrAPI = new phpFlickr('bac0bd138f5d0819982149f67c0ca734');
-							$flickrResult = $flickrAPI->photos_getInfo($extraId);
-
-							$nsid = $flickrResult['owner']['nsid']; // e.g. 49127042@N00
-							$username = $flickrResult['owner']['username']; // e.g. bossa67
-							$license = $flickrResult['license'];
-
-							$caption = '{{MediaWiki:Flickr'.intval($license).'|1='.wfEscapeWikiText($extraId).'|2='.wfEscapeWikiText($nsid).'|3='.wfEscapeWikiText($username).'}}';
-						} else {
-							$caption = '';
+						$video = new VideoPage( $title );
+						if ($video instanceof VideoPage) {
+							$video->loadFromPars( $provider, $id, $metadata );
+							$video->setName( $name );
+							$video->save();					
 						}
-
-						$file_name->upload($file_mwname->getPath(), '', $caption);
-						$file_mwname->delete('');
-						$newFile = false;
 					} else if($type == 'existing') {
 						header('X-screen-type: existing');
 						$file = wfFindFile(Title::newFromText($name, 6));
@@ -269,7 +255,13 @@ class VideoEmbedTool {
 					} else {
 						header('X-screen-type: conflict');
 						$tmpl = new EasyTemplate(dirname(__FILE__).'/templates/');
-						$tmpl->set_vars(array('name' => $name, 'mwname' => $mwname, 'extraId' => $extraId));
+						$tmpl->set_vars( array(
+							'name' => $name,
+							'id' => $id,
+							'provider' => $provider,
+							'metadata' => $metadata,	
+							)
+						);
 						return $tmpl->execute('conflict');
 					}
 				} else {
