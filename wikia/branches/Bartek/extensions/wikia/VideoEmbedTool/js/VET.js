@@ -43,7 +43,7 @@ function VET_loadDetails() {
 				if(FCK.wysiwygData[VET_refid].width) {
 					VET_slider.setValue(FCK.wysiwygData[VET_refid].width / (VET_slider.getRealValue() / VET_slider.getValue()), true);
 					VET_width = FCK.wysiwygData[VET_refid].width;
-					MWU_imageWidthChanged( VET_width );
+					VET_imageWidthChanged( VET_width );
 					$( 'VideoEmbedSlider' ).style.visibility = 'visible'; 
 					$( 'VideoEmbedInputWidth' ).style.visibility = 'visible';
 					$( 'VideoEmbedWidthCheckbox' ).checked = true;
@@ -546,7 +546,7 @@ function VET_insertFinalVideo(e, type) {
 	VET_asyncTransaction = YAHOO.util.Connect.asyncRequest('GET', wgScriptPath + '/index.php?action=ajax&rs=VET&method=insertFinalVideo&' + params.join('&'), callback);
 }
 
-function MWU_imageWidthChanged(changes) {
+function VET_imageWidthChanged(changes) {
 	var image = $('VideoEmbedThumb').firstChild;
 	if( !$( 'VideoEmbedWidthCheckbox' ).checked ) {
 		$('VideoEmbedManualWidth').value = '';
@@ -561,21 +561,8 @@ function MWU_imageWidthChanged(changes) {
 	}
 }
 
-function MWU_imageSizeChanged(size) {
-	VET_track('size/' + size); // tracking
-	YAHOO.util.Dom.setStyle(['ImageWidthRow', 'ImageLayoutRow'], 'display', size == 'thumb' ? '' : 'none');
-	if($('VideoEmbedThumb')) {
-		var image = $('VideoEmbedThumb').firstChild;
-		if(size == 'thumb') {
-			image.width = VET_thumbSize[0];
-			image.height = VET_thumbSize[1];
-			$('VideoEmbedManualWidth').value = VET_thumbSize[0];
-		} else {
-			image.width = VET_orgThumbSize[0];
-			image.height = VET_orgThumbSize[1];
-			$('VideoEmbedManualWidth').value = VET_orgThumbSize[0];
-		}
-	}
+function VET_imageSizeChanged(size) {
+	//leave that empty for now
 }
 
 function VET_toggleMainMesg(e) {

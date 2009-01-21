@@ -55,7 +55,7 @@ echo wfMsg('vet-details-inf2')
 	<tr>
 		<th><?= wfMsg('vet-size') ?></th>
 		<td>
-			<input onclick="MWU_imageSizeChanged('thumb');" type="checkbox" name="fullthumb" id="VideoEmbedThumbOption" checked=checked /> <label for="VideoEmbedThumbOption" onclick="MWU_imageSizeChanged('thumb');"><?= wfMsg('vet-thumbnail') ?></label>
+			<input onclick="VET_imageSizeChanged('thumb');" type="checkbox" name="fullthumb" id="VideoEmbedThumbOption" checked=checked /> <label for="VideoEmbedThumbOption" onclick="VET_imageSizeChanged('thumb');"><?= wfMsg('vet-thumbnail') ?></label>
 			&nbsp;
 		</td>
 	</tr>
