@@ -96,17 +96,16 @@ function VET_addHandler() {
   	YAHOO.util.Event.addListener(['vetLink', 'vetHelpLink', btn], 'click',  VET_show);
 }
 
-function VET_licenseSelVETorCheck() {
-	var selector = document.getElementById( "VideoEmbedLicense" );
-	var selection = selector.options[selector.selectedIndex].value;
-	if( selector.selectedIndex > 0 ) {
-		if( selection == "" ) {
-			selector.selectedIndex = 0;
-		}
-	}
-	VET_track('loadLicense/' + selection); // tracking
-	VET_loadLicense( selection );
+function VET_manualWidthInput( elem ) {
+        var val = parseInt( elem.value );
+        if ( isNaN( val ) ) {
+                return false;
+        }
+
+	$( 'VideoEmbedManualWidth' ).value = val;
+	VET_readjustSlider( val );
 }
+
 
 function VET_readjustSlider( value ) {
 		if ( 400 < value ) { // too big, hide slider
