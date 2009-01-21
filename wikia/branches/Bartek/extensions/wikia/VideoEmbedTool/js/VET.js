@@ -44,6 +44,7 @@ function VET_loadDetails() {
 					VET_slider.setValue(FCK.wysiwygData[VET_refid].width / (VET_slider.getRealValue() / VET_slider.getValue()), true);
 					VET_width = FCK.wysiwygData[VET_refid].width;
 					MWU_imageWidthChanged( VET_width );
+					$( 'VideoEmbedSlider' ).style.visibility = 'visible'; 
 					$( 'VideoEmbedInputWidth' ).style.visibility = 'visible';
 					$( 'VideoEmbedWidthCheckbox' ).checked = true;
 					$( 'VideoEmbedManualWidth' ).value = VET_width;
@@ -413,6 +414,29 @@ function VET_displayDetails(responseText) {
 		var thumbSize = [image.width, image.height];
 		VET_orgThumbSize = null;
 	}
+
+                VET_slider = YAHOO.widget.Slider.getHorizSlider('VideoEmbedSlider', 'VideoEmbedSliderThumb', 100, 300);
+                VET_slider.initialRound = true;
+                VEt_slider.getRealValue = function() {
+                        return Math.max(2, Math.round(this.getValue() * (thumbSize[0] / 200)));
+                }
+                VET_slider.subscribe("change", function(offsetFromStart) {
+                        if ( 'hidden' == $( 'VideoEmbedSliderThumb' ).style.visibility ) {
+                                $( 'VideoEmbedSliderThumb' ).style.visibility = 'visible';
+                        }
+                        if (VET_slider.initialRound) {
+                                $('VideoEmbedManualWidth').value = '';
+                                VET_slider.initialRound = false;
+                        } else {
+                                $('VideoEmbedManualWidth').value = VET_slider.getRealValue();
+                        }
+			// set the start value
+                        $('ImageUploadManualWidth').value = 300;
+			// get ratio for that video provider
+                });
+
+                VET_slider.setValue(200, true);
+
 	if ($( 'VET_error_box' )) {
 		alert( $( 'VET_error_box' ).innerHTML );
 	}
