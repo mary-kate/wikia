@@ -211,8 +211,9 @@ class VideoEmbedTool {
 					
 		$extra = 0;
 		$metadata = array();
-		while( '' != $wgRequest->getVal( 'metadata' + $extra ) ) {
-			$metadata[] = $wgRequest->getVal( 'metadata' + $extra );
+		while( '' != $wgRequest->getVal( 'metadata' . $extra ) ) {
+			$metadata[] = $wgRequest->getVal( 'metadata' . $extra );
+			$extra++;
 		}
 
 		if($name !== NULL) {
