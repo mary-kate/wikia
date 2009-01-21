@@ -305,17 +305,11 @@ class VideoEmbedTool {
 
 		if($size != 'full') {
 			$tag .= '|thumb';
-			if($layout != 'right') {
-				$tag .= '|'.$layout;
-			}
 		}
 
 		$tag .= '|'.$width;
-
+		$tag .= '|'.$layout;
 		if($caption != '') {
-			if($size == 'full') {
-				$tag .= '|frame';
-			}
 			$tag .= '|'.$caption.']]';
 		} else {
 			$tag .= ']]';

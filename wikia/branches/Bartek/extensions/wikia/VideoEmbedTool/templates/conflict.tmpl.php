@@ -16,13 +16,13 @@ echo wfMsg( 'vet-conflict-inf', $name );
 			<h2><?= wfMsg('vet-rename') ?></h2>
 			<div style="margin: 5px 0;">
 				<input type="text" id="VideoEmbedRenameName" value="<?= $name ?>" />
-				<input type="button" value="<?= wfMsg('vet-insert') ?>" onclick="VET_insertVideo(event, 'rename');" />
+				<input type="button" value="<?= wfMsg('vet-insert') ?>" onclick="VET_insertFinalVideo(event, 'rename');" />
 			</div>
 		</td>
 		<td>
 			<h2><?= wfMsg('vet-existing') ?></h2>
 			<div style="margin: 5px 0;">
-				<input type="button" value="<?= wfMsg('vet-insert') ?>" onclick="VET_insertVideo(event, 'existing');" />
+				<input type="button" value="<?= wfMsg('vet-insert') ?>" onclick="VET_insertFinalVideo(event, 'existing');" />
 			</div>
 		</td>
 	</tr>
@@ -36,4 +36,4 @@ echo wfMsg( 'vet-conflict-inf', $name );
 		</td>
 	</tr>
 </table>
-<div style="text-align: center;"><a onclick="VET_insertVideo(event, 'overwrite');" href="#"><?= wfMsg('vet-overwrite') ?></a></div>
+<div style="text-align: center;"><a onclick="VET_insertFinalVideo(event, 'overwrite');" href="#"><?= wfMsg('vet-overwrite') ?></a></div>
