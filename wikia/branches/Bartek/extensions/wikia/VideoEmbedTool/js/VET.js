@@ -466,9 +466,9 @@ function VET_insertFinalVideo(e, type) {
 	params.push('id='+$('VideoEmbedId').value);
 	params.push('provider='+$('VideoEmbedProvider').value);
 
-	if( $(' VideoEmbedMetadata' ) ) {
+	if( $( 'VideoEmbedMetadata' ) ) {
 		var metadata = Array();
-		metadata = $(' VideoEmbedMetadata' ).value.split( "," );	
+		metadata = $( 'VideoEmbedMetadata' ).value.split( "," );	
 		for( var i=0; i <= metadata.length; i++ ) {
 			params.push( 'metadata' + i  + '=' + metadata[i] );
 		}
