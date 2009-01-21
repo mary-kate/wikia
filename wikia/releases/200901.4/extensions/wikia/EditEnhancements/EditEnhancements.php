@@ -8,13 +8,15 @@ $wgExtensionCredits['other'][] = array(
 $wgExtensionFunctions[] = 'wfEditEnhancementsInit';
 
 function wfEditEnhancementsInit() {
-	global $wgRequest;
+	global $wgRequest, $wgUser;
 
 	$action = $wgRequest->getVal('action', null);
 
 	if ($action == 'edit' || $action == 'submit') {
-		require( dirname(__FILE__) . '/EditEnhancements.class.php' );
-		$instance = new EditEnhancements($action);
+		if(get_class($wgUser->getSkin()) == 'SkinMonaco') {
+			require( dirname(__FILE__) . '/EditEnhancements.class.php' );
+			$instance = new EditEnhancements($action);
+		}
 	}
 }
 
