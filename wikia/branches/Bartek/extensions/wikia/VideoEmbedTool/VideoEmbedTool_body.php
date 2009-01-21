@@ -308,15 +308,16 @@ class VideoEmbedTool {
 		$ns_img = $wgContLang->getFormattedNsText( NS_VIDEO );
 
 		$tag = '[[' . $ns_img . ':'.$title->getDBkey();
+
 		if($size != 'full') {
 			$tag .= '|thumb';
 			if($layout != 'right') {
 				$tag .= '|'.$layout;
 			}
-			if($slider == 'true') {
-				$tag .= '|'.$width;
-			}
 		}
+
+		$tag .= '|'.$width;
+
 		if($caption != '') {
 			if($size == 'full') {
 				$tag .= '|frame';
