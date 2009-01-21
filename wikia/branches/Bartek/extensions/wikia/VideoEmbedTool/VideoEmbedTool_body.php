@@ -202,6 +202,7 @@ class VideoEmbedTool {
 		global $wgRequest, $wgUser, $wgContLang, $IP;
 		require_once( "$IP/extensions/wikia/WikiaVideo/VideoPage.php" );
 
+		$type = $wgRequest->getVal('type');
 		$id = $wgRequest->getVal('id');
 		$provider = $wgRequest->getVal('provider');
 		$name = $wgRequest->getVal('name');
