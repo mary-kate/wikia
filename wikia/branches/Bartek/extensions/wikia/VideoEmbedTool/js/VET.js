@@ -108,17 +108,18 @@ function VET_manualWidthInput( elem ) {
 
 
 function VET_readjustSlider( value ) {
-		if ( 400 < value ) { // too big, hide slider
+		if ( 500 < value ) { // too big, hide slider
 			if ( 'hidden' != $( 'VideoEmbedSliderThumb' ).style.visibility ) {
 				$( 'VideoEmbedSliderThumb' ).style.visibility = 'hidden';				
 				VET_slider.setValue( 200, true, true, true );
 			}
-		} else {
+		} else {			
 			if ( 'hidden' == $( 'VideoEmbedSliderThumb' ).style.visibility ) {
 				$( 'VideoEmbedSliderThumb' ).style.visibility = 'visible';				
 			}
-			var fixed_width = Math.min( 400, VET_width );
-			value = Math.max(2, Math.round( ( value * 200 ) / fixed_width ) );	
+			
+			var fixed_width = value - 100;
+			value = Math.max(2, Math.round( ( fixed_width * 200 ) / 400 ) );	
 			VET_slider.setValue( value, true, true, true );
 		}		
 }
