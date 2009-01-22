@@ -3,6 +3,7 @@ package GlbDNS::Config;
 
 use strict;
 use warnings;
+use Data::Dumper;
 
 sub load_configs {
     my $class = shift;
@@ -29,7 +30,7 @@ $config
 #        print "loaded GlbDNS::Config::$package_name\n";
         close(CONF);
         if($package_name->can('new')) {
-            $glbdns->add_config($package_name->new($mtime));
+            $package_name->new($glbdns, $mtime);
         } else {
             warn "Loaded $package_name from $file but no method 'new' found\n";
         }
@@ -43,7 +44,8 @@ $config
 
 sub new {
     my $config = bless {}, shift;
-    my $mtime  = shift;
+    my $glbdns  = shift;
+    my $mtime   = shift;
     foreach my $base ($config->domains) {
         foreach my $record (split "\n", $config->hosts($base)) {
             next unless $record;
@@ -64,21 +66,21 @@ sub new {
 
                 my $address = join(".", reverse( split(/\./, $rr->address)) ) ;
                 my $reverse = Net::DNS::RR->new("$address.in-addr.arpa. " . $rr->ttl . " IN PTR  " . $rr->name);
-                add_host($config, join(".", @address[1..3], "in-addr","arpa."), $reverse);
-                add_host($config, $base, $rr);
+                add_host($glbdns, join(".", @address[1..3], "in-addr","arpa."), $reverse);
+                add_host($glbdns, $base, $rr);
             } elsif ($rr->type eq 'CNAME') {
-                add_host($config, $base, $rr);
+                add_host($glbdns, $base, $rr);
             } elsif ($rr->type eq 'SOA') {
-                $config->{$base}->{soa} = $rr;
+                $glbdns->{hosts}->{$base}->{soa} = $rr;
                 my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = gmtime($mtime);
                 $rr->serial($year+1900 . "$mon$mday$hour$min");
             } elsif ($rr->type eq 'MX') {
-                $config->{$base}->{mx}->{$rr->exchange} = $rr;
+                $glbdns->{hosts}->{mx}->{$rr->exchange} = $rr;
             } else {
                 die Dumper($rr);
             }
         }
-
+        next;
         my $geo = $config->geo($base);
         foreach my $host (keys %$geo) {
 
@@ -136,13 +138,14 @@ sub new {
 }
 
 sub add_host {
-    my ($config, $domain, $entry) = @_;
-    if (my $list = $config->{host}->{$entry->name}) {
+    my ($glbdns, $domain, $entry) = @_;
+    if (my $list = $glbdns->{hosts}->{$entry->name}) {
         push @$list, $entry;
     } else {
-        $config->{host}->{$entry->name} = [$entry];
+        $glbdns->{hosts}->{$entry->name} = [$entry];
     }
 }
+1;
 __END__
 
 # data structure idea

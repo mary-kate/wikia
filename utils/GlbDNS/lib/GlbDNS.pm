@@ -171,8 +171,10 @@ sub get_domain {
     my @query = split(/\./, $qname);
     while(@query) {
         my $test_domain = join (".", @query) . ".";
-        if($self->{domain}->{$test_domain}) {
-            return $self->{domain}->{$test_domain};
+        warn "$test_domain";
+        if($self->{hosts}->{$test_domain}) {
+            warn "found $test_domain";
+            return $self->{hosts}->{$test_domain};
         }
         shift @query;
     }
