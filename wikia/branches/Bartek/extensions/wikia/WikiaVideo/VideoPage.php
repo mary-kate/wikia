@@ -401,7 +401,7 @@ class VideoPage extends Article {
 			case "gamevideos":
 				$code = 'custom';
 				$embed = '<embed type="application/x-shockwave-flash" width="' . $width . '" height="' . $height . '" src="http://gamevideos.1up.com/swf/gamevideos12.swf?embedded=1&amp;fullscreen=1&amp;autoplay=0&amp;src=http://gamevideos.1up.com/do/videoListXML%3Fid%3D' . $this->mId . '%26adPlay%3Dtrue" align="middle"></embed>';
-				break
+				break;
                         default: break;
                 }	
 			if( 'custom' != $code ) { 
