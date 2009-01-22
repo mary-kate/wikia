@@ -17,6 +17,8 @@ $wgExtensionCredits['other'][] = array(
 
 $dir = dirname(__FILE__).'/';
 
+define( 'VIDEO_PREVIEW', 350 );
+
 $wgExtraNamespaces[400] = "Video";
 $wgExtraNamespaces[401] = "Video_talk";
 require_once( "$IP/extensions/wikia/WikiaVideo/WikiaVideo.php" );
