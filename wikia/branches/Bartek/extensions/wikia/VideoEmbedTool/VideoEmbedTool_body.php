@@ -243,7 +243,7 @@ class VideoEmbedTool {
 
 						$video = new VideoPage( $title );
 						if ($video instanceof VideoPage) {
-							$video->loadFromPars( $provider, $id, $metadata );
+							$video->loadFromPars( $provider, $id, $metadata );					
 							$video->setName( $name );
 							$video->save();					
 						}
@@ -312,7 +312,7 @@ class VideoEmbedTool {
 
 		$ns_img = $wgContLang->getFormattedNsText( NS_VIDEO );
 
-		$tag = '[[' . $ns_img . ':'.$title->getDBkey();
+		$tag = '[[' . $ns_img . ':'.$name;
 
 		if($size != 'full') {
 			$tag .= '|thumb';
