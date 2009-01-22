@@ -143,6 +143,17 @@ sub add_host {
         $config->{host}->{$entry->name} = [$entry];
     }
 }
+__END__
 
+# data structure idea
+
+
+{
+    host => {
+        ns => { any nameserver records },
+        geo => { any geo data }
+        mx => { mx }
+        record => [$records],
+    }
 
 1;
