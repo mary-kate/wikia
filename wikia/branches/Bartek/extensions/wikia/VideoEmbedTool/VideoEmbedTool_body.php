@@ -186,7 +186,7 @@ class VideoEmbedTool {
 		} else {
 			$props['metadata'] = '';		
 		}
-		$props['code'] = $video->getEmbedCode( 'VIDEO_PREVIEW' );
+		$props['code'] = $video->getEmbedCode( VIDEO_PREVIEW );
 
 		return $this->detailsPage($props);
 	}
@@ -262,7 +262,7 @@ class VideoEmbedTool {
 						} else {
 							$props['metadata'] = '';
 						}
-						$props['code'] = $video->getEmbedCode( 'VIDEO_PREVIEW' );
+						$props['code'] = $video->getEmbedCode( VIDEO_PREVIEW );
 
 						return $this->detailsPage($props);
 					} else {
