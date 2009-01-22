@@ -182,7 +182,7 @@ function VET_show(e) {
 
 	var element = document.createElement('div');
 	element.id = 'VET_div';
-	element.style.width = '722px';
+	element.style.width = '872px';
 	element.style.height = '587px';
 	element.innerHTML = html;
 
