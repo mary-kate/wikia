@@ -2,7 +2,7 @@
 	height: 507px;
 	padding: 25px 10px 10px;
 	position: relative;
-	width: 872px;
+	width: 812px;
 }
 #VideoEmbedBorder {
 	background-color: #000;
@@ -12,7 +12,7 @@
 	opacity: .6;
 	position: absolute;
 	top: 0;
-	width: 870px;
+	width: 810px;
 }
 #VideoEmbedBody {
 	background: #FFF;
@@ -21,7 +21,7 @@
 	overflow: hidden;
 	padding: 15px;
 	position: relative;
-	width: 820px;
+	width: 760px;
 	color: #000 !important;
 }
 #VideoEmbed h1 {
