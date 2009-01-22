@@ -375,7 +375,7 @@ class VideoPage extends Article {
                                 break;
 			case "sevenload":
 				$code = 'custom';
-				$embed = '<script type="text/javascript" src="http://en.sevenload.com/pl/'.$this->mId.'/'.$width.'x'.$height.'"></script>';
+				$embed = '<object style="visibility: visible;" id="sevenloadPlayer_' . $this->mId . '" data="http://static.sevenload.com/swf/player/player.swf" type="application/x-shockwave-flash" height="' . $height . '" width="' . $width . '"><param value="always" name="allowScriptAccess"><param value="true" name="allowFullscreen"><param value="configPath=http%3A%2F%2Fflash.sevenload.com%2Fplayer%3FportalId%3Den%26autoplay%3D0%26itemId%3D' . $this->mId . '&amp;locale=en_US&amp;autoplay=0&amp;environment=" name="flashvars"></object>';
                         default: break;
                 }	
 			if( 'custom' != $code ) { 
