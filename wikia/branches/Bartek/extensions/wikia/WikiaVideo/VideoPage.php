@@ -188,6 +188,21 @@ class VideoPage extends Article {
 				return true;
 			}
 		}
+
+		$text = strpos( $fixed_url, "GAMEVIDEOS.1UP.COM" );
+		if( false !== $text ) { // gamevideos
+			$provider = self::V_GAMEVIDEOS;
+			$parsed = split( "/", $url );			
+			if( is_array( $parsed ) ) {
+				$id = array_pop( $parsed );				
+				$this->mProvider = $provider;
+				$this->mId = array_pop( $parsed );
+				array_shift( $parsed_id );
+				$this->mData = array();					
+				return true;
+			}
+		}
+
 		return false;
 	}
 
@@ -203,6 +218,9 @@ class VideoPage extends Article {
 
 			case "sevenload":
 				return (500 / 408);
+				break;
+			case "gamevideos":
+				return (500 / 319);
 				break;
 			default:
 				return 1;
@@ -252,6 +270,9 @@ class VideoPage extends Article {
 			case 'sevenload':		
 				$metadata = $this->mProvider . ',' . $this->mId . ',' . $this->mData[0];
 				break;			
+			case 'gamevideos':
+				$metadata = $this->mProvider . ',' . $this->mId . ',';				
+				break;
 			default: 
 				$metadata = '';
 				break;
@@ -376,6 +397,11 @@ class VideoPage extends Article {
 			case "sevenload":
 				$code = 'custom';
 				$embed = '<object style="visibility: visible;" id="sevenloadPlayer_' . $this->mId . '" data="http://static.sevenload.com/swf/player/player.swf" type="application/x-shockwave-flash" height="' . $height . '" width="' . $width . '"><param value="always" name="allowScriptAccess"><param value="true" name="allowFullscreen"><param value="configPath=http%3A%2F%2Fflash.sevenload.com%2Fplayer%3FportalId%3Den%26autoplay%3D0%26itemId%3D' . $this->mId . '&amp;locale=en_US&amp;autoplay=0&amp;environment=" name="flashvars"></object>';
+				break;
+			case "gamevideos":
+				$code = 'custom';
+				$embed = '<embed type="application/x-shockwave-flash" width="' . $width . '" height="' . $height . '" src="http://gamevideos.1up.com/swf/gamevideos12.swf?embedded=1&amp;fullscreen=1&amp;autoplay=0&amp;src=http://gamevideos.1up.com/do/videoListXML%3Fid%3D' . $this->mId . '%26adPlay%3Dtrue" align="middle"></embed>';
+				break
                         default: break;
                 }	
 			if( 'custom' != $code ) { 
