@@ -330,7 +330,7 @@ class VideoPage extends Article {
 		}
 		
 		// todo make those categories more flexible
-		$this->doEdit( "[[Category:Videos]]", $desc, EDIT_SUPPRESS_RC );			
+		$this->doEdit( "[[Category:Videos]]", $desc );			
 
 		$dbw->immediateCommit();
 		
