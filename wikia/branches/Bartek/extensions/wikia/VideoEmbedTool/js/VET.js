@@ -428,7 +428,7 @@ function VET_displayDetails(responseText) {
                         }
                 });
 
-                VET_slider.setValue(200, true);
+                VET_slider.setValue(100, true);
 
 	if ($( 'VET_error_box' )) {
 		alert( $( 'VET_error_box' ).innerHTML );
