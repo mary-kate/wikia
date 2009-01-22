@@ -1,6 +1,6 @@
 <?php
 /*
- * @author Bartek Łapiński
+ * @author Bartek Łapiński 
  */
 
 if(!defined('MEDIAWIKI')) {
@@ -11,8 +11,8 @@ if(!defined('MEDIAWIKI')) {
 // for now it's more a copy of VideoEmbedTool files
 $wgExtensionCredits['other'][] = array(
         'name' => 'Video Embed Tool',
-        'author' => 'Bartek Łapiński',
-	'version' => '0.25',
+        'author' => 'Bartek Łapiński, Inez Korczyński',
+	'version' => '0.51',
 );
 
 $dir = dirname(__FILE__).'/';
