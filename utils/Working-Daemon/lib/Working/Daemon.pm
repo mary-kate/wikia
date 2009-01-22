@@ -8,7 +8,7 @@ use File::Copy;
 use Getopt::Long;
 use Carp;
 
-our $VERSION = 0.29;
+our $VERSION = 0.30;
 our $SVN = 4677;
 our %config;
 
@@ -25,17 +25,19 @@ sub exit_success { exit(0) }
 
 sub exit_error { exit(1) }
 
-sub default_options { return (
-                          "help"       => "This help",
-                          "version"    => "Version number",
-                          "loglevel=i" =>"The higher the loglevel, the more detailed messages. Default to 0",
-                          "daemon!"    => "Set to --no-daemon if you don't want it to daemonize. Default is true",
-                          "chroot!"    => "Set to --no-chroot if you don't want it to chroot. Default is true",
-                          "foreground" => "Inverse of daemonize, default is off",
-                          "user=s"     => "User to run this app as. Default is 'nobody'",
-                          "group=s"    => "Group to run this app as. Default is 'nobody'",
-                          "pidfile=s"  => "Where to store the pidfile. Default is /var/run/\$name.pid",
-                          "name=s"     => "Name of this app") }
+sub default_options {
+    return (
+        "help"       => undef() => "This help",
+        "version"    => undef() => "Version number",
+        "loglevel=i" => undef() => "The higher the loglevel, the more detailed messages. Default to 0",
+        "daemon!"    => undef() => "Set to --no-daemon if you don't want it to daemonize. Default is true",
+        "chroot!"    => undef() => "Set to --no-chroot if you don't want it to chroot. Default is true",
+        "foreground" => undef() => "Inverse of daemonize, default is off",
+        "user=s"     => undef() => "User to run this app as. Default is 'nobody'",
+        "group=s"    => undef() => "Group to run this app as. Default is 'nobody'",
+        "pidfile=s"  => undef() => "Where to store the pidfile. Default is /var/run/\$name.pid",
+        "name=s"     => undef() => "Name of this app")
+}
 
 
 sub tmpdir {
@@ -66,12 +68,18 @@ sub do_action {
     my $action = shift @ARGV || $self->default_action;
     my $action_method = "action_$action";
     $self->print_version if($self->options->{version});
+    if ($self->options->{help}) {
+        $self->show_help;
+        exit;
+    }
+
     if($self->can($action_method)) {
         my $exit_value = $self->$action_method;
         exit $exit_value unless ($action eq 'start' || $action eq 'restart');
     } else {
         print STDERR "Unknown command '$action'\n";
         $self->show_help;
+        exit;
     }
 }
 
@@ -114,11 +122,20 @@ sub show_help {
 
 sub parse_options {
     my $self = shift;
-    my %args = @_;
-    my %default = $self->default_options;
-    my %option_keys = (%default, %args);
+
     my %options;
+    my %option_keys;
+    my @options = ($self->default_options, @_);
+    while(@options) {
+        my $option = shift @options;
+        my $default_value = shift @options;
+        my $help = shift @options;
+        $option_keys{$option} = $help;
+        my ($key) = $option =~/(\w+)/;
+        $options{$key} = $default_value if(defined $default_value);
+    }
     GetOptions(\%options, keys %option_keys);
+    print Dumper(\%options);
     $self->options(\%options);
     $self->options_desc(\%option_keys);
     $self->assign_options(qw(user group name chroot foreground daemon pidfile));
@@ -530,10 +547,10 @@ Working::Daemon - Perl extension for turning your script inta daemon.
   our $VERSION = 0.45;
   my $daemon = Working::Daemon->new();
   $daemon->name("testdaemon");
-  $daemon->standard("bool"      => "Test if you can set bools",
-                    "integer=i" => "Integer settings",
-                    "string=s"  => "String setting",
-                    "multi=s%"  => "Multiset variable");
+  $daemon->standard("bool"      => 1 => "Test if you can set bools",
+                    "integer=i" => 2323 => "Integer settings",
+                    "string=s"  => string => "String setting",
+                    "multi=s%"  => undef() => "Multiset variable");
 
 Or
 
