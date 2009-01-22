@@ -194,10 +194,8 @@ class VideoPage extends Article {
 			$provider = self::V_GAMEVIDEOS;
 			$parsed = split( "/", $url );			
 			if( is_array( $parsed ) ) {
-				$id = array_pop( $parsed );				
 				$this->mProvider = $provider;
 				$this->mId = array_pop( $parsed );
-				array_shift( $parsed_id );
 				$this->mData = array();					
 				return true;
 			}
