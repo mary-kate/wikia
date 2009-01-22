@@ -3,9 +3,9 @@ use warnings;
 use Net::DNS::RR;
 use Data::Dumper;
 use GlbDNS::Config;
-package GlbDNS::Config;
+use base 'GlbDNS::Config';
 
-sub domains { "example.net." }
+sub domains { ("example.net.") }
 
 sub ns { return q{
 

@@ -19,8 +19,12 @@ my $gi = Geo::IP->open_type( GEOIP_CITY_EDITION_REV1, GEOIP_STANDARD);
 sub new {
     my $class = shift;
     my $self = bless {}, $class;
+    my $daemon = shift;
+    $self->{name} = $daemon->name;
     $self->{dns} = Net::DNS::Nameserver->new(
         Verbose => $main::config{debug},
+        LocalAddr => $daemon->options->{address},
+        LocalPort => $daemon->options->{port},
         ReplyHandler => sub { $self->request(@_) },
         );
 
@@ -31,6 +35,10 @@ sub add_config {
     my $self = shift;
     my $config = shift;
     $self->{config}->{ref($config)} = $config;
+
+    foreach my $domain ($config->domains) {
+        $self->{domain}->{$domain} = $config;
+    }
 
     foreach my $check (values %{$config->{_check}}) {
         $status{$check->{ip}} = 0;
@@ -61,11 +69,11 @@ sub check_status {
 
 sub start {
     my $self = shift;
-    $0 = "$main::config{name} worker - waiting for status checks before accepting requests";
-    while(keys %stats && sum(values %status) == 0) {
+    $0 = "$self->{name} worker - waiting for status checks before accepting requests";
+    while(keys %status && sum(values %status) == 0) {
         sleep 1;
     }
-    $0 = "$main::config{name} worker - accepting requests";
+    $0 = "$self->{name} worker - accepting requests";
     $self->{dns}->main_loop;
 }
 
@@ -79,7 +87,6 @@ sub request {
 
     return ("NXDOMAIN", [],[],[],{}) unless($domain);
 
-#    $query->print;
     if ($qtype eq 'ANY' || $qtype eq 'A' || $qtype eq 'PTR') {
         ($rcode, $ans) = $self->lookup($qname, $domain, $peerhost);
     }
@@ -117,7 +124,9 @@ sub lookup {
     my $domain = shift;
     my $peerhost = shift;
 
+    warn "looking for geo $domain $qname";
     if (my $geo = $domain->{geo}->{$qname}) {
+        warn "found geo";
         my $record = $gi->record_by_addr($peerhost);
         my ($lat, $lon) = (0,0);
         if($record) {
@@ -137,7 +146,9 @@ sub lookup {
             next if ($geo->{$server}->{radius} &&
                      $geo->{$server}->{radius} < $distance{$server});
 
-            foreach my $host (@{$geo->{$server}->{hosts}}) {
+            foreach my $host_data (@{$geo->{$server}->{hosts}}) {
+                my $host = $host_data->[0];
+                my $chance = $host_data->[1];
                 my $key = $host->type eq 'A' ? $host->address : $host->cname;
                 push @answer, $host if (!exists $status{$key} || $status{$key});
 
@@ -146,6 +157,7 @@ sub lookup {
         }
 
     }
+
 
     if (my $reply = $domain->{host}->{$qname}) {
         return ('NOERROR', $reply);
@@ -157,17 +169,14 @@ sub get_domain {
     my $self = shift;
     my $qname = shift;
     my @query = split(/\./, $qname);
-
-    my $domain;
     while(@query) {
-        foreach my $config_file (values %{$self->{config}}) {
-
-            last if $domain = $config_file->{join(".",@query) . "."};
+        my $test_domain = join (".", @query) . ".";
+        if($self->{domain}->{$test_domain}) {
+            return $self->{domain}->{$test_domain};
         }
-        last if $domain;
         shift @query;
     }
-    return $domain;
+    return;
 }
 
 
