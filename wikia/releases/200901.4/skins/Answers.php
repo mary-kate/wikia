@@ -70,11 +70,15 @@ class AnswersTemplate extends MonacoTemplate {
 		<?php $this->html('headlinks') ?>
 	        <link rel="stylesheet" type="text/css" href="<?=$wgStylePath?>/answers/css/monobook_modified.css?<?=$wgStyleVersion?>" />
 	        <link rel="stylesheet" type="text/css" href="<?=$wgStylePath?>/answers/css/reset_modified.css?<?=$wgStyleVersion?>" />
-		<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.5.2/build/yahoo-dom-event/yahoo-dom-event.js"></script> 
+		<link type="text/css" rel="stylesheet" href="http://yui.yahooapis.com/2.6.0/build/autocomplete/assets/skins/sam/autocomplete.css">
+
+		<script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/yahoo-dom-event/yahoo-dom-event.js"></script> 
+		<script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/datasource/datasource-min.js"></script>
+		<script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/connection/connection-min.js"></script>
+		<script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/autocomplete/autocomplete-min.js"></script>
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3/jquery.min.js"></script>
 		<script type="text/javascript" src="<?=$wgStylePath?>/answers/js/main.js?<?=$wgStyleVersion?>"></script>
-		
-		
+
 		<title><?php $this->text('pagetitle') ?></title>
 		<?php $this->html('csslinks') ?>
 
@@ -115,12 +119,16 @@ wfRunHooks('GetHTMLAfterBody', array (&$this));
         <div id="answers_header" class="reset">
 		<a href="/" id="wikianswers_logo"><img src="/skins/answers/images/wikianswers_logo.png" /></a>
 
+		<div class="yui-skin-sam">
+	
 		<div id="answers_ask">
 			<form method="get" action="" onsubmit="return false" name="ask_form" id="ask_form">
 				<input type="text" id="answers_ask_field" value="<?=htmlentities(wfMsg("ask_a_question"))?>" class="alt" /><span>?</span>
-				<a href="javascript:void(0);" id="ask_button" class="huge_button green"><div></div>Ask</a>
+				<a href="javascript:void(0);" id="ask_button" class="huge_button green"><div></div><?= wfMsg("ask_button") ?></a>
 			</form>
 		</div><?/*answers_ask*/?>
+		<div id="answers_suggest"></div>
+		</div>
 
 		<?php echo $this->execUserLinks()?>
 
@@ -213,7 +221,7 @@ wfRunHooks('GetHTMLAfterBody', array (&$this));
 			} 
 			?>
 			<div>
-			<span>Question asked by <a href="<?= $url ?>"><?= $author["user_name"] ?></a></span>
+			<span><?= wfMsg("question_asked_by")?> <a href="<?= $url ?>"><?= $author["user_name"] ?></a></span>
 			<a href="<?= $url ?>"><?= $author["avatar"]?></a>
 			</div>
 			<div id="question_tail"></div>
@@ -272,6 +280,7 @@ wfRunHooks('GetHTMLAfterBody', array (&$this));
 				<div class="inline_form_inside">
 					<form name="register" method="post" id="register" action="<?= $submit_url ?>">
 						<?= $captcha ?>
+						<div style="padding: 10px 0 0 15px;"><b><?= wfMsg("createaccount") ?></b> | <a href="<?php echo htmlspecialchars(Skin::makeSpecialUrl( 'Userlogin', 'returnto=' . $wgTitle->getPrefixedURL()) )?>"><?= wfMsg("log_in") ?></a></div>
 						<table>
 						<tr>
 							<td><?= wfMsg("yourname") ?></td>
@@ -290,15 +299,31 @@ wfRunHooks('GetHTMLAfterBody', array (&$this));
 							<td><input type="password" value="" name="wpRetype" id="wpRetype"></td>
 						</tr>
 						</table>
+						<div style="padding: 0 0 10px 15px;"><?php $this->msgWiki('prefs-help-terms'); ?></div>
 						<input type="hidden" name="wpRemember" value="1" id="wpRemember"/>
 						<div class="toolbar">
 							<input type='submit' name="wpCreateaccount" id="wpCreateaccount" value="<?= wfMsg("createaccount") ?>">
+							<a href="#" class="skip_link"><?= wfMsg("skip_this") ?></a>
 						</div>
 					</form>
 				</div>
 			</div>
 			<?php
 		}
+		
+		if ($wgUser->isLoggedin() && !$answer_page->isArticleAnswered() && $_GET['state'] == 'registered') {
+		?>
+			<div class="inline_form reset">
+				<h1><?= wfMsg("inline-welcome") ?>, <?= $wgUser->getName() ?></h1>
+				<div class="inline_form_inside">
+					<div style="padding: 10px;">
+					Thanks for the rockin' question!
+					</div>
+				</div>
+			</div>
+
+		<?
+		}	
 		if ($is_question) {
 		?>
 		<table id="bottom_ads"> 
@@ -391,7 +416,7 @@ wfRunHooks('GetHTMLAfterBody', array (&$this));
 			if ($wgUser->isLoggedIn()) {
 			?>
 				<div id="toolbox_inside">
-					<h6>Wikianswers toolbox</h6>
+					<h6><?= wfMsg("answers_toolbox")?></h6>
 					
 					<table>
 					<tr>
@@ -420,9 +445,7 @@ wfRunHooks('GetHTMLAfterBody', array (&$this));
 			?>
 				<div id="toolbox_inside">
 					<img src="/skins/answers/images/mr_wales.jpg" class="portrait" />
-					<i>"Wikianswers leverages the unique characterstics of a wiki to form the very best answers to any question."</i><br /><br />
-					<b>Jimmy Wales</b><br />
-					founder of Wikipedia and Wikianswers
+					<?= wfMsgExt( 'toolbox_anon_message', "parse" )?>
 				</div>
 			<?php
 			}
