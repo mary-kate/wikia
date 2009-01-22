@@ -5,7 +5,7 @@ class EditEnhancements {
 	private $buttons;
 	private $checkboxes;
 	private $summary;
-
+	private $action;
 	private $tmpl;
 
 	function __construct($action) {
@@ -22,7 +22,7 @@ class EditEnhancements {
 			$wgHooks['EditPage::showEditForm:checkboxes'][] = array(&$this, 'showCheckboxes');
                         if($this->action == 'edit') {
                                 $wgHooks['GetHTMLAfterBody'][] = array(&$this, 'editPageJS');
-                        } else if ($action == 'submit') {
+                        } else if ($this->action == 'submit') {
                                 $wgHooks['GetHTMLAfterBody'][] = array(&$this, 'previewJS');
                         }
 			$wgHooks['EditForm::MultiEdit:Form'][] = array(&$this, 'showToolbar');
