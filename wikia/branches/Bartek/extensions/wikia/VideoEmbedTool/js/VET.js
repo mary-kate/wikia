@@ -417,21 +417,15 @@ function VET_displayDetails(responseText) {
                 VET_slider = YAHOO.widget.Slider.getHorizSlider('VideoEmbedSlider', 'VideoEmbedSliderThumb', 0, 200);
                 VET_slider.initialRound = true;
                 VET_slider.getRealValue = function() {
-                        return Math.max(2, Math.round(this.getValue() * (thumbSize[0] / 200)));
+                        return ( Math.max( 2, Math.round( this.getValue() * 2 ) ) + 100 );
                 }
                 VET_slider.subscribe("change", function(offsetFromStart) {
-                        if ( 'hidden' == $( 'VideoEmbedSliderThumb' ).style.visibility ) {
-                                $( 'VideoEmbedSliderThumb' ).style.visibility = 'visible';
-                        }
                         if (VET_slider.initialRound) {
-                                $('VideoEmbedManualWidth').value = '';
+                                $('VideoEmbedManualWidth').value = 300;
                                 VET_slider.initialRound = false;
                         } else {
                                 $('VideoEmbedManualWidth').value = VET_slider.getRealValue();
                         }
-			// set the start value
-                        $('VideoEmbedManualWidth').value = 300;
-			// get ratio for that video provider
                 });
 
                 VET_slider.setValue(200, true);
