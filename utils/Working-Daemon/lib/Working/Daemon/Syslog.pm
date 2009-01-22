@@ -21,3 +21,9 @@ sub do_log {
     syslog($prio, $msg) || die "$!";
     $self->NEXT::do_log($prio, $msg);
 }
+
+sub action_stop {
+    my $self = shift;
+    $self->NEXT::action_stop(@_);
+    closelog();
+}
