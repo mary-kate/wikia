@@ -249,10 +249,21 @@ class VideoEmbedTool {
 						}
 					} else if($type == 'existing') {
 						header('X-screen-type: existing');
-						$file = wfFindFile(Title::newFromText($name, 6));
+						$title = Title::makeTitle( NS_VIDEO, $name );						
+						$video = new VideoPage( $title );
+						
 						$props = array();
-						$props['file'] = $file;
-						$props['mwname'] = $name;
+						$video->load();
+						$props['provider'] = $video->getProvider();
+						$props['id'] = $video->getVideoId();
+						$data = $video->getData();
+						if (is_array( $data ) ) {
+							$props['metadata'] = implode( ",", $video->getData() );
+						} else {
+							$props['metadata'] = '';
+						}
+						$props['code'] = $video->getEmbedCode( '250' );
+
 						return $this->detailsPage($props);
 					} else {
 						header('X-screen-type: conflict');
