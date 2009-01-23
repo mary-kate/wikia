@@ -50,7 +50,7 @@ sub geo {
     );
 
     my %sjc_images = (%sjc, radius => 500, servers => { "216.151.156.12" => 1 });;
-    my %sjc_html   = (%sjc, servers => { 216.224.121.143 => 1 });;
+    my %sjc_html   = (%sjc, servers => { "216.224.121.143" => 1 });;
 
     # locating this one in dallas
     my %panther = (lon => "-97",
@@ -63,6 +63,10 @@ sub geo {
             "panther" => \%panther,
 #            "sjc"     => \%sjc_images,
         },
+        "wikis.glb.wikia.net" => {
+            "lon"  => \%lon,
+            "sjc"  => \%sjc_html,
+        }
     };
 }
 
@@ -71,7 +75,7 @@ sub hosts {q{
 600 IN SOA ns-lon-2.wikia-glb.net. dnsmaster.wikia-inc.com. 2008121101 1200 120 1209600 3600
 
 images   600 IN CNAME g1.panthercdn.com
-
+wikis    600 IN A 216.224.121.143
 }}
 
 
