@@ -201,6 +201,20 @@ class VideoPage extends Article {
 			}
 		}
 
+		$text = strpos( $fixed_url, "5MIN.COM" );
+		if( false !== $text ) { // 5min
+			$provider = self::V_5MIN;
+			$parsed = split( "/", $url );			
+			if( is_array( $parsed ) ) {
+				$this->mProvider = $provider;
+				$ids = array_pop( $parsed );
+				$parsed_twice = split( "-", $ids );
+				$this->mId = array_pop( $parsed_twice );
+				$this->mData = array();					
+				return true;
+			}
+		}
+
 		return false;
 	}
 
@@ -208,17 +222,18 @@ class VideoPage extends Article {
 		switch( $this->mProviders[$this->mProvider] ) {
 			case "metacafe": 
 				return (40 / 35);
-				break;
-			
+				break;			
 			case "youtube": 
 				return (425 / 355);
 				break;
-
 			case "sevenload":
 				return (500 / 408);
 				break;
 			case "gamevideos":
 				return (500 / 319);
+				break;
+			case "5min":
+				return (480 / 401);
 				break;
 			default:
 				return 1;
@@ -260,16 +275,13 @@ class VideoPage extends Article {
 	
 		switch( $this->mProviders[$this->mProvider] ) {
 			case 'metacafe':		
+			case 'sevenload':					
 				$metadata = $this->mProvider . ',' . $this->mId . ',' . $this->mData[0];
 				break;
 			case 'youtube':		
-				$metadata = $this->mProvider . ',' . $this->mId . ',';
-				break;
-			case 'sevenload':		
-				$metadata = $this->mProvider . ',' . $this->mId . ',' . $this->mData[0];
-				break;			
 			case 'gamevideos':
-				$metadata = $this->mProvider . ',' . $this->mId . ',';				
+			case '5min':		
+				$metadata = $this->mProvider . ',' . $this->mId . ',';
 				break;
 			default: 
 				$metadata = '';
@@ -399,6 +411,10 @@ class VideoPage extends Article {
 			case "gamevideos":
 				$code = 'custom';
 				$embed = '<embed type="application/x-shockwave-flash" width="' . $width . '" height="' . $height . '" src="http://gamevideos.1up.com/swf/gamevideos12.swf?embedded=1&amp;fullscreen=1&amp;autoplay=0&amp;src=http://gamevideos.1up.com/do/videoListXML%3Fid%3D' . $this->mId . '%26adPlay%3Dtrue" align="middle"></embed>';
+				break;
+			case "5min":
+				$code = 'custom';
+				$embed = "<object width='{$width}' height='{$height}' id='FiveminPlayer' classid='clsid:d27cdb6e-ae6d-11cf-96b8-444553540000'><param name='allowfullscreen' value='true'/><param name='allowScriptAccess' value='always'/><param name='movie' value='http://www.5min.com/Embeded/{$this->mId}/'/><embed src='http://www.5min.com/Embeded/{$this->mId}/' type='application/x-shockwave-flash' width='{$width}' height='{$height}' allowfullscreen='true' allowScriptAccess='always'></embed></object>";
 				break;
                         default: break;
                 }	
