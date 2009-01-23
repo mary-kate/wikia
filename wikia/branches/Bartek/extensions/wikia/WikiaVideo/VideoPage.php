@@ -251,21 +251,22 @@ class VideoPage extends Article {
 		$this->mName = $name;
 	}
 
-	public function makeUrl() {
+	public function getUrl() {
 		switch( $this->mProviders[$this->mProvider] ) {
 			case "metacafe": 
-				break;			
+				return 'http://www.metacafe.com/watch/' . $this->mId . '/' . $this->mData[0];
 			case "youtube": 
-				break;
+				return 'http://www.youtube.com/watch?v=' . $this->mId;
 			case "sevenload":
-				break;
+				return ''
 			case "gamevideos":
+				return 'http://gamevideos.1up.com/video/id/' . $this->mId;
 				break;
 			case "5min":
+				return '';
 				break;
 			default:
-				return ;
-				break;
+				return '';
 		}
 
 	}
