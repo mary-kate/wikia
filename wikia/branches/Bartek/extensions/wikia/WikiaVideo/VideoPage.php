@@ -201,6 +201,19 @@ class VideoPage extends Article {
 			}
 		}
 
+
+		$text = strpos( $fixed_url, "VIMEO.COM" );
+		if( false !== $text ) { // vimeo
+			$provider = self::V_VIMEO;
+			$parsed = split( "/", $url );			
+			if( is_array( $parsed ) ) {
+				$this->mProvider = $provider;
+				$this->mId = array_pop( $parsed );
+				$this->mData = array();					
+				return true;
+			}
+		}
+
 		$text = strpos( $fixed_url, "5MIN.COM" );
 		if( false !== $text ) { // 5min
 			$provider = self::V_5MIN;
@@ -299,7 +312,8 @@ class VideoPage extends Article {
 				break;
 			case 'youtube':		
 			case 'gamevideos':
-			case '5min':		
+			case '5min':
+			case 'vimeo':		
 				$metadata = $this->mProvider . ',' . $this->mId . ',';
 				break;
 			default: 
@@ -434,6 +448,10 @@ class VideoPage extends Article {
 			case "5min":
 				$code = 'custom';
 				$embed = "<object width='{$width}' height='{$height}' id='FiveminPlayer' classid='clsid:d27cdb6e-ae6d-11cf-96b8-444553540000'><param name='allowfullscreen' value='true'/><param name='allowScriptAccess' value='always'/><param name='movie' value='http://www.5min.com/Embeded/{$this->mId}/'/><embed src='http://www.5min.com/Embeded/{$this->mId}/' type='application/x-shockwave-flash' width='{$width}' height='{$height}' allowfullscreen='true' allowScriptAccess='always'></embed></object>";
+				break;
+			case 'vimeo':
+				$code = 'custom';
+				$embed = '<object width="'.$width.'" height="'.$height.'"><param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id='.$this->mId.'&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=&amp;fullscreen=1" /><embed src="http://vimeo.com/moogaloop.swf?clip_id='.$this->mId.'&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=&amp;fullscreen=1" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="'.$width.'" height="'.$height.'"></embed></object>';
 				break;
                         default: break;
                 }	
