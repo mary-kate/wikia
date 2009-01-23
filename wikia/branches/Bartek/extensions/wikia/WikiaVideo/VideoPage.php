@@ -239,7 +239,6 @@ class VideoPage extends Article {
 				return 1;
 				break;
 		}
-
 	}
 
 	function loadFromPars( $provider, $id, $data ) {
@@ -250,6 +249,25 @@ class VideoPage extends Article {
 
 	public function setName( $name ) {
 		$this->mName = $name;
+	}
+
+	public function makeUrl() {
+		switch( $this->mProviders[$this->mProvider] ) {
+			case "metacafe": 
+				break;			
+			case "youtube": 
+				break;
+			case "sevenload":
+				break;
+			case "gamevideos":
+				break;
+			case "5min":
+				break;
+			default:
+				return ;
+				break;
+		}
+
 	}
 
 	public function getProvider() {
