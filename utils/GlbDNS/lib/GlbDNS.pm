@@ -89,7 +89,7 @@ sub request {
     my $domain = $self->get_host($host->{domain});
 
     if ($host->{CNAME}) {
-        push @$ans, $self->lookup($qname, $qtype, $host, $peerhost);
+        push @$ans, $self->lookup($qname, "CNAME", $host, $peerhost);
         $qname = $host->{CNAME}->[0]->cname;
         $host = $self->{hosts}->{$qname};
     }
