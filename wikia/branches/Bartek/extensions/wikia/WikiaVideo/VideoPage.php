@@ -248,6 +248,9 @@ class VideoPage extends Article {
 			case "5min":
 				return (480 / 401);
 				break;
+			case "vimeo":
+				return (400 / 225);
+				break;
 			default:
 				return 1;
 				break;
