@@ -454,6 +454,7 @@ class VideoHistoryList {
 		global $wgOut, $wgUser, $wgLang;
 		
 		$dbr = wfGetDB( DB_SLAVE );		
+		$sk = $wgUser->getSkin();
 
 		if ( $iscur ) {
 			// load from current db
@@ -473,9 +474,13 @@ class VideoHistoryList {
 			if ( 0 == $dbr->numRows( $history ) ) {
 				return '';
 			} else {
-				$s = '';				
 				$row = $dbr->fetchObject( $history );
-				return '<tr>' . '<td>' . $wgLang->timeAndDate( $row->img_timestamp, true ) . '</td>' . '<td>' . $row->img_user_text .'</td></tr>';
+				$user = $row->img_user;
+				$usertext = $row->img_user_text;
+				$line = '<tr>' . '<td>' . $wgLang->timeAndDate( $row->img_timestamp, true ) . '</td>' . '<td>';				
+				$line .= $sk->userLink( $user, $usertext ) . " <span style='white-space: nowrap;'>" . $sk->userToolLinks( $user, $usertext ) . "</span>";
+				$line .= '</td></tr>';
+				return $line;
 			}			
 		} else {
 			// load from old video db
@@ -494,7 +499,11 @@ class VideoHistoryList {
 					);
 			$s = '';
 			while( $row = $dbr->fetchObject( $history ) ) {
-				$s .= '<tr>' . '<td>' . $wgLang->timeAndDate( $row->img_timestamp, true ) . '</td>' . '<td>' . $row->img_user_text .'</td></tr>';	
+				$user = $row->img_user;
+				$usertext = $row->img_user_text;	
+				$s .= '<tr>' . '<td>' . $wgLang->timeAndDate( $row->img_timestamp, true ) . '</td>' . '<td>';
+				$s .= $sk->userLink( $user, $usertext ) . " <span style='white-space: nowrap;'>" . $sk->userToolLinks( $user, $usertext ) . "</span>";
+				$s .= '</td></tr>';	
 			}			
 			return $s;
 		}
