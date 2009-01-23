@@ -6,12 +6,11 @@ use Net::DNS::RR;
 use Data::Dumper;
 use base qw(GlbDNS::Config);
 
-sub domains { "wikia-glb.net." }
+sub domains { "wikia-glb.net" }
 
 sub ns { return q{
 
-60 IN NS ns-lon-2.wikia-glb.net.
-60 IN NS nj.wikia-glb.net.
+60 IN NS ns-lon-2.wikia-glb.net
 
 }}
 

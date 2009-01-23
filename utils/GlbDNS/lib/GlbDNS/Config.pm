@@ -56,7 +56,6 @@ sub new {
             } else {
                 unshift @record, $base;
             }
-
             my $rr = Net::DNS::RR->new(join " ", @record);
 
             if ($rr->type eq 'A') {
@@ -71,16 +70,18 @@ sub new {
             } elsif ($rr->type eq 'CNAME') {
                 add_host($glbdns, $base, $rr);
             } elsif ($rr->type eq 'SOA') {
-                $glbdns->{hosts}->{$base}->{soa} = $rr;
+                $glbdns->{hosts}->{$rr->name}->{SOA} = $rr;
                 my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = gmtime($mtime);
                 $rr->serial($year+1900 . "$mon$mday$hour$min");
             } elsif ($rr->type eq 'MX') {
-                $glbdns->{hosts}->{mx}->{$rr->exchange} = $rr;
+                $glbdns->{hosts}->{$rr->name}->{MX}->{$rr->exchange} = $rr;
             } else {
                 die Dumper($rr);
             }
+            $glbdns->{hosts}->{$rr->name}->{domain} = $base;
         }
-        next;
+
+        if(0) {
         my $geo = $config->geo($base);
         foreach my $host (keys %$geo) {
 
@@ -120,17 +121,14 @@ sub new {
                     }
                 }
             }
-        }
+        }}
 
-        foreach my $domain (keys %$config) {
-            next if($domain eq '_check');
-            my $domains = $config->{$domain}->{ns} = [];
-            foreach my $record (split "\n", $config->ns($domain)) {
-                next unless $record;
-                my $rr = Net::DNS::RR->new($domain . " " . $record);
-                die unless $rr->type eq 'NS';
-                push @$domains, $rr;
-            }
+        my $ns = $glbdns->{hosts}->{$base}->{NS} = [];
+        foreach my $record (split "\n", $config->ns($base)) {
+            next unless $record;
+            my $rr = Net::DNS::RR->new($base . " " . $record);
+            die unless $rr->type eq 'NS';
+            push @$ns, $rr;
         }
     }
 
@@ -139,10 +137,10 @@ sub new {
 
 sub add_host {
     my ($glbdns, $domain, $entry) = @_;
-    if (my $list = $glbdns->{hosts}->{$entry->name}) {
+    if (my $list = $glbdns->{hosts}->{$entry->name}->{$entry->type}) {
         push @$list, $entry;
     } else {
-        $glbdns->{hosts}->{$entry->name} = [$entry];
+        $glbdns->{hosts}->{$entry->name}->{$entry->type} = [$entry];
     }
 }
 1;
