@@ -1,0 +1,83 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use Net::DNS::RR;
+use Data::Dumper;
+use base qw(GlbDNS::Config);
+
+sub domains { "wikia-glb.net" }
+
+sub ns { return q{
+
+60 IN NS ns-sjc-1.wikia.net
+60 IN NS ns-nj-1.wikia.net
+60 IN NS ns-lon-1.wikia.net
+60 IN NS ns-lon-2.wikia.net
+
+}}
+
+#IN NS ns-nj-1.wikia.net.
+#IN NS ns-lon-1.wikia.net.
+
+sub geo {
+
+    my %iowa = ( lon => '-91',
+                 lat => '42',
+                 servers => {'208.68.167.146' => 1},
+                 ttl => 60,
+                 #check_type => 'http',
+                 url => 'lvscheck.html',
+                 radius => 750,
+                 expect => 'is okay',
+    );
+
+    my %lon = ( lon => '0',
+                lat => '51',
+                servers => {'83.223.112.142' => 10, '83.223.112.138' => 20},
+                ttl => 60,
+                check_type => 'http',
+                url => 'lvscheck.html',
+                expect => 'is okay',
+    );
+    my %sjc = ( lon => "-121",
+                lat => '37',
+                ttl => 60,
+                check_type => 'http',
+                url => 'lvscheck.html',
+                expect => 'is okay',
+    );
+
+    my %sjc_images = (%sjc, radius => 500, servers => { '216.151.156.12' => 1 });;
+    my %sjc_html   = (%sjc, servers => { '216.224.121.143' => 1 });;
+
+    # locating this one in dallas
+    my %panther = (lon => "-97",
+                   lat => "42",
+                   servers => { 'g1.panthercdn.com' => 1},
+        );
+    return {
+        "glb.wikia.wikia-glb.net" => {
+            "lon"   => \%lon,
+            "sjc"     => \%sjc_images,
+            'panther' => \%panther,
+        },
+    };
+}
+
+sub hosts {q{
+
+600 IN SOA ns-lon-2.wikia.net. dnsmaster.wikia-inc.com. 2008121101 1200 120 1209600 3600
+
+images1.wikia 600 IN CNAME glb.wikia.wikia-glb.net
+images2.wikia 600 IN CNAME glb.wikia.wikia-glb.net
+images3.wikia 600 IN CNAME glb.wikia.wikia-glb.net
+images4.wikia 600 IN CNAME glb.wikia.wikia-glb.net
+glb.wikia 60 IN A 216.151.156.12
+
+}}
+
+
+
+1;
+
