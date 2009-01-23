@@ -88,9 +88,14 @@ sub request {
 
     my $domain = $self->get_host($host->{domain});
 
+    if ($host->{CNAME}) {
+        push @$ans, $self->lookup($qname, $qtype, $host, $peerhost);
+        $qname = $host->{CNAME}->[0]->cname;
+        $host = $self->{hosts}->{$qname};
+    }
 
     if ($qtype eq 'ANY' || $qtype eq 'A' || $qtype eq 'PTR') {
-        ($rcode, $ans) = $self->lookup($qname, $qtype, $host, $peerhost);
+        push @$ans, $self->lookup($qname, $qtype, $host, $peerhost);
     }
 
     if ($qtype eq 'ANY' || $qtype eq 'NS') {
@@ -109,10 +114,11 @@ sub request {
     foreach my $ns (@$auth) {
         my $ns_domain = $self->get_host($ns->nsdname);
         if ($ns_domain) {
-            my ($result, $host) = $self->lookup($ns->nsdname, "A", $ns_domain, $peerhost);
-            push @$add, @$host;
+            push @$add, $self->lookup($ns->nsdname, "A", $ns_domain, $peerhost);
         }
     }
+
+    $rcode = "NOERROR";
 
     return ($rcode, $ans, $auth, $add, { aa => 1 });
 }
@@ -126,45 +132,51 @@ sub lookup {
     my $qtype = shift;
     my $host = shift;
     my $peerhost = shift;
+    my @answer;
 
-    if (my $geo = $host->{geo}->{$qname}) {
-        warn "found geo";
+    return unless $host;
+
+    if (my $geo = $host->{geo}) {
+
         my $record = $gi->record_by_addr($peerhost);
-        my ($lat, $lon) = (0,0);
+        my $location;
         if($record) {
+            my ($lat, $lon) = (0,0);
             $lat = $record->latitude;
             $lon = $record->longitude;
-        }
 
-        my %distance;
-        foreach my $server (keys %$geo) {
+            my %distance;
+            foreach my $server (keys %$geo) {
 
-            $distance{$server} = $self->distance($geo->{$server}->{lat}, $geo->{$server}->{lon}, $lat, $lon);
-        }
-
-        my @answer;
-        foreach my $server (@{[sort { $distance{$a} <=> $distance{$b} } keys %distance ]}) {
-            print "Distance $server $geo->{$server}->{radius} < $distance{$server}\n" if($geo->{$server}->{radius});
-            next if ($geo->{$server}->{radius} &&
-                     $geo->{$server}->{radius} < $distance{$server});
-
-            foreach my $host_data (@{$geo->{$server}->{hosts}}) {
-                my $host = $host_data->[0];
-                my $chance = $host_data->[1];
-                my $key = $host->type eq 'A' ? $host->address : $host->cname;
-                push @answer, $host if (!exists $status{$key} || $status{$key});
-
+                $distance{$server} = $self->distance($geo->{$server}->{lat}, $geo->{$server}->{lon}, $lat, $lon);
             }
-            return ('NOERROR', \@answer) if (@answer);
+
+            my @answer;
+            foreach my $server (@{[sort { $distance{$a} <=> $distance{$b} } keys %distance ]}) {
+                print "Distance $server $geo->{$server}->{radius} < $distance{$server}\n" if($geo->{$server}->{radius});
+                next if ($geo->{$server}->{radius} &&
+                         $geo->{$server}->{radius} < $distance{$server});
+
+                foreach my $host_data (@{$geo->{$server}->{hosts}}) {
+                    my $host = $host_data->[0];
+                    my $chance = $host_data->[1];
+                    my $key = $host->type eq 'A' ? $host->address : $host->cname;
+                    push @answer, $host if (!exists $status{$key} || $status{$key});
+
+                }
+                return (@answer) if (@answer);
+            }
         }
-
     }
 
-
-    if (my $reply = $host->{$qtype}) {
-        return ('NOERROR', $reply);
+    if ($qtype eq 'ANY') {
+        push @answer, @{$host->{A}} if $host->{A};
+        push @answer, @{$host->{AAAA}} if $host->{AAAA};
+        push @answer, @{$host->{CNAME}} if $host->{CNAME};
+    } else {
+        push @answer, @{$host->{$qtype}} if ($host->{$qtype});
     }
-    return ('NXDOMAIN', []);
+    return @answer;
 }
 
 sub get_host {
