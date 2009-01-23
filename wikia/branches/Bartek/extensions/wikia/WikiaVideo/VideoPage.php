@@ -189,6 +189,21 @@ class VideoPage extends Article {
 			}
 		}
 
+		$text = strpos( $fixed_url, "MYVIDEO.DE" );
+		if( false !== $text ) { // myvideo
+			$provider = self::V_MYVIDEO;
+			$parsed = split( "/", $url );
+			if( is_array( $parsed ) ) {
+				$mdata = array_pop( $parsed );	
+				$this->mProvider = $provider;
+				$this->mId = array_pop( $parsed );
+				$this->mData = array(
+						$mdata
+				);					
+				return true;
+			}
+		}
+
 		$text = strpos( $fixed_url, "GAMEVIDEOS.1UP.COM" );
 		if( false !== $text ) { // gamevideos
 			$provider = self::V_GAMEVIDEOS;
@@ -251,6 +266,9 @@ class VideoPage extends Article {
 			case "vimeo":
 				return (400 / 225);
 				break;
+			case "myvideo":
+				return (470 / 406);
+				break;
 			default:
 				return 1;
 				break;
@@ -311,6 +329,7 @@ class VideoPage extends Article {
 		switch( $this->mProviders[$this->mProvider] ) {
 			case 'metacafe':		
 			case 'sevenload':					
+			case 'myvideo':
 				$metadata = $this->mProvider . ',' . $this->mId . ',' . $this->mData[0];
 				break;
 			case 'youtube':		
@@ -443,6 +462,10 @@ class VideoPage extends Article {
 			case "sevenload":
 				$code = 'custom';
 				$embed = '<object style="visibility: visible;" id="sevenloadPlayer_' . $this->mId . '" data="http://static.sevenload.com/swf/player/player.swf" type="application/x-shockwave-flash" height="' . $height . '" width="' . $width . '"><param value="always" name="allowScriptAccess"><param value="true" name="allowFullscreen"><param value="configPath=http%3A%2F%2Fflash.sevenload.com%2Fplayer%3FportalId%3Den%26autoplay%3D0%26itemId%3D' . $this->mId . '&amp;locale=en_US&amp;autoplay=0&amp;environment=" name="flashvars"></object>';
+				break;
+			case 'myvideo':
+				$code = 'custom';
+				$embed = "<object style='width:{$width}px;height:{$height}px;' type='application/x-shockwave-flash' data='http://www.myvideo.de/movie/{$this->mId}'> <param name='movie' value='http://www.myvideo.de/movie/{$this->mId}' /> <param name='AllowFullscreen?' value='true' /> </object>";	
 				break;
 			case "gamevideos":
 				$code = 'custom';
