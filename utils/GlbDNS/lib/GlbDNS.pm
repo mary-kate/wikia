@@ -82,11 +82,12 @@ sub request {
     my ($rcode, $ans, $auth, $add) = (undef, [], [], []);
 
     my @query = split(/\./, $qname);
+    warn "Got query $qname foo";
+    my $host = $self->{hosts}->{$qname};
+    return ("NXDOMAIN", [],[],[],{}) unless($host);
 
-    my $host = $self->get_host($qname);
     my $domain = $self->get_host($host->{domain});
 
-    return ("NXDOMAIN", [],[],[],{}) unless($host);
 
     if ($qtype eq 'ANY' || $qtype eq 'A' || $qtype eq 'PTR') {
         ($rcode, $ans) = $self->lookup($qname, $qtype, $host, $peerhost);
@@ -114,7 +115,7 @@ sub request {
     }
 
     return ($rcode, $ans, $auth, $add, { aa => 1 });
-    }
+}
 
 
 
