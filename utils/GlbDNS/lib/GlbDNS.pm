@@ -83,31 +83,32 @@ sub request {
 
     my @query = split(/\./, $qname);
 
-    my $domain = $self->get_domain($qname);
+    my $host = $self->get_host($qname);
+    my $domain = $self->get_host($host->{domain});
 
-    return ("NXDOMAIN", [],[],[],{}) unless($domain);
+    return ("NXDOMAIN", [],[],[],{}) unless($host);
 
     if ($qtype eq 'ANY' || $qtype eq 'A' || $qtype eq 'PTR') {
-        ($rcode, $ans) = $self->lookup($qname, $domain, $peerhost);
+        ($rcode, $ans) = $self->lookup($qname, $qtype, $host, $peerhost);
     }
 
     if ($qtype eq 'ANY' || $qtype eq 'NS') {
-        push @$ans, @{$domain->{ns}};
+        push @$ans, @{$domain->{NS}};
     }
     if ($qtype eq 'ANY' || $qtype eq 'SOA') {
-        push @$ans, $domain->{soa};
+        push @$ans, $domain->{SOA};
     }
     if ($qtype eq 'ANY' || $qtype eq 'MX') {
-        push @$ans, values %{$domain->{mx}};
+        push @$ans, values %{$domain->{MX}};
     }
 
 
-    $auth = $domain->{ns};
+    $auth = $domain->{NS};
 
     foreach my $ns (@$auth) {
-        my $ns_domain = $self->get_domain($ns->nsdname);
+        my $ns_domain = $self->get_host($ns->nsdname);
         if ($ns_domain) {
-            my ($result, $host) = $self->lookup($ns->nsdname, $ns_domain, $peerhost);
+            my ($result, $host) = $self->lookup($ns->nsdname, "A", $ns_domain, $peerhost);
             push @$add, @$host;
         }
     }
@@ -121,11 +122,11 @@ sub request {
 sub lookup {
     my $self = shift;
     my $qname = shift;
-    my $domain = shift;
+    my $qtype = shift;
+    my $host = shift;
     my $peerhost = shift;
 
-    warn "looking for geo $domain $qname";
-    if (my $geo = $domain->{geo}->{$qname}) {
+    if (my $geo = $host->{geo}->{$qname}) {
         warn "found geo";
         my $record = $gi->record_by_addr($peerhost);
         my ($lat, $lon) = (0,0);
@@ -159,21 +160,19 @@ sub lookup {
     }
 
 
-    if (my $reply = $domain->{host}->{$qname}) {
+    if (my $reply = $host->{$qtype}) {
         return ('NOERROR', $reply);
     }
     return ('NXDOMAIN', []);
 }
 
-sub get_domain {
+sub get_host {
     my $self = shift;
     my $qname = shift;
     my @query = split(/\./, $qname);
     while(@query) {
-        my $test_domain = join (".", @query) . ".";
-        warn "$test_domain";
+        my $test_domain = join (".", @query);
         if($self->{hosts}->{$test_domain}) {
-            warn "found $test_domain";
             return $self->{hosts}->{$test_domain};
         }
         shift @query;
