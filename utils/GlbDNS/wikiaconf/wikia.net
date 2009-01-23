@@ -53,14 +53,20 @@ sub geo {
     my %sjc_html   = (%sjc, servers => { "216.224.121.143" => 1 });;
 
     # locating this one in dallas
-    my %panther = (lon => "-97",
-                   lat => "42",
-                   servers => { 'g1.panthercdn.com' => 1},
+    my %panther_us = (lon => "-97",
+                      lat => "42",
+                      servers => { 'g1.panthercdn.com' => 1},
         );
+    my %panther_apac = (lon => "103",
+                        lat => "1",
+                        servers => { 'g1.panthercdn.com' => 1},
+        );
+
     return {
         "images.glb.wikia.net" => {
             "lon_images"     => \%lon,
-            "panther" => \%panther,
+            "panther_us" => \%panther_us,
+            "panther_apac" => \%panther_apac,
 #            "sjc"     => \%sjc_images,
         },
         "wikis.glb.wikia.net" => {
