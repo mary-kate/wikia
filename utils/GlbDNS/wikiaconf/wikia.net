@@ -79,7 +79,7 @@ sub geo {
 
 sub hosts {q{
 
-600 IN SOA ns-lon-2.wikia-glb.net. dnsmaster.wikia-inc.com. 2008121101 1200 120 1209600 3600
+600 IN SOA ns-lon-2.wikia.net. dnsmaster.wikia-inc.com. 2008121101 1200 120 1209600 3600
 
 images   600 IN CNAME g1.panthercdn.com
 wikis    600 IN A 216.224.121.143

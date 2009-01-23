@@ -10,12 +10,10 @@ sub domains { "nocookie.net" }
 
 sub ns { return q{
 
+60 IN NS ns-sjc-1.wikia.net
+60 IN NS ns-nj-1.wikia.net
+60 IN NS ns-lon-1.wikia.net
 60 IN NS ns-lon-2.wikia.net
-600 IN NS NS0.DNSMADEEASY.COM
-600 IN NS NS1.DNSMADEEASY.COM
-600 IN NS NS2.DNSMADEEASY.COM
-600 IN NS NS3.DNSMADEEASY.COM
-600 IN NS NS4.DNSMADEEASY.COM
 
 }}
 
@@ -69,7 +67,7 @@ sub geo {
 
 sub hosts {q{
 
-600 IN SOA ns-lon-2.wikia-glb.net. dnsmaster.wikia-inc.com. 2008121101 1200 120 1209600 3600
+600 IN SOA ns-lon-2.wikia.net. dnsmaster.wikia-inc.com. 2008121101 1200 120 1209600 3600
 
 images1.wikia 600 IN CNAME glb.wikia.nocookie.net
 images2.wikia 600 IN CNAME glb.wikia.nocookie.net
