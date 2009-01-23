@@ -59,13 +59,13 @@ sub geo {
         );
     return {
         "images.glb.wikia.net" => {
-            "lon"     => \%lon,
+            "lon_images"     => \%lon,
             "panther" => \%panther,
 #            "sjc"     => \%sjc_images,
         },
         "wikis.glb.wikia.net" => {
-            "lon"  => \%lon,
-            "sjc"  => \%sjc_html,
+            "lon_html"  => \%lon,
+            "sjc_html"  => \%sjc_html,
         }
     };
 }

@@ -14,6 +14,8 @@ my %status : shared;
 my %stats : shared;
 use Geo::IP;
 
+my %counters : shared;
+
 my $gi = Geo::IP->open_type( GEOIP_CITY_EDITION_REV1, GEOIP_STANDARD);
 
 sub new {
@@ -27,6 +29,8 @@ sub new {
         LocalPort => $daemon->options->{port},
         ReplyHandler => sub { $self->request(@_) },
         );
+
+    threads->create(sub { while(1) { sleep 60; print Dumper(\%counters) } });
 
     return $self;
 }
@@ -81,10 +85,14 @@ sub request {
     my ($self, $qname, $qclass, $qtype, $peerhost, $query) = @_;
     my ($rcode, $ans, $auth, $add) = (undef, [], [], []);
 
+    $counters{request}++;
+
     my @query = split(/\./, $qname);
-    warn "Got query $qname foo";
+
     my $host = $self->{hosts}->{$qname};
     return ("NXDOMAIN", [],[],[],{}) unless($host);
+
+
 
     my $domain = $self->get_host($host->{domain});
 
@@ -156,7 +164,7 @@ sub lookup {
                 print "Distance $server $geo->{$server}->{radius} < $distance{$server}\n" if($geo->{$server}->{radius});
                 next if ($geo->{$server}->{radius} &&
                          $geo->{$server}->{radius} < $distance{$server});
-
+                $counters{"Location_$server"}++;
                 foreach my $host_data (@{$geo->{$server}->{hosts}}) {
                     my $host = $host_data->[0];
                     my $chance = $host_data->[1];
