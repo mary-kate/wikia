@@ -4,6 +4,7 @@ package GlbDNS::Config;
 use strict;
 use warnings;
 use Data::Dumper;
+use Net::DNS::RR::A;
 
 sub load_configs {
     my $class = shift;
@@ -81,47 +82,49 @@ sub new {
             $glbdns->{hosts}->{$rr->name}->{domain} = $base;
         }
 
-        if(0) {
+
         my $geo = $config->geo($base);
         foreach my $host (keys %$geo) {
+            $glbdns->{hosts}->{$host}->{domain} = $base;
 
             foreach my $location_name (keys %{$geo->{$host}}) {
-                my $location = $config->{geo}->{$host}->{$location_name} = {};
+                my $location = $glbdns->{hosts}->{$host}->{geo}->{$location_name} = {};
                 my $hosts = $location->{hosts} = [];
                 $location->{lat} = $geo->{$host}->{$location_name}->{lat};
                 $location->{lon} = $geo->{$host}->{$location_name}->{lon};
                 $location->{radius} = $geo->{$host}->{$location_name}->{radius};
-                $location->{default} = $geo->{$host}->{$location_name}->{default};
 
                 foreach my $ip (keys %{$geo->{$host}->{$location_name}->{servers}}) {
                     my $weight = $geo->{$host}->{$location_name}->{servers}->{$ip};
 
                     if($ip =~/\d+\.\d+\.\d+\.\d+/) {
                         push  @$hosts, [ Net::DNS::RR::A->new({name => $host,
-                                                                ttl     => ($geo->{$host}->{ttl} || 60),
-                                                                type    => 'A',
-                                                                class   => 'IN',
-                                                                address => $ip,
-                                                               }), $weight];
+                                                               ttl     => ($geo->{$host}->{ttl} || 60),
+                                                               type    => 'A',
+                                                               class   => 'IN',
+                                                               address => $ip,
+                                                               weight  => $weight,
+                                                               }) ]
                     } else {
                         push @$hosts, [ Net::DNS::RR::CNAME->new({name => $host,
-                                                                   ttl     => ($geo->{$host}->{ttl} || 60),
-                                                                   type    => 'CNAME',
-                                                                   class   => 'IN',
-                                                                   cname => $ip,
-                                                                  }), $weight];
+                                                                  ttl    => ($geo->{$host}->{ttl} || 60),
+                                                                  type   => 'CNAME',
+                                                                  class  => 'IN',
+                                                                  cname  => $ip,
+                                                                  weight => $weight,
+                                                                  }) ]
                     }
-                    if (exists $geo->{$host}->{$location_name}->{check_type}  &&
-                        $geo->{$host}->{$location_name}->{check_type} eq 'http' ) {
-                        $config->{_check}->{$ip} = {
-                            ip     => $ip,
-                            url    => $geo->{$host}->{$location_name}->{url},
-                            expect => $geo->{$host}->{$location_name}->{expect},
-                            status => 0 };
-                    }
+               #     if (exists $geo->{$host}->{$location_name}->{check_type}  &&
+               #         $geo->{$host}->{$location_name}->{check_type} eq 'http' ) {
+               #         $config->{_check}->{$ip} = {
+               #             ip     => $ip,
+                #            url    => $geo->{$host}->{$location_name}->{url},
+                #            expect => $geo->{$host}->{$location_name}->{expect},
+                #            status => 0 };
+                #    }
                 }
             }
-        }}
+        }
 
         my $ns = $glbdns->{hosts}->{$base}->{NS} = [];
         foreach my $record (split "\n", $config->ns($base)) {

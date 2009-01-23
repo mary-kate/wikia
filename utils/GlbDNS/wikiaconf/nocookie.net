@@ -6,14 +6,16 @@ use Net::DNS::RR;
 use Data::Dumper;
 use base qw(GlbDNS::Config);
 
-sub domains { "glb.wikia.net" }
+sub domains { "nocookie.net" }
 
 sub ns { return q{
 
-60 IN NS ns-lon-1.wikia.net
-60 IN NS ns-nj-1.wikia.net
-60 IN NS ns-sjc-1.wikia.net
 60 IN NS ns-lon-2.wikia.net
+600 IN NS NS0.DNSMADEEASY.COM
+600 IN NS NS1.DNSMADEEASY.COM
+600 IN NS NS2.DNSMADEEASY.COM
+600 IN NS NS3.DNSMADEEASY.COM
+600 IN NS NS4.DNSMADEEASY.COM
 
 }}
 
@@ -46,11 +48,10 @@ sub geo {
                 check_type => 'http',
                 url => 'lvscheck.html',
                 expect => 'is okay',
-                default => 1,
     );
 
-    my %sjc_images = (%sjc, radius => 500, servers => { "216.151.156.12" => 1 });;
-    my %sjc_html   = (%sjc, servers => { 216.224.121.143 => 1 });;
+    my %sjc_images = (%sjc, radius => 500, servers => { '216.151.156.12' => 1 });;
+    my %sjc_html   = (%sjc, servers => { '216.224.121.143' => 1 });;
 
     # locating this one in dallas
     my %panther = (lon => "-97",
@@ -58,10 +59,10 @@ sub geo {
                    servers => { 'g1.panthercdn.com' => 1},
         );
     return {
-        "images.glb.wikia.net" => {
-            "lon"     => \%lon,
-            "panther" => \%panther,
-#            "sjc"     => \%sjc_images,
+        "glb.wikia.nocookie.net" => {
+            "lon"   => \%lon,
+            "sjc"     => \%sjc_images,
+            'panther' => \%panther,
         },
     };
 }
@@ -70,7 +71,11 @@ sub hosts {q{
 
 600 IN SOA ns-lon-2.wikia-glb.net. dnsmaster.wikia-inc.com. 2008121101 1200 120 1209600 3600
 
-images   600 IN CNAME g1.panthercdn.com
+images1.wikia 600 IN CNAME glb.wikia.nocookie.net
+images2.wikia 600 IN CNAME glb.wikia.nocookie.net
+images3.wikia 600 IN CNAME glb.wikia.nocookie.net
+images4.wikia 600 IN CNAME glb.wikia.nocookie.net
+glb.wikia 60 IN A 216.151.156.12
 
 }}
 
