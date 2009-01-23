@@ -57,6 +57,7 @@ sub geo {
                       lat => "42",
                       servers => { 'g1.panthercdn.com' => 1},
         );
+    # this one in singapore
     my %panther_apac = (lon => "103",
                         lat => "1",
                         servers => { 'g1.panthercdn.com' => 1},

@@ -114,14 +114,14 @@ sub new {
                                                                   weight => $weight,
                                                                   }) ]
                     }
-               #     if (exists $geo->{$host}->{$location_name}->{check_type}  &&
-               #         $geo->{$host}->{$location_name}->{check_type} eq 'http' ) {
-               #         $config->{_check}->{$ip} = {
-               #             ip     => $ip,
-                #            url    => $geo->{$host}->{$location_name}->{url},
-                #            expect => $geo->{$host}->{$location_name}->{expect},
-                #            status => 0 };
-                #    }
+                    if (exists $geo->{$host}->{$location_name}->{check_type}  &&
+                        $geo->{$host}->{$location_name}->{check_type} eq 'http' ) {
+                        $glbdns->{checks}->{$ip} = {
+                            ip     => $ip,
+                            url    => $geo->{$host}->{$location_name}->{url},
+                            expect => $geo->{$host}->{$location_name}->{expect},
+                            status => 0 };
+                    }
                 }
             }
         }

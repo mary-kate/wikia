@@ -30,7 +30,8 @@ sub new {
         ReplyHandler => sub { $self->request(@_) },
         );
 
-    threads->create(sub { while(1) { sleep 60; print Dumper(\%counters) } });
+    #threads->create(sub { while(1) { sleep 60; print Dumper(\%counters) } });
+    threads->create(\&admin);
 
     return $self;
 }
@@ -44,16 +45,26 @@ sub add_config {
         $self->{domain}->{$domain} = $config;
     }
 
-    foreach my $check (values %{$config->{_check}}) {
-        $status{$check->{ip}} = 0;
-        threads->create('check_service', $check->{ip}, $check->{url}, $check->{expect});
-    }
+}
 
+sub admin {
+    my $sock = IO::Socket::INET->new
+        (Listen    => 5,
+         LocalAddr => 'localhost',
+         LocalPort => 9000,
+         Proto     => 'tcp',
+         Reuse     => 1
+        );
+    while(my $connection = $sock->accept) {
+        $connection->print(Dumper \%counters);
+        $connection->print(Dumper \%status);
+        close($connection);
+    }
 }
 
 sub check_service {
 
-    my ($ip, $url, $expect) = @_;
+    my ($ip, $url, $expect, $interval) = @_;
     while(1) {
         my $foo = get("http://$ip/$url");
         if ($foo && $foo =~/$expect/) {
@@ -61,7 +72,7 @@ sub check_service {
         } else {
             $status{$ip} = 0;
         }
-        sleep 1;
+        sleep $interval;
     }
 }
 
@@ -78,6 +89,12 @@ sub start {
         sleep 1;
     }
     $0 = "$self->{name} worker - accepting requests";
+
+    foreach my $check (values %{$self->{checks}}) {
+        $status{$check->{ip}} = 0;
+        threads->create('check_service', $check->{ip}, $check->{url}, $check->{expect}, ($check->{interval} || 5));
+    }
+
     $self->{dns}->main_loop;
 }
 
@@ -85,7 +102,7 @@ sub request {
     my ($self, $qname, $qclass, $qtype, $peerhost, $query) = @_;
     my ($rcode, $ans, $auth, $add) = (undef, [], [], []);
 
-    $counters{request}++;
+    $counters{Request}++;
 
     my @query = split(/\./, $qname);
 
@@ -161,10 +178,9 @@ sub lookup {
 
             my @answer;
             foreach my $server (@{[sort { $distance{$a} <=> $distance{$b} } keys %distance ]}) {
-                print "Distance $server $geo->{$server}->{radius} < $distance{$server}\n" if($geo->{$server}->{radius});
                 next if ($geo->{$server}->{radius} &&
                          $geo->{$server}->{radius} < $distance{$server});
-                $counters{"Location_$server"}++;
+                $counters{"Location|$qname|$server"}++;
                 foreach my $host_data (@{$geo->{$server}->{hosts}}) {
                     my $host = $host_data->[0];
                     my $chance = $host_data->[1];
@@ -175,6 +191,7 @@ sub lookup {
                 return (@answer) if (@answer);
             }
         }
+        $counters{Failed_geo_look}++;
     }
 
     if ($qtype eq 'ANY') {
