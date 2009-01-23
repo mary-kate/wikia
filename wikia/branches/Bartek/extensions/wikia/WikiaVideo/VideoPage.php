@@ -258,7 +258,7 @@ class VideoPage extends Article {
 			case "youtube": 
 				return 'http://www.youtube.com/watch?v=' . $this->mId;
 			case "sevenload":
-				return ''
+				return '';
 			case "gamevideos":
 				return 'http://gamevideos.1up.com/video/id/' . $this->mId;
 				break;
