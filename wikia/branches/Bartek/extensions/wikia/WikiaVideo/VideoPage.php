@@ -3,6 +3,27 @@
 // use the same namespace as in old NY extension
 define( 'NS_VIDEO', 400 );
 
+global $wgWikiaVideoProviders;
+$wgWikiaVideoProviders = array(
+		VideoPage::V_GAMETRAILERS => 'gametrailers',
+		VideoPage::V_GAMEVIDEOS => 'gamevideos',
+		VideoPage::V_GAMESPOT => 'gamespot',
+		VideoPage::V_MTVGAMES => 'mtvgames',
+		VideoPage::V_5MIN => '5min',
+		VideoPage::V_YOUTUBE => 'youtube',
+		VideoPage::V_HULU => 'hulu',
+		VideoPage::V_VEOH => 'veoh',
+		VideoPage::V_FANCAST => 'fancast',
+		VideoPage::V_IN2TV => 'in2tv',
+		VideoPage::V_BLIPTV => 'bliptv',
+		VideoPage::V_METACAFE => 'metacafe',
+		VideoPage::V_SEVENLOAD => 'sevenload',
+		VideoPage::V_VIMEO => 'vimeo',
+		VideoPage::V_CLIPFISH => 'clipfish',
+		VideoPage::V_MYVIDEO => 'myvideo'	
+		);
+
+
 // main video page class
 class VideoPage extends Article {
 
@@ -27,25 +48,7 @@ class VideoPage extends Article {
 		$mId,
 		$mProvider,
 		$mData,
-		$mDataline,
-		$mProviders = array(
-			self::V_GAMETRAILERS => 'gametrailers',
-			self::V_GAMEVIDEOS => 'gamevideos',
-			self::V_GAMESPOT => 'gamespot',
-			self::V_MTVGAMES => 'mtvgames',
-			self::V_5MIN => '5min',
-			self::V_YOUTUBE => 'youtube',
-			self::V_HULU => 'hulu',
-			self::V_VEOH => 'veoh',
-			self::V_FANCAST => 'fancast',
-			self::V_IN2TV => 'in2tv',
-			self::V_BLIPTV => 'bliptv',
-			self::V_METACAFE => 'metacafe',
-			self::V_SEVENLOAD => 'sevenload',
-			self::V_VIMEO => 'vimeo',
-			self::V_CLIPFISH => 'clipfish',
-			self::V_MYVIDEO => 'myvideo'	
-		);
+		$mDataline;
 
         function __construct (&$title){
                 parent::__construct(&$title);
@@ -247,7 +250,8 @@ class VideoPage extends Article {
 	}
 
 	public function getRatio() {
-		switch( $this->mProviders[$this->mProvider] ) {
+		global $wgWikiaVideoProviders;
+		switch( $wgWikiaVideoProviders[$this->mProvider] ) {
 			case "metacafe": 
 				return (40 / 35);
 				break;			
@@ -285,16 +289,28 @@ class VideoPage extends Article {
 		$this->mName = $name;
 	}
 
-	public function getUrl() {
-		switch( $this->mProviders[$this->mProvider] ) {
+	public static function getUrl( $metadata ) {
+		global $wgWikiaVideoProviders;
+		$meta = split( ",", $metadata );
+		if ( is_array( $meta ) ) {
+			$provider = $meta[0];
+			$id = $meta[1];
+			array_splice( $meta, 0, 2 );
+			if ( count( $meta ) > 0 ) {
+				foreach( $meta as $data  ) {
+					$mData[] = $data;
+				}
+			}
+		}
+		switch( $wgWikiaVideoProviders[$provider] ) {
 			case "metacafe": 
-				return 'http://www.metacafe.com/watch/' . $this->mId . '/' . $this->mData[0];
+				return 'http://www.metacafe.com/watch/' . $id . '/' . $mData[0];
 			case "youtube": 
-				return 'http://www.youtube.com/watch?v=' . $this->mId;
+				return 'http://www.youtube.com/watch?v=' . $id;
 			case "sevenload":
 				return '';
 			case "gamevideos":
-				return 'http://gamevideos.1up.com/video/id/' . $this->mId;
+				return 'http://gamevideos.1up.com/video/id/' . $id;
 				break;
 			case "5min":
 				return '';
@@ -302,7 +318,6 @@ class VideoPage extends Article {
 			default:
 				return '';
 		}
-
 	}
 
 	public function getProvider() {
@@ -449,10 +464,11 @@ class VideoPage extends Article {
 	}
 
         public function getEmbedCode( $width = 300 ) {
+		global $wgWikiaVideoProviders;
                 $embed = "";
 		$code = 'standard';
 		$height = round( $width / $this->getRatio() );
-                switch( $this->mProviders[$this->mProvider] ) {
+                switch( $wgWikiaVideoProviders[$this->mProvider] ) {
                         case "metacafe":
 				$url = 'http://www.metacafe.com/fplayer/' . $this->mId . '/' . $this->mData[0];
                                 break;
@@ -540,7 +556,8 @@ class VideoHistoryList {
 				$row = $dbr->fetchObject( $history );
 				$user = $row->img_user;
 				$usertext = $row->img_user_text;
-				$line = '<tr>' . '<td>' . $wgLang->timeAndDate( $row->img_timestamp, true ) . '</td>' . '<td>';				
+				$url = VideoPage::getUrl( $row->img_metadata );
+				$line = '<tr>' . '<td><a href="' . $url . '">' . $wgLang->timeAndDate( $row->img_timestamp, true ) . '</a></td>' . '<td>';				
 				$line .= $sk->userLink( $user, $usertext ) . " <span style='white-space: nowrap;'>" . $sk->userToolLinks( $user, $usertext ) . "</span>";
 				$line .= '</td></tr>';
 				return $line;
@@ -563,8 +580,9 @@ class VideoHistoryList {
 			$s = '';
 			while( $row = $dbr->fetchObject( $history ) ) {
 				$user = $row->img_user;
-				$usertext = $row->img_user_text;	
-				$s .= '<tr>' . '<td>' . $wgLang->timeAndDate( $row->img_timestamp, true ) . '</td>' . '<td>';
+				$usertext = $row->img_user_text;
+				$url = VideoPage::getUrl( $row->img_metadata );	
+				$s .= '<tr>' . '<td><a href="' . $url . '">' . $wgLang->timeAndDate( $row->img_timestamp, true ) . '</a></td>' . '<td>';
 				$s .= $sk->userLink( $user, $usertext ) . " <span style='white-space: nowrap;'>" . $sk->userToolLinks( $user, $usertext ) . "</span>";
 				$s .= '</td></tr>';	
 			}			
