@@ -73,7 +73,7 @@ sub new {
             } elsif ($rr->type eq 'SOA') {
                 $glbdns->{hosts}->{$rr->name}->{SOA} = $rr;
                 my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = gmtime($mtime);
-                $rr->serial($year+1900 . "$mon$mday$hour$min");
+                $rr->serial($year+1900 . $mon+1 . "$mday$hour");
             } elsif ($rr->type eq 'MX') {
                 $glbdns->{hosts}->{$rr->name}->{MX}->{$rr->exchange} = $rr;
             } else {
