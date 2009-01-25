@@ -138,7 +138,7 @@ class SkinMonaco extends SkinTemplate {
 		# Used for page load time tracking
 		$tpl->data['headlinks'] .= <<<EOS
 		<script type="text/javascript">/*<![CDATA[*/
-		var wgNow = new Date();		
+		var wgNow = new Date();
 		/*]]>*/</script>
 EOS;
 
@@ -1588,12 +1588,125 @@ if(count($wikiafooterlinks) > 0) {
 					<div id="searchSuggestContainer" class="yui-ac-container"></div>
 				</div>
 <?php
-
-	echo '<script type="text/javascript">var submenu_array = new Array();var
-menuitem_array = new Array();var submenuitem_array = new Array();</script>';
+	echo '<script type="text/javascript">var submenu_array = new Array();var menuitem_array = new Array();var submenuitem_array = new Array();</script>';
 	$this->navmenu_array = array();
 	$this->navmenu = $this->data['data']['sidebarmenu'];
-	echo $this->printMenu(0);
+	if(!in_array('staff', $wgUser->getGroups())) {
+		echo $this->printMenu(0);
+	} else {
+	// NEW MENU CODE BEGIN
+	echo '<div id="navigation">';
+	$count = 0;
+	$mainMenu = array();
+	foreach($this->navmenu[0]['children'] as $child) {
+		$count++;
+		echo '<div class="menu-item'.($count==sizeof($this->navmenu[0]['children']) ? ' border-fix' : '').'" id="menu-item_'.$count.'">';
+		echo '<a id="a-menu-item_'.$count.'" href="'.(!empty($this->navmenu[$child]['href']) ? htmlspecialchars($this->navmenu[$child]['href']) : '#').'" rel="nofollow">'.htmlspecialchars($this->navmenu[$child]['text']).(!empty($this->navmenu[$child]['children']) ? '<em>&rsaquo;</em>' : '').'</a>';
+		echo '</div>';
+		if(!empty($this->navmenu[$child]['children'])) {
+			$mainMenu[$count] = $this->navmenu[$child]['children'];
+		}
+		unset($this->navmenu[$child]);
+	}
+
+	unset($this->navmenu[0]);
+	foreach($this->navmenu as $key => $val) {
+		unset($this->navmenu[$key]['magic']);
+		unset($this->navmenu[$key]['org']);
+		unset($this->navmenu[$key]['desc']);
+		unset($this->navmenu[$key]['parentIndex']);
+		unset($this->navmenu[$key]['depth']);
+	}
+
+	echo '</div>';
+?>
+<script type="text/javascript">
+var mainMenu = <?=Wikia::json_encode($mainMenu)?>;
+var subMenu = <?=Wikia::json_encode($this->navmenu)?>;
+var mainMenuInitCalled = false;
+var menuitem_array = new Array();
+var submenuitem_array = new Array();
+var submenu_array = new Array();
+var badUrl = wgArticlePath.replace(/\$1/,'');
+function mainMenuInit() {
+	if(mainMenuInitCalled) {
+		return;
+	}
+	mainMenuInitCalled = true;
+	for(i in mainMenu) {
+		if(mainMenu[i].length > 0) {
+			var out = '<div class="sub-menu widget" id="sub-menu_'+i+'" style="display:none">';
+			var count = 0;
+			for(j in mainMenu[i]) {
+				count++;
+				var id = mainMenu[i][j];
+				out += '<div class="menu-item'+(count == mainMenu[i].length ? ' border-fix' : '')+'" id="sub-menu-item_'+i+'_'+id+'">';
+				out += '<a'+(subMenu[mainMenu[i][j]].href == badUrl ? ' onclick="return false;"' : '')+' id="a-sub-menu-item_'+i+'_'+id+'" href="'+subMenu[mainMenu[i][j]].href+'" rel="nofollow">'+subMenu[mainMenu[i][j]].text+(subMenu[mainMenu[i][j]].children ? '<em>&rsaquo;</em>' : '')+'</a>';
+				out += '</div>';
+			}
+			out += '</div>'
+			var div = document.createElement('div');
+			div.id = 'navigation_'+i;
+			div.innerHTML = out;
+			YAHOO.util.Dom.insertAfter(div, $('a-menu-item_'+i));
+			submenu_array["sub-menu_"+i] = "_"+i;
+			$("sub-menu_"+i).onmouseout = clearMenu;
+			if($("sub-menu_"+i).captureEvents) $("sub-menu_"+i).captureEvents(Event.MOUSEOUT);
+			for(j in mainMenu[i]) {
+				var id = mainMenu[i][j];
+			    submenuitem_array["sub-menu-item_"+i+"_"+id] = "_"+i+"_"+id;
+      			$("a-sub-menu-item_"+i+"_"+id).onmouseover = sub_menuItemAction_wrap;
+			}
+		}
+		menuitem_array["menu-item_"+i]= "_"+i;
+		$("a-menu-item_"+i).onmouseover = menuItemAction;
+		if($("a-menu-item_"+i).captureEvents) $("a-menu-item_"+i).captureEvents(Event.MOUSEOVER);
+		$("a-menu-item_"+i).onmouseout = clearBackground;
+		if($("a-menu-item_"+i).captureEvents) $("a-menu-item_"+i).captureEvents(Event.MOUSEOUT);
+	}
+	$("navigation_widget").onmouseout = clearMenu;
+}
+
+function sub_menuItemAction_wrap(e) {
+	if (!e) var e = window.event;
+	var id = YAHOO.util.Event.getTarget(e).id;
+	var menu_id = id.split('_');
+	menu_id = menu_id[menu_id.length-1];
+	if(subMenu[menu_id].children) {
+		var name_part = submenuitem_array[id.substring(2)];
+		var out = '<div class="sub-menu widget" id="sub-menu'+name_part+'" style="display:none">';
+		var count = 0;
+		for(j in subMenu[menu_id].children) {
+			count++;
+			var idi = subMenu[menu_id].children[j];
+			out += '<div class="menu-item'+(count == subMenu[menu_id].children.length ? ' border-fix' : '')+'" id="sub-menu-item'+name_part+'_'+idi+'">';
+			out += '<a'+(subMenu[idi].href == badUrl ? ' onclick="return false;"' : '')+' id="a-sub-menu-item'+name_part+'_'+idi+'" href="'+subMenu[idi].href+'" rel="nofollow">'+subMenu[idi].text+(subMenu[idi].children ? '<em>&rsaquo;</em>' : '')+'</a>';
+			out += '</div>';
+		}
+		out += '</div>';
+		var div = document.createElement('div');
+		div.id = 'navigation'+name_part;
+		div.innerHTML = out;
+		YAHOO.util.Dom.insertAfter(div, $('a-sub-menu-item'+name_part));
+		submenu_array["sub-menu"+name_part+"_"+menu_id] = name_part+"_"+menu_id;
+
+		for(j in subMenu[menu_id].children) {
+			var idi = subMenu[menu_id].children[j];
+			submenuitem_array["sub-menu-item"+name_part+"_"+idi] = name_part+"_"+idi;
+			$("a-sub-menu-item"+name_part+"_"+idi).onmouseover = sub_menuItemAction_wrap;
+		}
+		subMenu[menu_id].children = false; // to prevent calling it again
+	}
+	return sub_menuItemAction(e);
+}
+
+//mainMenuInit();
+YAHOO.util.Event.on('navigation_widget', 'mouseover', mainMenuInit);
+
+</script>
+<?php
+	// NEW MENU CODE END
+	}
 
 	$linksArrayL = $linksArrayR = array();
 	$linksArray = $this->data['data']['toolboxlinks'];
