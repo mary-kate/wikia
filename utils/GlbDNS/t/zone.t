@@ -29,7 +29,9 @@ $daemon->parse_options(
 my %response = ('ns1.example.local' => "127.0.0.2",
                 'ns2.example.local' => '127.0.0.3',
                 'ns3.example.local' => '127.0.0.4',
-                'ns4.example.local' => '127.0.0.5');
+                'ns4.example.local' => '127.0.0.5',
+                'smtp1.example.local' => '127.0.0.6',
+    );
 
 
 my $glbdns = GlbDNS->new($daemon);
@@ -86,7 +88,6 @@ $glbdns->{hosts}->{"example.local"}->{SOA}->[0]->serial(1234);
  {
      pass("example.local IN ANY");
      my ($rcode, $ans, $auth, $add, $flags) = $glbdns->request("example.local","IN","ANY","127.0.0.1",undef);
-     check_additional($add, \%expected_result);
      is(scalar @$auth, 0, "Auth still empty");
      is(scalar @$ans, 6, "Should include the SOA an MX");
      my $i = 0;
@@ -110,6 +111,9 @@ $glbdns->{hosts}->{"example.local"}->{SOA}->[0]->serial(1234);
      is($soa->serial, "1234", "Serial check");
      is($soa->minimum, 1, "minimum TTL");
 
+     is(scalar(@$add), 5, "We should get additional records for MX and for NS");
+     $expected_result{"smtp1.example.local"} = 1;
+     check_additional($add, \%expected_result);
 
  }
 }
@@ -118,11 +122,13 @@ sub check_additional {
     my $add = shift;
     my $expected_result = shift;
     my $result = {};
+
    foreach my $packet(@$add) {
-        is ($response{$packet->name}, $packet->address, "Check address");
-        $result->{$packet->name}++;
+       is ($response{$packet->name}, $packet->address, "Check address");
+       $result->{$packet->name}++;
     }
     is_deeply( $result, $expected_result, "Did we get correct glue?");
 }
+
 1;
 
