@@ -138,7 +138,7 @@ class SkinMonaco extends SkinTemplate {
 		# Used for page load time tracking
 		$tpl->data['headlinks'] .= <<<EOS
 		<script type="text/javascript">/*<![CDATA[*/
-		var wgNow = new Date();		
+		var wgNow = new Date();
 		/*]]>*/</script>
 EOS;
 
@@ -500,6 +500,11 @@ EOS;
 			}
 		}
 		wfProfileOut(__METHOD__);
+
+
+		//print_pre($nodes);
+		//exit();
+
 		return $nodes;
 	}
 
@@ -1588,12 +1593,42 @@ if(count($wikiafooterlinks) > 0) {
 					<div id="searchSuggestContainer" class="yui-ac-container"></div>
 				</div>
 <?php
-
-	echo '<script type="text/javascript">var submenu_array = new Array();var
-menuitem_array = new Array();var submenuitem_array = new Array();</script>';
 	$this->navmenu_array = array();
 	$this->navmenu = $this->data['data']['sidebarmenu'];
-	echo $this->printMenu(0);
+
+	// NEW MENU CODE BEGIN
+	echo '<div id="navigation">';
+	$count = 0;
+	$navmenu_main = array();
+	foreach($this->navmenu[0]['children'] as $child) {
+		$count++;
+		echo '<div class="menu-item'.($count==sizeof($this->navmenu[0]['children']) ? ' border-fix' : '').'" id="menu-item_'.$count.'">';
+		echo '<a id="a-menu-item_'.$count.'" href="'.(!empty($this->navmenu[$child]['href']) ? htmlspecialchars($this->navmenu[$child]['href']) : '#').'" rel="nofollow">'.htmlspecialchars($this->navmenu[$child]['text']).(!empty($this->navmenu[$child]['children']) ? '<em>&rsaquo;</em>' : '').'</a>';
+		echo '</div>';
+
+		if(!empty($this->navmenu[$child]['children'])) {
+			$navmenu_main[$count] = $this->navmenu[$child]['children'];
+		}
+
+		unset($this->navmenu[$child]);
+	}
+	echo '</div>';
+?>
+<script type="text/javascript">
+var mainMenuInitCalled = false;
+function mainMenuInit() {
+	if(mainMenuInitCalled) {
+		return;
+	}
+	mainMenuInitCalled = true;
+	console.log("mainMenuInitCalled");
+}
+
+
+YAHOO.util.Event.on('navigation_widget', 'mouseover', mainMenuInit);
+</script>
+<?php
+	// NEW MENU CODE END
 
 	$linksArrayL = $linksArrayR = array();
 	$linksArray = $this->data['data']['toolboxlinks'];
