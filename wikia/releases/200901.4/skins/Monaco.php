@@ -1633,11 +1633,11 @@ function mainMenuInit() {
 		return;
 	}
 	mainMenuInitCalled = true;
-	for(i in mainMenu) {
+	for(var i in mainMenu) {
 		if(mainMenu[i].length > 0) {
 			var out = '<div class="sub-menu widget" id="sub-menu_'+i+'" style="display:none">';
 			var count = 0;
-			for(j in mainMenu[i]) {
+			for(var j = 0; j < mainMenu[i].length; j++) {
 				count++;
 				var id = mainMenu[i][j];
 				out += '<div class="menu-item'+(count == mainMenu[i].length ? ' border-fix' : '')+'" id="sub-menu-item_'+i+'_'+id+'">';
@@ -1652,10 +1652,10 @@ function mainMenuInit() {
 			submenu_array["sub-menu_"+i] = "_"+i;
 			$("sub-menu_"+i).onmouseout = clearMenu;
 			if($("sub-menu_"+i).captureEvents) $("sub-menu_"+i).captureEvents(Event.MOUSEOUT);
-			for(j in mainMenu[i]) {
+			for(var j = 0; j < mainMenu[i].length; j++) {
 				var id = mainMenu[i][j];
-			    submenuitem_array["sub-menu-item_"+i+"_"+id] = "_"+i+"_"+id;
-      			$("a-sub-menu-item_"+i+"_"+id).onmouseover = sub_menuItemAction_wrap;
+				submenuitem_array["sub-menu-item_"+i+"_"+id] = "_"+i+"_"+id;
+				$("a-sub-menu-item_"+i+"_"+id).onmouseover = sub_menuItemAction_wrap;
 			}
 		}
 		menuitem_array["menu-item_"+i]= "_"+i;
@@ -1666,7 +1666,6 @@ function mainMenuInit() {
 	}
 	$("navigation_widget").onmouseout = clearMenu;
 }
-
 function sub_menuItemAction_wrap(e) {
 	if (!e) var e = window.event;
 	var id = YAHOO.util.Event.getTarget(e).id;
@@ -1676,7 +1675,7 @@ function sub_menuItemAction_wrap(e) {
 		var name_part = submenuitem_array[id.substring(2)];
 		var out = '<div class="sub-menu widget" id="sub-menu'+name_part+'" style="display:none">';
 		var count = 0;
-		for(j in subMenu[menu_id].children) {
+		for(var j = 0; j < subMenu[menu_id].children.length; j++) {
 			count++;
 			var idi = subMenu[menu_id].children[j];
 			out += '<div class="menu-item'+(count == subMenu[menu_id].children.length ? ' border-fix' : '')+'" id="sub-menu-item'+name_part+'_'+idi+'">';
@@ -1689,8 +1688,7 @@ function sub_menuItemAction_wrap(e) {
 		div.innerHTML = out;
 		YAHOO.util.Dom.insertAfter(div, $('a-sub-menu-item'+name_part));
 		submenu_array["sub-menu"+name_part+"_"+menu_id] = name_part+"_"+menu_id;
-
-		for(j in subMenu[menu_id].children) {
+		for(var j = 0; j < subMenu[menu_id].children.length; j++) {
 			var idi = subMenu[menu_id].children[j];
 			submenuitem_array["sub-menu-item"+name_part+"_"+idi] = name_part+"_"+idi;
 			$("a-sub-menu-item"+name_part+"_"+idi).onmouseover = sub_menuItemAction_wrap;
