@@ -1,0 +1,39 @@
+
+
+$ORIGIN wikia-glb.net.
+
+600 IN SOA ns-lon-2.wikia.net. dnsmaster.wikia-inc.com. 2009012423 1200 120 1209600 60
+
+
+images1.wikia 86400 IN CNAME glb.wikia.nocookie.net
+images2.wikia 86400 IN CNAME glb.wikia.nocookie.net
+images3.wikia 86400 IN CNAME glb.wikia.nocookie.net
+images4.wikia 86400 IN CNAME glb.wikia.nocookie.net
+
+glb.wikia 86400 IN CNAME london
+;glb.wikia 86400 IN CNAME panther-us
+glb.wikia 86400 IN CNAME sjc
+glb.wikia  86400 IN TXT GlbDNS::CHECK /lvscheck.html "varnish is okay"
+
+; default used when there is no geodata
+glb.wikia 60 IN A 216.151.156.12
+
+sjc 60 IN A 216.224.121.143
+;sjc 86400 IN LOC 37 00 00.000 N 121 00 00.000 W
+sjc 86400 IN LOC 37 00 00.000 N 121 00 00.000 W 0.00m 0.00m 0.00m 0.00m
+sjc 86400 IN TXT GlbDNS::RADIUS 500 km
+
+london 60 IN A 83.223.112.142
+london 60 IN A 83.223.112.138
+london 86400 IN LOC 51 00 00.000 N 0 00 00.000  W 0.00m 0.00m 0.00m 0.00m
+
+
+
+search1.wikia 600 IN CNAME g1.panthercdn.com
+ads.wikia     600 IN CNAME g1.panthercdn.com
+origin        600 IN CNAME images.glb.wikia.net.
+
+86400 IN NS ns-sjc-1.wikia.net
+86400 IN NS ns-nj-1.wikia.net
+86400 IN NS ns-lon-1.wikia.net
+86400 IN NS ns-lon-2.wikia.net
