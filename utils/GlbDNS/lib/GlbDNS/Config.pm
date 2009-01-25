@@ -71,11 +71,11 @@ sub new {
             } elsif ($rr->type eq 'CNAME') {
                 add_host($glbdns, $base, $rr);
             } elsif ($rr->type eq 'SOA') {
-                $glbdns->{hosts}->{$rr->name}->{SOA} = $rr;
+                add_host($glbdns, $base, $rr);
                 my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = gmtime($mtime);
                 $rr->serial($year+1900 . $mon+1 . "$mday");
             } elsif ($rr->type eq 'MX') {
-                $glbdns->{hosts}->{$rr->name}->{MX}->{$rr->exchange} = $rr;
+                add_host($glbdns, $base, $rr);
             } else {
                 die Dumper($rr);
             }
@@ -98,21 +98,21 @@ sub new {
                     my $weight = $geo->{$host}->{$location_name}->{servers}->{$ip};
 
                     if($ip =~/\d+\.\d+\.\d+\.\d+/) {
-                        push  @$hosts, [ Net::DNS::RR::A->new({name => $host,
+                        push  @$hosts, Net::DNS::RR::A->new({name => $host,
                                                                ttl     => ($geo->{$host}->{ttl} || 60),
                                                                type    => 'A',
                                                                class   => 'IN',
                                                                address => $ip,
                                                                weight  => $weight,
-                                                               }) ]
+                                                               })
                     } else {
-                        push @$hosts, [ Net::DNS::RR::CNAME->new({name => $host,
+                        push @$hosts, Net::DNS::RR::CNAME->new({name => $host,
                                                                   ttl    => ($geo->{$host}->{ttl} || 60),
                                                                   type   => 'CNAME',
                                                                   class  => 'IN',
                                                                   cname  => $ip,
                                                                   weight => $weight,
-                                                                  }) ]
+                                                                  })
                     }
                     if (exists $geo->{$host}->{$location_name}->{check_type}  &&
                         $geo->{$host}->{$location_name}->{check_type} eq 'http' ) {
