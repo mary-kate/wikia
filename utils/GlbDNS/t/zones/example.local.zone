@@ -3,13 +3,17 @@
 
 $ORIGIN example.local.
 
-600 IN SOA ns1.example.local. dnsmaster.example.local. 2009012506 1200 120 1209600 60
+600 IN SOA ns1.example.local. dnsmaster.example.local. 2009012511 1200 120 1209600 60
 
 86400 IN NS ns1.example.local
 86400 IN NS ns2.example.local
 86400 IN NS ns3.example.local
-86400 IN NS ns4.example2.local
+86400 IN NS ns4.example.local
 
+ns1   IN A 127.0.0.2
+ns2   IN A 127.0.0.3
+ns3.example.local. IN A 127.0.0.4
+ns4.example.local. IN A 127.0.0.5
 
 ;images1.wikia 86400 IN CNAME glb.wikia.nocookie.net.
 ;images2.wikia 86400 IN CNAME glb.wikia.nocookie.net.
