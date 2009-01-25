@@ -109,6 +109,8 @@ sub request {
     my ($self, $qname, $qclass, $qtype, $peerhost, $query) = @_;
     my ($rcode, $ans, $auth, $add) = (undef, [], [], []);
 
+    my $response_incudes_ns = 0;
+
     $counters{Request}++;
 
     my @query = split(/\./, $qname);
@@ -132,6 +134,7 @@ sub request {
 
     if ($qtype eq 'ANY' || $qtype eq 'NS') {
         push @$ans, @{$domain->{NS}};
+        $response_incudes_ns++;
     }
     if ($qtype eq 'ANY' || $qtype eq 'SOA') {
         push @$ans, @{$domain->{SOA}};
@@ -141,14 +144,15 @@ sub request {
     }
 
 
-    $auth = $domain->{NS};
 
-    foreach my $ns (@$auth) {
+    $auth = $domain->{NS} unless($response_incudes_ns);
+    foreach my $ns (@{$domain->{NS}}) {
         my $ns_domain = $self->get_host($ns->nsdname);
         if ($ns_domain) {
             push @$add, $self->lookup($ns->nsdname, "A", $ns_domain, $peerhost);
         }
     }
+
 
     $rcode = "NOERROR";
 
