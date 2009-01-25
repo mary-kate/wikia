@@ -4,7 +4,7 @@
 #########################
 
 # change 'tests => 1' to 'tests => last_test_to_print';
-
+use strict;
 use Test::More qw(no_plan);
 BEGIN { use_ok('GlbDNS') };
 BEGIN { use_ok('GlbDNS::Zone') };
@@ -49,7 +49,33 @@ ok(1, "Loaded t/zones/example.local.zone");
     is(scalar @$ans, 4, "We have 4 NS records back as answers");
     is(scalar @$auth, 0, "We should have 0 NS records since they are already in the answer section");
     is(scalar @$add, 4, "We have 4 glue records back");
-#    warn Dumper(@$add);
+
+    my %response = ('ns1.example.local' => "127.0.0.2",
+                    'ns2.example.local' => '127.0.0.3',
+                    'ns3.example.local' => '127.0.0.4',
+                    'ns4.example.local' => '127.0.0.5');
+    my %result;
+
+    foreach my $packet (@$ans) {
+        ok (exists $response{$packet->nsdname}, "Checking NS response for ". $packet->nsdname);
+        $result{$packet->nsdname}++;
+    }
+
+    my %expected_result = (
+        'ns1.example.local' => 1,
+        'ns2.example.local' => 1,
+        'ns3.example.local' => 1,
+        'ns4.example.local' => 1,
+        );
+
+    is_deeply( \%result, \%expected_result, "Did we get a result for each expected one");
+    %result = ();
+    foreach my $packet(@$add) {
+        is ($response{$packet->name}, $packet->address, "Check address");
+        $result{$packet->name}++;
+    }
+    is_deeply( \%result, \%expected_result, "Did we get correct glue?");
+
 }
 1;
 
