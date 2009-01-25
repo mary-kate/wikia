@@ -1702,7 +1702,7 @@ function sub_menuItemAction_wrap(e) {
 
 //mainMenuInit();
 YAHOO.util.Event.on('navigation_widget', 'mouseover', mainMenuInit);
-
+YAHOO.util.Event.onDOMReady(mainMenuInit);
 </script>
 <?php
 	// NEW MENU CODE END
