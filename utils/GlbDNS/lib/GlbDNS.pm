@@ -18,20 +18,27 @@ my %counters : shared;
 
 my $gi = Geo::IP->open_type( GEOIP_CITY_EDITION_REV1, GEOIP_STANDARD);
 
+
+#to enable testing
+our %TEST = ( noadmin => 0,
+              nosocket => 0
+    );
+
 sub new {
     my $class = shift;
     my $self = bless {}, $class;
     my $daemon = shift;
     $self->{name} = $daemon->name;
+
     $self->{dns} = Net::DNS::Nameserver->new(
         Verbose => $main::config{debug},
         LocalAddr => $daemon->options->{address},
         LocalPort => $daemon->options->{port},
         ReplyHandler => sub { $self->request(@_) },
-        );
+        ) unless ($TEST{nosocket});
 
     #threads->create(sub { while(1) { sleep 60; print Dumper(\%counters) } });
-    threads->create(\&admin);
+    threads->create(\&admin) unless ($TEST{noadmin});
 
     return $self;
 }
@@ -161,7 +168,8 @@ sub lookup {
 
     return unless $host;
 #    $peerhost = "207.216.165.95";
-    $peerhost = "75.101.17.33";
+#    $peerhost = "75.101.17.33";
+#    $peerhost = "216.224.121.134";
     if (my $geo = $host->{geo}) {
 
         my $record = $gi->record_by_addr($peerhost);

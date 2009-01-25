@@ -11,16 +11,18 @@ sub load_configs {
     my $class = shift;
     my $glbdns = shift;
     my $path = shift;
-    opendir(DIR, $path) || die "$!";
-    for my $file (readdir(DIR)) {
-        next if (-d $file);
-        next if ($file =~/^(\.|#)/);
-        next if ($file =~/~$/);
-        my $mtime = @{[stat("$path/$file")]}[9];
-        open(my $conf, "<", "$path/$file") || die;
-        $class->parse($conf, $glbdns);
-        close($conf);
-
+    if (-d $path) {
+        opendir(DIR, $path) || die "$!";
+        for my $file (readdir(DIR)) {
+            next if (-d $file);
+            next if ($file =~/^(\.|#)/);
+            next if ($file =~/~$/);
+            $class->parse($glbdns, "$path/$file");
+        }
+    } elsif (-f $path) {
+        $class->parse($glbdns, $path);
+    } else {
+        die "Cannot find zone file '$path'\n";
     }
     $class->geo_fix($glbdns);
 }
@@ -28,8 +30,18 @@ sub load_configs {
 
 sub parse {
     my $class = shift;
-    my $fh = shift;
     my $glbdns = shift;
+    my $file = shift;
+
+    open(my $fh, "<", "$file") || die "Cannot open file '$file': $!\n";
+    my $mtime = @{[stat("$file")]}[9];
+
+    my $error = sub {
+        die "$_[0] at $file:$.\n";
+    };
+
+
+
     my $base_fqdn;
     my $base;
     my $hosts = $glbdns->{hosts} ||= {};
@@ -42,10 +54,10 @@ sub parse {
         if($line =~/\$ORIGIN\s+([a-zA-Z.\-]+)/) {
             $base_fqdn = $1;
             ($base) = $base_fqdn =~/(.*)\.$/;
-            warn "Found domain '$base_fqdn' ($base)";
+            $error->("'$base_fqdn' needs to be terminated with a . to be a FQDN") unless ($base);
             next;
         } elsif (!$base) {
-            die "Don't know what domain this is in";
+            $error->("No \$ORIGIN domain has been specified, don't know what domain we are working on");
         }
 
         my @record = split /\s+/, $line;
@@ -78,6 +90,7 @@ sub parse {
         push @$records, $rr;
 
     }
+    close($fh);
 }
 
 
