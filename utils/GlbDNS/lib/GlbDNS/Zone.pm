@@ -72,9 +72,12 @@ sub parse {
         }
 
         # fully qualify CNAMEs
-
         if($record[3] eq 'CNAME' && $record[4] !~/\.$/) {
             $record[4] .= ".$base";
+        }
+        # fully qualify MX
+        if($record[3] eq 'MX' && $record[5] !~/\.$/) {
+            $record[5] .= ".$base";
         }
 
         my $rr = Net::DNS::RR->new(join " ", @record);
