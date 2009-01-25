@@ -2,7 +2,7 @@
 
 $ORIGIN wikia-glb.net.
 
-600 IN SOA ns-lon-2.wikia.net. dnsmaster.wikia-inc.com. 2009012502 1200 120 1209600 60
+600 IN SOA ns-lon-2.wikia.net. dnsmaster.wikia-inc.com. 2009012503 1200 120 1209600 60
 
 
 images1.wikia 86400 IN CNAME glb.wikia.nocookie.net.
