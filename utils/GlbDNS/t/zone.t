@@ -88,6 +88,8 @@ $glbdns->{hosts}->{"example.local"}->{SOA}->[0]->serial(1234);
  {
      pass("example.local IN ANY");
      my ($rcode, $ans, $auth, $add, $flags) = $glbdns->request("example.local","IN","ANY","127.0.0.1",undef);
+     is($rcode, "NOERROR", "Should be fine");
+     is($flags->{aa}, 1, "We are supposed to be authorative");
      is(scalar @$auth, 0, "Auth still empty");
      is(scalar @$ans, 6, "Should include the SOA an MX");
      my $i = 0;
@@ -119,6 +121,8 @@ $glbdns->{hosts}->{"example.local"}->{SOA}->[0]->serial(1234);
  {
      pass("example.local IN MX");
      my ($rcode, $ans, $auth, $add, $flags) = $glbdns->request("example.local","IN","MX","127.0.0.1",undef);
+     is($rcode, "NOERROR", "Should be fine");
+     is($flags->{aa}, 1, "We are supposed to be authorative");
      is(scalar(@$auth), 4, "Should have recieved the 4 nameservers");
      is(scalar(@$ans), 1, "One MX record replied");
      is(scalar(@$add), 5, "NS A records + MX A record");
@@ -139,6 +143,16 @@ sub check_additional {
        $result->{$packet->name}++;
     }
     is_deeply( $result, $expected_result, "Did we get correct glue?");
+}
+
+{
+    pass("Check for non existant A records");
+    my ($rcode, $ans, $auth, $add, $flags) = $glbdns->request("doesnotexist.example.local","IN","A","127.0.0.1",undef);
+    is($rcode, "NXDOMAIN", "Domain does not exist");
+    is($flags->{aa}, 1, "We are supposed to be authorative");
+    is(scalar @$ans, 0, "Doesn't exist");
+    is(scalar @$auth,1, "One SOA record should be returned");
+    is(scalar @$add, 0, "No additional records");
 }
 
 1;

@@ -116,8 +116,11 @@ sub request {
     my @query = split(/\./, $qname);
 
     my $host = $self->{hosts}->{$qname};
-    return ("NXDOMAIN", [],[],[],{}) unless($host);
-
+    unless($host) {
+        my $domain = $self->get_host($qname);
+        my $soa = $domain->{SOA} || [];
+        return ("NXDOMAIN", [], $soa, [],{ aa => 1})
+    }
 
 
     my $domain = $self->get_host($host->{domain});
