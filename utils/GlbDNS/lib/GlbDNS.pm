@@ -140,7 +140,7 @@ sub request {
         push @$ans, @{$domain->{SOA}};
     }
     if ($qtype eq 'ANY' || $qtype eq 'MX') {
-        push @$ans, values %{$domain->{MX}};
+        push @$ans, @{$domain->{MX}};
     }
 
 
