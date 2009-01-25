@@ -10,10 +10,10 @@ sub domains { "glb.wikia.net" }
 
 sub ns { return q{
 
-60 IN NS ns-lon-1.wikia.net
-60 IN NS ns-nj-1.wikia.net
-60 IN NS ns-sjc-1.wikia.net
-60 IN NS ns-lon-2.wikia.net
+86400 IN NS ns-lon-1.wikia.net
+86400 IN NS ns-nj-1.wikia.net
+86400 IN NS ns-sjc-1.wikia.net
+86400 IN NS ns-lon-2.wikia.net
 
 }}
 
@@ -81,8 +81,8 @@ sub hosts {q{
 
 600 IN SOA ns-lon-2.wikia.net. dnsmaster.wikia-inc.com. 2008121101 1200 120 1209600 3600
 
-images   600 IN CNAME g1.panthercdn.com
-wikis    600 IN A 216.224.121.143
+images   60 IN CNAME g1.panthercdn.com
+wikis    60 IN A 216.224.121.143
 }}
 
 
