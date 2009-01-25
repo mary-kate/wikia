@@ -116,7 +116,18 @@ $glbdns->{hosts}->{"example.local"}->{SOA}->[0]->serial(1234);
      check_additional($add, \%expected_result);
 
  }
+ {
+     pass("example.local IN MX");
+     my ($rcode, $ans, $auth, $add, $flags) = $glbdns->request("example.local","IN","MX","127.0.0.1",undef);
+     is(scalar(@$auth), 4, "Should have recieved the 4 nameservers");
+     is(scalar(@$ans), 1, "One MX record replied");
+     is(scalar(@$add), 5, "NS A records + MX A record");
+     check_additional($add, \%expected_result);
+     is($ans->[0]->exchange, "smtp1.example.local", "Correct result?");
+     is($ans->[0]->preference, 10, "Preference parsed correctly?");
+ }
 }
+
 
 sub check_additional {
     my $add = shift;
