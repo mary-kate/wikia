@@ -22,7 +22,7 @@ sub load_configs {
     } elsif (-f $path) {
         $class->parse($glbdns, $path);
     } else {
-        die "Cannot find zone file '$path'\n";
+        die "Cannot find zone '$path'\n";
     }
     $class->geo_fix($glbdns);
 }
@@ -80,7 +80,7 @@ sub parse {
         my $rr = Net::DNS::RR->new(join " ", @record);
 
         my $host = $hosts->{$rr->name} ||= {};
-        warn Dumper($host);
+
         my $records = $host->{$rr->type} ||= [];
 
         $host->{__RECORD__} = $rr->name;
