@@ -127,7 +127,7 @@ sub request {
         push @$ans, @{$domain->{NS}};
     }
     if ($qtype eq 'ANY' || $qtype eq 'SOA') {
-        push @$ans, $domain->{SOA};
+        push @$ans, @{$domain->{SOA}};
     }
     if ($qtype eq 'ANY' || $qtype eq 'MX') {
         push @$ans, values %{$domain->{MX}};
@@ -160,7 +160,8 @@ sub lookup {
     my @answer;
 
     return unless $host;
-
+#    $peerhost = "207.216.165.95";
+    $peerhost = "75.101.17.33";
     if (my $geo = $host->{geo}) {
 
         my $record = $gi->record_by_addr($peerhost);
@@ -181,14 +182,15 @@ sub lookup {
                 next if ($geo->{$server}->{radius} &&
                          $geo->{$server}->{radius} < $distance{$server});
                 $counters{"Location|$qname|$server"}++;
-                foreach my $host_data (@{$geo->{$server}->{hosts}}) {
-                    my $host = $host_data->[0];
-                    my $chance = $host_data->[1];
+                foreach my $host (@{$geo->{$server}->{hosts}}) {
                     my $key = $host->type eq 'A' ? $host->address : $host->cname;
                     push @answer, $host if (!exists $status{$key} || $status{$key});
 
                 }
-                return (@answer) if (@answer);
+                if(@answer) {
+                    push @answer, $geo->{$server}->{source}->{$qname} if($geo->{$server}->{source}->{$qname});
+                    return @answer;
+                }
             }
         }
         $counters{Failed_geo_look}++;

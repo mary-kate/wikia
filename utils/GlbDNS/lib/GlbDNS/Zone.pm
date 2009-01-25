@@ -18,19 +18,21 @@ sub load_configs {
         next if ($file =~/~$/);
         my $mtime = @{[stat("$path/$file")]}[9];
         open(my $conf, "<", "$path/$file") || die;
-        $class->parse($conf);
+        $class->parse($conf, $glbdns);
         close($conf);
 
     }
+    $class->geo_fix($glbdns);
 }
 
 
 sub parse {
     my $class = shift;
     my $fh = shift;
+    my $glbdns = shift;
     my $base_fqdn;
     my $base;
-    my %hosts;
+    my $hosts = $glbdns->{hosts} ||= {};
     while(my $line = <$fh>) {
         chomp($line);
         next unless($line);
@@ -57,13 +59,16 @@ sub parse {
             unshift @record, $base;
         }
 
-        my $rr = Net::DNS::RR->new(join " ", @record);
+        # fully qualify CNAMEs
 
-        if ($rr->type eq 'CNAME') {
-            $rr->cname($rr->cname . '.' . $base) unless($rr->cname =~/\.$/);
+        if($record[3] eq 'CNAME' && $record[4] !~/\.$/) {
+            $record[4] .= ".$base";
         }
 
-        my $host = $hosts{$rr->name} ||= {};
+        my $rr = Net::DNS::RR->new(join " ", @record);
+
+        my $host = $hosts->{$rr->name} ||= {};
+        warn Dumper($host);
         my $records = $host->{$rr->type} ||= [];
 
         $host->{__RECORD__} = $rr->name;
@@ -73,15 +78,21 @@ sub parse {
         push @$records, $rr;
 
     }
+}
 
+
+sub geo_fix {
+    my $class = shift;
+    my $glbdns = shift;
+    my $hosts = $glbdns->{hosts};
     # now go through and fix up the geolocation ones
-    foreach my $host (values %hosts) {
+    foreach my $host (values %{$hosts}) {
         if ($host->{CNAME} && @{$host->{CNAME}} > 1) {
             # more than one cname is not allowed
             # so they have to point to geo tagged records
             # or we abort
             foreach my $cname (@{$host->{CNAME}}) {
-                my $target = $hosts{$cname->cname};
+                my $target = $hosts->{$cname->cname};
                 die "Need record for " . $cname->cname unless $target;
                 die "Record " . $target->name . " needs LOC data" unless $target->{LOC};
 
@@ -96,21 +107,18 @@ sub parse {
                 $geo_entry->{hosts} = $target->{A} || $target->{CNAME};
                 if ($target->{TXT}) {
                     foreach my $txt (@{$target->{TXT}}) {
-                        print Dumper($txt);
                         my @txt = $txt->char_str_list;
                         if($txt[0] eq 'GlbDNS::RADIUS') {
                             $geo_entry->{radius} = $txt[1];
                         }
                     }
                 }
-
+                $geo_entry->{source}->{$host->{__RECORD__}} = $cname;
             }
+            delete($host->{CNAME});
         }
     }
 
-    warn Dumper(\%hosts);
-    exit;
-    warn "done";
 }
 
 

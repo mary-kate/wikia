@@ -12,6 +12,7 @@ $daemon->parse_options(
     "syslog"     => 0              => "Syslog",
     "config=s"   => "/etc/glbdns/" => "Configuration directory",
     "loglevel=i" => 1              => "What level of messaes to log, higher is more verbose",
+    "zones=s"    => "zone/"        => "Where to find zone files",
     );
 
 # this should be support cleaner by Working::Daemon
@@ -25,7 +26,10 @@ $daemon->do_action;
 my $dns = GlbDNS->new($daemon);
 
 use GlbDNS::Config;
+use GlbDNS::Zone;
 
-GlbDNS::Config->load_configs($dns, $daemon->options->{config});
+
+#GlbDNS::Config->load_configs($dns, $daemon->options->{config});
+GlbDNS::Zone->load_configs($dns, $daemon->options->{zones});
 
 $dns->start();
