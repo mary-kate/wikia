@@ -26,6 +26,11 @@ $daemon->parse_options(
     "zones=s"    => "zone/"        => "Where to find zone files",
     );
 
+my %response = ('ns1.example.local' => "127.0.0.2",
+                'ns2.example.local' => '127.0.0.3',
+                'ns3.example.local' => '127.0.0.4',
+                'ns4.example.local' => '127.0.0.5');
+
 
 my $glbdns = GlbDNS->new($daemon);
 isa_ok($glbdns, "GlbDNS");
@@ -42,40 +47,82 @@ is($@, "Cannot find zone 't/zones/doesntexist.zone'\n", "Testing non existant fi
 GlbDNS::Zone->load_configs($glbdns, "t/zones/example.local.zone");
 ok(1, "Loaded t/zones/example.local.zone");
 
+# modify serial to something deterministic
+ok(exists($glbdns->{hosts}->{"example.local"}->{SOA}), "SOA EXISTS");
+$glbdns->{hosts}->{"example.local"}->{SOA}->[0]->serial(1234);
+
 {
-    my ($rcode, $ans, $auth, $add, $flags) = $glbdns->request("example.local","IN","NS","127.0.0.1",undef);
-    is($flags->{aa}, 1, "We are supposed to be authorative");
-    is($rcode, "NOERROR", "We should have found something");
-    is(scalar @$ans, 4, "We have 4 NS records back as answers");
-    is(scalar @$auth, 0, "We should have 0 NS records since they are already in the answer section");
-    is(scalar @$add, 4, "We have 4 glue records back");
+ pass("Tests on the domain level");
+ my %expected_result = (
+     'ns1.example.local' => 1,
+     'ns2.example.local' => 1,
+     'ns3.example.local' => 1,
+     'ns4.example.local' => 1,
+ );
 
-    my %response = ('ns1.example.local' => "127.0.0.2",
-                    'ns2.example.local' => '127.0.0.3',
-                    'ns3.example.local' => '127.0.0.4',
-                    'ns4.example.local' => '127.0.0.5');
-    my %result;
 
-    foreach my $packet (@$ans) {
-        ok (exists $response{$packet->nsdname}, "Checking NS response for ". $packet->nsdname);
-        $result{$packet->nsdname}++;
-    }
+ {
 
-    my %expected_result = (
-        'ns1.example.local' => 1,
-        'ns2.example.local' => 1,
-        'ns3.example.local' => 1,
-        'ns4.example.local' => 1,
-        );
+     pass("example.local IN NS");
+     my ($rcode, $ans, $auth, $add, $flags) = $glbdns->request("example.local","IN","NS","127.0.0.1",undef);
+     is($flags->{aa}, 1, "We are supposed to be authorative");
+     is($rcode, "NOERROR", "We should have found something");
+     is(scalar @$ans, 4, "We have 4 NS records back as answers");
+     is(scalar @$auth, 0, "We should have 0 NS records since they are already in the answer section");
+     is(scalar @$add, 4, "We have 4 glue records back");
 
-    is_deeply( \%result, \%expected_result, "Did we get a result for each expected one");
-    %result = ();
-    foreach my $packet(@$add) {
+     my %result;
+
+     foreach my $packet (@$ans) {
+         ok (exists $response{$packet->nsdname}, "Checking NS response for ". $packet->nsdname);
+         $result{$packet->nsdname}++;
+     }
+
+     is_deeply( \%result, \%expected_result, "Did we get a result for each expected one");
+     %result = ();
+     check_additional($add, \%expected_result);
+ }
+
+ {
+     pass("example.local IN ANY");
+     my ($rcode, $ans, $auth, $add, $flags) = $glbdns->request("example.local","IN","ANY","127.0.0.1",undef);
+     check_additional($add, \%expected_result);
+     is(scalar @$auth, 0, "Auth still empty");
+     is(scalar @$ans, 6, "Should include the SOA an MX");
+     my $i = 0;
+     my %result;
+     my $soa;
+     my $mx;
+     foreach my $ans (@$ans) {
+         if($ans->type eq 'NS') {
+             $result{$ans->nsdname}++; next;
+         } elsif($ans->type eq 'SOA') {
+             $soa = $ans; next;
+         } elsif($ans->type eq 'MX') {
+             $mx = $ans; next;
+         }
+         fail("Was not expecting " . $ans->type);
+     }
+     isa_ok($soa, "Net::DNS::RR::SOA");
+     isa_ok($mx, "Net::DNS::RR::MX");
+     is($soa->mname, "ns1.example.local", "Check primary dns name");
+     is($soa->rname, "dnsmaster.example.local", "And who is responsible for it");
+     is($soa->serial, "1234", "Serial check");
+     is($soa->minimum, 1, "minimum TTL");
+
+
+ }
+}
+
+sub check_additional {
+    my $add = shift;
+    my $expected_result = shift;
+    my $result = {};
+   foreach my $packet(@$add) {
         is ($response{$packet->name}, $packet->address, "Check address");
-        $result{$packet->name}++;
+        $result->{$packet->name}++;
     }
-    is_deeply( \%result, \%expected_result, "Did we get correct glue?");
-
+    is_deeply( $result, $expected_result, "Did we get correct glue?");
 }
 1;
 
