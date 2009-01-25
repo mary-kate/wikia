@@ -141,6 +141,10 @@ sub request {
     }
     if ($qtype eq 'ANY' || $qtype eq 'MX') {
         push @$ans, @{$domain->{MX}};
+        foreach my $mx (@{$domain->{MX}}) {
+            my $mx_host = $self->get_host($mx->exchange);
+            push @$add, $self->lookup($mx->exchange, "A", $mx_host, $peerhost);
+        }
     }
 
 
