@@ -3,12 +3,15 @@
 
 $ORIGIN example.local.
 
-600 IN SOA ns1.example.local. dnsmaster.example.local. 2009012529 1200 120 1209600 1
+600 IN SOA ns1.example.local. dnsmaster.example.local. 2009012533 1200 120 1209600 1
 
 86400 IN NS ns1.example.local
 86400 IN NS ns2.example.local
 86400 IN NS ns3.example.local
 86400 IN NS ns4.example.local
+
+; white space here for tsting
+ 
 
 ns1   IN A 127.0.0.2
 ns2   IN A 127.0.0.3
