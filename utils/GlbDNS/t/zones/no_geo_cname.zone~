@@ -1,0 +1,13 @@
+
+$ORIGIN test.local.
+
+
+test.local. IN SOA SOA
+
+geo 86404 IN CNAME london
+geo 86400 IN CNAME london
+geo 86400 IN CNAME sjc
+geo 86400 IN CNAME singapore
+
+london 60 IN A 127.0.0.10
+london 60 IN A 127.0.0.11
