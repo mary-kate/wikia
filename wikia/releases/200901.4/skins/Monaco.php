@@ -180,7 +180,8 @@ EOS;
 						$data_array['sidebarmenu'][$this->lastExtraIndex] = array(
 							'text' => wfMsg('monaco-edit-this-menu'),
 							'href' => $monacoSidebarUrl,
-							'class' => 'Monaco-sidebar_edit'
+							'class' => 'Monaco-sidebar_edit',
+							'c' => 'Monaco-sidebar_edit'
 						);
 					}
 				}
@@ -402,11 +403,11 @@ EOS;
 				$node['magic'] = true;
 			}
 			$results = DataProvider::$extraWords[strtolower($node['org'])][1]();
-			$results[] = array('url' => Title::makeTitle(NS_SPECIAL, 'Top/'.$extraWords[strtolower($node['org'])][0])->getLocalURL(), 'text' => strtolower(wfMsg('moredotdotdot')), 'class' => 'Monaco-sidebar_more');
+			$results[] = array('url' => Title::makeTitle(NS_SPECIAL, 'Top/'.$extraWords[strtolower($node['org'])][0])->getLocalURL(), 'text' => strtolower(wfMsg('moredotdotdot')), 'class' => 'Monaco-sidebar_more', 'c' => 'Monaco-sidebar_more');
 			global $wgUser;
 			if( $wgUser->isAllowed( 'editinterface' ) ) {
 				if(strtolower($node['org']) == '#popular#') {
-					$results[] = array('url' => Title::makeTitle(NS_MEDIAWIKI, 'Most popular articles')->getLocalUrl(), 'text' => wfMsg('monaco-edit-this-menu'), 'class' => 'Monaco-sidebar_edit');
+					$results[] = array('url' => Title::makeTitle(NS_MEDIAWIKI, 'Most popular articles')->getLocalUrl(), 'text' => wfMsg('monaco-edit-this-menu'), 'class' => 'Monaco-sidebar_edit', 'c' => 'Monaco-sidebar_edit');
 				}
 			}
 			foreach($results as $key => $val) {
@@ -415,6 +416,7 @@ EOS;
 				$nodes[$this->lastExtraIndex]['href'] = $val['url'];
 				if(!empty($val['class'])) {
 					$nodes[$this->lastExtraIndex]['class'] = $val['class'];
+					$nodes[$this->lastExtraIndex]['c'] = $val['class'];
 				}
 				$this->lastExtraIndex++;
 			}
@@ -451,6 +453,7 @@ EOS;
 				$nodes[$this->lastExtraIndex]['text'] = strtolower(wfMsg('moredotdotdot'));
 				$nodes[$this->lastExtraIndex]['href'] = $node['href'];
 				$nodes[$this->lastExtraIndex]['class'] = 'Monaco-sidebar_more';
+				$nodes[$this->lastExtraIndex]['c'] = 'Monaco-sidebar_more';
 				$this->lastExtraIndex++;
 			}
 		}
@@ -1641,7 +1644,7 @@ function mainMenuInit() {
 				count++;
 				var id = mainMenu[i][j];
 				out += '<div class="menu-item'+(count == mainMenu[i].length ? ' border-fix' : '')+'" id="sub-menu-item_'+i+'_'+id+'">';
-				out += '<a'+(subMenu[mainMenu[i][j]].href == badUrl ? ' onclick="return false;"' : '')+' id="a-sub-menu-item_'+i+'_'+id+'" href="'+subMenu[mainMenu[i][j]].href+'" rel="nofollow"'+(subMenu[mainMenu[i][j]].class ? ' class="'+subMenu[mainMenu[i][j]].class+'"' : '')+'>'+subMenu[mainMenu[i][j]].text+(subMenu[mainMenu[i][j]].children ? '<em>&rsaquo;</em>' : '')+'</a>';
+				out += '<a'+(subMenu[mainMenu[i][j]].href == badUrl ? ' onclick="return false;"' : '')+' id="a-sub-menu-item_'+i+'_'+id+'" href="'+subMenu[mainMenu[i][j]].href+'" rel="nofollow"'+(subMenu[mainMenu[i][j]].c ? ' class="'+subMenu[mainMenu[i][j]].c+'"' : '')+'>'+subMenu[mainMenu[i][j]].text+(subMenu[mainMenu[i][j]].children ? '<em>&rsaquo;</em>' : '')+'</a>';
 				out += '</div>';
 			}
 			out += '</div>'
@@ -1679,7 +1682,7 @@ function sub_menuItemAction_wrap(e) {
 			count++;
 			var idi = subMenu[menu_id].children[j];
 			out += '<div class="menu-item'+(count == subMenu[menu_id].children.length ? ' border-fix' : '')+'" id="sub-menu-item'+name_part+'_'+idi+'">';
-			out += '<a'+(subMenu[idi].href == badUrl ? ' onclick="return false;"' : '')+' id="a-sub-menu-item'+name_part+'_'+idi+'" href="'+subMenu[idi].href+'" rel="nofollow"'+(subMenu[idi].class ? ' class="'+subMenu[idi].class+'"' : '')+'>'+subMenu[idi].text+(subMenu[idi].children ? '<em>&rsaquo;</em>' : '')+'</a>';
+			out += '<a'+(subMenu[idi].href == badUrl ? ' onclick="return false;"' : '')+' id="a-sub-menu-item'+name_part+'_'+idi+'" href="'+subMenu[idi].href+'" rel="nofollow"'+(subMenu[idi].c ? ' class="'+subMenu[idi].c+'"' : '')+'>'+subMenu[idi].text+(subMenu[idi].children ? '<em>&rsaquo;</em>' : '')+'</a>';
 			out += '</div>';
 		}
 		out += '</div>';
