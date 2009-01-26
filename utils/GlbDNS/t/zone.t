@@ -155,5 +155,23 @@ sub check_additional {
     is(scalar @$add, 0, "No additional records");
 }
 
+{
+    pass("Check for non existant domain");
+    my ($rcode, $ans, $auth, $add, $flags) = $glbdns->request("doesnotexist.doesnotexist.local","IN","A","127.0.0.1",undef);
+    is($rcode, "REFUSED", "Domain does not exist");
+    is($flags->{aa}, 0, "We are no authorative");
+    is(scalar @$ans, 0, "Doesn't exist");
+    is(scalar @$auth,0, "And we have no SOA");
+    is(scalar @$add, 0, "No additional records");
+}
+{
+    pass("Check for non existant host where parts of host exists");
+    my ($rcode, $ans, $auth, $add, $flags) = $glbdns->request("doesnotexist.smtp1.example.local","IN","A","127.0.0.1",undef);
+    is($rcode, "NXDOMAIN", "Domain does not exist");
+    is($flags->{aa}, 1, "We are supposed to be authorative");
+    is(scalar @$ans, 0, "Doesn't exist");
+    is(scalar @$auth,1, "One SOA record should be returned");
+    is(scalar @$add, 0, "No additional records");
+}
 1;
 
