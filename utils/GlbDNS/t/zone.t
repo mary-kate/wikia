@@ -173,5 +173,32 @@ sub check_additional {
     is(scalar @$auth,1, "One SOA record should be returned");
     is(scalar @$add, 0, "No additional records");
 }
+
+{
+    pass("Resolving a cname");
+    my ($rcode, $ans, $auth, $add, $flags) = $glbdns->request("cname.example.local","IN","A","127.0.0.1",undef);
+    is(scalar @$ans, 2, "CNAME and A record");
+    is(scalar @$auth, 4, "4 auth records");
+    is(scalar @$add, "4", "for the name servers");
+    my ($cname, $a);
+    for my $packet (@$ans) {
+        $cname = $packet if($packet->type eq 'CNAME');
+        $a = $packet if($packet->type eq 'A');
+    }
+    isa_ok($cname, "Net::DNS::RR::CNAME");
+    isa_ok($a, "Net::DNS::RR::A");
+    is($a->address, "127.0.0.7");
+    is($cname->cname, "resolved_cname.example.local");
+}
+
+TODO: {
+    local $TODO = "Doesnt support CNAMEs pointing to CNAMEs for glue, not sure if it should";
+    pass("Resolving a cname");
+    my ($rcode, $ans, $auth, $add, $flags) = $glbdns->request("cnamecname.example.local","IN","A","127.0.0.1",undef);
+    is(scalar @$ans, 3, "CNAME and A record");
+    is(scalar @$auth, 4, "4 auth records");
+    is(scalar @$add, "4", "for the name servers");
+}
+
 1;
 
