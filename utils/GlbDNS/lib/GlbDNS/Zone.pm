@@ -113,7 +113,7 @@ sub geo_fix {
                 die "Record " . $cname->name . " needs LOC data\n" unless $target->{LOC};
 
                 my ($lat, $lon) = $target->{LOC}[0]->latlon;
-                my $geo = $host->{geo} ||= $host->{__GEO__} ||= {};
+                my $geo = $host->{__GEO__} ||= {};
 
                 die "Trying to overwrite geo target $target->{__RECORD__}\n" if($geo->{$target->{__RECORD__}});
                 my $geo_entry = $geo->{$target->{__RECORD__}} = {};

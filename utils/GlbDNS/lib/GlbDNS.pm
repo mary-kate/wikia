@@ -184,7 +184,7 @@ sub lookup {
 #    $peerhost = "207.216.165.95";
 #    $peerhost = "75.101.17.33";
 #    $peerhost = "216.224.121.134";
-    if (my $geo = $host->{geo}) {
+    if (my $geo = $host->{__GEO__}) {
 
         my $record = $gi->record_by_addr($peerhost);
         my $location;
