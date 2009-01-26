@@ -3,7 +3,7 @@
 
 $ORIGIN example.local.
 
-600 IN SOA ns1.example.local. dnsmaster.example.local. 2009012517 1200 120 1209600 1
+600 IN SOA ns1.example.local. dnsmaster.example.local. 2009012529 1200 120 1209600 1
 
 86400 IN NS ns1.example.local
 86400 IN NS ns2.example.local
@@ -20,35 +20,27 @@ ns4.example.local. IN A 127.0.0.5
 smtp1 60 IN A 127.0.0.6
 
 cname 60 IN CNAME resolved_cname
-resolved_cname IN A 127.0.0.7
+resolved_cname 60 IN A 127.0.0.7
 cnamecname 60 IN CNAME cname
 
-;images1.wikia 86400 IN CNAME glb.wikia.nocookie.net.
-;images2.wikia 86400 IN CNAME glb.wikia.nocookie.net.
-;images3.wikia 86400 IN CNAME glb.wikia.nocookie.net.
-;images4.wikia 86400 IN CNAME glb.wikia.nocookie.net.;
+; multiple cname is not legal
+; so we have to resolve it to a location
+geo 86400 IN CNAME london
+geo 86400 IN CNAME sjc
+geo 86400 IN CNAME singapore
 
-;glb.wikia 86400 IN CNAME london
-;glb.wikia 86400 IN CNAME panther-us
-;glb.wikia 86400 IN CNAME sjc
-;glb.wikia  86400 IN TXT GlbDNS::CHECK /lvscheck.html "varnish is okay"
+; default to use in case of no geodata
+; cannot be a cname
+geo  60 IN A 127.0.0.8
 
-; default used when there is no geodata
-;glb.wikia 60 IN A 216.151.156.12
+sjc 60 IN A 127.0.0.9
+sjc 86400 IN LOC 37 00 00.000 N 121 00 00.000 W 0.00m 0.00m 0.00m 0.00m
+sjc 86400 IN TXT GlbDNS::RADIUS 500 km
 
-;sjc 60 IN A 216.224.121.143
-;sjc 86400 IN LOC 37 00 00.000 N 121 00 00.000 W
-;sjc 86400 IN LOC 37 00 00.000 N 121 00 00.000 W 0.00m 0.00m 0.00m 0.00m
-;sjc 86400 IN TXT GlbDNS::RADIUS 500 km
+london 60 IN A 127.0.0.10
+london 60 IN A 127.0.0.11
+london 86400 IN LOC 51 00 00.000 N 0 00 00.000  W 0.00m 0.00m 0.00m 0.00m
 
-;london 60 IN A 83.223.112.142
-;london 60 IN A 83.223.112.138
-;london 86400 IN LOC 51 00 00.000 N 0 00 00.000  W 0.00m 0.00m 0.00m 0.00m
-
-;panther-us 60 IN CNAME g1.panthercdn.com.
-;panther-us 86400 IN LOC 42 00 00.000 N 97 00 00.000 W 0.00m 0.00m 0.00m 0.00m
-
-;search1.wikia 600 IN CNAME g1.panthercdn.com.
-;ads.wikia     600 IN CNAME g1.panthercdn.com.
-;origin        600 IN CNAME images.glb.wikia.net.
+singapore 60 IN CNAME sing.example_other.local.
+singapore 86400 IN LOC 01 00 00.000 N 103 00 00.000 E 0.00m 0.00m 0.00m 0.00m
 
