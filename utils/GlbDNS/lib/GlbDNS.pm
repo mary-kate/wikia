@@ -118,8 +118,11 @@ sub request {
     my $host = $self->{hosts}->{$qname};
     unless($host) {
         my $domain = $self->get_host($qname);
-        my $soa = $domain->{SOA} || [];
-        return ("NXDOMAIN", [], $soa, [],{ aa => 1})
+        if ($domain) {
+            $domain = $self->{hosts}->{$domain->{__DOMAIN__}};
+            return ("NXDOMAIN", [], $domain->{SOA}, [],{ aa => 1});
+        }
+        return ("REFUSED", [], [], [],{ aa => 0});
     }
 
 
