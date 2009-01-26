@@ -7,6 +7,17 @@ use Data::Dumper;
 use Net::DNS::RR::A;
 
 
+=head1 GlbDNS::Zone
+
+Parsing zone files with LOC data
+
+=head2 load_configs
+
+    GlbDNS->load_configs($glbdns, $path);
+    GlbDNS->load_configs($glbdns, $file);
+
+=cut
+
 sub load_configs {
     my $class = shift;
     my $glbdns = shift;
@@ -27,6 +38,11 @@ sub load_configs {
     $class->geo_fix($glbdns);
 }
 
+=head2 parse
+
+    GlbDNS->parse($glbdns, $file);
+
+=cut
 
 sub parse {
     my $class = shift;
@@ -96,6 +112,11 @@ sub parse {
     close($fh);
 }
 
+=head2 geo_fix
+
+   GlbDNS::Zone->geo_fix($glbdns);
+
+=cut
 
 sub geo_fix {
     my $class = shift;

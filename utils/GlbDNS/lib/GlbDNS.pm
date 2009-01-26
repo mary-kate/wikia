@@ -43,17 +43,6 @@ sub new {
     return $self;
 }
 
-sub add_config {
-    my $self = shift;
-    my $config = shift;
-    $self->{config}->{ref($config)} = $config;
-
-    foreach my $domain ($config->domains) {
-        $self->{domain}->{$domain} = $config;
-    }
-
-}
-
 sub admin {
     my $sock = IO::Socket::INET->new
         (Listen    => 5,
