@@ -51,6 +51,24 @@ eval { GlbDNS::Zone->load_configs($glbdns, "t/zones/unreadable.zone") };
 is($@, "Cannot open file 't/zones/unreadable.zone': Permission denied\n", "Testing non readable file");
 chmod(0777, "t/zones/unreadable.zone");
 
+eval { GlbDNS::Zone->load_configs($glbdns, "t/zones/no_geo_loc.zone") };
+is($@, "Record geo.test.local needs LOC data\n", "If we have multiple CNAMES we need LOC");
+
+eval { GlbDNS::Zone->load_configs($glbdns, "t/zones/duplicate_geo_cname.zone") };
+is($@, "Trying to overwrite geo target london.test.local\n", "two LOC targets for london.text.local");
+
+$glbdns->{hosts} = {};
+
+eval { GlbDNS::Zone->load_configs($glbdns, "t/zones/no_geo_cname.zone") };
+is($@, "Need record for london.test.local\n", "CNAME not pointing to anything XXX maybe we should sanity check that in total");
+
+$glbdns->{hosts} = {};
+
+eval { GlbDNS::Zone->load_configs($glbdns, "t/zones/no_a_or_cname.zone") };
+is($@, "Need A or CNAME for london.example.local\n", "No CNAME or A for the geo target");
+
+$glbdns->{hosts} = {};
+
 GlbDNS::Zone->load_configs($glbdns, "t/zones/example.local.zone");
 ok(1, "Loaded t/zones/example.local.zone");
 

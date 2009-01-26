@@ -12,7 +12,7 @@ sub load_configs {
     my $glbdns = shift;
     my $path = shift;
     if (-d $path) {
-        opendir(DIR, $path) || die "$!";
+        opendir(DIR, $path) || die "Cannot open directory '$path': $!\n";
         for my $file (readdir(DIR)) {
             next if (-d $file);
             next if ($file =~/^(\.|#)/);
@@ -109,18 +109,18 @@ sub geo_fix {
             # or we abort
             foreach my $cname (@{$host->{CNAME}}) {
                 my $target = $hosts->{$cname->cname};
-                die "Need record for " . $cname->cname unless $target;
-                die "Record " . $target->name . " needs LOC data" unless $target->{LOC};
+                die "Need record for " . $cname->cname . "\n" unless $target;
+                die "Record " . $cname->name . " needs LOC data\n" unless $target->{LOC};
 
                 my ($lat, $lon) = $target->{LOC}[0]->latlon;
                 my $geo = $host->{geo} ||= $host->{__GEO__} ||= {};
 
-                die "Trying to overwrite geo target $target->{__RECORD__}" if($geo->{$target->{__RECORD__}});
+                die "Trying to overwrite geo target $target->{__RECORD__}\n" if($geo->{$target->{__RECORD__}});
                 my $geo_entry = $geo->{$target->{__RECORD__}} = {};
 
                 $geo_entry->{lat} = $lat;
                 $geo_entry->{lon} = $lon;
-                $geo_entry->{hosts} = $target->{A} || $target->{CNAME};
+                $geo_entry->{hosts} = $target->{A} || $target->{CNAME} || die "Need A or CNAME for $target->{__RECORD__}\n";
                 if ($target->{TXT}) {
                     foreach my $txt (@{$target->{TXT}}) {
                         my @txt = $txt->char_str_list;
