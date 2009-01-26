@@ -13,7 +13,7 @@ use List::Util qw(sum);
 my %status : shared;
 my %stats : shared;
 use Geo::IP;
-
+use List::Util qw(shuffle);
 my %counters : shared;
 
 my $gi = Geo::IP->open_type( GEOIP_CITY_EDITION_REV1, GEOIP_STANDARD);
@@ -199,6 +199,7 @@ sub lookup {
 
                 }
                 if(@answer) {
+                    @answer = shuffle(@answer);
                     push @answer, $geo->{$server}->{source}->{$qname} if($geo->{$server}->{source}->{$qname});
                     return @answer;
                 }

@@ -75,8 +75,11 @@ GlbDNS::Zone->load_configs($glbdns, "t/zones/example.local.zone");
     isa_ok($cname, "Net::DNS::RR::CNAME");
     isa_ok($a[0], "Net::DNS::RR::A");
     isa_ok($a[1], "Net::DNS::RR::A");
-    is($a[0]->address, "127.0.0.10");
-    is($a[1]->address, "127.0.0.11");
+    if($a[0]->address eq '127.0.0.10') {
+        is($a[1]->address, "127.0.0.11");
+    } else {
+        is($a[0]->address, "127.0.0.11");
+    }
     is($cname->cname, "london.example.local");
 
 }
