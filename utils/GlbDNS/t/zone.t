@@ -46,6 +46,11 @@ is($@, "No \$ORIGIN domain has been specified, don't know what domain we are wor
 eval { GlbDNS::Zone->load_configs($glbdns, "t/zones/doesntexist.zone") };
 is($@, "Cannot find zone 't/zones/doesntexist.zone'\n", "Testing non existant file");
 
+chmod(0000, "t/zones/unreadable.zone");
+eval { GlbDNS::Zone->load_configs($glbdns, "t/zones/unreadable.zone") };
+is($@, "Cannot open file 't/zones/unreadable.zone': Permission denied\n", "Testing non readable file");
+chmod(0777, "t/zones/unreadable.zone");
+
 GlbDNS::Zone->load_configs($glbdns, "t/zones/example.local.zone");
 ok(1, "Loaded t/zones/example.local.zone");
 
