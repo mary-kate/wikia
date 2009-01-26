@@ -1641,7 +1641,7 @@ function mainMenuInit() {
 				count++;
 				var id = mainMenu[i][j];
 				out += '<div class="menu-item'+(count == mainMenu[i].length ? ' border-fix' : '')+'" id="sub-menu-item_'+i+'_'+id+'">';
-				out += '<a'+(subMenu[mainMenu[i][j]].href == badUrl ? ' onclick="return false;"' : '')+' id="a-sub-menu-item_'+i+'_'+id+'" href="'+subMenu[mainMenu[i][j]].href+'" rel="nofollow">'+subMenu[mainMenu[i][j]].text+(subMenu[mainMenu[i][j]].children ? '<em>&rsaquo;</em>' : '')+'</a>';
+				out += '<a'+(subMenu[mainMenu[i][j]].href == badUrl ? ' onclick="return false;"' : '')+' id="a-sub-menu-item_'+i+'_'+id+'" href="'+subMenu[mainMenu[i][j]].href+'" rel="nofollow"'+(subMenu[mainMenu[i][j]].class ? ' class="'+subMenu[mainMenu[i][j]].class+'"' : '')+'>'+subMenu[mainMenu[i][j]].text+(subMenu[mainMenu[i][j]].children ? '<em>&rsaquo;</em>' : '')+'</a>';
 				out += '</div>';
 			}
 			out += '</div>'
@@ -1679,7 +1679,7 @@ function sub_menuItemAction_wrap(e) {
 			count++;
 			var idi = subMenu[menu_id].children[j];
 			out += '<div class="menu-item'+(count == subMenu[menu_id].children.length ? ' border-fix' : '')+'" id="sub-menu-item'+name_part+'_'+idi+'">';
-			out += '<a'+(subMenu[idi].href == badUrl ? ' onclick="return false;"' : '')+' id="a-sub-menu-item'+name_part+'_'+idi+'" href="'+subMenu[idi].href+'" rel="nofollow">'+subMenu[idi].text+(subMenu[idi].children ? '<em>&rsaquo;</em>' : '')+'</a>';
+			out += '<a'+(subMenu[idi].href == badUrl ? ' onclick="return false;"' : '')+' id="a-sub-menu-item'+name_part+'_'+idi+'" href="'+subMenu[idi].href+'" rel="nofollow"'+(subMenu[idi].class ? ' class="'+subMenu[idi].class+'"' : '')+'>'+subMenu[idi].text+(subMenu[idi].children ? '<em>&rsaquo;</em>' : '')+'</a>';
 			out += '</div>';
 		}
 		out += '</div>';
