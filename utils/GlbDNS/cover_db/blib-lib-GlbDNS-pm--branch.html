@@ -20,37 +20,37 @@ http://www.pjcj.net
 <h1>Branch Coverage</h1>
 <table>
 <tr><td class="h" align="right">File:</td><td align="left">blib/lib/GlbDNS.pm</td></tr>
-<tr><td class="h" align="right">Coverage:</td><td align="left" class="c1">76.9%</td></tr>
+<tr><td class="h" align="right">Coverage:</td><td align="left" class="c1">78.8%</td></tr>
 </table>
 <div><br/></div>
 <table>
 <tr><th>line</th><th>%</th><th colspan="2">coverage</th><th>branch</th></tr>
-<tr><td class="h"><a id="L38">38</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless $TEST{&#39;nosocket&#39;}</td></tr>
-<tr><td class="h"><a id="L41">41</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless $TEST{&#39;noadmin&#39;}</td></tr>
-<tr><td class="h"><a id="L66">66</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if ($foo and $foo =~ /$expect/) { }</td></tr>
-<tr><td class="h"><a id="L108">108</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless ($host)</td></tr>
-<tr><td class="h"><a id="L110">110</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($domain)</td></tr>
-<tr><td class="h"><a id="L120">120</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($$host{&#39;CNAME&#39;})</td></tr>
-<tr><td class="h"><a id="L126">126</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($qtype eq &#39;ANY&#39; or $qtype eq &#39;A&#39; or $qtype eq &#39;PTR&#39;)</td></tr>
-<tr><td class="h"><a id="L130">130</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($qtype eq &#39;ANY&#39; or $qtype eq &#39;NS&#39;)</td></tr>
-<tr><td class="h"><a id="L134">134</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($qtype eq &#39;ANY&#39; or $qtype eq &#39;SOA&#39;)</td></tr>
-<tr><td class="h"><a id="L137">137</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($qtype eq &#39;ANY&#39; or $qtype eq &#39;MX&#39;)</td></tr>
-<tr><td class="h"><a id="L147">147</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless $response_incudes_ns</td></tr>
-<tr><td class="h"><a id="L150">150</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if ($ns_domain)</td></tr>
-<tr><td class="h"><a id="L172">172</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless $host</td></tr>
-<tr><td class="h"><a id="L176">176</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (my $geo = $$host{&#39;__GEO__&#39;})</td></tr>
-<tr><td class="h"><a id="L180">180</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($record)</td></tr>
-<tr><td class="h"><a id="L193">193</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $$geo{$server}{&#39;radius&#39;} and $$geo{$server}{&#39;radius&#39;} &lt; $distance{$server}</td></tr>
-<tr><td class="h"><a id="L197">197</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">$host-&gt;type eq &#39;A&#39; ? :</td></tr>
-<tr><td class="h"><a id="L198">198</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if not exists $status{$key} or $status{$key}</td></tr>
-<tr><td class="h"><a id="L201">201</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if (@answer)</td></tr>
-<tr><td class="h"><a id="L202">202</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if $$geo{$server}{&#39;source&#39;}{$qname}</td></tr>
-<tr><td class="h"><a id="L210">210</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($qtype eq &#39;ANY&#39;) { }</td></tr>
-<tr><td class="h"><a id="L211">211</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if $$host{&#39;A&#39;}</td></tr>
-<tr><td class="h"><a id="L212">212</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if $$host{&#39;AAAA&#39;}</td></tr>
-<tr><td class="h"><a id="L213">213</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if $$host{&#39;CNAME&#39;}</td></tr>
-<tr><td class="h"><a id="L215">215</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $$host{$qtype}</td></tr>
-<tr><td class="h"><a id="L226">226</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($$self{&#39;hosts&#39;}{$test_domain})</td></tr>
+<tr><td class="h"><a id="L38">38</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless $TEST{&#39;nosocket&#39;}</td></tr>
+<tr><td class="h"><a id="L42">42</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless $TEST{&#39;noadmin&#39;}</td></tr>
+<tr><td class="h"><a id="L67">67</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if ($foo and $foo =~ /$expect/) { }</td></tr>
+<tr><td class="h"><a id="L103">103</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless ($host)</td></tr>
+<tr><td class="h"><a id="L105">105</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($domain)</td></tr>
+<tr><td class="h"><a id="L115">115</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($$host{&#39;CNAME&#39;})</td></tr>
+<tr><td class="h"><a id="L121">121</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($qtype eq &#39;ANY&#39; or $qtype eq &#39;A&#39; or $qtype eq &#39;PTR&#39;)</td></tr>
+<tr><td class="h"><a id="L125">125</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($qtype eq &#39;ANY&#39; or $qtype eq &#39;NS&#39;)</td></tr>
+<tr><td class="h"><a id="L129">129</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($qtype eq &#39;ANY&#39; or $qtype eq &#39;SOA&#39;)</td></tr>
+<tr><td class="h"><a id="L132">132</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($qtype eq &#39;ANY&#39; or $qtype eq &#39;MX&#39;)</td></tr>
+<tr><td class="h"><a id="L142">142</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless $response_incudes_ns</td></tr>
+<tr><td class="h"><a id="L145">145</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if ($ns_domain)</td></tr>
+<tr><td class="h"><a id="L167">167</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless $host</td></tr>
+<tr><td class="h"><a id="L171">171</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (my $geo = $$host{&#39;__GEO__&#39;})</td></tr>
+<tr><td class="h"><a id="L175">175</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($record)</td></tr>
+<tr><td class="h"><a id="L188">188</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $$geo{$server}{&#39;radius&#39;} and $$geo{$server}{&#39;radius&#39;} &lt; $distance{$server}</td></tr>
+<tr><td class="h"><a id="L192">192</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">$host-&gt;type eq &#39;A&#39; ? :</td></tr>
+<tr><td class="h"><a id="L193">193</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if not exists $status{$key} or $status{$key}</td></tr>
+<tr><td class="h"><a id="L196">196</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if (@answer)</td></tr>
+<tr><td class="h"><a id="L198">198</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if $$geo{$server}{&#39;source&#39;}{$qname}</td></tr>
+<tr><td class="h"><a id="L206">206</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($qtype eq &#39;ANY&#39;) { }</td></tr>
+<tr><td class="h"><a id="L207">207</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if $$host{&#39;A&#39;}</td></tr>
+<tr><td class="h"><a id="L208">208</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if $$host{&#39;AAAA&#39;}</td></tr>
+<tr><td class="h"><a id="L209">209</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if $$host{&#39;CNAME&#39;}</td></tr>
+<tr><td class="h"><a id="L211">211</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $$host{$qtype}</td></tr>
+<tr><td class="h"><a id="L222">222</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($$self{&#39;hosts&#39;}{$test_domain})</td></tr>
 </table>
 </body>
 </html>
