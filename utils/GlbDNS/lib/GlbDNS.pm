@@ -111,7 +111,7 @@ sub request {
 
     my $domain = $self->get_host($host->{domain});
 
-    if ($host->{CNAME}) {
+    if (($qtype eq 'ANY' || $qtype eq 'CNAME' || $qtype eq 'A') && $host->{CNAME}) {
         push @$ans, $self->lookup($qname, "CNAME", $host, $peerhost);
         $qname = $host->{CNAME}->[0]->cname;
         $host = $self->{hosts}->{$qname};

@@ -214,11 +214,56 @@ sub check_additional {
     is($cname->cname, "resolved_cname.example.local");
 }
 
+{
+    pass("Resolving a cname using CNAME query");
+    my ($rcode, $ans, $auth, $add, $flags) = $glbdns->request("cname.example.local","IN","CNAME","127.0.0.1",undef);
+    is(scalar @$ans, 1, "CNAME");
+    is(scalar @$auth, 4, "4 auth records");
+    is(scalar @$add, "4", "for the name servers");
+    isa_ok($ans->[0], "Net::DNS::RR::CNAME");
+    is($ans->[0]->cname, "resolved_cname.example.local");
+}
+
 TODO: {
     local $TODO = "Doesnt support CNAMEs pointing to CNAMEs for glue, not sure if it should";
     pass("Resolving a cname");
     my ($rcode, $ans, $auth, $add, $flags) = $glbdns->request("cnamecname.example.local","IN","A","127.0.0.1",undef);
     is(scalar @$ans, 3, "CNAME and A record");
+    is(scalar @$auth, 4, "4 auth records");
+    is(scalar @$add, "4", "for the name servers");
+}
+
+{
+    pass("PTR test");
+    my ($rcode, $ans, $auth, $add, $flags) = $glbdns->request("2.0.0.127.in-addr.arpa","IN","PTR","127.0.0.1",undef);
+    is($ans->[0]->ptrdname, "ns1.example.local");
+}
+
+{
+    pass("Request SOA for domain");
+    my ($rcode, $ans, $auth, $add, $flags) = $glbdns->request("example.local","IN","SOA","127.0.0.1",undef);
+    is($flags->{aa}, 1, "We are supposed to be authorative");
+    is(scalar @$ans, 1);
+    is(scalar @$auth, 4, "4 auth records");
+    is(scalar @$add, "4", "for the name servers");
+}
+
+{
+    pass("Request SOA for host");
+    my ($rcode, $ans, $auth, $add, $flags) = $glbdns->request("ns1.example.local","IN","SOA","127.0.0.1",undef);
+    is($flags->{aa}, 1, "We are supposed to be authorative");
+    is(scalar @$ans, 1);
+    isa_ok($ans->[0], "Net::DNS::RR::SOA");
+    is(scalar @$auth, 4, "4 auth records");
+    is(scalar @$add, "4", "for the name servers");
+}
+
+{
+    pass("Request SOA for cname");
+    my ($rcode, $ans, $auth, $add, $flags) = $glbdns->request("cname.example.local","IN","SOA","127.0.0.1",undef);
+    is($flags->{aa}, 1, "We are supposed to be authorative");
+    is(scalar @$ans, 1);
+    isa_ok($ans->[0], "Net::DNS::RR::SOA");
     is(scalar @$auth, 4, "4 auth records");
     is(scalar @$add, "4", "for the name servers");
 }
