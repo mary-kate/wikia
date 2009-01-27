@@ -268,5 +268,13 @@ TODO: {
     is(scalar @$add, "4", "for the name servers");
 }
 
+TODO: {
+    local($TODO) = "Possibly passing back too much";
+    pass("resolved_cname.example.local IN ANY");
+    my ($rcode, $ans, $auth, $add, $flags) = $glbdns->request("resolved_cname.example.local","IN","ANY","127.0.0.1",undef);
+    is($rcode, "NOERROR", "Should be fine");
+    is($flags->{aa}, 1, "We are supposed to be authorative");
+    is(scalar @$ans, 1, "Should include the SOA an MX");
+}
 1;
 
