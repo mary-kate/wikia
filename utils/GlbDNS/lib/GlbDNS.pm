@@ -108,6 +108,7 @@ sub request {
         return ("REFUSED", [], [], [],{ aa => 0});
     }
 
+    $qtype = "A" if($qtype eq 'AAAA');
 
     my $domain = $self->get_host($host->{domain});
 
