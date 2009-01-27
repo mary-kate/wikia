@@ -129,7 +129,7 @@ sub request {
         push @$ans, @{$domain->{SOA}};
     }
     if ($qtype eq 'ANY' || $qtype eq 'MX') {
-        push @$ans, @{$domain->{MX}};
+        push @$ans, @{$domain->{MX}} if($domain->{MX}); # need test
         foreach my $mx (@{$domain->{MX}}) {
             my $mx_host = $self->get_host($mx->exchange);
             push @$add, $self->lookup($mx->exchange, "A", $mx_host, $peerhost);
