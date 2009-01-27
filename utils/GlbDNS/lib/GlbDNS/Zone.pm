@@ -162,6 +162,15 @@ sub geo_fix {
                         my @txt = $txt->char_str_list;
                         if($txt[0] eq 'GlbDNS::RADIUS') {
                             $geo_entry->{radius} = $txt[1];
+                        } elsif($txt[0] eq 'GlbDNS::CHECK') {
+                            foreach my $check_host (@{$geo_entry->{hosts}}) {
+                                $glbdns->{checks}->{$check_host->address} = {
+                                    ip => $check_host->address,
+                                    url => $txt[1],
+                                    expect => $txt[2],
+                                    interval => 5,
+                                };
+                            }
                         }
                     }
                 }
@@ -170,7 +179,6 @@ sub geo_fix {
             delete($host->{CNAME});
         }
     }
-
 }
 
 
