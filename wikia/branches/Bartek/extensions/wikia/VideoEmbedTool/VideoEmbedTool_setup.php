@@ -101,7 +101,6 @@ function VETSetup($editform) {
 			$marg =  'clear: both;' ;
 			$editform->ImageSeparator = ' - ' ;
 		}
-		$wgOut->addHtml('<div id="vetLinkDiv" style="float: left; margin-top: 20px;' . $marg .'">' . $sep . '<a href="#" id="vetLink">' . wfMsg ('vet-imagelink') . '</a></div>');
 	}
 	return true;
 }
@@ -127,6 +126,9 @@ function VETSetupVars($vars) {
 	$vars['vet_hide_license_message'] = wfMsg('vet-hide-license-msg');
 	$vars['vet_max_thumb'] = wfMsg('vet-max-thumb');
 	$vars['vet_title'] = wfMsg('vet-title');
+
+	// macbre: for FCK
+	$vars['vet_enabled'] = true;
 
 	return true;
 }
