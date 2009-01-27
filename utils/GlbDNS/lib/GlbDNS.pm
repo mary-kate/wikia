@@ -108,11 +108,9 @@ sub request {
         return ("REFUSED", [], [], [],{ aa => 0});
     }
 
-    $qtype = "A" if($qtype eq 'AAAA');
-
     my $domain = $self->get_host($host->{domain});
 
-    if (($qtype eq 'ANY' || $qtype eq 'CNAME' || $qtype eq 'A') && $host->{CNAME}) {
+    if (($qtype eq 'ANY' || $qtype eq 'CNAME' || $qtype eq 'A' || $qtype eq 'AAAA') && $host->{CNAME}) {
         push @$ans, $self->lookup($qname, "CNAME", $host, $peerhost);
         $qname = $host->{CNAME}->[0]->cname;
         $host = $self->{hosts}->{$qname};
@@ -121,6 +119,19 @@ sub request {
     if ($qtype eq 'ANY' || $qtype eq 'A' || $qtype eq 'PTR') {
         push @$ans, $self->lookup($qname, $qtype, $host, $peerhost);
     }
+
+    if ($qtype eq 'ANY' || $qtype eq 'AAAA') {
+        my @answer = $self->lookup($qname, $qtype, $host, $peerhost);
+        # if we get a specific AAAA query
+        # and this host exists (otherwise we wouldnt have come this far
+        # then we have to return to SOA in auth 0 ANS and NO ERROR
+        # RFC 4074 4.1 and 4.2
+        if($qtype eq 'AAAA' && !@answer && !@$ans) {
+            return ("NOERROR", [], [@{$domain->{SOA}}], [], { aa => 1 });
+        }
+    }
+
+
 
     if ($qtype eq 'ANY' || $qtype eq 'NS') {
         push @$ans, @{$domain->{NS}};

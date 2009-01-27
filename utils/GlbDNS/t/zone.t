@@ -276,5 +276,26 @@ TODO: {
     is($flags->{aa}, 1, "We are supposed to be authorative");
     is(scalar @$ans, 1, "Should include the SOA an MX");
 }
+
+{
+    pass("Request resolved_cname.example.local IN AAAA");
+    my ($rcode, $ans, $auth, $add, $flags) = $glbdns->request("resolved_cname.example.local","IN","AAAA","127.0.0.1",undef);
+    is($flags->{aa}, 1, "We are supposed to be authorative");
+    is($rcode,'NOERROR');
+    is(scalar @$ans, 0);
+    is(scalar @$auth, 1);
+    is(scalar @$add,  0);
+}
+
+{
+    pass("Request cname.example.local IN AAAA");
+    my ($rcode, $ans, $auth, $add, $flags) = $glbdns->request("cname.example.local","IN","AAAA","127.0.0.1",undef);
+    is($flags->{aa}, 1, "We are supposed to be authorative");
+    is($rcode,'NOERROR');
+    is(scalar @$ans, 1);
+    is(scalar @$auth, 4);
+    is(scalar @$add,  4);
+}
+
 1;
 
