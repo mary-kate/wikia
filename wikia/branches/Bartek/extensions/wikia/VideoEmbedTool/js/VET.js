@@ -469,6 +469,8 @@ function VET_insertFinalVideo(e, type) {
 		}
 	}
 
+	params.push('oname='+$('VideoEmbedOname').value);
+
 	if(type == 'overwrite') {
 		params.push('name='+$('VideoEmbedExistingName').value);
 	} else if(type == 'rename') {

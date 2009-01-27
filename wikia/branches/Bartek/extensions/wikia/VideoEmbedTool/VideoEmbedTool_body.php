@@ -217,6 +217,7 @@ class VideoEmbedTool {
 		$id = $wgRequest->getVal('id');
 		$provider = $wgRequest->getVal('provider');
 		$name = $wgRequest->getVal('name');
+		$oname = $wgRequest->getVal('oname');
 
 		$title = Title::makeTitle( NS_VIDEO, $name );
 					
