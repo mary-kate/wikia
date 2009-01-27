@@ -69,15 +69,23 @@ sub hosts {q{
 
 600 IN SOA ns-lon-2.wikia.net. dnsmaster.wikia-inc.com. 2008121101 1200 120 1209600 3600
 
-images1.wikia 86400 IN CNAME glb.wikia.nocookie.net
-images2.wikia 86400 IN CNAME glb.wikia.nocookie.net
-images3.wikia 86400 IN CNAME glb.wikia.nocookie.net
-images4.wikia 86400 IN CNAME glb.wikia.nocookie.net
+images1.wikia 600 IN CNAME glb.wikia.nocookie.net
+images2.wikia 600 IN CNAME glb.wikia.nocookie.net
+images3.wikia 600 IN CNAME glb.wikia.nocookie.net
+images4.wikia 600 IN CNAME glb.wikia.nocookie.net
 glb.wikia 60 IN A 216.151.156.12
 
 search1.wikia 600 IN CNAME g1.panthercdn.com
 ads.wikia     600 IN CNAME g1.panthercdn.com
 origin        600 IN CNAME images.glb.wikia.net.
+
+panther-us 60 IN CNAME g1.panthercdn.com.
+panther-apac 60 IN CNAME g1.panthercdn.com.
+london 60 IN A 83.223.112.142
+london 60 IN A 83.223.112.138
+sjc-html 60 IN A 216.224.121.143
+sjc-images 60 IN A 216.151.156.12
+glb 60 IN A 216.151.156.12
 
 }}
 
