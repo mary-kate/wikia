@@ -2,7 +2,7 @@
 
 $ORIGIN nocookie.net.
 
-600 IN SOA ns-lon-2.wikia.net. dnsmaster.wikia-inc.com. 2009012625 1200 120 1209600 300
+600 IN SOA ns-lon-2.wikia.net. dnsmaster.wikia-inc.com. 2009012626 1200 120 1209600 300
 
 86400 IN NS ns-sjc-1.wikia.net
 86400 IN NS ns-nj-1.wikia.net
@@ -43,6 +43,8 @@ panther-us 86400 IN LOC 32 00 00.000 N 97 00 00.000 W 0.00m 0.00m 0.00m 0.00m
 search1.wikia 600 IN CNAME g1.panthercdn.com
 ads.wikia     600 IN CNAME g1.panthercdn.com
 origin        600 IN CNAME images.glb.wikia.net.
+
+glb.wikia 60 IN CNAME glb
 
 ; these should really not be here
 ; but we want glue
