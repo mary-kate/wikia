@@ -31,7 +31,7 @@ sub new {
     $self->{name} = $daemon->name;
 
     $self->{dns} = Net::DNS::Nameserver->new(
-        Verbose => $main::config{debug},
+        Verbose => $main::config{debug} || 0,
         LocalAddr => $daemon->options->{address},
         LocalPort => $daemon->options->{port},
         ReplyHandler => sub { $self->request(@_) },
@@ -70,12 +70,6 @@ sub check_service {
         }
         sleep $interval;
     }
-}
-
-sub check_status {
-    my $self = shift;
-    my $rr = shift;
-
 }
 
 sub start {
