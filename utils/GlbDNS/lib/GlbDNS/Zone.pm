@@ -96,17 +96,32 @@ sub parse {
             $record[5] .= ".$base";
         }
 
+
+        my $add_host = sub {
+            my $record = shift;
+            my $host = $hosts->{$record->name} ||= {};
+            my $records = $host->{$record->type} ||= [];
+            $host->{__RECORD__} = $record->name;
+            $host->{domain} = $host->{__DOMAIN__} = $base;
+            push @$records, $record;
+        };
+
         my $rr = Net::DNS::RR->new(join " ", @record);
 
-        my $host = $hosts->{$rr->name} ||= {};
+        # autocreate PTR records for A records
+        # there can be more than one
+        if ($rr->type eq 'A') {
+            my $address = join(".", reverse( split(/\./, $rr->address)) ) ;
+            my $reverse = Net::DNS::RR->new("$address.in-addr.arpa. " . $rr->ttl . " IN PTR  " . $rr->name);
+            $add_host->($reverse);
+        }
 
-        my $records = $host->{$rr->type} ||= [];
 
-        $host->{__RECORD__} = $rr->name;
-        $host->{domain} = $host->{__DOMAIN__} = $base;
+        $add_host->($rr);
 
 
-        push @$records, $rr;
+
+
 
     }
     close($fh);
