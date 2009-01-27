@@ -3,27 +3,6 @@
 // use the same namespace as in old NY extension
 define( 'NS_VIDEO', 400 );
 
-global $wgWikiaVideoProviders;
-$wgWikiaVideoProviders = array(
-		VideoPage::V_GAMETRAILERS => 'gametrailers',
-		VideoPage::V_GAMEVIDEOS => 'gamevideos',
-		VideoPage::V_GAMESPOT => 'gamespot',
-		VideoPage::V_MTVGAMES => 'mtvgames',
-		VideoPage::V_5MIN => '5min',
-		VideoPage::V_YOUTUBE => 'youtube',
-		VideoPage::V_HULU => 'hulu',
-		VideoPage::V_VEOH => 'veoh',
-		VideoPage::V_FANCAST => 'fancast',
-		VideoPage::V_IN2TV => 'in2tv',
-		VideoPage::V_BLIPTV => 'bliptv',
-		VideoPage::V_METACAFE => 'metacafe',
-		VideoPage::V_SEVENLOAD => 'sevenload',
-		VideoPage::V_VIMEO => 'vimeo',
-		VideoPage::V_CLIPFISH => 'clipfish',
-		VideoPage::V_MYVIDEO => 'myvideo'	
-		);
-
-
 // main video page class
 class VideoPage extends Article {
 
@@ -117,6 +96,7 @@ class VideoPage extends Article {
 		$provider = '';
 		$id = '';
 
+		$url = trim( $url );
 		// todo make sure to check just http://something.else/ part, omit whatever follows
 		$fixed_url = strtoupper( $url );
 		$test = strpos( $fixed_url, "HTTP://" );
@@ -162,6 +142,8 @@ class VideoPage extends Article {
 
 			if( $standard_url !== false){
 				$id = substr( $url , $standard_url+8, strlen($url) );
+			} else {
+				return false;
 			}
 			if(!$id){
 				$id_test = str_replace("http://www.youtube.com/v/","",$url);
@@ -241,7 +223,9 @@ class VideoPage extends Article {
 				$ids = array_pop( $parsed );
 				$parsed_twice = split( "-", $ids );
 				$this->mId = array_pop( $parsed_twice );
-				$this->mData = array();					
+				$this->mData = array(
+						implode( '-', $parsed_twice ) . '-'
+					);					
 				return true;
 			}
 		}
@@ -308,12 +292,18 @@ class VideoPage extends Article {
 			case "youtube": 
 				return 'http://www.youtube.com/watch?v=' . $id;
 			case "sevenload":
-				return '';
+				return 'http://www.sevenload.com/videos/' . $id;
 			case "gamevideos":
 				return 'http://gamevideos.1up.com/video/id/' . $id;
 				break;
 			case "5min":
-				return '';
+				return 'http://www.5min.com/Video/' . $mData[0] . $id;
+				break;
+			case "myvideo":
+				return 'http://www/myvideo.de/watch/' . $id;
+				break;
+			case "vimeo":
+				return 'http://www.vimeo.com/' . $id;
 				break;
 			default:
 				return '';
@@ -333,23 +323,23 @@ class VideoPage extends Article {
 	}
 	
 	public function save() {
-		global $wgUser;
+		global $wgUser, $wgWikiaVideoProviders;
 
-		$this->mTitle = Title::makeTitle( NS_VIDEO, $this->mName );
+		$this->mTitle = Title::newFromText($this->mName, NS_VIDEO );
 		$desc = "added video [[" . $this->mTitle->getPrefixedText() . "]]";			
 
                 $dbw = wfGetDB( DB_MASTER );
                 $now = $dbw->timestamp();
 	
-		switch( $this->mProviders[$this->mProvider] ) {
+		switch( $wgWikiaVideoProviders[$this->mProvider] ) {
 			case 'metacafe':		
 			case 'sevenload':					
 			case 'myvideo':
+			case '5min':
 				$metadata = $this->mProvider . ',' . $this->mId . ',' . $this->mData[0];
 				break;
 			case 'youtube':		
 			case 'gamevideos':
-			case '5min':
 			case 'vimeo':		
 				$metadata = $this->mProvider . ',' . $this->mId . ',';
 				break;
@@ -477,23 +467,23 @@ class VideoPage extends Article {
                                 break;
 			case "sevenload":
 				$code = 'custom';
-				$embed = '<object style="visibility: visible;" id="sevenloadPlayer_' . $this->mId . '" data="http://static.sevenload.com/swf/player/player.swf" type="application/x-shockwave-flash" height="' . $height . '" width="' . $width . '"><param value="always" name="allowScriptAccess"><param value="true" name="allowFullscreen"><param value="configPath=http%3A%2F%2Fflash.sevenload.com%2Fplayer%3FportalId%3Den%26autoplay%3D0%26itemId%3D' . $this->mId . '&amp;locale=en_US&amp;autoplay=0&amp;environment=" name="flashvars"></object>';
+				$embed = '<object style="visibility: visible;" id="sevenloadPlayer_' . $this->mId . '" data="http://static.sevenload.com/swf/player/player.swf" type="application/x-shockwave-flash" height="' . $height . '" width="' . $width . '"><param name="wmode" value="transparent"><param value="always" name="allowScriptAccess"><param value="true" name="allowFullscreen"><param value="configPath=http%3A%2F%2Fflash.sevenload.com%2Fplayer%3FportalId%3Den%26autoplay%3D0%26itemId%3D' . $this->mId . '&amp;locale=en_US&amp;autoplay=0&amp;environment=" name="flashvars"></object>';
 				break;
 			case 'myvideo':
 				$code = 'custom';
-				$embed = "<object style='width:{$width}px;height:{$height}px;' type='application/x-shockwave-flash' data='http://www.myvideo.de/movie/{$this->mId}'> <param name='movie' value='http://www.myvideo.de/movie/{$this->mId}' /> <param name='AllowFullscreen?' value='true' /> </object>";	
+				$embed = "<object style='width:{$width}px;height:{$height}px;' type='application/x-shockwave-flash' data='http://www.myvideo.de/movie/{$this->mId}'><param name='wmode' value='transparent'><param name='movie' value='http://www.myvideo.de/movie/{$this->mId}' /> <param name='AllowFullscreen?' value='true' /> </object>";	
 				break;
 			case "gamevideos":
 				$code = 'custom';
-				$embed = '<embed type="application/x-shockwave-flash" width="' . $width . '" height="' . $height . '" src="http://gamevideos.1up.com/swf/gamevideos12.swf?embedded=1&amp;fullscreen=1&amp;autoplay=0&amp;src=http://gamevideos.1up.com/do/videoListXML%3Fid%3D' . $this->mId . '%26adPlay%3Dtrue" align="middle"></embed>';
+				$embed = '<embed wmode="transparent" type="application/x-shockwave-flash" width="' . $width . '" height="' . $height . '" src="http://gamevideos.1up.com/swf/gamevideos12.swf?embedded=1&amp;fullscreen=1&amp;autoplay=0&amp;src=http://gamevideos.1up.com/do/videoListXML%3Fid%3D' . $this->mId . '%26adPlay%3Dtrue" align="middle"></embed>';
 				break;
 			case "5min":
 				$code = 'custom';
-				$embed = "<object width='{$width}' height='{$height}' id='FiveminPlayer' classid='clsid:d27cdb6e-ae6d-11cf-96b8-444553540000'><param name='allowfullscreen' value='true'/><param name='allowScriptAccess' value='always'/><param name='movie' value='http://www.5min.com/Embeded/{$this->mId}/'/><embed src='http://www.5min.com/Embeded/{$this->mId}/' type='application/x-shockwave-flash' width='{$width}' height='{$height}' allowfullscreen='true' allowScriptAccess='always'></embed></object>";
+				$embed = "<object width='{$width}' height='{$height}' id='FiveminPlayer' classid='clsid:d27cdb6e-ae6d-11cf-96b8-444553540000'><param name='allowfullscreen' value='true'/><param name='wmode' value='transparent'><param name='allowScriptAccess' value='always'/><param name='movie' value='http://www.5min.com/Embeded/{$this->mId}/'/><embed src='http://www.5min.com/Embeded/{$this->mId}/' type='application/x-shockwave-flash' width='{$width}' height='{$height}' allowfullscreen='true' allowScriptAccess='always'></embed></object>";
 				break;
 			case 'vimeo':
 				$code = 'custom';
-				$embed = '<object width="'.$width.'" height="'.$height.'"><param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id='.$this->mId.'&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=&amp;fullscreen=1" /><embed src="http://vimeo.com/moogaloop.swf?clip_id='.$this->mId.'&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=&amp;fullscreen=1" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="'.$width.'" height="'.$height.'"></embed></object>';
+				$embed = '<object width="'.$width.'" height="'.$height.'"><param name="allowfullscreen" value="true" /><param name="wmode" value="transparent"><param name="allowscriptaccess" value="always" /><param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id='.$this->mId.'&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=&amp;fullscreen=1" /><embed src="http://vimeo.com/moogaloop.swf?clip_id='.$this->mId.'&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=&amp;fullscreen=1" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="'.$width.'" height="'.$height.'"></embed></object>';
 				break;
                         default: break;
                 }	
@@ -508,9 +498,29 @@ class VideoPage extends Article {
 		global $wgOut;
 		$this->getContent();
 		$this->load();	
-		$wgOut->addHTML( $this->getEmbedCode() );
+		$wgOut->addHTML( $this->getEmbedCode( 400) );
 	}
 }
+
+global $wgWikiaVideoProviders;
+$wgWikiaVideoProviders = array(
+		VideoPage::V_GAMETRAILERS => 'gametrailers',
+		VideoPage::V_GAMEVIDEOS => 'gamevideos',
+		VideoPage::V_GAMESPOT => 'gamespot',
+		VideoPage::V_MTVGAMES => 'mtvgames',
+		VideoPage::V_5MIN => '5min',
+		VideoPage::V_YOUTUBE => 'youtube',
+		VideoPage::V_HULU => 'hulu',
+		VideoPage::V_VEOH => 'veoh',
+		VideoPage::V_FANCAST => 'fancast',
+		VideoPage::V_IN2TV => 'in2tv',
+		VideoPage::V_BLIPTV => 'bliptv',
+		VideoPage::V_METACAFE => 'metacafe',
+		VideoPage::V_SEVENLOAD => 'sevenload',
+		VideoPage::V_VIMEO => 'vimeo',
+		VideoPage::V_CLIPFISH => 'clipfish',
+		VideoPage::V_MYVIDEO => 'myvideo'	
+		);
 
 class VideoHistoryList {
 	var $mTitle;
@@ -557,7 +567,7 @@ class VideoHistoryList {
 				$user = $row->img_user;
 				$usertext = $row->img_user_text;
 				$url = VideoPage::getUrl( $row->img_metadata );
-				$line = '<tr>' . '<td><a href="' . $url . '">' . $wgLang->timeAndDate( $row->img_timestamp, true ) . '</a></td>' . '<td>';				
+				$line = '<tr>' . '<td><a href="' . $url . '">' . $wgLang->timeAndDate( $row->img_timestamp, true ) . '</a></td>' . '<td>';
 				$line .= $sk->userLink( $user, $usertext ) . " <span style='white-space: nowrap;'>" . $sk->userToolLinks( $user, $usertext ) . "</span>";
 				$line .= '</td></tr>';
 				return $line;
@@ -594,12 +604,3 @@ class VideoHistoryList {
                 return "</table>\n";
         }
 }
-
-?>
-
-
-
-
-
-
-

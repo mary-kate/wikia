@@ -5,7 +5,15 @@ if(!defined('MEDIAWIKI')) {
 
 $wgHooks['ParserBeforeStrip'][] = 'WikiaVideoParserBeforeStrip';
 $wgHooks['ArticleFromTitle'][] = 'WikiaVideoArticleFromTitle';
+$wgHooks['MWNamespace:isMovable'][] = 'WikiaVideoIsNotMovable';
 
+
+function WikiaVideoIsNotMovable( $result, $index ) {
+	global $IP;
+        require_once( "$IP/extensions/wikia/WikiaVideo/VideoPage.php" );
+	$result = !( $index < NS_MAIN || ($index == NS_IMAGE && !$wgAllowImageMoving) || ( $index == NS_VIDEO )  || $index == NS_CATEGORY );
+	return true;
+}
 
 function WikiaVideoParserBeforeStrip($parser, $text, $strip_state) {
 	// TODO change this to accomodate more cases ie parser inside, links and all
@@ -21,6 +29,10 @@ function WikiaVideoRenderVideo( $matches ) {
         $name = $matches[2];
         $params = explode( "|", $name );
         $video_name = $params[0];
+	global $wgCapitalLinks;
+	if( $wgCapitalLinks ) {
+		$video_name = ucfirst( $video_name );
+	}
 
         $x = 1;
 
@@ -47,7 +59,15 @@ function WikiaVideoRenderVideo( $matches ) {
                 $x++;
         }
 
-	$output = "<video name=\"{$video_name}\" width=\"{$width}\" align=\"{$align}\" caption=\"{$caption}\" thumb=\"{$thumb}\"></video>";
+	// macbre: add FCK support
+	global $wgWysiwygParserEnabled;
+
+	if (empty($wgWysiwygParserEnabled)) {
+		$output = "<video name=\"{$video_name}\" width=\"{$width}\" align=\"{$align}\" caption=\"{$caption}\" thumb=\"{$thumb}\"></video>";
+	}
+	else {
+		$output = "<video>[[Video:{$matches[2]}]]</video>";
+	}
 	return $output;
 }
 
