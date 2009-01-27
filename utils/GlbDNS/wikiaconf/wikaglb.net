@@ -6,7 +6,7 @@ use Net::DNS::RR;
 use Data::Dumper;
 use base qw(GlbDNS::Config);
 
-sub domains { "wikia-glb2.net" }
+sub domains { "wikia-glb.net" }
 
 sub ns { return q{
 
