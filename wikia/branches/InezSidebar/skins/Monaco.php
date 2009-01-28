@@ -129,7 +129,7 @@ class MonacoSidebar {
 
 			$nodes['mainMenu'] = $mainMenu;
 
-			$wgMemc->set($menuHash, $nodes, 60 * 60 * 8);
+			$wgMemc->set($menuHash, $nodes, 60 * 60 * 24 * 3); // three days
 
 			if(isset($magicWords)) {
 				$menu .= '<script type="text/javascript" src="'.$wgScript.'?action=ajax&rs=getMenu&words='.$magicWords.'"></script>';
@@ -234,14 +234,14 @@ class MonacoSidebar {
 	}
 
 	public function handleMagicWord(&$node) {
-		$node['original'] = strtolower($node['original']);
-		if(in_array($node['original'], array('#voted#', '#popular#', '#visited#', '#newlychanged#', '#topusers#'))) {
+		$original_lower = strtolower($node['original']);
+		if(in_array($original_lower, array('#voted#', '#popular#', '#visited#', '#newlychanged#', '#topusers#'))) {
 			if($node['text']{0} == '#') {
 				$node['text'] = wfMsg(trim($node['original'], ' *')); // TODO: That doesn't make sense to me
 			}
-			$node['magic'] = trim($node['original'], '#');
+			$node['magic'] = trim($original_lower, '#');
 			return true;
-		} else if(substr($node['original'], 1, 8) == 'category') {
+		} else if(substr($original_lower, 1, 8) == 'category') {
 			$param = trim(substr($node['original'], 9), '#');
 			if(is_numeric($param)) {
 				$category = $this->getBiggestCategory($param);
