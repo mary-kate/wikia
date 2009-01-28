@@ -233,6 +233,7 @@ sub lookup {
             $key = $answer->cname;
         } else {
             push @filtered, $answer;
+            next;
         }
         push @filtered, $answer if (!exists $status{$key} || $status{$key});
     }
