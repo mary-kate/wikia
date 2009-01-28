@@ -44,6 +44,7 @@ class VideoPage extends Article {
 		if ( $this->getID() ) {
 			$wgOut->addHTML( $this->showTOC('') );
 			$this->openShowVideo();
+			$this->showVideoInfoLine();
 			Article::view();
 			$this->videoHistory();
 		} else {
@@ -259,6 +260,36 @@ class VideoPage extends Article {
 				break;
 			default:
 				return 1;
+				break;
+		}
+	}
+
+	public function getTextRatio() {
+		global $wgWikiaVideoProviders;
+		switch( $wgWikiaVideoProviders[$this->mProvider] ) {
+			case "metacafe": 
+				return "40 x 35";
+				break;			
+			case "youtube": 
+				return "425 x 355";
+				break;
+			case "sevenload":
+				return "500 x 408";
+				break;
+			case "gamevideos":
+				return "500 x 319";
+				break;
+			case "5min":
+				return "480 x 401";
+				break;
+			case "vimeo":
+				return "400 x 225";
+				break;
+			case "myvideo":
+				return "470 x 406";
+				break;
+			default:
+				return "300 x 300";
 				break;
 		}
 	}
@@ -500,6 +531,22 @@ class VideoPage extends Article {
 		$this->load();	
 		$wgOut->addHTML( $this->getEmbedCode( 400) );
 	}
+
+	function showVideoInfoLine() {
+		global $wgOut;
+		$data = array(
+			$this->mProvider,
+			$this->mId,
+			$this->mData[0]
+		);
+		$data = implode( ",", $data ) ;
+		$url = self::getUrl( $data );	
+		$ratio = $this->getTextRatio();
+		// todo messagize	
+		$s = '<div id="VideoPageInfo"><a href="' . $url . '">' . $this->mTitle->getText() . ' </a> (' . $ratio . ' pixel type: swf)</div>' ;
+		$wgOut->addHTML( $s );				
+	}
+
 }
 
 global $wgWikiaVideoProviders;
