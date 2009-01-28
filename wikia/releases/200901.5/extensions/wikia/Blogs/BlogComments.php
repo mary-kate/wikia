@@ -431,7 +431,7 @@ class BlogComment {
 	 */
 	static public function doPost( &$Request, &$User, &$Title ) {
 
-		global $wgMemc;
+		global $wgMemc, $wgTitle;
 
 		$text = $Request->getText("wpBlogComment", false);
 		if( !$text || !strlen( $text ) ) {
@@ -446,6 +446,10 @@ class BlogComment {
 		$commentTitle = Title::newFromText(
 			sprintf( "%s/%s-%s", $Title->getText(), $User->getName(), wfTimestampNow() ),
 			NS_BLOG_ARTICLE_TALK );
+		/**
+		 * because we save different tile via Ajax request
+		 */
+		$wgTitle = $commentTitle;
 
 		/**
 		 * add article using EditPage class (for hooks)
