@@ -582,11 +582,9 @@ function getMenu() {
 	$id = $wgRequest->getVal('id');
 	if($id) {
 		$menuArray = $wgMemc->get($id);
-		$ar = new AjaxResponse('var menuArray = '.Wikia::json_encode($menuArray).';YAHOO.util.Event.on(\'navigation_widget\', \'mouseover\', menuInit);YAHOO.util.Event.onDOMReady(menuInit);');
-		$ar->setCacheDuration(60 * 60 * 24 * 7);
-		return $ar;
+		$content = 'var menuArray = '.Wikia::json_encode($menuArray).';YAHOO.util.Event.on(\'navigation_widget\', \'mouseover\', menuInit);YAHOO.util.Event.onDOMReady(menuInit);';
+		$duration = 60 * 60 * 24 * 7; // one week
 	}
-
 
 	$words = $wgRequest->getVal('words');
 	if($words) {
@@ -610,11 +608,16 @@ function getMenu() {
 				$magicWords[$word][] = array('className' => 'Monaco-sidebar_more', 'url' => Title::makeTitle(NS_CATEGORY, $name)->getLocalURL(), 'text' => '-more-');
 			}
 		}
-		$ar = new AjaxResponse('var magicWords = '.Wikia::json_encode($magicWords).';');
-		$ar->setCacheDuration(60 * 60 * 24);
-		return $ar;
+		$content = 'var magicWords = '.Wikia::json_encode($magicWords).';';
+		$duration = 60 * 60 * 24; // one day
 	}
 
+	if(!empty($content)) {
+		header("Cache-Control: s-maxage={$duration}, must-revalidate, max-age=0");
+		header("X-Pass-Cache-Control: max-age={$duration}");
+		echo $content;
+		exit();
+	}
 }
 
 function getMenuHelper($name, $limit = 7) {
