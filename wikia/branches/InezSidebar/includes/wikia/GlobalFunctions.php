@@ -581,6 +581,8 @@ function getMenu() {
 
 	$id = $wgRequest->getVal('id');
 	if($id) {
+		wfErrorLog("SideBar wgCityId: $wgCityId id: $id");
+
 		$menuArray = $wgMemc->get($id);
 		$ar = new AjaxResponse('var menuArray = '.Wikia::json_encode($menuArray).';');
 		$ar->setCacheDuration(60 * 60 * 24 * 7);
@@ -590,6 +592,8 @@ function getMenu() {
 
 	$words = $wgRequest->getVal('words');
 	if($words) {
+		wfErrorLog("SideBar wgCityId: $wgCityId id: $words");
+
 		$magicWords = array();
 		$map = array('voted' => array('highest_ratings', 'GetTopVotedArticles'), 'popular' => array('most_popular', 'GetMostPopularArticles'), 'visited' => array('most_visited', 'GetMostVisitedArticles'), 'newlychanged' => array('newly_changed', 'GetNewlyChangedArticles'), 'topusers' => array('community', 'GetTopFiveUsers'));
 		$words = split(',', $words);
