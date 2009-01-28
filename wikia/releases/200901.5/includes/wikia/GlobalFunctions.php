@@ -581,6 +581,7 @@ function getMenu() {
 
 	$id = $wgRequest->getVal('id');
 	if($id) {
+		error_log("NewSidebar: wgCityId: $wgCityId id: $id");
 		$menuArray = $wgMemc->get($id);
 		$content = 'var menuArray = '.Wikia::json_encode($menuArray).';YAHOO.util.Event.on(\'navigation_widget\', \'mouseover\', menuInit);YAHOO.util.Event.onDOMReady(menuInit);';
 		$duration = 60 * 60 * 24 * 7; // one week
@@ -588,6 +589,7 @@ function getMenu() {
 
 	$words = $wgRequest->getVal('words');
 	if($words) {
+		error_log("NewSidebar: wgCityId: $wgCityId words: $words");
 		$magicWords = array();
 		$map = array('voted' => array('highest_ratings', 'GetTopVotedArticles'), 'popular' => array('most_popular', 'GetMostPopularArticles'), 'visited' => array('most_visited', 'GetMostVisitedArticles'), 'newlychanged' => array('newly_changed', 'GetNewlyChangedArticles'), 'topusers' => array('community', 'GetTopFiveUsers'));
 		$words = split(',', $words);
