@@ -10,7 +10,7 @@ echo wfMsg('vet-details-inf2')
 <table class="VideoEmbedOptionsTable">
 <?php
 global $wgExtensionsPath;
-if(!isset($props['oname'])) {
+if('' == $props['oname']) {
 ?>
 
 	<tr>
