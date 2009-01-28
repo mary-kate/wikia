@@ -235,7 +235,12 @@ class MonacoSidebar {
 			} else if($link{0} == '#') {
 				$href = '#';
 			} else {
-				$href = Title::newFromText($link)->fixSpecialName()->getLocalURL();
+				$title = Title::newFromText($link);
+				if(is_object($title)) {
+					$href = $title->fixSpecialName()->getLocalURL();
+				} else {
+					$href = '#';
+				}
 			}
 		}
 
