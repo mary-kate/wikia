@@ -13,7 +13,17 @@ if(!defined('MEDIAWIKI')) {
 }
 
 ############################## MonacoSidebar ##############################
+global $wgHooks;
+$wgHooks['MessageCacheReplace'][] = 'MonacoSidebar::invalidateCache';
+
 class MonacoSidebar {
+
+	const version = '0.01';
+
+	static function invalidateCache() {
+		$wgMemc->delete(wfMemcKey('mMonacoSidebar', self::version));
+		return true;
+	}
 
 	public $editUrl = false;
 
@@ -34,7 +44,7 @@ class MonacoSidebar {
 
 		$cache = $wgLang->getCode() == $wgContLang->getCode();
 		if($cache) {
-			$key = wfMemcKey('mMonacoSidebar');
+			$key = wfMemcKey('mMonacoSidebar', self::version);
 			$menu = $wgMemc->get($key);
 		}
 		if(empty($menu)) {
@@ -132,10 +142,10 @@ class MonacoSidebar {
 			$wgMemc->set($menuHash, $nodes, 60 * 60 * 24 * 3); // three days
 
 			if(isset($magicWords)) {
-				$menu .= '<script type="text/javascript" src="'.$wgScript.'?action=ajax&rs=getMenu&words='.$magicWords.'"></script>';
+				$menu .= '<script type="text/javascript" src="'.$wgScript.'?action=ajax&rs=getMenu&v='.self::version.'&words='.$magicWords.'"></script>';
 			}
 
-			$menu .= '<script type="text/javascript" src="'.$wgScript.'?action=ajax&rs=getMenu&id='.$menuHash.'"></script>';
+			$menu .= '<script type="text/javascript" src="'.$wgScript.'?action=ajax&v='.self::version.'&rs=getMenu&id='.$menuHash.'"></script>';
 
 			return $menu;
 		}
