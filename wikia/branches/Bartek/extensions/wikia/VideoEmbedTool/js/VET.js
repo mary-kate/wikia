@@ -454,8 +454,15 @@ function VET_insertFinalVideo(e, type) {
 	params.push('type='+type);
 
 	if(!$('VideoEmbedName')) {
-		alert( 'vet_warn3');
-		return false;
+		if ($( 'VideoEmbedOname' ) ) {
+			if ('' == $( 'VideoEmbedOname' ).value)	 {
+				alert( 'vet_warn3');
+				return false;
+			}
+		} else {
+			alert( 'vet_warn3');
+			return false;
+		}
 	}
 
 	params.push('id='+$('VideoEmbedId').value);
@@ -476,7 +483,11 @@ function VET_insertFinalVideo(e, type) {
 	} else if(type == 'rename') {
 		params.push('name='+$('VideoEmbedRenameName').value);
 	} else {
-		params.push('name='+$('VideoEmbedName').value);
+		if ($( 'VideoEmbedName' )) {
+			params.push('name='+$('VideoEmbedName').value);
+		} else {
+			params.push('oname='+$('VideoEmbedOname').value);			
+		}
 	}
 
 	if($('VideoEmbedThumb')) {
