@@ -2,17 +2,17 @@
 
 $ORIGIN nocookie.net.
 
-600 IN SOA ns-lon-2.wikia.net. dnsmaster.wikia-inc.com. 2009012707 1200 120 1209600 300
+600 IN SOA ns-lon-2.wikia.net. dnsmaster.wikia-inc.com. 2009012708 1200 120 1209600 300
 
 86400 IN NS ns-sjc-1.wikia.net
 86400 IN NS ns-nj-1.wikia.net
 86400 IN NS ns-lon-1.wikia.net
 86400 IN NS ns-lon-2.wikia.net
 
-images1.wikia 86400 IN CNAME glb.nocookie.net.
-images2.wikia 86400 IN CNAME glb.noocokie.net.
-images3.wikia 86400 IN CNAME glb.noocokie.net.
-images4.wikia 86400 IN CNAME glb.noocokie.net.
+images1.wikia 86400 IN CNAME glb
+images2.wikia 86400 IN CNAME glb
+images3.wikia 86400 IN CNAME glb
+images4.wikia 86400 IN CNAME glb
 
 glb 120 IN CNAME sjc-images
 glb 120 IN CNAME london
