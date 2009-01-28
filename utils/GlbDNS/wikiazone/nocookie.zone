@@ -2,7 +2,7 @@
 
 $ORIGIN nocookie.net.
 
-600 IN SOA ns-lon-2.wikia.net. dnsmaster.wikia-inc.com. 2009012705 1200 120 1209600 300
+600 IN SOA ns-lon-2.wikia.net. dnsmaster.wikia-inc.com. 2009012706 1200 120 1209600 300
 
 86400 IN NS ns-sjc-1.wikia.net
 86400 IN NS ns-nj-1.wikia.net
@@ -34,15 +34,15 @@ london 60 IN A 83.223.112.138
 london 86400 IN LOC 51 00 00.000 N 0 00 00.000  W 0.00m 0.00m 0.00m 0.00m
 london 86400 IN TXT GlbDNS::CHECK /lvscheck.html "varnish is okay"
 
-panther-apac 60 IN CNAME g1.panthercdn.com
+panther-apac 60 IN CNAME g1.panthercdn.com.
 panther-apac 86400 IN LOC 01 00 00.000 N 103 00 00.000 E 0.00m 0.00m 0.00m 0.00m
 
 panther-us 60 IN CNAME g1.pantherchn.com.
 panther-us 86400 IN LOC 32 00 00.000 N 97 00 00.000 W 0.00m 0.00m 0.00m 0.00m
 
 
-search1.wikia 600 IN CNAME g1.panthercdn.com
-ads.wikia     600 IN CNAME g1.panthercdn.com
+search1.wikia 600 IN CNAME g1.panthercdn.com.
+ads.wikia     600 IN CNAME g1.panthercdn.com.
 origin        600 IN CNAME images.glb.wikia.net.
 
 glb.wikia 60 IN CNAME glb

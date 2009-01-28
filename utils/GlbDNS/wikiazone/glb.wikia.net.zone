@@ -3,7 +3,7 @@
 $ORIGIN glb.wikia.net.
 
 
-600 IN SOA ns-lon-2.wikia.net. dnsmaster.wikia-inc.com. 2009012614 1200 120 1209600 60
+600 IN SOA ns-lon-2.wikia.net. dnsmaster.wikia-inc.com. 2009012700 1200 120 1209600 60
 
 86400 IN NS ns-lon-1.wikia.net.
 86400 IN NS ns-nj-1.wikia.net.
@@ -25,7 +25,7 @@ london 60 IN A 83.223.112.138
 london 86400 IN LOC 51 00 00.000 N 0 00 00.000  W 0.00m 0.00m 0.00m 0.00m
 
 
-panther-apac 60 IN CNAME g1.panthercdn.com
+panther-apac 60 IN CNAME g1.panthercdn.com.
 panther-apac 86400 IN LOC 01 00 00.000 N 103 00 00.000 E 0.00m 0.00m 0.00m 0.00m
 
 panther-us 60 IN CNAME g1.pantherchn.com.
