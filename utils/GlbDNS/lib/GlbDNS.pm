@@ -91,7 +91,7 @@ sub start {
 sub request {
     my ($self, $qname, $qclass, $qtype, $peerhost, $query) = @_;
     my ($rcode, $ans, $auth, $add) = (undef, [], [], []);
-
+    $counters{"Lookup|" .$qname}++;
     my $response_incudes_ns = 0;
 
     $counters{Request}++;
