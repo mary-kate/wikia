@@ -395,12 +395,12 @@ function menuInit() {
 	if($('ca-edit')) {
 		editthispage = $('ca-edit').href;
 	}
-	if(wgMenuEdit) menuArray[2000] = {'href' : YAHOO.util.Dom.hasClass('navigation', 'userMenu') ? wgScript + '?title=User:'+wgUserName+'/Monaco-sidebar&action=edit' : wgScript + '?title=MediaWiki:Monaco-sidebar&action=edit', 'text' : wgMenuEdit, 'className' : 'Monaco-sidebar_edit'};
+	if(typeof wgMenuEdit != 'undefined') menuArray[2000] = {'href' : YAHOO.util.Dom.hasClass('navigation', 'userMenu') ? wgScript + '?title=User:'+wgUserName+'/Monaco-sidebar&action=edit' : wgScript + '?title=MediaWiki:Monaco-sidebar&action=edit', 'text' : wgMenuEdit, 'className' : 'Monaco-sidebar_edit'};
 	for(var i in menuArray.mainMenu) {
 		var out = '<div class="sub-menu widget" id="sub-menu_'+i+'" style="display:none">';
 		var items = new Array();
 		if(typeof menuArray.mainMenu[i] == 'object') {
-			if(wgMenuEdit) menuArray.mainMenu[i].push(2000);
+			if(typeof wgMenuEdit != 'undefined') menuArray.mainMenu[i].push(2000);
 			for(var j = 0; j < menuArray.mainMenu[i].length; j++) {
 				var id = menuArray.mainMenu[i][j];
 				if(menuArray[id]['href'] == 'editthispage') {
@@ -419,7 +419,7 @@ function menuInit() {
 		} else {
 			for(var j = 0; j < magicWords[menuArray.mainMenu[i]].length; j++) {
 				if(magicWords[menuArray.mainMenu[i]][j]['text'] == '-edit-') {
-					if(!wgMenuEdit) continue;
+					if(typeof wgMenuEdit == 'undefined') continue;
 					magicWords[menuArray.mainMenu[i]][j]['text'] = wgMenuEdit;
 				} else if(magicWords[menuArray.mainMenu[i]][j]['text'] == '-more-') {
 					magicWords[menuArray.mainMenu[i]][j]['text'] = wgMenuMore;
@@ -471,7 +471,7 @@ function sub_menuItemAction_wrap(e) {
 		} else {
 			for(var j = 0; j < magicWords[menuArray[menu_id].magic].length; j++) {
 				if(magicWords[menuArray[menu_id].magic][j]['text'] == '-edit-') {
-					if(!wgMenuEdit) continue;
+					if(typeof wgMenuEdit == 'undefined') continue;
 					magicWords[menuArray[menu_id].magic][j]['text'] = wgMenuEdit;
 				} else if(magicWords[menuArray[menu_id].magic][j]['text'] == '-more-') {
 					magicWords[menuArray[menu_id].magic][j]['text'] = wgMenuMore;
