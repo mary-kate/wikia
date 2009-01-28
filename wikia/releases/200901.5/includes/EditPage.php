@@ -101,6 +101,8 @@ class EditPage {
 		$this->editFormTextAfterWarn =
 		$this->editFormTextAfterTools =
 		$this->editFormTextBottom = "";
+		global $wgDebugLogFile;
+$wgDebugLogFile  = "/tmp/editpage.log";
 	}
 
 	/**
