@@ -167,10 +167,10 @@ class UserBadges {
 		 * run template
 		 */
 		
-		$wgOut->addScript( "<link rel=\"stylesheet\" type=\"text/css\" href=\"/skins/common/yui_2.5.2/colorpicker/assets/skins/sam/colorpicker.css\" />" );
+		$wgOut->addScript( "<link rel=\"stylesheet\" type=\"text/css\" href=\"/skins/common/yui_2.5.2/colorpicker/assets/skins/sam/colorpicker.css?{$wgStyleVersion}\" />" );
 		$wgOut->addScript( "<link rel=\"stylesheet\" type=\"text/css\" href=\"{$wgExtensionsPath}/wikia/Badges/css/UserBadges.css?{$wgStyleVersion}\" />" );
-		$wgOut->addScript( "<script type=\"text/javascript\" src=\"/skins/common/yui_2.5.2/slider/slider-min.js\"></script>" );
-		$wgOut->addScript( "<script type=\"text/javascript\" src=\"/skins/common/yui_2.5.2/colorpicker/colorpicker-min.js\"></script> ");
+		$wgOut->addScript( "<script type=\"text/javascript\" src=\"/skins/common/yui_2.5.2/slider/slider-min.js?{$wgStyleVersion}\"></script>" );
+		$wgOut->addScript( "<script type=\"text/javascript\" src=\"/skins/common/yui_2.5.2/colorpicker/colorpicker-min.js?{$wgStyleVersion}\"></script> ");
 		$wgOut->addScript( "<script type=\"text/javascript\" src=\"{$wgExtensionsPath}/wikia/Badges/js/UserBadges.js?{$wgStyleVersion}\"></script>");
 		$oTmpl = new EasyTemplate( dirname( __FILE__ ) . "/templates/" );
 		$oTmpl->set_vars( array(
@@ -437,8 +437,8 @@ class UserBadges {
 		$sPath = "";
 
 		// font path
-		$fontArial = USER_BADGES_FONT_PATH . "/DejaVuSansMono.ttf"; #"/arial.ttf";
-		$fontArialBold = USER_BADGES_FONT_PATH . "/DejaVuSansMono-Bold.ttf"; #"/arial_bold.ttf";
+		$fontArial = USER_BADGES_FONT_PATH . "/DejaVuSansCondensed.ttf"; #"/arial.ttf";
+		$fontArialBold = USER_BADGES_FONT_PATH . "/DejaVuSansCondensed-Bold.ttf"; #"/arial_bold.ttf";
 		$fontVerdana = USER_BADGES_FONT_PATH . "/DejaVuSans.ttf"; # "/verdana.ttf";
 		$fontVerdanaBold = USER_BADGES_FONT_PATH . "/DejaVuSans-Bold.ttf"; #"/verdana_bold.ttf";
 
@@ -485,9 +485,9 @@ class UserBadges {
 				$sLogo = $oLogo->getPath();
 			} 
 			$body = array(
-				'labelfontsize' => 9, 
+				'labelfontsize' => 10, 
 				'logo' =>  $sLogo,
-				'datafontsize' => 11,
+				'datafontsize' => 12,
 				'smalllogo' => $wgStyleDirectory . $this->mDefOptions['small-logo-color']['yellow'],
 			);
 			// small logo
@@ -524,7 +524,7 @@ class UserBadges {
 				}			
 			} 
 			// label Username 
-			$body['labelUsernameText'] = wfMsg('username');
+			$body['labelUsernameText'] = str_replace(":", "", wfMsg('username'));
 			$body['labelUsernameX'] = USER_BADGES_LOGO_WIDTH + 2 * (USER_BADGES_BODY_MARGIN); 
 			$body['labelUsernameY'] = $body['labelfontsize'] + USER_BADGES_HEADER_HEIGHT + USER_BADGES_BODY_MARGIN;
 			
@@ -590,11 +590,11 @@ class UserBadges {
 			// label <USERNAME>
 			@imagettftext( $image, $body['labelfontsize'], 0 /* angle */, $body['labelUsernameX'], $body['labelUsernameY'], $body['labelcolor'], $fontVerdanaBold, $body['labelUsernameText'] );
 			// data <USERNAME>
-			@imagettftext( $image, $body['datafontsize'], 0 /* angle */, $body['dataUsernameX'], $body['dataUsernameY'], $body['datacolor'], $fontArialBold, $body['dataUsernameText'] );
+			@imagettftext( $image, $body['datafontsize'], 0 /* angle */, $body['dataUsernameX'], $body['dataUsernameY'], $body['datacolor'], $fontArial, $body['dataUsernameText'] );
 			// label <EDITS>
 			@imagettftext( $image, $body['labelfontsize'], 0 /* angle */, $body['labelEditsX'], $body['labelEditsY'], $body['labelcolor'], $fontVerdanaBold, $body['labelEditsText'] );
 			// data <EDITS>
-			@imagettftext( $image, $body['datafontsize'], 0 /* angle */, $body['dataEditsX'], $body['dataEditsY'], $body['datacolor'], $fontArialBold, $body['dataEditsText'] );
+			@imagettftext( $image, $body['datafontsize'], 0 /* angle */, $body['dataEditsX'], $body['dataEditsY'], $body['datacolor'], $fontArial, $body['dataEditsText'] );
 			// small Wikia logo 
 			@imagecopyresized( $image, 
 				$oSmallBodyLogo, 

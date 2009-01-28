@@ -111,16 +111,21 @@ ColorTxt["DIALOG_HEADER"] = "<?=wfMsg("user-badge-dialog-title")?>";
 					</td>
 				</tr>
 				<tr>
-					<td><?=wfMsg('user-badge-small-wikia-logo-color')?></td>
-					<td style="padding:6px" valign="top">
+					<td style="padding:6px" valign="top" align="center" colspan="2">
+					<fieldset style="margin:0 auto 0 auto;width:100%">
+					<legend><?=wfMsg('user-badge-small-wikia-logo-color')?></legend>
+						<table>
 <?php if ($defOptions && $defOptions['small-logo-color']) { 
 	foreach ($defOptions['small-logo-color'] as $id => $path) { 
 		$checked = ""; if ($id == $mCurrentOptions->getSmallLogoColor()) $checked = " checked=\"checked\" "; 
 ?>
-						<p><input type="radio" name="ub-body-small-logo-color" id="ub-body-small-logo-color-<?=$id?>" value="<?=$id?>" <?=$checked?> onclick="changeSmallLogo('<?=$id?>', '<?=$wgStylePath . $path?>');" />
-						<img src="<?=$wgStylePath . $path?>" width="<?=USER_BADGES_SMALL_LOGO_WIDTH?>" height="<?=USER_BADGES_SMALL_LOGO_HEIGHT?>" /></p>
+						<tr>
+							<td valign="middle"><input type="radio" name="ub-body-small-logo-color" id="ub-body-small-logo-color-<?=$id?>" value="<?=$id?>" <?=$checked?> onclick="changeSmallLogo('<?=$id?>', '<?=$wgStylePath . $path?>');" /></td>
+							<td valign="middle"><img src="<?=$wgStylePath . $path?>" width="<?=USER_BADGES_SMALL_LOGO_WIDTH?>" height="<?=USER_BADGES_SMALL_LOGO_HEIGHT?>" /></td>
+						</tr>
 <?php } } ?>						
-						</select>
+						</table>
+					</fieldset>
 					</td>
 				</tr>
 			</table>
@@ -135,7 +140,7 @@ ColorTxt["DIALOG_HEADER"] = "<?=wfMsg("user-badge-dialog-title")?>";
 					<div id="ub-layer-logo"><img src="<?=$wgLogo?>" width="80" height="80" /></div>			
 				</div>
 				<div id="user-badges-body" style="background-color:<?=$mCurrentOptions->getBodyBgColor()?>;">
-					<div id="ub-layer-username-title" style="color:<?=$mCurrentOptions->getBodyLabelColor()?>;"><?=wfMsg('username')?></div>
+					<div id="ub-layer-username-title" style="color:<?=$mCurrentOptions->getBodyLabelColor()?>;"><?=str_replace(":", "", wfMsg('username'))?></div>
 					<div id="ub-layer-username-url" style="color:<?=$mCurrentOptions->getBodyDataColor()?>;"><?=$wgUser->getName()?></div>
 					<div id="ub-layer-edits-title" style="color:<?=$mCurrentOptions->getBodyLabelColor()?>;"><?=wfMsg('user-badge-edits-txt')?></div>
 					<div id="ub-layer-edits-value" style="color:<?=$mCurrentOptions->getBodyDataColor()?>;">76</div>
@@ -150,7 +155,7 @@ ColorTxt["DIALOG_HEADER"] = "<?=wfMsg("user-badge-dialog-title")?>";
 	</tr>
 	<tr>
 		<td colspan="2" style="padding:5px 25%;">
-			<input type="checkbox" name="ub-overwrite-badge" <?=(empty($sUserBadgeUrl)) ? "checked" : "";?> <?=(empty($sUserBadgeUrl))?" style=\"display:none;\" " : "" ?>> 
+			<input type="checkbox" name="ub-overwrite-badge" id="ub-overwrite-badge" <?=(empty($sUserBadgeUrl)) ? "checked" : "";?> <?=(empty($sUserBadgeUrl))?" style=\"display:none;\" " : "" ?>> 
 <? if (!empty($sUserBadgeUrl)) { ?>
 		<?=wfMsg('user-badge-overwrite-msg')?>
 <? } ?>		
