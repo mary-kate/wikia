@@ -61,6 +61,7 @@ sub admin {
 sub check_service {
 
     my ($ip, $url, $expect, $interval) = @_;
+    $url =~s/^\///;
     while(1) {
         my $foo = get("http://$ip/$url");
         if ($foo && $foo =~/$expect/) {
@@ -222,6 +223,20 @@ sub lookup {
     } else {
         push @answer, @{$host->{$qtype}} if ($host->{$qtype});
     }
+    my @filtered;
+
+    foreach my $answer (@answer) {
+        my $key;
+        if($answer->type eq 'A') {
+            $key = $answer->address;
+        } elsif($answer->type eq 'CNAME') {
+            $key = $answer->cname;
+        } else {
+            push @filtered, $answer;
+        }
+        push @filtered, $answer if (!exists $status{$key} || $status{$key});
+    }
+    return @filtered if(@filtered); #only return the filtered list if it contains SOMETHING
     return @answer;
 }
 
