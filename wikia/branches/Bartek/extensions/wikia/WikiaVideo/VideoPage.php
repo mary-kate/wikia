@@ -304,6 +304,28 @@ class VideoPage extends Article {
 		$this->mName = $name;
 	}
 
+	public function getProviderUrl() {
+		global $wgWikiaVideoProviders;
+		switch( $wgWikiaVideoProviders[$this->mProvider] ) {
+			case "metacafe": 
+				return 'http://www.metacafe.com';
+			case "youtube": 
+				return 'http://www.youtube.com';
+			case "sevenload":
+				return 'http://www.sevenload.com';
+			case "gamevideos":
+				return 'http://gamevideos.1up.com';
+			case "5min":
+				return 'http://www.5min.com';
+			case "myvideo":
+				return 'http://www/myvideo.de';
+			case "vimeo":
+				return 'http://www.vimeo.com';
+			default:
+				return '';
+		}
+	}
+
 	public static function getUrl( $metadata ) {
 		global $wgWikiaVideoProviders;
 		$meta = split( ",", $metadata );
@@ -533,7 +555,7 @@ class VideoPage extends Article {
 	}
 
 	function showVideoInfoLine() {
-		global $wgOut;
+		global $wgOut, $wgWikiaVideoProviders;
 		$data = array(
 			$this->mProvider,
 			$this->mId,
@@ -541,9 +563,12 @@ class VideoPage extends Article {
 		);
 		$data = implode( ",", $data ) ;
 		$url = self::getUrl( $data );	
+		$provider = $wgWikiaVideoProviders[$this->mProvider];
+		$purl = $this->getProviderUrl();
 		$ratio = $this->getTextRatio();
 		// todo messagize	
-		$s = '<div id="VideoPageInfo"><a href="' . $url . '">' . $this->mTitle->getText() . ' </a> (' . $ratio . ' pixel type: swf)</div>' ;
+		$s = '<div id="VideoPageInfo"><a href="' . $url . '">' . $this->mTitle->getText() . ' </a> (' . $ratio . ' pixel type: swf';
+		$s .= ', provider: <a href="' . $purl . '">' . $provider . '</a>)</div>' ;
 		$wgOut->addHTML( $s );				
 	}
 
