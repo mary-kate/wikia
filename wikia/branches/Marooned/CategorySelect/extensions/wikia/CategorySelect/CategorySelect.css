@@ -1,0 +1,53 @@
+#myContainer {
+	top: 85px;
+	left: 10px;
+}
+
+#myAutoComplete {
+//	border: 1px solid red;
+	background-color: #F0F0FF;
+	padding: 2px;
+}
+
+.CSitem {
+	background-color: #D7D7FF;
+	padding: 2px 35px 2px 4px;
+	margin-right: 4px;
+	white-space: nowrap;
+	position: relative;
+	color: black;
+}
+
+.CSitem:hover {
+	text-decoration: none;
+}
+
+.CSitem:visited, .CSitem:active {
+	color: black;
+}
+
+.CSitemX {
+	background: transparent url(http://cdn.last.fm/flatness/buttons/delete.2.png) no-repeat scroll left top;
+	cursor: pointer;
+	display: block;
+	position: absolute;
+	height: 13px;
+	width: 13px;
+	right: 3px;
+	top: 3px;
+}
+
+.CSitemM {
+	background: transparent url(http://cdn.last.fm/flatness/buttons/cog.png) no-repeat scroll left top;
+	cursor: pointer;
+	display: block;
+	position: absolute;
+	height: 13px;
+	width: 13px;
+	right: 19px;
+	top: 3px;
+}
+
+.CSsuggestHover {
+	background-color: #D2E3FF;
+}
