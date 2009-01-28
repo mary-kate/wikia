@@ -402,6 +402,7 @@ class MessageCache {
 		$parserMemc->delete( wfMemcKey( 'quartzsidebar' ) );
 		$parserMemc->delete( wfMemcKey( 'navlinks' ) );
 		$parserMemc->delete( wfMemcKey( 'MonacoData' ) );
+		$parserMemc->delete( wfMemcKey( 'MonacoDataOld' ) );
 
 		wfRunHooks( "MessageCacheReplace", array( $title, $text ) );
 
