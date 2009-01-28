@@ -275,6 +275,7 @@ class VideoEmbedTool {
 							$props['metadata'] = '';
 						}
 						$props['code'] = $video->getEmbedCode( VIDEO_PREVIEW );
+						$props['oname'] = $name;
 
 						return $this->detailsPage($props);
 					} else {
