@@ -605,7 +605,9 @@ function getMenu() {
 				$articles = getMenuHelper($name);
 				foreach($articles as $key => $val) {
 					$title = Title::newFromId($val);
-					$magicWords[$word][] = array('text' => $title->getText(), 'url' => $title->getLocalUrl());
+					if(is_object($title)) {
+						$magicWords[$word][] = array('text' => $title->getText(), 'url' => $title->getLocalUrl());
+					}
 				}
 				$magicWords[$word][] = array('className' => 'Monaco-sidebar_more', 'url' => Title::makeTitle(NS_CATEGORY, $name)->getLocalURL(), 'text' => '-more-');
 			}
