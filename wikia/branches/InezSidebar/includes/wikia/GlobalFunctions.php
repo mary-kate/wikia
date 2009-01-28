@@ -582,7 +582,7 @@ function getMenu() {
 	$id = $wgRequest->getVal('id');
 	if($id) {
 		$menuArray = $wgMemc->get($id);
-		$ar = new AjaxResponse('var menuArray = '.Wikia::json_encode($menuArray).';');
+		$ar = new AjaxResponse('var menuArray = '.Wikia::json_encode($menuArray).';YAHOO.util.Event.on(\'navigation_widget\', \'mouseover\', menuInit);YAHOO.util.Event.onDOMReady(menuInit);');
 		$ar->setCacheDuration(60 * 60 * 24 * 7);
 		return $ar;
 	}
