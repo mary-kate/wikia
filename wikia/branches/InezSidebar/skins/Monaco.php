@@ -21,6 +21,7 @@ class MonacoSidebar {
 	const version = '0.01';
 
 	static function invalidateCache() {
+		global $wgMemc;
 		$wgMemc->delete(wfMemcKey('mMonacoSidebar', self::version));
 		return true;
 	}
