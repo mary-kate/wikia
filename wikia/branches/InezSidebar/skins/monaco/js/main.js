@@ -496,5 +496,3 @@ function sub_menuItemAction_wrap(e) {
 	}
 	return sub_menuItemAction(e);
 }
-YAHOO.util.Event.on('navigation_widget', 'mouseover', menuInit);
-YAHOO.util.Event.onDOMReady(menuInit);
