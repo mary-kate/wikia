@@ -95,6 +95,8 @@ sub request {
     $counters{"Lookup|" .$qname}++;
     my $response_incudes_ns = 0;
 
+    $qname = lc($qname);
+
     $counters{Request}++;
 
     my @query = split(/\./, $qname);
