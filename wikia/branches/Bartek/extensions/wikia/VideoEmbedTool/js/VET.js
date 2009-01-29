@@ -118,7 +118,7 @@ function VET_readjustSlider( value ) {
 				$( 'VideoEmbedSliderThumb' ).style.visibility = 'visible';				
 			}
 			
-			var fixed_width = value - 100;
+			var fixed_width = value - 98;
 			value = Math.max(2, Math.round( ( fixed_width * 200 ) / 400 ) );	
 			VET_slider.setValue( value, true, true, true );
 		}		
@@ -415,10 +415,10 @@ function VET_displayDetails(responseText) {
 		VET_orgThumbSize = null;
 	}
 
-                VET_slider = YAHOO.widget.Slider.getHorizSlider('VideoEmbedSlider', 'VideoEmbedSliderThumb', 0, 200);
+                VET_slider = YAHOO.widget.Slider.getHorizSlider('VideoEmbedSlider', 'VideoEmbedSliderThumb', 0, 201);
                 VET_slider.initialRound = true;
                 VET_slider.getRealValue = function() {
-                        return ( Math.max( 2, Math.round( this.getValue() * 2 ) ) + 100 );
+                        return ( Math.max( 2, Math.round( this.getValue() * 2 ) ) + 98 );
                 }
                 VET_slider.subscribe("change", function(offsetFromStart) {
                         if (VET_slider.initialRound) {
