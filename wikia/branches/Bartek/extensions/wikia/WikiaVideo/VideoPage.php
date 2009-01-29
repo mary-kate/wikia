@@ -638,6 +638,7 @@ class VideoHistoryList {
                 return Xml::element( 'h2', array( 'id' => 'filehistory' ), wfMsg( 'filehist' ) )
                         . Xml::openElement( 'table', array( 'class' => 'filehistory' ) ) . "\n"
                         . '<tr>'
+			. '<th>&nbsp;</th>'
                         . '<th>' . wfMsgHtml( 'filehist-datetime' ) . '</th>'
                         . '<th>' . wfMsgHtml( 'filehist-user' ) . '</th>'
                         . "</tr>\n";
@@ -671,7 +672,7 @@ class VideoHistoryList {
 				$user = $row->img_user;
 				$usertext = $row->img_user_text;
 				$url = VideoPage::getUrl( $row->img_metadata );
-				$line = '<tr>' . '<td><a href="' . $url . '" class="link-video" target="_blank">' . $wgLang->timeAndDate( $row->img_timestamp, true ) . '</a></td>' . '<td>';
+				$line = '<tr>' . '<td>' . wfMsgHtml( 'filehist-current' ) . '</td><td><a href="' . $url . '" class="link-video" target="_blank">' . $wgLang->timeAndDate( $row->img_timestamp, true ) . '</a></td>' . '<td>';
 				$line .= $sk->userLink( $user, $usertext ) . " <span style='white-space: nowrap;'>" . $sk->userToolLinks( $user, $usertext ) . "</span>";
 				$line .= '</td></tr>';
 				return $line;
@@ -696,7 +697,7 @@ class VideoHistoryList {
 				$user = $row->img_user;
 				$usertext = $row->img_user_text;
 				$url = VideoPage::getUrl( $row->img_metadata );	
-				$s .= '<tr>' . '<td><a href="' . $url . '" class="link-video" target="_blank">' . $wgLang->timeAndDate( $row->img_timestamp, true ) . '</a></td>' . '<td>';
+				$s .= '<tr>' . '<td></td><td><a href="' . $url . '" class="link-video" target="_blank">' . $wgLang->timeAndDate( $row->img_timestamp, true ) . '</a></td>' . '<td>';
 				$s .= $sk->userLink( $user, $usertext ) . " <span style='white-space: nowrap;'>" . $sk->userToolLinks( $user, $usertext ) . "</span>";
 				$s .= '</td></tr>';	
 			}			
