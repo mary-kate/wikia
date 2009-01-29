@@ -549,11 +549,11 @@ class VideoPage extends Article {
 				}
 			}
 		}
-		$this->setName( $this->mTitle->getText() );
-		$this->save();
 		$sk = $wgUser->getSkin();
 		$link_back = $sk->makeKnownLinkObj( $this->mTitle );
-		$wgOut->addHTML( wfMsg( 'wikiavideo-reverted', '<b>' . $this->mTitle->getText() . '</b>', '<a href="' . $link_back . '">' . wfMsg( 'wikiavideo-back' ) . '</a>' ) );
+		$this->setName( $this->mTitle->getText() );
+		$this->save();
+		$wgOut->addHTML( wfMsg( 'wikiavideo-reverted', '<b>' . $this->mTitle->getText() . '</b>', $link_back ) );
 	}
 
 	function videoHistory() {
