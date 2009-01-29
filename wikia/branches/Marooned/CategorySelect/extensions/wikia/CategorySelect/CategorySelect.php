@@ -96,8 +96,10 @@ function CategorySelectCategoryBox($text) {
 	if (!is_array($wgCategorySelectMetaData)) {
 		global $wgTitle;
 		$rev = Revision::newFromTitle($wgTitle);
-		$wikitext = $rev->getText();
-		CategorySelect::SelectCategoryAPIgetData($wikitext);
+		if (!is_null($rev)) {
+			$wikitext = $rev->getText();
+			CategorySelect::SelectCategoryAPIgetData($wikitext);
+		}
 	}
 
 	$text = CategorySelectGenerateHTML();
@@ -135,8 +137,10 @@ function CategorySelectOutput(&$out, &$text) {
 
 	if (!is_array($wgCategorySelectMetaData)) {
 		$rev = Revision::newFromTitle($wgTitle);
-		$wikitext = $rev->getText();
-		CategorySelect::SelectCategoryAPIgetData($wikitext);
+		if (!is_null($rev)) {
+			$wikitext = $rev->getText();
+			CategorySelect::SelectCategoryAPIgetData($wikitext);
+		}
 	}
 
 	$html = CategorySelectGenerateHTML();
@@ -154,18 +158,21 @@ function CategorySelectOutput(&$out, &$text) {
  * @author Maciej Błaszkowski <marooned at wikia-inc.com>
  */
 function CategorySelectGenerateHTML() {
-	global $wgOut, $wgExtensionsPath, $wgStyleVersion, $wgTitle, $wgCategorySelectMetaData;
+	global $wgOut, $wgExtensionsPath, $wgStyleVersion, $wgCategorySelectMetaData;
+
+	if (!empty($wgCategorySelectMetaData)) {
+		$categoriesJSON = Wikia::json_encode($wgCategorySelectMetaData['categories']);
+		$wgOut->addScript("<script type=\"text/javascript\">var categories = $categoriesJSON;</script>");
+	}
 	$wgOut->addScript("<script type=\"text/javascript\" src=\"$wgExtensionsPath/wikia/CategorySelect/CategorySelect.js?$wgStyleVersion\"></script>");
 	$wgOut->addScript("<link rel=\"stylesheet\" type=\"text/css\" href=\"$wgExtensionsPath/wikia/CategorySelect/CategorySelect.css?$wgStyleVersion\" />");
+
 	//TODO: change IDs to more intuitive and related to this extension [also in .js]
-
-	$categoriesJSON = Wikia::json_encode($wgCategorySelectMetaData['categories']);
-	$wgOut->addScript("<script type=\"text/javascript\">var categories = $categoriesJSON;</script>");
-
 	$result = '
 	<div id="myAutoComplete">
-	    <input id="myInput" type="text">
-	    <div id="myContainer"></div>
+		<input id="myInput" type="text">
+		<div id="myContainer"></div>
 	</div>';
+
 	return $result;
 }
