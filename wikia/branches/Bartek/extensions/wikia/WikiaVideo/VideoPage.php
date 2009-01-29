@@ -697,7 +697,14 @@ class VideoHistoryList {
 				$user = $row->img_user;
 				$usertext = $row->img_user_text;
 				$url = VideoPage::getUrl( $row->img_metadata );	
-				$s .= '<tr>' . '<td></td><td><a href="' . $url . '" class="link-video" target="_blank">' . $wgLang->timeAndDate( $row->img_timestamp, true ) . '</a></td>' . '<td>';
+			        $q = array();
+                                $q[] = 'action=revert';
+                                $q[] = 'oldvideo=' . urlencode( $row->img_timestamp );
+                                $revert = $sk->makeKnownLinkObj( $this->mTitle,
+                                        wfMsgHtml( 'filehist-revert' ),
+                                        implode( '&', $q ) );
+
+				$s .= '<tr>' . '<td>' . $revert . '</td><td><a href="' . $url . '" class="link-video" target="_blank">' . $wgLang->timeAndDate( $row->img_timestamp, true ) . '</a></td>' . '<td>';
 				$s .= $sk->userLink( $user, $usertext ) . " <span style='white-space: nowrap;'>" . $sk->userToolLinks( $user, $usertext ) . "</span>";
 				$s .= '</td></tr>';	
 			}			
