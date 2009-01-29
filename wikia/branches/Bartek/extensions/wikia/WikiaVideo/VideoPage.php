@@ -236,32 +236,34 @@ class VideoPage extends Article {
 
 	public function getRatio() {
 		global $wgWikiaVideoProviders;
+		$ratio = 0;
 		switch( $wgWikiaVideoProviders[$this->mProvider] ) {
 			case "metacafe": 
-				return (40 / 35);
+				$ratio =  (40 / 35);
 				break;			
 			case "youtube": 
-				return (425 / 355);
+				$ratio =  (425 / 355);
 				break;
 			case "sevenload":
-				return (500 / 408);
+				$ratio =  (500 / 408);
 				break;
 			case "gamevideos":
-				return (500 / 319);
+				$ratio = (500 / 319);
 				break;
 			case "5min":
-				return (480 / 401);
+				$ratio = (480 / 401);
 				break;
 			case "vimeo":
-				return (400 / 225);
+				$ratio = (400 / 225);
 				break;
 			case "myvideo":
-				return (470 / 406);
+				$ratio = (470 / 406);
 				break;
 			default:
-				return 1;
-				break;
+				$ratio = 1;
+				break;		
 		}
+		return $ratio;
 	}
 
 	public function getTextRatio() {
@@ -339,28 +341,31 @@ class VideoPage extends Article {
 				}
 			}
 		}
-		switch( $wgWikiaVideoProviders[$provider] ) {
+		$url = '';
+		switch( $wgWikiaVideoProviders[$provider] ) {			
 			case "metacafe": 
-				return 'http://www.metacafe.com/watch/' . $id . '/' . $mData[0];
+				$url = 'http://www.metacafe.com/watch/' . $id . '/' . $mData[0];
 			case "youtube": 
-				return 'http://www.youtube.com/watch?v=' . $id;
+				$url = 'http://www.youtube.com/watch?v=' . $id;
 			case "sevenload":
-				return 'http://www.sevenload.com/videos/' . $id;
+				$url = 'http://www.sevenload.com/videos/' . $id;
 			case "gamevideos":
-				return 'http://gamevideos.1up.com/video/id/' . $id;
+				$url = 'http://gamevideos.1up.com/video/id/' . $id;
 				break;
 			case "5min":
-				return 'http://www.5min.com/Video/' . $mData[0] . $id;
+				$url = 'http://www.5min.com/Video/' . $mData[0] . $id;
 				break;
 			case "myvideo":
-				return 'http://www/myvideo.de/watch/' . $id;
+				$url = 'http://www/myvideo.de/watch/' . $id;
 				break;
 			case "vimeo":
-				return 'http://www.vimeo.com/' . $id;
+				$url = 'http://www.vimeo.com/' . $id;
 				break;
 			default:
-				return '';
+				$url = '';
+				break;
 		}
+		return $url;
 	}
 
 	public function getProvider() {
