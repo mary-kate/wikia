@@ -26,8 +26,14 @@ class CategorySelect {
 	private static $categories, $maybeCategory, $maybeCategoryBegin, $outerTag, $nodeLevel, $frame;
 
 	static function SelectCategoryAPIgetData($wikitext) {
-		global $wgParser, $wgTitle, $wgCategorySelectMetaData, $wgCategorySelectEnabled;
+		global $wgCategorySelectMetaData;
 
+		//this function is called from different hooks - parse article only once
+		if (is_array($wgCategorySelectMetaData)) {
+			return $wgCategorySelectMetaData;
+		}
+
+		global $wgParser, $wgTitle, $wgCategorySelectEnabled;
 		//enable changes in Preprocessor and Parser
 		$wgCategorySelectEnabled = true;
 		//prepare Parser
@@ -54,7 +60,8 @@ class CategorySelect {
 		//replace markers back to wikitext
 		$modifiedWikitext = $wgParser->mStripState->unstripBoth($modifiedWikitext);
 
-		return array('wikitext' => $modifiedWikitext, 'categories' => $categories, 'xml' => $xml /* TODO: remove - debug only */, 'root' => $root /* TODO: remove - debug only */);
+		$wgCategorySelectMetaData = array('wikitext' => $modifiedWikitext, 'categories' => $categories, 'xml' => $xml /* TODO: remove - debug only */, 'root' => $root /* TODO: remove - debug only */);
+		return $wgCategorySelectMetaData;
 	}
 
 	static private function parseNode(&$root, $outerTag = '') {

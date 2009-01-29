@@ -52,12 +52,12 @@ function addCategory(category, params, index) {
 
 	elementSpan = document.createElement('span');
 	elementSpan.setAttribute('class', 'CSitemX');
-	elementSpan.setAttribute('onclick', 'deleteCategory(this)');
+	elementSpan.setAttribute('onclick', 'deleteCategory(this); return false;');
 	elementSpanOuter.appendChild(elementSpan);
 
 	elementSpan = document.createElement('span');
 	elementSpan.setAttribute('class', 'CSitemM');
-	elementSpan.setAttribute('onclick', 'modifyCategory(this)');
+	elementSpan.setAttribute('onclick', 'modifyCategory(this); return false;');
 	elementSpanOuter.appendChild(elementSpan);
 
 	$(mainContainerId).insertBefore(elementA, $(inputId));

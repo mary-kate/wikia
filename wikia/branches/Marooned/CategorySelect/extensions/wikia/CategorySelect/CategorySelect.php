@@ -38,16 +38,15 @@ $wgAjaxExportList[] = 'CategorySelectAjaxGetCategories';
  * @author Maciej Błaszkowski <marooned at wikia-inc.com>
  */
 function CategorySelectInit() {
-	global $wgHooks, $wgCategorySelectEnabled, $wgCategorySelectMetaData, $wgAutoloadClasses;
+	global $wgHooks, $wgCategorySelectEnabled, $wgAutoloadClasses;
 	$wgAutoloadClasses['CategorySelect'] = 'extensions/wikia/CategorySelect/CategorySelect_body.php';
-//	$wgCategorySelectEnabled = true;
-//	$wgHooks['OutputPageMakeCategoryLinks'][] = 'CategorySelectHiddenCategory';
 	$wgHooks['OutputPageBeforeHTML'][] = 'CategorySelectOutput';
-//	$wgHooks['ParserBeforeStrip'][] = 'CategorySelectInit';
+	$wgHooks['EditPageAfterGetContent'][] = 'CategorySelectReplaceContent';
+	$wgHooks['EditPage::CategoryBox'][] = 'CategorySelectCategoryBox';
 }
 
 /**
- * Get categories via AJAX
+ * Get categories via AJAX that are matching typed text [for suggestion dropdown]
  *
  * @author Maciej Błaszkowski <marooned at wikia-inc.com>
  */
@@ -76,6 +75,36 @@ function CategorySelectAjaxGetCategories() {
 }
 
 /**
+ * Replace content of edited article [with cutted out categories]
+ *
+ * @author Maciej Błaszkowski <marooned at wikia-inc.com>
+ */
+function CategorySelectReplaceContent($text) {
+	$data = CategorySelect::SelectCategoryAPIgetData($text);
+	$text = $data['wikitext'];
+	return true;
+}
+
+/**
+ * Replace hidden category box with our CategorySelect on EditPage
+ *
+ * @author Maciej Błaszkowski <marooned at wikia-inc.com>
+ */
+function CategorySelectCategoryBox($text) {
+	global $wgCategorySelectMetaData;
+
+	if (!is_array($wgCategorySelectMetaData)) {
+		global $wgTitle;
+		$rev = Revision::newFromTitle($wgTitle);
+		$wikitext = $rev->getText();
+		CategorySelect::SelectCategoryAPIgetData($wikitext);
+	}
+
+	$text = CategorySelectGenerateHTML();
+	return true;
+}
+
+/**
  * Get categories via AJAX
  *
  * @author Maciej Błaszkowski <marooned at wikia-inc.com>
@@ -97,76 +126,46 @@ function CategorySelectAjaxGetCategoriesXYZ($titleName) {
 }
 
 /**
- *
+ * Test function - display CS above article in view mode
  *
  * @author Maciej Błaszkowski <marooned at wikia-inc.com>
  */
 function CategorySelectOutput(&$out, &$text) {
-	global $wgOut, $wgCategorySelectMetaData, $wgExtensionsPath, $wgStyleVersion, $wgTitle;
-	$wgOut->addScript("<script type=\"text/javascript\" src=\"$wgExtensionsPath/wikia/CategorySelect/CategorySelect.js?$wgStyleVersion\"></script>");
-	$wgOut->addScript("<link rel=\"stylesheet\" type=\"text/css\" href=\"$wgExtensionsPath/wikia/CategorySelect/CategorySelect.css?$wgStyleVersion\" />");
-	$wgOut->addHTML('
-	<div id="myAutoComplete">
-	    <input id="myInput" type="text">
-	    <div id="myContainer"></div>
-	</div>');
+	global $wgOut, $wgExtensionsPath, $wgStyleVersion, $wgTitle, $wgCategorySelectMetaData;
 
-	$rev = Revision::newFromTitle($wgTitle);
-	$wikitext = $rev->getText();
-	$wgCategorySelectMetaData = CategorySelect::SelectCategoryAPIgetData($wikitext);
-	$wgOut->addHTML('<pre>output:' . print_r ($wgCategorySelectMetaData['categories'], true) .'</pre>');
+	if (!is_array($wgCategorySelectMetaData)) {
+		$rev = Revision::newFromTitle($wgTitle);
+		$wikitext = $rev->getText();
+		CategorySelect::SelectCategoryAPIgetData($wikitext);
+	}
 
-	$categoriesJSON = Wikia::json_encode($wgCategorySelectMetaData['categories']);
-	$wgOut->addScript("<script type=\"text/javascript\">var categories = $categoriesJSON;</script>");
+	$html = CategorySelectGenerateHTML();
+	$wgOut->addHTML($html);
+
+	//TODO: remove this - for debug purpose
+//	$wgOut->addHTML('<pre>output:' . print_r($wgCategorySelectMetaData['categories'], true) .'</pre>');
+
 	return true;
 }
 
-///**
-// * Bogus function for setHook
-// *
-// * @author Maciej Błaszkowski <marooned at wikia-inc.com>
-// */
-//function CategorySelectParserHookCallback($input, $args, $parser) {
-//	echo '<pre>'; print_r ($input); echo '</pre>';
-//	return $input;
-//}
-//
-///**
-// * Bogus function for setHook
-// *
-// * @author Maciej Błaszkowski <marooned at wikia-inc.com>
-// */
-//function CategorySelectHiddenCategory($out, $categories, &$links) {
-//	global $wgCategorySelectMetaData;
-//	foreach ($categories as $category => $type) {
-//		$wgCategorySelectMetaData[$category]['hidden'] = $type == 'hidden' ? 1 : 0;
-//	}
-//	return true;
-//}
-//
-///**
-// * Load JS/CSS for extension
-// *
-// * @author Maciej Błaszkowski <marooned at wikia-inc.com>
-// */
-//function CategorySelectIncludeJSCSS( $skin, & $bottomScripts) {
-//	global $wgExtensionsPath, $wgStyleVersion;
-////	$bottomScripts .= "<script type=\"text/javascript\" src=\"$wgExtensionsPath/wikia/CategorySelect/SpecialCategorySelect.js?$wgStyleVersion\"></script>";
-//	return true;
-//}
-//
-///**
-// * Add messages above the editor on UserTalk page so the user with empty UTP would see their message when clicking on UTP link
-// *
-// * @author Maciej Błaszkowski <marooned at wikia-inc.com>
-// */
-//function CategorySelectArticleEditor($editPage) {
-//	global $wgOut, $wgTitle, $wgUser;
-//	if ($wgTitle->getNamespace() == NS_USER_TALK &&						//user talk page?
-//		$wgUser->getName() == $wgTitle->getPartialURL() &&				//*my* user talk page?
-//		!$wgUser->isAllowed('bot')										//user is not a bot?
-//	) {																	//if all above == 'yes' - display user's messages
-//		$wgOut->addHTML(CategorySelectGetUserMessagesContent());
-//	}
-//	return true;
-//}
+/**
+ * Add required JS & CSS and return HTML
+ *
+ * @author Maciej Błaszkowski <marooned at wikia-inc.com>
+ */
+function CategorySelectGenerateHTML() {
+	global $wgOut, $wgExtensionsPath, $wgStyleVersion, $wgTitle, $wgCategorySelectMetaData;
+	$wgOut->addScript("<script type=\"text/javascript\" src=\"$wgExtensionsPath/wikia/CategorySelect/CategorySelect.js?$wgStyleVersion\"></script>");
+	$wgOut->addScript("<link rel=\"stylesheet\" type=\"text/css\" href=\"$wgExtensionsPath/wikia/CategorySelect/CategorySelect.css?$wgStyleVersion\" />");
+	//TODO: change IDs to more intuitive and related to this extension [also in .js]
+
+	$categoriesJSON = Wikia::json_encode($wgCategorySelectMetaData['categories']);
+	$wgOut->addScript("<script type=\"text/javascript\">var categories = $categoriesJSON;</script>");
+
+	$result = '
+	<div id="myAutoComplete">
+	    <input id="myInput" type="text">
+	    <div id="myContainer"></div>
+	</div>';
+	return $result;
+}
