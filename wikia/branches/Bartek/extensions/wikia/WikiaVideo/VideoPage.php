@@ -518,8 +518,35 @@ class VideoPage extends Article {
 	}
 
 	function revert() {
-
-
+		global $wgOut, $wgRequest;
+		$timestamp = $wgRequest->getVal( 'oldvideo' );
+		$fname = get_class( $this ) . '::' . __FUNCTION__;
+		$dbr = wfGetDB( DB_SLAVE );		
+		$row = $dbr->selectRow(
+			'oldimage',
+			'oi_metadata AS img_metadata',
+			array( 
+				'oi_name' => $this->mTitle->getPrefixedText(),
+				'oi_timestamp' => $timestamp
+			),
+			$fname	
+		);	
+		if ($row) {
+			$metadata = split( ",", $row->img_metadata ); 	
+			if ( is_array( $metadata ) ) {
+				$this->mProvider = $metadata[0];
+				$this->mId = $metadata[1];
+				array_splice( $metadata, 0, 2 );
+				if ( count( $metadata ) > 0 ) {
+					foreach( $metadata as $data  ) {
+						$this->mData[] = $data;						
+					}
+				}
+			}
+		}
+		$this->setName( $this->mTitle->getText() );
+		$this->save();
+		$wgOut->addHTML( 'Was reverted' );
 	}
 
 	function videoHistory() {
