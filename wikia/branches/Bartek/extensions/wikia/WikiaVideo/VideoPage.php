@@ -553,7 +553,7 @@ class VideoPage extends Article {
 		$this->save();
 		$sk = $wgUser->getSkin();
 		$link_back = $sk->makeKnownLinkObj( $this->mTitle );
-		$wgOut->addHTML( wfMsg( 'wikiavideo-reverted', '<b>' . $this->mTitle->getText() . '</b>', '<a href="#">' . $link_back . '</a>' ) );
+		$wgOut->addHTML( wfMsg( 'wikiavideo-reverted', '<b>' . $this->mTitle->getText() . '</b>', '<a href="' . $link_back . '">' . wfMsg( 'wikiavideo-back' ) . '</a>' ) );
 	}
 
 	function videoHistory() {
