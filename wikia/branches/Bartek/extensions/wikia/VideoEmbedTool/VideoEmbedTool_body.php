@@ -16,17 +16,13 @@ class VideoEmbedTool {
 		return $tmpl->execute("main");
 	}
 
-	function loadLicense() {
-		global $wgRequest, $IP;
-		$license = $wgRequest->getText('license');
-		require_once($IP . '/includes/specials/SpecialUpload.php');
-		return preg_replace( '/(<a[^>]+)/', '$1 target="_new" ', UploadForm::ajaxGetLicensePreview( $license ) );		
-	}
 
 	function recentlyUploaded() {
 		global $IP, $wmu;
 		require_once($IP . '/includes/SpecialPage.php');
 		require_once($IP . '/includes/specials/SpecialNewimages.php');
+		// this needs to be revritten, since we will not display recently uploaded, but embedded
+
 		$isp = new IncludableSpecialPage('Newimages', '', 1, 'wfSpecialNewimages', $IP . '/includes/specials/SpecialNewimages.php');
 		wfSpecialNewimages(8, $isp);
 		$tmpl = new EasyTemplate(dirname(__FILE__).'/templates/');
@@ -40,7 +36,8 @@ class VideoEmbedTool {
 		$query = $wgRequest->getText('query');
 		$page = $wgRequest->getVal('page');
 		$sourceId = $wgRequest->getVal('sourceId');
-
+		// to be rewritten too
+		
 		if($sourceId == 1) {
 			require_once($IP.'/extensions/3rdparty/ImportFreeImages/phpFlickr-2.2.0/phpFlickr.php');
 			$flickrAPI = new phpFlickr('bac0bd138f5d0819982149f67c0ca734');
@@ -76,92 +73,6 @@ class VideoEmbedTool {
 		// to be applied later
 
 		return $this->detailsPage($props);
-	}
-
-	function checkImage() {
-		global $IP, $wgRequest;
-
-		$mFileSize = $wgRequest->getFileSize( 'wpUploadFile' );
-		$mSrcName = stripslashes($wgRequest->getFileName( 'wpUploadFile' ));
-		$filtered = wfStripIllegalFilenameChars( $mSrcName );
-		$form = new UploadForm( $wgRequest, '' );
-
-		// no filename or zero size
-		if( trim( $mSrcName ) == '' || empty( $mFileSize ) ) {
-			return UploadForm::EMPTY_FILE;
-		}
-
-		//illegal filename
-		$nt = Title::makeTitleSafe( NS_IMAGE, $filtered );
-		if( is_null( $nt ) ) {
-			return UploadForm::ILLEGAL_FILENAME;
-		}
-
-		// extensions check
-		list( $partname, $ext ) = $form->splitExtensions( $filtered );
-
-		if( count( $ext ) ) {
-			$finalExt = $ext[count( $ext ) - 1];
-		} else {
-			$finalExt = '';
-		}
-
-		// for more than one "extension"
-		if( count( $ext ) > 1 ) {
-			for( $i = 0; $i < count( $ext ) - 1; $i++ )
-				$partname .= '.' . $ext[$i];
-		}
-
-		if( strlen( $partname ) < 1 ) {
-			return UploadForm::MIN_LENGHT_PARTNAME;
-		}
-
-		$form->mFileProps = File::getPropsFromPath( $form->mTempPath, $finalExt );
-		$form->checkMacBinary();
-		$veri = $form->verify( $form->mTempPath, $finalExt );
-
-		if( $veri !== true ) { //it's a wiki error...
-//			$resultDetails = array( 'veri' => $veri );
-			return UploadForm::VERIFICATION_ERROR;
-		}
-
-		global $wgCheckFileExtensions, $wgStrictFileExtensions;
-		global $wgFileExtensions, $wgFileBlacklist;
-		if ($finalExt == '') {
-			return UploadForm::FILETYPE_MISSING;
-		} elseif ( $form->checkFileExtensionList( $ext, $wgFileBlacklist ) ||
-				($wgCheckFileExtensions && $wgStrictFileExtensions &&
-					!$form->checkFileExtension( $finalExt, $wgFileExtensions ) ) ) {
-			return UploadForm::FILETYPE_BADTYPE;
-		}
-
-		if(!wfRunHooks('WikiaMiniUpload:BeforeProcessing', $mSrcName)) {
-			wfDebug( "Hook 'WikiaMiniUpload:BeforeProcessing' broke processing the file." );
-			return UploadForm::VERIFICATION_ERROR;
-		}
-
-		return UploadForm::SUCCESS;
-	}
-
-	function translateError ( $error ) {
-		switch( $error ) {
-			case UploadForm::SUCCESS:
-				return false;
-			case UploadForm::EMPTY_FILE:
-				return wfMsg( 'emptyfile' );
-			case UploadForm::MIN_LENGHT_PARTNAME:
-				return wfMsg( 'minlength1' );
-			case UploadForm::ILLEGAL_FILENAME:
-				return wfMsg( 'illegalfilename' );
-			case UploadForm::FILETYPE_MISSING:
-				return wfMsg( 'filetype-missing' );
-			case UploadForm::FILETYPE_BADTYPE:
-				return wfMsg( 'filetype-bad-extension' );
-			case UploadForm::VERIFICATION_ERROR:
-				return "File type verification error!" ;
-			default:
-				return false;
-		}
 	}
 
 	function insertVideo() {
@@ -348,12 +259,6 @@ class VideoEmbedTool {
 		$tmpl = new EasyTemplate(dirname(__FILE__).'/templates/');
 		$tmpl->set_vars(array('tag' => $tag));
 		return $tmpl->execute('summary');
-	}
-
-	function clean() {
-		global $wgRequest;
-		$file = new FakeLocalFile(Title::newFromText($wgRequest->getVal('mwname'), 6), RepoGroup::singleton()->getLocalRepo());
-		$file->delete('');
 	}
 }
 
