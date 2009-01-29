@@ -268,33 +268,60 @@ class VideoPage extends Article {
 
 	public function getTextRatio() {
 		global $wgWikiaVideoProviders;
+		$ratio = '';
 		switch( $wgWikiaVideoProviders[$this->mProvider] ) {
 			case "metacafe": 
-				return "40 x 35";
+				$ratio = "40 x 35";
 				break;			
 			case "youtube": 
-				return "425 x 355";
+				$ratio = "425 x 355";
 				break;
 			case "sevenload":
-				return "500 x 408";
+				$ratio = "500 x 408";
 				break;
 			case "gamevideos":
-				return "500 x 319";
+				$ratio = "500 x 319";
 				break;
 			case "5min":
-				return "480 x 401";
+				$ratio = "480 x 401";
 				break;
 			case "vimeo":
-				return "400 x 225";
+				$ratio = "400 x 225";
 				break;
 			case "myvideo":
-				return "470 x 406";
+				$ratio = "470 x 406";
 				break;
 			default:
-				return "300 x 300";
+				$ratio = "300 x 300";
+				break;
+		}
+		return $ratio;
+	}
+
+	// run a check from provided api or elsewhere
+	// to see if we can go to details page or not 
+	public function checkIfVideoExists() {
+		global $wgWikiaVideoProviders;
+		switch( $wgWikiaVideoProviders[$this->mProvider] ) {
+			case "metacafe": 
+				break;			
+			case "youtube": 
+				break;
+			case "sevenload":
+				break;
+			case "gamevideos":
+				break;
+			case "5min":
+				break;
+			case "vimeo":
+				break;
+			case "myvideo":
+				break;
+			default:
 				break;
 		}
 	}
+
 
 	function loadFromPars( $provider, $id, $data ) {
 		$this->mProvider = $provider;
