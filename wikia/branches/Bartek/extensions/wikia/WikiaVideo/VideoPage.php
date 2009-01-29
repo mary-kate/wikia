@@ -3,6 +3,10 @@
 // use the same namespace as in old NY extension
 define( 'NS_VIDEO', 400 );
 
+$dir = dirname(__FILE__).'/';
+global $wgExtensionMessagesFiles;
+$wgExtensionMessagesFiles['WikiaVideo'] = $dir.'/WikiaVideo.i18n.php';
+
 // main video page class
 class VideoPage extends Article {
 
@@ -30,6 +34,7 @@ class VideoPage extends Article {
 		$mDataline;
 
         function __construct (&$title){
+		wfLoadExtensionMessages('WikiaVideo');
                 parent::__construct(&$title);
         }
 
@@ -518,7 +523,7 @@ class VideoPage extends Article {
 	}
 
 	function revert() {
-		global $wgOut, $wgRequest;
+		global $wgOut, $wgRequest, $wgUser;
 		$timestamp = $wgRequest->getVal( 'oldvideo' );
 		$fname = get_class( $this ) . '::' . __FUNCTION__;
 		$dbr = wfGetDB( DB_SLAVE );		
@@ -546,7 +551,9 @@ class VideoPage extends Article {
 		}
 		$this->setName( $this->mTitle->getText() );
 		$this->save();
-		$wgOut->addHTML( 'Was reverted' );
+		$sk = $wgUser->getSkin();
+		$link_back = $sk->makeKnownLinkObj( $this->mTitle );
+		$wgOut->addHTML( wfMsg( 'wikiavideo-reverted', '<b>' . $this->mTitle->getText() . '</b>', '<a href="#">' . $link_back . '</a>' ) );
 	}
 
 	function videoHistory() {
