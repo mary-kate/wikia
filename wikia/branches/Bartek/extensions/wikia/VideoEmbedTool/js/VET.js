@@ -99,9 +99,10 @@ function VET_addHandler() {
 function VET_manualWidthInput( elem ) {
         var val = parseInt( elem.value );
         if ( isNaN( val ) ) {
-                return false;
+		$( 'VideoEmbedManualWidth' ).value = 300;
+		VET_readjustSlider( 300 );		
+		return false;
         }
-
 	$( 'VideoEmbedManualWidth' ).value = val;
 	VET_readjustSlider( val );
 }
