@@ -3,32 +3,32 @@
 $ORIGIN glb.wikia.net.
 
 
-600 IN SOA ns-lon-2.wikia.net. dnsmaster.wikia-inc.com. 2009012703 1200 120 1209600 60
+600 IN SOA ns-lon-2.wikia.net. dnsmaster.wikia-inc.com. 2009012801 1200 120 1209600 60
 
-86400 IN NS ns-lon-1.wikia.net.
-86400 IN NS ns-nj-1.wikia.net.
-86400 IN NS ns-sjc-1.wikia.net.
-86400 IN NS ns-lon-2.wikia.net.
+60 IN NS ns-lon-1.wikia.net.
+60 IN NS ns-nj-1.wikia.net.
+60 IN NS ns-sjc-1.wikia.net.
+60 IN NS ns-lon-2.wikia.net.
 
 
 
 sjc-images 60 IN A 216.151.156.12
-sjc-images 86400 IN LOC 37 00 00.000 N 121 00 00.000 W 0.00m 0.00m 0.00m 0.00m
-sjc-images 86400 IN TXT GlbDNS::RADIUS 500 km
+sjc-images 60 IN LOC 37 00 00.000 N 121 00 00.000 W 0.00m 0.00m 0.00m 0.00m
+sjc-images 60 IN TXT GlbDNS::RADIUS 700 km
 
 sjc-html 60 IN A 216.224.121.143
-sjc-html 86400 IN LOC 37 00 00.000 N 121 00 00.000 W 0.00m 0.00m 0.00m 0.00m
+sjc-html 60 IN LOC 37 00 00.000 N 121 00 00.000 W 0.00m 0.00m 0.00m 0.00m
 
 london 60 IN A 83.223.112.142
 london 60 IN A 83.223.112.138
-london 86400 IN LOC 51 00 00.000 N 0 00 00.000  W 0.00m 0.00m 0.00m 0.00m
+london 60 IN LOC 51 00 00.000 N 0 00 00.000  W 0.00m 0.00m 0.00m 0.00m
 
 
 panther-apac 60 IN CNAME g1.panthercdn.com.
-panther-apac 86400 IN LOC 01 00 00.000 N 103 00 00.000 E 0.00m 0.00m 0.00m 0.00m
+panther-apac 60 IN LOC 01 00 00.000 N 103 00 00.000 E 0.00m 0.00m 0.00m 0.00m
 
 panther-us 60 IN CNAME g1.panthercdn.com.
-panther-us 86400 IN LOC 32 00 00.000 N 97 00 00.000 W 0.00m 0.00m 0.00m 0.00m
+panther-us 60 IN LOC 32 00 00.000 N 97 00 00.000 W 0.00m 0.00m 0.00m 0.00m
 
 images     120 IN CNAME sjc-images
 images     120 IN CNAME london
