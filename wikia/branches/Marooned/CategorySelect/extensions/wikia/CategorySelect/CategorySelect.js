@@ -1,5 +1,5 @@
 var Event = YAHOO.util.Event;
-//var categories = new Array();	//TODO: get this from API for existing article
+var categories;
 //HTML IDs
 const inputId = 'myInput';
 const suggestContainerId = 'myContainer';
@@ -68,9 +68,13 @@ function addCategory(category, params, index) {
 Event.onDOMReady(function() {
 	console.log('onDOMReady');
 
-	for(c in categories) {
-		console.log(categories[c].category);
-		addCategory(categories[c].category, {'outerTag': categories[c].outerTag, 'sortkey': categories[c].sortkey}, c);
+	if (categories == undefined) {
+		categories = new Array();
+	} else {
+		for(c in categories) {
+			console.log(categories[c].category);
+			addCategory(categories[c].category, {'outerTag': categories[c].outerTag, 'sortkey': categories[c].sortkey}, c);
+		}
 	}
 
 	// So far this extension works only in Firefox and Internet Explorer
