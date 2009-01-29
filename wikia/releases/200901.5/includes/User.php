@@ -2182,7 +2182,9 @@ class User {
 		}
 
 		wfRunHooks( 'UserSetCookies', array( $this, &$session, &$cookies ) );
-		$_SESSION = $session + $_SESSION;
+		if(is_array($session) && is_array($_SESSION)) {
+			$_SESSION = $session + $_SESSION;
+		}
 		foreach ( $cookies as $name => $value ) {
 			if ( $value === false ) {
 				$this->clearCookie( $name );
