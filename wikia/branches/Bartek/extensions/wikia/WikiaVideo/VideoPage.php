@@ -311,10 +311,18 @@ class VideoPage extends Article {
 		$exists = false;
 		switch( $wgWikiaVideoProviders[$this->mProvider] ) {
 			case "metacafe": 
+				$file = @file_get_contents( "http://www.metacafe.com/api/item/" . $this->mId, FALSE );
+				if ($file) {
+					$doc = new DOMDocument;
+					@$doc->loadHTML( $file );					
+					if( $item = $doc->getElementsByTagName('item')->item( 0 ) ) {						
+						$this->mVideoName = $item->getElementsByTagName('title')->item(0)->textContent;
+						$exists = true;
+					}
+				}
 				break;			
 			case "youtube": 
 				$file = @file_get_contents( "http://gdata.youtube.com/feeds/api/videos/" . $this->mId, FALSE );
-				// todo rudimentary
 				if ($file) {
 					$doc = new DOMDocument;
 					@$doc->loadHTML( $file );					
@@ -323,12 +331,12 @@ class VideoPage extends Article {
 				}
 				break;
 			case "sevenload":
+				// needs an API key - to be done last
 				break;
 			case "gamevideos":
 				break;
 			case "5min":
 				$file = @file_get_contents( "http://api.5min.com/video/" . $this->mId . '/info.xml', FALSE );
-				// todo rudimentary
 				if ($file) {
 					$doc = new DOMDocument;
 					@$doc->loadHTML( $file );					
@@ -347,6 +355,7 @@ class VideoPage extends Article {
 				}
 				break;
 			case "myvideo":
+				// entire site is in German? I need help here
 				break;
 			default:
 				// todo ONLY TEMPORARY to break a hole to allow test inserts
