@@ -88,7 +88,12 @@ class VideoEmbedTool {
 			header('X-screen-type: error');
 			return $this->loadMain( wfMsg( 'vet-bad-url' ) );
 		}
-			
+	
+		if( !$video->checkIfVideoExists() ) {
+			header('X-screen-type: error');
+			return $this->loadMain( wfMsg( 'vet-non-existing' ) );
+		}	
+	
 		$props['provider'] = $video->getProvider();
 		$props['id'] = $video->getVideoId();
 		$data = $video->getData();
@@ -99,7 +104,7 @@ class VideoEmbedTool {
 		}
 		$props['code'] = $video->getEmbedCode( VIDEO_PREVIEW );
 		$props['oname'] = '';
-
+		$video->checkIfVideoExists();
 		return $this->detailsPage($props);
 	}
 
