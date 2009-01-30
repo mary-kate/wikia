@@ -332,8 +332,10 @@ class VideoPage extends Article {
 				break;
 			case "sevenload":
 				// needs an API key - to be done last
+				$exists = true;
 				break;
 			case "gamevideos":
+				$exists = true;
 				break;
 			case "5min":
 				$file = @file_get_contents( "http://api.5min.com/video/" . $this->mId . '/info.xml', FALSE );
@@ -356,10 +358,9 @@ class VideoPage extends Article {
 				break;
 			case "myvideo":
 				// entire site is in German? I need help here
+				$exists = true;
 				break;
 			default:
-				// todo ONLY TEMPORARY to break a hole to allow test inserts
-				$exists = true;
 				break;
 		}
 		return $exists;
@@ -396,6 +397,12 @@ class VideoPage extends Article {
 			default:
 				return '';
 		}
+	}
+
+	public function getVideoName() {
+		$vname = '';
+		isset( $this->mVideoName ) ? $vname = $this->mVideoName : $vname = '';
+		return $vname; 
 	}
 
 	public static function getUrl( $metadata ) {
