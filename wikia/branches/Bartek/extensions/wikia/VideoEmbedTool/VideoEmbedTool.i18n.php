@@ -57,5 +57,6 @@ $messages['en'] = array(
 	'vet-supported' => 'Supported video sites:',
 	'vet-preview' => '<i>this is just a scaled down preview</i>',
 	'vet-bad-url' => 'The supplied URL is invalid',
+	'vet-non-existing' => 'The supplied video does not exist',
 	'vet-main-info' => '<i>Input the full video URL from one of the supported sites displayed below.</i>',
 );
