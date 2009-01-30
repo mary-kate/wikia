@@ -330,6 +330,9 @@ class VideoPage extends Article {
 				$file = @file_get_contents( "http://api.5min.com/video/" . $this->mId . '/info.xml', FALSE );
 				// todo rudimentary
 				if ($file) {
+					$doc = new DOMDocument;
+					@$doc->loadHTML( $file );					
+					$this->mVideoName = $doc->getElementsByTagName('item')->item(0)->getElementsByTagName('title')->item(0)->textContent;
 					$exists = true;
 				}
 				break;
