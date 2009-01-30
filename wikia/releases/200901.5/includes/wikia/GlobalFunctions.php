@@ -621,7 +621,7 @@ function getMenu() {
 			}
 		}
 		$content = 'var magicWords = '.Wikia::json_encode($magicWords).';';
-		$duration = 60 * 60 * 24; // one day
+		$duration = 60 * 60 * 48; // two days
 	}
 
 	if(!empty($content)) {
