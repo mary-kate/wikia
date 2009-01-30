@@ -305,7 +305,7 @@ class VideoPage extends Article {
 	}
 
 	// run a check from provided api or elsewhere
-	// to see if we can go to details page or not 
+// to see if we can go to details page or not 
 	public function checkIfVideoExists() {
 		global $wgWikiaVideoProviders;
 		$exists = false;
@@ -313,12 +313,25 @@ class VideoPage extends Article {
 			case "metacafe": 
 				break;			
 			case "youtube": 
+				$file = @file_get_contents( "http://gdata.youtube.com/feeds/api/videos/" . $this->mId, FALSE );
+				// todo rudimentary
+				if ($file) {
+					$doc = new DOMDocument;
+					@$doc->loadHTML( $file );					
+					$this->mVideoName = $doc->getElementsByTagName('title')->item(0)->textContent;
+					$exists = true;
+				}
 				break;
 			case "sevenload":
 				break;
 			case "gamevideos":
 				break;
 			case "5min":
+				$file = @file_get_contents( "http://api.5min.com/video/" . $this->mId . '/info.xml', FALSE );
+				// todo rudimentary
+				if ($file) {
+					$exists = true;
+				}
 				break;
 			case "vimeo":
 				$file = @file_get_contents( "http://vimeo.com/api/clip/" . $this->mId . '.php', FALSE );
@@ -331,7 +344,8 @@ class VideoPage extends Article {
 			case "myvideo":
 				break;
 			default:
-				return false;
+				// todo ONLY TEMPORARY to break a hole to allow test inserts
+				$exists = true;
 				break;
 		}
 		return $exists;
