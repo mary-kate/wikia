@@ -276,7 +276,7 @@ class VideoPage extends Article {
 		$ratio = '';
 		switch( $wgWikiaVideoProviders[$this->mProvider] ) {
 			case "metacafe": 
-				$ratio = "40 x 35";
+				$ratio = "400 x 350";
 				break;			
 			case "youtube": 
 				$ratio = "425 x 355";
