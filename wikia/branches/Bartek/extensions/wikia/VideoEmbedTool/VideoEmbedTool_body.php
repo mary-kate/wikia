@@ -96,6 +96,7 @@ class VideoEmbedTool {
 	
 		$props['provider'] = $video->getProvider();
 		$props['id'] = $video->getVideoId();
+		$props['vname'] = $video->getVideoName();
 		$data = $video->getData();
 		if (is_array( $data ) ) {
 			$props['metadata'] = implode( ",", $video->getData() );
@@ -104,7 +105,6 @@ class VideoEmbedTool {
 		}
 		$props['code'] = $video->getEmbedCode( VIDEO_PREVIEW );
 		$props['oname'] = '';
-		$video->checkIfVideoExists();
 		return $this->detailsPage($props);
 	}
 
