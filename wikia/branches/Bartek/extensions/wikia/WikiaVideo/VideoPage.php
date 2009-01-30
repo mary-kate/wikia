@@ -28,6 +28,7 @@ class VideoPage extends Article {
 	const V_MYVIDEO = 15;
 
 	var	$mName,
+		$mVideoName,
 		$mId,
 		$mProvider,
 		$mData,
@@ -307,6 +308,7 @@ class VideoPage extends Article {
 	// to see if we can go to details page or not 
 	public function checkIfVideoExists() {
 		global $wgWikiaVideoProviders;
+		$exists = false;
 		switch( $wgWikiaVideoProviders[$this->mProvider] ) {
 			case "metacafe": 
 				break;			
@@ -319,12 +321,20 @@ class VideoPage extends Article {
 			case "5min":
 				break;
 			case "vimeo":
+				$file = @file_get_contents( "http://vimeo.com/api/clip/" . $this->mId . '.php', FALSE );
+				if ($file) {
+					$data = unserialize( $file );
+					$this->mVideoName = $data[0]["title"];
+					$exists = true;
+				}
 				break;
 			case "myvideo":
 				break;
 			default:
+				return false;
 				break;
 		}
+		return $exists;
 	}
 
 
