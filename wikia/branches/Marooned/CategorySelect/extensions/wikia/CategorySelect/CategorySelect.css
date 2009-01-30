@@ -12,6 +12,11 @@
 	padding: 5px 5px 2px 5px;
 }
 
+#myInput {
+	display: block;
+	float: left;
+}
+
 .CSitem {
 	background: #9Cf;
 	border: 1px solid #82add8;
@@ -27,6 +32,7 @@
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
 }
+
 .CSitemOuter {
 	margin: 0 35px 0 4px;
 }
@@ -42,7 +48,7 @@
 
 /*** Control buttons ***/
 .CScontrol {
-	background: url(/extensions/wikia/CategorySelect/sprite.png);
+	background: url(sprite.png);
 	cursor: pointer;
 	display: block;
 	height: 14px;
