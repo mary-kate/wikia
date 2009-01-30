@@ -51,12 +51,12 @@ function addCategory(category, params, index) {
 	elementSpanOuter.appendChild(elementText);
 
 	elementSpan = document.createElement('span');
-	elementSpan.setAttribute('class', 'CSitemX');
+	elementSpan.setAttribute('class', 'CScontrol CScontrolRemove');
 	elementSpan.setAttribute('onclick', 'deleteCategory(this); return false;');
 	elementSpanOuter.appendChild(elementSpan);
 
 	elementSpan = document.createElement('span');
-	elementSpan.setAttribute('class', 'CSitemM');
+	elementSpan.setAttribute('class', 'CScontrol CScontrolSort');
 	elementSpan.setAttribute('onclick', 'modifyCategory(this); return false;');
 	elementSpanOuter.appendChild(elementSpan);
 

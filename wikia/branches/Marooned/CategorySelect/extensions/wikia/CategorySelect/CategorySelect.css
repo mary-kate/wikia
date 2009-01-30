@@ -6,17 +6,29 @@
 }
 
 #myAutoComplete {
-	background-color: #F0F0FF;
-	padding: 2px;
+	background: #FFF;
+	border: 1px solid #AAA;
+	overflow: hidden;
+	padding: 5px 5px 2px 5px;
 }
 
 .CSitem {
-	background-color: #D7D7FF;
-	padding: 2px 35px 2px 4px;
-	margin-right: 4px;
-	white-space: nowrap;
+	background: #9Cf;
+	border: 1px solid #82add8;
+	color: #000;
+	cursor: default;
+	display: block;
+	float: left;
+	font-size: 11px;
+	line-height: 16px;
+	margin: 0 5px 3px 0;
 	position: relative;
-	color: black;
+	white-space: nowrap;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+.CSitemOuter {
+	margin: 0 35px 0 4px;
 }
 
 .CSitem:hover {
@@ -27,26 +39,29 @@
 	color: black;
 }
 
-.CSitemX {
-	background: transparent url(http://cdn.last.fm/flatness/buttons/delete.2.png) no-repeat scroll left top;
+
+/*** Control buttons ***/
+.CScontrol {
+	background: url(/extensions/wikia/CategorySelect/sprite.png);
 	cursor: pointer;
 	display: block;
+	height: 14px;
 	position: absolute;
-	height: 13px;
-	width: 13px;
-	right: 3px;
-	top: 3px;
+	top: 1px;
+	width: 48px;
+}
+.CScontrolRemove {
+	clip: rect(0px 48px 14px 36px);
+	right: 4px;
 }
 
-.CSitemM {
-	background: transparent url(http://cdn.last.fm/flatness/buttons/cog.png) no-repeat scroll left top;
-	cursor: pointer;
-	display: block;
-	position: absolute;
-	height: 13px;
-	width: 13px;
-	right: 19px;
-	top: 3px;
+.CScontrolSort {
+	clip: rect(0px 36px 14px 24px);
+	right: 4px;
+}
+.CScontrolSorted {
+	clip: rect(0px 24px 14px 12px);
+	right: -8px;
 }
 
 .CSsuggestHover {
