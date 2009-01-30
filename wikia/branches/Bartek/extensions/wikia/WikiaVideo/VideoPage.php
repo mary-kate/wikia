@@ -332,6 +332,13 @@ class VideoPage extends Article {
 				break;
 			case "sevenload":
 				// needs an API key - to be done last
+				// 1. create a token
+				// http://api.sevenload.com/rest/1.0/tokens/create with user and password
+
+				// 2. load the data using the token
+				// http://api.sevenload.com/rest/1.0/items/A2C4E6G \
+				//  ?username=XYZ&token-id=8b8453ca4b79f500e94aac1fc7025b0704f3f2c7	
+
 				$exists = true;
 				break;
 			case "gamevideos":
