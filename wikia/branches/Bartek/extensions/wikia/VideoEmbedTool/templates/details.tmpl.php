@@ -16,7 +16,7 @@ if('' == $props['oname']) {
 	<tr>
 		<th><?= wfMsg( 'vet-name' ) ?></th>
 		<td>
-			<input type="text" id="VideoEmbedName" name="wpVideoEmbedName" />
+			<input type="text" id="VideoEmbedName" name="wpVideoEmbedName" value="<?= $props['vname'] ?>" />
 		</td>
 	</tr>
 <?
