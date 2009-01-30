@@ -332,8 +332,10 @@ class VideoPage extends Article {
 				if ($file) {
 					$doc = new DOMDocument;
 					@$doc->loadHTML( $file );					
-					$this->mVideoName = $doc->getElementsByTagName('item')->item(0)->getElementsByTagName('title')->item(0)->textContent;
-					$exists = true;
+					if( $item = $doc->getElementsByTagName('item')->item( 0 ) ) {						
+						$this->mVideoName = $item->getElementsByTagName('title')->item(0)->textContent;
+						$exists = true;
+					}
 				}
 				break;
 			case "vimeo":
