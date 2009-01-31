@@ -48,26 +48,26 @@
 
 /*** Control buttons ***/
 .CScontrol {
-	background: url(sprite.png);
+	background-image: url(sprite.png);
 	cursor: pointer;
 	display: block;
 	height: 14px;
 	position: absolute;
 	top: 1px;
-	width: 48px;
+	width: 12px;
 }
 .CScontrolRemove {
-	clip: rect(0px 48px 14px 36px);
+	background-position: top right;
 	right: 4px;
 }
 
 .CScontrolSort {
-	clip: rect(0px 36px 14px 24px);
-	right: 4px;
+	background-position: -24px 0px;
+	right: 16px;
 }
 .CScontrolSorted {
-	clip: rect(0px 24px 14px 12px);
-	right: -8px;
+	background-position: -12px 0px; 
+	right: 16px;
 }
 
 .CSsuggestHover {
