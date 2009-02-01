@@ -95,6 +95,17 @@ sub request {
     $counters{"Lookup|" .$qname}++;
     my $response_incudes_ns = 0;
 
+    if ($qname =~ 'show-calling-server') {
+        return ("NOERROR", [
+                    Net::DNS::RR::A->new(
+                        name => "$qname",
+                        ttl  => 60,
+                        class => "IN",
+                        type  => "A",
+                        address => $peerhost)
+                ], [], [],{ aa => 1});
+    }
+
     $qname = lc($qname);
 
     $counters{Request}++;
