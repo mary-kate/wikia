@@ -3,7 +3,7 @@
 $ORIGIN glb.wikia.net.
 
 
-600 IN SOA ns-lon-2.wikia.net. dnsmaster.wikia-inc.com. 2009013107 1200 120 1209600 60
+600 IN SOA ns-lon-2.wikia.net. dnsmaster.wikia-inc.com. 2009013109 1200 120 1209600 60
 
 60 IN NS ns-lon-1.wikia.net.
 60 IN NS ns-nj-1.wikia.net.
@@ -45,5 +45,6 @@ images     120 IN A 216.151.156.12
 
 wikis     120 IN CNAME sjc-html
 wikis     120 IN CNAME london
+wikis     120 IN CNAME iowa
 wikis     120 IN A 216.224.121.143
 
