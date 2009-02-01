@@ -97,12 +97,12 @@ sub request {
 
     if ($qname =~ 'show-calling-server') {
         return ("NOERROR", [
-                    Net::DNS::RR::A->new(
+                    Net::DNS::RR::A->new({
                         name => "$qname",
                         ttl  => 60,
                         class => "IN",
                         type  => "A",
-                        address => $peerhost)
+                        address => $peerhost})
                 ], [], [],{ aa => 1});
     }
 
