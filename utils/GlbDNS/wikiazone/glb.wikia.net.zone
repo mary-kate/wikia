@@ -3,7 +3,7 @@
 $ORIGIN glb.wikia.net.
 
 
-600 IN SOA ns-lon-2.wikia.net. dnsmaster.wikia-inc.com. 2009012801 1200 120 1209600 60
+600 IN SOA ns-lon-2.wikia.net. dnsmaster.wikia-inc.com. 2009013104 1200 120 1209600 60
 
 60 IN NS ns-lon-1.wikia.net.
 60 IN NS ns-nj-1.wikia.net.
@@ -21,8 +21,11 @@ sjc-html 60 IN LOC 37 00 00.000 N 121 00 00.000 W 0.00m 0.00m 0.00m 0.00m
 
 london 60 IN A 83.223.112.142
 london 60 IN A 83.223.112.138
-london 60 IN LOC 51 00 00.000 N 0 00 00.000  W 0.00m 0.00m 0.00m 0.00m
+london 60 IN LOC 51 00 00.000 N 00 00 00.000 W 0.00m 0.00m 0.00m 0.00m
 
+iowa   60 IN 208.68.167.132
+iowa   60 IN LOC 42 00 00.000 N 91 00 00.000 W 0.00m 0.00m 0.00m 0.00m
+iowa   60 IN TXT GlbDNS::RADIUS 700 km
 
 panther-apac 60 IN CNAME g1.panthercdn.com.
 panther-apac 60 IN LOC 01 00 00.000 N 103 00 00.000 E 0.00m 0.00m 0.00m 0.00m
