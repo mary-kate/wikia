@@ -37,6 +37,10 @@
 	margin: 0 35px 0 4px;
 }
 
+.CSitemOuterAddCategory {
+	margin: 0 20px 0 4px;
+}
+
 .CSitem:hover {
 	text-decoration: none;
 }
@@ -44,7 +48,6 @@
 .CSitem:visited, .CSitem:active {
 	color: black;
 }
-
 
 /*** Control buttons ***/
 .CScontrol {
@@ -56,6 +59,12 @@
 	top: 1px;
 	width: 12px;
 }
+
+.CScontrolAdd {
+	background-position: top left;
+	right: 4px;
+}
+
 .CScontrolRemove {
 	background-position: top right;
 	right: 4px;
@@ -65,6 +74,7 @@
 	background-position: -24px 0px;
 	right: 16px;
 }
+
 .CScontrolSorted {
 	background-position: -12px 0px; 
 	right: 16px;
