@@ -1,0 +1,61 @@
+<!-- INCLUDE overall_header.html -->
+
+<h1 style="margin-bottom: 12px;">Wikia Forum</h1>
+
+<!-- IF U_MCP -->
+	<div id="pageheader">
+		<p class="linkmcp">[ <a href="{U_MCP}">{L_MCP}</a> ]</p>
+	</div>
+
+	<br clear="all" /><br />
+<!-- ENDIF -->
+
+<!-- INCLUDE forumlist_body.html -->
+
+<br clear="all" />
+
+<!-- INCLUDE breadcrumbs.html -->
+
+<!-- IF S_DISPLAY_ONLINE_LIST -->
+	<br clear="all" />
+
+	<table class="tablebg" width="100%" cellspacing="1">
+	<tr>
+		<td class="cat" colspan="2"><h4><a href="{U_VIEWONLINE}">{L_WHO_IS_ONLINE}</a></h4></td>
+	</tr>
+	<tr>
+		<td class="row1" align="center" valign="middle"><img src="{T_THEME_PATH}/images/whosonline.gif" alt="{L_WHO_IS_ONLINE}" /></td>
+
+		<td class="row1" width="100%"><span class="genmed">{TOTAL_USERS_ONLINE}<br />{RECORD_USERS}<br /><br />{LOGGED_IN_USER_LIST}</span></td>
+	</tr>
+	</table>
+<!-- ENDIF -->
+
+<br clear="all" />
+
+<table class="tablebg" width="100%" cellspacing="1">
+<tr>
+	<td class="cat" colspan="2"><h4>{L_STATISTICS}</h4></td>
+</tr>
+<tr>
+	<td class="row1"><img src="{T_THEME_PATH}/images/whosonline.gif" alt="{L_STATISTICS}" /></td>
+	<td class="row1" width="100%" valign="middle"><p class="genmed">{TOTAL_POSTS} | {TOTAL_TOPICS}</p></td>
+</tr>
+</table>
+
+<br clear="all" />
+
+<table class="legend">
+<tr>
+	<td width="20" align="center">{FORUM_NEW_IMG}</td>
+	<td><span class="gensmall">{L_NEW_POSTS}</span></td>
+	<td>&nbsp;&nbsp;</td>
+	<td width="20" align="center">{FORUM_IMG}</td>
+	<td><span class="gensmall">{L_NO_NEW_POSTS}</span></td>
+	<td>&nbsp;&nbsp;</td>
+	<td width="20" align="center">{FORUM_LOCKED_IMG}</td>
+	<td><span class="gensmall">{L_FORUM_LOCKED}</span></td>
+</tr>
+</table>
+
+<!-- INCLUDE overall_footer.html -->

@@ -1,0 +1,7 @@
+Subject: Konto aktywowane
+
+Witaj {USERNAME},
+
+Twoje konto na "{SITENAME}" zostało aktywowane, możesz teraz zalogować się za pomocą loginu i hasła, które otrzymałeś(aś) w poprzednim e-mailu.
+
+{EMAIL_SIG}

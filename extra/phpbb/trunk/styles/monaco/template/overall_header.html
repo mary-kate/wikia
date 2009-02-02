@@ -1,0 +1,186 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="{S_CONTENT_DIRECTION}" lang="{S_USER_LANG}" xml:lang="{S_USER_LANG}">
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset={S_CONTENT_ENCODING}" />
+<meta http-equiv="content-language" content="{S_USER_LANG}" />
+<meta http-equiv="content-style-type" content="text/css" />
+<meta http-equiv="imagetoolbar" content="no" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="copyright" content="2002-2006 phpBB Group" />
+<meta name="keywords" content="" />
+<meta name="description" content="{SITE_DESCRIPTION}" />
+<link rel="shortcut icon" href="{WGFAVICON}" />
+
+<!-- IF T_STYLESHEET_LINK -->
+<link rel="stylesheet" href="{T_STYLESHEET_LINK}?{STYLE_VERSION}" type="text/css" />
+<!-- ELSE -->
+<style type="text/css">
+{T_THEME_DATA}
+</style>
+<!-- ENDIF -->
+
+    <script type= "text/javascript">/*<![CDATA[*/
+        var wgSkin = "monaco";
+        var stylepath = "{STYLE_PATH}";
+        var wgContentLanguage = "en";
+    /*]]>*/</script>
+
+    <script type="text/javascript" src="{STYLE_PATH}/common/wikibits.js?{STYLE_VERSION}"></script>
+    <link rel="stylesheet" href="{STYLE_PATH}/monobook/main.css?{STYLE_VERSION}" type="text/css" />
+    
+    <link rel="stylesheet" type="text/css" media="print" href="{STYLE_PATH}/common/commonPrint.css?{STYLE_VERSION}" />
+    <!--[if lt IE 5.5000]><style type="text/css">@import "{STYLE_PATH}/monobook/IE50Fixes.css?{STYLE_VERSION}";</style><![endif]-->
+    <!--[if IE 5.5000]><style type="text/css">@import "{STYLE_PATH}/monobook/IE55Fixes.css?{STYLE_VERSION}";</style><![endif]-->
+    <!--[if IE 6]><style type="text/css">@import "{STYLE_PATH}/monobook/IE60Fixes.css?{STYLE_VERSION}";</style><![endif]-->
+    <!--[if IE 7]><style type="text/css">@import "{STYLE_PATH}/monobook/IE70Fixes.css?{STYLE_VERSION}";</style><![endif]-->
+    <!--[if lt IE 7]><script type="text/javascript" src="{STYLE_PATH}/common/IEFixes.js?{STYLE_VERSION}"></script>
+    <meta http-equiv="imagetoolbar" content="no" /><![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="{STYLE_PATH}/monaco/css/monobook_modified.css?{STYLE_VERSION}" />
+    <link rel="stylesheet" type="text/css" href="{STYLE_PATH}/monaco/css/reset_modified.css?{STYLE_VERSION}" />
+    <link rel="stylesheet" type="text/css" href="{STYLE_PATH}/monaco/css/root.css?{STYLE_VERSION}" />
+    <link rel="stylesheet" type="text/css" href="{STYLE_PATH}/monaco/css/header.css?{STYLE_VERSION}" />
+    <link rel="stylesheet" type="text/css" href="{STYLE_PATH}/monaco/css/article.css?{STYLE_VERSION}" />
+    <link rel="stylesheet" type="text/css" href="{STYLE_PATH}/monaco/css/widgets.css?{STYLE_VERSION}" />
+    <link rel="stylesheet" type="text/css" href="{STYLE_PATH}/monaco/css/footer.css?{STYLE_VERSION}" />
+<!-- IF MONACO_THEME -->
+    <link rel="stylesheet" type="text/css" href="{STYLE_PATH}/monaco/{MONACO_THEME}/css/main.css?{STYLE_VERSION}" />
+<!-- ENDIF -->
+{META}
+<title>{SITENAME} &bull; {PAGE_TITLE}</title>
+
+<script type="text/javascript">
+<!--
+<!-- IF S_USER_PM_POPUP -->
+	if ({S_NEW_PM})
+	{
+		window.open('{UA_POPUP_PM}', '_phpbbprivmsg', 'height=225,resizable=yes,width=400');
+	}
+<!-- ENDIF -->
+
+function popup(url, width, height)
+{
+	window.open(url.replace(/&amp;/g, '&'), '_popup', 'HEIGHT=' + height + ',resizable=yes,scrollbars=yes, WIDTH=' + width);
+	return false;
+}
+
+function jumpto()
+{
+	var page = prompt('{LA_JUMP_PAGE}:', '{ON_PAGE}');
+	var perpage = '{PER_PAGE}';
+	var base_url = '{BASE_URL}';
+
+	if (page !== null && !isNaN(page) && page > 0)
+	{
+		document.location.href = base_url.replace(/&amp;/g, '&') + '&start=' + ((page - 1) * perpage);
+	}
+}
+
+/**
+* Find a member
+*/
+function find_username()
+{
+	<!-- IF UA_FIND_USERNAME -->
+	window.open('{UA_FIND_USERNAME}', '_usersearch', 'height=500, resizable=yes, scrollbars=yes, width=740');
+	<!-- ENDIF -->
+	return false;
+}
+
+// Mark/unmark checkboxes
+// id = ID of parent container, name = name prefix, state = state [true/false]
+function marklist(id, name, state)
+{
+	var parent = document.getElementById(id);
+	if (!parent)
+	{
+		eval('parent = document.' + id);
+	}
+
+	if (!parent)
+	{
+		return;
+	}
+
+	var rb = parent.getElementsByTagName('input');
+
+	for (var r = 0; r < rb.length; r++)
+	{
+		if (rb[r].name.substr(0, name.length) == name)
+		{
+			rb[r].checked = state;
+		}
+	}
+}
+
+<!-- IF ._file -->
+
+	/**
+	* Play quicktime file by determining it's width/height
+	* from the displayed rectangle area
+	*
+	* Only defined if there is a file block present.
+	*/
+	function play_qt_file(obj)
+	{
+		var rectangle = obj.GetRectangle();
+
+		if (rectangle)
+		{
+			rectangle = rectangle.split(',')
+			var x1 = parseInt(rectangle[0]);
+			var x2 = parseInt(rectangle[2]);
+			var y1 = parseInt(rectangle[1]);
+			var y2 = parseInt(rectangle[3]);
+
+			var width = (x1 < 0) ? (x1 * -1) + x2 : x2 - x1;
+			var height = (y1 < 0) ? (y1 * -1) + y2 : y2 - y1;
+		}
+		else
+		{
+			var width = 200;
+			var height = 0;
+		}
+
+		obj.width = width;
+		obj.height = height + 16;
+
+		obj.SetControllerVisible(true);
+
+		obj.Play();
+	}
+<!-- ENDIF -->
+
+//-->
+</script>
+</head>
+<body class="mediawiki ns-0 {S_CONTENT_DIRECTION} {FORUM_NS} color2 loggedout" id="body">
+
+		<!-- HEADER -->
+		<div id="wikia_header" class="reset color2">
+			<div id="wikiaBranding">
+				<h1 id="wikia_logo"><a href="http://www.wikia.com"><span id="wikiaHubLogo">Wikia</span></a></h1>
+			</div>
+			<ul id="userData">{WELCOME_LOGIN_MONACO}</ul>
+		</div>
+		<div id="background_strip" class="reset">
+			<div id="wiki_logo" style="background-image: url({WIKIA_FORUM_LOGO});"><a href="/index.php" accesskey="z">{SITENAME}</a></div>
+			<!--[if lt IE 7]>
+			<style type="text/css">
+				#wiki_logo {
+					background-image: none !important;
+					filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://images.wikia.com/simpsons/images/b/bf/Wiki_wide.png', sizingMethod='image');
+				}
+			</style>
+			<![endif]-->
+		</div>
+		<!-- /HEADER -->
+
+		<!-- PAGE -->
+		<div id="wikia_page">
+			<div id="page_bar" class="reset color1 clearfix"><ul id="page_tabs"><li class="selected"><a href="{U_INDEX}">{L_INDEX}</a></li></ul></div>
+
+			<!-- ARTICLE -->
+			<div id="article" >

@@ -1,0 +1,20 @@
+Subject: Powiadomienie o odpowiedzi w wątku "{TOPIC_TITLE}"
+
+Witaj {USERNAME},
+
+Otrzymałeś(aś) ten e-mail, ponieważ obserwujesz wątek "{TOPIC_TITLE}" na forum "{SITENAME}". Przed chwilą ktoś napisał odpowiedź. Możesz uzyć tego linku, żeby zobaczyć ten wątek. Dopóki tego nie zrobisz, nie otrzymasz żadnego następnego powiadomienia.
+
+Jeśli chcesz przejść prosto do tego nowo napisanego postu, kliknij na ten link:
+{U_NEWEST_POST}
+
+Jeśli chcesz przejść na początek wątku, kliknij na ten link:
+{U_TOPIC}
+
+Jeśli chcesz przejść do działu, w którym napisano ten post, kliknij na ten link:
+{U_FORUM}
+
+Jeśli nie chcesz już obserwować tego wątku, to kliknij na link "Przestań obserwować" znajdujący się na górze tego wątku lub kliknij na poniższy link:
+
+{U_STOP_WATCHING_TOPIC}
+
+{EMAIL_SIG}

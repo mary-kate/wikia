@@ -1,0 +1,19 @@
+Subject: Reactivar su cuenta en "{SITENAME}" - {U_BOARD}
+
+La Administración ha requerido que su cuenta sea reactivada. Su cuenta está actualmente inactiva.
+Por favor siga estos pasos para reactivar su cuenta.
+
+Por favor guarde este email para futuras referencias. La información de su cuenta es la siguiente:
+
+----------------------------
+Nombre de usuario: {USERNAME}
+----------------------------
+
+Su clave ha sido encriptada en nuestra base de datos. Si la olvidó podrá solicitar una nueva la cual será activada de la misma forma que esta cuenta.
+
+Por favor visite el siguiente enlace para reactivar su cuenta:
+
+{U_ACTIVATE}
+
+
+{EMAIL_SIG}

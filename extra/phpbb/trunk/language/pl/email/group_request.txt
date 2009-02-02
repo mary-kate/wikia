@@ -1,0 +1,10 @@
+Subject: Ktoś poprosił o przyjęcie do grupy
+
+Drogi {USERNAME},
+
+Jeden z użytkowników poprosił o przyjęcie do grupy "{GROUP_NAME}", której jesteś liderem, na forum "{SITENAME}".
+
+Aby zaakceptować lub odrzucić tę prośbę, kliknij tutaj:
+{U_PENDING}
+
+{EMAIL_SIG}

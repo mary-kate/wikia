@@ -1,0 +1,196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="{S_CONTENT_DIRECTION}" lang="{S_USER_LANG}" xml:lang="{S_USER_LANG}">
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset={S_CONTENT_ENCODING}" />
+<meta http-equiv="content-language" content="{S_USER_LANG}" />
+<meta http-equiv="content-style-type" content="text/css" />
+<meta http-equiv="imagetoolbar" content="no" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="copyright" content="2002-2006 phpBB Group" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<link rel="shortcut icon" href="{WGFAVICON}" />
+
+<!-- IF T_STYLESHEET_LINK -->
+<link rel="stylesheet" href="{T_STYLESHEET_LINK}" type="text/css" />
+<!-- ELSE -->
+<style type="text/css">
+{T_THEME_DATA}
+</style>
+<!-- ENDIF -->
+
+    <script type= "text/javascript">/*<![CDATA[*/
+        var wgSkin = "slate";
+        var stylepath = "{STYLE_PATH}";
+        var wgContentLanguage = "en";
+    /*]]>*/</script>
+
+    <script type="text/javascript" src="{STYLE_PATH}/common/wikibits.js?{STYLE_VERSION}"></script>
+    <link rel="stylesheet" href="{STYLE_PATH}/monobook/main.css?{STYLE_VERSION}" type="text/css" />
+
+	<link rel="stylesheet" type="text/css" media="print" href="{STYLE_PATH}/common/commonPrint.css?{STYLE_VERSION}" />
+        <!--[if lt IE 5.5000]><style type="text/css">@import "{STYLE_PATH}/monobook/IE50Fixes.css?{STYLE_VERSION}";</style><![endif]-->
+        <!--[if IE 5.5000]><style type="text/css">@import "{STYLE_PATH}/monobook/IE55Fixes.css?{STYLE_VERSION}";</style><![endif]-->
+        <!--[if IE 6]><style type="text/css">@import "{STYLE_PATH}/monobook/IE60Fixes.css?{STYLE_VERSION}";</style><![endif]-->
+        <!--[if IE 7]><style type="text/css">@import "{STYLE_PATH}/monobook/IE70Fixes.css?{STYLE_VERSION}";</style><![endif]-->
+        <!--[if lt IE 7]><script type="text/javascript" src="{STYLE_PATH}/common/IEFixes.js?{STYLE_VERSION}"></script>
+	<meta http-equiv="imagetoolbar" content="no" /><![endif]-->
+
+    <link rel="stylesheet" href="{STYLE_PATH}/monobook/main.css?{STYLE_VERSION}" type="text/css" />
+    <link rel="stylesheet" href="{STYLE_PATH}/slate/css/main.css?{STYLE_VERSION}" type="text/css" />
+
+<style type="text/css">
+<!--
+
+#content {background: #fff}
+
+div.forumheader {
+  background: #F9F9F9;
+  border: 1px solid #AAA;
+  padding: 10px;
+  margin: 12px 0;
+}
+
+.toc { display: none !important; }
+
+.boxHeader {cursor: auto}
+
+ul.widgets {list-style: none; margin: 0}
+ul.widgets li {margin: 10px 0}
+-->
+</style>
+
+{META}
+<title>{SITENAME} &bull; {PAGE_TITLE}</title>
+
+<script type="text/javascript">
+<!--
+<!-- IF S_USER_PM_POPUP -->
+	if ({S_NEW_PM})
+	{
+		window.open('{UA_POPUP_PM}', '_phpbbprivmsg', 'height=225,resizable=yes,width=400');
+	}
+<!-- ENDIF -->
+
+function popup(url, width, height)
+{
+	window.open(url.replace(/&amp;/g, '&'), '_popup', 'HEIGHT=' + height + ',resizable=yes,scrollbars=yes, WIDTH=' + width);
+	return false;
+}
+
+function jumpto()
+{
+	var page = prompt('{LA_JUMP_PAGE}:', '{ON_PAGE}');
+	var perpage = '{PER_PAGE}';
+	var base_url = '{BASE_URL}';
+
+	if (page !== null && !isNaN(page) && page > 0)
+	{
+		document.location.href = base_url.replace(/&amp;/g, '&') + '&start=' + ((page - 1) * perpage);
+	}
+}
+
+/**
+* Find a member
+*/
+function find_username()
+{
+	<!-- IF UA_FIND_USERNAME -->
+	window.open('{UA_FIND_USERNAME}', '_usersearch', 'height=500, resizable=yes, scrollbars=yes, width=740');
+	<!-- ENDIF -->
+	return false;
+}
+
+// Mark/unmark checkboxes
+// id = ID of parent container, name = name prefix, state = state [true/false]
+function marklist(id, name, state)
+{
+	var parent = document.getElementById(id);
+	if (!parent)
+	{
+		eval('parent = document.' + id);
+	}
+
+	if (!parent)
+	{
+		return;
+	}
+
+	var rb = parent.getElementsByTagName('input');
+
+	for (var r = 0; r < rb.length; r++)
+	{
+		if (rb[r].name.substr(0, name.length) == name)
+		{
+			rb[r].checked = state;
+		}
+	}
+}
+
+<!-- IF ._file -->
+
+	/**
+	* Play quicktime file by determining it's width/height
+	* from the displayed rectangle area
+	*
+	* Only defined if there is a file block present.
+	*/
+	function play_qt_file(obj)
+	{
+		var rectangle = obj.GetRectangle();
+
+		if (rectangle)
+		{
+			rectangle = rectangle.split(',')
+			var x1 = parseInt(rectangle[0]);
+			var x2 = parseInt(rectangle[2]);
+			var y1 = parseInt(rectangle[1]);
+			var y2 = parseInt(rectangle[3]);
+
+			var width = (x1 < 0) ? (x1 * -1) + x2 : x2 - x1;
+			var height = (y1 < 0) ? (y1 * -1) + y2 : y2 - y1;
+		}
+		else
+		{
+			var width = 200;
+			var height = 0;
+		}
+
+		obj.width = width;
+		obj.height = height + 16;
+
+		obj.SetControllerVisible(true);
+
+		obj.Play();
+	}
+<!-- ENDIF -->
+
+//-->
+</script>
+</head>
+<body class="mediawiki ns-0 {S_CONTENT_DIRECTION} {FORUM_NS}">
+<div id="containerMask" style="display:none"></div>
+
+<div id="container">
+<!-- start main col -->
+	<div id="mainColumn">
+	<div id="mainColumnInner">
+
+
+<!-- welcome message, login -->
+		<div id="welcomeLogin">
+			<div><a class="wikiaLogo" id="centralwikialogo" href='http://www.wikia.com'></a></div>
+			<div class="welcomeLoginCopy">{WELCOME_LOGIN}</div>
+		</div>
+<!-- welcome message, login -->
+
+		<div id="wikiNavigation">
+			<div><a class="logoContainer" style="background-image: url({WIKIA_FORUM_LOGO});" href="/index.php/Main_Page" id="wikialogo"></a></div>
+        {THIS_FORUM}
+        </div>
+
+
+
+<div id="content"><b class="xtop"><b class="xb1"></b><b class="xb2"></b><b class="xb3"></b><b class="xb4"></b></b>

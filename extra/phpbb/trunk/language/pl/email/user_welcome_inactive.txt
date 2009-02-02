@@ -1,0 +1,21 @@
+Subject: Witamy na forum "{SITENAME}"
+
+{WELCOME_MSG}
+
+Nie kasuj tego e-maila. Oto informacje o Twoim koncie:
+
+----------------------------
+Login: {USERNAME}
+Hasło: {PASSWORD}
+
+Adres forum: {U_BOARD}
+----------------------------
+
+Nie zapomnij swojego hasła, ponieważ zostało ono zaszyfrowane w naszej bazie danych i nie może zostać odzyskane. Jeśli jednak je zapomnisz, to będziesz mógł/mogła poprosić o nowe, które będziesz musiał(a) aktywować tak samo jak konto.
+
+Twoje konto jest aktualnie nieaktywne. Nie będziesz mógł/mogła go używać, póki nie klikniesz na poniższy link:
+{U_ACTIVATE}
+
+Dziękujemy za rejestrację.
+
+{EMAIL_SIG}

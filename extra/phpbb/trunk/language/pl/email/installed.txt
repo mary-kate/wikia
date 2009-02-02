@@ -1,0 +1,19 @@
+Subject: phpBB zainstalowane
+
+Gratulacje,
+
+Właśnie zainstalowałeś swoje własne forum oparte na skrypcie phpBB.
+
+Ten e-mail zawiera ważne informacje dotyczące Twojej instalacji. Twoje hasło zostało zaszyfrowane w bazie danych i nie może zostać odzyskane, ale jeśli je zapomnisz, to będziesz mógł/mogła poprosić o nowe.
+
+----------------------------
+Login: {USERNAME}
+Hasło: {PASSWORD}
+
+Adres WWW: {U_BOARD}
+----------------------------
+
+Przydatne informacje o phpBB możesz znaleźć w folderze "docs" i na polskiej stronie WWW skryptu - http://phpbb3.pl
+Aby otrzymywać powiadomienia o nowych wersjach phpBB, powinieneś zapisać się do naszej listy mailingowej, znajdującej się na stronie, której adres podaliśmy powyżej.
+
+{EMAIL_SIG}

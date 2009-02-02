@@ -1,0 +1,42 @@
+Subject: Witamy na forum "{SITENAME}"
+
+{WELCOME_MSG}
+
+Zgodnie z amerykańskim prawem COPPA Twoje konto jest aktualnie nieaktywne.
+
+Wydrukuj tę wiadomość i poproś swojego rodzica lub opiekuna o podpis, a potem prześlij ją faxem do:
+
+{FAX_INFO}
+
+lub pocztą do:
+
+{MAIL_INFO}
+
+--------------------------- PRZETNIJ TUTAJ ---------------------------
+Permission to participate at "{SITENAME}" - {U_BOARD}
+
+Username: {USERNAME}
+E-mail: {EMAIL_ADDRESS}
+
+I HAVE REVIEWED THE INFORMATION PROVIDED BY MY CHILD AND HEREBY GRANT PERMISSION TO "{SITENAME}" TO STORE THIS INFORMATION.
+I UNDERSTAND THIS INFORMATION CAN BE CHANGED AT ANY TIME BY ENTERING A PASSWORD.
+I UNDERSTAND THAT I MAY REQUEST FOR THIS INFORMATION TO BE REMOVED FROM "{SITENAME}" AT ANY TIME.
+
+
+Parent or guardian
+(print your name here): _____________________
+
+(sign here): __________________
+
+Date: _______________
+
+--------------------------- PRZETNIJ TUTAJ ---------------------------
+
+
+Gdy administrator otrzyma tę wiadomość za pomocą faxu lub poczty, Twoje konto zostanie aktywowane.
+
+Nie zapomnij swojego hasła, ponieważ zostało ono zaszyfrowane w naszej bazie danych i nie może zostać odzyskane. Jeśli jednak je zapominsz, to będziesz mógł/mogła poprosić o nowe, które będziesz musiał(a) aktywować tak samo jak konto.
+
+Dziękujemy za rejestrację.
+
+{EMAIL_SIG}

@@ -1,0 +1,7 @@
+Subject: Twoje konto zostało deaktywowane
+
+Witaj {USERNAME},
+
+Twoje konto na forum "{SITENAME}" zostało deaktywowane, najprawdopodobniej z powodu zmian w Twoim profilu. Żebyś mógł/mogła się zalogować, administrator forum musi aktywować Cię ponownie. Dostaniesz kolejny e-mail, jeśli to się stanie.
+
+{EMAIL_SIG}

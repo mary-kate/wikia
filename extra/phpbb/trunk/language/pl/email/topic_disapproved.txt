@@ -1,0 +1,10 @@
+Subject: Wątek "{TOPIC_TITLE}" został odrzucony
+
+Witaj {USERNAME},
+
+Otrzymałeś(aś) ten e-mail, ponieważ Twój wątek "{TOPIC_TITLE}", napisany na forum "{SITENAME}", został odrzucony przez moderatora lub administratora.
+
+Powód odrzucenia:
+{REASON}
+
+{EMAIL_SIG}

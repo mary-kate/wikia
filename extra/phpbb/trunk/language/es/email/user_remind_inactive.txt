@@ -1,0 +1,13 @@
+Subject: Recordatorio de cuenta inactiva
+
+Hola {USERNAME},
+
+El {REGISTER_DATE} registró una nueva cuenta en "{SITENAME}". 
+Hasta ahora no ha activado esa cuenta lo cuál es un requisito para identificarse en el Foro. 
+Puede hacerlo visitando el siguiente enlace.
+
+{U_ACTIVATE}
+
+Gracias por registrarse en "{SITENAME}", esperamos su participación.
+
+{EMAIL_SIG}
