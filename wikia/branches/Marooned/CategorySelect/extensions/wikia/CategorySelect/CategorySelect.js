@@ -5,6 +5,7 @@ var categories;
 inputId = 'myInput';
 suggestContainerId = 'myContainer';
 mainContainerId = 'myAutoComplete';
+addCategoryButtonText = 'Add category';
 
 function deleteCategory(e) {
 	var catId = e.parentNode.parentNode.getAttribute('catId');
@@ -32,6 +33,34 @@ function modifyCategory(e) {
 	Dom.replaceClass(e, oldClassName , newClassName);
 }
 
+function replaceAddToInput(e) {
+	e.parentNode.removeChild(e);
+	$(inputId).style.display = 'block';
+	$(inputId).focus();
+}
+
+function addAddCategoryButton() {
+	elementA = document.createElement('a');
+	elementA.className = 'CSitem';	//setAttribute doesn't work in IE
+	elementA.tabindex = '-1';
+	elementA.onfocus = 'this.blur()';
+	elementA.onclick = function(e) {replaceAddToInput(this); return false;};
+
+	elementSpanOuter = document.createElement('span');
+	elementSpanOuter.className = 'CSitemOuterAddCategory';
+	elementA.appendChild(elementSpanOuter);
+
+	elementText = document.createTextNode(addCategoryButtonText);
+	elementSpanOuter.appendChild(elementText);
+
+	elementSpan = document.createElement('span');
+	elementSpan.className = 'CScontrol CScontrolAdd';
+	elementSpan.onclick = function(e) {replaceAddToInput(this); return false;};
+	elementSpanOuter.appendChild(elementSpan);
+
+	$(mainContainerId).insertBefore(elementA, $(suggestContainerId));
+}
+
 function addCategory(category, params, index) {
 	YAHOO.log('index = ' + index);
 	if (params == undefined) {
@@ -46,7 +75,7 @@ function addCategory(category, params, index) {
 
 	YAHOO.log('addCategory: ' + category);
 	elementA = document.createElement('a');
-	elementA.className = 'CSitem';	//Fix for IE
+	elementA.className = 'CSitem';	//setAttribute doesn't work in IE
 	elementA.tabindex = '-1';
 	elementA.onfocus = 'this.blur()';
 	elementA.setAttribute('catId', index);
@@ -76,6 +105,7 @@ function addCategory(category, params, index) {
 Event.onDOMReady(function() {
 	YAHOO.log('onDOMReady');
 
+	addAddCategoryButton();
 	if (categories == undefined) {
 		categories = new Array();
 	} else {

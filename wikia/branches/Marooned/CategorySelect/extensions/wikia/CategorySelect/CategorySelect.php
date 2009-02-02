@@ -170,7 +170,7 @@ function CategorySelectGenerateHTML() {
 	//TODO: change IDs to more intuitive and related to this extension [also in .js]
 	$result = '
 	<div id="myAutoComplete">
-		<input id="myInput" type="text">
+		<input id="myInput" type="text" style="display: none" />
 		<div id="myContainer"></div>
 	</div>';
 
