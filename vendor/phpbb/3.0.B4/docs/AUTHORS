@@ -1,0 +1,43 @@
+/* ********************************************************************** *\
+/*                                                                        *\
+/*                   phpBB3 © Copyright 2006 phpBB Group                  *\
+/*                                                                        *\
+/*                       [ http://www.phpbb.com/ ]                        *\
+/*                                                                        *\
+/* ********************************************************************** *\
+
+Please see: http://www.phpbb.com/about/ for a list of all the people currently
+involved in phpBB.
+
+phpBB Project Manager : theFinn (James Atkinson)
+
+phpBB Lead Developers : Acyd Burn (Meik Sievertsen)
+                        psoTFX (Paul S. Owen) [2001 - 09/2005]
+
+phpBB Developers      : Ashe (Ludovic Arnaud) - [10/2002 - 11/2003, 06/2006 - ]
+                        DavidMJ (David M.)
+                        GrahamJE (Graham Eames)
+                        naderman (Nils Adermann)
+                        subBlue (Tom Beddard)
+
+                        BartVB (Bart van Bragt) - [11/2000 - 03/2006]
+
+
+Original subSilver by subBlue Design, Tom Beddard, (c) 2001 phpBB Group
+
+phpBB3 contains code from the following applications:
+
+LGPL licenced:
+Smarty (c) 2001, 2002 by ispi of Lincoln, Inc, http://smarty.php.net/
+
+GPL licenced:
+phpMyAdmin (c) 2001,2003 phpMyAdmin Devel team, http://www.phpmyadmin.net/ 
+Jabber Class (c) 2004 Nathan Fritz, http://cjphp.netflint.net
+Chora (c) 2000-2006, The Horde Project. http://horde.org/chora/
+Horde Project (c) 2000-2006, The Horde Project. http://horde.org/
+
+PHP License, version 3.0:
+Pear (c) 2001-2004 PHP Group, http://pear.php.net
+
+Text_Diff-0.2.1 http://pear.php.net/package/Text_Diff
+
