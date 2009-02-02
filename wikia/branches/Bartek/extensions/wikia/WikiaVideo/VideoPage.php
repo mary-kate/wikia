@@ -58,6 +58,11 @@ class VideoPage extends Article {
 			$wgOut->setArticleFlag( true );
 			$wgOut->setRobotpolicy( 'noindex,nofollow' );
 			$wgOut->setPageTitle( $this->mTitle->getPrefixedText() );
+			
+			//display the button for "adding the video"
+			$s = '<input type="submit" id="VideoEmbedCreate" value="' . wfMsg( 'wikiavideo-create' ) . '" /> ';
+			$wgOut->addHTML( $s );
+
 			$this->viewUpdates();
 		}
 	}
