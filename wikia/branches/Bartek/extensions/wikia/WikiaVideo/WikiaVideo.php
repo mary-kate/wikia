@@ -65,7 +65,7 @@ function WikiaVideoRenderVideo( $matches ) {
 	// don't destroy red links!
 	$title = Title::makeTitle( NS_VIDEO, $video_name ); 
 	if ( !$title->exists() ) {
-		return "[[Video:" . $matches[2] . "]]";
+		return "[[Video:" . $video_name . "]]";
 	}
 
 	if (empty($wgWysiwygParserEnabled)) {
