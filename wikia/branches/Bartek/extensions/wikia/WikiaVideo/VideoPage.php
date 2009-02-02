@@ -51,6 +51,8 @@ class VideoPage extends Article {
 			$wgOut->addHTML( $this->showTOC('') );
 			$this->openShowVideo();
 			$this->showVideoInfoLine();
+
+			wfRunHooks( 'WikiaVideo::View:BlueLink' );
 			Article::view();
 			$this->videoHistory();
 		} else {
