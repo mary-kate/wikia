@@ -62,6 +62,12 @@ function WikiaVideoRenderVideo( $matches ) {
 	// macbre: add FCK support
 	global $wgWysiwygParserEnabled;
 
+	// don't destroy red links!
+	$title = Title::makeTitle( NS_VIDEO, $video_name ); 
+	if ( !$title->exists() ) {
+		return "[[Video:" . $matches[2] . "]]";
+	}
+
 	if (empty($wgWysiwygParserEnabled)) {
 		$output = "<video name=\"{$video_name}\" width=\"{$width}\" align=\"{$align}\" caption=\"{$caption}\" thumb=\"{$thumb}\"></video>";
 	}
