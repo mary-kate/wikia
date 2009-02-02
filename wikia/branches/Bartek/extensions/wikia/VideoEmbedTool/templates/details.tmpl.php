@@ -13,7 +13,7 @@ global $wgExtensionsPath;
 if('' == $props['oname']) {
 ?>
 
-	<tr>
+	<tr id="VideoEmbedNameRow">
 		<th><?= wfMsg( 'vet-name' ) ?></th>
 		<td>
 			<input type="text" id="VideoEmbedName" name="wpVideoEmbedName" value="<?= $props['vname'] ?>" />

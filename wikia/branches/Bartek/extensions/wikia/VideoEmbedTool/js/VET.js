@@ -450,6 +450,12 @@ function VET_displayDetails(responseText) {
 			$('VideoEmbedLicenseLink').innerHTML = '[' + vet_show_license_message  + ']';
 		}
 	}
+
+	if ( ( "Video" == wgCanonicalNamespace ) && ( 0 == wgArticleId  ) ) {
+		$( 'VideoEmbedName' ).value = wgTitle;	
+		$( 'VideoEmbedNameRow' ).style.display = 'none';
+	}
+
 	VET_indicator(1, false);
 }
 

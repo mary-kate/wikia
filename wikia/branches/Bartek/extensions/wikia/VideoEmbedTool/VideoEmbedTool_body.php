@@ -107,12 +107,8 @@ class VideoEmbedTool {
 			$props['metadata'] = '';		
 		}
 		$props['code'] = $video->getEmbedCode( VIDEO_PREVIEW );
+		$props['oname'] = '';			
 
-		if ( ( NS_VIDEO == $ns ) && (!$video->getID() )) {
-			$props['oname'] = $wgTitle->getText();
-		} else {
-			$props['oname'] = 'Strobos';			
-		}
 		return $this->detailsPage($props);
 	}
 
