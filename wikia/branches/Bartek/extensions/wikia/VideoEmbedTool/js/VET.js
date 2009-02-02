@@ -555,6 +555,10 @@ function VET_insertFinalVideo(e, type) {
 								FCK.VideoAdd(wikitag, options);
 							}
 						}
+					} else {
+						$( 'VideoEmbedSuccess' ).style.display = 'none';
+						$( 'VideoEmbedTag' ).style.display = 'none';
+						$( 'VideoEmbedPageSuccess' ).style.display = 'block';							
 					}
 					break;
 				case 'existing':
