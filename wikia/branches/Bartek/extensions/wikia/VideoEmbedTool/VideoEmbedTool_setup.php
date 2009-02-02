@@ -12,7 +12,7 @@ if(!defined('MEDIAWIKI')) {
 $wgExtensionCredits['other'][] = array(
         'name' => 'Video Embed Tool',
         'author' => 'Bartek Łapiński, Inez Korczyński',
-	'version' => '0.55',
+	'version' => '0.61',
 );
 
 $dir = dirname(__FILE__).'/';
@@ -35,6 +35,25 @@ $wgExtensionFunctions[] = "VETSetupHook";
 $wgExtensionMessagesFiles['VideoEmbedTool'] = $dir.'/VideoEmbedTool.i18n.php';
 $wgHooks['EditPage::showEditForm:initial2'][] = 'VETSetup';
 $wgHooks['WikiaVideo::View:RedLink'][] = 'VETWIkiaVideoRedLink';
+$wgHooks['WikiaVideo::View:BlueLink'][] = 'VETWIkiaVideoBlueLink';
+
+function VETWikiaVideoBlueLink() {
+        global $wgOut, $wgStylePath, $wgExtensionsPath, $wgStyleVersion, $wgHooks, $wgUser;
+
+	//display the button for "adding the video"
+	$s = '<br/><input type="submit" id="VideoEmbedReplace" value="' . wfMsg( 'wikiavideo-replace' ) . '" /><br/><br/>';
+	$wgOut->addHTML( $s );
+
+        if(get_class($wgUser->getSkin()) == 'SkinMonaco') {
+                wfLoadExtensionMessages('VideoEmbedTool');
+                $wgHooks['ExtendJSGlobalVars'][] = 'VETSetupVars';
+                $wgOut->addScript('<script type="text/javascript" src="'.$wgStylePath.'/common/yui_2.5.2/slider/slider-min.js?'.$wgStyleVersion.'"></script>');
+                $wgOut->addScript('<script type="text/javascript" src="'.$wgExtensionsPath.'/wikia/VideoEmbedTool/js/VET.js?'.$wgStyleVersion.'"></script>');
+                $wgOut->addScript('<link rel="stylesheet" type="text/css" href="'.$wgExtensionsPath.'/wikia/VideoEmbedTool/css/VET.css?'.$wgStyleVersion.'" />');
+        }
+
+	return true;
+}
 
 function VETWikiaVideoRedLink() {
         global $wgOut, $wgStylePath, $wgExtensionsPath, $wgStyleVersion, $wgHooks, $wgUser;
