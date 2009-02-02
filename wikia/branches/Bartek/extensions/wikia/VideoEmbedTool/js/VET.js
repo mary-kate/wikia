@@ -224,6 +224,12 @@ function VET_show(e) {
 
 	YAHOO.util.Event.addListener('VideoEmbedBack', 'click', VET_back);
 	YAHOO.util.Event.addListener('VideoEmbedClose', 'click', VET_close);
+
+	if ( "Video" == wgCanonicalNamespace ) {
+		if( $( 'VideoEmbedPageWindow' ) ) {
+			$( 'VideoEmbedPageWindow' ).style.visibility = 'hidden';
+		}
+	}
 }
 
 function VET_loadMain() {
@@ -658,6 +664,11 @@ function VET_close(e) {
 	}
 	VET_track('close/' + VET_curScreen);
 	VET_panel.hide();
+	if ( "Video" == wgCanonicalNamespace ) {
+		if( $( 'VideoEmbedPageWindow' ) ) {
+			$( 'VideoEmbedPageWindow' ).style.visibility = 'visible';
+		}
+	}
 	if(typeof FCK == 'undefined' && $('wpTextbox1')) $('wpTextbox1').focus();
 	VET_switchScreen('Main');
 	VET_loadMain();
