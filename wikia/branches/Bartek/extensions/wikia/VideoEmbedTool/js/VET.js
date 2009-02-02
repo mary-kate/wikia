@@ -459,8 +459,10 @@ function VET_displayDetails(responseText) {
 	}
 
 	if ( ( "Video" == wgCanonicalNamespace ) && ( 0 == wgArticleId  ) ) {
-		$( 'VideoEmbedName' ).value = wgTitle;	
-		$( 'VideoEmbedNameRow' ).style.display = 'none';
+		if( $( 'VideoEmbedName' ) ) {
+			$( 'VideoEmbedName' ).value = wgTitle;	
+			$( 'VideoEmbedNameRow' ).style.display = 'none';
+		}
 	}
 
 	VET_indicator(1, false);
