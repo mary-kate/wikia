@@ -34,6 +34,25 @@ extAddSpecialPage( dirname(__FILE__) . '/QuickVideoAdd_body.php', 'QuickVideoAdd
 $wgExtensionFunctions[] = "VETSetupHook";
 $wgExtensionMessagesFiles['VideoEmbedTool'] = $dir.'/VideoEmbedTool.i18n.php';
 $wgHooks['EditPage::showEditForm:initial2'][] = 'VETSetup';
+$wgHooks['WikiaVideo::View:RedLink'][] = 'VETWIkiaVideoRedLink';
+
+function VETWikiaVideoRedLink() {
+        global $wgOut, $wgStylePath, $wgExtensionsPath, $wgStyleVersion, $wgHooks, $wgUser;
+
+	//display the button for "adding the video"
+	$s = '<input type="submit" id="VideoEmbedCreate" value="' . wfMsg( 'wikiavideo-create' ) . '" /> ';
+	$wgOut->addHTML( $s );
+
+        if(get_class($wgUser->getSkin()) == 'SkinMonaco') {
+                wfLoadExtensionMessages('VideoEmbedTool');
+                $wgHooks['ExtendJSGlobalVars'][] = 'VETSetupVars';
+                $wgOut->addScript('<script type="text/javascript" src="'.$wgStylePath.'/common/yui_2.5.2/slider/slider-min.js?'.$wgStyleVersion.'"></script>');
+                $wgOut->addScript('<script type="text/javascript" src="'.$wgExtensionsPath.'/wikia/VideoEmbedTool/js/VET.js?'.$wgStyleVersion.'"></script>');
+                $wgOut->addScript('<link rel="stylesheet" type="text/css" href="'.$wgExtensionsPath.'/wikia/VideoEmbedTool/css/VET.css?'.$wgStyleVersion.'" />');
+        }
+
+	return true;
+}
 
 function VETSetupHook() {
 	global $wgParser;		

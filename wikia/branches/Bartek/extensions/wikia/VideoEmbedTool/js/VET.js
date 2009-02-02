@@ -83,8 +83,15 @@ if(skin == 'monaco') {
 	addOnloadHook(function () {
 		if(document.forms.editform) {
 			VET_addHandler();
-		}
+		} else if ( $( 'VideoEmbedCreate' ) && ( 'Video' == wgCanonicalNamespace ) ) {
+			VET_addHandlerCreate();			
+		}		
 	});
+}
+
+function VET_addHandlerCreate() {
+	var btn = $( 'VideoEmbedCreate' );
+  	YAHOO.util.Event.addListener(['vetLink', 'vetHelpLink', btn], 'click',  VET_show);
 }
 
 function VET_addHandler() {
