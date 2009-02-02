@@ -84,13 +84,20 @@ if(skin == 'monaco') {
 		if(document.forms.editform) {
 			VET_addHandler();
 		} else if ( $( 'VideoEmbedCreate' ) && ( 'Video' == wgCanonicalNamespace ) ) {
-			VET_addHandlerCreate();			
-		}		
+			VET_addCreateHandler();			
+		} else if ( $( 'VideoEmbedReplace' ) && ( 'Video' == wgCanonicalNamespace ) ) {
+			VET_addReplaceHandler();						
+		}
 	});
 }
 
-function VET_addHandlerCreate() {
+function VET_addCreateHandler() {
 	var btn = $( 'VideoEmbedCreate' );
+  	YAHOO.util.Event.addListener(['vetLink', 'vetHelpLink', btn], 'click',  VET_show);
+}
+
+function VET_addReplaceHandler() {
+	var btn = $( 'VideoEmbedReplace' );
   	YAHOO.util.Event.addListener(['vetLink', 'vetHelpLink', btn], 'click',  VET_show);
 }
 
