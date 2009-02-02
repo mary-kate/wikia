@@ -458,7 +458,7 @@ function VET_displayDetails(responseText) {
 		}
 	}
 
-	if ( ( "Video" == wgCanonicalNamespace ) && ( 0 == wgArticleId  ) ) {
+	if ( ( "Video" == wgCanonicalNamespace ) ) {
 		if( $( 'VideoEmbedName' ) ) {
 			$( 'VideoEmbedName' ).value = wgTitle;	
 			$( 'VideoEmbedNameRow' ).style.display = 'none';
@@ -539,7 +539,7 @@ function VET_insertFinalVideo(e, type) {
 					VET_switchScreen('Summary');
 					$('VideoEmbedBack').style.display = 'none';
 					$('VideoEmbed' + VET_curScreen).innerHTML = o.responseText;
-					if (! $( 'VideoEmbedCreate'  )) {
+					if ( !$( 'VideoEmbedCreate'  ) && !$( 'VideoEmbedReplace' ) ) {
 						if(VET_refid == null) {
 							insertTags($('VideoEmbedTag').innerHTML, '', '');
 						} else {
