@@ -6,5 +6,6 @@ $messages['en'] = array(
 	'wikiavideo-back' => 'back',
 	'wikiavideo-create' => 'Add Video',
 	'wikiavideo-replace' => 'Replace Video',
+	'wikiavideo-category' => 'Videos',
 );
 

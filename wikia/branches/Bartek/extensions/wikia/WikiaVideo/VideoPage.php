@@ -469,7 +469,7 @@ class VideoPage extends Article {
 	}
 	
 	public function save() {
-		global $wgUser, $wgWikiaVideoProviders;
+		global $wgUser, $wgWikiaVideoProviders, $wgContLang;
 
 		$this->mTitle = Title::newFromText($this->mName, NS_VIDEO );
 		$desc = "added video [[" . $this->mTitle->getPrefixedText() . "]]";			
@@ -546,9 +546,8 @@ class VideoPage extends Article {
                                 ), __METHOD__
                         );
 		}
-		
-		// todo make those categories more flexible
-		$this->doEdit( "[[Category:Videos]]", $desc );			
+		$cat = $wgContLang->getFormattedNsText( NS_CATEGORY );
+		$this->doEdit( '[[' . $cat . ':' . wfMsg( 'wikiavideo-category' ) . ']]', $desc );			
 
 		$dbw->immediateCommit();
 		
