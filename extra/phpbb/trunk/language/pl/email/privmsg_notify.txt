@@ -1,0 +1,13 @@
+Subject: Otrzymałeś(aś) nową prywatną wiadomość
+
+Witaj {USERNAME},
+
+Otrzymałeś(aś) nową prywatną wiadomość pt. "{SUBJECT}" od "{AUTHOR_NAME}" na forum "{SITENAME}".
+
+Możesz ją zobaczyć klikając na ten link:
+
+{U_INBOX}
+
+Prosiłeś(aś), żeby powiadamiać Cię, gdy przychodzą nowe wiadomości. Jeśli zmieniłeś(aś) zdanie, możesz zrezygnować z powiadomień, zmieniając odpowiednie ustawienia w Twoim Panelu Zarządzania Kontem.
+
+{EMAIL_SIG}

@@ -1,0 +1,6 @@
+Subject: Aktywuj ponownie swoje konto na "{SITENAME}"
+
+Administrator forum "{SITENAME}" ({U_BOARD}) poprosił o ponowną aktywację Twojego konta ("{USERNAME}"). Aktualnie jest ono nieaktywne, aby je aktywować, kliknij na ten link:
+{U_ACTIVATE}
+
+{EMAIL_SIG}

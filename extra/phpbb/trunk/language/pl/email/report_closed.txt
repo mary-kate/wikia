@@ -1,0 +1,7 @@
+Subject: Raport zamknięty - "{POST_SUBJECT}"
+
+Witaj {USERNAME},
+
+Otrzymałeś(aś) ten e-mail, ponieważ wysłany przez Ciebie raport dotyczący postu "{POST_SUBJECT}" w wątku "{TOPIC_TITLE}" na forum "{SITENAME}", został zamknięty przez moderatora lub administratora. Jeśli masz jakieś pytania, to skontaktuj się z {CLOSER_NAME} za pomocą prywatnej wiadomości.
+
+{EMAIL_SIG}

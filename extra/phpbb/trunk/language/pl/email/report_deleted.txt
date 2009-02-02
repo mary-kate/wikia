@@ -1,0 +1,7 @@
+Subject: Raport usunięty - "{POST_SUBJECT}"
+
+Witaj {USERNAME},
+
+Otrzymałeś(aś) ten e-mail, ponieważ wysłany przez Ciebie raport dotyczący postu "{POST_SUBJECT}", w wątku "{TOPIC_TITLE}", na forum "{SITENAME}", został usunięty przez moderatora lub administratora.
+
+{EMAIL_SIG}

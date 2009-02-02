@@ -1,0 +1,11 @@
+Subject: Zostałeś(aś) dodany(a) do grupy "{GROUP_NAME}"
+
+Gratulujemy,
+
+Zostałeś(aś) członkiem grupy "{GROUP_NAME}" na forum "{SITENAME}"!
+Dodał Cię do niej lider tej grupy lub administrator forum, skontaktuj się z nimi, aby uzyskać więcej informacji.
+
+Informacje o swoich grupach możesz zobaczyć tutaj:
+{U_GROUP}
+
+{EMAIL_SIG}

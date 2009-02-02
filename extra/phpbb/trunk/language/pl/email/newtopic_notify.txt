@@ -1,0 +1,13 @@
+Subject: Powiadomienie o nowym wątku na forum "{FORUM_NAME}"
+
+Witaj {USERNAME},
+
+Otrzymałeś(aś) ten e-mail, ponieważ obserwujesz forum "{FORUM_NAME}" na forum "{SITENAME}". Przed chwilą ktoś napisał wątek "{TOPIC_TITLE}". Możesz uzyć tego linku, żeby zobaczyć to forum. Dopóki tego nie zrobisz, nie otrzymasz żadnego następnego powiadomienia.
+
+{U_FORUM}
+
+Jeśli nie chcesz już obserwować tego forum, to kliknij na link "Przestań obserwować" znajdujący się na górze tego forum lub kliknij na poniższy link:
+
+{U_STOP_WATCHING_FORUM}
+
+{EMAIL_SIG}

@@ -1,0 +1,12 @@
+Ten e-mail wysłał do Ciebie administrator "{SITENAME}". Jeśli ta wiadomość to spam lub zawiera obraźliwe treści, to wyślij informację o tym na ten adres e-mail:
+
+{CONTACT_EMAIL}
+
+Załącz cały e-mail (szczególnie nagłówki).
+
+Treść wiadomości:
+~~~~~~~~~~~~~~~~~
+
+{MESSAGE}
+
+{EMAIL_SIG}
