@@ -530,28 +530,30 @@ function VET_insertFinalVideo(e, type) {
 					VET_switchScreen('Summary');
 					$('VideoEmbedBack').style.display = 'none';
 					$('VideoEmbed' + VET_curScreen).innerHTML = o.responseText;
-					if(VET_refid == null) {
-						insertTags($('VideoEmbedTag').innerHTML, '', '');
-					} else {
-						var wikitag = YAHOO.util.Dom.get('VideoEmbedTag').innerHTML;
-						var options = {};
+					if (! $( 'VideoEmbedCreate'  )) {
+						if(VET_refid == null) {
+							insertTags($('VideoEmbedTag').innerHTML, '', '');
+						} else {
+							var wikitag = YAHOO.util.Dom.get('VideoEmbedTag').innerHTML;
+							var options = {};
 
-						if($('VideoEmbedThumbOption').checked) {
-							options.thumb = 1;
-						} else {
-							options.thumb = null;
-						}
-						if($('VideoEmbedLayoutLeft').checked) {
-							options.align = 'left';
-						} else {
-							options.align = null;
-						}
-						options.caption = $('VideoEmbedCaption').value;
+							if($('VideoEmbedThumbOption').checked) {
+								options.thumb = 1;
+							} else {
+								options.thumb = null;
+							}
+							if($('VideoEmbedLayoutLeft').checked) {
+								options.align = 'left';
+							} else {
+								options.align = null;
+							}
+							options.caption = $('VideoEmbedCaption').value;
 
-						if(VET_refid != -1) {
-							//FCK.ProtectImageUpdate(VET_refid, wikitag, options);
-						} else {
-							FCK.VideoAdd(wikitag, options);
+							if(VET_refid != -1) {
+								//FCK.ProtectImageUpdate(VET_refid, wikitag, options);
+							} else {
+								FCK.VideoAdd(wikitag, options);
+							}
 						}
 					}
 					break;
