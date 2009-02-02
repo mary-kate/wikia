@@ -76,8 +76,11 @@ class VideoEmbedTool {
 	}
 
 	function insertVideo() {
-		global $IP, $wgRequest, $wgUser;
+		global $IP, $wgRequest, $wgUser, $wgTitle;
 		require_once( "$IP/extensions/wikia/WikiaVideo/VideoPage.php" );
+
+		$ns = $wgTitle->getNamespace();
+
 		$url = $wgRequest->getVal( 'wpVideoEmbedUrl' );			
 		$tempname = 'Temp_video_'.$wgUser->getID().'_'.rand(0, 1000);
 		$title = Title::makeTitle( NS_VIDEO, $tempname );
@@ -104,7 +107,12 @@ class VideoEmbedTool {
 			$props['metadata'] = '';		
 		}
 		$props['code'] = $video->getEmbedCode( VIDEO_PREVIEW );
-		$props['oname'] = '';
+
+		if ( ( NS_VIDEO == $ns ) && (!$video->getID() )) {
+			$props['oname'] = $wgTitle->getText();
+		} else {
+			$props['oname'] = 'Strobos';			
+		}
 		return $this->detailsPage($props);
 	}
 
