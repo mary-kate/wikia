@@ -320,7 +320,7 @@ class VideoPage extends Article {
 					$doc = new DOMDocument;
 					@$doc->loadHTML( $file );					
 					if( $item = $doc->getElementsByTagName('item')->item( 0 ) ) {						
-						$this->mVideoName = $item->getElementsByTagName('title')->item(0)->textContent;
+						$this->mVideoName = trim( $item->getElementsByTagName('title')->item(0)->textContent );
 						$exists = true;
 					}
 				}
@@ -330,7 +330,7 @@ class VideoPage extends Article {
 				if ($file) {
 					$doc = new DOMDocument;
 					@$doc->loadHTML( $file );					
-					$this->mVideoName = $doc->getElementsByTagName('title')->item(0)->textContent;
+					$this->mVideoName = trim( $doc->getElementsByTagName('title')->item(0)->textContent );
 					$exists = true;
 				}
 				break;
@@ -354,7 +354,7 @@ class VideoPage extends Article {
 					$doc = new DOMDocument;
 					@$doc->loadHTML( $file );					
 					if( $item = $doc->getElementsByTagName('item')->item( 0 ) ) {						
-						$this->mVideoName = $item->getElementsByTagName('title')->item(0)->textContent;
+						$this->mVideoName = trim( $item->getElementsByTagName('title')->item(0)->textContent );
 						$exists = true;
 					}
 				}
@@ -363,7 +363,7 @@ class VideoPage extends Article {
 				$file = @file_get_contents( "http://vimeo.com/api/clip/" . $this->mId . '.php', FALSE );
 				if ($file) {
 					$data = unserialize( $file );
-					$this->mVideoName = $data[0]["title"];
+					$this->mVideoName = trim( $data[0]["title"] );
 					$exists = true;
 				}
 				break;
