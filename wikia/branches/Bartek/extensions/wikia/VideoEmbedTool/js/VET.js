@@ -254,8 +254,6 @@ function VET_loadMain() {
 	VET_indicator(1, true);
 	YAHOO.util.Connect.asyncRequest('GET', wgScriptPath + '/index.php?action=ajax&rs=VET&method=loadMain', callback);
 	VET_curSourceId = 0;
-
-
 }
 
 function VET_loadLicense( license ) {

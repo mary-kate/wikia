@@ -16,6 +16,12 @@
 ?>
 	<tr id="VideoEmbedSearch">
 		<th><h1><?= wfMsg('vet-upload') ?></h1></th>
+		<td>
+			<input onkeydown="VET_trySendQuery(event);" type="text" id="ImageQuery" />
+                        <input onclick="VEt_trySendQuery(event);" type="button" value="<?= wfMsg('vet-find-btn') ?>" />
+		</td>		
+	<tr id="VideoEmbedAdd">
+		<th><h1><?= wfMsg('vet-upload') ?></h1></th>
 
 		<td>
 			<img src="<?= $wgStylePath; ?>/monaco/images/widget_loading.gif" id="VideoEmbedProgress2" style="visibility: hidden;"/>
