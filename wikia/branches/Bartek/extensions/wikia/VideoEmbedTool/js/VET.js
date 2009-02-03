@@ -83,9 +83,9 @@ if(skin == 'monaco') {
 	addOnloadHook(function () {
 		if(document.forms.editform) {
 			VET_addHandler();
-		} else if ( $( 'VideoEmbedCreate' ) && ( 'Video' == wgCanonicalNamespace ) ) {
+		} else if ( $( 'VideoEmbedCreate' ) && ( 400 == wgNamespaceNumber ) ) {
 			VET_addCreateHandler();			
-		} else if ( $( 'VideoEmbedReplace' ) && ( 'Video' == wgCanonicalNamespace ) ) {
+		} else if ( $( 'VideoEmbedReplace' ) && ( 400 == wgNamespaceNumber ) ) {
 			VET_addReplaceHandler();						
 		}
 	});
@@ -225,7 +225,7 @@ function VET_show(e) {
 	YAHOO.util.Event.addListener('VideoEmbedBack', 'click', VET_back);
 	YAHOO.util.Event.addListener('VideoEmbedClose', 'click', VET_close);
 
-	if ( "Video" == wgCanonicalNamespace ) {
+	if ( 400 == wgNamespaceNumber ) {
 		if( $( 'VideoEmbedPageWindow' ) ) {
 			$( 'VideoEmbedPageWindow' ).style.visibility = 'hidden';
 		}
@@ -464,7 +464,7 @@ function VET_displayDetails(responseText) {
 		}
 	}
 
-	if ( ( "Video" == wgCanonicalNamespace ) ) {
+	if ( ( 400 == wgNamespaceNumber ) ) {
 		if( $( 'VideoEmbedName' ) ) {
 			$( 'VideoEmbedName' ).value = wgTitle;	
 			$( 'VideoEmbedNameRow' ).style.display = 'none';
@@ -664,9 +664,9 @@ function VET_close(e) {
 	}
 	VET_track('close/' + VET_curScreen);
 	VET_panel.hide();
-	if ( "Video" == wgCanonicalNamespace ) {
+	if ( 400 == wgNamespaceNumber ) {
 		if( $( 'VideoEmbedPageWindow' ) ) {
-			$( 'VideoEmbedPageWindow' ).style.visibility = 'visible';
+			$( 'VideoEmbedPageWindow' ).style.visibility = '';
 		}
 	}
 	if(typeof FCK == 'undefined' && $('wpTextbox1')) $('wpTextbox1').focus();
