@@ -200,11 +200,12 @@ sub lookup {
 #    $peerhost = "216.224.121.134";
 #    $peerhost = "82.138.248.236";
 #    $peerhost = "208.69.36.11";
-
+#    $peerhost = "208.69.36.11";
 
     if (my $geo = $host->{__GEO__}) {
         my ($lat, $lon) = (undef,undef);
         if (exists($known_broken_servers{$peerhost})) {
+            $counters{"Broken|$peerhost|$qname"}++;
             $lat = $known_broken_servers{$peerhost}->{lat};
             $lon = $known_broken_servers{$peerhost}->{lon};
         } else {
