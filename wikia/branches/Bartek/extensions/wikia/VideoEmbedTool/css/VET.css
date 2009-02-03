@@ -13,6 +13,7 @@
 	position: absolute;
 	top: 0;
 	width: 810px;
+	border 1px solid white;
 }
 
 #VideoEmbedUrl {
