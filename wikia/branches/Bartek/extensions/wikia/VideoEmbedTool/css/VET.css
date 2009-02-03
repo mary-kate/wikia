@@ -17,8 +17,8 @@
 }
 
 #VideoEmbedUrl {
-	width: 460px;
-	padding: 6px;
+	width: 260px;
+	padding: 2px;
 	font-family: sans-serif;			
 }
 
@@ -61,8 +61,8 @@
 }
 
 #VideoQuery {
-	height: 35px;
-	width: 300px;
+	padding: 6px;
+	width: 260px;
 }
 
 #VideoEmbedBack a {
