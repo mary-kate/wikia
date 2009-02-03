@@ -6,6 +6,7 @@ inputId = 'myInput';
 suggestContainerId = 'myContainer';
 mainContainerId = 'myAutoComplete';
 addCategoryButtonText = 'Add category';
+namespace = 'Category';	//TODO: default namespace
 
 function deleteCategory(e) {
 	var catId = e.parentNode.parentNode.getAttribute('catId');
@@ -71,7 +72,7 @@ function addCategory(category, params, index) {
 		index = categories.length;
 	}
 
-	categories[index] = {'category': category, 'outerTag': params['outerTag'], 'sortkey': params['sortkey']};
+	categories[index] = {'namespace': namespace, 'category': category, 'outerTag': params['outerTag'], 'sortkey': params['sortkey']};
 
 	YAHOO.log('addCategory: ' + category);
 	elementA = document.createElement('a');
@@ -102,6 +103,18 @@ function addCategory(category, params, index) {
 	$(inputId).value = '';
 }
 
+function generateWikitextForCategories() {
+	var categoriesStr = '';
+	for(c in categories) {
+		catTmp = '[[' + categories[c].namespace + ':' + categories[c].category + (categories[c].sortkey == '' ? '' : ('|' + categories[c].sortkey)) + ']]';
+		if (categories[c].outerTag != '') {
+			catTmp = '<' + categories[c].outerTag + '>' + catTmp + '</' + categories[c].outerTag + '>';
+		}
+		categoriesStr += catTmp + "\n";
+	}
+	return categoriesStr;
+}
+
 Event.onDOMReady(function() {
 	YAHOO.log('onDOMReady');
 
@@ -115,52 +128,47 @@ Event.onDOMReady(function() {
 		}
 	}
 
-	// So far this extension works only in Firefox and Internet Explorer
-//	if(YAHOO.env.ua.ie > 0 || YAHOO.env.ua.gecko > 0) {
-//		var submitAutoComplete_callback = {
-//			success: function(o) {
-//				if(o.responseText !== undefined) {
-//					window.location.href=o.responseText;
-//				}
-//			}
-//		};
+	var submitAutoComplete = function(comp, resultListItem) {
+//		YAHOO.Wikia.Tracker.trackByStr(null, 'search/suggestItem/' + escape(YAHOO.util.Dom.get('search_field').value.replace(/ /g, '_')));
+//		sUrl = wgServer + wgScriptPath + '?action=ajax&rs=getSuggestedArticleURL&rsargs=' + encodeURIComponent(Dom.get('search_field').value);
+//		var request = YAHOO.util.Connect.asyncRequest('GET', sUrl, submitAutoComplete_callback);
+		YAHOO.log('category selected');
+		YAHOO.log('event type:' + comp);
+		YAHOO.log('selected category:' + resultListItem[2]);
+		addCategory(resultListItem[2][0]);
+	};
 
-		var submitAutoComplete = function(comp, resultListItem) {
-//			YAHOO.Wikia.Tracker.trackByStr(null, 'search/suggestItem/' + escape(YAHOO.util.Dom.get('search_field').value.replace(/ /g, '_')));
-//			sUrl = wgServer + wgScriptPath + '?action=ajax&rs=getSuggestedArticleURL&rsargs=' + encodeURIComponent(Dom.get('search_field').value);
-//			var request = YAHOO.util.Connect.asyncRequest('GET', sUrl, submitAutoComplete_callback);
-			YAHOO.log('category selected');
-			YAHOO.log('event type:' + comp);
-			YAHOO.log('selected category:' + resultListItem[2]);
-			addCategory(resultListItem[2][0]);
-		};
-
-		var inputKeyPress = function(e, oSelf) {
-			if(e.keyCode == 13) {
-				//TODO: stop AJAX call for AutoComplete
-				YAHOO.util.Event.preventDefault(e);
-				category = $(inputId).value;
-				YAHOO.log('enter pressed, value = ' + category);
-				if (category != '') {
-					addCategory(category);
-				}
+	var inputKeyPress = function(e) {
+		if(e.keyCode == 13) {
+			//TODO: stop AJAX call for AutoComplete
+			YAHOO.util.Event.preventDefault(e);
+			category = $(inputId).value;
+			YAHOO.log('enter pressed, value = ' + category);
+			if (category != '') {
+				addCategory(category);
 			}
-		};
+		}
+	};
 
-		//handle [enter] for non existing categories
-		YAHOO.util.Event.addListener(inputId, 'keypress', inputKeyPress);
+	//handle [enter] for non existing categories
+	YAHOO.util.Event.addListener(inputId, 'keypress', inputKeyPress);
 
-		// Init datasource
-		var oDataSource = new YAHOO.widget.DS_XHR(wgServer + wgScriptPath + '/', ["\n"]);
-		oDataSource.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
-		oDataSource.scriptQueryAppend = 'action=ajax&rs=CategorySelectAjaxGetCategories';
+	var regularEditorSubmit = function(e) {
+		$('wpTextbox1').value += generateWikitextForCategories();
+	}
 
-		// Init AutoComplete object and assign datasource object to it
-		var oAutoComp = new YAHOO.widget.AutoComplete(inputId, suggestContainerId, oDataSource);
-		oAutoComp.autoHighlight = false;
-		oAutoComp.queryDelay = 1;
-		oAutoComp.highlightClassName = 'CSsuggestHover';
-		oAutoComp.queryMatchContains = true;
-		oAutoComp.itemSelectEvent.subscribe(submitAutoComplete);
-//	}
+	YAHOO.util.Event.addListener(formId, 'submit', regularEditorSubmit);
+
+	// Init datasource
+	var oDataSource = new YAHOO.widget.DS_XHR(wgServer + wgScriptPath + '/', ["\n"]);
+	oDataSource.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
+	oDataSource.scriptQueryAppend = 'action=ajax&rs=CategorySelectAjaxGetCategories';
+
+	// Init AutoComplete object and assign datasource object to it
+	var oAutoComp = new YAHOO.widget.AutoComplete(inputId, suggestContainerId, oDataSource);
+	oAutoComp.autoHighlight = false;
+	oAutoComp.queryDelay = 1;
+	oAutoComp.highlightClassName = 'CSsuggestHover';
+	oAutoComp.queryMatchContains = true;
+	oAutoComp.itemSelectEvent.subscribe(submitAutoComplete);
 });
