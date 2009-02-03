@@ -19,8 +19,24 @@ $dir = dirname(__FILE__).'/';
 
 define( 'VIDEO_PREVIEW', 350 );
 
-$wgExtraNamespaces[400] = "Video";
-$wgExtraNamespaces[401] = "Video_talk";
+switch( $wgLanguageCode ) {
+
+/*
+        case "pl" :
+        $wgExtraNamespaces[400] = 'Wideo';
+        $wgExtraNamespaces[401] = 'Dyskusja_wideo';
+
+        $wgNamespaceAliases['Video'] = 400;
+        $wgNamespaceAliases['Video_talk'] = 401;
+        break;
+*/
+        case "en" :
+	default :
+		$wgExtraNamespaces[400] = "Video";
+		$wgExtraNamespaces[401] = "Video_talk";
+		break;
+}
+
 require_once( "$IP/extensions/wikia/WikiaVideo/WikiaVideo.php" );
 
 #--- register special page (MW 1.1x way)
