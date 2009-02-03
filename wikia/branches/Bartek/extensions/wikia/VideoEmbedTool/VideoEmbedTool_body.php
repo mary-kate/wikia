@@ -36,15 +36,24 @@ class VideoEmbedTool {
 		$query = $wgRequest->getText('query');
 		$page = $wgRequest->getVal('page');
 		$sourceId = $wgRequest->getVal('sourceId');
-		// to be rewritten too
 		
-		if($sourceId == 1) {
-			require_once($IP.'/extensions/3rdparty/ImportFreeImages/phpFlickr-2.2.0/phpFlickr.php');
-			$flickrAPI = new phpFlickr('bac0bd138f5d0819982149f67c0ca734');
-			$flickrResult = $flickrAPI->photos_search(array('tags' => $query, 'tag_mode' => 'all', 'page' => $page, 'per_page' => 8, 'license' => '4,5', 'sort' => 'interestingness-desc'));
+		if($sourceId == 1) { // metacafe
+		
+			$file = file_get_contents( );
+			$file = @file_get_contents( "http://www.metacafe.com/api/videos?vq=" . $query, FALSE );
+                                if ($file) {
+                                        $doc = new DOMDocument;
+                                        @$doc->loadHTML( $file );
+                                        if( $item = $doc->getElementsByTagName('item')->item( 0 ) ) {
+                                                $this->mVideoName = $item->getElementsByTagName('title')->item(0)->textContent;
+                                                $exists = true;
+                                        }
+                                }
+                                break;
+			
 			$tmpl = new EasyTemplate(dirname(__FILE__).'/templates/');
-			$tmpl->set_vars(array('results' => $flickrResult, 'query' => addslashes($query)));
-			return $tmpl->execute('results_flickr');
+			$tmpl->set_vars(array('results' => $metacafeResult, 'query' => addslashes($query)));
+			return $tmpl->execute('results_metacafe');
 		} else if($sourceId == 0) {
 			$db =& wfGetDB(DB_SLAVE);
 			$res = $db->query("SELECT count(*) as count FROM `page` WHERE lower(page_title) LIKE '%".strtolower($db->escapeLike($query))."%' AND page_namespace = 6 ORDER BY page_title ASC LIMIT 8");
