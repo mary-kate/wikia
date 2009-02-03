@@ -40,7 +40,7 @@ $wgAjaxExportList[] = 'CategorySelectAjaxGetCategories';
 function CategorySelectInit() {
 	global $wgHooks, $wgCategorySelectEnabled, $wgAutoloadClasses;
 	$wgAutoloadClasses['CategorySelect'] = 'extensions/wikia/CategorySelect/CategorySelect_body.php';
-	$wgHooks['OutputPageBeforeHTML'][] = 'CategorySelectOutput';
+//	$wgHooks['OutputPageBeforeHTML'][] = 'CategorySelectOutput';
 	$wgHooks['EditPageAfterGetContent'][] = 'CategorySelectReplaceContent';
 	$wgHooks['EditPage::CategoryBox'][] = 'CategorySelectCategoryBox';
 }
@@ -102,7 +102,7 @@ function CategorySelectCategoryBox($text) {
 		}
 	}
 
-	$text = CategorySelectGenerateHTML();
+	$text = CategorySelectGenerateHTML('editform');
 	return true;
 }
 
@@ -111,21 +111,21 @@ function CategorySelectCategoryBox($text) {
  *
  * @author Maciej Błaszkowski <marooned at wikia-inc.com>
  */
-function CategorySelectAjaxGetCategoriesXYZ($titleName) {
-	$result = array('error' => null, 'wikitext' => null, 'categories' => null);
-	$title = Title::newFromText($titleName);
-	if($title->exists()) {
-		$rev = Revision::newFromTitle($title);
-		$wikitext = $rev->getText();
-		$data = CategorySelect::SelectCategoryAPIgetData($wikitext);
-		$result = array_merge($results, $data);
-	} else {
-		$result['error'] = wfMsg('');
-	}
-	$ar = new AjaxResponse(Wikia::json_encode($results));
-	$ar->setCacheDuration(60 * 20);
-	return $ar;
-}
+//function CategorySelectAjaxGetCategoriesXYZ($titleName) {
+//	$result = array('error' => null, 'wikitext' => null, 'categories' => null);
+//	$title = Title::newFromText($titleName);
+//	if($title->exists()) {
+//		$rev = Revision::newFromTitle($title);
+//		$wikitext = $rev->getText();
+//		$data = CategorySelect::SelectCategoryAPIgetData($wikitext);
+//		$result = array_merge($results, $data);
+//	} else {
+//		$result['error'] = wfMsg('');
+//	}
+//	$ar = new AjaxResponse(Wikia::json_encode($results));
+//	$ar->setCacheDuration(60 * 20);
+//	return $ar;
+//}
 
 /**
  * Test function - display CS above article in view mode
@@ -146,9 +146,6 @@ function CategorySelectOutput(&$out, &$text) {
 	$html = CategorySelectGenerateHTML();
 	$wgOut->addHTML($html);
 
-	//TODO: remove this - for debug purpose
-//	$wgOut->addHTML('<pre>output:' . print_r($wgCategorySelectMetaData['categories'], true) .'</pre>');
-
 	return true;
 }
 
@@ -157,13 +154,14 @@ function CategorySelectOutput(&$out, &$text) {
  *
  * @author Maciej Błaszkowski <marooned at wikia-inc.com>
  */
-function CategorySelectGenerateHTML() {
+function CategorySelectGenerateHTML($formId = '') {
 	global $wgOut, $wgExtensionsPath, $wgStyleVersion, $wgCategorySelectMetaData;
 
 	if (!empty($wgCategorySelectMetaData)) {
 		$categoriesJSON = Wikia::json_encode($wgCategorySelectMetaData['categories']);
 		$wgOut->addScript("<script type=\"text/javascript\">var categories = $categoriesJSON;</script>");
 	}
+	$wgOut->addScript("<script type=\"text/javascript\">var formId = '$formId';</script>");
 	$wgOut->addScript("<script type=\"text/javascript\" src=\"$wgExtensionsPath/wikia/CategorySelect/CategorySelect.js?$wgStyleVersion\"></script>");
 	$wgOut->addScript("<link rel=\"stylesheet\" type=\"text/css\" href=\"$wgExtensionsPath/wikia/CategorySelect/CategorySelect.css?$wgStyleVersion\" />");
 

@@ -23,7 +23,7 @@ if (!defined('MEDIAWIKI')) {
 }
 
 class CategorySelect {
-	private static $categories, $maybeCategory, $maybeCategoryBegin, $outerTag, $nodeLevel, $frame;
+	private static $categories, $maybeCategory, $maybeCategoryBegin, $outerTag, $nodeLevel, $frame, $categoryNamespace;
 
 	static function SelectCategoryAPIgetData($wikitext) {
 		global $wgCategorySelectMetaData;
@@ -45,12 +45,16 @@ class CategorySelect {
 		//add ecnoding information
 		$xml = '<?xml version="1.0" encoding="UTF-8"?>' . $xml;
 
+		//init variables
+		self::$nodeLevel = 0;
+		//TODO: add here "|CategoryKeywordInLocalLanguage"
+		self::$categoryNamespace = 'Category';
+
 		//create XML DOM document from provided XML
 		$dom = new DOMDocument();
 		$dom->loadXML($xml);
 		//get everything under main node
 		$root = $dom->getElementsByTagName('root')->item(0);
-		self::$nodeLevel = 0;
 		//grab categories into variable $categories and remove them from $root
 		$categories = self::parseNode($root);
 
@@ -132,8 +136,45 @@ class CategorySelect {
 								}
 								$root->removeChild($previous);
 							}
+
+							//extract category name and sort key for categories with weird syntax (eg. with templates)
+							$newCategory = trim($newCategory, '[]');
+							preg_match('/^(' . self::$categoryNamespace . '):/i', $newCategory, $m);
+							$catNamespace = $m[1];
+							$newCategory = preg_replace('/^' . self::$categoryNamespace . ':/i', '', $newCategory);
+							$len = strlen($newCategory);
+							$pipePos = 0;
+							$curly = $square = 0;
+							for ($i = 0; $i < $len && !$pipePos; $i++) {
+								switch ($newCategory[$i]) {
+									case '{':
+										$curly++;
+										break;
+									case '}':
+										$curly--;
+										break;
+									case '[':
+										$square++;
+										break;
+									case ']':
+										$square--;
+										break;
+									case '|':
+										if ($curly == 0 && $square == 0) {
+											$pipePos = $i;
+									}
+								}
+							}
+							if ($pipePos) {
+								$catName = substr($newCategory, 0, $pipePos);
+								$sortKey = substr($newCategory, $pipePos + 1);
+							} else {
+								$catName = $newCategory;
+								$sortKey = '';
+							}
+
 							$childOut['text'] = $newNode;
-							$childOut['categories'][] = array('category' => $newCategory, 'outerTag' => $outerTag, 'sortkey' => 'TODO: add sortkey here');
+							$childOut['categories'][] = array('namespace' => $catNamespace, 'category' => $catName, 'outerTag' => $outerTag, 'sortkey' => $sortKey);
 						}
 						if (count($childOut['categories'])) {
 							$out = array_merge($out, $childOut['categories']);
@@ -151,9 +192,7 @@ class CategorySelect {
 	static private function lookForCategory(&$text, $outerTag) {
 		self::$categories = array();
 		self::$outerTag = $outerTag;
-		//TODO: add here "|CategoryKeywordInLocalLanguage"
-		$category = 'Category';
-		$text = preg_replace_callback("/(\[\[(?:$category):[^]]+]])/i", array('self', 'replaceCallback'), $text);
+		$text = preg_replace_callback('/\[\[(' . self::$categoryNamespace . '):([^]]+)]]/i', array('self', 'replaceCallback'), $text);
 		$result = array('text' => $text, 'categories' => self::$categories);
 
 		$maybeIndex = count(self::$maybeCategory);
@@ -166,8 +205,8 @@ class CategorySelect {
 				self::$maybeCategory[$maybeIndex-1]['beginSibblingsBefore'] = self::$maybeCategoryBegin[self::$nodeLevel];
 			}
 		}
-		if (preg_match("/(\[\[$category:.*$)/i", $text, $match)) {
-			self::$maybeCategory[$maybeIndex] = array('begin' => $match[1], 'level' => self::$nodeLevel);
+		if (preg_match('/(\[\[(?:' . self::$categoryNamespace . '):.*$)/i', $text, $match)) {
+			self::$maybeCategory[$maybeIndex] = array('namespace' => $match[1], 'begin' => $match[1], 'level' => self::$nodeLevel);
 			self::$maybeCategoryBegin[self::$nodeLevel] = 0;
 		}
 		return $result;
@@ -175,7 +214,15 @@ class CategorySelect {
 
 	//used in lookForCategory() as a callback function for preg_replace_callback()
 	static private function replaceCallback($match) {
-		self::$categories[] = array('category' => $match[1], 'outerTag' => self::$outerTag, 'sortkey' => 'TODO: add sortkey here');
+		$pipePos = strpos($match[2], '|');
+		if ($pipePos) {
+			$catName = substr($match[2], 0, $pipePos);
+			$sortKey = substr($match[2], $pipePos + 1);
+		} else {
+			$catName = $match[2];
+			$sortKey = '';
+		}
+		self::$categories[] = array('namespace' => $match[1], 'category' => $catName, 'outerTag' => self::$outerTag, 'sortkey' => $sortKey);
 		return '';
 	}
 }
