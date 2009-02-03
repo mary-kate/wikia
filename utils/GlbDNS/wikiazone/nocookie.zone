@@ -2,7 +2,7 @@
 
 $ORIGIN nocookie.net.
 
-600 IN SOA ns-lon-2.wikia.net. dnsmaster.wikia-inc.com. 2009013110 1200 120 1209600 300
+600 IN SOA ns-lon-2.wikia.net. dnsmaster.wikia-inc.com. 2009020200 1200 120 1209600 300
 
 60 IN NS ns-sjc-1.wikia.net
 60 IN NS ns-nj-1.wikia.net
@@ -18,7 +18,7 @@ glb 120 IN CNAME sjc-images
 glb 120 IN CNAME london
 glb 120 IN CNAME panther-apac
 glb 120 IN CNAME panther-us
-glb 120 in CNAME iowa
+glb 120 IN CNAME iowa
 glb 120 IN A 216.151.156.12
 
 
