@@ -672,7 +672,12 @@ class VideoPage extends Article {
 		global $wgOut;
 		$this->getContent();
 		$this->load();	
-		$wgOut->addHTML( $this->getEmbedCode( 400) );
+
+		$s = '<div id="VideoEmbedPageWindow">';
+		$s .= $this->getEmbedCode( 400);
+		$s .= '</div>';
+
+		$wgOut->addHTML( $s );
 	}
 
 	function showVideoInfoLine() {

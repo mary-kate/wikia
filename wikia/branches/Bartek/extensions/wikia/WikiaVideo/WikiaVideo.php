@@ -18,7 +18,8 @@ function WikiaVideoIsNotMovable( $result, $index ) {
 function WikiaVideoParserBeforeStrip($parser, $text, $strip_state) {
 	// TODO change this to accomodate more cases ie parser inside, links and all
 	// MW parser stuff 
-      	$pattern = "@(\[\[Video:)([^\]]*?)].*?\]@si";   	 	 
+	global $wgExtraNamespaces;
+      	$pattern = "@(\[\[" . $wgExtraNamespaces[400] .":)([^\]]*?)].*?\]@si";   	 	 
 	$text = preg_replace_callback($pattern, 'WikiaVideoRenderVideo', $text);
 	return true;
 }
