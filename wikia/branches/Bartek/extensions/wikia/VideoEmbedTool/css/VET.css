@@ -23,7 +23,7 @@
 }
 
 #VideoEmbedUrlSubmit {
-	padding: 6px;
+	padding: 2px;
 }
 
 #VideoEmbedSearch label {
@@ -62,7 +62,7 @@
 
 #VideoQuery {
 	padding: 6px;
-	width: 260px;
+	width: 374px;
 }
 
 #VideoEmbedBack a {
