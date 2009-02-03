@@ -172,6 +172,12 @@ function VET_show(e) {
 
 	YAHOO.util.Dom.setStyle('header_ad', 'display', 'none');
 	if(VET_panel != null) {
+		if ( 400 == wgNamespaceNumber ) {
+			if( $( 'VideoEmbedPageWindow' ) ) {
+				$( 'VideoEmbedPageWindow' ).style.visibility = 'hidden';
+			}
+		}
+
 		VET_panel.show();
 		if(VET_refid != null && VET_wysiwygStart == 2) {
 			VET_loadDetails();
