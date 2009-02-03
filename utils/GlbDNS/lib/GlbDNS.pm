@@ -24,6 +24,11 @@ our %TEST = ( noadmin => 0,
               nosocket => 0
     );
 
+our %known_broken_servers = (
+    # opendns chicago server
+    '208.69.36.11' => { lat => '41.980905', lon => '-87.906654' }
+    );
+
 sub new {
     my $class = shift;
     my $self = bless {}, $class;
@@ -194,15 +199,22 @@ sub lookup {
 #    $peerhost = "75.101.17.33";
 #    $peerhost = "216.224.121.134";
 #    $peerhost = "82.138.248.236";
+#    $peerhost = "208.69.36.11";
+
+
     if (my $geo = $host->{__GEO__}) {
-
-        my $record = $gi->record_by_addr($peerhost);
-        my $location;
-        if($record) {
-            my ($lat, $lon) = (0,0);
-            $lat = $record->latitude;
-            $lon = $record->longitude;
-
+        my ($lat, $lon) = (undef,undef);
+        if (exists($known_broken_servers{$peerhost})) {
+            $lat = $known_broken_servers{$peerhost}->{lat};
+            $lon = $known_broken_servers{$peerhost}->{lon};
+        } else {
+            my $record = $gi->record_by_addr($peerhost);
+            if($record) {
+                $lat = $record->latitude;
+                $lon = $record->longitude;
+            }
+        }
+        if (defined($lat)) {
             my %distance;
             foreach my $server (keys %$geo) {
 
