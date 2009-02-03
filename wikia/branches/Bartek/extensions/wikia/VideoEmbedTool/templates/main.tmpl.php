@@ -15,9 +15,8 @@
 	global $wgStylePath, $wgUser, $wgScriptPath, $wgExtensionsPath;
 ?>
 	<tr id="VideoEmbedSearch">
-		<th><h1><?= wfMsg('vet-upload') ?></h1></th>
-		<td>
-			<input onkeydown="VET_trySendQuery(event);" type="text" id="ImageQuery" />
+		<td colspan="2">
+			<input onkeydown="VET_trySendQuery(event);" type="text" id="VideoQuery" />
                         <input onclick="VEt_trySendQuery(event);" type="button" value="<?= wfMsg('vet-find-btn') ?>" />
 		</td>		
 	<tr id="VideoEmbedAdd">
