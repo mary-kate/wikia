@@ -39,15 +39,19 @@ class VideoEmbedTool {
 		
 		if($sourceId == 0) { // metacafe
 		
-			$file = file_get_contents( );
 			$file = @file_get_contents( "http://www.metacafe.com/api/videos?vq=" . $query, FALSE );
                                 if ($file) {
                                         $doc = new DOMDocument;
                                         @$doc->loadHTML( $file );
-                                        if( $item = $doc->getElementsByTagName('item')->item( 0 ) ) {
-                                                $this->mVideoName = $item->getElementsByTagName('title')->item(0)->textContent;
-                                                $exists = true;
-                                        }
+					$items = $doc->getElementsByTagName('item');
+					$metacafeResult = array();
+
+					foreach( $items as $item ) {
+						$metacafeResult[] = array( 
+							'title' = $item->getElementsByTagName('title')->item(0)->textContent,
+							'id' = $item->getElementsByTagName('id')->item(0)->textContent
+						);
+					}
                                 }
 			
 			$tmpl = new EasyTemplate(dirname(__FILE__).'/templates/');
