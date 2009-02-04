@@ -314,7 +314,6 @@ function VET_trySendQuery(e) {
 	}
 
 	var query = $('VideoQuery').value;
-	query += '&max-results=8&start-index=0';
 
 	if(!e && VET_lastQuery[VET_curSourceId] == query) {
 		return;

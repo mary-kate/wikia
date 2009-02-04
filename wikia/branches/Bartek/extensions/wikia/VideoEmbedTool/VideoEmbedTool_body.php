@@ -37,23 +37,30 @@ class VideoEmbedTool {
 		$page = $wgRequest->getVal('page');
 		$sourceId = $wgRequest->getVal('sourceId');
 		
-		if($sourceId == 0) { // metacafe
-		
+		if($sourceId == 0) { // metacafe	
+			$page ? $start = ($page - 1) * 8 : $start = 0;	
+			
 			$file = @file_get_contents( "http://www.metacafe.com/api/videos?vq=" . $query, FALSE );
                                 if ($file) {
                                         $doc = new DOMDocument;
                                         @$doc->loadHTML( $file );
 					$items = $doc->getElementsByTagName('item');
 					$metacafeResult = array();
+					$preResult = array();
 
+					$metacafeResult['page'] = $page;
+					$count = 0;
 					foreach( $items as $item ) {
-						$metacafeResult[] = array( 
-							'title' = $item->getElementsByTagName('title')->item(0)->textContent,
-							'id' = $item->getElementsByTagName('id')->item(0)->textContent
+						$preResult[] = array( 
+							'title' => $item->getElementsByTagName('title')->item(0)->textContent,
+							'id' => $item->getElementsByTagName('id')->item(0)->textContent
 						);
+						$count++;
 					}
+					$metacafeResult['total'] = $count;
+					$metacafeResult['pages'] = ceil( $metacafeResult['total'] / 8 );
                                 }
-			
+			$metacafeResult['item'] = array_slice( $preResult, $start, 8 );	
 			$tmpl = new EasyTemplate(dirname(__FILE__).'/templates/');
 			$tmpl->set_vars(array('results' => $metacafeResult, 'query' => addslashes($query)));
 			return $tmpl->execute('results_metacafe');
