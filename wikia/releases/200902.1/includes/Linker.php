@@ -817,6 +817,9 @@ class Linker {
 			}
 
 			if ( $thumb ) {
+				if(filesize($thumb->path) > filesize($file->path)) {
+					error_log("Inez: thumbnail bigger then original image for: ".$file->getUrl());
+				}
 				$outerWidth = $thumb->getWidth() + 2;
 			} else {
 				$outerWidth = $hp['width'] + 2;
