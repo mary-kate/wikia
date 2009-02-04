@@ -5,6 +5,7 @@ var categories;
 inputId = 'myInput';
 suggestContainerId = 'myContainer';
 mainContainerId = 'myAutoComplete';
+categoryFieldId = 'wpCategorySelectWikitext';
 addCategoryButtonText = 'Add category';
 namespace = 'Category';	//TODO: default namespace
 
@@ -110,29 +111,29 @@ function addCategory(category, params, index) {
 	$(inputId).value = '';
 }
 
-function generateWikitextForCategories() {
-	var categoriesStr = '';
-	for(c in categories) {
-		catTmp = '[[' + categories[c].namespace + ':' + categories[c].category + (categories[c].sortkey == '' ? '' : ('|' + categories[c].sortkey)) + ']]';
-		if (categories[c].outerTag != '') {
-			catTmp = '<' + categories[c].outerTag + '>' + catTmp + '</' + categories[c].outerTag + '>';
-		}
-		categoriesStr += catTmp + "\n";
-	}
-	return categoriesStr;
-}
+//function generateWikitextForCategories() {
+//	var categoriesStr = '';
+//	for(c in categories) {
+//		catTmp = '[[' + categories[c].namespace + ':' + categories[c].category + (categories[c].sortkey == '' ? '' : ('|' + categories[c].sortkey)) + ']]';
+//		if (categories[c].outerTag != '') {
+//			catTmp = '<' + categories[c].outerTag + '>' + catTmp + '</' + categories[c].outerTag + '>';
+//		}
+//		categoriesStr += catTmp + "\n";
+//	}
+//	return categoriesStr;
+//}
 
 Event.onDOMReady(function() {
 	YAHOO.log('onDOMReady');
 
+	//move categories metadata from hidden field [JSON encoded] into array
+	cats = $(categoryFieldId).value;
+	categories = cats == '' ? new Array() : eval(cats);
+
 	addAddCategoryButton();
-	if (categories == undefined) {
-		categories = new Array();
-	} else {
-		for(c in categories) {
-			YAHOO.log(categories[c].category);
-			addCategory(categories[c].category, {'outerTag': categories[c].outerTag, 'sortkey': categories[c].sortkey}, c);
-		}
+	for(c in categories) {
+		YAHOO.log(categories[c].category);
+		addCategory(categories[c].category, {'outerTag': categories[c].outerTag, 'sortkey': categories[c].sortkey}, c);
 	}
 
 	var submitAutoComplete = function(comp, resultListItem) {
@@ -162,7 +163,7 @@ Event.onDOMReady(function() {
 	YAHOO.util.Event.addListener(inputId, 'blur', inputBlur);
 
 	var regularEditorSubmit = function(e) {
-		$('wpTextbox1').value += generateWikitextForCategories();
+		$(categoryFieldId).value = YAHOO.Tools.JSONEncode(categories);	//generateWikitextForCategories();
 	}
 
 	YAHOO.util.Event.addListener(formId, 'submit', regularEditorSubmit);
