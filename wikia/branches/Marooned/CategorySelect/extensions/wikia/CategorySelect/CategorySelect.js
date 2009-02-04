@@ -40,12 +40,6 @@ function replaceAddToInput(e) {
 	$(inputId).focus();
 }
 
-function inputBlur() {
-	if ($(inputId).value == '') {
-		$(inputId).style.display = 'none';
-		addAddCategoryButton();
-	}
-}
 function addAddCategoryButton() {
 	elementA = document.createElement('a');
 	elementA.className = 'CSitem CSaddCategory'; //setAttribute doesn't work in IE
@@ -66,6 +60,13 @@ function addAddCategoryButton() {
 	elementSpanOuter.appendChild(elementSpan);
 
 	$(mainContainerId).insertBefore(elementA, $(suggestContainerId));
+}
+
+function inputBlur() {
+	if ($(inputId).value == '') {
+		$(inputId).style.display = 'none';
+		addAddCategoryButton();
+	}
 }
 
 function addCategory(category, params, index) {
@@ -174,7 +175,7 @@ Event.onDOMReady(function() {
 	// Init AutoComplete object and assign datasource object to it
 	var oAutoComp = new YAHOO.widget.AutoComplete(inputId, suggestContainerId, oDataSource);
 	oAutoComp.autoHighlight = false;
-	oAutoComp.queryDelay = 1;
+	oAutoComp.queryDelay = 0.5;
 	oAutoComp.highlightClassName = 'CSsuggestHover';
 	oAutoComp.queryMatchContains = true;
 	oAutoComp.itemSelectEvent.subscribe(submitAutoComplete);
