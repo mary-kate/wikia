@@ -17,7 +17,7 @@
 	<tr id="VideoEmbedSearch">
 		<td colspan="2">
 			<input onkeydown="VET_trySendQuery(event);" type="text" id="VideoQuery" />
-                        <input onclick="VEt_trySendQuery(event);" type="button" id="VideoQuerySearch" value="<?= wfMsg('vet-find-btn') ?>" />
+                        <input onclick="VET_trySendQuery(event);" type="button" id="VideoQuerySearch" value="<?= wfMsg('vet-find-btn') ?>" />
 		</td>		
 	<tr id="VideoEmbedAdd">
 		<th><h1><?= wfMsg('vet-upload') ?></h1></th>
