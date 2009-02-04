@@ -654,6 +654,8 @@ class EditPage {
 		$this->live = $request->getCheck( 'live' );
 		$this->editintro = $request->getText( 'editintro' );
 
+		wfRunHooks( 'EditPage::importFormData::finished', array( &$this, $request ) );
+
 		wfProfileOut( $fname );
 	}
 

@@ -43,6 +43,9 @@ function CategorySelectInit() {
 //	$wgHooks['OutputPageBeforeHTML'][] = 'CategorySelectOutput';
 	$wgHooks['EditPageAfterGetContent'][] = 'CategorySelectReplaceContent';
 	$wgHooks['EditPage::CategoryBox'][] = 'CategorySelectCategoryBox';
+	$wgHooks['EditPage::importFormData::finished'][] = 'CategorySelectImportFormData';
+	$wgHooks['EditPage::showEditForm:fields'][] = 'CategorySelectAddFormFields';
+	$wgHooks['getCategoryLinks'][] = 'CategorySelectGetCategoryLinks';
 }
 
 /**
@@ -86,23 +89,12 @@ function CategorySelectReplaceContent($text) {
 }
 
 /**
- * Replace hidden category box with our CategorySelect on EditPage
+ * Remove hidden category box
  *
  * @author Maciej Błaszkowski <marooned at wikia-inc.com>
  */
 function CategorySelectCategoryBox($text) {
-	global $wgCategorySelectMetaData;
-
-	if (!is_array($wgCategorySelectMetaData)) {
-		global $wgTitle;
-		$rev = Revision::newFromTitle($wgTitle);
-		if (!is_null($rev)) {
-			$wikitext = $rev->getText();
-			CategorySelect::SelectCategoryAPIgetData($wikitext);
-		}
-	}
-
-	$text = CategorySelectGenerateHTML('editform');
+	$text = '';
 	return true;
 }
 
@@ -132,7 +124,7 @@ function CategorySelectCategoryBox($text) {
  *
  * @author Maciej Błaszkowski <marooned at wikia-inc.com>
  */
-function CategorySelectOutput(&$out, &$text) {
+function CategorySelectOutput($out, $text) {
 	global $wgOut, $wgExtensionsPath, $wgStyleVersion, $wgTitle, $wgCategorySelectMetaData;
 
 	if (!is_array($wgCategorySelectMetaData)) {
@@ -150,6 +142,87 @@ function CategorySelectOutput(&$out, &$text) {
 }
 
 /**
+ * Change format of categories metadata
+ *
+ * @author Maciej Błaszkowski <marooned at wikia-inc.com>
+ */
+function CategorySelectChangeFormat($categories, $fromJSON) {
+	if ($fromJSON) {
+		$categories = Wikia::json_decode($categories, true);
+		$categoriesStr = '';
+		foreach($categories as $c) {
+			$catTmp = '[[' . $c['namespace'] . ':' . $c['category'] . ($c['sortkey'] == '' ? '' : ('|' . $c['sortkey'])) . ']]';
+			if ($c['outerTag'] != '') {
+				$catTmp = '<' . $c['outerTag'] . '>' . $catTmp . '</' . $c['outerTag'] . '>';
+			}
+			$categoriesStr .= $catTmp . "\n";
+		}
+		return "\n" . $categoriesStr;
+	} else {
+		return Wikia::json_encode($categories);
+	}
+}
+
+/**
+ * Add hidden field with category metadata
+ *
+ * @author Maciej Błaszkowski <marooned at wikia-inc.com>
+ */
+function CategorySelectAddFormFields($editPage, $wgOut) {
+	global $wgCategorySelectMetaData;
+	$categories = '';
+	if (!empty($wgCategorySelectMetaData)) {
+		$categories = htmlspecialchars(CategorySelectChangeFormat($wgCategorySelectMetaData['categories'], false));
+	}
+	$wgOut->addHTML( "<input type=\"hidden\" value=\"$categories\" name=\"wpCategorySelectWikitext\" id=\"wpCategorySelectWikitext\" />" );
+	return true;
+}
+
+/**
+ * Concatenate categories on EditPage POST
+ *
+ * @author Maciej Błaszkowski <marooned at wikia-inc.com>
+ */
+function CategorySelectImportFormData($editPage, $request) {
+	if ($request->wasPosted()) {
+		$categories = $editPage->safeUnicodeInput($request, 'wpCategorySelectWikitext');
+		$categories = CategorySelectChangeFormat($categories, true);
+
+		if ($editPage->preview) {
+			CategorySelect::SelectCategoryAPIgetData($categories);
+		} else {	//saving article
+			echo '<pre>added to textbox: '; print_r ($categories); echo '</pre>';
+			$editPage->textbox1 .= $categories;
+		}
+	}
+	return true;
+}
+
+/**
+ * Remove regular category list under article
+ *
+ * @author Maciej Błaszkowski <marooned at wikia-inc.com>
+ */
+function CategorySelectGetCategoryLinks($categoryLinks) {
+	global $wgCategorySelectMetaData, $wgRequest;
+
+	if ($wgRequest->getVal('action', 'view') != 'view') {
+		if (!is_array($wgCategorySelectMetaData)) {
+			global $wgTitle;
+			$rev = Revision::newFromTitle($wgTitle);
+			if (!is_null($rev)) {
+				$wikitext = $rev->getText();
+				CategorySelect::SelectCategoryAPIgetData($wikitext);
+			}
+		}
+
+		$categoryLinks = CategorySelectGenerateHTML('editform');
+		return false;
+	}
+	return true;
+}
+
+/**
  * Add required JS & CSS and return HTML
  *
  * @author Maciej Błaszkowski <marooned at wikia-inc.com>
@@ -157,10 +230,11 @@ function CategorySelectOutput(&$out, &$text) {
 function CategorySelectGenerateHTML($formId = '') {
 	global $wgOut, $wgExtensionsPath, $wgStyleVersion, $wgCategorySelectMetaData;
 
-	if (!empty($wgCategorySelectMetaData)) {
-		$categoriesJSON = Wikia::json_encode($wgCategorySelectMetaData['categories']);
-		$wgOut->addScript("<script type=\"text/javascript\">var categories = $categoriesJSON;</script>");
-	}
+//	$categoriesJSON = 'new Array();';
+//	if (!empty($wgCategorySelectMetaData)) {
+//		$categoriesJSON = CategorySelectChangeFormat($wgCategorySelectMetaData['categories'], false);
+//	}
+//	$wgOut->addScript("<script type=\"text/javascript\">var categories = $categoriesJSON;</script>");
 	$wgOut->addScript("<script type=\"text/javascript\">var formId = '$formId';</script>");
 	$wgOut->addScript("<script type=\"text/javascript\" src=\"$wgExtensionsPath/wikia/CategorySelect/CategorySelect.js?$wgStyleVersion\"></script>");
 	$wgOut->addScript("<link rel=\"stylesheet\" type=\"text/css\" href=\"$wgExtensionsPath/wikia/CategorySelect/CategorySelect.css?$wgStyleVersion\" />");
