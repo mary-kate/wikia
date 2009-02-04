@@ -3,6 +3,8 @@ if(!defined('MEDIAWIKI')) {
 	exit(1);
 }
 
+define('NS_VIDEO', '400');
+
 $wgHooks['ParserBeforeStrip'][] = 'WikiaVideoParserBeforeStrip';
 $wgHooks['ArticleFromTitle'][] = 'WikiaVideoArticleFromTitle';
 $wgHooks['MWNamespace:isMovable'][] = 'WikiaVideoIsNotMovable';
@@ -10,7 +12,6 @@ $wgHooks['MWNamespace:isMovable'][] = 'WikiaVideoIsNotMovable';
 
 function WikiaVideoIsNotMovable( $result, $index ) {
 	global $IP, $wgAllowImageMoving;
-        require_once( "$IP/extensions/wikia/WikiaVideo/VideoPage.php" );
 	$result = !( $index < NS_MAIN || ($index == NS_IMAGE && !$wgAllowImageMoving) || ( $index == NS_VIDEO )  || $index == NS_CATEGORY );
 	return true;
 }
@@ -72,11 +73,10 @@ function WikiaVideoRenderVideo( $matches ) {
 }
 
 function WikiaVideoArticleFromTitle( $title, $article ) {
-        global $wgUser, $IP;
-
-        require_once( "$IP/extensions/wikia/WikiaVideo/VideoPage.php" );
+        global $IP;
 
         if( NS_VIDEO == $title->getNamespace() ) {
+		require_once( "$IP/extensions/wikia/WikiaVideo/VideoPage.php" );
                 $article = new VideoPage( $title );
         }
         return true;
