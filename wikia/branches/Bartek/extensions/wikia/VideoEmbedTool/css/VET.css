@@ -6,6 +6,7 @@
 }
 #VideoEmbedBorder {
 	background-color: #000;
+	border 1px solid #FFF;
 	filter: alpha(opacity=60);
 	height: 505px;
 	left: 0;
@@ -13,7 +14,6 @@
 	position: absolute;
 	top: 0;
 	width: 810px;
-	border 1px solid white;
 }
 
 #VideoEmbedUrl {
