@@ -820,7 +820,7 @@ class Linker {
 				if(filesize($thumb->path) > filesize($file->path)) {
 					$thumb->path = $file->path;
 					$thumb->url = $file->url;
-					error_log("Inez - saved: ".filesize($thumb->path)-filesize($file->path));
+					error_log("Inez - saved: ".(filesize($thumb->path)-filesize($file->path)));
 				}
 				$outerWidth = $thumb->getWidth() + 2;
 			} else {
