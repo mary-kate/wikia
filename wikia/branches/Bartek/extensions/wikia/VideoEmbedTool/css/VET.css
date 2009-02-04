@@ -65,6 +65,10 @@
 	width: 374px;
 }
 
+#VideoQuerySearch {
+	padding: 2px;	
+}
+
 #VideoEmbedBack a {
 	color: #FFF;
 }
