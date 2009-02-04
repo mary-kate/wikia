@@ -13,6 +13,7 @@
 }
 
 #myInput {
+	border: 0;
 	display: block;
 	float: left;
 }
@@ -32,13 +33,18 @@
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
 }
+.CSaddCategory {
+	background: #DDD;
+	border-color: #BBB;
+	cursor: pointer;
+}
 
 .CSitemOuter {
 	margin: 0 35px 0 4px;
 }
 
 .CSitemOuterAddCategory {
-	margin: 0 20px 0 4px;
+	margin: 0 4px 0 18px;
 }
 
 .CSitem:hover {
@@ -62,7 +68,7 @@
 
 .CScontrolAdd {
 	background-position: top left;
-	right: 4px;
+	left: 2px;
 }
 
 .CScontrolRemove {

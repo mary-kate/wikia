@@ -40,9 +40,15 @@ function replaceAddToInput(e) {
 	$(inputId).focus();
 }
 
+function inputBlur() {
+	if ($(inputId).value == '') {
+		$(inputId).style.display = 'none';
+		addAddCategoryButton();
+	}
+}
 function addAddCategoryButton() {
 	elementA = document.createElement('a');
-	elementA.className = 'CSitem';	//setAttribute doesn't work in IE
+	elementA.className = 'CSitem CSaddCategory'; //setAttribute doesn't work in IE
 	elementA.tabindex = '-1';
 	elementA.onfocus = 'this.blur()';
 	elementA.onclick = function(e) {replaceAddToInput(this); return false;};
@@ -152,6 +158,7 @@ Event.onDOMReady(function() {
 
 	//handle [enter] for non existing categories
 	YAHOO.util.Event.addListener(inputId, 'keypress', inputKeyPress);
+	YAHOO.util.Event.addListener(inputId, 'blur', inputBlur);
 
 	var regularEditorSubmit = function(e) {
 		$('wpTextbox1').value += generateWikitextForCategories();
