@@ -472,7 +472,7 @@ class VideoPage extends Article {
 		global $wgUser, $wgWikiaVideoProviders, $wgContLang;
 
 		$this->mTitle = Title::newFromText($this->mName, NS_VIDEO );
-		$desc = "added video [[" . $this->mTitle->getPrefixedText() . "]]";			
+		$desc = wfMsg( 'wikiavideo-added', $this->mTitle->getPrefixedText() );
 
                 $dbw = wfGetDB( DB_MASTER );
                 $now = $dbw->timestamp();
