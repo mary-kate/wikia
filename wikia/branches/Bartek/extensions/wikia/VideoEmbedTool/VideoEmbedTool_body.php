@@ -37,7 +37,7 @@ class VideoEmbedTool {
 		$page = $wgRequest->getVal('page');
 		$sourceId = $wgRequest->getVal('sourceId');
 		
-		if($sourceId == 1) { // metacafe
+		if($sourceId == 0) { // metacafe
 		
 			$file = file_get_contents( );
 			$file = @file_get_contents( "http://www.metacafe.com/api/videos?vq=" . $query, FALSE );
@@ -49,12 +49,11 @@ class VideoEmbedTool {
                                                 $exists = true;
                                         }
                                 }
-                                break;
 			
 			$tmpl = new EasyTemplate(dirname(__FILE__).'/templates/');
 			$tmpl->set_vars(array('results' => $metacafeResult, 'query' => addslashes($query)));
 			return $tmpl->execute('results_metacafe');
-		} else if($sourceId == 0) {
+		} else if($sourceId == 1) { // this wiki, to be done later
 			$db =& wfGetDB(DB_SLAVE);
 			$res = $db->query("SELECT count(*) as count FROM `page` WHERE lower(page_title) LIKE '%".strtolower($db->escapeLike($query))."%' AND page_namespace = 6 ORDER BY page_title ASC LIMIT 8");
 			$row = $db->fetchRow($res);
