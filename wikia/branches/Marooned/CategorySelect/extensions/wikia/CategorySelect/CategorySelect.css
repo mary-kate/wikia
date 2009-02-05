@@ -56,33 +56,35 @@
 
 /*** Control buttons ***/
 .CScontrol {
-	background-image: url(sprite.png);
+	background: url(sprite.png);
 	cursor: pointer;
 	display: block;
 	height: 14px;
 	position: absolute;
 	top: 1px;
-	width: 12px;
+	width: 48px;
+	overflow: hidden;
 }
 
 .CScontrolAdd {
 	background-position: top left;
 	left: 2px;
+	width: 12px;
 }
 
 .CScontrolRemove {
-	background-position: top right;
+	clip: rect(0px 48px 14px 36px);
 	right: 4px;
 }
 
 .CScontrolSort {
-	background-position: -24px 0px;
-	right: 16px;
+	clip: rect(0px 36px 14px 24px);
+	right: 4px;
 }
 
 .CScontrolSorted {
-	background-position: -12px 0px; 
-	right: 16px;
+	clip: rect(0px 24px 14px 12px);
+	right: -8px;
 }
 
 .CSsuggestHover {
@@ -93,4 +95,9 @@
 * html #myAutoComplete,
 * html .CSitem {
 	height: 1%;
+}
+
+* html .CScontrol {
+	background-image: none;
+	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/extensions/wikia/CategorySelect/sprite.png', sizingMethod='crop');
 }

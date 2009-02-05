@@ -243,7 +243,8 @@ function CategorySelectGenerateHTML($formId = '') {
 	$result = '
 	<div id="myAutoComplete">
 		<input id="myInput" type="text" style="display: none" />
-		<div id="myContainer" class="clearfix"></div>
+		<div id="myContainer"></div>
+		<div class="clearfix"></div>
 	</div>';
 
 	return $result;
