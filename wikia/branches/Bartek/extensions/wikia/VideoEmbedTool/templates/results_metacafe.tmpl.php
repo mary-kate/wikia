@@ -3,7 +3,7 @@
 <?php
 if($results['page'] > 1) {
 ?>
-	<a onclick="VET_sendQuery('<?= $query ?>', <?= $results['page']-1 ?>, 1, 'prev'); return false;" href="#"><?= wfMsg('vet-prev') ?></a>
+	<a onclick="VET_sendQuery('<?= $query ?>', <?= $results['page']-1 ?>, 0, 'prev'); return false;" href="#"><?= wfMsg('vet-prev') ?></a>
 <?php
 }
 if($results['page'] > 1 && $results['page'] < $results['pages']) {
@@ -13,7 +13,7 @@ if($results['page'] > 1 && $results['page'] < $results['pages']) {
 }
 if($results['page'] < $results['pages']) {
 ?>
-	<a onclick="VET_sendQuery('<?= $query ?>', <?= $results['page']+1 ?>, 1, 'next'); return false;" href="#"><?= wfMsg('vet-next') ?></a>
+	<a onclick="VET_sendQuery('<?= $query ?>', <?= $results['page']+1 ?>, 0, 'next'); return false;" href="#"><?= wfMsg('vet-next') ?></a>
 <?php
 }
 ?>
