@@ -1,19 +1,23 @@
-#myContainer {
+#csSuggestContainer {
 	position: relative;
 	top: 4px;
 	left: 0;
 	width: 250px;
 }
 
-#myAutoComplete {
+#csMainContainer {
 	border: 1px solid #AAA;
 	padding: 5px 5px 2px 5px;
 }
 
-#myInput {
+#csCategoryInput {
 	border: 0;
 	display: block;
 	float: left;
+}
+
+#csCodeView {
+	float: right;
 }
 
 .CSitem {
@@ -31,6 +35,7 @@
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
 }
+
 .CSaddCategory {
 	background: #DDD;
 	border-color: #BBB;
@@ -91,7 +96,7 @@
 }
 
 /** IE6 fixes **/
-* html #myAutoComplete,
+* html #csMainContainer,
 * html .CSitem {
 	height: 1%;
 }

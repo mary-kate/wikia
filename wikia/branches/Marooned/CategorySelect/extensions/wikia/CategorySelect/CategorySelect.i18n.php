@@ -24,7 +24,7 @@ if (!defined('MEDIAWIKI')) {
 
 $messages = array(
 	'en' => array(
-		'categoryselect'			=> 'CategorySelect',	//the name displayed on Special:SpecialPages
+		'categoryselect-code-view'	=> 'Code view'
 	)
 );
 ?>
