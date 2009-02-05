@@ -174,6 +174,8 @@ Event.onDOMReady(function() {
 				addCategory(category);
 			}
 		}
+		$(csSuggestContainerId).style.top = $(csCategoryInputId).offsetTop + parseInt(Dom.getStyle(csCategoryInputId, 'height')) + 5 + 'px';
+		$(csSuggestContainerId).style.left = $(csCategoryInputId).offsetLeft + 'px';
 	};
 
 	//handle [enter] for non existing categories
