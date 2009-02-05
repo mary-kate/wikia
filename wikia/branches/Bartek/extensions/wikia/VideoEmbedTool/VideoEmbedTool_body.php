@@ -91,7 +91,7 @@ class VideoEmbedTool {
 
 		$itemId = $wgRequest->getVal('itemId');
 		$sourceId = $wgRequest->getInt('sourceId');
-		$itemLink = $wgRequest->getVal('itemLink');
+		$itemLink = $wgRequest->getVal('itemLink') . '.swf';
 		require_once( "$IP/extensions/wikia/WikiaVideo/VideoPage.php" );
 
 		switch( $sourceId ) {
@@ -101,6 +101,8 @@ class VideoEmbedTool {
 				$video = new VideoPage( $title );
 
 				$video->loadFromPars( VideoPage::V_METACAFE, $itemId, array( $itemLink ) );
+				$video->setName( $tempname );
+
 				//$video->setName( $tempname );
 
 
@@ -109,7 +111,7 @@ class VideoEmbedTool {
 				$props['provider'] = VideoPage::V_METACAFE;		
 				$props['id'] = $itemId;
 				$props['vname'] = $itemLink;	
-				$props['metadata'] = VideoPage::V_METACAFE . ',' . $itemId .  ',' . $itemLink ;
+				$props['metadata'] = $itemLink;
 				$props['code'] = $video->getEmbedCode( VIDEO_PREVIEW );
 				break;
 			default:
