@@ -16,6 +16,8 @@ class QuickVideoAddForm extends SpecialPage {
 	public function execute( $subpage ) {
 		global $wgOut, $wgRequest;
 
+		wfLoadExtensionMessages('QuickVideoAdd');
+
 		$this->mTitle = Title::makeTitle( NS_SPECIAL, 'QuickVideoAdd' );
 		$wgOut->setRobotpolicy( 'noindex,nofollow' );
 		$wgOut->setPageTitle( "QuickVideoAdd" );
