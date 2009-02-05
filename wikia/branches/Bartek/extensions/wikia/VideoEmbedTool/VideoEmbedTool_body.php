@@ -51,7 +51,7 @@ class VideoEmbedTool {
 					$metacafeResult['page'] = $page;
 					$count = 0;
 					foreach( $items as $item ) {
-						$links= split( "/", $item->getElementsByTagName('id')->item(0)->textContent );
+						$links= split( "/", $item->getElementsByTagName('link')->item(0)->textContent );
 						$link = array_pop( $links ); 
 						$preResult[] = array( 
 							'provider' => 'metacafe',
@@ -91,20 +91,33 @@ class VideoEmbedTool {
 
 		$itemId = $wgRequest->getVal('itemId');
 		$sourceId = $wgRequest->getInt('sourceId');
-		$itenLink = $wgRequest->getInt('sourceLink');
+		$itemLink = $wgRequest->getVal('sourceLink');
+		echo $itemLink;
+		return;
 		require_once( "$IP/extensions/wikia/WikiaVideo/VideoPage.php" );
 
 		switch( $sourceId ) {
 			case 0: //metacafe
-				$props['provider'] = V_METACAFE;		
+				$tempname = 'Temp_video_'.$wgUser->getID().'_'.rand(0, 1000);
+				$title = Title::makeTitle( NS_VIDEO, $tempname );
+				$video = new VideoPage( $title );
+
+				$video->loadFromPars( VideoPage::V_METACAFE, $itemId, array( $itemLink ) );
+				//$video->setName( $tempname );
+
+
+				$props['oname'] = '';			
+
+				$props['provider'] = VideoPage::V_METACAFE;		
 				$props['id'] = $itemId;
 				$props['vname'] = $itemLink;	
+				$props['code'] = $video->getEmbedCode( VIDEO_PREVIEW );
 				break;
 			default:
 				break;
 		}
 
-		return $this->detailsPage($props);
+//		return $this->detailsPage($props);
 	}
 
 	function insertVideo() {
