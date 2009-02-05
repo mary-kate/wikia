@@ -60,10 +60,4 @@ $messages['en'] = array(
 	'vet-non-existing' => 'The supplied video does not exist',
 	'vet-main-info' => '<i>Input the full video URL from one of the supported sites displayed below.</i>',
 	'vet-page-success' => 'Video page was successfully updated. You may have to purge the video page to see the change.',
-	'qva-success' => 'Video page $1 was successfully added.',
-	'qva-failure' => 'Please supply valid parameters.',
-	'qva-name' => 'Enter the name:',
-	'qva-url' => 'Enter the URL:',
-	'qva-add' => 'Add',
-	'qva-title' => 'Quickly Add Video From URL',
 );
