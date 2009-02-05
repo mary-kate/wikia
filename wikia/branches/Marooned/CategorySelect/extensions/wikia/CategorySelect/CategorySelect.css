@@ -6,7 +6,6 @@
 }
 
 #myAutoComplete {
-	background: #FFF;
 	border: 1px solid #AAA;
 	padding: 5px 5px 2px 5px;
 }
@@ -20,7 +19,7 @@
 .CSitem {
 	background: #9Cf;
 	border: 1px solid #82add8;
-	color: #000;
+	color: #000 !important;
 	cursor: default;
 	display: block;
 	float: left;
