@@ -8,7 +8,6 @@
 #myAutoComplete {
 	background: #FFF;
 	border: 1px solid #AAA;
-	overflow: hidden;
 	padding: 5px 5px 2px 5px;
 }
 
@@ -28,8 +27,8 @@
 	font-size: 11px;
 	line-height: 16px;
 	margin: 0 5px 3px 0;
-	position: relative;
 	white-space: nowrap;
+	position: relative;
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
 }
@@ -88,4 +87,10 @@
 
 .CSsuggestHover {
 	background-color: #D2E3FF;
+}
+
+/** IE6 fixes **/
+* html #myAutoComplete,
+* html .CSitem {
+	height: 1%;
 }
