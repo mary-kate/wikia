@@ -51,10 +51,13 @@ class VideoEmbedTool {
 					$metacafeResult['page'] = $page;
 					$count = 0;
 					foreach( $items as $item ) {
+						$links= split( "/", $item->getElementsByTagName('id')->item(0)->textContent );
+						$link = array_pop( $links ); 
 						$preResult[] = array( 
 							'provider' => 'metacafe',
 							'title' => $item->getElementsByTagName('title')->item(0)->textContent,
-							'id' => $item->getElementsByTagName('id')->item(0)->textContent
+							'id' => $item->getElementsByTagName('id')->item(0)->textContent,
+							'link' => $link,	
 						);
 						$count++;
 					}
@@ -84,13 +87,22 @@ class VideoEmbedTool {
 	}
 
 	function chooseImage() {
-
 		global $wgRequest, $wgUser, $IP;
+
 		$itemId = $wgRequest->getVal('itemId');
 		$sourceId = $wgRequest->getInt('sourceId');
+		$itenLink = $wgRequest->getInt('sourceLink');
+		require_once( "$IP/extensions/wikia/WikiaVideo/VideoPage.php" );
 
-		// todo this is unused now, since there is currently now search
-		// to be applied later
+		switch( $sourceId ) {
+			case 0: //metacafe
+				$props['provider'] = V_METACAFE;		
+				$props['id'] = $itemId;
+				$props['vname'] = $itemLink;	
+				break;
+			default:
+				break;
+		}
 
 		return $this->detailsPage($props);
 	}

@@ -361,7 +361,7 @@ function VET_indicator(id, show) {
 	}
 }
 
-function VET_chooseImage(sourceId, itemId) {
+function VET_chooseImage(sourceId, itemId, itemLink) {
 	VET_track('insertVideo/choose/src-' + sourceId); // tracking
 
 	var callback = {
@@ -371,7 +371,7 @@ function VET_chooseImage(sourceId, itemId) {
 	}
 	VET_indicator(1, true);
 	YAHOO.util.Connect.abort(VET_asyncTransaction)
-	VET_asyncTransaction = YAHOO.util.Connect.asyncRequest('GET', wgScriptPath + '/index.php?action=ajax&rs=VET&method=chooseImage&' + 'sourceId=' + sourceId + '&itemId=' + itemId, callback);
+	VET_asyncTransaction = YAHOO.util.Connect.asyncRequest('GET', wgScriptPath + '/index.php?action=ajax&rs=VET&method=chooseImage&' + 'sourceId=' + sourceId + '&itemId=' + itemId + '&itemLink=' + itemLink, callback);
 }
 
 function VET_upload(e) {
