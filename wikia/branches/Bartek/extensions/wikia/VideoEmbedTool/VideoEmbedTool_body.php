@@ -51,7 +51,7 @@ class VideoEmbedTool {
 					$metacafeResult['page'] = $page;
 					$count = 0;
 					foreach( $items as $item ) {
-						$link= split( "/", $item->getElementsByTagName('link')->item(0)->textContent );
+						$links = split( "/", $item->getElementsByTagName('link')->item(0)->textContent );
 						$link = $links[count( $links ) -2]; 
 						$preResult[] = array( 
 							'provider' => 'metacafe',
@@ -91,9 +91,7 @@ class VideoEmbedTool {
 
 		$itemId = $wgRequest->getVal('itemId');
 		$sourceId = $wgRequest->getInt('sourceId');
-		$itemLink = $wgRequest->getVal('sourceLink');
-		echo $itemLink;
-		return;
+		$itemLink = $wgRequest->getVal('itemLink');
 		require_once( "$IP/extensions/wikia/WikiaVideo/VideoPage.php" );
 
 		switch( $sourceId ) {
@@ -111,13 +109,14 @@ class VideoEmbedTool {
 				$props['provider'] = VideoPage::V_METACAFE;		
 				$props['id'] = $itemId;
 				$props['vname'] = $itemLink;	
+				$props['metadata'] = VideoPage::V_METACAFE . ',' . $itemId .  ',' . $itemLink ;
 				$props['code'] = $video->getEmbedCode( VIDEO_PREVIEW );
 				break;
 			default:
 				break;
 		}
 
-//		return $this->detailsPage($props);
+		return $this->detailsPage($props);
 	}
 
 	function insertVideo() {
