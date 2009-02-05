@@ -24,7 +24,6 @@ class QuickVideoAddForm extends SpecialPage {
 		$this->mAction = $wgRequest->getVal( "action" );
 		$this->mPosted = $wgRequest->wasPosted();
 
-
 		switch( $this->mAction ) {
 			case 'submit' :
 				if ( $wgRequest->wasPosted() ) {
@@ -35,7 +34,6 @@ class QuickVideoAddForm extends SpecialPage {
 				$this->showForm();
 				break;
 		}
-
 	}
 
 	public function showForm() {
@@ -66,9 +64,11 @@ class QuickVideoAddForm extends SpecialPage {
 				$video->setName( $this->mName );
 				$video->save();				
 			}
-			$wgOut->addHTML( "Video page added successfully." );
+			$sk = $wgUser->getSkin();
+	                $link_back = $sk->makeKnownLinkObj( $title );
+			$wgOut->addHTML( wfMsg( 'qva-success', $link_back ) );
 		} else {
-			$wgOut->addHTML( "Error! Please supply parameters!" );
+			$wgOut->addHTML( wfMsg( 'qva-failure' ) );
 		}
 	}
 }
