@@ -56,7 +56,7 @@
 
 /*** Control buttons ***/
 .CScontrol {
-	background: url(sprite.png);
+	background-image: url(sprite.png);
 	cursor: pointer;
 	display: block;
 	height: 14px;
@@ -99,5 +99,5 @@
 
 * html .CScontrol {
 	background-image: none;
-	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/extensions/wikia/CategorySelect/sprite.png', sizingMethod='crop');
+	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='sprite.png', sizingMethod='crop');
 }
