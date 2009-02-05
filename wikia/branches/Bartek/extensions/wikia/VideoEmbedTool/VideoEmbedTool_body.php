@@ -43,7 +43,7 @@ class VideoEmbedTool {
 			$file = @file_get_contents( "http://www.metacafe.com/api/videos?vq=" . $query, FALSE );
                                 if ($file) {
                                         $doc = new DOMDocument;
-                                        @$doc->loadHTML( $file );
+                                        @$doc->loadXML( $file );
 					$items = $doc->getElementsByTagName('item');
 					$metacafeResult = array();
 					$preResult = array();
@@ -51,8 +51,8 @@ class VideoEmbedTool {
 					$metacafeResult['page'] = $page;
 					$count = 0;
 					foreach( $items as $item ) {
-						$links= split( "/", $item->getElementsByTagName('link')->item(0)->textContent );
-						$link = array_pop( $links ); 
+						$link= split( "/", $item->getElementsByTagName('link')->item(0)->textContent );
+						$link = $links[count( $links ) -2]; 
 						$preResult[] = array( 
 							'provider' => 'metacafe',
 							'title' => $item->getElementsByTagName('title')->item(0)->textContent,
