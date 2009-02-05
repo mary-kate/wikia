@@ -73,6 +73,7 @@ class CategorySelect {
 		$out = array();
 		if ($root->hasChildNodes()) {
 			$nodes = &$root->childNodes;
+			$nodesToDelete = array();	//iterating through the childNodes array and removing those children will stop the iteration
 			foreach ($nodes as $node) {
 				switch ($node->nodeType) {
 					case XML_ELEMENT_NODE:
@@ -89,7 +90,10 @@ class CategorySelect {
 									$childOut = self::parseNode($inner, $tmpOuterTag);
 									if (count($childOut)) {
 										$out = array_merge($out, $childOut);
-										$node->replaceChild($inner, $node->getElementsByTagName('inner')->item(0));
+										//remove tags when there is no content after removing category
+										if ($inner->textContent == '') {
+											$nodesToDelete[] = $node;
+										}
 									}
 								}
 								break;
@@ -184,6 +188,12 @@ class CategorySelect {
 				}
 				self::$maybeCategoryBegin[self::$nodeLevel] = isset(self::$maybeCategoryBegin[self::$nodeLevel]) ? self::$maybeCategoryBegin[self::$nodeLevel] + 1 : 1;
 			}
+
+			//delete marked nodes - one can't do it in foreach loop
+			foreach ($nodesToDelete as $node) {
+				$node->parentNode->removeChild($node);
+			}
+
 		}
 		self::$nodeLevel--;
 		return $out;

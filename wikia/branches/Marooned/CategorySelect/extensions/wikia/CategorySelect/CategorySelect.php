@@ -206,7 +206,8 @@ function CategorySelectImportFormData($editPage, $request) {
 function CategorySelectGetCategoryLinks($categoryLinks) {
 	global $wgCategorySelectMetaData, $wgRequest;
 
-	if ($wgRequest->getVal('action', 'view') != 'view') {
+	$action = $wgRequest->getVal('action', 'view');
+	if ($action != 'view' && $action != 'purge') {
 		if (!is_array($wgCategorySelectMetaData)) {
 			global $wgTitle;
 			$rev = Revision::newFromTitle($wgTitle);
