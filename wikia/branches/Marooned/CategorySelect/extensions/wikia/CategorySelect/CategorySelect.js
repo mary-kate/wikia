@@ -2,12 +2,15 @@ var Event = YAHOO.util.Event;
 var Dom = YAHOO.util.Dom;
 var categories;
 //HTML IDs
-inputId = 'myInput';
-suggestContainerId = 'myContainer';
-mainContainerId = 'myAutoComplete';
-categoryFieldId = 'wpCategorySelectWikitext';
-addCategoryButtonText = 'Add category';
-namespace = 'Category';	//TODO: default namespace
+csCategoryInputId = 'csCategoryInput';
+csSuggestContainerId = 'csSuggestContainer';
+csMainContainerId = 'csMainContainer';
+csItemsContainerId = 'csItemsContainer';
+csWikitextContainerId = 'csWikitext';
+csCodeViewId = 'csCodeView';
+csCategoryFieldId = 'wpCategorySelectWikitext';
+csAddCategoryButtonText = 'Add category';	//TODO: move to wfMsg
+csDefaultNamespace = 'Category';	//TODO: default namespace
 
 function deleteCategory(e) {
 	var catId = e.parentNode.parentNode.getAttribute('catId');
@@ -37,11 +40,12 @@ function modifyCategory(e) {
 
 function replaceAddToInput(e) {
 	e.parentNode.removeChild(e);
-	$(inputId).style.display = 'block';
-	$(inputId).focus();
+	$(csCategoryInputId).style.display = 'block';
+	$(csCategoryInputId).focus();
 }
 
 function addAddCategoryButton() {
+	YAHOO.log('addAddCategoryButton: begin');
 	elementA = document.createElement('a');
 	elementA.className = 'CSitem CSaddCategory'; //setAttribute doesn't work in IE
 	elementA.tabindex = '-1';
@@ -52,7 +56,7 @@ function addAddCategoryButton() {
 	elementSpanOuter.className = 'CSitemOuterAddCategory';
 	elementA.appendChild(elementSpanOuter);
 
-	elementText = document.createTextNode(addCategoryButtonText);
+	elementText = document.createTextNode(csAddCategoryButtonText);
 	elementSpanOuter.appendChild(elementText);
 
 	elementSpan = document.createElement('span');
@@ -60,18 +64,19 @@ function addAddCategoryButton() {
 	elementSpan.onclick = function(e) {replaceAddToInput(this); return false;};
 	elementSpanOuter.appendChild(elementSpan);
 
-	$(mainContainerId).insertBefore(elementA, $(suggestContainerId));
+	$(csItemsContainerId).insertBefore(elementA, $(csSuggestContainerId));
+	YAHOO.log('addAddCategoryButton: end');
 }
 
 function inputBlur() {
-	if ($(inputId).value == '') {
-		$(inputId).style.display = 'none';
+	if ($(csCategoryInputId).value == '') {
+		$(csCategoryInputId).style.display = 'none';
 		addAddCategoryButton();
 	}
 }
 
 function addCategory(category, params, index) {
-	YAHOO.log('index = ' + index);
+	YAHOO.log('addCategory: index = ' + index + ', category = ' + category);
 	if (params == undefined) {
 		params = {'outerTag': '', 'sortkey': ''};
 	}
@@ -80,9 +85,8 @@ function addCategory(category, params, index) {
 		index = categories.length;
 	}
 
-	categories[index] = {'namespace': namespace, 'category': category, 'outerTag': params['outerTag'], 'sortkey': params['sortkey']};
+	categories[index] = {'namespace': csDefaultNamespace, 'category': category, 'outerTag': params['outerTag'], 'sortkey': params['sortkey']};
 
-	YAHOO.log('addCategory: ' + category);
 	elementA = document.createElement('a');
 	elementA.className = 'CSitem';	//setAttribute doesn't work in IE
 	elementA.tabindex = '-1';
@@ -106,33 +110,47 @@ function addCategory(category, params, index) {
 	elementSpan.onclick = function(e) {modifyCategory(this); return false;};
 	elementSpanOuter.appendChild(elementSpan);
 
-	$(mainContainerId).insertBefore(elementA, $(inputId));
+	$(csItemsContainerId).insertBefore(elementA, $(csCategoryInputId));
 
-	$(inputId).value = '';
+	$(csCategoryInputId).value = '';
 }
 
-//function generateWikitextForCategories() {
-//	var categoriesStr = '';
-//	for(c in categories) {
-//		catTmp = '[[' + categories[c].namespace + ':' + categories[c].category + (categories[c].sortkey == '' ? '' : ('|' + categories[c].sortkey)) + ']]';
-//		if (categories[c].outerTag != '') {
-//			catTmp = '<' + categories[c].outerTag + '>' + catTmp + '</' + categories[c].outerTag + '>';
-//		}
-//		categoriesStr += catTmp + "\n";
-//	}
-//	return categoriesStr;
-//}
+function generateWikitextForCategories() {
+	YAHOO.log('generateWikitextForCategories: begin');
+	var categoriesStr = '';
+	for(c in categories) {
+		catTmp = '[[' + categories[c].namespace + ':' + categories[c].category + (categories[c].sortkey == '' ? '' : ('|' + categories[c].sortkey)) + ']]';
+		if (categories[c].outerTag != '') {
+			catTmp = '<' + categories[c].outerTag + '>' + catTmp + '</' + categories[c].outerTag + '>';
+		}
+		categoriesStr += catTmp + "\n";
+	}
+	YAHOO.log('generateWikitextForCategories: result = ' + categoriesStr);
+	return categoriesStr;
+}
+
+function toggleCodeView() {
+	if ($(csWikitextContainerId).style.display != 'block') {
+		YAHOO.log('toggleCodeView: switching');
+		$(csWikitextContainerId).innerHTML = generateWikitextForCategories();
+		YAHOO.log('toggleCodeView: value changed');
+		$(csItemsContainerId).style.display = 'none';
+		$(csCodeViewId).style.display = 'none';
+		$(csWikitextContainerId).style.display = 'block';
+		$(csCategoryFieldId).value = '';	//remove JSON - this will inform PHP to use wikitext instead
+	}
+	return false;
+}
 
 Event.onDOMReady(function() {
 	YAHOO.log('onDOMReady');
 
 	//move categories metadata from hidden field [JSON encoded] into array
-	cats = $(categoryFieldId).value;
+	cats = $(csCategoryFieldId).value;
 	categories = cats == '' ? new Array() : eval(cats);
 
 	addAddCategoryButton();
 	for(c in categories) {
-		YAHOO.log(categories[c].category);
 		addCategory(categories[c].category, {'outerTag': categories[c].outerTag, 'sortkey': categories[c].sortkey}, c);
 	}
 
@@ -150,7 +168,7 @@ Event.onDOMReady(function() {
 		if(e.keyCode == 13) {
 			//TODO: stop AJAX call for AutoComplete
 			YAHOO.util.Event.preventDefault(e);
-			category = $(inputId).value;
+			category = $(csCategoryInputId).value;
 			YAHOO.log('enter pressed, value = ' + category);
 			if (category != '') {
 				addCategory(category);
@@ -159,11 +177,11 @@ Event.onDOMReady(function() {
 	};
 
 	//handle [enter] for non existing categories
-	YAHOO.util.Event.addListener(inputId, 'keypress', inputKeyPress);
-	YAHOO.util.Event.addListener(inputId, 'blur', inputBlur);
+	YAHOO.util.Event.addListener(csCategoryInputId, 'keypress', inputKeyPress);
+	YAHOO.util.Event.addListener(csCategoryInputId, 'blur', inputBlur);
 
 	var regularEditorSubmit = function(e) {
-		$(categoryFieldId).value = YAHOO.Tools.JSONEncode(categories);	//generateWikitextForCategories();
+		$(csCategoryFieldId).value = YAHOO.Tools.JSONEncode(categories);	//generateWikitextForCategories();
 	}
 
 	YAHOO.util.Event.addListener(formId, 'submit', regularEditorSubmit);
@@ -174,7 +192,7 @@ Event.onDOMReady(function() {
 	oDataSource.scriptQueryAppend = 'action=ajax&rs=CategorySelectAjaxGetCategories';
 
 	// Init AutoComplete object and assign datasource object to it
-	var oAutoComp = new YAHOO.widget.AutoComplete(inputId, suggestContainerId, oDataSource);
+	var oAutoComp = new YAHOO.widget.AutoComplete(csCategoryInputId, csSuggestContainerId, oDataSource);
 	oAutoComp.autoHighlight = false;
 	oAutoComp.queryDelay = 0.5;
 	oAutoComp.highlightClassName = 'CSsuggestHover';

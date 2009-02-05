@@ -45,7 +45,9 @@ function CategorySelectInit() {
 	$wgHooks['EditPage::CategoryBox'][] = 'CategorySelectCategoryBox';
 	$wgHooks['EditPage::importFormData::finished'][] = 'CategorySelectImportFormData';
 	$wgHooks['EditPage::showEditForm:fields'][] = 'CategorySelectAddFormFields';
+	$wgHooks['EditForm::MultiEdit:Form'][] = 'CategorySelectDisplayCategoryBox';
 	$wgHooks['getCategoryLinks'][] = 'CategorySelectGetCategoryLinks';
+	wfLoadExtensionMessages('CategorySelect');
 }
 
 /**
@@ -146,9 +148,12 @@ function CategorySelectOutput($out, $text) {
  *
  * @author Maciej Błaszkowski <marooned at wikia-inc.com>
  */
-function CategorySelectChangeFormat($categories, $fromJSON) {
-	if ($fromJSON) {
+function CategorySelectChangeFormat($categories, $from, $to) {
+	if ($from == 'json') {
 		$categories = Wikia::json_decode($categories, true);
+	}
+
+	if ($to == 'wiki') {
 		$categoriesStr = '';
 		foreach($categories as $c) {
 			$catTmp = '[[' . $c['namespace'] . ':' . $c['category'] . ($c['sortkey'] == '' ? '' : ('|' . $c['sortkey'])) . ']]';
@@ -158,7 +163,11 @@ function CategorySelectChangeFormat($categories, $fromJSON) {
 			$categoriesStr .= $catTmp . "\n";
 		}
 		return "\n" . $categoriesStr;
-	} else {
+	} elseif ($to == 'array') {
+		return $categories;
+	}
+
+	if ($from == 'array' && $to == 'json') {
 		return Wikia::json_encode($categories);
 	}
 }
@@ -172,7 +181,7 @@ function CategorySelectAddFormFields($editPage, $wgOut) {
 	global $wgCategorySelectMetaData;
 	$categories = '';
 	if (!empty($wgCategorySelectMetaData)) {
-		$categories = htmlspecialchars(CategorySelectChangeFormat($wgCategorySelectMetaData['categories'], false));
+		$categories = htmlspecialchars(CategorySelectChangeFormat($wgCategorySelectMetaData['categories'], 'array', 'json'));
 	}
 	$wgOut->addHTML( "<input type=\"hidden\" value=\"$categories\" name=\"wpCategorySelectWikitext\" id=\"wpCategorySelectWikitext\" />" );
 	return true;
@@ -186,25 +195,25 @@ function CategorySelectAddFormFields($editPage, $wgOut) {
 function CategorySelectImportFormData($editPage, $request) {
 	if ($request->wasPosted()) {
 		$categories = $editPage->safeUnicodeInput($request, 'wpCategorySelectWikitext');
-		$categories = CategorySelectChangeFormat($categories, true);
+		$categories = CategorySelectChangeFormat($categories, 'json', 'wiki');
 
 		if ($editPage->preview) {
 			CategorySelect::SelectCategoryAPIgetData($categories);
 		} else {	//saving article
-			echo '<pre>added to textbox: '; print_r ($categories); echo '</pre>';
 			$editPage->textbox1 .= $categories;
 		}
 	}
 	return true;
 }
 
+
 /**
- * Remove regular category list under article
+ * Display category box
  *
  * @author Maciej Błaszkowski <marooned at wikia-inc.com>
  */
-function CategorySelectGetCategoryLinks($categoryLinks) {
-	global $wgCategorySelectMetaData, $wgRequest;
+function CategorySelectDisplayCategoryBox($rows, $cols, $ew, $textbox) {
+	global $wgCategorySelectMetaData, $wgRequest, $wgOut;
 
 	$action = $wgRequest->getVal('action', 'view');
 	if ($action != 'view' && $action != 'purge') {
@@ -217,7 +226,24 @@ function CategorySelectGetCategoryLinks($categoryLinks) {
 			}
 		}
 
-		$categoryLinks = CategorySelectGenerateHTML('editform');
+		$wgOut->addHTML( CategorySelectGenerateHTML('editform') );
+		return false;
+	}
+	return true;
+}
+
+/**
+ * Remove regular category list under article
+ *
+ * @author Maciej Błaszkowski <marooned at wikia-inc.com>
+ */
+function CategorySelectGetCategoryLinks($categoryLinks) {
+	global $wgRequest;
+
+	$action = $wgRequest->getVal('action', 'view');
+	//remove it for edit page
+	if ($action == 'edit' || $action == 'submit') {
+		$categoryLinks = '';
 		return false;
 	}
 	return true;
@@ -231,22 +257,24 @@ function CategorySelectGetCategoryLinks($categoryLinks) {
 function CategorySelectGenerateHTML($formId = '') {
 	global $wgOut, $wgExtensionsPath, $wgStyleVersion, $wgCategorySelectMetaData;
 
-//	$categoriesJSON = 'new Array();';
-//	if (!empty($wgCategorySelectMetaData)) {
-//		$categoriesJSON = CategorySelectChangeFormat($wgCategorySelectMetaData['categories'], false);
-//	}
-//	$wgOut->addScript("<script type=\"text/javascript\">var categories = $categoriesJSON;</script>");
 	$wgOut->addScript("<script type=\"text/javascript\">var formId = '$formId';</script>");
 	$wgOut->addScript("<script type=\"text/javascript\" src=\"$wgExtensionsPath/wikia/CategorySelect/CategorySelect.js?$wgStyleVersion\"></script>");
 	$wgOut->addScript("<link rel=\"stylesheet\" type=\"text/css\" href=\"$wgExtensionsPath/wikia/CategorySelect/CategorySelect.css?$wgStyleVersion\" />");
 
-	//TODO: change IDs to more intuitive and related to this extension [also in .js]
+	$categories = CategorySelectChangeFormat($wgCategorySelectMetaData['categories'], 'array', 'wiki');
+
 	$result = '
-	<div id="myAutoComplete">
-		<input id="myInput" type="text" style="display: none" />
-		<div id="myContainer"></div>
+	<script type="text/javascript">document.write(\'<style type="text/css">#csWikitext {display: none}</style>\');</script>
+	<div id="csMainContainer">
+		<div id="csItemsContainer">
+			<input id="csCategoryInput" type="text" style="display: none" />
+			<div id="csSuggestContainer"></div>
+		</div>
+		<div id="csWikitext"><textarea>' . $categories . '</textarea></div>
+		<div id="csCodeView"><a href="#" onclick="toggleCodeView(); return false;" onfocus="this.blur()" tabindex="-1">' . wfMsg('categoryselect-code-view') . '</a></div>
 		<div class="clearfix"></div>
-	</div>';
+	</div>
+	';
 
 	return $result;
 }
