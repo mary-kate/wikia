@@ -52,6 +52,7 @@ class VideoEmbedTool {
 					$count = 0;
 					foreach( $items as $item ) {
 						$preResult[] = array( 
+							'provider' => 'metacafe',
 							'title' => $item->getElementsByTagName('title')->item(0)->textContent,
 							'id' => $item->getElementsByTagName('id')->item(0)->textContent
 						);
@@ -66,13 +67,13 @@ class VideoEmbedTool {
 			return $tmpl->execute('results_metacafe');
 		} else if($sourceId == 1) { // this wiki, to be done later
 			$db =& wfGetDB(DB_SLAVE);
-			$res = $db->query("SELECT count(*) as count FROM `page` WHERE lower(page_title) LIKE '%".strtolower($db->escapeLike($query))."%' AND page_namespace = 6 ORDER BY page_title ASC LIMIT 8");
+			$res = $db->query("SELECT count(*) as count FROM `page` WHERE lower(page_title) LIKE '%".strtolower($db->escapeLike($query))."%' AND page_namespace = 400 ORDER BY page_title ASC LIMIT 8");
 			$row = $db->fetchRow($res);
 			$results = array();
 			$results['total'] = $row['count'];
 			$results['pages'] = ceil($row['count']/8);
 			$results['page'] = $page;
-			$res = $db->query("SELECT page_title FROM `page` WHERE lower(page_title) LIKE '%".strtolower($db->escapeLike($query))."%' AND page_namespace = 6 ORDER BY page_title ASC LIMIT 8 OFFSET ".($page*8-8));
+			$res = $db->query("SELECT page_title FROM `page` WHERE lower(page_title) LIKE '%".strtolower($db->escapeLike($query))."%' AND page_namespace = 400 ORDER BY page_title ASC LIMIT 8 OFFSET ".($page*8-8));
 			while($row = $db->fetchObject($res)) {
 				$results['images'][] = array('title' => $row->page_title);
 			}
