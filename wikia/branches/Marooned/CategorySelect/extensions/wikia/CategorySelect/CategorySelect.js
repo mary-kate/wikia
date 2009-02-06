@@ -6,8 +6,10 @@ csCategoryInputId = 'csCategoryInput';
 csSuggestContainerId = 'csSuggestContainer';
 csMainContainerId = 'csMainContainer';
 csItemsContainerId = 'csItemsContainer';
-csWikitextContainerId = 'csWikitext';
+csWikitextId = 'csWikitext';
+csWikitextContainerId = 'csWikitextContainer';
 csCodeViewId = 'csCodeView';
+csSourceTypeId = 'wpCategorySelectSourceType';
 csCategoryFieldId = 'wpCategorySelectWikitext';
 csAddCategoryButtonText = 'Add category';	//TODO: move to wfMsg
 csDefaultNamespace = 'Category';	//TODO: default namespace
@@ -116,7 +118,6 @@ function addCategory(category, params, index) {
 }
 
 function generateWikitextForCategories() {
-	YAHOO.log('generateWikitextForCategories: begin');
 	var categoriesStr = '';
 	for(c in categories) {
 		catTmp = '[[' + categories[c].namespace + ':' + categories[c].category + (categories[c].sortkey == '' ? '' : ('|' + categories[c].sortkey)) + ']]';
@@ -125,21 +126,18 @@ function generateWikitextForCategories() {
 		}
 		categoriesStr += catTmp + "\n";
 	}
-	YAHOO.log('generateWikitextForCategories: result = ' + categoriesStr);
 	return categoriesStr;
 }
 
 function toggleCodeView() {
 	if ($(csWikitextContainerId).style.display != 'block') {
-		YAHOO.log('toggleCodeView: switching');
-		$(csWikitextContainerId).innerHTML = generateWikitextForCategories();
-		YAHOO.log('toggleCodeView: value changed');
+		$(csWikitextId).value = generateWikitextForCategories();
 		$(csItemsContainerId).style.display = 'none';
 		$(csCodeViewId).style.display = 'none';
 		$(csWikitextContainerId).style.display = 'block';
 		$(csCategoryFieldId).value = '';	//remove JSON - this will inform PHP to use wikitext instead
+		$(csSourceTypeId).value = 'wiki';	//inform PHP what source should it use
 	}
-	return false;
 }
 
 Event.onDOMReady(function() {
@@ -148,6 +146,9 @@ Event.onDOMReady(function() {
 	//move categories metadata from hidden field [JSON encoded] into array
 	cats = $(csCategoryFieldId).value;
 	categories = cats == '' ? new Array() : eval(cats);
+
+	//inform PHP what source should it use
+	$(csSourceTypeId).value = 'json';
 
 	addAddCategoryButton();
 	for(c in categories) {
