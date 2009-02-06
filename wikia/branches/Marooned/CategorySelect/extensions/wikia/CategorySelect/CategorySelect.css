@@ -84,6 +84,14 @@
 	right: 4px;
 }
 
+/** fix for Opera **/
+html>/**/body .CSitemOuter > .CScontrolRemove {
+	clip: rect(auto, auto, auto, auto);
+	background-position: right center;
+	width: 12px;
+	z-index: 2;
+}
+
 .CScontrolSort {
 	clip: rect(0px 36px 14px 24px);
 	right: 4px;
