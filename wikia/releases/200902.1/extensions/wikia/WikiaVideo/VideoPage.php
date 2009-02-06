@@ -1,4 +1,9 @@
 <?php
+
+$dir = dirname(__FILE__).'/';
+global $wgExtensionMessagesFiles;
+$wgExtensionMessagesFiles['WikiaVideo'] = $dir.'/WikiaVideo.i18n.php';
+
 // main video page class
 class VideoPage extends Article {
 
@@ -18,6 +23,7 @@ class VideoPage extends Article {
 	const V_VIMEO = 13;
 	const V_CLIPFISH = 14;
 	const V_MYVIDEO = 15;
+	const V_SOUTHPARKSTUDIOS = 16;
 
 	var	$mName,
 		$mId,
@@ -26,7 +32,8 @@ class VideoPage extends Article {
 		$mDataline;
 
         function __construct (&$title){
-                parent::__construct(&$title);
+		wfLoadExtensionMessages('WikiaVideo');
+		parent::__construct(&$title);
         }
 
         function render() {
@@ -226,6 +233,23 @@ class VideoPage extends Article {
 			}
 		}
 
+		$text = strpos( $fixed_url, "SOUTHPARKSTUDIOS.COM" );
+		if( false !== $text ) { // southparkstudios
+			$provider = self::V_SOUTHPARKSTUDIOS;
+			$parsed = split( "/", $url );
+			if( is_array( $parsed ) ) {
+				$mdata = array_pop( $parsed );	
+				if ('' != $mdata) {
+					$this->mId = $mdata;
+				} else {
+					$this->mId = array_pop( $parsed );				
+				}
+				$this->mProvider = $provider;
+				$this->mData = array();					
+				return true;
+			}
+		}
+
 		return false;
 	}
 
@@ -253,6 +277,8 @@ class VideoPage extends Article {
 			case "myvideo":
 				return (470 / 406);
 				break;
+			case "southparkstudios":
+				return ( 480 / 400 );
 			default:
 				return 1;
 				break;
@@ -301,6 +327,9 @@ class VideoPage extends Article {
 			case "vimeo":
 				return 'http://www.vimeo.com/' . $id;
 				break;
+			case "southparkstudios":
+				return 'http://www.southparkstudios.com/clips/' . $id;
+				break;	
 			default:
 				return '';
 		}
@@ -337,6 +366,7 @@ class VideoPage extends Article {
 			case 'youtube':		
 			case 'gamevideos':
 			case 'vimeo':		
+			case 'southparkstudios':
 				$metadata = $this->mProvider . ',' . $this->mId . ',';
 				break;
 			default: 
@@ -481,6 +511,10 @@ class VideoPage extends Article {
 				$code = 'custom';
 				$embed = '<object width="'.$width.'" height="'.$height.'"><param name="allowfullscreen" value="true" /><param name="wmode" value="transparent"><param name="allowscriptaccess" value="always" /><param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id='.$this->mId.'&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=&amp;fullscreen=1" /><embed src="http://vimeo.com/moogaloop.swf?clip_id='.$this->mId.'&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=&amp;fullscreen=1" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="'.$width.'" height="'.$height.'"></embed></object>';
 				break;
+			case 'southparkstudios':
+				$code = 'custom';
+				$embed = '<embed src="http://media.mtvnservices.com/mgid:cms:item:southparkstudios.com:' . $this->mId . '" width="' . $width . '" height="' . $height . '" type="application/x-shockwave-flash" wmode="window" flashVars="autoPlay=false&dist=http://www.southparkstudios.com&orig=" allowFullScreen="true" allowScriptAccess="always" allownetworking="all" bgcolor="#000000"></embed>';
+				break;
                         default: break;
                 }	
 			if( 'custom' != $code ) { 
@@ -515,7 +549,8 @@ $wgWikiaVideoProviders = array(
 		VideoPage::V_SEVENLOAD => 'sevenload',
 		VideoPage::V_VIMEO => 'vimeo',
 		VideoPage::V_CLIPFISH => 'clipfish',
-		VideoPage::V_MYVIDEO => 'myvideo'	
+		VideoPage::V_MYVIDEO => 'myvideo',
+		VideoPage::V_SOUTHPARKSTUDIOS => 'southparkstudios',
 		);
 
 class VideoHistoryList {
