@@ -183,7 +183,8 @@ function CategorySelectAddFormFields($editPage, $wgOut) {
 	if (!empty($wgCategorySelectMetaData)) {
 		$categories = htmlspecialchars(CategorySelectChangeFormat($wgCategorySelectMetaData['categories'], 'array', 'json'));
 	}
-	$wgOut->addHTML( "<input type=\"hidden\" value=\"$categories\" name=\"wpCategorySelectWikitext\" id=\"wpCategorySelectWikitext\" />" );
+	$wgOut->addHTML("<input type=\"hidden\" value=\"$categories\" name=\"wpCategorySelectWikitext\" id=\"wpCategorySelectWikitext\" />");
+	$wgOut->addHTML('<input type="hidden" value="wiki" id="wpCategorySelectSourceType" name="wpCategorySelectSourceType" />');
 	return true;
 }
 
@@ -194,8 +195,13 @@ function CategorySelectAddFormFields($editPage, $wgOut) {
  */
 function CategorySelectImportFormData($editPage, $request) {
 	if ($request->wasPosted()) {
-		$categories = $editPage->safeUnicodeInput($request, 'wpCategorySelectWikitext');
-		$categories = CategorySelectChangeFormat($categories, 'json', 'wiki');
+		$sourceType = $request->getVal('wpCategorySelectSourceType');
+		if ($sourceType == 'wiki') {
+			$categories = $editPage->safeUnicodeInput($request, 'csWikitext');
+		} else {	//json
+			$categories = $editPage->safeUnicodeInput($request, 'wpCategorySelectWikitext');
+			$categories = CategorySelectChangeFormat($categories, 'json', 'wiki');
+		}
 
 		if ($editPage->preview) {
 			CategorySelect::SelectCategoryAPIgetData($categories);
@@ -264,13 +270,13 @@ function CategorySelectGenerateHTML($formId = '') {
 	$categories = CategorySelectChangeFormat($wgCategorySelectMetaData['categories'], 'array', 'wiki');
 
 	$result = '
-	<script type="text/javascript">document.write(\'<style type="text/css">#csWikitext {display: none}</style>\');</script>
+	<script type="text/javascript">document.write(\'<style type="text/css">#csWikitextContainer {display: none}</style>\');</script>
 	<div id="csMainContainer">
 		<div id="csItemsContainer">
 			<input id="csCategoryInput" type="text" style="display: none" />
 			<div id="csSuggestContainer"></div>
 		</div>
-		<div id="csWikitext"><textarea>' . $categories . '</textarea></div>
+		<div id="csWikitextContainer"><textarea id="csWikitext" name="csWikitext">' . $categories . '</textarea></div>
 		<div id="csCodeView"><a href="#" onclick="toggleCodeView(); return false;" onfocus="this.blur()" tabindex="-1">' . wfMsg('categoryselect-code-view') . '</a></div>
 		<div class="clearfix"></div>
 	</div>
