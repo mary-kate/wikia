@@ -104,6 +104,7 @@
 	height: 1%;
 }
 
+/** TODO: when merged with trunk, change the path to http://images.wikia.com/common/extensions/wikia/CategorySelect/sprite.png **/
 * html .CScontrol {
 	background-image: none;
 	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='sprite.png', sizingMethod='crop');
