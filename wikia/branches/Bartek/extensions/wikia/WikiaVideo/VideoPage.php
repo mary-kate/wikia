@@ -394,6 +394,9 @@ class VideoPage extends Article {
 				// entire site is in German? I need help here
 				$exists = true;
 				break;
+			case "southpark": // todo verify if exists
+				$exists = true;
+				break;
 			default:
 				break;
 		}
