@@ -206,7 +206,7 @@ function CategorySelectImportFormData($editPage, $request) {
 		if ($editPage->preview) {
 			CategorySelect::SelectCategoryAPIgetData($categories);
 		} else {	//saving article
-			$editPage->textbox1 .= $categories;
+			$editPage->textbox1 .= "\n" . $categories;
 		}
 	}
 	return true;
@@ -233,7 +233,6 @@ function CategorySelectDisplayCategoryBox($rows, $cols, $ew, $textbox) {
 		}
 
 		$wgOut->addHTML( CategorySelectGenerateHTML('editform') );
-		return false;
 	}
 	return true;
 }
@@ -267,7 +266,7 @@ function CategorySelectGenerateHTML($formId = '') {
 	$wgOut->addScript("<script type=\"text/javascript\" src=\"$wgExtensionsPath/wikia/CategorySelect/CategorySelect.js?$wgStyleVersion\"></script>");
 	$wgOut->addScript("<link rel=\"stylesheet\" type=\"text/css\" href=\"$wgExtensionsPath/wikia/CategorySelect/CategorySelect.css?$wgStyleVersion\" />");
 
-	$categories = CategorySelectChangeFormat($wgCategorySelectMetaData['categories'], 'array', 'wiki');
+	$categories = is_null($wgCategorySelectMetaData) ? '' : CategorySelectChangeFormat($wgCategorySelectMetaData['categories'], 'array', 'wiki');
 
 	$result = '
 	<script type="text/javascript">document.write(\'<style type="text/css">#csWikitextContainer {display: none}</style>\');</script>
