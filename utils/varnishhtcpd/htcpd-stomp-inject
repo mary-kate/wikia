@@ -1,0 +1,121 @@
+#!/usr/bin/perl
+
+# varnishhtpcd      Translates multicast htcp to varnish local http purge
+#
+# chkconfig: - 90 10
+# description: HTCP2Varnish purger
+
+#
+# Released under some license as perl AL || GPL
+#
+# Requires the second patch at http://varnish.projects.linpro.no/ticket/265
+#
+
+
+use strict;
+use URI;
+use warnings;
+
+use Socket;
+use IO::Socket;
+use LWP::UserAgent;
+use Net::Stomp;
+
+my $ip_add_membership;
+if($^O eq 'linux') {
+    $ip_add_membership = 35;
+} else {
+    die "no constants for non linux platforms";
+}
+
+use Working::Daemon;
+my $daemon = Working::Daemon->new();
+
+$daemon->parse_options(
+    'mcast_port=i' => 4827 => "htcp multicast port to listen to",
+    'mcast_address=s' => "224.0.0.85" => "htcp multicast port",
+    'cache=s@' => [] => 'Where to purge',
+    'address=s'=> '0.0.0.0' => 'Interface to listen to',
+    'debug'    => 0 =>  "Debugging",
+    );
+
+
+
+$daemon->do_action;
+use Data::Dumper;
+print Dumper($daemon->options);
+
+use threads;
+use threads::shared;
+my %servers;
+my %servers_count_success : shared;
+my %servers_count_fail : shared;
+my @errors : shared;
+use Thread::Queue;
+
+
+my $admin = threads->create(sub {
+    my $sock = IO::Socket::INET->new
+        (Listen    => 5,
+         LocalAddr => 'localhost',
+         LocalPort => 9001,
+         Proto     => 'tcp',
+         Reuse     => 1
+        );
+    while(my $connection = $sock->accept) {
+	$connection->print("# Server\tPending\tDelivered\tFailed\n");
+        close($connection);
+    }
+    		});
+
+
+my $listen = IO::Socket::INET->new(
+                                   LocalPort => $daemon->options->{'mcast_port'},
+                                   Type      => SOCK_DGRAM,
+                                   Proto     => 'udp',
+                                   ) || die;
+
+
+setsockopt($listen, 0, $ip_add_membership,,
+           pack("a4 a4", inet_aton($daemon->options->{'mcast_address'}), inet_aton($daemon->options->{address})))
+    || die "IP_ADD_MEMBERSHIP: $!"; 
+
+my $stomp = Net::Stomp->new({hostname=>'mq1', port=>'61613'});
+$stomp->connect({login=>'guest', passcode=>'guest'});
+
+
+
+while(1) {
+  my $raw;
+  my ($len, $datalen, $op, $id, $specifier,$extra);
+  my ($method, $url, $version, $nr3);
+  eval {
+    $0 = $daemon->name . " worker - waiting for net";
+
+    (my $peer = recv($listen, $raw, 512, 0)) || die "recv: $!";
+    my ($port, $addr) = sockaddr_in($peer);
+
+    # reverse engineered from mediawiki SquidUpdate.php
+    
+    ($len, $datalen, $op, $id, $specifier,$extra) = unpack("nxxnCxNxxa*n", $raw);    
+    ($method, $url, $version, $nr3) = unpack("n/an/an/an", $specifier); 
+    
+    $0 = $daemon->name ." worker - purging $url";
+
+    $stomp->send({destination=> 'wikia.purges',
+		  exchange => "amq.topic",
+		  bytes_message => 1,
+		  body => $url});
+
+  };
+  if($@) {
+    no warnings;
+    warn "$@\n";
+    warn "$len, $datalen, $op, $id, $specifier,$extra\n";
+    warn "$method, $url, $version, $nr3\n";
+  }
+}
+
+exit;
+
+1;
