@@ -102,7 +102,7 @@
 	'gl' => 'Galego',		# Galician
 	'glk' => 'Ú¯ÛŒÙ„Ú©ÛŒ',	# Gilaki
 	'gn' => 'AvaÃ±e\'áº½',	# GuaranÃ­, Paraguayan
-	'got' => 'í €í¼²í €í¼¿í €í½„í €í¼¹í €í½ƒí €í¼º',	# Gothic
+	'got' => 'ğŒ²ğŒ¿ğ„ğŒ¹ğƒğŒº',	# Gothic
 	'grc' => 'á¼ˆÏÏ‡Î±Î¯Î± á¼‘Î»Î»Î·Î½Î¹Îºá½´', # Ancient Greece
 	'gsw' => 'Alemannisch',	# Alemannic
 	'gu' => 'àª—à«àªœàª°àª¾àª¤à«€',	# Gujarati

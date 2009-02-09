@@ -47,6 +47,8 @@ $messages = array(
 'tog-watchlisthideown'        => 'ವೀಕ್ಷಣಾಪಟ್ಟಿಡ್ ಎನ್ನ ಸಂಪಾದನೆಲೆನ್ ತೊಜ್’ಪಾವೊಚಿ',
 'tog-watchlisthidebots'       => 'ವೀಕ್ಷಣಾಪಟ್ಟಿಡ್ ಬಾಟ್ ಸಂಪಾದನೆಲೆನ್ ದೆಂಗಾಲೆ',
 'tog-watchlisthideminor'      => 'ಎಲ್ಯ ಬದಲಾವಣೆಲೆನ್ ವೀಕ್ಷಣಾಪಟ್ಟಿರ್ದ್ ದೆಂಗಾಲೆ',
+'tog-watchlisthideliu'        => 'ಲಾಗಿನ್ ಆತಿನಂಚಿನ ಸದಸ್ಯೆರ್’ನ ಸಂಪಾದನೆಲೆನ್ ವೀಕ್ಷಣಾಪಟ್ಟಿರ್ದ್ ದೆಂಗಾಲೆ',
+'tog-watchlisthideanons'      => 'ಪುದರಿಜ್ಜಂದಿನ ಬಳಕೆದಾರನ ಸಂಪಾದನೆಲೆನ್ ವೀಕ್ಷಣಾಪಟ್ಟಿರ್ದ್ ದೆಂಗಾಲೆ',
 'tog-ccmeonemails'            => 'ಯಾನ್ ಬೇತೆ ಸದಸ್ಯೆರೆಗ್ ಕಡಪುಡ್ಪುನಂಚಿನ ಇ-ಮೇಲ್’ಲೆದ ಪ್ರತಿಲೆನ್(copy) ಎಂಕ್ ಕಡಪುಡ್ಲೆ',
 'tog-diffonly'                => 'ವ್ಯತ್ಯಾಸದ ತಿರ್ತುಪ್ಪುನಂಚಿನ ಪುಟೊತ ವಿವರೊಲೆನ್ ತೊಜ್’ಪಾವೊಚಿ',
 'tog-showhiddencats'          => 'ದೆಂಗಾದಿನ ವರ್ಗೊಲೆನ್ ತೊಜ್ಪಾಲೆ',
@@ -148,6 +150,7 @@ $messages = array(
 'mytalk'         => 'ಎನ್ನ ಚರ್ಚೆ',
 'anontalk'       => 'ಈ ಐ.ಪಿ ಗ್ ಪಾತೆರ್’ಲೆ',
 'navigation'     => 'ಸಂಚಾರ',
+'and'            => '&#32;ಬೊಕ್ಕ',
 
 # Metadata in edit box
 'metadata_help' => 'ಮೂಲಮಾಹಿತಿ:',
@@ -210,8 +213,6 @@ $messages = array(
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
 'aboutsite'            => '{{SITENAME}} ದ ಬಗ್ಗೆ',
 'aboutpage'            => 'Project:ನಮ್ಮ ಬಗ್ಗೆ',
-'bugreports'           => 'ದೋಷ ವರದಿಲು',
-'bugreportspage'       => 'Project:ದೋಷ ವರದಿಲು',
 'copyright'            => 'ಉಂದು ಈ ಕಾಪಿರೈಟ್‌ಡ್ ಲಭ್ಯವುಂಡು $1.',
 'copyrightpagename'    => '{{SITENAME}} ಕಾಪಿರೈಟ್',
 'copyrightpage'        => '{{ns:project}}:ಕೃತಿಸ್ವಾಮ್ಯತೆಲು',
@@ -234,6 +235,7 @@ $messages = array(
 
 'badaccess'        => 'ಅನುಮತಿ ದೋಷ',
 'badaccess-group0' => 'ಈರ್ ಕೇನಿನ ಬೇಲೆನ್ ಮಲ್ಪೆರೆ ಇರೆಗ್ ಅನುಮತಿ ಇಜ್ಜಿ.',
+'badaccess-groups' => 'ಈರ್ ಕೇನಿನಂಚಿನ ಕ್ರಿಯೆ ಖಾಲಿ $1 ಗುಂಪುಲೆಡ್ ಒಂಜೆಕ್ ಸೇರ್ದುಪ್ಪುನ ಬಳಕೆದಾರೆರೆಗ್ ಮಾತ್ರ.',
 
 'versionrequired'     => 'ಮೀಡಿಯವಿಕಿಯದ $1 ನೇ ಅವೃತ್ತಿ ಬೋಡು',
 'versionrequiredtext' => 'ಈ ಪುಟೊನು ತೂಯೆರೆ ಮೀಡಿಯವಿಕಿಯದ $1 ನೇ ಆವೃತ್ತಿ ಬೋಡು. 
@@ -334,6 +336,8 @@ $1',
 'hr_tip'          => 'ಅಡ್ಡ ಗೆರೆ(ಆಯಿನಾತ್ ಕಮ್ಮಿ ಉಪಯೋಗಿಸಾಲೆ)',
 
 # Edit pages
+'summary'                => 'ಸಾರಾಂಶ:',
+'subject'                => 'ವಿಷಯ/ಮುಖ್ಯಾ೦ಶ:',
 'minoredit'              => 'ಉಂದು ಎಲ್ಯ ಬದಲಾವಣೆ',
 'watchthis'              => 'ಈ ಪುಟೊನು ತೂಲೆ',
 'savearticle'            => 'ಪುಟೊನು ಒರಿಪಾಲೆ',
@@ -347,6 +351,8 @@ $1',
 ಈರ್ ಪಿರ 'ಒರಿಪಾಲೆ' ಬಟನ್ ನ್ ಒತ್ತ್೦ಡ ಸಾರಾ೦ಶ ಇಜ್ಜ೦ದೆನೇ ಈರ್ನ ಬದಲಾವಣೆ ದಾಖಲಾಪು೦ಡು.",
 'missingcommenttext'     => 'ದಯ ಮಲ್ತ್ ದ ಈರ್ನ ಅಭಿಪ್ರಾಯನ್ ತಿರ್ತ್ ಕೊರ್ಲೆ',
 'missingcommentheader'   => "'''ಗಮನಿಸಾಲೆ:''' ಈರ್ ಈ ಅಭಿಪ್ರಾಯಗ್ \"ವಿಷಯ/ಮುಖ್ಯಾ೦ಶ\" ದಾಲ ಕೊರ್ತಿಜರ್. ಈರ್ ಪಿರ ’ಒರಿಪಾಲೆ’ ಬಟನ್ ನ್ ಒತ್ತ್೦ಡ ಈರ್ನ ಬದಲಾವಣೆ ವಿಷಯ/ಮುಖ್ಯಾ೦ಶ ಇಜ್ಜ೦ದನೇ ಒರಿಪ್ಪಾವು೦ಡು.",
+'summary-preview'        => 'ಸಾರಾ೦ಶ ಮುನ್ನೋಟ:',
+'subject-preview'        => 'ವಿಷಯ/ಮುಖ್ಯಾ೦ಶದ ಮುನ್ನೋಟ:',
 'blockedtitle'           => 'ಈ ಸದಸ್ಯೆರೆನ್ ತಡೆ ಮಲ್ತ್ ದ್೦ಡ್.',
 'newarticletext'         => "ನನಲ ಅಸ್ಥಿತ್ವಡ್ ಉಪ್ಪಂದಿನ ಪುಟೊಗು ಈರ್ ಬೈದರ್.
 ಈ ಪುಟೊನು ಸೃಷ್ಟಿ ಮಲ್ಪೆರೆ ತಿರ್ತ್’ದ ಚೌಕೊಡು ಬರೆಯೆರೆ ಸುರು ಮಲ್ಪುಲೆ.
@@ -380,12 +386,13 @@ $1',
 'editundo'                => 'ದುಂಬುದಲೆಕ',
 
 # Search results
-'noexactmatch' => "'''\"\$1\". ಅ೦ಚಿನ ವಾ ಪುಟಲಾ ಇಜ್ಜಿ. '''
+'noexactmatch'   => "'''\"\$1\". ಅ೦ಚಿನ ವಾ ಪುಟಲಾ ಇಜ್ಜಿ. '''
 ಈರ್ [[:\$1| ಐನ್ ಸುರು ಮಲ್ಪೊಲಿ]].",
-'prevn'        => 'ದುಂಬುದ $1',
-'nextn'        => 'ಬೊಕ್ಕದ $1',
-'viewprevnext' => 'ತೂಲೆ ($1) ($2) ($3)',
-'powersearch'  => 'ನಾಡ್’ಲೆ',
+'prevn'          => 'ದುಂಬುದ $1',
+'nextn'          => 'ಬೊಕ್ಕದ $1',
+'viewprevnext'   => 'ತೂಲೆ ($1) ($2) ($3)',
+'searchhelp-url' => 'Help:ಪರಿವಿಡಿ',
+'powersearch'    => 'ನಾಡ್’ಲೆ',
 
 # Preferences page
 'mypreferences' => 'ಎನ್ನ ಪ್ರಾಶಸ್ತ್ಯಲು',
@@ -419,7 +426,7 @@ $1',
 # Upload
 'upload' => 'ಫೈಲ್ ಅಪ್ಲೋಡ್',
 
-# Image description page
+# File description page
 'filehist'            => 'ಫೈಲ್’ದ ಇತಿಹಾಸ',
 'filehist-help'       => 'ಫೈಲ್ ಆ ದಿನೊಟು ಎಂಚ ಇತ್ತ್’ನ್ಡ್’ನ್ದ್ ತೂಯೆರೆ ಆ ದಿನ/ಪೊರ್ತುದ ಮಿತ್ತ್ ಕ್ಲಿಕ್ ಮಲ್ಪುಲೆ.',
 'filehist-current'    => 'ಪ್ರಸಕ್ತ',
@@ -458,10 +465,12 @@ $1',
 'watching'   => 'ವೀಕ್ಷಣಾಪಟ್ಟಿಗ್ ಸೇರ್ಪಾವೊಂದುಂಡು...',
 'unwatching' => 'ವೀಕ್ಷಣಾಪಟ್ಟಿರ್ದ್ ದೆತ್ತೊಂದುಂಡು...',
 
-# Delete/protect/revert
+# Delete
 'deletedarticle' => '"$1" ನೆನ್ನ್ ದೆತ್ತ್ ದಾ೦ಡ್',
 'dellogpage'     => 'ಡಿಲೀಟ್ ಮಲ್ತಿನ ಫೈಲ್’ಲೆದ ದಾಖಲೆ',
-'rollbacklink'   => 'ಪಿರ ಪೋಲೆ',
+
+# Rollback
+'rollbacklink' => 'ಪಿರ ಪೋಲೆ',
 
 # Namespace form on various pages
 'namespace'      => 'ನೇಮ್-ಸ್ಪೇಸ್:',
@@ -536,6 +545,8 @@ $1',
 'tooltip-watch'                   => 'ಈ ಪುಟನ್ ಈರ್ನ ತೂಪುನ ಪಟ್ಟಿಗ್ ಸೇರ್ಸಾಲೆ',
 'tooltip-recreate'                => 'ಈ ಪುಟ ಇತ್ತೆ ಇಜ್ಜ೦ಡಲಾ ಐನ್ ಪಿರ ಮಲ್ಪ್',
 'tooltip-upload'                  => 'ಅಪ್ಲೋಡ್ ಸುರು ಮಲ್ಪು',
+'tooltip-rollback'                => '"Rollback", ಈ ಪುಟದ ಕರಿನ ಬದಾಲವಣೆಗ್ ಒ೦ಜಿ ಕ್ಲಿಕ್ ಡ್ ಕೊನೊಪು೦ಡು',
+'tooltip-undo'                    => '"Undo" ಈ ಬದಲಾವಣೆನ್ ದೆತೊನುಜಿ ಬುಕ ಪ್ರಿವ್ಯೂ ಮೋಡ್ ಡ್ ಬದಲಾವಣೆ ಮಲ್ಪೆರ್ ಕೊನೊಪು೦ಡು. ಅ೦ಚೆನೆ ಸಮ್ಮರಿ ಡ್ ಬದಲಾವಣೆ ಗ್ ಕಾರಣ ಕೊರ್ರ್‍ಎ ಆಪು೦ಡು.',
 
 # Browsing diffs
 'previousdiff' => '← ದುಂಬುದ ಸಂಪಾದನೆ',

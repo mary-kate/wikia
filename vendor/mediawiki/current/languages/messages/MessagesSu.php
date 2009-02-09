@@ -17,22 +17,107 @@ $fallback = 'id';
 $namespaceNames = array(
 	NS_MEDIA          => 'Média',
 	NS_SPECIAL        => 'Husus',
-	NS_MAIN           => '',
 	NS_TALK           => 'Obrolan',
 	NS_USER           => 'Pamaké',
 	NS_USER_TALK      => 'Obrolan_pamaké',
-	# NS_PROJECT set by $wgMetaNamespace
 	NS_PROJECT_TALK   => 'Obrolan_$1',
-	NS_IMAGE          => 'Gambar',
-	NS_IMAGE_TALK     => 'Obrolan_gambar',
-	NS_MEDIAWIKI      => 'MediaWiki',
-	NS_MEDIAWIKI_TALK => 'Obrolan_MediaWiki',
+	NS_FILE           => 'Gambar',
+	NS_FILE_TALK      => 'Obrolan_gambar',
+	NS_MEDIAWIKI      => 'MédiaWiki',
+	NS_MEDIAWIKI_TALK => 'Obrolan MédiaWiki',
 	NS_TEMPLATE       => 'Citakan',
 	NS_TEMPLATE_TALK  => 'Obrolan_citakan',
 	NS_HELP           => 'Pitulung',
 	NS_HELP_TALK      => 'Obrolan_pitulung',
 	NS_CATEGORY       => 'Kategori',
 	NS_CATEGORY_TALK  => 'Obrolan_kategori',
+);
+
+$namespaceAliases = array(
+	'Obrolan_MediaWiki' => NS_MEDIAWIKI_TALK,
+);
+
+$specialPageAliases = array(
+	'DoubleRedirects'           => array( 'AlihanGanda' ),
+	'BrokenRedirects'           => array( 'AlihanPegat' ),
+	'Disambiguations'           => array( 'Disambiguasi' ),
+	'Userlogin'                 => array( 'AsupLog' ),
+	'Userlogout'                => array( 'KaluarLog' ),
+	'CreateAccount'             => array( 'NyieunRekening' ),
+	'Preferences'               => array( 'Preferensi' ),
+	'Watchlist'                 => array( 'Awaskeuneun' ),
+	'Recentchanges'             => array( 'AnyarRobah' ),
+	'Upload'                    => array( 'Kunjal' ),
+	'Listfiles'                 => array( 'DaptarGambar' ),
+	'Newimages'                 => array( 'GambarAnyar' ),
+	'Listusers'                 => array( 'DaptarPamake' ),
+	'Listgrouprights'           => array( 'DaptarHakPamake' ),
+	'Statistics'                => array( 'Statistika' ),
+	'Randompage'                => array( 'Acak', 'KacaAcak' ),
+	'Lonelypages'               => array( 'KacaNyorangan' ),
+	'Uncategorizedpages'        => array( 'KacaTanpaKategori' ),
+	'Uncategorizedcategories'   => array( 'KategoriTanpaKategori' ),
+	'Uncategorizedimages'       => array( 'GambarTanpaKategori' ),
+	'Uncategorizedtemplates'    => array( 'CitakanTanpaKategori' ),
+	'Unusedcategories'          => array( 'KategoriNganggur' ),
+	'Unusedimages'              => array( 'GambarNganggur' ),
+	'Wantedpages'               => array( 'KacaDiteang', 'TumbuPegat' ),
+	'Wantedcategories'          => array( 'KategoriDiteang' ),
+	'Mostlinked'                => array( 'PalingDitumbu' ),
+	'Mostlinkedcategories'      => array( 'KategoriPalingDitumbu', 'KategoriPalingKapake' ),
+	'Mostlinkedtemplates'       => array( 'CitakanPalingDitumbu', 'CitakanPalingKapake' ),
+	'Mostcategories'            => array( 'KategoriPalingLoba' ),
+	'Mostimages'                => array( 'GambarPalingKapake' ),
+	'Mostrevisions'             => array( 'PalingRevisi' ),
+	'Fewestrevisions'           => array( 'PangjarangnaRevisi' ),
+	'Shortpages'                => array( 'KacaPondok' ),
+	'Longpages'                 => array( 'KacaPanjang' ),
+	'Newpages'                  => array( 'KacaAnyar' ),
+	'Ancientpages'              => array( 'KacaKolot' ),
+	'Deadendpages'              => array( 'KacaBuntu' ),
+	'Protectedpages'            => array( 'KacaDikonci' ),
+	'Protectedtitles'           => array( 'JudulDikonci' ),
+	'Allpages'                  => array( 'SadayaKaca' ),
+	'Prefixindex'               => array( 'IndeksAwalan' ),
+	'Ipblocklist'               => array( 'IPDipeungpeuk' ),
+	'Specialpages'              => array( 'KacaHusus' ),
+	'Contributions'             => array( 'Kontribusi' ),
+	'Emailuser'                 => array( 'SurelekPamake' ),
+	'Confirmemail'              => array( 'KonfirmasiSurelek' ),
+	'Whatlinkshere'             => array( 'NumbuKaDieu' ),
+	'Recentchangeslinked'       => array( 'ParobahanPatali' ),
+	'Movepage'                  => array( 'PindahkeunKaca' ),
+	'Blockme'                   => array( 'PeungpeukKuring' ),
+	'Booksources'               => array( 'SumberPustaka' ),
+	'Categories'                => array( 'Kategori' ),
+	'Export'                    => array( 'Ekspor' ),
+	'Version'                   => array( 'Versi' ),
+	'Allmessages'               => array( 'SadayaTalatah' ),
+	'Blockip'                   => array( 'PeungpeukIP' ),
+	'Undelete'                  => array( 'BolayHapus' ),
+	'Import'                    => array( 'Impor' ),
+	'Lockdb'                    => array( 'KonciDB' ),
+	'Unlockdb'                  => array( 'BukaKonciDB' ),
+	'Userrights'                => array( 'HakPamake' ),
+	'MIMEsearch'                => array( 'SungsiMIME' ),
+	'FileDuplicateSearch'       => array( 'SungsiGambarDuplikat' ),
+	'Unwatchedpages'            => array( 'KacaTeuDiawaskeun' ),
+	'Listredirects'             => array( 'DaptarAlihan' ),
+	'Revisiondelete'            => array( 'HapusRevisi' ),
+	'Unusedtemplates'           => array( 'CitakanNganggur' ),
+	'Randomredirect'            => array( 'AlihanAcak' ),
+	'Mypage'                    => array( 'KacaKuring' ),
+	'Mytalk'                    => array( 'ObrolanKuring' ),
+	'Mycontributions'           => array( 'KontribusiKuring' ),
+	'Listadmins'                => array( 'DaptarKuncen' ),
+	'Listbots'                  => array( 'DaptarBot' ),
+	'Popularpages'              => array( 'KacaPayu' ),
+	'Search'                    => array( 'Sungsi' ),
+	'Resetpass'                 => array( 'GantiSandi' ),
+	'Withoutinterwiki'          => array( 'TanpaInterwiki' ),
+	'MergeHistory'              => array( 'GabungJujutan' ),
+	'Filepath'                  => array( 'JalurKoropak' ),
+	'Invalidateemail'           => array( 'SurelekTeuKaci' ),
 );
 
 $messages = array(
@@ -73,16 +158,17 @@ $messages = array(
 'tog-watchlisthideown'        => 'Sumputkeun éditan kuring dina daptar awaskeuneun',
 'tog-watchlisthidebots'       => 'Sumputkeun éditan bot dina daptar awaskeuneun',
 'tog-watchlisthideminor'      => 'Sumputkeun éditan leutik dina daptar awaskeuneun',
+'tog-watchlisthideliu'        => 'Sumputkeun éditan pamaké nu asup log tina daptar awaskeun',
+'tog-watchlisthideanons'      => 'Sumputkeun éditan pamaké anonim tina daptar awaskeun',
 'tog-nolangconversion'        => 'Tumpurkeun konversi varian',
 'tog-ccmeonemails'            => 'Kirimkeun ogé salinan surélékna ka alamat kuring',
 'tog-diffonly'                => 'Ulah némbongkeun eusi kaca di handapeun béda éditan',
 'tog-showhiddencats'          => 'Témbongkeun kategori nyumput',
+'tog-noconvertlink'           => 'Non-aktifkeun konvérsi judul tumbu',
 
 'underline-always'  => 'Salawasna',
 'underline-never'   => 'Ulah',
 'underline-default' => 'Luyu jeung buhunna panyungsi',
-
-'skinpreview' => '(Pramidang)',
 
 # Dates
 'sunday'        => 'Minggu',
@@ -171,7 +257,7 @@ $messages = array(
 'mytalk'         => 'Obrolan kuring',
 'anontalk'       => 'Obrolan pikeun IP ieu',
 'navigation'     => 'Pituduh',
-'and'            => 'jeung',
+'and'            => '&#32;jeung',
 
 # Metadata in edit box
 'metadata_help' => 'Métadata:',
@@ -234,8 +320,6 @@ $messages = array(
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
 'aboutsite'            => 'Ngeunaan {{SITENAME}}',
 'aboutpage'            => 'Project:Ngeunaan',
-'bugreports'           => 'Laporan kutu',
-'bugreportspage'       => 'Project:Laporan_kutu',
 'copyright'            => 'Sadaya kandungan ieu loka ditangtayungan ku $1',
 'copyrightpagename'    => 'Hak cipta {{SITENAME}}',
 'copyrightpage'        => '{{ns:project}}:Hak cipta',
@@ -258,9 +342,7 @@ $messages = array(
 
 'badaccess'        => 'Kasalahan widi',
 'badaccess-group0' => 'Anjeun teu wenang ngalaksanakeun peta nu dipundut.',
-'badaccess-group1' => 'Peta nu dipundut ngan bisa laksana pikeun pamaké ti gorombolan $1.',
-'badaccess-group2' => 'Peta nu dipundut ngan bisa laksana pikeun pamaké ti salah sahiji gorombolan $1.',
-'badaccess-groups' => 'Peta nu dipundut ngan bisa laksana pikeun pamaké ti salah sahiji gorombolan $1.',
+'badaccess-groups' => 'Peta nu dipundut ngan bisa laksana pikeun pamaké ti salah sahiji {{PLURAL:$2|gorombolan|salah sahiji gorombolan}}: $1.',
 
 'versionrequired'     => 'Butuh MediaWiki vérsi $1',
 'versionrequiredtext' => 'Butuh MediaWiki vérsi $1 pikeun migunakeun ieu kaca. Mangga tingal [[Special:Version|kaca vérsi]]',
@@ -355,7 +437,6 @@ Mangga laporkeun ha ieu ka salasaurang [[Special:ListUsers/sysop|Kuncén]], bari
 'cannotdelete'         => 'Teu bisa ngahapus kaca atawa gambar nu dimaksud (bisa jadi geus aya nu ngahapus saméméhna).',
 'badtitle'             => 'Judul goréng',
 'badtitletext'         => 'Judul kaca nu dipénta teu sah, kosong, atawa judul antarbasa atawa antarwikina salah tumbu.',
-'perfdisabled'         => 'Punten! Fungsi ieu pikeun samentawis ditumpurkeun sabab ngahambat pangkalan data nepi ka titik di mana teu saurang ogé bisa migunakeun wiki.',
 'perfcached'           => 'Data di handap ieu sindangan sahingga--meureun--teu mutahir:',
 'perfcachedts'         => 'Data di handap ieu mah sindangan, panungtungan diropéa téh $1.',
 'querypage-no-updates' => 'Pangrobahan ahir ti kaca ieu keur dipaéhkeun. Data anu aya di dieu ayeuna moal dimuat deui.',
@@ -393,7 +474,6 @@ Tong hilap ngarobih [[Special:Preferences|{{SITENAME}} préferénsi]] anjeun.',
 'remembermypassword'         => 'Inget sandi kuring nembus rintakan.',
 'yourdomainname'             => 'Domain anjeun',
 'externaldberror'            => 'Aya kasalahan dina pangkalan data oténtikasi luar, atawa anjeun mémang teu diwenangkeun pikeun ngaropéa rekening luar anjeun.',
-'loginproblem'               => "<b>Aya masalah na ''login'' anjeun.</b><br />Coba deui!",
 'login'                      => 'Asup log',
 'nav-login-createaccount'    => 'Nyieun rekening atawa asup log',
 'loginprompt'                => "Anjeun kudu boga ''cookies'' sangkan bisa asup log ka {{SITENAME}}.",
@@ -450,8 +530,9 @@ is not allowed to use the password recovery function to prevent abuse.',
 'throttled-mailpassword'     => 'Hiji panginget kecap sandi geus dikirimkeun dina {{PLURAL:$1|jam|$1 jam}} pamungkas. 
 Pikeun ngahindar disalahgunakeun, ngan hiji kecap sandi anu baris dikirimkeun saban {{PLURAL:$1|jam|$1 jam}}.',
 'mailerror'                  => 'Kasalahan ngirim surat: $1',
-'acct_creation_throttle_hit' => 'Punten, anjeun geus nyieun $1 rekening, teu bisa nyieun deui.',
-'emailauthenticated'         => 'Alamat surélék anjeun geus dioténtikasi $1.',
+'acct_creation_throttle_hit' => 'Punten, anjeun geus nyieun {{PLURAL:$1|1 rekening|$1 rekening}}.
+anjeun teu bisa nyieun deui.',
+'emailauthenticated'         => 'Alamat surélék anjeun geus dioténtikasi dina $3, $2.',
 'emailnotauthenticated'      => 'Alamat surélék anjeun <strong>can dioténtikasi</strong>. Moal aya surélék nu bakal dikirim pikeun fitur-fitur di handap ieu.',
 'noemailprefs'               => '<strong>Teu aya alamat surélék</strong>, fitur di handap moal bisa jalan.',
 'emailconfirmlink'           => 'Konfirmasi alamat surélék anjeun',
@@ -470,11 +551,13 @@ Mun ieu rekening balukar ayana éror, teu kudu diwaro.',
 'resetpass_announce'      => 'Anjeun asup log migunakeun sandi samentara. Salajengna, mangga gentos ku sandi anyar di dieu:',
 'resetpass_text'          => '<!-- Tambahkeun téks di dieu -->',
 'resetpass_header'        => 'Ganti sandi rekening',
+'oldpassword'             => 'Sandi heubeul',
+'newpassword'             => 'Sandi anyar:',
+'retypenew'               => 'Ketik ulang sandi',
 'resetpass_submit'        => 'Setél log asup katut sandina',
 'resetpass_success'       => 'Kecap sandi Anjeun geus junun dirobah! Ayeuna proses asup log Anjeun...',
 'resetpass_bad_temporary' => 'Kecap sandi samentara salah. Anjeun meureun kungsi junun ngaganti kecap sandi Anjeun atawa geus ménta kecap sandi anyar.',
 'resetpass_forbidden'     => 'Sandi henteu bisa dirobah',
-'resetpass_missing'       => 'Data formulir teu dipikawanoh.',
 
 # Edit page toolbar
 'bold_sample'     => 'Téks kandel',
@@ -499,8 +582,8 @@ Mun ieu rekening balukar ayana éror, teu kudu diwaro.',
 'hr_tip'          => 'Garis horizontal (use sparingly)',
 
 # Edit pages
-'summary'                          => 'Ringkesan',
-'subject'                          => 'Jejer/Judul',
+'summary'                          => 'Ringkesan:',
+'subject'                          => 'Jejer/Judul:',
 'minoredit'                        => 'Ieu éditan minor',
 'watchthis'                        => 'Awaskeun kaca ieu',
 'savearticle'                      => 'Simpen',
@@ -512,8 +595,8 @@ Mun ieu rekening balukar ayana éror, teu kudu diwaro.',
 'missingsummary'                   => "'''Pépéling:''' Anjeun can ngeusian sari éditan. Mun anjeun ngaklik deui Simpen, éditan anjeun bakal disimpen tanpa sari éditan",
 'missingcommenttext'               => 'Mangga tulis koméntar di handapeun ieu.',
 'missingcommentheader'             => "'''Pépéling:''' Anjeun can ngeusian judul pikeun ieu koméntar. Mun anjeun ngaklik deui Simpen, éditan anjeun bakal disimpen tanpa judul.",
-'summary-preview'                  => 'Ringkesan pramidang',
-'subject-preview'                  => 'Sawangan subyek/tajuk',
+'summary-preview'                  => 'Ringkesan pramidang:',
+'subject-preview'                  => 'Sawangan subyek/tajuk:',
 'blockedtitle'                     => 'Pamaké dipeungpeuk',
 'blockedtext'                      => "<big>'''Ngaran pamaké atawa alamat IP anjeun dipeungpeuk.'''</big>
 
@@ -603,7 +686,9 @@ Anjeun ogé mastikeun yén ieu téh pituin tulisan anjeun, atawa salinan ti doma
 <strong>ULAH NGINTUNKEUN KARYA NU MIBANDA HAK CIPTA TANPA WIDI!</strong>',
 'longpagewarning'                  => 'PERHATOSAN: Kaca ieu panjangna $1 kb; sababaraha panyungsi boga masalah dina ngédit kaca nu panjangna nepi ka 32 kb. Mun bisa mah bagi-bagi ieu kaca jadi sababaraha bab.',
 'longpageerror'                    => '<strong>SALAH: Téks anu dikirimkeun gedéna $1 kb, leuwih ti maksimum $2 kb. Téks teu bisa disimpen.</strong>',
-'readonlywarning'                  => "PERHATOSAN: pangkalan data dikonci pikeun diropéa, anjeun moal bisa nyimpen éditan anjeun ayeuna. Cobi ''cut-n-paste'' téksna ka na koropak téks sarta simpen dina waktu séjén.",
+'readonlywarning'                  => "'''PERHATOSAN''': pangkalan data dikonci pikeun diropéa, anjeun moal bisa nyimpen éditan anjeun ayeuna. Cobi ''cut-n-paste'' téksna ka na koropak téks sarta simpen dina waktu séjén.
+
+kuncén nu ngonci pangkalan data mikeun kajelasan : $1",
 'protectedpagewarning'             => '<strong>PERHATOSAN: Kaca ieu dikonci sahingga ngan bisa dirobah ku pamaké nu statusna kuncén.</strong>',
 'semiprotectedpagewarning'         => "'''Perhatoskeun''': ieu kaca dikonci sahingga ukur bisa dirobah ku pamaké nu geus asup log.",
 'cascadeprotectedwarning'          => "'''Awas''': ieu kaca dikonci sahingga ukur bisa dirobah ku kuncén, sabab kaasup {{PLURAL:$1|kaca|kaca}} dina panyalindungan-ngaruntuy di handap ieu:",
@@ -630,7 +715,7 @@ Pikeun leuwih écés, di handap dibéréndélkeun log hapusanana:",
 # Parser/template warnings
 'expensive-parserfunction-warning'        => "Inget!: Kaca ieu ngandung réa teuing maké fungsi ''parser''.
 
-Ayeuna aya $1, sakuduna kurang ti $2.",
+Ayeuna aya {{PLURAL:$1|$1 panggilan|$1 panggilan}}, sakuduna kurang ti $2 {{PLURAL:$2|panggilan|panggilan}}.",
 'expensive-parserfunction-category'       => 'Kaca kalawan réa teuing maké fungsi parser',
 'post-expand-template-inclusion-warning'  => 'Inget! : Ukuran citakan anu dipaké badag teuing.
 Sawatara citakan baris teu diasupkeun.',
@@ -650,30 +735,28 @@ Sawatara citakan baris teu diasupkeun.',
 Alesanana $3 cenah ''$2''.",
 
 # History pages
-'viewpagelogs'        => 'Tempo log kaca ieu',
-'nohistory'           => 'Teu aya jujutan édit pikeun kaca ieu.',
-'revnotfound'         => 'Révisi teu kapanggih',
-'revnotfoundtext'     => 'Révisi heubeul kaca nu dipénta ku anjeun teu bisa kapanggih.
-Please check the URL you used to access this page.',
-'currentrev'          => 'Révisi kiwari',
-'revisionasof'        => 'Révisi nurutkeun $1',
-'revision-info'       => 'Révisi per $1; $2',
-'previousrevision'    => '← Révisi leuwih heubeul',
-'nextrevision'        => 'Révisi nu leuwih anyar →',
-'currentrevisionlink' => 'Témbongkeun révisi kiwari',
-'cur'                 => 'kiw',
-'next'                => 'salajengna',
-'last'                => 'ahir',
-'page_first'          => 'mimiti',
-'page_last'           => 'tung-tung',
-'histlegend'          => 'Pilihan béda: tandaan wadah buleud vérsina pikeun ngabandingkeun sarta pencét énter atawa tombol di handap.<br />
+'viewpagelogs'           => 'Tempo log kaca ieu',
+'nohistory'              => 'Teu aya jujutan édit pikeun kaca ieu.',
+'currentrev'             => 'Révisi kiwari',
+'revisionasof'           => 'Révisi nurutkeun $1',
+'revision-info'          => 'Révisi per $1; $2', # Additionally available: $3: revision id
+'previousrevision'       => '← Révisi leuwih heubeul',
+'nextrevision'           => 'Révisi nu leuwih anyar →',
+'currentrevisionlink'    => 'Témbongkeun révisi kiwari',
+'cur'                    => 'kiw',
+'next'                   => 'salajengna',
+'last'                   => 'ahir',
+'page_first'             => 'mimiti',
+'page_last'              => 'tung-tung',
+'histlegend'             => 'Pilihan béda: tandaan wadah buleud vérsina pikeun ngabandingkeun sarta pencét énter atawa tombol di handap.<br />
 Katerangan: (kiw) = bédana jeung vérsi kiwari,
 (ahir) = bédana jeung vérsi nu harita, m = éditan minor.',
-'deletedrev'          => '[dihapus]',
-'histfirst'           => 'Pangheubeulna',
-'histlast'            => 'Pangahirna',
-'historysize'         => '($1 {{PLURAL:$1|bit|bit}})',
-'historyempty'        => '(kosong)',
+'history-fieldset-title' => 'Sungsi jujutan',
+'deletedrev'             => '[dihapus]',
+'histfirst'              => 'Pangheubeulna',
+'histlast'               => 'Pangahirna',
+'historysize'            => '($1 {{PLURAL:$1|bit|bit}})',
+'historyempty'           => '(kosong)',
 
 # Revision feed
 'history-feed-title'          => 'Sajarah révisi',
@@ -783,6 +866,7 @@ Pastikeun yén ieu parobahan bisa miara jujutan kaca sagemblengna.',
 'prevn'                     => '$1 saméméhna',
 'nextn'                     => '$1 salajengna',
 'viewprevnext'              => 'Témbongkeun ($1) ($2) ($3).',
+'searchhelp-url'            => 'Help:Pitulung',
 'search-result-size'        => '$1 ({{PLURAL:$2|1 kecap|$2 kecap}})',
 'search-result-score'       => 'Kacocogan: $1%',
 'search-redirect'           => '(alihan $1)',
@@ -798,7 +882,7 @@ Pastikeun yén ieu parobahan bisa miara jujutan kaca sagemblengna.',
 'searchall'                 => 'sadayana',
 'showingresults'            => "Di handap ieu némbongkeun {{PLURAL:$1|'''1''' hasil|'''$1''' hasil}}, dimimitianku  #'''$2'''.",
 'showingresultsnum'         => "Di handap ieu némbongkeun {{PLURAL:$3|'''1''' hasil|'''$3''' hasil}}, dimimitian #'''$2'''.",
-'showingresultstotal'       => "Nembongkeun {{PLURAL:$3|Hasil '''$1''' ti '''$3'''|hasil '''$1 - $2''' ti '''$3'''}} sungsi",
+'showingresultstotal'       => "Nembongkeun {{PLURAL:$4|hasil '''$1'''|'''$1 - $2'''}} ti '''$3''' sungsi",
 'nonefound'                 => '<strong>Catetan</strong>: panéangan nu teu hasil mindeng disababkeun ku néang kecap umum kawas "ti" nu teu diasupkeun kana indéks, atawa alatan nangtukeun leuwih ti hiji istilah panéang (ngan kaca-kaca nu ngandung sakabéh istilah panéang nu bakal némbongan).',
 'powersearch'               => 'Sungsi',
 'powersearch-legend'        => 'Panéangan tuluy',
@@ -823,6 +907,7 @@ Pastikeun yén ieu parobahan bisa miara jujutan kaca sagemblengna.',
 'qbsettings-floatingright' => 'Ngambang ka katuhu',
 'changepassword'           => 'Robah sandi',
 'skin'                     => 'Kulit',
+'skin-preview'             => 'Pramidang',
 'math'                     => 'Maté',
 'dateformat'               => 'Format titimangsa',
 'datedefault'              => 'Tanpa préferénsi',
@@ -843,9 +928,6 @@ Pastikeun yén ieu parobahan bisa miara jujutan kaca sagemblengna.',
 'prefs-misc'               => 'Pangaturan rupa-rupa',
 'saveprefs'                => 'Simpen préferénsi',
 'resetprefs'               => 'Sét ulang préferénsi',
-'oldpassword'              => 'Sandi heubeul',
-'newpassword'              => 'Sandi anyar:',
-'retypenew'                => 'Ketik ulang sandi',
 'textboxsize'              => 'Ukuran kotak téks',
 'rows'                     => 'Baris',
 'columns'                  => 'Kolom',
@@ -1003,12 +1085,12 @@ Pastikeun yén ieu parobahan bisa miara jujutan kaca sagemblengna.',
 
 Mun geus aya koropak na wiki nu ngaranna sarua jeung nu disebutkeun ku anjeun, koropak nu geus lila bakal diganti otomatis. Mangka, iwal ti pikeun ngaropéa hiji koropak, tangtu leuwih hadé mun anjeun mariksa heula bisi koropak nu sarupa geus aya.
 
-Pikeun némbongkeun atawa néang gambar-gambar nu pernah dimuat saméméhna, mangga lebet ka [[Special:ImageList|daptar gambar nu dimuat]]. Muatan sarta hapusan kadaptar dina log [[Special:Log/upload|log muatan]].
+Pikeun némbongkeun atawa néang gambar-gambar nu pernah dimuat saméméhna, mangga lebet ka [[Special:FileList|daptar gambar nu dimuat]]. Muatan sarta hapusan kadaptar dina log [[Special:Log/upload|log muatan]].
 
 Paké formulir di handap pikeun ngamuat koropak gambar anyar pikeun ilustrasi kaca anjeun. Na kalolobaan panyungsi, anjeun bakal manggihan tombol \"Sungsi/''Browse''...\", nu bakal nganteur ka dialog muka-koropak nu baku na sistim operasi anjeun. Milih hiji koropak bakal ngeusian ngaran koropakna kana rohangan téks gigireun tombol nu tadi. Anjeun ogé kudu nyontréng kotak nu nandakeun yén anjeun teu ngarumpak hak cipta batur ku dimuatna ieu koropak. Pencét tombol \"Muatkeun/''Upload''\" pikeun ngeréngsékeun muatan. Prosés ieu bisa lila mun anjeun migunakeun sambungan internét nu lambat.
 
 Format nu dianjurkeun nyéta JPEG pikeun gambar fotografik, PNG pikeun hasil ngagambar sarta gambar séjénna, sarta OGG pikeun sora. Pilih ngaran koropak nu déskriptif sangkan teu ngalieurkeun. Pikeun ngasupkeun gambarna na kaca séjén, pigunakeun tumbu dina wujud
-* '''<tt><nowiki>[[</nowiki>{{ns:image}}<nowiki>:Gambar.jpg]]</nowiki></tt>''' pikeun gambar dina ukuran aslina
+* '''<tt><nowiki>[[</nowiki>{{ns:file}}<nowiki>:Gambar.jpg]]</nowiki></tt>''' pikeun gambar dina ukuran aslina
 * '''<tt><nowiki>[[</nowiki>{{ns:media}}<nowiki>:Berkas.ogg]]</nowiki></tt>''' pikeun sora.
 
 Catet yén salaku kaca wiki, nu séjén bisa ngarobah atawa ngahapus muatan anjeun mun maranéhna nganggap ieu saluyu jeung kapentingan proyék, sarta anjeun bisa waé dipeungpeuk ti ngamuat koropak mun anjeun ngaruksak/ngaganggu sistim.",
@@ -1040,8 +1122,8 @@ Catet yén salaku kaca wiki, nu séjén bisa ngarobah atawa ngahapus muatan anje
 'emptyfile'                   => "Koropak nu dimuatkeun ku anjeun jigana kosong. Hal ieu bisa jadi alatan sarupaning ''typo'' na ngaran koropakna. Mangga parios deui yén anjeun leres-leres hoyong ngamuat koropak éta.",
 'fileexists'                  => 'Koropak nu ngaranna kieu geus aya, mangga parios <strong><tt>$1</tt></strong> mun anjeun teu yakin rék ngaganti.',
 'fileexists-thumb'            => "<center>'''Koropak nu aya'''</center>",
-'fileexists-forbidden'        => 'Koropak nu ngaranna ieu geus aya; mangga balik deui sarta muatkeun koropakna maké ngaran nu béda. [[Image:$1|thumb|center|$1]]',
-'fileexists-shared-forbidden' => "Koropak nu ngaranna ieu geus aya dina gudang koropak babagi (''shared file repository''); mangga balik deui sarta muatkeun koropak ieu maké ngaran nu béda. [[Image:$1|thumb|center|$1]]",
+'fileexists-forbidden'        => 'Koropak nu ngaranna ieu geus aya; mangga balik deui sarta muatkeun koropakna maké ngaran nu béda. [[File:$1|thumb|center|$1]]',
+'fileexists-shared-forbidden' => "Koropak nu ngaranna ieu geus aya dina gudang koropak babagi (''shared file repository''); mangga balik deui sarta muatkeun koropak ieu maké ngaran nu béda. [[File:$1|thumb|center|$1]]",
 'file-exists-duplicate'       => 'Gambar ieu duplikat sareng {{PLURAL:$1|gambar|gambar}}:',
 'successfulupload'            => 'Ngamuat geus hasil',
 'uploadwarning'               => 'Pépéling ngamuat',
@@ -1073,17 +1155,17 @@ Catet yén salaku kaca wiki, nu séjén bisa ngarobah atawa ngahapus muatan anje
 'upload_source_url'  => '(URL nu sohéh sarta bisa dibuka ku umum)',
 'upload_source_file' => ' (koropak dina komputer salira)',
 
-# Special:ImageList
-'imagelist_search_for'  => 'Sungsi ngaran média:',
+# Special:ListFiles
+'listfiles_search_for'  => 'Sungsi ngaran média:',
 'imgfile'               => 'koropak',
-'imagelist'             => 'Daptar gambar',
-'imagelist_date'        => 'Titimangsa',
-'imagelist_name'        => 'Ngaran',
-'imagelist_user'        => 'Pamaké',
-'imagelist_size'        => 'Badagna',
-'imagelist_description' => 'Pedaran',
+'listfiles'             => 'Daptar gambar',
+'listfiles_date'        => 'Titimangsa',
+'listfiles_name'        => 'Ngaran',
+'listfiles_user'        => 'Pamaké',
+'listfiles_size'        => 'Badagna',
+'listfiles_description' => 'Pedaran',
 
-# Image description page
+# File description page
 'filehist'                       => 'Sajarah gambar',
 'filehist-help'                  => 'Klik dina titimangsa pikeun nempo koropak nu aya dina mangsa éta.',
 'filehist-deleteall'             => 'hapus kabéh',
@@ -1130,7 +1212,6 @@ Catet yén salaku kaca wiki, nu séjén bisa ngarobah atawa ngahapus muatan anje
 'filedelete-success-old'      => "Vérsi '''[[Media:$1|$1]]''' $3, $2 geus dihapus.",
 'filedelete-nofile'           => "Teu aya '''$1'''.",
 'filedelete-nofile-old'       => "Euweuh arsip vérsi '''$1''' nu tetenggerna kawas kitu.",
-'filedelete-iscurrent'        => 'Anjeun rék ngahapus vérsi paling anyar ieu koropak. Balikkeun ka vérsi nu leuwih heubeul heula atuh.',
 'filedelete-otherreason'      => 'Alesan séjén/panambah:',
 'filedelete-reason-otherlist' => 'Alesan séjén',
 'filedelete-reason-dropdown'  => '*Alesan nu ilahar
@@ -1158,26 +1239,21 @@ Saméméh ngahapus, pariksa heula bisi aya tumbu ka ieu citakan.',
 
 # Random page
 'randompage'         => 'Kaca acak',
-'randompage-nopages' => 'Euweuh kaca dina ieu spasi ngaran.',
+'randompage-nopages' => 'Euweuh kaca dina ieu spasi ngaran "$1".',
 
 # Random redirect
 'randomredirect'         => 'Alihan acak',
-'randomredirect-nopages' => 'Euweuh alihan dina ieu spasi ngaran.',
+'randomredirect-nopages' => 'Euweuh alihan dina ieu spasi ngaran "$1".',
 
 # Statistics
-'statistics'             => 'Statistik',
-'sitestats'              => 'Statistika {{SITENAME}}',
-'userstats'              => 'Statistik pamaké',
-'sitestatstext'          => "Jumlah-jamléh aya {{PLURAL:\$1|'''\$1''' kaca}} dina pangkalan data, kaasup kaca \"obrolan\", kaca-kaca ngeunaan {{SITENAME}}, kaca \"tukung\", alihan, sarta nu séjénna nu meureun teu kaasup artikel.  Lian ti nu éta, aya {{PLURAL:\$2|'''\$2''' kaca }} nu dianggap artikel nu bener.
-
-'''\$8''' {{PLURAL:\$8|koropak|koropak}} koropak geus dimuat.
-
-Jumlah-jamléh geus aya '''\$3''' {{PLURAL:\$3|kaca}} ulasan sarta '''\$4''' {{PLURAL:\$4|éditan}} ti saprak {{SITENAME}} ieu ngadeg. Jadi hartina aya rata-rata '''\$5''' éditan per kaca sarta '''\$6''' ulasan per édit.
-
-[http://www.mediawiki.org/wiki/Manual:Job_queue Antrian gawé] lobana '''\$7'''.",
-'userstatstext'          => "Aya '''$1''' [[Special:ListUsers|{{PLURAL:$1|pamaké|pamaké}}]] nu kadaptar.
-'''$2''' ($4) di antarana boga hak $5.",
-'statistics-mostpopular' => 'Kaca nu pangmindengna dibuka',
+'statistics'              => 'Statistik',
+'statistics-header-pages' => 'Statistik kaca',
+'statistics-header-edits' => 'Statistik éditan',
+'statistics-header-views' => 'Statistik pidangan',
+'statistics-header-users' => 'Statistik pamaké',
+'statistics-articles'     => 'Halaman eusi',
+'statistics-pages'        => 'Kaca',
+'statistics-mostpopular'  => 'Kaca nu pangmindengna dibuka',
 
 'disambiguations'      => 'Kaca disambiguasi',
 'disambiguationspage'  => 'Project:Tumbu_ka_kaca_disambiguasi',
@@ -1264,8 +1340,6 @@ Sahiji kaca dianggap minangka kaca disambiguasi lamun kaca kasebut ngagunakeun c
 'speciallogtitlelabel' => 'Judul:',
 'log'                  => 'Log',
 'all-logs-page'        => 'Kabéh log',
-'log-search-legend'    => 'Sungsi log',
-'log-search-submit'    => 'Jung',
 'alllogstext'          => 'Béréndélan sakabéh log nu aya di {{SITENAME}}.
 Bisa dipondokkeun ku cara milih tipe log, ngaran pamaké, atawa kaca nu dimaksud.',
 'logempty'             => 'Taya item nu cocog dina log.',
@@ -1295,10 +1369,30 @@ Baca ogé [[Special:WantedCategories|kategori nu dipikabutuh]].',
 'categoriesfrom'                => 'Tembongkeun kategori-kategori dimimitian ku:',
 'special-categories-sort-count' => 'ngurut numutkeun jumlah',
 
+# Special:DeletedContributions
+'deletedcontributions' => 'Kontribusi nu dihapus',
+
+# Special:LinkSearch
+'linksearch'       => 'Sungsi tumbu ramat',
+'linksearch-pat'   => 'Pola sungsi:',
+'linksearch-ns'    => 'Spasi ngaran:',
+'linksearch-ok'    => 'Sungsi',
+'linksearch-text'  => "''Wildcard'' sarupaning \"*.wikipedia.org\" bisa dipaké.<br />Protokol nu dirojong: <tt>\$1</tt>",
+'linksearch-line'  => '$1 ditumbu ti $2',
+'linksearch-error' => "''Wildcard'' ngan bisa némbongan dina awal ngaran indung (''host'').",
+
 # Special:ListUsers
 'listusersfrom'      => 'Témbongkeun pamaké nu dimimitian ku',
 'listusers-submit'   => 'Témbongkeun',
 'listusers-noresult' => 'Teu kapendak.',
+
+# Special:Log/newusers
+'newuserlogpage'              => 'Log pamaké anyar',
+'newuserlogpagetext'          => 'Di handap ieu béréndélan log pamaké anyar.',
+'newuserlog-byemail'          => 'Sandi geus dikirim maké surélék.',
+'newuserlog-create-entry'     => 'Pamaké anyar',
+'newuserlog-create2-entry'    => 'rekening pikeun $1 geus dijieun',
+'newuserlog-autocreate-entry' => 'rekening pamaké dijieun sacara otomatis',
 
 # Special:ListGroupRights
 'listgrouprights'          => 'Hak-hak grup pamaké',
@@ -1361,12 +1455,6 @@ Jaga, parobahan na kaca ieu katut kaca obrolanana bakal dibéréndélkeun di din
 'iteminvalidname'      => "Masalah dina '$1', ngaran teu bener...",
 'wlnote'               => "Di handap ieu mangrupa $1 {{PLURAL:$1|robahan|robahan}} ahir salila '''$2''' jam.",
 'wlshowlast'           => 'Témbongkeun $1 jam $2 poé $3 ahir',
-'watchlist-show-bots'  => 'Témbongkeun éditan bot',
-'watchlist-hide-bots'  => 'Sumputkeun éditan bot',
-'watchlist-show-own'   => 'Témbongkeun éditan kuring',
-'watchlist-hide-own'   => 'Sumputkeun éditan kuring',
-'watchlist-show-minor' => 'Témbongkeun éditan leutik',
-'watchlist-hide-minor' => 'Sumputkeun éditan leutik',
 
 # Displayed when you click the "watch" button and it is in the process of watching
 'watching'   => 'Ngawaskeun...',
@@ -1404,53 +1492,58 @@ Pikeun ngarobah setélan dabtar awaseun anjeun, sindang ka {{SERVER}}{{localurl:
 Asupan jeung bantuan salajengna:
 {{fullurl:{{MediaWiki:Helppage}}}}',
 
-# Delete/protect/revert
-'deletepage'                  => 'Hapus kaca',
-'confirm'                     => 'Konfirmasi',
-'excontent'                   => "eusina nu heubeul: '$1'",
-'excontentauthor'             => "eusina: '$1' (nu ditulis ku '$2' wungkul)",
-'exbeforeblank'               => "eusi méméh dikosongkeun nyéta: '$1'",
-'exblank'                     => 'kaca ieu kosong',
-'delete-confirm'              => 'Hapus "$1"',
-'delete-legend'               => 'Hapus',
-'historywarning'              => 'Perhatosan: Kaca nu rék dihapus mibanda',
-'confirmdeletetext'           => 'Anjeun rék ngahapus hiji kaca atawa gambar katut jujutanana tina pangkalan data, mangga yakinkeun yén anjeun mémang niat midamel ieu, yén anjeun ngartos kana sagala konsékuénsina, sarta yén anjeun ngalakukeun ieu saluyu jeung [[{{MediaWiki:Policy-url}}|kawijakan {{SITENAME}}]].',
-'actioncomplete'              => 'Peta geus réngsé',
-'deletedtext'                 => '"<nowiki>$1</nowiki>" geus dihapus. Tempo $2 pikeun rékaman hapusan anyaran ieu.',
-'deletedarticle'              => 'ngahapus "$1"',
-'dellogpage'                  => 'Log_hapusan',
-'dellogpagetext'              => 'Di handap ieu daptar hapusan nu ahir-ahir, sakabéh wanci dumasar wanci server.',
-'deletionlog'                 => 'log hapusan',
-'reverted'                    => 'Malikkeun ka révisi nu ti heula',
-'deletecomment'               => 'Alesan ngahapus',
-'deleteotherreason'           => 'Alesan séjén/panambih:',
-'deletereasonotherlist'       => 'Alesan séjén',
-'deletereason-dropdown'       => '*Alesan ilahar
+# Delete
+'deletepage'             => 'Hapus kaca',
+'confirm'                => 'Konfirmasi',
+'excontent'              => "eusina nu heubeul: '$1'",
+'excontentauthor'        => "eusina: '$1' (nu ditulis ku '$2' wungkul)",
+'exbeforeblank'          => "eusi méméh dikosongkeun nyéta: '$1'",
+'exblank'                => 'kaca ieu kosong',
+'delete-confirm'         => 'Hapus "$1"',
+'delete-legend'          => 'Hapus',
+'historywarning'         => 'Perhatosan: Kaca nu rék dihapus mibanda',
+'confirmdeletetext'      => 'Anjeun rék ngahapus hiji kaca atawa gambar katut jujutanana tina pangkalan data, mangga yakinkeun yén anjeun mémang niat midamel ieu, yén anjeun ngartos kana sagala konsékuénsina, sarta yén anjeun ngalakukeun ieu saluyu jeung [[{{MediaWiki:Policy-url}}|kawijakan {{SITENAME}}]].',
+'actioncomplete'         => 'Peta geus réngsé',
+'deletedtext'            => '"<nowiki>$1</nowiki>" geus dihapus. Tempo $2 pikeun rékaman hapusan anyaran ieu.',
+'deletedarticle'         => 'ngahapus "$1"',
+'dellogpage'             => 'Log_hapusan',
+'dellogpagetext'         => 'Di handap ieu daptar hapusan nu ahir-ahir, sakabéh wanci dumasar wanci server.',
+'deletionlog'            => 'log hapusan',
+'reverted'               => 'Malikkeun ka révisi nu ti heula',
+'deletecomment'          => 'Alesan ngahapus',
+'deleteotherreason'      => 'Alesan séjén/panambih:',
+'deletereasonotherlist'  => 'Alesan séjén',
+'deletereason-dropdown'  => '*Alesan ilahar
 ** Paménta pamaké
 ** Ngarumpak hak cipta
 ** Vandalismeu',
-'delete-edit-reasonlist'      => 'Alesan ngahapus éditan',
-'delete-toobig'               => 'Jujutan édit ieu kaca panjang pisan, leuwih ti {{PLURAL:$1|révisi|révisi}}.
+'delete-edit-reasonlist' => 'Alesan ngahapus éditan',
+'delete-toobig'          => 'Jujutan édit ieu kaca panjang pisan, leuwih ti {{PLURAL:$1|révisi|révisi}}.
 Hal ieu teu diwenangkeun pikeun nyegah karuksakan {{SITENAME}} nu teu dihaja.',
-'delete-warning-toobig'       => 'Jujutan ieu kaca panjang pisan, leuwih ti{{PLURAL:$1|révisi|révisi}}. Dihapusna ieu kaca bisa ngaruksak jalanna pangkalan data {{SITENAME}}; sing ati-ati.',
-'rollback'                    => 'Balikkeun éditan',
-'rollback_short'              => 'Balikkeun',
-'rollbacklink'                => 'balikkeun',
-'rollbackfailed'              => 'Gagal malikkeun',
-'cantrollback'                => 'Éditan teu bisa dibalikkeun; kontribusi panungtung ngarupakeun hiji-hijina panulis kaca ieu.',
-'alreadyrolled'               => 'Teu bisa mulangkeun édit ahir [[$1]] ku [[User:$2|$2]] ([[User talk:$2|Obrolan]]); geus aya nu ngédit atawa mulangkeun kacana.
+'delete-warning-toobig'  => 'Jujutan ieu kaca panjang pisan, leuwih ti{{PLURAL:$1|révisi|révisi}}. Dihapusna ieu kaca bisa ngaruksak jalanna pangkalan data {{SITENAME}}; sing ati-ati.',
+
+# Rollback
+'rollback'         => 'Balikkeun éditan',
+'rollback_short'   => 'Balikkeun',
+'rollbacklink'     => 'balikkeun',
+'rollbackfailed'   => 'Gagal malikkeun',
+'cantrollback'     => 'Éditan teu bisa dibalikkeun; kontribusi panungtung ngarupakeun hiji-hijina panulis kaca ieu.',
+'alreadyrolled'    => 'Teu bisa mulangkeun édit ahir [[$1]] ku [[User:$2|$2]] ([[User talk:$2|Obrolan]]); geus aya nu ngédit atawa mulangkeun kacana.
 
 Édit ahir ku [[User:$3|$3]] ([[User talk:$3|Obrolan]]).',
-'editcomment'                 => 'Komentar ngéditna: "<i>$1</i>".', # only shown if there is an edit comment
-'revertpage'                  => 'Malikkeun éditan $2, diganti deui ka vérsi ahir ku $1', # Additional available: $3: revid of the revision reverted to, $4: timestamp of the revision reverted to, $5: revid of the revision reverted from, $6: timestamp of the revision reverted from
-'rollback-success'            => 'Mulangkeun éditan $1; balik deui ka vérsi panungtung ku $2.',
-'sessionfailure'              => 'Sigana aya masalah jeung termin log anjeun; peta ieu geus dibolaykeun salaku pépéling pikeun ngalawan ayana pangbajak. Mangga pencét "back" jeung muat ulang ti kaca asal anjeun, lajeng cobaan deui.',
+'editcomment'      => 'Komentar ngéditna: "<i>$1</i>".', # only shown if there is an edit comment
+'revertpage'       => 'Malikkeun éditan $2, diganti deui ka vérsi ahir ku $1', # Additionally available: $3: revid of the revision reverted to, $4: timestamp of the revision reverted to, $5: revid of the revision reverted from, $6: timestamp of the revision reverted from
+'rollback-success' => 'Mulangkeun éditan $1; balik deui ka vérsi panungtung ku $2.',
+'sessionfailure'   => 'Sigana aya masalah jeung termin log anjeun; peta ieu geus dibolaykeun salaku pépéling pikeun ngalawan ayana pangbajak. Mangga pencét "back" jeung muat ulang ti kaca asal anjeun, lajeng cobaan deui.',
+
+# Protect
 'protectlogpage'              => 'Log_koncian',
 'protectlogtext'              => 'Di handap ieu mangrupa daptar koncian kaca. Tempo [[Special:ProtectedPages|kaca nu dikonci]] pikeun iber leuwih lengkep.',
 'protectedarticle'            => 'ngonci $1',
 'modifiedarticleprotection'   => 'hambalan koncian "[[$1]]" geus dirobah',
 'unprotectedarticle'          => 'muka konci $1',
 'protect-title'               => 'Ngonci "$1"',
+'prot_1movedto2'              => 'mindahkeun [[$1]] ka [[$2]]',
 'protect-legend'              => 'Konfirmasi ngonci',
 'protectcomment'              => 'Alesan ngonci',
 'protectexpiry'               => 'Kadaluwarsa',
@@ -1469,6 +1562,7 @@ Hal ieu teu diwenangkeun pikeun nyegah karuksakan {{SITENAME}} nu teu dihaja.',
 'protect-expiring'            => 'kadaluwarsa $1',
 'protect-cascade'             => 'Konci kaca nu kawengku dina ieu kaca (pangonci ngaruntuy).',
 'protect-cantedit'            => 'Anjeung teu wenang ngarobah hambalan ngonci ieu kaca.',
+'protect-expiry-options'      => '2 jam:2 hours,sapoé:1 day,3 poé:3 days,saminggu:1 week,2 minggu:2 weeks,sabulan:1 month,3 bulan:3 months,6 bulan:6 months,sataun:1 year,tanpa wates:infinite', # display1:time1,display2:time2,...
 'restriction-type'            => 'Ngonci:',
 'restriction-level'           => 'Hambalan ngonci:',
 'minimum-size'                => 'Ukuran minimum',
@@ -1498,7 +1592,7 @@ Mun aya kaca anyar nu ngaranna sarua dijieun deui satutasna dihapus, révisi nu 
 'undeletehistorynoadmin'       => 'Artikel ieu geus dihapus.
 Alesanana bisa dibaca dina katrangan di handap, katut saha waé nu geus ngédit ieu artikel saméméh dihapus.
 Téks aktual révisi nu geus dihapus ieu ngan bisa dibuka ku kuncén.',
-'undelete-revision'            => 'Révisi nu dihapus ti $1 (nepi ka $2) ku $3:',
+'undelete-revision'            => 'Révisi nu dihapus ti $1 (dina $5, $4) ku $3:',
 'undelete-nodiff'              => 'Euweuh revisi nu lewih lila',
 'undeletebtn'                  => 'Simpen deui!',
 'undeletelink'                 => 'pulangkeun',
@@ -1550,7 +1644,6 @@ $1',
 'whatlinkshere'            => 'Nu numbu ka dieu',
 'whatlinkshere-title'      => 'Kaca-kaca nu numbu ka "$1"',
 'whatlinkshere-page'       => 'Kaca:',
-'linklistsub'              => '(Daptar tumbu)',
 'linkshere'                => "Kaca di handap ieu numbu ka '''[[:$1]]''':",
 'nolinkshere'              => "Euweuh kaca nu numbu ka '''[[:$1]]'''.",
 'nolinkshere-ns'           => "Euweuh kaca nu numbu ka '''[[:$1]]''' dina namespace nu dipilih.",
@@ -1676,6 +1769,8 @@ anjeun kudu bener-bener ngarti kana hal ieu.",
 
 Dina kajadian kitu, mun hayang (jeung perlu) anjeun kudu mindahkeun atawa ngagabungkeun kacana sacara manual.",
 'movearticle'             => 'Pindahkeun kaca',
+'movenologin'             => 'Can asup log',
+'movenologintext'         => 'Anjeun kudu jadi pamaké nu kadaptar tur [[Special:UserLogin|asup log]] pikeun mindahkeun kaca.',
 'movenotallowed'          => 'Anjeung teu boga kawenangan mindahkeun kaca.',
 'newtitle'                => 'Ka judul anyar',
 'move-watch'              => 'Awaskeuneun kaca ieu',
@@ -1706,7 +1801,6 @@ Artikel nu dituju "[[:$1]]" geus aya. Badé dihapus baé sangkan bisa mindahkeun
 'delete_and_move_confirm' => 'Enya, hapus kaca éta',
 'delete_and_move_reason'  => 'Hapus sangkan bisa mindahkeun',
 'selfmove'                => 'Judul sumber jeung tujuanana sarua, lain gé mindahkeun atuh!',
-'immobile_namespace'      => 'Judul nu dituju kaasup kana tipe husus, teu bisa mindahkeun kaca ka ngaranspasi kitu.',
 'imagenocrossnamespace'   => 'Teu bisa mindahkeun gambar ka rohangan ngaran nu lain gambar',
 'imagetypemismatch'       => 'Éksténsi koropak anyar teu cocog jeung tipena',
 'imageinvalidfilename'    => 'Ngaran koropak tujuan teu sah',
@@ -1752,6 +1846,7 @@ Sadaya aktivitas impor transwiki baris kacatet dina [[Special:Log/import|log imp
 'import-interwiki-history'   => 'Salin sakabéh vérsi jujutan pikeun ieu kaca',
 'import-interwiki-submit'    => 'Impor',
 'import-interwiki-namespace' => 'Spasi ngaran tujuan:',
+'import-comment'             => 'Ringkesan:',
 'importtext'                 => 'Mangga ékspor koropakna ti sumber nu dipaké ku wiki migunakeun fungsi Special:Export, simpen na piringan anjeun, teras muatkeun di dieu.',
 'importstart'                => 'Ngimpor kaca...',
 'import-revision-count'      => '$1 {{PLURAL:$1|vérsi heubeul}}',
@@ -1853,12 +1948,12 @@ Sadaya aktivitas impor transwiki baris kacatet dina [[Special:Log/import|log imp
 'notacceptable' => "''Server'' wiki teu bisa nyadiakeun data dina format nu bisa dibaca ku klien anjeun.",
 
 # Attribution
-'anonymous'        => 'Pamaké anonim {{SITENAME}}',
+'anonymous'        => '{{PLURAL:$1|Pamaké|Pamaké-pamaké}} anonim di {{SITENAME}}',
 'siteuser'         => 'Pamaké $1 {{SITENAME}}',
 'lastmodifiedatby' => 'Kaca ieu panungtungan dirobah $2, $1 ku $3.', # $1 date, $2 time, $3 user
 'othercontribs'    => 'Dumasar karya $1.',
 'others'           => 'Séjénna',
-'siteusers'        => 'Pamaké $1 {{SITENAME}}',
+'siteusers'        => '{{PLURAL:$2|Pamaké|Pamaké-pamaké}} {{SITENAME}} $1',
 'creditspage'      => 'Pangajén kaca',
 'nocredits'        => 'Teu aya émbaran pangajén pikeun kaca ieu.',
 
@@ -1912,6 +2007,9 @@ $1',
 'previousdiff' => '← Éditan saméméhna',
 'nextdiff'     => 'Éditan salajengna →',
 
+# Visual comparison
+'visual-comparison' => 'Babandingan visual',
+
 # Media information
 'imagemaxsize'         => 'Watesan gambar na kaca dadaran gambar nepi ka:',
 'widthheightpage'      => '$1×$2, $3 {{PLURAL:$3|kaca|kaca}}',
@@ -1922,7 +2020,7 @@ $1',
 'show-big-image'       => 'Résolusi pinuh',
 'show-big-image-thumb' => '<small>Ukuran ieu pidangan: $1 × $2 piksel</small>',
 
-# Special:NewImages
+# Special:NewFiles
 'newimages'             => 'Galeri gambar anyar',
 'imagelisttext'         => "Di handap ieu daptar '''$1''' {{PLURAL:$1|gambar|gambar}} nu disusun $2.",
 'newimages-summary'     => 'Ieu kaca husus ngabéréndélkeun koropak nu alanyar dimuat.',
@@ -2175,21 +2273,9 @@ $1
 mangga pastikeun yén anjeun rék nyieun deui artikel ieu.",
 'recreate'            => 'Jieun deui',
 
-# HTML dump
-'redirectingto' => 'Mindahkeun ka [[:$1]]...',
-
 # action=purge
-'confirm_purge'        => 'Hapus sindangan kaca ieu?
-
-$1',
 'confirm_purge_button' => 'Heug',
-
-# AJAX search
-'searchcontaining' => "Sungsi artikel nu ngandung ''$1''.",
-'searchnamed'      => "Sungsi artikel nu judulna ''$1''.",
-'articletitles'    => "Artikel nu dimimitian ku ''$1''",
-'hideresults'      => 'Sumputkeun hasil',
-'useajaxsearch'    => 'Paké sungsi AJAX',
+'confirm-purge-top'    => 'Hapus sindangan kaca ieu?',
 
 # Multipage image navigation
 'imgmultipageprev' => '&larr; kaca saacana',

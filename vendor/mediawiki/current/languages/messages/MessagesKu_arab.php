@@ -10,15 +10,6 @@
 
 $fallback = 'ku-latn';
 
-$skinNames = array(
-'standard'    => 'كلاسیك',
-'nostalgia'   => 'قاوه‌یی',
-'cologneblue' => 'شین',
-'monobook'    => 'مۆنۆ',
-'myskin'      => 'پێستی خۆم',
-'chick'       => 'جوجه‌',
-'simple'      => 'ساده‌'
-);
 
 $digitTransformTable = array(
 	'0' => '٠', # &#x0660;
@@ -73,8 +64,6 @@ $messages = array(
 'underline-always'  => 'هه‌میشه‌',
 'underline-never'   => 'هیچ كات',
 'underline-default' => 'نمایشكه‌ری پێوانه‌یی',
-
-'skinpreview' => '(پێش بینین)',
 
 # Dates
 'sunday'        => 'یه‌كشه‌ممه‌',
@@ -345,8 +334,8 @@ $messages = array(
 'hr_tip'         => 'هێڵی ئاسۆیی (ده‌گمه‌ن به‌كاری بهێنه‌)',
 
 # Edit pages
-'summary'                => 'پوختە',
-'subject'                => 'بابه‌ت / سه‌روتار',
+'summary'                => 'پوختە:',
+'subject'                => 'بابه‌ت / سه‌روتار:',
 'minoredit'              => 'ئەم گۆڕانکاری‌یە بچووکە',
 'watchthis'              => 'چاودێڕی ئه‌م په‌ڕه‌یه‌ بكه‌',
 'savearticle'            => 'په‌ڕه‌كه‌ پاشه‌كه‌وت بكه‌',
@@ -383,6 +372,7 @@ $messages = array(
 
 # Preferences page
 'mypreferences' => 'ھەڵبژاردەکانی من',
+'skin-preview'  => 'پێش بینین',
 
 # Recent changes
 'recentchanges'   => 'دوایین گۆڕانکارییەکان',
@@ -401,7 +391,7 @@ $messages = array(
 # Upload
 'upload' => 'وێنەیەک بار بکە',
 
-# Image description page
+# File description page
 'filehist'   => 'مێژووی پەڕگە',
 'imagelinks' => 'بەستەرەکان',
 
@@ -429,7 +419,7 @@ $messages = array(
 # Displayed when you click the "watch" button and it is in the process of watching
 'watching' => 'چاودێڕی...',
 
-# Delete/protect/revert
+# Rollback
 'rollbacklink' => 'گەڕاندنەوە',
 
 # Namespace form on various pages
@@ -454,6 +444,15 @@ $messages = array(
 'tooltip-ca-nstab-user'           => 'پەڕەی بەکارھێنەر تەماشا بکە',
 'tooltip-compareselectedversions' => 'جیاوازییەکانی دوو وەشانە دیاریکراوەی ئەم پەڕە ببینە.',
 
+# Skin names
+'skinname-standard'    => 'كلاسیك',
+'skinname-nostalgia'   => 'قاوه‌یی',
+'skinname-cologneblue' => 'شین',
+'skinname-monobook'    => 'مۆنۆ',
+'skinname-myskin'      => 'پێستی خۆم',
+'skinname-chick'       => 'جوجه‌',
+'skinname-simple'      => 'ساده‌',
+
 # Media information
 'show-big-image' => 'گەورە کردنەوە',
 
@@ -468,7 +467,7 @@ $messages = array(
 * focallength', # Do not translate list items
 
 # Separators for various lists, etc.
-'semicolon-separator' => '؛',
+'semicolon-separator' => '؛&#32;',
 'comma-separator'     => '،&#32;',
 
 # Live preview

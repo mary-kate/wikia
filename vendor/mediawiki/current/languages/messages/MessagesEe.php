@@ -81,7 +81,7 @@ $messages = array(
 'qbspecialpages' => 'Axa tɔxewo',
 'mypage'         => 'Axa nye',
 'navigation'     => 'Mɔtabiala',
-'and'            => 'kpakple',
+'and'            => '&#32;kpakple',
 
 'errorpagetitle'   => 'Vodada',
 'returnto'         => 'Gbugbɔ yi $1.',
@@ -147,20 +147,22 @@ $messages = array(
 'viewsourcefor' => '$1 tɔwo',
 
 # Login and logout pages
-'login'                   => 'Ge ɖe eme',
-'nav-login-createaccount' => 'Geɖe me / Ŋlɔ ŋkɔ',
-'userlogin'               => 'Ge ɖe eme / ŋlɔ ŋkɔ daɖi',
-'logout'                  => 'Do le eme',
-'userlogout'              => 'Do le eme',
-'nologin'                 => 'Wòmeŋlɔ ŋkɔ oa? $1.',
-'nologinlink'             => 'Ŋlɔ ŋkɔ daɖi',
-'createaccount'           => 'Ŋlɔ ŋkɔ daɖi',
-'gotaccount'              => 'Wò ŋlɔ ŋkɔ xoxoa? $1.',
-'gotaccountlink'          => 'Ge ɖe eme',
-'yourlanguage'            => 'Gbe:',
-'loginsuccesstitle'       => 'Wò ge ɖe eme azɔ̃.',
-'loginsuccess'            => "'''Wò le {{SITENAME}} me fifia abe \"\$1\" ene.'''",
-'loginlanguagelabel'      => 'Gbe: $1',
+'login'                      => 'Ge ɖe eme',
+'nav-login-createaccount'    => 'Geɖe me / Ŋlɔ ŋkɔ',
+'userlogin'                  => 'Ge ɖe eme / ŋlɔ ŋkɔ daɖi',
+'logout'                     => 'Do le eme',
+'userlogout'                 => 'Do le eme',
+'nologin'                    => 'Wòmeŋlɔ ŋkɔ oa? $1.',
+'nologinlink'                => 'Ŋlɔ ŋkɔ daɖi',
+'createaccount'              => 'Ŋlɔ ŋkɔ daɖi',
+'gotaccount'                 => 'Wò ŋlɔ ŋkɔ xoxoa? $1.',
+'gotaccountlink'             => 'Ge ɖe eme',
+'yourlanguage'               => 'Gbe:',
+'loginsuccesstitle'          => 'Wò ge ɖe eme azɔ̃.',
+'loginsuccess'               => "'''Wò le {{SITENAME}} me fifia abe \"\$1\" ene.'''",
+'acct_creation_throttle_hit' => 'Taflatse, wòŋlɔ {{PLURAL:$1|1 ŋkɔ|$1 ŋkɔwo}} xoxo.
+Wòmageteŋu agbugbɔ aŋlɔe o.',
+'loginlanguagelabel'         => 'Gbe: $1',
 
 # Edit page toolbar
 'sig_tip' => 'Dzesiwò kple gaƒoƒoa',
@@ -179,7 +181,7 @@ $messages = array(
 
 # History pages
 'revisionasof'        => 'Tataa le $1',
-'revision-info'       => 'Tataa le $1 si $2 wɔ',
+'revision-info'       => 'Tataa le $1 si $2 wɔ', # Additionally available: $3: revision id
 'previousrevision'    => '← Tata xoxoa',
 'nextrevision'        => 'Tata yeyea →',
 'currentrevisionlink' => 'Tata susuea',
@@ -213,21 +215,22 @@ Wòateŋu [[:\$1|adze axa sia gɔme]].",
 'mypreferences' => 'Nyeƒe didiwo',
 
 # Recent changes
-'recentchanges'   => 'Tɔtrɔ yeyewo',
-'rcnote'          => "Afisia wofia {{PLURAL:$1|tɔtrɔ '''1''' susue|tɔtrɔ '''$1''' susuewo}} le {{PLURAL:$2|ŋkeke si|ŋkeke '''$2''' mamleawo siwo}} vayi la me, le $5, $4.",
-'rcnotefrom'      => 'Tɔtrɔwo siwo wowɔ tso <b>$2</b> (wofia vaseɖe <b>$1</b>) le afii.',
-'rclistfrom'      => 'Fia tɔtrɔ yeyewo tso $1',
-'rcshowhideminor' => '$1 tɔtrɔ suewo',
-'rcshowhideliu'   => '$1 ezãla siwo ŋlɔ ŋkɔ',
-'rcshowhideanons' => '$1 ŋkɔ maŋlɔlawo',
-'rcshowhidemine'  => '$1 nyeƒe tɔtrɔwo',
-'rclinks'         => 'Fia tɔtrɔ $1 mamleawo le ŋkeke $2 siwo vayi me<br />$3',
-'diff'            => 'tɔtrɔ',
-'hist'            => 'xoxo',
-'hide'            => 'Ɣla',
-'show'            => 'Fia',
-'minoreditletter' => 's',
-'newpageletter'   => 'Y',
+'recentchanges'        => 'Tɔtrɔ yeyewo',
+'recentchanges-legend' => 'Tatiawo na tɔtrɔ yeyewo',
+'rcnote'               => "Afisia wofia {{PLURAL:$1|tɔtrɔ '''1''' susue|tɔtrɔ '''$1''' susuewo}} le {{PLURAL:$2|ŋkeke si|ŋkeke '''$2''' mamleawo siwo}} vayi la me, le $5, $4.",
+'rcnotefrom'           => 'Tɔtrɔwo siwo wowɔ tso <b>$2</b> (wofia vaseɖe <b>$1</b>) le afii.',
+'rclistfrom'           => 'Fia tɔtrɔ yeyewo tso $1',
+'rcshowhideminor'      => '$1 tɔtrɔ suewo',
+'rcshowhideliu'        => '$1 ezãla siwo ŋlɔ ŋkɔ',
+'rcshowhideanons'      => '$1 ŋkɔ maŋlɔlawo',
+'rcshowhidemine'       => '$1 nyeƒe tɔtrɔwo',
+'rclinks'              => 'Fia tɔtrɔ $1 mamleawo le ŋkeke $2 siwo vayi me<br />$3',
+'diff'                 => 'tɔtrɔ',
+'hist'                 => 'xoxo',
+'hide'                 => 'Ɣla',
+'show'                 => 'Fia',
+'minoreditletter'      => 's',
+'newpageletter'        => 'Y',
 
 # Recent changes linked
 'recentchangeslinked'       => 'Tɔtrɔ siwo kaa afii',
@@ -237,7 +240,7 @@ Wòateŋu [[:\$1|adze axa sia gɔme]].",
 'upload'    => 'Ɖo agbalẽ ɖa',
 'uploadbtn' => 'Ɖo agbalẽ ɖa',
 
-# Image description page
+# File description page
 'filehist-help'     => 'Tia ŋkeke/gaƒoƒo ɖeka ne wòadi be yea kpɔ axa sia ƒe tata le ɣemaɣi',
 'filehist-datetime' => 'Ŋkeke/Gaƒoƒo',
 'filehist-user'     => 'Ezãla',
@@ -281,19 +284,27 @@ Wòateŋu [[:\$1|adze axa sia gɔme]].",
 'allinnamespace' => 'Axawo katã ($1 namespace)',
 'allpagessubmit' => 'Yi',
 
-# Watchlist
-'watchlistfor'         => "(na '''$1''')",
-'watch'                => 'Le ŋku ɖe eŋu',
-'watchthispage'        => 'Le ŋku ɖe axa sia ŋu',
-'wlshowlast'           => 'Fia gaƒoƒo $1 ŋkeke $2 mamleawo. $3',
-'watchlist-hide-own'   => 'Ɣla nyeƒe tɔtrɔwo',
-'watchlist-show-minor' => 'Fia tɔtrɔ suewo',
-'watchlist-hide-minor' => 'Ɣla tɔtrɔ suewo',
+# Special:LinkSearch
+'linksearch-ok' => 'Dii',
 
-# Delete/protect/revert
-'deletepage'                  => 'Tutu axa sia',
-'deletedarticle'              => 'wotutu "[[$1]]"',
+# Special:Log/newusers
+'newuserlog-create-entry'  => 'Nuŋlɔla yeye',
+'newuserlog-create2-entry' => 'woŋlɔ ŋkɔ na $1',
+
+# Watchlist
+'watchlistfor'  => "(na '''$1''')",
+'watch'         => 'Le ŋku ɖe eŋu',
+'watchthispage' => 'Le ŋku ɖe axa sia ŋu',
+'wlshowlast'    => 'Fia gaƒoƒo $1 ŋkeke $2 mamleawo. $3',
+
+# Delete
+'deletepage'     => 'Tutu axa sia',
+'deletedarticle' => 'wotutu "[[$1]]"',
+
+# Protect
+'prot_1movedto2'              => '[[$1]] wohee yi [[$2]]',
 'protect-level-autoconfirmed' => 'Xemɔ na ŋkɔmaŋlɔlawo',
+'protect-expiry-options'      => 'gaƒoƒo 2:2 hours,ŋkeke 1:1 day,ŋkeke 3:3 days,kɔsiɖa 1:1 week,kɔsiɖa 2:2 weeks,ɣleti 1:1 month,ɣleti 3:3 months,ɣleti 6:6 months,ƒe 1:1 year,tegbe:infinite', # display1:time1,display2:time2,...
 'restriction-type'            => 'Mɔɖeɖe:',
 
 # Undelete
@@ -366,7 +377,7 @@ Wòateŋu akpɔ alesi woŋlɔe.',
 'previousdiff' => '← Tata xoxoa',
 'nextdiff'     => 'Tɔtrɔ yeyea →',
 
-# Special:NewImages
+# Special:NewFiles
 'newimages' => 'Nutata yeyewo',
 
 # External editor support

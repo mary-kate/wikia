@@ -57,7 +57,7 @@ $messages = array(
 'username'          => 'Ishletkuqi ismi:',
 
 # Edit pages
-'summary'     => 'Hulasa',
+'summary'     => 'Hulasa:',
 'minoredit'   => 'Bu Kichik Uzgartish',
 'watchthis'   => 'Bu Batka Kharang',
 'showpreview' => 'Aldinala kurux',
@@ -97,9 +97,6 @@ $messages = array(
 # Book sources
 'booksources-go' => 'Kuchush',
 
-# Special:Log
-'log-search-submit' => 'Kuchush',
-
 # Special:AllPages
 'allpagessubmit' => 'Kuchush',
 
@@ -134,7 +131,7 @@ $messages = array(
 'tooltip-search'  => 'Izdash {{SITENAME}}',
 'tooltip-p-logo'  => 'Bash Bet',
 
-# Special:NewImages
+# Special:NewFiles
 'ilsubmit' => 'Izdash',
 
 # Trackbacks

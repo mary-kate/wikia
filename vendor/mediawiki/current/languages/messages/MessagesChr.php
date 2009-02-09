@@ -54,7 +54,7 @@ $messages = array(
 # Random page
 'randompage' => 'ᎤᏍᏆᏂᎪᏗ ᎤᏆᏓᏛ',
 
-# Delete/protect/revert
+# Delete
 'actioncomplete' => 'ᎠᏍᏆᏙᏅᎯ',
 
 # What links here
@@ -63,7 +63,7 @@ $messages = array(
 # Block/unblock
 'proxyblocksuccess' => 'ᎠᏍᏆᏛᎯ.',
 
-# Special:NewImages
+# Special:NewFiles
 'ilsubmit' => 'ᎠᏯᏍᏗ',
 
 # Special:SpecialPages
