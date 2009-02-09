@@ -381,9 +381,17 @@ function VET_upload(e) {
 		return false;
 	} else {
 		if (VET_initialCheck( $('VideoEmbedUrl').value )) {
-			VET_track('insert/defined'); // tracking
-			VET_indicator(1, true);
-			return true;
+
+			var query = $('VideoEmbedUrl').value;
+
+			if ( !( query.match( 'http://' ) || query.match( 'www.' ) ) ) {
+				VET_sendQuery(query, 1, VET_curSourceId);
+				return false;
+			} else {
+				VET_track('insert/defined'); // tracking
+				VET_indicator(1, true);
+				return true;				
+			}
 		} else {
 			return false;
 		}
