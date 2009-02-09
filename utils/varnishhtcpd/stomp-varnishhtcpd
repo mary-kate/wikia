@@ -33,7 +33,7 @@ use Working::Daemon;
 my $daemon = Working::Daemon->new();
 
 $daemon->parse_options(
-    'cache=s@'            => [] => 'Where to purge',
+    'cache=s'             => '127.0.0.1' => 'Where to purge',
     'debug'               => 0 =>  "Debugging",
     'stomp_username=s'    => 'guest' => "Stomp username",
     'stomp_password=s'    => 'guest' => "Stomp password",
@@ -52,12 +52,13 @@ print Dumper($daemon->options);
 
 use threads;
 use threads::shared;
-my %servers;
-my %servers_count_success : shared;
-my %servers_count_fail : shared;
+
 my @errors : shared;
 use Thread::Queue;
 
+my %purges_success :shared;
+my %purges_fail :shared;
+my %purges_error :shared;
 
 my $admin = threads->create(sub {
     my $sock = IO::Socket::INET->new
@@ -68,11 +69,13 @@ my $admin = threads->create(sub {
          Reuse     => 1,
         ) || die $!;
     while(my $connection = $sock->accept) {
-	$connection->print("# Server\tPending\tDelivered\tFailed\n");
+	$connection->print(Dumper({ success => \%purges_success, 
+				    fail    => \%purges_fail, 
+				    error   => \%purges_error}));
         close($connection);
     }
-    		});
-
+			    });
+    
 
 my $stomp = Net::Stomp->new( {hostname => $daemon->options->{'stomp_server'},
 			      port     => $daemon->options->{'stomp_port'},
@@ -86,6 +89,15 @@ $stomp->subscribe( {destination => $daemon->options->{'stomp_destination'},
 		   routing_key => $daemon->options->{'stomp_key'}}, 
 		  id => 1);
 
+
+
+my $cache = $daemon->options->{'cache'};
+my $ua = LWP::UserAgent->new(keep_alive => 1);
+$ua->agent("HTCP Purger");
+$ua->proxy('http', "http://$cache:80/");
+
+
+
 while(1) {
   
     my $frame = $stomp->receive_frame;
@@ -94,12 +106,23 @@ while(1) {
     my $url = $obj->{url};
     warn "Purging $url\n";
 
-  $0 = $daemon->name ." worker - purging $url";
+    $0 = $daemon->name ." worker - purging $url";
   
+    for my $compression ('', 'gzip', 'deflate') {
+	$ua->default_header('Accept-Encoding' => $compression);
 
+	my $req = HTTP::Request->new(PURGE => "$url");
 
+	my $res = $ua->request($req);
+	if($res->is_success()) {
+	    warn "Purged $url $compression\n";
+	    $purges_success{$compression}++;
+	} else {
+	    warn "Purging $url failed: @{[$res->status_line]}\n";
+	    $purges_fail{$cache}++;
+	}
 
-
+    }
 
 }
 
