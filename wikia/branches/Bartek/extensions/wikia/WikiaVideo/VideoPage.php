@@ -773,7 +773,7 @@ class VideoPage extends Article {
 		$purl = $this->getProviderUrl();
 		$ratio = $this->getTextRatio();
 		// todo messagize	
-		$s = '<div id="VideoPageInfo"><a href="' . $url . '">' . $this->mTitle->getText() . ' </a> (' . $ratio . ' pixel type: swf';
+		$s = '<div id="VideoPageInfo"><a href="' . $url . '">' . $this->mTitle->getText() . ' </a> (' . $ratio . ' pixel';
 		$s .= ', provider: <a href="' . $purl . '" class="external" target="_blank">' . $provider . '</a>)</div>' ;
 		$wgOut->addHTML( $s );				
 	}
