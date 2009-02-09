@@ -17,6 +17,7 @@ use URI;
 use warnings;
 
 use Socket;
+use JSON;
 use IO::Socket;
 use LWP::UserAgent;
 use Net::Stomp;
@@ -32,16 +33,14 @@ use Working::Daemon;
 my $daemon = Working::Daemon->new();
 
 $daemon->parse_options(
-    'mcast_port=i'        => 4827 => "htcp multicast port to listen to",
-    'mcast_address=s'     => "224.0.0.85" => "htcp multicast port",
     'cache=s@'            => [] => 'Where to purge',
-    'address=s'=> '0.0.0.0' => 'Interface to listen to',
     'debug'               => 0 =>  "Debugging",
     'stomp_username=s'    => 'guest' => "Stomp username",
     'stomp_password=s'    => 'guest' => "Stomp password",
     'stomp_server=s'      => '127.0.0.1' => "Stomp Server",
     'stomp_port=i'        => '61613' => "stomp port",
-    'stomp_destination=s' => 'purges' => "Where to send purges",
+    'stomp_destination=s' => 'purges' => "Waht routing key to read",
+    'name'                => 'stomp-varnishd' => '',
     );
 
 
@@ -74,37 +73,33 @@ my $admin = threads->create(sub {
     		});
 
 
-my $listen = IO::Socket::INET->new(
-                                   LocalPort => $daemon->options->{'mcast_port'},
-                                   Type      => SOCK_DGRAM,
-                                   Proto     => 'udp',
-                                   ) || die;
-
-
-setsockopt($listen, 0, $ip_add_membership,,
-           pack("a4 a4", inet_aton($daemon->options->{'mcast_address'}), inet_aton($daemon->options->{address})))
-    || die "IP_ADD_MEMBERSHIP: $!"; 
-
-my $stomp = Net::Stomp->new( {hostname => $daemon->options->{'stomp_server'},, 
-			      port     => $deamon->options->{'stomp_port'});
+my $stomp = Net::Stomp->new( {hostname => $daemon->options->{'stomp_server'},
+			      port     => $daemon->options->{'stomp_port'},
+			     });
 
 $stomp->connect( {login    => $daemon->options->{'stomp_username'},
-		  passcode => $daemon->options->{'stomp_password'} });
+		  passcode => $daemon->options->{'stomp_password'} },);
 
-
+$stomp->subscribe( {destination => '', 
+		   exchange => 'amq.topic', 
+		   routing_key => $daemon->options->{'stomp_destination'}}, 
+		  id => 1);
 
 while(1) {
-  my $raw;
-  my ($len, $datalen, $op, $id, $specifier,$extra);
-  my ($method, $url, $version, $nr3);
-    
+  
+    my $frame = $stomp->receive_frame;
+  
+    my $obj = jsonToObj($frame->body);
+    my $url = $obj->{url};
+    warn "Purging $url\n";
+
   $0 = $daemon->name ." worker - purging $url";
   
-  $stomp->send({destination=> 'wikia.purges',
-		exchange => "amq.topic",
-		bytes_message => 1,
-		body => $url});
-  };
+
+
+
+
+
 }
 
 exit;
