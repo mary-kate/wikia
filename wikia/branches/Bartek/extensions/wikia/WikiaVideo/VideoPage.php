@@ -56,6 +56,8 @@ class VideoPage extends Article {
 			wfRunHooks( 'WikiaVideo::View:BlueLink' );
 			Article::view();
 			$this->videoHistory();
+
+			$this->videoLinks();
 		} else {
 			# Just need to set the right headers
 			$wgOut->setArticleFlag( true );
@@ -654,10 +656,48 @@ class VideoPage extends Article {
 		$wgOut->addHTML( $s );
 	}
 
-	function videoLinks() {
+       function videoLinks() {
+                global $wgUser, $wgOut;
+                $limit = 100;
 
+                $dbr = wfGetDB( DB_SLAVE );
 
-	}
+                $res = $dbr->select(
+                        array( 'imagelinks', 'page' ),
+                        array( 'page_namespace', 'page_title' ),
+                        array( 'il_to' => $this->mTitle->getPrefixedDBkey(), 'il_from = page_id' ),
+                        __METHOD__,
+                        array( 'LIMIT' => $limit + 1)
+                );
+                $count = $dbr->numRows( $res );
+                if ( $count == 0 ) {
+                        $wgOut->addHTML( "<div id='mw-imagepage-nolinkstoimage'>\n" );
+                        $wgOut->addWikiMsg( 'nolinkstoimage' );
+                        $wgOut->addHTML( "</div>\n" );
+                        return;
+                }
+                $wgOut->addHTML( "<div id='mw-imagepage-section-linkstoimage'>\n" );
+                $wgOut->addWikiMsg( 'linkstoimage', $count );
+                $wgOut->addHTML( "<ul class='mw-imagepage-linktoimage'>\n" );
+
+                $sk = $wgUser->getSkin();
+                $count = 0;
+                while ( $s = $res->fetchObject() ) {
+                        $count++;
+                        if ( $count <= $limit ) {
+                                // We have not yet reached the extra one that tells us there is more to fetch
+                                $name = Title::makeTitle( $s->page_namespace, $s->page_title );
+                                $link = $sk->makeKnownLinkObj( $name, "" );
+                                $wgOut->addHTML( "<li>{$link}</li>\n" );
+                        }
+                }
+                $wgOut->addHTML( "</ul></div>\n" );
+                $res->free();
+
+                // Add a links to [[Special:Whatlinkshere]]
+                if ( $count > $limit )
+                        $wgOut->addWikiMsg( 'morelinkstoimage', $this->mTitle->getPrefixedDBkey() );
+        }
 
         public function getEmbedCode( $width = 300 ) {
 		global $wgWikiaVideoProviders;
