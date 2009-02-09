@@ -34,7 +34,6 @@ function WikiaVideoRenderVideo( $matches ) {
 	if( $wgCapitalLinks ) {
 		$video_name = ucfirst( $video_name );
 	}
-
         $x = 1;
 
         $width = 300;
