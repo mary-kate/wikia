@@ -13,6 +13,7 @@
 
 
 use strict;
+use JSON;
 use URI;
 use warnings;
 
@@ -31,13 +32,20 @@ if($^O eq 'linux') {
 use Working::Daemon;
 my $daemon = Working::Daemon->new();
 
+
 $daemon->parse_options(
-    'mcast_port=i' => 4827 => "htcp multicast port to listen to",
-    'mcast_address=s' => "224.0.0.85" => "htcp multicast port",
-    'cache=s@' => [] => 'Where to purge',
+    'mcast_port=i'        => 4827 => "htcp multicast port to listen to",
+    'mcast_address=s'     => "224.0.0.85" => "htcp multicast port",
     'address=s'=> '0.0.0.0' => 'Interface to listen to',
-    'debug'    => 0 =>  "Debugging",
+    'debug'               => 0 =>  "Debugging",
+    'stomp_username=s'    => 'guest' => "Stomp username",
+    'stomp_password=s'    => 'guest' => "Stomp password",
+    'stomp_server=s'      => '127.0.0.1' => "Stomp Server",
+    'stomp_port=i'        => '61613' => "stomp port",
+    'stomp_destination=s' => 'purges' => "Where to send purges",
+    'name'                => 'htcpd-stomp-inject' => '',
     );
+
 
 
 
@@ -80,9 +88,12 @@ setsockopt($listen, 0, $ip_add_membership,,
            pack("a4 a4", inet_aton($daemon->options->{'mcast_address'}), inet_aton($daemon->options->{address})))
     || die "IP_ADD_MEMBERSHIP: $!"; 
 
-my $stomp = Net::Stomp->new({hostname=>'mq1', port=>'61613'});
-$stomp->connect({login=>'guest', passcode=>'guest'});
 
+my $stomp = Net::Stomp->new( {hostname => $daemon->options->{'stomp_server'},,
+			      port     => $daemon->options->{'stomp_port'} });
+
+$stomp->connect( {login    => $daemon->options->{'stomp_username'},
+		  passcode => $daemon->options->{'stomp_password'} });
 
 
 while(1) {
@@ -102,10 +113,12 @@ while(1) {
     
     $0 = $daemon->name ." worker - purging $url";
 
-    $stomp->send({destination=> 'wikia.purges',
+    
+
+    $stomp->send({destination=> $daemon->options->{'stomp_destination'},
 		  exchange => "amq.topic",
 		  bytes_message => 1,
-		  body => $url});
+		  body => objToJson({ url => $url })});
 
   };
   if($@) {
