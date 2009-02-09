@@ -175,14 +175,15 @@ my $listen = IO::Socket::INET->new(
                                    ) || die;
 
 setsockopt($listen, 0, $ip_add_membership,,
-           pack("a4 a4", inet_aton("$config{address}"), inet_aton("0.0.0.0")))
+           pack("a4 a4", inet_aton("$config{address}"), inet_aton("10.8.2.214")))
     || die "IP_ADD_MEMBERSHIP: $!"; 
 
 
 my $ua = LWP::UserAgent->new(keep_alive => 1);
 $ua->agent("HTCP Purger");
-$ua->proxy('http', "http://127.0.0.1:80/");
+$ua->proxy('http', "http://$config{cache}:80/");
 my $req = HTTP::Request->new(PURGE => "http://$config{cache}/lvscheck.html");
+$req->header(PurgeURL => "xx");
 my $res = $ua->request($req);
 if($res->code != 200) {
     die "FAILED @{[$res->status_line]}\n";    
@@ -225,12 +226,14 @@ while(1) {
  #   return  unless($url =~/communitytest.wikia.com/);
     print "Got [[[$url]]] from " . inet_ntoa($addr) . ":$port\n";
     my $uri = URI->new($url);
-#    warn "$url";
-#    warn $uri->path_query;
-#    warn $uri->host;
- 
-    my $req = HTTP::Request->new(PURGE => "$url");
+    warn "$url";
+    warn $uri->path_query;
+    warn $uri->host;
+    my $hashed_url = $uri->path_query . "#" . $uri->host . "#";
+    $hashed_url =~ s/\?/\\?/;
+    my $req = HTTP::Request->new(PURGE => "$uri");
     $req->header("Accept-Encoding" => 'gzip');
+    $req->header(PurgeURL => "$hashed_url");
     my $res = $ua->request($req);
     if($res->is_success()) {
 	warn "PURGED";
