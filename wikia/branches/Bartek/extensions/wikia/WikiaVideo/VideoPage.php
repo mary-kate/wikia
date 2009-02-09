@@ -505,11 +505,22 @@ class VideoPage extends Article {
 		return $this->mData;		
 	}
 	
+	public static function getNameFromTitle( $title ) {
+		global $wgCapitalLinks;
+		if ( !$wgCapitalLinks ) {
+			global $wgContLang;
+			$name = $title->getUserCaseDBKey();
+		} else {
+			$name = $title->getDBkey();
+		}
+		return ":" . $name;
+	}
+
 	public function save() {
 		global $wgUser, $wgWikiaVideoProviders, $wgContLang;
 
 		$this->mTitle = Title::newFromText($this->mName, NS_VIDEO );
-		$desc = wfMsg( 'wikiavideo-added', $this->mTitle->getPrefixedText() );
+		$desc = wfMsg( 'wikiavideo-added', $this->mTitle->getText() );
 
                 $dbw = wfGetDB( DB_MASTER );
                 $now = $dbw->timestamp();
@@ -534,7 +545,7 @@ class VideoPage extends Article {
 
                 $dbw->insert( 'image',
                         array(
-                                'img_name' => $this->mTitle->getPrefixedText(),
+                                'img_name' => self::getNameFromTitle( $this->mTitle ),
                                 'img_size' => 300,
                                 'img_description' => '',
                                 'img_user' => $wgUser->getID(),
@@ -551,7 +562,7 @@ class VideoPage extends Article {
 
                 if( $dbw->affectedRows() == 0 ) {
 			// we are updating
-                        $desc = "updated video [[" . $this->mTitle->getPrefixedText() . "]]";
+                        $desc = "updated video [[" . self::getNameFromTitle( $this->mTitle ) . "]]";
 			                        $dbw->insertSelect( 'oldimage', 'image',
                                 array(
                                         'oi_name' => 'img_name',
@@ -569,7 +580,7 @@ class VideoPage extends Article {
                                         'oi_major_mime' => 'img_major_mime',
                                         'oi_minor_mime' => 'img_minor_mime',
                                         'oi_sha1' => 'img_sha1'
-                                ), array( 'img_name' => $this->mTitle->getPrefixedText() ), __METHOD__
+                                ), array( 'img_name' => self::getNameFromTitle( $this->mTitle ) ), __METHOD__
                         );
 
 		        // update the current image row
@@ -580,7 +591,7 @@ class VideoPage extends Article {
                                         'img_user_text' => $wgUser->getName(),
                                         'img_metadata' => $metadata,
                                 ), array( /* WHERE */
-                                        'img_name' => $this->mTitle->getPrefixedText()
+                                        'img_name' => self::getNameFromTitle( $this->mTitle )
                                 ), __METHOD__
                         );
 		}
@@ -597,7 +608,7 @@ class VideoPage extends Article {
 		$row = $dbr->selectRow(
 			'image',
 			'img_metadata',
-			array( 'img_name' => $this->mTitle->getPrefixedText() ),
+			array( 'img_name' => self::getNameFromTitle( $this->mTitle ) ),
 			$fname	
 		);	
 		if ($row) {
@@ -624,7 +635,7 @@ class VideoPage extends Article {
 			'oldimage',
 			'oi_metadata AS img_metadata',
 			array( 
-				'oi_name' => $this->mTitle->getPrefixedText(),
+				'oi_name' => self::getNameFromTitle( $this->mTitle ),
 				'oi_timestamp' => $timestamp
 			),
 			$fname	
@@ -837,7 +848,7 @@ class VideoHistoryList {
 						'img_description',
 						"'' AS ov_archive_name"
 					     ),
-					array( 'img_name' => $this->mTitle->getPrefixedText() ),
+					array( 'img_name' => VideoPage::getNameFromTitle( $this->mTitle ) ),
 					__METHOD__
 					);
 			if ( 0 == $dbr->numRows( $history ) ) {
@@ -863,7 +874,7 @@ class VideoHistoryList {
 						'oi_timestamp AS img_timestamp',
 						'oi_description AS img_description',
 					     ),
-					array( 'oi_name' => $this->mTitle->getPrefixedText() ),
+					array( 'oi_name' => VideoPage::getNameFromTitle( $this->mTitle ) ),
 					__METHOD__,
 					array( 'ORDER BY' => 'oi_timestamp DESC' )
 					);
