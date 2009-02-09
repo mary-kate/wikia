@@ -56,6 +56,10 @@ class VideoPage extends Article {
 			wfRunHooks( 'WikiaVideo::View:BlueLink' );
 			Article::view();
 			$this->videoHistory();
+			$wgOut->addHTML( '<br/>' );
+			$wgOut->addHTML( Xml::element( 'h2',
+						array( 'id' => 'filelinks' ),
+						wfMsg( 'wikiavideo-links' ) ) . "\n" );
 
 			$this->videoLinks();
 		} else {
