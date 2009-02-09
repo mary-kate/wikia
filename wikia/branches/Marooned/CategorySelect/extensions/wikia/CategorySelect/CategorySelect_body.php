@@ -93,6 +93,10 @@ class CategorySelect {
 										//remove tags when there is no content after removing category
 										if ($inner->textContent == '') {
 											$nodesToDelete[] = $node;
+											//try to remove newline right after <tag>[[category:abc]]</tag>\n - it will be in next sibbling
+											if (!is_null($node->nextSibling)) {
+												$node->nextSibling->nodeValue = preg_replace('/^\n/', '', $node->nextSibling->nodeValue);
+											}
 										}
 									}
 								}
@@ -202,7 +206,7 @@ class CategorySelect {
 	static private function lookForCategory(&$text, $outerTag) {
 		self::$categories = array();
 		self::$outerTag = $outerTag;
-		$text = preg_replace_callback('/\[\[(' . self::$categoryNamespace . '):([^]]+)]]/i', array('self', 'replaceCallback'), $text);
+		$text = preg_replace_callback('/\[\[(' . self::$categoryNamespace . '):([^]]+)]]\n?/i', array('self', 'replaceCallback'), $text);
 		$result = array('text' => $text, 'categories' => self::$categories);
 
 		$maybeIndex = count(self::$maybeCategory);
