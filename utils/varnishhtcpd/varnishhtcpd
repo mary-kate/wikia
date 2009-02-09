@@ -1,4 +1,4 @@
-#!/usr/bin/perl -T
+#!/usr/bin/perl
 
 # varnishhtpcd      Translates multicast htcp to varnish local http purge
 #
@@ -15,14 +15,11 @@
 use strict;
 use URI;
 use warnings;
-use IO::Socket::INET;
+
 use Socket;
-use LWP;
-use Sys::Syslog qw(:DEFAULT setlogsock :macros);
-use Data::Dumper qw(Dumper);
-use Carp::Heavy;
-setlogsock('unix') || die "$!";;
-my @arguments = @ARGV;
+use IO::Socket;
+use LWP::UserAgent;
+
 my $ip_add_membership;
 if($^O eq 'linux') {
     $ip_add_membership = 35;
@@ -30,153 +27,132 @@ if($^O eq 'linux') {
     die "no constants for non linux platforms";
 }
 
-use Getopt::Long;
-my %config = (
-              foreground => 0,
-              port    => 4827,
-              address => '224.0.0.85',
-              cache   => '127.0.0.1',
-              syslog   => 1,
-              debug    => 0,
-              name     => 'varnishhtcpd',
-              pidfile  => '',
-              loglevel => 1,
-              );
+use Working::Daemon;
+my $daemon = Working::Daemon->new();
 
-my $uid = getpwnam('nobody');
-my $gid = getpwnam('nobody');
+$daemon->parse_options(
+    'mcast_port=i' => 4827 => "htcp multicast port to listen to",
+    'mcast_address=s' => "224.0.0.85" => "htcp multicast port",
+    'cache=s@' => [] => 'Where to purge',
+    'address=s'=> '0.0.0.0' => 'Interface to listen to',
+    'debug'    => 0 =>  "Debugging",
+    );
 
-my $results = GetOptions("foreground" => \$config{foreground},
-                         "port=i"     => \$config{port},
-                         "address=s"  => \$config{address},
-                         "cache=s"    => \$config{cache},
-                         "syslog"     => \$config{syslog},
-                         "debug"      => \$config{debug},
-                         "name=s"     => \$config{name},
-                         "pidfile=s"  => \$config{pidfile},
-                         "logleve=i"  => \$config{loglevel},
-                         );
 
-my $command = shift || 'start';
-$config{pidfile} = "/var/run/$config{name}.pid" unless $config{pidfile};
-$config{foreground} = 1 if($config{debug});
 
-if($command eq 'restart') {
-    openlog("$config{name}", 'ndelay,pid', LOG_DAEMON) if($config{syslog});
-    # we don't do anything on restart
-    stop();
-    closelog();
-    $command = 'start';
+$daemon->do_action;
+use Data::Dumper;
+print Dumper($daemon->options);
+
+use threads;
+use threads::shared;
+my %servers;
+my %servers_count_success : shared;
+my %servers_count_fail : shared;
+my @errors : shared;
+use Thread::Queue;
+
+foreach my $cache (@{$daemon->options->{cache}}) {
+    my $queue = $servers{$cache}->{queue} = Thread::Queue->new;
+    $servers{$cache}->{thread} = threads->create(\&worker, $cache, $queue);
 }
 
-if($command eq 'status') {
-    if(my $pid = get_pid()) {
-        print "$config{name} is running on $pid\n";
-        exit 0;
-    } else {
-        print "$config{name} is not running\n";
-        exit 1;
+my $admin = threads->create(sub {
+    my $sock = IO::Socket::INET->new
+        (Listen    => 5,
+         LocalAddr => 'localhost',
+         LocalPort => 9001,
+         Proto     => 'tcp',
+         Reuse     => 1
+        );
+    while(my $connection = $sock->accept) {
+	$connection->print("# Server\tPending\tDelivered\tFailed\n");
+	foreach my $server (keys %servers) {
+	    $connection->print("$server: \t" . $servers{$server}->{queue}->pending . "\t$servers_count_success{$server}\t$servers_count_fail{$server}\n");
+	}
+	$connection->print("#######   ERRORS  ##########\n");
+	$connection->print(@errors);
+        close($connection);
+    }
+    		});
+
+
+sub worker {
+    my ($cache, $queue) = @_;
+    print "Starting worker for $cache\n";
+    $servers_count_success{$cache} = 0;
+    $servers_count_fail{$cache} = 0;
+    my $ua = LWP::UserAgent->new(keep_alive => 1);
+    $ua->agent("HTCP Purger");
+    $ua->proxy('http', "http://$cache:80/");
+    while(my $url = $queue->dequeue) {
+	my $uri = URI->new($url);
+	my $req = HTTP::Request->new(PURGE => "$uri");
+	$req->header("Accept-Encoding" => 'gzip');
+	
+	my $res = $ua->request($req);
+	if($res->is_success()) {
+#	    warn "Purged $uri\n";
+	    $servers_count_success{$cache}++;
+	} else {
+#	    warn "Purging $uri failed: @{[$res->status_line]}\n";
+	    $servers_count_fail{$cache}++;
+	    lock(@errors);
+	    if (@errors > 20) {
+		pop @errors;
+	    }
+	    my $error = scalar gmtime;
+	    $error .= " $cache: '@{[$res->status_line]}' $uri\n";
+	    push @errors, $error;
+	}
     }
 }
-if($command eq 'start') {
-    if(my $pid = get_pid()) {
-        #already running just return
-        openlog("$config{name}", 'ndelay,pid', LOG_DAEMON) if($config{syslog});
-        mylog(0, 'info', "exiting - process already running on $pid");
-        print STDERR "exiting - process already running on $pid\n";
-        exit 1;
-    }
-}
-
-if($command eq 'stop') {
-    openlog("$config{name}", 'ndelay,pid', LOG_DAEMON) if($config{syslog});
-    if(stop()) {
-        exit 0;
-    } else {
-        # no running
-        mylog(0, 'info', "failed to stop daemon - cannot find process");
-        print STDERR "$config{name} failed to stop daemon - cannot find process\n";
-        exit 1;
-    }
-}
-
-sub stop {
-    if(my $pid = get_pid()) {
-        while(check_pid($pid)) {
-            kill(2, $pid);
-            mylog(0, 'info', "sent SIGINT - waiting on stopped pid $pid");
-            print STDERR "sent SIGINT - waiting on stopped pid $pid\n";
-            sleep 1;
-        }
-        mylog(0, 'info',"Stopped $config{name} on $pid");
-        print STDERR "$config{name} stopped on $pid\n";
-        return $pid;
-    }
-    return 0;
-}
-
-sub get_pid {
-   if(-r $config{pidfile}) {
-        open(my $pidfile, "<$config{pidfile}") || die;
-        my $line = <$pidfile>;
-        close($pidfile);
-        $line =~/(\d+)/;
-        if(my $pid_to_check = $1) {
-            $ENV{PATH} = '';
-            return $pid_to_check if(check_pid($pid_to_check));
-        }
-    }
-   return 0;
-}
-
-sub check_pid {
-    my $pid = shift;
-    return !system("/bin/ps aux | /bin/grep $pid | /bin/grep -v grep | /bin/grep $config{name}");
-}
-
-
-daemonize() unless $config{foreground};
-
-{
-    if(my $pid = fork()) {
-
-        # this is the master session
-        # it makes sure to cleanup from the slave
-        # it stays as superuser
-
-        open(my $pidfile, "+>$config{pidfile}") || die;
-        openlog("$config{name}", 'ndelay,pid', LOG_DAEMON) if($config{syslog});
-        mylog(1, 'info', "started master session - child is $pid") || die "$!";
-        select($pidfile); $|++; select(STDOUT);
-        print $pidfile "$$";
-        $SIG{INT} = sub { kill(2,$pid) };
-        $0 = "$config{name} - waiting for child $pid"; 
-        waitpid($pid, 0);
-        mylog(1, 'info', "exiting master session - child is $pid") || die "$!";
-        unlink("/tmp/varnishhtcpd.$pid/etc/protocols") || die;
-        rmdir("/tmp/varnishhtcpd.$pid/etc/") || die;
-        rmdir("/tmp/varnishhtcpd.$pid/") || die;
-        unlink($config{pidfile}) || die $!;
-        exit;
-    }
-
-    openlog("$config{name} worker", 'ndelay,pid', LOG_DAEMON) if($config{syslog});
-    mylog(1, 'info', "started session - ready to listen on $config{address}:$config{port} purging to $config{cache}");
-    $0 = "$config{name} worker - starting up";
-
-}
-
 
 
 my $listen = IO::Socket::INET->new(
-                                   LocalPort => $config{port},
+                                   LocalPort => $daemon->options->{'mcast_port'},
                                    Type      => SOCK_DGRAM,
                                    Proto     => 'udp',
                                    ) || die;
 
+
 setsockopt($listen, 0, $ip_add_membership,,
-           pack("a4 a4", inet_aton("$config{address}"), inet_aton("10.8.2.214")))
+           pack("a4 a4", inet_aton($daemon->options->{'mcast_address'}), inet_aton($daemon->options->{address})))
     || die "IP_ADD_MEMBERSHIP: $!"; 
+
+while(1) {
+  my $raw;
+  my ($len, $datalen, $op, $id, $specifier,$extra);
+  my ($method, $url, $version, $nr3);
+  eval {
+    $0 = $daemon->name . " worker - waiting for net";
+
+    (my $peer = recv($listen, $raw, 512, 0)) || die "recv: $!";
+    my ($port, $addr) = sockaddr_in($peer);
+
+    # reverse engineered from mediawiki SquidUpdate.php
+    
+    ($len, $datalen, $op, $id, $specifier,$extra) = unpack("nxxnCxNxxa*n", $raw);    
+    ($method, $url, $version, $nr3) = unpack("n/an/an/an", $specifier); 
+    
+    $0 = $daemon->name ." worker - purging $url";
+
+    foreach my $server (values %servers) {
+	$server->{queue}->enqueue("$url");
+    }
+
+  };
+  if($@) {
+    no warnings;
+    warn "$@\n";
+    warn "$len, $datalen, $op, $id, $specifier,$extra\n";
+    warn "$method, $url, $version, $nr3\n";
+  }
+}
+
+exit;
+__END__
+
 
 
 my $ua = LWP::UserAgent->new(keep_alive => 1);
