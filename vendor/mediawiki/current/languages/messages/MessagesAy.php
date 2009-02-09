@@ -92,7 +92,7 @@ $messages = array(
 'moredotdotdot' => 'Yapa...',
 'mypage'        => 'Uñstawija',
 'navigation'    => 'Wampuña',
-'and'           => '-mpi',
+'and'           => '&#32;-mpi',
 
 'errorpagetitle'    => 'Pantja',
 'help'              => 'Yanapaña',
@@ -135,6 +135,7 @@ $messages = array(
 
 'editsection'    => 'turkaña',
 'editold'        => 'turkaña',
+'editlink'       => 'trukaña',
 'showtoc'        => 'uñachayaña',
 'site-rss-feed'  => "$1 ''RSS'' jalsuri",
 'site-atom-feed' => "$1 ''Atom'' jalsuri",
@@ -162,8 +163,8 @@ $messages = array(
 'loginlanguagelabel' => 'Aru: $1',
 
 # Edit pages
-'summary'  => 'Juk’aptayawi',
-'subject'  => 'Yatsuwi/titulu',
+'summary'  => 'Juk’aptayawi:',
+'subject'  => 'Yatsuwi/titulu:',
 'yourdiff' => 'Jalaqtatanaka',
 
 # Preferences page
@@ -179,12 +180,12 @@ $messages = array(
 
 'license' => 'Iyawsawi:',
 
-# Special:ImageList
-'imagelist_date'        => 'Uru jakhu',
-'imagelist_user'        => 'Apnaqiri',
-'imagelist_description' => 'Uñt’ayawi',
+# Special:ListFiles
+'listfiles_date'        => 'Uru jakhu',
+'listfiles_user'        => 'Apnaqiri',
+'listfiles_description' => 'Uñt’ayawi',
 
-# Image description page
+# File description page
 'filehist-user' => 'Apnaqiri',
 
 # Miscellaneous special pages
@@ -193,7 +194,6 @@ $messages = array(
 # Special:Log
 'specialloguserlabel'  => 'Apnaqiri:',
 'speciallogtitlelabel' => 'Titulu:',
-'log-search-submit'    => 'Saraña',
 
 # Special:ListUsers
 'listusers-submit' => 'Uñachayaña',

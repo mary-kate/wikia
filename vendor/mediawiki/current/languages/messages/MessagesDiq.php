@@ -10,36 +10,36 @@
 
 $messages = array(
 # User preference toggles
-'tog-underline'               => 'Bınê gıreyan de xete bıance:',
-'tog-highlightbroken'         => 'Gıreyanê vengan {a href="" class="new"}wına{/a} (alternative: wına{a 
+'tog-underline'               => 'Bınê gırêyan de xete bıance:',
+'tog-highlightbroken'         => 'Gırêyanê vengan {a href="" class="new"}wına{/a} (alternative: wına{a 
 href="" class="internal"}?{/a}) bımocne.',
 'tog-justify'                 => 'Nuşte dı kıştan ser bıazne',
-'tog-hideminor'               => 'Vurnayışanê şenıkan perra „vurnayışê peyêni“ de bınımne',
-'tog-extendwatchlist'         => 'Lista seyr-kerdışia hirakerdiye',
-'tog-usenewrc'                => "Lista vurnayışanê peyênana hirakerdiye (''JavaScript'' lazımo)",
+'tog-hideminor'               => 'Vurnayışanê şenıkan pela „vurnayışê peyêni“ de bınımne',
+'tog-extendwatchlist'         => 'Lista seyr-kerdışia herakerdiyı',
+'tog-usenewrc'                => "Lista vurnayışanê peyênana herakerdiyı (''JavaScript'' lazımo)",
 'tog-numberheadings'          => 'Sernuşteyan be xo numre cışane',
 'tog-showtoolbar'             => 'Goceganê hacetanê vurnayışi bımocne (JavaScript)',
-'tog-editondblclick'          => 'Pê dı rey tıknayış perre sero bıxebetiye (JavaScript)',
-'tog-editsection'             => 'Vurnayışê tek tek qısman rê gıreyan bımocne',
-'tog-editsectiononrightclick' => 'Sernuştey qısıman sero be gocega raşte tıknaene bıvurne (JavaScript)',
-'tog-showtoc'                 => 'Tabloyê tedeesteyan bımocne (de perranê be hirê sernuşteyan ra vêşêri de)',
+'tog-editondblclick'          => 'Pê dı rey tıknayış pele sero bıxebıtiye (JavaScript)',
+'tog-editsection'             => 'Vurnayışê tek tek qısman rê gırêyan bımocne',
+'tog-editsectiononrightclick' => 'Sernuştey qısıman sero be gocega raşte tıknayenı bıvurne (JavaScript)',
+'tog-showtoc'                 => 'Tabloyê tedeesteyan bımocne (de pelanê be hirê sernuşteyan ra vêşêri de)',
 'tog-rememberpassword'        => 'Parola mı bia xo viri',
-'tog-editwidth'               => 'Verınina perra cıdayışê nuştey tam bıaso',
-'tog-watchcreations'          => 'Perrê ke mı afernaê, lista mına seyr-kerdışi ke',
-'tog-watchdefault'            => 'Perrê ke mı vurnaê, lista mına seyr-kerdışi ke',
-'tog-watchmoves'              => 'Perrê ke mı kırışnaê, lista mına seyr-kerdışi ke',
-'tog-watchdeletion'           => 'Perrê ke mı esterıtê, lista mına seyr-kerdışi ke',
-'tog-minordefault'            => 'Vurnayışanê xo pêroine ‘vurnayışo qıckek’ nışan bıde',
-'tog-previewontop'            => 'Verqayti perra nuştışi ser de bımocne',
+'tog-editwidth'               => 'Verıniya pela cıdayışê nuştey tam bıaso',
+'tog-watchcreations'          => 'Pelê ke mı afernayê, lista mına seyr-kerdışi ke',
+'tog-watchdefault'            => 'Pelê ke mı vurnayê, lista mına seyr-kerdışi ke',
+'tog-watchmoves'              => 'Pelê ke mı kırışnayê, lista mına seyr-kerdışi ke',
+'tog-watchdeletion'           => 'Pelê ke mı esterıtê, lista mına seyr-kerdışi ke',
+'tog-minordefault'            => 'Vurnayışanê xo pêrune ‘vurnayışo qıckek’ nışan bıde',
+'tog-previewontop'            => 'Verqayti pela nuştışi ser de bımocne',
 'tog-previewonfirst'          => 'Vurnayışo verên de verqayti tım bımocne',
-'tog-nocache'                 => 'Perran mia xo viri',
-'tog-enotifwatchlistpages'    => 'Perra ke ez seyr kenan eke vurnê mı rê e-mail bırışe',
-'tog-enotifusertalkpages'     => 'Pela mına werênayışi ke vurnê, mı rê e-mail bırışe',
+'tog-nocache'                 => 'Pelan mia xo viri',
+'tog-enotifwatchlistpages'    => 'Pela ke ez seyr kenan eke vurnayê mı rê e-mail bırışe',
+'tog-enotifusertalkpages'     => 'Pela mına werênayışi ke vurnayê, mı rê e-mail bırışe',
 'tog-enotifminoredits'        => 'Vurnayışanê qıckekan de ki mı rê e-mail bırışe',
 'tog-enotifrevealaddr'        => 'E-mailadresa mı emailanê xeberan de bımocne',
 'tog-shownumberswatching'     => 'Amarê karberanê seyrkerdoğan bımocne',
-'tog-fancysig'                => 'İmza xame (bê gıreo otomatik be perra karberan ser)',
-'tog-externaleditor'          => 'Editorê teberi standard bıxebetne (tenya seba ekspertano, komputerê şıma de ayarê xususiy lazımê)',
+'tog-fancysig'                => 'İmza xame (bê gırêo otomatik be pela karberan ser)',
+'tog-externaleditor'          => 'Editorê teberi standard bıxebıtne (tenya seba ekspertano, komputerê şıma de ayarê xususiy lazımê)',
 'tog-externaldiff'            => 'Têverşanayışan pê programê teberi vıraze (tenya seba ekspertano, komputerê şıma de ayarê xususiy lazımê)',
 'tog-showjumplinks'           => 'Gırey "şo"y feal ke',
 'tog-uselivepreview'          => 'Verqayto cınde bıgurene/bıxebetne (JavaScript) (hewna cerrebnayış dero)',
@@ -54,8 +54,6 @@ href="" class="internal"}?{/a}) bımocne.',
 'underline-always'  => 'Tım',
 'underline-never'   => 'Qet',
 'underline-default' => 'Qerar cıgeyraoği dest dero',
-
-'skinpreview' => '(Verqayt)',
 
 # Dates
 'sunday'        => 'Yewşeme',
@@ -143,7 +141,7 @@ href="" class="internal"}?{/a}) bımocne.',
 'mytalk'         => 'Perra mına werênayışi',
 'anontalk'       => 'Perra werênayışê nê IPy',
 'navigation'     => 'pusula',
-'and'            => 'u',
+'and'            => '&#32;u',
 
 'errorpagetitle'    => 'Xeta',
 'returnto'          => 'Peyser şo $1.',
@@ -200,8 +198,6 @@ href="" class="internal"}?{/a}) bımocne.',
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
 'aboutsite'            => 'Heqa {{SITENAME}} de',
 'aboutpage'            => 'Project:Heqa',
-'bugreports'           => 'Xebera xeteyan',
-'bugreportspage'       => 'Project:Xebera xeteyan',
 'copyright'            => 'Nuştey bınê Lisansê $1 de vêrenê.',
 'copyrightpagename'    => 'Heqa telifê {{SITENAME}}',
 'copyrightpage'        => '{{ns:project}}:Heqê telifi',
@@ -231,6 +227,8 @@ href="" class="internal"}?{/a}) bımocne.',
 'editsection-brackets'    => '[$1]',
 'editold'                 => 'bıvurne',
 'viewsourceold'           => 'çımey bıvêne',
+'editlink'                => 'bıvurne',
+'viewsourcelink'          => 'çımey bıvêne',
 'editsectionhint'         => 'Qısımê vurnayışi: $1',
 'toc'                     => 'Tedeestey',
 'showtoc'                 => 'bımocne',
@@ -266,7 +264,6 @@ Seba /qandê lista pelanê xasanê vêrdeyan kerem ke: [[Special:SpecialPages|{{
 # General errors
 'error'               => 'Ğelet',
 'badtitle'            => 'Sernameya xırabe',
-'perfdisabled'        => 'Qusır de seyrmeke! This feature has been temporarily disabled because it slows the database down to the point that no one can use the wiki.',
 'viewsource'          => 'Çımey bıvêne',
 'viewsourcefor'       => 'Seba / qandê $1',
 'viewsourcetext'      => 'To şikinay çımey na pele bıvêne u kopya kerê:',
@@ -306,7 +303,13 @@ It must have at least $1 characters and be different from your username.',
 'mailmypassword'            => 'E-mail sera parola newiye bırışe',
 'loginlanguagelabel'        => 'Zıwan: $1',
 
+# Password reset dialog
+'oldpassword' => 'Parola kıhane:',
+'newpassword' => 'Parola newiye:',
+'retypenew'   => 'Parola newiye tekrar ke:',
+
 # Edit pages
+'summary'      => 'Xulasa:',
 'savearticle'  => 'Ena pele qeyd ke',
 'preview'      => 'Verqayt',
 'showpreview'  => 'Verqayti bımocne',
@@ -328,6 +331,7 @@ It must have at least $1 characters and be different from your username.',
 'editundo' => 'peyser biya',
 
 # Search results
+'searchhelp-url'     => 'Help:Tedeestey',
 'powersearch'        => 'Cıgeyrayışo hera',
 'powersearch-legend' => 'Cıgeyrayışo hera',
 'powersearch-ns'     => 'Cayanê nameyan de cıgeyrayış:',
@@ -338,13 +342,11 @@ It must have at least $1 characters and be different from your username.',
 # Preferences page
 'mypreferences'   => 'tercihê mı',
 'qbsettings-none' => 'çino',
+'skin-preview'    => 'Verqayt',
 'prefs-personal'  => 'Pela karberi',
 'prefs-rc'        => 'Vurnayışê peyêni',
 'prefs-watchlist' => 'Lista seyr-kerdışi',
 'saveprefs'       => 'Qeyd ke',
-'oldpassword'     => 'Parola kıhane:',
-'newpassword'     => 'Parola newiye:',
-'retypenew'       => 'Parola newiye tekrar ke:',
 'timezonelegend'  => 'Warey saete',
 'files'           => 'Dosyey',
 
@@ -372,13 +374,13 @@ It must have at least $1 characters and be different from your username.',
 'filesource' => 'Çımey:',
 'savefile'   => 'Dosya qeyd ke',
 
-# Special:ImageList
+# Special:ListFiles
 'imgfile'        => 'dosya',
-'imagelist'      => 'Lista Dosya',
-'imagelist_date' => 'Tarix',
-'imagelist_user' => 'Karber',
+'listfiles'      => 'Lista Dosya',
+'listfiles_date' => 'Tarix',
+'listfiles_user' => 'Karber',
 
-# Image description page
+# File description page
 'filehist'          => 'Tarixê dosya',
 'filehist-datetime' => 'Tarix/Zeman',
 'filehist-user'     => 'Karber',
@@ -417,7 +419,6 @@ It must have at least $1 characters and be different from your username.',
 
 # Special:Log
 'specialloguserlabel' => 'Karber:',
-'log-search-submit'   => 'Şo',
 
 # Special:AllPages
 'alphaindexline' => '$1 ra $2ine',
@@ -441,8 +442,10 @@ It must have at least $1 characters and be different from your username.',
 'watching'   => 'Seyr ke...',
 'unwatching' => 'Seyr meke...',
 
-# Delete/protect/revert
-'deletepage'   => 'Pele bıestere',
+# Delete
+'deletepage' => 'Pele bıestere',
+
+# Rollback
 'rollbacklink' => 'peyser bia',
 
 # Restrictions (nouns)
@@ -473,6 +476,7 @@ Sebebê kılit-biyayışê $1\'i: "$2"o',
 'tooltip-pt-userpage'     => 'Pela mına karberi',
 'tooltip-pt-mytalk'       => 'Pela mına werênayışi',
 'tooltip-pt-login'        => 'Seba cıkotışi şıma rê dewato, labelê no zeruri niyo.',
+'tooltip-pt-logout'       => 'Veciye',
 'tooltip-ca-talk'         => 'Pela tedeesteyan sero werênayış',
 'tooltip-ca-edit'         => 'Tı eşkenay na pele bıvurnê.
 Kerem ke, qeyd-kerdış ra ver gozega verqayti bıxebıtne.',
@@ -490,7 +494,7 @@ Kerem ke, qeyd-kerdış ra ver gozega verqayti bıxebıtne.',
 # Attribution
 'lastmodifiedatby' => 'Ena pele tewr peyên roca $2, $1 by $3. de biya rocaniye', # $1 date, $2 time, $3 user
 
-# Special:NewImages
+# Special:NewFiles
 'ilsubmit' => 'Cıgeyre',
 
 # Bad image list
@@ -501,9 +505,6 @@ Yew rêze de gırêyo sıfteyın gani gırêyo de dosya xırabıne bo.
 Na rêze de her gırêyo bin zey istisna vêniyeno, yanê pelê ke dosya beno ke sero rêzbiyaye asena.',
 
 'exif-gaincontrol-0' => 'çino',
-
-# AJAX search
-'articletitles' => "Perri be ''$1'' dest cı kenê",
 
 # Special:FilePath
 'filepath-page' => 'Dosya:',

@@ -80,7 +80,7 @@ $messages = array(
 'moredotdotdot'  => 'Máis...',
 'mypage'         => '𐌼𐌴𐌹𐌽 𐍃𐌴𐌹𐌳𐍉',
 'mytalk'         => '𐌼𐌴𐌹𐌽𐌰 𐌼𐌰𐌸𐌻𐌴𐌹',
-'and'            => 'jah',
+'and'            => '&#32;jah',
 
 # Metadata in edit box
 'metadata_help' => 'Ufardata:',
@@ -123,7 +123,6 @@ $messages = array(
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
 'aboutsite'            => 'Ufar {{SITENAME}}',
 'aboutpage'            => 'Project:Ufar',
-'bugreports'           => '𐌰𐌹𐍂𐌶𐌹𐌸𐌰𐌷𐌰𐌿𐍃𐌴𐌹𐌽𐌴𐌹𐍃',
 'copyrightpage'        => '{{ns:project}}:Manleikawitoþa',
 'currentevents'        => 'Niuja waíhts',
 'currentevents-url'    => 'Project:Nu her',
@@ -197,8 +196,8 @@ $messages = array(
 'hr_tip'          => 'Ráihtsbáurd (brukjan miþ niufarussus)',
 
 # Edit pages
-'summary'                => 'Máidjanspillon',
-'subject'                => 'Háubidaboka',
+'summary'                => 'Máidjanspillon:',
+'subject'                => 'Háubidaboka:',
 'minoredit'              => 'Sa ist lietila máideins',
 'watchthis'              => '𐍅𐌰𐍂𐌰𐌽 𐍃𐌴𐌹𐌳𐍉',
 'savearticle'            => 'Melja seido',
@@ -218,7 +217,7 @@ $messages = array(
 # History pages
 'currentrev'          => 'Nu máideins',
 'revisionasof'        => 'Gamelido us $1',
-'revision-info'       => 'Máideins fram $1 bi $2',
+'revision-info'       => 'Máideins fram $1 bi $2', # Additionally available: $3: revision id
 'previousrevision'    => '←Áiris Máideins',
 'nextrevision'        => 'Iftuma máideins→',
 'currentrevisionlink' => 'Numáideins',
@@ -239,15 +238,17 @@ $messages = array(
 'editundo'      => 'niuskapjan',
 
 # Search results
-'prevn'        => 'aftuma $1',
-'nextn'        => 'iftuma $1',
-'viewprevnext' => 'Siuneis ($1) ($2) ($3)',
-'powersearch'  => 'Sokeiþ',
+'prevn'          => 'aftuma $1',
+'nextn'          => 'iftuma $1',
+'viewprevnext'   => 'Siuneis ($1) ($2) ($3)',
+'searchhelp-url' => 'Hilpa:Háubidaseido',
+'powersearch'    => 'Sokeiþ',
 
 # Preferences page
 'preferences'       => 'Meinos brukjamaideineis',
 'mypreferences'     => '𐌼𐌴𐌹𐌽𐍉𐍃 𐌱𐍂𐌿𐌺𐌾𐌰',
 'skin'              => 'Seidofill',
+'skin-preview'      => 'Faúrsaiƕa',
 'saveprefs'         => 'Melja',
 'searchresultshead' => 'Sokeiþ',
 
@@ -283,11 +284,11 @@ $messages = array(
 'uploadedimage'   => 'ushlaþiþ "[[$1]]"',
 'watchthisupload' => 'Witan so seido',
 
-# Special:ImageList
+# Special:ListFiles
 'imgfile'   => 'Feilans',
-'imagelist' => 'Feilans tala',
+'listfiles' => 'Feilans tala',
 
-# Image description page
+# File description page
 'filehist'            => 'Feilans áiris',
 'filehist-current'    => 'nu',
 'filehist-datetime'   => 'Ƕeila',
@@ -311,7 +312,6 @@ $messages = array(
 
 # Statistics
 'statistics' => 'Seidostatistik',
-'sitestats'  => '{{SITENAME}} seidostatistik',
 
 'brokenredirects-edit'   => '(máidjan)',
 'brokenredirects-delete' => '(taíran)',
@@ -334,7 +334,6 @@ $messages = array(
 'speciallogtitlelabel' => 'Namo:',
 'log'                  => 'Logbokos',
 'all-logs-page'        => 'Alla logos',
-'log-search-submit'    => 'Afgaggan',
 
 # Special:AllPages
 'allpages'       => 'Allis seidos',
@@ -347,18 +346,20 @@ $messages = array(
 # Special:Categories
 'categories' => '𐌺𐌿𐌽𐌾𐍉𐍃',
 
+# Special:LinkSearch
+'linksearch-ns' => 'Seidofera:',
+
 # E-mail user
 'emailuser' => 'Sandjan þo niutand bokom',
 
 # Watchlist
-'watchlist'            => '𐌼𐌴𐌹𐌽𐍉𐍃 𐍅𐌹𐍄𐌰𐌽𐌳𐍃𐌻𐌴𐌹𐍃𐍄𐌰',
-'mywatchlist'          => '𐌼𐌴𐌹𐌽𐍉𐍃 𐍅𐌹𐍄𐌰𐌽𐌳𐍃𐌻𐌴𐌹𐍃𐍄𐌰',
-'watchlistfor'         => "(fáur '''$1''')",
-'watch'                => '𐍅𐌰𐍂𐌰𐌽',
-'watchthispage'        => '𐍅𐌰𐍂𐌰𐌽 𐍃𐌴𐌹𐌳𐍉',
-'unwatch'              => '𐌽𐌹𐍅𐌰𐍂𐌰𐌽',
-'watchlist-details'    => '{{PLURAL:$1|$1 seido|$1 seidona}} witáiþs inu maþleiseidam.',
-'watchlist-hide-minor' => 'Filhan leitila máideins',
+'watchlist'         => '𐌼𐌴𐌹𐌽𐍉𐍃 𐍅𐌹𐍄𐌰𐌽𐌳𐍃𐌻𐌴𐌹𐍃𐍄𐌰',
+'mywatchlist'       => '𐌼𐌴𐌹𐌽𐍉𐍃 𐍅𐌹𐍄𐌰𐌽𐌳𐍃𐌻𐌴𐌹𐍃𐍄𐌰',
+'watchlistfor'      => "(fáur '''$1''')",
+'watch'             => '𐍅𐌰𐍂𐌰𐌽',
+'watchthispage'     => '𐍅𐌰𐍂𐌰𐌽 𐍃𐌴𐌹𐌳𐍉',
+'unwatch'           => '𐌽𐌹𐍅𐌰𐍂𐌰𐌽',
+'watchlist-details' => '{{PLURAL:$1|$1 seido|$1 seidona}} witáiþs inu maþleiseidam.',
 
 # Displayed when you click the "watch" button and it is in the process of watching
 'watching'   => 'Wita...',
@@ -366,7 +367,7 @@ $messages = array(
 
 'created' => 'gaskapjan',
 
-# Delete/protect/revert
+# Delete
 'deletepage'            => 'Taíra seido',
 'delete-legend'         => 'Taíran',
 'actioncomplete'        => 'Wasuh Ita Gaustiuhan',
@@ -374,12 +375,17 @@ $messages = array(
 'dellogpage'            => 'Taíra áirwboka',
 'deleteotherreason'     => 'Anþar/máis mitons:',
 'deletereasonotherlist' => 'Anþar mitons',
-'rollbacklink'          => 'afwalwjan',
-'protectlogpage'        => 'Log af Baírgjan',
-'protect-unchain'       => 'Ungalukan sa skiubanfreihals',
-'protect-level-sysop'   => 'Seidofaþs áinaha',
-'protect-expiring'      => 'bláuþiþ $1 (UTC)',
-'restriction-type'      => 'Freihals:',
+
+# Rollback
+'rollbacklink' => 'afwalwjan',
+
+# Protect
+'protectlogpage'      => 'Log af Baírgjan',
+'prot_1movedto2'      => '[[$1]] skiubiþ du [[$2]]',
+'protect-unchain'     => 'Ungalukan sa skiubanfreihals',
+'protect-level-sysop' => 'Seidofaþs áinaha',
+'protect-expiring'    => 'bláuþiþ $1 (UTC)',
+'restriction-type'    => 'Freihals:',
 
 # Restrictions (nouns)
 'restriction-edit' => 'Máidjan',
@@ -408,7 +414,6 @@ $messages = array(
 # What links here
 'whatlinkshere'       => '𐍈𐌰𐍂𐌾𐌹𐍃 𐍃𐌴𐌹𐌳𐍉𐌽𐌰 𐌷𐌻𐌰𐌲𐌺𐌾𐌰𐌽𐌳 𐌷𐌹𐌳𐍂𐌴',
 'whatlinkshere-title' => 'Seidos hwarjis du $1 táiknjan',
-'linklistsub'         => '(Tala af táikjanbanjam)',
 'isredirect'          => 'táikjaseido',
 'istemplate'          => 'ináukan',
 'whatlinkshere-prev'  => '{{PLURAL:$1|aftuma|aftumans $1}}',
@@ -465,7 +470,7 @@ $messages = array(
 # Media information
 'show-big-image' => 'Fullis wahstus',
 
-# Special:NewImages
+# Special:NewFiles
 'ilsubmit' => 'Sokeiþ',
 
 # Metadata

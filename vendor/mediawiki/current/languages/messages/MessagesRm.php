@@ -24,8 +24,6 @@ $messages = array(
 'underline-never'   => 'mai suttastritgar',
 'underline-default' => 'surprender standard dal browser',
 
-'skinpreview' => '(Prevista)',
-
 # Dates
 'sunday'        => 'Dumengia',
 'monday'        => 'Glindesdi',
@@ -97,7 +95,7 @@ $messages = array(
 'mytalk'        => 'Mia pagina da discussiun',
 'anontalk'      => 'Pagina da discussiun da questa IP',
 'navigation'    => 'Navigaziun',
-'and'           => 'e',
+'and'           => '&#32;e',
 
 'errorpagetitle'   => 'Sbagl',
 'returnto'         => 'Enavos tar $1.',
@@ -139,8 +137,6 @@ $messages = array(
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
 'aboutsite'            => 'Surda {{SITENAME}}',
 'aboutpage'            => 'Project:Surda',
-'bugreports'           => 'Rapportar sbagls',
-'bugreportspage'       => 'Project:Rapportar sbagls',
 'copyright'            => 'Cuntegn disponibel sut $1.',
 'copyrightpagename'    => '{{ns:project}}:Resguardar_dretgs_d_autur',
 'copyrightpage'        => '{{ns:project}}:Resguardar_dretgs_d_autur',
@@ -171,6 +167,8 @@ $messages = array(
 'youhavenewmessagesmulti' => 'Ti as novs messadis en $1',
 'editsection'             => 'editar',
 'editold'                 => 'editar',
+'editlink'                => 'editar',
+'viewsourcelink'          => 'mussar il code fundamental',
 'editsectionhint'         => 'Editar secziun: $1',
 'toc'                     => 'Cuntegn',
 'showtoc'                 => 'mussar',
@@ -220,7 +218,6 @@ Tes conto è vegni creà. Betg emblida da midar tias preferenzas da {{SITENAME}}
 'yourpasswordagain'          => 'repeter pled-clav',
 'remembermypassword'         => 'Memorisar il pled-clav',
 'yourdomainname'             => 'Vossa domain',
-'loginproblem'               => '<b>I ha dà in problem cun voss log-in.</b><br />Empruvai per plaschair danovamain!',
 'login'                      => 'Log-in',
 'nav-login-createaccount'    => 'Log-in / crear in conto',
 'loginprompt'                => "Vus stuais avair '''activà cookies''' per pudair s'annunziar tar {{SITENAME}}.",
@@ -264,13 +261,19 @@ Sch\'insatgi auter ha fatg questa dumonda, ni sch\'il pled-clav è vegnì endame
 T'annunzia per plaschair sche ti has retschavì el.",
 'eauthentsent'               => "In e-mail da confermaziun è vegnì tramess a l'adressa d'e-mail numnada. 
 Suonda las infurmaziuns en l'e-mail per confirmar ch'il conto d'utilisader è il tes.",
-'acct_creation_throttle_hit' => "Stgisai, vus avais gia creà $1 contos d'utilisaders. Vus na pudais betg far plirs.",
-'emailauthenticated'         => "Tia adressa d'email è vegnida verifitgada ils $1.",
+'acct_creation_throttle_hit' => "Stgisa, ti has gia creà {{PLURAL:$1|in conto|$1 contos}} d'utilisader. 
+Ti na sas betg far plirs.",
+'emailauthenticated'         => "Tia adressa d'email è vegnida verifitgada ils $2 las $3.",
 'emailnotauthenticated'      => "Vus n'avais betg anc <strong>confermà vossa adressa dad email</strong>.<br />
 Perquei è anc nagin retschaiver e trametter dad emails per las suandantas funcziuns pussaivel.",
 'emailconfirmlink'           => "Confirmar l'adressa dad email",
 'accountcreated'             => "Creà il conto d'utilisader",
 'accountcreatedtext'         => "Il conto d'utilisader per $1 è vegnì creà.",
+
+# Password reset dialog
+'oldpassword' => 'pled-clav vegl:',
+'newpassword' => 'pled-clav nov:',
+'retypenew'   => 'repeter pled-clav nov:',
 
 # Edit page toolbar
 'bold_sample'     => 'Text grass',
@@ -294,7 +297,8 @@ Perquei è anc nagin retschaiver e trametter dad emails per las suandantas funcz
 'hr_tip'          => 'Lingia orizontala (betg utilisar savens!)',
 
 # Edit pages
-'summary'                => 'Resumaziun',
+'summary'                => 'Resumaziun:',
+'subject'                => 'Pertutga:',
 'minoredit'              => 'Midà be bagatellas',
 'watchthis'              => 'observar quest artitgel',
 'savearticle'            => "memorisar l'artitgel",
@@ -303,6 +307,7 @@ Perquei è anc nagin retschaiver e trametter dad emails per las suandantas funcz
 'showlivepreview'        => 'prevista directa',
 'showdiff'               => 'mussar midadas',
 'anoneditwarning'        => "Vus essas betg annunziads. Empè dal num d'utilisader vign l'adressa dad IP registrada en la historia da las versiuns.",
+'summary-preview'        => 'prevista da la resumaziun:',
 'blockedtitle'           => 'Utilisader è bloccà',
 'blockedtext'            => "<big>'''Tes num d'utilisader u tia adressa d'IP è vegnida bloccada.'''</big>
 
@@ -364,25 +369,26 @@ En il ''log da stidar'' che suonda pos ti guardar daco che la pagina è vegnida 
 'cantcreateaccounttitle' => "Betg pussaivel da crear l'account",
 
 # History pages
-'viewpagelogs'        => 'Guardar ils logs da questa pagina',
-'currentrev'          => 'Versiun actuala',
-'revisionasof'        => 'Versiun dals $1',
-'revision-info'       => "Quai è ina versiun veglia. Temp da la midada ''$1'' da ''$2''",
-'previousrevision'    => '← versiun pli veglia',
-'nextrevision'        => 'versiun pli nova →',
-'currentrevisionlink' => 'Guardar la versiun actuala',
-'cur'                 => 'act',
-'next'                => 'proxim',
-'last'                => 'davosa',
-'page_first'          => 'entschatta',
-'page_last'           => 'fin',
-'histlegend'          => 'Per vesair las differenzas tranter duas versiuns, marca ils quaderins da la versiuns che ti vul cumparegliar e clicca sin "cumparegliar las versiuns selecziunadas".
+'viewpagelogs'           => 'Guardar ils logs da questa pagina',
+'currentrev'             => 'Versiun actuala',
+'revisionasof'           => 'Versiun dals $1',
+'revision-info'          => "Quai è ina versiun veglia. Temp da la midada ''$1'' da ''$2''", # Additionally available: $3: revision id
+'previousrevision'       => '← versiun pli veglia',
+'nextrevision'           => 'versiun pli nova →',
+'currentrevisionlink'    => 'Guardar la versiun actuala',
+'cur'                    => 'act',
+'next'                   => 'proxim',
+'last'                   => 'davosa',
+'page_first'             => 'entschatta',
+'page_last'              => 'fin',
+'histlegend'             => 'Per vesair las differenzas tranter duas versiuns, marca ils quaderins da la versiuns che ti vul cumparegliar e clicca sin "cumparegliar las versiuns selecziunadas".
 * (act) = differenzas cun la versiun actuala
 * (davosa) = differenza cun la versiun precedenta
 * M = Midà be bagatellas',
-'deletedrev'          => '[stidà]',
-'histfirst'           => 'pli veglia',
-'histlast'            => 'pli nova',
+'history-fieldset-title' => 'tschertgar en la cronica',
+'deletedrev'             => '[stidà]',
+'histfirst'              => 'pli veglia',
+'histlast'               => 'pli nova',
 
 # Revision feed
 'history-feed-item-nocomment' => '$1 las $2', # user at time
@@ -403,6 +409,7 @@ En il ''log da stidar'' che suonda pos ti guardar daco che la pagina è vegnida 
 'prevn'             => 'davos $1',
 'nextn'             => 'proxims $1',
 'viewprevnext'      => 'Mussar ($1) ($2) ($3).',
+'searchhelp-url'    => 'Help:Cuntegn',
 'showingresults'    => "Sutvart èn enfin {{PLURAL:$1|'''in''' resultat|'''$1''' resultats}} cumenzond cun il numer '''$2'''.",
 'showingresultsnum' => "Qua èn '''$3''' resultats, cumenzond cun il number '''$2'''.",
 'powersearch'       => 'retschertgar',
@@ -414,6 +421,7 @@ En il ''log da stidar'' che suonda pos ti guardar daco che la pagina è vegnida 
 'prefsnologintext'      => 'Ti stos esser <span class="plainlinks">[{{fullurl:Special:UserLogin|returnto=$1}} annunzià]</span> per midar tias preferenzas.',
 'prefsreset'            => 'Preferenzas da standard ein vegnì reconstruidas.',
 'changepassword'        => 'Midar pled-clav',
+'skin-preview'          => 'Prevista',
 'dateformat'            => 'format da las datas',
 'datedefault'           => 'Nagina preferenza',
 'datetime'              => 'Data e temp',
@@ -424,9 +432,6 @@ En il ''log da stidar'' che suonda pos ti guardar daco che la pagina è vegnida 
 'prefs-watchlist-edits' => 'Dumber da las midadas mussadas en la glista dad observaziun extendida:',
 'saveprefs'             => 'memorisar',
 'resetprefs'            => 'remetter las preferenzas (reset)',
-'oldpassword'           => 'pled-clav vegl:',
-'newpassword'           => 'pled-clav nov:',
-'retypenew'             => 'repeter pled-clav nov:',
 'columns'               => 'Colonna:',
 'searchresultshead'     => 'Tschertga',
 'resultsperpage'        => 'resultats per pagina:',
@@ -488,11 +493,11 @@ Paginas sin [[Special:Watchlist|tia glista d'observaziun]] èn '''grassas'''.",
 'reupload'          => 'chargiar si danovamain',
 'reuploaddesc'      => 'Anavos tar la pagina da chargiar si.',
 'uploadnologintext' => "Ti stos [[Special:UserLogin|t'annunziar]] per chargiar si files.",
-'uploadtext'        => "Cun il formular sutvart pos ti chargiar si files, per vesair u tschertgar maletgs gia chargiads si, dovra [[Special:ImageList|quest link]]. I dat er ina [[Special:Log/upload|glista dals files chargiads si u stidads]].
+'uploadtext'        => "Cun il formular sutvart pos ti chargiar si files, per vesair u tschertgar maletgs gia chargiads si, dovra [[Special:FileList|quest link]]. I dat er ina [[Special:Log/upload|glista dals files chargiads si u stidads]].
 
 Per integrar il maletg/purtret en tes artitgel sas ti per exempel duvrar in dals suandants cumonds: 
-* '''<nowiki>[[</nowiki>{{ns:image}}<nowiki>:file.png]]</nowiki>'''
-* '''<nowiki>[[</nowiki>{{ns:image}}<nowiki>:file.jpg]]</nowiki>'''
+* '''<nowiki>[[</nowiki>{{ns:file}}<nowiki>:file.png]]</nowiki>'''
+* '''<nowiki>[[</nowiki>{{ns:file}}<nowiki>:file.jpg]]</nowiki>'''
 * '''<nowiki>[[</nowiki>{{ns:media}}<nowiki>:file.ogg]]</nowiki>'''",
 'uploadlogpage'     => 'Log da chargiar si',
 'filedesc'          => 'Resumaziun',
@@ -504,10 +509,10 @@ Per integrar il maletg/purtret en tes artitgel sas ti per exempel duvrar in dals
 'sourcefilename'    => 'file sin tes computer:',
 'destfilename'      => 'num dal file sin il server:',
 
-# Special:ImageList
-'imagelist' => 'Glista dals maletgs',
+# Special:ListFiles
+'listfiles' => 'Glista dals maletgs',
 
-# Image description page
+# File description page
 'filehist'                  => 'Istorgia da las versiuns',
 'filehist-help'             => 'Clicca sin ina data/temps per vesair la versiun da lura.',
 'filehist-current'          => 'actual',
@@ -541,24 +546,8 @@ Per integrar il maletg/purtret en tes artitgel sas ti per exempel duvrar in dals
 'randomredirect' => 'Redirect casual',
 
 # Statistics
-'statistics'    => 'Statisticas',
-'sitestats'     => 'Statisticas da {{SITENAME}}',
-'userstats'     => 'Statisticas davart ils utilisaders',
-'sitestatstext' => "There {{PLURAL:\$1|is '''1''' page|are '''\$1''' total pages}} in the database.
-This includes \"talk\" pages, pages about {{SITENAME}}, minimal \"stub\"
-pages, redirects, and others that probably don't qualify as content pages.
-Excluding those, there {{PLURAL:\$2|is '''1''' page that is a|are '''\$2''' pages that are}} probably legitimate
-content {{PLURAL:\$2|page|pages}}.
-
-'''\$8''' {{PLURAL:\$8|file|files}} have been uploaded.
-
-There have been a total of '''\$3''' {{PLURAL:\$3|page view|page views}}, and '''\$4''' {{PLURAL:\$4|page edit|page edits}}
-since {{SITENAME}} was setup.
-That comes to '''\$5''' average edits per page, and '''\$6''' views per edit.
-
-La lunghezza da la [http://www.mediawiki.org/wiki/Manual:Job_queue job queue]: '''\$7'''.",
-'userstatstext' => "There {{PLURAL:$1|is '''1''' registered [[Special:ListUsers|user]]|are '''$1''' registered [[Special:ListUsers|users]]}}, of which
-'''$2''' (or '''$4%''') {{PLURAL:$2|has|have}} $5 rights.",
+'statistics'              => 'Statisticas',
+'statistics-header-users' => 'Statisticas davart ils utilisaders',
 
 'disambiguations' => 'pagina per la decleraziun da noziuns',
 
@@ -631,6 +620,9 @@ La lunghezza da la [http://www.mediawiki.org/wiki/Manual:Job_queue job queue]: '
 # Special:Categories
 'categories' => 'Categorias',
 
+# Special:LinkSearch
+'linksearch-ok' => 'Tschertgar',
+
 # E-mail user
 'mailnologintext' => "Ti stos [[Special:UserLogin|t'annunziar]] ed avair ina adressa d'email valaivla en tias [[Special:Preferences|preferenzas]] per trametter emails ad auters utilisaders.",
 'emailuser'       => 'Trametter in email a quest utilisader',
@@ -676,25 +668,30 @@ Midadas futuras vid quai artitgel e la pagina da discussiun appertegnenta vegnan
 'changed' => 'midà',
 'created' => 'creà',
 
-# Delete/protect/revert
-'deletepage'                  => 'Stidar la pagina',
-'confirm'                     => 'Confermar',
-'historywarning'              => "Attenziun: L'artitgel che ti vuls stidar ha in'istorgia (pliras versiuns):",
-'confirmdeletetext'           => 'Ti es vidlonder da stidar permanentamain in artitgel u in maletg e tut las versiuns pli veglias ord la datoteca. <br /> 
+# Delete
+'deletepage'            => 'Stidar la pagina',
+'confirm'               => 'Confermar',
+'historywarning'        => "Attenziun: L'artitgel che ti vuls stidar ha in'istorgia (pliras versiuns):",
+'confirmdeletetext'     => 'Ti es vidlonder da stidar permanentamain in artitgel u in maletg e tut las versiuns pli veglias ord la datoteca. <br /> 
 Conferma per plaschair che ti ta es conscient da las consequenzas e che ti ageschas tenor las [[{{MediaWiki:Policy-url}}|directivas da {{SITENAME}}]].',
-'actioncomplete'              => "L' acziun è terminada.",
-'deletedtext'                 => '"<nowiki>$1</nowiki>" è vegnì stidà.
+'actioncomplete'        => "L' acziun è terminada.",
+'deletedtext'           => '"<nowiki>$1</nowiki>" è vegnì stidà.
 Sin $2 chattas ti ina glista dals davos artitgels stidads.',
-'deletedarticle'              => '"[[$1]]" è stidà',
-'dellogpage'                  => 'log dal stidar',
-'deletecomment'               => 'Motiv per il stidar',
-'deleteotherreason'           => 'Autra / supplementara raschun:',
-'deletereasonotherlist'       => 'Autra raschun:',
-'rollbacklink'                => 'reinizialisar',
-'alreadyrolled'               => "I n'è betg pussaivel da reconstruir l'artigel [[:$1]] da [[User:$2|$2]] ([[User talk:$2|discussiun]]), perquai che insatgi auter ha midà u reconstruì la pagina.
+'deletedarticle'        => '"[[$1]]" è stidà',
+'dellogpage'            => 'log dal stidar',
+'deletecomment'         => 'Motiv per il stidar',
+'deleteotherreason'     => 'Autra / supplementara raschun:',
+'deletereasonotherlist' => 'Autra raschun:',
+
+# Rollback
+'rollbacklink'  => 'reinizialisar',
+'alreadyrolled' => "I n'è betg pussaivel da reconstruir l'artigel [[:$1]] da [[User:$2|$2]] ([[User talk:$2|discussiun]]), perquai che insatgi auter ha midà u reconstruì la pagina.
 
 Quest calöri è  [[User:$3|$3]] ([[User talk:$3|discussiun]]).",
+
+# Protect
 'protectlogpage'              => 'Log da las protecziuns',
+'prot_1movedto2'              => 'Spustà [[$1]] tar [[$2]]',
 'protect-legend'              => 'Midar il status da protecziun da la pagina.',
 'protectcomment'              => 'Commentari:',
 'protectexpiry'               => 'Pretegì enfin:',
@@ -791,6 +788,7 @@ sajas conscient da las consequenzas che quai process po avair.",
 
 En quests cas as ti da spustar u colliar manualmain las paginas, sche giavischà.",
 'movearticle'             => 'Spustar artitgel:',
+'movenologintext'         => "Ti stos [[Special:UserLogin|t'annunziar]] per spustar in artitgel.",
 'newtitle'                => 'Al titel nov:',
 'move-watch'              => 'Observar questa pagina',
 'movepagebtn'             => 'Spustar la pagina',
@@ -885,7 +883,7 @@ Ti pos vesair il code-fundamental.',
 'monobook.js' => '/* Deprecated; use [[MediaWiki:common.js]] */',
 
 # Attribution
-'anonymous'     => 'Utilisader(s) anonim(s) da {{SITENAME}}',
+'anonymous'     => '{{PLURAL:$1|In utilisader anonim|Utilisaders anonims}} da {{SITENAME}}',
 'othercontribs' => 'Basescha sin la lavur da $1.',
 'others'        => 'auters',
 'creditspage'   => 'Statistica da la pagina',
@@ -921,7 +919,7 @@ Ti pos vesair il code-fundamental.',
 'show-big-image'       => 'Resoluziun cumplaina',
 'show-big-image-thumb' => '<small>Grondezza da quest prevista: $1 × $2 pixels</small>',
 
-# Special:NewImages
+# Special:NewFiles
 'newimages' => 'Novs maletgs',
 'ilsubmit'  => 'Tschertgar',
 'bydate'    => 'tenor data',
@@ -989,14 +987,8 @@ Bler divertiment!',
 Conferma per plaschair che ti vuls propi crear danovamain quest artitgel.",
 
 # action=purge
-'confirm_purge'        => 'Stidar il cache da questa pagina?
-
-$1',
 'confirm_purge_button' => 'ok',
-
-# AJAX search
-'articletitles' => "Artitgels che entschaivan cun ''$1''",
-'hideresults'   => 'zuppar ils resultats',
+'confirm-purge-top'    => 'Stidar il cache da questa pagina?',
 
 # Watchlist editing tools
 'watchlisttools-view' => 'Guardar las midadas relevantas',
