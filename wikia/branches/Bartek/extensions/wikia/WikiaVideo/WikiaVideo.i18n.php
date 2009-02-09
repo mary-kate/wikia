@@ -7,6 +7,7 @@ $messages['en'] = array(
 	'wikiavideo-create' => 'Add Video',
 	'wikiavideo-replace' => 'Replace Video',
 	'wikiavideo-category' => 'Videos',
+	'wikiavideo-links' => 'Links',
 );
 
 $messages['pl'] = array(
@@ -16,4 +17,5 @@ $messages['pl'] = array(
 	'wikiavideo-create' => 'Dodaj wideo',
 	'wikiavideo-replace' => 'Zamień wideo',
 	'wikiavideo-category' => 'Wideo',
+	'wikiavideo-links' => 'Linki',
 );
