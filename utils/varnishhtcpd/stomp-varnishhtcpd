@@ -28,7 +28,7 @@ if($^O eq 'linux') {
 } else {
     die "no constants for non linux platforms";
 }
-
+use Sys::Hostname;
 use Working::Daemon;
 my $daemon = Working::Daemon->new();
 
@@ -39,7 +39,8 @@ $daemon->parse_options(
     'stomp_password=s'    => 'guest' => "Stomp password",
     'stomp_server=s'      => '127.0.0.1' => "Stomp Server",
     'stomp_port=i'        => '61613' => "stomp port",
-    'stomp_destination=s' => 'purges' => "Waht routing key to read",
+    'stomp_destination=s' => hostname() => "Waht routing key to read",
+    'stomp_key=s'         => 'purges' => "Waht routing key to read",
     'name'                => 'stomp-varnishd' => '',
     );
 
@@ -62,10 +63,10 @@ my $admin = threads->create(sub {
     my $sock = IO::Socket::INET->new
         (Listen    => 5,
          LocalAddr => 'localhost',
-         LocalPort => 9001,
+         LocalPort => 9002,
          Proto     => 'tcp',
          Reuse     => 1,
-        );
+        ) || die $!;
     while(my $connection = $sock->accept) {
 	$connection->print("# Server\tPending\tDelivered\tFailed\n");
         close($connection);
@@ -80,9 +81,9 @@ my $stomp = Net::Stomp->new( {hostname => $daemon->options->{'stomp_server'},
 $stomp->connect( {login    => $daemon->options->{'stomp_username'},
 		  passcode => $daemon->options->{'stomp_password'} },);
 
-$stomp->subscribe( {destination => '', 
+$stomp->subscribe( {destination => $daemon->options->{'stomp_destination'}, 
 		   exchange => 'amq.topic', 
-		   routing_key => $daemon->options->{'stomp_destination'}}, 
+		   routing_key => $daemon->options->{'stomp_key'}}, 
 		  id => 1);
 
 while(1) {
