@@ -6,7 +6,15 @@ if(!defined('MEDIAWIKI')) {
 $wgHooks['ParserBeforeStrip'][] = 'WikiaVideoParserBeforeStrip';
 $wgHooks['ArticleFromTitle'][] = 'WikiaVideoArticleFromTitle';
 $wgHooks['MWNamespace:isMovable'][] = 'WikiaVideoIsNotMovable';
+$wgHooks['LinksUpdateConstructed'][] = 'WikiaVideoLinksUpdateConstructed';
 
+
+function WikiaVideoLinksUpdateConstructed( $linksupdate ) {
+	$text = $linksupdate->mParserOutput->mText;
+	// parse out 
+
+	return true;
+}
 
 function WikiaVideoIsNotMovable( $result, $index ) {
 	global $IP;
