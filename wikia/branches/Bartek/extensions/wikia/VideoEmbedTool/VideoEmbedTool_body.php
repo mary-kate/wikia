@@ -39,7 +39,10 @@ class VideoEmbedTool {
 		
 		if($sourceId == 0) { // metacafe	
 			$page ? $start = ($page - 1) * 8 : $start = 0;	
-			
+			$query_arr = split( " ", $query );
+			if (is_array( $query_arr ) ) {
+				$query = implode( "+", $query_arr  );	
+			}
 			$file = @file_get_contents( "http://www.metacafe.com/api/videos?vq=" . $query, FALSE );
                                 if ($file) {
                                         $doc = new DOMDocument;
