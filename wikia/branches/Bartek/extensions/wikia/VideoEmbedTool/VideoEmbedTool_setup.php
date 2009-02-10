@@ -135,7 +135,7 @@ function VETParserHook( $input, $argv, $parser ) {
 	}
 
 	global $wgVideoLinks;
-	$dbk = $title->getDBkey();
+	$dbk = ":" . $title->getDBkey();
         if ( !isset( $wgVideoLinks[$dbk] ) ) {
                 $id = $title->getArticleID();
                 $wgVideoLinks[$dbk] = 1;
