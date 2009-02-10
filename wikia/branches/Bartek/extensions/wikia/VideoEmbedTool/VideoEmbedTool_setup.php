@@ -54,10 +54,11 @@ $wgHooks['WikiaVideo::View:RedLink'][] = 'VETWIkiaVideoRedLink';
 $wgHooks['WikiaVideo::View:BlueLink'][] = 'VETWIkiaVideoBlueLink';
 
 function VETWikiaVideoBlueLink() {
-        global $wgOut, $wgStylePath, $wgExtensionsPath, $wgStyleVersion, $wgHooks, $wgUser;
+        global $wgOut, $wgStylePath, $wgExtensionsPath, $wgStyleVersion, $wgHooks, $wgUser, $wgArticlePath, $wgContLang;
 
 	//display the button for "adding the video"
-	$s = '<br/><input type="submit" id="VideoEmbedReplace" value="' . wfMsg( 'wikiavideo-replace' ) . '" /><br/><br/>';
+	$special = $wgContLang->getFormattedNsText( NS_SPECIAL );
+	$s = '<br/><a id="VideoEmbedReplace" href="' . $wgArticlePath . $special . ':QuickVideoAdd'  . '">' . wfMsg( 'wikiavideo-replace' ) . '<a/><br/><br/>';
 	$wgOut->addHTML( $s );
 
         if(get_class($wgUser->getSkin()) == 'SkinMonaco') {
