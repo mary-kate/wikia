@@ -130,9 +130,15 @@ function VETParserHook( $input, $argv, $parser ) {
 	$video = new VideoPage( $title );
 	$video->load();
 
-        if (!empty($argv['width']) && settype($argv['width'], 'integer') && ($width_max >= $argv['width']))
-        {
-                $width = $argv['width'];
+	if (!empty($argv['width']) && settype($argv['width'], 'integer') && ($width_max >= $argv['width'])) {
+		$width = $argv['width'];
+	}
+
+	global $wgVideoLinks;
+	$dbk = $title->getDBkey();
+        if ( !isset( $wgVideoLinks[$dbk] ) ) {
+                $id = $title->getArticleID();
+                $wgVideoLinks[$dbk] = 1;
         }
 
 	$output = $video->generateWindow( $align, $width, $caption, $thumb );
