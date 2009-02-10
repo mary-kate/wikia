@@ -98,7 +98,12 @@ function VET_addCreateHandler() {
 
 function VET_addReplaceHandler() {
 	var btn = $( 'VideoEmbedReplace' );
-  	YAHOO.util.Event.addListener(['vetLink', 'vetHelpLink', btn], 'click',  VET_show);
+  	YAHOO.util.Event.addListener(['vetLink', 'vetHelpLink', btn], 'click',  VET_showReplace);
+}
+
+function VET_showReplace(e) {
+	YAHOO.util.Event.preventDefault(e);
+	VET_show(e);
 }
 
 function VET_addHandler() {
@@ -137,6 +142,49 @@ function VET_readjustSlider( value ) {
 			value = Math.max(2, Math.round( ( fixed_width * 200 ) / 400 ) );	
 			VET_slider.setValue( value, true, true, true );
 		}		
+}
+
+function VET_showPreview(e) {
+	YAHOO.util.Dom.setStyle('header_ad', 'display', 'none');
+
+	var html = '';
+	html += '<div class="reset" id="VideoEmbedPreview">';
+	html += '	<div id="VideoEmbedBorder"></div>';
+	html += '	<div id="VideoEmbedPreviewClose"><div></div><a href="#">' + vet_close + '</a></div>';
+	html += '	<div id="VideoEmbedPreviewBody">';
+	html += '		<div id="VideoEmbedPreviewContent" style="display: none;"></div>';
+	html += '	</div>';
+	html += '</div>';
+
+	var element = document.createElement('div');
+	element.id = 'VET_previewDiv';
+	element.style.width = '600px';
+	element.style.height = '500px';
+	element.innerHTML = html;
+
+	document.body.appendChild(element);
+
+	VET_previewPanel = new YAHOO.widget.Panel('VET_previewDiv', {
+		modal: true,
+		constraintoviewport: true,
+		draggable: false,
+		close: false,
+		fixedcenter: true,
+		underlay: "none",
+		visible: false,
+		zIndex: 1600
+	});
+	VET_previewPanel.render();
+	VET_previewPanel.show();
+	if(VET_refid != null && VET_wysiwygStart == 2) {
+		VET_loadDetails();
+	} else {
+		VET_loadMain();
+	}
+
+	YAHOO.util.Event.addListener('VideoEmbedPreviewClose', 'click', VET_previewClose);
+
+
 }
 
 function VET_show(e) {
@@ -365,7 +413,7 @@ function VET_chooseImage(sourceId, itemId, itemLink) {
 	VET_track('insertVideo/choose/src-' + sourceId); // tracking
 
 	var callback = {
-		success: function(o) {
+		success: function(o) {			
 			VET_displayDetails(o.responseText);
 		}
 	}
@@ -669,6 +717,17 @@ function VET_back(e) {
 		VET_switchScreen('Details');
 	}
 }
+
+
+
+function VET_previewClose(e) {
+	if(e) {
+		YAHOO.util.Event.preventDefault(e);
+	}
+	VET_track('closePreview/' + VET_curScreen);
+	VET_previewPanel.hide();
+}
+
 
 function VET_close(e) {
 	if(e) {
