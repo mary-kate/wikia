@@ -3,6 +3,7 @@ if(!defined('MEDIAWIKI')) {
 	exit(1);
 }
 
+global $wgVideoLinks;
 $wgHooks['ParserBeforeStrip'][] = 'WikiaVideoParserBeforeStrip';
 $wgHooks['ArticleFromTitle'][] = 'WikiaVideoArticleFromTitle';
 $wgHooks['MWNamespace:isMovable'][] = 'WikiaVideoIsNotMovable';
@@ -10,9 +11,10 @@ $wgHooks['LinksUpdateConstructed'][] = 'WikiaVideoLinksUpdateConstructed';
 
 
 function WikiaVideoLinksUpdateConstructed( $linksupdate ) {
-	$text = $linksupdate->mParserOutput->mText;
-	// parse out 
-
+	global $wgVideoLinks;
+	if( is_array( $wgVideoLinks ) ) {
+		$linksupdate->mImages = array_merge( $linksupdate->mImages, $wgVideoLinks );
+	}
 	return true;
 }
 
@@ -33,7 +35,7 @@ function WikiaVideoParserBeforeStrip($parser, $text, $strip_state) {
 }
 
 function WikiaVideoRenderVideo( $matches ) {
-        global $IP, $wgOut;
+        global $IP, $wgOut, $wgVideoLinks;
         require_once( "$IP/extensions/wikia/WikiaVideo/VideoPage.php" );
         $name = $matches[2];
         $params = explode( "|", $name );
