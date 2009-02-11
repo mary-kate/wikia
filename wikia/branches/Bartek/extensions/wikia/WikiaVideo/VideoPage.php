@@ -607,7 +607,7 @@ class VideoPage extends Article {
 		$row = $dbr->selectRow(
 			'image',
 			'img_metadata',
-			array( 'img_name' => self::getNameFromTitle( $this->mTitle ) ),
+			'img_name = ' . $dbr->addQuotes( self::getNameFromTitle( $this->mTitle ) ) .' OR img_name = ' . $dbr->addQuotes( $this->mTitle->getPrefixedText() ),
 			$fname	
 		);	
 		if ($row) {
