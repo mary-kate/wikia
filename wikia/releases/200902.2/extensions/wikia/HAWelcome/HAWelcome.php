@@ -53,6 +53,8 @@ class HAWelcomeJob extends Job {
 		$mAnon,
 		$mSysop;
 
+	const WELCOMEUSER = "Wikia";
+
 	/**
 	 * Construct a job
 	 * @param Title $title The title linked to
@@ -82,9 +84,9 @@ class HAWelcomeJob extends Job {
 		 * overwrite $wgUser for ~~~~ expanding
 		 */
 		$tmpUser = $wgUser;
-		$wgUser  = User::newFromName( "Wikia" );
+		$wgUser  = User::newFromName( self::WELCOMEUSER );
 
-		if( $this->mUser ) {
+		if( $this->mUser && $this->mUser->getName() !== self::WELCOMEUSER ) {
 			/**
 			 * check again if talk page exists
 			 */
@@ -265,7 +267,7 @@ class HAWelcomeTask extends BatchTask {
 		$this->mVisible = false;
 		$this->mTTL = 1800;
 		parent::__construct();
-		$this->mDebug = true;
+		$this->mDebug = false;
 	}
 
 	/**
@@ -290,8 +292,7 @@ class HAWelcomeTask extends BatchTask {
 			 * execute maintenance script
 			 */
 			$cmd = sprintf( "SERVER_ID={$city_id} php {$IP}/maintenance/runJobs.php --type HAWelcome --conf {$wgWikiaLocalSettingsPath} --aconf {$wgWikiaAdminSettingsPath}" );
-			$this->addLog( "Running {$cmd}");
-			$this->addLog( $cmd );
+			$this->addLog( "Running {$cmd}" );
 			$retval = wfShellExec( $cmd, $status );
 			$this->addLog( $retval );
 		}
