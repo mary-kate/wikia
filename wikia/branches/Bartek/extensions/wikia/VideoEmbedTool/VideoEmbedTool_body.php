@@ -115,7 +115,7 @@ class VideoEmbedTool {
 				$props['id'] = $itemId;
 				$props['vname'] = $itemLink;	
 				$props['metadata'] = $itemLink;
-				$props['code'] = $video->getEmbedCode( VIDEO_PREVIEW );
+				$props['code'] = $video->getEmbedCode( VIDEO_PREVIEW, true );
 				break;
 			default:
 				break;
