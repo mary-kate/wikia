@@ -12,7 +12,7 @@ if(!defined('MEDIAWIKI')) {
 $wgExtensionCredits['other'][] = array(
         'name' => 'Video Embed Tool',
         'author' => 'Bartek Łapiński, Inez Korczyński',
-	'version' => '0.62',
+	'version' => '0.65',
 );
 
 $dir = dirname(__FILE__).'/';
@@ -54,11 +54,19 @@ $wgHooks['WikiaVideo::View:RedLink'][] = 'VETWIkiaVideoRedLink';
 $wgHooks['WikiaVideo::View:BlueLink'][] = 'VETWIkiaVideoBlueLink';
 
 function VETWikiaVideoBlueLink() {
-        global $wgOut, $wgStylePath, $wgExtensionsPath, $wgStyleVersion, $wgHooks, $wgUser, $wgArticlePath, $wgContLang;
+        global $wgOut, $wgStylePath, $wgExtensionsPath, $wgStyleVersion, $wgHooks, $wgUser, $wgArticlePath, $wgContLang, $wgTitle;
 
 	//display the button for "adding the video"
 	$special = $wgContLang->getFormattedNsText( NS_SPECIAL );
-	$s = '<br/><a id="VideoEmbedReplace" href="' . $wgArticlePath . $special . ':QuickVideoAdd'  . '">' . wfMsg( 'wikiavideo-replace' ) . '<a/><br/><br/>';
+	$url = $wgArticlePath;
+	$name = $wgTitle->getDBKey();
+	if( false !== strpos( '?', $wgArticlePath ) ) {
+		$url = str_replace( '$1', $special . ':QuickVideoAdd&name=' . $name, $url );
+	} else {
+		$url = str_replace( '$1', $special . ':QuickVideoAdd?name=' . $name, $url );		
+	}
+
+	$s = '<br/><a id="VideoEmbedReplace" href="' . $url . '">' . wfMsg( 'wikiavideo-replace' ) . '<a/><br/><br/>';
 	$wgOut->addHTML( $s );
 
         if(get_class($wgUser->getSkin()) == 'SkinMonaco') {
@@ -68,7 +76,6 @@ function VETWikiaVideoBlueLink() {
                 $wgOut->addScript('<script type="text/javascript" src="'.$wgExtensionsPath.'/wikia/VideoEmbedTool/js/VET.js?'.$wgStyleVersion.'"></script>');
                 $wgOut->addScript('<link rel="stylesheet" type="text/css" href="'.$wgExtensionsPath.'/wikia/VideoEmbedTool/css/VET.css?'.$wgStyleVersion.'" />');
         }
-
 	return true;
 }
 
@@ -86,7 +93,6 @@ function VETWikiaVideoRedLink() {
                 $wgOut->addScript('<script type="text/javascript" src="'.$wgExtensionsPath.'/wikia/VideoEmbedTool/js/VET.js?'.$wgStyleVersion.'"></script>');
                 $wgOut->addScript('<link rel="stylesheet" type="text/css" href="'.$wgExtensionsPath.'/wikia/VideoEmbedTool/css/VET.css?'.$wgStyleVersion.'" />');
         }
-
 	return true;
 }
 

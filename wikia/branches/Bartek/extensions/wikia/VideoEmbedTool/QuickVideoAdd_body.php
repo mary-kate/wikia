@@ -55,10 +55,11 @@ class QuickVideoAddForm extends SpecialPage {
 	public function doSubmit() {
 		global $wgOut, $wgRequest, $IP, $wgUser;
 		require_once( "$IP/extensions/wikia/WikiaVideo/VideoPage.php" );	
-
+		$replaced = false;
 		if( '' == $wgRequest->getVal( 'wpQuickVideoAddName' ) ) {
 			if( '' != $wgRequest->getVal( 'wpQuickVideoAddPrefilled' ) ) {
 				$this->mName = $wgRequest->getVal( 'wpQuickVideoAddPrefilled' );
+				$replaced = true;
 			} else {
 				$this->mName = '';
 			}			
@@ -78,7 +79,11 @@ class QuickVideoAddForm extends SpecialPage {
 			}
 			$sk = $wgUser->getSkin();
 	                $link_back = $sk->makeKnownLinkObj( $title );
-			$wgOut->addHTML( wfMsg( 'qva-success', $link_back ) );
+			if ($replaced) {
+				$wgOut->addHTML( wfMsg( 'qva-success-replaced', $link_back ) );
+			} else {
+				$wgOut->addHTML( wfMsg( 'qva-success', $link_back ) );
+			}
 		} else {
 			$wgOut->addHTML( wfMsg( 'qva-failure' ) );
 		}
