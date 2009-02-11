@@ -508,7 +508,6 @@ class VideoPage extends Article {
 	public static function getNameFromTitle( $title ) {
 		global $wgCapitalLinks;
 		if ( !$wgCapitalLinks ) {
-			global $wgContLang;
 			$name = $title->getUserCaseDBKey();
 		} else {
 			$name = $title->getDBkey();
@@ -714,7 +713,7 @@ class VideoPage extends Article {
                         $wgOut->addWikiMsg( 'morelinkstoimage', $this->mTitle->getPrefixedDBkey() );
         }
 
-        public function getEmbedCode( $width = 300 ) {
+        public function getEmbedCode( $width = 300, $autoplay = false ) {
 		global $wgWikiaVideoProviders;
                 $embed = "";
 		$code = 'standard';
@@ -722,6 +721,9 @@ class VideoPage extends Article {
                 switch( $wgWikiaVideoProviders[$this->mProvider] ) {
                         case "metacafe":
 				$url = 'http://www.metacafe.com/fplayer/' . $this->mId . '/' . $this->mData[0];
+				$code = 'custom';
+				$autoplay ? $auto = 'flashVars="playerVars=autoPlay=yes"' : $auto = '';
+				$embed = '<embed ' . $auto . ' src="' . $url . '" width="' . $width . '" height="' . $height . '" wmode="transparent"" allowFullScreen="true" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash"></embed>';	
                                 break;
                         case "youtube":
 				$url = 'http://www.youtube.com/v/' . $this->mId;
