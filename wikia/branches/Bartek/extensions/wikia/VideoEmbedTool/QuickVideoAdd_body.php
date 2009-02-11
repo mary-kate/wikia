@@ -1,7 +1,6 @@
 <?php
 
 class QuickVideoAddForm extends SpecialPage {
-
 	var	$mAction,
 		$mPosted,
 		$mName,
@@ -39,23 +38,34 @@ class QuickVideoAddForm extends SpecialPage {
 	}
 
 	public function showForm() {
-		global $wgOut;
+		global $wgOut, $wgRequest;
 		$titleObj = Title::makeTitle( NS_SPECIAL, 'QuickVideoAdd' );
 		$action = $titleObj->escapeLocalURL( "action=submit" );
+		( '' != $wgRequest->getVal( 'name' ) ) ? $name = $wgRequest->getVal( 'name' ) : $name = '';
 
 		$oTmpl = new EasyTemplate( dirname( __FILE__ ) . "/templates/" );
 		$oTmpl->set_vars( array(
 					"out"		=> 	$wgOut,
 					"action"	=>	$action,
+					"name"		=> 	$name,
 				       ) );
 		$wgOut->addHTML( $oTmpl->execute("quickform") );
 	}
 
 	public function doSubmit() {
-		global $wgOut, $wgRequest, $IP;
+		global $wgOut, $wgRequest, $IP, $wgUser;
 		require_once( "$IP/extensions/wikia/WikiaVideo/VideoPage.php" );	
 
-		( '' != $wgRequest->getVal( 'wpQuickVideoAddName' ) ) ? $this->mName = $wgRequest->getVal( 'wpQuickVideoAddName' ) : $this->mName = '';	
+		if( '' == $wgRequest->getVal( 'wpQuickVideoAddName' ) ) {
+			if( '' != $wgRequest->getVal( 'wpQuickVideoAddPrefilled' ) ) {
+				$this->mName = $wgRequest->getVal( 'wpQuickVideoAddPrefilled' );
+			} else {
+				$this->mName = '';
+			}			
+		} else {
+			$this->mName = $wgRequest->getVal( 'wpQuickVideoAddName' );
+		}
+
 		( '' != $wgRequest->getVal( 'wpQuickVideoAddUrl' ) ) ? $this->mUrl = $wgRequest->getVal( 'wpQuickVideoAddUrl' ) : $this->mUrl = '';	
 
 		if ( ( '' != $this->mName ) && ( '' != $this->mUrl ) ) {
