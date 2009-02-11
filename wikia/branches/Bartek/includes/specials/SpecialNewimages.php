@@ -102,6 +102,9 @@ function wfSpecialNewimages( $par, $specialPage ) {
 		$sql .= $hidebotsql;
 		$where[]='ug_group IS NULL';
 	}
+
+	wfRunHooks( 'wfSpecialNewimages::BeforeConditions', array( &$where ) );
+
 	if(count($where)) {
 		$sql.=' WHERE '.$dbr->makeList($where, LIST_AND);
 	}
