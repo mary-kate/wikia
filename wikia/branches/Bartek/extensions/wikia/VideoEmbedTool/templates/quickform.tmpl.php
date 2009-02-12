@@ -4,25 +4,25 @@
 if ('' == $name) {
 ?> 
 <tr><td width="120">
-<?= wfMsg( 'qva-name' ); ?>
+<?= wfMsg( 'wva-name' ); ?>
 </td>
 <td>
-<input type="text" id="wpQuickVideoAddName" name="wpQuickVideoAddName" size="50" />
+<input type="text" id="wpWikiaVideoAddName" name="wpWikiaVideoAddName" size="50" />
 </td>
 </tr>
 <?php
 }
 ?>
 <tr><td>
-<?= wfMsg( 'qva-url' ); ?>
+<?= wfMsg( 'wva-url' ); ?>
 </td>
 <td>
-<input type="text" id="wpQuickVideoAddUrl" name="wpQuickVideoAddUrl" size="50" />
+<input type="text" id="wpWikiaVideoAddUrl" name="wpWikiaVideoAddUrl" size="50" />
 </td>
 </tr>
 <tr>
 <td colspan="2">
-<input type="submit" value="<?= wfMsg( 'qva-add' ); ?>" />
+<input type="submit" value="<?= wfMsg( 'wva-add' ); ?>" />
 </td>
 </tr>
 </table>
@@ -30,7 +30,7 @@ if ('' == $name) {
 <?php
 if ('' != $name) {
 ?>
-<input type="hidden" name="wpQuickVideoAddPrefilled" value="<?= $name ?>" id="wpQuickVideoAddPrefilled"  />
+<input type="hidden" name="wpWikiaVideoAddPrefilled" value="<?= $name ?>" id="wpWikiaVideoAddPrefilled"  />
 <?php
 }
 ?>
