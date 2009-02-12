@@ -29,7 +29,7 @@ class VideoPage extends Article {
 		$mData,
 		$mDataline;
 
-	function __construct (&$title){
+	function __construct(&$title){
 		wfLoadExtensionMessages('WikiaVideo');
 		parent::__construct(&$title);
 	}
@@ -72,7 +72,7 @@ class VideoPage extends Article {
 
 	function showTOC($metadata) {
 		global $wgLang;
-		$r = '<ul id="filetoc"><li><a href="#file">'.$wgLang->getNsText(NS_VIDEO).'</a></li><li><a href="#filehistory">'.wfMsgHtml( 'filehist' ).'</a></li>'.($metadata ? ' <li><a href="#metadata">'.wfMsgHtml('metadata').'</a></li>' : '').'</ul>';
+		$r = '<ul id="filetoc"><li><a href="#file">'.$wgLang->getNsText(NS_VIDEO).'</a></li><li><a href="#filehistory">'.wfMsgHtml( 'filehist' ).'</a></li>'.($metadata ? '<li><a href="#metadata">'.wfMsgHtml('metadata').'</a></li>' : '').'</ul>';
 		return $r;
 	}
 
@@ -80,7 +80,7 @@ class VideoPage extends Article {
 		return Article::getContent();
 	}
 
-	public function generateWindow($align = 'left', $width = 400, $caption = '', $thumb) {
+	public function generateWindow($align, $width, $caption, $thumb) {
 		global $wgStylePath;
 
 		$code = $this->getEmbedCode($width);
@@ -102,14 +102,16 @@ class VideoPage extends Article {
 	</div>
 </div>
 EOD;
-		return str_replace("\n", ' ', $s);
+		return str_replace("\n", ' ', $s); // TODO: Figure out what for this string replace is
 	}
 
-	public function parseUrl( $url, $load = true ) {
+	public function parseUrl($url, $load = true) { // TODO: Consider renaming to loadFromURL
 		$provider = '';
 		$id = '';
 
-		$url = trim( $url );
+		$url = trim($url);
+
+
 		// todo make sure to check just http://something.else/ part, omit whatever follows
 		$fixed_url = strtoupper( $url );
 		$test = strpos( $fixed_url, "HTTP://" );
@@ -405,13 +407,13 @@ EOD;
 	}
 
 
-	function loadFromPars( $provider, $id, $data ) {
+	function loadFromPars( $provider, $id, $data ) { // TODO: Consider renameing
 		$this->mProvider = $provider;
 		$this->mId = $id;
 		$this->mData = $data;
 	}
 
-	public function setName( $name ) {
+	public function setName( $name ) { // TODO: Maybe redundant - check!
 		$this->mName = $name;
 	}
 
@@ -761,7 +763,7 @@ EOD;
 		$this->getContent();
 		$this->load();
 
-		$s = '<div id="VideoEmbedPageWindow">';
+		$s = '<div id="file">';
 		$s .= $this->getEmbedCode( 400);
 		$s .= '</div>';
 
