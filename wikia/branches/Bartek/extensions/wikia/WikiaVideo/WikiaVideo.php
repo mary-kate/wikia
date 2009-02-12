@@ -5,15 +5,14 @@ if(!defined('MEDIAWIKI')) {
 
 $wgAutoloadClasses['VideoPage'] = dirname(__FILE__). '/VideoPage.php';
 
-function WikiaVideo_makeVideo($title, $options) {
+function WikiaVideo_makeVideo($title, $options, $sk) {
 	wfProfileIn('WikiaVideo_makeVideo');
-	if(!$title->exists()) {
+	if(!$title->exists() || true) {
 		// TO DO: Generate redlinks for not existing video
-		wfProfileOut('WikiaVideo_makeVideo');
-		$out = '-RED_LINK-';
+		$out = $sk->makeColouredLinkObj(Title::newFromText('Test', NS_SPECIAL), 'new', 'text', 'query');
 	} else {
 		// defaults
-		$width = 300;
+		$width = 400;
 		$thumb = '';
 		$align = 'left';
 		$caption = '';
