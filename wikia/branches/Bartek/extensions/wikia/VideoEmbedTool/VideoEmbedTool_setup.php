@@ -12,7 +12,7 @@ if(!defined('MEDIAWIKI')) {
 $wgExtensionCredits['other'][] = array(
         'name' => 'Video Embed Tool',
         'author' => 'Bartek Łapiński, Inez Korczyński',
-	'version' => '0.65',
+	'version' => '0.67',
 );
 
 $dir = dirname(__FILE__).'/';
@@ -44,8 +44,8 @@ if ( !function_exists( 'extAddSpecialPage' ) ) {
     require( "$IP/extensions/ExtensionFunctions.php" );
 }
 
-$wgExtensionMessagesFiles['QuickVideoAdd'] = dirname(__FILE__) . '/QuickVideoAdd.i18n.php';
-extAddSpecialPage( dirname(__FILE__) . '/QuickVideoAdd_body.php', 'QuickVideoAdd', 'QuickVideoAddForm' );
+$wgExtensionMessagesFiles['WikiaVideoAdd'] = dirname(__FILE__) . '/WikiaVideoAdd.i18n.php';
+extAddSpecialPage( dirname(__FILE__) . '/WikiaVideoAdd_body.php', 'WikiaVideoAdd', 'WikiaVideoAddForm' );
 
 $wgExtensionFunctions[] = "VETSetupHook";
 $wgExtensionMessagesFiles['VideoEmbedTool'] = $dir.'/VideoEmbedTool.i18n.php';
@@ -61,9 +61,9 @@ function VETWikiaVideoBlueLink() {
 	$url = $wgArticlePath;
 	$name = $wgTitle->getDBKey();
 	if( false !== strpos( '?', $wgArticlePath ) ) {
-		$url = str_replace( '$1', $special . ':QuickVideoAdd&name=' . $name, $url );
+		$url = str_replace( '$1', $special . ':WikiaVideoAdd&name=' . $name, $url );
 	} else {
-		$url = str_replace( '$1', $special . ':QuickVideoAdd?name=' . $name, $url );		
+		$url = str_replace( '$1', $special . ':WikiaVideoAdd?name=' . $name, $url );		
 	}
 
 	$s = '<br/><a id="VideoEmbedReplace" href="' . $url . '">' . wfMsg( 'wikiavideo-replace' ) . '<a/><br/><br/>';

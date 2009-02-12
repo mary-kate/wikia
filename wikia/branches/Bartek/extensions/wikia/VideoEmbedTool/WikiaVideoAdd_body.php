@@ -1,6 +1,6 @@
 <?php
 
-class QuickVideoAddForm extends SpecialPage {
+class WikiaVideoAddForm extends SpecialPage {
 	var	$mAction,
 		$mPosted,
 		$mName,
@@ -9,17 +9,17 @@ class QuickVideoAddForm extends SpecialPage {
 	/* constructor */
 	function __construct () {
 		$this->mAction = "";
-		parent::__construct( "QuickVideoAdd", "quickvideoadd" );
+		parent::__construct( "WikiaVideoAdd", "wikiavideoadd" );
 	}
 
 	public function execute( $subpage ) {
 		global $wgOut, $wgRequest;
 
-		wfLoadExtensionMessages('QuickVideoAdd');
+		wfLoadExtensionMessages('WikiaVideoAdd');
 
-		$this->mTitle = Title::makeTitle( NS_SPECIAL, 'QuickVideoAdd' );
+		$this->mTitle = Title::makeTitle( NS_SPECIAL, 'WikiaVideoAdd' );
 		$wgOut->setRobotpolicy( 'noindex,nofollow' );
-		$wgOut->setPageTitle( "QuickVideoAdd" );
+		$wgOut->setPageTitle( "WikiaVideoAdd" );
 		$wgOut->setArticleRelated( false );
 
 		$this->mAction = $wgRequest->getVal( "action" );
@@ -39,7 +39,7 @@ class QuickVideoAddForm extends SpecialPage {
 
 	public function showForm() {
 		global $wgOut, $wgRequest;
-		$titleObj = Title::makeTitle( NS_SPECIAL, 'QuickVideoAdd' );
+		$titleObj = Title::makeTitle( NS_SPECIAL, 'WikiaVideoAdd' );
 		$action = $titleObj->escapeLocalURL( "action=submit" );
 		( '' != $wgRequest->getVal( 'name' ) ) ? $name = $wgRequest->getVal( 'name' ) : $name = '';
 
@@ -56,18 +56,18 @@ class QuickVideoAddForm extends SpecialPage {
 		global $wgOut, $wgRequest, $IP, $wgUser;
 		require_once( "$IP/extensions/wikia/WikiaVideo/VideoPage.php" );	
 		$replaced = false;
-		if( '' == $wgRequest->getVal( 'wpQuickVideoAddName' ) ) {
-			if( '' != $wgRequest->getVal( 'wpQuickVideoAddPrefilled' ) ) {
-				$this->mName = $wgRequest->getVal( 'wpQuickVideoAddPrefilled' );
+		if( '' == $wgRequest->getVal( 'wpWikiaVideoAddName' ) ) {
+			if( '' != $wgRequest->getVal( 'wpWikiaVideoAddPrefilled' ) ) {
+				$this->mName = $wgRequest->getVal( 'wpWikiaVideoAddPrefilled' );
 				$replaced = true;
 			} else {
 				$this->mName = '';
 			}			
 		} else {
-			$this->mName = $wgRequest->getVal( 'wpQuickVideoAddName' );
+			$this->mName = $wgRequest->getVal( 'wpWikiaVideoAddName' );
 		}
 
-		( '' != $wgRequest->getVal( 'wpQuickVideoAddUrl' ) ) ? $this->mUrl = $wgRequest->getVal( 'wpQuickVideoAddUrl' ) : $this->mUrl = '';	
+		( '' != $wgRequest->getVal( 'wpWikiaVideoAddUrl' ) ) ? $this->mUrl = $wgRequest->getVal( 'wpWikiaVideoAddUrl' ) : $this->mUrl = '';	
 
 		if ( ( '' != $this->mName ) && ( '' != $this->mUrl ) ) {
 			$title = Title::makeTitle( NS_SPECIAL, $this->mName );
@@ -80,12 +80,12 @@ class QuickVideoAddForm extends SpecialPage {
 			$sk = $wgUser->getSkin();
 	                $link_back = $sk->makeKnownLinkObj( $title );
 			if ($replaced) {
-				$wgOut->addHTML( wfMsg( 'qva-success-replaced', $link_back ) );
+				$wgOut->addHTML( wfMsg( 'wva-success-replaced', $link_back ) );
 			} else {
-				$wgOut->addHTML( wfMsg( 'qva-success', $link_back ) );
+				$wgOut->addHTML( wfMsg( 'wva-success', $link_back ) );
 			}
 		} else {
-			$wgOut->addHTML( wfMsg( 'qva-failure' ) );
+			$wgOut->addHTML( wfMsg( 'wva-failure' ) );
 		}
 	}
 }
