@@ -34,12 +34,15 @@ class VideoPage extends Article {
 		parent::__construct(&$title);
 	}
 
+
+	// render the article
 	function render() {
 		global $wgOut;
 		$wgOut->setArticleBodyOnly(true);
 		parent::view();
 	}
 
+	// for viewing the article, two behaviours for exist/not-exist
 	function view() {
 		global $wgOut, $wgUser, $wgRequest;
 
@@ -70,6 +73,7 @@ class VideoPage extends Article {
 		}
 	}
 
+	// show the complimentary Table of Contents
 	function showTOC($metadata) {
 		global $wgLang;
 		$r = '<ul id="filetoc"><li><a href="#file">'.$wgLang->getNsText(NS_VIDEO).'</a></li><li><a href="#filehistory">'.wfMsgHtml( 'filehist' ).'</a></li>'.($metadata ? ' <li><a href="#metadata">'.wfMsgHtml('metadata').'</a></li>' : '').'</ul>';
@@ -80,6 +84,7 @@ class VideoPage extends Article {
 		return Article::getContent();
 	}
 
+	// generate the parametrized window for displaying video on page
 	public function generateWindow($align = 'left', $width = 400, $caption = '', $thumb) {
 		global $wgStylePath;
 
@@ -105,6 +110,7 @@ EOD;
 		return str_replace("\n", ' ', $s);
 	}
 
+	// parse url and load data into the object
 	public function parseUrl( $url, $load = true ) {
 		$provider = '';
 		$id = '';
@@ -263,6 +269,7 @@ EOD;
 		return false;
 	}
 
+	// return the ratio (in number), for width 
 	public function getRatio() {
 		global $wgWikiaVideoProviders;
 		$ratio = 0;
@@ -297,6 +304,7 @@ EOD;
 		return $ratio;
 	}
 
+	// return the ratio in text form, this one is used for VideoPage info line
 	public function getTextRatio() {
 		global $wgWikiaVideoProviders;
 		$ratio = '';
@@ -332,8 +340,8 @@ EOD;
 		return $ratio;
 	}
 
-	// run a check from provided api or elsewhere
-// to see if we can go to details page or not
+	// runs a check from provided api or elsewhere
+	// to see if we can go to details page or not
 	public function checkIfVideoExists() {
 		global $wgWikiaVideoProviders;
 		$exists = false;
@@ -404,7 +412,7 @@ EOD;
 		return $exists;
 	}
 
-
+	// load video from parameters
 	function loadFromPars( $provider, $id, $data ) {
 		$this->mProvider = $provider;
 		$this->mId = $id;
@@ -415,6 +423,7 @@ EOD;
 		$this->mName = $name;
 	}
 
+	// returns the provider url
 	public function getProviderUrl() {
 		global $wgWikiaVideoProviders;
 		switch( $wgWikiaVideoProviders[$this->mProvider] ) {
@@ -439,12 +448,14 @@ EOD;
 		}
 	}
 
+	// gets the video name
 	public function getVideoName() {
 		$vname = '';
 		isset( $this->mVideoName ) ? $vname = $this->mVideoName : $vname = '';
 		return $vname;
 	}
 
+	// gets the video url depending on provider
 	public static function getUrl( $metadata ) {
 		global $wgWikiaVideoProviders;
 		$meta = split( ",", $metadata );
@@ -500,6 +511,7 @@ EOD;
 		return $this->mData;
 	}
 
+	// returns name from title
 	public static function getNameFromTitle( $title ) {
 		global $wgCapitalLinks;
 		if ( !$wgCapitalLinks ) {
@@ -510,6 +522,7 @@ EOD;
 		return ":" . $name;
 	}
 
+	// saves video and handles overwrite
 	public function save() {
 		global $wgUser, $wgWikiaVideoProviders, $wgContLang;
 
@@ -596,6 +609,7 @@ EOD;
 
 	}
 
+	// loads video data from db
 	public function load() {
 		$fname = get_class( $this ) . '::' . __FUNCTION__;
 		$dbr = wfGetDB( DB_SLAVE );
@@ -619,7 +633,8 @@ EOD;
 			}
 		}
 	}
-
+	
+	// handles revert
 	function revert() {
 		global $wgOut, $wgRequest, $wgUser;
 		$timestamp = $wgRequest->getVal( 'oldvideo' );
@@ -654,6 +669,7 @@ EOD;
 		$wgOut->addHTML( wfMsg( 'wikiavideo-reverted', '<b>' . $this->mTitle->getText() . '</b>', $link_back ) );
 	}
 
+	// displays history
 	function videoHistory() {
 		global $wgOut;
 		$dbr = wfGetDB( DB_SLAVE );
@@ -665,6 +681,7 @@ EOD;
 		$wgOut->addHTML( $s );
 	}
 
+	// displays links to that particular video
        function videoLinks() {
                 global $wgUser, $wgOut;
                 $limit = 100;
@@ -708,6 +725,7 @@ EOD;
                         $wgOut->addWikiMsg( 'morelinkstoimage', $this->mTitle->getPrefixedDBkey() );
         }
 
+	// returns the embed code, this is used more widely
         public function getEmbedCode( $width = 300, $autoplay = false ) {
 		global $wgWikiaVideoProviders;
                 $embed = "";
@@ -756,6 +774,7 @@ EOD;
                 return $embed;
         }
 
+	// wrapper for video display on video page
 	function openShowVideo() {
 		global $wgOut;
 		$this->getContent();
@@ -768,6 +787,7 @@ EOD;
 		$wgOut->addHTML( $s );
 	}
 
+	// shows the info line below the video on the video page
 	function showVideoInfoLine() {
 		global $wgOut, $wgWikiaVideoProviders;
 		$data = array(
@@ -785,7 +805,6 @@ EOD;
 		$s .= ', provider: <a href="' . $purl . '" class="external" target="_blank">' . $provider . '</a>)</div>' ;
 		$wgOut->addHTML( $s );
 	}
-
 }
 
 global $wgWikiaVideoProviders;
@@ -809,6 +828,7 @@ $wgWikiaVideoProviders = array(
 		VideoPage::V_SOUTHPARKSTUDIOS => 'southparkstudios',
 		);
 
+// used for generating video history table with links
 class VideoHistoryList {
 	var $mTitle;
 
