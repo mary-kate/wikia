@@ -1,9 +1,7 @@
 <?php
-$dir = dirname(__FILE__).'/';
 global $wgExtensionMessagesFiles;
-$wgExtensionMessagesFiles['WikiaVideo'] = $dir.'/WikiaVideo.i18n.php';
+$wgExtensionMessagesFiles['WikiaVideo'] = dirname(__FILE__).'/WikiaVideo.i18n.php';
 
-// main video page class
 class VideoPage extends Article {
 
 	const V_GAMETRAILERS = 0;
@@ -31,78 +29,79 @@ class VideoPage extends Article {
 		$mData,
 		$mDataline;
 
-        function __construct (&$title){
+	function __construct (&$title){
 		wfLoadExtensionMessages('WikiaVideo');
-                parent::__construct(&$title);
-        }
+		parent::__construct(&$title);
+	}
 
-        function render() {
-                global $wgOut;
-                $wgOut->setArticleBodyOnly( true );
-                parent::view();
-        }
+	function render() {
+		global $wgOut;
+		$wgOut->setArticleBodyOnly(true);
+		parent::view();
+	}
 
 	function view() {
 		global $wgOut, $wgUser, $wgRequest;
-		if ( $this->getID() ) {
-			$wgOut->addHTML( $this->showTOC('') );
+
+		if($this->getID()) { // existing video
+
+			$wgOut->addHTML($this->showTOC(''));
 			$this->openShowVideo();
 			$this->showVideoInfoLine();
 
-			wfRunHooks( 'WikiaVideo::View:BlueLink' );
+			wfRunHooks('WikiaVideo::View:BlueLink');
+
 			Article::view();
+
 			$this->videoHistory();
-			$wgOut->addHTML( '<br/>' );
-			$wgOut->addHTML( Xml::element( 'h2',
-						array( 'id' => 'filelinks' ),
-						wfMsg( 'wikiavideo-links' ) ) . "\n" );
-
+			$wgOut->addHTML('<br/>');
+			$wgOut->addHTML(Xml::element('h2', array('id' => 'filelinks'), wfMsg('wikiavideo-links'))."\n");
 			$this->videoLinks();
-		} else {
-			# Just need to set the right headers
-			$wgOut->setArticleFlag( true );
-			$wgOut->setRobotpolicy( 'noindex,nofollow' );
-			$wgOut->setPageTitle( $this->mTitle->getPrefixedText() );
 
-			wfRunHooks( 'WikiaVideo::View:RedLink' );
+		} else { // not existing video
+
+			# Just need to set the right headers
+			$wgOut->setArticleFlag(true);
+			$wgOut->setRobotpolicy('noindex,nofollow');
+			$wgOut->setPageTitle($this->mTitle->getPrefixedText());
+
+			wfRunHooks('WikiaVideo::View:RedLink');
 			$this->viewUpdates();
 		}
 	}
 
-        function showTOC( $metadata ) {
-                global $wgLang;
-                $r = '<ul id="filetoc">
-                        <li><a href="#file">' . $wgLang->getNsText( NS_VIDEO ) . '</a></li>
-                        <li><a href="#filehistory">' . wfMsgHtml( 'filehist' ) . '</a></li>' .
-                        ($metadata ? ' <li><a href="#metadata">' . wfMsgHtml( 'metadata' ) . '</a></li>' : '') . '
-                </ul>';
-                return $r;
-        }
+	function showTOC($metadata) {
+		global $wgLang;
+		$r = '<ul id="filetoc"><li><a href="#file">'.$wgLang->getNsText(NS_VIDEO).'</a></li><li><a href="#filehistory">'.wfMsgHtml( 'filehist' ).'</a></li>'.($metadata ? ' <li><a href="#metadata">'.wfMsgHtml('metadata').'</a></li>' : '').'</ul>';
+		return $r;
+	}
 
 	function getContent() {
 		return Article::getContent();
 	}
 
-	public function generateWindow( $align = 'left', $width = 400, $caption = '', $thumb ) {
+	public function generateWindow($align = 'left', $width = 400, $caption = '', $thumb) {
 		global $wgStylePath;
-		$code = $this->getEmbedCode( $width );
-		if ( 'false' == $thumb ) {
-			return "<div class=\"t{$align}\">" . $code . "</div>";
-		}
-		$s = "<div class=\"thumb t{$align}\"><div class=\"thumbinner\" style=\"width:{$width}px;\">";
-		$s .= $code;
 
-		$url = $this->mTitle->getLocalURL( '' );
+		$code = $this->getEmbedCode($width);
 
-		if ( isset( $fp['framed'] ) ) {
-			$zoomicon="";
-		} else {
-			$zoomicon =  '<div class="magnify">'.
-				'<a href="'.$url.'" class="internal" title="'.$caption.'">'.
-				'<img src="'.$wgStylePath.'/common/images/magnify-clip.png" ' .
-				'width="15" height="11" alt="" /></a></div>';
+		if('false' == $thumb) { // TODO: $thumb should be boolean variable, not string
+			return "<div class=\"t{$align}\">".$code."</div>";
 		}
-		$s .= '  <div class="thumbcaption">'.$zoomicon.$caption."</div></div></div>";
+
+		$url = $this->mTitle->getLocalURL('');
+
+		$s = <<<EOD
+<div class="thumb t{$align}">
+	<div class="thumbinner" style="width:{$width}px;">
+		{$code}
+		<div class="thumbcaption">
+			<div class="magnify"><a href="{$url}" class="internal"><img src="{$wgStylePath}/common/images/magnify-clip.png" width="15" height="11" alt="" /></a></div>
+			$caption
+		</div>
+	</div>
+</div>
+EOD;
 		return str_replace("\n", ' ', $s);
 	}
 
