@@ -58,6 +58,6 @@ $messages['en'] = array(
 	'vet-preview' => '<i>This preview is not to scale</i>',
 	'vet-bad-url' => 'The supplied URL is invalid',
 	'vet-non-existing' => 'The supplied video does not exist',
-	'vet-main-info' => '<i>Input the full video URL from one of the supported sites displayed below.</i>',
+	'vet-main-info' => '<i>Search for a video or enter the full URL from any of the supported sites</i>',
 	'vet-page-success' => 'Video page was successfully updated. You may have to purge the video page to see the change.',
 );
