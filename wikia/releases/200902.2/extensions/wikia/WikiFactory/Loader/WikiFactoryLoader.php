@@ -97,7 +97,7 @@ class WikiFactoryLoader {
 		/**
 		 * initalizations
 		 */
-		$this->mDebug = true;
+		$this->mDebug = false;
 		$this->mOldServerName = false;
 		$this->mAlternativeDomainUsed = false;
 		$this->mDBname = "wikicities";
@@ -180,7 +180,7 @@ class WikiFactoryLoader {
 		if( $this->mDBhandler instanceof Database ) {
 			return $this->mDBhandler;
 		}
-		if( isset( $wgDBservers ) && !empty( $wgDBservers ) ) {
+		if( isset( $wgDBservers ) && is_array( $wgDBservers ) ) {
 			$server = array_rand( $wgDBservers );
 			$host = $wgDBservers[ $server ]["host"];
 			$this->mDBhandler = new Database( $host, $wgDBuser, $wgDBpassword, $this->mDBname );
