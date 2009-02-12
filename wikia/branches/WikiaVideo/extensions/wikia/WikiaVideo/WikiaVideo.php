@@ -8,9 +8,7 @@ $wgAutoloadClasses['VideoPage'] = dirname(__FILE__). '/VideoPage.php';
 function WikiaVideo_makeVideo($title, $options, $sk) {
 	wfProfileIn('WikiaVideo_makeVideo');
 	if(!$title->exists()) {
-		global $wgContLang;
-		$video_ns = $wgContLang->getFormattedNsText( NS_VIDEO ) ;
-		$out = $sk->makeColouredLinkObj(Title::newFromText('WikiaVideoAdd', NS_SPECIAL), 'new', $video_ns . ':' . $title->getText(), 'name=' . $title->getDBKey());
+		$out = $sk->makeColouredLinkObj(Title::newFromText('WikiaVideoAdd', NS_SPECIAL), 'new', $title->getPrefixedText(), 'name=' . $title->getDBKey());
 	} else {
 		// defaults
 		$width = 400;
