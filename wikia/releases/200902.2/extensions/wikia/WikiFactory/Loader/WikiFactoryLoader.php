@@ -97,7 +97,7 @@ class WikiFactoryLoader {
 		/**
 		 * initalizations
 		 */
-		$this->mDebug = false;
+		$this->mDebug = true;
 		$this->mOldServerName = false;
 		$this->mAlternativeDomainUsed = false;
 		$this->mDBname = "wikicities";
@@ -177,20 +177,19 @@ class WikiFactoryLoader {
 	public function getDB() {
 		global $wgDBserver, $wgDBuser, $wgDBpassword,  $wgDBservers;
 
-		if( is_object( $this->mDBhandler ) ) {
+		if( $this->mDBhandler instanceof Database ) {
 			return $this->mDBhandler;
 		}
-
 		if( isset( $wgDBservers ) && !empty( $wgDBservers ) ) {
 			$server = array_rand( $wgDBservers );
-			$host = $server[0]["host"];
+			$host = $wgDBservers[ $server ]["host"];
 			$this->mDBhandler = new Database( $host, $wgDBuser, $wgDBpassword, $this->mDBname );
-			$this->debug( "connecting to {$host}" );
+			$this->debug( "connecting to {$host} {$wgDBuser} {$wgDBpassword} {$this->mDBname}" );
 		}
 		/**
 		 * and finally fallback to $wgDBserver
 		 */
-		if( is_null( $this->mDBhandler ) ) {
+		if( ! $this->mDBhandler ) {
 			$this->mDBhandler = new Database( $wgDBserver, $wgDBuser, $wgDBpassword, $this->mDBname );
 			$this->debug( "fallback to wgDBserver {$wgDBserver}" );
 		}
