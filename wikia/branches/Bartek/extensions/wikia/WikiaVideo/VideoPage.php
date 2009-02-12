@@ -1,8 +1,4 @@
 <?php
-
-// use the same namespace as in old NY extension
-define( 'NS_VIDEO', 400 );
-
 $dir = dirname(__FILE__).'/';
 global $wgExtensionMessagesFiles;
 $wgExtensionMessagesFiles['WikiaVideo'] = $dir.'/WikiaVideo.i18n.php';
@@ -47,7 +43,7 @@ class VideoPage extends Article {
         }
 
 	function view() {
-		global $wgOut, $wgUser, $wgRequest;		
+		global $wgOut, $wgUser, $wgRequest;
 		if ( $this->getID() ) {
 			$wgOut->addHTML( $this->showTOC('') );
 			$this->openShowVideo();
@@ -67,7 +63,7 @@ class VideoPage extends Article {
 			$wgOut->setArticleFlag( true );
 			$wgOut->setRobotpolicy( 'noindex,nofollow' );
 			$wgOut->setPageTitle( $this->mTitle->getPrefixedText() );
-			
+
 			wfRunHooks( 'WikiaVideo::View:RedLink' );
 			$this->viewUpdates();
 		}
@@ -95,7 +91,7 @@ class VideoPage extends Article {
 		}
 		$s = "<div class=\"thumb t{$align}\"><div class=\"thumbinner\" style=\"width:{$width}px;\">";
 		$s .= $code;
-				
+
 		$url = $this->mTitle->getLocalURL( '' );
 
 		if ( isset( $fp['framed'] ) ) {
@@ -121,28 +117,28 @@ class VideoPage extends Article {
 		if( !false === $test ) {
 			return false;
 		}
-		
+
 		$fixed_url = str_replace( "HTTP://", "", $fixed_url );
 		$fixed_parts = split( "/", $fixed_url );
 		$fixed_url = $fixed_parts[0];
 
 		$text = strpos( $fixed_url, "METACAFE.COM" );
 		if( false !== $text ) { // metacafe
-			$provider = self::V_METACAFE;                        	
+			$provider = self::V_METACAFE;
 			// reuse some NY stuff for now
 			$standard_url = strpos( strtoupper( $url ), "HTTP://WWW.METACAFE.COM/WATCH/" );
 			if( false !== $standard_url ) {
-				$id = substr( $url , $standard_url+ strlen("HTTP://WWW.METACAFE.COM/WATCH/") , strlen($url) );				
+				$id = substr( $url , $standard_url+ strlen("HTTP://WWW.METACAFE.COM/WATCH/") , strlen($url) );
 				$last_char = substr( $id,-1 ,1 );
 
 				if($last_char == "/"){
 					$id = substr( $id , 0 , strlen($id)-1 );
 				}
-				
+
 				if ( !( false !== strpos( $id, ".SWF" ) ) ) {
 					$id .= ".swf";
 				}
-				
+
 				$data = split( "/", $id );
 				if (is_array( $data ) ) {
 					$this->mProvider = $provider;
@@ -154,7 +150,7 @@ class VideoPage extends Article {
 		}
 		$text = strpos( $fixed_url, "YOUTUBE.COM" );
 		if( false !== $text ) { // youtube
-			$provider = self::V_YOUTUBE;                        	
+			$provider = self::V_YOUTUBE;
 			// reuse some NY stuff for now
 			$standard_url = strpos( strtoupper( $url ), "WATCH?V=");
 
@@ -187,7 +183,7 @@ class VideoPage extends Article {
 				array_shift( $parsed_id );
 				$this->mData = array(
 					'-' . implode( "-", $parsed_id )
-				);					
+				);
 				return true;
 			}
 		}
@@ -197,12 +193,12 @@ class VideoPage extends Article {
 			$provider = self::V_MYVIDEO;
 			$parsed = split( "/", $url );
 			if( is_array( $parsed ) ) {
-				$mdata = array_pop( $parsed );	
+				$mdata = array_pop( $parsed );
 				$this->mProvider = $provider;
 				$this->mId = array_pop( $parsed );
 				$this->mData = array(
 						$mdata
-				);					
+				);
 				return true;
 			}
 		}
@@ -210,11 +206,11 @@ class VideoPage extends Article {
 		$text = strpos( $fixed_url, "GAMEVIDEOS.1UP.COM" );
 		if( false !== $text ) { // gamevideos
 			$provider = self::V_GAMEVIDEOS;
-			$parsed = split( "/", $url );			
+			$parsed = split( "/", $url );
 			if( is_array( $parsed ) ) {
 				$this->mProvider = $provider;
 				$this->mId = array_pop( $parsed );
-				$this->mData = array();					
+				$this->mData = array();
 				return true;
 			}
 		}
@@ -223,11 +219,11 @@ class VideoPage extends Article {
 		$text = strpos( $fixed_url, "VIMEO.COM" );
 		if( false !== $text ) { // vimeo
 			$provider = self::V_VIMEO;
-			$parsed = split( "/", $url );			
+			$parsed = split( "/", $url );
 			if( is_array( $parsed ) ) {
 				$this->mProvider = $provider;
 				$this->mId = array_pop( $parsed );
-				$this->mData = array();					
+				$this->mData = array();
 				return true;
 			}
 		}
@@ -235,7 +231,7 @@ class VideoPage extends Article {
 		$text = strpos( $fixed_url, "5MIN.COM" );
 		if( false !== $text ) { // 5min
 			$provider = self::V_5MIN;
-			$parsed = split( "/", $url );			
+			$parsed = split( "/", $url );
 			if( is_array( $parsed ) ) {
 				$this->mProvider = $provider;
 				$ids = array_pop( $parsed );
@@ -243,7 +239,7 @@ class VideoPage extends Article {
 				$this->mId = array_pop( $parsed_twice );
 				$this->mData = array(
 						implode( '-', $parsed_twice ) . '-'
-					);					
+					);
 				return true;
 			}
 		}
@@ -272,10 +268,10 @@ class VideoPage extends Article {
 		global $wgWikiaVideoProviders;
 		$ratio = 0;
 		switch( $wgWikiaVideoProviders[$this->mProvider] ) {
-			case "metacafe": 
+			case "metacafe":
 				$ratio =  (40 / 35);
-				break;			
-			case "youtube": 
+				break;
+			case "youtube":
 				$ratio =  (425 / 355);
 				break;
 			case "sevenload":
@@ -297,7 +293,7 @@ class VideoPage extends Article {
                                 $ratio = ( 480 / 400 );
 			default:
 				$ratio = 1;
-				break;		
+				break;
 		}
 		return $ratio;
 	}
@@ -306,10 +302,10 @@ class VideoPage extends Article {
 		global $wgWikiaVideoProviders;
 		$ratio = '';
 		switch( $wgWikiaVideoProviders[$this->mProvider] ) {
-			case "metacafe": 
+			case "metacafe":
 				$ratio = "400 x 350";
-				break;			
-			case "youtube": 
+				break;
+			case "youtube":
 				$ratio = "425 x 355";
 				break;
 			case "sevenload":
@@ -338,27 +334,27 @@ class VideoPage extends Article {
 	}
 
 	// run a check from provided api or elsewhere
-// to see if we can go to details page or not 
+// to see if we can go to details page or not
 	public function checkIfVideoExists() {
 		global $wgWikiaVideoProviders;
 		$exists = false;
 		switch( $wgWikiaVideoProviders[$this->mProvider] ) {
-			case "metacafe": 
+			case "metacafe":
 				$file = @file_get_contents( "http://www.metacafe.com/api/item/" . $this->mId, FALSE );
 				if ($file) {
 					$doc = new DOMDocument;
-					@$doc->loadHTML( $file );					
-					if( $item = $doc->getElementsByTagName('item')->item( 0 ) ) {						
+					@$doc->loadHTML( $file );
+					if( $item = $doc->getElementsByTagName('item')->item( 0 ) ) {
 						$this->mVideoName = trim( $item->getElementsByTagName('title')->item(0)->textContent );
 						$exists = true;
 					}
 				}
-				break;			
-			case "youtube": 
+				break;
+			case "youtube":
 				$file = @file_get_contents( "http://gdata.youtube.com/feeds/api/videos/" . $this->mId, FALSE );
 				if ($file) {
 					$doc = new DOMDocument;
-					@$doc->loadHTML( $file );					
+					@$doc->loadHTML( $file );
 					$this->mVideoName = trim( $doc->getElementsByTagName('title')->item(0)->textContent );
 					$exists = true;
 				}
@@ -370,7 +366,7 @@ class VideoPage extends Article {
 
 				// 2. load the data using the token
 				// http://api.sevenload.com/rest/1.0/items/A2C4E6G \
-				//  ?username=XYZ&token-id=8b8453ca4b79f500e94aac1fc7025b0704f3f2c7	
+				//  ?username=XYZ&token-id=8b8453ca4b79f500e94aac1fc7025b0704f3f2c7
 
 				$exists = true;
 				break;
@@ -381,8 +377,8 @@ class VideoPage extends Article {
 				$file = @file_get_contents( "http://api.5min.com/video/" . $this->mId . '/info.xml', FALSE );
 				if ($file) {
 					$doc = new DOMDocument;
-					@$doc->loadHTML( $file );					
-					if( $item = $doc->getElementsByTagName('item')->item( 0 ) ) {						
+					@$doc->loadHTML( $file );
+					if( $item = $doc->getElementsByTagName('item')->item( 0 ) ) {
 						$this->mVideoName = trim( $item->getElementsByTagName('title')->item(0)->textContent );
 						$exists = true;
 					}
@@ -413,7 +409,7 @@ class VideoPage extends Article {
 	function loadFromPars( $provider, $id, $data ) {
 		$this->mProvider = $provider;
 		$this->mId = $id;
-		$this->mData = $data;		
+		$this->mData = $data;
 	}
 
 	public function setName( $name ) {
@@ -423,9 +419,9 @@ class VideoPage extends Article {
 	public function getProviderUrl() {
 		global $wgWikiaVideoProviders;
 		switch( $wgWikiaVideoProviders[$this->mProvider] ) {
-			case "metacafe": 
+			case "metacafe":
 				return 'http://www.metacafe.com';
-			case "youtube": 
+			case "youtube":
 				return 'http://www.youtube.com';
 			case "sevenload":
 				return 'http://www.sevenload.com';
@@ -447,7 +443,7 @@ class VideoPage extends Article {
 	public function getVideoName() {
 		$vname = '';
 		isset( $this->mVideoName ) ? $vname = $this->mVideoName : $vname = '';
-		return $vname; 
+		return $vname;
 	}
 
 	public static function getUrl( $metadata ) {
@@ -464,10 +460,10 @@ class VideoPage extends Article {
 			}
 		}
 		$url = '';
-		switch( $wgWikiaVideoProviders[$provider] ) {			
-			case "metacafe": 
+		switch( $wgWikiaVideoProviders[$provider] ) {
+			case "metacafe":
 				$url = 'http://www.metacafe.com/watch/' . $id . '/' . $mData[0];
-			case "youtube": 
+			case "youtube":
 				$url = 'http://www.youtube.com/watch?v=' . $id;
 			case "sevenload":
 				$url = 'http://www.sevenload.com/videos/' . $id;
@@ -494,17 +490,17 @@ class VideoPage extends Article {
 	}
 
 	public function getProvider() {
-		return $this->mProvider;		
+		return $this->mProvider;
 	}
 
 	public function getVideoId() {
-		return $this->mId;		
+		return $this->mId;
 	}
 
 	public function getData() {
-		return $this->mData;		
+		return $this->mData;
 	}
-	
+
 	public static function getNameFromTitle( $title ) {
 		global $wgCapitalLinks;
 		if ( !$wgCapitalLinks ) {
@@ -523,21 +519,21 @@ class VideoPage extends Article {
 
                 $dbw = wfGetDB( DB_MASTER );
                 $now = $dbw->timestamp();
-	
+
 		switch( $wgWikiaVideoProviders[$this->mProvider] ) {
-			case 'metacafe':		
-			case 'sevenload':					
+			case 'metacafe':
+			case 'sevenload':
 			case 'myvideo':
 			case '5min':
 				$metadata = $this->mProvider . ',' . $this->mId . ',' . $this->mData[0];
 				break;
-			case 'youtube':		
+			case 'youtube':
 			case 'gamevideos':
-			case 'vimeo':		
+			case 'vimeo':
 			case 'southparkstudios':
 				$metadata = $this->mProvider . ',' . $this->mId . ',';
 				break;
-			default: 
+			default:
 				$metadata = '';
 				break;
 		}
@@ -550,10 +546,10 @@ class VideoPage extends Article {
                                 'img_user' => $wgUser->getID(),
                                 'img_user_text' => $wgUser->getName(),
                                 'img_timestamp' => $now,
-				'img_metadata'	=> $metadata,										
+				'img_metadata'	=> $metadata,
                                 'img_media_type' => 'VIDEO',
 				'img_major_mime' => 'video',
-				'img_minor_mime' => 'swf',					
+				'img_minor_mime' => 'swf',
                         ),
                         __METHOD__,
                         'IGNORE'
@@ -595,30 +591,30 @@ class VideoPage extends Article {
                         );
 		}
 		$cat = $wgContLang->getFormattedNsText( NS_CATEGORY );
-		$this->doEdit( '[[' . $cat . ':' . wfMsg( 'wikiavideo-category' ) . ']]', $desc );			
+		$this->doEdit( '[[' . $cat . ':' . wfMsg( 'wikiavideo-category' ) . ']]', $desc );
 
 		$dbw->immediateCommit();
-		
+
 	}
 
 	public function load() {
 		$fname = get_class( $this ) . '::' . __FUNCTION__;
-		$dbr = wfGetDB( DB_SLAVE );		
+		$dbr = wfGetDB( DB_SLAVE );
 		$row = $dbr->selectRow(
 			'image',
 			'img_metadata',
 			'img_name = ' . $dbr->addQuotes( self::getNameFromTitle( $this->mTitle ) ) .' OR img_name = ' . $dbr->addQuotes( $this->mTitle->getPrefixedText() ),
-			$fname	
-		);	
+			$fname
+		);
 		if ($row) {
-			$metadata = split( ",", $row->img_metadata ); 	
+			$metadata = split( ",", $row->img_metadata );
 			if ( is_array( $metadata ) ) {
 				$this->mProvider = $metadata[0];
 				$this->mId = $metadata[1];
 				array_splice( $metadata, 0, 2 );
 				if ( count( $metadata ) > 0 ) {
 					foreach( $metadata as $data  ) {
-						$this->mData[] = $data;						
+						$this->mData[] = $data;
 					}
 				}
 			}
@@ -629,25 +625,25 @@ class VideoPage extends Article {
 		global $wgOut, $wgRequest, $wgUser;
 		$timestamp = $wgRequest->getVal( 'oldvideo' );
 		$fname = get_class( $this ) . '::' . __FUNCTION__;
-		$dbr = wfGetDB( DB_SLAVE );		
+		$dbr = wfGetDB( DB_SLAVE );
 		$row = $dbr->selectRow(
 			'oldimage',
 			'oi_metadata AS img_metadata',
-			array( 
+			array(
 				'oi_name' => self::getNameFromTitle( $this->mTitle ),
 				'oi_timestamp' => $timestamp
 			),
-			$fname	
-		);	
+			$fname
+		);
 		if ($row) {
-			$metadata = split( ",", $row->img_metadata ); 	
+			$metadata = split( ",", $row->img_metadata );
 			if ( is_array( $metadata ) ) {
 				$this->mProvider = $metadata[0];
 				$this->mId = $metadata[1];
 				array_splice( $metadata, 0, 2 );
 				if ( count( $metadata ) > 0 ) {
 					foreach( $metadata as $data  ) {
-						$this->mData[] = $data;						
+						$this->mData[] = $data;
 					}
 				}
 			}
@@ -723,7 +719,7 @@ class VideoPage extends Article {
 				$url = 'http://www.metacafe.com/fplayer/' . $this->mId . '/' . $this->mData[0];
 				$code = 'custom';
 				$autoplay ? $auto = 'flashVars="playerVars=autoPlay=yes"' : $auto = '';
-				$embed = '<embed ' . $auto . ' src="' . $url . '" width="' . $width . '" height="' . $height . '" wmode="transparent"" allowFullScreen="true" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash"></embed>';	
+				$embed = '<embed ' . $auto . ' src="' . $url . '" width="' . $width . '" height="' . $height . '" wmode="transparent"" allowFullScreen="true" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash"></embed>';
                                 break;
                         case "youtube":
 				$url = 'http://www.youtube.com/v/' . $this->mId;
@@ -734,7 +730,7 @@ class VideoPage extends Article {
 				break;
 			case 'myvideo':
 				$code = 'custom';
-				$embed = "<object style='width:{$width}px;height:{$height}px;' type='application/x-shockwave-flash' data='http://www.myvideo.de/movie/{$this->mId}'><param name='wmode' value='transparent'><param name='movie' value='http://www.myvideo.de/movie/{$this->mId}' /> <param name='AllowFullscreen?' value='true' /> </object>";	
+				$embed = "<object style='width:{$width}px;height:{$height}px;' type='application/x-shockwave-flash' data='http://www.myvideo.de/movie/{$this->mId}'><param name='wmode' value='transparent'><param name='movie' value='http://www.myvideo.de/movie/{$this->mId}' /> <param name='AllowFullscreen?' value='true' /> </object>";
 				break;
 			case "gamevideos":
 				$code = 'custom';
@@ -753,8 +749,8 @@ class VideoPage extends Article {
                                 $embed = '<embed src="http://media.mtvnservices.com/mgid:cms:item:southparkstudios.com:' . $this->mId . '" width="' . $width . '" height="' . $height . '" type="application/x-shockwave-flash" wmode="window" flashVars="autoPlay=false&dist=http://www.southparkstudios.com&orig=" allowFullScreen="true" allowScriptAccess="always" allownetworking="all" bgcolor="#000000"></embed>';
                                 break;
                         default: break;
-                }	
-			if( 'custom' != $code ) { 
+                }
+			if( 'custom' != $code ) {
                                 $embed = "<embed src=\"{$url}\" width=\"{$width}\" height=\"{$height}\" wmode=\"transparent\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" type=\"application/x-shockwave-flash\"> </embed>";
 			}
 
@@ -764,7 +760,7 @@ class VideoPage extends Article {
 	function openShowVideo() {
 		global $wgOut;
 		$this->getContent();
-		$this->load();	
+		$this->load();
 
 		$s = '<div id="VideoEmbedPageWindow">';
 		$s .= $this->getEmbedCode( 400);
@@ -781,14 +777,14 @@ class VideoPage extends Article {
 			$this->mData[0]
 		);
 		$data = implode( ",", $data ) ;
-		$url = self::getUrl( $data );	
+		$url = self::getUrl( $data );
 		$provider = $wgWikiaVideoProviders[$this->mProvider];
 		$purl = $this->getProviderUrl();
 		$ratio = $this->getTextRatio();
-		// todo messagize	
+		// todo messagize
 		$s = '<div id="VideoPageInfo"><a href="' . $url . '">' . $this->mTitle->getText() . ' </a> (' . $ratio . ' pixel';
 		$s .= ', provider: <a href="' . $purl . '" class="external" target="_blank">' . $provider . '</a>)</div>' ;
-		$wgOut->addHTML( $s );				
+		$wgOut->addHTML( $s );
 	}
 
 }
@@ -811,7 +807,7 @@ $wgWikiaVideoProviders = array(
 		VideoPage::V_VIMEO => 'vimeo',
 		VideoPage::V_CLIPFISH => 'clipfish',
 		VideoPage::V_MYVIDEO => 'myvideo',
-		VideoPage::V_SOUTHPARKSTUDIOS => 'southparkstudios',	
+		VideoPage::V_SOUTHPARKSTUDIOS => 'southparkstudios',
 		);
 
 class VideoHistoryList {
@@ -834,8 +830,8 @@ class VideoHistoryList {
 
 	public function videoHistoryLine( $iscur = false ) {
 		global $wgOut, $wgUser, $wgLang;
-		
-		$dbr = wfGetDB( DB_SLAVE );		
+
+		$dbr = wfGetDB( DB_SLAVE );
 		$sk = $wgUser->getSkin();
 
 		if ( $iscur ) {
@@ -864,7 +860,7 @@ class VideoHistoryList {
 				$line .= $sk->userLink( $user, $usertext ) . " <span style='white-space: nowrap;'>" . $sk->userToolLinks( $user, $usertext ) . "</span>";
 				$line .= '</td></tr>';
 				return $line;
-			}			
+			}
 		} else {
 			// load from old video db
 			$history = $dbr->select( 'oldimage',
@@ -884,7 +880,7 @@ class VideoHistoryList {
 			while( $row = $dbr->fetchObject( $history ) ) {
 				$user = $row->img_user;
 				$usertext = $row->img_user_text;
-				$url = VideoPage::getUrl( $row->img_metadata );	
+				$url = VideoPage::getUrl( $row->img_metadata );
 			        $q = array();
                                 $q[] = 'action=revert';
                                 $q[] = 'oldvideo=' . urlencode( $row->img_timestamp );
@@ -894,8 +890,8 @@ class VideoHistoryList {
 
 				$s .= '<tr>' . '<td>' . $revert . '</td><td><a href="' . $url . '" class="link-video" target="_blank">' . $wgLang->timeAndDate( $row->img_timestamp, true ) . '</a></td>' . '<td>';
 				$s .= $sk->userLink( $user, $usertext ) . " <span style='white-space: nowrap;'>" . $sk->userToolLinks( $user, $usertext ) . "</span>";
-				$s .= '</td></tr>';	
-			}			
+				$s .= '</td></tr>';
+			}
 			return $s;
 		}
 	}
