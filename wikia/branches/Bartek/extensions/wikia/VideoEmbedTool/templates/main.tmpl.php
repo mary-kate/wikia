@@ -15,8 +15,6 @@
 	global $wgStylePath, $wgUser, $wgScriptPath, $wgExtensionsPath;
 ?>
 	<tr id="VideoEmbedAdd">
-		<th><h1><?= wfMsg('vet-upload') ?></h1></th>
-
 		<td>
 			<img src="<?= $wgStylePath; ?>/monaco/images/widget_loading.gif" id="VideoEmbedProgress2" style="visibility: hidden;"/>
 			<?php
