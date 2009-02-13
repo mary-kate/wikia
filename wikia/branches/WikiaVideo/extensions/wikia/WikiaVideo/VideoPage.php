@@ -515,7 +515,7 @@ EOD;
 	public function save() {
 		global $wgUser, $wgWikiaVideoProviders, $wgContLang;
 
-		$this->mTitle = Title::newFromText($this->mName, NS_VIDEO );
+		//$this->mTitle = Title::newFromText($this->mName, NS_VIDEO );
 		$desc = wfMsg( 'wikiavideo-added', $this->mTitle->getText() );
 
                 $dbw = wfGetDB( DB_MASTER );
