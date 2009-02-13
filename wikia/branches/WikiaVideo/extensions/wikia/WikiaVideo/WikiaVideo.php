@@ -3,6 +3,7 @@ if(!defined('MEDIAWIKI')) {
 	exit(1);
 }
 
+$wgExtraNamespaces[NS_VIDEO] = 'Video';
 $wgAutoloadClasses['VideoPage'] = dirname(__FILE__). '/VideoPage.php';
 
 function WikiaVideo_makeVideo($title, $options, $sk) {
