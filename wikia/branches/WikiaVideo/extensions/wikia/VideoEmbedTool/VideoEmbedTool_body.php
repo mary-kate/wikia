@@ -103,11 +103,7 @@ class VideoEmbedTool {
 
 				$video->loadFromPars( VideoPage::V_METACAFE, $itemId, array( $itemLink ) );
 				$video->setName( $tempname );
-
-				//$video->setName( $tempname );
-
 				$props['oname'] = '';
-
 				$props['provider'] = VideoPage::V_METACAFE;
 				$props['id'] = $itemId;
 				$props['vname'] = $itemTitle;
