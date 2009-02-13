@@ -36,13 +36,10 @@ class VideoEmbedTool {
 		$query = $wgRequest->getText('query');
 		$page = $wgRequest->getVal('page');
 		$sourceId = $wgRequest->getVal('sourceId');
-		
-		if($sourceId == 0) { // metacafe	
-			$page ? $start = ($page - 1) * 8 : $start = 0;	
-			$query_arr = split( " ", $query );
-			if (is_array( $query_arr ) ) {
-				$query = implode( "+", $query_arr  );	
-			}
+
+		if($sourceId == 0) { // metacafe
+			$page ? $start = ($page - 1) * 8 : $start = 0;
+			$query = str_replace(" ", "+", $query);
 			$file = @file_get_contents( "http://www.metacafe.com/api/videos?vq=" . $query, FALSE );
                                 if ($file) {
                                         $doc = new DOMDocument;
@@ -55,19 +52,19 @@ class VideoEmbedTool {
 					$count = 0;
 					foreach( $items as $item ) {
 						$links = split( "/", $item->getElementsByTagName('link')->item(0)->textContent );
-						$link = $links[count( $links ) -2]; 
-						$preResult[] = array( 
+						$link = $links[count( $links ) -2];
+						$preResult[] = array(
 							'provider' => 'metacafe',
 							'title' => $item->getElementsByTagName('title')->item(0)->textContent,
 							'id' => $item->getElementsByTagName('id')->item(0)->textContent,
-							'link' => $link,	
+							'link' => $link,
 						);
 						$count++;
 					}
 					$metacafeResult['total'] = $count;
 					$metacafeResult['pages'] = ceil( $metacafeResult['total'] / 8 );
                                 }
-			$metacafeResult['item'] = array_slice( $preResult, $start, 8 );	
+			$metacafeResult['item'] = array_slice( $preResult, $start, 8 );
 			$tmpl = new EasyTemplate(dirname(__FILE__).'/templates/');
 			$tmpl->set_vars(array('results' => $metacafeResult, 'query' => addslashes($query)));
 			return $tmpl->execute('results_metacafe');
@@ -109,11 +106,11 @@ class VideoEmbedTool {
 				//$video->setName( $tempname );
 
 
-				$props['oname'] = '';			
+				$props['oname'] = '';
 
-				$props['provider'] = VideoPage::V_METACAFE;		
+				$props['provider'] = VideoPage::V_METACAFE;
 				$props['id'] = $itemId;
-				$props['vname'] = $itemLink;	
+				$props['vname'] = $itemLink;
 				$props['metadata'] = $itemLink;
 				$props['code'] = $video->getEmbedCode( VIDEO_PREVIEW, true );
 				break;
@@ -130,7 +127,7 @@ class VideoEmbedTool {
 
 		$ns = $wgTitle->getNamespace();
 
-		$url = $wgRequest->getVal( 'wpVideoEmbedUrl' );			
+		$url = $wgRequest->getVal( 'wpVideoEmbedUrl' );
 		$tempname = 'Temp_video_'.$wgUser->getID().'_'.rand(0, 1000);
 		$title = Title::makeTitle( NS_VIDEO, $tempname );
 		$video = new VideoPage( $title );
@@ -140,12 +137,12 @@ class VideoEmbedTool {
 			header('X-screen-type: error');
 			return $this->loadMain( wfMsg( 'vet-bad-url' ) );
 		}
-	
+
 		if( !$video->checkIfVideoExists() ) {
 			header('X-screen-type: error');
 			return $this->loadMain( wfMsg( 'vet-non-existing' ) );
-		}	
-	
+		}
+
 		$props['provider'] = $video->getProvider();
 		$props['id'] = $video->getVideoId();
 		$props['vname'] = $video->getVideoName();
@@ -153,10 +150,10 @@ class VideoEmbedTool {
 		if (is_array( $data ) ) {
 			$props['metadata'] = implode( ",", $video->getData() );
 		} else {
-			$props['metadata'] = '';		
+			$props['metadata'] = '';
 		}
 		$props['code'] = $video->getEmbedCode( VIDEO_PREVIEW );
-		$props['oname'] = '';			
+		$props['oname'] = '';
 
 		return $this->detailsPage($props);
 	}
@@ -165,7 +162,7 @@ class VideoEmbedTool {
                 global $wgRequest, $wgUser, $wgContLang, $IP;
                 require_once( "$IP/extensions/wikia/WikiaVideo/VideoPage.php" );
 
-                $name = $wgRequest->getVal('name');		
+                $name = $wgRequest->getVal('name');
 		$title = Title::makeTitle( NS_VIDEO, $name );
 		$video = new VideoPage( $title );
 		$video->load();
@@ -175,7 +172,7 @@ class VideoEmbedTool {
 	function detailsPage($props) {
 		$tmpl = new EasyTemplate(dirname(__FILE__).'/templates/');
 
-		$tmpl->set_vars(array('props' => $props));	
+		$tmpl->set_vars(array('props' => $props));
 		return $tmpl->execute('details');
 	}
 
@@ -193,7 +190,7 @@ class VideoEmbedTool {
 		}
 
 		$title = Title::makeTitle( NS_VIDEO, $name );
-					
+
 		$extra = 0;
 		$metadata = array();
 		while( '' != $wgRequest->getVal( 'metadata' . $extra ) ) {
@@ -211,7 +208,7 @@ class VideoEmbedTool {
 				$title = Title::makeTitleSafe(NS_VIDEO, $name);
 				if(is_null($title)) {
 					header('X-screen-type: error');
-					return wfMsg ( 'wmu-filetype-incorrect' ); 
+					return wfMsg ( 'wmu-filetype-incorrect' );
 				}
 				if($title->exists()) {
 					if($type == 'overwrite') {
@@ -228,15 +225,15 @@ class VideoEmbedTool {
 
 						$video = new VideoPage( $title );
 						if ($video instanceof VideoPage) {
-							$video->loadFromPars( $provider, $id, $metadata );					
+							$video->loadFromPars( $provider, $id, $metadata );
 							$video->setName( $name );
-							$video->save();					
+							$video->save();
 						}
 					} else if($type == 'existing') {
 						header('X-screen-type: existing');
-						$title = Title::makeTitle( NS_VIDEO, $name );						
+						$title = Title::makeTitle( NS_VIDEO, $name );
 						$video = new VideoPage( $title );
-						
+
 						$props = array();
 						$video->load();
 						$props['provider'] = $video->getProvider();
@@ -259,7 +256,7 @@ class VideoEmbedTool {
 										'name' => $name,
 										'id' => $id,
 										'provider' => $provider,
-										'metadata' => $metadata,	
+										'metadata' => $metadata,
 									      )
 								       );
 							return $tmpl->execute('conflict');
@@ -281,7 +278,7 @@ class VideoEmbedTool {
 					if ($video instanceof VideoPage) {
 						$video->loadFromPars( $provider, $id, $metadata );
 						$video->setName( $name );
-						$video->save();					
+						$video->save();
 					}
 				}
 			}
