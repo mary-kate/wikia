@@ -464,10 +464,13 @@ EOD;
 		switch( $wgWikiaVideoProviders[$provider] ) {
 			case "metacafe":
 				$url = 'http://www.metacafe.com/watch/' . $id . '/' . $mData[0];
+				break;
 			case "youtube":
 				$url = 'http://www.youtube.com/watch?v=' . $id;
+				break;
 			case "sevenload":
 				$url = 'http://www.sevenload.com/videos/' . $id;
+				break;
 			case "gamevideos":
 				$url = 'http://gamevideos.1up.com/video/id/' . $id;
 				break;
