@@ -14,7 +14,6 @@ function WikiaVideo_makeVideo($title, $options, $sk) {
 		// defaults
 		$width = 400;
 		$thumb = '';
-		$align = 'left';
 		$caption = '';
 
 		$params = explode('|', $options);
@@ -28,6 +27,14 @@ function WikiaVideo_makeVideo($title, $options, $sk) {
 				$align = $param;
 			} else {
 				$caption = $param;
+			}
+		}
+
+		if(empty($align)) {
+			if($thumb == 'thumb') {
+				$align = 'right';
+			} else {
+				$align = 'left';
 			}
 		}
 
