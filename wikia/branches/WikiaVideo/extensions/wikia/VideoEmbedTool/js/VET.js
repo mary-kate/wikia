@@ -93,7 +93,7 @@ if(skin == 'monaco') {
 
 function VET_addCreateHandler() {
 	var btn = $( 'VideoEmbedCreate' );
-  	YAHOO.util.Event.addListener(['vetLink', 'vetHelpLink', btn], 'click',  VET_show);
+  	YAHOO.util.Event.addListener(['vetLink', 'vetHelpLink', btn], 'click',  VET_showReplace);
 }
 
 function VET_addReplaceHandler() {
@@ -409,7 +409,7 @@ function VET_indicator(id, show) {
 	}
 }
 
-function VET_chooseImage(sourceId, itemId, itemLink) {
+function VET_chooseImage(sourceId, itemId, itemLink, itemTitle) {
 	VET_track('insertVideo/choose/src-' + sourceId); // tracking
 
 	var callback = {
