@@ -12,7 +12,7 @@ if(!defined('MEDIAWIKI')) {
 $wgExtensionCredits['other'][] = array(
         'name' => 'Video Embed Tool',
         'author' => 'Bartek Łapiński, Inez Korczyński',
-	'version' => '0.67',
+	'version' => '0.70',
 );
 
 $dir = dirname(__FILE__).'/';
@@ -56,7 +56,7 @@ $wgHooks['WikiaVideo::View:BlueLink'][] = 'VETWIkiaVideoBlueLink';
 function VETWikiaVideoBlueLink() {
         global $wgOut, $wgStylePath, $wgExtensionsPath, $wgStyleVersion, $wgHooks, $wgUser, $wgArticlePath, $wgContLang, $wgTitle;
 
-	//display the button for "adding the video"
+	//display the link for "replacing the video"
 	$special = $wgContLang->getFormattedNsText( NS_SPECIAL );
 	$url = $wgArticlePath;
 	$name = $wgTitle->getDBKey();
@@ -80,10 +80,19 @@ function VETWikiaVideoBlueLink() {
 }
 
 function VETWikiaVideoRedLink() {
-        global $wgOut, $wgStylePath, $wgExtensionsPath, $wgStyleVersion, $wgHooks, $wgUser;
+        global $wgOut, $wgStylePath, $wgExtensionsPath, $wgStyleVersion, $wgHooks, $wgUser, $wgContLang, $wgTitle, $wgArticlePath;
 
-	//display the button for "adding the video"
-	$s = '<input type="submit" id="VideoEmbedCreate" value="' . wfMsg( 'wikiavideo-create' ) . '" /> ';
+	//display the link for "adding the video"
+	$special = $wgContLang->getFormattedNsText( NS_SPECIAL );
+	$url = $wgArticlePath;
+	$name = $wgTitle->getDBKey();
+	if( false !== strpos( '?', $wgArticlePath ) ) {
+		$url = str_replace( '$1', $special . ':WikiaVideoAdd&name=' . $name, $url );
+	} else {
+		$url = str_replace( '$1', $special . ':WikiaVideoAdd?name=' . $name, $url );		
+	}
+	
+	$s = '<br/><a id="VideoEmbedCreate" href="' . $url . '">' . wfMsg( 'wikiavideo-create' ) . '<a/><br/><br/>';
 	$wgOut->addHTML( $s );
 
         if(get_class($wgUser->getSkin()) == 'SkinMonaco') {
