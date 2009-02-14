@@ -77,7 +77,7 @@ class AnswersTemplate extends MonacoTemplate {
 		<script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/connection/connection-min.js"></script>
 		<script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/autocomplete/autocomplete-min.js"></script>
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3/jquery.min.js"></script>
-		<script type="text/javascript" src="<?=$wgStylePath?>/answers/js/main.js?<?=$wgStyleVersion?>"></script>
+		<script type="text/javascript" src="/skins/answers/js/main.js?<?=$wgStyleVersion?>"></script>
 		<?php
 		if( $wgEnableFacebookConnect ){
 		?>
@@ -94,6 +94,9 @@ class AnswersTemplate extends MonacoTemplate {
 		<!-- Head Scripts -->
 <?php $this->html('headscripts') ?>
 	        <link rel="stylesheet" type="text/css" href="<?=$wgStylePath?>/answers/css/main.css?<?=$wgStyleVersion?>" />
+		<!--[if IE 6]>
+	        <link rel="stylesheet" type="text/css" href="<?=$wgStylePath?>/answers/css/ie6.css?<?=$wgStyleVersion?>" />
+		<![endif]-->
 <?php	if($this->data['jsvarurl']) { ?>
 		<script type="<?php $this->text('jsmimetype') ?>" src="<?php $this->text('jsvarurl') ?>"><!-- site js --></script>
 <?php	} ?>
@@ -113,7 +116,9 @@ class AnswersTemplate extends MonacoTemplate {
 	</head>
 <body<?php if($this->data['body_ondblclick']) { ?> ondblclick="<?php $this->text('body_ondblclick') ?>"<?php } ?>
 <?php if($this->data['body_onload']) { ?> onload="<?php $this->text('body_onload') ?>"<?php } ?>
- class="mediawiki <?php $this->text('dir') ?> <?php $this->text('pageclass') ?> <?php $this->text('skinnameclass') ?>">
+ class="mediawiki <?php $this->text('dir') ?> <?php $this->text('pageclass') ?> <?php $this->text('skinnameclass') ?>
+ <?php if($answer_page->isQuestion(false,false) && $action=="edit") { ?>editquestion<?php } ?>"> 
+ 
 
 <!--GetHTMLAfterBody-->
 <?
@@ -130,7 +135,7 @@ wfRunHooks('GetHTMLAfterBody', array (&$this));
 		<div id="answers_ask">
 			<form method="get" action="" onsubmit="return false" name="ask_form" id="ask_form">
 				<input type="text" id="answers_ask_field" value="<?=htmlentities(wfMsg("ask_a_question"))?>" class="alt" /><span>?</span>
-				<a href="javascript:void(0);" id="ask_button" class="huge_button green"><div></div><?= wfMsg("ask_button") ?></a>
+				<a href="javascript:void(0);" id="ask_button" class="huge_button huge_button_green"><div></div><?= wfMsg("ask_button") ?></a>
 			</form>
 		</div><?/*answers_ask*/?>
 		<div id="answers_suggest"></div>
@@ -237,9 +242,15 @@ wfRunHooks('GetHTMLAfterBody', array (&$this));
 		<h1 id="firstHeading" class="firstHeading"><?php $this->data['displaytitle']!=""?$this->html('title'):$this->text('title') ?></h1>
 		<?php
 		}
+
+		// Magic Answer
+		if (!empty($_GET['state']) && $_GET['state'] == 'asked'){
+			$this->displayMagicAnswer();
+		}
 		?>
 		
-		<?
+		
+		<?php
 		global $wgTitle;
 		if ( $is_question && $answer_page->isArticleAnswered() ) {
 			echo '<div class="sectionedit">[<a href="'. $this->data['content_actions']['edit']['href'] .'">'. wfMsg('editsection') .'</a>]</div>';
@@ -378,7 +389,7 @@ wfRunHooks('GetHTMLAfterBody', array (&$this));
 
 		<?php
 		$tiny_url = Http::get("http://tinyurl.com/api-create.php?url={$wgTitle->getFullURL()}");
-		$twitter_question = substr( $wgTitle->getText(), 0, 99 );
+		$twitter_question = urlencode( substr( $wgTitle->getText(), 0, 99 ) );
 		$twitter_url = "http://twitter.com/home?status=" . $twitter_question . "? " . $tiny_url . " " . urlencode("#" . wfMsg("twitter_hashtag"));
 
 		?>
@@ -527,7 +538,7 @@ wfRunHooks('GetHTMLAfterBody', array (&$this));
 			?>
 			</div><?/*toolbox_stroke*/?>
 		</div><?/*toolbox*/?>
-
+		
 		<div class="widget">
 			<h2><?= wfMsg("recent_unanswered_questions") ?></h2>
 			<ul id="recent_unanswered_questions">
@@ -549,6 +560,7 @@ wfRunHooks('GetHTMLAfterBody', array (&$this));
 				?>
 			</ul>
 		</div>
+		
 	</div><?/*answers_sidebar*/?>
 
 	<div id="footer">
@@ -564,11 +576,10 @@ wfRunHooks('GetHTMLAfterBody', array (&$this));
 <?php endif; ?>
 <script>
 google_ad_client = 'pub-4086838842346968'; // substitute your client_id (pub-#)
-google_ad_channel = '7000000004';
+google_ad_channel = (( wgIsAnswered )?'7000000004':'7000000003');
 google_ad_output = 'js';
 google_max_num_ads = '10';
-google_ad_type = 'text_html';
-google_image_size = '728x90';
+google_ad_type = 'text';
 google_feedback = 'on';
 <?
 if ($category_text) {
@@ -578,6 +589,8 @@ if ($category_text) {
 			$google_hints .= (( $google_hints ) ? ", " : "" ) . $ctg;
 		}
 	}
+	if( $google_hints == "" ) $google_hints = str_replace("'","\'",$wgTitle->getText() );
+	
 	echo 'google_hints = \''. $google_hints .'\';';
 }
 ?>
@@ -585,7 +598,6 @@ if ($category_text) {
 <script language="JavaScript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
 
 <?php
-// Note, these were placed above the Ad calls intentionally because ad code screws with analytics
 echo AnalyticsEngine::track('GA_Urchin', AnalyticsEngine::EVENT_PAGEVIEW);
 echo AnalyticsEngine::track('GA_Urchin', 'hub', 'answers');
 global $wgCityId;
@@ -757,6 +769,54 @@ echo AnalyticsEngine::track('QuantServe', AnalyticsEngine::EVENT_PAGEVIEW);
 <?php
 		}
         }
+
+	function displayMagicAnswer(){
+		global $wgTitle;
+		?>
+		<div id="magicAnswer" style="display:none"><!-- display is shown in web service callback function -->
+			<div id="magicAnswerLeft"><div id="magicAnswerRight"><div id="magicAnswerCurtainLeft"></div><div id="magicAnswerCurtainRight"></div><div id="magicAnswerHat"></div>
+			<img id="magicAnswerLogo" src="/skins/answers/images/magic_answer.png" />
+			<form action="<?php echo $wgTitle->getLocalUrl() ?>" method="get" id="magicAnswerForm"><!-- Must be GET or the edit form does preview -->
+			<?php/* Note there is a hook called displayMagicAnswer in Answers.php on the Edit form that looks for "magic Answer" in theurl */?>
+			<input type="hidden" name="action" value="edit"/>
+			<input type="hidden" id="magicAnswerField" name="magicAnswer" value=""/><!-- Filled in with js -->
+			<h6><?=wfMsg("magic_answer_headline") ?></h6>
+			<div id="magicAnswerBox"></div>
+			<div id="magicAnswerButtons" class="clearfix">	
+				<button id="magicAnswerYes" class="button_small button_small_green"><span><?=wfMsg("magic_answer_yes")?></span></button>
+				<button id="magicAnswerNo" class="button_small button_small_blue"><span><?=wfMsg("magic_answer_no")?></span></button>
+			</div>
+			</form>
+			<div id="magicAnswerStage">
+				<a href="http://answers.yahoo.com" rel="nofollow"><?=wfMsg("magic_answer_credit")?></a>
+			</div>
+			</div></div><?/*right, left*/?>
+		</div>
+		<script type="text/javascript">
+		jQuery("#magicAnswerNo").bind("click", function(e) {
+			$("#magicAnswer").animate({opacity: "0"}, function() {
+				$(this).slideUp()
+			});
+			return false;
+		});
+		jQuery("#magicAnswerYes").bind("click", function(e) {
+			jQuery("#magicAnswerForm").submit();
+			return false;
+		});
+		MagicAnswer.getAnswer("<?php echo addslashes($this->data['title'])?>", "magicAnswerCallback");
+		function magicAnswerCallback(result){
+		        //if (console.dir) { console.dir(result); }
+		        try {
+				jQuery("#magicAnswerBox").html(result.all.questions[0]["ChosenAnswer"]);
+				jQuery("#magicAnswerField").val(result.all.questions[0]["Subject"]);
+				jQuery('#magicAnswer').show();
+        		} catch (e){
+			//	console.dir(e);
+			}
+		}
+		</script>
+		<?php
+	}
 } // end of class
 
 

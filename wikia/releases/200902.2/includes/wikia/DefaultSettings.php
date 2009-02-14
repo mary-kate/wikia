@@ -26,9 +26,9 @@ if( !defined( 'MEDIAWIKI' ) ) {
 /**
  * Use revision number
  */
-$wgStyleVersion         = '5449';
-$wgMergeStyleVersionJS  = '5449';
-$wgMergeStyleVersionCSS = '5449';
+$wgStyleVersion         = '5551';
+$wgMergeStyleVersionJS  = '5551';
+$wgMergeStyleVersionCSS = '5551';
 
 /**
  * @name $wgCityId
@@ -208,7 +208,6 @@ $wgSkipSkins = array(
 		'uncyclopedia',
 		'wowwiki',
 		'lostbook',
-		'monaconew',
 );
 
 /**
@@ -250,3 +249,9 @@ $wgExtensionsPath = false; /// defaults to "{$wgScriptPath}/extensions"
  */
 $wgHubCreationVariables = array();
 $wgLangCreationVariables = array();
+
+/**
+ * Define Video namespace (used by WikiaVideo extensions)
+ * Can not be define directly in extension since it is used in Parser.php and extension is not always enabled
+ */
+define('NS_VIDEO', '400');

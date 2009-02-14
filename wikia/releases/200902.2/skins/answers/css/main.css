@@ -465,14 +465,14 @@ a.bigButton small {
 	height: 41px; 
 	width: 36px; 
 }
-.huge_button.green { 
+.huge_button_green { 
 	background-position: top right; 
 	color: #FFF; 
 	font-size: 18pt;
 	font-weight: normal;
 	height: 37px; 
 }
-.huge_button.green div { 
+.huge_button_green div { 
 	background-position: top left; 
 	height: 37px; 
 	width: 10px; 
@@ -493,6 +493,7 @@ body .header_menu_button {
 	position: relative;
 }
 body .header_menu_button * {
+	display: inline;
 	float: left;
 	font-size: 8pt;
 	font-weight: bold;
@@ -537,6 +538,74 @@ body .header_menu_button * {
 	border: 0;
 	vertical-align: middle;
 }
+
+/*** MAGIC ANSWER***/
+#magicAnswer {
+	background: #000 url(/skins/answers/images/magic_answer_backdrop.png) bottom left repeat-x;
+	color: #FFF;
+	font-size: 11pt;
+	position: relative;
+	text-align: center;
+	width: 100%;
+}
+#magicAnswerLeft {
+	background: url(/skins/answers/images/magic_answer_curtain_left.png) repeat-y;
+	overflow: hidden;
+}
+#magicAnswerRight {
+	background: url(/skins/answers/images/magic_answer_curtain_right.png) top right repeat-y;
+}
+#magicAnswerCurtainLeft, #magicAnswerCurtainRight {
+	background: url(/skins/answers/images/magic_answer_curtains.png) no-repeat;
+	height: 108px;
+	position: absolute;
+	top: 0;
+	width: 88px;
+}
+#magicAnswerCurtainLeft {
+	clip: rect(0px 88px 108px 44px);
+	left: -44px;
+}
+#magicAnswerCurtainRight {
+	clip: rect(0px 44px 108px 0px);
+	right: -44px;
+}
+#magicAnswerHat {
+	background: url(/skins/answers/images/magic_answer_hat.jpg) no-repeat;
+	position: absolute;
+	bottom: 0;
+	height: 45px;
+	left: 30px;
+	width: 51px;
+}
+#magicAnswer h6 {
+	color: #007AC8;
+	font-size: 11pt;
+}
+#magicAnswerBox {
+	margin: 0 50px 10px;
+}
+#magicAnswerButtons {
+	margin-bottom: 20px;
+	position: relative;
+	text-align: center;
+}
+#magicAnswerButtons button {
+	margin-right: 5px;
+}
+#magicAnswerStage {
+	background: url(/skins/answers/images/magic_answer_stage.jpg) repeat-x;
+	font-size: 8pt;
+	height: 18px;
+	line-height: 18px;
+	margin: 0 12px;
+	padding-right: 10px;
+	text-align: right;
+}
+#magicAnswerStage a {
+	color: #FFF;
+}
+
 
 
 /*** SIDEBAR ***/
@@ -644,6 +713,32 @@ body .header_menu_button * {
 .clearfix { display:block; }
 /* End hide from IE Mac */
 
+.button_small {
+	text-align: center;
+	background: left center no-repeat;
+	border: 0;
+	cursor: pointer;
+	margin: 0;
+	padding: 0 0 0 3px;
+	overflow: visible;
+}
+.button_small span {
+	position: relative;
+	display: block;
+	white-space: nowrap;
+	height: 20px;
+	color: #fff;
+	font: bold 10px/20px "Verdana", "Arial", sans-serif;
+	background: right center no-repeat;
+	padding: 0 8px 0 5px;
+}
+.button_small_green, .button_small_green span {
+	background-image: url(/skins/answers/images/button_small_green.png);
+}
+.button_small_blue, .button_small_blue span {
+	background-image: url(/skins/answers/images/button_small_blue.png);
+}
+
 .editsection {
 	float: right;
 }
@@ -654,6 +749,7 @@ body .header_menu_button * {
 	color: #000 !important;
 }
 #bottom_ads {
+	border-collapse: collapse;
 	margin-top: 20px;
 }
 #bottom_ads .google_label {
@@ -686,4 +782,20 @@ body .header_menu_button * {
 }
 #answers_sidebar .google_label {
 	font-weight: bold;
+}
+
+.editquestion{
+	background: none;
+}
+.editquestion #answers_sidebar{
+	display: none;
+}
+.editquestion #answers_page, .editquestion #wikia_footer {
+	margin-right: 0;
+}
+.editquestion #ask_wrapper {
+	display: none;
+}
+.editquestion #answers_header {
+	height: 30px;
 }
