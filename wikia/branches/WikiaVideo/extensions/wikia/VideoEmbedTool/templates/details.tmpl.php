@@ -25,7 +25,7 @@ if('' == $props['oname']) {
 	<tr>
 		<th><?= wfMsg('vet-size') ?></th>
 		<td>
-			<input onclick="VET_imageSizeChanged('thumb');" type="checkbox" name="fullthumb" id="VideoEmbedThumbOption" checked=checked /> <label for="VideoEmbedThumbOption" onclick="VET_imageSizeChanged('thumb');"><?= wfMsg('vet-thumbnail') ?></label>
+			<input type="checkbox" name="fullthumb" id="VideoEmbedThumbOption" checked=checked /> <label for="VideoEmbedThumbOption" ><?= wfMsg('vet-thumbnail') ?></label>
 			&nbsp;
 		</td>
 	</tr>
