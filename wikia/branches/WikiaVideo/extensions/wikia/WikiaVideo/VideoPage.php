@@ -597,6 +597,10 @@ EOD;
                                         'img_name' => self::getNameFromTitle( $this->mTitle )
                                 ), __METHOD__
                         );
+			// todo same as image, but how should it really look?
+			// may also need modifying watchlist...
+			$log = new LogPage( 'upload' );
+			$log->addEntry( 'overwrite', $this->mTitle, 'updated video' );
 		}
 		$cat = $wgContLang->getFormattedNsText( NS_CATEGORY );
 		$this->doEdit( '[[' . $cat . ':' . wfMsg( 'wikiavideo-category' ) . ']]', $desc );
@@ -749,7 +753,7 @@ EOD;
 				$embed = "<object width='{$width}' height='{$height}' id='FiveminPlayer' classid='clsid:d27cdb6e-ae6d-11cf-96b8-444553540000'><param name='allowfullscreen' value='true'/><param name='wmode' value='transparent'><param name='allowScriptAccess' value='always'/><param name='movie' value='http://www.5min.com/Embeded/{$this->mId}/'/><embed src='http://www.5min.com/Embeded/{$this->mId}/' type='application/x-shockwave-flash' width='{$width}' height='{$height}' allowfullscreen='true' allowScriptAccess='always'></embed></object>";
 				break;
 			case 'vimeo':
-				$code = 'custom';
+		$code = 'custom';
 				$embed = '<object width="'.$width.'" height="'.$height.'"><param name="allowfullscreen" value="true" /><param name="wmode" value="transparent"><param name="allowscriptaccess" value="always" /><param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id='.$this->mId.'&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=&amp;fullscreen=1" /><embed src="http://vimeo.com/moogaloop.swf?clip_id='.$this->mId.'&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=&amp;fullscreen=1" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="'.$width.'" height="'.$height.'"></embed></object>';
 				break;
                         case 'southparkstudios':
