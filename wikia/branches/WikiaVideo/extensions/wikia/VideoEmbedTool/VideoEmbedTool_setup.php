@@ -191,7 +191,6 @@ function VETSetupVars($vars) {
 	$vars['vet_warn2'] = wfMsg('vet-warn2');
 	$vars['vet_warn3'] = wfMsg('vet-warn3');
 	$vars['vet_bad_extension'] = wfMsg('vet-bad-extension');
-	$vars['filetype_missing'] = wfMsg('filetype-missing');
 	$vars['file_extensions'] = $wgFileExtensions;
 	$vars['file_blacklist'] = $wgFileBlacklist;
 	$vars['check_file_extensions'] = $wgCheckFileExtensions;
