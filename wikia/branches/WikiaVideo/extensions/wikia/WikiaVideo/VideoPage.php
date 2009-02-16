@@ -66,6 +66,10 @@ class VideoPage extends Article {
 			$wgOut->setPageTitle($this->mTitle->getPrefixedText());
 
 			wfRunHooks('WikiaVideo::View:RedLink');
+
+			$wgOut->addHTML('<br/>');
+			$wgOut->addHTML(Xml::element('h2', array('id' => 'filelinks'), wfMsg('wikiavideo-links'))."\n");
+			$this->videoLinks();
 			$this->viewUpdates();
 		}
 	}
