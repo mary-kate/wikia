@@ -204,7 +204,7 @@ class VideoEmbedTool {
 				$title = Title::makeTitleSafe(NS_VIDEO, $name);
 				if(is_null($title)) {
 					header('X-screen-type: error');
-					return wfMsg ( 'vet-filetype-incorrect' );
+					return wfMsg ( 'vet-name-incorrect' );
 				}
 				if($title->exists()) {
 					if($type == 'overwrite') {
