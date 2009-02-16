@@ -477,13 +477,16 @@ function VET_insertFinalVideo(e, type) {
 	if(!$('VideoEmbedName')) {
 		if ($( 'VideoEmbedOname' ) ) {
 			if ('' == $( 'VideoEmbedOname' ).value)	 {
-				alert( 'vet_warn3');
+				alert( vet_warn3 );
 				return false;
 			}
 		} else {
-			alert( 'vet_warn3');
+			alert( vet_warn3 );
 			return false;
 		}
+	} else if ('' == $( 'VideoEmbedName' ).value ) {
+		alert( vet_warn3 );
+		return false;		
 	}
 
 	params.push('id='+$('VideoEmbedId').value);
