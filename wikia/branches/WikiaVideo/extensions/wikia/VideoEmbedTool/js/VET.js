@@ -304,10 +304,10 @@ function VET_recentlyUploaded(param, pagination) {
 	var callback = {
 		success: function(o) {
 			$('VET_results_0').innerHTML = o.responseText;
-			VET_indicator(2, false);
+			VET_indicator(1, false);
 		}
 	}
-	VET_indicator(2, true);
+	VET_indicator(1, true);
 	YAHOO.util.Connect.asyncRequest('GET', wgScriptPath + '/index.php?action=ajax&rs=VET&method=recentlyUploaded&'+param, callback);
 }
 
@@ -364,12 +364,12 @@ function VET_sendQuery(query, page, sourceId, pagination) {
 	var callback = {
 		success: function(o) {
 			$('VET_results_' + o.argument[0]).innerHTML = o.responseText;
-			VET_indicator(2, false);
+			VET_indicator(1, false);
 		},
 		argument: [sourceId]
 	}
 	VET_lastQuery[sourceId] = query;
-	VET_indicator(2, true);
+	VET_indicator(1, true);
 	YAHOO.util.Connect.abort(VET_asyncTransaction)
 	VET_asyncTransaction = YAHOO.util.Connect.asyncRequest('GET', wgScriptPath + '/index.php?action=ajax&rs=VET&method=query&' + 'query=' + query + '&page=' + page + '&sourceId=' + sourceId, callback);
 }
