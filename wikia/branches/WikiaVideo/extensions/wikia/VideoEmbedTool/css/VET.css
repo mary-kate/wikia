@@ -37,6 +37,10 @@
 	letter-spacing: -1px;
 }
 
+#VideoEmbedCaption {
+	width: 250px;
+}
+
 #VideoEmbedBody {
 	background: #FFF;
 	height: 440px;
