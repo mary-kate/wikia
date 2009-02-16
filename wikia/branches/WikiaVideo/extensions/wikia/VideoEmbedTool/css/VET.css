@@ -6,7 +6,7 @@
 }
 #VideoEmbedBorder {
 	background-color: #000;
-	border 1px solid #FFF;
+	border: 1px solid #FFF;
 	filter: alpha(opacity=60);
 	height: 505px;
 	left: 0;
