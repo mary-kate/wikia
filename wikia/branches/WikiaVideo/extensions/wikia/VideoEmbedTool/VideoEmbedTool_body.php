@@ -39,8 +39,10 @@ class VideoEmbedTool {
 
 		if($sourceId == 0) { // metacafe
 			$page ? $start = ($page - 1) * 8 : $start = 0;
-			$query = str_replace(" ", "+", $query);
-			$file = @file_get_contents( "http://www.metacafe.com/api/videos?vq=" . $query, FALSE );
+//			$query = str_replace(" ", "+", $query);
+			$query = str_replace(" ", "_", $query);		
+//			$file = @file_get_contents( "http://www.metacafe.com/api/videos?vq=" . $query, FALSE );
+			$file = @file_get_contents( "http://www.metacafe.com/tags/" . $query . '/rss.xml', FALSE );
                                 if ($file) {
                                         $doc = new DOMDocument;
                                         @$doc->loadXML( $file );
