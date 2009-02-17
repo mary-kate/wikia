@@ -104,22 +104,25 @@ while(1) {
   
     my $obj = jsonToObj($frame->body);
     my $url = $obj->{url};
-    warn "Purging $url\n";
 
+
+    warn "Purging $url\n";
     $0 = $daemon->name ." worker - purging $url";
   
     for my $compression ('', 'gzip', 'deflate') {
 	$ua->default_header('Accept-Encoding' => $compression);
 
 	my $req = HTTP::Request->new(PURGE => "$url");
-
+	
 	my $res = $ua->request($req);
 	if($res->is_success()) {
 	    warn "Purged $url $compression\n";
 	    $purges_success{$compression}++;
-	} else {
+	} elsif ($res->code eq '404') {
 	    warn "Purging $url failed: @{[$res->status_line]}\n";
-	    $purges_fail{$cache}++;
+	    $purges_fail{$compression}++;
+	} else {
+	    $purges_error{$compression}++;
 	}
 
     }
