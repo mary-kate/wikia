@@ -687,7 +687,7 @@ EOD;
                 $res = $dbr->select(
                         array( 'imagelinks', 'page' ),
                         array( 'page_namespace', 'page_title' ),
-                        array( 'il_to' => ':' . $this->mTitle->getDBkey(), 'il_from = page_id' ),
+			'(il_to = ' . $dbr->addQuotes( self::getNameFromTitle( $this->mTitle ) ) .' OR il_to = ' . $dbr->addQuotes( $this->mTitle->getPrefixedText() ) . ') AND il_from = page_id',
                         __METHOD__,
                         array( 'LIMIT' => $limit + 1)
                 );
