@@ -99,8 +99,10 @@ sub start {
 sub request {
     my ($self, $qname, $qclass, $qtype, $peerhost, $query) = @_;
     my ($rcode, $ans, $auth, $add) = (undef, [], [], []);
-    $counters{"Lookup|" .$qname}++;
     my $response_incudes_ns = 0;
+
+    $qname = lc($qname);
+    $counters{"Lookup|" .$qname}++;
 
     if ($qname =~ 'show-calling-server') {
         return ("NOERROR", [
@@ -112,8 +114,6 @@ sub request {
                         address => $peerhost})
                 ], [], [],{ aa => 1});
     }
-
-    $qname = lc($qname);
 
     $counters{Request}++;
 
