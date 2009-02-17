@@ -61,7 +61,7 @@ function WikiaVideo_renderVideoGallery($input, $args, $parser) {
 
 		if (count($videos) < 4) { // fill up 
 			for($i = count($videos); $i < 4; $i++) {
-				$out .= '<td><div class="gallerybox" style="width: 335px;"><div class="thumb" style="padding: 13px 0; width: 330px;"><div style="margin-left: auto; margin-right: auto; width: 300px; height: 250px;"></div></div><div class="gallerytext"></div></div></td>';
+				$out .= '<td><div class="gallerybox" style="width: 335px;"><div class="thumb" style="padding: 13px 0; width: 330px;"><div style="margin-left: auto; margin-right: auto; width: 300px; height: 250px;"></div></div><div class="gallerytext"><a href="#" class="bigButton"><big>' . wfMsg( 'wikiavideo-create' ) . '</big></a></div></div></td>';
 				if($i%2 == 1) {
 					$out .= '</tr><tr>';
 				}
