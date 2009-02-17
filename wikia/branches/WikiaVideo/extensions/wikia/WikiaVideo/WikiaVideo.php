@@ -55,10 +55,18 @@ function WikiaVideo_renderVideoGallery($input, $args, $parser) {
 			$out .= '<td><div class="gallerybox" style="width: 335px;"><div class="thumb" style="padding: 13px 0; width: 330px;"><div style="margin-left: auto; margin-right: auto; width: 300px;">'.$video->getEmbedCode().'</div></div><div class="gallerytext">'.(!empty($videos[$i][1]) ? $videos[$i][1] : '').'</div></div></td>';
 
 			if($i%2 == 1) {
-				$out .= '</tr></tr>';
+				$out .= '</tr><tr>';
 			}
 		}
 
+		if (count($videos) < 4) { // fill up 
+			for($i = count($videos); $i < 4; $i++) {
+				$out .= '<td><div class="gallerybox" style="width: 335px;"><div class="thumb" style="padding: 13px 0; width: 330px;"><div style="margin-left: auto; margin-right: auto; width: 300px; height: 250px;"></div></div><div class="gallerytext"></div></div></td>';
+				if($i%2 == 1) {
+					$out .= '</tr><tr>';
+				}
+			}
+		}
 		$out .= '</tr></table>';
 	}
 
