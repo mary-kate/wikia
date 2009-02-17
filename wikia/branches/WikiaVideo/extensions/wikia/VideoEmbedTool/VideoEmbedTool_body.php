@@ -293,20 +293,29 @@ class VideoEmbedTool {
 		$caption = $wgRequest->getVal('caption');
 		$slider = $wgRequest->getVal('slider');
 
-		$ns_img = $wgContLang->getFormattedNsText( NS_VIDEO );
+		$ns_vid = $wgContLang->getFormattedNsText( NS_VIDEO );
 
-		$tag = '[[' . $ns_img . ':'.$name;
+		if( 'gallery' != $layout ) {
+			$tag = '[[' . $ns_vid . ':'.$name;
+			if($size != 'full') {
+				$tag .= '|thumb';
+			}
+			$tag .= '|'.$width;
+			$tag .= '|'.$layout;
 
-		if($size != 'full') {
-			$tag .= '|thumb';
-		}
-
-		$tag .= '|'.$width;
-		$tag .= '|'.$layout;
-		if($caption != '') {
-			$tag .= '|'.$caption.']]';
-		} else {
-			$tag .= ']]';
+			if($caption != '') {
+				$tag .= '|'.$caption.']]';
+			} else {
+				$tag .= ']]';
+			}
+		} else { // gallery needs to be treated differently...
+			$tag = "<videogallery>\n";
+			$tag .= $ns_vid . ":" . $name;			
+			if($caption != '') {
+				$tag .= "|".$caption."\n</videogallery>";
+			} else {
+				$tag .= "\n</videogallery>";
+			}
 		}
 
 		$tmpl = new EasyTemplate(dirname(__FILE__).'/templates/');
