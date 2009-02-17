@@ -2,7 +2,7 @@
 
 $ORIGIN nocookie.net.
 
-600 IN SOA ns-lon-2.wikia.net. dnsmaster.wikia-inc.com. 2009020200 1200 120 1209600 300
+600 IN SOA ns-lon-2.wikia.net. dnsmaster.wikia-inc.com. 2009021701 1200 120 1209600 300
 
 60 IN NS ns-sjc-1.wikia.net
 60 IN NS ns-nj-1.wikia.net
@@ -36,6 +36,7 @@ iowa   60 IN A 208.68.167.134
 ;iowa   60 IN A 208.68.167.132
 iowa   60 IN LOC 42 00 00.000 N 91 00 00.000 W 0.00m 0.00m 0.00m 0.00m
 iowa   60 IN TXT GlbDNS::RADIUS 700 km
+iowa 60 IN TXT GlbDNS::CHECK /lvscheck.html "varnish is okay"
 
 panther-apac 60 IN CNAME g1.panthercdn.com.
 panther-apac 60 IN LOC 01 00 00.000 N 103 00 00.000 E 0.00m 0.00m 0.00m 0.00m
