@@ -858,7 +858,7 @@ class VideoHistoryList {
 						'img_description',
 						"'' AS ov_archive_name"
 					     ),
-					array( 'img_name' => VideoPage::getNameFromTitle( $this->mTitle ) ),
+					'img_name = ' . $dbr->addQuotes( VideoPage::getNameFromTitle( $this->mTitle ) ) .' OR img_name = ' . $dbr->addQuotes( $this->mTitle->getPrefixedText() ),
 					__METHOD__
 					);
 			if ( 0 == $dbr->numRows( $history ) ) {
@@ -884,7 +884,7 @@ class VideoHistoryList {
 						'oi_timestamp AS img_timestamp',
 						'oi_description AS img_description',
 					     ),
-					array( 'oi_name' => VideoPage::getNameFromTitle( $this->mTitle ) ),
+					'oi_name = ' . $dbr->addQuotes( VideoPage::getNameFromTitle( $this->mTitle ) ) .' OR oi_name = ' . $dbr->addQuotes( $this->mTitle->getPrefixedText() ),
 					__METHOD__,
 					array( 'ORDER BY' => 'oi_timestamp DESC' )
 					);
