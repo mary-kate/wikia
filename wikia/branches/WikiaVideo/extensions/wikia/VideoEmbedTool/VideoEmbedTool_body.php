@@ -295,11 +295,11 @@ class VideoEmbedTool {
 			$text = $article_obj->getContent();
 
 			// todo nowiki?
-			preg_match_all( '/<videogallery>[^<]*/s', $text, $matches );
+			preg_match_all( '/<videogallery>[^<]*/s', $text, $matches, PREG_OFFSET_CAPTURE );
 			if( is_array( $matches ) ) {
-				$our_gallery = $matches[0][$gallery];				
+				$our_gallery = $matches[0][$gallery][0];				
 				$our_gallery_modified = $our_gallery . "\n" . $ns_vid . ":" . $name . "\n";	
-				$text = substr_replace( $text, $our_gallery_modified, strpos( $text, $our_gallery ), strlen( $our_gallery ) );
+				$text = substr_replace( $text, $our_gallery_modified, $matches[0][$gallery][1], strlen( $our_gallery ) );
 			}	
 
 			$summary = wfMsg( 'vet-added-from-gallery' ) ;
