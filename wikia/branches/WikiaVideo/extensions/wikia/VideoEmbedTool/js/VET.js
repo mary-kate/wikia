@@ -516,6 +516,8 @@ function VET_insertFinalVideo(e, type) {
 
 	if( '-1' != VET_gallery ) {
 		params.push( 'gallery=' + VET_gallery );
+		params.push( 'article='+encodeURIComponent( wgTitle ) );
+		params.push( 'ns='+wgNamespaceNumber );
 	}
 
 	params.push('oname='+encodeURIComponent( $('VideoEmbedOname').value ) );
