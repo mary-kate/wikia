@@ -285,11 +285,21 @@ class VideoEmbedTool {
 			$title = Title::newFromText($mwname, 6);
 		}
 
-		if ($gallery) {
+		$ns_vid = $wgContLang->getFormattedNsText( NS_VIDEO );
+
+		if ('' != $gallery) {
 			// todo when inserting into video gallery, open the article, fillet the videogallery tag, insert stuffing and save
 			global $wgArticle;
 			$text = $wgArticle->getContent();
-			// todo find the gallery and insert into
+
+			// todo nowiki?
+			preg_match( '/<videogallery>[^<]*/s', $text, $matches );
+			if( is_array( $matches ) ) {
+				$our_gallery = $matches[$gallery];
+				$our_gallery_modified = $our_gallery . "\n" . $ns_vid . ":" . $name . "\n";	
+				$text = substr_replace( $text, $our_gallery_modified, strpos( $our_gallery, $text ), count( $our_gallery ) );
+			}	
+
 			$summary = wfMsg( 'vet-added-from-gallery' ) ;
 			$success = $wgArticle->doEdit( $text, $summary);
 			if ( $success ) {
@@ -305,8 +315,6 @@ class VideoEmbedTool {
 			$layout = $wgRequest->getVal('layout');
 			$caption = $wgRequest->getVal('caption');
 			$slider = $wgRequest->getVal('slider');
-
-			$ns_vid = $wgContLang->getFormattedNsText( NS_VIDEO );
 
 			if( 'gallery' != $layout ) {
 				$tag = '[[' . $ns_vid . ':'.$name;
