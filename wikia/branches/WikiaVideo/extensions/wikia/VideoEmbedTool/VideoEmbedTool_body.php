@@ -181,7 +181,7 @@ class VideoEmbedTool {
 		$type = $wgRequest->getVal('type');
 		$id = $wgRequest->getVal('id');
 		$provider = $wgRequest->getVal('provider');
-		isset( $wgRequest->getVal( 'gallery' ) ) ? $gallery = $wgRequest->getVal( 'gallery' ) : $gallery = '' ;
+		( '' != $wgRequest->getVal( 'gallery' ) ) ? $gallery = $wgRequest->getVal( 'gallery' ) : $gallery = '' ;
 		$name = urldecode( $wgRequest->getVal('name') );
 		$oname = urldecode( $wgRequest->getVal('oname') );
 		if ('' == $name) {

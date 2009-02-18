@@ -55,7 +55,7 @@ function VET_loadDetails() {
 			if(FCK.wysiwygData[VET_refid].caption) {
 				$('VideoEmbedCaption').value = FCK.wysiwygData[VET_refid].caption;
 			}
-			if( '-1' == VET_gallery ) {
+			if( '-1' != VET_gallery ) {
 				$( 'VideoEmbedSlider' ).style.visibility = 'hidden';
 				$( 'VideoEmbedInputWidth' ).style.visibility = 'hidden';
 				$( 'VideoEmbedWidthCheckbox' ).style.visibility = 'hidden';
@@ -69,10 +69,6 @@ function VET_loadDetails() {
 	var params = Array();
 	params.push('sourceId=0');
 	params.push('itemId='+FCK.wysiwygData[VET_refid].href.split(":")[1]);
-
-	if( '-1' == VET_gallery ) {
-		params.push( 'gallery=true' );
-	}
 	
 	VET_asyncTransaction = YAHOO.util.Connect.asyncRequest('GET', wgScriptPath + '/index.php?action=ajax&rs=VET&method=chooseImage&' + params.join('&'), callback);
 }
@@ -81,7 +77,7 @@ function VET_loadDetails() {
  * Functions/methods
  */
 if(mwCustomEditButtons) {
-	if( VET_gallery > -1 ) {
+	if( '-1' == VET_gallery ) {
 		mwCustomEditButtons[mwCustomEditButtons.length] = {
 			"imageFile": stylepath + '/../extensions/wikia/VideoEmbedTool/images/button_vet2.png',
 			"speedTip": vet_imagebutton,
