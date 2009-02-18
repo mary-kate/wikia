@@ -22,7 +22,7 @@ $wgExtensionCredits['other'][] = array(
 	'name' => 'HAWelcome',
 	'version' => '0.2',
 	'author' => 'Krzysztof Krzyżaniak',
-	'description' => 'Highly Automated Welcome Tool ',
+	'description' => 'Highly Automated Welcome Tool',
 );
 
 
@@ -240,7 +240,7 @@ class HAWelcomeJob extends Job {
 			$Title = Title::newFromId( $revision->getPage() );
 			$revision->setTitle( $Title );
 		}
-		
+
 		if( $Title && ! $wgCommandLineMode && ! $wgUser->isAllowed( "bot" ) ) {
 
 			Wikia::log( __METHOD__, "title", $Title->getFullURL() );
