@@ -49,6 +49,9 @@ $wgWikiaBatchTasks[ "welcome" ] = "HAWelcomeTask";
 class HAWelcomeJob extends Job {
 
 	private
+		$mUserId,
+		$mUserName,
+		$mUserIP,
 		$mUser,
 		$mAnon,
 		$mSysop;
@@ -64,15 +67,23 @@ class HAWelcomeJob extends Job {
 	public function __construct( $title, $params, $id = 0 ) {
 		wfLoadExtensionMessages( "HAWelcome" );
 		parent::__construct( "HAWelcome", $title, $params, $id );
-		$user_id = $params[ "user_id" ];
-		$user_ip = $params[ "user_ip" ];
+		$this->mUserId = $params[ "user_id" ];
+		$this->mUserIP = $params[ "user_ip" ];
+		$this->mUserName = $params[ "user_name" ];
 
 		$this->mAnon = (bool )$params[ "is_anon" ];
 		if( $this->mAnon ) {
-			$this->mUser = User::newFromName( $user_ip, false );
+			$this->mUser = User::newFromName( $this->mUserIP, false );
 		}
 		else {
-			$this->mUser = User::newFromId( $user_id );
+			$this->mUser = User::newFromId( $this->mUserId );
+		}
+
+		/**
+		 * fallback
+		 */
+		if( ! $this->mUser ) {
+			$this->mUser = User::newFromName( $this->mUserName );
 		}
 	}
 
