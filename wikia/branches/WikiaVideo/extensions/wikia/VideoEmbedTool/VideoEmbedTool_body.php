@@ -182,6 +182,8 @@ class VideoEmbedTool {
 		$id = $wgRequest->getVal('id');
 		$provider = $wgRequest->getVal('provider');
 		( '' != $wgRequest->getVal( 'gallery' ) ) ? $gallery = $wgRequest->getVal( 'gallery' ) : $gallery = '' ;
+		( '' != $wgRequest->getVal( 'article' ) ) ? $title_main = urldecode( $wgRequest->getVal( 'article' ) ) : $title_main = '' ;
+		( '' != $wgRequest->getVal( 'ns' ) ) ? $ns = $wgRequest->getVal( 'ns' ) : $ns = '' ;
 		$name = urldecode( $wgRequest->getVal('name') );
 		$oname = urldecode( $wgRequest->getVal('oname') );
 		if ('' == $name) {
@@ -289,8 +291,9 @@ class VideoEmbedTool {
 
 		if ('' != $gallery) {
 			// todo when inserting into video gallery, open the article, fillet the videogallery tag, insert stuffing and save
-			global $wgArticle;
-			$text = $wgArticle->getContent();
+			$title_obj = Title::newFromText( $title_main, $ns );
+			$article_obj = new Article( $title_obj );
+			$text = $article_obj->getContent();
 
 			// todo nowiki?
 			preg_match( '/<videogallery>[^<]*/s', $text, $matches );
@@ -301,7 +304,7 @@ class VideoEmbedTool {
 			}	
 
 			$summary = wfMsg( 'vet-added-from-gallery' ) ;
-			$success = $wgArticle->doEdit( $text, $summary);
+			$success = $article_obj->doEdit( $text, $summary);
 			if ( $success ) {
 				header('X-screen-type: summary');				
 			} else {
