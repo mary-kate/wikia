@@ -9,9 +9,11 @@ $messages['en'] = array(
 	"welcome-user-page" => "==About me==
 
 ''This is your user page. Please edit this page to tell the community about yourself!''
+
 ==My contributions==
 
 * [[Special:Contributions/{{PAGENAME}}|User contributions]]
+
 ==My favorite pages==
 
 * Add links to your favorite pages on the wiki here!
