@@ -293,8 +293,7 @@ class VideoEmbedTool {
 			$summary = wfMsg( 'vet-added-from-gallery' ) ;
 			$success = $wgArticle->doEdit( $text, $summary);
 			if ( $success ) {
-				header('X-screen-type: summary');
-				
+				header('X-screen-type: summary');				
 			} else {
 				// todo well, communicate failure
 			}
