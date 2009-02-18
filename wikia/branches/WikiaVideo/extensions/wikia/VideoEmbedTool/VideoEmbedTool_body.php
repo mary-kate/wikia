@@ -181,6 +181,7 @@ class VideoEmbedTool {
 		$type = $wgRequest->getVal('type');
 		$id = $wgRequest->getVal('id');
 		$provider = $wgRequest->getVal('provider');
+		isset( $wgRequest->getVal( 'gallery' ) ) ? $gallery = $wgRequest->getVal( 'gallery' ) : $gallery = '' ;
 		$name = urldecode( $wgRequest->getVal('name') );
 		$oname = urldecode( $wgRequest->getVal('oname') );
 		if ('' == $name) {
@@ -284,37 +285,40 @@ class VideoEmbedTool {
 			$title = Title::newFromText($mwname, 6);
 		}
 
+		if ($gallery) {
+			// todo when inserting into video gallery, open the article, fillet the videogallery tag, insert stuffing and save
+		} else {
+			header('X-screen-type: summary');
 
-		header('X-screen-type: summary');
+			$size = $wgRequest->getVal('size');
+			$width = $wgRequest->getVal('width');
+			$layout = $wgRequest->getVal('layout');
+			$caption = $wgRequest->getVal('caption');
+			$slider = $wgRequest->getVal('slider');
 
-		$size = $wgRequest->getVal('size');
-		$width = $wgRequest->getVal('width');
-		$layout = $wgRequest->getVal('layout');
-		$caption = $wgRequest->getVal('caption');
-		$slider = $wgRequest->getVal('slider');
+			$ns_vid = $wgContLang->getFormattedNsText( NS_VIDEO );
 
-		$ns_vid = $wgContLang->getFormattedNsText( NS_VIDEO );
+			if( 'gallery' != $layout ) {
+				$tag = '[[' . $ns_vid . ':'.$name;
+				if($size != 'full') {
+					$tag .= '|thumb';
+				}
+				$tag .= '|'.$width;
+				$tag .= '|'.$layout;
 
-		if( 'gallery' != $layout ) {
-			$tag = '[[' . $ns_vid . ':'.$name;
-			if($size != 'full') {
-				$tag .= '|thumb';
-			}
-			$tag .= '|'.$width;
-			$tag .= '|'.$layout;
-
-			if($caption != '') {
-				$tag .= '|'.$caption.']]';
-			} else {
-				$tag .= ']]';
-			}
-		} else { // gallery needs to be treated differently...
-			$tag = "<videogallery>\n";
-			$tag .= $ns_vid . ":" . $name;			
-			if($caption != '') {
-				$tag .= "|".$caption."\n</videogallery>";
-			} else {
-				$tag .= "\n</videogallery>";
+				if($caption != '') {
+					$tag .= '|'.$caption.']]';
+				} else {
+					$tag .= ']]';
+				}
+			} else { // gallery needs to be treated differently...
+				$tag = "<videogallery>\n";
+				$tag .= $ns_vid . ":" . $name;			
+				if($caption != '') {
+					$tag .= "|".$caption."\n</videogallery>";
+				} else {
+					$tag .= "\n</videogallery>";
+				}
 			}
 		}
 
