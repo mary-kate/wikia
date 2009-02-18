@@ -89,15 +89,17 @@ function WikiaVideo_renderVideoGallery($input, $args, $parser) {
 				$wgOut->addScript('<link rel="stylesheet" type="text/css" href="'.$wgExtensionsPath.'/wikia/VideoEmbedTool/css/VET.css?'.$wgStyleVersion.'" />');
 			}
 		}
+
 		if( isset( $args['id'] ) ) {
 			if (count($videos) < 4) { // fill up 
 				global $wgUser;
-				if( get_class( $wgUser->getSkin() ) == 'SkinMonaco' ) {
-					$inside = '<a href="#" class="bigButton" style="margin-left: 105px; margin-top: 110px;" onclick="VET_show( event, ' . $args['id'] .')"><big>' . wfMsg( 'wikiavideo-create' ) . '</big><small>&nbsp;</small></a>';
-				} else {
-					$inside = wfMsg( 'wikiavideo-not-supported' );				
-				}
 				for($i = count($videos); $i < 4; $i++) {
+					if( get_class( $wgUser->getSkin() ) == 'SkinMonaco' ) {
+						$inside = '<a href="#" class="bigButton" style="margin-left: 105px; margin-top: 110px;" id="WikiaVideoGalleryPlaceholder' . $args['id'] . 'x' .  $i . '" onclick="VET_show( event, ' . $args['id'] .', ' . $i . ')"><big>' . wfMsg( 'wikiavideo-create' ) . '</big><small>&nbsp;</small></a>';
+					} else { // todo maybe add some icon here not text, as we agreed
+						$inside = wfMsg( 'wikiavideo-not-supported' );				
+					}
+
 					$out .= '<td><div class="gallerybox" style="width: 335px;"><div class="thumb" style="padding: 13px 0; width: 330px;"><div style="margin-left: auto; margin-right: auto; width: 300px; height: 250px;">' . $inside . '</div></div><div class="gallerytext"></div></div></td>';
 					if($i%2 == 1) {
 						$out .= '</tr><tr>';
