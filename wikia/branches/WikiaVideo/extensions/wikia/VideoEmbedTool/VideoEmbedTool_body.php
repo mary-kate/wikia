@@ -290,15 +290,14 @@ class VideoEmbedTool {
 		$ns_vid = $wgContLang->getFormattedNsText( NS_VIDEO );
 
 		if ('' != $gallery) {
-			// todo when inserting into video gallery, open the article, fillet the videogallery tag, insert stuffing and save
 			$title_obj = Title::newFromText( $title_main, $ns );
 			$article_obj = new Article( $title_obj );
 			$text = $article_obj->getContent();
 
 			// todo nowiki?
-			preg_match( '/<videogallery>[^<]*/s', $text, $matches );
+			preg_match_all( '/<videogallery>[^<]*/s', $text, $matches );
 			if( is_array( $matches ) ) {
-				$our_gallery = $matches[$gallery];
+				$our_gallery = $matches[0][$gallery];				
 				$our_gallery_modified = $our_gallery . "\n" . $ns_vid . ":" . $name . "\n";	
 				$text = substr_replace( $text, $our_gallery_modified, strpos( $our_gallery, $text ), strlen( $our_gallery ) );
 			}	
