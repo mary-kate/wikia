@@ -348,15 +348,15 @@ class Wikia {
 	 *
 	 */
 	static public function log( $method, $sub = false, $message = false ) {
-		global $wgDevelEnvironment;
+		global $wgDevelEnvironment, $wgCityId;
 
 		$method = $sub ? $method . "-" . $sub : $method;
 		if( $wgDevelEnvironment ) {
-			error_log( $method . ": " . $message );
+			error_log( "{$method}({$wgCityId}): {$message}" );
 		}
 		/**
 		 * and use wfDebug as well
 		 */
-		wfDebug( $method . ": " . $message . "\n" );
+		wfDebug( "{$method}({$wgCityId}): {$message}\n" );
 	}
 }
