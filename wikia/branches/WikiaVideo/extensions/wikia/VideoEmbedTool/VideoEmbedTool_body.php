@@ -300,13 +300,14 @@ class VideoEmbedTool {
 			if( is_array( $matches ) ) {
 				$our_gallery = $matches[$gallery];
 				$our_gallery_modified = $our_gallery . "\n" . $ns_vid . ":" . $name . "\n";	
-				$text = substr_replace( $text, $our_gallery_modified, strpos( $our_gallery, $text ), count( $our_gallery ) );
+				$text = substr_replace( $text, $our_gallery_modified, strpos( $our_gallery, $text ), strlen( $our_gallery ) );
 			}	
 
 			$summary = wfMsg( 'vet-added-from-gallery' ) ;
 			$success = $article_obj->doEdit( $text, $summary);
 			if ( $success ) {
 				header('X-screen-type: summary');				
+				$tag = '';
 			} else {
 				// todo well, communicate failure
 			}
