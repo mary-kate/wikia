@@ -299,7 +299,7 @@ class VideoEmbedTool {
 			if( is_array( $matches ) ) {
 				$our_gallery = $matches[0][$gallery];				
 				$our_gallery_modified = $our_gallery . "\n" . $ns_vid . ":" . $name . "\n";	
-				$text = substr_replace( $text, $our_gallery_modified, strpos( $our_gallery, $text ), strlen( $our_gallery ) );
+				$text = substr_replace( $text, $our_gallery_modified, strpos( $text, $our_gallery ), strlen( $our_gallery ) );
 			}	
 
 			$summary = wfMsg( 'vet-added-from-gallery' ) ;
