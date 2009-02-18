@@ -91,10 +91,15 @@ function WikiaVideo_renderVideoGallery($input, $args, $parser) {
 		}
 
 		if (count($videos) < 4) { // fill up 
-			if( isset( $args['id'] ) ) {
-				$inside = '<a href="#" class="bigButton" style="margin-left: 105px; margin-top: 110px;" onclick="VET_show( event, ' . $args['id'] .')"><big>' . wfMsg( 'wikiavideo-create' ) . '</big><small>&nbsp;</small></a>';
+			global $wgUser;
+			if( get_class( $wgUser->getSkin() ) == 'SkinMonaco' ) {
+				if( isset( $args['id'] ) ) {
+					$inside = '<a href="#" class="bigButton" style="margin-left: 105px; margin-top: 110px;" onclick="VET_show( event, ' . $args['id'] .')"><big>' . wfMsg( 'wikiavideo-create' ) . '</big><small>&nbsp;</small></a>';
+				} else {
+					$inside = wfMsg( 'wikiavideo-gallery-template' );
+				}
 			} else {
-				$inside = wfMsg( 'wikiavideo-gallery-template' );
+				$inside = wfMsg( 'wikiavideo-not-supported' );				
 			}
 			for($i = count($videos); $i < 4; $i++) {
 				$out .= '<td><div class="gallerybox" style="width: 335px;"><div class="thumb" style="padding: 13px 0; width: 330px;"><div style="margin-left: auto; margin-right: auto; width: 300px; height: 250px;">' . $inside . '</div></div><div class="gallerytext"></div></div></td>';
