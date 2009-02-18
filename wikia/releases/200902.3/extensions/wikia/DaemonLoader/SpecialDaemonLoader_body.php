@@ -46,15 +46,17 @@ class DaemonLoader extends SpecialPage {
 			switch ($action) {
 				case "save" : {
 					$res = $this->saveDaemon();
+					$res = (!empty($res)) ? 1 : "";
 					break;
 				}
 				case "savetask" : {
 					$res = $this->saveTask();
+					$res = (!empty($res)) ? 2 : "";
 					break;
 				}
 			}
 			$titleObj = Title::makeTitle( NS_SPECIAL, 'DaemonLoader' );
-			$saved = "saved=" . ((empty($res)) ? "-1" : "1");
+			$saved = "saved=" . ((empty($res)) ? "-1" : $res);
 			$check = $titleObj->getFullURL( $saved );
 			return $wgOut->redirect( $check );
 		} elseif ($par == 'report') {
@@ -250,15 +252,10 @@ class DaemonLoader extends SpecialPage {
 		return $res;
 	}
 
-	public function closeJob($dj_id) {
-		global $wgCityId, $wgUser;
-		global $wgRequest;
+	public static function closeJob($dj_id) {
 		$res = 0;
-        wfProfileIn( __METHOD__ );
-		
 		if ( $dj_id > 0 ) {
-			$dbs = wfGetDBExt(DB_MASTER);
-			// remove (so set as non-visible)
+			$dbs = wfGetDBExt();
 			$dbs->begin();
 			$dbs->update(
 				"`dataware`.`daemon_tasks_jobs`",
@@ -270,7 +267,6 @@ class DaemonLoader extends SpecialPage {
 			$res = 1;
 		} 
         
-        wfProfileOut( __METHOD__ );
 		return $res;
 	}
 
@@ -418,13 +414,12 @@ class DaemonLoader extends SpecialPage {
 	public static function axShowDaemon ( $dt_id ) {
 		global $wgRequest, $wgUser,	$wgCityId, $wgDBname;
 		global $wgContLang, $wgOut;
-		
-		$res = array('nbr_records' => 0, 'data' => array());
 
 		if ( !$wgUser->isAllowed( 'daemonloader' ) ) {
-			return $res;
+			return "";
 		}
 
+		$res = array('nbr_records' => 0, 'data' => array());
 		if ( (!empty($wgUser)) && (!$wgUser->isBlocked()) ) {
 			wfLoadExtensionMessages(self::$oName);
 			$data = self::getAllDaemons($dt_id);
@@ -452,11 +447,12 @@ class DaemonLoader extends SpecialPage {
 	public static function axJobsList($limit = 30, $offset = 0, $order = 'dj_id', $desc = 0) {
 		global $wgUser;
 
-		$res = array('nbr_records' => 0, 'data' => array(), 'limit' => $limit, 'page' => $offset, 'order' => $order, 'desc' => $desc);
+		$res = "";
 		if ( !$wgUser->isAllowed( 'daemonloader' ) ) {
 			return $res;
 		}
 
+		$res = array('nbr_records' => 0, 'data' => array(), 'limit' => $limit, 'page' => $offset, 'order' => $order, 'desc' => $desc);
 		if ( (!empty($wgUser)) && (!$wgUser->isBlocked()) ) {
 			wfLoadExtensionMessages(self::$oName);
 			$data = self::getAllJobs(0, $order, $limit, $offset, $desc);
@@ -483,8 +479,8 @@ class DaemonLoader extends SpecialPage {
 
 	public static function axGetJobInfo($id) {
 		global $wgUser;
-		
-		$res = array('nbr_records' => 0, 'data' => array());
+
+		$res = "";	
 		if ( !$wgUser->isAllowed( 'daemonloader' ) ) {
 			return $res;
 		}
@@ -493,6 +489,7 @@ class DaemonLoader extends SpecialPage {
 			return $res;
 		}
 
+		$res = array('nbr_records' => 0, 'data' => array());
 		if ( (!empty($wgUser)) && (!$wgUser->isBlocked()) ) {
 			$data = self::getAllJobs($id);
 			
@@ -553,17 +550,21 @@ class DaemonLoader extends SpecialPage {
 	public static function axRemoveJobsList($id) {
 		global $wgUser;
 		
-		$res = array('nbr_records' => 0);
-		
 		if ( !$wgUser->isAllowed( 'daemonloader' ) ) {
-			return $res;
+			return "";
 		}
 
+		$res = array('nbr_records' => 0);
 		if ( (!empty($wgUser)) && (!$wgUser->isBlocked()) ) {
-			wfLoadExtensionMessages(self::$oName);
 			$res['nbr_records'] = self::closeJob($id);
 		}
-		return $res;
+
+		if (!function_exists('json_encode')) {
+			$oJson = new Services_JSON();
+			return $oJson->encode($res);
+		} else {
+			return json_encode($res);
+		}
 	}
 
 	private static function parseParams($sParams) {
