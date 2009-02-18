@@ -287,6 +287,17 @@ class VideoEmbedTool {
 
 		if ($gallery) {
 			// todo when inserting into video gallery, open the article, fillet the videogallery tag, insert stuffing and save
+			global $wgArticle;
+			$text = $wgArticle->getContent();
+			// todo find the gallery and insert into
+			$summary = wfMsg( 'vet-added-from-gallery' ) ;
+			$success = $wgArticle->doEdit( $text, $summary);
+			if ( $success ) {
+				header('X-screen-type: summary');
+				
+			} else {
+				// todo well, communicate failure
+			}
 		} else {
 			header('X-screen-type: summary');
 
