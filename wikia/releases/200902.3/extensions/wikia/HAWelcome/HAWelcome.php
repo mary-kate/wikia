@@ -377,7 +377,9 @@ class HAWelcomeTask extends BatchTask {
 	public function execute( $params = null ) {
 		global $IP, $wgWikiaLocalSettingsPath, $wgWikiaAdminSettingsPath;
 
+		$this->mTaskID = $params->task_id;
 		$this->mParams = unserialize( $params->task_arguments );
+
 		$city_id = $this->mParams["city_id"];
 		if( $city_id ) {
 			/**
