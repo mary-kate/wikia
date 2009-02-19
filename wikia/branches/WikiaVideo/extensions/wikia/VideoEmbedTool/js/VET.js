@@ -16,6 +16,7 @@ var VET_slider = null;
 var VET_thumbSize = null;
 var VET_orgThumbSize = null;
 var VET_gallery = -1;
+var VET_box = -1;
 var VET_width = null;
 var VET_height = null;
 var VET_widthChanges = 1;
@@ -194,12 +195,13 @@ function VET_showPreview(e) {
 	YAHOO.util.Event.addListener('VideoEmbedPreviewClose', 'click', VET_previewClose);
 }
 
-function VET_show(e, gallery) {
+function VET_show(e, gallery, box) {
 	VET_refid = null;
 	VET_wysiwygStart = 1;
 
 	if(typeof gallery != "undefined") {
 		VET_gallery = gallery;		
+		VET_box = box;
 	}
 
 	if(YAHOO.lang.isNumber(e)) {
@@ -216,7 +218,6 @@ function VET_show(e, gallery) {
 				// go to main page
 			}
 		}
-
 	} else {
 		var el = YAHOO.util.Event.getTarget(e);
 		if (el.id == 'vetLink') {
@@ -516,6 +517,7 @@ function VET_insertFinalVideo(e, type) {
 
 	if( '-1' != VET_gallery ) {
 		params.push( 'gallery=' + VET_gallery );
+		params.push( 'box=' + VET_box );
 		params.push( 'article='+encodeURIComponent( wgTitle ) );
 		params.push( 'ns='+wgNamespaceNumber );
 	}
@@ -568,6 +570,8 @@ function VET_insertFinalVideo(e, type) {
 						if(VET_refid == null) {
 							if ('-1' == VET_gallery) {
 								insertTags($('VideoEmbedTag').innerHTML, '', '');
+							} else { 
+								var to_update = $( 'WikiaVideoGalleryPlaceholder' + VET_gallery + 'x' + VET_box );
 							}
 						} else {
 							var wikitag = YAHOO.util.Dom.get('VideoEmbedTag').innerHTML;
