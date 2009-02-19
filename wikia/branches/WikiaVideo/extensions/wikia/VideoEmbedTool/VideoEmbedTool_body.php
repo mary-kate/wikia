@@ -199,6 +199,8 @@ class VideoEmbedTool {
 			$extra++;
 		}
 
+		$embed_code = '';
+
 		if($name !== NULL) {
 			if($name == '') {
 				header('X-screen-type: error');
@@ -230,7 +232,7 @@ class VideoEmbedTool {
 							$video->setName( $name );
 							$video->save();
 							if ('' != $gallery) { // for gallery, return also embed code to insert live on page
-								$props['code'] = $video->getEmbedCode( 300 );
+								$embed_code = $video->getEmbedCode( 300 );
 							}						
 						}
 					} else if($type == 'existing') {
@@ -284,7 +286,7 @@ class VideoEmbedTool {
 						$video->setName( $name );
 						$video->save();
 						if ('' != $gallery) { // for gallery, return also embed code to insert live on page
-							$props['code'] = $video->getEmbedCode( 300 );							
+							$embed_code = $video->getEmbedCode( 300 );							
 						}						
 					}
 				}
@@ -350,7 +352,10 @@ class VideoEmbedTool {
 		}
 
 		$tmpl = new EasyTemplate(dirname(__FILE__).'/templates/');
-		$tmpl->set_vars(array('tag' => $tag));
+		$tmpl->set_vars(array(
+			'tag' => $tag,
+			'code' => $embed_code,
+			));
 		return $tmpl->execute('summary');
 	}
 }
