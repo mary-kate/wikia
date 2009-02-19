@@ -571,7 +571,10 @@ function VET_insertFinalVideo(e, type) {
 							if ('-1' == VET_gallery) {
 								insertTags($('VideoEmbedTag').innerHTML, '', '');
 							} else { 
-								var to_update = $( 'WikiaVideoGalleryPlaceholder' + VET_gallery + 'x' + VET_box );
+								if( $( 'WikiaVideoGalleryPlaceholder' + VET_gallery + 'x' + VET_box ) ) {
+									var to_update = $( 'WikiaVideoGalleryPlaceholder' + VET_gallery + 'x' + VET_box );
+									to_update.parentNode.innerHTML = $('VideoEmbedCode').innerHTML;
+								}
 							}
 						} else {
 							var wikitag = YAHOO.util.Dom.get('VideoEmbedTag').innerHTML;
