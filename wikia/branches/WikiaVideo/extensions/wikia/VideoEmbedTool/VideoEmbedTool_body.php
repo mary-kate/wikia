@@ -229,6 +229,9 @@ class VideoEmbedTool {
 							$video->loadFromPars( $provider, $id, $metadata );
 							$video->setName( $name );
 							$video->save();
+							if ('' != $gallery) { // for gallery, return also embed code to insert live on page
+								$props['code'] = $video->getEmbedCode( 300 );
+							}						
 						}
 					} else if($type == 'existing') {
 						header('X-screen-type: existing');
@@ -280,6 +283,9 @@ class VideoEmbedTool {
 						$video->loadFromPars( $provider, $id, $metadata );
 						$video->setName( $name );
 						$video->save();
+						if ('' != $gallery) { // for gallery, return also embed code to insert live on page
+							$props['code'] = $video->getEmbedCode( 300 );							
+						}						
 					}
 				}
 			}
