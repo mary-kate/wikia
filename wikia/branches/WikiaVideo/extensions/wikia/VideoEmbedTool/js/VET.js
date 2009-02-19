@@ -471,6 +471,12 @@ function VET_displayDetails(responseText) {
 		alert( $( 'VET_error_box' ).innerHTML );
 	}
 
+	if ( '-1' != VET_gallery ) {
+		$( 'ImageWidthRow' ).style.visibility = 'hidden';		
+		$( 'ImageLayoutRow' ).style.display = 'none';		
+		$( 'VideoEmbedThumbOption' ).style.visibility = 'hidden';		
+	}
+
 	if ( ( 400 == wgNamespaceNumber ) ) {
 		if( $( 'VideoEmbedName' ) ) {
 			$( 'VideoEmbedName' ).value = wgTitle;	
