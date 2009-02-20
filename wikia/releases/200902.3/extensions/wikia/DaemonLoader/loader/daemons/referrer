@@ -2,7 +2,8 @@
 
 my $wikia_lib;
 BEGIN {
-	$wikia_lib = "/home/wikicities/conf/mediawiki/wikia-utils/lib/";
+	$wikia_lib = "/home/moli/wikia/wikia-utils/lib/";
+	#my $wikia_lib = "/home/wikicities/conf/mediawiki/wikia-utils/lib";
 }
 
 =needed modules
@@ -14,7 +15,7 @@ use Data::Dumper;
 
 use Date::Manip;
 use Switch;
-use Spreadsheet::WriteExcel;
+use Spreadsheet::WriteExcel::Big;
 
 use lib $wikia_lib;
 use Wikia::Config;
@@ -26,7 +27,7 @@ use Wikia::DB;
 my @CHECK_ALLOWED = ("day", "week", "month");
 my $DEF_WEEK = "6";
 my $email_title = "Referrer report";
-my $XLS_FILE = "/tmp/referrer_" . substr (&ParseDate("today"), 0, 8) . ".xls";
+my $XLS_FILE = "/home/reports/referrer/referrer_" . substr (&ParseDate("today"), 0, 8) . ".xls";
 
 =help function
 =cut
@@ -39,6 +40,7 @@ referrer [--help] [--usedb=s]
 	check - check every days|weeks|months - default "weeks"
 	fromWiki - identifier of Wikia as begin of range. This parameter can be used when 'usedb' is not set!
 	toWiki - identifier of Wikia as end of range. This parameter can be used when 'usedb' is not set!
+	TASKID - identifier of job
 EOF
 ;	
 }
@@ -58,13 +60,13 @@ my @ltime = localtime;
 
 =checking args
 =cut
-if ( (!$usedb) && (!$weeks) && (!$fromWiki) && (!$toWiki) ) {
-	print STDERR "Use option --help to know how to use script \n";
-	exit;
-} elsif ($help) {
+if ($help) {
 	&usage();
 	exit;
-}
+} elsif ( (!$usedb) && (!$weeks) && (!$fromWiki) && (!$toWiki) ) {
+	print STDERR "Use option --help to know how to use script \n";
+	exit;
+} 
 
 =config -> set logfile 
 =cut
@@ -111,7 +113,7 @@ $weeks = $DEF_WEEK unless $weeks;
 
 =build dates structure 
 =cut
-my $daysago = $weeks*7;
+my $daysago = ($weeks+1)*7;
 my $dates = $oUtils->get_dates($daysago, $check, "now");
 my @dates = ();
 if (scalar @$dates) {
@@ -127,7 +129,7 @@ if (!@dates) {
 =get task info
 =cut
 $oConf->log("\n\nTask ID: $TASKID started");
-$oConf->log("Processing: ".scalar keys(%$databases));
+$oConf->log("Processing: ".scalar keys(%$databases)." Wikis");
 
 my $task = $db_ext->get_daemon_task($TASKID);
 
@@ -145,9 +147,6 @@ foreach my $num (sort ( map { sprintf("%012u",$_) } (keys %$databases) )) {
 	$oConf->log($databases->{$city_id} . " processed (city_id: ".$city_id.")");
 	
 	$db_ext->handler->ping();
-	
-	my $end_sec = time();
-	my @ts = gmtime($end_sec - $start_sec);
 	
 =main loop for every wiki and every period
 =cut
@@ -207,6 +206,9 @@ foreach my $num (sort ( map { sprintf("%012u",$_) } (keys %$databases) )) {
 	}
 =end of main loop
 =cut
+	my $end_sec = time();
+	my @ts = gmtime($end_sec - $start_sec);
+
 	$oConf->log($databases->{$city_id} . " processed ".sprintf ("%d hours %d minutes %d seconds",@ts[2,1,0]));
 }
 
@@ -226,8 +228,10 @@ my $res = ();
 =XLS - default settings ========================
 =init XLS spreadsheet
 =cut
+my $dir = "/home/reports/referrer/";
+mkdir($dir) if (!(-e $dir)) ;
 unlink ($XLS_FILE);
-my $workbook = Spreadsheet::WriteExcel->new($XLS_FILE);
+my $workbook = Spreadsheet::WriteExcel::Big->new($XLS_FILE);
 my @cols = (A..Z);
 
 my $formatHdrMerge = $workbook->add_format( bold => 1, color => 'black', valign => 'vcenter', align => 'center' );
@@ -339,12 +343,14 @@ foreach my $city_id (keys %$DATA) {
 }
 $workbook->close();
 
-my %updata = ("-dj_result_file" => "concat_ws(',', dj_result_file, '".$XLS_FILE."')");
+system("gzip -c $XLS_FILE > $XLS_FILE.gz") if ( -e $XLS_FILE );
+
+my %updata = ("-dj_result_file" => "concat_ws(',', dj_result_file, '".$XLS_FILE.".gz')");
 $oConf->log("update task info in database");
 my $q_up = $db_ext->update_daemon_task( \%updata, $TASKID );
 if ( $q_up ) {
 	$oConf->log("send emails with report");
-	$oUtils->send_file( $email_title, $task->{dj_result_emails}, $XLS_FILE );
+	$oUtils->send_file( $email_title, $task->{dj_result_emails}, $XLS_FILE . ".gz" );
 }
 $oConf->log("process done");
 
