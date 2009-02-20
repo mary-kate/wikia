@@ -784,6 +784,8 @@ function WysiwygParserHookCallback($input, $args, $parser) {
  * Decide whether we should show first time edit popup
  */
 function WysiwygFirstEditMessageShow() {
+	return false; // not to be released yet
+
 	global $wgUser, $wgCityId;
 
 	// for anon users we have JS logic
