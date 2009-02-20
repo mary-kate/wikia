@@ -77,7 +77,7 @@ class AnswersTemplate extends MonacoTemplate {
 		<script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/connection/connection-min.js"></script>
 		<script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/autocomplete/autocomplete-min.js"></script>
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3/jquery.min.js"></script>
-		<script type="text/javascript" src="/skins/answers/js/main.js?<?=$wgStyleVersion?>"></script>
+		<script type="text/javascript" src="<?=$wgStylePath?>/answers/js/main.js?<?=$wgStyleVersion?>"></script>
 		<?php
 		if( $wgEnableFacebookConnect ){
 		?>
@@ -227,7 +227,14 @@ wfRunHooks('GetHTMLAfterBody', array (&$this));
 			?>
 			<div id="question_actions">
 				<button class="button_small button_small_green" onclick="document.location='<?=$wgTitle->getEditURL()?>';"><span><? echo ($answer_page->isArticleAnswered() ? wfMsg("improve_this_answer") : wfMsg("answer_this_question"));?></span></button>
-				<button class="button_small button_small_blue" onclick="document.location='<?=$wgTitle->getEditURL()?>';"><span>Research this</span></button>
+				<?php
+				global $wgEnableEditResearch;
+				if( $wgEnableEditResearch ){
+				?>
+					<button class="button_small button_small_blue" onclick="document.location='<?=$wgTitle->getEditURL()?>';"><span><?=wfMsg("research_this")?></span></button>
+				<?php
+				}
+				?>
 				<button class="button_small button_small_blue" onclick="document.location='<?=$watchlist_url?>';"><span><? echo ($answer_page->isArticleAnswered() ? wfMsg("notify_improved") : wfMsg("notify_answered"));?></span></button>
 			</div>
 			<div class="bottom"><span></span></div>
