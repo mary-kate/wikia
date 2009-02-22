@@ -312,45 +312,32 @@ __END__
 
 =head1 NAME
 
-GlbDNS - Perl extension for blah blah blah
+GlbDNS - Perl daemon for global load balancing
 
 =head1 SYNOPSIS
+ 
+ perl -Mblib  bin/glbdns.pl --help
 
-  use GlbDNS;
-  blah blah blah
 
 =head1 DESCRIPTION
 
-Stub documentation for GlbDNS, created by h2xs. It looks like the
-author of the extension was negligent enough to leave the stub
-unedited.
-
-Blah blah blah.
+GlbDNS is a global load balancing DNS server. Partly inspired
+by pgeodns -- it differs in that it uses the absolute position
+of the DNS server to calculate which site is closest. All
+other opensource servers I could find uses country level.
+This doesn't work in the US. It also uses real zone files.
 
 =head2 EXPORT
 
 None by default.
 
-
-
 =head1 SEE ALSO
 
-Mention other useful documentation such as the documentation of
-related modules or operating system documentation (such as man pages
-in UNIX), or any relevant external documentation such as RFCs or
-standards.
-
-If you have a mailing list set up for your module, mention it here.
-
-If you have a web site set up for your module, mention it here.
-
-=head1 AUTHOR
-
-Artur Bergman, E<lt>sky@apple.comE<gt>
+Artur Bergman, E<lt>sky-cpan@crucially.netE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2008 by Artur Bergman
+Copyright (C) 2008,2009 by Artur Bergman
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.8 or,
