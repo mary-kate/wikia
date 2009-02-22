@@ -197,12 +197,6 @@ sub lookup {
     my @answer;
 
     return unless $host;
-#    $peerhost = "207.216.165.95";
-#    $peerhost = "75.101.17.33";
-#    $peerhost = "216.224.121.134";
-#    $peerhost = "82.138.248.236";
-#    $peerhost = "208.69.36.11";
-#    $peerhost = "208.69.36.11";
 
     if (my $geo = $host->{__GEO__}) {
         my ($lat, $lon) = (undef,undef);
