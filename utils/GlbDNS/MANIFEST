@@ -20,4 +20,3 @@ t/zones/no_geo_loc.zone
 t/zones/no_origin.zone
 t/zones/unreadable.zone
 zone/example.zone
-zone/test.zone
