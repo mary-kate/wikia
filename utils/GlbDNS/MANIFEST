@@ -1,7 +1,6 @@
 bin/glbdns.pl
 Changes
 lib/GlbDNS.pm
-lib/GlbDNS/Config.pm
 lib/GlbDNS/Zone.pm
 Makefile.PL
 MANIFEST
