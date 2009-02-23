@@ -13,7 +13,7 @@ sub request {
     $qname = lc($qname);
 
     if ($qname =~/glbdns-show-calling-server/) {
-	warn "foo";
+
 	return ("NOERROR", [
                     Net::DNS::RR::A->new({
                         name => "$qname",
