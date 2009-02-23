@@ -11,7 +11,7 @@ sub new {
 sub request {
     my ($self, $glbdns, $qname, $qclass, $qtype, $peerhost, $query) = @_;
     $qname = lc($qname);
-    warn "qname is $qname";
+
     if ($qname =~/glbdns-show-calling-server/) {
 	warn "foo";
 	return ("NOERROR", [
