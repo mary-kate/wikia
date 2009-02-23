@@ -16,7 +16,7 @@ use Geo::IP;
 my %counters : shared;
 
 use GlbDNS::Resolver::Base;
-
+use GlbDNS::Resolver::ShowServer;
 #to enable testing
 our %TEST = ( noadmin => 0,
               nosocket => 0
@@ -38,7 +38,10 @@ sub new {
     #threads->create(sub { while(1) { sleep 60; print Dumper(\%counters) } });
     threads->create(\&admin) unless ($TEST{noadmin});
 
-    $self->{resolver_hook} = [GlbDNS::Resolver::Base->new()];
+    $self->{resolver_hook} = [
+	GlbDNS::Resolver::ShowServer->new(),
+	GlbDNS::Resolver::Base->new(),
+	];
     return $self;
 }
 
