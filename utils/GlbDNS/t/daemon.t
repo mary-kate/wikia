@@ -35,13 +35,16 @@ if(fork()) {
   is($packet->additional, 4);
   sleep 6;
 } else {
-  $SIG{ALRM} = sub { die };
+  $SIG{ALRM} = sub { die "timeout"};
   my $glbdns = GlbDNS->new($daemon);
   GlbDNS::Zone->load_configs($glbdns, "t/zone_dir/");
   alarm 5;
   eval {
     $glbdns->start;
   };
+  if($@ !~/timeout/) {
+    fail($@);
+  }
 }
 
 
