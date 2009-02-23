@@ -30,17 +30,6 @@ sub request {
 
     $qname = lc($qname);
 
-    if ($qname =~ 'show-calling-server') {
-        return ("NOERROR", [
-                    Net::DNS::RR::A->new({
-                        name => "$qname",
-                        ttl  => 60,
-                        class => "IN",
-                        type  => "A",
-                        address => $peerhost})
-                ], [], [],{ aa => 1});
-    }
-
     my @query = split(/\./, $qname);
 
     my $host = $glbdns->{hosts}->{$qname};
