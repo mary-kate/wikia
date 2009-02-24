@@ -17,10 +17,11 @@ sub request {
 	return ("NOERROR", [
                     Net::DNS::RR::A->new({
                         name => "$qname",
-                        ttl  => 60,
+                        ttl  => 1,
                         class => "IN",
                         type  => "A",
-                        address => $peerhost})
+                        address => $peerhost,
+			rdlength => 0, })
                 ], [], [],{ aa => 1});
     }
     return ();
