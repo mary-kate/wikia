@@ -26,9 +26,9 @@ if( !defined( 'MEDIAWIKI' ) ) {
 /**
  * Use revision number
  */
-$wgStyleVersion         = '5553';
-$wgMergeStyleVersionJS  = '5553';
-$wgMergeStyleVersionCSS = '5553';
+$wgStyleVersion         = '5553a';
+$wgMergeStyleVersionJS  = '5553a';
+$wgMergeStyleVersionCSS = '5553a';
 
 /**
  * @name $wgCityId
