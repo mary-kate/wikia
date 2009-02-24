@@ -17,6 +17,7 @@ my %counters : shared;
 
 use GlbDNS::Resolver::Base;
 use GlbDNS::Resolver::ShowServer;
+use GlbDNS::Resolver::ShowLocation;
 #to enable testing
 our %TEST = ( noadmin => 0,
               nosocket => 0
@@ -39,6 +40,7 @@ sub new {
     threads->create(\&admin) unless ($TEST{noadmin});
 
     $self->{resolver_hook} = [
+	GlbDNS::Resolver::ShowLocation->new(),
 	GlbDNS::Resolver::ShowServer->new(),
 	GlbDNS::Resolver::Base->new(),
 	];
