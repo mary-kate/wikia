@@ -2456,6 +2456,14 @@ class Article {
 			$dbw->rollback();
 			return false;
 		}
+		
+		# Fix category table counts
+		$cats = array();
+		$res = $dbw->select( 'categorylinks', 'cl_to', array( 'cl_from' => $id ), __METHOD__ );
+		foreach( $res as $row ) {
+			$cats []= $row->cl_to;
+		}
+		$this->updateCategoryCounts( array(), $cats );
 
 		# If using cascading deletes, we can skip some explicit deletes
 		if( !$dbw->cascadingDeletes() ) {
@@ -2489,14 +2497,6 @@ class Article {
 
 		# Clear caches
 		Article::onArticleDelete( $this->mTitle );
-		
-		# Fix category table counts
-		$cats = array();
-		$res = $dbw->select( 'categorylinks', 'cl_to', array( 'cl_from' => $id ), __METHOD__ );
-		foreach( $res as $row ) {
-			$cats []= $row->cl_to;
-		}
-		$this->updateCategoryCounts( array(), $cats );
 
 		# Clear the cached article id so the interface doesn't act like we exist
 		$this->mTitle->resetArticleID( 0 );
@@ -2508,7 +2508,7 @@ class Article {
 
 		# Make sure logging got through
 		$log->addEntry( 'delete', $this->mTitle, $reason, array() );
-		
+
 		$dbw->commit();
 
 		return true;
@@ -2965,8 +2965,8 @@ class Article {
 
 		$r = "\n\t\t\t\t<div id=\"mw-{$infomsg}\">" . wfMsgExt( $infomsg, array( 'parseinline', 'replaceafter' ), $td, $userlinks, $revision->getID() ) . "</div>\n" .
 
-		     "\n\t\t\t\t<div id=\"mw-revision-nav\">" . $cdel . wfMsgHtml( 'revision-nav', $prevdiff, 
-				$prevlink, $lnk, $curdiff, $nextlink, $nextdiff ) . "</div>\n\t\t\t";
+		     "\n\t\t\t\t<div id=\"mw-revision-nav\">" . $cdel . wfMsgExt( 'revision-nav', array( 'escapenoentities', 'parsemag', 'replaceafter' ),
+		     	$prevdiff, $prevlink, $lnk, $curdiff, $nextlink, $nextdiff ) . "</div>\n\t\t\t";
 		$wgOut->setSubtitle( $r );
 	}
 
