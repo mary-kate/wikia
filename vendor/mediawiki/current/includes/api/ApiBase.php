@@ -743,14 +743,28 @@ abstract class ApiBase {
 
 	/**
 	 * Output the error message related to a certain array
-	 * @param array $error Element of a getUserPermissionsErrors()
+	 * @param array $error Element of a getUserPermissionsErrors()-style array
 	 */
 	public function dieUsageMsg($error) {
+		$parsed = $this->parseMsg($error);
+		$this->dieUsage($parsed['code'], $parsed['info']);
+	}
+	
+	/**
+	 * Return the error message related to a certain array
+	 * @param array $error Element of a getUserPermissionsErrors()-style array
+	 * @return array('code' => code, 'info' => info)
+	 */
+	public function parseMsg($error) {
 		$key = array_shift($error);
 		if(isset(self::$messageMap[$key]))
-			$this->dieUsage(wfMsgReplaceArgs(self::$messageMap[$key]['info'], $error), wfMsgReplaceArgs(self::$messageMap[$key]['code'], $error));
+			return array(	'code' =>
+				wfMsgReplaceArgs(self::$messageMap[$key]['code'], $error),
+					'info' =>
+				wfMsgReplaceArgs(self::$messageMap[$key]['info'], $error)
+			);
 		// If the key isn't present, throw an "unknown error"
-		$this->dieUsageMsg(array('unknownerror', $key));
+		return $this->parseMsg(array('unknownerror', $key));
 	}
 
 	/**
@@ -888,6 +902,6 @@ abstract class ApiBase {
 	 * Returns a String that identifies the version of this class.
 	 */
 	public static function getBaseVersion() {
-		return __CLASS__ . ': $Id: ApiBase.php 44864 2008-12-21 00:21:01Z catrope $';
+		return __CLASS__ . ': $Id: ApiBase.php 47041 2009-02-09 14:39:41Z catrope $';
 	}
 }

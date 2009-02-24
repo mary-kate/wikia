@@ -33,7 +33,7 @@ if ( !defined( 'MW_PHP4' ) ) {
 }
 
 /** MediaWiki version number */
-$wgVersion			= '1.14.0rc1';
+$wgVersion			= '1.14.0';
 
 /** Name of the site. It must be changed in LocalSettings.php */
 $wgSitename         = 'MediaWiki';
@@ -2504,7 +2504,7 @@ $wgAutoloadClasses = array();
  * $wgExtensionCredits[$type][] = array(
  * 	'name' => 'Example extension',
  *  'version' => 1.9,
- *  'svn-revision' => '$LastChangedRevision: 45629 $',
+ *  'svn-revision' => '$LastChangedRevision: 47653 $',
  *	'author' => 'Foo Barstein',
  *	'url' => 'http://wwww.example.com/Example%20Extension/',
  *	'description' => 'An example extension',

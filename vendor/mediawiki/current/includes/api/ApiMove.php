@@ -95,8 +95,9 @@ class ApiMove extends ApiBase {
 			// We're not gonna dieUsage() on failure, since we already changed something
 			else
 			{
-				$r['talkmove-error-code'] = ApiBase::$messageMap[reset($retval)]['code'];
-				$r['talkmove-error-info'] = ApiBase::$messageMap[reset($retval)]['info'];
+				$parsed = $this->parseMsg(reset($retval));
+				$r['talkmove-error-code'] = $parsed['code'];
+				$r['talkmove-error-info'] = $parsed['info'];
 			}
 		}
 
@@ -159,6 +160,6 @@ class ApiMove extends ApiBase {
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiMove.php 41810 2008-10-07 14:57:59Z catrope $';
+		return __CLASS__ . ': $Id: ApiMove.php 47041 2009-02-09 14:39:41Z catrope $';
 	}
 }
