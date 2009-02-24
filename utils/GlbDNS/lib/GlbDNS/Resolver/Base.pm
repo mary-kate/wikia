@@ -32,23 +32,41 @@ sub request {
 
     my @query = split(/\./, $qname);
 
+    # do a direct lookup here
+    # should probably be a hook
     my $host = $glbdns->{hosts}->{$qname};
+
+    # if the host doesnt know
+    # try to find something in the tree that matches
+
+    # xxx this needs wilcard support
     unless($host) {
         my $domain = $glbdns->get_host($qname);
+
+	# if we find something, we find out the domain and return not found
         if ($domain) {
             $domain = $glbdns->{hosts}->{$domain->{__DOMAIN__}};
             return ("NXDOMAIN", [], $domain->{SOA}, [],{ aa => 1});
         }
+
+	# we find nothing we refuse 
         return ("REFUSED", [], [], [],{ aa => 0});
     }
 
+    # unclear why go through get_host again here
     my $domain = $glbdns->get_host($host->{domain});
 
+
+
+    # if it is a ANY|CNAME|A|AAAA query and we have  CNAME we resolve the CNAME
     if (($qtype eq 'ANY' || $qtype eq 'CNAME' || $qtype eq 'A' || $qtype eq 'AAAA') && $host->{CNAME}) {
         push @$ans, $self->lookup($qname, "CNAME", $host, $peerhost);
+	# CNAMES are only allowed to point to one resource
         $qname = $host->{CNAME}->[0]->cname;
         $host = $glbdns->{hosts}->{$qname};
     }
+
+    # after we resolved the CNAME, we just continue
 
     if ($qtype eq 'ANY' || $qtype eq 'A' || $qtype eq 'PTR') {
         push @$ans, $self->lookup($qname, $qtype, $host, $peerhost);
@@ -60,6 +78,9 @@ sub request {
         # and this host exists (otherwise we wouldnt have come this far
         # then we have to return to SOA in auth 0 ANS and NO ERROR
         # RFC 4074 4.1 and 4.2
+
+	# This probably applies for more things
+	# should we be returning glue?
         if($qtype eq 'AAAA' && !@answer && !@$ans) {
             return ("NOERROR", [], [@{$domain->{SOA}}], [], { aa => 1 });
         }
@@ -74,6 +95,8 @@ sub request {
     if ($qtype eq 'ANY' || $qtype eq 'SOA') {
         push @$ans, @{$domain->{SOA}};
     }
+
+    # XXX negative MX should probably be treated like AAAA
     if ($qtype eq 'ANY' || $qtype eq 'MX') {
         push @$ans, @{$domain->{MX}} if($domain->{MX}); # need test
         foreach my $mx (@{$domain->{MX}}) {
