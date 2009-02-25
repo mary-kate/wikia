@@ -251,7 +251,7 @@ function SharedHelpBrokenLink( $linker, $nt, $query, $u, $style, $prefix, $text,
 		$specialpage = SpecialPage::resolveAlias( $wgTitle->getDBkey() );
 		if( ( $nt->getNamespace() == 12 ) && ( 'Wantedpages' != $specialpage ) ) {
 
-			if (SharedHelpArticleExists()) {
+			if (SharedHelpArticleExists($nt)) {
 				//not red, blue
 				$style = $linker->getInternalLinkAttributesObj( $nt, $text, '' );
 				$u = str_replace( "&amp;action=edit&amp;redlink=1", "", $u );
@@ -271,13 +271,13 @@ function SharedHelpBrokenLink( $linker, $nt, $query, $u, $style, $prefix, $text,
  *
  * @see SharedHelpHook
  */
-function SharedHelpArticleExists() {
+function SharedHelpArticleExists($title) {
 	global $wgTitle, $wgMemc, $wgSharedDB, $wgHelpWikiId;
 
 	$exists = false;
 
 	$sharedArticleKey = $wgSharedDB . ':sharedArticles:' . $wgHelpWikiId . ':' . 
-		MWNamespace::getCanonicalName( $wgTitle->getNamespace() ) .  ':' . $wgTitle->getDBkey();
+		MWNamespace::getCanonicalName( $title->getNamespace() ) .  ':' . $title->getDBkey();
 	$sharedArticle = $wgMemc->get($sharedArticleKey);
 
 	if ( !empty($sharedArticle['timestamp']) ) {
