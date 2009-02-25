@@ -272,11 +272,12 @@ function SharedHelpBrokenLink( $linker, $nt, $query, $u, $style, $prefix, $text,
  * @see SharedHelpHook
  */
 function SharedHelpArticleExists() {
-	global $wgTitle, $wgMemc, $wgSharedDB;
+	global $wgTitle, $wgMemc, $wgSharedDB, $wgHelpWikiId;
 
 	$exists = false;
 
-	$sharedArticleKey = $wgSharedDB . ':sharedArticles:' . $wgTitle->getDBkey();
+	$sharedArticleKey = $wgSharedDB . ':sharedArticles:' . $wgHelpWikiId . ':' . 
+		MWNamespace::getCanonicalName( $wgTitle->getNamespace() ) .  ':' . $wgTitle->getDBkey();
 	$sharedArticle = $wgMemc->get($sharedArticleKey);
 
 	if ( !empty($sharedArticle['timestamp']) ) {
