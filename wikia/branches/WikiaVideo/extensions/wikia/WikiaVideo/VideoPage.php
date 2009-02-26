@@ -90,7 +90,7 @@ class VideoPage extends Article {
 
 		$code = $this->getEmbedCode($width);
 
-		if('false' == $thumb) { // TODO: $thumb should be boolean variable, not string
+		if(empty($thumb)) {
 			return "<div class=\"t{$align}\">".$code."</div>";
 		}
 
@@ -115,11 +115,16 @@ EOD;
 
 		$code = $this->getThumbnailCode($width);
 
-		// TODO: fill  $wgWysiwygMetaData
+		// fill  meta data
+		$wgWysiwygMetaData[$refid]['align'] = $align;
+		if (!empty($width)) $wgWysiwygMetaData[$refid]['width'] = intval($width);
+		if ($caption != '') $wgWysiwygMetaData[$refid]['caption'] = $caption;
 
-		if('false' == $thumb) { // TODO: $thumb should be boolean variable, not string
+		if(empty($thumb)) {
 			return "<div class=\"t{$align}\">".$code."</div>";
 		}
+
+		$wgWysiwygMetaData[$refid]['thumb'] = 1;
 
 		$url = $this->mTitle->getLocalURL('');
 
