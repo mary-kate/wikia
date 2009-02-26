@@ -12,7 +12,7 @@ if(!defined('MEDIAWIKI')) {
 $wgExtensionCredits['other'][] = array(
         'name' => 'Video Embed Tool',
         'author' => 'Bartek Łapiński, Inez Korczyński',
-	'version' => '0.80',
+	'version' => '0.91',
 );
 
 $dir = dirname(__FILE__).'/';
@@ -201,6 +201,7 @@ function VETSetupVars($vars) {
 	$vars['vet_hide_license_message'] = wfMsg('vet-hide-license-msg');
 	$vars['vet_max_thumb'] = wfMsg('vet-max-thumb');
 	$vars['vet_title'] = wfMsg('vet-title');
+	$vars['vet_no_preview'] = wfMsg( 'vet-no-preview' );
 
 	// macbre: for FCK
 	$vars['vet_enabled'] = true;

@@ -16,7 +16,6 @@ class VideoEmbedTool {
 		return $tmpl->execute("main");
 	}
 
-
 	function recentlyUploaded() {
 		global $IP, $wmu;
 		require_once($IP . '/includes/SpecialPage.php');
@@ -39,6 +38,11 @@ class VideoEmbedTool {
 
 		if($sourceId == 0) { // metacafe
 			$page ? $start = ($page - 1) * 8 : $start = 0;
+			/*	those two searches are because Metacafe gives two kinds of searches: tag based, and in title, desc and such
+				the problem is that one day the second didn't work on their site...
+				so I replaced it with tag based and included commented code for the second
+				just in case we needed to replace it			  
+			*/
 //			$query = str_replace(" ", "+", $query);
 			$query = str_replace(" ", "_", $query);		
 //			$file = @file_get_contents( "http://www.metacafe.com/api/videos?vq=" . $query, FALSE );
@@ -65,7 +69,10 @@ class VideoEmbedTool {
 					}
 					$metacafeResult['total'] = $count;
 					$metacafeResult['pages'] = ceil( $metacafeResult['total'] / 8 );
-                                }
+                                } else {
+					return wfMsg( 'vet-bad-search' );
+				}
+
 			$metacafeResult['item'] = array_slice( $preResult, $start, 8 );
 			$tmpl = new EasyTemplate(dirname(__FILE__).'/templates/');
 			$tmpl->set_vars(array('results' => $metacafeResult, 'query' => addslashes($query)));
@@ -184,6 +191,9 @@ class VideoEmbedTool {
 		( '' != $wgRequest->getVal( 'gallery' ) ) ? $gallery = $wgRequest->getVal( 'gallery' ) : $gallery = '' ;
 		( '' != $wgRequest->getVal( 'article' ) ) ? $title_main = urldecode( $wgRequest->getVal( 'article' ) ) : $title_main = '' ;
 		( '' != $wgRequest->getVal( 'ns' ) ) ? $ns = $wgRequest->getVal( 'ns' ) : $ns = '' ;
+		( '' != $wgRequest->getCheck( 'fck' ) ) ? $fck = $wgRequest->getCheck( 'ns' ) : $fck = false ;
+		( '' != $wgRequest->getVal( 'mwgalpos' ) ) ? $mwInGallery = $wgRequest->getVal( 'mwgalpos' ) : $mwInGallery = '' ;
+		
 		$name = urldecode( $wgRequest->getVal('name') );
 		$oname = urldecode( $wgRequest->getVal('oname') );
 		if ('' == $name) {
@@ -296,50 +306,72 @@ class VideoEmbedTool {
 		}
 
 		$ns_vid = $wgContLang->getFormattedNsText( NS_VIDEO );
+		$caption = $wgRequest->getVal('caption');
 
 		if ('' != $gallery) {
-			$title_obj = Title::newFromText( $title_main, $ns );
-			$article_obj = new Article( $title_obj );
-			$text = $article_obj->getContent();
+			if (!$fck) { // of course, don't edit article for fck...
+				$title_obj = Title::newFromText( $title_main, $ns );
+				$article_obj = new Article( $title_obj );
+				$text = $article_obj->getContent();
 
-			// todo nowiki?
-			preg_match_all( '/<videogallery>[^<]*/s', $text, $matches, PREG_OFFSET_CAPTURE );
-			if( is_array( $matches ) ) {
-				$our_gallery = $matches[0][$gallery][0];				
-				$our_gallery_modified = $our_gallery . "\n" . $ns_vid . ":" . $name . "\n";	
-				$text = substr_replace( $text, $our_gallery_modified, $matches[0][$gallery][1], strlen( $our_gallery ) );
-			}	
+				// todo nowiki?
+				preg_match_all( '/<videogallery>[^<]*/s', $text, $matches, PREG_OFFSET_CAPTURE );
+				if( is_array( $matches ) ) {
+					$our_gallery = $matches[0][$gallery][0];				
+					$our_gallery_modified = $our_gallery . "\n" . $ns_vid . ":" . $name;	
+					if( $caption != '' ) {
+						$our_gallery_modified .= '|' . $caption;
+					}				
+					$our_gallery_modified .= "\n";
+					$text = substr_replace( $text, $our_gallery_modified, $matches[0][$gallery][1], strlen( $our_gallery ) );
+				}	
 
-			$summary = wfMsg( 'vet-added-from-gallery' ) ;
-			$success = $article_obj->doEdit( $text, $summary);
-			if ( $success ) {
-				header('X-screen-type: summary');				
-				$tag = '';
+				$summary = wfMsg( 'vet-added-from-gallery' ) ;
+				$success = $article_obj->doEdit( $text, $summary);
+				if ( $success ) {
+					header('X-screen-type: summary');				
+					$tag = $our_gallery_modified . "\n</videogallery>";
+				} else {
+					// todo well, communicate failure
+				}
 			} else {
-				// todo well, communicate failure
+				header('X-screen-type: summary');				
+				$tag = $ns_vid . ":" . $name ;
+				if($caption != '') {
+					$tag .= "|".$caption;
+				}
 			}
+			$message = wfMsg( 'vet-gallery-add-success' );
 		} else {
 			header('X-screen-type: summary');
 
 			$size = $wgRequest->getVal('size');
 			$width = $wgRequest->getVal('width');
 			$layout = $wgRequest->getVal('layout');
-			$caption = $wgRequest->getVal('caption');
 			$slider = $wgRequest->getVal('slider');
 
 			if( 'gallery' != $layout ) {
-				$tag = '[[' . $ns_vid . ':'.$name;
-				if($size != 'full') {
-					$tag .= '|thumb';
-				}
-				$tag .= '|'.$width;
-				$tag .= '|'.$layout;
+				if( '' == $mwInGallery ) { // not adding gallery, not in gallery
+					$tag = '[[' . $ns_vid . ':'.$name;
+					if($size != 'full') {
+						$tag .= '|thumb';
+					}
+					$tag .= '|'.$width;
+					$tag .= '|'.$layout;
 
-				if($caption != '') {
-					$tag .= '|'.$caption.']]';
-				} else {
-					$tag .= ']]';
-				}
+					if($caption != '') {
+						$tag .= '|'.$caption.']]';
+					} else {
+						$tag .= ']]';
+					}
+					$message = wfMsg( 'vet-single-success' );
+				} else { // we were in gallery
+					$tag = "\n" . $ns_vid . ":" . $name ;
+					if($caption != '') {
+						$tag .= "|".$caption;
+					}
+					$message = wfMsg( 'vet-gallery-add-success' );
+				}	
 			} else { // gallery needs to be treated differently...
 				$tag = "<videogallery>\n";
 				$tag .= $ns_vid . ":" . $name;			
@@ -348,12 +380,14 @@ class VideoEmbedTool {
 				} else {
 					$tag .= "\n</videogallery>";
 				}
+				$message = wfMsg( 'vet-gallery-create-success' );				
 			}
 		}
 
 		$tmpl = new EasyTemplate(dirname(__FILE__).'/templates/');
 		$tmpl->set_vars(array(
 			'tag' => $tag,
+			'message' => $message,
 			'code' => $embed_code,
 			));
 		return $tmpl->execute('summary');
