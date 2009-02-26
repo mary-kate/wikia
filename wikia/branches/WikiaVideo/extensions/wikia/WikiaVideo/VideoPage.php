@@ -112,9 +112,7 @@ EOD;
 	public function generateWysiwygWindow($refid, $align, $width, $caption, $thumb) {
 		global $wgStylePath, $wgWysiwygMetaData;
 
-		// TODO
-		//$code = $this->getThumbnailCode($width);
-		$code = '';
+		$code = $this->getThumbnailCode($width);
 
 		// TODO: fill  $wgWysiwygMetaData
 
@@ -798,6 +796,11 @@ EOD;
 
                 return $embed;
         }
+	private function getThumbnailCode($width) {
+		// TODO: get thumbnail / placeholder for now
+		$height = round( $width / $this->getRatio() );
+ 		return "<div style=\"width: {$width}px; height: {$height}px; background-color: #eee\"><br /></div>";
+	}
 
 	function openShowVideo() {
 		global $wgOut;
