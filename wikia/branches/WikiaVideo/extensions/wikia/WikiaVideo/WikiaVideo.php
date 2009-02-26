@@ -165,7 +165,7 @@ function WikiaVideo_makeVideo($title, $options, $sk) {
 
 		// defaults
 		$width = 400;
-		$thumb = '';
+		$thumb = false;
 		$caption = '';
 
 		foreach($params as $param) {
@@ -173,7 +173,7 @@ function WikiaVideo_makeVideo($title, $options, $sk) {
 			if($width_check > -1) {
 				$width = str_replace('px', '', $param);
 			} else if('thumb' == $param) {
-				$thumb = 'thumb';
+				$thumb = true;
 			} else if(('left' == $param) || ('right' == $param)) {
 				$align = $param;
 			} else {
@@ -182,7 +182,7 @@ function WikiaVideo_makeVideo($title, $options, $sk) {
 		}
 
 		if(empty($align)) {
-			if($thumb == 'thumb') {
+			if($thumb) {
 				$align = 'right';
 			} else {
 				$align = 'left';
