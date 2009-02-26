@@ -268,7 +268,7 @@ function VET_show(e, gallery, box) {
 	if(typeof gallery != "undefined") {
 
 		// if in preview mode, go away
-		if ($ ( 'editform' ) ) {
+		if ($ ( 'editform' ) && !YAHOO.lang.isNumber(e) ) {
 			alert( vet_no_preview );
 			return false;
 		}
