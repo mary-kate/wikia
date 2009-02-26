@@ -151,15 +151,16 @@ function WikiaVideo_makeVideo($title, $options, $sk) {
 	if(!$title->exists()) {
 		$out = $sk->makeColouredLinkObj(Title::newFromText('WikiaVideoAdd', NS_SPECIAL), 'new', $title->getPrefixedText(), 'name=' . $title->getDBKey());
 	} else {
+		// get refId from Wysiwyg
 		if (!empty($wgWysiwygParserEnabled)) {
 			$refId = Wysiwyg_GetRefId($options, true);
 		}
 
-		$parts = array_map( 'trim', explode( '|', $options) );
+		$params = array_map( 'trim', explode( '|', $options) );
 
 		//Wysiwyg: remove markers
 		if (!empty($wgWysiwygParserEnabled)) {
-			$parts = array_map( create_function('$par', 'return preg_replace(\'%\x7f-wtb-(\d+)-\x7f(.*?)\x7f-wte-\1-\x7f%si\', \'\\2\', $par);'), $parts);
+			$params = array_map( create_function('$par', 'return preg_replace(\'%\x7f-wtb-(\d+)-\x7f(.*?)\x7f-wte-\1-\x7f%si\', \'\\2\', $par);'), $params);
 		}	
 
 		// defaults
@@ -167,7 +168,6 @@ function WikiaVideo_makeVideo($title, $options, $sk) {
 		$thumb = '';
 		$caption = '';
 
-		$params = explode('|', $options);
 		foreach($params as $param) {
 			$width_check = strpos($param, 'px');
 			if($width_check > -1) {
