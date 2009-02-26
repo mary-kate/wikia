@@ -110,12 +110,13 @@ EOD;
 		return str_replace("\n", ' ', $s); // TODO: Figure out what for this string replace is
 	}
 
-	public function generateWysiwygWindow($refid, $align, $width, $caption, $thumb) {
+	public function generateWysiwygWindow($refid, $title, $align, $width, $caption, $thumb) {
 		global $wgStylePath, $wgWysiwygMetaData;
 
 		$code = $this->getThumbnailCode($width);
 
 		// fill  meta data
+		$wgWysiwygMetaData[$refid]['href'] = !empty($title) ? $title->getText() : '';
 		$wgWysiwygMetaData[$refid]['align'] = $align;
 		if (!empty($width)) $wgWysiwygMetaData[$refid]['width'] = intval($width);
 		if ($caption != '') $wgWysiwygMetaData[$refid]['caption'] = $caption;
@@ -841,7 +842,7 @@ EOD;
 			$image = '';
 		}
 						
- 		return "$image<div style=\"width: {$width}px; height: {$height}px; background: #eee url({$wgExtensionsPath}/wikia/Wysiwyg/fckeditor/editor/plugins/video/video.png) no-repeat 50% 50%\"><br /></div>";
+ 		return "$image<div style=\"width: {$width}px; height: {$height}px; background: transparent url({$wgExtensionsPath}/wikia/Wysiwyg/fckeditor/editor/plugins/video/video.png) no-repeat 50% 50%; position: absolute; top: 0\"><br /></div>";
 	}
 
 	function openShowVideo() {
