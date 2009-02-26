@@ -12,7 +12,7 @@ if(!defined('MEDIAWIKI')) {
 $wgExtensionCredits['other'][] = array(
         'name' => 'Video Embed Tool',
         'author' => 'Bartek Łapiński, Inez Korczyński',
-	'version' => '0.67',
+	'version' => '0.91',
 );
 
 $dir = dirname(__FILE__).'/';
@@ -56,7 +56,7 @@ $wgHooks['WikiaVideo::View:BlueLink'][] = 'VETWIkiaVideoBlueLink';
 function VETWikiaVideoBlueLink() {
         global $wgOut, $wgStylePath, $wgExtensionsPath, $wgStyleVersion, $wgHooks, $wgUser, $wgArticlePath, $wgContLang, $wgTitle;
 
-	//display the button for "adding the video"
+	//display the link for "replacing the video"
 	$special = $wgContLang->getFormattedNsText( NS_SPECIAL );
 	$url = $wgArticlePath;
 	$name = $wgTitle->getDBKey();
@@ -66,7 +66,7 @@ function VETWikiaVideoBlueLink() {
 		$url = str_replace( '$1', $special . ':WikiaVideoAdd?name=' . $name, $url );		
 	}
 
-	$s = '<br/><a id="VideoEmbedReplace" href="' . $url . '">' . wfMsg( 'wikiavideo-replace' ) . '<a/><br/><br/>';
+	$s = '<br/><a id="VideoEmbedReplace" href="' . $url . '" id="VideoEmbedReplace" >' . wfMsg( 'wikiavideo-replace' ) . '</a><br/><br/>';
 	$wgOut->addHTML( $s );
 
         if(get_class($wgUser->getSkin()) == 'SkinMonaco') {
@@ -80,10 +80,19 @@ function VETWikiaVideoBlueLink() {
 }
 
 function VETWikiaVideoRedLink() {
-        global $wgOut, $wgStylePath, $wgExtensionsPath, $wgStyleVersion, $wgHooks, $wgUser;
+        global $wgOut, $wgStylePath, $wgExtensionsPath, $wgStyleVersion, $wgHooks, $wgUser, $wgContLang, $wgTitle, $wgArticlePath;
 
-	//display the button for "adding the video"
-	$s = '<input type="submit" id="VideoEmbedCreate" value="' . wfMsg( 'wikiavideo-create' ) . '" /> ';
+	//display the link for "adding the video"
+	$special = $wgContLang->getFormattedNsText( NS_SPECIAL );
+	$url = $wgArticlePath;
+	$name = $wgTitle->getDBKey();
+	if( false !== strpos( '?', $wgArticlePath ) ) {
+		$url = str_replace( '$1', $special . ':WikiaVideoAdd&name=' . $name, $url );
+	} else {
+		$url = str_replace( '$1', $special . ':WikiaVideoAdd?name=' . $name, $url );		
+	}
+	
+	$s = '<br/><a id="VideoEmbedCreate" href="' . $url . '">' . wfMsg( 'wikiavideo-create' ) . '</a><br/><br/>';
 	$wgOut->addHTML( $s );
 
         if(get_class($wgUser->getSkin()) == 'SkinMonaco') {
@@ -182,7 +191,6 @@ function VETSetupVars($vars) {
 	$vars['vet_warn2'] = wfMsg('vet-warn2');
 	$vars['vet_warn3'] = wfMsg('vet-warn3');
 	$vars['vet_bad_extension'] = wfMsg('vet-bad-extension');
-	$vars['filetype_missing'] = wfMsg('filetype-missing');
 	$vars['file_extensions'] = $wgFileExtensions;
 	$vars['file_blacklist'] = $wgFileBlacklist;
 	$vars['check_file_extensions'] = $wgCheckFileExtensions;
@@ -193,6 +201,7 @@ function VETSetupVars($vars) {
 	$vars['vet_hide_license_message'] = wfMsg('vet-hide-license-msg');
 	$vars['vet_max_thumb'] = wfMsg('vet-max-thumb');
 	$vars['vet_title'] = wfMsg('vet-title');
+	$vars['vet_no_preview'] = wfMsg( 'vet-no-preview' );
 
 	// macbre: for FCK
 	$vars['vet_enabled'] = true;
