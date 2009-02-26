@@ -109,6 +109,36 @@ EOD;
 		return str_replace("\n", ' ', $s); // TODO: Figure out what for this string replace is
 	}
 
+	public function generateWysiwygWindow($refid, $align, $width, $caption, $thumb) {
+		global $wgStylePath, $wgWysiwygMetaData;
+
+		// TODO
+		//$code = $this->getThumbnailCode($width);
+		$code = '';
+
+		// TODO: fill  $wgWysiwygMetaData
+
+		if('false' == $thumb) { // TODO: $thumb should be boolean variable, not string
+			return "<div class=\"t{$align}\">".$code."</div>";
+		}
+
+		$url = $this->mTitle->getLocalURL('');
+
+		$s = <<<EOD
+<div class="thumb t{$align}" refid="{$refid}">
+	<div class="thumbinner" style="width:{$width}px;">
+		{$code}
+		<div class="thumbcaption">
+			<div class="magnify"><a href="{$url}" class="internal"><img src="{$wgStylePath}/common/images/magnify-clip.png" width="15" height="11" alt="" /></a></div>
+			$caption
+		</div>
+	</div>
+</div>
+EOD;
+		return str_replace("\n", ' ', $s); // TODO: Figure out what for this string replace is
+
+	}
+
 	public function parseUrl($url, $load = true) { // TODO: Consider renaming to loadFromURL
 		$provider = '';
 		$id = '';
