@@ -806,10 +806,11 @@ EOD;
                 return $embed;
         }
 	private function getThumbnailCode($width) {
+		global $wgExtensionsPath;
 		// TODO: get thumbnail / placeholder for now
 			
 		$height = round( $width / $this->getRatio() );
- 		return "<div style=\"width: {$width}px; height: {$height}px; background-color: #eee\"><br /></div>";
+ 		return "<div style=\"width: {$width}px; height: {$height}px; background: #eee url({$wgExtensionsPath}/wikia/Wysiwyg/fckeditor/editor/plugins/video/video.png) no-repeat 50% 50%\"><br /></div>";
 	}
 
 	function openShowVideo() {
