@@ -149,8 +149,6 @@ EOD;
 
 		$url = trim($url);
 
-
-		// todo make sure to check just http://something.else/ part, omit whatever follows
 		$fixed_url = strtoupper( $url );
 		$test = strpos( $fixed_url, "HTTP://" );
 		if( !false === $test ) {
@@ -373,7 +371,7 @@ EOD;
 	}
 
 	// run a check from provided api or elsewhere
-// to see if we can go to details page or not
+	// to see if we can go to details page or not
 	public function checkIfVideoExists() {
 		global $wgWikiaVideoProviders;
 		$exists = false;
@@ -479,7 +477,6 @@ EOD;
 				return '';
 		}
 	}
-
 	
 	// return video name
 	public function getVideoName() {
@@ -807,15 +804,44 @@ EOD;
 			if( 'custom' != $code ) {
                                 $embed = "<embed src=\"{$url}\" width=\"{$width}\" height=\"{$height}\" wmode=\"transparent\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" type=\"application/x-shockwave-flash\"> </embed>";
 			}
-
                 return $embed;
         }
+
 	private function getThumbnailCode($width) {
-		global $wgExtensionsPath;
-		// TODO: get thumbnail / placeholder for now
-			
-		$height = round( $width / $this->getRatio() );
- 		return "<div style=\"width: {$width}px; height: {$height}px; background: #eee url({$wgExtensionsPath}/wikia/Wysiwyg/fckeditor/editor/plugins/video/video.png) no-repeat 50% 50%\"><br /></div>";
+		global $wgExtensionsPath, $wgWikiaVideoProviders;
+		$thumb = '';
+
+		switch( $wgWikiaVideoProviders[$this->mProvider] ) {
+			case "metacafe":
+				$thumb = 'http://www.metacafe.com/thumb/' . $this->mId . '.jpg';	
+				break;
+			case "youtube":
+				$thumb = 'http://img.youtube.com/vi/' . $this->mId . '/0.jpg';
+				break;
+			case "sevenload":					
+				break;
+			case "gamevideos":
+				break;
+			case "5min":
+				break;
+			case "myvideo":
+				break;
+			case "vimeo":
+				break;
+			case 'southparkstudios':
+				break;
+			default:
+				break;
+		}
+
+		$height = round( $width / $this->getRatio() );	
+		if ( '' != $thumb) {
+			$image = "<img src=\"$thumb\" height=\"$height\" width=\"$width\" alt=\"\" />";
+		} else {
+			$image = '';
+		}
+						
+ 		return "$image<div style=\"width: {$width}px; height: {$height}px; background: #eee url({$wgExtensionsPath}/wikia/Wysiwyg/fckeditor/editor/plugins/video/video.png) no-repeat 50% 50%\"><br /></div>";
 	}
 
 	function openShowVideo() {
