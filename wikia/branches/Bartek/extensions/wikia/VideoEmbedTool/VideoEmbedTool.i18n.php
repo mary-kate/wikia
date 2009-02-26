@@ -32,7 +32,7 @@ $messages['en'] = array(
 	'vet-insert3' => 'Insert this video',
 	'vet-recent-inf' => 'Recently Inserted Videos',
 	'vet-thiswiki2' => 'This Wiki Videos ($1 results)',
-	'vet-success' => '<h1>Success</h1>The following wikitext was successfully placed in your article:',
+	'vet-success' => '<h1>Success</h1>',
 	'vet-return' => 'Return to Editing',
 	'vet-back' => 'back',
 	'vet-close' => 'close',
@@ -42,8 +42,7 @@ $messages['en'] = array(
 	'vet-imagelink' => '<b>New!</b> Insert Videos',
 	'vet-imagebutton' => 'Insert Videos' ,
 	'vet-license-cc' => 'Licenced under Creative Commons Attribution-Share Alike 3.0',
-	'vet-filetype-missing' => 'This upload is missing its file extension',
-	'vet-filetype-incorrect' => 'This upload has an incorrect file extension',
+	'vet-name-incorrect' => 'This video name contains invalid characters',
 	'vet-uploadtext' => '\'\'\'This form allows you to quickly upload and display files in articles.\'\'\'
 
 \'\'See also the [[Special:Log/upload|upload log]] and a [[Special:ImageList|list of all uploaded files]].\'\'',
@@ -60,4 +59,12 @@ $messages['en'] = array(
 	'vet-non-existing' => 'The supplied video does not exist',
 	'vet-main-info' => '<i>Search for a video or enter the full URL from any of the supported sites</i>',
 	'vet-page-success' => 'Video page was successfully updated. You may have to purge the video page to see the change.',
+	'vet-add-button' => 'Add Video',
+	'vet-added-from-gallery' => 'video added from video gallery',
+	'vet-see-all' => 'see all',
+	'vet-bad-search' => 'Error loading search query.',
+	'vet-no-preview' => 'You cannot add video from article in preview mode',
+	'vet-single-success' => 'Video was successfully placed in this article',
+	'vet-gallery-create-success' => 'A video gallery was added to this article',
+	'vet-gallery-add-success' => 'Video has been added to the video gallery in this article',
 );

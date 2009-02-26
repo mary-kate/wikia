@@ -6,7 +6,7 @@
 }
 #VideoEmbedBorder {
 	background-color: #000;
-	border 1px solid #FFF;
+	border: 1px solid #FFF;
 	filter: alpha(opacity=60);
 	height: 505px;
 	left: 0;
@@ -16,11 +16,19 @@
 	width: 810px;
 }
 
+#VideoEmbedSuccess {
+	line-height: 2em;
+	margin-bottom: 10px;
+}
+
 #VideoEmbedUrl {
-	width: 260px;
+	width: 450px;
 	padding: 2px;
-	margin-left: 40px;
 	font-family: sans-serif;			
+}
+
+#VideoEmbedMainMesg {
+	margin-top: 6px;
 }
 
 #VideoEmbedName {
@@ -35,6 +43,10 @@
 	font-size: 15pt;
 	font-weight: bold;
 	letter-spacing: -1px;
+}
+
+#VideoEmbedCaption {
+	width: 250px;
 }
 
 #VideoEmbedBody {
@@ -120,7 +132,7 @@
 }
 #VideoEmbedProgress1 {
 	position: absolute;
-	left: 326px;
+	left: 371px;
 	top: 9px;
 	display: none;
 }
@@ -159,13 +171,7 @@
 }
 
 #VideoEmbedSupported {
-	float: left;
-	font-size: 11pt;
-	font-weight: bold;
-	text-align: center;
-	width: 275px;
-	height: 125px;
-	background-color: #e3f2f3;	
+	text-align: right;
 }
 
 /*** UPLOAD/FIND ***/
