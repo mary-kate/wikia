@@ -40,6 +40,7 @@ class VideoPage extends Article {
 		parent::view();
 	}
 
+	// 
 	function view() {
 		global $wgOut, $wgUser, $wgRequest;
 
@@ -449,6 +450,7 @@ EOD;
 		$this->mName = $name;
 	}
 
+	// return provider url
 	public function getProviderUrl() {
 		global $wgWikiaVideoProviders;
 		switch( $wgWikiaVideoProviders[$this->mProvider] ) {
@@ -473,12 +475,15 @@ EOD;
 		}
 	}
 
+	
+	// return video name
 	public function getVideoName() {
 		$vname = '';
 		isset( $this->mVideoName ) ? $vname = $this->mVideoName : $vname = '';
 		return $vname;
 	}
 
+	// return url for the video file
 	public static function getUrl( $metadata ) {
 		global $wgWikiaVideoProviders;
 		$meta = split( ",", $metadata );
@@ -537,6 +542,7 @@ EOD;
 		return $this->mData;
 	}
 
+	// return normalized name for db purposes
 	public static function getNameFromTitle( $title ) {
 		global $wgCapitalLinks;
 		if ( !$wgCapitalLinks ) {
@@ -547,6 +553,7 @@ EOD;
 		return ":" . $name;
 	}
 
+	// save the video info in db, handles overwrite too
 	public function save() {
 		global $wgUser, $wgWikiaVideoProviders, $wgContLang;
 
@@ -661,6 +668,7 @@ EOD;
 		}
 	}
 
+	// handle video page revert
 	function revert() {
 		global $wgOut, $wgRequest, $wgUser;
 		$timestamp = $wgRequest->getVal( 'oldvideo' );
@@ -749,6 +757,7 @@ EOD;
                         $wgOut->addWikiMsg( 'morelinkstoimage', $this->mTitle->getPrefixedDBkey() );
         }
 
+	// return embed code for the particular video per provider
         public function getEmbedCode( $width = 300, $autoplay = false ) {
 		global $wgWikiaVideoProviders;
                 $embed = "";
