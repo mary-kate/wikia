@@ -283,7 +283,7 @@ function VET_show(e, gallery, box) {
 			// go to main page
 		} else {
 			VET_track('open/fromWysiwyg/existing');
-			if(FCK.wysiwygData[VET_refid].exists) {
+			if(FCK.wysiwygData[VET_refid].href) {
 				// go to details page
 				VET_wysiwygStart = 2;
 			} else {
