@@ -807,6 +807,7 @@ EOD;
         }
 	private function getThumbnailCode($width) {
 		// TODO: get thumbnail / placeholder for now
+			
 		$height = round( $width / $this->getRatio() );
  		return "<div style=\"width: {$width}px; height: {$height}px; background-color: #eee\"><br /></div>";
 	}
@@ -835,8 +836,7 @@ EOD;
 		$provider = $wgWikiaVideoProviders[$this->mProvider];
 		$purl = $this->getProviderUrl();
 		$ratio = $this->getTextRatio();
-		// todo messagize
-		$s = '<div id="VideoPageInfo"><a href="' . $url . '">' . $this->mTitle->getText() . ' </a> (' . $ratio . ' pixel';
+		$s = '<div id="VideoPageInfo"><a href="' . $url . '">' . $this->mTitle->getText() . ' </a> (' . $ratio . wfMsg( 'vet-pixel' );
 		$s .= ', provider: <a href="' . $purl . '" class="external" target="_blank">' . $provider . '</a>)</div>' ;
 		$wgOut->addHTML( $s );
 	}
