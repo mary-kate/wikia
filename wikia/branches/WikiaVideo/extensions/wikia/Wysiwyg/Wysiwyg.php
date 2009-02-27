@@ -1,4 +1,4 @@
-o?php
+<?php
 $wgExtensionCredits['other'][] = array(
 	'name' => 'Wikia Rich Text Editor (Wysiwyg)',
 	'description' => 'FCKeditor integration for MediaWiki',
