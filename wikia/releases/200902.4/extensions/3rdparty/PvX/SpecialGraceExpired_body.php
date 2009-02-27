@@ -81,8 +81,8 @@ class GraceExpiredPage extends QueryPage {
 
 	function formatResult( $skin, $result ) {
 		global $wgLang, $wgContLang;
-		$cat='';
-		if ($result->cat=="Abandoned") {
+		$cat= $result->cat;
+/*		if ($result->cat=="Abandoned") {
 		    $cat='abandoned';
 		}
 		if ($result->cat=="Build_stubs") {
@@ -93,7 +93,7 @@ class GraceExpiredPage extends QueryPage {
 		}
 		if ($result->cat=="Trash_builds") {
 		        $cat='trash';
-		}
+		} */
 		$d = "<i>$cat</i>, ".$wgLang->timeanddate( wfTimestamp( TS_MW, $result->value ), true );
 		$title = Title::makeTitle( $result->namespace, $result->title );
 		$link = $skin->makeKnownLinkObj( $title, htmlspecialchars( $wgContLang->convert( $title->getPrefixedText() ) ) );
