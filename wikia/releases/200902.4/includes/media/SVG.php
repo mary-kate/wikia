@@ -73,7 +73,6 @@ class SvgHandler extends ImageHandler {
 				$wgSVGConverters[$wgSVGConverter] ) . " 2>&1";
 			wfProfileIn( 'rsvg' );
 			wfDebug( __METHOD__.": $cmd\n" );
-			error_log( __METHOD__.": $cmd" );
 			$err = wfShellExec( $cmd, $retval );
 			wfProfileOut( 'rsvg' );
 		}
