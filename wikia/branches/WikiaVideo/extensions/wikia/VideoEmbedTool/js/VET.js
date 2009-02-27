@@ -70,7 +70,7 @@ function VET_loadDetails() {
 
 	var params = Array();
 	params.push('sourceId=0');
-	params.push('itemId='+FCK.wysiwygData[VET_refid].href.split(":")[1]);
+	params.push('itemId='+FCK.wysiwygData[VET_refid].href.split(":").pop());
 
 	VET_asyncTransaction = YAHOO.util.Connect.asyncRequest('GET', wgScriptPath + '/index.php?action=ajax&rs=VET&method=chooseImage&' + params.join('&'), callback);
 }
