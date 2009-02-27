@@ -1,4 +1,4 @@
-<?php
+o?php
 $wgExtensionCredits['other'][] = array(
 	'name' => 'Wikia Rich Text Editor (Wysiwyg)',
 	'description' => 'FCKeditor integration for MediaWiki',
@@ -557,6 +557,10 @@ function Wysiwyg_SetRefId($type, $params, $addMarker = true, $returnId = false) 
 		case 'tilde':
 			$data['description'] = $params['text'];
 			$result = $params['text'];
+			break;
+
+		case 'video':
+			$data['original'] = htmlspecialchars_decode(preg_replace($regexPreProcessor['search'], $regexPreProcessor['replace'], $params['original']));
 			break;
 	}
 

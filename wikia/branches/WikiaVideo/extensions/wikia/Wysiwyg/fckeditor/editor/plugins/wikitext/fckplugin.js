@@ -69,7 +69,22 @@ FCKToolbarItems.RegisterItem( 'AddImage', oTildesItem );
 FCK.originalSwitchEditMode = FCK.SwitchEditMode;
 
 FCK.WysiwygSwitchToolbars = function(switchToWikitext) {
-	var toolbarItems = document.getElementById('xToolbar').getElementsByTagName('tr')[0].childNodes;
+	// using new toolbar?
+	if (typeof FCK.WikiaUsingNewToolbar != 'undefined') {
+		var toolbar = FCK.ToolbarSet.Toolbars[0];
+		toolbar.WikiaSwitchToolbar(switchToWikitext);
+		return;
+	}
+
+	var toolbar = document.getElementById('xToolbar').getElementsByTagName('tr');
+
+	// using new toolbar?
+	if (!toolbar.length || toolbar.length < 2) {
+		// don't do anything for now
+		return;
+	}
+
+	var toolbarItems = toolbar[0].childNodes;
 	var MWtoolbar = window.parent.document.getElementById('toolbar');
 
 	// move MW toolbar next to "Source" button
@@ -436,6 +451,10 @@ FCK.SetupElementsWithRefId = function() {
 
 			case 'image':
 				FCK.ProtectImage(node);
+				break;
+
+			case 'video':
+				FCK.ProtectVideo(node);
 				break;
 
 			// add tooltip to links
