@@ -212,12 +212,6 @@ FCK.VideoUpdate = function(refid, wikitext, extraData) {
 			// set HTML
 			wrapper.innerHTML = html;
 
-			// is "simple" video wrapped by <p></p> ?
-			if (html.substr(0,3) == '<p>') {
-				// remove wrapping <p></p>
-				wrapper.innerHTML = html.substr(3, html.length-7);
-			}
-
 			// ...and "protect" it
 			wrapper.firstChild.setAttribute('refid', refid);
 			FCK.ProtectVideo(wrapper.firstChild);
