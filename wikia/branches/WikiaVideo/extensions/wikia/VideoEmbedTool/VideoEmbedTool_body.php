@@ -140,8 +140,11 @@ class VideoEmbedTool {
 		$props['vname'] = $itemTitle;
 		$props['metadata'] = implode( ",", $video->getData() );
 		$props['code'] = $video->getEmbedCode( VIDEO_PREVIEW, true );
-			
-		return $this->detailsPage($props);
+
+		$tmpl = new EasyTemplate(dirname(__FILE__).'/templates/');
+
+		$tmpl->set_vars(array('props' => $props));
+		return $tmpl->execute('edit');
 	}
 
 	function insertVideo() {
