@@ -66,7 +66,6 @@ FCKToolbarItems.RegisterItem( 'AddImage', oTildesItem );
 FCK.originalSwitchEditMode = FCK.SwitchEditMode;
 
 FCK.WysiwygSwitchToolbars = function(switchToWikitext) {
-<<<<<<< .robocza
 	// using new toolbar?
 	if (typeof FCK.WikiaUsingNewToolbar != 'undefined') {
 		var toolbar = FCK.ToolbarSet.Toolbars[0];
