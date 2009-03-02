@@ -116,7 +116,7 @@ EOD;
 		$code = $this->getThumbnailCode($width);
 
 		// fill  meta data
-		$wgWysiwygMetaData[$refid]['href'] = !empty($title) ? $title->getText() : '';
+		$wgWysiwygMetaData[$refid]['href'] = !empty($title) ? $title->getPrefixedText() : '';
 		$wgWysiwygMetaData[$refid]['align'] = $align;
 		if (!empty($width)) $wgWysiwygMetaData[$refid]['width'] = intval($width);
 		if ($caption != '') $wgWysiwygMetaData[$refid]['caption'] = $caption;
