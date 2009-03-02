@@ -76,7 +76,7 @@ function VET_doEditVideo() {
 	// setup metadata
 	var extraData = {};
 
-	extraData.href = $('VideoEmbedName').value;
+	extraData.href = $('VideoEmbedHref').value;
 	extraData.width= $('VideoEmbedManualWidth').value;
 
 	if ($('VideoEmbedThumbOption').checked) {
@@ -96,7 +96,7 @@ function VET_doEditVideo() {
 	}
 
 	// generate wikitext
-	var wikitext = '[[Video:' + extraData.href;
+	var wikitext = '[[' + extraData.href;
 
 	if (extraData.thumb) {
 		wikitext += '|thumb';

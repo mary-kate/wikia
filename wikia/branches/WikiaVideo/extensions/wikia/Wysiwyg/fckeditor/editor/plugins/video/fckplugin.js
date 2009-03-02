@@ -175,7 +175,7 @@ FCK.VideoUpdate = function(refid, wikitext, extraData) {
 	FCKUndo.SaveUndoStep();
 
 	// update metaData
-	FCK.wysiwygData[refid].original = wikitext;
+	FCK.wysiwygData[refid] = {"type": "video", "original": wikitext};
 
 	// merge with extraData
 	FCK.wysiwygData[refid] = FCK.YAHOO.lang.merge(FCK.wysiwygData[refid], extraData);

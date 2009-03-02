@@ -140,6 +140,7 @@ class VideoEmbedTool {
 		$props['vname'] = $itemTitle;
 		$props['metadata'] = implode( ",", $video->getData() );
 		$props['code'] = $video->getEmbedCode( VIDEO_PREVIEW, true );
+		$props['href'] = !empty($title) ? $title->getPrefixedText() : $itemTitle;
 
 		$tmpl = new EasyTemplate(dirname(__FILE__).'/templates/');
 
