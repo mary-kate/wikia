@@ -2,7 +2,7 @@
 $wgExtensionCredits['other'][] = array(
 	'name' => 'Wikia Rich Text Editor (Wysiwyg)',
 	'description' => 'FCKeditor integration for MediaWiki',
-	'version' => 0.1,
+	'version' => 0.11,
 	'author' => array('Inez Korczyński', '[http://pl.wikia.com/wiki/User:Macbre Maciej Brencz]', 'Maciej Błaszkowski (Marooned)', 'Łukasz \'TOR\' Garczewski')
 );
 
@@ -18,7 +18,6 @@ $wgHooks['getEditingPreferencesTab'][] = 'Wysiwyg_Toggle';
 $wgHooks['MagicWordwgVariableIDs'][] = 'Wysiwyg_RegisterMagicWordID';
 $wgHooks['LanguageGetMagic'][] = 'Wysiwyg_GetMagicWord';
 $wgHooks['InternalParseBeforeLinks'][] = 'Wysiwyg_RemoveMagicWord';
-$wgHooks['EditPageAfterGetContent'][] = 'Wysiwyg_CheckEditPageContent';
 
 function Wysiwyg_SetDomain(&$skin, &$tpl) {
 
@@ -52,26 +51,6 @@ function Wysiwyg_RemoveMagicWord(&$parser, &$text, &$strip_state) {
 	return true;
 }
 
-// macbre: handle __NOWYSIWYG__ in really weird way (get content of whole page, even when editing/adding one section)
-function Wysiwyg_CheckEditPageContent(&$text) {
-	global $wgWysiwygNoWysiwygFound;
-
-	$mw = MagicWord::get('MAG_NOWYSIWYG');
-	if ($mw->match($text)) {
-		$matches = array();
-		$countNoWysiwygAll = preg_match_all($mw->getRegex(), $text, $matches);
-		$countNoWysiwygInNoWiki = preg_match_all('/\<nowiki\>__NOWYSIWYG__\<\/nowiki\>/si', $text, $matches);
-
-		wfDebug("Wysiwyg: __NOWYSIWYG__ (count: {$countNoWysiwygAll} / in <nowiki>: {$countNoWysiwygInNoWiki})\n");
-
-		if ($countNoWysiwygAll > $countNoWysiwygInNoWiki) {
-			$wgWysiwygNoWysiwygFound = true;
-		}
-	}
-
-	return true;
-}
-
 function Wysiwyg_Toggle($toggles, $default_array = false) {
 	if(is_array($default_array)) {
 		$default_array[] = 'disablewysiwyg';
@@ -82,10 +61,12 @@ function Wysiwyg_Toggle($toggles, $default_array = false) {
 }
 
 function Wysywig_Ajax($type, $input = false, $wysiwygData = false, $articleId = -1) {
+
 	if($type == 'html2wiki') {
 		return new AjaxResponse(Wysiwyg_HtmlToWikiText($input, $wysiwygData, true));
 
 	} else if($type == 'wiki2html') {
+		wfLoadExtensionMessages('Wysiwyg');
 		$edgeCasesText = Wysiwyg_CheckEdgeCases($input);
 		if ($edgeCasesText != '') {
 			header('X-edgecases: 1');
@@ -101,7 +82,7 @@ function Wysywig_Ajax($type, $input = false, $wysiwygData = false, $articleId = 
 }
 
 function Wysiwyg_Initial($form) {
-	global $wgUser, $wgOut, $wgRequest, $IP, $wgExtensionsPath, $wgStyleVersion, $wgHooks, $wgWysiwygEdgeCasesFound, $wgWysiwygFallbackToSourceMode, $wgJsMimeType;
+	global $wgUser, $wgOut, $wgRequest, $IP, $wgExtensionsPath, $wgStyleVersion, $wgHooks, $wgWysiwygEdgeCasesFound, $wgWysiwygFallbackToSourceMode, $wgJsMimeType, $wgWysiwygEdit, $wgWysiwygUseNewToolbar;
 
 	// check user preferences option
 	if($wgUser->getOption('disablewysiwyg') == true) {
@@ -127,6 +108,9 @@ function Wysiwyg_Initial($form) {
 
 	wfLoadExtensionMessages('Wysiwyg');
 
+	// set global flag - we're using wysiwyg to edit this page
+	$wgWysiwygEdit = true;
+
 	// detect edgecases
 	$wgWysiwygEdgeCasesFound = (Wysiwyg_CheckEdgeCases($form->textbox1) != '');
 
@@ -144,11 +128,8 @@ function Wysiwyg_Initial($form) {
 		'var fallbackToSourceMode = ' . ($wgWysiwygFallbackToSourceMode ? 'true' : 'false') . ";\n" .
 		'var templateList = ' . WysiwygGetTemplateList() . ";\n" .
 		'var templateHotList = ' . WysiwygGetTemplateHotList() . ";\n" .
-		'var magicWordList = ' . Wikia::json_encode($magicWords, true) . ';'
+		'var magicWordList = ' . Wikia::json_encode($magicWords, true) . ";"
 	);
-
-	$wgOut->addScript( "<script type=\"{$wgJsMimeType}\" src=\"$wgExtensionsPath/wikia/Wysiwyg/fckeditor/fckeditor.js?$wgStyleVersion\"></script>" );
-	$wgOut->addScript( "<script type=\"{$wgJsMimeType}\" src=\"$wgExtensionsPath/wikia/Wysiwyg/wysiwyg.js?$wgStyleVersion\"></script>" );
 
 	// CSS
  	$wgOut->addLink(array(
@@ -156,6 +137,55 @@ function Wysiwyg_Initial($form) {
 		'href' => "$wgExtensionsPath/wikia/Wysiwyg/wysiwyg.css?$wgStyleVersion",
 		'type' => 'text/css'
 	));
+
+	// add support for new toolbar
+	if (!empty($wgWysiwygUseNewToolbar)) {
+		// toolbar data
+		// TODO: get it from MW article
+		// TODO: i18n
+		$toolbarData = array(
+			array(
+				'name'  => 'Text Appearance', 
+				'items' => array('H2', 'H3', 'Bold', 'Italic', 'Underline', 'StrikeThrough', 'Normal', 'Pre', 'Outdent', 'Indent')
+			),
+			array(
+				'name'  => 'Lists and Links', 
+				'items' => array('UnorderedList', 'OrderedList', 'Link', 'Unlink')
+			),
+			array(
+				'name'  => 'Insert', 
+				'items' => array('AddImage', 'AddVideo', 'Table', 'Tildes')
+			),
+			array(
+				'name'  => 'Wiki Templates', 
+				'items' => array('InsertTemplate')
+			),
+			array(
+				'name'  => 'Controls', 
+				'items' => array('Undo', 'Redo', 'Widescreen', 'Source')
+			),
+		);
+
+		// generate buckets and items data
+		$toolbarBuckets = array();
+		$toolbarItems = array();
+
+		foreach($toolbarData as $bucket) {
+			$toolbarBuckets[] = $bucket['name'];
+
+			$toolbarItems[] = '-';
+			$toolbarItems = array_merge($toolbarItems, $bucket['items']);
+		}
+
+		$wgOut->addInlineScript(
+			"var wysiwygUseNewToolbar = true;\n" .
+			"var wysiwygToolbarBuckets = " . Wikia::json_encode($toolbarBuckets) . ";\n" . 
+			"var wysiwygToolbarItems = " . Wikia::json_encode($toolbarItems) . ";"
+		);
+	}
+
+	$wgOut->addScript( "<script type=\"{$wgJsMimeType}\" src=\"$wgExtensionsPath/wikia/Wysiwyg/fckeditor/fckeditor.js?$wgStyleVersion\"></script>" );
+	$wgOut->addScript( "<script type=\"{$wgJsMimeType}\" src=\"$wgExtensionsPath/wikia/Wysiwyg/wysiwyg.js?$wgStyleVersion\"></script>" );
 
 	$wgHooks['EditPage::showEditForm:initial2'][] = 'Wysiwyg_Initial2';
 	$wgHooks['EditForm:BeforeDisplayingTextbox'][] = 'Wysiwyg_BeforeDisplayingTextbox';
@@ -239,10 +269,20 @@ function Wysiwyg_CheckEdgeCases($text) {
 		}
 	}
 
-	// macbre: existance of __NOWYSIWYG__ checked in hook handler
-	global $wgWysiwygNoWysiwygFound;
-	if (!empty($wgWysiwygNoWysiwygFound)) {
-		$edgeCasesFound[] = wfMsg('wysiwyg-edgecase-nowysiwyg');
+	// macbre: existance of __NOWYSIWYG__
+	wfDebug("Wysiwyg: checking for __NOWYSIWYG__\n");
+
+	$mw = MagicWord::get('MAG_NOWYSIWYG');
+	if ($mw->match($text)) {
+		$matches = array();
+		$countNoWysiwygAll = preg_match_all($mw->getRegex(), $text, $matches);
+		$countNoWysiwygInNoWiki = preg_match_all('/\<nowiki\>__NOWYSIWYG__\<\/nowiki\>/si', $text, $matches);
+
+		wfDebug("Wysiwyg: __NOWYSIWYG__ (count: {$countNoWysiwygAll} / in <nowiki>: {$countNoWysiwygInNoWiki})\n");
+
+		if ($countNoWysiwygAll > $countNoWysiwygInNoWiki) {
+			$edgeCasesFound[] = wfMsg('wysiwyg-edgecase-nowysiwyg');
+		}
 	}
 
 	// if edge case was found add main information about edge cases, like "Edge cases found:"
@@ -537,10 +577,14 @@ function Wysiwyg_SetRefId($type, $params, $addMarker = true, $returnId = false) 
 
 		case 'nowiki':
 		case 'gallery':
-		case 'hook':
-		case 'video':
 		case 'html':
 			$data['description'] = $params['text'];
+			$result = $params['text'];
+			break;
+
+		case 'hook':
+			$data['description'] = $params['text'];
+			$data['name'] = $params['name'];
 			$result = $params['text'];
 			break;
 
@@ -560,7 +604,8 @@ function Wysiwyg_SetRefId($type, $params, $addMarker = true, $returnId = false) 
 			break;
 
 		case 'video':
-			$data['original'] = htmlspecialchars_decode(preg_replace($regexPreProcessor['search'], $regexPreProcessor['replace'], $params['original']));
+			$data['original'] = $params['original'];
+			$result = $params['original'];
 			break;
 	}
 
@@ -573,7 +618,10 @@ function Wysiwyg_SetRefId($type, $params, $addMarker = true, $returnId = false) 
 			$data['description'] =  str_replace(' wasHtml="1"', '', $data['description']);
 		}
 		$result = htmlspecialchars($result);
-		$result = "<input type=\"button\" refid=\"{$refId}\" _fck_type=\"{$type}\" value=\"{$result}\" title=\"{$result}\" class=\"wysiwygDisabled\" />";
+
+		// CSS class based on type of placeholder
+		$className = 'wysiwyg' . strtr(ucwords($type), array(':' => '', ' ' => ''));
+		$result = "<input type=\"button\" refid=\"{$refId}\" _fck_type=\"{$type}\" value=\"{$result}\" title=\"{$result}\" class=\"wysiwygDisabled {$className}\" />";
 
 		// macbre: use placeholders
 		// they will be replaced with <input> grey boxes
