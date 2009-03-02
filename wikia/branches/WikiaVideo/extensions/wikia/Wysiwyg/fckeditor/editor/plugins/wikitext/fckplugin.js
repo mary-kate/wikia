@@ -4,9 +4,6 @@ FCKCommands.RegisterCommand('Link', new FCKDialogCommand('Link', FCKLang.DlgLnkW
 // Register templates editor
 FCK.TemplateClickCommand = new FCKDialogCommand('Template', '&nbsp;', FCKConfig.PluginsPath + 'wikitext/dialogs/template.html', 780, 490);
 
-// Wikitext infobox
-FCK.InputClickCommand = new FCKDialogCommand('inputClickCommand', '&nbsp;', FCKConfig.PluginsPath + 'wikitext/dialogs/inputClick.html', 400, 100);
-
 // signature toolbar button
 var FCKTildesCommand = function() {
 	this.Name = 'Tildes' ;
@@ -35,7 +32,7 @@ FCKTildesCommand.prototype = {
 	}
 } ;
 FCKCommands.RegisterCommand('Tildes', new FCKTildesCommand());
-var oTildesItem = new FCKToolbarButton( 'Tildes', 'Your signature with timestamp' ) ;
+var oTildesItem = new FCKToolbarButton( 'Tildes', 'Add your signature' ) ;
 oTildesItem.IconPath = FCKConfig.PluginsPath + 'wikitext/sig.gif' ;
 FCKToolbarItems.RegisterItem( 'Tildes', oTildesItem );
 
@@ -69,6 +66,24 @@ FCKToolbarItems.RegisterItem( 'AddImage', oTildesItem );
 FCK.originalSwitchEditMode = FCK.SwitchEditMode;
 
 FCK.WysiwygSwitchToolbars = function(switchToWikitext) {
+<<<<<<< .robocza
+	// using new toolbar?
+	if (typeof FCK.WikiaUsingNewToolbar != 'undefined') {
+		var toolbar = FCK.ToolbarSet.Toolbars[0];
+		toolbar.WikiaSwitchToolbar(switchToWikitext);
+		return;
+	}
+
+	var toolbar = document.getElementById('xToolbar').getElementsByTagName('tr');
+
+	// using new toolbar?
+	if (!toolbar.length || toolbar.length < 2) {
+		// don't do anything for now
+		return;
+	}
+
+	var toolbarItems = toolbar[0].childNodes;
+
 	// using new toolbar?
 	if (typeof FCK.WikiaUsingNewToolbar != 'undefined') {
 		var toolbar = FCK.ToolbarSet.Toolbars[0];
@@ -375,7 +390,8 @@ FCK.Events.AttachEvent( 'OnAfterSetHTML', function() {
 					if (FCK.Track && FCK.wysiwygData) {
 						FCK.Track('/wikitextbox/' + (FCK.wysiwygData[refid] ? FCK.wysiwygData[refid].type : 'unknown'));
 					}
-					FCK.InputClickCommand.Execute();
+					// show simple YUI dialog
+					FCK.ShowInfoDialog('To edit this section please switch to WikiText view by clicking the "Source" button');
 				}
 			}
 			// probably IE - go up the DOM tree looking for refid element of the image
@@ -452,7 +468,7 @@ FCK.SetupElementsWithRefId = function() {
 			case 'image':
 				FCK.ProtectImage(node);
 				break;
-
+			
 			case 'video':
 				FCK.ProtectVideo(node);
 				break;
@@ -465,6 +481,13 @@ FCK.SetupElementsWithRefId = function() {
 			case 'external link':
 				node.title = data.href;
 				break;
+
+			// hooks
+			case 'hook':
+				// setup <videogallery>
+				if ( (typeof FCK.VideoSetupGalleryPlaceholder != 'undefined') && (data.name == 'videogallery') ) {
+					FCK.VideoSetupGalleryPlaceholder(node);
+				}
 		}
 
 		// fix issues with input tags and cursor
@@ -478,13 +501,37 @@ FCK.SetupElementsWithRefId = function() {
 	return true;
 }
 
+// show YUI dialog
+FCK.ShowInfoDialog = function(text) {
+	var Dialog = new FCK.YAHOO.widget.SimpleDialog("wysiwygInfobox",
+	{
+		width: "450px",
+		zIndex: 999,
+		effect: {effect: FCK.YAHOO.widget.ContainerEffect.FADE, duration: 0.25},
+		fixedcenter: true,
+		modal: true,
+		draggable: true,
+		close: false
+	});
+
+	var buttons = [ { text: 'OK', handler: function() {this.hide()}, isDefault: true} ];
+
+	Dialog.setHeader('&nbsp;');
+	Dialog.setBody(text);
+	Dialog.cfg.queueProperty("buttons", buttons);
+
+	Dialog.render(window.parent.document.body);
+	Dialog.show();
+}
+
 // setup grey wikitext placeholder: block context menu, add dirty span(s) if needed
 FCK.FixWikitextPlaceholder = function(placeholder) {
 	// disable context menu
 	placeholder.setAttribute('_fckContextMenuDisabled', true);
 
 	// placeholder is last child of p, div, li, dt or dd node - add dirty span
-	if (placeholder.parentNode.nodeName.IEquals(['p', 'div', 'li', 'dt', 'dd']) &&  placeholder == placeholder.parentNode.lastChild) {
+	if (placeholder.parentNode.nodeName.IEquals(['p', 'div', 'li', 'dt', 'dd']) && 
+		(placeholder == placeholder.parentNode.lastChild || placeholder == placeholder.parentNode.lastChild.previousSibling) ) {
 		if (FCKBrowserInfo.IsGecko10) {
 			// add &nbsp; for FF2.x
 			var frag = FCK.EditorDocument.createDocumentFragment();
@@ -492,8 +539,7 @@ FCK.FixWikitextPlaceholder = function(placeholder) {
 			placeholder.parentNode.appendChild(frag);
 		}
 		else {
-			// add 'dirty' <br/>
-			FCKTools.AppendBogusBr(placeholder.parentNode);
+			FCK.InsertDirtySpanAfter(placeholder);
 		}
 	}
 
@@ -777,7 +823,7 @@ FCK.ImageProtectSetupOverlayMenu = function(refid, div) {
 
 	// add "move" option for images handled by contentEditable
 	if (FCK.UseContentEditable) {
-		overlay.innerHTML += '<span class="imageOverlayDrag" onmousedown="FCK.ProtectImageDrag('+refid+')">move</span>';
+		overlay.innerHTML += '<span class="imageOverlayDrag">move</span>';
 	}
 
 	// show overlay menu
@@ -1127,9 +1173,12 @@ FCK.TemplatePreviewShow = function(placeholder) {
 
 	preview.style.display = '';
 
+	// toolbar height (the one build in FCK)
+	var toolbarY = FCK.ToolbarSet._TargetElement.offsetHeight;
+
 	// calculate cloud placement
 	var x = FCK.YD.getX(placeholder);
-	var y = FCK.YD.getY(placeholder) + placeholder.clientHeight + 32;
+	var y = FCK.YD.getY(placeholder) + placeholder.clientHeight + toolbarY + 5;
 
 	// editor area scroll
 	var scrollXY = [FCK.EditorDocument.body.scrollLeft, FCK.EditorDocument.body.scrollTop];

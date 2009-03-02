@@ -12,11 +12,22 @@ FCKConfig.EditorAreaStyles = window.parent.stylepath + '/monobook/main.css';
 FCKConfig.BodyId = 'bodyContent';
 FCKConfig.BodyClass = 'fckeditor';
 
+//
+// load plugins
+//
+
+// main wikia plugin
 FCKConfig.Plugins.Add('wikitext');
 
-if (typeof window.parent.vet_enabled != 'undefined') {
-	FCKConfig.Plugins.Add('video');
-	toolbarItems.splice(20, 0, 'AddVideo');
+// video embed tool
+FCKConfig.Plugins.Add('video');
+toolbarItems.splice(20, 0, 'AddVideo');
+
+// new toolbar
+if (typeof window.parent.wysiwygUseNewToolbar != 'undefined') {
+	toolbarItems = window.parent.wysiwygToolbarItems;
+
+	FCKConfig.Plugins.Add('toolbar');
 }
 
 FCKConfig.ToolbarSets["Default"] = [ toolbarItems ];

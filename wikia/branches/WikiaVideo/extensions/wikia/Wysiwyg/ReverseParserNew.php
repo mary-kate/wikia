@@ -170,9 +170,9 @@ class ReverseParser {
 			if($isListNode) {
 				// fix for different list types on the same level of nesting
 				if($node->previousSibling && in_array($node->previousSibling->nodeName, array('ol', 'ul', 'dl')) && $this->listLevel > 1) {
-					$childOut = "\n" . trim($childOut);
+					$childOut = "\n" . $childOut;
 				} else {
-					$childOut = trim($childOut);
+					$childOut = $childOut;
 				}
 
 				if (!$node->getAttribute('washtml')) {
@@ -190,6 +190,7 @@ class ReverseParser {
 		if($node->nodeType == XML_ELEMENT_NODE) {
 
 			$washtml = $node->getAttribute('washtml');
+			$newNode = $node->getAttribute('_wysiwyg_new');
 
 			if(empty($washtml)) {
 
@@ -217,6 +218,11 @@ class ReverseParser {
 						if($node->nextSibling && $node->nextSibling->nextSibling && 
 							$node->nextSibling->nextSibling->nodeType != XML_COMMENT_NODE) {
 							$out = "<br />";
+						}
+
+						// <br /> added in FCK by pressing Shift+ENTER
+						else if ($newNode) {
+							$out = "\n";
 						}
 						
 						break;
@@ -251,6 +257,12 @@ class ReverseParser {
 						}
 
 						$previousNode = $this->getPreviousElementNode($node);
+
+						// <p><br /> </p>
+						if ( ($textContent == ' ') && ($node->firstChild->nodeType == XML_ELEMENT_NODE) && 
+							($node->firstChild->nodeName == 'br') ) {
+							$textContent = '';
+						}
 
 						// if the first previous XML_ELEMENT_NODE (so no text and no comment) of the current
 						// node is <p> then add new line before the current one
@@ -321,7 +333,7 @@ class ReverseParser {
 								$linesAfter++;
 							}
 						} else {
-							$linesBefore = 0;
+							$linesBefore = $node->previousSibling ? 2 : 0;
 							$linesAfter = 1;
 							$textContent = " ".trim($textContent)." ";
 						}
@@ -581,6 +593,26 @@ class ReverseParser {
 			if($this->nodeHasLineStart($node)) {
 				$out = "\n{$out}";
 			}
+
+			// add newlines before/after wikimarkup if current node has been added in FCK wysiwyg mode
+			// FCK formats HTML a bit different then MW parser
+			if ($newNode) {
+				$prevNode = $this->getPreviousElementNode($node);
+
+				if (!empty($prevNode)) {
+					switch($node->nodeName) {
+						case 'ol':
+						case 'ul':
+							$out = "\n\n{$out}\n";
+							break;
+
+						case 'table':
+							$out = "\n\n{$out}\n";
+							break;
+					}
+				}
+			}
+			
 		} else if($node->nodeType == XML_COMMENT_NODE) {
 
 			// if the next sibling node of the current one comment node is text or node (so any sibling)
@@ -615,6 +647,16 @@ class ReverseParser {
 					case 'tr':
 					case 'body':
 						$textContent = '';
+						break;
+
+					case 'li':
+						// we may have single space before <ul> nested inside another <li>
+						// e.g.
+						// * <strike>foo</strike>
+						// ** test
+						if ( $node->nextSibling && $this->isList($node->nextSibling) ) {
+							$textContent = substr($textContent, 0, -1);
+						}
 						break;
 					default:
 				}
@@ -709,7 +751,7 @@ class ReverseParser {
 
 				// WikiaVideo
 				case 'video':
-					return $refData['description'];
+					return $refData['original'];
 
 				// fallback
 				default:
@@ -866,13 +908,19 @@ class ReverseParser {
 	private function handleListItem($node, $content) {
 		switch($node->nodeName) {
 			case 'li':
-				if( $node->hasChildNodes() && in_array($node->childNodes->item(0)->nodeName, array('ul', 'ol')) ) {
+				if( $node->hasChildNodes() && in_array($node->firstChild->nodeName, array('ul', 'ol')) ) {
 					// nested lists like
 					// *** foo
 					// *** bar
 					return $content . "\n";
 				} else {
-					return $this->listIndent . $this->listBullets . substr($content, 0, -1) . "\n";
+					// remove last char only (if space) from list items containing only text
+					// so without nested lists
+					if (substr($content, -1) == ' ') {
+						$content = substr($content, 0, -1);
+					}
+
+					return $this->listIndent . $this->listBullets . $content . "\n";
 				}
 			break;
 		}
@@ -1022,7 +1070,7 @@ class ReverseParser {
 
 		$attStr = '';
 		foreach ($node->attributes as $attrName => $attrNode) {
-			if( in_array($attrName, array('washtml', '_wysiwyg_new_line', '_wysiwyg_line_start')) ) {
+			if( in_array($attrName, array('washtml', '_wysiwyg_new_line', '_wysiwyg_line_start', '_wysiwyg_new')) ) {
 				continue;
 			}
 			$attStr .= ' ' . $attrName . '="' . $attrNode->nodeValue  . '"';

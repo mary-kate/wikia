@@ -686,6 +686,11 @@ FCKStyle.prototype =
 			}
 		}
 
+		// mark block styles with _wysiwyg_new attribute
+		if ( this.GetType() == FCK_STYLE_BLOCK ) {
+			el.setAttribute('_wysiwyg_new', 'true');
+		}
+
 		// Assign the style attribute.
 		if ( this._GetStyleText().length > 0 )
 			el.style.cssText = this.GetFinalStyleValue() ;
