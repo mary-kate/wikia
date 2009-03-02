@@ -26,48 +26,103 @@ var VET_ratio = 1;
 var VET_shownMax = false;
 var VET_inGalleryPosition = false;
 
-function VET_loadDetails() {
+// macbre: show edit video screen (wysiwyg edit)
+function VET_editVideo() {
 	YAHOO.util.Dom.setStyle('VideoEmbedMain', 'display', 'none');
 	VET_indicator(1, true);
 
 	var callback = {
 		success: function(o) {
+			var data = FCK.wysiwygData[VET_refid];
+			FCK.log('video # ' + VET_refid + ' edit');
+			FCK.log(data);
+
 			VET_displayDetails(o.responseText);
 
 			$('VideoEmbedBack').style.display = 'none';
 
 			setTimeout(function() {
-				if(!FCK.wysiwygData[VET_refid].thumb) {
-					$('VideoEmbedFullOption').click();
+				if(!data.thumb) {
+					$('VideoEmbedThumbOption').click();
 				}
-				if(FCK.wysiwygData[VET_refid].align && FCK.wysiwygData[VET_refid].align == 'left') {
+				if(data.align && data.align == 'left') {
 					$('VideoEmbedLayoutLeft').click();
 				}
-				if(FCK.wysiwygData[VET_refid].width) {
-					VET_slider.setValue(FCK.wysiwygData[VET_refid].width / (VET_slider.getRealValue() / VET_slider.getValue()), true);
-					VET_width = FCK.wysiwygData[VET_refid].width;
+				if(data.width) {
+					VET_slider.setValue(data.width / (VET_slider.getRealValue() / VET_slider.getValue()), true);
+					VET_width = data.width;
 					$( 'VideoEmbedManualWidth' ).value = VET_width;
 				}
 			}, 200);
 
-			if(FCK.wysiwygData[VET_refid].caption) {
-				$('VideoEmbedCaption').value = FCK.wysiwygData[VET_refid].caption;
-			}
-
-			if( ( '-1' != VET_gallery ) || VET_inGalleryPosition ) {
-				$( 'ImageWidthRow' ).style.display = 'none';
-				$( 'ImageLayoutRow' ).style.display = 'none';
-				$( 'VideoEmbedSizeRow' ).style.display = 'none';						
+			if(data.caption) {
+				$('VideoEmbedCaption').value = data.caption;
 			}
 		}
-	}
+	};
 
-	YAHOO.util.Connect.abort(VET_asyncTransaction)
-	var params = Array();
+	YAHOO.util.Connect.abort(VET_asyncTransaction);
+	var params = [];
 	params.push('itemTitle='+FCK.wysiwygData[VET_refid].href.split(":").pop());
 
 	VET_asyncTransaction = YAHOO.util.Connect.asyncRequest('GET', wgScriptPath + '/index.php?action=ajax&rs=VET&method=editVideo&' + params.join('&'), callback);
 }
+
+// macbre: update video in wysiwyg mode
+function VET_doEditVideo() {
+
+	YAHOO.util.Event.preventDefault( YAHOO.util.Event.getEvent() );
+
+	// setup metadata
+	var extraData = {};
+
+	extraData.href = $('VideoEmbedName').value;
+	extraData.width= $('VideoEmbedManualWidth').value;
+
+	if ($('VideoEmbedThumbOption').checked) {
+		extraData.thumb = 1;
+	}
+	
+	if (extraData.thumb) {
+		if( $('VideoEmbedLayoutLeft').checked ) {
+			extraData.align = 'left';
+		} else {
+			extraData.align = 'right';
+		}
+	}
+
+	if ($('VideoEmbedCaption').value) {
+		 extraData.caption = $('VideoEmbedCaption').value;
+	}
+
+	// generate wikitext
+	var wikitext = '[[Video:' + extraData.href;
+
+	if (extraData.thumb) {
+		wikitext += '|thumb';
+	}
+
+	if (extraData.align) {
+		wikitext += '|' + extraData.align;
+	}
+
+	if (extraData.width) {
+		wikitext += '|' + extraData.width + 'px';
+	}
+
+	if (extraData.caption) {
+		wikitext += '|' + extraData.caption;
+	}
+
+	wikitext += ']]';
+
+	// update FCK
+	FCK.VideoUpdate(VET_refid, wikitext, extraData);
+
+	// close dialog
+	VET_close();
+}
+
 
 /*
  * Functions/methods
@@ -193,7 +248,7 @@ function VET_showPreview(e) {
 	VET_previewPanel.render();
 	VET_previewPanel.show();
 	if(VET_refid != null && VET_wysiwygStart == 2) {
-		VET_loadDetails();
+		VET_editVideo();
 	} else {
 		VET_loadMain();
 	}
@@ -308,7 +363,7 @@ function VET_show(e, gallery, box) {
 
 		VET_panel.show();
 		if(VET_refid != null && VET_wysiwygStart == 2) {
-			VET_loadDetails();
+			VET_editVideo();
 		} else {
 			if($('VideoQuery')) $('VideoQuery').focus();
 		}
@@ -351,7 +406,7 @@ function VET_show(e, gallery, box) {
 	VET_panel.render();
 	VET_panel.show();
 	if(VET_refid != null && VET_wysiwygStart == 2) {
-		VET_loadDetails();
+		VET_editVideo();
 	} else {
 		VET_loadMain();
 	}
