@@ -1,6 +1,8 @@
 // "add video" toolbar button
 var FCKAddVideoCommand = function() {
 	this.Name = 'AddVideo' ;
+
+	this.IsEnabled = (typeof window.parent.vet_enabled != 'undefined');
 }
 FCKAddVideoCommand.prototype = {
 	Execute : function() {
@@ -9,7 +11,7 @@ FCKAddVideoCommand.prototype = {
 		window.parent.VET_show(-1);
 	},
 	GetState : function() {
-		if ( FCK.EditMode != FCK_EDITMODE_WYSIWYG )
+		if ( (FCK.EditMode != FCK_EDITMODE_WYSIWYG) || (this.IsEnabled == false) )
 			return FCK_TRISTATE_DISABLED ;
 		return FCK_TRISTATE_OFF;
 	}
@@ -23,8 +25,9 @@ var oTildesItem = new FCKToolbarButton( 'AddVideo', 'Add video' ) ;
 oTildesItem.IconPath = FCKConfig.PluginsPath + 'video/addVideo.png';
 
 // register toolbar item
-FCKToolbarItems.RegisterItem( 'AddVideo', oTildesItem );	
+FCKToolbarItems.RegisterItem( 'AddVideo', oTildesItem );
 
+<<<<<<< .robocza
 // video overlay with edit/delete link
 FCK.VideoOverlay = false;
 
