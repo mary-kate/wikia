@@ -246,6 +246,7 @@ function Wysiwyg_AlternateEdit($form) {
 }
 
 function Wysiwyg_NotifySaveComplete(&$article, &$user, &$text, &$summary, &$minoredit, &$watchthis, &$sectionanchor, &$flags, $revision) {
+	/*
         if(is_object($revision)) {
                 global $wgSitename;
 
@@ -268,6 +269,7 @@ function Wysiwyg_NotifySaveComplete(&$article, &$user, &$text, &$summary, &$mino
 		curl_exec($ch);
 		curl_close($ch);
         }
+	*/
         return true;
 }
 
