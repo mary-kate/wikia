@@ -699,6 +699,9 @@ class ReverseParser {
 
 		wfDebug("ReverseParserNew cleanupTextContent for: >>{$text}<<\n");
 
+		wfProfileOut(__METHOD__);
+		return $text;
+
 		// 1. wrap repeating apostrophes using <nowiki>
 		$text = preg_replace("/('{2,})/", '<nowiki>$1</nowiki>', $text);
 
