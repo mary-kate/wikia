@@ -249,11 +249,12 @@ function Wysiwyg_NotifySaveComplete(&$article, &$user, &$text, &$summary, &$mino
         if(is_object($revision)) {
                 global $wgSitename;
 
-		$diffUrl = $article->getTitle()->getFullURL('diff='.$revision->getId());
+		$url = $article->getTitle()->getFullURL();
 
                 $diffEngine = new DifferenceEngine($article->getTitle());
                 $diffText = $diffEngine->getDiffBody();
-                $out = "<div><table class='diff'><col class='diff-marker' /><col class='diff-content' /><col class='diff-marker' /><col class='diff-content' /><col class='diff-content' /><tbody>{$diffText}</tbody></table></div>";
+		$diffText = str_replace("\n", "", $diffText);
+                $out = "<div><a href='{$url}'>link</a><table class='diff'><col class='diff-marker' /><col class='diff-content' /><col class='diff-marker' /><col class='diff-content' /><col class='diff-content' /><tbody>{$diffText}</tbody></table></div>";
 
 		$data = array('title'=>$wgSitename,'text'=>$out);
 		$ch = curl_init();
