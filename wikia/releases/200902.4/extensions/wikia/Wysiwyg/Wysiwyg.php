@@ -248,104 +248,22 @@ function Wysiwyg_AlternateEdit($form) {
 function Wysiwyg_NotifySaveComplete(&$article, &$user, &$text, &$summary, &$minoredit, &$watchthis, &$sectionanchor, &$flags, $revision) {
         if(is_object($revision)) {
                 global $wgSitename;
+
 		$diffUrl = $article->getTitle()->getFullURL('diff='.$revision->getId());
+
                 $diffEngine = new DifferenceEngine($article->getTitle());
                 $diffText = $diffEngine->getDiffBody();
-                $out = <<<EOD
-<html>
-<body>
-<style>
-/*
-** Diff rendering
-*/
-table.diff, td.diff-otitle, td.diff-ntitle {
-        background-color: white;
-}
-td.diff-otitle,
-td.diff-ntitle {
-        text-align: center;
-}
-td.diff-marker {
-        text-align: right;
-}
-.rtl td.diff-marker {
-        text-align: left;
-}
-td.diff-lineno {
-        font-weight: bold;
-}
-td.diff-addedline {
-        background: #cfc;
-        font-size: smaller;
-}
-td.diff-deletedline {
-        background: #ffa;
-        font-size: smaller;
-}
-td.diff-context {
-        background: #eee;
-        font-size: smaller;
-}
-.diffchange {
-        color: red;
-        font-weight: bold;
-        text-decoration: none;
-        white-space: pre-wrap;
-        white-space: -moz-pre-wrap;
-}
+                $out = "<div><table class='diff'><col class='diff-marker' /><col class='diff-content' /><col class='diff-marker' /><col class='diff-content' /><col class='diff-content' /><tbody>{$diffText}</tbody></table></div>";
 
-table.diff {
-        border: none;
-        width: 98%;
-        border-spacing: 4px;
-
-        /* Fixed layout is required to ensure that cells containing long URLs
-           don't widen in Safari, Internet Explorer, or iCab */
-        table-layout: fixed;
-}
-table.diff td {
-        padding: 0;
-}
-table.diff col.diff-marker {
-        width: 2%;
-}
-table.diff col.diff-content {
-        width: 48%;
-}
-table.diff td div {
-        /* Force-wrap very long lines such as URLs or page-widening char strings.
-           CSS 3 draft..., but Gecko doesn't support it yet:
-           https://bugzilla.mozilla.org/show_bug.cgi?id=99457 */
-        word-wrap: break-word;
-
-        /* As fallback, scrollbars will be added for very wide cells
-           instead of text overflowing or widening */
-        overflow: auto;
-
-        /* The above rule breaks on very old versions of Mozilla due
-           to a bug which collapses the table cells to a single line.
-
-           In Mozilla 1.1 and below with JavaScript enabled, the rule
-           will be overridden with this by diff.js; wide cell contents
-           then spill horizontally without widening the rest of the
-           table: */
-        /* overflow: visible; */
-}
-</style>
-<a href="$diffUrl">Diff link</a>
-<table class="diff">
-<col class='diff-marker' />
-<col class='diff-content' />
-<col class='diff-marker' />
-<col class='diff-content' />
-<col class='diff-content' />
-<tbody>
-$diffText
-</tbody></table>
-</body>
-</html>
-EOD;
-                mail('inez@wikia-inc.com, macbre@wikia-inc.com', "Wysiwyg Edit @ $wgSitename", $out, "Content-Type: text/html; charset=UTF-8");
+		$data = array('title'=>$wgSitename,'text'=>$out);
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, "http://fp026.sjc.wikia-inc.com/inez/Blogger.php");
+		curl_setopt($ch, CURLOPT_HEADER, 0);
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
+		curl_exec($ch);
+		curl_close($ch);
         }
         return true;
 }
