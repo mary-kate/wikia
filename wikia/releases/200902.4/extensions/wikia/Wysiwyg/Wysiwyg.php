@@ -254,7 +254,7 @@ function Wysiwyg_NotifySaveComplete(&$article, &$user, &$text, &$summary, &$mino
                 $diffEngine = new DifferenceEngine($article->getTitle(), $revision->mParentId, $revision->mId);
                 $diffText = $diffEngine->getDiffBody();
 		$diffText = str_replace("\n", "", $diffText);
-                $out = "<div><a href='{$url}'>link</a><table class='diff'><col class='diff-marker' /><col class='diff-content' /><col class='diff-marker' /><col class='diff-content' /><col class='diff-content' /><tbody>{$diffText}</tbody></table></div>";
+                $out = "<div><a href='{$url}'>link</a><table class='diff'><col class='diff-marker' /><col class='diff-content' /><col class='diff-marker' /><col class='diff-content' /><tbody>{$diffText}</tbody></table></div>";
 
 		mail('inez@wikia-inc.com', "Wysiwyg Edit - $wgSitename", $out, "Content-Type: text/html; charset=UTF-8");
 
