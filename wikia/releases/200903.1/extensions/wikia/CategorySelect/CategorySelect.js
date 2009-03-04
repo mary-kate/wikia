@@ -206,7 +206,7 @@ function addCategory(category, params, index) {
 	//if user provides "abc|def" explode this into category "abc" and sortkey "def"
 	extractedParams = extractSortkey(category);
 	category = extractedParams['name'];
-	params['sortkey'] = extractedParams['sort'];
+	params['sortkey'] = extractedParams['sort'] + params['sortkey'];
 
 	if (category == '') {
 		alert(csEmptyName);
@@ -418,6 +418,7 @@ function initTooltip() {
 
 //`view article` mode
 function showCSpanel() {
+	csType = 'view';
 	var pars = 'rs=CategorySelectGenerateHTMLforView';
 	var callback = {
 		success: function(originalRequest) {
@@ -425,7 +426,6 @@ function showCSpanel() {
 			var el = document.createElement('div');
 			el.innerHTML = originalRequest.responseText;
 			$('catlinks').appendChild(el);
-			csType = 'view';
 			initHandlers();
 			initAutoComplete();
 			initializeCategories();
