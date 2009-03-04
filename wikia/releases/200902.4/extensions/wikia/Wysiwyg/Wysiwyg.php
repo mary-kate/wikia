@@ -246,7 +246,6 @@ function Wysiwyg_AlternateEdit($form) {
 }
 
 function Wysiwyg_NotifySaveComplete(&$article, &$user, &$text, &$summary, &$minoredit, &$watchthis, &$sectionanchor, &$flags, $revision) {
-	/*
         if(is_object($revision)) {
                 global $wgSitename;
 
@@ -259,9 +258,9 @@ function Wysiwyg_NotifySaveComplete(&$article, &$user, &$text, &$summary, &$mino
 
 		mail('inez@wikia-inc.com', "Wysiwyg Edit - $wgSitename", $out, "Content-Type: text/html; charset=UTF-8");
 
-		$data = array('title'=>$wgSitename,'text'=>$out);
+		$data = array('title'=>$wgSitename,'description'=>$out);
 		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, "http://fp026.sjc.wikia-inc.com/inez/Blogger.php");
+		curl_setopt($ch, CURLOPT_URL, "http://fp026.sjc.wikia-inc.com/inez/test.php");
 		curl_setopt($ch, CURLOPT_HEADER, 0);
 		curl_setopt($ch, CURLOPT_POST, 1);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
@@ -269,7 +268,6 @@ function Wysiwyg_NotifySaveComplete(&$article, &$user, &$text, &$summary, &$mino
 		curl_exec($ch);
 		curl_close($ch);
         }
-	*/
         return true;
 }
 
