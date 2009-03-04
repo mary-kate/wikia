@@ -35,19 +35,21 @@ class WysiwygParser extends Parser {
 			if ( substr($this->mCurrentPrefix, -1) == ':' && $this->mLastCommonPrefix ) {
 				$this->mListLevel = strlen($this->mCurrentPrefix);
 				$style = ' style="margin-left:'.($this->mListLevel*40).'px"';
+
+				if ($this->mEmptyLineCounter%2 == 1) {
+					$style .= ' _wysiwyg_new_line="true" _new_lines_before="1"';
+				}
+
 				if ($this->mListLevel > 1) {
-					if ($this->mLast != 'close' && empty($result)) {
-						$result .= '</p>';
+					if ($this->mLast != 'close' && !empty($result)) {
+						//
 					}
-					else if ($result == '') {
+					else if ( ($result == '') &&  !($this->mEmptyLineCounter%2 == 1) ) {
 						$result .= '<!--NEW_LINE_1-->';
 					}
 					$result .= "<p{$style}>";
 				}
 				else {
-					if ($this->mEmptyLineCounter%2 == 1) {
-						$style .= ' _wysiwyg_new_line="true" _new_lines_before="1"';
-					}
 					$result .= "<p{$style}>";
 				}
 				$this->mLast = 'open';

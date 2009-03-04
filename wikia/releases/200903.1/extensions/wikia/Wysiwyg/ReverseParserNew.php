@@ -219,8 +219,9 @@ class ReverseParser {
 
 						// <br /> inside paragraphs (without ' <!--NEW_LINE_1-->' following it)
 						if($node->nextSibling && $node->nextSibling->nextSibling && 
+							$node->nextSibling->nodeType != XML_COMMENT_NODE &&
 							$node->nextSibling->nextSibling->nodeType != XML_COMMENT_NODE) {
-							$out = "<br />";
+							$out = '<br />';
 						}
 
 						// <br /> added in FCK by pressing Shift+ENTER
@@ -254,7 +255,6 @@ class ReverseParser {
 						// handle indentations
 						if ($indentation > 0) {
 							$textContent = str_repeat(':', $indentation) . rtrim($textContent);
-							$prefix = $node->previousSibling ? "\n" : '';
 
 							$isDefinitionList = true;
 						}
@@ -287,29 +287,32 @@ class ReverseParser {
 
 						} else {
 							// add new lines before paragraph
-							$newLinesBefore = $node->getAttribute('_new_lines_before');
-							if(is_numeric($newLinesBefore)) {
+							$newLinesBefore = intval($node->getAttribute('_new_lines_before'));
+							if($newLinesBefore > 0) {
 								$textContent = str_repeat("\n", $newLinesBefore).$textContent;
 							}
 
-							// we're in definion list and previous node wasn't paragraph -> add extra line break
-							if($isDefinitionList && $node->previousSibling) {
-								$textContent = "\n{$textContent}";
+							// add newline before paragraph if previous node ...
+							if(!empty($previousNode) && (!$isDefinitionList || $newLinesBefore == 0) ) {
+								// is list
+								if ($this->isList($previousNode)) {
+									$textContent = "\n{$textContent}";
+								}
+
+								// is <pre>
+								if ($previousNode->nodeName == 'pre') {
+									$textContent = "\n{$textContent}";
+								}
+
+								// has wasHTML attribute set
+								if ($previousNode->hasAttribute('washtml')) {
+									$textContent = "\n{$textContent}";
+								}
 							}
 
 							// <p> is second child of <td> and previous sibling is text node
 							// and first child of parent node
 							if ( ($node->parentNode->nodeName == 'td') && $node->previousSibling && $node->previousSibling->isSameNode($node->parentNode->firstChild) && ($node->previousSibling->nodeType == XML_TEXT_NODE) ) {
-								$textContent = "\n{$textContent}";
-							}
-
-							// add \n if previous node is <pre>
-							if ($previousNode && $previousNode->nodeName == 'pre') {
-								$textContent = "\n{$textContent}";
-							}
-
-							// add \n if previous node has wasHTML attribute set
-							if ($previousNode && $previousNode->hasAttribute('washtml')) {
 								$textContent = "\n{$textContent}";
 							}
 						}
@@ -526,13 +529,6 @@ class ReverseParser {
 					case 'ol':
 						// rtrim used to remove \n added by the last list item
 						$out = rtrim($textContent, "\n");
-
-						// add newline if next node is paragraph
-						$nextNode = $this->getNextElementNode($node);
-
-						if ( $nextNode && in_array($nextNode->nodeName, array('p')) ) {
-							$out = "$out\n";
-						}
 						break;
 
 					// lists elements
