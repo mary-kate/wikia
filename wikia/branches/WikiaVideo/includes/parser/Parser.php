@@ -1522,7 +1522,7 @@ class Parser
 	 * @private
 	 */
 	function replaceInternalLinks( $s ) {
-		global $wgContLang, $wgWysiwygParserEnabled, $wgEnableWikiaVideoExt;
+		global $wgContLang, $wgWysiwygParserEnabled, $wgEnableVideoToolExt;
 		static $fname = 'Parser::replaceInternalLinks' ;
 
 		wfProfileIn( $fname );
@@ -1758,12 +1758,25 @@ class Parser
 				wfProfileOut( "$fname-interwiki" );
 
 				if($ns == NS_VIDEO) {
-					if(!empty($wgEnableWikiaVideoExt)) {
+					if(!empty($wgEnableVideoToolExt)) {
 						wfProfileIn("$fname-video");
-						$text = $this->replaceExternalLinks($text);
-						$text = $this->replaceInternalLinks($text);
-						$s .= $prefix . $this->armorLinks(WikiaVideo_makeVideo($nt, $text, $sk)).$trail;
-						$this->mOutput->addImage(':'.$nt->getDBkey());
+
+						// Wysiwyg: mark videos
+						if (!empty($wgWysiwygParserEnabled)) {
+							Wysiwyg_SetRefId('video', array('text' => &$text, 'link' => $link, 'wasblank' => $wasblank, 'noforce' => $noforce, 'original' => $originalWikitext));
+
+							$wgWysiwygParserEnabled = false;
+							$text = $this->replaceExternalLinks(preg_replace('/\x7e-start-\d+-stop/', '', $text));
+							$text = $this->replaceInternalLinks(preg_replace('/\x7d-\d{4}/', '', $text));
+							$wgWysiwygParserEnabled = true;
+							$s .= $prefix . $this->armorLinks(WikiaVideo_makeVideo($nt, $text, $sk)).$trail;
+						}
+						else {
+							$text = $this->replaceExternalLinks($text);
+							$text = $this->replaceInternalLinks($text);
+							$s .= $prefix . $this->armorLinks(WikiaVideo_makeVideo($nt, $text, $sk)).$trail;
+							$this->mOutput->addImage(':'.$nt->getDBkey());
+						}
 						wfProfileOut("$fname-video");
 						continue;
 					}
@@ -3470,12 +3483,6 @@ class Parser
 						$output = $this->renderImageGallery( $content, $attributes );
 					}
 					break;
-				// support for WikiaVideo
-				case 'video':
-					if (!empty($wgWysiwygParserEnabled)) {
-						$output = Wysiwyg_SetRefId('video', array('text' => &$content), false);
-						break;
-					}
 				default:
 					if( isset( $this->mTagHooks[$name] ) ) {
 						# Workaround for PHP bug 35229 and similar
@@ -3487,7 +3494,7 @@ class Parser
 							$tmp = ($content != ''
 								? "<{$name}{$attrText}>{$content}</{$name}>"
 								: "<{$name}{$attrText}/>");
-							$output = Wysiwyg_SetRefId('hook', array('text' => &$tmp), false);
+							$output = Wysiwyg_SetRefId('hook', array('text' => &$tmp, 'name' => $name), false);
 						} else {
 							$output = call_user_func_array( $this->mTagHooks[$name],
 								array( $content, $attributes, $this ) );
