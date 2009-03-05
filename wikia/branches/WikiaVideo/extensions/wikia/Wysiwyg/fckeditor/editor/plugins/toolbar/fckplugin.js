@@ -1,5 +1,28 @@
 FCK.log('new toolbar enabled...');
 
+// show toolbar tooltip
+FCK.WikiaToolbarShowTooltip = function(content) {
+	FCK.log('showing toolbar tooltip');
+
+	// create tooltip node
+	var docObj = window.parent.document;
+	var tooltip = docObj.createElement('DIV');
+	tooltip.id = 'wysiwygToolbarTooltip';
+
+	docObj.body.appendChild(tooltip);
+
+	// set HTML & CSS
+	tooltip.innerHTML = content;
+	tooltip.style.top = parseInt(FCK.YD.getY('editform') - 30) + 'px';
+	tooltip.style.left = '500px';
+
+	// add close handler
+	FCK.YE.addListener('wysiwygToolbarTooltipClose', 'click', function(e) {
+		FCK.YD.get('wysiwygToolbarTooltip').style.display = 'none';
+		window.parent.sajax_do_call('WysiwygToolbarRemoveTooltip', [], function() {});
+	});
+}
+
 // WikiaSeparator class for separating buckets
 var WikiaSeparator = function( bucket  ) { this.Bucket = bucket; };
 WikiaSeparator.prototype.Create = function(node) { }
@@ -23,31 +46,33 @@ WikiaToolbar.prototype.Create = function(parentElement) {
 	FCK.log('toolbar rendering');
 
 	// setup new toolbar
-	parentElement.className = 'color1';
-
 	var toolbarDoc = FCKTools.GetElementDocument(parentElement);
 	var toolbar = toolbarDoc.createElement('TABLE');
 	toolbar.id = 'fck_toolbar';
 	toolbar.className = 'reset';
-
+	
 	parentElement.appendChild(toolbar);
+
+	parentElement.style.display = 'none';
 
 	// store toolbar object
 	this.Toolbar = toolbar;
 
 	// add new toolbar CSS
-	FCKTools.AppendStyleSheet(toolbarDoc, window.parent.wgExtensionsPath + '/wikia/Wysiwyg/toolbar/toolbar.css?' + window.parent.wgStyleVersion);
+	FCKTools.AppendStyleSheet(toolbarDoc, window.parent.wgExtensionsPath + '/wikia/Wysiwyg/fckeditor/editor/plugins/toolbar/toolbar.css');
 
 	// set toolbar foreground / background color based on #page_bar (.color1 CSS class)
 	var pageBar = new FCK.YAHOO.util.Element('page_bar');
-	if (pageBar) {
-		toolbar.style.color= pageBar.getStyle('color');
-		toolbar.style.backgroundColor= pageBar.getStyle('backgroundColor');
-	}
+
+	var backgroundColor= pageBar.getStyle('backgroundColor') || '#efefde';
+
+	toolbar.style.color= pageBar.getStyle('color') || '#000';
+	parentElement.style.backgroundColor= backgroundColor;
 
 	var toolbarRow = toolbar.insertRow(-1);
 	var currentBucket = false;
 	var currentBucketItems = 0;
+	var bucketsCount = 0;
 
 	// add toolbar items
 	for ( var i = 0 ; i < this.Items.length ; i++ ) {
@@ -58,12 +83,13 @@ WikiaToolbar.prototype.Create = function(parentElement) {
 			// set width of previous bucket <UL>
 			if (currentBucket && currentBucketItems > 1) {
 				currentBucket.style.maxWidth = (currentBucketItems*28) + 'px';
+				this.addBucketIEFixes(currentBucket);
 			}
 
 			// create new bucket
 			var toolbarCell = toolbarRow.insertCell(-1);
-			toolbarCell.innerHTML = '<div class="clearfix color1">' + 
-				'<label title="' + item.Bucket.name + '" class="color1">' + item.Bucket.name  + '</label><ul></ul></div>';
+			toolbarCell.innerHTML = '<div class="clearfix" style="background-color: ' + backgroundColor  + '">' + 
+				'<label title="' + item.Bucket.name + '">' + item.Bucket.name  + '</label><ul></ul></div>';
 
 			// set CSS class for last bucket
 			if (item.Bucket.last) {
@@ -73,6 +99,10 @@ WikiaToolbar.prototype.Create = function(parentElement) {
 			// get <ul> node - new items will be added there
 			currentBucket = toolbarCell.getElementsByTagName('ul')[0];
 			currentBucketItems = 0;
+
+			// set id
+			currentBucket.id = 'fck_toolbar_bucket_' + (++bucketsCount);
+
 		}
 		else {
 			// add item to current bucket
@@ -81,11 +111,68 @@ WikiaToolbar.prototype.Create = function(parentElement) {
 			currentBucketItems++;
 		}
 	}
+
+	this.addBucketIEFixes(currentBucket);
+
 	// set width of last bucket <UL>
 	if (currentBucket && currentBucketItems > 1) {
 		currentBucket.style.maxWidth = (currentBucketItems*28) + 'px';
 	}
+
+	// show tooltip
+	if (typeof window.parent.wysiwygToolbarTooltip != 'undefined') {
+		FCK.WikiaToolbarShowTooltip(window.parent.wysiwygToolbarTooltip);
+	}
+	else {
+		FCK.log('not showing toolbar tooltip');
+	}
+
+	// and finally show our super cool toolbar
+	parentElement.style.display = 'block';
 }
+
+// setup onmouseover / onmouseout event handlers for IE
+WikiaToolbar.prototype.addBucketIEFixes = function(bucket) {
+
+	// apply only to IE
+	if (!FCKBrowserInfo.IsIE) {
+		return;
+	}
+
+	var timeout;
+
+	FCKTools.AddEventListener(bucket.parentNode, 'mouseover', function(e) {
+		if (FCK.EditMode != FCK_EDITMODE_WYSIWYG) {
+			return;
+		}
+
+		var id = bucket.id.split('_').pop();
+		bucket.parentNode.style.height = 'auto';
+		setTimeout("var node = document.getElementById('fck_toolbar_bucket_" + id  + "').parentNode;" +
+			"node.style.height = node.offsetHeight + 'px'", 50);
+
+		// emulate min-width
+		if (bucket.parentNode.offsetWidth < 125) {
+			bucket.parentNode.style.width = '120px';
+		}
+		else {
+			bucket.parentNode.style.width = 'auto';
+		}
+
+		clearTimeout(timeout);
+	});
+
+	FCKTools.AddEventListener(bucket.parentNode, 'mouseout', function(e) {
+		if (FCK.EditMode != FCK_EDITMODE_WYSIWYG) {
+			return;
+		}
+
+		var id = bucket.id.split('_').pop();
+		timeout = setTimeout("var node = document.getElementById('fck_toolbar_bucket_" + id  + "').parentNode;" +
+			"node.style.height = '41px'", 500);
+	});
+}
+
 
 FCK.WikiaUsingNewToolbar = true;
 
@@ -129,7 +216,7 @@ var WikiaButtonUI = function( name, label, tooltip, iconPathOrStripInfoArray, st
 
 	this.Icon = new FCKIcon( iconPathOrStripInfoArray ) ;
 
-	this.IconsPath = window.parent.wgExtensionsPath + '/wikia/Wysiwyg/toolbar/';
+	this.IconsPath = window.parent.wgExtensionsPath + '/wikia/Wysiwyg/fckeditor/editor/plugins/toolbar/icons/';
 	this.Icons = {
 		'H2':		'text_heading_2.png',
 		'H3':		'text_heading_3.png',
@@ -389,15 +476,36 @@ var StyleCommand = function(id, name) {
         this.Name = name;
 	this.Command = new FCKCoreStyleCommand(id);
 	this.IsActive = false;
+	this.IsDisabled = false;
+
+	// handle state of block style buttons when cursor is inside list
+	if (id == 'h2' || id == 'h3' || id == 'pre' || id == 'p') {
+		this.disableWhenInsideList = true;
+		FCK.log(id + ' will be disabled inside list');
+	}
 
 	FCKStyles.AttachStyleStateChange(this.Command.StyleName, this._OnStyleStateChange, this);
 }
 StyleCommand.prototype = {
+	IsInsideList : function() {
+		var startContainer = FCKSelection.GetBoundaryParentElement(true);
+		var listNode = startContainer;
+
+		if (listNode && listNode.nodeName.IEquals(['ul', 'ol', 'li'])) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	},
         Execute : function() {
 		this.Command.Execute();
         },
         GetState : function() {
 		if ( FCK.EditMode != FCK_EDITMODE_WYSIWYG ) {
+			return FCK_TRISTATE_DISABLED ;
+		}
+		else if (this.IsDisabled) {
 			return FCK_TRISTATE_DISABLED ;
 		}
 		else {
@@ -406,6 +514,7 @@ StyleCommand.prototype = {
 	 },
 	_OnStyleStateChange : function( styleName, isActive ) {
 		this.IsActive = isActive;
+		this.IsDisabled = (this.disableWhenInsideList && this.IsInsideList());
 
 		if (isActive) {
 			FCK.log('current style: ' + this.Name);
@@ -424,12 +533,12 @@ var WideScreenToggle = function() {
 	var toggleWideScreenLink = window.parent.document.getElementById("toggleWideScreen");
 
 	// try to get listener function attached to "Enter Widescreen" link
-	if (toggleWideScreenLink) {
-		this.toggleWideScreenListener = FCK.YAHOO.util.Event.getListeners(toggleWideScreenLink).pop();
+	if (toggleWideScreenLink && FCK.YE.getListeners) {
+		this.toggleWideScreenListener = FCK.YE.getListeners(toggleWideScreenLink).pop();
 	}
 
 	// get current widescreen mode state
-	this.isActive = FCK.YAHOO.util.Dom.hasClass(window.parent.document.body, 'editingWide');
+	this.isActive = FCK.YD.hasClass(window.parent.document.body, 'editingWide');
  }
 
 WideScreenToggle.prototype = {
@@ -461,7 +570,7 @@ FCKCommands.RegisterCommand('Pre', new StyleCommand('pre', 'Preformatted'));
 FCKToolbarItems.RegisterItem('Pre', new FCKToolbarButton('Pre', 'Preformatted'));
 
 FCKCommands.RegisterCommand('Normal', new StyleCommand('p', 'Normal Text'));
-FCKToolbarItems.RegisterItem('Normal', new FCKToolbarButton('Normal', 'Plain Text'));
+FCKToolbarItems.RegisterItem('Normal', new FCKToolbarButton('Normal', 'Remove Heading'));
 
 FCKCommands.RegisterCommand('Widescreen', new WideScreenToggle());
 FCKToolbarItems.RegisterItem('Widescreen', new FCKToolbarButton('Widescreen', 'Toggle widescreen'));
