@@ -58,6 +58,7 @@ function VET_editVideo() {
 			if(data.caption) {
 				$('VideoEmbedCaption').value = data.caption;
 			}
+			VET_toggleSizing(true);
 		}
 	};
 
