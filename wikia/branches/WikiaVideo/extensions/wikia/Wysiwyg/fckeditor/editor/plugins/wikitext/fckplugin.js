@@ -12,16 +12,18 @@ FCKTildesCommand.prototype = {
 	Execute : function() {
 		FCKUndo.SaveUndoStep() ;
 
-		var text = document.createTextNode('--');
+		var text = FCK.EditorDocument.createTextNode('--');
 		FCK.InsertElement(text) ;
 
-		FCK.wysiwygData.push({'type':'tilde','description':'~~~~'});
+		var refid = FCK.GetFreeRefId();
 
-		var input = document.createElement('input');
+		FCK.wysiwygData[refid] = {'type':'tilde','description':'~~~~'};
+
+		var input = FCK.EditorDocument.createElement('input');
 		input.value = "~~~~";
 		input.className = 'wysiwygDisabled';
 		input.type = 'button';
-		input.setAttribute('refid', FCK.wysiwygData.length-1);
+		input.setAttribute('refid', refid);
 
 		FCK.InsertElement(input) ;
 	},
@@ -82,28 +84,13 @@ FCK.WysiwygSwitchToolbars = function(switchToWikitext) {
 	}
 
 	var toolbarItems = toolbar[0].childNodes;
-
-	// using new toolbar?
-	if (typeof FCK.WikiaUsingNewToolbar != 'undefined') {
-		var toolbar = FCK.ToolbarSet.Toolbars[0];
-		toolbar.WikiaSwitchToolbar(switchToWikitext);
-		return;
-	}
-
-	var toolbar = document.getElementById('xToolbar').getElementsByTagName('tr');
-
-	// using new toolbar?
-	if (!toolbar.length || toolbar.length < 2) {
-		// don't do anything for now
-		return;
-	}
-
-	var toolbarItems = toolbar[0].childNodes;
 	var MWtoolbar = window.parent.document.getElementById('toolbar');
+	var iframe = window.parent.document.getElementById('wpTextbox1___Frame');
 
 	// move MW toolbar next to "Source" button
-	if (MWtoolbar) {
+	if (MWtoolbar && iframe) {
 		MWtoolbar.style.marginLeft = (toolbarItems[1].offsetWidth + 4) + 'px';
+		MWtoolbar.style.top = (iframe.offsetTop + 3) + 'px';
 	}
 
 	// show/hide FCK toolbar items
@@ -431,11 +418,13 @@ FCK.Events.AttachEvent( 'OnAfterSetHTML', function() {
 				}
 			}
 		});
+
+		// initial toolbar positioning
+		FCK.WysiwygSwitchToolbars(1);
 	}
 
 	// for QA team tests
 	FCK.GetParentForm().className = (FCK.EditMode == FCK_EDITMODE_WYSIWYG ? 'wysiwyg' : 'source') + '_mode';
-
 });
 
 // setup elements with refId (after switching to wysiwyg mode and after drag&drop is finished)
@@ -470,6 +459,10 @@ FCK.SetupElementsWithRefId = function() {
 			
 			case 'video':
 				FCK.ProtectVideo(node);
+				break;
+
+			case 'video':
+				//FCK.ProtectVideo(node);
 				break;
 
 			// add tooltip to links

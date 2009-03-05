@@ -35,6 +35,7 @@ class ReverseParser {
 	}
 
 	private function parseToDOM($html, $parseAsXML = true) {
+			wfProfileIn(__METHOD__);
 
 			$ret = false;
 
@@ -60,6 +61,8 @@ class ReverseParser {
 			}
 
 			wfRestoreWarnings();
+
+			wfProfileOut(__METHOD__);
 
 			// return <body> node or false if XML parsing failed
 			return $ret;
@@ -185,7 +188,7 @@ class ReverseParser {
 		// parse current node
 		$out = '';
 
-		$textContent = ($childOut != '') ? $childOut : $node->textContent;
+		$textContent = ($childOut != '') ? $childOut : $this->cleanupTextContent($node);
 
 		if($node->nodeType == XML_ELEMENT_NODE) {
 
@@ -216,8 +219,9 @@ class ReverseParser {
 
 						// <br /> inside paragraphs (without ' <!--NEW_LINE_1-->' following it)
 						if($node->nextSibling && $node->nextSibling->nextSibling && 
+							$node->nextSibling->nodeType != XML_COMMENT_NODE &&
 							$node->nextSibling->nextSibling->nodeType != XML_COMMENT_NODE) {
-							$out = "<br />";
+							$out = '<br />';
 						}
 
 						// <br /> added in FCK by pressing Shift+ENTER
@@ -251,7 +255,6 @@ class ReverseParser {
 						// handle indentations
 						if ($indentation > 0) {
 							$textContent = str_repeat(':', $indentation) . rtrim($textContent);
-							$prefix = $node->previousSibling ? "\n" : '';
 
 							$isDefinitionList = true;
 						}
@@ -284,13 +287,32 @@ class ReverseParser {
 
 						} else {
 							// add new lines before paragraph
-							$newLinesBefore = $node->getAttribute('_new_lines_before');
-							if(is_numeric($newLinesBefore)) {
+							$newLinesBefore = intval($node->getAttribute('_new_lines_before'));
+							if($newLinesBefore > 0) {
 								$textContent = str_repeat("\n", $newLinesBefore).$textContent;
 							}
 
-							// we're in definion list and previous node wasn't paragraph -> add extra line break
-							if($isDefinitionList && $node->previousSibling) {
+							// add newline before paragraph if previous node ...
+							if(!empty($previousNode) && (!$isDefinitionList || $newLinesBefore == 0) ) {
+								// is list
+								if ($this->isList($previousNode)) {
+									$textContent = "\n{$textContent}";
+								}
+
+								// is <pre>
+								if ($previousNode->nodeName == 'pre') {
+									$textContent = "\n{$textContent}";
+								}
+
+								// has wasHTML attribute set
+								if ($previousNode->hasAttribute('washtml')) {
+									$textContent = "\n{$textContent}";
+								}
+							}
+
+							// <p> is second child of <td> and previous sibling is text node
+							// and first child of parent node
+							if ( ($node->parentNode->nodeName == 'td') && $node->previousSibling && $node->previousSibling->isSameNode($node->parentNode->firstChild) && ($node->previousSibling->nodeType == XML_TEXT_NODE) ) {
 								$textContent = "\n{$textContent}";
 							}
 
@@ -523,13 +545,6 @@ class ReverseParser {
 					case 'ol':
 						// rtrim used to remove \n added by the last list item
 						$out = rtrim($textContent, "\n");
-
-						// add newline if next node is paragraph
-						$nextNode = $this->getNextElementNode($node);
-
-						if ( $nextNode && in_array($nextNode->nodeName, array('p')) ) {
-							$out = "$out\n";
-						}
 						break;
 
 					// lists elements
@@ -544,6 +559,14 @@ class ReverseParser {
 					case 'iframe':
 						if (!empty($nodeData)) {
 							$out = $this->handleMedia($node, $textContent);
+
+							// add newline if next node is paragraph
+							// and was in next line of wikitext
+							$nextNode = $this->getNextElementNode($node);
+
+							if ( $nextNode && ($nextNode->nodeName == 'p') && $nextNode->hasAttribute('_new_lines_before') ) {
+								$out = "$out\n";
+							}
 
 							// add newline if next node is paragraph
 							// and was in next line of wikitext
@@ -674,6 +697,64 @@ class ReverseParser {
 
 		wfProfileOut(__METHOD__);
 		return $out;
+	}
+
+	/**
+	 * Clean up node text content
+	 */
+	private function cleanupTextContent($node) {
+		wfProfileIn(__METHOD__);
+
+		$text = $node->textContent;
+
+		$text = strtr($text, array('<' => '&lt;', '>' => '&gt;'));
+
+		if($text == '') {
+			wfProfileOut(__METHOD__);
+			return '';
+		}
+
+		// is text node the first child of parent node?
+		$isFirstChild = $node->isSameNode($node->parentNode->firstChild);
+
+		wfDebug("ReverseParserNew cleanupTextContent for: >>{$text}<<\n");
+
+		// 1. wrap repeating apostrophes using <nowiki>
+		$text = preg_replace("/('{2,})/", '<nowiki>$1</nowiki>', $text);
+
+		// 2. wrap = using <nowiki>
+		$text = preg_replace("/^(=+)/m", '<nowiki>$1</nowiki>', $text);
+
+		// 3. wrap wikimarkup special characters (only when they're at the beginning of the p/td, don't do it for link descriptions...)
+		if ( $isFirstChild && !in_array($node->parentNode->nodeName, array('a')) ) {
+			// 3a. wrap list bullets using <nowiki>
+			$text = preg_replace("/^([#*]+)/", '<nowiki>$1</nowiki>', $text);
+
+			// 3b. semicolon at the beginning of the line
+			if(in_array($text{0}, array(':', ';'))) {
+				$text = '<nowiki>' . $text{0} . '</nowiki>' . substr($text, 1);
+			}
+		}
+
+		// 4. wrap curly brackets {{ }} using <nowiki>
+		$text = preg_replace("/({{2,3})([^}]+)(}{2,3})/", '<nowiki>$1$2$3</nowiki>', $text);
+
+		// 5. wrap magic words __ __ using <nowiki>
+		$text = preg_replace("/__([\d\D]+)__/", '<nowiki>__$1__</nowiki>', $text);
+
+		// 6. wrap [[foo]] using <nowiki>
+		$text = preg_replace("/(\[{2,})([^]]+)(\]{2,})/", '<nowiki>$1$2$3</nowiki>', $text);
+
+		// 7. wrap [<url protocol>...] using <nowiki> (don't apply to link descriptions)
+		if ($node->parentNode->nodeName != 'a') {
+			$text = preg_replace("/\[(?=".$this->getUrlProtocols().")([^\]]+)\]/", '<nowiki>[$1]</nowiki>', $text);
+		}
+
+		// 8. wrap repeating ~ using <nowiki>
+		$text = preg_replace("/(~{3,5})/", '<nowiki>$1</nowiki>', $text);
+
+		wfProfileOut(__METHOD__);
+		return $text;
 	}
 
 	/**
@@ -956,7 +1037,7 @@ class ReverseParser {
 			return false;
 		}
 
-		if($node->getAttribute('_wysiwyg_new_line')) {
+		if($node->getAttribute('_wysiwyg_new_line') && !in_array($node->nodeName, array('a')) )  {
 			return true;
 		}
 
@@ -982,6 +1063,12 @@ class ReverseParser {
 			return false;
 		}
 
+		// <ul> / <ol> should always have _wysiwyg_line_start attribute
+		// lists added in FCK won't have it -> force return of TRUE
+		if ($this->isList($node) && !$node->getAttribute('washtml')) {
+			return true;
+		}
+
 		// they start new line, but we don't have to add new line before them
 		if ($node->nodeName == 'p') {
 			return false;
@@ -992,8 +1079,8 @@ class ReverseParser {
 			return true;
 		}
 
-		// HTML tags (e.g. image containers)
-		if ($node->getAttribute('_wysiwyg_line_start')) {
+		// HTML tags (e.g. image containers, ignore inline tags)
+		if ($node->getAttribute('_wysiwyg_line_start') && !in_array($node->nodeName, array('a')) ) {
 			return true;
 		}
 

@@ -9,6 +9,7 @@ $wgExtensionCredits['other'][] = array(
 $dir = dirname(__FILE__).'/';
 $wgExtensionMessagesFiles['Wysiwyg'] = $dir.'Wysiwyg.i18n.php';
 $wgAjaxExportList[] = 'Wysywig_Ajax';
+$wgAjaxExportList[] = 'WysiwygToolbarRemoveTooltip';
 $wgEnableMWSuggest = true;
 
 $wgHooks['AlternateEdit'][] = 'Wysiwyg_AlternateEdit';
@@ -145,23 +146,23 @@ function Wysiwyg_Initial($form) {
 		// TODO: i18n
 		$toolbarData = array(
 			array(
-				'name'  => 'Text Appearance', 
+				'name'  => 'Text Appearance',
 				'items' => array('H2', 'H3', 'Bold', 'Italic', 'Underline', 'StrikeThrough', 'Normal', 'Pre', 'Outdent', 'Indent')
 			),
 			array(
-				'name'  => 'Lists and Links', 
+				'name'  => 'Lists and Links',
 				'items' => array('UnorderedList', 'OrderedList', 'Link', 'Unlink')
 			),
 			array(
-				'name'  => 'Insert', 
+				'name'  => 'Insert',
 				'items' => array('AddImage', 'AddVideo', 'Table', 'Tildes')
 			),
 			array(
-				'name'  => 'Wiki Templates', 
+				'name'  => 'Wiki Templates',
 				'items' => array('InsertTemplate')
 			),
 			array(
-				'name'  => 'Controls', 
+				'name'  => 'Controls',
 				'items' => array('Undo', 'Redo', 'Widescreen', 'Source')
 			),
 		);
@@ -177,10 +178,14 @@ function Wysiwyg_Initial($form) {
 			$toolbarItems = array_merge($toolbarItems, $bucket['items']);
 		}
 
+		// tooltip
+		$toolbarTooltip = WysiwygToolbarAddTooltip();
+
 		$wgOut->addInlineScript(
 			"var wysiwygUseNewToolbar = true;\n" .
-			"var wysiwygToolbarBuckets = " . Wikia::json_encode($toolbarBuckets) . ";\n" . 
-			"var wysiwygToolbarItems = " . Wikia::json_encode($toolbarItems) . ";"
+			"var wysiwygToolbarBuckets = " . Wikia::json_encode($toolbarBuckets) . ";\n" .
+			"var wysiwygToolbarItems = " . Wikia::json_encode($toolbarItems) . ";" .
+			( !empty($toolbarTooltip) ? "\nvar wysiwygToolbarTooltip = " . Xml::encodeJsVar($toolbarTooltip) . ";" : '')
 		);
 	}
 
@@ -227,8 +232,22 @@ function Wysiwyg_AlternateEdit($form) {
 function Wysiwyg_NotifySaveComplete(&$article, &$user, &$text, &$summary, &$minoredit, &$watchthis, &$sectionanchor, &$flags, $revision) {
 	if(is_object($revision)) {
 		global $wgSitename;
-		$diffUrl = $article->getTitle()->getFullURL('diff='.$revision->getId());
-		UserMailer::send(array(new MailAddress('korczynski1.wysiwyg@blogger.com'), new MailAddress('inez@wikia-inc.com')), new MailAddress('inez@wikia-inc.com'), "Wysiwyg Edit @ $wgSitename", $diffUrl);
+
+		$url = $article->getTitle()->getFullURL();
+		$diffEngine = new DifferenceEngine($article->getTitle(), $revision->mParentId, $revision->mId);
+		$diffText = $diffEngine->getDiffBody();
+		$diffText = str_replace("\n", "", $diffText);
+		$out = "<a href=\"{$url}\">link</a><table class='diff'><col class='diff-marker' /><col class='diff-content' /><col class='diff-marker' /><col class='diff-content' /><tbody>{$diffText}</tbody></table>";
+
+		$data = array('title' => $wgSitename, 'description' => $out);
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, "http://fp026.sjc.wikia-inc.com/inez/test.php");
+		curl_setopt($ch, CURLOPT_HEADER, 0);
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_exec($ch);
+		curl_close($ch);
 	}
 	return true;
 }
@@ -456,6 +475,9 @@ function Wysiwyg_SetRefId($type, $params, $addMarker = true, $returnId = false) 
 	$data = array('type' => $type);
 	$result = '';
 
+	// CSS class based on type of placeholder
+	$className = 'wysiwygDisabled wysiwyg' . strtr(ucwords($type), array(':' => '', ' ' => ''));
+
 	// macbre: whether to replace $params['text'] with placeholder
 	// used for links with templates (e.g. [[foo|{{bar}}]]
 	$returnPlaceholder = false;
@@ -572,7 +594,7 @@ function Wysiwyg_SetRefId($type, $params, $addMarker = true, $returnId = false) 
 
 		case 'interwiki':
 			$data['originalCall'] = htmlspecialchars_decode(preg_replace($regexPreProcessor['search'], $regexPreProcessor['replace'], $params['original']));
-			$result = $data['originalCall']; 
+			$result = $data['originalCall'];
 			break;
 
 		case 'nowiki':
@@ -585,7 +607,20 @@ function Wysiwyg_SetRefId($type, $params, $addMarker = true, $returnId = false) 
 		case 'hook':
 			$data['description'] = $params['text'];
 			$data['name'] = $params['name'];
-			$result = $params['text'];
+
+			// return different placeholder content for different hook types
+			switch($params['name']) {
+				case 'inputbox':
+				case 'videogallery':
+					$result = "<{$params['name']}>";
+					break;
+				default:
+					$result = $params['text'];
+			}
+
+			// class name based on hook type
+			$className .= ' wysiwygHook' . ucfirst($params['name']);
+
 			break;
 
 		case 'double underscore: toc':
@@ -619,9 +654,7 @@ function Wysiwyg_SetRefId($type, $params, $addMarker = true, $returnId = false) 
 		}
 		$result = htmlspecialchars($result);
 
-		// CSS class based on type of placeholder
-		$className = 'wysiwyg' . strtr(ucwords($type), array(':' => '', ' ' => ''));
-		$result = "<input type=\"button\" refid=\"{$refId}\" _fck_type=\"{$type}\" value=\"{$result}\" title=\"{$result}\" class=\"wysiwygDisabled {$className}\" />";
+		$result = "<input type=\"button\" refid=\"{$refId}\" _fck_type=\"{$type}\" value=\"{$result}\" title=\"{$result}\" class=\"{$className}\" />";
 
 		// macbre: use placeholders
 		// they will be replaced with <input> grey boxes
@@ -806,7 +839,6 @@ function WysiwygParserHookCallback($input, $args, $parser) {
 	return $input;
 }
 
-
 /**
  * Decide whether we should show first time edit popup
  */
@@ -888,4 +920,49 @@ function WysiwygFirstEditMessage() {
 	}
 
 	return;
+}
+
+/**
+ * Add tooltip on first usage of new toolbar
+ *
+ * @author Maciej Brencz <macbre at wikia-inc.com>
+ */
+function WysiwygToolbarAddTooltip() {
+
+	// logic to check whether we should show tooltip
+	global $wgUser;
+
+	if ($wgUser->isAnon()) {
+		// don't show for anon user
+		$closed = true;
+	}
+	else {
+		$closed = $wgUser->getOption('wysiwyg-toolbar-closed', 0) ? true : false;
+	}
+
+	return ($closed ? false : wfMsgExt('wysiwyg-tooltip' , 'parse').'<span id="wysiwygToolbarTooltipClose">&nbsp;</span>');
+}
+
+/**
+ * Permanently remove tooltip
+ *
+ * @author Maciej Brencz <macbre at wikia-inc.com>
+ */
+function WysiwygToolbarRemoveTooltip() {
+
+	// store in user settings
+	global $wgUser;
+
+	if ($wgUser->isAnon()) {
+		return;
+	}
+
+	$wgUser->setOption('wysiwyg-toolbar-closed', 1);
+	$wgUser->saveSettings();
+
+	// commit
+	$dbw = wfGetDB( DB_MASTER );
+	$dbw->commit();
+
+	return new AjaxResponse('ok');
 }
