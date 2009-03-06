@@ -37,7 +37,6 @@ FCK.ProtectVideo = function(video) {
 	// for browsers supporting contentEditable
 	if (FCK.UseContentEditable) {
 		video.setAttribute('contentEditable', false);
-		video.style.position = 'relative';
 
 		// apply contentEditable to all child nodes of video
 		FCK.YD.getElementsBy(
