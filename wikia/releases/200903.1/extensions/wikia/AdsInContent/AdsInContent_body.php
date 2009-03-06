@@ -239,7 +239,7 @@ if ( $wgUser->getSkin() === 'monaco' ) {
 	google_color_url = "002BB8";';
 }
 
-$body .= '//--></script><script src="http://pagead2.googlesyndication.com/pagead/show_ads.js" type="text/javascript"></script>'
+$body .= '//--></script><script src="http://pagead2.googlesyndication.com/pagead/show_ads.js" type="text/javascript"></script>';
 
 		return $body;
 	}
