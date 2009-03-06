@@ -122,7 +122,7 @@ EOD;
 		if ($caption != '') $wgWysiwygMetaData[$refid]['caption'] = $caption;
 
 		if(empty($thumb)) {
-			return "<div class=\"t{$align}\" refid=\"{$refid}\">{$code}</div>";
+			return "<div class=\"t{$align}\" refid=\"{$refid}\" style=\"position:relative\">{$code}</div>";
 		}
 
 		$wgWysiwygMetaData[$refid]['thumb'] = 1;
@@ -130,7 +130,7 @@ EOD;
 		$url = $this->mTitle->getLocalURL('');
 
 		$s = <<<EOD
-<div class="thumb t{$align}" refid="{$refid}">
+<div class="thumb t{$align}" refid="{$refid}" style="position:relative">
 	<div class="thumbinner" style="width:{$width}px;">
 		{$code}
 		<div class="thumbcaption">
