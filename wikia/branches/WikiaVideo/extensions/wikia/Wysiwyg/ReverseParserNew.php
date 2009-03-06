@@ -255,7 +255,7 @@ class ReverseParser {
 						// handle indentations
 						if ($indentation > 0) {
 							$textContent = str_repeat(':', $indentation) . rtrim($textContent);
-
+							$prefix = "\n";
 							$isDefinitionList = true;
 						}
 
@@ -313,22 +313,6 @@ class ReverseParser {
 							// <p> is second child of <td> and previous sibling is text node
 							// and first child of parent node
 							if ( ($node->parentNode->nodeName == 'td') && $node->previousSibling && $node->previousSibling->isSameNode($node->parentNode->firstChild) && ($node->previousSibling->nodeType == XML_TEXT_NODE) ) {
-								$textContent = "\n{$textContent}";
-							}
-
-							// <p> is second child of <td> and previous sibling is text node
-							// and first child of parent node
-							if ( ($node->parentNode->nodeName == 'td') && $node->previousSibling && $node->previousSibling->isSameNode($node->parentNode->firstChild) && ($node->previousSibling->nodeType == XML_TEXT_NODE) ) {
-								$textContent = "\n{$textContent}";
-							}
-
-							// add \n if previous node is <pre>
-							if ($previousNode && $previousNode->nodeName == 'pre') {
-								$textContent = "\n{$textContent}";
-							}
-
-							// add \n if previous node has wasHTML attribute set
-							if ($previousNode && $previousNode->hasAttribute('washtml')) {
 								$textContent = "\n{$textContent}";
 							}
 						}
@@ -609,11 +593,13 @@ class ReverseParser {
 			// if current processed node contains _wysiwyg_new_line attribute (added in Parser.php)
 			// then add new line before it
 			if($this->nodeHasNewLineBefore($node)) {
+				wfDebug("Wysiwyg ReverseParserNew - has new line before\n");
 				$out = "\n{$out}";
 			}
 			
 			// do the same with nodes containing _wysiwyg_line_start and washtml attributes (added in Parser.php)
 			if($this->nodeHasLineStart($node)) {
+				wfDebug("Wysiwyg ReverseParserNew - starts new line\n");
 				$out = "\n{$out}";
 			}
 
