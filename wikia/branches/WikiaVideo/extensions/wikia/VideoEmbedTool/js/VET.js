@@ -64,7 +64,7 @@ function VET_editVideo() {
 
 	YAHOO.util.Connect.abort(VET_asyncTransaction);
 	var params = [];
-	params.push('itemTitle='+FCK.wysiwygData[VET_refid].href.split(":").pop());
+	params.push('itemTitle='+FCK.wysiwygData[VET_refid].href);
 
 	VET_asyncTransaction = YAHOO.util.Connect.asyncRequest('GET', wgScriptPath + '/index.php?action=ajax&rs=VET&method=editVideo&' + params.join('&'), callback);
 }
