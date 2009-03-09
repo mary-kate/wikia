@@ -366,7 +366,7 @@ function VET_show(e, gallery, box) {
 		if(VET_refid != null && VET_wysiwygStart == 2) {
 			VET_editVideo();
 		} else {
-			if($('VideoQuery')) $('VideoQuery').focus();
+			if($('VideoEmbedUrl')) $('VideoEmbedUrl').focus();
 		}
 		return;
 	}
@@ -427,7 +427,7 @@ function VET_loadMain() {
 		success: function(o) {
 			$('VideoEmbedMain').innerHTML = o.responseText;
 			VET_indicator(1, false);
-			if($('VideoQuery') && VET_panel.element.style.visibility == 'visible') $('VideoQuery').focus();
+			if($('VideoEmbedUrl') && VET_panel.element.style.visibility == 'visible') $('VideoEmbedUrl').focus();
 		}
 	}
 	VET_indicator(1, true);
@@ -449,53 +449,8 @@ function VET_recentlyUploaded(param, pagination) {
 	YAHOO.util.Connect.asyncRequest('GET', wgScriptPath + '/index.php?action=ajax&rs=VET&method=recentlyUploaded&'+param, callback);
 }
 
-function VET_changeSource(e) {
-	var el = YAHOO.util.Event.getTarget(e);
-	if(el.nodeName == 'A') {
-		var sourceId = el.id.substring(11);
-		if(VET_curSourceId != sourceId) {
-			$('VET_source_' + VET_curSourceId).style.fontWeight = '';
-			$('VET_source_' + sourceId).style.fontWeight = 'bold';
-
-			$('VET_results_' + VET_curSourceId).style.display = 'none';
-			$('VET_results_' + sourceId).style.display = '';
-
-			VET_track('changeSource/src-'+sourceId); // tracking
-
-			if($('VideoQuery')) $('VideoQuery').focus();
-
-			VET_curSourceId = sourceId;
-			VET_trySendQuery();
-		}
-	}
-}
-
-function VET_trySendQuery(e) {
-	if(e && e.type == "keydown") {
-		if(e.keyCode != 13) {
-			return;
-		}
-		VET_track('find/enter/' + $('VideoQuery').value); // tracking
-	} else if(e) {
-		VET_track('find/click/' + $('VideoQuery').value); // tracking
-	}
-
-	var query = $('VideoQuery').value;
-
-	if(!e && VET_lastQuery[VET_curSourceId] == query) {
-		return;
-	}
-
-	if(query == '') {
-		if(e) {
-			alert(vet_warn1);
-		}
-	} else {
-		VET_sendQuery(query, 1, VET_curSourceId);
-	}
-}
-
 function VET_sendQuery(query, page, sourceId, pagination) {
+
 	if(pagination) {
 		VET_track('pagination/' + pagination + '/src-' + sourceId); // tracking
 	}
