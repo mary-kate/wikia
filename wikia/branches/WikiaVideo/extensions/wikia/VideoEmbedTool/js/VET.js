@@ -49,7 +49,7 @@ function VET_editVideo() {
 					$('VideoEmbedLayoutLeft').click();
 				}
 				if(data.width) {
-					VET_slider.setValue(data.width / (VET_slider.getRealValue() / VET_slider.getValue()), true);
+					VET_readjustSlider( data.width );
 					VET_width = data.width;
 					$( 'VideoEmbedManualWidth' ).value = VET_width;
 				}
