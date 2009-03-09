@@ -494,7 +494,7 @@ function VET_chooseImage(sourceId, itemId, itemLink, itemTitle) {
 	VET_asyncTransaction = YAHOO.util.Connect.asyncRequest('GET', wgScriptPath + '/index.php?action=ajax&rs=VET&method=chooseImage&' + 'sourceId=' + sourceId + '&itemId=' + itemId + '&itemLink=' + itemLink + '&itemTitle=' + itemTitle, callback);
 }
 
-function VET_upload(e) {
+function VET_preQuery(e) {
 	if($('VideoEmbedUrl').value == '') {
 		VET_track('query/undefined'); // tracking
 		alert(vet_warn2);
@@ -772,7 +772,7 @@ function VET_track(str) {
 	YAHOO.Wikia.Tracker.track('VET/' + str);
 }
 
-var VET_uploadCallback = {
+var VET_preQueryCallback = {
 	onComplete: function(response) {
 		VET_displayDetails(response);
 	}
