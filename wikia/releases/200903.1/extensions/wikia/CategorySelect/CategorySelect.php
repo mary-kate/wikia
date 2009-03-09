@@ -77,14 +77,19 @@ function CategorySelectInitializeHooks($title, $article) {
 		}
 	}
 
+	//view mode
+	$wgHooks['Skin::getCategoryLinks::end'][] = 'CategorySelectGetCategoryLinksEnd';
+
+	//edit mode
 	$wgHooks['EditPage::importFormData::finished'][] = 'CategorySelectImportFormData';
 	$wgHooks['EditPage::getContent::end'][] = 'CategorySelectReplaceContent';
 	$wgHooks['EditPage::CategoryBox'][] = 'CategorySelectCategoryBox';
 	$wgHooks['EditPage::showEditForm:fields'][] = 'CategorySelectAddFormFields';
 	$wgHooks['EditPage::showDiff::begin'][] = 'CategorySelectDiffArticle';
 	$wgHooks['EditForm::MultiEdit:Form'][] = 'CategorySelectDisplayCategoryBox';
+
+	//both
 	$wgHooks['Skin::getCategoryLinks::begin'][] = 'CategorySelectGetCategoryLinksBegin';
-	$wgHooks['Skin::getCategoryLinks::end'][] = 'CategorySelectGetCategoryLinksEnd';
 	$wgHooks['ExtendJSGlobalVars'][] = 'CategorySelectSetupVars';
 
 	return true;
@@ -106,6 +111,7 @@ function CategorySelectSetupVars($vars) {
 	$vars['csEmptyName'] = wfMsg('categoryselect-empty-name');
 	$vars['csDefaultSort'] = $wgParser->getDefaultSort();
 	$vars['csCategoryNamespaces'] = 'Category|' . $wgContLang->getNsText(NS_CATEGORY);
+	$vars['csDefaultNamespace'] = $wgContLang->getNsText(NS_CATEGORY);
 	$vars['csCodeView'] = wfMsg('categoryselect-code-view');
 	$vars['csVisualView'] = wfMsg('categoryselect-visual-view');
 
@@ -203,7 +209,7 @@ function CategorySelectReplaceContent($editPage, $text) {
 }
 
 /**
- * Remove hidden category box
+ * Remove hidden category box from edit page
  *
  * @author Maciej Błaszkowski <marooned at wikia-inc.com>
  */
@@ -298,7 +304,7 @@ function CategorySelectDiffArticle($editPage, $oldtext, $newtext) {
 }
 
 /**
- * Display category box
+ * Display category box on edit page
  *
  * @author Maciej Błaszkowski <marooned at wikia-inc.com>
  */
