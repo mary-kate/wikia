@@ -342,9 +342,7 @@ function VET_show(e, gallery, box) {
 		}
 	} else {
 		var el = YAHOO.util.Event.getTarget(e);
-		if (el.id == 'vetLink') {
-			VET_track('open/fromLinkAboveToolbar'); //tracking
-		} else if (el.id == 'vetHelpLink') {
+		if (el.id == 'vetHelpLink') {
 			VET_track('open/fromEditTips'); //tracking
 		} else if (el.id == 'mw-editbutton-vet') {
 			VET_inGalleryPosition = VET_inGallery();
@@ -498,17 +496,18 @@ function VET_chooseImage(sourceId, itemId, itemLink, itemTitle) {
 
 function VET_upload(e) {
 	if($('VideoEmbedUrl').value == '') {
-		VET_track('insert/undefined'); // tracking
+		VET_track('query/undefined'); // tracking
 		alert(vet_warn2);
 		return false;
 	} else {
 		var query = $('VideoEmbedUrl').value;
 
 		if ( !( query.match( 'http://' ) || query.match( 'www.' ) ) ) {
+			VET_track('query/url/' + query); // tracking			
 			VET_sendQuery(query, 1, VET_curSourceId);
 			return false;
 		} else {
-			VET_track('insert/defined'); // tracking
+			VET_track('query/search/' + query); // tracking
 			VET_indicator(1, true);
 			return true;
 		}
