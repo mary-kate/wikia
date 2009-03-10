@@ -47,7 +47,6 @@ if ( !function_exists( 'extAddSpecialPage' ) ) {
 $wgExtensionMessagesFiles['WikiaVideoAdd'] = dirname(__FILE__) . '/WikiaVideoAdd.i18n.php';
 extAddSpecialPage( dirname(__FILE__) . '/WikiaVideoAdd_body.php', 'WikiaVideoAdd', 'WikiaVideoAddForm' );
 
-$wgExtensionFunctions[] = "VETSetupHook";
 $wgExtensionMessagesFiles['VideoEmbedTool'] = $dir.'/VideoEmbedTool.i18n.php';
 $wgHooks['EditPage::showEditForm:initial2'][] = 'VETSetup';
 $wgHooks['WikiaVideo::View:RedLink'][] = 'VETWIkiaVideoRedLink';
@@ -105,60 +104,11 @@ function VETWikiaVideoRedLink() {
 	return true;
 }
 
-function VETSetupHook() {
-	global $wgParser;		
-	$wgParser->setHook( "video", "VETParserHook" );
-	return true;
-}
-
 function VETArticleSave( $article, $user, $text, $summary) {
 	if (NS_VIDEO == $article->mTitle->getNamespace()) {
 		$text = $article->dataline . $text;
 	}
 	return true;
-}
-
-function VETParserHook( $input, $argv, $parser ) {
-	// todo get video name, get embed code, display that code
-	$name = '';
-	$width = 300;
-	$width_max = 600;
-	$height_max = 600;
-	$align = 'left';
-	$caption = '';
-	$thumb = 'false';
-
-	if (!empty($argv['name'])) {
-                $name = $argv['name'];
-        }
-	if (!empty($argv['align'])) {
-                $align = $argv['align'];
-        }
-	if (!empty($argv['caption'])) {
-                $caption = $argv['caption'];
-        }
-	if (!empty($argv['thumb'])) {
-                $thumb = $argv['thumb'];
-        }
-
-	$title = Title::makeTitle( NS_VIDEO, $name );
-
-	$video = new VideoPage( $title );
-	$video->load();
-
-	if (!empty($argv['width']) && settype($argv['width'], 'integer') && ($width_max >= $argv['width'])) {
-		$width = $argv['width'];
-	}
-
-	global $wgVideoLinks;
-	$dbk = ":" . $title->getDBkey();
-        if ( !isset( $wgVideoLinks[$dbk] ) ) {
-                $id = $title->getArticleID();
-                $wgVideoLinks[$dbk] = 1;
-        }
-
-	$output = $video->generateWindow( $align, $width, $caption, $thumb );
-	return $output;
 }
 
 function VETSetup($editform) {
