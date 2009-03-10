@@ -58,7 +58,12 @@ function VET_editVideo() {
 			if(data.caption) {
 				$('VideoEmbedCaption').value = data.caption;
 			}
+
+			// show width slider
 			VET_toggleSizing(true);
+
+			// show alignment row
+			$( 'ImageLayoutRow' ).style.display = '';
 		}
 	};
 
@@ -551,7 +556,7 @@ function VET_displayDetails(responseText) {
 	if ( ( '-1' != VET_gallery ) || VET_inGalleryPosition ) {
 		$( 'ImageWidthRow' ).style.display = 'none';
 		$( 'ImageLayoutRow' ).style.display = 'none';
-		$( 'VideoEmbedSizeRow' ).style.display = 'none';						
+		$( 'VideoEmbedSizeRow' ).style.display = 'none';
 	}
 
 	if ( ( 400 == wgNamespaceNumber ) ) {
