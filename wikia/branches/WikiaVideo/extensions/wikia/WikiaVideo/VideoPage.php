@@ -560,7 +560,6 @@ EOD;
 	public function save() {
 		global $wgUser, $wgWikiaVideoProviders, $wgContLang;
 
-		//$this->mTitle = Title::newFromText($this->mName, NS_VIDEO );
 		$desc = wfMsg( 'wikiavideo-added', $this->mTitle->getText() );
 
                 $dbw = wfGetDB( DB_MASTER );
@@ -869,7 +868,7 @@ EOD;
 		$provider = $wgWikiaVideoProviders[$this->mProvider];
 		$purl = $this->getProviderUrl();
 		$ratio = $this->getTextRatio();
-		$s = '<div id="VideoPageInfo"><a href="' . $url . '">' . $this->mTitle->getText() . ' </a> (' . $ratio . wfMsg( 'vet-pixel' );
+		$s = '<div id="VideoPageInfo"><a href="' . $url . '">' . $this->mTitle->getText() . ' </a> (' . $ratio . wfMsg( 'wikiavideo-pixel' );
 		$s .= ', provider: <a href="' . $purl . '" class="external" target="_blank">' . $provider . '</a>)</div>' ;
 		$wgOut->addHTML( $s );
 	}
