@@ -148,7 +148,7 @@ class CategorySelect {
 							$newCategory = trim($newCategory, '[]');
 							preg_match('/^(' . self::$categoryNamespace . '):/i', $newCategory, $m);
 							$catNamespace = $m[1];
-							$newCategory = preg_replace('/^' . self::$categoryNamespace . ':/i', '', $newCategory);
+							$newCategory = preg_replace('/^(?:' . self::$categoryNamespace . '):/i', '', $newCategory);
 							$len = strlen($newCategory);
 							$pipePos = 0;
 							$curly = $square = 0;
@@ -227,6 +227,9 @@ class CategorySelect {
 
 	//used in lookForCategory() as a callback function for preg_replace_callback()
 	static private function replaceCallback($match) {
+		if (strpos($match[2], '[') !== false || strpos($match[2], ']') !== false) {
+			return $match[0];
+		}
 		$pipePos = strpos($match[2], '|');
 		if ($pipePos) {
 			$catName = substr($match[2], 0, $pipePos);

@@ -54,7 +54,7 @@ function hookEvent(hookName, hookFunct) {
 function importScript(page) {
 	return importScriptURI(wgScript + '?action=raw&ctype=text/javascript&title=' + encodeURIComponent(page.replace(/ /g,'_')));
 }
- 
+
 var loadedScripts = {}; // included-scripts tracker
 function importScriptURI(url) {
 	if (loadedScripts[url]) {
@@ -67,15 +67,15 @@ function importScriptURI(url) {
 	document.getElementsByTagName('head')[0].appendChild(s);
 	return s;
 }
- 
+
 function importStylesheet(page) {
 	return importStylesheetURI(wgScript + '?action=raw&ctype=text/css&title=' + encodeURIComponent(page.replace(/ /g,'_')));
 }
- 
+
 function importStylesheetURI(url) {
 	return document.createStyleSheet ? document.createStyleSheet(url) : appendCSS('@import "' + url + '";');
 }
- 
+
 function appendCSS(text) {
 	var s = document.createElement('style');
 	s.type = 'text/css';
@@ -120,11 +120,11 @@ function toggleVisibility(_levelId, _otherId, _linkId) {
 	}
 }
 
-function showTocToggle() {
+function showTocToggle(toctitleId, tocId, togglelinkId) {
 	if (document.createTextNode) {
 		// Uses DOM calls to avoid document.write + XHTML issues
 
-		var linkHolder = document.getElementById('toctitle');
+		var linkHolder = document.getElementById(toctitleId ? toctitleId : 'toctitle');
 		if (!linkHolder) {
 			return;
 		}
@@ -133,9 +133,9 @@ function showTocToggle() {
 		outerSpan.className = 'toctoggle';
 
 		var toggleLink = document.createElement('a');
-		toggleLink.id = 'togglelink';
+		toggleLink.id = togglelinkId ? togglelinkId : 'togglelink';
 		toggleLink.className = 'internal';
-		toggleLink.href = 'javascript:toggleToc()';
+		toggleLink.href = togglelinkId ? "javascript:toggleToc('" + tocId + "','" + togglelinkId + "')" : 'javascript:toggleToc()';
 		toggleLink.appendChild(document.createTextNode(tocHideText));
 
 		outerSpan.appendChild(document.createTextNode('['));
@@ -147,7 +147,7 @@ function showTocToggle() {
 
 		var cookiePos = document.cookie.indexOf("hidetoc=");
 		if (cookiePos > -1 && document.cookie.charAt(cookiePos + 8) == 1) {
-			toggleToc();
+			toggleToc(tocId, togglelinkId);
 		}
 	}
 }
@@ -161,9 +161,9 @@ function changeText(el, newText) {
 	}
 }
 
-function toggleToc() {
-	var toc = document.getElementById('toc').getElementsByTagName('ul')[0];
-	var toggleLink = document.getElementById('togglelink');
+function toggleToc(tocId, togglelinkId) {
+	var toc = document.getElementById(tocId ? tocId : 'toc').getElementsByTagName('ul')[0];
+	var toggleLink = document.getElementById(togglelinkId ? togglelinkId : 'togglelink');
 
 	if (toc && toggleLink && toc.style.display == 'none') {
 		changeText(toggleLink, tocHideText);
@@ -814,7 +814,7 @@ function jsMsg( message, className ) {
 	if( className ) {
 		messageDiv.setAttribute( 'class', 'mw-js-message-'+className );
 	}
-	
+
 	if (typeof message === 'object') {
 		while (messageDiv.hasChildNodes()) // Remove old content
 			messageDiv.removeChild(messageDiv.firstChild);
@@ -919,52 +919,4 @@ function getLabelFor (obj_id) {
 			}
 		}
 	return false;
-}
-
-function mwWikiaUploadButton(namespace, tooltip) {
-	var toolbar = document.getElementById('toolbar');
-	if (!toolbar) {
-		return false;
-	}
-
-	var upload_image = document.createElement("img");
-	upload_image.width = 23;
-	upload_image.height = 22;
-	upload_image.src = stylepath + "/common/images/button_upload.gif";
-	upload_image.border = 0;
-	upload_image.alt = tooltip;
-	upload_image.title = tooltip;
-	upload_image.style.cursor = "pointer";
-	upload_image.onclick = function() {
-		specialImageUpload('[['+ namespace +':', ']]');
-		return false
-	}
-
-	toolbar.appendChild(upload_image);
-	return true;
-}
-
-var imageUploadDialog = null;
-function specialImageUpload(tagOpen, tagClose, sampleText) {
-	// Hack: We need to know whether or not a user is logged in
-	// before they can upload a file.  Therefore, to know whether or not
-	// they are logged in, we can look for the "watch this" checkbox on
-	// the edit page since this only appears when the user is logged in to
-	// the site.  If they are not logged in, we display a message and prompt
-	// to ask if they would like to log in now.  If they are logged in, we
-	// open up the image upload popup window, and allow them to upload.
-
-	// if user is not logged in
-	if ( !wgUserName ) {
-
-		alert(mu_login);
-
-    } else {
-
-		if (imageUploadDialog && imageUploadDialog.open && !imageUploadDialog.closed) {
-			imageUploadDialog.close();
-		}
-
-		imageUploadDialog = window.open(wgServer + wgArticlePath.replace(/\$1/, "Special:MiniUpload"), "upload_file", "height=520,width=500,toolbar=no,location=no,resizable=no,menubar=0,scrollbars=yes");
-	}
 }

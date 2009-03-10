@@ -114,10 +114,12 @@ function SiteWideMessagesGetUserMessagesContent($dismissLink = true, $parse = tr
 function SiteWideMessagesEmptyTalkPageWithMessages(&$out, &$text) {
 	global $wgTitle, $wgOut, $wgUser;
 	if (wfIsTalkPageForCurrentUserDisplayed() && !$wgUser->isAllowed('bot')) {
-		$msgContent = SiteWideMessagesGetUserMessagesContent(false, false, false, false);
-		if(!$wgTitle->exists() && $msgContent != '') {
-			//replace message about empty UserTalk only if we have a messages to display
-			$text = '';
+		if(!$wgTitle->exists()) {
+			$msgContent = SiteWideMessagesGetUserMessagesContent(false, false, false, false);
+			if ($msgContent != '') {
+				//replace message about empty UserTalk only if we have a messages to display
+				$text = '';
+			}
 		}
 	}
 	return true;
@@ -152,7 +154,7 @@ function SiteWideMessagesUserNewTalks (&$user, &$talks) {
 	$key = 'wikia:talk_messages:' . $user->getID() . ':' . str_replace(' ', '_', $user->getName());
 	$messages = $wgMemc->get($key);
 
-	if(!is_array($messages)) {
+	if(!is_array($messages) && $messages != 'deleted') {
 		$messages = array();
 		$messagesID = SiteWideMessages::getAllUserMessagesId($user);
 		if(!empty($messagesID)) {

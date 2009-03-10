@@ -63,6 +63,10 @@ END;
 		return $javascript_text;
 	}
 
+	/**
+	 * All the Javascript calls to validate both the type of each
+	 * form field and their presence, for mandatory fields
+	 */
 	static function validationJavascript() {
 		global $sfgJSValidationCalls;
 
@@ -394,6 +398,39 @@ END;
 		return $text;
 	}
 
+	/**
+	 * Add a hidden input for each field in the template call that's
+	 * not handled by the form itself
+	 */
+	static function unhandledFieldsHTML($template_contents) {
+		$text = "";
+		foreach ($template_contents as $key => $value) {
+			if ($key != '' && !is_numeric($key)) {
+				$text .=<<<END
+	<input type="hidden" name="_unhandled_$key" value="$value" />
+
+END;
+			}
+		}
+		return $text;
+	}
+
+	/**
+	 * Add unhandled fields back into the template call that the form
+	 * generates, so that editing with a form will have no effect on them
+	 */
+	static function addUnhandledFields() {
+		global $wgRequest;
+		$additional_template_text = "";
+		foreach ($wgRequest->getValues() as $key => $value) {
+			if (substr($key, 0, 11) == '_unhandled_') {
+				$field_name = substr($key, 11);
+				$additional_template_text .= "|$field_name=$value\n";
+			}
+		}
+		return $additional_template_text;
+	}
+
 	static function summaryInputHTML($is_disabled, $label = null) {
 		global $sfgTabIndex;
 
@@ -402,7 +439,7 @@ END;
 			$label = wfMsg('summary');
 		$disabled_text = ($is_disabled) ? "disabled" : "";
 		$text =<<<END
-	<span id='wpSummaryLabel'><label for='wpSummary'>$label:</label></span>
+	<span id='wpSummaryLabel'><label for='wpSummary'>$label</label></span>
 	<input tabindex="$sfgTabIndex" type='text' value="" name='wpSummary' id='wpSummary' maxlength='200' size='60' $disabled_text/>
 
 END;
