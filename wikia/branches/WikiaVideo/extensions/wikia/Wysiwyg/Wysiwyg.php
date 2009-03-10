@@ -2,7 +2,7 @@
 $wgExtensionCredits['other'][] = array(
 	'name' => 'Wikia Rich Text Editor (Wysiwyg)',
 	'description' => 'FCKeditor integration for MediaWiki',
-	'version' => 0.11,
+	'version' => 0.12,
 	'author' => array('Inez Korczyński', '[http://pl.wikia.com/wiki/User:Macbre Maciej Brencz]', 'Maciej Błaszkowski (Marooned)', 'Łukasz \'TOR\' Garczewski')
 );
 
@@ -97,6 +97,11 @@ function Wysiwyg_Initial($form) {
 
 	// RT #10170: do not initialize for user JS/CSS subpages
 	if ($form->mTitle->isCssJsSubpage()) {
+		return true;
+	}
+
+	// macbre: enable only on monaco skin
+	if(get_class($wgUser->getSkin()) != 'SkinMonaco') {
 		return true;
 	}
 
@@ -401,6 +406,9 @@ function Wysiwyg_WikiTextToHtml($wikitext, $articleId = -1, $encode = false) {
 
 		$html = preg_replace('/\x7f-wtb-(\d+)-\x7f.*?\x7f-wte-\1-\x7f/sie', "'<input type=\"button\" refid=\"\\1\" _fck_type=\"template\" value=\"'.\$wgWysiwygMetaData[\\1]['name'].'\" class=\"wysiwygDisabled wysiwygTemplate\" /><input value=\"'.htmlspecialchars(stripslashes(\$templateCallsParsed[\\1])).'\" style=\"display:none\" />'", $html);
 	}
+	$html = str_replace("\n", "<!--EOL1-->\n", $html);
+
+	$html = preg_replace_callback("/<li>(\s*)/", create_function('$matches','return "<li space_after=\"".$matches[1]."\">";'), $html);
 
 	wfDebug("Wysiwyg_WikiTextToHtml html: {$html}\n");
 
@@ -409,6 +417,12 @@ function Wysiwyg_WikiTextToHtml($wikitext, $articleId = -1, $encode = false) {
 
 function Wysiwyg_HtmlToWikiText($html, $wysiwygData, $decode = false) {
 	global $wgUseNewReverseParser;
+
+	$html = str_replace("<!--EOL1-->\n", "", $html);
+	$html = str_replace("<!--EOL1--> ", " ", $html);
+	$html = str_replace("<!--EOL1-->", " ", $html);
+
+	$html = preg_replace_callback("/<li space_after=\"(\s*)\">/", create_function('$matches','return "<li>".$matches[1];'), $html);
 
 	if (empty($wgUseNewReverseParser)) {
 		require_once(dirname(__FILE__).'/ReverseParser.php');

@@ -26,9 +26,9 @@ if( !defined( 'MEDIAWIKI' ) ) {
 /**
  * Use revision number
  */
-$wgStyleVersion         = '5549';
-$wgMergeStyleVersionJS  = '5549';
-$wgMergeStyleVersionCSS = '5549';
+$wgStyleVersion         = '5562';
+$wgMergeStyleVersionJS  = '5562';
+$wgMergeStyleVersionCSS = '5562';
 
 /**
  * @name $wgCityId
@@ -208,7 +208,6 @@ $wgSkipSkins = array(
 		'uncyclopedia',
 		'wowwiki',
 		'lostbook',
-		'monaconew',
 );
 
 /**

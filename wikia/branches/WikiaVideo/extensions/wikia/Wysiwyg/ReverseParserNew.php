@@ -235,6 +235,9 @@ class ReverseParser {
 						// detect indented paragraph (margin-left CSS property)
 						$indentation = $this->getIndentationLevel($node);
 
+						// get previous node (ignoring whitespaces and comments)
+						$previousNode = $this->getPreviousElementNode($node);
+
 						// is current <p> node of definition list?
 						$isDefinitionList = false;
 
@@ -247,19 +250,22 @@ class ReverseParser {
 						// handle <dt> elements being rendered as p.definitionTerm
 						if ($this->hasCSSClass($node, 'definitionTerm')) {
 							$textContent = ';' . rtrim($textContent);
-							$prefix = $node->previousSibling ? "\n" : '';
-
+							$prefix = $node->getAttribute('_new_lines_before') ? "\n\n" : "\n";
 							$isDefinitionList = true;
 						}
 
 						// handle indentations
 						if ($indentation > 0) {
 							$textContent = str_repeat(':', $indentation) . rtrim($textContent);
-							$prefix = "\n";
+							$prefix = $node->getAttribute('_new_lines_before') ? "\n\n" : "\n";
 							$isDefinitionList = true;
 						}
 
-						$previousNode = $this->getPreviousElementNode($node);
+						// paragraph following indented paragraph
+						if ($previousNode && $this->getIndentationLevel($previousNode) !== false) {
+							$newLinesBefore = intval($node->getAttribute('_new_lines_before')) + 1;
+							$prefix = str_repeat("\n", $newLinesBefore);
+						}
 
 						// <p><br /> </p>
 						if ( ($textContent == ' ') && ($node->firstChild->nodeType == XML_ELEMENT_NODE) && 
@@ -287,26 +293,37 @@ class ReverseParser {
 
 						} else {
 							// add new lines before paragraph
-							$newLinesBefore = intval($node->getAttribute('_new_lines_before'));
-							if($newLinesBefore > 0) {
-								$textContent = str_repeat("\n", $newLinesBefore).$textContent;
+							if ($isDefinitionList) {
+								// for : and ; lists use prefix value
+								if (empty($node->previousSibling)) {
+									// current node begins the wikitext - remove one new line
+									$prefix = substr($prefix, 1);
+								}
+								$textContent = $prefix . $textContent;
 							}
-
-							// add newline before paragraph if previous node ...
-							if(!empty($previousNode) && (!$isDefinitionList || $newLinesBefore == 0) ) {
-								// is list
-								if ($this->isList($previousNode)) {
-									$textContent = "\n{$textContent}";
+							else {
+								// for paragraphs use _new_lines_before attribute value
+								$newLinesBefore = intval($node->getAttribute('_new_lines_before'));
+								if($newLinesBefore > 0) {
+									$textContent = str_repeat("\n", $newLinesBefore).$textContent;
 								}
 
-								// is <pre>
-								if ($previousNode->nodeName == 'pre') {
-									$textContent = "\n{$textContent}";
-								}
+								// add newline before paragraph if previous node ...
+								if(!empty($previousNode) && (!$isDefinitionList) ) {
+									// is list
+									if ($this->isList($previousNode)) {
+										$textContent = "\n{$textContent}";
+									}
 
-								// has wasHTML attribute set
-								if ($previousNode->hasAttribute('washtml')) {
-									$textContent = "\n{$textContent}";
+									// is <pre> or <div>
+									if ( $previousNode->nodeName == 'pre' ) {
+										$textContent = "\n{$textContent}";
+									}
+
+									// has wasHTML attribute set
+									if ($previousNode->hasAttribute('washtml')) {
+										$textContent = "\n{$textContent}";
+									}
 								}
 							}
 
@@ -328,14 +345,13 @@ class ReverseParser {
 					case 'h6':
 						$head = str_repeat("=", $node->nodeName{1});
 						if(!empty($nodeData)) {
-							$prevNode = $this->getPreviousElementNode($node);
 							$nextNode = $this->getNextElementNode($node);
 
 							$linesBefore = 0;
 							$linesAfter = $nodeData['linesAfter']-1;
 
 							// do not remove one lineAfter if paragraph is following
-							if ( $nextNode && ($nextNode->nodeName == 'p') ) {
+							if ( $nextNode && ($nextNode->nodeName == 'p') && $this->getIndentationLevel($nextNode) === false ) {
 								$linesAfter++;
 							}
 						} else {
@@ -445,12 +461,16 @@ class ReverseParser {
 								$out = "\n$out";
 							}
 
-							// we have non-table content after current table
-							if ( $node->nextSibling && ($node->nextSibling->nodeName != 'table') ) {
+							$nextNode = $this->getNextElementNode($node);
 
-								switch($node->nextSibling->nodeName) {
+							// we have non-table content after current table
+							if (!empty($nextNode)) {
+								switch($nextNode->nodeName) {
+									case 'table':
+										break;
+
 									case 'p':
-										if ($node->nextSibling->hasAttribute('_new_lines_before')) {
+										if ($nextNode->hasAttribute('_new_lines_before') && $this->getIndentationLevel($nextNode) === false) {
 											$out = "$out\n";
 										}
 										break;
@@ -548,7 +568,7 @@ class ReverseParser {
 							// and was in next line of wikitext
 							$nextNode = $this->getNextElementNode($node);
 
-							if ( $nextNode && ($nextNode->nodeName == 'p') && $nextNode->hasAttribute('_new_lines_before') ) {
+							if ( $nextNode && ($nextNode->nodeName == 'p') && $nextNode->hasAttribute('_new_lines_before') && $this->getIndentationLevel($nextNode) === false ) {
 								$out = "$out\n";
 							}
 

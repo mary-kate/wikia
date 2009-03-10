@@ -132,12 +132,7 @@ class Skin extends Linker {
 				// Preload base classes to work around APC/PHP5 bug
 				$deps = "{$wgStyleDirectory}/{$skinName}.deps.php";
 				if( file_exists( $deps ) ) include_once( $deps );
-				global $wgMonacoNewSidebar, $wgRequest;
-				if(!empty($wgMonacoNewSidebar) && $skinName == 'Monaco' && $wgRequest->getVal('useold') != 'true') {
-					require_once( "{$wgStyleDirectory}/{$skinName}New.php" );
-				} else {
-					require_once( "{$wgStyleDirectory}/{$skinName}.php" );
-				}
+				require_once( "{$wgStyleDirectory}/{$skinName}.php" );
 			}
 
 			# Check if we got if not failback to default skin
@@ -661,7 +656,7 @@ END;
 		global $wgOut, $wgTitle, $wgUseCategoryBrowser;
 		global $wgContLang, $wgUser;
 
-		if( !wfRunHooks( 'getCategoryLinks', array( &$alternativeCategoryLinks ) ) )
+		if( !wfRunHooks( 'Skin::getCategoryLinks::begin', array( &$alternativeCategoryLinks ) ) )
 			return $alternativeCategoryLinks;
 
 		if( count( $wgOut->mCategoryLinks ) == 0 ) return '';
@@ -718,6 +713,8 @@ END;
 			# Output one per line
 			$s .= implode("<br />\n", $tempout);
 		}
+
+		wfRunHooks( 'Skin::getCategoryLinks::end', array( &$s ) );
 
 		return $s;
 	}

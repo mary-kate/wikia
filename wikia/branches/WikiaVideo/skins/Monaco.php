@@ -12,6 +12,303 @@ if(!defined('MEDIAWIKI')) {
 	die(-1);
 }
 
+############################## MonacoSidebar ##############################
+global $wgHooks;
+$wgHooks['MessageCacheReplace'][] = 'MonacoSidebar::invalidateCache';
+
+class MonacoSidebar {
+
+	const version = '0.03';
+
+	static function invalidateCache() {
+		global $wgMemc;
+		$wgMemc->delete(wfMemcKey('mMonacoSidebar', self::version));
+		return true;
+	}
+
+	public $editUrl = false;
+
+	public function getCode() {
+		global $wgUser, $wgTitle, $wgRequest, $wgMemc, $wgLang, $wgContLang;
+		if($wgUser->isLoggedIn()) {
+			if(empty($wgUser->mMonacoSidebar) || ($wgTitle->getNamespace() == NS_USER && $wgRequest->getText('action') == 'delete')) {
+				$wgUser->mMonacoSidebar = $this->getMenu($this->getUserLines(), true);
+				if(empty($wgUser->mMonacoSidebar)) {
+					$wgUser->mMonacoSidebar = -1;
+				}
+				$wgUser->saveToCache();
+			}
+			if($wgUser->mMonacoSidebar != -1) {
+				return $wgUser->mMonacoSidebar;
+			}
+		}
+
+		$cache = $wgLang->getCode() == $wgContLang->getCode();
+		if($cache) {
+			$key = wfMemcKey('mMonacoSidebar', self::version);
+			$menu = $wgMemc->get($key);
+		}
+		if(empty($menu)) {
+			$menu = $this->getMenu($this->getMenuLines());
+			if($cache) {
+				$wgMemc->set($key, $menu, 60 * 60 * 8);
+			}
+		}
+		return $menu;
+	}
+
+	public function getUserLines() {
+		global $wgUser,  $wgParser, $wgMessageCache;
+		$revision = Revision::newFromTitle(Title::newFromText('User:'.$wgUser->getName().'/Monaco-sidebar'));
+		if(is_object($revision)) {
+			$text = $revision->getText();
+			if(!empty($text)) {
+				$ret = explode("\n", $wgParser->transformMsg($text, $wgMessageCache->getParserOptions()));
+				return $ret;
+			}
+		}
+		return null;
+	}
+
+	public function getMenuLines() {
+		global $wgCat;
+
+		$revision = Revision::newFromTitle(Title::newFromText('Monaco-sidebar', NS_MEDIAWIKI));
+		if(is_object($revision) && trim($revision->getText()) != '') {
+			$lines = getMessageAsArray('Monaco-sidebar');
+		}
+
+		if(empty($lines)) {
+			if(isset($wgCat['id'])) {
+				$lines = getMessageAsArray('shared-Monaco-sidebar-' . $wgCat['id']);
+			}
+		}
+
+		if(empty($lines)) {
+			$lines = getMessageAsArray('Monaco-sidebar');
+		}
+
+		return $lines;
+	}
+
+	public function getMenu($lines, $userMenu = false) {
+		global $wgMemc, $wgScript;
+
+		$nodes = $this->parse($lines);
+
+		if(count($nodes) > 0) {
+			$menu = '<div id="navigation"'.($userMenu ? ' class="userMenu"' : '').'>';
+			$mainMenu = array();
+			foreach($nodes[0]['children'] as $key => $val) {
+				if(isset($nodes[$val]['children'])) {
+					$mainMenu[$val] = $nodes[$val]['children'];
+				}
+				if(isset($nodes[$val]['magic'])) {
+					$mainMenu[$val] = $nodes[$val]['magic'];
+				}
+				if(isset($nodes[$val]['href']) && $nodes[$val]['href'] == 'editthispage') $menu .= '<!--b-->';
+				$menu .= '<div id="menu-item_'.$val.'" class="menu-item'.($val==end($nodes[0]['children']) ? ' border-fix' : '').'">';
+				$menu .= '<a id="a-menu-item_'.$val.'" href="'.(!empty($nodes[$val]['href']) ? htmlspecialchars($nodes[$val]['href']) : '#').'" rel="nofollow">'.htmlspecialchars($nodes[$val]['text']).((!empty($nodes[$val]['children']) || !empty($nodes[$val]['magic'])) ? '<em>&rsaquo;</em>' : '').'</a>';
+				$menu .= '</div>';
+				if(isset($nodes[$val]['href']) && $nodes[$val]['href'] == 'editthispage') $menu .= '<!--e-->';
+			}
+			$menu .= '</div>';
+
+			if($this->editUrl) {
+				$menu = str_replace('href="editthispage"', 'href="'.$this->editUrl.'"', $menu);
+			} else {
+				$menu = preg_replace('/<!--b-->(.*)<!--e-->/U', '', $menu);
+			}
+
+			if(isset($nodes[0]['magicWords'])) {
+				$magicWords = $nodes[0]['magicWords'];
+				$magicWords = array_unique($magicWords);
+				sort($magicWords);
+			}
+
+			$menuHash = hash('md5', serialize($nodes));
+
+			foreach($nodes as $key => $val) {
+				if(!isset($val['depth']) || $val['depth'] == 1) {
+					unset($nodes[$key]);
+				}
+				unset($nodes[$key]['parentIndex']);
+				unset($nodes[$key]['depth']);
+				unset($nodes[$key]['original']);
+			}
+
+			$nodes['mainMenu'] = $mainMenu;
+			if(!empty($magicWords)) {
+				$nodes['magicWords'] = $magicWords;
+			}
+
+			$wgMemc->set($menuHash, $nodes, 60 * 60 * 24 * 3); // three days
+
+			$menu .= '<script type="text/javascript" src="'.$wgScript.'?action=ajax&v='.self::version.'&rs=getMenu&id='.$menuHash.'"></script>';
+
+			return $menu;
+		}
+	}
+
+	public function parse($lines) {
+		$nodes = array();
+		$lastDepth = 0;
+		$i = 0;
+		if(is_array($lines) && count($lines) > 0) {
+			foreach($lines as $line) {
+				if(trim($line) === '') {
+					continue; // ignore empty lines
+				}
+
+				$node = $this->parseLine($line);
+				$node['depth'] = strrpos($line, '*') + 1;
+
+				if($node['depth'] == $lastDepth) {
+					$node['parentIndex'] = $nodes[$i]['parentIndex'];
+				} else if ($node['depth'] == $lastDepth + 1) {
+					$node['parentIndex'] = $i;
+				} else {
+					for($x = $i; $x >= 0; $x--) {
+						if($x == 0) {
+							$node['parentIndex'] = 0;
+							break;
+						}
+						if($nodes[$x]['depth'] == $node['depth'] - 1) {
+							$node['parentIndex'] = $x;
+							break;
+						}
+					}
+				}
+
+				if($node['original'] == 'editthispage') {
+					$node['href'] = 'editthispage';
+					if($node['depth'] == 1) {
+						$nodes[0]['editthispage'] = true; // we have to know later if there is editthispage special word used in first level
+					}
+				} else if($node['original']{0} == '#') {
+					if($this->handleMagicWord($node)) {
+						$nodes[0]['magicWords'][] = $node['magic'];
+						if($node['depth'] == 1) {
+							$nodes[0]['magicWord'] = true; // we have to know later if there is any magic word used if first level
+						}
+					} else {
+						continue;
+					}
+				}
+
+				$nodes[$i+1] = $node;
+				$nodes[$node['parentIndex']]['children'][] = $i+1;
+				$lastDepth = $node['depth'];
+				$i++;
+			}
+		}
+		return $nodes;
+	}
+
+	public function parseLine($line) {
+		$lineTmp = explode('|', trim($line, '* '), 2);
+		$lineTmp[0] = trim($lineTmp[0], '[]'); // for external links defined as [http://www.wikia.com] instead of just http://www.wikia.com
+
+		if(count($lineTmp) == 2 && $lineTmp[1] != '') {
+			$link = trim(wfMsgForContent($lineTmp[0]));
+			$line = trim($lineTmp[1]);
+		} else {
+			$link = trim($lineTmp[0]);
+			$line = trim($lineTmp[0]);
+		}
+
+		if(wfEmptyMsg($line, $text = wfMsg($line))) {
+			$text = $line;
+		}
+
+		if(wfEmptyMsg($lineTmp[0], $link)) {
+			$link = $lineTmp[0];
+		}
+
+		if(preg_match( '/^(?:' . wfUrlProtocols() . ')/', $link )) {
+			$href = $link;
+		} else {
+			if(empty($link)) {
+				$href = '#';
+			} else if($link{0} == '#') {
+				$href = '#';
+			} else {
+				$title = Title::newFromText($link);
+				if(is_object($title)) {
+					$href = $title->fixSpecialName()->getLocalURL();
+				} else {
+					$href = '#';
+				}
+			}
+		}
+
+		$ret = array('original' => $lineTmp[0], 'text' => $text);
+		$ret['href'] = $href;
+		return $ret;
+	}
+
+	public function handleMagicWord(&$node) {
+		$original_lower = strtolower($node['original']);
+		if(in_array($original_lower, array('#voted#', '#popular#', '#visited#', '#newlychanged#', '#topusers#'))) {
+			if($node['text']{0} == '#') {
+				$node['text'] = wfMsg(trim($node['original'], ' *')); // TODO: That doesn't make sense to me
+			}
+			$node['magic'] = trim($original_lower, '#');
+			return true;
+		} else if(substr($original_lower, 1, 8) == 'category') {
+			$param = trim(substr($node['original'], 9), '#');
+			if(is_numeric($param)) {
+				$category = $this->getBiggestCategory($param);
+				$name = $category['name'];
+			} else {
+				$name = substr($param, 1);
+			}
+			if($name) {
+				$node['href'] = Title::makeTitle(NS_CATEGORY, $name)->getLocalURL();
+				if($node['text']{0} == '#') {
+					$node['text'] = str_replace('_', ' ', $name);
+				}
+				$node['magic'] = 'category'.$name;
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private $biggestCategories;
+
+	public function getBiggestCategory($index) {
+		global $wgMemc, $wgBiggestCategoriesBlacklist;
+		$limit = max($index, 15);
+		if($limit > count($this->biggestCategories)) {
+			$key = wfMemcKey('biggest', $limit);
+			$data = $wgMemc->get($key);
+			if(empty($data)) {
+				$filterWordsA = array();
+				foreach($wgBiggestCategoriesBlacklist as $word) {
+					$filterWordsA[] = '(cl_to not like "%'.$word.'%")';
+				}
+				$dbr =& wfGetDB( DB_SLAVE );
+				$tables = array("categorylinks");
+				$fields = array("cl_to, COUNT(*) AS cnt");
+				$where = count($filterWordsA) > 0 ? array(implode(' AND ', $filterWordsA)) : array();
+				$options = array("ORDER BY" => "cnt DESC", "GROUP BY" => "cl_to", "LIMIT" => $limit);
+				$res = $dbr->select($tables, $fields, $where, __METHOD__, $options);
+				$categories = array();
+				while ($row = $dbr->fetchObject($res)) {
+					$this->biggestCategories[] = array('name' => $row->cl_to, 'count' => $row->cnt);
+				}
+				$wgMemc->set($key, $this->biggestCategories, 60 * 60 * 24 * 7);
+			} else {
+				$this->biggestCategories = $data;
+			}
+		}
+		return isset($this->biggestCategories[$index-1]) ? $this->biggestCategories[$index-1] : null;
+	}
+
+}
+############################## MonacoSidebar ##############################
+
 $wgAdCalled = array();
 
 require_once dirname(__FILE__) . "/../extensions/wikia/AnalyticsEngine/AnalyticsEngine.php";
@@ -79,7 +376,7 @@ class SkinMonaco extends SkinTemplate {
 		wfDebugLog('monaco', sprintf('Cache: %s, wgLang: %s, wgContLang %s', (int) $cache, $wgLang->getCode(), $wgContLang->getCode()));
 
 		if($cache) {
-			$key = wfMemcKey('MonacoData');
+			$key = wfMemcKey('MonacoDataOld');
 			$data_array = $parserMemc->get($key);
 		}
 
@@ -90,7 +387,7 @@ class SkinMonaco extends SkinTemplate {
 			$data_array['wikiafooterlinks'] = $this->getWikiaFooterLinks();
 			$data_array['categorylist'] = $this->getCategoryList();
 			$data_array['toolboxlinks'] = $this->getToolboxLinks();
-			$data_array['sidebarmenu'] = $this->getSidebarLinks();
+			//$data_array['sidebarmenu'] = $this->getSidebarLinks();
 			$data_array['relatedcommunities'] = $this->getRelatedCommunitiesLinks();
 			wfProfileOut(__METHOD__ . ' - DATA ARRAY');
 			if($cache) {
@@ -106,12 +403,14 @@ class SkinMonaco extends SkinTemplate {
 				$wgUser->mMonacoData = array();
 
 				wfProfileIn(__METHOD__ . ' - DATA ARRAY');
+				/*
 				$text = $this->getTransformedArticle('User:'.$wgUser->getName().'/Monaco-sidebar', true);
 				if(empty($text)) {
 					$wgUser->mMonacoData['sidebarmenu'] = false;
 				} else {
 					$wgUser->mMonacoData['sidebarmenu'] = $this->parseSidebarMenu($text);
 				}
+				*/
 
 				$text = $this->getTransformedArticle('User:'.$wgUser->getName().'/Monaco-toolbox', true);
 				if(empty($text)) {
@@ -124,10 +423,12 @@ class SkinMonaco extends SkinTemplate {
 				$wgUser->saveToCache();
 			}
 
+			/*
 			if($wgUser->mMonacoData['sidebarmenu'] !== false && is_array($wgUser->mMonacoData['sidebarmenu'])) {
 				wfDebugLog('monaco', 'There is user data for sidebarmenu');
 				$data_array['sidebarmenu'] = $wgUser->mMonacoData['sidebarmenu'];
 			}
+			*/
 
 			if($wgUser->mMonacoData['toolboxlinks'] !== false && is_array($wgUser->mMonacoData['toolboxlinks'])) {
 				wfDebugLog('monaco', 'There is user data for toolboxlinks');
@@ -138,7 +439,7 @@ class SkinMonaco extends SkinTemplate {
 		# Used for page load time tracking
 		$tpl->data['headlinks'] .= <<<EOS
 		<script type="text/javascript">/*<![CDATA[*/
-		var wgNow = new Date();		
+		var wgNow = new Date();
 		/*]]>*/</script>
 EOS;
 
@@ -152,6 +453,7 @@ EOS;
 			}
 		}
 
+		/*
 		foreach($data_array['sidebarmenu'] as $key => $val) {
 			if(isset($val['org']) && $val['org'] == 'editthispage') {
 				if(isset($tpl->data['content_actions']['edit'])) {
@@ -186,6 +488,7 @@ EOS;
 				}
 			}
 		}
+		*/
 
 		// This is for WidgetRelatedCommunities
 		$this->relatedcommunities = $data_array['relatedcommunities'];
@@ -1013,10 +1316,19 @@ class MonacoTemplate extends QuickTemplate {
 	} else {
 		$isMainpage = null;
 	}
+
+	$action = $wgRequest->getVal('action');
+	if (in_array($action, array('edit', 'history', 'diff', 'delete', 'protect', 'unprotect'))) {
+		$body_css_action = 'action_' . $action;
+	} else if (empty($action) || in_array($action, array('view', 'purge'))) {
+		$body_css_action = 'action_view';
+	} else {
+		$body_css_action = '';
+	}
 ?>
 
 	<body<?php if($this->data['body_onload'    ]) { ?> onload="<?php     $this->text('body_onload')     ?>"<?php } ?>
- class="mediawiki <?php $this->text('nsclass') ?> <?php $this->text('dir') ?> <?php $this->text('pageclass') ?><?php if(!empty($this->data['printable']) ) { ?> printable<?php } ?><?php if (!$wgUser->isLoggedIn()) { ?> loggedout<?php } ?> color2 wikiaSkinMonaco<?=$isMainpage?>" id="body">
+ class="mediawiki <?php $this->text('nsclass') ?> <?php $this->text('dir') ?> <?php $this->text('pageclass') ?><?php if(!empty($this->data['printable']) ) { ?> printable<?php } ?><?php if (!$wgUser->isLoggedIn()) { ?> loggedout<?php } ?> color2 wikiaSkinMonaco<?=$isMainpage?> <?= $body_css_action ?>" id="body">
 
  <?php
    if(!empty($skin->timemarker)) {
@@ -1325,6 +1637,19 @@ if ($wgOut->isArticle()){
 				     '</div>' . "\n";
 			}
 
+			// Display additional ads before the footer on long pages
+			if ($wgOut->isArticle() &&
+			ArticleAdLogic::isContentPage() &&
+			ArticleAdLogic::isLongArticle($this->data['bodytext'])) {
+				echo  '<table style="width: 100%"><tr>' . 
+					'<td style="text-align: center">' .
+					AdEngine::getInstance()->getPlaceHolderDiv('PREFOOTER_LEFT_BOXAD', false) .
+					"</td>\n" .
+					'<td style="text-align: center">' .
+					AdEngine::getInstance()->getPlaceHolderDiv('PREFOOTER_LEFT_BOXAD', false) .
+                                        "</td></tr>\n</table>";
+			}
+
 		wfProfileOut( __METHOD__ . '-article'); ?>
 
 			<!-- ARTICLE FOOTER -->
@@ -1440,6 +1765,10 @@ if(!$custom_article_footer && $displayArticleFooter) {
 							<dl id="shareDigg" class="share">
 								<dt>Digg</dt>
 								<dd><a rel="nofollow" href="http://digg.com/submit?phase=2&amp;url=<?=$url?>&amp;title=<?=$title?>" id="shareDigg_a"></a></dd>
+							</dl>
+							<dl id="shareFacebook" class="share">
+								<dt>Facebook</dt>
+								<dd><a rel="nofollow" href="http://www.facebook.com/share.php?u=<?=$url?>" id="shareFacebook_a"></a></dd>
 							</dl>
 							</div>
 						</td>
@@ -1587,12 +1916,11 @@ if(count($wikiafooterlinks) > 0) {
 					<div id="searchSuggestContainer" class="yui-ac-container"></div>
 				</div>
 <?php
-
-	echo '<script type="text/javascript">var submenu_array = new Array();var
-menuitem_array = new Array();var submenuitem_array = new Array();</script>';
-	$this->navmenu_array = array();
-	$this->navmenu = $this->data['data']['sidebarmenu'];
-	echo $this->printMenu(0);
+	$monacoSidebar = new MonacoSidebar();
+	if(isset($this->data['content_actions']['edit'])) {
+		$monacoSidebar->editUrl = $this->data['content_actions']['edit']['href'];
+	}
+	echo $monacoSidebar->getCode();
 
 	$linksArrayL = $linksArrayR = array();
 	$linksArray = $this->data['data']['toolboxlinks'];
@@ -1675,9 +2003,9 @@ menuitem_array = new Array();var submenuitem_array = new Array();</script>';
 <?php		wfProfileOut( __METHOD__ . '-navigation'); ?>
 
 			<?php
-				echo AdEngine::getInstance()->getPlaceHolderDiv('LEFT_NAVBOX_1', false);
 				// Logic for skyscrapers defined here: http://staff.wikia-inc.com/wiki/DART_Implementation/Skyscrapers
 				global $wgOut;
+				echo AdEngine::getInstance()->getPlaceHolderDiv('LEFT_NAVBOX_1', false);
 				if ($wgOut->isArticle() ){
 					if (ArticleAdLogic::isMainPage()) { //main page
 						echo '<div style="text-align: center; margin-bottom: 10px;">'. AdEngine::getInstance()->getPlaceHolderDiv('HOME_LEFT_SKYSCRAPER_1', false) .'</div>';
@@ -1723,14 +2051,16 @@ echo AnalyticsEngine::track('GA_Urchin', AnalyticsEngine::EVENT_PAGEVIEW);
 echo AnalyticsEngine::track('GA_Urchin', 'hub', AdEngine::getCachedCategory());
 global $wgCityId;
 echo AnalyticsEngine::track('GA_Urchin', 'onewiki', array($wgCityId));
-echo AnalyticsEngine::track('QuantServe', AnalyticsEngine::EVENT_PAGEVIEW);
 ?>
 <!-- End Analytics -->
 
 <?
 echo AdEngine::getInstance()->getDelayedLoadingCode();
 
+
 echo '</div>';
+// Quant serve moved *after* the ads because it depends on Athena/Provider values.
+echo AnalyticsEngine::track('QuantServe', AnalyticsEngine::EVENT_PAGEVIEW);
 $this->html('bottomscripts'); /* JS call to runBodyOnloadHook */
 $this->html('reporttime');
 wfRunHooks('SpecialFooter');

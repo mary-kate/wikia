@@ -132,6 +132,20 @@ $aliases['hu'] = array(
 	'UploadWindow' => array( 'Feltöltő ablak' ),
 );
 
+/** Japanese (日本語) */
+$aliases['ja'] = array(
+	'AddData' => array( 'データ追加' ),
+	'AddPage' => array( 'ページ追加' ),
+	'CreateCategory' => array( 'カテゴリ作成' ),
+	'CreateForm' => array( 'フォーム作成' ),
+	'CreateProperty' => array( 'プロパティ作成' ),
+	'CreateTemplate' => array( 'テンプレート作成' ),
+	'EditData' => array( 'データ編集' ),
+	'Forms' => array( 'フォーム' ),
+	'Templates' => array( 'テンプレート' ),
+	'UploadWindow' => array( 'アップロードウィンドウ' ),
+);
+
 /** Georgian (ქართული) */
 $aliases['ka'] = array(
 	'Templates' => array( 'თარგები' ),
@@ -235,6 +249,14 @@ $aliases['oc'] = array(
 	'Templates' => array( 'Modèls' ),
 );
 
+/** Pashto (پښتو) */
+$aliases['ps'] = array(
+	'CreateCategory' => array( 'وېشنيزه جوړول' ),
+	'CreateProperty' => array( 'د جوړولو ځانتيا' ),
+	'CreateTemplate' => array( 'کينډۍ جوړول' ),
+	'Templates' => array( 'کينډۍ' ),
+);
+
 /** Brazilian Portuguese (Português do Brasil) */
 $aliases['pt-br'] = array(
 	'Forms' => array( 'Formulários' ),
@@ -244,6 +266,12 @@ $aliases['pt-br'] = array(
 /** Romanian (Română) */
 $aliases['ro'] = array(
 	'Templates' => array( 'Formate' ),
+);
+
+/** Albanian (Shqip) */
+$aliases['sq'] = array(
+	'Forms' => array( 'Format' ),
+	'Templates' => array( 'Stampat' ),
 );
 
 /** Swahili (Kiswahili) */
@@ -257,5 +285,10 @@ $aliases['sw'] = array(
 	'Forms' => array( 'Fomu' ),
 	'Templates' => array( 'Vigezo' ),
 	'UploadWindow' => array( 'DirishalaKupakizia' ),
+);
+
+/** Turkish (Türkçe) */
+$aliases['tr'] = array(
+	'Templates' => array( 'Şablonlar' ),
 );
 

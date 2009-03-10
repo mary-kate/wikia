@@ -101,9 +101,9 @@ class UpdateProfile extends SpecialPage {
 		global $wgUser, $wgOut, $wgRequest, $wgSiteView;
 		
 		$wgUser->setRealName( $wgRequest->getVal("real_name") );
-		$wgUser->setEmail( $wgRequest->getVal("email") );
 	
 		if($wgUser->getEmail()!=$wgRequest->getVal("email")){
+			$wgUser->setEmail( $wgRequest->getVal("email") );
 			$wgUser->mEmailAuthenticated = null; # but flag as "dirty" = unauthenticated
 		}
 		
@@ -342,7 +342,7 @@ class UpdateProfile extends SpecialPage {
 			$form .= '</p>
 			<div class="cleared"></div>';
 			if(!$wgUser->mEmailAuthenticated){
-				$form  .= '<p class="profile-update-unit-left"></p><p class="profile-update-unit-small">(your e-mail needs to be authenticated to receive site notifications)</p>';
+				$form  .= '<p class="profile-update-unit-left"></p><p class="profile-update-unit-small">' . wfMsg("emailnotauthenticated") . '</p>';
 			}
 			$form .='</p>
 			<div class="cleared"></div>

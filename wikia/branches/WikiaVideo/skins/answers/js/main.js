@@ -65,29 +65,15 @@ function askQuestion(){
 	q = q.replace(/#/g,""); //we only want one space
 	q = encodeURIComponent( q );
 	
-	var url = wgServer + "/api.php?action=query&titles=" + q + "&format=json";
-	var params = '';
-	
-	jQuery.get( url, "", function (oResponse){
-			
-			eval("j=" + oResponse);
-			
-			page = j.query.pages["-1"];
-			path = wgServer + wgArticlePath.replace("$1","");
-			if( typeof( page ) != "object" ){
-				url = path + q;
-			}else{
-				url = path + "Special:CreateQuestionPage?questiontitle=" + q.charAt(0).toUpperCase() + q.substring(1);
-			}
-			window.location = url;
-		}
-	);
+	path = wgServer + wgArticlePath.replace("$1","");
+	url = path + "Special:CreateQuestionPage?questiontitle=" + q.charAt(0).toUpperCase() + q.substring(1);
+	window.location = url;
 }
 	
 function anonWatch(){
 	jQuery.get( wgServer + "/index.php?action=ajax&rs=wfHoldWatchForAnon&rsargs[]=" + wgPageName, "", 
 	function (oResponse){
-		window.location = oResponse
+		window.location = oResponse;
 	});
 }
 
@@ -112,7 +98,7 @@ function google_ad_render( google_ads, i ){
 	i = i - 1;
 	if( google_ads[i] ){
 		s = "";
-		s += '<a href=\"' + google_info.feedback_url + '\" class="google_label">Ads by Google</a><br>';
+		s += '<a href=\"' + google_info.feedback_url + '\" class="google_label">' + wgAdsByGoogleMsg + '</a><br>';
 		s += '<a style="text-decoration:none" href="' +
 		google_ads[i].url + '" onmouseout="window.status=\'\'" onmouseover="window.status=\'go to ' +
 		google_ads[i].visible_url + '\';return true" class="google_link">' +
@@ -142,22 +128,44 @@ YAHOO.widget.Effects.Fade = function( id ){
 };
 
 //Sidebar Widgets
-jQuery("#recent_unanswered_questions").ready(function() {
+var recent_questions_page = 0;
+var recent_questions_limit = 10;
+function renderQuestions() {
 	
-	url = wgServer + "/api.php?smaxage=60&action=query&list=wkpagesincat&wkcategory=" + wgUnAnsweredCategory  + "&format=json&wklimit=10";
-	jQuery.get( url, "", function( oResponse ){
-		eval("j=" + oResponse);
+	url = wgServer + "/api.php?smaxage=60&action=query&list=wkpagesincat&wkcategory=" + wgUnAnsweredCategory  + "&format=json&wklimit=" + recent_questions_limit + "&wkoffset=" + (recent_questions_limit * recent_questions_page);
+	jQuery.getJSON( url, "", function( j ){
 		if( j.query.wkpagesincat ){
 			html = "";
 			for( recent_q in j.query.wkpagesincat ){
 				page = j.query.wkpagesincat[recent_q];
 				html += "<li><a href=\"" + page.url + "\">" + page.title.replace(/_/g," ") + "?</a></li>";
 			}
-			jQuery("#recent_unanswered_questions").prepend( html );
+		
+			//nav
+			html += "<li class='sidebar_nav'>"
+			if( recent_questions_page > 0 )html+= "<div class=\"sidebar_nav_prev\"><a href=javascript:void(0); onclick='questionsNavClick(-1);'>" + wgPrevPageMsg + "</a></div>";
+			html += "<div class=\"sidebar_nav_next\"><a href=javascript:void(0); onclick='questionsNavClick(1);'>" + wgNextPageMsg + "</a></div>";
+			html += "<a href='" + wgUnansweredRecentChangesURL + "'>" + wgUnansweredRecentChangesText + "</a>";
+			html += "</li>";
+			
+			jQuery("#recent_unanswered_questions").html( html );
+			jQuery("#recent_unanswered_questions").animate({opacity: 1.0}, "normal");
+			
 		}
 		
 	});
-});
+}
+
+function questionsNavClick( dir ){
+	recent_questions_page = recent_questions_page + dir
+	
+	jQuery("#recent_unanswered_questions").animate({opacity: 0},500);
+	renderQuestions()
+}
+
+    
+jQuery("#recent_unanswered_questions").ready( renderQuestions );
+
 
 jQuery("#related_answered_questions").ready(function() {
 	
@@ -189,29 +197,6 @@ jQuery(document).ready(function() {
 			jQuery(this).closest(".inline_form").animate({ opacity: 0 }).animate({ height: "0px" }, function() { jQuery(this).hide(); });
 			return false;
 		});
-	});
-});
-
-
-jQuery("#popular_categories").ready(function() {
-	
-	url = wgServer + "/api.php?smaxage=60&action=query&list=wkmostcat&format=json&wklimit=15";
-	jQuery.get( url, "", function( oResponse ){
-		eval("j=" + oResponse);
-		if( j.query.wkmostcat ){
-			html = "";
-			count = 1;
-			for( category in j.query.wkmostcat ){
-				if( count > 10 )break;
-				category_check = category.toLowerCase().replace(/_/g," ");
-				if ( category_check != wgAnsweredCategory.toLowerCase() && category_check != wgUnAnsweredCategory.toLowerCase()){
-					html += "<li><a href=\"" + j.query.wkmostcat[category].url + "\">" + category.replace(/_/g," ") + "</a></li>";
-					count++;
-				}
-			}
-			jQuery("#popular_categories").prepend( html );
-		}
-		
 	});
 });
 
@@ -257,23 +242,22 @@ if( wgIsMainpage == true ){
 
 jQuery("#facebook-connect").ready(function() {
 	if( !wgEnableFacebookConnect || !wgIsQuestion )return false;
-	updateFacebookBox()
-
+	updateFacebookBox();
 });
 
 
 function updateFacebookBox(){
-	if( ! document.getElementById("facebook-user-placeholder") )return false
+	if( ! document.getElementById("facebook-user-placeholder") )return false;
 		
 	fb_uid = YAHOO.util.Cookie.get(wgFacebookAnswersAppID + "_user");
 	if( ! fb_uid ){
-		jQuery("#facebook-connect-login").show()
-		jQuery("#facebook-connect-ask").hide()
+		jQuery("#facebook-connect-login").show();
+		jQuery("#facebook-connect-ask").hide();
 	}else{
-		jQuery("#facebook-connect-login").hide()
+		jQuery("#facebook-connect-login").hide();
 		fb_html = "<div id='fb-pic' uid='" + fb_uid + "' facebook-logo='true' style='float:left'></div>";
 		fb_html += "<div style='float:left'><span id='fb-name' useyou='false' uid='" + fb_uid + "'></span><br/>";
-		fb_html += wgFacebookSignedInMsg + "<br/>"
+		fb_html += wgFacebookSignedInMsg + "<br/>";
 		fb_html += "<a href='#' onclick='FB.Connect.logoutAndRedirect(window.location.href)'>" + wgFacebookLogoutMsg + "</a></div>";
 		fb_html += "<div style='clear:both'></div>";
 		
@@ -282,21 +266,21 @@ function updateFacebookBox(){
 		FB.XFBML.Host.addElement(new FB.XFBML.Name(document.getElementById("fb-name"))); 
 		FB.XFBML.Host.addElement(new FB.XFBML.ProfilePic(document.getElementById("fb-pic"))); 
 	
-		jQuery("#facebook-connect-logout").show()
+		jQuery("#facebook-connect-logout").show();
 		
 		document.getElementById("facebook-connect-ask").innerHTML = "<a href='javascript:facebook_ask()'><img src=\"http://b.static.ak.fbcdn.net/images/fbconnect/login-buttons/connect_light_small_short.gif?8:121638\"></a> <a href='javascript:facebook_ask()'>" + wgFacebookAskMsg + "</a><span id='facebook_finish'></span>";
-		jQuery("#facebook-connect-ask").show()
+		jQuery("#facebook-connect-ask").show();
 	}
 }
 
 function facebook_login_handler(){
-	window.location = document.location.href
+	window.location = document.location.href;
 }
 	
 var facebook_clicked_ask = false;
 function facebook_ask(){
 	facebook_clicked_ask = true;
-	facebook_publish_feed_story()
+	facebook_publish_feed_story();
 }
 
 function facebook_publish_finish(){
@@ -310,7 +294,99 @@ function facebook_publish_finish(){
 function facebook_publish_feed_story() {
 	// Load the feed form
 	FB.ensureInit(function() {  
-	  template_data = {"question" : wgTitle + "?", "url" : wgServer + wgArticlePath.replace("$1",wgPageName), "editurl" : wgServer + wgScript + "?title=" + wgPageName + "&action=edit" }
+	  template_data = {"question" : wgTitle + "?", "url" : wgServer + wgArticlePath.replace("$1",wgPageName), "editurl" : wgServer + wgScript + "?title=" + wgPageName + "&action=edit" };
 	  FB.Connect.showFeedDialog(wgFacebookAnswersTemplateID, template_data,  null , null, FB.FeedStorySize.oneLine, FB.RequireConnect.require, facebook_publish_finish );
 	});
 }
+
+/* Function to take an array and turn it into a url encoded string. Handy for ajax requests. ;) */
+function http_build_query( formdata, numeric_prefix, arg_separator ) {
+    // http://kevin.vanzonneveld.net
+    // +   original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+    // +   improved by: Legaev Andrey
+    // +   improved by: Michael White (http://getsprink.com)
+    // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+    // *     example 1: http_build_query({foo: 'bar', php: 'hypertext processor', baz: 'boom', cow: 'milk'}, '', '&amp;');
+    // *     returns 1: 'foo=bar&amp;php=hypertext+processor&amp;baz=boom&amp;cow=milk'
+    // *     example 2: http_build_query({'php': 'hypertext processor', 0: 'foo', 1: 'bar', 2: 'baz', 3: 'boom', 'cow': 'milk'}, 'myvar_');
+    // *     returns 2: 'php=hypertext+processor&myvar_0=foo&myvar_1=bar&myvar_2=baz&myvar_3=boom&cow=milk'
+ 
+    var key, use_val, use_key, i = 0, j=0, tmp_arr = [];
+ 
+    if (!arg_separator) {
+        arg_separator = '&';
+    }
+ 
+    for (key in formdata) {
+        use_val = escape(formdata[key].toString());
+        use_key = escape(key);
+ 
+        if (numeric_prefix && !isNaN(key)) {
+            use_key = numeric_prefix + j;
+            j++;
+        }
+        tmp_arr[i++] = use_key + '=' + use_val;
+    }
+ 
+    return tmp_arr.join(arg_separator);
+}
+
+
+
+// Magic answer
+MagicAnswer = {};
+MagicAnswer.appid  = 'GD2UGdfIkY1gi6EBoIck4Exv2xLUsVrm'; // From search
+MagicAnswer.region = '';
+MagicAnswer.apiUrl = 'http://answers.yahooapis.com/AnswersService/V1/';
+
+MagicAnswer.getAnswer = function  (question, callbackFunction) {
+        var params = Array();
+        params["search_in"] = "question";
+        params["type"] = "resolved";
+        params["results"] = "1";
+        MagicAnswer.questionSearch(question, params, callbackFunction);
+};
+
+MagicAnswer.questionSearch = function(question, params, callbackFunction){
+        var defaultParams = Array();
+        // http://developer.yahoo.com/answers/V1/questionSearch.html
+        defaultParams["search_in"] = "all"; // all|question|best_answer
+        defaultParams["category_id"] = "";
+        defaultParams["category_name"] = "";
+        defaultParams["region"] = MagicAnswer.region;
+        defaultParams["date_range"] = "all";
+        defaultParams["sort"] = "relevance"; // relevance|date_desc|date_asc
+        defaultParams["appid"] = MagicAnswer.appid;
+        defaultParams["type"] = "all"; // all|resolved|open|undecided
+        defaultParams["results"] = "10";
+        defaultParams["output"] = "json";
+        defaultParams["callback"] = callbackFunction;
+
+        var formData = defaultParams;
+        for (var param in params){
+                formData[param]=params[param];
+        }
+        if (!params["query"]) { formData["query"] = question; }
+
+        var s = document.createElement("script");
+        s.type = "text/javascript";
+        s.src = MagicAnswer.apiUrl + 'questionSearch?' + http_build_query(formData);
+        document.getElementsByTagName('head')[0].appendChild(s);
+};
+
+jQuery("#random_users_with_avatars").ready(function() {
+	if( !document.getElementById("random_users_with_avatars") )return false;
+	
+	url = wgServer + "/api.php?smaxage=60&action=query&list=wkuserswithavatars&format=json&wklimit=6&wkavatarsize=l";
+	jQuery.getJSON( url, "", function( j ){	
+		if( j.query.wkuserswithavatars ){
+			html = "";
+			for( user_name in j.query.wkuserswithavatars ){
+				user = j.query.wkuserswithavatars[user_name];
+				html += "<div class='random_user_avatar'><a href='" + user.user_page_url + "'><img src='" + user.user_avatar + "' border='0'></a></div>";		
+			}
+			html += "<div style='clear:both'></div>";
+			jQuery("#random_users_with_avatars").html( html );
+		}
+	});
+});

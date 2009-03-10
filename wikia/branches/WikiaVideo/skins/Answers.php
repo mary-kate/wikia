@@ -76,6 +76,7 @@ class AnswersTemplate extends MonacoTemplate {
 		<script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/datasource/datasource-min.js"></script>
 		<script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/connection/connection-min.js"></script>
 		<script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/autocomplete/autocomplete-min.js"></script>
+		<script type="text/javascript" src="http://yui.yahooapis.com/2.7.0/build/get/get-min.js" ></script> 
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3/jquery.min.js"></script>
 		<script type="text/javascript" src="<?=$wgStylePath?>/answers/js/main.js?<?=$wgStyleVersion?>"></script>
 		<?php
@@ -94,6 +95,9 @@ class AnswersTemplate extends MonacoTemplate {
 		<!-- Head Scripts -->
 <?php $this->html('headscripts') ?>
 	        <link rel="stylesheet" type="text/css" href="<?=$wgStylePath?>/answers/css/main.css?<?=$wgStyleVersion?>" />
+		<!--[if IE 6]>
+	        <link rel="stylesheet" type="text/css" href="<?=$wgStylePath?>/answers/css/ie6.css?<?=$wgStyleVersion?>" />
+		<![endif]-->
 <?php	if($this->data['jsvarurl']) { ?>
 		<script type="<?php $this->text('jsmimetype') ?>" src="<?php $this->text('jsvarurl') ?>"><!-- site js --></script>
 <?php	} ?>
@@ -114,8 +118,8 @@ class AnswersTemplate extends MonacoTemplate {
 <body<?php if($this->data['body_ondblclick']) { ?> ondblclick="<?php $this->text('body_ondblclick') ?>"<?php } ?>
 <?php if($this->data['body_onload']) { ?> onload="<?php $this->text('body_onload') ?>"<?php } ?>
  class="mediawiki <?php $this->text('dir') ?> <?php $this->text('pageclass') ?> <?php $this->text('skinnameclass') ?>
- <?php if($answer_page->isQuestion(false,false) && $action=="edit") { ?>editquestion<?php } ?>"> 
- 
+ <?php if($answer_page->isQuestion(false,false) && $action=="edit") { ?>editquestion<?php } ?>
+ <?php if($answer_page->isQuestion(false,false) && $action=="submit") { ?>editquestion<?php } ?>"> 
 
 <!--GetHTMLAfterBody-->
 <?
@@ -132,7 +136,7 @@ wfRunHooks('GetHTMLAfterBody', array (&$this));
 		<div id="answers_ask">
 			<form method="get" action="" onsubmit="return false" name="ask_form" id="ask_form">
 				<input type="text" id="answers_ask_field" value="<?=htmlentities(wfMsg("ask_a_question"))?>" class="alt" /><span>?</span>
-				<a href="javascript:void(0);" id="ask_button" class="huge_button green"><div></div><?= wfMsg("ask_button") ?></a>
+				<a href="javascript:void(0);" id="ask_button" class="huge_button huge_button_green"><div></div><?= wfMsg("ask_button") ?></a>
 			</form>
 		</div><?/*answers_ask*/?>
 		<div id="answers_suggest"></div>
@@ -188,7 +192,7 @@ wfRunHooks('GetHTMLAfterBody', array (&$this));
 		<?php if($this->data['sitenotice']) { ?><div id="siteNotice"><?php $this->html('sitenotice') ?></div><?php } ?>
 
 		<?php
-		if ($is_question) {
+		if ( $answer_page->isQuestion(true) ) {
 			$author = $answer_page->getOriginalAuthor();
 			
 			$category_text = array();
@@ -199,20 +203,50 @@ wfRunHooks('GetHTMLAfterBody', array (&$this));
 					$category_text[]=strip_tags($ctg);
 				}
 			}
+			if ($category_text) {
+				$google_hints = "";
+				foreach($category_text as $ctg){
+					if( strtoupper($ctg) != strtoupper(wfMsg("unanswered_category")) && strtoupper($ctg) != strtoupper(wfMsg("answered_category")) ){
+						$google_hints .= (( $google_hints ) ? ", " : "" ) . $ctg;
+					}
+				}
+				if( $google_hints == "" ) $google_hints = str_replace("'","\'",$wgTitle->getText() );
+			}
 		?>
-		<div class="sectionedit">[<a href="<?=$this->data['content_actions']['move']['href']?>"><?=wfMsg('editsection')?></a>]</div>
+		
 		<div id="question">
 			<div class="top"><span></span></div>
-			<h1 id="firstHeading" class="firstHeading"><?php $this->data['displaytitle']!=""?$this->html('title'):$this->text('title') ?><?=$question_mark?></h1>
-			<div class="categories">
+			<h1 id="firstHeading" class="firstHeading"><?php $this->data['displaytitle']!=""?$this->html('title'):$this->text('title') ?><?=$question_mark?> <a href="<?=$this->data['content_actions']['move']['href']?>"><?=wfMsg('rephrase')?></a></h1>
+			<!--<div class="categories">
 			<?php
+			/*
 				foreach($category_text as $ctg){
 					$category_title = Title::makeTitle(NS_CATEGORY, $ctg );
 					if( $categories ) $categories .= ", ";
 					$categories .=  "<a href=\"" . $category_title->escapeFullURL() . "\">{$ctg}</a>";
 				}
 				echo wfMsg("categories") . ": " . $categories;
+				*/
 				?>
+			</div>-->
+			<?
+			if( $wgUser->isLoggedIn() ){
+				$watchlist_url = $wgTitle->escapeFullURL("action=watch");
+			}else{
+				$watchlist_url = "javascript:anonWatch();";
+			}
+			?>
+			<div id="question_actions">
+				<button class="button_small button_small_green" onclick="document.location='<?=$wgTitle->getEditURL()?>';"><span><? echo ($answer_page->isArticleAnswered() ? wfMsg("improve_this_answer") : wfMsg("answer_this_question"));?></span></button>
+				<?php
+				global $wgEnableEditResearch;
+				if( $wgEnableEditResearch ){
+				?>
+					<button class="button_small button_small_blue" onclick="document.location='<?=$wgTitle->getEditURL()?>';"><span><?=wfMsg("research_this")?></span></button>
+				<?php
+				}
+				?>
+				<button class="button_small button_small_blue" onclick="document.location='<?=$watchlist_url?>';"><span><? echo ($answer_page->isArticleAnswered() ? wfMsg("notify_improved") : wfMsg("notify_answered"));?></span></button>
 			</div>
 			<div class="bottom"><span></span></div>
 		</div>
@@ -236,16 +270,44 @@ wfRunHooks('GetHTMLAfterBody', array (&$this));
 		<?php
 		} else {
 		?>	
+		
 		<h1 id="firstHeading" class="firstHeading"><?php $this->data['displaytitle']!=""?$this->html('title'):$this->text('title') ?></h1>
 		<?php
 		}
+
+		// Magic Answer
+		if (!empty($_GET['state']) && $_GET['state'] == 'asked'){
+			$this->displayMagicAnswer();
+		}
 		?>
 		
-		<?
+		
+		<?php
 		global $wgTitle;
 		if ( $is_question && $answer_page->isArticleAnswered() ) {
-			echo '<div class="sectionedit">[<a href="'. $this->data['content_actions']['edit']['href'] .'">'. wfMsg('editsection') .'</a>]</div>';
-			echo '<div id="answer_title">'. wfMsg("answer_title") .'</div>';
+			
+			if( !( $wgRequest->getVal("diff") ) ){
+				echo '<div class="sectionedit">[<a href="'. $this->data['content_actions']['edit']['href'] .'">'. wfMsg('editsection') .'</a>]</div>';
+				echo '<div id="answer_title">'. wfMsg("answer_title") .'</div>';
+				
+				if ( $wgUser->isAnon() ) {
+				$ads = '<div id="ads-answered-left">
+				<script type="text/javascript">
+					google_ad_client    = "pub-4086838842346968";
+					google_ad_channel = (( wgIsAnswered )?"7000000004":"7000000003");
+					google_ad_width     = "120";
+					google_ad_height    = "240";
+					google_ad_format    = google_ad_width + "x" + google_ad_height + "_as";
+					google_ad_type      = "text";
+					google_color_link   = "002BB8";
+					google_hints	    = "' . $google_hints . '";
+				</script>
+				<script language="JavaScript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
+				</div>';
+				echo $ads;
+				}
+			}
+			
 			$bodyContentClass = ' class="question"';
 		} else if ($wgTitle->getNamespace() == NS_CATEGORY) {
 			$bodyContentClass = ' class="category"';
@@ -253,7 +315,7 @@ wfRunHooks('GetHTMLAfterBody', array (&$this));
 			$bodyContentClass = '';
 		}
 		?>
-		
+			
 		<div id="bodyContent"<?=$bodyContentClass?>> 
 			<h3 id="siteSub"><?php $this->msg('tagline') ?></h3>
 			<div id="contentSub"><?php $this->html('subtitle') ?></div>
@@ -264,9 +326,32 @@ wfRunHooks('GetHTMLAfterBody', array (&$this));
 			<?php $this->html('bodytext') ?>
 			<!-- end content -->
 			<?php if($this->data['dataAfterContent']) { $this->html ('dataAfterContent'); } ?>
+			
 			<div class="visualClear"></div>
 		</div><?/*bodyContent*/?>
 
+		<?php
+		if( $is_question && !$answer_page->isArticleAnswered() ){
+		
+			if( !( $wgRequest->getVal("diff") ) && $wgUser->isAnon() ){
+				$ads = '<div id="ads-unaswered-bottom">
+				<script type="text/javascript">
+					google_ad_client    = "pub-4086838842346968";
+					google_ad_channel = (( wgIsAnswered )?"7000000004":"7000000003");
+					google_ad_width     = "200";
+					google_ad_height    = "200";
+					google_ad_format    = google_ad_width + "x" + google_ad_height + "_as";
+					google_ad_type      = "text";
+					google_color_link   = "002BB8";
+					google_hints	    = "' . $google_hints . '";
+				</script>
+				<script language="JavaScript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
+				</div>';
+				echo $ads;
+			}
+		
+		}?>
+		
 		<?php
 		global $wgTitle, $wgAnswersShowInlineRegister;
 		if ($wgAnswersShowInlineRegister && $wgUser->isAnon() && !$answer_page->isArticleAnswered() && $_GET['state'] == 'asked') {
@@ -324,27 +409,30 @@ wfRunHooks('GetHTMLAfterBody', array (&$this));
 				<h1><?= wfMsg("inline-welcome") ?>, <?= $wgUser->getName() ?></h1>
 				<div class="inline_form_inside">
 					<div style="padding: 10px;">
-					Thanks for the rockin' question!
+					<?= wfMsg("ask_thanks") ?>
 					</div>
 				</div>
 			</div>
 
 		<?
 		}	
-		if ($is_question) {
+		if ( !$wgRequest->getVal("diff") && $is_question) {
 			if( $wgUser->isLoggedIn() ){
 				$watchlist_url = $wgTitle->escapeFullURL("action=watch");
 			}else{
 				$watchlist_url = "javascript:anonWatch();";
 			}
 		?>
+		<!--
 		<table id="bottom_ads"> 
 		<tr>
 			<td id="google_ad_1" class="google_ad"></td>
 			<td id="google_ad_2" class="google_ad"></td> 
 		</tr>
 		</table> 
-		
+		-->
+		<?
+		/*
 		<div id="huge_buttons" class="clearfix">
 			<? if ( $answer_page->isArticleAnswered() ) { ?>
 			<a href="<?= $wgTitle->getEditURL() ?>" class="huge_button edit"><div></div><?= wfMsg("improve_this_answer") ?></a>	
@@ -354,6 +442,33 @@ wfRunHooks('GetHTMLAfterBody', array (&$this));
 			<a href="<?= $watchlist_url ?>" class="huge_button watchlist"><div></div><?= wfMsg("notify_answered") ?></a>
 			<? } ?>
 		</div>
+		*/
+		?>
+		<?php
+		$tiny_url = Http::get("http://tinyurl.com/api-create.php?url={$wgTitle->getFullURL()}");
+		$twitter_question = urlencode( substr( $wgTitle->getText(), 0, 99 ) );
+		$twitter_url = "http://twitter.com/home?status=" . $twitter_question . "? " . $tiny_url . " " . urlencode("#" . wfMsg("twitter_hashtag"));
+
+		?>
+		<?php
+		if( !$answer_page->isArticleAnswered() ){
+		?>
+			<div id="answer_title"><?= wfMsg("answer_title")?></div>
+			<div><?= wfMsg("question_not_answered")?></div>
+			
+			<div id="unanswered-links">
+			<div><?= wfMsg("you_can")?></div>
+			<ul>
+			<li><?= wfMsg("answer_this", $wgTitle->getEditURL())?></li>
+			<li><?= wfMsg("research_this_on_wikipedia", $wgTitle->getEditURL())?></li>
+			<li><?= wfMsg("ask_friends_on_twitter", $twitter_url)?></li>
+			<li><?= wfMsg("receive_email", $watchlist_url)?></li>
+			</ul>
+			</div>
+		<?php
+		}else{
+		?>
+		
 		<div id="social_networks">
 		<label><?= wfMsg("ask_friends")?></label>
 			<?
@@ -378,12 +493,7 @@ wfRunHooks('GetHTMLAfterBody', array (&$this));
 			
 			?>
 
-		<?php
-		$tiny_url = Http::get("http://tinyurl.com/api-create.php?url={$wgTitle->getFullURL()}");
-		$twitter_question = substr( $wgTitle->getText(), 0, 99 );
-		$twitter_url = "http://twitter.com/home?status=" . $twitter_question . "? " . $tiny_url . " " . urlencode("#" . wfMsg("twitter_hashtag"));
-
-		?>
+		
 		<div id="twitter-post">
 			<a href="<?=$twitter_url?>" onclick="window.open('<?=$twitter_url?>', 'twitter'); return false;"><img src="/skins/answers/images/twitter_icon.png" /></a> <a href="<?=$twitter_url?>" onclick="window.open('<?=$twitter_url?>', 'twitter'); return false;"><?= wfMsg("twitter_ask")?></a>
 		</div>
@@ -412,6 +522,7 @@ wfRunHooks('GetHTMLAfterBody', array (&$this));
 				}
 		} 
 		} 
+		}
 		?>
 		
 		<?php if($this->data['catlinks']) { $this->html('catlinks'); } ?>
@@ -485,12 +596,16 @@ wfRunHooks('GetHTMLAfterBody', array (&$this));
 
         <div id="answers_sidebar" class="reset">
 		<?php
+		/*
 		($wgUser->isLoggedIn()) ? $toolboxClass = '' : $toolboxClass = ' class="anon"';
+		*/
 		?>
-		<div id="toolbox"<?=$toolboxClass?>>
+		<div id="toolbox">
 			<div id="toolbox_stroke">
 			<?php
+			/* SAME TOOLBOX FOR USERS AND ANONS
 			if ($wgUser->isLoggedIn()) {
+			*/
 			?>
 				<div id="toolbox_inside">
 					<h6><?= wfMsg("answers_toolbox")?></h6>
@@ -518,6 +633,7 @@ wfRunHooks('GetHTMLAfterBody', array (&$this));
 					<?=$this->searchBox();?>
 				</div>
 			<?php
+			/*
 			} else {
 			?>
 				<div id="toolbox_inside">
@@ -526,6 +642,7 @@ wfRunHooks('GetHTMLAfterBody', array (&$this));
 				</div>
 			<?php
 			}
+			*/
 			?>
 			</div><?/*toolbox_stroke*/?>
 		</div><?/*toolbox*/?>
@@ -533,20 +650,32 @@ wfRunHooks('GetHTMLAfterBody', array (&$this));
 		<div class="widget">
 			<h2><?= wfMsg("recent_unanswered_questions") ?></h2>
 			<ul id="recent_unanswered_questions">
-				<? 
-				if ($is_question) {	
-				echo '<li><div id="google_ad_3" class="google_ad"></div></li>';
-				} 
-				?>
 			</ul>
+			<? 
+			if ($is_question) {	
+			echo '<li><div id="google_ad_1" class="google_ad"></div></li>';
+			}
+			?>
 		</div>
 
 		<div class="widget">
 			<h2><?= wfMsg("popular_categories") ?></h2>
 			<ul id="popular_categories">
 				<? 
+				$lines = getMessageAsArray("sidebar-popular-categories");
+				if( is_array( $lines ) ){
+					foreach($lines as $line) {
+						$item = parseItem(trim($line, ' *'));
+						$popular_categories[] = $item;
+					}
+				}
+				if( is_array( $popular_categories ) ){
+					foreach( $popular_categories as $popular_category ){
+						echo '<li><a href="' . $popular_category["href"] . '">' . $popular_category["text"] . '</a></li>';
+					}
+				}
 				if ($is_question) {	
-				echo '<li><div id="google_ad_4" class="google_ad"></div></li>';
+				echo '<li><div id="google_ad_2" class="google_ad"></div></li>';
 				}
 				?>
 			</ul>
@@ -567,28 +696,18 @@ wfRunHooks('GetHTMLAfterBody', array (&$this));
 <?php endif; ?>
 <script>
 google_ad_client = 'pub-4086838842346968'; // substitute your client_id (pub-#)
-google_ad_channel = '7000000004';
+google_ad_channel = (( wgIsAnswered )?'7000000004':'7000000003');
 google_ad_output = 'js';
 google_max_num_ads = '10';
-google_ad_type = 'text_html';
-google_image_size = '728x90';
+google_ad_type = 'text';
 google_feedback = 'on';
 <?
-if ($category_text) {
-	$google_hints = "";
-	foreach($category_text as $ctg){
-		if( strtoupper($ctg) != strtoupper(wfMsg("unanswered_category")) && strtoupper($ctg) != strtoupper(wfMsg("answered_category")) ){
-			$google_hints .= (( $google_hints ) ? ", " : "" ) . $ctg;
-		}
-	}
-	echo 'google_hints = \''. $google_hints .'\';';
-}
+echo 'google_hints = \''. $google_hints .'\';';
 ?>
 </script>
 <script language="JavaScript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
 
 <?php
-// Note, these were placed above the Ad calls intentionally because ad code screws with analytics
 echo AnalyticsEngine::track('GA_Urchin', AnalyticsEngine::EVENT_PAGEVIEW);
 echo AnalyticsEngine::track('GA_Urchin', 'hub', 'answers');
 global $wgCityId;
@@ -760,6 +879,54 @@ echo AnalyticsEngine::track('QuantServe', AnalyticsEngine::EVENT_PAGEVIEW);
 <?php
 		}
         }
+
+	function displayMagicAnswer(){
+		global $wgTitle;
+		?>
+		<div id="magicAnswer" style="display:none"><!-- display is shown in web service callback function -->
+			<div id="magicAnswerLeft"><div id="magicAnswerRight"><div id="magicAnswerCurtainLeft"></div><div id="magicAnswerCurtainRight"></div><div id="magicAnswerHat"></div>
+			<img id="magicAnswerLogo" src="/skins/answers/images/magic_answer.png" />
+			<form action="<?php echo $wgTitle->getLocalUrl() ?>" method="get" id="magicAnswerForm"><!-- Must be GET or the edit form does preview -->
+			<?php/* Note there is a hook called displayMagicAnswer in Answers.php on the Edit form that looks for "magic Answer" in theurl */?>
+			<input type="hidden" name="action" value="edit"/>
+			<input type="hidden" id="magicAnswerField" name="magicAnswer" value=""/><!-- Filled in with js -->
+			<h6><?=wfMsg("magic_answer_headline") ?></h6>
+			<div id="magicAnswerBox"></div>
+			<div id="magicAnswerButtons" class="clearfix">	
+				<button id="magicAnswerYes" class="button_small button_small_green"><span><?=wfMsg("magic_answer_yes")?></span></button>
+				<button id="magicAnswerNo" class="button_small button_small_blue"><span><?=wfMsg("magic_answer_no")?></span></button>
+			</div>
+			</form>
+			<div id="magicAnswerStage">
+				<a href="http://answers.yahoo.com" rel="nofollow"><?=wfMsg("magic_answer_credit")?></a>
+			</div>
+			</div></div><?/*right, left*/?>
+		</div>
+		<script type="text/javascript">
+		jQuery("#magicAnswerNo").bind("click", function(e) {
+			$("#magicAnswer").animate({opacity: "0"}, function() {
+				$(this).slideUp()
+			});
+			return false;
+		});
+		jQuery("#magicAnswerYes").bind("click", function(e) {
+			jQuery("#magicAnswerForm").submit();
+			return false;
+		});
+		MagicAnswer.getAnswer("<?php echo addslashes($this->data['title'])?>", "magicAnswerCallback");
+		function magicAnswerCallback(result){
+		        //if (console.dir) { console.dir(result); }
+		        try {
+				jQuery("#magicAnswerBox").html(result.all.questions[0]["ChosenAnswer"]);
+				jQuery("#magicAnswerField").val(result.all.questions[0]["Subject"]);
+				jQuery('#magicAnswer').show();
+        		} catch (e){
+			//	console.dir(e);
+			}
+		}
+		</script>
+		<?php
+	}
 } // end of class
 
 

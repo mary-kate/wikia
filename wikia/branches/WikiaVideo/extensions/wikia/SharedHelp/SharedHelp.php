@@ -34,7 +34,7 @@ class SharedHttp extends Http {
 	}
 
 	static function request( $method, $url, $timeout = 'default' ) {
-		global $wgHTTPTimeout, $wgHTTPProxy, $wgVersion, $wgTitle;
+		global $wgHTTPTimeout, $wgHTTPProxy, $wgVersion, $wgTitle, $wgDevelEnvironment;
 
 		wfDebug( __METHOD__ . ": $method $url\n" );
 		# Use curl if available
@@ -47,16 +47,18 @@ class SharedHttp extends Http {
 				curl_setopt($c, CURLOPT_PROXY, $wgHTTPProxy);
 			}
 			*/
-			curl_setopt( $c, CURLOPT_PROXY, 'localhost:80' );
+			if (empty($wgDevelEnvironment)) {
+				curl_setopt( $c, CURLOPT_PROXY, 'localhost:80' );
+			}
 
 			if ( $timeout == 'default' ) {
 				$timeout = $wgHTTPTimeout;
 			}
 			curl_setopt( $c, CURLOPT_TIMEOUT, $timeout );
-	
+
 			curl_setopt( $c, CURLOPT_HEADER, true );
 			curl_setopt( $c, CURLOPT_FOLLOWLOCATION, false );
-			
+
 			curl_setopt( $c, CURLOPT_USERAGENT, "MediaWiki/$wgVersion" );
 			if ( $method == 'POST' )
 				curl_setopt( $c, CURLOPT_POST, true );
@@ -92,7 +94,7 @@ class SharedHttp extends Http {
 }
 
 function SharedHelpHook(&$out, &$text) {
-	global $wgTitle, $wgMemc, $wgSharedDB, $wgDBname, $wgCityId, $wgHelpWikiId, $wgContLang, $wgArticlePath;
+	global $wgTitle, $wgMemc, $wgSharedDB, $wgDBname, $wgCityId, $wgHelpWikiId, $wgContLang, $wgLanguageCode, $wgArticlePath;
 
 	if(empty($wgHelpWikiId) || $wgCityId == $wgHelpWikiId) { # Do not proceed if we don't have a help wiki or are on it
 		return true;
@@ -102,10 +104,16 @@ function SharedHelpHook(&$out, &$text) {
 		return true;
 	}
 
+	# Do not process if explicitly told not to
+	$mw = MagicWord::get('MAG_NOSHAREDHELP');
+	if ( $mw->match( $text ) ) {
+		return true;
+	}
+
 	if($wgTitle->getNamespace() == 12) { # Process only for pages in namespace Help (12)
 		# Initialize shared and local variables
 		# Canonical namespace is added here in case we ever want to share other namespaces (e.g. Advice)
-		$sharedArticleKey = $wgSharedDB . ':sharedArticles:' . $wgHelpWikiId . ':' . 
+		$sharedArticleKey = $wgSharedDB . ':sharedArticles:' . $wgHelpWikiId . ':' .
 			MWNamespace::getCanonicalName( $wgTitle->getNamespace() ) .  ':' . $wgTitle->getDBkey();
 		$sharedArticle = $wgMemc->get($sharedArticleKey);
 		$sharedServer = unserialize(WikiFactory::getVarByName('wgServer', $wgHelpWikiId)->cv_value);
@@ -141,7 +149,7 @@ function SharedHelpHook(&$out, &$text) {
 			$articleUrl = sprintf($urlTemplate, urlencode($wgTitle->getDBkey()));
 			list($content, $c) = SharedHttp::get($articleUrl);
 
-			# if we had redirect, then store it somewhere 
+			# if we had redirect, then store it somewhere
 			if(curl_getinfo($c, CURLINFO_HTTP_CODE) == 301) {
 				if(preg_match("/^Location: ([^\n]+)/m", $content, $dest_url)) {
 					$destinationUrl = $dest_url[1];
@@ -152,7 +160,7 @@ function SharedHelpHook(&$out, &$text) {
 			$sk = $wgUser->getSkin();
 
 			if (!empty ($_SESSION ['SH_redirected'])) {
-				$from_link = Title::newfromText( $helpNs . ":" . $_SESSION ['SH_redirected'] );				
+				$from_link = Title::newfromText( $helpNs . ":" . $_SESSION ['SH_redirected'] );
 				$redir = $sk->makeKnownLinkObj( $from_link, '', 'redirect=no', '', '', 'rel="nofollow"' );
 				$s = wfMsg( 'redirectedfrom', $redir );
 				$out->setSubtitle( $s );
@@ -162,9 +170,8 @@ function SharedHelpHook(&$out, &$text) {
 			if(isset($destinationUrl)) {
 				$destinationPageIndex = strpos( $destinationUrl, "$helpNs:" );
 				# if $helpNs was not found, assume we're on help.wikia.com and try again
-				# TODO: this is ugly, might use a rewrite
 				if ( $destinationPageIndex === false )
-					$destinationPageIndex = strpos( $destinationUrl, "Help:" );
+					$destinationPageIndex = strpos( $destinationUrl, Namespace::getCanonicalName(NS_HELP) . ":" );
 				$destinationPage = substr( $destinationUrl, $destinationPageIndex );
 				$link = $wgServer . str_replace( "$1", $destinationPage, $wgArticlePath );
 				if ( 'no' != $wgRequest->getVal( 'redirect' ) ) {
@@ -173,10 +180,10 @@ function SharedHelpHook(&$out, &$text) {
 					$wasRedirected = true;
 				} else {
 					$content = "\n\n" . wfMsg( 'shared_help_was_redirect', "<a href=" . $link . ">$destinationPage</a>" );
-				} 
+				}
 			} else {
 				$tmp = split("\r\n\r\n", $content, 2);
-				$content = $tmp[1];
+				$content = isset($tmp[1]) ? $tmp[1] : '';
 			}
 			if(strpos($content, '"noarticletext"') > 0) {
 				$sharedArticle = array('exists' => 0, 'timestamp' => wfTimestamp());
@@ -184,7 +191,7 @@ function SharedHelpHook(&$out, &$text) {
 				return true;
 			} else {
 				$contentA = explode("\n", $content);
-				$tmp = $contentA[count($contentA)-2];
+				$tmp = isset($contentA[count($contentA)-2]) ? $contentA[count($contentA)-2] : '';
 				$idx1 = strpos($tmp, 'key');
 				$idx2 = strpos($tmp, 'end');
 				$key = trim(substr($tmp, $idx1+4, $idx2-$idx1));
@@ -199,10 +206,23 @@ function SharedHelpHook(&$out, &$text) {
 		if (empty($wasRedirected)) {
 			# get rid of editsection links
 			$content = preg_replace("|<span class=\"editsection\">\[<a href=\".*?\" title=\".*?\">.*?<\/a>\]<\/span>|", "", $content);
+			$content = str_replace(
+				array('showTocToggle();', '<table id="toc" class="toc"', '<div id="toctitle">'),
+				array("showTocToggle('sharedtoctitle', 'sharedtoc', 'sharedtogglelink');", '<table id="sharedtoc" class="toc"', '<div id="sharedtoctitle" class="toctitle">'),
+				$content);
 
-			# replace help wiki links with local links, except for Category links, which will go to the help wiki
-			$categoryNs = $wgContLang->getNsText(NS_CATEGORY);
-			$content = preg_replace("|{$sharedServer}{$sharedArticlePathClean}(?!$categoryNs)(?!Advice)|", $localArticlePathClean, $content);
+			# namespaces to skip when replacing links
+			$skipNamespaces = array();
+			$skipNamespaces[] = $wgContLang->getNsText(NS_CATEGORY);
+			$skipNamespaces[] = $wgContLang->getNsText(NS_IMAGE);
+			$skipNamespaces[] = "Advice";
+			if ($wgLanguageCode != 'en') {
+				$skipNamespaces[] = Namespace::getCanonicalName(NS_CATEGORY);
+				$skipNamespaces[] = Namespace::getCanonicalName(NS_IMAGE);
+			}
+
+			# replace help wiki links with local links, except for special namespaces defined above
+			$content = preg_replace("|{$sharedServer}{$sharedArticlePathClean}(?!" . implode(")(?!", $skipNamespaces) . ")|", $localArticlePathClean, $content);
 
 			// "this text is stored..."
 			$info = '<div class="sharedHelpInfo" style="text-align: right; font-size: smaller;padding: 5px">' . wfMsgExt('shared_help_info', 'parseinline', $wgTitle->getDBkey()) . '</div>';
@@ -239,17 +259,45 @@ function SharedHelpEditPageHook(&$editpage) {
 
 function SharedHelpBrokenLink( $linker, $nt, $query, $u, $style, $prefix, $text, $inside, $trail  ) {
 	global $wgTitle;
-	if ($wgTitle instanceof Title) {
+	if (isset($wgTitle)) {
 		$specialpage = SpecialPage::resolveAlias( $wgTitle->getDBkey() );
 		if( ( $nt->getNamespace() == 12 ) && ( 'Wantedpages' != $specialpage ) ) {
-			//not red, blue
-			$style = $linker->getInternalLinkAttributesObj( $nt, $text, '' );
-			$u = str_replace( "&amp;action=edit&amp;redlink=1", "", $u );
-			$u = str_replace( "?action=edit&amp;redlink=1&amp;", "?", $u );
-			$u = str_replace( "?action=edit&amp;redlink=1", "", $u );	
+
+			if (SharedHelpArticleExists($nt)) {
+				//not red, blue
+				$style = $linker->getInternalLinkAttributesObj( $nt, $text, '' );
+				$u = str_replace( "&amp;action=edit&amp;redlink=1", "", $u );
+				$u = str_replace( "?action=edit&amp;redlink=1&amp;", "?", $u );
+				$u = str_replace( "?action=edit&amp;redlink=1", "", $u );
+				$u .= $nt->getFragmentForURL();	//fix rt#11382
+			}
 		}
 	}
 	return true;
+}
+
+/**
+ * does $title article exist @help.wikia?
+ *
+ * uses info cached by SharedHelpHook
+ * in border cases may be inacurate up to cachetime (600 sec right now)
+ *
+ * @see SharedHelpHook
+ */
+function SharedHelpArticleExists($title) {
+	global $wgTitle, $wgMemc, $wgSharedDB, $wgHelpWikiId;
+
+	$exists = false;
+
+	$sharedArticleKey = $wgSharedDB . ':sharedArticles:' . $wgHelpWikiId . ':' .
+		MWNamespace::getCanonicalName( $title->getNamespace() ) .  ':' . $title->getDBkey();
+	$sharedArticle = $wgMemc->get($sharedArticleKey);
+
+	if ( !empty($sharedArticle['timestamp']) ) {
+		$exists =  true;
+	}
+
+	return $exists;
 }
 
 // basically modify the Wantedpages query to exclude pages that appear on the help wiki, as per #5866
@@ -287,3 +335,22 @@ function SharedHelpWantedPagesSql( $page, $sql ) {
 	return true;
 }
 
+# __NOSHAREDHELP__ magic word prevents rendering of shared content
+$wgHooks['MagicWordwgVariableIDs'][] = 'efSharedHelpRegisterMagicWordID';
+$wgHooks['LanguageGetMagic'][] = 'efSharedHelpGetMagicWord';
+$wgHooks['InternalParseBeforeLinks'][] = 'efSharedHelpRemoveMagicWord';
+
+function efSharedHelpRegisterMagicWordID(&$magicWords) {
+	$magicWords[] = 'MAG_NOSHAREDHELP';
+	return true;
+}
+
+function efSharedHelpGetMagicWord(&$magicWords, $langCode) {
+	$magicWords['MAG_NOSHAREDHELP'] = array(0, '__NOSHAREDHELP__');
+	return true;
+}
+
+function efSharedHelpRemoveMagicWord(&$parser, &$text, &$strip_state) {
+	MagicWord::get('MAG_NOSHAREDHELP')->matchAndRemove($text);
+	return true;
+}
