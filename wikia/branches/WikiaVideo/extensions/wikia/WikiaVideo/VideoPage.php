@@ -600,6 +600,9 @@ EOD;
                         'IGNORE'
                 );
 
+		$cat = $wgContLang->getFormattedNsText( NS_CATEGORY );
+		$saved_text = '[[' . $cat . ':' . wfMsg( 'wikiavideo-category' ) . ']]';		
+
                 if( $dbw->affectedRows() == 0 ) {
 			// we are updating
                         $desc = "updated video [[" . self::getNameFromTitle( $this->mTitle ) . "]]";
@@ -638,12 +641,11 @@ EOD;
 			// may also need modifying watchlist...
 			$log = new LogPage( 'upload' );
 			$log->addEntry( 'overwrite', $this->mTitle, 'updated video' );
+			$saved_text = $this->getContent();
 		}
-		$cat = $wgContLang->getFormattedNsText( NS_CATEGORY );
-		$this->doEdit( '[[' . $cat . ':' . wfMsg( 'wikiavideo-category' ) . ']]', $desc );
 
+		$this->doEdit( $saved_text, $desc );
 		$dbw->immediateCommit();
-
 	}
 
 	public function load() {
