@@ -572,13 +572,6 @@ class ReverseParser {
 								$out = "$out\n";
 							}
 
-							// add newline if next node is paragraph
-							// and was in next line of wikitext
-							$nextNode = $this->getNextElementNode($node);
-
-							if ( $nextNode && ($nextNode->nodeName == 'p') && $nextNode->hasAttribute('_new_lines_before') ) {
-								$out = "$out\n";
-							}
 						}
 						break;
 
