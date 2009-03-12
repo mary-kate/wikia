@@ -331,7 +331,7 @@ FCK.VideoSetupOverlayMenu = function(refid, div) {
 
 	div.appendChild(overlay);
 
-	overlay.innerHTML = '<span class="videoOverlayEdit" onclick="FCK.VideoEdit('+refid+')">edit</span><span class="videoOverlayRemove" onclick="FCK.VideoRemove('+refid+')">remove</span>';
+	overlay.innerHTML = '<span class="videoOverlayEdit" onclick="FCK.VideoEdit('+refid+')">' + FCKLang.DlgSelectBtnModify + '</span><span class="videoOverlayRemove" onclick="FCK.VideoRemove('+refid+')">' + FCKLang.DlgSelectBtnDelete + '</span>';
 
 	// add "move" option for videos handled by contentEditable
 	if (FCK.UseContentEditable) {
