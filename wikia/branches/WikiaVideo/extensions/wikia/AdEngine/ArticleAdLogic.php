@@ -77,7 +77,7 @@ class ArticleAdLogic {
 		if (preg_match_all('/<(table|img|div)[^>]+>/is', $firstHtml, $matches, PREG_OFFSET_CAPTURE)){
 
 			// PHP's preg_match_all return is a PITA to deal with	
-			for ($i = 0; $i< sizeof($matches[0]); $i++){
+			for ($i = 0; $i < sizeof($matches[0]) && $score < 1; $i++){
 				$wholetag = $matches[0][$i];
 				$tag = $matches[1][$i][0];
 				if (strtolower($tag) == 'table' ) $tableFound=true;
@@ -91,7 +91,7 @@ class ArticleAdLogic {
 		}
 
 		// For tables, check to see if we have a table that has a lot of columns.
-		if ( $tableFound ){
+		if ( $tableFound && $score < 1 ){
 			$firstRow = substr($firstHtml, 0, stripos($firstHtml, '</tr>'));
 			if (preg_match_all('/<\/[tT][HhDd]>/', $firstRow, $columnMatches)){
 				$numColumns = count($columnMatches[0]);
