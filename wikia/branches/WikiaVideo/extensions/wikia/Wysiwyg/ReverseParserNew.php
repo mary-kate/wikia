@@ -76,7 +76,7 @@ class ReverseParser {
 		if(is_string($html) && $html != '') {
 
 			// save meta-data
-			$this->data = $data;
+			$this->data = is_array($data) ? $data : array();
 
 			// HTML cleanup
 			// trying to fix RT #9466

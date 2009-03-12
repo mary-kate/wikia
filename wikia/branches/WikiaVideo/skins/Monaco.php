@@ -368,7 +368,7 @@ class SkinMonaco extends SkinTemplate {
 	 */
 	public function addVariables(&$obj, &$tpl) {
 		wfProfileIn(__METHOD__);
-		global $wgLang, $wgContLang, $wgMemc, $wgUser, $wgRequest, $wgTitle, $parserMemc;
+		global $wgDBname, $wgLang, $wgContLang, $wgMemc, $wgUser, $wgRequest, $wgTitle, $parserMemc;
 
 		// We want to cache populated data only if user language is same with wiki language
 		$cache = $wgLang->getCode() == $wgContLang->getCode();
@@ -493,6 +493,23 @@ EOS;
 		// This is for WidgetRelatedCommunities
 		$this->relatedcommunities = $data_array['relatedcommunities'];
 		unset($data_array['relatedcommunities']);
+
+		/*
+		// Get Magic Footer Links
+		$dbr =& wfGetDB(DB_SLAVE);
+		$row = $dbr->selectRow('`wikicities`.magic_footer_links', 'links, parsed_links', array('dbname' => $wgDBname, 'page' => $wgTitle->getPrefixedText()), 'SkinMonaco->addVariables');
+		if($row) {
+			if(empty($row->parsed_links)) {
+				$tempParser = new Parser();
+				$tempParser->setOutputType(OT_HTML);
+				$row->parsed_links = $tempParser->parse($row->links, $wgTitle, new ParserOptions(), false)->getText();
+				$dbw = wfGetDB(DB_MASTER);
+				$dbw->update('`wikicities`.magic_footer_links', array('parsed_links' => $row->parsed_links), array('dbname' => $wgDBname, 'page' => $wgTitle->getPrefixedText()), 'SkinMonaco->addVariables');
+				$dbw->commit();
+			}
+			$data_array['magicfooterlinks'] = $row->parsed_links;
+		}
+		*/
 
 		$tpl->set('data', $data_array);
 
@@ -1365,7 +1382,12 @@ wfProfileIn( __METHOD__ . '-header'); ?>
 		<div id="wikia_header" class="reset color2">
 			<div class="monaco_shrinkwrap">
 			<div id="wikiaBranding">
-				<div id="wikia_logo"><a rel="nofollow" href="http://www.wikia.com/">Wikia</a></div>
+<?php
+global $wgLangToCentralMap, $wgContLang;
+$central_url = !empty($wgLangToCentralMap[$wgContLang->getCode()]) ? $wgLangToCentralMap[$wgContLang->getCode()] : 'http://www.wikia.com/';
+?>
+				<div id="wikia_logo"><a rel="nofollow" href="<?= $central_url ?>">Wikia</a></div>
+
 <?php
 $categorylist = $this->data['data']['categorylist'];
 if(isset($categorylist['nodes']) && count($categorylist['nodes']) > 0 ) {
@@ -1614,8 +1636,28 @@ if ($wgOut->isArticle()){
 					}
 					?>
 					<!-- start content -->
-					<?php $this->html('bodytext') ?>
-					<?php if($this->data['catlinks']) { $this->html('catlinks'); } ?>
+					<?php
+					// Display content
+					$this->html('bodytext');
+					
+		                        // Display additional ads before categories and footer on long pages
+					if ( $wgUser->isAnon() &&
+					$wgOut->isArticle() &&
+					ArticleAdLogic::isContentPage() &&
+					ArticleAdLogic::isLongArticle($this->data['bodytext'])) {
+						echo  '<table style="margin-top: 1em; width: 100%"><tr>' .
+						'<td style="width: 50%; text-align: center"><div style="width: 300px; margin: 0 auto">' .
+						AdEngine::getInstance()->getPlaceHolderDiv('PREFOOTER_LEFT_BOXAD', false) .
+						"</div></td>\n" .
+						'<td style="width: 50%; text-align: center"><div style="width: 300px; margin: 0 auto">' .
+						AdEngine::getInstance()->getPlaceHolderDiv('PREFOOTER_RIGHT_BOXAD', false) .
+						"</div></td></tr>\n</table>";
+					}
+
+					// Display categories
+					if($this->data['catlinks'])
+						$this->html('catlinks');
+					?>
 					<!-- end content -->
 					<div class="visualClear"></div>
 				</div>
@@ -1635,19 +1677,6 @@ if ($wgOut->isArticle()){
 				echo '<div style="position: absolute; height: 600px; width: 160px; margin-top: -600px; left: -190px;">' .
 					AdEngine::getInstance()->getPlaceHolderDiv('LEFT_SKYSCRAPER_3', true) .
 				     '</div>' . "\n";
-			}
-
-			// Display additional ads before the footer on long pages
-			if ($wgOut->isArticle() &&
-			ArticleAdLogic::isContentPage() &&
-			ArticleAdLogic::isLongArticle($this->data['bodytext'])) {
-				echo  '<table style="width: 100%"><tr>' . 
-					'<td style="text-align: center">' .
-					AdEngine::getInstance()->getPlaceHolderDiv('PREFOOTER_LEFT_BOXAD', false) .
-					"</td>\n" .
-					'<td style="text-align: center">' .
-					AdEngine::getInstance()->getPlaceHolderDiv('PREFOOTER_LEFT_BOXAD', false) .
-                                        "</td></tr>\n</table>";
 			}
 
 		wfProfileOut( __METHOD__ . '-article'); ?>
@@ -1865,8 +1894,17 @@ if (array_key_exists("TOP_RIGHT_BOXAD", AdEngine::getInstance()->getPlaceholders
                 }
             }
         }
+
+        if(!empty($this->data['data']['magicfooterlinks'])) {
 ?>
+                <tr>
+                    <th><?= wfMsg('magicfooterlinks') ?></th>
+                    <td><?= $this->data['data']['magicfooterlinks'] ?></td>
+                </tr>
 <?php
+        }
+
+
 $wikiafooterlinks = $this->data['data']['wikiafooterlinks'];
 if(count($wikiafooterlinks) > 0) {
 	$wikiafooterlinksA = array();
