@@ -519,6 +519,33 @@ function VET_preQuery(e) {
 	}
 }
 
+function VET_insertTag( target, tag, position ) {
+	// store the scrollbar positions
+	if (document.selection  && document.selection.createRange) { // IE/Opera
+		if (document.documentElement && document.documentElement.scrollTop) {
+			var winScroll = document.documentElement.scrollTop;
+		}
+		else if (document.body) {
+			var winScroll = document.body.scrollTop;
+		}
+		target.value = target.value.substring(0, position)
+			+ '\n' + tag + '\n'
+			+ target.value.substring( position + 1, target.value.length);
+
+		if (document.documentElement && document.documentElement.scrollTop) {
+			document.documentElement.scrollTop = winScroll;
+		} else if (document.body) {
+			document.body.scrollTop = winScroll;
+		}
+	} else if (target.selectionStart || target.selectionStart == '0') { // Mozilla
+		var textScroll = target.scrollTop;			
+		target.value = target.value.substring(0, position)
+			+ '\n' + tag + '\n'
+			+ target.value.substring( position + 1, target.value.length);
+		target.scrollTop = textScroll;
+	}							
+}
+
 function VET_displayDetails(responseText) {
 	VET_switchScreen('Details');
 	VET_width = null;
@@ -674,16 +701,14 @@ function VET_insertFinalVideo(e, type) {
 									} else {
 										var txtarea = FCK.EditingArea.Textarea;
 									}
-									txtarea.value = txtarea.value.substring(0, VET_inGalleryPosition)
-						                        + '\n' + $( 'VideoEmbedTag' ).value + '\n'
-						                        + txtarea.value.substring(VET_inGalleryPosition + 1, txtarea.value.length);
+									VET_insertTag( txtarea, $('VideoEmbedTag').value, VET_inGalleryPosition );
 								}
 							} else {
 								// insert into first free "add video" node
 								var box_num = VET_getFirstFree( VET_gallery, VET_box );
 								if( $( 'WikiaVideoGalleryPlaceholder' + VET_gallery + 'x' + box_num ) ) {
 									var to_update = $( 'WikiaVideoGalleryPlaceholder' + VET_gallery + 'x' + box_num );
-									to_update.parentNode.innerHTML = $('VideoEmbedCode').innerHTML;
+									to_update.parentNode.innerHTML = $('VideoEmbedCode').innerHTML;			
 									YAHOO.util.Connect.asyncRequest('POST', wgServer + wgScript + '?title=' + wgPageName  +'&action=purge');
 								}
 							}
