@@ -811,8 +811,8 @@ EOD;
 
 	private function getThumbnailCode($width) {
 		global $wgExtensionsPath, $wgWikiaVideoProviders;
-		$thumb = '';
 
+		$thumb = $wgExtensionsPath . '/wikia/VideoEmbedTool/images/vid_thumb.jpg';
 		switch( $wgWikiaVideoProviders[$this->mProvider] ) {
 			case "metacafe":
 				$thumb = 'http://www.metacafe.com/thumb/' . $this->mId . '.jpg';	
@@ -820,14 +820,31 @@ EOD;
 			case "youtube":
 				$thumb = 'http://img.youtube.com/vi/' . $this->mId . '/0.jpg';
 				break;
-			case "sevenload":					
-			case "gamevideos":
-			case "5min":
-			case "myvideo":
 			case "vimeo":
+				$file = @file_get_contents( "http://vimeo.com/api/clip/" . $this->mId . '.php', FALSE );
+				if ($file) {
+					$data = unserialize( $file );
+					$thumb = trim( $data[0]["thumbnail_large"] );
+				}
+				break;
+			case "5min":
+				break;
+				/* todo test
+				$file = @file_get_contents( "http://api.5min.com/video/" . $this->mId . '/info.xml', FALSE );
+					if ($file) {
+						$doc = new DOMDocument;
+						@$doc->loadHTML( $file );
+						if( $item = $doc->getElementsByTagName('item')->item( 0 ) ) {
+							$thumb = trim( $item->getElementsByTagNameNS('media', 'thumbnail')->item(0)->getAttribute('url') );
+						}
+					}				
+				break;
+				*/
+			case "sevenload":					
+			case "myvideo":
+			case "gamevideos":
 			case 'southparkstudios': // no API
 			default:
-				$thumb = $wgExtensionsPath . '/wikia/VideoEmbedTool/images/vid_thumb.jpg';
 				break;
 		}
 
