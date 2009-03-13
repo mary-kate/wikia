@@ -236,7 +236,7 @@ class HAWelcomeJob extends Job {
 			$Title = Title::newFromId( $revision->getPage() );
 			$revision->setTitle( $Title );
 		}
-
+		error_log( __METHOD__ .": " . $Title->getDBkey());
 		if( $Title && ! $wgCommandLineMode && ! $wgUser->isAllowed( "bot" ) ) {
 
 			Wikia::log( __METHOD__, "title", $Title->getFullURL() );
@@ -245,7 +245,7 @@ class HAWelcomeJob extends Job {
 			Wikia::log( __METHOD__, "welcomer", $welcomer );
 
 			if( $welcomer !== "@disabled" && $welcomer !== "-" ) {
-
+			  error_log( __METHOD__ .": {$welcomer}");
 				/**
 				 * check if talk page for wgUser exists
 				 *
