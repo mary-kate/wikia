@@ -233,10 +233,10 @@ class HAWelcomeJob extends Job {
 		 */
 		$Title = $revision->getTitle();
 		if( !$Title ) {
-			$Title = Title::newFromId( $revision->getPage() );
+		  $Title = Title::newFromId( $revision->getPage(), GAID_FOR_UPDATE );
 			$revision->setTitle( $Title );
 		}
-		error_log( __METHOD__ .": " . $Title->getDBkey());
+
 		if( $Title && ! $wgCommandLineMode && ! $wgUser->isAllowed( "bot" ) ) {
 
 			Wikia::log( __METHOD__, "title", $Title->getFullURL() );
