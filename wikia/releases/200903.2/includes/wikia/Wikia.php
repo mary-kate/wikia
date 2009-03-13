@@ -348,11 +348,11 @@ class Wikia {
 	 *
 	 */
 	static public function log( $method, $sub = false, $message = false ) {
-	  global $wgDevelEnvironment, $wgErrorLog;
+	  global $wgDevelEnvironment, $wgErrorLog, $wgDBname, $wgCityId;
 
 		$method = $sub ? $method . "-" . $sub : $method;
 		if( $wgDevelEnvironment || $wgErrorLog ) {
-			error_log( $method . ": " . $message );
+			error_log( $method . ":{$wgDBname}/{$wgCityId}:" . $message );
 		}
 		/**
 		 * and use wfDebug as well
