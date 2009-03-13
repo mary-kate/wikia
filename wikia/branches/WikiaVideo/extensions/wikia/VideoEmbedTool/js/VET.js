@@ -522,21 +522,11 @@ function VET_preQuery(e) {
 function VET_insertTag( target, tag, position ) {
 	// store the scrollbar positions
 	if (document.selection  && document.selection.createRange) { // IE/Opera
-		if (document.documentElement && document.documentElement.scrollTop) {
-			var winScroll = document.documentElement.scrollTop;
-		}
-		else if (document.body) {
-			var winScroll = document.body.scrollTop;
-		}
+		var winScroll = target.scrollTop;
 		target.value = target.value.substring(0, position)
 			+ '\n' + tag + '\n'
 			+ target.value.substring( position + 1, target.value.length);
-
-		if (document.documentElement && document.documentElement.scrollTop) {
-			document.documentElement.scrollTop = winScroll;
-		} else if (document.body) {
-			document.body.scrollTop = winScroll;
-		}
+		target.scrollTop = winScroll;
 	} else if (target.selectionStart || target.selectionStart == '0') { // Mozilla
 		var textScroll = target.scrollTop;			
 		target.value = target.value.substring(0, position)
