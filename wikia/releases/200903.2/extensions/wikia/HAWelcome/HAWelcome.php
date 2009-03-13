@@ -93,10 +93,10 @@ class HAWelcomeJob extends Job {
 	 * @access public
 	 */
 	public function run() {
-		global $wgUser, $wgDevelEnvironment, $wgTitle;
+	  global $wgUser, $wgDevelEnvironment, $wgTitle, $wgErrorLog;
 
 		wfProfileIn( __METHOD__ );
-
+		$wgErrorLog = true;
 		/**
 		 * overwrite $wgUser for ~~~~ expanding
 		 */
@@ -222,12 +222,12 @@ class HAWelcomeJob extends Job {
 	 * @return true means process other hooks
 	 */
 	public static function revisionInsertComplete( &$revision, &$url, &$flags ) {
-		global $wgUser, $wgDevelEnvironment, $wgCityId, $wgCommandLineMode;
+	  global $wgUser, $wgDevelEnvironment, $wgCityId, $wgCommandLineMode, $wgErrorLog;
 
 		wfProfileIn( __METHOD__ );
 
 		wfLoadExtensionMessages( "HAWelcome" );
-
+		$wgErrorLog = true;
 		/**
 		 * Revision has valid Title field but sometimes not filled
 		 */
@@ -245,7 +245,6 @@ class HAWelcomeJob extends Job {
 			Wikia::log( __METHOD__, "welcomer", $welcomer );
 
 			if( $welcomer !== "@disabled" && $welcomer !== "-" ) {
-			  error_log( __METHOD__ .": {$welcomer}");
 				/**
 				 * check if talk page for wgUser exists
 				 *
