@@ -821,18 +821,13 @@ EOD;
 				$thumb = 'http://img.youtube.com/vi/' . $this->mId . '/0.jpg';
 				break;
 			case "sevenload":					
-				break;
 			case "gamevideos":
-				break;
 			case "5min":
-				break;
 			case "myvideo":
-				break;
 			case "vimeo":
-				break;
-			case 'southparkstudios':
-				break;
+			case 'southparkstudios': // no API
 			default:
+				$thumb = $wgExtensionsPath . '/wikia/VideoEmbedTool/images/vid_thumb.jpg';
 				break;
 		}
 
