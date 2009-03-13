@@ -348,10 +348,10 @@ class Wikia {
 	 *
 	 */
 	static public function log( $method, $sub = false, $message = false ) {
-		global $wgDevelEnvironment;
+	  global $wgDevelEnvironment, $wgErrorLog;
 
 		$method = $sub ? $method . "-" . $sub : $method;
-		if( $wgDevelEnvironment ) {
+		if( $wgDevelEnvironment || $wgErrorLog ) {
 			error_log( $method . ": " . $message );
 		}
 		/**
