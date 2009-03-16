@@ -43,7 +43,7 @@ $wgAdsInContentExtensionConfig = array(
 				'float' => true,
 //				'googleAdChannel' => '9100000016') // 012
 				'googleAdChannel' => 'INCONTENT_BOXAD')
- 																	,
+ 		),
 /* 	'yieldbuild' => array(
 																			0 => array( 'width' => 468, 'height' => 200, 'align' => 'left', 'yieldbuildLocation' => 'left_first_section'),
 																			1 => array( 'width' => 468, 'height' => 200, 'align' => 'left', 'yieldbuildLocation' => 'right_first_section')
