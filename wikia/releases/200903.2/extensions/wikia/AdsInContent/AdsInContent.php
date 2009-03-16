@@ -27,11 +27,23 @@ $wgAdsInContentExtensionConfig = array(
 		'8-*' => array(2,5,8)
 //		'9-*' => array(3,6,8)
 	),
- 'insideAdUnitConfig' => array(
- 	'google'     => array(
-																			0 => array( 'width' => 468, 'height' => 60, 'align' => 'left', 'googleAdChannel' => '9100000015'), // 011
-																			1 => array( 'width' => 200, 'height' => 200, 'align' => 'left', 'googleAdChannel' => '9100000016') // 012
- 																	),
+	'insideAdUnitConfig' => array(
+ 		'google'     => array(
+			0 => array(
+				'width' => 468,
+				'height' => 60,
+				'align' => 'left',
+				'float' => false,
+//				'googleAdChannel' => '9100000015'), // 011
+				'googleAdChannel' => 'INCONTENT_LEADERBOARD'),
+			1 => array(
+				'width' => 200,
+				'height' => 200,
+				'align' => 'left',
+				'float' => true,
+//				'googleAdChannel' => '9100000016') // 012
+				'googleAdChannel' => 'INCONTENT_BOXAD')
+ 																	,
 /* 	'yieldbuild' => array(
 																			0 => array( 'width' => 468, 'height' => 200, 'align' => 'left', 'yieldbuildLocation' => 'left_first_section'),
 																			1 => array( 'width' => 468, 'height' => 200, 'align' => 'left', 'yieldbuildLocation' => 'right_first_section')
@@ -60,16 +72,29 @@ function wfAdsInContentSetup() {
  * AdsInContent Extenssion hook handler
  */
 function wfAdsInContentHook(&$out, &$text) {
-	global $wgAdsInContentExtensionConfig, $wgTitle, $wgUser, $wgHooks;
+	global $wgAdsInContentExtensionConfig, $wgTitle, $wgUser, $wgHooks, $wgOut;
 
 	$loggedIn = $wgUser->isLoggedIn();
-	//$loggedIn = false;
 	$ns = $wgTitle->getNamespace();
-	$title = $wgTitle->getText();
 
 	// show only for anon user in the main namespace (if article exists)
 	if( ($ns == NS_MAIN) && !$loggedIn && $wgTitle->exists() && !AdsInContent::isMainPage()) {
 		$wgHooks['SkinAfterBottomScripts'][] = 'AdsInContent::applyTopSectionJSFix';
+		$wgOut->addScript(
+'<script type="text/javascript" src="http://partner.googleadservices.com/gampad/google_service.js">
+</script>
+<script type="text/javascript">
+  GS_googleAddAdSenseService("ca-pub-4086838842346968");
+  GS_googleEnableAllServices();
+</script>
+<script type="text/javascript">
+  GA_googleAddSlot("ca-pub-4086838842346968", "INCONTENT_BOXAD");
+  GA_googleAddSlot("ca-pub-4086838842346968", "INCONTENT_LEADERBOARD");
+</script>
+<script type="text/javascript">
+  GA_googleFetchAds();
+</script>'
+		);
 
 		$adsInContent = new AdsInContent($text, $wgAdsInContentExtensionConfig);
 		$adsInContent->execute();
