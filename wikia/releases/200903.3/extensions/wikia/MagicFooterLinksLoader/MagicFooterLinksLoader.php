@@ -24,7 +24,7 @@ class MagicFooterLinksLoader extends SpecialPage {
 	}
 
 	public function execute($par) {
-		global $wgUser, $wgRequest, $wgOut;
+		global $wgUser, $wgRequest, $wgOut, $wgMemc;
 
 		if(!$this->userCanExecute($wgUser)) {
 			$this->displayRestrictionError();
@@ -35,8 +35,45 @@ class MagicFooterLinksLoader extends SpecialPage {
 
 		if($wgRequest->wasPosted()) {
 			try {
+
+				// Populate $this->results and $this->badRows with data from Google Spreadsheet
 				$this->downloadData();
-				$out = $this->deleteAndInsertData();
+
+				// Collect database names for all wikis which had some magic footer links before loading new configuration.
+				$dbnames = array();
+				$dbr =& wfGetDB(DB_SLAVE);
+				$res = $dbr->select(wfSharedTable('magic_footer_links'), 'DISTINCT dbname');
+				while($row = $dbr->fetchObject($res)) {
+					$dbnames[] = $row->dbname;
+				}
+				$dbr->freeResult($res);
+
+				// Delete current data from database
+				$dbw = wfGetDB(DB_MASTER);
+				$dbw->delete(wfSharedTable('magic_footer_links'), '*');
+				$deleted = $dbw->affectedRows();
+
+				// Insert data from Google Spreadsheet into database and into cache
+				$inserted = 0;
+				foreach($this->results as $row => $result) {
+					if(count($result) == 3 && $dbw->insert(wfSharedTable('magic_footer_links'), array('dbname' => $result['dbname'], 'page' => str_replace('_', ' ', $result['page']), 'links' => join(' | ', $result['links'])))) {
+						$dbnames[] = $result['dbname'];
+						$inserted++;
+					} else {
+						$this->badRows[] = $row;
+					}
+				}
+
+				// Invalidate cache data: <dbname>:MonacoDataOld
+				$dbnames = array_unique($dbnames);
+				foreach($dbnames as $dbname) {
+					$wgMemc->delete($dbname.':MonacoDataOld');
+				}
+
+				$this->badRows = array_unique($this->badRows);
+				sort($this->badRows);
+
+				$out = "{$deleted} old record(s) deleted <br /><br />{$inserted} new record(s) inserted".(count($this->badRows) >0 ? '<br /><br />row(s): '.implode(', ', $this->badRows).' not inserted due to missing or incorrect data' : '');
 			} catch (Exception $e) {
 				$out = 'Error: '.$e->getMessage();
 			}
@@ -122,25 +159,5 @@ EOD;
 				}
 			}
 		}
-	}
-
-	private function deleteAndInsertData() {
-		$dbw = wfGetDB(DB_MASTER);
-		$dbw->delete('`wikicities`.magic_footer_links', '*', 'MagicFooterLinksLoader->deleteAndInsertData');
-
-		$deleted = $dbw->affectedRows();
-		$inserted = 0;
-
-		foreach($this->results as $row => $result) {
-			if(count($result) == 3 && $dbw->insert('`wikicities`.magic_footer_links', array('dbname' => strtolower($result['dbname']), 'page' => str_replace('_', ' ', $result['page']), 'links' => join(' | ', $result['links'])), 'MagicFooterLinksLoader->deleteAndInsertData')) {
-				$inserted++;
-			} else {
-				$this->badRows[] = $row;
-			}
-		}
-
-		$this->badRows = array_unique($this->badRows);
-
-		return "{$deleted} old record(s) deleted <br /><br />{$inserted} new record(s) inserted".(count($this->badRows) >0 ? '<br /><br />row(s): '.implode(', ', $this->badRows).' not inserted due to missing or incorrect data' : '');
 	}
 }
