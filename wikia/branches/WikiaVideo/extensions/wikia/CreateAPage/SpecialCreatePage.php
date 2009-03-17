@@ -41,6 +41,11 @@ if (!isset ($wgCreatePageCoverRedLinks) ) {
 $wgHooks['EditPage::showEditForm:initial'][] = 'wfCreatePagePreloadContent';
 $wgHooks['Image::RecordUpload:article'][] = 'wfCreatePageShowNoImagePage';
 $wgHooks ['CustomEditor'][] = 'wfCreatePageRedLinks' ; 
+// confirm edit captcha
+if( $wgWikiaEnableConfirmEditExt ) {
+	$wgHooks['ConfirmEdit::onConfirmEdit'][] = 'wfCreatePageConfirmEdit';	
+}
+
 if ($wgCreatePageCoverRedLinks) {
 	$wgHooks ['getEditingPreferencesCustomHtml'][] = 'wfCreatePagePrefCustomHtml' ;
 	$wgHooks ['UserToggles'][] = 'wfCreatePageToggle' ;
@@ -49,6 +54,12 @@ if ($wgCreatePageCoverRedLinks) {
 /* special page init */
 $wgSpecialPages ['createpage'] = array('SpecialPage', 'Createpage', 'createpage', true, 'wfCreatePageSpecial', false) ;
 $wgSpecialPageGroups['Createpage'] = 'pagetools';
+
+function wfCreatePageConfirmEdit( &$this, &$editPage, $newtext, $section, $merged, &$result ) {
+	// provisory
+	$result = false;
+	return $result;
+}
 
 // when AdvancedEdit button is used, the existing content is preloaded
 function wfCreatePagePreloadContent ($editpage) {
