@@ -37,7 +37,7 @@ $wgAjaxExportList[] = 'CategorySelectRemoveTooltip';
 $wgAjaxExportList[] = 'CategorySelectGenerateHTMLforView';
 
 /**
- * Initialize hooks
+ * Initialize hooks - step 1/2
  *
  * @author Maciej Błaszkowski <marooned at wikia-inc.com>
  */
@@ -57,11 +57,28 @@ function CategorySelectInit() {
 	global $wgHooks, $wgAutoloadClasses;
 	$wgAutoloadClasses['CategorySelect'] = 'extensions/wikia/CategorySelect/CategorySelect_body.php';
 	$wgHooks['ArticleFromTitle'][] = 'CategorySelectInitializeHooks';
+	$wgHooks['UserToggles'][] = 'CategorySelectToggleUserPreference';
+	$wgHooks['getEditingPreferencesTab'][] = 'CategorySelectToggleUserPreference';
 	wfLoadExtensionMessages('CategorySelect');
 }
 
+/**
+ * Initialize hooks - step 2/2
+ *
+ * @author Maciej Błaszkowski <marooned at wikia-inc.com>
+ */
 function CategorySelectInitializeHooks($title, $article) {
 	global $wgHooks, $wgRequest, $wgUser, $wgTitle;
+
+	// Check user preferences option
+	if($wgUser->getOption('disablecategoryselect') == true) {
+		return true;
+	}
+
+	// Don't initialize for blocked users
+	if($wgUser->isBlocked()) {
+		return true;
+	}
 
 	// Initialize only for Monaco skin
 	if(get_class($wgUser->getSkin()) != 'SkinMonaco') {
@@ -70,6 +87,16 @@ function CategorySelectInitializeHooks($title, $article) {
 
 	// Initialize only for namespace: main, image, user (same as for Wysiwyg)
 	if(!in_array($title->mNamespace, array(NS_MAIN, NS_IMAGE, NS_USER))) {
+		return true;
+	}
+
+	// Don't initialize on CSS and JS user subpages
+	if ( $wgTitle->isCssJsSubpage() ) {
+		return true;
+	}
+
+	// Don't initialize when DB is locked
+	if ( wfReadOnly() ) {
 		return true;
 	}
 
@@ -288,12 +315,15 @@ function CategorySelectImportFormData($editPage, $request) {
 		} else {	//json
 			$categories = $editPage->safeUnicodeInput($request, 'wpCategorySelectWikitext');
 			$categories = CategorySelectChangeFormat($categories, 'json', 'wiki');
+			if (trim($categories) == '') {
+				$categories = '';
+			}
 		}
 
 		if ($editPage->preview || $editPage->diff) {
 			CategorySelect::SelectCategoryAPIgetData($categories);
 		} else {	//saving article
-			$editPage->textbox1 .= "\n" . $categories;
+			$editPage->textbox1 .= $categories;
 		}
 		$wgCategorySelectCategoriesInWikitext = $categories;
 	}
@@ -335,7 +365,7 @@ function CategorySelectDisplayCategoryBox($rows, $cols, $ew, $textbox) {
  *
  * @author Maciej Błaszkowski <marooned at wikia-inc.com>
  */
-function CategorySelectGetCategoryLinksBegin($categoryLinks) {
+function CategorySelectGetCategoryLinksBegin(&$categoryLinks) {
 	global $wgRequest, $wgOut;
 
 	$action = $wgRequest->getVal('action', 'view');
@@ -355,7 +385,7 @@ function CategorySelectGetCategoryLinksBegin($categoryLinks) {
  *
  * @author Maciej Błaszkowski <marooned at wikia-inc.com>
  */
-function CategorySelectGetCategoryLinksEnd($categoryLinks) {
+function CategorySelectGetCategoryLinksEnd(&$categoryLinks) {
 	global $wgRequest;
 
 	$action = $wgRequest->getVal('action', 'view');
@@ -471,4 +501,18 @@ function CategorySelectRemoveTooltip() {
 	$dbw->commit();
 
 	return new AjaxResponse('ok');
+}
+
+/**
+ * Toggle CS in user preferences
+ *
+ * @author Maciej Błaszkowski <marooned at wikia-inc.com>
+ */
+function CategorySelectToggleUserPreference($toggles, $default_array = false) {
+	if(is_array($default_array)) {
+		$default_array[] = 'disablecategoryselect';
+	} else {
+		$toggles[] = 'disablecategoryselect';
+	}
+	return true;
 }

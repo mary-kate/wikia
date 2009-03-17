@@ -103,7 +103,7 @@ function modifyCategory(e) {
 		'caption': csInfoboxCaption,
 		'content': '<label for="csInfoboxCategory">' + csInfoboxCategoryText + '</label>' +
 			'<br/><input type="text" id="csInfoboxCategory" />' +
-			'<br/><label for="csInfoboxSortKey">' + csInfoboxSortkeyText.replace('$1', categories[catId].category) + '</label>' +
+			'<br/><label for="csInfoboxSortKey">' + csInfoboxSortkeyText.replace('$1', categories[catId].category).replace('<', '&lt;').replace('>', '&gt;') + '</label>' +
 			'<br/><input type="text" id="csInfoboxSortKey" />',
 		'data': {'category': categories[catId].category, 'sortkey': defaultSortkey},
 		'save': csInfoboxSave
@@ -422,7 +422,6 @@ function showCSpanel() {
 	var pars = 'rs=CategorySelectGenerateHTMLforView';
 	var callback = {
 		success: function(originalRequest) {
-			$('csAddCategorySwitch').style.display = 'none';
 			var el = document.createElement('div');
 			el.innerHTML = originalRequest.responseText;
 			$('catlinks').appendChild(el);
@@ -438,6 +437,7 @@ function showCSpanel() {
 		timeout: 30000
 	};
 	YAHOO.util.Connect.asyncRequest('POST', ajaxUrl, callback, pars);
+	$('csAddCategorySwitch').style.display = 'none';
 }
 
 function csSave() {
@@ -445,7 +445,7 @@ function csSave() {
 	var callback = {
 		success: function(originalRequest) {
 			var result = eval('(' + originalRequest.responseText + ')');
-			if (result['info'] == 'ok') {
+			if (result['info'] == 'ok' && result['html'] != '') {
 				tmpDiv = document.createElement('div');
 				tmpDiv.innerHTML = result['html'];
 				var innerCatlinks = $('mw-normal-catlinks');
