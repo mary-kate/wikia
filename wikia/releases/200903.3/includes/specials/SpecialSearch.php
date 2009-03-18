@@ -78,18 +78,6 @@ class SpecialSearch {
 	 * @public
 	 */
 	function goResult( $term ) {
-		global $wgCityId;
-		if(!empty($wgCityId) && $wgCityId != 425) {
-			$term_tmp = strtolower(str_replace(' ', '_', trim($term)));
-			if(strlen($term_tmp) < 21) {
-				$dbw = wfGetDB(DB_MASTER);
-				$dbw->update(wfSharedTable('search_terms_counter'), array('counter = counter+1'), array('city_id' => $wgCityId, 'term' => $term_tmp));
-				if(!$dbw->affectedRows()) {
-					$dbw->insert(wfSharedTable('search_terms_counter'), array('city_id' => $wgCityId, 'term' => $term_tmp, 'counter' => 1));
-				}
-			}
-		}
-
 		global $wgOut;
 		global $wgGoToEdit;
 
@@ -118,6 +106,18 @@ class SpecialSearch {
 			if ( $wgGoToEdit ) {
 				$wgOut->redirect( $t->getFullURL( 'action=edit' ) );
 				return;
+			}
+		}
+
+		global $wgCityId;
+		if(!empty($wgCityId) && $wgCityId != 425) {
+			$term_tmp = strtolower(str_replace('_', ' ', trim($term)));
+			if(strlen($term_tmp) < 21) {
+				$dbw = wfGetDB(DB_MASTER);
+				$dbw->update(wfSharedTable('search_terms_counter'), array('counter = counter+1'), array('city_id' => $wgCityId, 'term' => $term_tmp));
+				if(!$dbw->affectedRows()) {
+					$dbw->insert(wfSharedTable('search_terms_counter'), array('city_id' => $wgCityId, 'term' => $term_tmp, 'counter' => 1));
+				}
 			}
 		}
 
