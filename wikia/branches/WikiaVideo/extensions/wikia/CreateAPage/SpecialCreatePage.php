@@ -57,7 +57,7 @@ $wgSpecialPageGroups['Createpage'] = 'pagetools';
 
 // handle ConfirmEdit captcha, only for CreatePage, which will be treated a bit differently (edits in special page)
 function wfCreatePageConfirmEdit( &$captcha, &$editPage, $newtext, $section, $merged, &$result ) {
-	global $wgTitle, $wgCreatePageCoverRedLinks;
+	global $wgTitle, $wgCreatePageCoverRedLinks, $wgOut, $wgRequest;
 	$canonspname = SpecialPage::resolveAlias( $wgTitle->getDBkey() );
         if (!$wgCreatePageCoverRedLinks) {
                 return true;
@@ -65,8 +65,25 @@ function wfCreatePageConfirmEdit( &$captcha, &$editPage, $newtext, $section, $me
 	if ('createpage' != $canonspname) {
 		return true;	
 	}
-	$result = true;
-	return false;
+
+	if( $captcha->shouldCheck( $editPage, $newtext, $section, $merged ) ) {
+		if( $captcha->passCaptcha() ) {
+			$result = true;
+			return false;
+		} else {
+			// display CAP page
+			wfLoadExtensionMessages ('CreateAPage');
+			$mainform = new CreatePageCreatePlateForm () ;
+			$mainform->showForm ( '', false, array( &$captcha, 'editCallback' ) ) ;
+			$editor = new CreatePageMultiEditor ( 'Blank' ) ;
+			$editor->GenerateForm ($newtext) ;
+
+			$result = false;
+			return false;
+		}
+	} else {
+		return true;
+	}
 }
 
 // when AdvancedEdit button is used, the existing content is preloaded
@@ -183,7 +200,7 @@ class CreatePageCreateplateForm {
 	} 
 
 	// show form
-	function showForm ( $err, $content_prev = false ) {
+	function showForm ( $err, $content_prev = false, $formCallback = null ) {
 		global $wgOut, $wgUser, $wgRequest ;
 
 		if ($wgRequest->getCheck ('wpPreview')) {
@@ -259,7 +276,13 @@ class CreatePageCreateplateForm {
 		<input type=\"hidden\" name=\"wpCreatePage\" value=\"true\" />
 		" ;
 
+
 		$wgOut->addHTML ($html) ;
+		// adding this for captchas and the like
+		if( is_callable( $formCallback ) ) {
+                        call_user_func_array( $formCallback, array( &$wgOut ) );
+                }
+
 		$wgOut->addHTML($tmpl->execute('toggles'));
 		$parsed_templates = $this->getCreateplates () ;
                	!$parsed_templates ? $show_field = 'none' : $show_field = '' ;
