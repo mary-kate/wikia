@@ -87,6 +87,7 @@ FCKIndentCommand.prototype =
 		var startContainer = FCKSelection.GetBoundaryParentElement( true ) ;
 		var endContainer = FCKSelection.GetBoundaryParentElement( false ) ;
 		var listNode = FCKDomTools.GetCommonParentNode( startContainer, endContainer, ['ul','ol'] ) ;
+		var dontIndentNode = FCKDomTools.GetCommonParentNode( startContainer, endContainer, ['h1','h2','h3','h4','h5','h6','pre'] ) ;
 
 		if ( listNode )
 		{
@@ -97,6 +98,12 @@ FCKIndentCommand.prototype =
 				return FCK_TRISTATE_DISABLED ;
 			return FCK_TRISTATE_OFF ;
 		}
+
+		if ( dontIndentNode )
+		{
+			return FCK_TRISTATE_DISABLED;
+		}
+
 		if ( ! FCKIndentCommand._UseIndentClasses && this.Name.IEquals( 'indent' ) )
 			return FCK_TRISTATE_OFF;
 
@@ -124,7 +131,7 @@ FCKIndentCommand.prototype =
 			var indent = parseInt( firstBlock.style[this.IndentCSSProperty], 10 ) ;
 			if ( isNaN( indent ) )
 				indent = 0 ;
-			if ( indent <= 0 )
+			if ( indent <= 0 &&  !firstBlock.nodeName.IEquals(['dl', 'dd']) ) // Wikia: MW uses <dl><dd> 'tree' for indentation
 				return FCK_TRISTATE_DISABLED ;
 			return FCK_TRISTATE_OFF ;
 		}

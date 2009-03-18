@@ -489,7 +489,9 @@ var FCK =
 			// Listen for keystroke events.
 			FCK.KeystrokeHandler.AttachToElement( this.EditingArea.Textarea ) ;
 
-			this.EditingArea.Textarea.focus() ;
+			try {
+				this.EditingArea.Textarea.focus() ;
+			} catch(e) {}
 
 			FCK.Events.FireEvent( 'OnAfterSetHTML' ) ;
 		}

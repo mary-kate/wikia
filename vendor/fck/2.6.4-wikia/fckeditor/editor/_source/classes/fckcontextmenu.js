@@ -96,13 +96,22 @@ function FCKContextMenu_Document_OnContextMenu( e )
 
 	while ( el )
 	{
+		// Wikia: support option to block context menu on certain elements
+		if ( el.getAttribute && el.getAttribute('_fckContextMenuDisabled') ) {
+			FCKTools.CancelEvent(e) ;
+			e.stopPropagation();
+			return false;
+		}
+
 		if ( el._FCKContextMenu )
 		{
 			if ( el._FCKContextMenu.CtrlDisable && ( e.ctrlKey || e.metaKey ) )
 				return true ;
 
 			FCKTools.CancelEvent( e ) ;
+			e.stopPropagation(); // Wikia: don't show build-in browser's context menu on FF3
 			FCKContextMenu_AttachedElement_OnContextMenu( e, el._FCKContextMenu, el ) ;
+			if (FCK.Track) FCK.Track('/contextMenu/open');
 			return false ;
 		}
 		el = el.parentNode ;
@@ -220,4 +229,5 @@ function FCKContextMenu_MenuBlock_OnClick( menuItem, contextMenu )
 {
 	contextMenu._Panel.Hide() ;
 	FCKTools.RunFunction( contextMenu.OnItemClick, contextMenu, menuItem ) ;
+	if (FCK.Track) FCK.Track('/contextMenu/command/' + menuItem.Name);
 }
