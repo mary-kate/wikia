@@ -30,33 +30,12 @@
 // <![CDATA[
 
 // Domain relaxation logic.
-(function()
-{
-	var d = document.domain ;
-
-	while ( true )
-	{
-		// Test if we can access a parent property.
-		try
-		{
-			var parentDomain = ( Args().TopWindow || E ).document.domain ;
-
-			if ( document.domain != parentDomain )
-				document.domain = parentDomain ;
-
-			break ;
-		}
-		catch( e ) {}
-
-		// Remove a domain part: www.mytest.example.com => mytest.example.com => example.com ...
-		d = d.replace( /.*?(?:\.|$)/, '' ) ;
-
-		if ( d.length == 0 )
-			break ;		// It was not able to detect the domain.
-
-		document.domain = d ;
-	}
-})() ;
+if(document.domain != 'localhost') {
+	var chunks = document.domain.split('.');
+	var d = chunks.pop(); // com
+	d = chunks.pop() + '.' + d; // wikia.com
+	document.domain = d;
+}
 
 var E = frameElement._DialogArguments.Editor ;
 
@@ -218,71 +197,20 @@ var Sizer = function()
 // Manages the throbber image that appears if the inner part of dialog is taking too long to load.
 var Throbber = function()
 {
-	var timer ;
-
-	var updateThrobber = function()
-	{
-		var throbberParent = $( 'throbberBlock' ) ;
-		var throbberBlocks = throbberParent.childNodes ;
-		var lastClass = throbberParent.lastChild.className ;
-
-		// From the last to the second one, copy the class from the previous one.
-		for ( var i = throbberBlocks.length - 1 ; i > 0 ; i-- )
-			throbberBlocks[i].className = throbberBlocks[i-1].className ;
-
-		// For the first one, copy the last class (rotation).
-		throbberBlocks[0].className = lastClass ;
-	}
-
 	return {
 		Show : function( waitMilliseconds )
 		{
-			// Auto-setup the Show function to be called again after the
-			// requested amount of time.
-			if ( waitMilliseconds && waitMilliseconds > 0 )
-			{
-				timer = FCKTools.SetTimeout( this.Show, waitMilliseconds, this, null, window ) ;
-				return ;
-			}
-
-			var throbberParent = $( 'throbberBlock' ) ;
-
-			if (throbberParent.childNodes.length == 0)
-			{
-				// Create the throbber blocks.
-				var classIds = [ 1,2,3,4,5,4,3,2 ] ;
-				while ( classIds.length > 0 )
-					throbberParent.appendChild( document.createElement( 'div' ) ).className = ' throbber_' + classIds.shift() ;
-			}
-
-			// Center the throbber.
-			var frm = $( 'contents' ) ;
-			var frmCoords = FCKTools.GetDocumentPosition( window, frm ) ;
-			var x = frmCoords.x + ( frm.offsetWidth - throbberParent.offsetWidth ) / 2 ;
-			var y = frmCoords.y + ( frm.offsetHeight - throbberParent.offsetHeight ) / 2 ;
-			throbberParent.style.left = parseInt( x, 10 ) + 'px' ;
-			throbberParent.style.top = parseInt( y, 10 ) + 'px' ;
-
-			// Show it.
-			throbberParent.style.visibility = ''  ;
+			// show throbber
+			$( 'contents' ).className += ' throbber' ;
 
 			// Hide tabs and buttons:
 			$( 'Tabs' ).style.visibility = 'hidden' ;
 			$( 'PopupButtons' ).style.visibility = 'hidden' ;
-
-			// Setup the animation interval.
-			timer = setInterval( updateThrobber, 100 ) ;
 		},
 
 		Hide : function()
 		{
-			if ( timer )
-			{
-				clearInterval( timer ) ;
-				timer = null ;
-			}
-
-			$( 'throbberBlock' ).style.visibility = 'hidden' ;
+			$( 'contents' ).className = 'contents' ;
 
 			// Show tabs and buttons:
 			$( 'Tabs' ).style.visibility = '' ;
@@ -451,8 +379,14 @@ var Tabs = function()
 				$( oTabs[sCode] ).className = 'PopupTab' ;
 		}
 
-		if ( typeof( window.frames["frmMain"].OnDialogTabChange ) == 'function' )
+		if ( typeof( window.frames["frmMain"].OnDialogTabChange ) == 'function' ) {
 			window.frames["frmMain"].OnDialogTabChange( tabCode ) ;
+
+			if (FCK.Track) {
+				srcHtml = window.frames['frmMain'].location.pathname.split('/').pop();
+				FCK.Track('/dialog/tab/' + srcHtml.substring(0, srcHtml.length - 5) + '/' + tabCode);
+			}
+		}
 	}
 
 	function TabDiv_OnClick()
@@ -589,13 +523,14 @@ var onReadyRegister = function()
 		FCKTools.DisableSelection( document.body ) ;
 
 		// Make the title area draggable.
+		/*
 		var titleElement = $( 'header' ) ;
 		titleElement.onmousedown = DragAndDrop.MouseDownHandler ;
 
 		// Connect mousemove and mouseup events from dialog frame and outer window to dialog dragging logic.
 		DragAndDrop.RegisterHandlers( window ) ;
 		DragAndDrop.RegisterHandlers( Args().TopWindow ) ;
-
+		*/
 		// Disable the previous dialog if it exists.
 		if ( ParentDialog() )
 		{
@@ -647,8 +582,15 @@ var onReadyRegister = function()
 		// First of all, translate the dialog box contents.
 		E.FCKLanguageManager.TranslatePage( document ) ;
 
+		if (FCK.Track) {
+			srcHtml = Args().Page.split('/').pop();
+			FCK.Track('/dialog/open/' + srcHtml.substring(0, srcHtml.length - 5));
+		}
+
 		// Create the IFRAME that holds the dialog contents.
-		$( 'innerContents' ).innerHTML = '<iframe id="frmMain" src="' + Args().Page + '" name="frmMain" frameborder="0" width="100%" height="100%" scrolling="auto" style="visibility: hidden;" allowtransparency="true"><\/iframe>' ;
+		iframeSrc = Args().Page + (Args().Page.indexOf('?') != -1 ? '&' : '?') + 'cb=' + FCKConfig.StyleVersion;
+
+		$( 'innerContents' ).innerHTML = '<iframe id="frmMain" src="' + iframeSrc + '" name="frmMain" frameborder="0" width="100%" height="100%" scrolling="auto" style="visibility: hidden;" allowtransparency="true"><\/iframe>' ;
 	} ;
 
 	window.InnerDialogLoaded = function()
@@ -687,6 +629,23 @@ var onReadyRegister = function()
 	window.SetOkButton = function( showIt )
 	{
 		$('btnOk').style.visibility = ( showIt ? '' : 'hidden' ) ;
+	} ;
+
+	window.SetCancelButton = function( showIt )
+	{
+		$('btnCancel').style.display = ( showIt ? 'block' : 'none' ) ;
+	} ;
+
+	window.SetBackButton = function( html )
+	{
+		if (!html) {
+			$('backButton').style.display = 'none';
+			$('backButton').innerHTML = html;
+		}
+		else {
+			$('backButton').style.display = 'block';
+			$('backButton').innerHTML = html;
+		}
 	} ;
 
 	window.Ok = function()
@@ -762,16 +721,14 @@ var onReadyRegister = function()
 		</script>
 	</head>
 	<body onload="Init();" class="PopupBody">
+		<div id="border"></div>
+		<div id="TitleArea"><script type="text/javascript">// <![CDATA[
+			document.write( Args().Title );
+		// ]]></script></div>
+		<div id="backButton"></div>
+		<div id="closeButton" onclick="Cancel();">close</div>
 		<div class="contents" id="contents">
 			<div id="header">
-				<div id="TitleArea" class="PopupTitle PopupTitleBorder">
-					<script type="text/javascript">
-// <![CDATA[
-document.write( Args().Title ) ;
-// ]]>
-					</script>
-					<div id="closeButton" onclick="Cancel();"></div>
-				</div>
 				<div id="TabsRow" class="PopupTabArea" style="display: none">
 					<table border="0" cellpadding="0" cellspacing="0" width="100%">
 						<tr id="Tabs">
@@ -782,27 +739,11 @@ document.write( Args().Title ) ;
 				</div>
 			</div>
 			<div id="innerContents"></div>
-			<div id="PopupButtons" class="PopupButtons">
-				<table border="0" cellpadding="0" cellspacing="0">
-					<tr>
-						<td width="100%">&nbsp;</td>
-						<td nowrap="nowrap">
-							<input id="btnOk" style="visibility: hidden;" type="button" value="Ok" class="Button" onclick="Ok();" fckLang="DlgBtnOK" />
-							&nbsp;
-							<input id="btnCancel" type="button" value="Cancel" class="Button" onclick="Cancel();" fckLang="DlgBtnCancel" />
-						</td>
-					</tr>
-				</table>
+			<div id="PopupButtons">
+				<input id="btnOk" style="visibility: hidden;" type="button" value="Ok" onclick="Ok();" fckLang="DlgBtnOK" />
+				<input id="btnCancel" type="button" value="Cancel" onclick="Cancel();" fckLang="DlgBtnCancel" />
 			</div>
 		</div>
-		<div class="tl"></div>
-		<div class="tc"></div>
-		<div class="tr"></div>
-		<div class="ml"></div>
-		<div class="mr"></div>
-		<div class="bl"></div>
-		<div class="bc"></div>
-		<div class="br"></div>
 		<div class="cover" id="cover" style="display:none"></div>
 		<div id="throbberBlock" style="position: absolute; visibility: hidden"></div>
 		<script type="text/javascript">

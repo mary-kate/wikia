@@ -126,7 +126,6 @@ function FCK_ContextMenu_GetListener( listenerName )
 					// If it isn't a link then don't add the Link context menu
 					if ( bIsAnchor )
 						return ;
-
 					menu.AddSeparator() ;
 					menu.AddItem( 'VisitLink', FCKLang.VisitLink ) ;
 					menu.AddSeparator() ;

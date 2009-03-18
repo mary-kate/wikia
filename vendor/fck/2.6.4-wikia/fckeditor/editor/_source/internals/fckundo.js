@@ -152,13 +152,14 @@ FCKUndo.SaveUndoStep = function()
 		this.CurrentIndex++ ;
 
 	// Save the new level in front of the actual position.
-	this.SavedData[ this.CurrentIndex ] = [ sHtml, bookmark ] ;
+	// FCK.wysiwygData should always be JS array
+	this.SavedData[ this.CurrentIndex ] = [ sHtml, bookmark, ((FCK.wysiwygData && FCK.wysiwygData.length) ? FCK.YAHOO.Tools.JSONEncode(FCK.wysiwygData) : '[]') ] ;
 
 	FCK.Events.FireEvent( "OnSelectionChange" ) ;
 }
 
 FCKUndo.CheckUndoState = function()
-{
+	{
 	return ( this.Changed || this.CurrentIndex > 0 ) ;
 }
 
@@ -182,6 +183,7 @@ FCKUndo.Undo = function()
 		this._ApplyUndoLevel( --this.CurrentIndex ) ;
 
 		FCK.Events.FireEvent( "OnSelectionChange" ) ;
+		FCK.Events.FireEvent( "OnUndoRedo" );
 	}
 }
 
@@ -193,6 +195,7 @@ FCKUndo.Redo = function()
 		this._ApplyUndoLevel( ++this.CurrentIndex ) ;
 
 		FCK.Events.FireEvent( "OnSelectionChange" ) ;
+		FCK.Events.FireEvent( "OnUndoRedo" );
 	}
 }
 
@@ -213,6 +216,10 @@ FCKUndo._ApplyUndoLevel = function( level )
 	}
 	else
 		FCK.EditorDocument.body.innerHTML = oData[0] ;
+
+	FCK.log('wysiwygData: ' + oData[2]);
+
+	FCK.wysiwygData = FCK.YAHOO.Tools.JSONParse(oData[2]);
 
 	// Restore the selection
 	this._SelectBookmark( oData[1] ) ;

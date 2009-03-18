@@ -39,7 +39,7 @@ var table ;
 var e = dialog.Selection.GetSelectedElement() ;
 var hasColumnHeaders ;
 
-if ( ( !e && document.location.search.substr(1) == 'Parent' ) || ( e && e.tagName != 'TABLE' ) )
+if ( ( !e && document.location.search.substr(1,6) == 'Parent' ) || ( e && e.tagName != 'TABLE' ) )
 	e = oEditor.FCKSelection.MoveToAncestorNode( 'TABLE' ) ;
 
 if ( e && e.tagName == "TABLE" )
@@ -54,6 +54,9 @@ window.onload = function()
 
 	if (table)
 	{
+		// wikia: change dialog title when editing existing table
+		dialog.$('TitleArea').innerHTML = dialog.E.FCKLang.TableProperties;
+
 		document.getElementById('txtRows').value    = table.rows.length ;
 		document.getElementById('txtColumns').value = table.rows[0].cells.length ;
 
@@ -121,8 +124,12 @@ window.onload = function()
 		document.getElementById('txtColumns').disabled = true ;
 		SelectField( 'txtWidth' ) ;
 	}
-	else
+	else {
+		// wikia: change dialog title when adding new table
+		dialog.$('TitleArea').innerHTML = dialog.E.FCKLang.InsertTable;
+
 		SelectField( 'txtRows' ) ;
+	}
 
 	dialog.SetOkButton( true ) ;
 	dialog.SetAutoSize( true ) ;
@@ -154,6 +161,8 @@ function Ok()
 	SetAttribute( table, 'cellPadding'	, GetE('txtCellPadding').value ) ;
 	SetAttribute( table, 'cellSpacing'	, GetE('txtCellSpacing').value ) ;
 	SetAttribute( table, 'summary'		, GetE('txtSummary').value ) ;
+
+	SetAttribute( table, '_wysiwyg_new'	, 'true' );
 
 	var eCaption = oEditor.FCKDomTools.GetFirstChild( table, 'CAPTION' ) ;
 

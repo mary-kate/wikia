@@ -312,6 +312,7 @@ FCKListCommand.prototype =
 		// Insert the list to the DOM tree.
 		var insertAnchor = listContents[listContents.length - 1].nextSibling ;
 		var listNode = doc.createElement( this.TagName ) ;
+		listNode.setAttribute('_wysiwyg_new', 'true');
 		listsCreated.push( listNode ) ;
 		while ( listContents.length )
 		{
@@ -376,6 +377,10 @@ FCKListCommand.prototype =
 		{
 			if ( newList.listNode.lastChild.nodeName.IEquals( 'br' ) )
 				newList.listNode.removeChild( newList.listNode.lastChild ) ;
+		}
+		// Wikia: avoid leaving empty table cell - add bogus <br />
+		if ( groupObj.root.parentNode.nodeName.IEquals( 'td' ) ) {
+			newList.listNode.appendChild( FCKTools.CreateBogusBR(groupObj.root.ownerDocument) );
 		}
 		groupObj.root.parentNode.replaceChild( newList.listNode, groupObj.root ) ;
 	}

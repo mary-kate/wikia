@@ -47,7 +47,11 @@ function FCKeditor_IsCompatibleBrowser()
 		}
 	}
 
-	if ( strpos($sAgent, 'MSIE') !== false && strpos($sAgent, 'mac') === false && strpos($sAgent, 'Opera') === false )
+	if ( strpos($sAgent, 'Chrome') !== false )
+	{
+		return false;
+	}
+	else if ( strpos($sAgent, 'MSIE') !== false && strpos($sAgent, 'mac') === false && strpos($sAgent, 'Opera') === false )
 	{
 		$iVersion = (float)substr($sAgent, strpos($sAgent, 'MSIE') + 5, 3) ;
 		return ($iVersion >= 5.5) ;
@@ -57,6 +61,7 @@ function FCKeditor_IsCompatibleBrowser()
 		$iVersion = (int)substr($sAgent, strpos($sAgent, 'Gecko/') + 6, 8) ;
 		return ($iVersion >= 20030210) ;
 	}
+	/*
 	else if ( strpos($sAgent, 'Opera/') !== false )
 	{
 		$fVersion = (float)substr($sAgent, strpos($sAgent, 'Opera/') + 6, 4) ;
@@ -67,6 +72,7 @@ function FCKeditor_IsCompatibleBrowser()
 		$iVersion = $matches[1] ;
 		return ( $matches[1] >= 522 ) ;
 	}
+	*/
 	else
 		return false ;
 }

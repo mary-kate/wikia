@@ -37,6 +37,16 @@ body
     border: #696969 1px solid;
 }
 
+td.childrenHidden
+{
+	background: #efefde url('images/progress.gif') no-repeat 50% 50%;
+}
+
+td.childrenHidden textarea, td.childrenHidden iframe
+{
+    visibility: hidden;
+}
+
 .SourceField
 {
     padding: 5px;
@@ -89,6 +99,7 @@ body
     height: 16px;
 }
 
+.TB_Start,
 .TB_End
 {
     display: none;
@@ -462,3 +473,91 @@ body
     float: left;
     background-color: #c4cdd6;
 }
+
+#wysiwygTemplatePreviewCloud {
+	position: absolute;
+	visibility: hidden;
+	z-index: 10;
+	background-repeat: no-repeat;
+	font-family: sans-serif;
+	font-size: 12px;
+}
+
+.cloudUnder {
+	background-image: url('../../css/images/template_cloud_bg.gif');
+	background-position: -10px 0;
+	padding-top: 9px;
+}
+
+.cloudOver {
+	background-image: url('../../css/images/template_cloud_bg_over.gif');
+	background-position: -10px 100%;
+	padding-bottom: 9px;
+}
+ 
+#wysiwygTemplatePreviewCloudInner {
+	min-width: 50px;
+	max-width: 300px;
+	max-height: 250px;
+	overflow: auto;
+
+	border: solid 1px #e5e5e5;
+	background: #fffff6;
+	padding: 5px;
+}
+
+#wysiwygTemplatePreviewCloudInner * {
+	cursor: default;
+}
+
+.cloudUnder #wysiwygTemplatePreviewCloudInner {
+	border-top: none;
+}
+
+.cloudOver #wysiwygTemplatePreviewCloudInner {
+	border-bottom: none;
+}
+
+.resetTemplate {
+	margin: 0 !important;
+	padding: 0 !important;
+	float: none !important;
+	position: relative !important;
+	top: 0px !important;
+	left: auto !important;
+	right: auto !important;
+}
+
+.imageOverlay {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	padding: 5px;
+	background-color: #333;
+	opacity: 0.8;
+	color: #fff;
+	text-decoration: none;
+	font-size: 10px;
+	font-family: sans-serif;
+}
+
+.imageOverlayLeft {
+	top: 9px;
+	left: 7px;
+}
+
+.imageOverlayRight {
+	top: 9px;
+	right: 4px;
+	left: auto;
+}
+
+.imageOverlay span {
+	cursor: pointer;
+	margin: 0 2px;
+}
+
+.imageOverlay .imageOverlayDrag {
+	cursor: move
+}
+
