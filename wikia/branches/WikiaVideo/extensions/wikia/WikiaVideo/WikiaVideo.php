@@ -46,8 +46,6 @@ function WikiaVideo_renderVideoGallery($input, $args, $parser) {
 	wfLoadExtensionMessages('VideoEmbedTool');
 	$wgHooks['ExtendJSGlobalVars'][] = 'VETSetupVars';
 	
-
-
 	$lines = explode("\n", $input);
 	foreach($lines as $line) {
 		$matches = array();
@@ -148,6 +146,20 @@ function WikiaVideo_makeVideo($title, $options, $sk, $wikitext = '') {
 	global $wgWysiwygParserEnabled, $wgRequest;
 
 	wfProfileIn('WikiaVideo_makeVideo');
+
+	// placeholder? treat differently
+	if( 'Placeholder' == $title->getText() ) {
+		// generate a single empty cell with a button
+		global $wgExtensionMessagesFiles;
+		$wgExtensionMessagesFiles['WikiaVideo'] = dirname(__FILE__).'/WikiaVideo.i18n.php';		
+		wfLoadExtensionMessages( 'WikiaVideo' );
+		$function = ''; // todo fill it up
+		$out = '<div class="gallerybox" style="width: 335px;"><div class="thumb" style="padding: 13px 0; width: 330px;"><div style="margin-left: auto; margin-right: auto; width: 300px; height: 250px;">';
+		$out .= '<a href="#" class="bigButton" style="margin-left: 105px; margin-top: 110px;" id="WikiaVideoPlaceholder" onclick="' . $function . '"><big>' . wfMsg( 'wikiavideo-create' ) . '</big><small>&nbsp;</small></a></div></div></div>';
+		wfProfileOut('WikiaVideo_makeVideo');
+		return $out;
+	}
+
 	if(!$title->exists()) {
 		//Wysiwyg: generate wikitext placeholder
 		if (!empty($wgWysiwygParserEnabled)) {
@@ -178,6 +190,7 @@ function WikiaVideo_makeVideo($title, $options, $sk, $wikitext = '') {
 		$caption = '';
 
 		foreach($params as $param) {
+
 			$width_check = strpos($param, 'px');
 			if($width_check > -1) {
 				$width = str_replace('px', '', $param);
