@@ -177,7 +177,7 @@ FCKeditor.prototype._GetIFrameHtml = function()
 	if (this.ToolbarSet)
 		sLink += '&amp;Toolbar=' + this.ToolbarSet ;
 
-	sLink += '&amp;cb=' + this.wgStyleVersion ;
+	sLink += '&amp;cb=' + window.wgStyleVersion ;
 
 	var html = '<iframe id="' + this.InstanceName +
 		'___Frame" src="' + sLink +
