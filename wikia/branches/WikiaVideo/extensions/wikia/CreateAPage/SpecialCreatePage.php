@@ -23,7 +23,7 @@ $wgExtensionCredits['specialpage'][] = array(
    'name' => 'CreatePage',
    'author' => 'Bartek Łapiński, Lucas \'TOR\' Garczewski, Przemek Piotrowski'  ,
    'url' => 'http://help.wikia.com/wiki/Help:CreatePage' ,
-   'version' => '3.75' ,
+   'version' => '3.78' ,
    'description' => 'easy to use interface for creating new articles'
 );
 
@@ -75,7 +75,7 @@ function wfCreatePageConfirmEdit( &$captcha, &$editPage, $newtext, $section, $me
 			wfLoadExtensionMessages ('CreateAPage');
 			$mainform = new CreatePageCreatePlateForm () ;
 			$mainform->showForm ( '', false, array( &$captcha, 'editCallback' ) ) ;
-			$editor = new CreatePageMultiEditor ( 'Blank' ) ;
+			$editor = new CreatePageMultiEditor ( $_SESSION['article_createplate'] ) ;
 			$editor->GenerateForm ($newtext) ;
 
 			$result = false;
@@ -455,6 +455,7 @@ class CreatePageCreateplateForm {
 				$editpage->minoredit = $wgRequest->getCheck ('wpMinoredit') ;
 	                        $editpage->watchthis = $wgRequest->getCheck ('wpWatchthis') ;
 	                        $editpage->summary = $wgRequest->getVal ('wpSummary') ;
+				$_SESSION ['article_createplate'] = $this->mCreateplate;
 				// pipe tags to pipes
 				wfCreatePageUnescapeKnownMarkupTags ($editpage->textbox1) ;
 				$editpage->attemptSave () ;
