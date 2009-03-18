@@ -23,7 +23,7 @@ $wgExtensionCredits['specialpage'][] = array(
    'name' => 'CreatePage',
    'author' => 'Bartek Łapiński, Lucas \'TOR\' Garczewski, Przemek Piotrowski'  ,
    'url' => 'http://help.wikia.com/wiki/Help:CreatePage' ,
-   'version' => '3.73' ,
+   'version' => '3.75' ,
    'description' => 'easy to use interface for creating new articles'
 );
 
@@ -55,10 +55,18 @@ if ($wgCreatePageCoverRedLinks) {
 $wgSpecialPages ['createpage'] = array('SpecialPage', 'Createpage', 'createpage', true, 'wfCreatePageSpecial', false) ;
 $wgSpecialPageGroups['Createpage'] = 'pagetools';
 
-function wfCreatePageConfirmEdit( &$this, &$editPage, $newtext, $section, $merged, &$result ) {
-	// provisory
-	$result = false;
-	return $result;
+// handle ConfirmEdit captcha, only for CreatePage, which will be treated a bit differently (edits in special page)
+function wfCreatePageConfirmEdit( &$captcha, &$editPage, $newtext, $section, $merged, &$result ) {
+	global $wgTitle, $wgCreatePageCoverRedLinks;
+	$canonspname = SpecialPage::resolveAlias( $wgTitle->getDBkey() );
+        if (!$wgCreatePageCoverRedLinks) {
+                return true;
+        }
+	if ('createpage' != $canonspname) {
+		return true;	
+	}
+	$result = true;
+	return false;
 }
 
 // when AdvancedEdit button is used, the existing content is preloaded
