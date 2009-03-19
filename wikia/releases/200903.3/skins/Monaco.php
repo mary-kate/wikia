@@ -2067,7 +2067,7 @@ if(count($wikiafooterlinks) > 0) {
 			<div id="sidebar_1" class="sidebar">
 			<?= WidgetFramework::getInstance()->Draw(1) ?>
 <div style="display: none">
-<img src="http://images.wikia.com/common/releases_200902.4/skins/monobook/blank.gif?js_test"/><noscript><img src="http://images.wikia.com/common/releases_200902.4/skins/monobook/blank.gif?js_test_disabled"/></noscript>
+<img src="http://images.wikia.com/common/releases_200902.4/skins/monobook/blank.gif?js_test_blah"/><noscript><img src="http://images.wikia.com/common/releases_200902.4/skins/monobook/blank.gif?js_test_blah_disabled"/></noscript>
 </div>
 			<?php
 				echo AdEngine::getInstance()->getPlaceHolderDiv('LEFT_NAVBOX_2', false);
