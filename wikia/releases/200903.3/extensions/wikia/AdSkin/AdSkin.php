@@ -3,7 +3,7 @@
  * Author: Christian Williams 
  */
 
-$wgAdSkinVersion = 2;
+$wgAdSkinVersion = 3;
 
 $wgHooks['GetHTMLAfterBody'][] = 'RenderAdSkin';
 $wgHooks['SpecialFooterAfterWikia'][] = 'RenderAdSkinJS';
@@ -14,6 +14,11 @@ function RenderAdSkin() {
 
 	// Disable for logged in users
 	if (is_object($wgUser) && $wgUser->isLoggedIn() ){
+		return true;
+	}
+
+	// Disable if not the main page
+	if (!ArticleAdLogic::isMainPage()) {
 		return true;
 	}
 
