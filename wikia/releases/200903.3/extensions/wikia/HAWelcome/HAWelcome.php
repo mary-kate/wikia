@@ -94,7 +94,7 @@ class HAWelcomeJob extends Job {
 	 * @access public
 	 */
 	public function run() {
-		global $wgUser, $wgDevelEnvironment, $wgTitle;
+		global $wgUser, $wgTitle;
 
 		wfProfileIn( __METHOD__ );
 
@@ -109,7 +109,7 @@ class HAWelcomeJob extends Job {
 		}
 		Wikia::log( __METHOD__, "user", $this->mUser->getName() );
 
-		if( $this->mUser && $this->mUser->getName() !== self::WELCOMEUSER ) {
+		if( $this->mUser && $this->mUser->getName() !== self::WELCOMEUSER && !$wgUser->isBlocked() ) {
 			/**
 			 * check again if talk page exists
 			 */
@@ -122,39 +122,57 @@ class HAWelcomeJob extends Job {
 				$sysopPage = $sysop->getUserPage()->getTalkPage();
 				$signature = $this->expandSig();
 
-				$wgTitle = $talkPage;
+				$wgTitle     = $talkPage;
+				$welcomeMsg  = false;
 				$talkArticle = new Article( $talkPage, 0 );
 
-				if( ! $talkArticle->exists() || $wgDevelEnvironment ) {
+				if( ! $talkArticle->exists() ) {
 					if( $this->mAnon ) {
-						$welcomeMsg = wfMsg( "welcome-message-anon", array(
-							$this->title->getPrefixedText(),
-							$sysopPage->getPrefixedText(),
-							$signature
-						));
+						if( $this->isEnabled( "message-anon" ) ) {
+							$welcomeMsg = wfMsg( "welcome-message-anon", array(
+								$this->title->getPrefixedText(),
+								$sysopPage->getPrefixedText(),
+								$signature
+							));
+						}
+						else {
+							Wikia::log( __METHOD__, "talk", "message-anon disabled" );
+						}
 					}
 					else {
 						/**
 						 * now create user page (if not exists of course)
 						 */
-						$userPage = $this->mUser->getUserPage();
-						if( $userPage ) {
-							$wgTitle = $userPage;
-							$userArticle = new Article( $userPage, 0 );
-							if( ! $userArticle->exists() || $wgDevelEnvironment ) {
-								$welcomeMsg = wfMsg( "welcome-user-page" );
-								$userArticle->doEdit( $welcomeMsg, false, $flags );
+						if( $this->isEnabled( "page-user" ) ) {
+							$userPage = $this->mUser->getUserPage();
+							if( $userPage ) {
+								$wgTitle = $userPage;
+								$userArticle = new Article( $userPage, 0 );
+								if( ! $userArticle->exists() ) {
+									$pageMsg = wfMsg( "welcome-user-page" );
+									$userArticle->doEdit( $pageMsg, false, $flags );
+								}
 							}
 						}
+						else {
+							Wikia::log( __METHOD__, "page", "page-user disabled" );
+						}
 
-						$welcomeMsg = wfMsg( "welcome-message-user", array(
-							$this->title->getPrefixedText(),
-							$sysopPage->getPrefixedText(),
-							$signature
-						));
+						if( $this->isEnabled( "message-user" ) ) {
+							$welcomeMsg = wfMsg( "welcome-message-user", array(
+								$this->title->getPrefixedText(),
+								$sysopPage->getPrefixedText(),
+								$signature
+							));
+						}
+						else {
+							Wikia::log( __METHOD__, "talk", "message-user disabled" );
+						}
 					}
-					$wgTitle = $talkPage; /** is it necessary there? **/
-					$talkArticle->doEdit( $welcomeMsg, wfMsg( "welcome-message-log" ), $flags );
+					if( $welcomeMsg ) {
+						$wgTitle = $talkPage; /** is it necessary there? **/
+						$talkArticle->doEdit( $welcomeMsg, wfMsg( "welcome-message-log" ), $flags );
+					}
 					Wikia::log( __METHOD__, "edit", $welcomeMsg );
 				}
 				$wgTitle = $tmpTitle;
@@ -183,6 +201,7 @@ class HAWelcomeJob extends Job {
 		if( ! $this->mSysop instanceof User ) {
 
 			$sysop = trim( wfMsg( "welcome-user" ) );
+
 			if( $sysop !== "-" && $sysop !== "@latest" && $sysop !== "@disabled" && $sysop !== "@sysop" ) {
 				$this->mSysop = User::newFromName( $sysop );
 			}
@@ -243,11 +262,13 @@ class HAWelcomeJob extends Job {
 	 * @return true means process other hooks
 	 */
 	public static function revisionInsertComplete( &$revision, &$url, &$flags ) {
-		global $wgUser, $wgDevelEnvironment, $wgCityId, $wgCommandLineMode;
+		global $wgUser, $wgCityId, $wgCommandLineMode, $wgSharedDB;
 
 		wfProfileIn( __METHOD__ );
 
-		// Do not create task when DB is locked (rt#12229)
+		/**
+		 * Do not create task when DB is locked (rt#12229)
+		 */
 		if ( !wfReadOnly() ) {
 			wfLoadExtensionMessages( "HAWelcome" );
 
@@ -259,8 +280,14 @@ class HAWelcomeJob extends Job {
 				$Title = Title::newFromId( $revision->getPage(), GAID_FOR_UPDATE );
 				$revision->setTitle( $Title );
 			}
+			$skip = (bool)(
+				$wgUser->isAllowed( "bot" )    ||
+				$wgUser->isAllowed( "staff" )  ||
+				$wgUser->isAllowed( "helper" ) ||
+				$wgUser->isAllowed( "sysop" )  ||
+				$wgUser->isAllowed( "bureaucrat" ) );
 
-			if( $Title && ! $wgCommandLineMode && ! $wgUser->isAllowed( "bot" ) && ! $wgUser->isAllowed( 'staff' ) && ! $wgUser->isAllowed( 'helper' ) && ! $wgUser->isAllowed( 'sysop' ) && ! $wgUser->isAllowed( 'bureaucrat' ) ) {
+			if( $Title && !$wgCommandLineMode && !$skip && !empty( $wgSharedDB ) ) {
 
 				Wikia::log( __METHOD__, "title", $Title->getFullURL() );
 
@@ -278,7 +305,7 @@ class HAWelcomeJob extends Job {
 					$talkPage = $wgUser->getUserPage()->getTalkPage();
 					if( $talkPage ) {
 						$talkArticle = new Article( $talkPage, 0 );
-						if( !$talkArticle->exists( ) || $wgDevelEnvironment ) {
+						if( !$talkArticle->exists( ) ) {
 							$welcomeJob = new HAWelcomeJob(
 								$Title,
 								array(
@@ -351,6 +378,33 @@ class HAWelcomeJob extends Job {
 	 */
 	public function getTitle() {
 		return $this->title;
+	}
+
+	/**
+	 * check if some (or all) functionality is disabled/enabled
+	 *
+	 * @param String $message
+	 * @param String $what default false
+	 *
+	 * possible vaules for $what: page-user, message-anon, message-user
+	 *
+	 * @access public
+	 *
+	 * @return Bool disabled or not
+	 */
+	public function isEnabled( $what ) {
+
+		wfProfileIn( __METHOD__ );
+
+		$message = wfMsgForContent( "welcome-enabled" );
+		if( in_array( $what, array( "page-user", "message-anon", "message-user" ) ) ) {
+			$parts = preg_split( "/\s+/", $message );
+			$return = (bool )array_search( $what, $parts );
+		}
+
+		wfProfileOut( __METHOD__ );
+
+		return $return;
 	}
 }
 
