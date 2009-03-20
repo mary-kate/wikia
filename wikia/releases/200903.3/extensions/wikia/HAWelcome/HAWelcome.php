@@ -8,8 +8,9 @@
  *
  * @copyright Copyright © Krzysztof Krzyżaniak for Wikia Inc.
  * @author Krzysztof Krzyżaniak (eloy) <eloy@wikia-inc.com>
+ * @author Maciej Błaszkowski (Marooned) <marooned at wikia-inc.com>
  * @date 2009-02-02
- * @version 0.2
+ * @version 0.5
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License 2.0 or later
  */
 
@@ -20,8 +21,8 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 
 $wgExtensionCredits['other'][] = array(
 	'name' => 'HAWelcome',
-	'version' => '0.4',
-	'author' => 'Krzysztof Krzyżaniak',
+	'version' => '0.5',
+	'author' => array('Krzysztof Krzyżaniak', '[http://www.wikia.com/wiki/User:Marooned Maciej Błaszkowski (Marooned)]'),
 	'description' => 'Highly Automated Welcome Tool',
 );
 
@@ -102,6 +103,10 @@ class HAWelcomeJob extends Job {
 		 */
 		$tmpUser = $wgUser;
 		$wgUser  = User::newFromName( self::WELCOMEUSER );
+		$flags = 0;
+		if( $wgUser->isAllowed( 'bot' ) ) {
+			$flags = EDIT_FORCE_BOT;
+		}
 		Wikia::log( __METHOD__, "user", $this->mUser->getName() );
 
 		if( $this->mUser && $this->mUser->getName() !== self::WELCOMEUSER ) {
@@ -138,7 +143,7 @@ class HAWelcomeJob extends Job {
 							$userArticle = new Article( $userPage, 0 );
 							if( ! $userArticle->exists() || $wgDevelEnvironment ) {
 								$welcomeMsg = wfMsg( "welcome-user-page" );
-								$userArticle->doEdit( $welcomeMsg, false ); // EDIT_FORCE_BOT
+								$userArticle->doEdit( $welcomeMsg, false, $flags );
 							}
 						}
 
@@ -149,7 +154,7 @@ class HAWelcomeJob extends Job {
 						));
 					}
 					$wgTitle = $talkPage; /** is it necessary there? **/
-					$talkArticle->doEdit( $welcomeMsg, wfMsg( "welcome-message-log" ) ); // EDIT_FORCE_BOT
+					$talkArticle->doEdit( $welcomeMsg, wfMsg( "welcome-message-log" ), $flags );
 					Wikia::log( __METHOD__, "edit", $welcomeMsg );
 				}
 				$wgTitle = $tmpTitle;
@@ -178,19 +183,35 @@ class HAWelcomeJob extends Job {
 		if( ! $this->mSysop instanceof User ) {
 
 			$sysop = trim( wfMsg( "welcome-user" ) );
-			if( $sysop !== "-" && $sysop !== "@latest" && $sysop !== "@disabled" ) {
+			if( $sysop !== "-" && $sysop !== "@latest" && $sysop !== "@disabled" && $sysop !== "@sysop" ) {
 				$this->mSysop = User::newFromName( $sysop );
 			}
 			else {
 				$dbr = wfGetDB( DB_SLAVE );
+				$aWhere = ($sysop !== "@sysop") ? array('staff', 'sysop', 'helper') : array('sysop');
+				$res = $dbr->query(
+					"SELECT ug_group, GROUP_CONCAT(DISTINCT ug_user SEPARATOR ',') AS user_id" .
+					" FROM user_groups" .
+					" WHERE ug_group IN ('" . implode("','", $aWhere) . "', 'bot')" .
+					" GROUP BY ug_group;",
+					__METHOD__
+				);
+
+				$idsInGroups = array();
+				while( $row = $dbr->fetchObject( $res ) ) {
+					$idsInGroups[$row->ug_group] = explode(',', $row->user_id);
+				}
+				$idsBot = isset($idsInGroups['bot']) ? $idsInGroups['bot'] : array();
+				unset($idsInGroups['bot']);
+				//combine $idsInGroups['sysop'], $idsInGroups['staff'], .... etc. into one unique array
+				$idsUser = array_unique(call_user_func_array('array_merge', $idsInGroups));
+				//remove users that has 'bot' flag
+				$idsInGroups = array_diff($idsUser, $idsBot);
+
 				$res = $dbr->query("
-					SELECT rev_user, rev_timestamp
+					SELECT rev_user
 					FROM revision
-					WHERE revision.rev_user IN (
-						SELECT ug_user
-						FROM user_groups
-						WHERE ug_group IN ( 'staff', 'sysop', 'helper')
-					)
+					WHERE revision.rev_user IN ('" . implode("','", $idsInGroups) . "')
 					ORDER BY rev_timestamp DESC
 					LIMIT 1",
 					__METHOD__
@@ -226,62 +247,65 @@ class HAWelcomeJob extends Job {
 
 		wfProfileIn( __METHOD__ );
 
-		wfLoadExtensionMessages( "HAWelcome" );
+		// Do not create task when DB is locked (rt#12229)
+		if ( !wfReadOnly() ) {
+			wfLoadExtensionMessages( "HAWelcome" );
 
-		/**
-		 * Revision has valid Title field but sometimes not filled
-		 */
-		$Title = $revision->getTitle();
-		if( !$Title ) {
-			$Title = Title::newFromId( $revision->getPage(), GAID_FOR_UPDATE );
-			$revision->setTitle( $Title );
-		}
+			/**
+			 * Revision has valid Title field but sometimes not filled
+			 */
+			$Title = $revision->getTitle();
+			if( !$Title ) {
+				$Title = Title::newFromId( $revision->getPage(), GAID_FOR_UPDATE );
+				$revision->setTitle( $Title );
+			}
 
-		if( $Title && ! $wgCommandLineMode && ! $wgUser->isAllowed( "bot" ) ) {
+			if( $Title && ! $wgCommandLineMode && ! $wgUser->isAllowed( "bot" ) && ! $wgUser->isAllowed( 'staff' ) && ! $wgUser->isAllowed( 'helper' ) && ! $wgUser->isAllowed( 'sysop' ) && ! $wgUser->isAllowed( 'bureaucrat' ) ) {
 
-			Wikia::log( __METHOD__, "title", $Title->getFullURL() );
+				Wikia::log( __METHOD__, "title", $Title->getFullURL() );
 
-			$welcomer = trim( wfMsgForContent( "welcome-user" ) );
-			Wikia::log( __METHOD__, "welcomer", $welcomer );
+				$welcomer = trim( wfMsgForContent( "welcome-user" ) );
+				Wikia::log( __METHOD__, "welcomer", $welcomer );
 
-			if( $welcomer !== "@disabled" && $welcomer !== "-" ) {
+				if( $welcomer !== "@disabled" && $welcomer !== "-" ) {
 
-				/**
-				 * check if talk page for wgUser exists
-				 *
-				 * @todo check editcount for user
-				 */
-				Wikia::log( __METHOD__, "user", $wgUser->getName() );
-				$talkPage = $wgUser->getUserPage()->getTalkPage();
-				if( $talkPage ) {
-					$talkArticle = new Article( $talkPage, 0 );
-					if( !$talkArticle->exists( ) || $wgDevelEnvironment ) {
-						$welcomeJob = new HAWelcomeJob(
-							$Title,
-							array(
-								"is_anon"   => $wgUser->isAnon(),
-								"user_id"   => $wgUser->getId(),
-								"user_ip"   => wfGetIP(),
-								"user_name" => $wgUser->getName(),
-							)
-						);
-						$welcomeJob->insert();
-						Wikia::log( __METHOD__, "job" );
+					/**
+					 * check if talk page for wgUser exists
+					 *
+					 * @todo check editcount for user
+					 */
+					Wikia::log( __METHOD__, "user", $wgUser->getName() );
+					$talkPage = $wgUser->getUserPage()->getTalkPage();
+					if( $talkPage ) {
+						$talkArticle = new Article( $talkPage, 0 );
+						if( !$talkArticle->exists( ) || $wgDevelEnvironment ) {
+							$welcomeJob = new HAWelcomeJob(
+								$Title,
+								array(
+									"is_anon"   => $wgUser->isAnon(),
+									"user_id"   => $wgUser->getId(),
+									"user_ip"   => wfGetIP(),
+									"user_name" => $wgUser->getName(),
+								)
+							);
+							$welcomeJob->insert();
+							Wikia::log( __METHOD__, "job" );
 
-						/**
-						 * inform task manager
-						 */
-						$Task = new HAWelcomeTask();
-						$Task->createTask( array( "city_id" => $wgCityId ), TASK_QUEUED  );
-						Wikia::log( __METHOD__, "task" );
-					}
-					else {
-						Wikia::log( __METHOD__, "exists", sprintf( "Talk page for user %s alredy exits", $wgUser->getName() ) );
+							/**
+							 * inform task manager
+							 */
+							$Task = new HAWelcomeTask();
+							$Task->createTask( array( "city_id" => $wgCityId ), TASK_QUEUED  );
+							Wikia::log( __METHOD__, "task" );
+						}
+						else {
+							Wikia::log( __METHOD__, "exists", sprintf( "Talk page for user %s alredy exits", $wgUser->getName() ) );
+						}
 					}
 				}
-			}
-			else {
-				Wikia::log( __METHOD__, "disabled" );
+				else {
+					Wikia::log( __METHOD__, "disabled" );
+				}
 			}
 		}
 		wfProfileOut( __METHOD__ );
@@ -304,11 +328,13 @@ class HAWelcomeJob extends Job {
 		$tmpUser = $wgUser;
 		$wgUser = $Sysop;
 		$signature = sprintf(
-			"-- [[User:%s|%s]] ([[User_talk:%s|%s]]) %s",
+			"-- [[%s:%s|%s]] ([[%s:%s|%s]]) %s",
+			$wgContLang->getNsText(NS_USER),
 			wfEscapeWikiText( $Sysop->getName() ),
 			wfEscapeWikiText( $Sysop->getName() ),
+			$wgContLang->getNsText(NS_USER_TALK),
 			wfEscapeWikiText( $Sysop->getName() ),
-			$wgContLang->lc( wfMsg( "talkpagelinktext" ) ),
+			wfMsg( "talkpagelinktext" ),
 			$wgContLang->timeanddate( wfTimestampNow( TS_MW ) )
 		);
 		$wgUser = $tmpUser;
