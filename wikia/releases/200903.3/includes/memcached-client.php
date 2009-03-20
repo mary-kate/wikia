@@ -437,7 +437,7 @@ class memcached
       }
 
       $val = array();
-      $this->_load_items($sock, $val, $key);
+      $this->_load_items($sock, $val, $cmd);
 
       if ($this->_debug)
          foreach ($val as $k => $v)
@@ -889,7 +889,7 @@ class memcached
     *
     * @access  private
     */
-   function _load_items ($sock, &$ret, $key='')
+   function _load_items ($sock, &$ret, $cmd='')
    {
       while (1)
       {
@@ -938,10 +938,10 @@ class memcached
          {
             if ($this->_debug)
                $this->_debugprint("Error parsing memcached response\n");
-            if( !empty( $key ) )
-	        error_log( "memcached ({$this->_memc_host}) - Error parsing memcached response. The key was: $key. And we got: $decl" );
+            if( !empty( $cmd ) )
+	        error_log( "memcached ({$this->_memc_host}) - Error parsing memcached response. The cmd was: $key. And we got: $decl" );
             else
-	        error_log( "memcached ({$this->_memc_host}) - Error parsing memcached response. No key. We got: $decl" );
+	        error_log( "memcached ({$this->_memc_host}) - Error parsing memcached response. No cmd. We got: $decl" );
             return 0;
          }
       }
