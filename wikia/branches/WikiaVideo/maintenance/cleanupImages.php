@@ -43,12 +43,14 @@ class ImageCleanup extends TableCleanup {
 	function processPage( $row ) {
 		global $wgContLang;
 
+		$source = $row->img_name;
+
 		// do nothing for videos, regardless of anything else
 		if ( ( 'VIDEO' == $row->img_media_type ) && ( 'video' == $row->img_major_mime ) && ( 'swf' == $row->img_minor_mime ) ) {
+			$this->log( "omitting video row '$source'" );
 			return $this->progress( 0 );
 		}
 
-		$source = $row->img_name;
 		if( $source == '' ) {
 			// Ye olde empty rows. Just kill them.
 			$this->killRow( $source );
