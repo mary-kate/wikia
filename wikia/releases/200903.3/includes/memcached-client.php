@@ -941,7 +941,7 @@ class memcached
             if( !empty( $key ) )
 	        error_log( "memcached ({$this->_memc_host}) - Error parsing memcached response. The key was: $key. And we got: $decl" );
             else
-	        error_log( "memcached ({$this->_memc_host}) - Error parsing memcached response. We got: $decl" );
+	        error_log( "memcached ({$this->_memc_host}) - Error parsing memcached response. No key. We got: $decl" );
             return 0;
          }
       }
