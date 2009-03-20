@@ -492,7 +492,7 @@ class memcached
 
          if ($this->_safe_fwrite($sock, $cmd, strlen($cmd)))
          {
-            $gather[] = $sock;
+            $gather[$cmd] = $sock;
          } else
          {
             $this->_dead_sock($sock);
@@ -501,9 +501,9 @@ class memcached
 
       // Parse responses
       $val = array();
-      foreach ($gather as $sock)
+      foreach ($gather as $cmd=>$sock)
       {
-         $this->_load_items($sock, $val);
+         $this->_load_items($sock, $val, $cmd);
       }
 
       if ($this->_debug)
