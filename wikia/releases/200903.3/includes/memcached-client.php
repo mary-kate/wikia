@@ -437,7 +437,7 @@ class memcached
       }
 
       $val = array();
-      $this->_load_items($sock, $val, $cmd);
+      $this->_load_items($sock, $val, $key);
 
       if ($this->_debug)
          foreach ($val as $k => $v)
@@ -492,7 +492,7 @@ class memcached
 
          if ($this->_safe_fwrite($sock, $cmd, strlen($cmd)))
          {
-            $gather[$cmd] = $sock;
+            $gather[] = $sock;
          } else
          {
             $this->_dead_sock($sock);
@@ -501,9 +501,9 @@ class memcached
 
       // Parse responses
       $val = array();
-      foreach ($gather as $cmd=>$sock)
+      foreach ($gather as $sock)
       {
-         $this->_load_items($sock, $val, $cmd);
+         $this->_load_items($sock, $val);
       }
 
       if ($this->_debug)
@@ -779,11 +779,6 @@ class memcached
       if (!$this->_active)
          return false;
 
-      if (preg_match('/\s/', $key)) {
-         error_log( 'MEMCACHED ERROR: found a white space character in the key "'.$key.'". Fixing it' );
-         $key = preg_replace( '/\s/', '_', $key );
-      }
-
       if ($this->_single_sock !== null) {
          $this->_flush_read_buffer($this->_single_sock);
          return $this->sock_to_host($this->_single_sock);
@@ -889,7 +884,7 @@ class memcached
     *
     * @access  private
     */
-   function _load_items ($sock, &$ret, $cmd='')
+   function _load_items ($sock, &$ret, $key='')
    {
       while (1)
       {
@@ -938,10 +933,10 @@ class memcached
          {
             if ($this->_debug)
                $this->_debugprint("Error parsing memcached response\n");
-            if( !empty( $cmd ) )
-	        error_log( "memcached ({$this->_memc_host}) - Error parsing memcached response. The cmd was: $key. And we got: $decl" );
+            if( !empty( $key ) )
+	        error_log( "memcached ({$this->_memc_host}) - Error parsing memcached response. The key was: $key. And we got: $decl" );
             else
-	        error_log( "memcached ({$this->_memc_host}) - Error parsing memcached response. No cmd. We got: $decl" );
+	        error_log( "memcached ({$this->_memc_host}) - Error parsing memcached response. We got: $decl" );
             return 0;
          }
       }
