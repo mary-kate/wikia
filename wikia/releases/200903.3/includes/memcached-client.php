@@ -779,9 +779,9 @@ class memcached
       if (!$this->_active)
          return false;
 
-      if (strpos($key, ' ')) {
-         error_log( 'MEMCACHED ERROR: found a space character in the key "'.$key.'". Fixing it' );
-         $key = str_replace( ' ', '_', $key );
+      if (preg_match('/\s/', $key)) {
+         error_log( 'MEMCACHED ERROR: found a white space character in the key "'.$key.'". Fixing it' );
+         $key = preg_replace( '/\s/', '_', $key );
       }
 
       if ($this->_single_sock !== null) {
