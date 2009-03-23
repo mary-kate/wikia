@@ -172,7 +172,7 @@ YAHOO.lang.extend(YAHOO.example.AutoCompleteTextArea, YAHOO.widget.AutoComplete,
 
 		var textBefore = text.substr(0, i);
 
-		var newVal = textBefore + ((this._bIsTemplate && this._bIsSubstTemplate) ? 'subst:' : '' ) + (this._bIsColon ? ':' : '') + oItem._oResultData[0] + (text.charAt(i - 1) == "{" ? "}}" : "]]") + text.substr(i + this._originalQuery.length);
+		var newVal = textBefore + ((this._bIsTemplate && this._bIsSubstTemplate) ? 'subst:' : '' ) + (this._bIsColon ? ':' : '') + oItem._oResultData[0] + (this._bIsTemplate ? "}}" : "]]") + text.substr(i + this._originalQuery.length);
 		this._elTextbox.value = newVal;
 
 		if(YAHOO.env.ua.ie > 0) {
