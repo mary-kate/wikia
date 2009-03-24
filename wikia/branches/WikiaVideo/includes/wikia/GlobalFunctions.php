@@ -626,7 +626,7 @@ function getMenu() {
 			}
 		}
 		$content .= 'var magicWords = '.Wikia::json_encode($magicWords).';';
-		$duration = 60 * 60 * 48; // two days
+		$duration = 60 * 60 * 12; // two days
 	}
 
 	if(!empty($content)) {
@@ -666,4 +666,12 @@ function getMenuHelper($name, $limit = 7) {
 	$data[$name] = $result;
 	$wgMemc->set($key, $data, 60 * 60 * 6);
 	return $result;
+}
+
+
+/**
+ * @author Inez Korczynski <inez@wikia.com>
+ */
+function isMsgEmpty($key) {
+	return wfEmptyMsg($key, trim(wfMsg($key)));
 }
