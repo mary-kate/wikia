@@ -433,8 +433,8 @@ class EmailNotification {
 		// Wikia, Bartek Lapinski 24.03.2009 for RT #1294 - always compose email using the *WATCHING* user's language settings...
 		$langCode = $user->getOption( 'language' );
 
-		$summary = ($this->summary == '') ? wfMsgExt( 'enotif_no_summary', $langCode ) : wfMsgExt( 'enotif_summary', $langCode  ) . '"' . $this->summary . '"';
-		$medit   = ($this->minorEdit) ? wfMsgExt( 'minoredit', $langCode ) : '';
+		$summary = ($this->summary == '') ? wfMsgExt( 'enotif_no_summary', array( 'language' => $langCode ) ) : wfMsgExt( 'enotif_summary', array( 'language' => $langCode )  ) . '"' . $this->summary . '"';
+		$medit   = ($this->minorEdit) ? wfMsgExt( 'minoredit', array( 'language' => $langCode ) ) : '';
 
 		# You as the WikiAdmin and Sysops can make use of plenty of
 		# named variables when composing your notification emails while
