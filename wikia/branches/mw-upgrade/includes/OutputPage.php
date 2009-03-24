@@ -850,7 +850,7 @@ class OutputPage {
 
 			wfRunHooks( 'AjaxAddScript', array( &$this ) );
 
-			if( $wgAjaxSearch ) {
+			if( $wgEnableMWSuggest ) {
 				if(get_class($wgUser->getSkin()) != 'SkinMonaco') {
 					$this->addScript( "<script type=\"{$wgJsMimeType}\" src=\"{$wgStylePath}/common/ajaxsearch.js?$wgStyleVersion\"></script>\n" );
 				}
