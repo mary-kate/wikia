@@ -131,7 +131,7 @@ function initEditor() {
 	oFCKeditor.Config["CustomConfigurationsPath"] = window.wgExtensionsPath + '/wikia/Wysiwyg/wysiwyg_config.js';
 	oFCKeditor.ready = true;
 	oFCKeditor.Height = '450px';
-	oFCKeditor.Width = document.all ? '99%' : '100%'; // IE fix
+	oFCKeditor.Width = '100%';
 	oFCKeditor.ReplaceTextarea();
 
 	// restore editor state after user returns to edit page?
@@ -164,7 +164,7 @@ function initEditor() {
 			var elem = YAHOO.util.Event.getTarget(e);
 
 			var buttonId = elem.id.substring(2).toLowerCase();
-			var editorSourceMode = window.FCKwpTextbox1.FCK.EditMode;
+			var editorSourceMode = FCK.EditMode;
 
 			YAHOO.Wikia.Tracker.trackByStr(e, 'wysiwyg/' + buttonId + '/' + (editorSourceMode ? 'wikitextmode' : 'visualmode'));
 		});
