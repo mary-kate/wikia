@@ -423,7 +423,7 @@ class EmailNotification {
 	/**
 	 * @private
 	 */
-	function composeCommonMailtext() {
+	function composeCommonMailtext( $user ) {
 		global $wgPasswordSender, $wgNoReplyAddress;
 		global $wgEnotifFromEditor, $wgEnotifRevealEditorAddress;
 		global $wgEnotifImpersonal;
@@ -540,7 +540,7 @@ class EmailNotification {
 		global $wgEnotifImpersonal;
 
 		if ( !$this->composed_common )
-			$this->composeCommonMailtext();
+			$this->composeCommonMailtext( $user );
 
 		if ( $wgEnotifImpersonal ) {
 			$this->mailTargets[] = new MailAddress( $user );
