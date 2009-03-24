@@ -70,7 +70,7 @@ function wfProblemReports()
 	
 		// add "Report a problem" link and return html of "Report a problem" dialog
 		$wgHooks['SkinTemplateContentActions'][] = 'wfProblemReportsAddLink';
-		$wgHooks['ExtendJSGlobalVars'][] = 'wfProblemReportsSetupVars';
+		$wgHooks['MakeGlobalVariablesScript'][] = 'wfProblemReportsSetupVars';
 	}
 
 	// setup for Special:Log

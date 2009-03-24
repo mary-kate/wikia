@@ -72,7 +72,7 @@ function getEditingTips() {
 
 $wgHooks['UserToggles'][] = 'wfEditingTipsToggle';
 $wgHooks['getEditingPreferencesTab'][] = 'wfEditingTipsToggle';
-$wgHooks['ExtendJSGlobalVars'][] = 'wfEditingTipsSetupVars';
+$wgHooks['MakeGlobalVariablesScript'][] = 'wfEditingTipsSetupVars';
 
 function wfEditingTipsToggle($toggles, $default_array = false) {
 	wfLoadExtensionMessages('EditingTips');
