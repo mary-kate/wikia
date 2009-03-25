@@ -1537,15 +1537,15 @@ END;
 
 	protected function showFormBeforeText() {
 		global $wgOut;
-		$wgOut->addHTML( "
-/* Wikia change begin - @author: Inez Korczyñ */
+/* Wikia change begin - @author: Inez */
 /* Make AjaxLogin work on EditPage without losing user changes */
+		$wgOut->addHTML( "
 <input type='hidden' value=\"\" name=\"wpLogin\" id=\"wpLogin\" />
-/* Wikia change end */
 <input type='hidden' value=\"" . htmlspecialchars( $this->section ) . "\" name=\"wpSection\" />
 <input type='hidden' value=\"{$this->starttime}\" name=\"wpStarttime\" />\n
 <input type='hidden' value=\"{$this->edittime}\" name=\"wpEdittime\" />\n
 <input type='hidden' value=\"{$this->scrolltop}\" name=\"wpScrolltop\" id=\"wpScrolltop\" />\n" );
+/* Wikia change end */
 	}
 
 	protected function showTextbox1( $classes ) {
