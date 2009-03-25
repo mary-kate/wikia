@@ -70,7 +70,7 @@ class AutoCreateWikiLocalJob extends Job {
 	 *
 	 * @param Integer $city_id	wiki identifier in city_list table
 	 */
-	public function WFinsert( $city_id ) {
+	public function WFinsert( $city_id, $database = false ) {
 
 		global $wgDBname, $wgErrorLog;
 
@@ -80,30 +80,32 @@ class AutoCreateWikiLocalJob extends Job {
 		$oldValue = $wgErrorLog;
 		$wgErrorLog = true;
 		Wikia::log( __METHOD__ , "id", $city_id );
-		if( $city_id ) {
+
+		if( !$database ) {
 			$database = Wikifactory::IdtoDB( $city_id );
-			Wikia::log( __METHOD__ , "db", $database );
-			if( $database ) {
-				$fields = $this->insertFields();
+		}
+		
+		Wikia::log( __METHOD__ , "db", $database );
+		if( $database ) {
+			$fields = $this->insertFields();
 
-				$dbw = wfGetDB( DB_MASTER );
-				$dbw->selectDB( $database );
+			$dbw = wfGetDB( DB_MASTER );
+			$dbw->selectDB( $database );
 
-				if ( $this->removeDuplicates ) {
-					$res = $dbw->select( 'job', array( '1' ), $fields, __METHOD__ );
-					if ( $dbw->numRows( $res ) ) {
-						return;
-					}
+			if ( $this->removeDuplicates ) {
+				$res = $dbw->select( 'job', array( '1' ), $fields, __METHOD__ );
+				if ( $dbw->numRows( $res ) ) {
+					return;
 				}
-				$fields['job_id'] = $dbw->nextSequenceValue( 'job_job_id_seq' );
-				$dbw->insert( 'job', $fields, __METHOD__ );
-
-				/**
-				 * we need to commit before switching databases
-				 */
-				$dbw->commit();
-				$dbw->selectDB( $wgDBname );
 			}
+			$fields['job_id'] = $dbw->nextSequenceValue( 'job_job_id_seq' );
+			$dbw->insert( 'job', $fields, __METHOD__ );
+
+			/**
+			 * we need to commit before switching databases
+			 */
+			$dbw->commit();
+			$dbw->selectDB( $wgDBname );
 		}
 		$wgErrorLog = $oldValue;
 	}
