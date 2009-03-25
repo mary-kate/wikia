@@ -107,7 +107,8 @@ class EditAccount extends SpecialPage {
 				'status'	=> $this->mStatus,
 				'statusMsg' => $this->mStatusMsg,
 				'user'	  => $userName,
-				'userEmail' => is_object($this->mUser) ? $this->mUser->getEmail() : null
+				'userEmail' => is_object($this->mUser) ? $this->mUser->getEmail() : null,
+				'userRealName' => is_object($this->mUser) ? $this->mUser->getRealName() : null,
 			));
 		// HTML output
 		$wgOut->addHTML( $oTmpl->execute( $template ) );
