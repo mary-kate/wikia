@@ -530,12 +530,12 @@ function WMU_insertImage(e, type) {
 	params.push('mwname='+$('ImageUploadMWname').value);
 
 	if(type == 'overwrite') {
-		params.push('name='+$('ImageUploadExistingName').value);
+		params.push('name='+ encodeURIComponent( $('ImageUploadExistingName').value ) );
 	} else if(type == 'rename') {
-		params.push('name='+$('ImageUploadRenameName').value);
+		params.push('name='+ encodeURIComponent( $('ImageUploadRenameName').value ) );
 	} else {
 		if($('ImageUploadName')) {
-			params.push('name='+$('ImageUploadName').value + '.' + $('ImageUploadExtension').value);
+			params.push('name='+ encodeURIComponent( $('ImageUploadName').value ) + '.' + $('ImageUploadExtension').value);
 		}
 	}
 
