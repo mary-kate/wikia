@@ -575,9 +575,9 @@ function WMU_insertImage(e, type) {
 					$('ImageUploadBack').style.display = 'none';
 					$('ImageUpload' + WMU_curScreen).innerHTML = o.responseText;
 					if(WMU_refid == null) {
-						insertTags($('ImageUploadTag').innerHTML, '', '');
+						insertTags($('ImageUploadTag').value, '', '');
 					} else {
-						var wikitag = YAHOO.util.Dom.get('ImageUploadTag').innerHTML;
+						var wikitag = YAHOO.util.Dom.get('ImageUploadTag').value;
 						var options = {};
 
 						if($('ImageUploadThumbOption').checked) {
