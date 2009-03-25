@@ -422,7 +422,7 @@ class Parser
 				"Template argument size: {$this->mIncludeSizes['arg']}/$max bytes\n".
 				$PFreport;
 			wfRunHooks( 'ParserLimitReport', array( $this, &$limitReport ) );
-			$text .= "\n<!-- \n$limitReport-->\n";
+			$text .= "<!-- \n$limitReport-->\n";
 		}
 		$this->mOutput->setText( $text );
 		$this->mRevisionId = $oldRevisionId;
@@ -1006,6 +1006,14 @@ class Parser
 		$text = $this->replaceInternalLinks( $text );
 		$text = $this->replaceExternalLinks( $text );
 
+		/* Wikia change begin - @author: Inez */
+		/* Wysiwyg: Remove markers added in Preprocessor_DOM.php */
+		global $wgWysiwygParserEnabled;
+		if(!empty($wgWysiwygParserEnabled)) {
+			$text = preg_replace('/\x7e-start-\d+-stop/', '', $text);
+		}
+		/* Wikia change end */
+
 		# replaceInternalLinks may sometimes leave behind
 		# absolute URLs, which have to be masked to hide them from replaceExternalLinks
 		$text = str_replace($this->mUniqPrefix."NOPARSE", "", $text);
@@ -1020,7 +1028,7 @@ class Parser
 	/**
 	 * Replace special strings like "ISBN xxx" and "RFC xxx" with
 	 * magic external links.
-	 * 
+	 *
 	 * DML
 	 * @private
 	 */
@@ -1030,7 +1038,7 @@ class Parser
 		$urlChar = self::EXT_LINK_URL_CLASS;
 		$text = preg_replace_callback(
 			'!(?:                           # Start cases
-				(<a.*?</a>) |               # m[1]: Skip link text 
+				(<a.*?</a>) |               # m[1]: Skip link text
 				(<.*?>) |                   # m[2]: Skip stuff inside HTML elements' . "
 				(\\b(?:$prots)$urlChar+) |  # m[3]: Free external links" . '
 				(?:RFC|PMID)\s+([0-9]+) |   # m[4]: RFC or PMID, capture number
@@ -1128,9 +1136,18 @@ class Parser
 		# Is this an external image?
 		$text = $this->maybeMakeExternalImage( $url );
 		if ( $text === false ) {
+			/* Wikia change begin - @author: Marooned */
+			/* Wysiwyg: Mark external raw links and add to wysiwyg metadate array */
+			$description = $wgContLang->markNoConversion($url);
+			global $wgWysiwygParserEnabled;
+			if (!empty($wgWysiwygParserEnabled)) {
+				Wysiwyg_SetRefId('external link: raw', array('text' => &$description, 'link' => $url));
+			}
+
 			# Not an image, make a link
-			$text = $sk->makeExternalLink( $url, $wgContLang->markNoConversion($url), true, 'free', 
+			$text = $sk->makeExternalLink( $url, $description, true, 'free',
 				$this->getExternalLinkAttribs() );
+			/* Wikia change end */
 			# Register it in the output object...
 			# Replace unnecessary URL escape codes with their equivalent characters
 			$pasteurized = self::replaceUnusualEscapes( $url );
@@ -1384,6 +1401,20 @@ class Parser
 			# Set linktype for CSS - if URL==text, link is essentially free
 			$linktype = ($text === $url) ? 'free' : 'text';
 
+			/* Wikia change begin - @author: Inez, Marooned */
+			/* Wysiwyg: restore original external link added in Preprocessor_DOM.php */
+			global $wgWysiwygParserEnabled;
+			if(!empty($wgWysiwygParserEnabled)) {
+				global $wgWikitext;
+				$originalWikitext = '';
+				if (preg_match('/\]\x7e-start-(\d+)-stop[^\x7e]*$/', $trail, $matches)) {
+					$originalWikitext = $wgWikitext[$matches[1]];
+					$trail = str_replace("\x7e-start-{$matches[1]}-stop", '', $trail);
+				}
+			}
+			$wasblank = $text == '';
+			/* Wikia change end */
+
 			# No link text, e.g. [http://domain.tld/some.link]
 			if ( $text == '' ) {
 				# Autonumber if allowed. See bug #5918
@@ -1412,11 +1443,18 @@ class Parser
 				$attribs = array();
 			}
 
+			/* Wikia change begin - @author: Marooned */
+			/* Wysiwyg: mark element and add metadata to wysiwyg array */
+			if(!empty($wgWysiwygParserEnabled)) {
+				Wysiwyg_SetRefId('external link', array('text' => &$text, 'link' => $url, 'wasblank' => $wasblank, 'original' => $originalWikitext));
+			}
+			/* Wikia change end */
+
 			# Use the encoded URL
 			# This means that users can paste URLs directly into the text
 			# Funny characters like &ouml; aren't valid in URLs anyway
 			# This was changed in August 2004
-			$s .= $sk->makeExternalLink( $url, $text, false, $linktype, $this->getExternalLinkAttribs() ) 
+			$s .= $sk->makeExternalLink( $url, $text, false, $linktype, $this->getExternalLinkAttribs() )
 				. $dtrail . $trail;
 
 			# Register link in the output object.
@@ -1484,6 +1522,7 @@ class Parser
 	 * @private
 	 */
 	function maybeMakeExternalImage( $url ) {
+		global $wgAllowExternalWhitelistImages;
 		$sk = $this->mOptions->getSkin();
 		$imagesfrom = $this->mOptions->getAllowExternalImagesFrom();
 		$imagesexception = !empty($imagesfrom);
@@ -1503,10 +1542,19 @@ class Parser
 			$imagematch = false;
 		}
 		if ( $this->mOptions->getAllowExternalImages()
-		     || ( $imagesexception && $imagematch ) ) {
+		     || ( $imagesexception && $imagematch )
+		     || (!empty($wgAllowExternalWhitelistImages) && wfRunHooks('outputMakeExternalImage', array(&$url)))) {
 			if ( preg_match( self::EXT_IMAGE_REGEX, $url ) ) {
 				# Image found
-				$text = $sk->makeExternalImage( $url );
+				/* Wikia change begin - @author: Marooned */
+				/* Wysiwyg: mark element and add metadata to wysiwyg array */
+				global $wgWysiwygParserEnabled;
+				if (!empty($wgWysiwygParserEnabled)) {
+					Wysiwyg_SetRefId('external link: raw image', array('text' => &$url));
+				} else {
+					$text = $sk->makeExternalImage( $url );
+				}
+				/* Wikia change end */
 			}
 		}
 		if( !$text && $this->mOptions->getEnableImageWhitelist()
@@ -1544,14 +1592,14 @@ class Parser
 	 * @private
 	 */
 	function replaceInternalLinks2( &$s ) {
-		global $wgContLang;
+		global $wgContLang, $wgWysiwygParserEnabled, $wgEnableVideoToolExt;
 
 		wfProfileIn( __METHOD__ );
 
 		wfProfileIn( __METHOD__.'-setup' );
 		static $tc = FALSE, $e1, $e1_img;
 		# the % is needed to support urlencoded titles as well
-		if ( !$tc ) { 
+		if ( !$tc ) {
 			$tc = Title::legalChars() . '#%';
 			# Match a link having the form [[namespace:link|alternate]]trail
 			$e1 = "/^([{$tc}]+)(?:\\|(.+?))?]](.*)\$/sD";
@@ -1604,8 +1652,12 @@ class Parser
 		$useSubpages = $this->areSubpagesAllowed();
 		wfProfileOut( __METHOD__.'-setup' );
 
+		/* Wikia change begin - @author: Marooned, Inez */
+		/* previousLine variable is required later in category handling for wysiwyg*/
+		$previousLine = false;
 		# Loop for each link
-		for ( ; $line !== false && $line !== null ; $a->next(), $line = $a->current() ) {
+		for ( ; $line !== false && $line !== null ; $previousLine = $a->current(), $a->next(), $line = $a->current() ) {
+		/* Wikia change end */
 			# Check for excessive memory usage
 			if ( $holders->isBig() ) {
 				# Too big
@@ -1613,6 +1665,19 @@ class Parser
 				$holders->replace( $s );
 				$holders->clear();
 			}
+
+			/* Wikia change begin - @author: Marooned */
+			/* Wysiwyg: restore original internal link */
+			if(!empty($wgWysiwygParserEnabled)) {
+				global $wgWikitext;
+				$originalWikitext = '';
+				if($line[0] == "\x7d" && $line[1] == "-") {
+					$linkmark = intval(substr($line, 2, 4));
+					$originalWikitext = $wgWikitext[$linkmark];
+					$line = substr($line, 6);
+				}
+			}
+			/* Wikia change end */
 
 			if ( $useLinkPrefixExtension ) {
 				wfProfileIn( __METHOD__.'-prefixhandling' );
@@ -1709,7 +1774,7 @@ class Parser
 
 			if ($might_be_img) { # if this is actually an invalid link
 				wfProfileIn( __METHOD__."-might_be_img" );
-				if ($ns == NS_FILE && $noforce) { #but might be an image
+				if (($ns == NS_FILE || $ns == NS_VIDEO) && $noforce) { #but might be an image
 					$found = false;
 					while ( true ) {
 						#look at the next 'line' to see if we can close it there
@@ -1762,26 +1827,77 @@ class Parser
 				wfProfileIn( __METHOD__."-interwiki" );
 				if( $iw && $this->mOptions->getInterwikiMagic() && $nottalk && $wgContLang->getLanguageName( $iw ) ) {
 					$this->mOutput->addLanguageLink( $nt->getFullText() );
-					$s = rtrim($s . $prefix);
-					$s .= trim($trail, "\n") == '' ? '': $prefix . $trail;
+
+					/* Wikia change begin - @author: Marooned */
+					/* Wysiwyg: add placeholder */
+					if(!empty($wgWysiwygParserEnabled)) {
+						$FCKtmp= Wysiwyg_SetRefId('interwiki', array('text' => &$text, 'original' => $originalWikitext));
+						$s .= $prefix . $this->armorLinks( $FCKtmp ) . $trail;
+						wfDebug("Interwiki: {$text}\n");
+					} else {
+						$s = rtrim($s . $prefix);
+						$s .= trim($trail, "\n") == '' ? '': $prefix . $trail;
+					}
+					/* Wikia change end */
+
 					wfProfileOut( __METHOD__."-interwiki" );
 					continue;
 				}
 				wfProfileOut( __METHOD__."-interwiki" );
 
+				/* Wikia change begin - @author: Inez, Macbre */
+				/* Support for [[Video:...]] */
+				if($ns == NS_VIDEO) {
+					if(!empty($wgEnableVideoToolExt)) {
+						wfProfileIn("$fname-video");
+						if (!empty($wgWysiwygParserEnabled)) {
+							Wysiwyg_SetRefId('video', array('text' => &$text, 'link' => $link, 'wasblank' => $wasblank, 'noforce' => $noforce, 'original' => $originalWikitext));
+							$wgWysiwygParserEnabled = false;
+							$text = $this->replaceExternalLinks(preg_replace('/\x7e-start-\d+-stop/', '', $text));
+							$holders->merge($this->replaceInternalLinks2(preg_replace('/\x7d-\d{4}/', '', $text)));
+							$wgWysiwygParserEnabled = true;
+							$s .= $prefix . $this->armorLinks(WikiaVideo_makeVideo($nt, $text, $sk, $originalWikitext)).$trail;
+						} else {
+							$text = $this->replaceExternalLinks($text);
+							$holders->merge( $this->replaceInternalLinks2( $text ) );
+							$s .= $prefix . $this->armorLinks(WikiaVideo_makeVideo($nt, $text, $sk)).$trail;
+							$this->mOutput->addImage(':'.$nt->getDBkey());
+						}
+						wfProfileOut("$fname-video");
+						continue;
+					}
+				}
+				/* Wikia change end */
+
 				if ( $ns == NS_FILE ) {
 					wfProfileIn( __METHOD__."-image" );
+					/* Wikia change begin - @author: Marooned */
+					/* Wysiwyg: mark image and add metadata to wysiwyg array, parse links in caption without wysiwyg related actions */
+					if(!empty($wgWysiwygParserEnabled)) {
+						Wysiwyg_SetRefId('image', array('text' => &$text, 'link' => $link, 'wasblank' => $wasblank, 'noforce' => $noforce, 'original' => $originalWikitext));
+					}
+
 					if ( !wfIsBadImage( $nt->getDBkey(), $this->mTitle ) ) {
 						# recursively parse links inside the image caption
 						# actually, this will parse them in any other parameters, too,
 						# but it might be hard to fix that, and it doesn't matter ATM
-						$text = $this->replaceExternalLinks($text);
-						$holders->merge( $this->replaceInternalLinks2( $text ) );
-
+						if(!empty($wgWysiwygParserEnabled)) {
+							$wgWysiwygParserEnabled = false;
+							$text = $this->replaceExternalLinks(preg_replace('/\x7e-start-\d+-stop/', '', $text));
+							$holders->merge( $this->replaceInternalLinks2( preg_replace('/\x7d-\d{4}/', '', $text) ) );
+							$wgWysiwygParserEnabled = true;
+						} else {
+							$text = $this->replaceExternalLinks($text);
+							$holders->merge( $this->replaceInternalLinks2( $text ) );
+						}
 						# cloak any absolute URLs inside the image markup, so replaceExternalLinks() won't touch them
 						$s .= $prefix . $this->armorLinks( $this->makeImage( $nt, $text, $holders ) ) . $trail;
 					}
-					$this->mOutput->addImage( $nt->getDBkey() );
+
+					if(empty($wgWysiwygParserEnabled)) {
+						$this->mOutput->addImage( $nt->getDBkey() );
+					}
+					/* Wikia change end */
 					wfProfileOut( __METHOD__."-image" );
 					continue;
 
@@ -1790,6 +1906,17 @@ class Parser
 				if ( $ns == NS_CATEGORY ) {
 					wfProfileIn( __METHOD__."-category" );
 					$s = rtrim($s . "\n"); # bug 87
+
+					/* Wikia change begin - @author: Marooned */
+					/* Wysiwyg: mark element and add metadata to wysiwyg array */
+					if(!empty($wgWysiwygParserEnabled)) {
+						$extraTrial = '';
+						if($previousLine && preg_match('/(\s+)$/', $previousLine, $extraTrial)) {
+							$extraTrial = $extraTrial[1];
+						}
+						$FCKtmp = Wysiwyg_SetRefId('category', array('text' => &$text, 'link' => $link, 'wasblank' => $wasblank, 'noforce' => $noforce, 'original' => $originalWikitext, 'whiteSpacePrefix' => $extraTrial), false);
+					}
+					/* Wikia change end */
 
 					if ( $wasblank ) {
 						$sortkey = $this->getDefaultSort();
@@ -1805,7 +1932,15 @@ class Parser
 					 * Strip the whitespace Category links produce, see bug 87
 					 * @todo We might want to use trim($tmp, "\n") here.
 					 */
-					$s .= trim($prefix . $trail, "\n") == '' ? '': $prefix . $trail;
+
+					/* Wikia change begin - @author: Marooned */
+					/* Wysiwyg: don't strip new lines and replace category with placeholders */
+					if (!empty($wgWysiwygParserEnabled)) {
+						$s .= $prefix . $FCKtmp . $trail;
+					} else {
+						$s .= trim($prefix . $trail, "\n") == '' ? '': $prefix . $trail;
+					}
+					/* Wikia change end */
 
 					wfProfileOut( __METHOD__."-category" );
 					continue;
@@ -1815,26 +1950,49 @@ class Parser
 			# Self-link checking
 			if( $nt->getFragment() === '' && $ns != NS_SPECIAL ) {
 				if( in_array( $nt->getPrefixedText(), $selflink, true ) ) {
-					$s .= $prefix . $sk->makeSelfLinkObj( $nt, $text, '', $trail );
-					continue;
+					/* Wikia change begin - @author: Marooned */
+					/* Wysiwyg: do not use 'continue' so we can handle self link as a regular link */
+					if(!$wgWysiwygParserEnabled) {
+						$s .= $prefix . $sk->makeSelfLinkObj( $nt, $text, '', $trail );
+						continue;
+					}
+					/* Wikia change end */
 				}
 			}
 
 			# NS_MEDIA is a pseudo-namespace for linking directly to a file
 			# FIXME: Should do batch file existence checks, see comment below
 			if( $ns == NS_MEDIA ) {
-				# Give extensions a chance to select the file revision for us
-				$skip = $time = false;
-				wfRunHooks( 'BeforeParserMakeImageLinkObj', array( &$this, &$nt, &$skip, &$time ) );
-				if ( $skip ) {
-					$link = $sk->link( $nt );
-				} else {
-					$link = $sk->makeMediaLinkObj( $nt, $text, $time );
+				/* Wikia change begin - @author: Marooned */
+				if(!empty($wgWysiwygParserEnabled)) {
+					$FCKtmp = Wysiwyg_SetRefId('internal link: media', array('text' => &$text, 'link' => $link, 'wasblank' => $wasblank, 'noforce' => $noforce), false);
+					$s .= $prefix . $FCKtmp . $trail;
+				} else { //original actio
+					# Give extensions a chance to select the file revision for us
+					$skip = $time = false;
+					wfRunHooks( 'BeforeParserMakeImageLinkObj', array( &$this, &$nt, &$skip, &$time ) );
+					if ( $skip ) {
+						$link = $sk->link( $nt );
+					} else {
+						$link = $sk->makeMediaLinkObj( $nt, $text, $time );
+					}
+					# Cloak with NOPARSE to avoid replacement in replaceExternalLinks
+					$s .= $prefix . $this->armorLinks( $link ) . $trail;
+					$this->mOutput->addImage( $nt->getDBkey() );
 				}
-				# Cloak with NOPARSE to avoid replacement in replaceExternalLinks
-				$s .= $prefix . $this->armorLinks( $link ) . $trail;
-				$this->mOutput->addImage( $nt->getDBkey() );
+				/* Wikia change end */
 				continue;
+			}
+
+			/* Wikia change begin - @author: Marooned, Inez */
+			if(!empty($wgWysiwygParserEnabled)) {
+				if($ns == NS_SPECIAL) {
+					Wysiwyg_SetRefId('internal link: special page', array('text' => &$text, 'link' => $link, 'trail' => $trail, 'wasblank' => $wasblank, 'noforce' => $noforce));
+				} else if($ns == NS_IMAGE) {
+					Wysiwyg_SetRefId('internal link: file', array('text' => &$text, 'link' => $link, 'trail' => $trail, 'wasblank' => $wasblank, 'noforce' => $noforce));
+				} else {
+					Wysiwyg_SetRefId('internal link', array('text' => &$text, 'link' => $link, 'trail' => $trail, 'wasblank' => $wasblank, 'noforce' => $noforce, 'original' => $originalWikitext));
+				}
 			}
 
 			# Some titles, such as valid special pages or files in foreign repos, should
@@ -1843,12 +2001,30 @@ class Parser
 			# FIXME: isAlwaysKnown() can be expensive for file links; we should really do
 			# batch file existence checks for NS_FILE and NS_MEDIA
 			if( $iw == '' && $nt->isAlwaysKnown() ) {
-				$this->mOutput->addLink( $nt );
-				$s .= $this->makeKnownLinkHolder( $nt, $text, '', $trail, $prefix );
+				if(!empty($wgWysiwygParserEnabled)) {
+					if(substr($text, 0, 6) == '<input') {
+						$s .= $prefix . $text . $trail;
+					} else {
+						$this->mOutput->addLink( $nt );
+						$s .= $this->makeKnownLinkHolder( $nt, $text, '', $trail, $prefix );
+					}
+				} else {
+					$this->mOutput->addLink( $nt );
+					$s .= $this->makeKnownLinkHolder( $nt, $text, '', $trail, $prefix );
+				}
 			} else {
-				# Links will be added to the output link list after checking
-				$s .= $holders->makeHolder( $nt, $text, '', $trail, $prefix );
+				if(!empty($wgWysiwygParserEnabled)) {
+					if(substr($text, 0, 6) == '<input') {
+						$s .= $prefix . $text . $trail;
+					} else {
+						$s .= $holders->makeHolder( $nt, $text, '', $trail, $prefix );
+					}
+				} else {
+					# Links will be added to the output link list after checking
+					$s .= $holders->makeHolder( $nt, $text, '', $trail, $prefix );
+				}
 			}
+			/* Wikia change end */
 		}
 		wfProfileOut( __METHOD__ );
 		return $holders;
@@ -2066,6 +2242,11 @@ class Parser
 	}
 	/**#@-*/
 
+	/* Wikia change begin - @author: Macbre */
+	var $mCurrentPrefix = '';
+	var $mLastCommonPrefix = false;
+	/* Wikia change end */
+
 	/**
 	 * Make lists from lines starting with ':', '*', '#', etc. (DBL)
 	 *
@@ -2073,6 +2254,7 @@ class Parser
 	 * @return string the lists rendered as HTML
 	 */
 	function doBlockLevels( $text, $linestart ) {
+		global $wgWysiwygParserEnabled;
 		wfProfileIn( __METHOD__ );
 
 		# Parsing through the text line by line.  The main thing
@@ -2113,6 +2295,10 @@ class Parser
 				$t = $oLine;
 			}
 
+			/* Wikia change begin - @author: Macbre */
+			$this->mCurrentPrefix = $prefix;
+			/* Wikia change end */
+
 			# List generation
 			if( $prefixLength && $lastPrefix === $prefix2 ) {
 				# Same as the last item, so no need to deal with nesting or opening stuff
@@ -2144,6 +2330,9 @@ class Parser
 				}
 				while ( $prefixLength > $commonPrefixLength ) {
 					$char = substr( $prefix, $commonPrefixLength, 1 );
+					/* Wikia change begin - @author: Macbre */
+					$this->mLastCommonPrefix = ($prefixLength == $commonPrefixLength + 1);
+					/* Wikia change end */
 					$output .= $this->openList( $char );
 
 					if ( ';' === $char ) {
@@ -2169,6 +2358,17 @@ class Parser
 					$paragraphStack = false;
 					# TODO bug 5718: paragraph closed
 					$output .= $this->closeParagraph();
+					/* Wikia change begin - @author: Macbre */
+					if(!empty($wgWysiwygParserEnabled)) {
+						if ($this->mEmptyLineCounter%2 == 1) {
+							// empty line before HTML tag
+							$t = preg_replace('/^<(\w+)/', '<$1 _wysiwyg_new_line="true"', $t);
+						}
+						// HTML tag starts the line
+						$t = preg_replace('/^<(\w+)/', '<$1 _wysiwyg_line_start="true"', $t);
+						$this->mEmptyLineCounter = 0;
+					}
+					/* Wikia change end */
 					if ( $preOpenMatch and !$preCloseMatch ) {
 						$this->mInPre = true;
 					}
@@ -2179,16 +2379,35 @@ class Parser
 					}
 				} else if ( !$inBlockElem && !$this->mInPre ) {
 					if ( ' ' == $t{0} and ( $this->mLastSection === 'pre' or trim($t) != '' ) ) {
+						/* Wikia change begin - @author: Macbre */
+						if(!empty($wgWysiwygParserEnabled)) {
+							// empty line before preformatted block?
+							$newLines = ($this->mEmptyLineCounter %2) == 1;
+							$this->mEmptyLineCounter = 0;
+						}
+						/* Wikia change end */
 						// pre
 						if ($this->mLastSection !== 'pre') {
 							$paragraphStack = false;
-							$output .= $this->closeParagraph().'<pre>';
+							/* Wikia change begin - @author: Macbre */
+							$close = $this->closeParagraph();
+							if(!empty($wgWysiwygParserEnabled)) {
+								$output .= $close .'<pre'.(!empty($newLines) ? ' _wysiwyg_new_line="true"' : '').'>';
+							} else {
+								$output .= $close . '<pre>';
+							}
+							/* Wikia change end */
 							$this->mLastSection = 'pre';
 						}
 						$t = substr( $t, 1 );
 					} else {
 						// paragraph
 						if ( '' == trim($t) ) {
+							/* Wikia change begin - @author: Macbre */
+							if(!empty($wgWysiwygParserEnabled)) {
+								$this->mEmptyLineCounter++;
+							}
+							/* Wikia change end */
 							if ( $paragraphStack ) {
 								$output .= $paragraphStack.'<br />';
 								$paragraphStack = false;
@@ -2197,24 +2416,43 @@ class Parser
 								if ($this->mLastSection !== 'p' ) {
 									$output .= $this->closeParagraph();
 									$this->mLastSection = '';
-									$paragraphStack = '<p>';
+									if(!empty($wgWysiwygParserEnabled)) {
+										$paragraphStack = '<p _new_lines_before='.($this->mEmptyLineCounter).'>';
+									} else {
+										$paragraphStack = '<p>';
+									}
 								} else {
 									$paragraphStack = '</p><p>';
 								}
 							}
 						} else {
+							if(!empty($wgWysiwygParserEnabled)) {
+								$this->mEmptyLineCounter = 0;
+							}
 							if ( $paragraphStack ) {
 								$output .= $paragraphStack;
 								$paragraphStack = false;
 								$this->mLastSection = 'p';
 							} else if ($this->mLastSection !== 'p') {
-								$output .= $this->closeParagraph().'<p>';
+								if(!empty($wgWysiwygParserEnabled)) {
+									$output .= $this->closeParagraph().'<p _new_lines_before="0">';
+								} else {
+									$output .= $this->closeParagraph().'<p>';
+								}
 								$this->mLastSection = 'p';
+							} else {
+								if(!empty($wgWysiwygParserEnabled)) {
+									$output .= "<!--NEW_LINE_1-->";
+								}
 							}
 						}
 					}
 				}
 				wfProfileOut( __METHOD__."-paragraph" );
+			} else {
+				if(!empty($wgWysiwygParserEnabled)) {
+					$this->mEmptyLineCounter = 0;
+				}
 			}
 			// somewhere above we forget to get out of pre block (bug 785)
 			if($preCloseMatch && $this->mInPre) {
@@ -2689,7 +2927,7 @@ class Parser
 	 *  self::OT_HTML: all templates and extension tags
 	 *
 	 * @param string $tex The text to transform
-	 * @param PPFrame $frame Object describing the arguments passed to the template. 
+	 * @param PPFrame $frame Object describing the arguments passed to the template.
 	 *        Arguments may also be provided as an associative array, as was the usual case before MW1.12.
 	 *        Providing arguments this way may be useful for extensions wishing to perform variable replacement explicitly.
 	 * @param bool $argsOnly Only do argument (triple-brace) expansion, not double-brace expansion
@@ -2755,7 +2993,7 @@ class Parser
 	function limitationWarn( $limitationType, $current=null, $max=null) {
 		$msgName = $limitationType . '-warning';
 		//does no harm if $current and $max are present but are unnecessary for the message
-		$warning = wfMsgExt( $msgName, array( 'parsemag', 'escape' ), $current, $max ); 
+		$warning = wfMsgExt( $msgName, array( 'parsemag', 'escape' ), $current, $max );
 		$this->mOutput->addWarning( $warning );
 		$cat = Title::makeTitleSafe( NS_CATEGORY, wfMsgForContent( $limitationType . '-category' ) );
 		if ( $cat ) {
@@ -2897,7 +3135,7 @@ class Parser
 					$found = true;
 					$noparse = true;
 					$preprocessFlags = 0;
-					
+
 					if ( is_array( $result ) ) {
 						if ( isset( $result[0] ) ) {
 							$text = $result[0];
@@ -3280,7 +3518,7 @@ class Parser
 	 * @param PPFrame $frame
 	 */
 	function extensionSubstitution( $params, $frame ) {
-		global $wgRawHtml, $wgContLang;
+		global $wgRawHtml, $wgContLang, $wgWysiwygParserEnabled;
 
 		$name = $frame->expand( $params['name'] );
 		$attrText = !isset( $params['attr'] ) ? null : $frame->expand( $params['attr'] );
@@ -3298,20 +3536,42 @@ class Parser
 			switch ( $name ) {
 				case 'html':
 					if( $wgRawHtml ) {
-						$output = $content;
+						/* Wikia change begin - @author: Marooned */
+						if(!empty($wgWysiwygParserEnabled)) {
+							$output = Wysiwyg_SetRefId('html', array('text' => &$content), false);
+						} else {
+							$output = $content;
+						}
+						/* Wikia change end */
 						break;
 					} else {
 						throw new MWException( '<html> extension tag encountered unexpectedly' );
 					}
 				case 'nowiki':
-					$output = Xml::escapeTagsOnly( $content );
+					/* Wikia change begin - @author: Marooned */
+					if(!empty($wgWysiwygParserEnabled)) {
+						$output = Wysiwyg_SetRefId('nowiki', array('text' => &$content), false);
+					} else {
+						$output = Xml::escapeTagsOnly( $content );
+					}
+					/* Wikia change end */
 					break;
+				/*
 				case 'math':
 					$output = $wgContLang->armourMath(
 						MathRenderer::renderMath( $content, $attributes ) );
 					break;
+				*/
 				case 'gallery':
-					$output = $this->renderImageGallery( $content, $attributes );
+					/* Wikia change begin - @author: Marooned */
+					/* Wysiwyg: mark element and add metadata to wysiwyg array, don't render gallery to HTML */
+					if(!empty($wgWysiwygParserEnabled)) {
+						$content = "<gallery$attrText>$content</gallery>";
+						$output = Wysiwyg_SetRefId('gallery', array('text' => &$content), false);
+					} else {
+						$output = $this->renderImageGallery( $content, $attributes );
+					}
+					/* Wikia change end */
 					break;
 				default:
 					if( isset( $this->mTagHooks[$name] ) ) {
@@ -3319,8 +3579,17 @@ class Parser
 						if ( !is_callable( $this->mTagHooks[$name] ) ) {
 							throw new MWException( "Tag hook for $name is not callable\n" );
 						}
-						$output = call_user_func_array( $this->mTagHooks[$name],
-							array( $content, $attributes, $this ) );
+						/* Wikia change begin - @author: Marooned */
+						if(!empty($wgWysiwygParserEnabled)) {
+							$tmp = ($content != ''
+									? "<{$name}{$attrText}>{$content}</{$name}>"
+									: "<{$name}{$attrText}/>");
+							$output = Wysiwyg_SetRefId('hook', array('text' => &$tmp, 'name' => $name), false);
+						} else {
+							$output = call_user_func_array( $this->mTagHooks[$name],
+								array( $content, $attributes, $this ) );
+						}
+						/* Wikia change end */
 					} else {
 						$output = '<span class="error">Invalid tag extension name: ' .
 							htmlspecialchars( $name ) . '</span>';
@@ -3387,6 +3656,7 @@ class Parser
 	 * Fills $this->mDoubleUnderscores, returns the modified text
 	 */
 	function doDoubleUnderscore( $text ) {
+		global $wgWysiwygParserEnabled;
 		// The position of __TOC__ needs to be recorded
 		$mw = MagicWord::get( 'toc' );
 		if( $mw->match( $text ) ) {
@@ -3394,8 +3664,15 @@ class Parser
 			$this->mForceTocPosition = true;
 
 			// Set a placeholder. At the end we'll fill it in with the TOC.
-			$text = $mw->replace( '<!--MWTOC-->', $text, 1 );
-
+			/* Wikia change begin - @author: Marooned */
+			if(!empty($wgWysiwygParserEnabled)) {
+				$tmp = '__TOC__';
+				$FCKtmp = Wysiwyg_SetRefId('double underscore: toc', array('text' => &$tmp), false);
+				$text = $mw->replace($FCKtmp, $text, 1);
+			} else {
+				$text = $mw->replace( '<!--MWTOC-->', $text, 1 );
+			}
+			/* Wikia change end */
 			// Only keep the first one.
 			$text = $mw->replace( '', $text );
 		}
@@ -3430,6 +3707,11 @@ class Parser
 			$this->mOutput->setIndexPolicy( 'index' );
 		}
 
+		/* Wikia change begin - @author: Marooned */
+		if(!empty($wgWysiwygParserEnabled)) {
+			$text = str_replace('<!--MWTOC-->', '__TOC__', $text);
+		}
+		/* Wikia change end */
 		return $text;
 	}
 
@@ -3451,7 +3733,7 @@ class Parser
 		global $wgMaxTocLevel, $wgContLang, $wgEnforceHtmlIds;
 
 		$doNumberHeadings = $this->mOptions->getNumberHeadings();
-		$showEditLink = $this->mOptions->getEditSection();
+		$showEditLink = $this->mOptions->getEditSection() && wfRunHooks('EditForm::MultiEdit:Section', array($text));
 
 		// Do not call quickUserCan unless necessary
 		if( $showEditLink && !$this->mTitle->quickUserCan( 'edit' ) ) {
@@ -3791,7 +4073,7 @@ class Parser
 	 * @private
 	 */
 	function pstPass2( $text, $user ) {
-		global $wgContLang, $wgLocaltimezone;
+		global $wgContLang, $wgLocaltimezone, $wgWysiwygParserTildeEnabled;
 
 		/* Note: This is the timestamp saved as hardcoded wikitext to
 		 * the database, we use $wgContLang here in order to give
@@ -3817,13 +4099,17 @@ class Parser
 		# Because mOutputType is OT_WIKI, this will only process {{subst:xxx}} type tags
 		$text = $this->replaceVariables( $text );
 
-		# Signatures
-		$sigText = $this->getUserSig( $user );
-		$text = strtr( $text, array(
-			'~~~~~' => $d,
-			'~~~~' => "$sigText $d",
-			'~~~' => $sigText
-		) );
+		if($wgWysiwygParserTildeEnabled) {
+			$text = preg_replace_callback('/~{3,5}/', create_function('$tilde', 'return Wysiwyg_SetRefId("tilde", array("text" => &$tilde[0]), false);'), $text);
+		} else {
+			# Signatures
+			$sigText = $this->getUserSig( $user );
+			$text = strtr( $text, array(
+				'~~~~~' => $d,
+				'~~~~' => "$sigText $d",
+				'~~~' => $sigText
+			) );
+		}
 
 		# Context links: [[|name]] and [[name (context)|]]
 		#
@@ -4069,23 +4355,23 @@ class Parser
 	 * @param integer $flags a combination of the following flags:
 	 *     SFH_NO_HASH   No leading hash, i.e. {{plural:...}} instead of {{#if:...}}
 	 *
-	 *     SFH_OBJECT_ARGS   Pass the template arguments as PPNode objects instead of text. This 
+	 *     SFH_OBJECT_ARGS   Pass the template arguments as PPNode objects instead of text. This
 	 *     allows for conditional expansion of the parse tree, allowing you to eliminate dead
-	 *     branches and thus speed up parsing. It is also possible to analyse the parse tree of 
+	 *     branches and thus speed up parsing. It is also possible to analyse the parse tree of
 	 *     the arguments, and to control the way they are expanded.
 	 *
 	 *     The $frame parameter is a PPFrame. This can be used to produce expanded text from the
 	 *     arguments, for instance:
 	 *         $text = isset( $args[0] ) ? $frame->expand( $args[0] ) : '';
 	 *
-	 *     For technical reasons, $args[0] is pre-expanded and will be a string. This may change in 
+	 *     For technical reasons, $args[0] is pre-expanded and will be a string. This may change in
 	 *     future versions. Please call $frame->expand() on it anyway so that your code keeps
 	 *     working if/when this is changed.
 	 *
 	 *     If you want whitespace to be trimmed from $args, you need to do it yourself, post-
 	 *     expansion.
 	 *
-	 *     Please read the documentation in includes/parser/Preprocessor.php for more information 
+	 *     Please read the documentation in includes/parser/Preprocessor.php for more information
 	 *     about the methods available in PPFrame and PPNode.
 	 *
 	 * @return The old callback function for this name, if any
@@ -4209,7 +4495,7 @@ class Parser
 			if ( count( $matches ) == 0 ) {
 				continue;
 			}
-			
+
 			if ( strpos( $matches[0], '%' ) !== false )
 				$matches[1] = urldecode( $matches[1] );
 			$tp = Title::newFromText( $matches[1]/*, NS_FILE*/ );
@@ -4283,6 +4569,7 @@ class Parser
 	 * @param LinkHolderArray $holders
 	 */
 	function makeImage( $title, $options, $holders = false ) {
+		global $wgWysiwygParserEnabled, $wgWysiwygMetaData;
 		# Check if the options text is of the form "options|alt text"
 		# Options are:
 		#  * thumbnail  make a thumbnail with enlarge-icon and caption, alignment depends on lang
@@ -4306,7 +4593,20 @@ class Parser
 		#  * bottom
 		#  * text-bottom
 
+		/* Wikia change begin - @author: Marooned */
+		/* Wysiwyg: get refId and remove it from wikitext */
+		if(!empty($wgWysiwygParserEnabled)) {
+			$refId = Wysiwyg_GetRefId($options, true);
+		}
+		/* Wikia change end */
+
 		$parts = StringUtils::explode( "|", $options );
+		/* Wikia change begin - @author: Inez */
+		/* Wysiwyg: remove markers */
+		if(!empty($wgWysiwygParserEnabled)) {
+			$parts = array_map( create_function('$par', 'return preg_replace(\'%\x7f-wtb-(\d+)-\x7f(.*?)\x7f-wte-\1-\x7f%si\', \'\\2\', $par);'), $parts);
+		}
+		/* Wikia change end */
 		$sk = $this->mOptions->getSkin();
 
 		# Give extensions a chance to select the file revision for us
@@ -4456,6 +4756,28 @@ class Parser
 			$params['frame']['alt'] = $params['frame']['title'];
 		}
 
+
+		if(!empty($wgWysiwygParserEnabled)) {
+			if(isset($params['frame'])) {
+				$params['frame']['alt'] = '';
+				$params['frame']['refid'] = $refId;
+				if(isset($params['frame']['align'])) {
+					$wgWysiwygMetaData[$refId]['align'] = $params['frame']['align'];
+				}
+				if(isset($params['frame']['thumbnail'])) {
+					$wgWysiwygMetaData[$refId]['thumb'] = 1;
+				}
+				if(isset($params['frame']['framed'])) {
+					$wgWysiwygMetaData[$refId]['frame'] = 1;
+				}
+			}
+
+			if(isset($params['handler']) && isset($params['handler']['width'])) {
+				$wgWysiwygMetaData[$refId]['width'] = $params['handler']['width'];
+			}
+			if($caption == '') unset($wgWysiwygMetaData[$refId]['caption']);
+		}
+
 		wfRunHooks( 'ParserMakeImageParams', array( $title, $file, &$params ) );
 
 		# Linker does the rest
@@ -4468,7 +4790,7 @@ class Parser
 
 		return $ret;
 	}
-	
+
 	protected function stripAltText( $caption, $holders ) {
 		# Strip bad stuff out of the title (tooltip).  We can't just use
 		# replaceLinkHoldersText() here, because if this function is called
@@ -4484,7 +4806,7 @@ class Parser
 		# remove the tags
 		$tooltip = $this->mStripState->unstripBoth( $tooltip );
 		$tooltip = Sanitizer::stripAllTags( $tooltip );
-		
+
 		return $tooltip;
 	}
 
