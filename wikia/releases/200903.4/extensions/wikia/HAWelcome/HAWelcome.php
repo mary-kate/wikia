@@ -31,6 +31,7 @@ $wgExtensionCredits['other'][] = array(
  * used hooks
  */
 $wgHooks[ "RevisionInsertComplete" ][]	= "HAWelcomeJob::revisionInsertComplete";
+$wgHooks[ "EditPage::attemptSave" ][] = "HAWelcomeJob::checkSysopAfterSave";
 
 /**
  * register job class
@@ -58,6 +59,7 @@ class HAWelcomeJob extends Job {
 		$mSysop;
 
 	const WELCOMEUSER = "Wikia";
+	const MEMC_SYSOP_USER = "HAWelcomeSysop_%s";
 
 	/**
 	 * Construct a job
@@ -129,8 +131,9 @@ class HAWelcomeJob extends Job {
 				if( ! $talkArticle->exists() ) {
 					if( $this->mAnon ) {
 						if( $this->isEnabled( "message-anon" ) ) {
-							$welcomeMsg = wfMsg( "welcome-message-anon", array(
-								$this->title->getPrefixedText(),
+							$welcomeMsg = wfMsgExt( "welcome-message-anon", "parsemag", 
+							array(
+								$this->getPrefixedText(),
 								$sysopPage->getPrefixedText(),
 								$signature,
 								wfEscapeWikiText( $this->mUser->getName() ),
@@ -163,8 +166,9 @@ class HAWelcomeJob extends Job {
 						}
 
 						if( $this->isEnabled( "message-user" ) ) {
-							$welcomeMsg = wfMsg( "welcome-message-user", array(
-								$this->title->getPrefixedText(),
+							$welcomeMsg = wfMsgExt( "welcome-message-user", "parsemag", 
+							array(
+								$this->getPrefixedText(),
 								$sysopPage->getPrefixedText(),
 								$signature,
 								wfEscapeWikiText( $this->mUser->getName() ),
@@ -210,39 +214,56 @@ class HAWelcomeJob extends Job {
 				$this->mSysop = User::newFromName( $sysop );
 			}
 			else {
-				$dbr = wfGetDB( DB_SLAVE );
-				$aWhere = ($sysop !== "@sysop") ? array('staff', 'sysop', 'helper') : array('sysop');
-				$res = $dbr->query(
-					"SELECT ug_group, GROUP_CONCAT(DISTINCT ug_user SEPARATOR ',') AS user_id" .
-					" FROM user_groups" .
-					" WHERE ug_group IN ('" . implode("','", $aWhere) . "', 'bot')" .
-					" GROUP BY ug_group;",
-					__METHOD__
-				);
-
-				$idsInGroups = array();
-				while( $row = $dbr->fetchObject( $res ) ) {
-					$idsInGroups[$row->ug_group] = explode(',', $row->user_id);
+				$memKey = sprintf(self::MEMC_SYSOP_USER, $wgCityId);
+				$mSysop = $wgMemc->get( $memKey );
+				if ( !empty($mSysop) ) {
+					$this->mSysop = User::newFromName( $sysop );
 				}
-				$idsBot = isset($idsInGroups['bot']) ? $idsInGroups['bot'] : array();
-				unset($idsInGroups['bot']);
-				//combine $idsInGroups['sysop'], $idsInGroups['staff'], .... etc. into one unique array
-				$idsUser = array_unique(call_user_func_array('array_merge', $idsInGroups));
-				//remove users that has 'bot' flag
-				$idsInGroups = array_diff($idsUser, $idsBot);
+				
+				if ( ! $this->mSysop instanceof User ) {
+					$dbr = wfGetDB( DB_SLAVE );
+					$aWhere = ($sysop !== "@sysop") ? array('staff', 'sysop', 'helper') : array('sysop');
+					$res = $dbr->query(
+						"SELECT ug_group, GROUP_CONCAT(DISTINCT ug_user SEPARATOR ',') AS user_id" .
+						" FROM user_groups" .
+						" WHERE ug_group IN ('" . implode("','", $aWhere) . "', 'bot')" .
+						" GROUP BY ug_group;",
+						__METHOD__
+					);
 
-				$res = $dbr->query("
-					SELECT rev_user
-					FROM revision
-					WHERE revision.rev_user IN ('" . implode("','", $idsInGroups) . "')
-					ORDER BY rev_timestamp DESC
-					LIMIT 1",
-					__METHOD__
-				);
-				$row = $dbr->fetchObject( $res );
-				$dbr->freeResult( $res );
+					$idsInGroups = array();
+					while( $row = $dbr->fetchObject( $res ) ) {
+						$idsInGroups[$row->ug_group] = explode(',', $row->user_id);
+					}
+					$idsBot = isset($idsInGroups['bot']) ? $idsInGroups['bot'] : array();
+					unset($idsInGroups['bot']);
+					//combine $idsInGroups['sysop'], $idsInGroups['staff'], .... etc. into one unique array
+					$idsUser = array_unique(call_user_func_array('array_merge', $idsInGroups));
+					//remove users that has 'bot' flag
+					$idsInGroups = array_diff($idsUser, $idsBot);
 
-				$this->mSysop = User::newFromId( $row->rev_user );
+					$res = $dbr->select( 'revision',
+						array( 'max(rev_id) as rev' ),
+						array( "rev_user IN ('" . implode("','", $idsInGroups) . "')" ),
+						__METHOD__
+					);
+					$row = $dbr->fetchObject( $res );
+					$dbr->freeResult( $res );
+
+					$rev_user = 0;
+					if ( !empty($row) && !empty($row->rev) ) {
+						$res = $dbr->select( 'revision',
+							array( 'rev_user' ),
+							array( "rev_id" => $row->rev ),
+							__METHOD__
+						);
+						$row = $dbr->fetchObject( $res );
+						$dbr->freeResult( $res );
+						$rev_user = $row->rev_user;
+					}
+
+					$this->mSysop = User::newFromId( $rev_user );
+				}
 			}
 		}
 
@@ -284,14 +305,8 @@ class HAWelcomeJob extends Job {
 				$Title = Title::newFromId( $revision->getPage(), GAID_FOR_UPDATE );
 				$revision->setTitle( $Title );
 			}
-			$skip = (bool)(
-				$wgUser->isAllowed( "bot" )    ||
-				$wgUser->isAllowed( "staff" )  ||
-				$wgUser->isAllowed( "helper" ) ||
-				$wgUser->isAllowed( "sysop" )  ||
-				$wgUser->isAllowed( "bureaucrat" ) );
 
-			if( $Title && !$wgCommandLineMode && !$skip && !empty( $wgSharedDB ) ) {
+			if( $Title && !$wgCommandLineMode && $wgUser->isAllowed( 'welcometool' ) && !empty( $wgSharedDB ) ) {
 
 				Wikia::log( __METHOD__, "title", $Title->getFullURL() );
 
@@ -344,6 +359,39 @@ class HAWelcomeJob extends Job {
 		return true;
 	}
 
+	public static function checkSysopAfterSave(&$editPage) {
+		global $wgUser, $wgCityId, $wgMemc;
+
+		wfProfileIn( __METHOD__ );
+		$mSysop = "";
+		wfLoadExtensionMessages( "HAWelcome" );		
+
+		$sysop = trim( wfMsg( "welcome-user" ) );
+		$aGroup = ($sysop !== "@sysop") ? array('staff', 'sysop', 'helper') : array('sysop');			
+		$user_groups = $wgUser->getGroups();
+		$inGroup = false;
+		if ( !empty($user_groups) && is_array($user_groups) ) {
+			foreach ($user_groups as $i => $group) {
+				if (in_array($group, $aGroup)) {
+					$inGroup = true;
+					break;						
+				}
+			}
+		}
+		
+		if ( !empty($inGroup) ) {
+			$mSysop = $wgUser->getName();
+		}
+		
+		if ( !empty($mSysop) ) {
+			$memKey = sprintf(self::MEMC_SYSOP_USER, $wgCityId);
+			$wgMemc->set( $memKey, $mSysop );			
+		}
+		
+		wfProfileOut( __METHOD__ );
+		return true;
+	}
+
 	/**
 	 * expandSig -- hack, expand signature from message for sysop
 	 *
@@ -383,6 +431,22 @@ class HAWelcomeJob extends Job {
 	public function getTitle() {
 		return $this->title;
 	}
+
+	/**
+	 * @access private
+	 *
+	 * @return Title instance of Title object
+	 */
+	public function getPrefixedText() {
+		$ns = $this->title->getNamespace();
+		$oT = ($ns == NS_BLOG_ARTICLE_TALK) ? BlogArticle::commentToUserBlog($this->title) : $this->title;
+		$pText = "";
+		if ($oT instanceof Title) {
+			$pText = ($ns == NS_BLOG_ARTICLE_TALK) ? $oT->getFullText() : $oT->getPrefixedText();
+		}
+		return $pText;
+	}
+
 
 	/**
 	 * check if some (or all) functionality is disabled/enabled

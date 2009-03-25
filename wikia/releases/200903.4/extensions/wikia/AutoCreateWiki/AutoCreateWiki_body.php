@@ -183,7 +183,7 @@ class AutoCreateWikiPage extends SpecialPage {
 						}
 					}
 					# log in
-					if ( !empty($oUser) && ($oUser instanceof User) ) {
+					if ( !empty($oUser) && ($oUser instanceof User) && ($this->mErrors == 0) ) {
 						$isLoggedIn = $this->loginAfterCreateAccount( );
 						if ( empty($isLoggedIn) ) {
 							wfDebug( "Login (api) failed - so use " . $oUser->getName() . "\n" );
@@ -191,7 +191,7 @@ class AutoCreateWikiPage extends SpecialPage {
 							$wgUser = $oUser;
 							$wgUser->setCookies();
 						}
-						# check after logged in 
+						# check after logged in
 						if ( $wgUser->isAnon() ) {
 							$this->makeError( "wiki-username", wfMsg('autocreatewiki-user-notloggedin') );
 						} else {
@@ -199,9 +199,9 @@ class AutoCreateWikiPage extends SpecialPage {
 								$wgUser->setOption( 'rememberpassword', 1 );
 								$wgUser->saveSettings();
 							}
-						}						
+						}
 					} else {
-						$this->makeError( "wiki-username", wfMsg('autocreatewiki-busy-username') );					
+						$this->makeError( "wiki-username", wfMsg('autocreatewiki-busy-username') );
 					}
 				}
 
@@ -559,6 +559,7 @@ class AutoCreateWikiPage extends SpecialPage {
 			$wikiMover->setOverwrite( true );
 			$wikiMover->mMoveUserGroups = false;
 			$wikiMover->load();
+			$wikiMover->setTargetUploadDirectory( $this->mWikiData[ "images" ] );
 			$wikiMover->move();
 
 			/**
@@ -688,6 +689,7 @@ class AutoCreateWikiPage extends SpecialPage {
 		#-
 		$aTopLanguages = explode(',', wfMsg('autocreatewiki-language-top-list'));
 		$aLanguages = $this->getFixedLanguageNames();
+		asort($aLanguages);
 		#-
 		$hubs = WikiFactoryHub::getInstance();
 		$aCategories = $hubs->getCategories();
