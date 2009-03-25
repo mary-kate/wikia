@@ -86,6 +86,11 @@ class EditAccount extends SpecialPage {
 				$this->mStatus = $this->setPassword( $newPass );
 				$template = $this->mStatus ? 'selectuser' : 'displayuser';
 				break;
+			case 'setrealname':
+				$newRealName = $wgRequest->getVal( 'wpNewRealName' );
+				$this->mStatus = $this->setRealName( $newRealName );
+				$template = $this->mStatus ? 'selectuser' : 'displayuser';				
+				break;
 			case 'closeaccount':
 				$template = 'closeaccount';
 				break;
@@ -166,6 +171,34 @@ class EditAccount extends SpecialPage {
 		} else {
 			// We have errors, let's inform the user about those
 			$this->mStatusMsg = wfMsg( 'editaccount-error-pass', $this->mUser->mName );
+			return false;
+		}
+	}
+
+	/**
+	 * Set a user's real name
+	 * @param $pass Mixed: real name to set to the user
+	 * @return Boolean: true on success, false on failure
+	 */
+	function setRealName( $realname ) {
+		if( $this->mUser->setRealName( $realname ) ) {
+			global $wgUser, $wgTitle;
+
+			// Save the new settings
+			$this->mUser->saveSettings();
+
+			// Log what was done
+			$log = new LogPage( 'editaccnt' );
+
+			// todo check out the entry format
+			$log->addEntry( 'realnamechange', $wgTitle, '', array( $this->mUser->getUserPage() ) );
+
+			// And finally, inform the user that everything went as planned
+			$this->mStatusMsg = wfMsg( 'editaccount-success-realname', $this->mUser->mName );
+			return true;
+		} else {
+			// We have errors, let's inform the user about those
+			$this->mStatusMsg = wfMsg( 'editaccount-error-realname', $this->mUser->mName );
 			return false;
 		}
 	}
