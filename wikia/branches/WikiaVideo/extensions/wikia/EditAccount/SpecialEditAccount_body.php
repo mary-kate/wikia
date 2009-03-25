@@ -181,11 +181,11 @@ class EditAccount extends SpecialPage {
 	 * @return Boolean: true on success, false on failure
 	 */
 	function setRealName( $realname ) {
-		if( $this->mUser->setRealName( $realname ) ) {
+		$this->mUser->setRealName( $realname );
+		$this->mUser->saveSettings();
+		
+		if( $this->mUser->getRealName() == $realname ) { // was saved ok? the setRealName function doesn't return bool...
 			global $wgUser, $wgTitle;
-
-			// Save the new settings
-			$this->mUser->saveSettings();
 
 			// Log what was done
 			$log = new LogPage( 'editaccnt' );

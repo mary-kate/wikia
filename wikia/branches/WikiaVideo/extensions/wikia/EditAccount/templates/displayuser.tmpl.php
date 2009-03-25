@@ -40,7 +40,7 @@
 			<label for="wpNewRealName"><?= wfMsg('editaccount-label-realname') ?></label>
 		</td>
 		<td>
-			<input type="text" name="wpNewEmail" value="<?= $userRealName ?>" />
+			<input type="text" name="wpNewRealName" value="<?= $userRealName ?>" />
 			<input type="submit" value="<?= wfMsg('editaccount-submit-realname') ?>" />
 			<input type="hidden" name="wpAction" value="setrealname" />
 			<input type="hidden" name="wpUserName" value="<?= $user ?>" />
