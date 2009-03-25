@@ -180,28 +180,28 @@ class AutoCreateWikiPage extends SpecialPage {
 						if ( !is_null($oUser) ) {
 							# user ok - so log in
 							$wgAuth->updateUser( $oUser );
+						}
+					}
+					# log in
+					if ( !empty($oUser) && ($oUser instanceof User) ) {
+						$isLoggedIn = $this->loginAfterCreateAccount( );
+						if ( empty($isLoggedIn) ) {
+							wfDebug( "Login (api) failed - so use " . $oUser->getName() . "\n" );
+							$oUser->loadFromDatabase();
 							$wgUser = $oUser;
 							$wgUser->setCookies();
 						}
-					} 
-					# log in
-					
-/*					$isLoggedIn = $this->loginAfterCreateAccount( );
-					if ( !empty($isLoggedIn) ) {
-						if ( !empty($this->mRemember) ) {
-							$wgUser->setOption( 'rememberpassword', 1 );
-							$wgUser->saveSettings();
-						}
-					} else {*
-						$this->makeError( "wiki-username", wfMsg('autocreatewiki-busy-username') );
-					}*/
-					if ( $wgUser->isAnon() ) {
-						$this->makeError( "wiki-username", wfMsg('autocreatewiki-user-notloggedin') );
+						# check after logged in 
+						if ( $wgUser->isAnon() ) {
+							$this->makeError( "wiki-username", wfMsg('autocreatewiki-user-notloggedin') );
+						} else {
+							if ( !empty($this->mRemember) ) {
+								$wgUser->setOption( 'rememberpassword', 1 );
+								$wgUser->saveSettings();
+							}
+						}						
 					} else {
-						if ( !empty($this->mRemember) ) {
-							$wgUser->setOption( 'rememberpassword', 1 );
-							$wgUser->saveSettings();
-						}
+						$this->makeError( "wiki-username", wfMsg('autocreatewiki-busy-username') );					
 					}
 				}
 
@@ -547,6 +547,7 @@ class AutoCreateWikiPage extends SpecialPage {
 		/**
 		 * use starter when wikia in proper hub
 		 */
+		$this->log( "Defined starters: " . print_r( $this->mStarters, true ) );
 		if( isset( $this->mStarters[ $this->mWikiData[ "hub" ] ] )
 			&& $this->mStarters[ $this->mWikiData[ "hub" ] ]
 			&& $this->mWikiData[ "language" ] === "en" ) {
@@ -567,6 +568,10 @@ class AutoCreateWikiPage extends SpecialPage {
                 $this->log( $log["info"] );
             }
 			$this->addCustomSettings( $this->mWikiData[ "hub" ], $wgHubCreationVariables, 'hub' );
+		}
+		else {
+			$this->log( sprintf( "There's not starters for category %d and language %s",
+				$this->mWikiData[ 'hub' ], $this->mWikiData[ "language" ] ) );
 		}
 
 		/**
@@ -1057,7 +1062,6 @@ class AutoCreateWikiPage extends SpecialPage {
 		$oApi = new ApiMain( new FauxRequest( $apiParams ) );
 		$oApi->execute();
 		$aResult = &$oApi->GetResultData();
-		error_log("awc-autologin: " . print_r($aResult, true));
 		wfProfileOut( __METHOD__ );
 
 		return ( isset($aResult['login']['result']) && ( $aResult['login']['result'] == 'Success' ) );
