@@ -190,7 +190,6 @@ class EditAccount extends SpecialPage {
 			// Log what was done
 			$log = new LogPage( 'editaccnt' );
 
-			// todo check out the entry format
 			$log->addEntry( 'realnamechange', $wgTitle, '', array( $this->mUser->getUserPage() ) );
 
 			// And finally, inform the user that everything went as planned
