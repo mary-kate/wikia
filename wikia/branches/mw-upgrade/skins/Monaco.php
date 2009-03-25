@@ -1742,7 +1742,7 @@ if(!$custom_article_footer && $displayArticleFooter) {
 	try { $oApi->execute(); } catch (Exception $e) {};
 	$aResult =& $oApi->GetResultData();
 
-	if(count($aResult['query']['wkvoteart']) > 0) {
+	if( !empty( $aResult['query']['wkvoteart'] ) ) {
 		if(!empty($aResult['query']['wkvoteart'][$this->data['articleid']]['uservote'])) {
 			$voted = true;
 		} else {
