@@ -1156,8 +1156,6 @@ class AutoCreateWikiPage extends SpecialPage {
 				$this->log( sprintf("[debug] Creating new article: %s", $centralTitle->getFullUrl( ) ) );
 
 				$sPage = $oTmpl->execute("central");
-
-				$this->log( "[debug] Page body formatted, launching doEdit() ..." );
 				$oCentralArticle->doEdit( $sPage, "created by autocreate Wiki process", EDIT_FORCE_BOT );
 				$this->log( sprintf("Article %s added.", $centralTitle->getFullUrl()) );
 			} else {
