@@ -25,7 +25,7 @@ Inappropriate files will be deleted immediately, see the [[{{MediaWiki:Multipleu
 	'multiupload-fileuploaded'         => "File uploaded.",
 	'multiupload-toolbox'              => "Upload multiple files",
 	'multiupload-no-files'		   => "Please select at least one file to upload",
-	'multiupload-blank'		   => "Blank",
+	'multiupload-blank'		   => "No file selected",
 );
 
 /** Karelian (Karjala)
