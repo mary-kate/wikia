@@ -512,8 +512,8 @@ $wgAutoloadLocalClasses = array(
 	'WithoutInterwikiPage' => 'includes/specials/SpecialWithoutinterwiki.php',
 
 	# includes/templates
-	'UsercreateTemplate' => 'includes/templates/Userlogin.php',
-	'UserloginTemplate' => 'includes/templates/Userlogin.php',
+	'UsercreateTemplate' => 'includes/templates/wikia/Userlogin.php',
+	'UserloginTemplate' => 'includes/templates/wikia/Userlogin.php',
 
 	# languages
 	'Language' => 'languages/Language.php',
