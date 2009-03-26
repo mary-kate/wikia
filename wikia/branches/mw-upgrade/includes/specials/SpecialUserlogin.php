@@ -8,13 +8,20 @@
  * constructor
  */
 function wfSpecialUserlogin( $par = '' ) {
-	global $wgRequest;
+	global $wgRequest, $wgHooks;
 	if( session_id() == '' ) {
 		wfSetupSession();
 	}
-
+	$wgHooks['ExtendJSGlobalVars'][] = 'wfSpecialUserloginSetupVars';
 	$form = new LoginForm( $wgRequest, $par );
 	$form->execute();
+}
+
+function wfSpecialUserloginSetupVars($vars) {
+	$vars['prefs_help_birthmesg'] = wfMsg('prefs-help-birthmesg');
+	$vars['prefs_help_birthinfo'] = wfMsg('prefs-help-birthinfo');
+
+	return true;
 }
 
 /**
@@ -38,6 +45,7 @@ class LoginForm {
 	var $mName, $mPassword, $mRetype, $mReturnTo, $mCookieCheck, $mPosted;
 	var $mAction, $mCreateaccount, $mCreateaccountMail, $mMailmypassword;
 	var $mLoginattempt, $mRemember, $mEmail, $mDomain, $mLanguage, $mSkipCookieCheck;
+	var $wpBirthYear, $wpBirthMonth, $wpBirthDay;
 
 	/**
 	 * Constructor
@@ -65,6 +73,10 @@ class LoginForm {
 		$this->mRemember = $request->getCheck( 'wpRemember' );
 		$this->mLanguage = $request->getText( 'uselang' );
 		$this->mSkipCookieCheck = $request->getCheck( 'wpSkipCookieCheck' );
+
+		$this->wpBirthYear = $request->getVal( 'wpBirthYear' );
+		$this->wpBirthMonth = $request->getVal( 'wpBirthMonth' );
+		$this->wpBirthDay = $request->getVal( 'wpBirthDay' );
 
 		if( $wgEnableEmail ) {
 			$this->mEmail = $request->getText( 'wpEmail' );
@@ -117,7 +129,7 @@ class LoginForm {
 			return;
 		}
 
-		$u = $this->addNewaccountInternal();
+		$u = $this->addNewAccountInternal();
 
 		if ($u == NULL) {
 			return;
@@ -185,7 +197,9 @@ class LoginForm {
 			wfRunHooks( 'AddNewAccount', array( $wgUser ) );
 			$wgUser->addNewUserLogEntry();
 			if( $this->hasSessionCookie() ) {
-				return $this->successfulCreation();
+				$ret = $this->successfulCreation();
+				wfRunHooks( 'AddNewAccount2', array( $wgUser ) );
+				return $ret;
 			} else {
 				return $this->cookieRedirectCheck( 'new' );
 			}
@@ -213,6 +227,28 @@ class LoginForm {
 		global $wgMemc, $wgAccountCreationThrottle;
 		global $wgAuth, $wgMinimalPasswordLength;
 		global $wgEmailConfirmToEdit;
+
+		//new registration - start [Marooned [at] wikia-inc.com]
+		//check if the date has been choosen
+		if ($this->wpBirthYear == -1 || $this->wpBirthMonth == -1 || $this->wpBirthDay == -1) {
+			$this->mainLoginForm( wfMsg( 'userlogin-bad-birthday' ) );
+			return null;
+		}
+
+		$userBirthDay = strtotime($this->wpBirthYear . '-' . $this->wpBirthMonth . '-' . $this->wpBirthDay);
+		if($userBirthDay > strtotime('-13 years')) {
+			$wgOut->setPageTitle( wfMsg('userlogin-unable-title') );
+			$wgOut->setRobotpolicy( 'noindex,nofollow' );
+			$wgOut->setArticleRelated( false );
+			$wgOut->addWikiText( wfMsg('userlogin-unable-info') );
+			if ( !empty( $this->mReturnTo ) ) {
+				$wgOut->returnToMain( true, $this->mReturnTo );
+			} else {
+				$wgOut->returnToMain( true );
+			}
+			return null;
+		}
+		//new registration - end
 
 		// If the user passes an invalid domain, something is fishy
 		if( !$wgAuth->validDomain( $this->mDomain ) ) {
@@ -327,7 +363,18 @@ class LoginForm {
 			return false;
 		}
 
-		return $this->initUser( $u, false );
+		$u = $this->initUser( $u, false );
+		$user_id = $u->getID();
+		if(!empty($user_id)) {
+			$dbw = wfGetDB(DB_MASTER);
+			$dbw->update(
+				'user',
+				array( 'user_birthdate' => date('Y-m-d', $userBirthDay) ),
+				array( 'user_id' => $user_id ),
+				__METHOD__
+			);
+		}
+		return $u;
 	}
 
 	/**
@@ -355,6 +402,7 @@ class LoginForm {
 		$wgAuth->initUser( $u, $autocreate );
 
 		$u->setOption( 'rememberpassword', $this->mRemember ? 1 : 0 );
+		$u->setOption('skinoverwrite', 1);
 		$u->saveSettings();
 
 		# Update user count
@@ -378,7 +426,7 @@ class LoginForm {
 		if ( '' == $this->mName ) {
 			return self::NO_NAME;
 		}
-		
+
 		global $wgPasswordAttemptThrottle;
 
 		$throttleCount=0;
@@ -386,7 +434,7 @@ class LoginForm {
 			$throttleKey = wfMemcKey( 'password-throttle', wfGetIP(), md5( $this->mName ) );
 			$count = $wgPasswordAttemptThrottle['count'];
 			$period = $wgPasswordAttemptThrottle['seconds'];
-			
+
 			global $wgMemc;
 			$throttleCount = $wgMemc->get($throttleKey);
 			if ( !$throttleCount ) {
@@ -663,7 +711,7 @@ class LoginForm {
 		if( !$ip ) {
 			return new WikiError( wfMsg( 'badipaddress' ) );
 		}
-		
+
 		wfRunHooks( 'User::mailPasswordInternal', array(&$wgUser, &$ip, &$u) );
 
 		$np = $u->randomPassword();
@@ -791,12 +839,12 @@ class LoginForm {
 		global $wgUser, $wgOut, $wgAllowRealName, $wgEnableEmail;
 		global $wgCookiePrefix, $wgLoginLanguageSelector;
 		global $wgAuth, $wgEmailConfirmToEdit, $wgCookieExpiration;
-		
+
 		$titleObj = SpecialPage::getTitleFor( 'Userlogin' );
-		
+
 		if ( $this->mType == 'signup' ) {
-			// Block signup here if in readonly. Keeps user from 
-			// going through the process (filling out data, etc) 
+			// Block signup here if in readonly. Keeps user from
+			// going through the process (filling out data, etc)
 			// and being informed later.
 			if ( wfReadOnly() ) {
 				$wgOut->readOnlyPage();
@@ -870,6 +918,10 @@ class LoginForm {
 		$template->set( 'canreset', $wgAuth->allowPasswordChange() );
 		$template->set( 'canremember', ( $wgCookieExpiration > 0 ) );
 		$template->set( 'remember', $wgUser->getOption( 'rememberpassword' ) or $this->mRemember  );
+
+		$template->set( 'birthyear', $this->wpBirthYear );
+		$template->set( 'birthmonth', $this->wpBirthMonth );
+		$template->set( 'birthday', $this->wpBirthDay );
 
 		# Prepare language selection links as needed
 		if( $wgLoginLanguageSelector ) {
