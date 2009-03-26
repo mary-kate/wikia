@@ -21,7 +21,7 @@ $wgExtensionFunctions[] = 'wfMultipleUpload';
 $wgExtensionCredits['specialpage'][] = array(
 	'name'           => 'MultipleUpload',
 	'author'         => 'Travis Derouin',
-	'version'        => '1.0',
+	'version'        => '1.01',
 	'description'    => 'Allows users to upload several files at once.',
 	'descriptionmsg' => 'multipleupload-desc',
 	'url'            => 'http://www.mediawiki.org/wiki/Extension:MultiUpload',
@@ -147,6 +147,7 @@ class MultipleUploadForm extends UploadForm {
 			$wgOut->addHTML("</td></tr>");
 		}
 		$wgOut->addHTML("</table>");
+		// Wikia, Bartek Lapinski 26.03.09 - display a form again with a warning if we gave no files, instead of a blank screen
 		if( 0 == $images) {
 			$this->mShowUploadForm = true;
 			$this->mUploadSaveName = wfMsg( 'multiupload-blank' ) ;
