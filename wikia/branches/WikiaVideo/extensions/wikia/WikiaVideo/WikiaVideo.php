@@ -5,8 +5,16 @@ if(!defined('MEDIAWIKI')) {
 
 $wgExtensionFunctions[] = 'WikiaVideo_init';
 $wgHooks['ParserBeforeStrip'][] = 'WikiaVideoParserBeforeStrip';
+$wgHooks['SpecialNewImages::beforeQuery'][] = 'WikiaVideoNewImagesBeforeQuery';
 $wgWikiaVideoGalleryId = 0;
 $wgWikiaVETLoaded = false;
+
+function WikiaVideoNewImagesBeforeQuery( $where ) {
+        $where[] = 'img_media_type != \'VIDEO\'';
+        $where[] = 'img_major_mime != \'video\'';
+        $where[] = 'img_media_type != \'swf\'';
+        return true;
+}
 
 function WikiaVideoParserBeforeStrip($parser, $text, $strip_state) {
 	global $wgExtraNamespaces, $wgWysiwygParserEnabled, $wgWikiaVideoGalleryId;
