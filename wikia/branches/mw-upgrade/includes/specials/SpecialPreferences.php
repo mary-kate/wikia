@@ -28,6 +28,10 @@ class PreferencesForm {
 	var $mReset, $mPosted, $mToggles, $mSearchNs, $mRealName, $mImageSize;
 	var $mUnderline, $mWatchlistEdits;
 
+	/* Wikia change begin - @author: unknown */
+	var $mTheme, $mSearchType, $mVisualEditor;
+	/* Wikia change end */
+
 	/**
 	 * Constructor
 	 * Load some values
@@ -35,11 +39,29 @@ class PreferencesForm {
 	function PreferencesForm( &$request ) {
 		global $wgContLang, $wgUser, $wgAllowRealName;
 
+		/* Wikia change begin - @author: unknown */
+		global $wgInPageEnabled, $wgWysiwygEnabled;
+		/* Wikia change end */
+
 		$this->mQuickbar = $request->getVal( 'wpQuickbar' );
 		$this->mStubs = $request->getVal( 'wpStubs' );
 		$this->mRows = $request->getVal( 'wpRows' );
 		$this->mCols = $request->getVal( 'wpCols' );
 		$this->mSkin = Skin::normalizeKey( $request->getVal( 'wpSkin' ) );
+
+		/* Wikia change begin - @author: Inez */
+		/* Skin chooser related */
+		$_temp = split('-', $this->mSkin);
+		$this->mSkin = isset($_temp[0]) ? $_temp[0] : null;
+		$this->mTheme = isset($_temp[1]) ? $_temp[1] : null;
+		/* Related to GameSpot integration (and another where Skin tab is not visible) */
+		if(empty($this->mSkin)) {
+			$this->mSkin = $wgUser->getOption('skin');
+			$this->mTheme = $wgUser->getOption('theme');
+		}
+		$this->mAdminSkin = $request->getVal('adminSkin');
+		/* Wikia change end */
+
 		$this->mMath = $request->getVal( 'wpMath' );
 		$this->mDate = $request->getVal( 'wpDate' );
 		$this->mUserEmail = $request->getVal( 'wpUserEmail' );
@@ -49,6 +71,9 @@ class PreferencesForm {
 		$this->mUserLanguage = $request->getVal( 'wpUserLanguage' );
 		$this->mUserVariant = $request->getVal( 'wpUserVariant' );
 		$this->mSearch = $request->getVal( 'wpSearch' );
+		/* Wikia change begin - @author: unknown */
+		$this->mSearchType = $request->getVal( 'wpSearchType' );
+		/* Wikia change end */
 		$this->mRecent = $request->getVal( 'wpRecent' );
 		$this->mRecentDays = $request->getVal( 'wpRecentDays' );
 		$this->mTimeZone = $request->getVal( 'wpTimeZone' );
@@ -65,6 +90,12 @@ class PreferencesForm {
 		$this->mWatchlistDays = $request->getVal( 'wpWatchlistDays' );
 		$this->mWatchlistEdits = $request->getVal( 'wpWatchlistEdits' );
 		$this->mDisableMWSuggest = $request->getCheck( 'wpDisableMWSuggest' );
+
+		/* Wikia change begin - @author: unknown */
+		if(isset($wgInPageEnabled) && $wgInPageEnabled && $wgWysiwygEnabled && isset($wgWysiwygEnabled)) {
+			$this->mVisualEditor = $request->getVal('wpVisualEditor');
+		}
+		/* Wikia change end */
 
 		$this->mSaveprefs = $request->getCheck( 'wpSaveprefs' ) &&
 			$this->mPosted &&
@@ -212,6 +243,12 @@ class PreferencesForm {
 		global $wgEnableUserEmail, $wgEnableEmail;
 		global $wgEmailAuthentication, $wgRCMaxAge;
 		global $wgAuth, $wgEmailConfirmToEdit;
+		global $wgWysiwygEnabled;
+
+		/* Wikia change begin - @author: Inez */
+		/* Skin chooser related */
+		wfRunHooks('SavePreferencesHook', array($this));
+		/* Wikia change end */
 
 		$wgUser->setRealName( $this->mRealName );
 		$oldOptions = $wgUser->mOptions;
@@ -255,6 +292,9 @@ class PreferencesForm {
 		}
 		$wgUser->setOption( 'date', $this->validateDate( $this->mDate ) );
 		$wgUser->setOption( 'searchlimit', $this->validateIntOrNull( $this->mSearch ) );
+		/* Wikia change begin - @author: unknown */
+		$wgUser->setOption( 'searchtype', $this->validateIntOrNull( $this->mSearchType ) );
+		/* Wikia change end */
 		$wgUser->setOption( 'contextlines', $this->validateIntOrNull( $this->mSearchLines ) );
 		$wgUser->setOption( 'contextchars', $this->validateIntOrNull( $this->mSearchChars ) );
 		$wgUser->setOption( 'rclimit', $this->validateIntOrNull( $this->mRecent ) );
@@ -268,6 +308,11 @@ class PreferencesForm {
 		$wgUser->setOption( 'thumbsize', $this->mThumbSize );
 		$wgUser->setOption( 'underline', $this->validateInt($this->mUnderline, 0, 2) );
 		$wgUser->setOption( 'watchlistdays', $this->validateFloat( $this->mWatchlistDays, 0, 7 ) );
+		/* Wikia change begin - @author: unknown */
+		if(isset($wgWysiwygEnabled) && $wgWysiwygEnabled) {
+			$wgUser->setOption('visualeditormode', $this->mVisualEditor);
+		}
+		/* Wikia change end */
 		$wgUser->setOption( 'disablesuggest', $this->mDisableMWSuggest );
 
 		# Set search namespace options
@@ -375,7 +420,7 @@ class PreferencesForm {
 		switch ( $data[0] ) {
 			case 'ZoneInfo':
 				$this->mTimeZone = $tz;
-				# Check if the specified TZ exists, and change to 'Offset' if 
+				# Check if the specified TZ exists, and change to 'Offset' if
 				# not.
 				if ( !function_exists('timezone_open') || @timezone_open( $data[2] ) === false ) {
 					$this->mTimeZone = 'Offset';
@@ -410,6 +455,9 @@ class PreferencesForm {
 		}
 
 		$this->mSearch = $wgUser->getOption( 'searchlimit' );
+		/* Wikia change begin - @author: unknown */
+		$this->mSearchType = $wgUser->getOption( 'searchtype', 0 );
+		/* Wikia change end */
 		$this->mSearchLines = $wgUser->getOption( 'contextlines' );
 		$this->mSearchChars = $wgUser->getOption( 'contextchars' );
 		$this->mImageSize = $wgUser->getOption( 'imagesize' );
@@ -420,6 +468,10 @@ class PreferencesForm {
 		$this->mUnderline = $wgUser->getOption( 'underline' );
 		$this->mWatchlistDays = $wgUser->getOption( 'watchlistdays' );
 		$this->mDisableMWSuggest = $wgUser->getBoolOption( 'disablesuggest' );
+
+		/* Wikia change begin - @author: unknown */
+		wfRunHooks('ModifyPreferencesValue', array ($this));
+		/* Wikia change end */
 
 		$togs = User::getToggles();
 		foreach ( $togs as $tname ) {
@@ -535,6 +587,9 @@ class PreferencesForm {
 		global $wgEnableEmail, $wgEnableUserEmail, $wgEmailAuthentication;
 		global $wgContLanguageCode, $wgDefaultSkin, $wgCookieExpiration;
 		global $wgEmailConfirmToEdit, $wgEnableMWSuggest, $wgLocalTZoffset;
+		/* Wikia change begin - @author: unknown */
+		global $wgDefaultTheme, $wgDisableInternalSearch, $wgStylePath, $wgSkinTheme, $wgVisitorSkin, $wgVisitorTheme, $wgWysiwygEnabled;
+		/* Wikia change end */
 
 		$wgOut->setPageTitle( wfMsg( 'preferences' ) );
 		$wgOut->setArticleRelated( false );
@@ -614,6 +669,9 @@ class PreferencesForm {
 				'action' => $titleObj->getLocalUrl(),
 				'method' => 'post',
 				'id'     => 'mw-preferences-form',
+				/* Wikia change begin - @author: unknown */
+				'enctype'=> 'multipart/form-data',
+				/* Wikia change end */
 			) ) .
 			Xml::openElement( 'div', array( 'id' => 'preferences' ) )
 		);
@@ -657,7 +715,11 @@ class PreferencesForm {
 
 			$this->tableRow(
 				wfMsgHtml( 'prefs-edits' ),
-				$wgLang->formatNum( $wgUser->getEditCount() )
+				/* Wikia change begin - @author: unknown */
+				/* $wgLang->formatNum( $wgUser->getEditCount() ) */
+				/* $wgLang->formatNum( User::edits( $wgUser->getId() ) )  RT#5022 */
+				$sk->makeKnownLinkObj( SpecialPage::getTitleFor( 'Editcount', $wgUser->getName() ), wfMsg( 'seeeditcount' ) )
+				/* Wikia change end */
 			);
 
 		if( wfRunHooks( 'PreferencesUserInformationPanel', array( $this, &$userInformationHtml ) ) ) {
@@ -768,6 +830,13 @@ class PreferencesForm {
 			}
 		}
 
+		/* Wikia change begin - @author: unknown */
+		$userAdditionalProfileHtml = '';
+		if(wfRunHooks('AdditionalUserProfilePreferences', array($this, &$userAdditionalProfileHtml))) {
+			$wgOut->addHtml($userAdditionalProfileHtml);
+		}
+		/* Wikia change end */
+
 		# Password
 		if( $wgAuth->allowPasswordChange() ) {
 			$link = $wgUser->getSkin()->link( SpecialPage::getTitleFor( 'ResetPass' ), wfMsgHtml( 'prefs-resetpass' ),
@@ -792,6 +861,9 @@ class PreferencesForm {
 					$this->getToggle( 'ccmeonemails', '', $disableEmailPrefs );
 			}
 
+			/* Wikia change begin - @author: unknown */
+			wfRunHooks('getUserProfilePreferencesCustomEmailToggles', array(&$this, &$enotifminoredits));
+			/* Wikia change end */
 
 			$wgOut->addHTML(
 				$this->tableRow( Xml::element( 'h2', null, wfMsg( 'email' ) ) ) .
@@ -801,7 +873,10 @@ class PreferencesForm {
 					$enotifwatchlistpages.
 					$enotifusertalkpages.
 					$enotifminoredits.
-					$moreEmail
+					/* Wikia change begin - @author: unknown */
+					$moreEmail.
+					$this->getToggle('htmlemails')
+					/* Wikia change end */
 				)
 			);
 		}
@@ -834,29 +909,33 @@ class PreferencesForm {
 		global $wgAllowUserSkin;
 		if( $wgAllowUserSkin ) {
 			$wgOut->addHTML( "<fieldset>\n<legend>\n" . wfMsg( 'skin' ) . "</legend>\n" );
-			$mptitle = Title::newMainPage();
-			$previewtext = wfMsg( 'skin-preview' );
-			# Only show members of Skin::getSkinNames() rather than
-			# $skinNames (skins is all skin names from Language.php)
-			$validSkinNames = Skin::getUsableSkins();
-			# Sort by UI skin name. First though need to update validSkinNames as sometimes
-			# the skinkey & UI skinname differ (e.g. "standard" skinkey is "Classic" in the UI).
-			foreach ( $validSkinNames as $skinkey => &$skinname ) {
-				$msgName = "skinname-{$skinkey}";
-				$localisedSkinName = wfMsg( $msgName );
-				if ( !wfEmptyMsg( $msgName, $localisedSkinName ) )  {
-					$skinname = $localisedSkinName;
+			/* Wikia change begin - @author: Inez */
+			if(wfRunHooks('AlternateSkinPreferences', array ($this))) {
+				$mptitle = Title::newMainPage();
+				$previewtext = wfMsg( 'skin-preview' );
+				# Only show members of Skin::getSkinNames() rather than
+				# $skinNames (skins is all skin names from Language.php)
+				$validSkinNames = Skin::getUsableSkins();
+				# Sort by UI skin name. First though need to update validSkinNames as sometimes
+				# the skinkey & UI skinname differ (e.g. "standard" skinkey is "Classic" in the UI).
+				foreach ( $validSkinNames as $skinkey => &$skinname ) {
+					$msgName = "skinname-{$skinkey}";
+					$localisedSkinName = wfMsg( $msgName );
+					if ( !wfEmptyMsg( $msgName, $localisedSkinName ) )  {
+						$skinname = $localisedSkinName;
+					}
+				}
+				asort($validSkinNames);
+				foreach ($validSkinNames as $skinkey => $sn ) {
+					$checked = $skinkey == $this->mSkin ? ' checked="checked"' : '';
+					$mplink = htmlspecialchars( $mptitle->getLocalURL( "useskin=$skinkey" ) );
+					$previewlink = "(<a target='_blank' href=\"$mplink\">$previewtext</a>)";
+					if( $skinkey == $wgDefaultSkin )
+						$sn .= ' (' . wfMsg( 'default' ) . ')';
+					$wgOut->addHTML( "<input type='radio' name='wpSkin' id=\"wpSkin$skinkey\" value=\"$skinkey\"$checked /> <label for=\"wpSkin$skinkey\">{$sn}</label> $previewlink<br />\n" );
 				}
 			}
-			asort($validSkinNames);
-			foreach ($validSkinNames as $skinkey => $sn ) {
-				$checked = $skinkey == $this->mSkin ? ' checked="checked"' : '';
-				$mplink = htmlspecialchars( $mptitle->getLocalURL( "useskin=$skinkey" ) );
-				$previewlink = "(<a target='_blank' href=\"$mplink\">$previewtext</a>)";
-				if( $skinkey == $wgDefaultSkin )
-					$sn .= ' (' . wfMsg( 'default' ) . ')';
-				$wgOut->addHTML( "<input type='radio' name='wpSkin' id=\"wpSkin$skinkey\" value=\"$skinkey\"$checked /> <label for=\"wpSkin$skinkey\">{$sn}</label> $previewlink<br />\n" );
-			}
+			/* Wikia change end */
 			$wgOut->addHTML( "</fieldset>\n\n" );
 		}
 
@@ -982,7 +1061,7 @@ class PreferencesForm {
 			foreach ( $tzs as $tz ) {
 				$z = explode( '/', $tz, 2 );
 				# timezone_identifiers_list() returns a number of
-				# backwards-compatibility entries. This filters them out of the 
+				# backwards-compatibility entries. This filters them out of the
 				# list presented to the user.
 				if ( count( $z ) != 2 || !in_array( $z[0], array( 'Africa', 'America', 'Antarctica', 'Arctic', 'Asia', 'Atlantic', 'Australia', 'Europe', 'Indian', 'Pacific' ) ) ) continue;
 				if ( $optgroup != $z[0] ) {
@@ -1028,12 +1107,8 @@ class PreferencesForm {
 		# Editing
 		#
 		global $wgLivePreview;
-		$wgOut->addHTML(
-			Xml::fieldset( wfMsg( 'textboxsize' ) ) .
-			wfMsgHTML( 'prefs-edit-boxsize' ) . ' ' .
-			Xml::inputLabel( wfMsg( 'rows' ), 'wpRows', 'wpRows', 3, $this->mRows ) . ' ' .
-			Xml::inputLabel( wfMsg( 'columns' ), 'wpCols', 'wpCols', 3, $this->mCols ) .
-			$this->getToggles( array(
+		/* Wikia change begin - @author: Bartek */
+		$default_array = array(
 				'editsection',
 				'editsectiononrightclick',
 				'editondblclick',
@@ -1045,9 +1120,18 @@ class PreferencesForm {
 				'externaleditor',
 				'externaldiff',
 				$wgLivePreview ? 'uselivepreview' : false,
-				'forceeditsummary',
-			) )
+				'forceeditsummary');
+
+		wfRunHooks('getEditingPreferencesTab', array(&$this, &$default_array));
+
+		$wgOut->addHTML(
+			Xml::fieldset( wfMsg( 'textboxsize' ) ) .
+			wfMsgHTML( 'prefs-edit-boxsize' ) . ' ' .
+			Xml::inputLabel( wfMsg( 'rows' ), 'wpRows', 'wpRows', 3, $this->mRows ) . ' ' .
+			Xml::inputLabel( wfMsg( 'columns' ), 'wpCols', 'wpCols', 3, $this->mCols ) .
+			$this->getToggles( $default_array )
 		);
+		/* Wikia change end */
 
 		$wgOut->addHTML( Xml::closeElement( 'fieldset' ) );
 
@@ -1088,7 +1172,7 @@ class PreferencesForm {
 		);
 
 		# Watchlist
-		$wgOut->addHTML( 
+		$wgOut->addHTML(
 			Xml::fieldset( wfMsg( 'prefs-watchlist' ) ) .
 			Xml::inputLabel( wfMsg( 'prefs-watchlist-days' ), 'wpWatchlistDays', 'wpWatchlistDays', 3, $this->mWatchlistDays ) . ' ' .
 			wfMsgHTML( 'prefs-watchlist-days-max' ) .
@@ -1112,6 +1196,10 @@ class PreferencesForm {
 		$this->mUsedToggles['watchdefault'] = true;
 		$this->mUsedToggles['watchmoves'] = true;
 		$this->mUsedToggles['watchdeletion'] = true;
+
+		/* Wikia change begin - @author: unknown */
+		wfRunHooks('getWatchlistPreferencesCustomHtml', array(&$this));
+		/* Wikia change end */
 
 		$wgOut->addHTML( Xml::closeElement( 'fieldset' ) );
 
@@ -1153,6 +1241,11 @@ class PreferencesForm {
 			// End of the search tab
 			Xml::closeElement( 'fieldset' )
 		);
+		/* Wikia change begin - @author: Macbre */
+		$wgOut->addHTML( '<fieldset><legend>'.wfMsg('searchsuggest').'</legend>' );
+		$wgOut->addHTML( $this->getToggle( 'searchsuggest' ).'</fieldset>' );
+		//$wgOut->addHTML( "</fieldset>" ); // macbre: was causing #3578
+		/* Wikia change end */
 
 		# Misc
 		#
@@ -1190,17 +1283,19 @@ class PreferencesForm {
 
 		$token = htmlspecialchars( $wgUser->editToken() );
 		$skin = $wgUser->getSkin();
+		/* Wikia change begin - @author: unknown */
 		$wgOut->addHTML( "
 	<div id='prefsubmit'>
 	<div>
-		<input type='submit' name='wpSaveprefs' class='btnSavePrefs' value=\"" . wfMsgHtml( 'saveprefs' ) . '"'.$skin->tooltipAndAccesskey('save')." />
-		<input type='submit' name='wpReset' value=\"" . wfMsgHtml( 'resetprefs' ) . "\" />
+		<input type='submit' id='wpSaveprefs' name='wpSaveprefs' class='btnSavePrefs' value=\"" . wfMsgHtml( 'saveprefs' ) . '"'.$skin->tooltipAndAccesskey('save')." />
+		<input type='submit' id='wpReset' name='wpReset' value=\"" . wfMsgHtml( 'resetprefs' ) . "\" />
 	</div>
 
 	</div>
 
 	<input type='hidden' name='wpEditToken' value=\"{$token}\" />
 	</div></form>\n" );
+		/* Wikia change end */
 
 		$wgOut->addHTML( Xml::tags( 'div', array( 'class' => "prefcache" ),
 			wfMsgExt( 'clearyourcache', 'parseinline' ) )
