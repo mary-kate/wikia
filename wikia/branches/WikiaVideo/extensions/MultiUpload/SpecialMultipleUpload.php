@@ -151,6 +151,7 @@ class MultipleUploadForm extends UploadForm {
 			$this->mShowUploadForm = true;
 			$this->mUploadSaveName = wfMsg( 'multiupload-blank' ) ;
 			$this->mainUploadForm( wfMsg( 'multiupload-no-files' ) );
+		} else {
 			$this->mShowUploadForm = false;
 			$wgOut->redirect(''); // clear the redirect, we want to show a nice page of images
 			$this->mShowUploadForm = true;
