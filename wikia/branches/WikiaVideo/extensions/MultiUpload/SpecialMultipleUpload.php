@@ -126,18 +126,18 @@ class MultipleUploadForm extends UploadForm {
 	 */
 	function processUpload() {
 		global $wgMaxUploadFiles, $wgOut;
-
+		$images = 0;
 		$wgOut->addHTML("<table>");
 		$this->mShowUploadForm = false;
 		for ($x = 0; $x < $wgMaxUploadFiles; $x++) {
 			$this->mFileIndex = $x;
 			if (!isset ($this->mUploadTempNameArray[$x]) || $this->mUploadTempNameArray[$x] == null) continue;
-   
-            $this->mTempPath = $this->mUploadTempNameArray[$x]; 
-            $this->mFileSize = $this->mUploadSizeArray[$x];
-            $this->mSrcName = $this->mOnameArray[$x]; // for mw > 1.9
-            $this->mRemoveTempFile = true;
-            $this->mIgnoreWarning = true;
+			$images++;
+			$this->mTempPath = $this->mUploadTempNameArray[$x]; 
+			$this->mFileSize = $this->mUploadSizeArray[$x];
+			$this->mSrcName = $this->mOnameArray[$x]; // for mw > 1.9
+			$this->mRemoveTempFile = true;
+			$this->mIgnoreWarning = true;
 
 			$this->mUploadError = $this->mUploadErrorArray [$x];
 			$this->mDesiredDestName = $this->mDestFileArray [$x];
@@ -146,13 +146,17 @@ class MultipleUploadForm extends UploadForm {
 			parent::processUpload();
 			$wgOut->addHTML("</td></tr>");
 		}
-
 		$wgOut->addHTML("</table>");
-		$this->mShowUploadForm = false;
-		$wgOut->redirect(''); // clear the redirect, we want to show a nice page of images
-		$this->mShowUploadForm = true;
-		if ($this->mHasWarning) {
-			$this->showWarningOptions();
+		if( 0 == $images) {
+			$this->mShowUploadForm = true;
+			$this->mUploadSaveName = wfMsg( 'multiupload-blank' ) ;
+			$this->mainUploadForm( wfMsg( 'multiupload-no-files' ) );
+			$this->mShowUploadForm = false;
+			$wgOut->redirect(''); // clear the redirect, we want to show a nice page of images
+			$this->mShowUploadForm = true;
+			if ($this->mHasWarning) {
+				$this->showWarningOptions();
+			}
 		}
 	}
 
