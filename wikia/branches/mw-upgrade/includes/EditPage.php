@@ -1458,6 +1458,10 @@ END
 );
 		$this->showTextbox1( $classes );
 
+		// Wikia
+		$rows = $wgUser->getIntOption( 'rows' );
+		$cols = $wgUser->getIntOption( 'cols' );
+		$ew = $wgUser->getOption( 'editwidth' );
 		wfRunHooks( 'EditForm::MultiEdit:Form', array( $rows, $cols, $ew, htmlspecialchars( $this->safeUnicodeOutput( $this->textbox1 ) ) ) );
 
 		$wgOut->wrapWikiMsg( "<div id=\"editpage-copywarn\">\n$1\n</div>", $copywarnMsg );
