@@ -96,10 +96,10 @@ function wfProblemReports()
 	$wgProblemReportsSecret = md5($wgServer . 'saltyWikiaSalt');
 	
 	// setup API module
-	global $wgAutoloadClasses, $wgApiQueryListModules;
+	global $wgAutoloadClasses, $wgAPIListModules;
 	
 	$wgAutoloadClasses["WikiaApiQueryProblemReports"]  = "extensions/wikia/ProblemReports/WikiaApiQueryProblemReports.php";
-	$wgApiQueryListModules["problemreports"] = "WikiaApiQueryProblemReports";
+	$wgAPIListModules["problemreports"] = "WikiaApiQueryProblemReports";
 
 	// setup ajax interface wrapper
 	global $wgAjaxExportList;
