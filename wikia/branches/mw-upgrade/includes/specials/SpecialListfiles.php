@@ -23,7 +23,11 @@ function wfSpecialListfiles() {
  */
 class ImageListPager extends TablePager {
 	var $mFieldNames = null;
-	var $mQueryConds = array();
+
+	/* Wikia change begin - @author: Inez */
+	/* Do not list Videos on this special page */
+	var $mQueryConds = array("img_media_type != 'VIDEO'");
+	/* Wikia change end */
 
 	function __construct() {
 		global $wgRequest, $wgMiserMode;
