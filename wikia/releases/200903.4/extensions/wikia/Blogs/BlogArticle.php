@@ -408,18 +408,38 @@ class BlogArticle extends Article {
 
 		$dbcnt = $cat->getPageCount() - $cat->getSubcatCount() - $cat->getFileCount();
 		$rescnt = count( $catView->blogs );
-		#	$countmsg = $catView->getCountMessage( $rescnt, $dbcnt, 'article' );
+		$countmsg = self::getCountMessage( $catView, $rescnt, $dbcnt, 'article' );
 
 		if( $rescnt > 0 ) {
 			$r = "<div id=\"mw-pages\">\n";
 			$r .= '<h2>' . wfMsg( "blog-header", $ti ) . "</h2>\n";
-			#	$r .= $countmsg;
+			$r .= $countmsg;
 			$r .= $catView->formatList( $catView->blogs, $catView->blogs_start_char );
 			$r .= "\n</div>";
 		}
 		$output = $r;
 
 		return true;
+	}
+
+	/*
+	 * static method to get number of pages in caetgory
+	 */ 
+	static public function getCountMessage( &$catView, $rescnt, $dbcnt, $type ) {
+		global $wgLang;
+		# See CategoryPage->getCountMessage() function
+		$totalrescnt = count( $catView->blogs ) + count( $catView->children ) + ($catView->showGallery ? $catView->gallery->count() : 0);
+		if ($dbcnt == $rescnt || (($totalrescnt == $this->limit || $this->from || $this->until) && $dbcnt > $rescnt)) {
+			# Case 1: seems sane.
+			$totalcnt = $dbcnt;
+		} elseif ( $totalrescnt < $catView->limit && !$catView->from && !$catView->until ) {
+			# Case 2: not sane, but salvageable.
+			$totalcnt = $rescnt;
+		} else {
+			# Case 3: hopeless.  Don't give a total count at all.
+			return wfMsgExt("blog-subheader-all", 'parse', $wgLang->formatNum( $rescnt ) );
+		}
+		return wfMsgExt( "blog-subheader-all", 'parse', $wgLang->formatNum( $rescnt ), $wgLang->formatNum( $totalcnt ) );
 	}
 
 	/**
@@ -730,4 +750,23 @@ class BlogArticle extends Article {
 		}
 		return true;
 	}
+	
+	/**
+	 * Get User_blog article from USer_blog_comment
+	 * 
+	 * @access public
+	 * @static
+	 */ 
+	static public function commentToUserBlog( $oTitle ) {
+		$oUBlogTitle = null;
+		if ($oTitle instanceof Title) {
+			list( $author, $title, $comment_title )  = explode('/', $oTitle->getPrefixedText(), 3);
+			if ( !empty($author) ) {
+				list ( $ns, $user ) = explode ( ':', $author );
+				$oUBlogTitle = Title::newFromText( "{$user}/{$title}#{$comment_title}", NS_BLOG_ARTICLE);
+			}
+		}
+		return $oUBlogTitle;
+	}
+	 
 }
