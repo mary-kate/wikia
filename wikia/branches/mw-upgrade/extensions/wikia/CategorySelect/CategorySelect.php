@@ -164,7 +164,7 @@ function CategorySelectAjaxGetCategories() {
 	$res = $dbr->select(
 		'category',
 		'cat_title',
-		'cat_title LIKE "%' . $dbr->escapeLike($cat) . '%"',
+		'cat_title LIKE "%' . $dbr->escapeLike(str_replace(' ', '_', $cat)) . '%"',
 		__METHOD__,
 		array('LIMIT' => '10')
 	);
@@ -202,6 +202,7 @@ function CategorySelectAjaxParseCategories($wikitext) {
  * @author Maciej Błaszkowski <marooned at wikia-inc.com>
  */
 function CategorySelectAjaxSaveCategories($articleId, $categories) {
+	global $wgUser;
 	$categories = CategorySelectChangeFormat($categories, 'json', 'wiki');
 	if ($categories == '') {
 		$result['info'] = 'Nothing to add.';
@@ -210,7 +211,7 @@ function CategorySelectAjaxSaveCategories($articleId, $categories) {
 		if (is_null($title)) {
 			$result['error'] = "Article [id=$articleId] does not exist.";
 		} else {
-			if($title->userCan('edit')) {
+			if($title->userCan('edit') && !$wgUser->isBlocked()) {
 				global $wgUser, $wgOut;
 				$article = new Article($title);
 				$article_text = $article->fetchContent();
@@ -381,12 +382,12 @@ function CategorySelectGetCategoryLinksBegin(&$categoryLinks) {
  * @author Maciej Błaszkowski <marooned at wikia-inc.com>
  */
 function CategorySelectGetCategoryLinksEnd(&$categoryLinks) {
-	global $wgRequest;
+	global $wgRequest, $wgExtensionsPath;
 
 	$action = $wgRequest->getVal('action', 'view');
 	//for redirected page this hook is ran twice - check for button existence and don't add second one (fixes rt#12223)
 	if (($action == 'view' || $action == 'purge') && strpos($categoryLinks, '<div id="csAddCategorySwitch"') === false) {
-		$categoryLinks .= ' <div id="csAddCategorySwitch" style="position:relative;float:left;border: 1px solid #BBB;-moz-border-radius:3px;-webkit-border-radius:3px;padding:0 4px 0 12px;background:#ddd url(\'http://images.wikia.com/extensions/wikia/CategorySelect/sprite.png\') left center no-repeat;line-height: 16px;"><a href="#" onclick="YAHOO.util.Get.script(wgExtensionsPath+\'/wikia/CategorySelect/CategorySelect.js?\'+wgStyleVersion,{onSuccess:function(){showCSpanel();}});$(\'catlinks\').className+=\' csLoading\';return false;" onfocus="this.blur();" style="color:#000;font-size:0.85em;text-decoration:none;background:#ddd;display:block;padding:0 3px">' . wfMsg('categoryselect-addcategory-button') . '</a></div>';
+		$categoryLinks .= ' <div id="csAddCategorySwitch" style="position:relative;float:left;border: 1px solid #BBB;-moz-border-radius:3px;-webkit-border-radius:3px;padding:0 4px 0 12px;background:#ddd url(\'' . $wgExtensionsPath . '/wikia/CategorySelect/sprite.png\') left center no-repeat;line-height: 16px;"><a href="#" onclick="YAHOO.util.Get.script(wgExtensionsPath+\'/wikia/CategorySelect/CategorySelect.js?\'+wgStyleVersion,{onSuccess:function(){showCSpanel();}});$(\'catlinks\').className+=\' csLoading\';return false;" onfocus="this.blur();" style="color:#000;font-size:0.85em;text-decoration:none;background:#ddd;display:block;padding:0 3px">' . wfMsg('categoryselect-addcategory-button') . '</a></div>';
 	}
 	return true;
 }

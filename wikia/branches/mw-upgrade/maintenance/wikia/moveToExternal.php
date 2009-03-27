@@ -24,9 +24,13 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 
 
 function moveToExternal( $cluster, $limit ) {
+	global $wgDBName;
+
 	$fname = 'moveToExternal';
 	$dbw = wfGetDB( DB_MASTER );
 	$dbr = wfGetDB( DB_SLAVE );
+
+	echo "Moving revisions from {$wgDBName}\n";
 
 	$ext = new ExternalStoreDB;
 	$numMoved = 0;
@@ -41,13 +45,11 @@ function moveToExternal( $cluster, $limit ) {
 		$limit";
 
 	$res = $dbr->query( $sql, __METHOD__ );
-	echo $sql."\n";
 	$ext = new ExternalStoreDB;
-	echo "Get external storage object\n";
+	echo "Get external storage object.\n";
 	while ( $row = $dbr->fetchObject( $res ) ) {
 		$text = $row->old_text;
 		$id = $row->old_id;
-#		echo $row->rev_id.":".$row->old_flags."\n";
 		if ( $row->old_flags === '' ) {
 			$flags = 'external';
 		} else {
@@ -104,6 +106,7 @@ function moveToExternal( $cluster, $limit ) {
 		}
 
 		$numMoved++;
+		usleep( 5000 );
 	}
 	$dbr->freeResult( $res );
 }
