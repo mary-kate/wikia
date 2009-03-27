@@ -82,8 +82,9 @@ class CreateBlogPage extends SpecialBlogPage {
 		}
 
 		$editPage = new EditPage( $this->mPostArticle );
+		$editPage->initialiseForm();
 		$editPage->textbox1 = $sPostBody;
-		$editpage->summary  = wfMsg('create-blog-updated');
+		$editPage->summary  = wfMsg('create-blog-updated');
 		$status = $editPage->internalAttemptSave( $result );
 		switch( $status ) {
 			case EditPage::AS_SUCCESS_UPDATE:
@@ -98,7 +99,8 @@ class CreateBlogPage extends SpecialBlogPage {
 
 			default:
 				Wikia::log( __METHOD__, "editpage", $status );
-				$this->mFormErrors[] = wfMsg('create-blog-spam');
+				$sMsg = wfMsg('create-blog-spam');
+				$this->mFormErrors[] = $sMsg . "($status)";
 				$this->renderForm();
 				break;
 		}
@@ -127,23 +129,25 @@ class CreateBlogPage extends SpecialBlogPage {
 					$this->mFormErrors[] = wfMsg('create-blog-invalid-title-error');
 				}
 				else {
-					$this->mPostArticle = new BlogArticle($oPostTitle, 0);
-					if($this->mPostArticle->exists() && !$this->mFormData['isExistingArticleEditAllowed']) {
-						$this->mFormErrors[] = wfMsg('create-blog-article-already-exists');
+					$sFragment = $oPostTitle->getFragment();
+					if ( strlen($sFragment) > 0 ) {
+						$this->mFormErrors[] = wfMsg('create-blog-invalid-title-error');
+					} else {
+						$this->mPostArticle = new BlogArticle($oPostTitle, 0);
+						if($this->mPostArticle->exists() && !$this->mFormData['isExistingArticleEditAllowed']) {
+							$this->mFormErrors[] = wfMsg('create-blog-article-already-exists');
+						}
 					}
 				}
 			}
 		}
 		else { // we have an article id
 			$isSysop = ( in_array('sysop', $wgUser->getGroups()) || in_array('staff', $wgUser->getGroups() ) );
-
 			$oPostTitle = Title::newFromID($this->mFormData['postId']);
 			$this->mPostArticle = new BlogArticle($oPostTitle, 0);
-
 			if((strtolower($wgUser->getName()) != strtolower( BlogArticle::getOwner($oPostTitle))) && !$isSysop) {
 				$this->mFormErrors[] = wfMsg('create-blog-permission-denied');
 			}
-
 		}
 
 		if(empty($this->mFormData['postBody'])) {
