@@ -123,7 +123,7 @@ class AutoCreateWikiPage extends SpecialPage {
 		$this->mNbrCreated = $this->countCreatedWikis();
 
 		if ( $this->mNbrCreated >= self::DAILY_LIMIT ) {
-			$wgOut->addHTML(wfMsg('autocreatewiki-limit-creation'));
+			$wgOut->addHTML(wfMsg('autocreatewiki-limit-day'), $this->mNbrCreated);
 			return;
 		}
 
@@ -141,7 +141,7 @@ class AutoCreateWikiPage extends SpecialPage {
 			if ( isset( $_SESSION['mAllowToCreate'] ) && ( $_SESSION['mAllowToCreate'] >= wfTimestamp() ) ) {
 				$this->mNbrUserCreated = $this->countCreatedWikisByUser();
 				if ( $this->mNbrUserCreated >= self::DAILY_USER_LIMIT ) {
-					$wgOut->addHTML(wfMsg('autocreatewiki-limit-creation'));
+					$wgOut->addHTML(wfMsg('autocreatewiki-limit-creation'), $this->mNbrUserCreated);
 					return;
 				}
 				if ( $this->setVarsFromSession() > 0 ) {
@@ -158,7 +158,7 @@ class AutoCreateWikiPage extends SpecialPage {
 				#--- Limit of user creation
 				$this->mNbrUserCreated = $this->countCreatedWikisByUser();
 				if ( $this->mNbrUserCreated >= self::DAILY_USER_LIMIT ) {
-					$wgOut->addHTML(wfMsg('autocreatewiki-limit-creation'));
+					$wgOut->addHTML(wfMsg('autocreatewiki-limit-creation'), $this->mNbrUserCreated);
 					return;
 				}
 				if ( $this->setVarsFromSession() > 0 ) {
@@ -700,6 +700,7 @@ class AutoCreateWikiPage extends SpecialPage {
 		$f = new FancyCaptcha();
 		#--
 		$wgOut->addScript( "<link rel=\"stylesheet\" type=\"text/css\" href=\"{$wgStylePath}/common/form.css?{$wgStyleVersion}\" />" );
+		$wgOut->addScript( "<script type=\"text/javascript\" src=\"{$wgStylePath}/common/form.js?{$wgStyleVersion}\"></script>" );
 		/* run template */
 		$oTmpl = new EasyTemplate( dirname( __FILE__ ) . "/templates/" );
 		$oTmpl->set_vars( array(
@@ -744,6 +745,7 @@ class AutoCreateWikiPage extends SpecialPage {
 		#--
 		/* run template */
 		$wgOut->addScript( "<link rel=\"stylesheet\" type=\"text/css\" href=\"{$wgStylePath}/common/form.css?{$wgStyleVersion}\" />" );
+		$wgOut->addScript( "<script type=\"text/javascript\" src=\"{$wgStylePath}/common/form.js?{$wgStyleVersion}\"></script>" );
 		$oTmpl = new EasyTemplate( dirname( __FILE__ ) . "/templates/" );
 		$oTmpl->set_vars( array(
 			"wgExtensionsPath" => $wgExtensionsPath,
@@ -1406,7 +1408,7 @@ class AutoCreateWikiPage extends SpecialPage {
 		);
 
 		wfProfileOut( __METHOD__ );
-		return $oRow->count;
+		return intval($oRow->count);
 	}
 
 	/**
