@@ -204,19 +204,30 @@ var msgError = "<?=addslashes(wfMsg('autocreatewiki-invalid-wikiname'))?>";
 	</div>
 </div>
 </form>
+<iframe id="awc-process-login" height="1" width="1" style="visibility: hidden;"></iframe>
 <script type="text/javascript">
 /*<![CDATA[*/
 var YC = YAHOO.util.Connect;
 var YD = YAHOO.util.Dom;
 var YE = YAHOO.util.Event;
+<?php error_log (print_r($mPostedErrors, true)); ?>
 <?php if ( !empty($mPostedErrors) && is_array($mPostedErrors) ) : ?>
 <?php 	foreach ( $mPostedErrors as $field => $value ) : ?>
 <?php 		if ( !empty($value) ) : ?>
 if ( YD.get('<?=$field?>') ) { 
-	YD.setStyle('<?=$field?>-error', 'display', 'block');
 	YD.addClass('<?=$field?>', 'error');
-	YD.addClass('<?=$field?>-label', 'error');
-	YD.get('<?=$field?>-error').innerHTML = "<?=str_replace("\n", "<br />", $value)?>";
+	if ( YD.get('<?=$field?>-error') ) {
+		YD.setStyle('<?=$field?>-error', 'display', 'block');
+		YD.get('<?=$field?>-error').innerHTML = "<?=str_replace("\n", "<br />", $value)?>";
+	}
+	if ( YD.get('<?=$field?>-label') ) YD.addClass('<?=$field?>-label', 'error');
+<?
+	if ($field == 'wiki-blurry-word') {
+?>		
+		if ( YD.get('wpCaptchaWord') ) YD.addClass('wpCaptchaWord', 'error');
+<?		
+	}
+?>	
 }
 <?php		endif ?>
 <?php 	endforeach ?>
@@ -224,4 +235,29 @@ if ( YD.get('<?=$field?>') ) {
 /*]]>*/
 </script>
 <script type="text/javascript" src="<?=$wgExtensionsPath?>/wikia/AutoCreateWiki/js/autocreatewiki.js?<?=$wgStyleVersion?>"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+YE.onDOMReady(function () {
+	if (YD.get('userloginRound')) {
+		__showLoginPanel = function(e) {
+			var ifr = YD.get('awc-process-login');
+			var titleUrl = '<?=$mTitle->getLocalURL()."/Caching"?>'; 
+			var wikiName = YD.get('wiki-name');
+			var wikiDomain = YD.get('wiki-domain');
+			var wikiCategory = YD.get('wiki-category');
+			var wikiLanguage = YD.get('wiki-language');
+			titleUrl += "?wiki-name=" + wikiName.value;
+			titleUrl += "&wiki-domain=" + wikiDomain.value;
+			titleUrl += "&wiki-category=" + wikiCategory.value;
+			titleUrl += "&wiki-language=" + wikiLanguage.value;
+			ifr.src = titleUrl;
+			YAHOO.wikia.AjaxLogin.showLoginPanel(e);
+			return false;
+		}
+		
+		YE.addListener('AWClogin', 'click', __showLoginPanel);
+	}
+});
+/*]]>*/
+</script>
 <!-- e:<?= __FILE__ ?> -->

@@ -37,25 +37,31 @@ define( "TASK_FINISHED_UNDO", 5 );     #--- task finished but undone later
  */
 abstract class BatchTask {
 
-    public static $mStatuses = array(
-        TASK_WAITING => "Waiting for start",
-        TASK_STARTED => "Running",
-        TASK_QUEUED => "Queued",
-        TASK_FINISHED_SUCCESS => "Finished, status OK",
-        TASK_FINISHED_ERROR => "Finished, status ERROR",
-        TASK_FINISHED_UNDO => "Finished, status UNDO",
-    );
+	public static $mStatuses = array(
+		TASK_WAITING           => "Waiting for start",
+		TASK_STARTED           => "Running",
+		TASK_QUEUED            => "Queued",
+		TASK_FINISHED_SUCCESS  => "Finished, status OK",
+		TASK_FINISHED_ERROR    => "Finished, status ERROR",
+		TASK_FINISHED_UNDO     => "Finished, status UNDO",
+	);
 
-    const DEFAULT_TTL = 86400; #--- one day
-    public $mDebug, $mTaskID, $mData, $mTTL, $mVisible, $mType;
+	const DEFAULT_TTL = 7200; // two hours
+	public
+		$mDebug  = false,
+		$mTaskID = false,
+		$mData   = false,
+		$mTTL,
+		$mVisible,
+		$mType;
 
-    /**
-     * contructor
-     */
-    function  __construct() {
-        $this->mDebug = false;
-        $this->mTaskID = null;
-        $this->mData = null;
+     /**
+      * constructor
+      */
+    public function __construct() {
+		/**
+		 * nothing
+		 */
     }
 
     /**
@@ -70,9 +76,8 @@ abstract class BatchTask {
 	 * return string with codename type of task
 	 *
 	 * @access public
-	 * @author eloy@wikia
 	 *
-	 * @return string: unique name
+	 * @return string	 type of task
 	 */
 	public function getType() {
 		return $this->mType;
@@ -84,9 +89,8 @@ abstract class BatchTask {
 	 * check if class is visible in TaskManager from dropdown
 	 *
 	 * @access public
-	 * @author eloy@wikia
 	 *
-	 * @return boolean: visible or not
+	 * @return boolean	is task visible or not
 	 */
 	public function isVisible() {
 		return $this->mVisible;
@@ -522,8 +526,7 @@ abstract class BatchTask {
  *
  * @return void
  */
-function extAddBatchTask( $file, $shortName, $className )
-{
+function extAddBatchTask( $file, $shortName, $className ) {
     global $wgWikiaBatchTasks, $wgAutoloadClasses;
 
     $wgWikiaBatchTasks[$shortName] = $className;

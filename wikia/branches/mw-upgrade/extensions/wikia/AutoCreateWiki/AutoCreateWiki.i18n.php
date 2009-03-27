@@ -37,7 +37,8 @@ $messages['en'] = array(
 	"autocreatewiki-info-blurry-word" => "To help protect against automated account creation, please type the blurry word that you see into this field.",
 	"autocreatewiki-info-terms-agree" => "By creating a wiki and a user account, you agree to the <a href=\"http://www.wikia.com/wiki/Terms_of_use\">Wikia's Terms of Use</a>",
 // errors
-	"autocreatewiki-limit-creation" => "You have exceeded the the maximum number of wiki creation in 24 hours.",
+	"autocreatewiki-limit-day" => "You have exceeded the the maximum number of wiki creation today ($1).",
+	"autocreatewiki-limit-creation" => "You have exceeded the the maximum number of wiki creation in 24 hours ($1).",
 	"autocreatewiki-empty-field" => "Please complete this field.",
 	"autocreatewiki-bad-name" => "The name cannot contain special characters (like $ or @) and must be a single lower-case word without spaces.",
 	"autocreatewiki-invalid-wikiname" => "The name cannot contain special characters (like $ or @) and cannot be empty",
@@ -48,6 +49,7 @@ $messages['en'] = array(
 	"autocreatewiki-invalid-username" => "This username is invalid.",
 	"autocreatewiki-busy-username" => "This username is already taken.",
 	"autocreatewiki-blocked-username" => "You cannot create account.",
+	"autocreatewiki-user-notloggedin" => "Your account was created but not logged in!",
 	"autocreatewiki-empty-language" => "Please, select language of Wiki.",
 	"autocreatewiki-empty-category" => "Please, select one of category.",
 	"autocreatewiki-empty-wikiname" => "The name of Wiki cannot be empty.",
@@ -121,5 +123,6 @@ Best wishes,
 
 [[User:$2|$3]]
     ",
-	"autocreatewiki-welcometalk-log" => "Welcoming new sysop"
+	"autocreatewiki-welcometalk-log" => "Welcoming new sysop",
+	"requestwiki-filter-language" => "kh,kp,mu,als,an,ast,de-form,de-weig,dk,en-gb,ia,ie,ksh,mwl,pdc,pfl,simple,tokipona,tp,zh-cn,zh-hans,zh-hant,zh-hk,zh-mo,zh-my,zh-sg,zh-tw",
 );

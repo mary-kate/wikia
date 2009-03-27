@@ -27,14 +27,13 @@
 
 body
 {
-	padding: 1px;
 	margin: 0;
 	background-color: #ffffff;
 }
 
 #xEditingArea
 {
-    border: #696969 1px solid;
+    border: #AAA 1px solid;
 }
 
 td.childrenHidden

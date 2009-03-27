@@ -8,7 +8,7 @@
 	<div id="awc-log" class="note"></div>
 </div>
 <br />
-<iframe id="awc-process" height="10" width="50"></iframe>
+<iframe id="awc-process" height="1" width="1"></iframe>
 <script type="text/javascript">
 /*<![CDATA[*/
 var YD = YAHOO.util.Dom;
@@ -56,8 +56,8 @@ YE.onDOMReady(function () {
 					};
 					//window.location.href = 'http://'+redirServer+'.<?=$domain?>';
 				} else if ( !(isError > 0) ) {
-					if (loop < 20) {
-						setTimeout(checkProcess, 666);
+					if (loop < 30) {
+						setTimeout(checkProcess, 2000);
 					} else {
 						setLog(loop, errorMsg, 'ERROR');
 					}
