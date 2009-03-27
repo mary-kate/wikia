@@ -1849,7 +1849,7 @@ class Parser
 				/* Support for [[Video:...]] */
 				if($ns == NS_VIDEO) {
 					if(!empty($wgEnableVideoToolExt)) {
-						wfProfileIn("$fname-video");
+						wfProfileIn(__METHOD__ . "-video");
 						if (!empty($wgWysiwygParserEnabled)) {
 							Wysiwyg_SetRefId('video', array('text' => &$text, 'link' => $link, 'wasblank' => $wasblank, 'noforce' => $noforce, 'original' => $originalWikitext));
 							$wgWysiwygParserEnabled = false;
@@ -1863,7 +1863,7 @@ class Parser
 							$s .= $prefix . $this->armorLinks(WikiaVideo_makeVideo($nt, $text, $sk)).$trail;
 							$this->mOutput->addImage(':'.$nt->getDBkey());
 						}
-						wfProfileOut("$fname-video");
+						wfProfileOut(__METHOD__ . "-video");
 						continue;
 					}
 				}
