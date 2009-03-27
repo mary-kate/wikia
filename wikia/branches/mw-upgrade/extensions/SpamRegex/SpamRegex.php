@@ -23,6 +23,11 @@ define('SPAMREGEX_EXPIRE', 0);
 define('SPAMREGEX_TEXTBOX', 0);
 define('SPAMREGEX_SUMMARY', 1);
 
+/* return the name of the table  */
+function wfSpamRegexGetTable() {
+        return wfSharedTable('spam_regex', false);
+}
+
 // Extension credits
 $wgExtensionCredits['specialpage'][] = array(
 	'name' => 'Regular Expression Spam Block',

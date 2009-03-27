@@ -119,7 +119,7 @@ class spamRegexList {
 			$this->showPrevNext( $wgOut );
 			$wgOut->addHTML( "<form name=\"spamregexlist\" method=\"get\" action=\"{$action}\">" );
 
-			$res = $dbr->select( 'spam_regex', '*', array(), __METHOD__, array( 'LIMIT' => $limit, 'OFFSET' => $offset ) );
+			$res = $dbr->select( wfSpamRegexGetTable(), '*', array(), __METHOD__, array( 'LIMIT' => $limit, 'OFFSET' => $offset ) );
 			while ( $row = $res->fetchObject() ) {
 				$time = $wgLang->timeanddate( wfTimestamp( TS_MW, $row->spam_timestamp ), true );
 				$ublock_ip = urlencode($row->spam_text);
@@ -151,7 +151,7 @@ class spamRegexList {
 		$text = urldecode( $wgRequest->getVal( 'text' ) );
 		/* delete */
 		$dbw = wfGetDB( DB_MASTER );
-		$dbw->delete( 'spam_regex', array( 'spam_text' => $text ), __METHOD__ );
+		$dbw->delete( wfSpamRegexGetTable(), array( 'spam_text' => $text ), __METHOD__ );
 		$titleObj = SpecialPage::getTitleFor( 'SpamRegex' );
 		if ( $dbw->affectedRows() ) {
 			/* success  */
@@ -178,7 +178,7 @@ class spamRegexList {
 		$results = 0;
 		if ( is_null( $cached ) || $cached === false ) {
 			$dbr = wfGetDB( DB_SLAVE );
-			$results = $dbr->selectField( 'spam_regex', 'COUNT(*)', '', __METHOD__ );
+			$results = $dbr->selectField( wfSpamRegexGetTable(), 'COUNT(*)', '', __METHOD__ );
 			$wgMemc->set( $key, $results, SPAMREGEX_EXPIRE );
 		} else {
 			$results = $cached;
@@ -379,7 +379,7 @@ class spamRegexForm {
 		}
 
 		$dbw->insert(
-			'spam_regex',
+			wfSpamRegexGetTable(),
 				array(
 				'spam_text' => $this->mBlockedPhrase,
 				'spam_timestamp' => $timestamp,
