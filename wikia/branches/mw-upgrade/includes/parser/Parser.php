@@ -4604,7 +4604,7 @@ class Parser
 		/* Wikia change begin - @author: Inez */
 		/* Wysiwyg: remove markers */
 		if(!empty($wgWysiwygParserEnabled)) {
-			$parts = array_map( create_function('$par', 'return preg_replace(\'%\x7f-wtb-(\d+)-\x7f(.*?)\x7f-wte-\1-\x7f%si\', \'\\2\', $par);'), $parts);
+			$parts = array_map( create_function('$par', 'return preg_replace(\'%\x7f-wtb-(\d+)-\x7f(.*?)\x7f-wte-\1-\x7f%si\', \'\\2\', $par);'), (array) $parts);
 		}
 		/* Wikia change end */
 		$sk = $this->mOptions->getSkin();
