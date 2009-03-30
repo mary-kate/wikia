@@ -91,7 +91,17 @@ class SpecialRecentChanges extends SpecialPage {
 		$feedFormat = $wgRequest->getVal( 'feed' );
 
 		# 10 seconds server-side caching max
-		$wgOut->setSquidMaxage( 10 );
+		// modified by Emil, 10 secs is not enough for us
+		// so the most popular URLs are cached longer and purged on every edit
+		if( $wgRequest->getFullRequestURL() == SpecialPage::getTitleFor('RecentChanges')->getInternalURL()
+		 || $wgRequest->getFullRequestURL() == SpecialPage::getTitleFor('RecentChanges')->getInternalURL('feed=rss')
+		 || $wgRequest->getFullRequestURL() == SpecialPage::getTitleFor('RecentChanges')->getInternalURL('feed=atom') ) {
+			global $wgSquidMaxage;
+			$wgOut->setSquidMaxage( $wgSquidMaxage );
+		} else {
+			// all others are treated old-fashion
+			$wgOut->setSquidMaxage( 10 );
+		}
 		# Check if the client has a cached version
 		$lastmod = $this->checkLastModified( $feedFormat );
 		if( $lastmod === false ) {
