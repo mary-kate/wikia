@@ -215,7 +215,7 @@ function WikiaVideo_makeVideo($title, $options, $sk, $wikitext = '') {
 			if($thumb) {
 				$align = 'right';
 			} else {
-				$align = 'left';
+				$align = 'vetnone';
 			}
 		}
 
