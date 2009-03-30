@@ -351,3 +351,9 @@ VideoEmbedOptionsTable img {
 #VideoEmbedToolProvidersTable td {
 	background: #fff;
 }
+
+.vetnone {
+	float: none;
+	clear: none;
+}
+
