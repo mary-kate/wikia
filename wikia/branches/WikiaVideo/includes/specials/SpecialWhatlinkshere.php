@@ -148,6 +148,8 @@ class WhatLinksHerePage {
 		$options['LIMIT'] = $queryLimit;
 		$fields = array( 'page_id', 'page_namespace', 'page_title', 'page_is_redirect' );
 
+		wfRunHooks( 'SpecialWhatlinkshere::beforeImageQuery', array( &$hideimages, &$ilConds ) );
+
 		if( $fetchlinks ) {
 			$options['ORDER BY'] = 'pl_from';
 			$plRes = $dbr->select( array( 'pagelinks', 'page' ), $fields,
