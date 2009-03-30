@@ -148,7 +148,7 @@ class WhatLinksHerePage {
 		$options['LIMIT'] = $queryLimit;
 		$fields = array( 'page_id', 'page_namespace', 'page_title', 'page_is_redirect' );
 
-		wfRunHooks( 'SpecialWhatlinkshere::beforeImageQuery', array( &$hideimages, &$ilConds ) );
+		wfRunHooks( 'SpecialWhatlinkshere::beforeImageQuery', array( &$hideimages, &$ilConds, $namespace ) );
 
 		if( $fetchlinks ) {
 			$options['ORDER BY'] = 'pl_from';
