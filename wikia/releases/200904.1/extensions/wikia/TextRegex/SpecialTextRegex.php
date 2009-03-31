@@ -23,7 +23,7 @@ class TextRegex extends SpecialPage {
 	 * @param $par Mixed: parameter passed to the page or null
 	 */
 	function execute( $subpage ) {
-		global $wgOut, $wgUser, $wgRequest;
+		global $wgOut, $wgUser, $wgRequest, $wgLang;
 
 		if ( $wgUser->isBlocked() ) {
 			$wgOut->blockedPage();
@@ -42,10 +42,11 @@ class TextRegex extends SpecialPage {
 		$this->mBlockedRegex = $wgRequest->getVal( 'wpBlockedRegex',  $wgRequest->getVal( 'text' ) );
 
 		$wgOut->setPageTitle( wfMsgHtml( 'textregex-page-title' ) );
+
+		$subpage = $wgLang->lc(trim($subpage));
+		error_log ("subpage = $subpage \n");
 		$oTextRegexList = new TextRegexList( $subpage );
 		$oTextRegexForm = new TextRegexForm( $oTextRegexList, $subpage, $this->mBlockedRegex );
-
-		$subpage = trim($subpage);
 		if ( empty($subpage) ) {
 			if ( $this->action == 'addsubpage' && $wgUser->matchEditToken( $wgRequest->getVal( 'wpEditToken' ) ) ) {
 				$oTextRegexForm->selectSubpage();
