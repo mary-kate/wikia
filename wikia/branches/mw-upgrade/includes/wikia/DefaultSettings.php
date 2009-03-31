@@ -256,6 +256,11 @@ $wgLangCreationVariables = array();
  */
 define('NS_VIDEO', '400');
 
+/** Should we allow the user's to select their own skin that will override the default? 
+ *
+ * We have SkinChooser extension to do this
+ */
+$wgAllowUserSkin = false;
 
 /**
  * register job class
