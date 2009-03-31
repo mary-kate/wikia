@@ -346,7 +346,6 @@ class HAWelcomeJob extends Job {
 				$Title = Title::newFromId( $revision->getPage(), GAID_FOR_UPDATE );
 				$revision->setTitle( $Title );
 			}
-			global $wgAvailableRights, $wgGroupPermissions;
 
 			/**
 			 * get groups for user rt#12215
