@@ -455,7 +455,10 @@ class TextRegexForm {
 	
 	function selectSubpage() {
 		global $wgRequest, $wgOut;
-		$__subpage = $wgRequest->getVal( 'wpBlockedRegexList', $wgRequest->getVal('wpBlockedRegexListName', '') );
+		$__subpage = $wgRequest->getVal( 'wpBlockedRegexList' );
+		if ( empty($__subpage) ) {
+			$__subpage = $wgRequest->getVal('wpBlockedRegexListName');
+		}
 		if (!empty($__subpage)) {
 			$oNewTitle = SpecialPage::getTitleFor( 'TextRegex', $__subpage );
 		} else {
