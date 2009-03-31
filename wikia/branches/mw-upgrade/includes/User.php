@@ -2196,16 +2196,15 @@ class User {
 				# get the user skin
 				$userSkin = $this->getOption( 'skin' );
 				$userSkin = $wgRequest->getVal('useskin', $userSkin);
+
+				$this->mSkin =& Skin::newFromKey( $userSkin );
 			}
 
 			if( $wgAllowUserSkin ) {
 				# get the user skin
 				$userSkin = $this->getOption( 'skin' );
 				$userSkin = $wgRequest->getVal('useskin', $userSkin);
-			}
 
-			// Wikia: skin may be be already initialized inside AlternateGetSkin hook handler
-			if ( ! isset( $this->mSkin ) ) {
 				$this->mSkin =& Skin::newFromKey( $userSkin );
 			}
 
