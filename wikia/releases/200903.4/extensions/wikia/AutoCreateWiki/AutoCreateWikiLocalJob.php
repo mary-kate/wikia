@@ -56,11 +56,13 @@ class AutoCreateWikiLocalJob extends Job {
 	 */
     public function run() {
 
-		global $wgUser;
+		global $wgUser, $wgErrorLog;
 
 		wfProfileIn( __METHOD__ );
 
 		wfLoadExtensionMessages( "AutoCreateWiki" );
+
+		$wgErrorLog = true;
 
 		/**
 		 * setup founder user
@@ -71,6 +73,9 @@ class AutoCreateWikiLocalJob extends Job {
 		$this->setWelcomeTalkPage();
 		$this->moveMainPage();
 		$this->populateCheckUserTables();
+
+		$wgErrorLog = false;
+
 
 		wfProfileOut( __METHOD__ );
 
