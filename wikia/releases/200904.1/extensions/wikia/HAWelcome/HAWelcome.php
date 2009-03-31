@@ -47,17 +47,6 @@ $wgExtensionMessagesFiles[ "HAWelcome" ] = dirname(__FILE__) . '/HAWelcome.i18n.
  */
 $wgWikiaBatchTasks[ "welcome" ] = "HAWelcomeTask";
 
-/**
- *  permissions / rt#12215
- */
-$wgAvailableRights[] = "welcometool";
-$wgGroupPermissions['*'          ]['welcometool'] = true;
-$wgGroupPermissions['user'       ]['welcometool'] = true;
-$wgGroupPermissions['bot'        ]['welcometool'] = false;
-$wgGroupPermissions['staff'      ]['welcometool'] = false;
-$wgGroupPermissions['helper'     ]['welcometool'] = false;
-$wgGroupPermissions['sysop'      ]['welcometool'] = false;
-$wgGroupPermissions['bureaucrat' ]['welcometool'] = false;
 
 class HAWelcomeJob extends Job {
 
@@ -358,7 +347,27 @@ class HAWelcomeJob extends Job {
 				$revision->setTitle( $Title );
 			}
 
-			if( $Title && !$wgCommandLineMode && $wgUser->isAllowed( 'welcometool' ) && !empty( $wgSharedDB ) ) {
+			/**
+			 * get groups for user rt#12215
+			 */
+			$groups = $wgUser->getEffectiveGroups();
+			$invalid = array(
+				"bot" => true,
+				"staff" => true,
+				"helper" => true,
+				"sysop" => true,
+				"bureaucrat" => true
+			);
+			$canWelcome = true;
+			foreach( $groups as $group ) {
+				if( isset( $invalid[ $group ] ) && $invalid[ $group ] ) {
+					$canWelcome = false;
+					Wikia::log( __METHOD__, $wgUser->getId(), "Skip welcome, user is at least in group: " . $group );
+					break;
+				}
+			}
+
+			if( $Title && !$wgCommandLineMode && $canWelcome && !empty( $wgSharedDB ) ) {
 
 				Wikia::log( __METHOD__, "title", $Title->getFullURL() );
 
@@ -404,9 +413,6 @@ class HAWelcomeJob extends Job {
 				else {
 					Wikia::log( __METHOD__, "disabled" );
 				}
-			}
-			else {
-				Wikia::log( __METHOD__, "rights", "user isAllowed = " . $wgUser->isAllowed( 'welcometool' ) );
 			}
 		}
 		$wgErrorLog = $oldValue;
