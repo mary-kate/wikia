@@ -226,7 +226,7 @@ class HAWelcomeJob extends Job {
 	 * @return User class instance
 	 */
 	public function getLastSysop() {
-		global $wgCityId, $wgMemc;
+		global $wgCityId, $wgMemc, $wgLanguageCode;
 
 		wfProfileIn( __METHOD__ );
 
@@ -309,11 +309,11 @@ class HAWelcomeJob extends Job {
 			 * fallback, if still user is uknown we use Wikia user
 			 */
 			if( $this->mSysop instanceof User && $this->mSysop->getId() ) {
-				Wikia::log( __METHOD__, "sysop", "Found sysop: " . $this->mSysop->getName( ) );
+				Wikia::log( __METHOD__, "sysop", "Found sysop: " . $this->mSysop->getName() );
 			}
 			else {
-				Wikia::log( __METHOD__, "sysop", "Fallback to " . self::WELCOMEUSER );
-				$this->mSysop = User::newFromName( self::WELCOMEUSER );
+				$this->mSysop = Wikia::staffForLang( $wgLanguageCode );
+				Wikia::log( __METHOD__, "sysop", "Fallback to hardcoded user: " . $this->mSysop->getName() );
 			}
 		}
 		wfProfileOut( __METHOD__ );
