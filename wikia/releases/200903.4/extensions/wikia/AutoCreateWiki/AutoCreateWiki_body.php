@@ -103,7 +103,6 @@ class AutoCreateWikiPage extends SpecialPage {
 
 		wfLoadExtensionMessages( "AutoCreateWiki" );
 
-		error_log ("wfTimestamp = " . wfTimestamp() . "\n");
 		$this->setHeaders();
 		$this->mTitle = Title::makeTitle( NS_SPECIAL, "AutoCreateWiki" );
 		$this->mAction = $wgRequest->getVal( "action", false );
@@ -198,6 +197,9 @@ class AutoCreateWikiPage extends SpecialPage {
 						# check after logged in
 						if ( $wgUser->isAnon() ) {
 							$this->makeError( "wiki-username", wfMsg('autocreatewiki-user-notloggedin') );
+						} elseif ( $wgUser->isBlocked() ) {
+							$wgOut->blockedPage();
+							return;
 						} else {
 							if ( !empty($this->mRemember) ) {
 								$wgUser->setOption( 'rememberpassword', 1 );
