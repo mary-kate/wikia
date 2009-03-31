@@ -80,6 +80,7 @@ $messages['en'] = array(
 	"autocreatewiki-step11" => "Sending email to user ... ",
 	"autocreatewiki-redirect" => "Redirecting to new Wiki: $1 ... ",
 	"autocreatewiki-congratulation" => "Congratulation!",
+	"autocreatewiki-regex-error-comment" => "used in Wiki $1 (whole text: $2)",
 // processing errors
 	"autocreatewiki-step2-error" => "Database exists!",
 	"autocreatewiki-step3-error" => "Cannot set default information in database!",
