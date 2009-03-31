@@ -363,7 +363,7 @@ class HAWelcomeJob extends Job {
 			foreach( $groups as $group ) {
 				if( isset( $invalid[ $group ] ) && $invalid[ $group ] ) {
 					$canWelcome = false;
-					Wikia::log( __METHOD__, "group", "Skip welcome, user is at least in group:" . $group );
+					Wikia::log( __METHOD__, $wgUser->getId(), "Skip welcome, user is at least in group:" . $group );
 					break;
 				}
 			}
