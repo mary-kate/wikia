@@ -293,6 +293,7 @@ class HAWelcomeJob extends Job {
 							__METHOD__,
 							array( "ORDER BY" => "rev_id DESC")
 						);
+						Wikia::log( __METHOD__, "query", $dbr->lastQuery() );
 						if( $row->rev_user ) {
 							$this->mSysop = User::newFromId( $row->rev_user );
 							$wgMemc->set( wfMemcKey( "last-sysop-id" ), $row->rev_user, 86400 );
