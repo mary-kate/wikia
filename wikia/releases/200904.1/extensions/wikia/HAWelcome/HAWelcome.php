@@ -242,7 +242,7 @@ class HAWelcomeJob extends Job {
 					/**
 					 * first: check memcache, maybe we have already stored id of sysop
 					 */
-					$sysopId = $wgMemc->get( wfMemcKey( "lastsysopid" ) );
+					$sysopId = $wgMemc->get( wfMemcKey( "last-sysop-id" ) );
 					if( $sysopId ) {
 						Wikia::log( __METHOD__, "sysop", "Have sysop id from memcached: {$sysopId}" );
 						$this->mSysop = User::newFromId( $sysopId );
@@ -291,11 +291,11 @@ class HAWelcomeJob extends Job {
 							array( "rev_user", "rev_user_text"),
 							$dbr->makeList( $admins, LIST_OR ),
 							__METHOD__,
-							array( "order by" => "rev_timestamp desc")
+							array( "ORDER BY" => "rev_id DESC")
 						);
 						if( $row->rev_user ) {
 							$this->mSysop = User::newFromId( $row->rev_user );
-							$wgMemc->set( wfMemcKey( "lastsysopid" ), $row->rev_user, 86400 );
+							$wgMemc->set( wfMemcKey( "last-sysop-id" ), $row->rev_user, 86400 );
 						}
 					}
 				}
