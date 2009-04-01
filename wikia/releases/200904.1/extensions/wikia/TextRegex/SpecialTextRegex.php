@@ -46,6 +46,7 @@ class TextRegex extends SpecialPage {
 		$subpage = $wgLang->lc(trim($subpage));
 		$oTextRegexList = new TextRegexList( $subpage );
 		$oTextRegexForm = new TextRegexForm( $oTextRegexList, $subpage, $this->mBlockedRegex );
+		$db_conn = DB_SLAVE;
 		if ( empty($subpage) ) {
 			if ( $this->action == 'addsubpage' && $wgUser->matchEditToken( $wgRequest->getVal( 'wpEditToken' ) ) ) {
 				$oTextRegexForm->selectSubpage();
@@ -59,13 +60,16 @@ class TextRegex extends SpecialPage {
 			if ( $this->action == 'success_block' ) {
 				$wgOut->setSubTitle( wfMsg( 'textregex-block-succ' ) );
 				$wgOut->addHTML(wfMsgExt('textregex-block-message', 'parse', htmlspecialchars($this->mBlockedRegex) ));
+				$db_conn = DB_MASTER;
 				$oTextRegexForm->showForm('');
 			} elseif ( $this->action == 'success_unblock' ) {
 				$wgOut->setSubTitle( wfMsg( 'textregex-unblock-succ' ) );
 				$wgOut->addHTML(wfMsgExt('textregex-unblock-message', 'parse', htmlspecialchars($this->mBlockedRegex)) );
+				$db_conn = DB_MASTER;
 				$oTextRegexForm->showForm('');
 			} elseif ( $this->action == 'failure_unblock' ) {
 				$id = htmlspecialchars( $wgRequest->getVal( 'id' ) );
+				$db_conn = DB_MASTER;
 				$sRF->showForm( wfMsg( 'textregex-error-unblocking', $id ) );
 			} else if ( $wgRequest->wasPosted() && ($this->action == 'submit') && $wgUser->matchEditToken( $wgRequest->getVal( 'wpEditToken' ) ) ) {
 				$oTextRegexForm->doSubmit();
@@ -74,7 +78,7 @@ class TextRegex extends SpecialPage {
 			} else {
 				$oTextRegexForm->showForm( '' );
 			}
-			$oTextRegexList->showList( '' );
+			$oTextRegexList->showList( '', $db_conn );
 		}
 	}
 }
@@ -131,7 +135,7 @@ class TextRegexList {
 	 *
 	 * @param $err string: error message
 	 */
-	function showList( $err ) {
+	function showList( $err, $db_conn = DB_SLAVE ) {
 		wfProfileIn( __METHOD__ );
 		global $wgOut, $wgRequest, $wgLang;
 
@@ -142,7 +146,7 @@ class TextRegexList {
 		$action_unblock = $this->oTitle->escapeLocalURL( 'action=delete&' . $this->getListBits() );
 		$action_stats = $this->oTitle->escapeLocalURL( 'action=stats&' . $this->getListBits() );
 		if ( empty($regexList) ) {
-			$dbr = wfGetDBExt( DB_SLAVE );
+			$dbr = wfGetDBExt( $db_conn );
 			$res = $dbr->select ( 
 				"`dataware`.`text_regex`", 
 				'tr_id,	tr_text, tr_timestamp, tr_user, tr_subpage',
@@ -477,7 +481,7 @@ class TextRegexCore {
 		$this->id = $id;
 	}
 	
-	public function getRegexes() {
+	public function getRegexes( $db_conn = DB_SLAVE ) {
 		wfProfileIn( __METHOD__ );
 		global $wgMemc, $wgUser, $wgLang;
 
@@ -486,7 +490,7 @@ class TextRegexCore {
 		$regexList = array();
 		$cached = $wgMemc->get($key) ;
 		if ( !$cached ) {
-			$dbr = wfGetDBExt( DB_SLAVE );
+			$dbr = wfGetDBExt( $db_conn );
 			$res = $dbr->select ( 
 				"`dataware`.`text_regex`", 
 				'tr_id,	tr_text, tr_timestamp, tr_user, tr_subpage',
@@ -639,7 +643,7 @@ class TextRegexCore {
 		} else {
 	        $aWordsInText = $text;
 		}
-		$aBadWords = $this->getRegexes();
+		$aBadWords = $this->getRegexes( DB_MASTER );
 				
 		#$sBadWords
 		if ( !empty($aBadWords) && !empty($aWordsInText) ) {
