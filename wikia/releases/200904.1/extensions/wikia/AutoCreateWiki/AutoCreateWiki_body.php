@@ -601,19 +601,6 @@ class AutoCreateWikiPage extends SpecialPage {
 		$localJob = new AutoCreateWikiLocalJob(	Title::newFromText( NS_MAIN, "Main" ), $this->mWikiData );
 		$localJob->WFinsert( $this->mWikiId, $this->mWikiData[ "dbname" ] );
 
-		/**
-		 * inform task manager
-		 */
-		$Task = new LocalMaintenanceTask();
-		$Task->createTask(
-			array(
-				"city_id" => $this->mWikiId,
-				"command" => "maintenance/runJobs.php",
-				"arguments" => "--type ACWLocal"
-			),
-			TASK_QUEUED
-		);
-
 		$dbw->selectDB( $wgDBname );
 
 		$this->setCentralPages();
@@ -628,6 +615,20 @@ class AutoCreateWikiPage extends SpecialPage {
 		 * show congratulation message
 		 */
 		$this->setInfoLog( 'OK', wfMsg('autocreatewiki-congratulation')  );
+
+		/**
+		 * inform task manager
+		 */
+		$Task = new LocalMaintenanceTask();
+		$Task->createTask(
+			array(
+				"city_id" => $this->mWikiId,
+				"command" => "maintenance/runJobs.php",
+				"arguments" => "--type ACWLocal"
+			),
+			TASK_QUEUED
+		);
+		$this->log( "Add local maintenance task" );
 
 		/**
 		 * show total time
