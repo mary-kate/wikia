@@ -368,7 +368,11 @@ class UsercreateTemplate extends QuickTemplate {
 				// initial check, if not empty...
 				if ('' != YD.get( 'wpName2' ).value) {
 					YAHOO.util.Dom.addClass('wpNameTD', 'mw-progress');
-					sajax_do_call('cxValidateUserName', Array (YD.get( 'wpName2' ).value), login_formhandler);
+                                        // changed 01.04.2009 by Bartek, use POST instead of GET
+                                        var stored_sajax_rqtype = sajax_request_type;
+                                        sajax_request_type = "POST";
+                                        sajax_do_call('cxValidateUserName', Array (YD.get( 'wpName2' ).value), login_formhandler);
+                                        sajax_request_type = stored_sajax_rqtype;
 				}
 				if ('' != YD.get( 'wpEmail' ).value) {
 					checkEmail();
@@ -549,7 +553,11 @@ class UsercreateTemplate extends QuickTemplate {
 			YAHOO.util.Dom.removeClass('wpNameTD', 'mw-input-error');
 			YAHOO.util.Dom.addClass('wpNameTD', 'mw-progress');
 			checkUsernamePass();
-			sajax_do_call('cxValidateUserName', Array (this.value), login_formhandler);
+                        // changed 01.04.2009 by Bartek, use POST instead of GET
+                        var stored_sajax_rqtype = sajax_request_type;
+                        sajax_request_type = "POST";
+                        sajax_do_call('cxValidateUserName', Array (this.value), login_formhandler);
+                        sajax_request_type = stored_sajax_rqtype;
 		}
 
 		document.getElementById('wpName2').onblur = login_eventhandler;
