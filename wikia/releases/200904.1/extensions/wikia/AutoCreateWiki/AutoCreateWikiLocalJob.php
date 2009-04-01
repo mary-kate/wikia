@@ -72,6 +72,7 @@ class AutoCreateWikiLocalJob extends Job {
 		}
 		$this->moveMainPage();
 		$this->populateCheckUserTables();
+		$this->protectKeyPages();
 		$this->setWelcomeTalkPage();
 
 		$wgErrorLog = false;
