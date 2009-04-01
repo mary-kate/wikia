@@ -1240,14 +1240,14 @@ FCK.TemplatePreviewShow = function(placeholder) {
 	FCK.TemplatePreviewCloud.style.top = cloudPos.y + 'px';
 
 	// show template preview and cloud
-	FCK.TemplatePreviewCloud.style.visibility = 'visible';
+	FCK.TemplatePreviewCloud.style.display = 'block';
 	FCK.TemplatePreviewCloud.className = showUnder ? 'cloudUnder' : 'cloudOver';
 
 	FCK.TemplatePreviewCloud.setAttribute('refid', refId);
 }
 
 FCK.TemplatePreviewHide = function() {
-	FCK.TemplatePreviewCloud.style.visibility = 'hidden';
+	FCK.TemplatePreviewCloud.style.display = 'none';
 }
 
 // set/get preview cloud HTML for given template
@@ -1532,4 +1532,5 @@ if (FCK.UseContentEditable) {
 }
 
 // for us, developers ;)
+FCK.BrowserInfo = FCKBrowserInfo;
 window.parent.FCK = FCK;
