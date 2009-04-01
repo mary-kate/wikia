@@ -71,6 +71,9 @@ class AutoCreateWikiLocalJob extends Job {
 			$this->mFounder = User::newFromId( $this->mParams[ "founder"] );
 			$this->mFounder->load();
 		}
+		if( ! $this->mFounder ) {
+			Wikia::log( __METHOD__, "user", "Cannot load user with user_id = {$this->mParams[ "founder"]}" );
+		}
 		$this->moveMainPage();
 		$this->setWelcomeTalkPage();
 		$this->protectKeyPages();
