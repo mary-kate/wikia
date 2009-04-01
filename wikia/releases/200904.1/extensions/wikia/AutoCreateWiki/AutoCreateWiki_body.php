@@ -328,7 +328,8 @@ class AutoCreateWikiPage extends SpecialPage {
 			return;
 		}
 		$this->mWikiData[ "city_id" ] = $this->mWikiId;
-		$this->mWikiData[ "founder" ] = $wgUser->getId();
+		$this->mWikiData[ "founder" ] = $this->mFounder->getId();
+		$this->mWikiData[ "founder-name" ] = $this->mFounder->getName();
 		$this->log( "Creating row in city_list table, city_id = {$this->mWikiId}" );
 
 		$bIns = $dbw->insert(
