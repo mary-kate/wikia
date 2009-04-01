@@ -56,8 +56,8 @@ YE.onDOMReady(function () {
 					};
 					//window.location.href = 'http://'+redirServer+'.<?=$domain?>';
 				} else if ( !(isError > 0) ) {
-					if (loop < 150) {
-						setTimeout(checkProcess, 2000);
+					if (loop < 60) {
+						setTimeout(checkProcess, 5000);
 					} else {
 						setLog(loop, errorMsg, 'ERROR');
 					}
