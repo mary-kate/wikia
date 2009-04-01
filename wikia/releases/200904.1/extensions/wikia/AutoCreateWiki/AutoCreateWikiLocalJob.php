@@ -70,9 +70,9 @@ class AutoCreateWikiLocalJob extends Job {
 		if( $this->mParams[ "founder"] ) {
 			$this->mFounder = User::newFromId( $this->mParams[ "founder"] );
 		}
-		$this->setWelcomeTalkPage();
 		$this->moveMainPage();
 		$this->populateCheckUserTables();
+		$this->setWelcomeTalkPage();
 
 		$wgErrorLog = false;
 
