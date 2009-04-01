@@ -70,7 +70,7 @@ class TextRegex extends SpecialPage {
 			} elseif ( $this->action == 'failure_unblock' ) {
 				$id = htmlspecialchars( $wgRequest->getVal( 'id' ) );
 				$db_conn = DB_MASTER;
-				$sRF->showForm( wfMsg( 'textregex-error-unblocking', $id ) );
+				$oTextRegexForm->showForm( wfMsg( 'textregex-error-unblocking', $id ) );
 			} else if ( $wgRequest->wasPosted() && ($this->action == 'submit') && $wgUser->matchEditToken( $wgRequest->getVal( 'wpEditToken' ) ) ) {
 				$oTextRegexForm->doSubmit();
 			} else if ( $this->action == 'delete' ) {
