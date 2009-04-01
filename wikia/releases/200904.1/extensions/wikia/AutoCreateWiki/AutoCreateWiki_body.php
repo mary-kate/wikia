@@ -497,9 +497,10 @@ class AutoCreateWikiPage extends SpecialPage {
 				}
 
 				$startupImages = sprintf( "%s/starter/%s/images/", self::IMGROOT, $prefix );
+
 				if (file_exists( $startupImages ) && is_dir( $startupImages ) ) {
-					wfShellExec("/bin/cp -af $startupImages {$this->mWikiData[ "images" ]}/");
-					$this->log("/bin/cp -af $startupImages {$this->mWikiData[ "images" ]}/");
+					wfShellExec("/bin/cp -af {$startupImages} /images/{$this->mWikiData[ "dir_part" ]}/");
+					$this->log("/bin/cp -af {$startupImages} /images/{$this->mWikiData[ "dir_part" ]}/");
 				}
 				$cmd = sprintf(
 					"SERVER_ID=%d %s %s/maintenance/updateArticleCount.php --update --conf %s",
