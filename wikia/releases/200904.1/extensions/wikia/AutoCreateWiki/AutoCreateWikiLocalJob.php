@@ -264,7 +264,7 @@ class AutoCreateWikiLocalJob extends Job {
 	 * @author Lucas 'TOR' Garczewski <tor@wikia-inc.com>
 	 */
 	private function protectKeyPages() {
-		global $wgUser, $wgWikiaKeyPages;
+		global $wgUser, $wgWikiaKeyPages, $wgMessageCache;
 
 		$wgUser = User::newFromName( "CreateWiki script" );
 		if ( $wgUser->isAnon() ) {
