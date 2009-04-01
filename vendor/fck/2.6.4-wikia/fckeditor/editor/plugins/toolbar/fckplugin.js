@@ -62,6 +62,11 @@ WikiaToolbar.prototype.Create = function(parentElement) {
 	// add new toolbar CSS
 	FCKTools.AppendStyleSheet(toolbarDoc, window.parent.wgExtensionsPath + '/wikia/Wysiwyg/fckeditor/editor/plugins/toolbar/toolbar.css');
 
+	// fix IE6/7
+	if (FCKBrowserInfo.IsIE) {
+		FCKTools.AppendStyleSheet(toolbarDoc, window.parent.wgExtensionsPath + '/wikia/Wysiwyg/fckeditor/editor/plugins/toolbar/toolbar_ie.css');
+	}
+
 	// set toolbar foreground / background color based on #page_bar (.color1 CSS class)
 	var pageBar = new FCK.YAHOO.util.Element('page_bar');
 
@@ -83,14 +88,14 @@ WikiaToolbar.prototype.Create = function(parentElement) {
 		if (item.Bucket) {
 			// set width of previous bucket <UL>
 			if (currentBucket && currentBucketItems > 1) {
-				currentBucket.style.maxWidth = (currentBucketItems*28) + 'px';
+				currentBucket.style.maxWidth = (currentBucketItems*27) + 'px';
 				this.addBucketIEFixes(currentBucket);
 			}
 
 			// create new bucket
 			var toolbarCell = toolbarRow.insertCell(-1);
 			toolbarCell.innerHTML = '<div class="clearfix" style="background-color: ' + backgroundColor  + '">' + 
-				'<label title="' + item.Bucket.name + '">' + item.Bucket.name  + '</label><ul></ul></div>';
+				'<label title="' + item.Bucket.name + '">' + item.Bucket.name  + '</label><ul class="clearfix"></ul></div>';
 
 			// set CSS class for last bucket
 			if (item.Bucket.last) {
@@ -117,7 +122,7 @@ WikiaToolbar.prototype.Create = function(parentElement) {
 
 	// set width of last bucket <UL>
 	if (currentBucket && currentBucketItems > 1) {
-		currentBucket.style.maxWidth = (currentBucketItems*28) + 'px';
+		currentBucket.style.maxWidth = (currentBucketItems*27) + 'px';
 	}
 
 	// show tooltip
@@ -139,35 +144,35 @@ WikiaToolbar.prototype.addBucketIEFixes = function(bucket) {
 
 	var timeout;
 
-	FCKTools.AddEventListener(bucket.parentNode, 'mouseover', function(e) {
+	FCKTools.AddEventListener(bucket.parentNode.parentNode, 'mouseover', function(e) {
 		if (FCK.EditMode != FCK_EDITMODE_WYSIWYG) {
 			return;
 		}
 
 		var id = bucket.id.split('_').pop();
-		bucket.parentNode.style.height = 'auto';
+		if (bucket.getElementsByTagName('li').length * 27 > bucket.offsetWidth) {
+			bucket.parentNode.style.height = 'auto';
+		}
 		setTimeout("var node = document.getElementById('fck_toolbar_bucket_" + id  + "').parentNode;" +
 			"node.style.height = node.offsetHeight + 'px'", 50);
 
 		// emulate min-width
+		/*
 		if (bucket.parentNode.offsetWidth < 125) {
 			bucket.parentNode.style.width = '120px';
 		}
 		else {
 			bucket.parentNode.style.width = 'auto';
 		}
-
+		*/
 		clearTimeout(timeout);
 	});
 
-	FCKTools.AddEventListener(bucket.parentNode, 'mouseout', function(e) {
+	FCKTools.AddEventListener(bucket.parentNode.parentNode, 'mouseout', function(e) {
 		if (FCK.EditMode != FCK_EDITMODE_WYSIWYG) {
 			return;
 		}
-
-		var id = bucket.id.split('_').pop();
-		timeout = setTimeout("var node = document.getElementById('fck_toolbar_bucket_" + id  + "').parentNode;" +
-			"node.style.height = '41px'", 500);
+		bucket.parentNode.style.height = '49px';
 	});
 }
 
@@ -177,9 +182,10 @@ FCK.WikiaUsingNewToolbar = true;
 WikiaToolbar.prototype.WikiaSwitchToolbar = function(switchToWikitext) {
 
 	var MWtoolbar = window.parent.document.getElementById('toolbar');
+	var iframe = window.parent.document.getElementById('wpTextbox1___Frame');
 
 	if (switchToWikitext) {
-		MWtoolbar.style.top = '16px';
+		MWtoolbar.style.top = (iframe.offsetTop + 14) + 'px';
 		MWtoolbar.style.left = '12px';
 		MWtoolbar.style.visibility = 'visible';
 
@@ -239,7 +245,7 @@ var WikiaButtonUI = function( name, label, tooltip, iconPathOrStripInfoArray, st
 
 		'Undo':		'arrow_undo.png',
 		'Redo':		'arrow_redo.png',
-		'Widescreen':	'icon_full_screen.png',
+		'Widescreen':	'icon_widescreen.png',
 		'Source':	'application_xp_terminal.png'
 	};
 
@@ -532,33 +538,47 @@ StyleCommand.prototype = {
 
 // widescreen switching
 var WideScreenToggle = function() {
-	var toggleWideScreenLink = window.parent.document.getElementById("toggleWideScreen");
-
-	// try to get listener function attached to "Enter Widescreen" link
-	if (toggleWideScreenLink && FCK.YE.getListeners) {
-		this.toggleWideScreenListener = FCK.YE.getListeners(toggleWideScreenLink).pop();
-	}
+	this.toggleWideScreenLink = window.parent.document.getElementById("toggleWideScreen");
 
 	// get current widescreen mode state
 	this.isActive = FCK.YD.hasClass(window.parent.document.body, 'editingWide');
+
+	// store listener function
+	this.listener = false;
  }
 
 WideScreenToggle.prototype = {
-	Execute : function() {
-		if (typeof this.toggleWideScreenListener != 'undefined') {
-			this.toggleWideScreenListener.fn(true);
-			this.isActive = !this.isActive;
 
-			// hack: refresh toolbar items state
-			var items = FCK.ToolbarSet.Items;
-			for (i=0; i<items.length; i++) {
-				items[i].RefreshState();
-			}
+	Toggle: function() {
+		// use previously stored listener function
+		if (this.listener) {
+			this.listener(true);
+			return true;
+		}
+
+		if (this.toggleWideScreenLink && FCK.YE.getListeners) {
+			// store listener function
+			this.listener = FCK.YE.getListeners(this.toggleWideScreenLink).pop().fn;
+			this.listener(true);
+			return true;
+		}
+		else {
+			return false;
+		}
+	},
+	Execute : function() {
+		this.Toggle();
+		this.isActive = !this.isActive;
+
+		// hack: refresh toolbar items state
+		var items = FCK.ToolbarSet.Items;
+		for (i=0; i<items.length; i++) {
+			items[i].RefreshState();
 		}
         },
         GetState : function() {
 		return this.isActive ? FCK_TRISTATE_ON : FCK_TRISTATE_OFF ;
-	 }
+	}
 };
 
 // register new toolbar items
