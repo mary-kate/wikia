@@ -285,7 +285,7 @@ class AutoCreateWikiPage extends SpecialPage {
 			$this->log( "Database {$this->mWikiData[ "dbname"]} exists!" );
 			$error = 1;
 		} else {
-			$dbw->query( sprintf( "CREATE DATABASE %s", $this->mWikiData[ "dbname"]) );
+			$dbw->query( sprintf( "CREATE DATABASE `%s`", $this->mWikiData[ "dbname"]) );
 			$this->log( "Creating database {$this->mWikiData[ "dbname"]}" );
 		}
 
