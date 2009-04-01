@@ -167,7 +167,7 @@ class AutoCreateWikiLocalJob extends Job {
 			);
 
 			$talkBody = false;
-			if(! empty( $wikiaLang ) ) {
+			if (! empty( $wikiaLang ) ) {
 				/**
 				 * custom lang translation
 				 */
