@@ -44,7 +44,6 @@ class TextRegex extends SpecialPage {
 		$wgOut->setPageTitle( wfMsgHtml( 'textregex-page-title' ) );
 
 		$subpage = $wgLang->lc(trim($subpage));
-		error_log ("subpage = $subpage \n");
 		$oTextRegexList = new TextRegexList( $subpage );
 		$oTextRegexForm = new TextRegexForm( $oTextRegexList, $subpage, $this->mBlockedRegex );
 		if ( empty($subpage) ) {
@@ -569,7 +568,6 @@ class TextRegexCore {
 			'trs_text' => $text,
 			'trs_comment' => $comment
 		);
-		error_log ("data insert = ". print_r($data, true)."\n");
 		$dbw->insert( "`dataware`.`text_regex_stats`", $data, __METHOD__, array( 'IGNORE' ) );
 		$dbw->commit();
 		$lastId = $dbw->insertId();
@@ -642,17 +640,14 @@ class TextRegexCore {
 	        $aWordsInText = $text;
 		}
 		$aBadWords = $this->getRegexes();
-		error_log ("sBadWords = " . print_r($aBadWords, true));
 				
 		#$sBadWords
 		if ( !empty($aBadWords) && !empty($aWordsInText) ) {
 			#--- check every word in text
-			error_log ("aWordsInText = " . print_r($aWordsInText, true) );
 			foreach ($aWordsInText as $sWord) {
 				$sWord = trim($sWord);
 				#--- check every regex
 				foreach ($aBadWords as $badWord) {
-					error_log ( "badWord = " . print_r($badWord, true) );
 					if ( empty($badWord) && !is_array($badWord) ) continue;
 					$badWordTxt = trim($badWord['text']);
 					$badWordId = intval($badWord['id']);
