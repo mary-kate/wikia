@@ -57,7 +57,7 @@ class AutoCreateWikiPage extends SpecialPage {
 	 * constructor
 	 */
 	public function  __construct() {
-		parent::__construct( "AutoCreateWiki" /*class*/ );
+		parent::__construct( "CreateWiki" /*class*/ );
 
 		/**
 		 * initialize some data
@@ -171,7 +171,7 @@ class AutoCreateWikiPage extends SpecialPage {
 				if ( $this->mNbrUserCreated >= self::DAILY_USER_LIMIT ) {
 					$wgOut->addHTML(wfMsg('autocreatewiki-limit-creation'), $this->mNbrUserCreated);
 					return;
-				} 
+				}
 				if ( $this->setVarsFromSession() > 0 ) {
 					$this->processCreatePage();
 				}
