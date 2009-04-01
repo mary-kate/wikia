@@ -104,7 +104,7 @@ class AutoCreateWikiPage extends SpecialPage {
 		wfLoadExtensionMessages( "AutoCreateWiki" );
 
 		$this->setHeaders();
-		$this->mTitle = Title::makeTitle( NS_SPECIAL, "AutoCreateWiki" );
+		$this->mTitle = Title::makeTitle( NS_SPECIAL, "CreateWiki" );
 		$this->mAction = $wgRequest->getVal( "action", false );
 		$this->mSubpage = $subpage;
 		$this->mPosted = $wgRequest->wasPosted();
