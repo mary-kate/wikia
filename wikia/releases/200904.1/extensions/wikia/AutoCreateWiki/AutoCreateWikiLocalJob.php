@@ -69,6 +69,7 @@ class AutoCreateWikiLocalJob extends Job {
 		 */
 		if( $this->mParams[ "founder"] ) {
 			$this->mFounder = User::newFromId( $this->mParams[ "founder"] );
+			$this->mFounder->load();
 		}
 		$this->moveMainPage();
 		$this->setWelcomeTalkPage();
@@ -141,6 +142,7 @@ class AutoCreateWikiLocalJob extends Job {
 		Wikia::log( __METHOD__, "talk", "Setting welcome talk page on new wiki" );
 
 		$talkPage = $this->mFounder->getTalkPage();
+		Wikia::log( __METHOD__, "talk", $talkPage->getFullUrl() );
 		if( $talkPage ) {
 			$wikiaName = isset( $this->mParams[ "title" ] )
 				? $this->mParams[ "title" ]
