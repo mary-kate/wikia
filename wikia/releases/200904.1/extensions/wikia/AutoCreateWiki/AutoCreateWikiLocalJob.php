@@ -71,10 +71,9 @@ class AutoCreateWikiLocalJob extends Job {
 			$this->mFounder = User::newFromId( $this->mParams[ "founder"] );
 		}
 		$this->moveMainPage();
-		$this->populateCheckUserTables();
-		$this->protectKeyPages();
 		$this->setWelcomeTalkPage();
-
+		$this->protectKeyPages();
+		$this->populateCheckUserTables();
 		$wgErrorLog = false;
 
 
@@ -139,7 +138,7 @@ class AutoCreateWikiLocalJob extends Job {
 	private function setWelcomeTalkPage() {
 		global $wgUser;
 
-		Wikia::log( __METHOD__, "talk", "Setting welcome talk page on new wiki..." );
+		Wikia::log( __METHOD__, "talk", "Setting welcome talk page on new wiki" );
 
 		$talkPage = $this->mFounder->getTalkPage();
 		if( $talkPage ) {
