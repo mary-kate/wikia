@@ -602,7 +602,6 @@ class AutoCreateWikiPage extends SpecialPage {
 
 		$dbw->selectDB( $wgDBname );
 
-		$this->setCentralPages();
 		$this->setInfoLog( 'OK', wfMsg('autocreatewiki-step10') );
 
 		/**
