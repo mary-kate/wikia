@@ -270,7 +270,6 @@ class WikiMover {
 			),
 			array( "*" ),
 			array( 
-				"page_namespace not in (" . implode(",", $skipNamespaces) . ")",
 				"page_id = rev_page",
 				"rev_text_id = old_id"
 			 ),
@@ -294,10 +293,11 @@ class WikiMover {
 		 * get all pages for target DB
 		 */
 		$aTargetPages = array();
+		//array( "page_namespace not in (" . implode(",", $skipNamespaces) . ")" ),
 		$oRes = $dbr->select(
 			array( $this->targetTable( "page" ) ),
 			array( "*" ),
-			array( "page_namespace not in (" . implode(",", $skipNamespaces) . ")" ),
+			null,	
 			__METHOD__
 		);
 
@@ -395,6 +395,9 @@ class WikiMover {
 					#--- main article
 					case NS_MAIN:
 					case NS_TALK:
+					#--- Template namespace
+					case NS_MEDIAWIKI:
+					case NS_MEDIAWIKI_TALK:
 					#--- Template namespace
 					case NS_TEMPLATE:
 					case NS_TEMPLATE_TALK:
