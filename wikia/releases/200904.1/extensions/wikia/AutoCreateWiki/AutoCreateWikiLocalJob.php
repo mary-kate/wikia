@@ -352,11 +352,11 @@ class AutoCreateWikiLocalJob extends Job {
 		$sTo = $oReceiver->getEmail();
 
 		$aBodyParams = array (
-			0 => $sServer,
-			1 => $oReceiver->getName(),
-			2 => $oStaffUser->getRealName(),
-			3 => htmlspecialchars( $oStaffUser->getName() ),
-			4 => sprintf( "%s%s", $sServer, $oReceiver->getTalkPage()->getLocalURL() ),
+			$sServer,
+			$oReceiver->getName(),
+			$oStaffUser->getRealName(),
+			htmlspecialchars( $oStaffUser->getName() ),
+			htmlspecialchars( $oReceiver->getTalkPage()->getFullURL() ),
 		);
 
 		$sBody = $sSubject = null;
@@ -385,13 +385,13 @@ class AutoCreateWikiLocalJob extends Job {
 		if ( !empty($sTo) ) {
 			$bStatus = $oReceiver->sendMail( $sSubject, $sBody, $sFrom );
 			if ( $bStatus === true ) {
-				$this->addLog( "Mail to founder {$sTo} sent." );
+				Wikia::log( __METHOD__, "mail", "Mail to founder {$sTo} sent." );
 			}
 			else {
-				$this->addLog( "Mail to founder {$sTo} probably not sent. sendMail returned false." );
+				Wikia::log( __METHOD__, "mail", "Mail to founder {$sTo} probably not sent. sendMail returned false." );
 			}
 		} else {
-			$this->addLog( "Founder email is not set. Welcome email is not sent" );
+			Wikia::log( __METHOD__, "mail", "Founder email is not set. Welcome email is not sent" );
 		}
 	}
 }
