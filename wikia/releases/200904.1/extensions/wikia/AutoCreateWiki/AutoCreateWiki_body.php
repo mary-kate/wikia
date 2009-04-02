@@ -561,6 +561,7 @@ class AutoCreateWikiPage extends SpecialPage {
 			$wikiMover->setOverwrite( true );
 			$wikiMover->mMoveUserGroups = false;
 			$wikiMover->load();
+			$wikiMover->setRunJobs(true);
 			$wikiMover->setTargetUploadDirectory( $this->mWikiData[ "images" ] );
 			$wikiMover->move();
 
