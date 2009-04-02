@@ -18,11 +18,7 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 	exit( 1 );
 }
 
-/**
- * job is self-hosted, without other part of autocreate
- */
-$dir = dirname(__FILE__);
-$wgExtensionMessagesFiles[ "AutoCreateWiki" ] = $dir . "/AutoCreateWiki.i18n.php";
+$wgJobClasses[ "ACWLocal" ] = "AutoCreateWikiLocalJob";
 
 /**
  * maintenance script from CheckUser
@@ -56,11 +52,13 @@ class AutoCreateWikiLocalJob extends Job {
 	 */
     public function run() {
 
-		global $wgUser, $wgErrorLog;
+		global $wgUser, $wgErrorLog, $wgExtensionMessagesFiles;
 
 		wfProfileIn( __METHOD__ );
 
+		$wgExtensionMessagesFiles[ "AutoCreateWiki" ] = dirname(__FILE__) . "/AutoCreateWiki.i18n.php";
 		wfLoadExtensionMessages( "AutoCreateWiki" );
+
 		$wgErrorLog = true;
 		/**
 		 * setup founder user
