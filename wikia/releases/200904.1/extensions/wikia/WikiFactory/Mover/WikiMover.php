@@ -264,7 +264,7 @@ class WikiMover {
 			if ( !isset( $aSourcePages[ $oRow->page_id ][ "revision" ] ) ) {
 				$aSourcePages[ $oRow->page_id ][ "revision" ] = array();
 			}
-			$aSourcePages[ $oRow->page_id ][ "revision" ][ $oRowRev->rev_id ] = $oRowRev;
+			$aSourcePages[ $oRow->page_id ][ "revision" ][ $oRow->rev_id ] = $oRow;
 		}
 		$dbr->freeResult( $oRes );
 
