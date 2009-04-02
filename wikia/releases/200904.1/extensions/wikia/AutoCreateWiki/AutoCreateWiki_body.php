@@ -564,12 +564,6 @@ class AutoCreateWikiPage extends SpecialPage {
 			$wikiMover->setTargetUploadDirectory( $this->mWikiData[ "images" ] );
 			$wikiMover->move();
 
-			/**
-			 * WikiMove has internal log engine
-			 */
-            foreach( $wikiMover->getLog( true ) as $log ) {
-                $this->log( $log["info"] );
-            }
 			$this->addCustomSettings( $this->mWikiData[ "hub" ], $wgHubCreationVariables, 'hub' );
 		}
 		else {
