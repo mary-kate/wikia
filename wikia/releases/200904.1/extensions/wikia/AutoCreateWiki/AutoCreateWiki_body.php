@@ -611,7 +611,6 @@ class AutoCreateWikiPage extends SpecialPage {
 			array(
 				"city_id" => $this->mWikiId,
 				"command" => "maintenance/runJobs.php",
-				"arguments" => "--type ACWLocal",
 				"type" => "ACWLocal",
 				"data" => $this->mWikiData
 			),

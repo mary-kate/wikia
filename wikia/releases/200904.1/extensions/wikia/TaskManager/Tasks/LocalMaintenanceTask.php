@@ -57,8 +57,6 @@ class LocalMaintenanceTask extends BatchTask {
 		$city_id = $this->mParams[ "city_id" ];
 		$command = $this->mParams[ "command" ];
 		$type    = $this->mParams[ "type" ];
-		$arguments = isset( $this->mParams[ "arguments" ] )
-			? $this->mParams[ "arguments" ] : "";
 
 		wfWaitForSlaves( 2 );
 
@@ -67,12 +65,17 @@ class LocalMaintenanceTask extends BatchTask {
 			/**
 			 * execute maintenance script
 			 */
-			$cmd = sprintf( "SERVER_ID={$city_id} php {$IP}/{$command} {$arguments} --conf {$wgWikiaLocalSettingsPath} --aconf {$wgWikiaAdminSettingsPath}" );
+			$cmd = sprintf( "SERVER_ID={$city_id} php {$IP}/{$command} --conf {$wgWikiaLocalSettingsPath} --aconf {$wgWikiaAdminSettingsPath}" );
 			$this->addLog( "Running {$cmd}" );
 			$retval = wfShellExec( $cmd, $status );
 			$this->addLog( $retval );
 
 			if( $type == "ACWLocal" ) {
+				$cmd = sprintf( "SERVER_ID={$city_id} php {$IP}/refreshLinks.php --conf {$wgWikiaLocalSettingsPath} --aconf {$wgWikiaAdminSettingsPath}" );
+				$this->addLog( "Running {$cmd}" );
+				$retval = wfShellExec( $cmd, $status );
+				$this->addLog( $retval );
+
 				$this->mWikiData = $this->mParams[ "data" ];
 				$this->mFounder = User::newFromId( $this->mWikiData[ "founder"] );
 				$this->mFounder->load();
