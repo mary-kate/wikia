@@ -399,27 +399,37 @@ class AutoCreateWikiPage extends SpecialPage {
 			$WFSettingsVars[ "wgEnableWysiwygExt" ] = true;
 		}
 
+		$oRes = $dbw->select(
+			wfSharedTable("city_variables_pool"),
+			array( "cv_id, cv_name" ),
+			array( "cv_name in ('" . implode( "', '", array_keys($WFSettingsVars) ) . "')"),
+			__METHOD__
+		);
+		$WFVariables = array();
+		while ( $oRow = $dbw->fetchObject( $oRes ) ) {
+			$WFVariables[ $oRow->cv_name ] = $oRow->cv_id;
+		}
+		$dbw->freeResult( $oRes );
+
 		foreach( $WFSettingsVars as $variable => $value ) {
 			/**
 			 * first, get id of variable
 			 */
-			$Row = $dbw->selectRow(
-				wfSharedTable("city_variables_pool"),
-				array( "cv_id" ),
-				array( "cv_name" => $variable ),
-				__METHOD__
-			);
+			$cv_id = 0;
+			if ( isset( $WFVariables[$variable] ) ) {
+				$cv_id = $WFVariables[$variable];
+			}
 
 			/**
 			 * then, insert value for wikia
 			 */
-			if( isset( $Row->cv_id ) && $Row->cv_id ) {
+			if( !empty($cv_id) ) {
 				$dbw->insert(
 					wfSharedTable( "city_variables" ),
 					array(
 						"cv_value"       => serialize( $value ),
 						"cv_city_id"     => $this->mWikiId,
-						"cv_variable_id" => $Row->cv_id
+						"cv_variable_id" => $cv_id
 					),
 					__METHOD__
 				);
