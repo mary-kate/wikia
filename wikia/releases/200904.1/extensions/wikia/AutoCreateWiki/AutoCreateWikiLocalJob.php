@@ -25,10 +25,6 @@ $wgJobClasses[ "ACWLocal" ] = "AutoCreateWikiLocalJob";
  */
 include_once( $GLOBALS['IP'] . "/extensions/CheckUser/install.inc" );
 
-/**
- * include helper file for additional methods
- */
-include_once( $dir . "/AutoCreateWiki_helper.php" );
 
 class AutoCreateWikiLocalJob extends Job {
 
@@ -158,7 +154,7 @@ class AutoCreateWikiLocalJob extends Job {
 			/**
 			 * set apropriate staff member
 			 */
-			$wgUser = AutoCreateWiki::getStaffUserByLang( $wikiaLang );
+			$wgUser = Wikia::staffUserByLang( $wikiaLang );
 			$wgUser = ( $wgUser instanceof User ) ? $wgUser : User::newFromName( "Angela" );
 
 			$talkParams = array(
