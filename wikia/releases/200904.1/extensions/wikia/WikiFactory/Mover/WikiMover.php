@@ -311,9 +311,9 @@ class WikiMover {
 				#--- go ahead and dance, article doesn't exist\
 				switch( $page["data"]->page_namespace ) {
 					case NS_IMAGE:
-						$this->log( sprintf("Found image in DB -> %s copy to %s ", $aImages["source"], $aImages["target"] ) );
 						#--- get image dir
 						$aImages = $this->getImagePaths( $page["data"]->page_title, false );
+						$this->log( sprintf("Found image in DB -> %s copy to %s ", $aImages["source"], $aImages["target"] ) );
 						if ( !isset( $imageDirs[ $aImages["target"] ] ) ) {
 							wfMkdirParents(dirname($aImages["target"]));
 						}
@@ -355,9 +355,10 @@ class WikiMover {
 							));
 						}
 						else {
-							$this->log( sprintf("Found image (new) in DB -> %s copy to %s ", $aImages["source"], $aImages["target"] ) );
 							#--- get image dir
 							$aImages = $this->getImagePaths( $page["data"]->page_title, false );
+							$this->log( sprintf("Found image (new) in DB -> %s copy to %s ", $aImages["source"], $aImages["target"] ) );
+							#--- mkdir if needed
 							if ( !isset( $imageDirs[ $aImages["target"] ] ) ) {
 								wfMkdirParents(dirname($aImages["target"]));
 							}
