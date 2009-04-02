@@ -60,14 +60,11 @@ class AutoCreateWikiLocalJob extends Job {
 
 		wfProfileIn( __METHOD__ );
 
-		error_log ("AWC: run local job \n");
 		wfLoadExtensionMessages( "AutoCreateWiki" );
-		error_log ("AWC: after run local job \n");
 		$wgErrorLog = true;
 		/**
 		 * setup founder user
 		 */
-		error_log ("AWC: founder : " . $this->mParams[ "founder"] .  " \n");
 		if( $this->mParams[ "founder"] ) {
 			$this->mFounder = User::newFromId( $this->mParams[ "founder"] );
 			$this->mFounder->load();
@@ -79,13 +76,10 @@ class AutoCreateWikiLocalJob extends Job {
 				$this->mFounder->load();
 			}
 		}
-		error_log ("AWC: moveMainPage \n");
+
 		$this->moveMainPage();
-		error_log ("AWC: protectKeyPages \n");
 		$this->protectKeyPages();
-		error_log ("AWC: populateCheckUserTables \n");
 		$this->populateCheckUserTables();
-		error_log ("AWC: setWelcomeTalkPage \n");
 		$this->setWelcomeTalkPage();
 
 		wfProfileOut( __METHOD__ );
