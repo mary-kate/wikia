@@ -85,7 +85,6 @@ class LocalMaintenanceTask extends BatchTask {
 				$this->mFounder = User::newFromId( $this->mWikiData[ "founder"] );
 				$this->mFounder->load();
 				$this->setCentralPages();
-				$this->sendWelcomeMail();
 			}
 		}
 
@@ -319,80 +318,5 @@ class LocalMaintenanceTask extends BatchTask {
 
 		$this->addLog( "Creating and modifing pages on Central Wikia finished." );
 		return true;
-	}
-
-	/**
-	 * sendWelcomeMail
-	 *
-	 * sensd welcome email to founder (if founder has set email address)
-	 *
-	 * @author eloy@wikia-inc.com
-	 * @author adi@wikia-inc.com
-	 * @author moli@wikia-inc.com
-	 * @access private
-	 *
-	 * @return boolean status
-	 */
-	private function sendWelcomeMail() {
-		global $wgDevelEnvironment, $wgUser, $wgPasswordSender;
-
-		$oReceiver = $this->mFounder;
-		if ( !empty( $wgDevelEnvironment ) ) {
-			$oReceiver = $wgUser;
-		}
-
-		$sServer = "http://{$this->mWikiData["subdomain"]}." . "wikia.com";
-
-		/**
-		 * set apropriate staff member
-		 */
-		$oStaffUser = AutoCreateWiki::getStaffUserByLang( $this->mWikiData['language'] );
-		$oStaffUser = ( $oStaffUser instanceof User ) ? $oStaffUser : User::newFromName( "Angela" );
-
-		$sFrom = new MailAddress( $wgPasswordSender, "The Wikia Community Team" );
-		$sTo = $oReceiver->getEmail();
-
-		$aBodyParams = array (
-			0 => $sServer,
-			1 => $oReceiver->getName(),
-			2 => $oStaffUser->getRealName(),
-			3 => htmlspecialchars( $oStaffUser->getName() ),
-			4 => sprintf( "%s%s", $sServer, $oReceiver->getTalkPage()->getLocalURL() ),
-		);
-
-		$sBody = $sSubject = null;
-		if ( !empty( $this->mWikiData['language'] ) ) {
-			// custom lang translation
-			$sBody = wfMsgExt("createwiki_welcomebody",
-				array( 'language' => $this->mWikiData['language'] ),
-				$aBodyParams
-			);
-			$sSubject = wfMsgExt("createwiki_welcomesubject",
-				array( 'language' => $this->mWikiData['language'] ),
-				array( $this->mWikiData[ "title" ] )
-			);
-		}
-
-		/**
-		 * fallback to english
-		 */
-		if( empty( $sBody ) ) {
-			$sBody = wfMsg( "createwiki_welcomebody", $aBodyParams );
-		}
-		if( empty( $sSubject ) ) {
-			$sSubject = wfMsg( "createwiki_welcomesubject", array( $this->mWikiData[ 'title' ] ) );
-		}
-
-		if ( !empty($sTo) ) {
-			$bStatus = $oReceiver->sendMail( $sSubject, $sBody, $sFrom );
-			if ( $bStatus === true ) {
-				$this->addLog( "Mail to founder {$sTo} sent." );
-			}
-			else {
-				$this->addLog( "Mail to founder {$sTo} probably not sent. sendMail returned false." );
-			}
-		} else {
-			$this->addLog( "Founder email is not set. Welcome email is not sent" );
-		}
 	}
 }
