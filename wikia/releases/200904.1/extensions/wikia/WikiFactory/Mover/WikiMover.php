@@ -403,13 +403,17 @@ class WikiMover {
 
 		}
 
+		$this->log( "run moveImages() " );
 		$this->moveImages();
+		$this->log( "run moveUserGroups() " );
 		$this->moveUserGroups();
 
 		#--- and last cleaning
+		$this->log( "run SERVER_ID={$this->mTargetID} php $IP/maintenance/runJobs.php --conf {$wgWikiaLocalSettingsPath}" );
 		wfShellExec( "SERVER_ID={$this->mTargetID} php $IP/maintenance/runJobs.php --conf {$wgWikiaLocalSettingsPath}" );
 
 		#--- refresh links - related to rt#6189
+		$this->log( "run SERVER_ID={$this->mTargetID} php $IP/maintenance/refreshLinks.php --conf {$wgWikiaLocalSettingsPath}" );
 		wfShellExec( "SERVER_ID={$this->mTargetID} php $IP/maintenance/refreshLinks.php --conf {$wgWikiaLocalSettingsPath}" );
 
 		$this->log( sprintf("Total (mover): %F" . wfTime() - $startTime) );
