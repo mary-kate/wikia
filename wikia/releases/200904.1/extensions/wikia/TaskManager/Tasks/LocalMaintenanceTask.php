@@ -15,7 +15,7 @@
 /**
  * Generic Task, will run maintenance task for specified city_id
  */
-$wgExtensionMessagesFiles[ "LocalMaintenance" ] = dirname(__FILE__) . "/LocalMaintenanceTask/messages.i18n.php";
+
 class LocalMaintenanceTask extends BatchTask {
 
 	private $mParams, $mWikiId;
@@ -46,8 +46,9 @@ class LocalMaintenanceTask extends BatchTask {
 	 * @return boolean - status of operation
 	 */
 	public function execute( $params = null ) {
-		global $IP, $wgWikiaLocalSettingsPath, $wgWikiaAdminSettingsPath;
+		global $IP, $wgWikiaLocalSettingsPath, $wgWikiaAdminSettingsPath, $wgExtensionMessagesFiles;
 
+		$wgExtensionMessagesFiles[ "LocalMaintenance" ] = dirname(__FILE__) . "/LocalMaintenanceTask/messages.i18n.php";
 		wfLoadExtensionMessages( "LocalMaintenance" );
 
 		$this->mTaskID = $params->task_id;
@@ -377,13 +378,13 @@ class LocalMaintenanceTask extends BatchTask {
 		if ( !empty($sTo) ) {
 			$bStatus = $oReceiver->sendMail( $sSubject, $sBody, $sFrom );
 			if ( $bStatus === true ) {
-				$this->log( "Mail to founder {$sTo} sent." );
+				$this->addLog( "Mail to founder {$sTo} sent." );
 			}
 			else {
-				$this->log( "Mail to founder {$sTo} probably not sent. sendMail returned false." );
+				$this->addLog( "Mail to founder {$sTo} probably not sent. sendMail returned false." );
 			}
 		} else {
-			$this->log( "Founder email is not set. Welcome email is not sent" );
+			$this->addLog( "Founder email is not set. Welcome email is not sent" );
 		}
 	}
 }
