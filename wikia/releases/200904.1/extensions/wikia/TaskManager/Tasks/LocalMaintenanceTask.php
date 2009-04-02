@@ -74,6 +74,8 @@ class LocalMaintenanceTask extends BatchTask {
 
 			if( $type == "ACWLocal" ) {
 				$this->mWikiData = $this->mParams[ "data" ];
+				$this->mFounder = User::newFromId( $this->mWikiData[ "founder"] );
+				$this->mFounder->load();
 				$this->setCentralPages();
 				$this->sendWelcomeMail();
 			}
@@ -157,8 +159,6 @@ class LocalMaintenanceTask extends BatchTask {
 			return false;
 		}
 
-		$Founder = User::newFromId( $this->mWikiData[ "founder"] );
-		$Founder->load();
 
 		$oldUser = $wgUser;
 		/**
@@ -196,7 +196,7 @@ class LocalMaintenanceTask extends BatchTask {
 			$oTmpl->set_vars( array(
 				"data"          => $this->mWikiData,
 				"wikid"         => $this->mWikiId,
-				"founder"       => $Founder,
+				"founder"       => $this->mFounder,
 				"timestamp"     => $sTimeStamp = gmdate("j F, Y"),
 				"category"		=> $sCategory
 			));
