@@ -416,7 +416,7 @@ class WikiMover {
 		$this->log( "run SERVER_ID={$this->mTargetID} php $IP/maintenance/refreshLinks.php --conf {$wgWikiaLocalSettingsPath}" );
 		wfShellExec( "SERVER_ID={$this->mTargetID} php $IP/maintenance/refreshLinks.php --conf {$wgWikiaLocalSettingsPath}" );
 
-		$this->log( sprintf("Total (mover): %F" . wfTime() - $startTime) );
+		$this->log( sprintf("Total (mover): %F", wfTime() - $startTime) );
 
 		wfProfileOut( __METHOD__ );
 	}
