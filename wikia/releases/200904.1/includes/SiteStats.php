@@ -53,6 +53,7 @@ class SiteStats {
 
 			ob_start();
 			wfInitStats();
+			wfGetDB( DB_MASTER )->commit();
 			ob_end_clean();
 
 			$row = self::doLoad( wfGetDB( DB_MASTER ) );
