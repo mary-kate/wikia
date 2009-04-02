@@ -340,12 +340,12 @@ class AutoCreateWikiLocalJob extends Job {
 		global $wgUser, $wgPasswordSender;
 
 		$oReceiver = $this->mFounder;
-		$sServer = "http://{$this->mWikiData["subdomain"]}." . "wikia.com";
+		$sServer = sprintf("http://%s.wikia.com", $this->mParams["subdomain"] );
 
 		/**
 		 * set apropriate staff member
 		 */
-		$oStaffUser = Wikia::staffForLang( $this->mWikiData['language'] );
+		$oStaffUser = Wikia::staffForLang( $this->mParams[ "language" ] );
 		$oStaffUser = ( $oStaffUser instanceof User ) ? $oStaffUser : User::newFromName( "Angela" );
 
 		$sFrom = new MailAddress( $wgPasswordSender, "The Wikia Community Team" );
@@ -360,15 +360,15 @@ class AutoCreateWikiLocalJob extends Job {
 		);
 
 		$sBody = $sSubject = null;
-		if ( !empty( $this->mWikiData['language'] ) ) {
+		if ( !empty( $this->mParams['language'] ) ) {
 			// custom lang translation
 			$sBody = wfMsgExt("createwiki_welcomebody",
-				array( 'language' => $this->mWikiData['language'] ),
+				array( 'language' => $this->mParams['language'] ),
 				$aBodyParams
 			);
 			$sSubject = wfMsgExt("createwiki_welcomesubject",
-				array( 'language' => $this->mWikiData['language'] ),
-				array( $this->mWikiData[ "title" ] )
+				array( 'language' => $this->mParams['language'] ),
+				array( $this->mParams[ "title" ] )
 			);
 		}
 
@@ -379,12 +379,12 @@ class AutoCreateWikiLocalJob extends Job {
 			$sBody = wfMsg( "createwiki_welcomebody", $aBodyParams );
 		}
 		if( empty( $sSubject ) ) {
-			$sSubject = wfMsg( "createwiki_welcomesubject", array( $this->mWikiData[ 'title' ] ) );
+			$sSubject = wfMsg( "createwiki_welcomesubject", array( $this->mParams[ 'title' ] ) );
 		}
 
 		if ( !empty($sTo) ) {
-			$bStatus = $oReceiver->sendMail( $sSubject, $sBody, $sFrom );
-			if ( $bStatus === true ) {
+			$status = $oReceiver->sendMail( $sSubject, $sBody, $sFrom );
+			if ( $status === true ) {
 				Wikia::log( __METHOD__, "mail", "Mail to founder {$sTo} sent." );
 			}
 			else {
