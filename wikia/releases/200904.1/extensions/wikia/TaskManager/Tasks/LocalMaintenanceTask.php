@@ -354,23 +354,23 @@ class LocalMaintenanceTask extends BatchTask {
 		$sBody = $sSubject = null;
 		if ( !empty( $this->mWikiData['language'] ) ) {
 			// custom lang translation
-			$sBody = wfMsgExt("autocreatewiki-welcomebody",
+			$sBody = wfMsgExt("createwiki_welcomebody",
 				array( 'language' => $this->mWikiData['language'] ),
 				$aBodyParams
 			);
-			$sSubject = wfMsgExt("autocreatewiki-welcomesubject",
+			$sSubject = wfMsgExt("createwiki_welcomesubject",
 				array( 'language' => $this->mWikiData['language'] ),
 				array( $this->mWikiData[ "title" ] )
 			);
 		}
 
-		if ( is_null( $sBody ) ) {
-			// default lang (english)
+		/**
+		 * fallback to english
+		 */
+		if( empty( $sBody ) ) {
 			$sBody = wfMsg( "createwiki_welcomebody", $aBodyParams );
 		}
-
-		if ( $sSubject == null ) {
-			// default lang (english)
+		if( empty( $sSubject ) ) {
 			$sSubject = wfMsg( "createwiki_welcomesubject", array( $this->mWikiData[ 'title' ] ) );
 		}
 
