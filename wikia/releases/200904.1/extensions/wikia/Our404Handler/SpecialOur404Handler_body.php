@@ -228,7 +228,11 @@ class Our404HandlerPage extends UnlistedSpecialPage {
 		 * this article
 		 */
 		if( $uri === null ) {
-			$uri = substr( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ), 1 );
+			$uri = $_SERVER['REQUEST_URI'];
+			if ( !preg_match( '!^https?://!', $uri ) ) {
+				$uri = 'http://unused' . $uri;
+			}
+			$uri = substr( parse_url( $uri, PHP_URL_PATH ), 1 );
 		}
 		$title = $wgContLang->ucfirst( $uri );
 		$namespace = NS_MAIN;
