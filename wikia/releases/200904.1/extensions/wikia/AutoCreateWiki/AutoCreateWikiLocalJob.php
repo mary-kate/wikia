@@ -75,6 +75,7 @@ class AutoCreateWikiLocalJob extends Job {
 		$this->protectKeyPages();
 		$this->populateCheckUserTables();
 		$this->setWelcomeTalkPage();
+		$this->sendWelcomeMail();
 
 		wfProfileOut( __METHOD__ );
 
@@ -154,7 +155,7 @@ class AutoCreateWikiLocalJob extends Job {
 			/**
 			 * set apropriate staff member
 			 */
-			$wgUser = Wikia::staffUserByLang( $wikiaLang );
+			$wgUser = Wikia::staffForLang( $wikiaLang );
 			$wgUser = ( $wgUser instanceof User ) ? $wgUser : User::newFromName( "Angela" );
 
 			$talkParams = array(
@@ -169,14 +170,14 @@ class AutoCreateWikiLocalJob extends Job {
 				/**
 				 * custom lang translation
 				 */
-				$talkBody = wfMsgExt( "autocreatewiki-welcometalk", array( 'language' => $wikiaLang ), $talkParams );
+				$talkBody = wfMsgExt( "createwiki_welcometalk", array( 'language' => $wikiaLang ), $talkParams );
 			}
 
 			if( ! $talkBody ) {
 				/**
 				 * wfMsgExt should always return message, but just in case...
 				 */
-				$talkBody = wfMsg( "autocreatewiki-welcometalk", $talkParams );
+				$talkBody = wfMsg( "createwiki_welcometalk", $talkParams );
 			}
 
 			/**
@@ -318,9 +319,79 @@ class AutoCreateWikiLocalJob extends Job {
 	 * tables are created in first step. there we only fill them
 	 */
 	private function populateCheckUserTables() {
-
 		$dbw = wfGetDB( DB_MASTER );
 		create_cu_changes( $dbw, true );
 		create_cu_log( $dbw );
+	}
+
+	/**
+	 * sendWelcomeMail
+	 *
+	 * sensd welcome email to founder (if founder has set email address)
+	 *
+	 * @author eloy@wikia-inc.com
+	 * @author adi@wikia-inc.com
+	 * @author moli@wikia-inc.com
+	 * @access private
+	 *
+	 * @return boolean status
+	 */
+	private function sendWelcomeMail() {
+		global $wgUser, $wgPasswordSender;
+
+		$oReceiver = $this->mFounder;
+		$sServer = "http://{$this->mWikiData["subdomain"]}." . "wikia.com";
+
+		/**
+		 * set apropriate staff member
+		 */
+		$oStaffUser = Wikia::staffForLang( $this->mWikiData['language'] );
+		$oStaffUser = ( $oStaffUser instanceof User ) ? $oStaffUser : User::newFromName( "Angela" );
+
+		$sFrom = new MailAddress( $wgPasswordSender, "The Wikia Community Team" );
+		$sTo = $oReceiver->getEmail();
+
+		$aBodyParams = array (
+			0 => $sServer,
+			1 => $oReceiver->getName(),
+			2 => $oStaffUser->getRealName(),
+			3 => htmlspecialchars( $oStaffUser->getName() ),
+			4 => sprintf( "%s%s", $sServer, $oReceiver->getTalkPage()->getLocalURL() ),
+		);
+
+		$sBody = $sSubject = null;
+		if ( !empty( $this->mWikiData['language'] ) ) {
+			// custom lang translation
+			$sBody = wfMsgExt("createwiki_welcomebody",
+				array( 'language' => $this->mWikiData['language'] ),
+				$aBodyParams
+			);
+			$sSubject = wfMsgExt("createwiki_welcomesubject",
+				array( 'language' => $this->mWikiData['language'] ),
+				array( $this->mWikiData[ "title" ] )
+			);
+		}
+
+		/**
+		 * fallback to english
+		 */
+		if( empty( $sBody ) ) {
+			$sBody = wfMsg( "createwiki_welcomebody", $aBodyParams );
+		}
+		if( empty( $sSubject ) ) {
+			$sSubject = wfMsg( "createwiki_welcomesubject", array( $this->mWikiData[ 'title' ] ) );
+		}
+
+		if ( !empty($sTo) ) {
+			$bStatus = $oReceiver->sendMail( $sSubject, $sBody, $sFrom );
+			if ( $bStatus === true ) {
+				$this->addLog( "Mail to founder {$sTo} sent." );
+			}
+			else {
+				$this->addLog( "Mail to founder {$sTo} probably not sent. sendMail returned false." );
+			}
+		} else {
+			$this->addLog( "Founder email is not set. Welcome email is not sent" );
+		}
 	}
 }
