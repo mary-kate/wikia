@@ -36,6 +36,8 @@ class WikiMover {
 	public $mInternalLogger = array();
 	public $mTargetTextFields = array();       #--- contains fields from "text" table
 
+	public $mRunJobs = false;                  #--- set true to run jobs
+	public $mRefreshLinks = false;             #--- set true to refresh articles links after move
 
 	/**
 	 * almost empty constructor
@@ -190,6 +192,25 @@ class WikiMover {
 	 */
 	public function setTargetUploadDirectory( $path ) {
 		$this->mTargetUploadDirectory = $path;
+	}
+
+
+	/**
+	 * setRunJobs
+	 *
+	 * @param Boolean	$param 
+	 */
+	public function setRunJobs( $value = true ) {
+		$this->mRunJobs = $value;
+	}
+
+	/**
+	 * setRunJobs
+	 *
+	 * @param Boolean	$param 
+	 */
+	public function setRefreshLinks( $value = true ) {
+		$this->mRefreshLinks = $value;
 	}
 
 	/**
@@ -409,12 +430,16 @@ class WikiMover {
 		$this->moveUserGroups();
 
 		#--- and last cleaning
-		$this->log( "run SERVER_ID={$this->mTargetID} php $IP/maintenance/runJobs.php --conf {$wgWikiaLocalSettingsPath}" );
-		wfShellExec( "SERVER_ID={$this->mTargetID} php $IP/maintenance/runJobs.php --conf {$wgWikiaLocalSettingsPath}" );
+		if ( $this->mRunJobs === true ) {
+			wfShellExec( "SERVER_ID={$this->mTargetID} php $IP/maintenance/runJobs.php --conf {$wgWikiaLocalSettingsPath}" );
+			$this->log( "run SERVER_ID={$this->mTargetID} php $IP/maintenance/runJobs.php --conf {$wgWikiaLocalSettingsPath}" );
+		}
 
 		#--- refresh links - related to rt#6189
-		$this->log( "run SERVER_ID={$this->mTargetID} php $IP/maintenance/refreshLinks.php --conf {$wgWikiaLocalSettingsPath}" );
-		wfShellExec( "SERVER_ID={$this->mTargetID} php $IP/maintenance/refreshLinks.php --conf {$wgWikiaLocalSettingsPath}" );
+		if ( $this->mRefreshLinks === true ) {
+			wfShellExec( "SERVER_ID={$this->mTargetID} php $IP/maintenance/refreshLinks.php --conf {$wgWikiaLocalSettingsPath}" );
+			$this->log( "run SERVER_ID={$this->mTargetID} php $IP/maintenance/refreshLinks.php --conf {$wgWikiaLocalSettingsPath}" );
+		}
 
 		$this->log( sprintf("Total (mover): %F", wfTime() - $startTime) );
 
