@@ -236,6 +236,7 @@ class WikiMover {
 		/**
 		 * get all pages
 		 */
+		$skipNamespaces = array( "NS_MEDIAWIKI", "NS_MEDIAWIKI_TALK" );
 		$aSourcePages = array();
 		$oRes = $dbr->select(
 			array( $this->sourceTable( "page" )),
