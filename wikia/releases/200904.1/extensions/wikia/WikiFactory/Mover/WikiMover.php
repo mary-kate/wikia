@@ -239,7 +239,7 @@ class WikiMover {
 		/**
 		 * get all pages for source DB
 		 */
-		$skipNamespaces = array( "NS_MEDIAWIKI", "NS_MEDIAWIKI_TALK" );
+		$skipNamespaces = array( NS_MEDIAWIKI, NS_MEDIAWIKI_TALK );
 		$aSourcePages = array();
 		$oRes = $dbr->select(
 			array( 
@@ -272,12 +272,11 @@ class WikiMover {
 		/**
 		 * get all pages for target DB
 		 */
-		$skipNamespaces = array( "NS_MEDIAWIKI", "NS_MEDIAWIKI_TALK" );
 		$aTargetPages = array();
 		$oRes = $dbr->select(
 			array( $this->targetTable( "page" ) ),
 			array( "*" ),
-			array( "page_namespace not in ('".NS_MEDIAWIKI."', '".NS_MEDIAWIKI_TALK."')" ),
+			array( "page_namespace not in (" . implode(",", $skipNamespaces) . ")" ),
 			__METHOD__
 		);
 
