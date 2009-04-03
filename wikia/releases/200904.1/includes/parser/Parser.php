@@ -1758,7 +1758,8 @@ class Parser
 				wfProfileOut( "$fname-interwiki" );
 
 				if($ns == NS_VIDEO) {
-					if(!empty($wgEnableVideoToolExt)) {
+					// fix fatal
+					if(!empty($wgEnableVideoToolExt) && (empty($wgEnableNYCSocialTools) || empty($wgEnableVideoNY))) {
 						wfProfileIn("$fname-video");
 
 						// Wysiwyg: mark videos
