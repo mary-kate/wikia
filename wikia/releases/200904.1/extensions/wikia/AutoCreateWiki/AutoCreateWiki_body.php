@@ -119,7 +119,7 @@ class AutoCreateWikiPage extends SpecialPage {
 
 		$this->mNbrCreated = $this->countCreatedWikis();
 
-		if ( $this->mNbrCreated >= self::DAILY_LIMIT ) {
+		if ( !in_array('staff', $wgUser->getGroups()) && ($this->mNbrCreated >= self::DAILY_LIMIT) ) {
 			$wgOut->addHTML(wfMsg('autocreatewiki-limit-day'), $this->mNbrCreated);
 			return;
 		}
@@ -140,7 +140,7 @@ class AutoCreateWikiPage extends SpecialPage {
 			}
 			if ( isset( $_SESSION['mAllowToCreate'] ) && ( $_SESSION['mAllowToCreate'] >= wfTimestamp() ) ) {
 				$this->mNbrUserCreated = $this->countCreatedWikisByUser();
-				if ( $this->mNbrUserCreated >= self::DAILY_USER_LIMIT ) {
+				if ( !in_array('staff', $wgUser->getGroups()) && ($this->mNbrUserCreated >= self::DAILY_USER_LIMIT) ) {
 					$wgOut->addHTML(wfMsg('autocreatewiki-limit-creation'), $this->mNbrUserCreated);
 					return;
 				}
@@ -165,7 +165,7 @@ class AutoCreateWikiPage extends SpecialPage {
 			if ( isset( $_SESSION['mAllowToCreate'] ) && ( $_SESSION['mAllowToCreate'] >= wfTimestamp() ) ) {
 				#--- Limit of user creation
 				$this->mNbrUserCreated = $this->countCreatedWikisByUser();
-				if ( $this->mNbrUserCreated >= self::DAILY_USER_LIMIT ) {
+				if ( !in_array('staff', $wgUser->getGroups()) && ($this->mNbrUserCreated >= self::DAILY_USER_LIMIT) ) {
 					$wgOut->addHTML(wfMsg('autocreatewiki-limit-creation'), $this->mNbrUserCreated);
 					return;
 				}
