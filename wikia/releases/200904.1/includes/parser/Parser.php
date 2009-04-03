@@ -1759,6 +1759,7 @@ class Parser
 
 				if($ns == NS_VIDEO) {
 					// fix fatal
+					global $wgEnableNYCSocialTools, $wgEnableVideoNY;
 					if(!empty($wgEnableVideoToolExt) && (empty($wgEnableNYCSocialTools) || empty($wgEnableVideoNY))) {
 						wfProfileIn("$fname-video");
 
