@@ -245,7 +245,7 @@ class WikiaMiniUpload {
 		if($name !== NULL) {
 			if($name == '') {
 				header('X-screen-type: error');
-				return 'You need to specify file name first!';
+				return WfMsg( 'wmu-warn3' );
 			} else {
 				$name = preg_replace("/[^".Title::legalChars()."]|:/", '-', $name);
 				// did they give no extension at all when they changed the name?
