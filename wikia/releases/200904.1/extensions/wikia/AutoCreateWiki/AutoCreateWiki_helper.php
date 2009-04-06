@@ -36,11 +36,23 @@ class AutoCreateWiki {
 		$dbr = wfGetDB( DB_SLAVE );
 		$oRow = $dbr->selectRow(
 			wfSharedTable("city_domains"),
-			array( "count(*) as count" ),
+			array( "city_id" ),
 			array( "city_domain" => $sDomain ),
 			__METHOD__
 		);
-		return $oRow->count;
+		
+		$exists = 0;
+		if (isset($oRow->city_id)) {
+			$city_id = $oRow->city_id;
+			$oRow = $dbr->selectRow(
+				wfSharedTable("city_list"),
+				array( "count(*) as count" ),
+				array( "city_id" => $city_id, "city_public" => 1 ),
+				__METHOD__
+			);
+			$exists = (isset($oRow->count) && $oRow->count > 0);
+		}
+		return $exists;
 	}
 
 	/**
@@ -101,8 +113,7 @@ class AutoCreateWiki {
 					array ( "*" ),
 					array (
 						$condition,
-						"{$city_domains}.city_id = {$city_list}.city_id",
-						"{$city_list}.city_public" => 1
+						"{$city_domains}.city_id = {$city_list}.city_id"
 					),
 					__METHOD__,
 					array( "limit" => 20 )
@@ -111,8 +122,12 @@ class AutoCreateWiki {
 				while ( $oRow = $dbr->fetchObject( $oRes ) ) {
 					if ( preg_match( "/^www\./", strtolower( $oRow->city_domain ) ) )
 						continue;
-					$unique[ strtolower( $oRow->city_domain ) ] = 1;
-					$domains["exact"][] = $oRow;
+					if ( $oRow->city_public == 1 ) {
+						$unique[ strtolower( $oRow->city_domain ) ] = 1;
+						$domains["exact"][] = $oRow;
+					} else {
+						$domains["closed"][] = $oRow;
+					}
 				}
 				$dbr->freeResult($oRes);
 
@@ -123,8 +138,7 @@ class AutoCreateWiki {
 					array ( "*" ),
 					array (
 						$conditionSimilar,
-						"{$city_domains}.city_id = {$city_list}.city_id",
-						"{$city_list}.city_public" => 1
+						"{$city_domains}.city_id = {$city_list}.city_id"
 					),
 					__METHOD__,
 					array( "limit" => 20 )
@@ -133,10 +147,14 @@ class AutoCreateWiki {
 				while ( $oRow = $dbr->fetchObject( $oRes ) ) {
 					if ( preg_match( "/^www\./", strtolower( $oRow->city_domain ) ) )
 						continue;
-					if ( array_key_exists( strtolower($oRow->city_domain), $unique)
-						&& $unique[ strtolower($oRow->city_domain) ] == 1 )
-						continue;
-					$domains["like"][] = $oRow;
+					if ( $oRow->city_public == 1 ) {
+						if ( array_key_exists( strtolower($oRow->city_domain), $unique)
+							&& $unique[ strtolower($oRow->city_domain) ] == 1 )
+							continue;
+						$domains["like"][] = $oRow;
+					} else {
+						$domains["closed"][] = $oRow;
+					}
 				}
 				$dbr->freeResult($oRes);
 			}
