@@ -28,7 +28,7 @@ function moveToExternal( $cluster, $limit ) {
 
 	$fname = 'moveToExternal';
 	$dbw = wfGetDB( DB_MASTER );
-	$dbr = wfGetDB( DB_SLAVE );
+	$dbr = wfGetDB( DB_SLAVE, "dpl" );
 
 	echo "Moving revisions from {$wgDBname}\n";
 
