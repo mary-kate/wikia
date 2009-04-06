@@ -24,13 +24,13 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 
 
 function moveToExternal( $cluster, $limit ) {
-	global $wgDBName;
+	global $wgDBname;
 
 	$fname = 'moveToExternal';
 	$dbw = wfGetDB( DB_MASTER );
 	$dbr = wfGetDB( DB_SLAVE );
 
-	echo "Moving revisions from {$wgDBName}\n";
+	echo "Moving revisions from {$wgDBname}\n";
 
 	$ext = new ExternalStoreDB;
 	$numMoved = 0;
