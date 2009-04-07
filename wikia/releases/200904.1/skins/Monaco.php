@@ -312,6 +312,7 @@ class MonacoSidebar {
 $wgAdCalled = array();
 
 require_once dirname(__FILE__) . "/../extensions/wikia/AnalyticsEngine/AnalyticsEngine.php";
+require_once dirname(__FILE__) . "/../extensions/wikia/AdsenseForSearch/AdsenseForSearch.php";
 
 class SkinMonaco extends SkinTemplate {
 
@@ -979,8 +980,13 @@ EOS;
 		$css[] = array('url' => $wgStylePath.'/monaco/css/monaco_ie7.css?'.$wgStyleVersion, 'cond' => 'if IE 7');
 		$css[] = array('url' => $wgStylePath.'/monaco/css/monaco_ie8.css?'.$wgStyleVersion, 'cond' => 'if IE 8');
 
-		$css[] = array('url' => $wgStylePath.'/common/commonPrint.css?'.$wgStyleVersion, 'param' => empty($tpl->data['printable']) ? 'media="print" ' : '');
 		$css[] = array('url' => $wgStylePath.'/monaco/css/print.css?'.$wgStyleVersion, 'param' => empty($tpl->data['printable']) ? 'media="print" ' : '');
+
+		// RTL support
+		if ($wgContLang->isRTL()) {
+			$css[] = array('url' => $wgStylePath.'/monaco/rtl.css?'.$wgStyleVersion);
+		}
+
 		// CSS - end
 
 		// CSS style - begin
@@ -1319,6 +1325,10 @@ class MonacoTemplate extends QuickTemplate {
 		<style type="text/css"><?= $cssstyle['content'] ?></style>
 <?php
 	}
+
+	echo "\t\t";
+	$this->html('csslinks');
+
 	if($wgRequest->getVal('action') != '' || $wgTitle->getNamespace() == NS_SPECIAL) {
 		echo $wgUser->isLoggedIn() ? GetReferences("monaco_loggedin_js") : GetReferences("monaco_non_loggedin_js");
 		foreach($this->data['references']['js'] as $script) {
@@ -1359,7 +1369,7 @@ class MonacoTemplate extends QuickTemplate {
 ?>
 
 	<body<?php if($this->data['body_onload'    ]) { ?> onload="<?php     $this->text('body_onload')     ?>"<?php } ?>
- class="mediawiki <?php $this->text('nsclass') ?> <?php $this->text('dir') ?> <?php $this->text('pageclass') ?><?php if(!empty($this->data['printable']) ) { ?> printable<?php } ?><?php if (!$wgUser->isLoggedIn()) { ?> loggedout<?php } ?> color2 wikiaSkinMonaco<?=$isMainpage?> <?= $body_css_action ?>" id="body">
+ class="mediawiki <?php $this->text('dir') ?> <?php $this->text('pageclass') ?><?php if(!empty($this->data['printable']) ) { ?> printable<?php } ?><?php if (!$wgUser->isLoggedIn()) { ?> loggedout<?php } ?> color2 wikiaSkinMonaco<?=$isMainpage?> <?= $body_css_action ?>" id="body">
 
  <?php
    if(!empty($skin->timemarker)) {
@@ -1651,6 +1661,14 @@ if ($wgOut->isArticle()){
 						echo $topAdCode;
 					}
 					?>
+					<?
+					// Adsense for search
+					global $wgAFSEnabled;
+					if ($wgAFSEnabled && $wgTitle->getLocalURL() == $this->data['searchaction'] && !$wgUser->isLoggedIn() ) {
+						renderAdsenseForSearch('w2n8', '2226605464');
+					}
+					?>
+
 					<!-- start content -->
 					<?php
 					// Display content
@@ -1742,7 +1760,7 @@ if(!$custom_article_footer && $displayArticleFooter) {
 	try { $oApi->execute(); } catch (Exception $e) {};
 	$aResult =& $oApi->GetResultData();
 
-	if(count($aResult['query']['wkvoteart']) > 0) {
+	if( !empty( $aResult['query']['wkvoteart'] ) ) {
 		if(!empty($aResult['query']['wkvoteart'][$this->data['articleid']]['uservote'])) {
 			$voted = true;
 		} else {
@@ -1851,6 +1869,9 @@ if (array_key_exists("TOP_RIGHT_BOXAD", AdEngine::getInstance()->getPlaceholders
 <?php		wfProfileIn( __METHOD__ . '-monacofooter'); ?>
 		<div id="monaco_footer" class="reset">
 
+<?php
+if ( $wgRequest->getVal('action') != 'edit' ) {
+?>
 		<div id="spotlight_footer">
 		<table>
 		<tr>
@@ -1866,8 +1887,9 @@ if (array_key_exists("TOP_RIGHT_BOXAD", AdEngine::getInstance()->getPlaceholders
 		</tr>
 		</table>
 		</div>
-
 <?php
+}
+
 	// macbre: BEGIN
 	//
 	global $wgCityId;
