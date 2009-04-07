@@ -40,6 +40,10 @@ class VideoPage extends Article {
 		parent::view();
 	}
 
+	function delete() {
+		parent::delete();	
+	}
+
 	// 
 	function view() {
 		global $wgOut, $wgUser, $wgRequest;
