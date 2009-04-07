@@ -42,6 +42,13 @@ class VideoPage extends Article {
 
 	function delete() {
 		parent::delete();	
+		$title = $this->mTitle;
+//		print_pre( $title );
+		if ( $title ) {
+			// todo Cache update... cater for 'special' title in this case, in imagelinks
+			$update = new HTMLCacheUpdate( $title, 'imagelinks' );
+			$update->doUpdate();
+		}
 	}
 
 	// 
