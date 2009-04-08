@@ -43,10 +43,8 @@ class VideoPage extends Article {
 	function delete() {
 		parent::delete();	
 		$title = $this->mTitle;
-//		print_pre( $title );
 		if ( $title ) {
-			// todo Cache update... cater for 'special' title in this case, in imagelinks
-			$update = new HTMLCacheUpdate( $title, 'imagelinks' );
+			$update = new VideoHTMLCacheUpdate( $title, 'imagelinks' );
 			$update->doUpdate();
 		}
 	}
@@ -1020,3 +1018,25 @@ class VideoHistoryList {
                 return "</table>\n";
         }
 }
+
+class VideoHTMLCacheUpdate extends HTMLCacheUpdate {
+
+	function getToCondition() {
+		$prefix = $this->getPrefix();
+		switch ( $this->mTable ) {
+			case 'pagelinks':
+			case 'templatelinks':
+			case 'redirect':
+				return array(
+						"{$prefix}_namespace" => $this->mTitle->getNamespace(),
+						"{$prefix}_title" => $this->mTitle->getDBkey()
+					    );
+			case 'imagelinks':
+				return array( 'il_to' => ':' . $this->mTitle->getDBkey() );
+			case 'categorylinks':
+				return array( 'cl_to' => $this->mTitle->getDBkey() );
+		}
+		throw new MWException( 'Invalid table type in ' . __CLASS__ );
+	}
+}
+
