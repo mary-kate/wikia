@@ -74,6 +74,7 @@ class AutoCreateWikiLocalJob extends Job {
 				$this->mFounder->load();
 			}
 		}
+		$wgUser = User::newFromName( "CreateWiki script" );
 
 		$this->moveMainPage();
 		$this->protectKeyPages();
@@ -205,7 +206,7 @@ class AutoCreateWikiLocalJob extends Job {
 	 * move main page to SEO-friendly name
 	 */
 	private function moveMainPage() {
-		global $wgSitename;
+		global $wgSitename, $wgUser;
 
 		$source = wfMsgForContent('Mainpage');
 		$target = $wgSitename;
@@ -282,8 +283,9 @@ class AutoCreateWikiLocalJob extends Job {
 		/**
 		 * define restriction level and duration
 		 */
-		$restrictions['edit'] = 'sysop';
-		$restrictions['move'] = 'sysop';
+		$restrictions[ "edit"   ] = 'sysop';
+		$restrictions[ "move"   ] = 'sysop';
+		$restrictions[ "create" ] = 'sysop';
 		$titleRestrictions = 'sysop';
 		$expiry = Block::infinity();
 
