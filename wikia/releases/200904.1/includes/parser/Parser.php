@@ -3369,11 +3369,13 @@ class Parser
 		if (!$text)
 			return wfMsg('scarytranscludefailed', $url);
 
-		$dbw = wfGetDB(DB_MASTER);
-		$dbw->replace('transcache', array('tc_url'), array(
-			'tc_url' => $url,
-			'tc_time' => time(),
-			'tc_contents' => $text));
+		if( !wfReadOnly() ) {
+			$dbw = wfGetDB(DB_MASTER);
+			$dbw->replace('transcache', array('tc_url'), array(
+				'tc_url' => $url,
+				'tc_time' => time(),
+				'tc_contents' => $text));
+		}
 		return $text;
 	}
 
