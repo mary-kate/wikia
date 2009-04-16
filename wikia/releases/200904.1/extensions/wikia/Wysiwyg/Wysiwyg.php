@@ -285,7 +285,7 @@ function Wysiwyg_NotifySaveComplete(&$article, &$user, &$text, &$summary, &$mino
 		$diffEngine = new DifferenceEngine($article->getTitle(), $revision->mParentId, $revision->mId);
 		$diffText = $diffEngine->getDiffBody();
 		$diffText = str_replace("\n", "", $diffText);
-		$out = "<a href=\"{$url}\">link</a><table class='diff'><col class='diff-marker' /><col class='diff-content' /><col class='diff-marker' /><col class='diff-content' /><tbody>{$diffText}</tbody></table>";
+		$out = "User agent: ".$_SERVER['HTTP_USER_AGENT']."<br/><a href=\"{$url}\">link</a><table class='diff'><col class='diff-marker' /><col class='diff-content' /><col class='diff-marker' /><col class='diff-content' /><tbody>{$diffText}</tbody></table>";
 
 		$data = array('title' => $wgSitename, 'description' => $out);
 		$ch = curl_init();
