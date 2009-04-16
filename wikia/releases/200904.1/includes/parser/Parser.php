@@ -3365,6 +3365,7 @@ class Parser
 			}
 		}
 
+		error_log( 'scarytransclude cache miss' );
 		$text = Http::get($url);
 		if (!$text)
 			return wfMsg('scarytranscludefailed', $url);
