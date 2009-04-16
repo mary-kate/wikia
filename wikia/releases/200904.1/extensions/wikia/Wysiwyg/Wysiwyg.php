@@ -457,6 +457,7 @@ function Wysiwyg_WikiTextToHtml($wikitext, $articleId = -1, $encode = false) {
 	$html = str_replace("\n", "<!--EOL1-->\n", $html);
 
 	$html = preg_replace_callback("/<li>(\s*)/", create_function('$matches','return "<li space_after=\"".$matches[1]."\">";'), $html);
+	$html = preg_replace_callback("/<h([1-6][^>]*)>(\s*)/", create_function('$matches','return "<h".$matches[1]." space_after=\"".$matches[2]."\">";'), $html);
 
 	wfDebug("Wysiwyg_WikiTextToHtml html: {$html}\n");
 
