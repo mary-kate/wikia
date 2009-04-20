@@ -3,7 +3,15 @@ if(!defined('MEDIAWIKI')) {
 	exit(1);
 }
 
+//Avoid unstubbing $wgParser on setHook() too early on modern (1.12+) MW versions, as per r35980 
+if ( defined( 'MW_SUPPORTS_PARSERFIRSTCALLINIT' ) ) {
+	$wgHooks['ParserFirstCallInit'][] = 'WikiaVideo_initParserHook';
+} else {
+	$wgExtensionFunctions[] = 'WikiaVideo_initParserHook';
+}
+
 $wgExtensionFunctions[] = 'WikiaVideo_init';
+
 $wgHooks['ParserBeforeStrip'][] = 'WikiaVideoParserBeforeStrip';
 $wgHooks['SpecialNewImages::beforeQuery'][] = 'WikiaVideoNewImagesBeforeQuery';
 $wgHooks['SpecialWhatlinkshere::beforeImageQuery'][] = 'WikiaVideoWhatlinkshereBeforeQuery';
@@ -48,9 +56,23 @@ function WikiaVideoPreRenderVideoGallery( $matches ) {
 }
 
 function WikiaVideo_init() {
-	global $wgExtraNamespaces, $wgAutoloadClasses, $wgParser;
-	$wgExtraNamespaces[NS_VIDEO] = 'Video';
+	global $wgExtraNamespaces, $wgNamespaceAliases, $wgAutoloadClasses, $wgLanguageCode;
+
+	switch ( $wgLanguageCode ) {
+		case 'pl':
+			$wgExtraNamespaces[NS_VIDEO] = 'Video';
+			$wgExtraNamespaces[NS_VIDEO + 1] = 'Dyskusja_Video';
+			$wgNamespaceAliases['Video_talk'] = NS_VIDEO + 1;
+			break;
+		default:
+			$wgExtraNamespaces[NS_VIDEO] = 'Video';
+			$wgExtraNamespaces[NS_VIDEO + 1] = 'Video_talk';
+	}
 	$wgAutoloadClasses['VideoPage'] = dirname(__FILE__). '/VideoPage.php';
+}
+
+function WikiaVideo_initParserHook() {
+	global $wgParser;
 	$wgParser->setHook('videogallery', 'WikiaVideo_renderVideoGallery');
 	return true;
 }
@@ -61,7 +83,7 @@ function WikiaVideo_renderVideoGallery($input, $args, $parser) {
 
 	global $wgHooks;
 	wfLoadExtensionMessages('VideoEmbedTool');
-	$wgHooks['ExtendJSGlobalVars'][] = 'VETSetupVars';
+	$wgHooks['MakeGlobalVariablesScript'][] = 'VETSetupVars';
 	
 	$lines = explode("\n", $input);
 	foreach($lines as $line) {
@@ -128,7 +150,7 @@ function WikiaVideo_renderVideoGallery($input, $args, $parser) {
 			if( ( !$wgWikiaVETLoaded ) && get_class( $wgUser->getSkin() ) == 'SkinMonaco' ) {
 				global $wgStylePath, $wgOut, $wgExtensionsPath, $wgStyleVersion, $wgUser, $wgHooks;			
 				wfLoadExtensionMessages('VideoEmbedTool');
-				$wgHooks['ExtendJSGlobalVars'][] = 'VETSetupVars';
+				$wgHooks['MakeGlobalVariablesScript'][] = 'VETSetupVars';
 				$wgWikiaVETLoaded = true;
 			}
 		}
@@ -168,7 +190,7 @@ function WikiaVideo_makeVideo($title, $options, $sk, $wikitext = '') {
 	if( 'Placeholder' == $title->getText() ) {
 		// generate a single empty cell with a button
 		global $wgExtensionMessagesFiles;
-		$wgExtensionMessagesFiles['WikiaVideo'] = dirname(__FILE__).'/WikiaVideo.i18n.php';		
+		$wgExtensionMessagesFiles['WikiaVideo'] = dirname(__FILE__).'/WikiaVideo.i18n.php';
 		wfLoadExtensionMessages( 'WikiaVideo' );
 		$function = ''; // todo fill it up
 		$out = '<div class="gallerybox" style="width: 335px;"><div class="thumb" style="padding: 13px 0; width: 330px;"><div style="margin-left: auto; margin-right: auto; width: 300px; height: 250px;">';
