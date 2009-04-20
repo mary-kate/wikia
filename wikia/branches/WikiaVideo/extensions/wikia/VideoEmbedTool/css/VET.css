@@ -352,6 +352,16 @@ VideoEmbedOptionsTable img {
 	background: #fff;
 }
 
+#VideoReplaceLink {
+	font-size: 0.9em;
+	margin-top: 30px;
+	width: 400px;
+}
+
+#VideoReplaceLink p {
+	line-height: 1.5em;
+}
+
 .vetnone {
 	float: none;
 	clear: none;
