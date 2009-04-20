@@ -1,0 +1,50 @@
+#siteNotice,
+.firstHeading,
+#siteSub,
+#contentSub,
+#mw-anon-edit-warning,
+.usermessage,
+.previewnote,
+#user_masthead,
+.mediawiki_longpagewarning,
+#editingTipsToggleDiv {
+	display: none !important;
+}
+
+#editform {
+	padding-top: 0px;
+}
+
+#article, #content {
+	padding: 2px !important;
+}
+
+#csMainContainer {
+	border-top: 0 !important;
+}
+
+#edit_enhancements_toolbar {
+	margin: 0 !important;
+}
+
+#page_bar, .articleBar {
+	display: none;
+}
+
+#new_edit_page_preview_notice {
+	background-color: #c00;
+	color: #fff;
+	margin: 2px 1px -2px 1px;
+	padding: 8px;
+	text-align: center;
+	font-weight: bold;
+	font-size: 1.1em;
+}
+
+#new_edit_page_preview_title {
+	clear: both;
+}
+
+#wikiPreview {
+	padding: 0 10px;
+}
