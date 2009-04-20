@@ -90,7 +90,69 @@ class VideoPage extends Article {
 	}
 
 	function doDBInserts() {
+		global $wgUser;
 
+		$dbw = wfGetDB( DB_MASTER );
+		$concat = $dbw->buildConcat( array( "img_sha1", '.swf' ) ); // todo check out
+		$encTimestamp = $dbw->addQuotes( $dbw->timestamp() );
+		$encUserId = $dbw->addQuotes( $wgUser->getId() );
+		$encReason = $dbw->addQuotes( $this->reason );
+		$encGroup = $dbw->addQuotes( 'deleted' );
+		// main rev
+		$where = array( 'img_name' => self::getNameFromTitle( $this->mTitle ) );
+
+				$dbw->insertSelect( 'filearchive', 'image',
+					array(
+						'fa_storage_group' => $encGroup,
+						'fa_storage_key'   => "CASE WHEN img_sha1='' THEN '' ELSE $concat END",
+						'fa_deleted_user'      => $encUserId,
+						'fa_deleted_timestamp' => $encTimestamp,
+						'fa_deleted_reason'    => $encReason,
+						'fa_deleted'               => 1, //todo check
+
+						'fa_name'         => 'img_name',
+						'fa_archive_name' => 'NULL',
+						'fa_size'         => 'img_size',
+						'fa_width'        => 'img_width',
+						'fa_height'       => 'img_height',
+						'fa_metadata'     => 'img_metadata',
+						'fa_bits'         => 'img_bits',
+						'fa_media_type'   => 'img_media_type',
+						'fa_major_mime'   => 'img_major_mime',
+						'fa_minor_mime'   => 'img_minor_mime',
+						'fa_description'  => 'img_description',
+						'fa_user'         => 'img_user',
+						'fa_user_text'    => 'img_user_text',
+						'fa_timestamp'    => 'img_timestamp'
+							), $where, __METHOD__ );
+
+
+		$concat = $dbw->buildConcat( array( "oi_sha1", $encExt ) );
+		$where = array(
+				'oi_name' => self::getNameFromTitle( $this->mTitle ),
+				$dbw->insertSelect( 'filearchive', 'oldimage',
+					array(
+						'fa_storage_group' => $encGroup,
+						'fa_storage_key'   => "CASE WHEN oi_sha1='' THEN '' ELSE $concat END",
+						'fa_deleted_user'      => $encUserId,
+						'fa_deleted_timestamp' => $encTimestamp,
+						'fa_deleted_reason'    => $encReason,
+						'fa_name'         => 'oi_name',
+						'fa_archive_name' => 'oi_archive_name',
+						'fa_size'         => 'oi_size',
+						'fa_width'        => 'oi_width',
+						'fa_height'       => 'oi_height',
+						'fa_metadata'     => 'oi_metadata',
+						'fa_bits'         => 'oi_bits',
+						'fa_media_type'   => 'oi_media_type',
+						'fa_major_mime'   => 'oi_major_mime',
+						'fa_minor_mime'   => 'oi_minor_mime',
+						'fa_description'  => 'oi_description',
+						'fa_user'         => 'oi_user',
+						'fa_user_text'    => 'oi_user_text',
+						'fa_timestamp'    => 'oi_timestamp',
+						'fa_deleted'      => $bitfield
+							), $where, __METHOD__ );
 
 	}
 
