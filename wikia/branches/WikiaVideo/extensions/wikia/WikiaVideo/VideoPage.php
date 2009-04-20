@@ -43,6 +43,11 @@ class VideoPage extends Article {
 	function delete() {
 		parent::delete();	
 		$title = $this->mTitle;
+		// move the history to filearchive
+		$this->doDBInserts();
+		// and clean it up
+		$this->doDBDeletes();	
+	
 		if ( $title ) {
 			$update = new VideoHTMLCacheUpdate( $title, 'imagelinks' );
 			$update->doUpdate();
@@ -82,6 +87,16 @@ class VideoPage extends Article {
 			$this->videoLinks();
 			$this->viewUpdates();
 		}
+	}
+
+	function doDBInserts() {
+
+
+	}
+
+	function doDBDeletes() {
+
+
 	}
 
 	function showTOC($metadata) {
