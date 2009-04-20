@@ -100,7 +100,7 @@ class VideoPage extends Article {
 		$code = $this->getEmbedCode($width);
 
 		if(empty($thumb)) {
-			return "<div class=\"t{$align}\">{$code}</div>";
+			return "<div class=\"t{$align}\" style=\"width:{$width}px\">{$code}</div>";
 		}
 
 		$url = $this->mTitle->getLocalURL('');
@@ -131,7 +131,7 @@ EOD;
 		if ($caption != '') $wgWysiwygMetaData[$refid]['caption'] = $caption;
 
 		if(empty($thumb)) {
-			return "<div class=\"t{$align}\" refid=\"{$refid}\" style=\"position:relative\">{$code}</div>";
+			return "<div class=\"t{$align}\" refid=\"{$refid}\" style=\"position:relative;width:{$width}px\">{$code}</div>";
 		}
 
 		$wgWysiwygMetaData[$refid]['thumb'] = 1;
@@ -610,7 +610,7 @@ EOD;
                 );
 
 		$cat = $wgContLang->getFormattedNsText( NS_CATEGORY );
-		$saved_text = '[[' . $cat . ':' . wfMsg( 'wikiavideo-category' ) . ']]';		
+		$saved_text = '[[' . $cat . ':' . wfMsgForContent( 'wikiavideo-category' ) . ']]';
 
                 if( $dbw->affectedRows() == 0 ) {
 			// we are updating
@@ -874,7 +874,7 @@ EOD;
 			$image = '';
 		}
 						
- 		return "$image<div style=\"width: {$width}px; height: {$height}px; background: transparent url({$wgExtensionsPath}/wikia/Wysiwyg/fckeditor/editor/plugins/video/video.png) no-repeat 50% 50%; position: absolute; top: 0\"><br /></div>";
+ 		return "$image<div style=\"width: {$width}px; height: {$height}px; background: transparent url({$wgExtensionsPath}/wikia/Wysiwyg/fckeditor/editor/plugins/video/video.png) no-repeat 50% 50%; position: absolute; top: 0; left: 0\"><br /></div>";
 	}
 
 	function openShowVideo() {
