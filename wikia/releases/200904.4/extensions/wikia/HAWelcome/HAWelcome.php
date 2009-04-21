@@ -328,7 +328,8 @@ class HAWelcomeJob extends Job {
 	 * @return true means process other hooks
 	 */
 	public static function revisionInsertComplete( &$revision, &$url, &$flags ) {
-		global $wgUser, $wgCityId, $wgCommandLineMode, $wgSharedDB, $wgErrorLog;
+		global $wgUser, $wgCityId, $wgCommandLineMode, $wgSharedDB,
+			$wgErrorLog, $wgMemc;
 
 		wfProfileIn( __METHOD__ );
 
@@ -367,6 +368,14 @@ class HAWelcomeJob extends Job {
 					Wikia::log( __METHOD__, $wgUser->getId(), "Skip welcome, user is at least in group: " . $group );
 					break;
 				}
+			}
+
+			/**
+			 * put possible welcomer into memcached, RT#14067
+			 */
+			if( $wgUser->getId() && self::isWelcomer( $wgUser ) ) {
+				$wgMemc->set( wfMemcKey( "last-sysop-id" ), $wgUser->getId(), 86400 );
+				Wikia::log( __METHOD__, $wgUser->getId(), "Store possible welcomer in memcached" );
 			}
 
 			if( $Title && !$wgCommandLineMode && $canWelcome && !empty( $wgSharedDB ) ) {
@@ -508,6 +517,44 @@ class HAWelcomeJob extends Job {
 		wfProfileOut( __METHOD__ );
 
 		return $return;
+	}
+
+	/**
+	 * check if user can welcome other users
+	 *
+	 * @static
+	 * @access public
+	 *
+	 * @param User	$User	instance of User class
+	 *
+	 * @return boolean	status of operation
+	 */
+	static public function isWelcomer( &$User ) {
+
+		wfProfileIn( __METHOD__ );
+
+		$sysop  = trim( wfMsg( "welcome-user" ) );
+		$groups = $User->getEffectiveGroups();
+		$result = false;
+
+		/**
+		 * bots can't welcome
+		 */
+		if( !in_array( "bot", $groups ) ) {
+			if( $sysop === "@sysop" ) {
+				$result = in_array( "sysop", $groups ) ? true : false;
+			}
+			else {
+				$result =
+					in_array( "sysop", $groups ) ||
+					in_array( "staff", $groups ) ||
+					in_array( "helper", $groups )
+						? true : false;
+			}
+		}
+		wfProfileOut( __METHOD__ );
+
+		return $result;
 	}
 }
 
