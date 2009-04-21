@@ -152,7 +152,8 @@ class VideoPage extends Article {
 						'fa_user_text'    => 'oi_user_text',
 						'fa_timestamp'    => 'oi_timestamp',
 						'fa_deleted'      => $bitfield
-							), $where, __METHOD__ );
+							), $where, __METHOD__ )
+			);
 
 	}
 
