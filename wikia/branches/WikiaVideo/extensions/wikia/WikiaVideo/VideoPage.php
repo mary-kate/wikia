@@ -163,8 +163,14 @@ class VideoPage extends Article {
 	}
 
 	function doDBDeletes() {
-
-
+		$dbw = wfGetDB( DB_MASTER );				
+		// clear old revs
+		$dbw->delete( 'oldimage',
+				array(
+					'oi_name' => self::getNameFromTitle( $this->mTitle )
+				     ), __METHOD__ );
+		// clear current rev
+		$dbw->delete( 'image', array( 'img_name' => self::getNameFromTitle( $this->mTitle ) ), __METHOD__ );
 	}
 
 	function showTOC($metadata) {
