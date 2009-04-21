@@ -41,17 +41,26 @@ class VideoPage extends Article {
 	}
 
 	function delete() {
+		// content moved to doDelete
 		parent::delete();	
-		$title = $this->mTitle;
+	}
+
+	public function doDelete( $reason, $suppress = false ) {
+		global $wgOut, $wgUser;
+
 		// move the history to filearchive
 		$this->doDBInserts();
 		// and clean it up
 		$this->doDBDeletes();	
-	
+
+		parent::doDelete( $reason, $suppress );	
+
+		$title = $this->mTitle;
 		if ( $title ) {
 			$update = new VideoHTMLCacheUpdate( $title, 'imagelinks' );
 			$update->doUpdate();
 		}
+
 	}
 
 	// 
@@ -93,10 +102,10 @@ class VideoPage extends Article {
 		global $wgUser;
 
 		$dbw = wfGetDB( DB_MASTER );
-		$concat = $dbw->buildConcat( array( "img_sha1", '.swf' ) ); // todo check out
 		$encTimestamp = $dbw->addQuotes( $dbw->timestamp() );
 		$encUserId = $dbw->addQuotes( $wgUser->getId() );
 		$encReason = $dbw->addQuotes( $this->reason );
+		$concat = $dbw->buildConcat( array( "img_sha1", '.swf' ) ); // todo check out
 		$encGroup = $dbw->addQuotes( 'deleted' );
 		// main rev
 		$where = array( 'img_name' => self::getNameFromTitle( $this->mTitle ) );
@@ -104,11 +113,11 @@ class VideoPage extends Article {
 				$dbw->insertSelect( 'filearchive', 'image',
 					array(
 						'fa_storage_group' => $encGroup,
-						'fa_storage_key'   => "CASE WHEN img_sha1='' THEN '' ELSE $concat END",
+						'fa_storage_key'   => "''",
 						'fa_deleted_user'      => $encUserId,
 						'fa_deleted_timestamp' => $encTimestamp,
 						'fa_deleted_reason'    => $encReason,
-						'fa_deleted'               => 1, //todo check
+						'fa_deleted'               => 0, //todo check
 
 						'fa_name'         => 'img_name',
 						'fa_archive_name' => 'NULL',
@@ -126,35 +135,31 @@ class VideoPage extends Article {
 						'fa_timestamp'    => 'img_timestamp'
 							), $where, __METHOD__ );
 
-
-		$concat = $dbw->buildConcat( array( "oi_sha1", $encExt ) );
-		$where = array(
-				'oi_name' => self::getNameFromTitle( $this->mTitle ),
+			$concat = $dbw->buildConcat( array( "oi_sha1", '.swf' ) ); // todo check out
+				$where = array( 'oi_name' => self::getNameFromTitle( $this->mTitle ) );
 				$dbw->insertSelect( 'filearchive', 'oldimage',
-					array(
-						'fa_storage_group' => $encGroup,
-						'fa_storage_key'   => "CASE WHEN oi_sha1='' THEN '' ELSE $concat END",
-						'fa_deleted_user'      => $encUserId,
-						'fa_deleted_timestamp' => $encTimestamp,
-						'fa_deleted_reason'    => $encReason,
-						'fa_name'         => 'oi_name',
-						'fa_archive_name' => 'oi_archive_name',
-						'fa_size'         => 'oi_size',
-						'fa_width'        => 'oi_width',
-						'fa_height'       => 'oi_height',
-						'fa_metadata'     => 'oi_metadata',
-						'fa_bits'         => 'oi_bits',
-						'fa_media_type'   => 'oi_media_type',
-						'fa_major_mime'   => 'oi_major_mime',
-						'fa_minor_mime'   => 'oi_minor_mime',
-						'fa_description'  => 'oi_description',
-						'fa_user'         => 'oi_user',
-						'fa_user_text'    => 'oi_user_text',
-						'fa_timestamp'    => 'oi_timestamp',
-						'fa_deleted'      => $bitfield
-							), $where, __METHOD__ )
-			);
-
+						array(
+							'fa_storage_group' => $encGroup,
+							'fa_storage_key'   => "''",
+							'fa_deleted_user'      => $encUserId,
+							'fa_deleted_timestamp' => $encTimestamp,
+							'fa_deleted_reason'    => $encReason,
+							'fa_name'         => 'oi_name',
+							'fa_archive_name' => 'oi_archive_name',
+							'fa_size'         => 'oi_size',
+							'fa_width'        => 'oi_width',
+							'fa_height'       => 'oi_height',
+							'fa_metadata'     => 'oi_metadata',
+							'fa_bits'         => 'oi_bits',
+							'fa_media_type'   => 'oi_media_type',
+							'fa_major_mime'   => 'oi_major_mime',
+							'fa_minor_mime'   => 'oi_minor_mime',
+							'fa_description'  => 'oi_description',
+							'fa_user'         => 'oi_user',
+							'fa_user_text'    => 'oi_user_text',
+							'fa_timestamp'    => 'oi_timestamp',
+							'fa_deleted'      => 0 // todo check
+								), $where, __METHOD__ );
 	}
 
 	function doDBDeletes() {
