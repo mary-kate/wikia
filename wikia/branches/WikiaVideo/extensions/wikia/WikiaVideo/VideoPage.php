@@ -60,7 +60,6 @@ class VideoPage extends Article {
 			$update = new VideoHTMLCacheUpdate( $title, 'imagelinks' );
 			$update->doUpdate();
 		}
-
 	}
 
 	// 
@@ -105,61 +104,59 @@ class VideoPage extends Article {
 		$encTimestamp = $dbw->addQuotes( $dbw->timestamp() );
 		$encUserId = $dbw->addQuotes( $wgUser->getId() );
 		$encReason = $dbw->addQuotes( $this->reason );
-		$concat = $dbw->buildConcat( array( "img_sha1", '.swf' ) ); // todo check out
 		$encGroup = $dbw->addQuotes( 'deleted' );
 		// main rev
 		$where = array( 'img_name' => self::getNameFromTitle( $this->mTitle ) );
 
-				$dbw->insertSelect( 'filearchive', 'image',
-					array(
-						'fa_storage_group' => $encGroup,
-						'fa_storage_key'   => "''",
-						'fa_deleted_user'      => $encUserId,
-						'fa_deleted_timestamp' => $encTimestamp,
-						'fa_deleted_reason'    => $encReason,
-						'fa_deleted'               => 0, //todo check
+		$dbw->insertSelect( 'filearchive', 'image',
+				array(
+					'fa_storage_group' => $encGroup,
+					'fa_storage_key'   => "''",
+					'fa_deleted_user'      => $encUserId,
+					'fa_deleted_timestamp' => $encTimestamp,
+					'fa_deleted_reason'    => $encReason,
+					'fa_deleted'               => 0, //todo check
 
-						'fa_name'         => 'img_name',
-						'fa_archive_name' => 'NULL',
-						'fa_size'         => 'img_size',
-						'fa_width'        => 'img_width',
-						'fa_height'       => 'img_height',
-						'fa_metadata'     => 'img_metadata',
-						'fa_bits'         => 'img_bits',
-						'fa_media_type'   => 'img_media_type',
-						'fa_major_mime'   => 'img_major_mime',
-						'fa_minor_mime'   => 'img_minor_mime',
-						'fa_description'  => 'img_description',
-						'fa_user'         => 'img_user',
-						'fa_user_text'    => 'img_user_text',
-						'fa_timestamp'    => 'img_timestamp'
-							), $where, __METHOD__ );
+					'fa_name'         => 'img_name',
+					'fa_archive_name' => 'NULL',
+					'fa_size'         => 'img_size',
+					'fa_width'        => 'img_width',
+					'fa_height'       => 'img_height',
+					'fa_metadata'     => 'img_metadata',
+					'fa_bits'         => 'img_bits',
+					'fa_media_type'   => 'img_media_type',
+					'fa_major_mime'   => 'img_major_mime',
+					'fa_minor_mime'   => 'img_minor_mime',
+					'fa_description'  => 'img_description',
+					'fa_user'         => 'img_user',
+					'fa_user_text'    => 'img_user_text',
+					'fa_timestamp'    => 'img_timestamp'
+						), $where, __METHOD__ );
 
-			$concat = $dbw->buildConcat( array( "oi_sha1", '.swf' ) ); // todo check out
-				$where = array( 'oi_name' => self::getNameFromTitle( $this->mTitle ) );
-				$dbw->insertSelect( 'filearchive', 'oldimage',
-						array(
-							'fa_storage_group' => $encGroup,
-							'fa_storage_key'   => "''",
-							'fa_deleted_user'      => $encUserId,
-							'fa_deleted_timestamp' => $encTimestamp,
-							'fa_deleted_reason'    => $encReason,
-							'fa_name'         => 'oi_name',
-							'fa_archive_name' => 'oi_archive_name',
-							'fa_size'         => 'oi_size',
-							'fa_width'        => 'oi_width',
-							'fa_height'       => 'oi_height',
-							'fa_metadata'     => 'oi_metadata',
-							'fa_bits'         => 'oi_bits',
-							'fa_media_type'   => 'oi_media_type',
-							'fa_major_mime'   => 'oi_major_mime',
-							'fa_minor_mime'   => 'oi_minor_mime',
-							'fa_description'  => 'oi_description',
-							'fa_user'         => 'oi_user',
-							'fa_user_text'    => 'oi_user_text',
-							'fa_timestamp'    => 'oi_timestamp',
-							'fa_deleted'      => 0 // todo check
-								), $where, __METHOD__ );
+		$where = array( 'oi_name' => self::getNameFromTitle( $this->mTitle ) );
+		$dbw->insertSelect( 'filearchive', 'oldimage',
+				array(
+					'fa_storage_group' => $encGroup,
+					'fa_storage_key'   => "''",
+					'fa_deleted_user'      => $encUserId,
+					'fa_deleted_timestamp' => $encTimestamp,
+					'fa_deleted_reason'    => $encReason,
+					'fa_name'         => 'oi_name',
+					'fa_archive_name' => 'oi_archive_name',
+					'fa_size'         => 'oi_size',
+					'fa_width'        => 'oi_width',
+					'fa_height'       => 'oi_height',
+					'fa_metadata'     => 'oi_metadata',
+					'fa_bits'         => 'oi_bits',
+					'fa_media_type'   => 'oi_media_type',
+					'fa_major_mime'   => 'oi_major_mime',
+					'fa_minor_mime'   => 'oi_minor_mime',
+					'fa_description'  => 'oi_description',
+					'fa_user'         => 'oi_user',
+					'fa_user_text'    => 'oi_user_text',
+					'fa_timestamp'    => 'oi_timestamp',
+					'fa_deleted'      => 0 // todo check
+						), $where, __METHOD__ );
 	}
 
 	function doDBDeletes() {
@@ -183,8 +180,13 @@ class VideoPage extends Article {
 		return Article::getContent();
 	}
 
-	public function generateWindow($align, $width, $caption, $thumb) {
+	public function generateWindow($align, $width, $caption, $thumb, $frame) {
 		global $wgStylePath;
+
+		if ($frame) { // frame has always native width
+			$ratios = split( "x", $this->getTextRatio() );
+			$width = intval( trim( $ratios[0] ) );					
+		}
 
 		$code = $this->getEmbedCode($width);
 
