@@ -24,6 +24,9 @@ function WikiaVideoSpecialUndeleteBeforeForm( $request, $par ) {
 		return true;
 	}	
 	$title = Title::newFromText( $par );
+	if( !is_object( $title ) ) { 
+		return true;
+	}
 	if( NS_VIDEO != $title->getNamespace() ) {
 		return true;
 	} 
