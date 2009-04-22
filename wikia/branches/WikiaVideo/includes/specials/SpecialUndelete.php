@@ -13,6 +13,9 @@
  */
 function wfSpecialUndelete( $par ) {
 	global $wgRequest;
+	if (!wfRunHooks( 'SpecialUndelete::beforeForm', array( &$par ) ) ) {
+		return;
+	}
 
 	$form = new UndeleteForm( $wgRequest, $par );
 	$form->execute();
