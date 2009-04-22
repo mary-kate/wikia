@@ -15,8 +15,22 @@ $wgExtensionFunctions[] = 'WikiaVideo_init';
 $wgHooks['ParserBeforeStrip'][] = 'WikiaVideoParserBeforeStrip';
 $wgHooks['SpecialNewImages::beforeQuery'][] = 'WikiaVideoNewImagesBeforeQuery';
 $wgHooks['SpecialWhatlinkshere::beforeImageQuery'][] = 'WikiaVideoWhatlinkshereBeforeQuery';
+$wgHooks['SpecialUndelete::beforeForm'][] = 'WikiaVideoSpecialUndeleteBeforeForm';
 $wgWikiaVideoGalleryId = 0;
 $wgWikiaVETLoaded = false;
+
+function WikiaVideoSpecialUndeleteBeforeForm( $request, $par ) {	
+	if( '' == $par ) { // no need to do, not a video anyway
+		return true;
+	}	
+	$title = Title::newFromText( $par );
+	if( NS_VIDEO != $title->getNamespace() ) {
+		return true;
+	} 
+
+	// todo add custom form init here
+	return false;
+}
 
 function WikiaVideoWhatlinkshereBeforeQuery( $hideimages, $pageconds, $targetconds, $imageconds ) {	
 	if( NS_VIDEO == $pageconds['pl_namespace'] ) {
