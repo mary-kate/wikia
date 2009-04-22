@@ -1131,3 +1131,8 @@ class VideoHTMLCacheUpdate extends HTMLCacheUpdate {
 	}
 }
 
+class VideoUndeleteForm extends UndeleteForm {
+
+	//todo substitute needed functionality
+}
+

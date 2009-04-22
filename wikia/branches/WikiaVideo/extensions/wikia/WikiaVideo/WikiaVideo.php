@@ -30,8 +30,8 @@ function WikiaVideoSpecialUndeleteBeforeForm( $request, $par ) {
 	if( NS_VIDEO != $title->getNamespace() ) {
 		return true;
 	} 
-
-	// todo add custom form init here
+	$form = new VideoUndeleteForm( $request, $par );
+	$form->execute();
 	return false;
 }
 
