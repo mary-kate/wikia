@@ -13,7 +13,7 @@
  */
 function wfSpecialUndelete( $par ) {
 	global $wgRequest;
-	if (!wfRunHooks( 'SpecialUndelete::beforeForm', array( &$par ) ) ) {
+	if (!wfRunHooks( 'SpecialUndelete::beforeForm', array( $wgRequest, &$par ) ) ) {
 		return;
 	}
 
