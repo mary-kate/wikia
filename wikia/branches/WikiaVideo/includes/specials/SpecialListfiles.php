@@ -7,7 +7,7 @@
 /**
  *
  */
-function wfSpecialImagelist() {
+function wfSpecialListfiles() {
 	global $wgOut;
 
 	$pager = new ImageListPager;
@@ -23,7 +23,11 @@ function wfSpecialImagelist() {
  */
 class ImageListPager extends TablePager {
 	var $mFieldNames = null;
+
+	/* Wikia change begin - @author: Inez */
+	/* Do not list Videos on this special page */
 	var $mQueryConds = array("img_media_type != 'VIDEO'");
+	/* Wikia change end */
 
 	function __construct() {
 		global $wgRequest, $wgMiserMode;
@@ -40,7 +44,7 @@ class ImageListPager extends TablePager {
 				$m = $dbr->strencode( strtolower( $nt->getDBkey() ) );
 				$m = str_replace( "%", "\\%", $m );
 				$m = str_replace( "_", "\\_", $m );
-				$this->mQueryConds[] = "LOWER(img_name) LIKE '%{$m}%'";
+				$this->mQueryConds = array( "LOWER(img_name) LIKE '%{$m}%'" );
 			}
 		}
 
@@ -49,13 +53,17 @@ class ImageListPager extends TablePager {
 
 	function getFieldNames() {
 		if ( !$this->mFieldNames ) {
+			global $wgMiserMode;
 			$this->mFieldNames = array(
-				'img_timestamp' => wfMsg( 'imagelist_date' ),
-				'img_name' => wfMsg( 'imagelist_name' ),
-				'img_user_text' => wfMsg( 'imagelist_user' ),
-				'img_size' => wfMsg( 'imagelist_size' ),
-				'img_description' => wfMsg( 'imagelist_description' ),
+				'img_timestamp' => wfMsg( 'listfiles_date' ),
+				'img_name' => wfMsg( 'listfiles_name' ),
+				'img_user_text' => wfMsg( 'listfiles_user' ),
+				'img_size' => wfMsg( 'listfiles_size' ),
+				'img_description' => wfMsg( 'listfiles_description' ),
 			);
+			if( !$wgMiserMode ) {
+				$this->mFieldNames['COUNT(oi_archive_name)'] = wfMsg( 'listfiles_count' );
+			}
 		}
 		return $this->mFieldNames;
 	}
@@ -66,13 +74,22 @@ class ImageListPager extends TablePager {
 	}
 
 	function getQueryInfo() {
-		$fields = $this->getFieldNames();
-		$fields = array_keys( $fields );
+		$tables = array( 'image' );
+		$fields = array_keys( $this->getFieldNames() );
 		$fields[] = 'img_user';
+		$options = $join_conds = array();
+		# Depends on $wgMiserMode
+		if( isset($this->mFieldNames['COUNT(oi_archive_name)']) ) {
+			$tables[] = 'oldimage';
+			$options = array('GROUP BY' => 'img_name');
+			$join_conds = array('oldimage' => array('LEFT JOIN','oi_name = img_name') );
+		}
 		return array(
-			'tables' => 'image',
-			'fields' => $fields,
-			'conds' => $this->mQueryConds
+			'tables'     => $tables,
+			'fields'     => $fields,
+			'conds'      => $this->mQueryConds,
+			'options'    => $options,
+			'join_conds' => $join_conds
 		);
 	}
 
@@ -98,9 +115,6 @@ class ImageListPager extends TablePager {
 
 	function formatValue( $field, $value ) {
 		global $wgLang;
-
-		// macbre: fixes #1999
-
 		switch ( $field ) {
 			case 'img_timestamp':
 				return $wgLang->timeanddate( $value, true );
@@ -109,7 +123,7 @@ class ImageListPager extends TablePager {
 				if ( $imgfile === null ) $imgfile = wfMsg( 'imgfile' );
 
 				$name = $this->mCurrentRow->img_name;
-				$link = $this->getSkin()->makeKnownLinkObj( Title::makeTitle( NS_IMAGE, $name ), wordwrap($value, 30, '<br />', true) ); // #1999
+				$link = $this->getSkin()->makeKnownLinkObj( Title::makeTitle( NS_FILE, $name ), $value );
 				$image = wfLocalFile( $value );
 				$url = $image->getURL();
 				$download = Xml::element('a', array( 'href' => $url ), $imgfile );
@@ -125,7 +139,9 @@ class ImageListPager extends TablePager {
 			case 'img_size':
 				return $this->getSkin()->formatSize( $value );
 			case 'img_description':
-				return $this->getSkin()->commentBlock( wordwrap($value, 30, ' ', true) ); // #1999
+				return $this->getSkin()->commentBlock( $value );
+			case 'COUNT(oi_archive_name)':
+				return intval($value)+1;
 		}
 	}
 
@@ -133,14 +149,14 @@ class ImageListPager extends TablePager {
 		global $wgRequest, $wgMiserMode;
 		$search = $wgRequest->getText( 'ilsearch' );
 
-		$s = Xml::openElement( 'form', array( 'method' => 'get', 'action' => $this->getTitle()->getLocalURL(), 'id' => 'mw-imagelist-form' ) ) .
+		$s = Xml::openElement( 'form', array( 'method' => 'get', 'action' => $this->getTitle()->getLocalURL(), 'id' => 'mw-listfiles-form' ) ) .
 			Xml::openElement( 'fieldset' ) .
-			Xml::element( 'legend', null, wfMsg( 'imagelist' ) ) .
+			Xml::element( 'legend', null, wfMsg( 'listfiles' ) ) .
 			Xml::tags( 'label', null, wfMsgHtml( 'table_pager_limit', $this->getLimitSelect() ) );
 
 		if ( !$wgMiserMode ) {
 			$s .= "<br />\n" .
-				Xml::inputLabel( wfMsg( 'imagelist_search_for' ), 'ilsearch', 'mw-ilsearch', 20, $search );
+				Xml::inputLabel( wfMsg( 'listfiles_search_for' ), 'ilsearch', 'mw-ilsearch', 20, $search );
 		}
 		$s .= ' ' .
 			Xml::submitButton( wfMsg( 'table_pager_limit_submit' ) ) ."\n" .
@@ -151,14 +167,14 @@ class ImageListPager extends TablePager {
 	}
 
 	function getTableClass() {
-		return 'imagelist ' . parent::getTableClass();
+		return 'listfiles ' . parent::getTableClass();
 	}
 
 	function getNavClass() {
-		return 'imagelist_nav ' . parent::getNavClass();
+		return 'listfiles_nav ' . parent::getNavClass();
 	}
 
 	function getSortHeaderClass() {
-		return 'imagelist_sort ' . parent::getSortHeaderClass();
+		return 'listfiles_sort ' . parent::getSortHeaderClass();
 	}
 }
