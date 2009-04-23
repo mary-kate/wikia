@@ -1165,18 +1165,91 @@ class VideoPageArchive extends PageArchive {
 
 	function undelete( $timestamps, $comment = '', $fileVersions = array(), $unsuppress = false ) {
 		global $wgUser;
+		$dbw = wfGetDB( DB_MASTER );
 
-		// todo return the data from filearchive and put it into image and oldimage if necessary
+		$conditions = array( 'fa_name' => self::getNameFromTitle( $this->title ) );
 
-		// todo check out and return the proper "file" restoration info
-//			$filesRestored = $this->fileStatus->successCount;
+		$result = $dbw->select( 'filearchive', '*',
+				$conditions,
+				__METHOD__,
+				array( 'ORDER BY' => 'fa_timestamp DESC' )
+				);
 
-		// run parent version, because it uses a private function inside
-		// files will not be touched anyway here, because it's not NS_FILE
-		parent::undelete( $timestamps, $comment, $fileVersions, $unsuppress );
+		$insertBatch = array();
+		$insertCurrent = false;
+		$deleteIds = array();
+		$archiveName = '';
+		$first = true;
 
-		return array('', '', ''); // todo check out
+		while( $row = $dbw->fetchObject( $result ) ) {
+			if( $first ) { // this is our new current revision
+				$insertCurrent = array(
+						'img_name'        => $row->fa_name,
+						'img_size'        => $row->fa_size,
+						'img_width'       => $row->fa_width,
+						'img_height'      => $row->fa_height,
+						'img_metadata'    => $row->fa_metadata,
+						'img_bits'        => $row->fa_bits,
+						'img_media_type'  => $row->media_type,
+						'img_major_mime'  => $row->major_mime,
+						'img_minor_mime'  => $row->minor_mime,
+						'img_description' => $row->fa_description,
+						'img_user'        => $row->fa_user,
+						'img_user_text'   => $row->fa_user_text,
+						'img_timestamp'   => $row->fa_timestamp,
+						'img_sha1'        => $sha1
+						);
+			} else {
+				$insertBatch[] = array(
+						'oi_name'         => $row->fa_name,
+						'oi_archive_name' => $archiveName, // todo check
+						'oi_size'         => $row->fa_size,
+						'oi_width'        => $row->fa_width,
+						'oi_height'       => $row->fa_height,
+						'oi_bits'         => $row->fa_bits,
+						'oi_description'  => $row->fa_description,
+						'oi_user'         => $row->fa_user,
+						'oi_user_text'    => $row->fa_user_text,
+						'oi_timestamp'    => $row->fa_timestamp,
+						'oi_metadata'     => $row->fa_metadata,
+						'oi_media_type'   => $row->media_type,
+						'oi_major_mime'   => $row->major_mime,
+						'oi_minor_mime'   => $row->minor_mime,
+						'oi_deleted'      => $this->unsuppress ? 0 : $row->fa_deleted, // todo check
+						'oi_sha1'         => $sha1 );
+			}
+
+		}
+		$deleteIds[] = $row->fa_id;
+		$first = false;
+
 	}
+	unset( $result );		
+
+	if ( $insertCurrent ) {
+		$dbw->insert( 'image', $insertCurrent, __METHOD__ );
+	}
+	if ( $insertBatch ) {
+		$dbw->insert( 'oldimage', $insertBatch, __METHOD__ );
+	}
+	if ( $deleteIds ) {
+		$dbw->delete( 'filearchive',
+				array( 'fa_id IN (' . $dbw->makeList( $deleteIds ) . ')' ),
+					__METHOD__ );
+				}
+
+
+	// todo return the data from filearchive and put it into image and oldimage if necessary
+
+	// todo check out and return the proper "file" restoration info
+	//			$filesRestored = $this->fileStatus->successCount;
+
+	// run parent version, because it uses a private function inside
+	// files will not be touched anyway here, because it's not NS_FILE
+	parent::undelete( $timestamps, $comment, $fileVersions, $unsuppress );
+
+	return array('', '', ''); // todo check out
+}
 
 }
 
