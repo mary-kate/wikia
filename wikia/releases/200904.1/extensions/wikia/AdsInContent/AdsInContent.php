@@ -82,8 +82,8 @@ function wfAdsInContentHook(&$out, &$text) {
   GS_googleEnableAllServices();
 </script>
 <script type="text/javascript">
-  GA_googleAddSlot("ca-pub-4086838842346968", "INCONTENT1_' . $wgDBname . '");
-  GA_googleAddSlot("ca-pub-4086838842346968", "INCONTENT2_' . $wgDBname . '");
+  GA_googleAddSlot("ca-pub-4086838842346968", "INCONTENT1_' . strtolower($wgDBname) . '");
+  GA_googleAddSlot("ca-pub-4086838842346968", "INCONTENT2_' . strtolower($wgDBname) . '");
   GA_googleAddAdSensePageAttr("google_ad_channel", "4974569436");
 </script>
 <script type="text/javascript">
