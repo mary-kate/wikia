@@ -475,7 +475,7 @@ function csCancel() {
 	$('csAddCategorySwitch').style.display = 'block';
 }
 
-Event.onDOMReady(function() {
+wgAfterContentAndJS.push(function() {
 	YAHOO.log('onDOMReady');
 	if (csType == 'edit') {
 		initHandlers();
