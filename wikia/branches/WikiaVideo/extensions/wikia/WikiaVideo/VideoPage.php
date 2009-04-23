@@ -1199,7 +1199,7 @@ class VideoPageArchive extends PageArchive {
 						'img_timestamp'   => $row->fa_timestamp,
 						'img_sha1'        => $sha1
 						);
-			} else {
+			} else { // older revisions, they could be even elder current ones from ancient deletions
 				$insertBatch[] = array(
 						'oi_name'         => $row->fa_name,
 						'oi_archive_name' => $archiveName, // todo check
@@ -1237,9 +1237,6 @@ class VideoPageArchive extends PageArchive {
 				array( 'fa_id IN (' . $dbw->makeList( $deleteIds ) . ')' ),
 					__METHOD__ );
 				}
-
-
-	// todo return the data from filearchive and put it into image and oldimage if necessary
 
 	// todo check out and return the proper "file" restoration info
 	//			$filesRestored = $this->fileStatus->successCount;
