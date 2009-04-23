@@ -40,7 +40,7 @@ class WikiFactoryLoader {
 	public $mServerName, $mWikiID, $mCityHost, $mCityID, $mOldServerName;
 	public $mAlternativeDomainUsed;
 	public $mDomain, $mVariables, $mIsWikiaActive, $mAlwaysFromDB;
-	public $mNoRedirect, $mTimestamp, $mAdCategory, $mCommandLine;
+	public $mNoRedirect, $mTimestamp, $mAdCategory;
 	public $mExpireDomainCacheTimeout = 86400; #--- 24 hours
 	public $mExpireValuesCacheTimeout = 86400; #--- 24 hours
 
@@ -55,22 +55,20 @@ class WikiFactoryLoader {
 	 * @author Krzysztof Krzyżaniak <eloy@wikia-inc.com>
 	 *
 	 * @param integer $id default null	explicite set wiki id
-	 * @param string $server_name default false	explicite set server name
+	 * @param string $server_name default null	explicite set server name
 	 *
 	 * @return WikiFactoryLoader object
 	 */
-	public function  __construct( $id = null, $server_name = false ) {
+	public function  __construct( $id = null, $server_name = null ) {
 		global $wgDBname, $wgSharedDB, $wgDevelEnvironment, $wgDevelDomains;
 		global $wgWikiFactoryDomains;
-
-		$this->mCommandLine = false;
 
 		if( !is_null( $id ) ) {
 			/**
 			 * central / dofus / memory-alpha case
 			 */
 			$this->mCityID = $id;
-			$this->mServerName = ( $server_name === false )
+			$this->mServerName = is_null( $server_name )
 				? strtolower( $_SERVER['SERVER_NAME'] )
 				: $server_name;
 		}
@@ -79,15 +77,14 @@ class WikiFactoryLoader {
 			 * normal http request
 			 */
 			$this->mServerName = strtolower( $_SERVER['SERVER_NAME'] );
-			$this->mCityID = false;
+			$this->mCityID = null;
 		}
 		elseif( !empty($_ENV['SERVER_ID']) ) {
 			/**
 			 * interactive/cmdline
 			 */
 			$this->mCityID = $_ENV['SERVER_ID'];
-			$this->mServerName = false;
-			$this->mCommandLine = true;
+			$this->mServerName = null;
 		}
 		else {
 			/**
@@ -158,7 +155,7 @@ class WikiFactoryLoader {
 		 * if run via commandline always take data from database,
 		 * never from cache
 		 */
-		if( $this->mCommandLine && $this->mAlwaysFromDB == 0 ) {
+		if( !is_null($this->mCityID) && $this->mAlwaysFromDB == 0 ) {
 			$this->mAlwaysFromDB = 1;
 		}
 	}
@@ -183,7 +180,6 @@ class WikiFactoryLoader {
 		if( $this->mDBhandler instanceof Database ) {
 			return $this->mDBhandler;
 		}
-		$host = "";
 		if( isset( $wgDBservers ) && is_array( $wgDBservers ) ) {
 			$server = array_rand( $wgDBservers );
 			$host = $wgDBservers[ $server ]["host"];
@@ -224,7 +220,7 @@ class WikiFactoryLoader {
 
 		if( empty( $this->mAlwaysFromDB ) ) {
 			wfProfileIn( __METHOD__."-domaincache" );
-			$key = WikiFactory::getDomainKey( $this->mServerName, $this->mCityID );
+			$key = WikiFactory::getDomainKey( $this->mServerName );
 			$this->mDomain = $oMemc->get( $key );
 			$this->mDomain = isset( $this->mDomain["id"] ) ? $this->mDomain : array ();
 			$this->debug( "reading from cache, key {$key}" );
@@ -243,7 +239,7 @@ class WikiFactoryLoader {
 			 * interactive/cmdline case. We know city_id so we don't have to
 			 * ask city_domains table
 			 */
-			if( $this->mCityID ) {
+			if( !is_null( $this->mCityID ) ) {
 				$oRow = $dbr->selectRow(
 					array( "city_list" ),
 					array(
@@ -303,18 +299,18 @@ class WikiFactoryLoader {
 					preg_match( "/http[s]*\:\/\/(.+)$/", $oRow->city_url, $matches );
 					$host = rtrim( $matches[1],  "/" );
 
-					if( $oRow->city_domain == $this->mServerName && $this->mServerName ) {
+					if( $oRow->city_domain == $this->mServerName && !is_null($this->mServerName) ) {
 						$this->mWikiID =  $oRow->city_id;
 						$this->mIsWikiaActive = $oRow->city_public;
 						$this->mCityHost = $host;
 						$this->mTimestamp = $oRow->city_factory_timestamp;
 						$this->mAdCategory = empty( $oRow->ad_cat  ) ?  $oRow->ad_cat : "NONE";
 						$this->mDomain = array(
-							"id"     => $oRow->city_id,
-							"host"   => $host,
+							"id" => $oRow->city_id,
+							"host" => $host,
 							"active" => $oRow->city_public,
-							"time"   => $oRow->city_factory_timestamp,
-							"ad"     => $oRow->ad_cat
+							"time" =>  $oRow->city_factory_timestamp,
+							"ad" => $oRow->ad_cat
 						);
 					}
 				}
@@ -324,7 +320,7 @@ class WikiFactoryLoader {
 				 * store value in cache
 				 */
 				$oMemc->set(
-					WikiFactory::getDomainKey( $this->mServerName, $this->mCityID ),
+					WikiFactory::getDomainKey( $this->mServerName ),
 					$this->mDomain,
 					$this->mExpireDomainCacheTimeout
 				);
