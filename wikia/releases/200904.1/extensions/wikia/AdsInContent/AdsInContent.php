@@ -34,13 +34,13 @@ $wgAdsInContentExtensionConfig = array(
 				'align' => 'left',
 				'float' => true,
 //				'googleAdChannel' => '9100000016') // 012
-				'googleAdChannel' => "INCONTENT1_$wgDBname"),
+				'googleAdChannel' => "INCONTENT1_" . strtolower($wgDBname) ),
 			1 => array(
 				'width' => 200,
 				'height' => 200,
 				'align' => 'left',
 				'float' => true,
-				'googleAdChannel' => "INCONTENT2_$wgDBname"),
+				'googleAdChannel' => "INCONTENT2_" . strtolower($wgDBname) ),
  																	),
 	),
 	'limit' => array(
