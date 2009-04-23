@@ -76,6 +76,11 @@ function WikiaVideo_init() {
 	global $wgExtraNamespaces, $wgNamespaceAliases, $wgAutoloadClasses, $wgLanguageCode;
 
 	switch ( $wgLanguageCode ) {
+		case 'de':
+			$wgExtraNamespaces[NS_VIDEO] = 'Video';
+			$wgExtraNamespaces[NS_VIDEO + 1] = 'Video_Diskussion';
+			$wgNamespaceAliases['Video_talk'] = NS_VIDEO + 1;
+			break;
 		case 'pl':
 			$wgExtraNamespaces[NS_VIDEO] = 'Video';
 			$wgExtraNamespaces[NS_VIDEO + 1] = 'Dyskusja_Video';
@@ -275,10 +280,7 @@ function WikiaVideo_makeVideo($title, $options, $sk, $wikitext = '') {
 		$video->load();
 
 		// generate different HTML for MW editor and FCK editor
-		$isWysiwyg = !empty($wgWysiwygParserEnabled);
-		$isWysiwyg |= ($wgRequest->getVal('action') == 'parse') && ($wgRequest->getVal('wysiwyg') == 'true');
-
-		if ($isWysiwyg) {
+		if (!empty($wgWysiwygParserEnabled)) {
 			$out = $video->generateWysiwygWindow($refId, $title, $align, $width, $caption, $thumb, $frame);
 		}
 		else {
