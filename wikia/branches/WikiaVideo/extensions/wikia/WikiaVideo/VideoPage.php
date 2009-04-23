@@ -1167,7 +1167,7 @@ class VideoPageArchive extends PageArchive {
 		global $wgUser;
 		$dbw = wfGetDB( DB_MASTER );
 
-		$conditions = array( 'fa_name' => self::getNameFromTitle( $this->title ) );
+		$conditions = array( 'fa_name' => VideoPage::getNameFromTitle( $this->title ) );
 
 		$result = $dbw->select( 'filearchive', '*',
 				$conditions,
@@ -1190,14 +1190,14 @@ class VideoPageArchive extends PageArchive {
 						'img_height'      => $row->fa_height,
 						'img_metadata'    => $row->fa_metadata,
 						'img_bits'        => $row->fa_bits,
-						'img_media_type'  => $row->media_type,
-						'img_major_mime'  => $row->major_mime,
-						'img_minor_mime'  => $row->minor_mime,
+						'img_media_type'  => $row->fa_media_type,
+						'img_major_mime'  => $row->fa_major_mime,
+						'img_minor_mime'  => $row->fa_minor_mime,
 						'img_description' => $row->fa_description,
 						'img_user'        => $row->fa_user,
 						'img_user_text'   => $row->fa_user_text,
 						'img_timestamp'   => $row->fa_timestamp,
-						'img_sha1'        => $sha1
+						'img_sha1'        => ''
 						);
 			} else { // older revisions, they could be even elder current ones from ancient deletions
 				$insertBatch[] = array(
@@ -1212,11 +1212,11 @@ class VideoPageArchive extends PageArchive {
 						'oi_user_text'    => $row->fa_user_text,
 						'oi_timestamp'    => $row->fa_timestamp,
 						'oi_metadata'     => $row->fa_metadata,
-						'oi_media_type'   => $row->media_type,
-						'oi_major_mime'   => $row->major_mime,
-						'oi_minor_mime'   => $row->minor_mime,
+						'oi_media_type'   => $row->fa_media_type,
+						'oi_major_mime'   => $row->fa_major_mime,
+						'oi_minor_mime'   => $row->fa_minor_mime,
 						'oi_deleted'      => $this->unsuppress ? 0 : $row->fa_deleted, // todo check
-						'oi_sha1'         => $sha1 );
+						'oi_sha1'         => '' );
 			}
 
 		}
