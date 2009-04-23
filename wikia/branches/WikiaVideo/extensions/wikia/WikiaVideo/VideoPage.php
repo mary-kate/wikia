@@ -1132,7 +1132,36 @@ class VideoHTMLCacheUpdate extends HTMLCacheUpdate {
 	}
 }
 
-class VideoUndeleteForm extends UndeleteForm {
+class VideoPageArchive extends PageArchive {
+
+	function listFiles() {
+		$dbr = wfGetDB( DB_SLAVE );
+		$res = $dbr->select( 'filearchive',
+				array(
+					'fa_id',
+					'fa_name',
+					'fa_archive_name',
+					'fa_storage_key',
+					'fa_storage_group',
+					'fa_size',
+					'fa_width',
+					'fa_height',
+					'fa_bits',
+					'fa_metadata',
+					'fa_media_type',
+					'fa_major_mime',
+					'fa_minor_mime',
+					'fa_description',
+					'fa_user',
+					'fa_user_text',
+					'fa_timestamp',
+					'fa_deleted' ),
+				array( 'fa_name' => VideoPage::getNameFromTitle( $this->title ) ),
+				__METHOD__,
+				array( 'ORDER BY' => 'fa_timestamp DESC' ) );
+		$ret = $dbr->resultObject( $res );
+		return $ret;
+	}
 
 	//todo substitute needed functionality
 }

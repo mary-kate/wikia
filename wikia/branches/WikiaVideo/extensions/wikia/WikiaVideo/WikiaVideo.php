@@ -15,24 +15,20 @@ $wgExtensionFunctions[] = 'WikiaVideo_init';
 $wgHooks['ParserBeforeStrip'][] = 'WikiaVideoParserBeforeStrip';
 $wgHooks['SpecialNewImages::beforeQuery'][] = 'WikiaVideoNewImagesBeforeQuery';
 $wgHooks['SpecialWhatlinkshere::beforeImageQuery'][] = 'WikiaVideoWhatlinkshereBeforeQuery';
-$wgHooks['SpecialUndelete::beforeForm'][] = 'WikiaVideoSpecialUndeleteBeforeForm';
+$wgHooks['UndeleteForm::showRevision'][] = 'WikiaVideoSpecialUndeleteSwitchArchive';
+$wgHooks['UndeleteForm::showHistory'][] = 'WikiaVideoSpecialUndeleteSwitchArchive';
+$wgHooks['UndeleteForm::undelete'][] = 'WikiaVideoSpecialUndeleteSwitchArchive';
+
 $wgWikiaVideoGalleryId = 0;
 $wgWikiaVETLoaded = false;
 
-function WikiaVideoSpecialUndeleteBeforeForm( $request, $par ) {	
-	if( '' == $par ) { // no need to do, not a video anyway
-		return true;
-	}	
-	$title = Title::newFromText( $par );
-	if( !is_object( $title ) ) { 
-		return true;
-	}
+function WikiaVideoSpecialUndeleteSwitchArchive( $archive, $title ) {	
 	if( NS_VIDEO != $title->getNamespace() ) {
 		return true;
-	} 
-	$form = new VideoUndeleteForm( $request, $par );
-	$form->execute();
-	return false;
+	} else {
+		$archive = new VideoPageArchive( $title );
+	}
+	return true;
 }
 
 function WikiaVideoWhatlinkshereBeforeQuery( $hideimages, $pageconds, $targetconds, $imageconds ) {	
@@ -91,6 +87,7 @@ function WikiaVideo_init() {
 			$wgExtraNamespaces[NS_VIDEO + 1] = 'Video_talk';
 	}
 	$wgAutoloadClasses['VideoPage'] = dirname(__FILE__). '/VideoPage.php';
+	$wgAutoloadClasses['VideoPageArchive'] = dirname(__FILE__). '/VideoPage.php';
 }
 
 function WikiaVideo_initParserHook() {
