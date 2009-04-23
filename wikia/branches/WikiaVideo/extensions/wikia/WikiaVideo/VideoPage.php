@@ -1163,6 +1163,20 @@ class VideoPageArchive extends PageArchive {
 		return $ret;
 	}
 
-	//todo substitute needed functionality
+	function undelete( $timestamps, $comment = '', $fileVersions = array(), $unsuppress = false ) {
+		global $wgUser;
+
+		// todo return the data from filearchive and put it into image and oldimage if necessary
+
+		// todo check out and return the proper "file" restoration info
+//			$filesRestored = $this->fileStatus->successCount;
+
+		// run parent version, because it uses a private function inside
+		// files will not be touched anyway here, because it's not NS_FILE
+		parent::undelete( $timestamps, $comment, $fileVersions, $unsuppress );
+
+		return array('', '', ''); // todo check out
+	}
+
 }
 
