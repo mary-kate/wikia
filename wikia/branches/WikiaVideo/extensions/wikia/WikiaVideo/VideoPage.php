@@ -1223,30 +1223,29 @@ class VideoPageArchive extends PageArchive {
 		$deleteIds[] = $row->fa_id;
 		$first = false;
 
+		unset( $result );		
+
+		if ( $insertCurrent ) {
+			$dbw->insert( 'image', $insertCurrent, __METHOD__ );
+		}
+		if ( $insertBatch ) {
+			$dbw->insert( 'oldimage', $insertBatch, __METHOD__ );
+		}
+		if ( $deleteIds ) {
+			$dbw->delete( 'filearchive',
+					array( 'fa_id IN (' . $dbw->makeList( $deleteIds ) . ')' ),
+						__METHOD__ );
+					}
+
+		// todo check out and return the proper "file" restoration info
+//			$filesRestored = $this->fileStatus->successCount;
+
+		// run parent version, because it uses a private function inside
+		// files will not be touched anyway here, because it's not NS_FILE
+		parent::undelete( $timestamps, $comment, $fileVersions, $unsuppress );
+
+		return array('', '', ''); // todo check out
 	}
-	unset( $result );		
-
-	if ( $insertCurrent ) {
-		$dbw->insert( 'image', $insertCurrent, __METHOD__ );
-	}
-	if ( $insertBatch ) {
-		$dbw->insert( 'oldimage', $insertBatch, __METHOD__ );
-	}
-	if ( $deleteIds ) {
-		$dbw->delete( 'filearchive',
-				array( 'fa_id IN (' . $dbw->makeList( $deleteIds ) . ')' ),
-					__METHOD__ );
-				}
-
-	// todo check out and return the proper "file" restoration info
-	//			$filesRestored = $this->fileStatus->successCount;
-
-	// run parent version, because it uses a private function inside
-	// files will not be touched anyway here, because it's not NS_FILE
-	parent::undelete( $timestamps, $comment, $fileVersions, $unsuppress );
-
-	return array('', '', ''); // todo check out
-}
 
 }
 
