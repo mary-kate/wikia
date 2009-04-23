@@ -735,6 +735,8 @@ class UndeleteForm {
 		if(!preg_match("/[0-9]{14}/",$timestamp)) return 0;
 
 		$archive = new PageArchive( $this->mTargetObj );
+		wfRunHooks( 'UndeleteForm::showRevision', array( &$archive ) );
+
 		$rev = $archive->getRevision( $timestamp );
 
 		if( !$rev ) {
@@ -951,6 +953,8 @@ class UndeleteForm {
 		$wgOut->addWikiText( wfMsgHtml( 'undeletepagetitle', $this->mTargetObj->getPrefixedText()) );
 
 		$archive = new PageArchive( $this->mTargetObj );
+		wfRunHooks( 'UndeleteForm::showHistory', array( &$archive ) );
+
 		/*
 		$text = $archive->getLastRevisionText();
 		if( is_null( $text ) ) {
@@ -1280,6 +1284,8 @@ class UndeleteForm {
 		}
 		if( !is_null( $this->mTargetObj ) ) {
 			$archive = new PageArchive( $this->mTargetObj );
+			wfRunHooks( 'UndeleteForm::undelete', array( &$archive ) );
+			
 			$ok = $archive->undelete(
 				$this->mTargetTimestamp,
 				$this->mComment,
