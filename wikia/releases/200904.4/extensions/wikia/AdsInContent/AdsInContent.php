@@ -23,8 +23,7 @@ $wgAdsInContentExtensionConfig = array(
 	'topAdUnit' => false,
 	'bottomAdUnit' => false,
 	'insideAdUnit' => array( /* secttions range => array of section numbers */
-		'3-7' => array(2,5),
-		'8-*' => array(2,5,8),
+		'3-*' => array(2,5),
 //		'9-*' => array(3,6,8)
 	),
 	'insideAdUnitConfig' => array(
@@ -35,7 +34,13 @@ $wgAdsInContentExtensionConfig = array(
 				'align' => 'left',
 				'float' => true,
 //				'googleAdChannel' => '9100000016') // 012
-				'googleAdChannel' => 'INCONTENT_BOXAD')
+				'googleAdChannel' => "INCONTENT1_" . strtolower($wgDBname) ),
+			1 => array(
+				'width' => 200,
+				'height' => 200,
+				'align' => 'left',
+				'float' => true,
+				'googleAdChannel' => "INCONTENT2_" . strtolower($wgDBname) ),
  																	),
 	),
 	'limit' => array(
@@ -60,14 +65,15 @@ function wfAdsInContentSetup() {
  * AdsInContent Extenssion hook handler
  */
 function wfAdsInContentHook(&$out, &$text) {
-	global $wgAdsInContentExtensionConfig, $wgTitle, $wgUser, $wgHooks, $wgOut, $wgDBname;
+	global $wgAdsInContentExtensionConfig, $wgTitle, $wgUser, $wgHooks, $wgOut, $wgDBname, $wgContentNamespaces;
 
 	$loggedIn = $wgUser->isLoggedIn();
 	$ns = $wgTitle->getNamespace();
 
 	// show only for anon user in the main namespace (if article exists)
-	if( ($ns == NS_MAIN) && !$loggedIn && $wgTitle->exists() && !AdsInContent::isMainPage()) {
+	if( in_array( $ns, $wgContentNamespaces ) && !$loggedIn && $wgTitle->exists() && !AdsInContent::isMainPage()) {
 		$wgHooks['SkinAfterBottomScripts'][] = 'AdsInContent::applyTopSectionJSFix';
+		$wgOut->addStyle( '../extensions/wikia/AdsInContent/adsincontent.css', 'screen' );
 		$wgOut->addHtml(
 '<script type="text/javascript" src="http://partner.googleadservices.com/gampad/google_service.js">
 </script>
@@ -76,7 +82,8 @@ function wfAdsInContentHook(&$out, &$text) {
   GS_googleEnableAllServices();
 </script>
 <script type="text/javascript">
-  GA_googleAddSlot("ca-pub-4086838842346968", "INCONTENT_BOXAD_' . $wgDBname . '");
+  GA_googleAddSlot("ca-pub-4086838842346968", "INCONTENT1_' . strtolower($wgDBname) . '");
+  GA_googleAddSlot("ca-pub-4086838842346968", "INCONTENT2_' . strtolower($wgDBname) . '");
   GA_googleAddAdSensePageAttr("google_ad_channel", "4974569436");
 </script>
 <script type="text/javascript">
