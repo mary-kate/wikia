@@ -818,16 +818,3 @@ function VET_sendQueryEmbed(query) {
 	VET_asyncTransaction = YAHOO.util.Connect.asyncRequest('GET', wgScriptPath + '/index.php?action=ajax&rs=VET&method=insertVideo&' + 'url=' + $('VideoEmbedUrl').value, callback);
 }
 
-
-var VET_preQueryCallback = {
-	onComplete: function(response) {
-		var screenType = o.getResponseHeader['X-screen-type'];
-		if(typeof screenType == "undefined") {
-			screenType = o.getResponseHeader['X-Screen-Type'];
-		}
-
-		alert( YAHOO.lang.trim(screenType) );
-		VET_displayDetails(response);
-	}
-}
-
