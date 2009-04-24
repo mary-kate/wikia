@@ -1,9 +1,15 @@
+
+# declare the function signature
+# so we can use them
 C{
 #include <string.h>
   double TIM_real(void);
   void TIM_format(double t, char *p);
 }C
 
+
+
+# init GeoIP code
 C{
   #include <dlfcn.h>
   #include <stdlib.h>
@@ -12,23 +18,16 @@ C{
   #include <GeoIPCity.h>
   #include <pthread.h>
 
-  pthread_key_t geoip_key;
+  pthread_mutex_t geoip_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-  GeoIP* geoip () {
-    GeoIP *gi;
-    if(!geoip_key) {
-      pthread_key_create(&geoip_key, NULL);
-    }
-    gi = pthread_getspecific(geoip_key);
-    if(gi = pthread_getspecific(geoip_key)) {
-      return gi;
-    } else {
-      gi = GeoIP_open_type(GEOIP_CITY_EDITION_REV1,GEOIP_STANDARD);
-      pthread_setspecific(geoip_key, gi);
-      return gi;
+  GeoIP* gi;
+  void geo_init () {
+    if(!gi) {
+      gi = GeoIP_open_type(GEOIP_CITY_EDITION_REV1,GEOIP_MEMORY_CACHE);
     }
   }
 }C
+
 
 #
 # This is a basic VCL configuration file for varnish.  See the vcl(7)
@@ -40,109 +39,98 @@ C{
 # Default backend definition.  Set this to point to your content
 # server.
 
+
 backend default {
-	.host = "127.0.0.1";
+	.host = "192.168.1.1";
 	.port = "80";
 }
 
-
-
-# Below is a commented-out copy of the default VCL logic.  If you
-# redefine any of these subroutines, the built-in logic will be
-# appended to your code.
-
-## Called when a client request is received
-#
 sub vcl_recv {
 
-    if(req.http.host == "geoip.example") {
-      error 200 "OK";
+  # normalize Accept-Encoding to reduce vary
+  if (req.http.Accept-Encoding) {
+    if (req.http.User-Agent ~ "MSIE 6") {
+      unset req.http.Accept-Encoding;
+    } elsif (req.http.Accept-Encoding ~ "gzip") {
+      set req.http.Accept-Encoding = "gzip";
+    } elsif (req.http.Accept-Encoding ~ "deflate") {
+      set req.http.Accept-Encoding = "deflate";
+    } else {
+      unset req.http.Accept-Encoding;
     }
+  }
 
-	if (req.http.Accept-Encoding) {
-		if (req.http.Accept-Encoding ~ "gzip") {
-	            set req.http.Accept-Encoding = "gzip";
-	        } elsif (req.http.Accept-Encoding ~ "deflate") {
-	            set req.http.Accept-Encoding = "deflate";
-	        } else {
-	            # unkown algorithm
-	            remove req.http.Accept-Encoding;
-	        }
-	}
-
-	# clean out requests sent via curls -X mode and LWP
-	if (req.url ~ "^http://") {
-		set req.url = regsub(req.url, "http://[^/]*","");
-	}
+# clean out requests sent via curls -X mode and LWP
+  if (req.url ~ "^http://") {
+    set req.url = regsub(req.url, "http://[^/]*","");
+  }
 
 
-	if (req.url == "/lvscheck.html") {
-		error 200 "varnish is okay";
-	}
+  # get out error handler for geoiplookup
+  if(req.http.host == "geoiplookup.wikia.com" || req.url == "/__varnish_geoip") {
+    set req.http.host = "geoiplookup.wikia.com";
+    error 200 "OK";
+  }
 
-	if (req.http.Expect) {
-		pipe;
-	}
+  # lvs check
+  if (req.url == "/lvscheck.html") {
+    error 200 "OK";
+  }
 
-	{
-	  C{
-	    char *cookie = 0;
-	    char *current_cookie = 0;
-	    int keep = 0;
-	    int end = 0;
-	    current_cookie = cookie = VRT_GetHdr(sp, HDR_REQ, "\007cookie:");
-	    while(cookie && *cookie != '\0') {
-	      if(cookie[1] ==  ';'
-		 || cookie[1] == '\0') {
-		if (keep) {
-		  keep = 0;
-		} else {
-		  memset(current_cookie, 32, (cookie + ( cookie[1] == '\0' ? 1 : 2) - current_cookie));
-		}
-		/* jump 2 to avoid the ; -- if we are at the end it doesn't matter */
-		current_cookie = cookie + 2;
-		cookie++;
-		continue;
-	      }
+  if (req.url == "/__varnish_servername") {
+    error 200 "OK";
+  }
 
-	      if(!keep && ((*cookie == 's' && !memcmp(cookie, "session", 7))
-			   || (*cookie == 'U' && !memcmp(cookie, "UserID", 6))
-			   || (*cookie == 'U' && !memcmp(cookie, "UserName", 8))
-			   || (*cookie == 'T' && !memcmp(cookie, "Token", 5))
-			   || (*cookie == 'L' && !memcmp(cookie, "LoggedOut", 9)))) {
-		keep = 1;
-	      }
-	      cookie++;
-	    }
-	  }C
-	     #;
-	}
+  #normalise images
+  if(req.http.host ~ "images.wikia.com" || req.http.host ~ "nocookie.net") {
+    set req.http.host = "origin-images.wikia.com";
+  }
 
-	if (req.request != "GET" && req.request != "HEAD" && req.request != "PURGE") {
-		pipe;
-	}
+  if(req.url ~ "^/(skins|extensions)/") {
+    set req.http.host = "origin-images.wikia.com";
+    set req.url = regsub(req.url, "^", "/common");
+  }
 
-	if ((req.http.Pragma ~ "xxno-cache" && req.url ~ "raw") || req.request == "PURGE") {
-	  if (req.http.host ~ "images.wikia.com" 
-	      || req.http.host ~ "nocookie.net" 
-	      || req.http.X-Initial-Url ~ "images.wikia.com"
-	      || req.http.X-Initial-Url ~ "nocookie.net") {
-	    nuke(req.url, "origin-images.wikia.com");
-	  } else {
-	    nuke(req.url, req.http.host);
-	  }
-	  if (req.request == "PURGE") {
-	    error 200 "purged";
-	  }
-
-	}
+  if(req.url == "/favicon.ico") {
+    set req.url = "/central/images/6/64/Favicon.ico";
+    set req.http.host = "origin-images.wikia.com";
+  }
+ 
+  set req.http.X-Orig-Cookie = req.http.Cookie;
+  if(req.http.Cookie ~ "(session|UserID|UserName|Token|LoggedOut)") {
+    # dont do anything, the user is logged in
+  } else {
+    # dont care about any other cookies
+    unset req.http.Cookie;
+  }
 
 
-	if (req.http.Authenticate) {
-		pass;
-	}
-	lookup;
+
+  # Yahoo uses this to check for 404
+  if (req.url ~ "^/SlurpConfirm404") {
+    error 404 "Not found";
+  }
+
+
+  if (req.http.Expect) {
+    pipe;
+  }
+
+  # pipe post
+  if (req.request != "GET" && req.request != "HEAD" && req.request != "PURGE") {
+    pipe;
+  }
+
+  # dont cache Authenticate calls
+  # we dont use those?
+  if (req.http.Authenticate) {
+    pass;
+  }
+  set req.grace = 3600s;
+  lookup;
 }
+
+
 
 
 sub vcl_hash {
@@ -151,7 +139,36 @@ sub vcl_hash {
 	hash;
 }
 
+sub vcl_pipe {
+  # do the right XFF processing
+  set bereq.http.X-Forwarded-For = req.http.X-Forwarded-For;
+  set bereq.http.X-Forwarded-For = regsub(bereq.http.X-Forwarded-For, "$", ", ");
+  set bereq.http.X-Forwarded-For = regsub(bereq.http.X-Forwarded-For, "$", client.ip);
+  set bereq.http.Cookie = req.http.X-Orig-Cookie;
+  set bereq.http.connection = "close";
+}
+
+sub vcl_hit {
+  if (req.request == "PURGE") {
+    set obj.ttl = 1s;
+    set obj.grace = 5s;
+    error 200 "Purged.";
+  }
+}
+
 sub vcl_miss {
+
+  if (req.request == "PURGE") {
+    error 404 "Not purged";
+  }
+
+  set bereq.http.X-Forwarded-For = req.http.X-Forwarded-For;
+  set bereq.http.X-Forwarded-For = regsub(bereq.http.X-Forwarded-For, "$", ", ");
+  set bereq.http.X-Forwarded-For = regsub(bereq.http.X-Forwarded-For, "$", client.ip);
+
+  # for nef needs to be generic
+  set bereq.http.Cookie = req.http.X-Orig-Cookie;
+
 }
 
 #
@@ -161,8 +178,34 @@ sub vcl_miss {
 sub vcl_fetch {
 
 
-	set obj.http.X-Orighost = req.http.host;
-	set obj.http.X-Served-By-Backend = obj.http.X-Served-By;
+
+	if ( obj.http.X-Pass-Cache-Control ) {
+	  set obj.http.X-Internal-Pass-Cache-Control = obj.http.X-Pass-Cache-Control;
+	} elsif ( obj.status == 304 ) {
+# no headers on if-modified since
+	} elsif ( req.url ~ ".*/index\.php.*(css|js)"
+		  || req.url ~ "raw") {
+# dont touch it let mediawiki decide
+	} elsif (req.http.Host ~ "images.wikia.com") {
+# lighttpd knows what it is doing
+	} elsif (req.http.Host.host ~ "(geoiplookup|athena-ads)"
+		 || req.url ~ "/__varnish") {
+	  
+	} else {
+#follow squid content here
+	  set obj.http.X-Internal-Pass-Cache-Control = "private, s-maxage=0, max-age=0, must-revalidate";
+	}
+
+
+	if(req.url ~"action=render$") {
+#force cache this
+	  set obj.ttl = 600s;
+	  set obj.grace = 600s;
+	  set obj.http.X-Cacheable = "YES - FORCED";
+	  deliver;
+	}
+
+
 	if (!obj.cacheable) {
 		set obj.http.X-Cacheable = "NO:Not-Cacheable";
 		pass;
@@ -180,20 +223,45 @@ sub vcl_fetch {
 		pass;
 	}
 
-	set obj.http.X-Cacheable = "YES";
 
+	if(req.url == "/robots.txt") {
+		   set obj.http.X-Pass-Cache-Control = "max-age=600";
+		   set obj.ttl = 86400s;
+	}
+
+       if (obj.ttl < 1s) {
+           set obj.ttl = 5s;
+           set obj.grace = 5s;
+           set obj.http.X-Cacheable = "YES - FORCED";
+           deliver;
+        } else {
+          set obj.http.X-Cacheable = "YES";
 # if the backend is down, just server this traffic
-	set obj.grace = 300s;
+     	 if (obj.ttl < 600s) {
+	  set obj.grace = 5s;
+	 } else {
+          set obj.grace = 3600s;
+
+	  }
+        }
+
 
 # ignore the cache rules on images
+	if (req.http.host ~ "images.wikia.com") {
+	  set obj.ttl = 604800s;
+	}
 
 	# do not cache 404
 	if(obj.status == 404) {
-	  set obj.ttl = 0s;
-	  set obj.http.Cache-Control = "max-age=0";
-	  set obj.http.Expires = "Thu, 01 Jan 1970 00:00:00 GMT";
-	  pass;
+	  set obj.http.Cache-Control = "max-age=10";
+	  set obj.ttl = 10s;
+	  set obj.grace = 10s;
 	}
+	if(req.url ~ "esitest") {
+		   esi;
+		   set obj.http.Content-Encoding = "gzip";
+		   set obj.ttl = 1s;
+	}	
 	deliver;
 }
 
@@ -206,33 +274,61 @@ sub vcl_prefetch {
 ## Called before a cached object is delivered to the client
 #
 sub vcl_deliver {
-  
-  set resp.http.X-Served-By = "varnishx";
-  
 
-  if (obj.hits > 0) {
-    set resp.http.X-Cache = "HIT";	
+
+  #add or append Served By
+  if(!resp.http.X-Served-By) {
+    set resp.http.X-Served-By  = server.identity;
+    if (obj.hits > 0) {
+      set resp.http.X-Cache = "HIT";
+    } else {
+      set resp.http.X-Cache = "MISS";
+    }
     set resp.http.X-Cache-Hits = obj.hits;
   } else {
-    set resp.http.X-Cache = "MISS";	
+# append current data
+    set resp.http.X-Served-By = regsub(resp.http.X-Served-By, "$", ", ");
+    set resp.http.X-Served-By = regsub(resp.http.X-Served-By, "$", server.identity);
+    if (obj.hits > 0) {
+      set resp.http.X-Cache = regsub(resp.http.X-Cache, "$", ", HIT");
+    } else {
+      set resp.http.X-Cache = regsub(resp.http.X-Cache, "$" , ", MISS");
+    }
+    set resp.http.X-Cache-Hits = regsub(resp.http.X-Cache-Hits, "$", ", ");
+    set resp.http.X-Cache-Hits = regsub(resp.http.X-Cache-Hits, "$", obj.hits);
   }
 
 
+  set resp.http.X-Age = resp.http.Age;
 
-  if ( resp.http.X-Pass-Cache-Control ) {
-    set resp.http.Cache-Control = resp.http.X-Pass-Cache-Control;
-  } elsif ( resp.status == 304 ) {
-# no headers on if-modified since
-  } elsif ( resp.http.origurl ~ ".*/.*\.(css|js)"
-	    || resp.http.orgiurl ~ "raw") {
-# dont touch it let mediawiki decide
-  } elsif (! resp.http.X-Orig-Host ~ "images.wikia.com") {
-# lighttpd knows what it is doing
-  } else {
-#follow squid content here 
-    set resp.http.cache-control = "private, s-maxage=0, max-age=0, must-revalidate";
-  }
+  unset resp.http.Age;
+  unset resp.http.X-Varnish;
+  unset resp.http.Via;
+  unset resp.http.X-Vary-Options;
+  unset resp.http.X-Powered-By;
 
+  # these are upstream varnishes
+  # dont change anything
+
+    if ( client.ip ~ LON
+      || client.ip ~ SJC
+      || client.ip ~ IOWA
+	 ) {
+    unset resp.http.X-CPU-Time;
+    unset resp.http.X-Real-Time;
+    unset resp.http.X-Served-By-Backend;
+    unset resp.http.X-User-Id;
+    unset resp.http.X-Namespace-Number;
+    unset resp.http.X-Internal-Pass-Cache-Control;
+    deliver;
+  } 
+
+    if (resp.http.X-Internal-Pass-Cache-Control) {
+      set resp.http.Cache-Control = resp.http.Internal-X-Pass-Cache-Control;
+    }
+
+
+  # if there isnt an expiry
   if (!resp.status == 304) {
     C{
       char *cache = VRT_GetHdr(sp, HDR_REQ, "\016cache-control:");
@@ -259,26 +355,28 @@ sub vcl_deliver {
 	  VRT_SetHdr(sp, HDR_RESP, "\010Expires:", date, vrt_magic_string_end);
 	}
       }
-    }C  
+    }C
        #;
   }
 
-  if( resp.http.cache-control ~ "max-age=0") {
-    set resp.http.Expires = "Thu, 01 Jan 1970 00:00:00 GMT";
-  }
-  
   deliver;
 }
 
 sub vcl_error {
-  if(req.http.host == "geoip.example.com") {
-  set obj.http.Content-Type = "text/plain";
-    C{
-      GeoIP *gi = geoip();
-      char json[255];
-      char *ip = VRT_IP_string(sp, VRT_r_client_ip(sp));
-      GeoIPRecord *record = GeoIP_record_by_addr(gi, ip);
+  if(req.http.host == "geoiplookup.wikia.com" || req.url == "/__varnish_geoip") {
+    set obj.http.Content-Type = "text/plain";
+    set obj.http.x-internal-pass-cache-control = "private, s-maxage=0, max-age=360";
 
+    C{
+      char *ip = VRT_IP_string(sp, VRT_r_client_ip(sp));
+      char date[40];
+      char json[255];
+
+      pthread_mutex_lock(&geoip_mutex);
+
+      if(!gi) { geo_init(); }
+
+      GeoIPRecord *record = GeoIP_record_by_addr(gi, ip);
       if(record) {
         snprintf(json, 255, "Geo = {\"city\":\"%s\",\"country\":\"%s\",\"lat\":\"%f\",\"lon\":\"%f\",\"classC\":\"%s\",\"netmask\":\"%d\"}",
                  record->city,
@@ -288,18 +386,32 @@ sub vcl_error {
                  ip,
                  GeoIP_last_netmask(gi)
                  );
+	pthread_mutex_unlock(&geoip_mutex);
         VRT_synth_page(sp, 0, json,  vrt_magic_string_end);
       } else {
+	pthread_mutex_unlock(&geoip_mutex);
         VRT_synth_page(sp, 0, "Geo = {}",  vrt_magic_string_end);
       }
 
 
+      TIM_format(TIM_real(), date);
+      VRT_SetHdr(sp, HDR_OBJ, "\016Last-Modified:", date, vrt_magic_string_end);
     }C
+    deliver;
        }
-       
-       if(req.url ~ "lvscheck.html") {
-       synthetic {"varnish is okay"};
-       }
+
+  # check if site is working
+  if(req.url ~ "lvscheck.html") {
+    synthetic {"varnish is okay"};
+    deliver;
+  }
+  if (req.url ~ "/__varnish_servername") {
+#C{
+#  VRT_synth_page(sp, 0, VRT_r_server_identity(sp), vrt_magic_string_end);
+# }C
+  synthetic server.identity;
+     deliver;
+ }
 
   deliver;
 
