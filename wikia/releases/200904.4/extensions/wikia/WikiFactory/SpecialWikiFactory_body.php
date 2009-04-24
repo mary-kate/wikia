@@ -348,7 +348,7 @@ class WikiFactoryPage extends SpecialPage {
 		$Tmpl = new EasyTemplate( dirname( __FILE__ ) . "/templates/" );
 		$Tmpl->set( "stats", $stats );
 
-		return $Tmpl->render( "shortstats" );
+		return $Tmpl->execute( "shortstats" );
 	}
 }
 
