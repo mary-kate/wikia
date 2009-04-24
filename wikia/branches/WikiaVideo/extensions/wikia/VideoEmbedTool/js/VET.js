@@ -517,7 +517,8 @@ function VET_preQuery(e) {
 		} else {
 			VET_track('query/search/' + query); // tracking
 			VET_indicator(1, true);
-			return true;
+			VET_sendQueryEmbed( query );
+			return false;
 		}
 	}
 }
@@ -795,8 +796,37 @@ function VET_track(str) {
 	YAHOO.Wikia.Tracker.track('VET/' + str);
 }
 
+function VET_sendQueryEmbed(query) {
+	var callback = {
+		success: function(o) {
+			var screenType = o.getResponseHeader['X-screen-type'];
+			if(typeof screenType == "undefined") {
+				screenType = o.getResponseHeader['X-Screen-Type'];
+			}
+
+			if( 'error' == YAHOO.lang.trim(screenType) ) {
+				alert( o.responseText );		
+			} else {
+				VET_displayDetails(o.responseText);		
+			}
+
+			VET_indicator(1, false);
+		}
+	}
+	VET_indicator(1, true);
+	YAHOO.util.Connect.abort(VET_asyncTransaction)
+	VET_asyncTransaction = YAHOO.util.Connect.asyncRequest('GET', wgScriptPath + '/index.php?action=ajax&rs=VET&method=insertVideo&' + 'url=' + $('VideoEmbedUrl').value, callback);
+}
+
+
 var VET_preQueryCallback = {
 	onComplete: function(response) {
+		var screenType = o.getResponseHeader['X-screen-type'];
+		if(typeof screenType == "undefined") {
+			screenType = o.getResponseHeader['X-Screen-Type'];
+		}
+
+		alert( YAHOO.lang.trim(screenType) );
 		VET_displayDetails(response);
 	}
 }
