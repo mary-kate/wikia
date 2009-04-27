@@ -2,9 +2,6 @@
 /**
  * search hook extending near matches to mixture of capital/not letters
  * at the beginning of words
- * + shared help
- * + link suggest emulation TODO
- * + full capital/not mix
  *
  * @author Przemek Piotrowski <ppiotr@wikia-inc.com>
  * @see RT#4307 RT#11497
@@ -18,18 +15,9 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 /**
  * order is important, put heavy queries at the end
  */
-$wgHooks['SearchGetNearMatch'][] = 'SearchNearMatch::allCapitalOneLowerFromDB';
 $wgHooks['SearchGetNearMatch'][] = 'SearchNearMatch::allCapitalOneLower';
 $wgHooks['SearchGetNearMatch'][] = 'SearchNearMatch::fullCapitalAndLowerMix';
-
-if ($wgWikiaEnableSharedHelpExt) {
-#	$wgHooks['SearchGetNearMatch'][] = 'SearchNearMatch::checkHelpWikia';
-}
-
-if ($wgEnableLinkSuggestExt) {
-#	$wgHooks['SearchGetNearMatch'][] = 'SearchNearMatch::emulateLinkSuggest';
-}
-
+$wgHooks['SearchGetNearMatch'][] = 'SearchNearMatch::allCapitalOneLowerFromDB';
 
 class SearchNearMatch {
 	/**
@@ -59,7 +47,12 @@ class SearchNearMatch {
 		$guesses = array();
 		
 		$words = ucwords(strtolower($term));
-		$words = explode(' ', $words);
+		$words = preg_split('/\s/', $words, -1, PREG_SPLIT_NO_EMPTY);
+		if (7 < sizeof($words)) {
+			// PHP Fatal error:  Allowed memory size exhausted...
+			return true;
+		}
+
 		// first word is always upercase, no need to mutate
 		$first_word = array_shift($words);
 
@@ -78,7 +71,8 @@ class SearchNearMatch {
 			$guesses[] = $first_word . ' ' . $mutation;
 		}
 
-		return self::checkGuesses($guesses, $title);
+		$result = self::checkGuesses($guesses, $title);
+		return $result;
 	}
 
 
@@ -136,7 +130,13 @@ class SearchNearMatch {
 		$guesses = array();
 
 		$words = ucwords(strtolower($term));
-		$words = explode(' ', $words);
+		$words = preg_split('/\s/', $words, -1, PREG_SPLIT_NO_EMPTY);
+		if (7 < sizeof($words)) {
+			// PHP Fatal error:  Allowed memory size exhausted...
+			return true;
+		}
+
+		// first word is always upercase, no need to mutate
 		$first_word = array_shift($words);
 
 		$heap = array();
@@ -149,7 +149,8 @@ class SearchNearMatch {
 			$guesses[] = $first_word . ' ' . $mutation;
 		}
 
-		return self::checkGuesses($guesses, $title);
+		$result = self::checkGuesses($guesses, $title);
+		return $result;
 	}
 
 	private static function fullCapitalAndLowerMixMagic($words, &$heap) {
@@ -162,44 +163,6 @@ class SearchNearMatch {
 				self::fullCapitalAndLowerMixMagic($temp, $heap);
 			}
 		}
-	}
-
-	/**
-	 * @see getLinkSuggest in LinkSuggest.php 
-	 */
-	public static function emulateLinkSuggest($term, &$title) {
-		$guesses = array();
-
-/*
-		TODO
-		decouple getLinkSuggest into engine and ajax wrapper
-		use engine here
-*/
-		return self::checkGuesses($guesses, $title);
-	}
-
-	/**
-	 * page Help:Foo may not/semi/exists via shared help.wikia
-	 *
-	 * FIXME do it only for help namespace?
-	 */
-	public static function checkHelpWikia($term, &$title) {
-		$guesses = array();
-
-		$data = Http::get('http://help.wikia.com/api.php?action=opensearch&search=' . $term . '&namespace=12');
-		if (preg_match('/^\["' . $term . '",\["(.*)"\]\]$/', $data, $matches)) {
-			$guesses = split('","', $matches[1]);
-		}
-
-		//return self::checkGuesses($guesses, $title);
-		// not this time, it does not exist here for sure
-		// however, it surely exists via shared help
-		if (!empty($guesses[0])) {
-			$title = Title::newFromText($guesses[0]);
-			return false;
-		}
-
-		return true;
 	}
 }
 
