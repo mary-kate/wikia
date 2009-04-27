@@ -107,20 +107,23 @@ class VideoPage extends Article {
 		$encGroup = $dbw->addQuotes( 'deleted' );
 
 		// cater for older format, gather first, insert then
-		'img_name = ' . $dbr->addQuotes( self::getNameFromTitle( $this->mTitle ) ) .' OR img_name = ' . $dbr->addQuotes( $this->mTitle->getPrefixedText()
+		$where = 'img_name = ' . $dbr->addQuotes( self::getNameFromTitle( $this->mTitle ) ) .' OR img_name = ' . $dbr->addQuotes( $this->mTitle->getPrefixedText());
 			
-		$conditions = array( 'img_name = ' . $dbr->addQuotes( self::getNameFromTitle( $this->mTitle ) ) .' OR img_name = ' . $dbr->addQuotes( $this->mTitle->getPrefixedText() );
+		$conditions = array( 'img_name = ' . $dbr->addQuotes( self::getNameFromTitle( $this->mTitle ) ) .' OR img_name = ' . $dbr->addQuotes( $this->mTitle->getPrefixedText() ) );
 
 		$result = $dbw->select( 'image', '*',
 				$conditions,
 				__METHOD__,
-				array( 'ORDER BY' => 'fa_timestamp DESC' )
+				array( 'ORDER BY' => 'img_timestamp DESC' )
 				);
 
+		$insertBatch = array();
+		$archiveName = '';
+		$first = true;
 
-
-		$dbw->insertSelect( 'filearchive', 'image',
-				array(
+		while( $row = $dbw->fetchObject( $result ) ) {
+                	if( $first ) { // this is our new current revision
+				$insertCurrent = array(
 					'fa_storage_group' => $encGroup,
 					'fa_storage_key'   => "''",
 					'fa_deleted_user'      => $encUserId,
@@ -128,46 +131,51 @@ class VideoPage extends Article {
 					'fa_deleted_reason'    => $encReason,
 					'fa_deleted'               => 0, //todo check
 
-					'fa_name'         => 'img_name',
+					'fa_name'         => self::getNameFromTitle( $this->mTitle ),
 					'fa_archive_name' => 'NULL',
-					'fa_size'         => 'img_size',
-					'fa_width'        => 'img_width',
-					'fa_height'       => 'img_height',
-					'fa_metadata'     => 'img_metadata',
-					'fa_bits'         => 'img_bits',
-					'fa_media_type'   => 'img_media_type',
-					'fa_major_mime'   => 'img_major_mime',
-					'fa_minor_mime'   => 'img_minor_mime',
-					'fa_description'  => 'img_description',
-					'fa_user'         => 'img_user',
-					'fa_user_text'    => 'img_user_text',
-					'fa_timestamp'    => 'img_timestamp'
-						), $where, __METHOD__ );
-
-		$where = array( 'oi_name' => self::getNameFromTitle( $this->mTitle ) );
-		$dbw->insertSelect( 'filearchive', 'oldimage',
-				array(
+					'fa_size'         => $row->img_size,
+					'fa_width'        => $row->img_width,
+					'fa_height'       => $row->img_height,
+					'fa_metadata'     => $row->img_metadata,
+					'fa_bits'         => $row->img_bits,
+					'fa_media_type'   => $row->img_media_type,
+					'fa_major_mime'   => $row->img_major_mime,
+					'fa_minor_mime'   => $row->img_minor_mime,
+					'fa_description'  => $row->img_description,
+					'fa_user'         => $row->img_user,
+					'fa_user_text'    => $row->img_user_text,
+					'fa_timestamp'    => $row->img_timestamp
+					);
+			} else {
+				
+				$insertBatchImg = array(
 					'fa_storage_group' => $encGroup,
 					'fa_storage_key'   => "''",
 					'fa_deleted_user'      => $encUserId,
 					'fa_deleted_timestamp' => $encTimestamp,
 					'fa_deleted_reason'    => $encReason,
-					'fa_name'         => 'oi_name',
-					'fa_archive_name' => 'oi_archive_name',
-					'fa_size'         => 'oi_size',
-					'fa_width'        => 'oi_width',
-					'fa_height'       => 'oi_height',
-					'fa_metadata'     => 'oi_metadata',
-					'fa_bits'         => 'oi_bits',
-					'fa_media_type'   => 'oi_media_type',
-					'fa_major_mime'   => 'oi_major_mime',
-					'fa_minor_mime'   => 'oi_minor_mime',
-					'fa_description'  => 'oi_description',
-					'fa_user'         => 'oi_user',
-					'fa_user_text'    => 'oi_user_text',
-					'fa_timestamp'    => 'oi_timestamp',
-					'fa_deleted'      => 0 // todo check
-						), $where, __METHOD__ );
+					'fa_deleted'               => 0, //todo check
+
+					'fa_name'         => self::getNameFromTitle( $this->mTitle ),
+					'fa_archive_name' => $archiveName, // todo check
+					'fa_size'         => $row->img_size,
+					'fa_width'        => $row->img_width,
+					'fa_height'       => $row->img_height,
+					'fa_metadata'     => $row->img_metadata,
+					'fa_bits'         => $row->img_bits,
+					'fa_media_type'   => $row->img_media_type,
+					'fa_major_mime'   => $row->img_major_mime,
+					'fa_minor_mime'   => $row->img_minor_mime,
+					'fa_description'  => $row->img_description,
+					'fa_user'         => $row->img_user,
+					'fa_user_text'    => $row->img_user_text,
+					'fa_timestamp'    => $row->img_timestamp
+					);
+
+			}
+
+		}
+
 	}
 
 	function doDBDeletes() {
