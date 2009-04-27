@@ -171,10 +171,45 @@ class VideoPage extends Article {
 					'fa_user_text'    => $row->img_user_text,
 					'fa_timestamp'    => $row->img_timestamp
 					);
-
 			}
-
+			$deleteIds[] = $row->fa_id;
+			$first = false;
 		}
+
+		$where = 'oi_name = ' . $dbr->addQuotes( self::getNameFromTitle( $this->mTitle ) ) .' OR oi_name = ' . $dbr->addQuotes( $this->mTitle->getPrefixedText());
+	
+		if ( $insertCurrent ) {
+                        $dbw->insert( 'filearchive', $insertCurrent, __METHOD__ );
+                }
+                if ( $insertBatchImg ) {
+                        $dbw->insert( 'filearchive', $insertBatchImg, __METHOD__ );
+                }
+
+		$where = array( 'oi_name' => self::getNameFromTitle( $this->mTitle ) );
+		$dbw->insertSelect( 'filearchive', 'oldimage',
+				array(
+					'fa_storage_group' => $encGroup,
+					'fa_storage_key'   => "''",
+					'fa_deleted_user'      => $encUserId,
+					'fa_deleted_timestamp' => $encTimestamp,
+					'fa_deleted_reason'    => $encReason,
+					'fa_name'         => 'oi_name',
+					'fa_archive_name' => 'oi_archive_name',
+					'fa_size'         => 'oi_size',
+					'fa_width'        => 'oi_width',
+					'fa_height'       => 'oi_height',
+					'fa_metadata'     => 'oi_metadata',
+					'fa_bits'         => 'oi_bits',
+					'fa_media_type'   => 'oi_media_type',
+					'fa_major_mime'   => 'oi_major_mime',
+					'fa_minor_mime'   => 'oi_minor_mime',
+					'fa_description'  => 'oi_description',
+					'fa_user'         => 'oi_user',
+					'fa_user_text'    => 'oi_user_text',
+					'fa_timestamp'    => 'oi_timestamp',
+					'fa_deleted'      => 0 // todo check
+						), $where, __METHOD__ );
+
 
 	}
 
