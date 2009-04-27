@@ -105,8 +105,19 @@ class VideoPage extends Article {
 		$encUserId = $dbw->addQuotes( $wgUser->getId() );
 		$encReason = $dbw->addQuotes( $this->reason );
 		$encGroup = $dbw->addQuotes( 'deleted' );
-		// main rev
-		$where = array( 'img_name' => self::getNameFromTitle( $this->mTitle ) );
+
+		// cater for older format, gather first, insert then
+		'img_name = ' . $dbr->addQuotes( self::getNameFromTitle( $this->mTitle ) ) .' OR img_name = ' . $dbr->addQuotes( $this->mTitle->getPrefixedText()
+			
+		$conditions = array( 'img_name = ' . $dbr->addQuotes( self::getNameFromTitle( $this->mTitle ) ) .' OR img_name = ' . $dbr->addQuotes( $this->mTitle->getPrefixedText() );
+
+		$result = $dbw->select( 'image', '*',
+				$conditions,
+				__METHOD__,
+				array( 'ORDER BY' => 'fa_timestamp DESC' )
+				);
+
+
 
 		$dbw->insertSelect( 'filearchive', 'image',
 				array(
@@ -1238,7 +1249,7 @@ class VideoPageArchive extends PageArchive {
 					}
 
 		// todo check out and return the proper "file" restoration info
-//			$filesRestored = $this->fileStatus->successCount;
+		// the info is put into the log inside the parent function
 
 		// run parent version, because it uses a private function inside
 		// files will not be touched anyway here, because it's not NS_FILE
