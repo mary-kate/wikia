@@ -1272,10 +1272,9 @@ class VideoPageArchive extends PageArchive {
 						'oi_deleted'      => $this->unsuppress ? 0 : $row->fa_deleted, // todo check
 						'oi_sha1'         => '' );
 			}
-
+			$deleteIds[] = $row->fa_id;
+			$first = false;
 		}
-		$deleteIds[] = $row->fa_id;
-		$first = false;
 
 		unset( $result );		
 
