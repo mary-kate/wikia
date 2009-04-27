@@ -107,9 +107,9 @@ class VideoPage extends Article {
 		$encGroup = $dbw->addQuotes( 'deleted' );
 
 		// cater for older format, gather first, insert then
-		$where = 'img_name = ' . $dbr->addQuotes( self::getNameFromTitle( $this->mTitle ) ) .' OR img_name = ' . $dbr->addQuotes( $this->mTitle->getPrefixedText());
+		$where = 'img_name = ' . $dbw->addQuotes( self::getNameFromTitle( $this->mTitle ) ) .' OR img_name = ' . $dbw->addQuotes( $this->mTitle->getPrefixedText());
 			
-		$conditions = array( 'img_name = ' . $dbr->addQuotes( self::getNameFromTitle( $this->mTitle ) ) .' OR img_name = ' . $dbr->addQuotes( $this->mTitle->getPrefixedText() ) );
+		$conditions = array( 'img_name = ' . $dbw->addQuotes( self::getNameFromTitle( $this->mTitle ) ) .' OR img_name = ' . $dbw->addQuotes( $this->mTitle->getPrefixedText() ) );
 
 		$result = $dbw->select( 'image', '*',
 				$conditions,
@@ -176,7 +176,7 @@ class VideoPage extends Article {
 			$first = false;
 		}
 
-		$where = 'oi_name = ' . $dbr->addQuotes( self::getNameFromTitle( $this->mTitle ) ) .' OR oi_name = ' . $dbr->addQuotes( $this->mTitle->getPrefixedText());
+		$where = 'oi_name = ' . $dbw->addQuotes( self::getNameFromTitle( $this->mTitle ) ) .' OR oi_name = ' . $dbw->addQuotes( $this->mTitle->getPrefixedText());
 	
 		if ( $insertCurrent ) {
                         $dbw->insert( 'filearchive', $insertCurrent, __METHOD__ );
