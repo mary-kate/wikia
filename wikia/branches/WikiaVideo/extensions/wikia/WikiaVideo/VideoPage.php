@@ -97,6 +97,16 @@ class VideoPage extends Article {
 		}
 	}
 
+	function doCleanup () {
+		global $wgUser;
+
+
+
+
+
+
+	}
+	
 	function doDBInserts() {
 		global $wgUser;
 
