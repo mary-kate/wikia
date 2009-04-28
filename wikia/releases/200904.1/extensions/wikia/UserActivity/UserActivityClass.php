@@ -510,6 +510,8 @@ class UserActivity {
 			} else {
 				$page_title = Title::newFromText( $page_name );
 			}
+
+			if (!($page_title instanceof Title)) continue;
 			
 			$count_users = count( $page_data["users"] );
 			$user_index = 0;
