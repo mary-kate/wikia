@@ -1,0 +1,206 @@
+#csSuggestContainer {
+	position: relative;
+	top: 4px;
+	left: 0;
+	width: 250px;
+}
+
+#csMainContainer {
+	border: 1px solid #AAA;
+	padding: 5px 5px 2px 5px;
+	position: relative;
+}
+
+#csItemsContainer {
+	position: relative;
+}
+
+#csHintContainer {
+	background: #DDD;
+	border: 1px solid #777;
+	color: #000;
+	display: none;
+	font-size: 11px;
+	padding: 2px 4px;
+	position: absolute;
+}
+
+#csCategoryInput {
+	background: transparent;
+	border: 0;
+	color: inherit;
+	display: block;
+	float: left;
+	outline: none;
+}
+
+#csSwitchViewContainer {
+	display: none;
+	float: right;
+	white-space: pre;
+}
+
+#csButtonsContainer {
+	float: right;
+}
+
+.CSitem {
+	background: #9Cf;
+	border: 1px solid #82add8;
+	color: #000 !important;
+	cursor: default;
+	display: block;
+	float: left;
+	font-size: 11px;
+	line-height: 16px;
+	margin: 0 5px 3px 0;
+	white-space: nowrap;
+	position: relative;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+
+.CSaddCategory {
+	background: #DDD;
+	border-color: #BBB;
+	cursor: pointer;
+}
+
+.CSitemOuter {
+	padding: 0 35px 0 4px;
+}
+
+.CSitemOuterAddCategory {
+	margin: 0 4px 0 18px;
+}
+
+.CSitem:hover {
+	text-decoration: none;
+}
+
+.CSitem:visited, .CSitem:active {
+	color: black;
+}
+
+/*** Control buttons ***/
+.CScontrol {
+	background-image: url(sprite.png);
+	cursor: pointer;
+	display: block;
+	height: 14px;
+	position: absolute;
+	top: 1px;
+	width: 48px;
+	overflow: hidden;
+}
+
+.CScontrolAdd {
+	background-position: top left;
+	left: 2px;
+	width: 12px;
+}
+
+.CScontrolRemove {
+	clip: rect(0px 48px 14px 36px);
+	right: 4px;
+}
+
+/** fix for Opera **/
+html>/**/body .CSitemOuter > .CScontrolRemove {
+	clip: rect(auto, auto, auto, auto);
+	background-position: right center;
+	width: 12px;
+	z-index: 2;
+}
+
+.CScontrolSort {
+	clip: rect(0px 36px 14px 24px);
+	right: 4px;
+}
+
+.CScontrolSorted {
+	clip: rect(0px 24px 14px 12px);
+	right: -8px;
+}
+
+.CSsuggestHover {
+	background-color: #D2E3FF;
+}
+
+/** Tooltip **/
+#csTooltip {
+	position: absolute;
+	width: 200px;
+	background-color: #ffc;
+	border: solid 1px #dda;
+	color: #000;
+	display: none;
+}
+
+#csTooltip p {
+	font-size: 0.9em;
+	padding: 5px 15px 5px 5px;
+}
+
+#csTooltip a {
+	text-decoration: underline;
+}
+
+#csTooltipClose {
+	position: absolute;
+	top: 2px;
+	right: 2px;
+	width: 12px;
+	height: 12px;
+	background-image: url('http://images.wikia.com/skins/common/yui_2.5.2/container/assets/close12_1.gif');
+	cursor: pointer;
+	line-height: 12px;
+}
+
+/** View mode **/
+.csViewMode {
+	border: none !important;
+}
+
+.csViewMode #csButtonsContainer {
+	float: none;
+	margin: 25px -10px -12px -10px;
+	padding: 5px;
+}
+
+.csViewMode #csItemsContainer {
+	padding: 5px 0;
+}
+
+.csLoading {
+	background-image: url('http://images.wikia.com/common/skins/monaco/images/widget_loading.gif');
+	background-repeat: no-repeat;
+	background-position: 99% 50%;
+}
+
+.csSaving {
+	background-image: url('http://images.wikia.com/common/skins/monaco/images/widget_loading.gif');
+	background-repeat: no-repeat;
+	background-position: 99% 50%;
+}
+
+/** IE6 fixes **/
+* html #csMainContainer,
+* html .CSitem {
+	height: 1%;
+}
+
+* html .CScontrol {
+	background-image: none;
+	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://images.wikia.com/common/extensions/wikia/CategorySelect/sprite.png', sizingMethod='crop');
+}
+
+/* fix for YUI AutoComplete in CategorySelect */
+* html #article,
+* html #csMainContainer {
+	z-index: 10 !important;
+}
+
+* html .csViewMode #csButtonsContainer {
+	margin: 0;
+}
