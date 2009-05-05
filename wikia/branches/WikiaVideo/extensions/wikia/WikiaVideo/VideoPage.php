@@ -46,26 +46,32 @@ class VideoPage extends Article {
 	}
 
 	public function doDelete( $reason, $suppress = false ) {
-		global $wgOut, $wgUser;
+		global $wgOut, $wgUser, $wgRequest;
 
 		// move the history to filearchive
-		$this->doDBInserts();
-		// and clean it up
-		$this->doDBDeletes();	
+		if( !$wgRequest->getVal( 'wpOldVideo' ) ) { 
+			$this->doDBInserts();
+			// and clean it up
+			$this->doDBDeletes();	
+			parent::doDelete( $reason, $suppress );	
 
-		parent::doDelete( $reason, $suppress );	
+			$title = $this->mTitle;
+			if ( $title ) {
+				$update = new VideoHTMLCacheUpdate( $title, 'imagelinks' );
+				$update->doUpdate();
+			}
 
-		$title = $this->mTitle;
-		if ( $title ) {
-			$update = new VideoHTMLCacheUpdate( $title, 'imagelinks' );
-			$update->doUpdate();
+		} else {
+			// todo delete just this one "file" revision
 		}
 	}
 
 	public function confirmDelete( $reason ) {
-		global $wgOut, $wgUser;
+		global $wgOut, $wgUser, $wgRequest;
 
 		wfDebug( "Article::confirmDelete\n" );
+
+		$wgRequest->getVal( 'oldvideo' ) ? $oldvideo = $wgRequest->getVal( 'oldvideo' ) : $oldvideo = '';
 
 		$wgOut->setSubtitle( wfMsgHtml( 'delete-backlink', $wgUser->getSkin()->makeKnownLinkObj( $this->mTitle ) ) );
 		$wgOut->setRobotPolicy( 'noindex,nofollow' );
@@ -126,6 +132,7 @@ class VideoPage extends Article {
 			Xml::closeElement( 'table' ) .
 			Xml::closeElement( 'fieldset' ) .
 			Xml::hidden( 'wpEditToken', $wgUser->editToken() ) .
+			Xml::hidden( 'wpOldVideo', $oldvideo ) .			
 			Xml::closeElement( 'form' );
 
 		if( $wgUser->isAllowed( 'editinterface' ) ) {
