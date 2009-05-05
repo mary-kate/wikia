@@ -224,11 +224,13 @@ sub check_additional {
     is($ans->[0]->cname, "resolved_cname.example.local");
 }
 
-TODO: {
-    local $TODO = "Doesnt support CNAMEs pointing to CNAMEs for glue, not sure if it should";
+{
     pass("Resolving a cname");
     my ($rcode, $ans, $auth, $add, $flags) = $glbdns->request("cnamecname.example.local","IN","A","127.0.0.1",undef);
-    is(scalar @$ans, 3, "CNAME and A record");
+    TODO: {
+        local $TODO = "Doesnt support CNAMEs pointing to CNAMEs for glue, not sure if it should";
+	is(scalar @$ans, 3, "CNAME and A record");
+    }
     is(scalar @$auth, 4, "4 auth records");
     is(scalar @$add, "4", "for the name servers");
 }
@@ -268,13 +270,35 @@ TODO: {
     is(scalar @$add, "4", "for the name servers");
 }
 
-TODO: {
-    local($TODO) = "Possibly passing back too much";
+{
     pass("resolved_cname.example.local IN ANY");
     my ($rcode, $ans, $auth, $add, $flags) = $glbdns->request("resolved_cname.example.local","IN","ANY","127.0.0.1",undef);
     is($rcode, "NOERROR", "Should be fine");
     is($flags->{aa}, 1, "We are supposed to be authorative");
-    is(scalar @$ans, 1, "Should include the SOA an MX");
+    TODO: {
+      local($TODO) = "Possibly passing back too much";
+      is(scalar @$ans, 1, "Should include the SOA and no MX");
+    }
+}
+
+{
+    pass("resolved_cname.example.local IN MX");
+    my ($rcode, $ans, $auth, $add, $flags) = $glbdns->request("resolved_cname.example.local","IN","MX","127.0.0.1",undef);
+    is($rcode, "NOERROR", "Should be fine");
+    is($flags->{aa}, 1, "We are supposed to be authorative");
+    is(scalar @$ans, 0, "No MX");
+    is(scalar @$auth, 1, "SOA Record");
+    is(scalar @$add, 0, "No addetional");
+}
+
+{
+    pass("london.example.local IN MX");
+    my ($rcode, $ans, $auth, $add, $flags) = $glbdns->request("london.example.local","IN","MX","127.0.0.1",undef);
+    is($rcode, "NOERROR", "Should be fine");
+    is($flags->{aa}, 1, "We are supposed to be authorative");
+    is(scalar @$ans, 0, "No MX");
+    is(scalar @$auth, 1, "SOA Record");
+    is(scalar @$add, 0, "No addetional");
 }
 
 {
@@ -295,6 +319,26 @@ TODO: {
     is(scalar @$ans, 1);
     is(scalar @$auth, 4);
     is(scalar @$add,  4);
+}
+
+{
+    pass("example.local IN MX");
+    my ($rcode, $ans, $auth, $add, $flags) = $glbdns->request("example.local","IN","MX","127.0.0.1",undef);
+    is($rcode, "NOERROR", "Should be fine");
+    is($flags->{aa}, 1, "We are supposed to be authorative");
+    is(scalar @$ans, 1, "No MX");
+    is(scalar @$auth, 4, "NS");
+    is(scalar @$add, 5, "No addetional");
+}
+
+{
+    pass("not-existant.example.local IN MX");
+    my ($rcode, $ans, $auth, $add, $flags) = $glbdns->request("not-existant.example.local","IN","MX","127.0.0.1",undef);
+    is($rcode, "NXDOMAIN", "Should be fine");
+    is($flags->{aa}, 1, "We are supposed to be authorative");
+    is(scalar @$ans, 0, "No MX");
+    is(scalar @$auth, 1, "SOA");
+    is(scalar @$add, 0, "No additional");
 }
 
 1;
