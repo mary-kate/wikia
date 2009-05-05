@@ -2,29 +2,30 @@
 
 $ORIGIN nocookie.net.
 
-600 IN SOA ns-lon-2.wikia.net. dnsmaster.wikia-inc.com. 2009032001 1200 120 1209600 300
+600 IN SOA ns-lon-2.wikia.net. dnsmaster.wikia-inc.com. 2009050501 1200 120 1209600 300
 
-60 IN NS ns-sjc-1.wikia.net
-60 IN NS ns-nj-1.wikia.net
-60 IN NS ns-lon-1.wikia.net
-60 IN NS ns-lon-2.wikia.net
+3600 IN NS ns-sjc-1.wikia.net
+3600 IN NS ns-nj-1.wikia.net
+3600 IN NS ns-lon-1.wikia.net
+3600 IN NS ns-lon-2.wikia.net
 
-images1.wikia 60 IN CNAME glb
-images2.wikia 60 IN CNAME glb
-images3.wikia 60 IN CNAME glb
-images4.wikia 60 IN CNAME glb
+images1.wikia 3600 IN CNAME glb
+images2.wikia 3600 IN CNAME glb
+images3.wikia 3600 IN CNAME glb
+images4.wikia 3600 IN CNAME glb
 
-glb 120 IN CNAME sjc-images
-glb 120 IN CNAME london
-;glb 120 IN CNAME panther-apac
-;glb 120 IN CNAME panther-us
-glb 120 IN CNAME iowa
-glb 120 IN A 216.151.156.12
+glb 60 IN CNAME sjc-images
+glb 60 IN CNAME london
+glb 60 IN CNAME panther-apac
+glb 60 IN CNAME panther-us
+glb 60 IN CNAME iowa
+glb 60 IN A 216.151.156.12
 
 
-sjc-images 60 IN A 216.151.156.12
+;sjc-images 60 IN A 216.151.156.12
+sjc-images 60 IN A 70.42.129.196
 sjc-images 60 IN LOC 37 00 00.000 N 121 00 00.000 W 0.00m 0.00m 0.00m 0.00m
-;sjc-images 60 IN TXT GlbDNS::RADIUS 700 km
+sjc-images 60 IN TXT GlbDNS::RADIUS 700 km
 
 london 60 IN A 83.223.112.142
 london 60 IN A 83.223.112.138
@@ -35,7 +36,7 @@ iowa   60 IN A 208.68.167.133
 iowa   60 IN A 208.68.167.134
 ;iowa   60 IN A 208.68.167.132
 iowa   60 IN LOC 42 00 00.000 N 91 00 00.000 W 0.00m 0.00m 0.00m 0.00m
-;iowa   60 IN TXT GlbDNS::RADIUS 700 km
+iowa   60 IN TXT GlbDNS::RADIUS 700 km
 iowa 60 IN TXT GlbDNS::CHECK /lvscheck.html "varnish is okay"
 
 panther-apac 60 IN CNAME g1.panthercdn.com.
@@ -44,23 +45,36 @@ panther-apac 60 IN LOC 01 00 00.000 N 103 00 00.000 E 0.00m 0.00m 0.00m 0.00m
 panther-us 60 IN CNAME g1.panthercdn.com.
 panther-us 60 IN LOC 32 00 00.000 N 97 00 00.000 W 0.00m 0.00m 0.00m 0.00m
 
-test 60 IN CNAME sjc-images
-test 60 IN CNAME london
-test 60 IN CNAME iowa
-;test 60 IN CNAME panther-apac
-;test 60 IN CNAME panther-us
+test 60 IN CNAME sjc-test
+test 60 IN CNAME london-test
+test 60 IN CNAME iowa-test
 test 60 IN A 216.151.156.12
+
+iowa-test   60 IN A 208.68.167.133
+iowa-test   60 IN A 208.68.167.134
+iowa-test   60 IN LOC 42 00 00.000 N 91 00 00.000 W 0.00m 0.00m 0.00m 0.00m
+iowa-test   60 IN TXT GlbDNS::CHECK /lvscheck.html "varnish is okay"
+
+london-test 60 IN A 83.223.112.142
+london-test 60 IN A 83.223.112.138
+london-test 60 IN LOC 51 00 00.000 N 0 00 00.000  W 0.00m 0.00m 0.00m 0.00m
+london-test 60 IN TXT GlbDNS::CHECK /lvscheck.html "varnish is okay"
+
+sjc-test 60 IN A 70.42.129.196
+sjc-test 60 IN LOC 37 00 00.000 N 121 00 00.000 W 0.00m 0.00m 0.00m 0.00m
 
 search1.wikia 600 IN CNAME g1.panthercdn.com.
 ads.wikia     600 IN CNAME g1.panthercdn.com.
 origin        600 IN CNAME images.glb.wikia.net.
+
+
 
 glb.wikia 60 IN CNAME glb
 
 ; these should really not be here
 ; but we want glue
 
-ns-lon-1.wikia.net. 60 IN A 83.223.112.142
-ns-lon-2.wikia.net. 60 IN A 83.223.112.138
-ns-sjc-1.wikia.net. 60 IN A 216.224.121.143
-ns-nj-1.wikia.net.  60 IN A 76.9.5.204
+ns-lon-1.wikia.net. 3600 IN A 83.223.112.142
+ns-lon-2.wikia.net. 3600 IN A 83.223.112.138
+ns-sjc-1.wikia.net. 3600 IN A 216.224.121.143
+ns-nj-1.wikia.net.  3600 IN A 76.9.5.204
