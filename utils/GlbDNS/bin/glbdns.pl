@@ -25,7 +25,7 @@ $daemon->do_action;
 
 my $dns = GlbDNS->new($daemon);
 
-use GlbDNS::Config;
+#use GlbDNS::Config;
 use GlbDNS::Zone;
 
 
