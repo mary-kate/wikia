@@ -101,10 +101,15 @@ sub request {
 
     # XXX negative MX should probably be treated like AAAA
     if ($qtype eq 'ANY' || $qtype eq 'MX') {
-        push @$ans, @{$domain->{MX}} if($domain->{MX}); # need test
-        foreach my $mx (@{$domain->{MX}}) {
-            my $mx_host = $glbdns->get_host($mx->exchange);
-            push @$add, $self->lookup($mx->exchange, "A", $mx_host, $peerhost);
+	if($host->{MX}) {
+	    push @$ans, @{$host->{MX}};
+	    foreach my $mx (@{$host->{MX}}) {
+		my $mx_host = $glbdns->get_host($mx->exchange);
+		push @$add, $self->lookup($mx->exchange, "A", $mx_host, $peerhost);
+	    }
+	}
+        if($qtype eq 'MX' && !@$ans) {
+            return ("NOERROR", [], [@{$domain->{SOA}}], [], { aa => 1 });
         }
     }
 

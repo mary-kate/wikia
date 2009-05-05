@@ -94,6 +94,16 @@ GlbDNS::Zone->load_configs($glbdns, "t/zones/example.local.zone");
 }
 
 {
+    # amazon IP in seattle
+    # should pick london because SJC has a radius limitation
+    my ($rcode, $ans, $auth, $add, $flags) = $glbdns->request("london.example.local","IN","MX","207.171.166.252",undef);
+    print Data::Dumper::Dumper($auth);
+    is(scalar @$ans,  0);
+    is(scalar @$auth, 1);
+    is(scalar @$add,  0);
+}
+
+{
     # www.sg
     my ($rcode, $ans, $auth, $add, $flags) = $glbdns->request("geo.example.local","IN","A","160.96.178.46",undef);
     is(scalar @$ans,  2);
