@@ -62,6 +62,82 @@ class VideoPage extends Article {
 		}
 	}
 
+	public function confirmDelete( $reason ) {
+		global $wgOut, $wgUser;
+
+		wfDebug( "Article::confirmDelete\n" );
+
+		$wgOut->setSubtitle( wfMsgHtml( 'delete-backlink', $wgUser->getSkin()->makeKnownLinkObj( $this->mTitle ) ) );
+		$wgOut->setRobotPolicy( 'noindex,nofollow' );
+		$wgOut->addWikiMsg( 'confirmdeletetext' );
+
+		if( $wgUser->isAllowed( 'suppressrevision' ) ) {
+			$suppress = "<tr id=\"wpDeleteSuppressRow\" name=\"wpDeleteSuppressRow\">
+				<td></td>
+				<td class='mw-input'>" .
+				Xml::checkLabel( wfMsg( 'revdelete-suppress' ),
+						'wpSuppress', 'wpSuppress', false, array( 'tabindex' => '4' ) ) .
+				"</td>
+				</tr>";
+		} else {
+			$suppress = '';
+		}
+		$checkWatch = $wgUser->getBoolOption( 'watchdeletion' ) || $this->mTitle->userIsWatching();
+
+		$form = Xml::openElement( 'form', array( 'method' => 'post',
+					'action' => $this->mTitle->getLocalURL( 'action=delete' ), 'id' => 'deleteconfirm' ) ) .
+			Xml::openElement( 'fieldset', array( 'id' => 'mw-delete-table' ) ) .
+			Xml::tags( 'legend', null, wfMsgExt( 'delete-legend', array( 'parsemag', 'escapenoentities' ) ) ) .
+			Xml::openElement( 'table', array( 'id' => 'mw-deleteconfirm-table' ) ) .
+			"<tr id=\"wpDeleteReasonListRow\">
+			<td class='mw-label'>" .
+			Xml::label( wfMsg( 'deletecomment' ), 'wpDeleteReasonList' ) .
+			"</td>
+			<td class='mw-input'>" .
+			Xml::listDropDown( 'wpDeleteReasonList',
+					wfMsgForContent( 'deletereason-dropdown' ),
+					wfMsgForContent( 'deletereasonotherlist' ), '', 'wpReasonDropDown', 1 ) .
+			"</td>
+			</tr>
+			<tr id=\"wpDeleteReasonRow\">
+			<td class='mw-label'>" .
+			Xml::label( wfMsg( 'deleteotherreason' ), 'wpReason' ) .
+			"</td>
+			<td class='mw-input'>" .
+			Xml::input( 'wpReason', 60, $reason, array( 'type' => 'text', 'maxlength' => '255',
+						'tabindex' => '2', 'id' => 'wpReason' ) ) .
+			"</td>
+			</tr>
+			<tr>
+			<td></td>
+			<td class='mw-input'>" .
+			Xml::checkLabel( wfMsg( 'watchthis' ),
+					'wpWatch', 'wpWatch', $checkWatch, array( 'tabindex' => '3' ) ) .
+			"</td>
+			</tr>
+			$suppress
+			<tr>
+			<td></td>
+			<td class='mw-submit'>" .
+			Xml::submitButton( wfMsg( 'deletepage' ),
+					array( 'name' => 'wpConfirmB', 'id' => 'wpConfirmB', 'tabindex' => '5' ) ) .
+			"</td>
+			</tr>" .
+			Xml::closeElement( 'table' ) .
+			Xml::closeElement( 'fieldset' ) .
+			Xml::hidden( 'wpEditToken', $wgUser->editToken() ) .
+			Xml::closeElement( 'form' );
+
+		if( $wgUser->isAllowed( 'editinterface' ) ) {
+			$skin = $wgUser->getSkin();
+			$link = $skin->makeLink ( 'MediaWiki:Deletereason-dropdown', wfMsgHtml( 'delete-edit-reasonlist' ) );
+			$form .= '<p class="mw-delete-editreasons">' . $link . '</p>';
+		}
+
+		$wgOut->addHTML( $form );
+		LogEventsList::showLogExtract( $wgOut, 'delete', $this->mTitle->getPrefixedText() );
+	}
+
 	// 
 	function view() {
 		global $wgOut, $wgUser, $wgRequest;
