@@ -1,6 +1,9 @@
 bin/glbdns.pl
 Changes
 lib/GlbDNS.pm
+lib/GlbDNS/Resolver/Base.pm
+lib/GlbDNS/Resolver/ShowLocation.pm
+lib/GlbDNS/Resolver/ShowServer.pm
 lib/GlbDNS/Zone.pm
 Makefile.PL
 MANIFEST
@@ -8,6 +11,8 @@ README
 t/daemon.t
 t/geo.t
 t/GlbDNS.t
+t/show-calling-server.t
+t/show-location.t
 t/zone.t
 t/zone_dir.t
 t/zone_dir/simple.zone
