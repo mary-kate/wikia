@@ -84,6 +84,9 @@ sub request {
         if($qtype eq 'AAAA' && !@answer && !@$ans) {
             return ("NOERROR", [], [@{$domain->{SOA}}], [], { aa => 1 });
         }
+	if($answer[0]->type eq 'CNAME') {
+	    push @$ans, $answer[0];
+	}
     }
 
 
@@ -163,7 +166,7 @@ sub lookup {
                 }
                 if(@answer) {
                     @answer = shuffle(@answer);
-                    push @answer, $geo->{$server}->{source}->{$qname} if($geo->{$server}->{source}->{$qname});
+                    unshift @answer, $geo->{$server}->{source}->{$qname} if($geo->{$server}->{source}->{$qname});
                     return @answer;
                 }
             }
