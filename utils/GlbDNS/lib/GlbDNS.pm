@@ -3,7 +3,7 @@ package GlbDNS;
 use 5.008008;
 use strict;
 use warnings;
-our $VERSION = '0.29';
+our $VERSION = '0.30';
 use Net::DNS::Nameserver;
 use Data::Dumper;
 use threads;
