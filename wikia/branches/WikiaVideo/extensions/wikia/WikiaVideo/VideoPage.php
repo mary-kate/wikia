@@ -1095,6 +1095,7 @@ class VideoHistoryList {
                         . Xml::openElement( 'table', array( 'class' => 'filehistory' ) ) . "\n"
                         . '<tr>'
 			. '<th>&nbsp;</th>'
+			. ( ( $wgUser->isAllowed( 'delete' ) || $wgUser->isAllowed( 'deleterevision' ) ) ? '<th>&nbsp;</th>' : '' )
                         . '<th>' . wfMsgHtml( 'filehist-datetime' ) . '</th>'
                         . '<th>' . wfMsgHtml( 'filehist-user' ) . '</th>'
                         . "</tr>\n";
@@ -1128,7 +1129,20 @@ class VideoHistoryList {
 				$user = $row->img_user;
 				$usertext = $row->img_user_text;
 				$url = VideoPage::getUrl( $row->img_metadata );
-				$line = '<tr>' . '<td>' . wfMsgHtml( 'filehist-current' ) . '</td><td><a href="' . $url . '" class="link-video" target="_blank">' . $wgLang->timeAndDate( $row->img_timestamp, true ) . '</a></td>' . '<td>';
+
+			        $q = array();
+                                $q[] = 'action=delete';
+                                $q[] = 'oldvideo=' . urlencode( $row->img_timestamp );
+				if( $wgUser->isAllowed('delete') || $wgUser->isAllowed('deleterevision') ) {
+					$delete = '<td>' . $sk->makeKnownLinkObj( $this->mTitle,
+							wfMsgHtml( 'filehist-deleteall' ),
+							implode( '&', $q ) ) . '</td>';
+				} else {
+					$delete = '';
+				}
+
+
+				$line = '<tr>' . $delete . '<td>' . wfMsgHtml( 'filehist-current' ) . '</td><td><a href="' . $url . '" class="link-video" target="_blank">' . $wgLang->timeAndDate( $row->img_timestamp, true ) . '</a></td>' . '<td>';
 				$line .= $sk->userLink( $user, $usertext ) . " <span style='white-space: nowrap;'>" . $sk->userToolLinks( $user, $usertext ) . "</span>";
 				$line .= '</td></tr>';
 				return $line;
@@ -1160,7 +1174,16 @@ class VideoHistoryList {
                                         wfMsgHtml( 'filehist-revert' ),
                                         implode( '&', $q ) );
 
-				$s .= '<tr>' . '<td>' . $revert . '</td><td><a href="' . $url . '" class="link-video" target="_blank">' . $wgLang->timeAndDate( $row->img_timestamp, true ) . '</a></td>' . '<td>';
+                                $q[0] = 'action=delete';
+				if( $wgUser->isAllowed('delete') || $wgUser->isAllowed('deleterevision') ) {
+					$delete = '<td>' . $sk->makeKnownLinkObj( $this->mTitle,
+							wfMsgHtml( 'filehist-deleteone' ),
+							implode( '&', $q ) ) . '</td>';
+				} else {
+					$delete = '';
+				}
+
+				$s .= '<tr>' . $delete . '<td>' . $revert . '</td><td><a href="' . $url . '" class="link-video" target="_blank">' . $wgLang->timeAndDate( $row->img_timestamp, true ) . '</a></td>' . '<td>';
 				$s .= $sk->userLink( $user, $usertext ) . " <span style='white-space: nowrap;'>" . $sk->userToolLinks( $user, $usertext ) . "</span>";
 				$s .= '</td></tr>';
 			}
