@@ -27,4 +27,5 @@ $messages['pl'] = array(
 	'wikiavideo-gallery-template' => 'Ta galeria wideo znajduje się w szablonie, i nie jest edytowalna w trybie podglądu. Proszę edytować odpowiedni szablon.',
 	'wikiavideo-not-supported' => 'Ta skórka nie obsługuje wstawiania wideo do galerii z trybu widoku.',
 	'wikiavideo-pixel' => ' pikseli',
+	'wikiavideo-deleted-old' => "Usunięto video '''[$1 $1]''' w wersji z $4, $3.",
 );
