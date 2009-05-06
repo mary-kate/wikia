@@ -52,11 +52,18 @@ class CloseWikiMaintenace {
 				$this->mAction = $Wiki->city_public;
 			}
 			switch( $this->mAction ) {
-				case WikiFactory::STATUS_CLOSED:
+
 				case WikiFactory::STATUS_OPEN:
 					$this->dumpXMl();
 					$this->compressImages();
 					$this->createIndex( $wgDBname, $wgServer );
+					break;
+
+				case WikiFactory::STATUS_CLOSED:
+					$this->dumpXMl();
+					$this->compressImages();
+					$this->createIndex( $wgDBname, $wgServer );
+					$this->removeImageDirectory();
 					break;
 
 				case WikiFactory::STATUS_DELETE:
@@ -64,7 +71,7 @@ class CloseWikiMaintenace {
 					$this->compressImages();
 					$this->removeImageDirectory();
 					$this->cleanWikiFactory();
-					// $this->dropDB();
+					$this->dropDB();
 					break;
 			}
 		}
@@ -72,8 +79,8 @@ class CloseWikiMaintenace {
 	}
 
 	public function dumpXMl() {
-		global $wgDBname;
-
+		global $wgDBname, $wgDBuser, $wgDBpassword;
+		Wikia::log( __CLASS__, "$wgDBuser : $wgDBpassword" );
 		/**
 		 * @name dumpfile
 		 */
@@ -143,6 +150,7 @@ class CloseWikiMaintenace {
 		$dbw->begin();
 		$dbw->query( "DROP DATABASE `$wgDBname`");
 		$dbw->commit();
+
 		wfProfileOut( __METHOD__ );
 	}
 
@@ -202,54 +210,101 @@ class CloseWikiMaintenace {
 	 */
 	public function cleanWikiFactory() {
 
-		// so far return();
-		return;
-
 		wfProfileIn( __METHOD__ );
 
-		$dbw = wfGetDB( DB_MASTER );
-
-		$dba = wfGetDBExt( DB_MASTER );
-		$dba->selectDb( "archive" );
-
 		/**
-		 * move city_variables to archive
+		 * do only on inactive wikis
 		 */
-		$sth = $dbw->select(
-			array( WikiFactory::table( "city_variables" ) ),
-			array( "cv_city_id", "cv_variable_id", "cv_value" ),
-			array( "cv_city_id" => $this->mCityID ),
-			__METHOD__
-		);
-		$timestamp = wfTimestampNow();
-		while( $row = $dbw->fetchObject( $sth ) ) {
+		$wiki = WikiFactory::getWikiByID( $this->mCityID );
+		if( isset( $wiki->city_id ) && $wiki->city_public != 1 ) {
+
+			$timestamp = wfTimestampNow();
+			$dbw = wfGetDB( DB_MASTER );
+			$dba = wfGetDBExt( DB_MASTER );
+			$dba->selectDb( "archive" );
+
+			$dba->begin();
+
+			/**
+			 * copy city_list to archive
+			 */
 			$dba->insert(
-				"city_variables",
+				"city_list",
 				array(
-					"cv_city_id"     => $row->cv_city_id,
-					"cv_variable_id" => $row->cv_variable_id,
-					"cv_value"       => $row->cv_value,
-					"cv_timestamp"   => $timestamp
+					"city_id"                => $wiki->city_id,
+					"city_path"              => $wiki->city_path,
+					"city_dbname"            => $wiki->city_dbname,
+					"city_sitename"          => $wiki->city_sitename,
+					"city_url"               => $wiki->city_url,
+					"city_created"           => $wiki->city_created,
+					"city_founding_user"     => $wiki->city_founding_user,
+					"city_adult"             => $wiki->city_adult,
+					"city_public"            => $wiki->city_public,
+					"city_additional"        => $wiki->city_additional,
+					"city_description"       => $wiki->city_description,
+					"city_title"             => $wiki->city_title,
+					"city_founding_email"    => $wiki->city_founding_email,
+					"city_lang"              => $wiki->city_lang,
+					"city_special_config"    => $wiki->city_special_config,
+					"city_umbrella"          => $wiki->city_umbrella,
+					"city_ip"                => $wiki->city_ip,
+					"city_google_analytics"  => $wiki->city_google_analytics,
+					"city_google_search"     => $wiki->city_google_search,
+					"city_google_maps"       => $wiki->city_google_maps,
+					"city_indexed_rev"       => $wiki->city_indexed_rev,
+					"city_deleted_timestamp" => $timestamp,
+					"city_factory_timestamp" => $timestamp,
+					"city_useshared"         => $row->city_useshared,
+					"ad_cat"                 => $row->ad_cat,
 				),
 				__METHOD__
 			);
+			$dba->commit();
+
+			/**
+			 * move city_variables to archive
+			 */
+			$sth = $dbw->select(
+				array( WikiFactory::table( "city_variables" ) ),
+				array( "cv_city_id", "cv_variable_id", "cv_value" ),
+				array( "cv_city_id" => $this->mCityID ),
+				__METHOD__
+			);
+			while( $row = $dbw->fetchObject( $sth ) ) {
+				$dba->insert(
+					"city_variables",
+					array(
+						"cv_city_id"     => $row->cv_city_id,
+						"cv_variable_id" => $row->cv_variable_id,
+						"cv_value"       => $row->cv_value,
+						"cv_timestamp"   => $timestamp
+					),
+					__METHOD__
+				);
+			}
+			$dbw->freeResult( $sth );
+
+			$dbw->begin();
+			$dbw->delete(
+				WikiFactory::table( "city_variables" ),
+				array( "cv_city_id" => $this->mCityID ),
+				__METHOD__
+			);
+
+			$dbw->delete(
+				WikiFactory::table( "city_list_log" ),
+				array( "cv_city_id" => $this->mCityID ),
+				__METHOD__
+			);
+
+			$dbw->delete(
+				WikiFactory::table( "city_list" ),
+				array( "city_id" => $this->mCityID ),
+				__METHOD__
+			);
+
+			$dbw->commit();
 		}
-		$dbw->freeResult( $sth );
-
-		$dbw->begin();
-		$dbw->delete(
-			WikiFactory::table( "city_variables" ),
-			array( "cv_city_id" => $this->mCityID ),
-			__METHOD__
-		);
-
-		$dbw->delete(
-			WikiFactory::table( "city_list_log" ),
-			array( "cv_city_id" => $this->mCityID ),
-			__METHOD__
-		);
-
-		$dbw->commit();
 		wfProfileOut( __METHOD__ );
 	}
 
