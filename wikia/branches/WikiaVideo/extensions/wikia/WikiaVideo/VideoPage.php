@@ -1215,7 +1215,6 @@ class VideoHistoryList {
 
 			        $q = array();
                                 $q[] = 'action=delete';
-                                $q[] = 'oldvideo=' . urlencode( $row->img_timestamp );
 				if( $wgUser->isAllowed('delete') || $wgUser->isAllowed('deleterevision') ) {
 					$delete = '<td>' . $sk->makeKnownLinkObj( $this->mTitle,
 							wfMsgHtml( 'filehist-deleteall' ),
