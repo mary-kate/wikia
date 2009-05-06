@@ -197,7 +197,7 @@ class VideoPage extends Article {
 		$encTimestamp = $dbw->addQuotes( $dbw->timestamp() );
 		$encUserId = $dbw->addQuotes( $wgUser->getId() );
 		$encReason = $dbw->addQuotes( $this->reason );
-		$encGroup = $dbw->addQuotes( 'deleted' );
+		$encGroup = 'deleted';
 
 		// cater for older format, gather first, insert then
 
@@ -219,7 +219,7 @@ class VideoPage extends Article {
 				if( $first ) { // this is our new current revision
 					$insertCurrent = array(
 							'fa_storage_group' => $encGroup,
-							'fa_storage_key'   => "''",
+							'fa_storage_key'   => "",
 							'fa_deleted_user'      => $encUserId,
 							'fa_deleted_timestamp' => $encTimestamp,
 							'fa_deleted_reason'    => $encReason,
@@ -241,10 +241,9 @@ class VideoPage extends Article {
 							'fa_timestamp'    => $row->img_timestamp
 								);
 				} else {
-
 					$insertBatchImg = array(
 							'fa_storage_group' => $encGroup,
-							'fa_storage_key'   => "''",
+							'fa_storage_key'   => "",
 							'fa_deleted_user'      => $encUserId,
 							'fa_deleted_timestamp' => $encTimestamp,
 							'fa_deleted_reason'    => $encReason,
@@ -286,6 +285,7 @@ class VideoPage extends Article {
 			);
 
 		}
+		$encGroup = $dbw->addQuotes( 'deleted' );
 
 		$dbw->insertSelect( 'filearchive', 'oldimage',
 				array(
