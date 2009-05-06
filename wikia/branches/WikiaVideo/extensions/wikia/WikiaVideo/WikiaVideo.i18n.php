@@ -13,6 +13,7 @@ $messages['en'] = array(
 	'wikiavideo-gallery-template' => 'This video gallery is within a template, and is not editable from the view mode. Please edit the appriopriate template.',
 	'wikiavideo-not-supported' => 'This skin does not support inserting videos from the view mode into galleries.',
 	'wikiavideo-pixel' => ' pixel',
+	'wikiavideo-deleted-old' => "The version of '''[$1 $2]''' as of $4, $3 has been deleted.",
 );
 
 $messages['pl'] = array(
