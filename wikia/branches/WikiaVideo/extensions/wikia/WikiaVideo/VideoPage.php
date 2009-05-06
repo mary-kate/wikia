@@ -48,13 +48,17 @@ class VideoPage extends Article {
 	public function doDelete( $reason, $suppress = false ) {
 		global $wgOut, $wgUser, $wgRequest;
 
-		// move the history to filearchive
-		if( !$wgRequest->getVal( 'wpOldVideo' ) ) { 
+		$wgRequest->getVal( 'wpOldVideo' ) ? $oldvideo = $wgRequest->getVal( 'wpOldVideo' ) : $oldvideo = false ;
+
+		if( !$oldvideo ) { 
+			// move the history to filearchive
 			$this->doDBInserts();
 			// and clean it up
 			$this->doDBDeletes();	
+			// delete the article itself
 			parent::doDelete( $reason, $suppress );	
 
+			// clean up cache for all articles that linked to this one
 			$title = $this->mTitle;
 			if ( $title ) {
 				$update = new VideoHTMLCacheUpdate( $title, 'imagelinks' );
@@ -62,7 +66,9 @@ class VideoPage extends Article {
 			}
 
 		} else {
-			// todo delete just this one "file" revision
+			// delete just this one "file" revision, the article remains intact
+			$this->doDBInserts( $oldvideo );
+			$this->doDBDeletes( $oldvideo );				
 		}
 	}
 
@@ -190,7 +196,7 @@ class VideoPage extends Article {
 
 	}
 	
-	function doDBInserts( $oldimage = false ) {
+	function doDBInserts( $oldvideo = false ) {
 		global $wgUser;
 
 		$dbw = wfGetDB( DB_MASTER );
@@ -201,7 +207,7 @@ class VideoPage extends Article {
 
 		// cater for older format, gather first, insert then
 
-		if( !$oldimage ) {
+		if( !$oldvideo ) {
 
 			$conditions = array( 'img_name = ' . $dbw->addQuotes( self::getNameFromTitle( $this->mTitle ) ) .' OR img_name = ' . $dbw->addQuotes( $this->mTitle->getPrefixedText() ) );
 
@@ -281,7 +287,7 @@ class VideoPage extends Article {
 		} else { // single old revision to delete
 			$where = array(
 				'oi_name = ' . $dbw->addQuotes( self::getNameFromTitle( $this->mTitle ) ) .' OR oi_name = ' . $dbw->addQuotes( $this->mTitle->getPrefixedText()),
-				'oi_timestamp' => $oldimage
+				'oi_timestamp' => $oldvideo
 			);
 
 		}
