@@ -45,8 +45,9 @@ class VideoPage extends Article {
 		parent::delete();	
 	}
 
+	// wrapper for deletion - two modes, total (deletes article plus all history) or one chosen old history (file) revision
 	public function doDelete( $reason, $suppress = false ) {
-		global $wgOut, $wgUser, $wgRequest;
+		global $wgOut, $wgUser, $wgRequest, $wgLang;
 
 		$wgRequest->getVal( 'wpOldVideo' ) ? $oldvideo = $wgRequest->getVal( 'wpOldVideo' ) : $oldvideo = false ;
 
@@ -64,11 +65,30 @@ class VideoPage extends Article {
 				$update = new VideoHTMLCacheUpdate( $title, 'imagelinks' );
 				$update->doUpdate();
 			}
-
 		} else {
 			// delete just this one "file" revision, the article remains intact
 			$this->doDBInserts( $oldvideo );
 			$this->doDBDeletes( $oldvideo );				
+
+			// supply info about what we have done
+			$this->load();
+			$data = array(
+					$this->mProvider,
+					$this->mId,
+					$this->mData[0]
+				     );
+			$data = implode( ",", $data ) ;
+			$url = self::getUrl( $data );
+
+			$wgOut->addHTML( wfMsgExt(
+                                "filedelete-success-old",
+                                'parse',
+                                $this->mTitle->getText(),
+                                $wgLang->date( $oldvideo, true ),
+                                $wgLang->time( $oldvideo, true ),
+                                $url ) );
+
+			$wgOut->addReturnTo( $this->mTitle );
 		}
 	}
 
