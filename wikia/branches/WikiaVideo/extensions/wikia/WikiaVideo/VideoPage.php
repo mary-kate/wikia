@@ -151,7 +151,7 @@ class VideoPage extends Article {
 		LogEventsList::showLogExtract( $wgOut, 'delete', $this->mTitle->getPrefixedText() );
 	}
 
-	// 
+	// handles main video page viewing - two modes, for existing page and for non-existing (not created, deleted...) 
 	function view() {
 		global $wgOut, $wgUser, $wgRequest;
 
@@ -195,7 +195,9 @@ class VideoPage extends Article {
 
 
 	}
-	
+
+	// take all given video's records from image and oldimage and put into filearchive or just one single old revision
+	// performs old format correction along the way	
 	function doDBInserts( $oldvideo = false ) {
 		global $wgUser;
 
@@ -320,13 +322,26 @@ class VideoPage extends Article {
 
 	}
 
-	function doDBDeletes() {
+	// delete all given video's records from image and oldimage or just one single old revision
+	// complementary function for doDBInserts
+	function doDBDeletes( $oldvideo = false ) {
 		$dbw = wfGetDB( DB_MASTER );				
-		// clear old revs
-		$dbw->delete( 'oldimage', array( 'oi_name = ' . $dbw->addQuotes( self::getNameFromTitle( $this->mTitle ) ) .' OR oi_name = ' . $dbw->addQuotes( $this->mTitle->getPrefixedText())  ), __METHOD__ );
 
-		// clear current rev
-		$dbw->delete( 'image', array( 'img_name = ' . $dbw->addQuotes( self::getNameFromTitle( $this->mTitle ) ) .' OR img_name = ' . $dbw->addQuotes( $this->mTitle->getPrefixedText()) ), __METHOD__ );
+		if (!$oldvideo ) {
+			// clear current rev
+			$dbw->delete( 'image', array( 'img_name = ' . $dbw->addQuotes( self::getNameFromTitle( $this->mTitle ) ) .' OR img_name = ' . $dbw->addQuotes( $this->mTitle->getPrefixedText()) ), __METHOD__ );
+			// clear all old revisions
+			$where =  array( 'oi_name = ' . $dbw->addQuotes( self::getNameFromTitle( $this->mTitle ) ) .' OR oi_name = ' . $dbw->addQuotes( $this->mTitle->getPrefixedText())  );
+		} else { // clear just one given old revision
+			$where =  array(
+				'oi_name = ' . $dbw->addQuotes( self::getNameFromTitle( $this->mTitle ) ) .' OR oi_name = ' . $dbw->addQuotes( $this->mTitle->getPrefixedText()),
+				'oi_timestamp' => $oldvideo
+			);			
+		}
+		
+		// clear old revs
+		$dbw->delete( 'oldimage', $where, __METHOD__ );
+
 	}
 
 	function showTOC($metadata) {
