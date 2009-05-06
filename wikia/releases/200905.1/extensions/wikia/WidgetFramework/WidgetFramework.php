@@ -34,18 +34,19 @@ class WidgetFramework {
 		global $wgUser;
 
 		switch (get_class($wgUser->getSkin())) {
-		case "SkinMonaco":
-			$this->skinname = 'monaco';
-			break;
-		case "SkinQuartz":
-			$this->skinname = 'quartz';
-			break;
-		default:
-			# This is a generalization, but we don't really care
-			# most of the times -- widgets are only displayed on
-			# Quartz and Monaco.
-			# We do care for things like Special:WidgetDashboard
-			$this->skinname = 'monobook';
+			case "SkinMonaco":
+			case "SkinAwesome":
+				$this->skinname = 'monaco';
+				break;
+			case "SkinQuartz":
+				$this->skinname = 'quartz';
+				break;
+			default:
+				# This is a generalization, but we don't really care
+				# most of the times -- widgets are only displayed on
+				# Quartz and Monaco.
+				# We do care for things like Special:WidgetDashboard
+				$this->skinname = 'monobook';
 		}
 
 		$this->loadConfig();
@@ -74,6 +75,8 @@ class WidgetFramework {
 
 				// Turn this widget on for anons if the wiki factory variable is on
 				global $wgEnableAnswersMonacoWidget;
+				// Disabled because Pean made it slow and unusable. 
+				$wgEnableAnswersMonacoWidget = false;
 				if ($wgEnableAnswersMonacoWidget){
 					$last = array_pop($this->config[1]);
 					$this->config[1][] = array('type' => 'WidgetAnswers', 'id' => 142);
