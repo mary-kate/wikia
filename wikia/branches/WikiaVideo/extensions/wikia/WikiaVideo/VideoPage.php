@@ -81,12 +81,13 @@ class VideoPage extends Article {
 			$url = self::getUrl( $data );
 
 			$wgOut->addHTML( wfMsgExt(
-                                "filedelete-success-old",
+                                "wikiavideo-deleted-old",
                                 'parse',
+				$url,
                                 $this->mTitle->getText(),
                                 $wgLang->date( $oldvideo, true ),
-                                $wgLang->time( $oldvideo, true ),
-                                $url ) );
+                                $wgLang->time( $oldvideo, true )
+                                ) );
 
 			$wgOut->addReturnTo( $this->mTitle );
 		}
