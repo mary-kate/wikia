@@ -94,7 +94,7 @@ class VideoPage extends Article {
 	}
 
 	public function confirmDelete( $reason ) {
-		global $wgOut, $wgUser, $wgRequest;
+		global $wgOut, $wgUser, $wgRequest, $wgLang;
 
 		wfDebug( "Article::confirmDelete\n" );
 
@@ -102,7 +102,29 @@ class VideoPage extends Article {
 
 		$wgOut->setSubtitle( wfMsgHtml( 'delete-backlink', $wgUser->getSkin()->makeKnownLinkObj( $this->mTitle ) ) );
 		$wgOut->setRobotPolicy( 'noindex,nofollow' );
-		$wgOut->addWikiMsg( 'confirmdeletetext' );
+		if( '' == $oldvideo ) {
+			$wgOut->addWikiMsg( 'confirmdeletetext' );
+		} else {
+			// supply info about what we have done
+			$this->load();
+			$data = array(
+					$this->mProvider,
+					$this->mId,
+					$this->mData[0]
+				     );
+			$data = implode( ",", $data ) ;
+			$url = self::getUrl( $data );
+
+			$wgOut->addHTML( wfMsgExt(
+                                "wikiavideo-intro-old",
+                                'parse',
+                                $url,
+                                $wgLang->date( $oldvideo, true ),
+                                $wgLang->time( $oldvideo, true ),
+				$url, // todo one should be old, one should be new
+				$this->mTitle->getText()				
+                                ) );			
+		}
 
 		if( $wgUser->isAllowed( 'suppressrevision' ) ) {
 			$suppress = "<tr id=\"wpDeleteSuppressRow\" name=\"wpDeleteSuppressRow\">
