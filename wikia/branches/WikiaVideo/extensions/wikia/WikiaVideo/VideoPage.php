@@ -190,7 +190,7 @@ class VideoPage extends Article {
 
 	}
 	
-	function doDBInserts() {
+	function doDBInserts( $oldimage = false ) {
 		global $wgUser;
 
 		$dbw = wfGetDB( DB_MASTER );
@@ -200,85 +200,93 @@ class VideoPage extends Article {
 		$encGroup = $dbw->addQuotes( 'deleted' );
 
 		// cater for older format, gather first, insert then
-		$where = 'img_name = ' . $dbw->addQuotes( self::getNameFromTitle( $this->mTitle ) ) .' OR img_name = ' . $dbw->addQuotes( $this->mTitle->getPrefixedText());
-			
-		$conditions = array( 'img_name = ' . $dbw->addQuotes( self::getNameFromTitle( $this->mTitle ) ) .' OR img_name = ' . $dbw->addQuotes( $this->mTitle->getPrefixedText() ) );
 
-		$result = $dbw->select( 'image', '*',
-				$conditions,
-				__METHOD__,
-				array( 'ORDER BY' => 'img_timestamp DESC' )
-				);
+		if( !$oldimage ) {
 
-		$insertBatch = array();
-		$archiveName = '';
-		$first = true;
+			$conditions = array( 'img_name = ' . $dbw->addQuotes( self::getNameFromTitle( $this->mTitle ) ) .' OR img_name = ' . $dbw->addQuotes( $this->mTitle->getPrefixedText() ) );
 
-		while( $row = $dbw->fetchObject( $result ) ) {
-                	if( $first ) { // this is our new current revision
-				$insertCurrent = array(
-					'fa_storage_group' => $encGroup,
-					'fa_storage_key'   => "''",
-					'fa_deleted_user'      => $encUserId,
-					'fa_deleted_timestamp' => $encTimestamp,
-					'fa_deleted_reason'    => $encReason,
-					'fa_deleted'               => 0, //todo check
-
-					'fa_name'         => self::getNameFromTitle( $this->mTitle ),
-					'fa_archive_name' => 'NULL',
-					'fa_size'         => $row->img_size,
-					'fa_width'        => $row->img_width,
-					'fa_height'       => $row->img_height,
-					'fa_metadata'     => $row->img_metadata,
-					'fa_bits'         => $row->img_bits,
-					'fa_media_type'   => $row->img_media_type,
-					'fa_major_mime'   => $row->img_major_mime,
-					'fa_minor_mime'   => $row->img_minor_mime,
-					'fa_description'  => $row->img_description,
-					'fa_user'         => $row->img_user,
-					'fa_user_text'    => $row->img_user_text,
-					'fa_timestamp'    => $row->img_timestamp
+			$result = $dbw->select( 'image', '*',
+					$conditions,
+					__METHOD__,
+					array( 'ORDER BY' => 'img_timestamp DESC' )
 					);
-			} else {
-				
-				$insertBatchImg = array(
-					'fa_storage_group' => $encGroup,
-					'fa_storage_key'   => "''",
-					'fa_deleted_user'      => $encUserId,
-					'fa_deleted_timestamp' => $encTimestamp,
-					'fa_deleted_reason'    => $encReason,
-					'fa_deleted'               => 0, //todo check
 
-					'fa_name'         => self::getNameFromTitle( $this->mTitle ),
-					'fa_archive_name' => $archiveName, // todo check
-					'fa_size'         => $row->img_size,
-					'fa_width'        => $row->img_width,
-					'fa_height'       => $row->img_height,
-					'fa_metadata'     => $row->img_metadata,
-					'fa_bits'         => $row->img_bits,
-					'fa_media_type'   => $row->img_media_type,
-					'fa_major_mime'   => $row->img_major_mime,
-					'fa_minor_mime'   => $row->img_minor_mime,
-					'fa_description'  => $row->img_description,
-					'fa_user'         => $row->img_user,
-					'fa_user_text'    => $row->img_user_text,
-					'fa_timestamp'    => $row->img_timestamp
-					);
+			$insertBatch = array();
+			$archiveName = '';
+			$first = true;
+
+			while( $row = $dbw->fetchObject( $result ) ) {
+				if( $first ) { // this is our new current revision
+					$insertCurrent = array(
+							'fa_storage_group' => $encGroup,
+							'fa_storage_key'   => "''",
+							'fa_deleted_user'      => $encUserId,
+							'fa_deleted_timestamp' => $encTimestamp,
+							'fa_deleted_reason'    => $encReason,
+							'fa_deleted'               => 0, //todo check
+
+							'fa_name'         => self::getNameFromTitle( $this->mTitle ),
+							'fa_archive_name' => 'NULL',
+							'fa_size'         => $row->img_size,
+							'fa_width'        => $row->img_width,
+							'fa_height'       => $row->img_height,
+							'fa_metadata'     => $row->img_metadata,
+							'fa_bits'         => $row->img_bits,
+							'fa_media_type'   => $row->img_media_type,
+							'fa_major_mime'   => $row->img_major_mime,
+							'fa_minor_mime'   => $row->img_minor_mime,
+							'fa_description'  => $row->img_description,
+							'fa_user'         => $row->img_user,
+							'fa_user_text'    => $row->img_user_text,
+							'fa_timestamp'    => $row->img_timestamp
+								);
+				} else {
+
+					$insertBatchImg = array(
+							'fa_storage_group' => $encGroup,
+							'fa_storage_key'   => "''",
+							'fa_deleted_user'      => $encUserId,
+							'fa_deleted_timestamp' => $encTimestamp,
+							'fa_deleted_reason'    => $encReason,
+							'fa_deleted'               => 0, //todo check
+
+							'fa_name'         => self::getNameFromTitle( $this->mTitle ),
+							'fa_archive_name' => $archiveName, // todo check
+							'fa_size'         => $row->img_size,
+							'fa_width'        => $row->img_width,
+							'fa_height'       => $row->img_height,
+							'fa_metadata'     => $row->img_metadata,
+							'fa_bits'         => $row->img_bits,
+							'fa_media_type'   => $row->img_media_type,
+							'fa_major_mime'   => $row->img_major_mime,
+							'fa_minor_mime'   => $row->img_minor_mime,
+							'fa_description'  => $row->img_description,
+							'fa_user'         => $row->img_user,
+							'fa_user_text'    => $row->img_user_text,
+							'fa_timestamp'    => $row->img_timestamp
+								);
+				}
+				$deleteIds[] = $row->fa_id;
+				$first = false;
 			}
-			$deleteIds[] = $row->fa_id;
-			$first = false;
+
+			if ( $insertCurrent ) {
+				$dbw->insert( 'filearchive', $insertCurrent, __METHOD__ );
+			}
+			if ( $insertBatchImg ) {
+				$dbw->insert( 'filearchive', $insertBatchImg, __METHOD__ );
+			}
+
+			$where = array( 'oi_name = ' . $dbw->addQuotes( self::getNameFromTitle( $this->mTitle ) ) .' OR oi_name = ' . $dbw->addQuotes( $this->mTitle->getPrefixedText()) );
+
+		} else { // single old revision to delete
+			$where = array(
+				'oi_name = ' . $dbw->addQuotes( self::getNameFromTitle( $this->mTitle ) ) .' OR oi_name = ' . $dbw->addQuotes( $this->mTitle->getPrefixedText()),
+				'oi_timestamp' => $oldimage
+			);
+
 		}
 
-		$where = 'oi_name = ' . $dbw->addQuotes( self::getNameFromTitle( $this->mTitle ) ) .' OR oi_name = ' . $dbw->addQuotes( $this->mTitle->getPrefixedText());
-	
-		if ( $insertCurrent ) {
-                        $dbw->insert( 'filearchive', $insertCurrent, __METHOD__ );
-                }
-                if ( $insertBatchImg ) {
-                        $dbw->insert( 'filearchive', $insertBatchImg, __METHOD__ );
-                }
-
-		$where = array( 'oi_name' => self::getNameFromTitle( $this->mTitle ) );
 		$dbw->insertSelect( 'filearchive', 'oldimage',
 				array(
 					'fa_storage_group' => $encGroup,
