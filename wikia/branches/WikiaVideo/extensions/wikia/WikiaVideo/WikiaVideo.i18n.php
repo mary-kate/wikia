@@ -14,6 +14,7 @@ $messages['en'] = array(
 	'wikiavideo-not-supported' => 'This skin does not support inserting videos from the view mode into galleries.',
 	'wikiavideo-pixel' => ' pixel',
 	'wikiavideo-deleted-old' => "The version of '''[$1 $2]''' as of $4, $3 has been deleted.",
+	'wikiavideo-intro-old' => "You are deleting the version of '''[$1 $5]''' as of [$4 $3, $2].",
 );
 
 $messages['pl'] = array(
@@ -28,4 +29,5 @@ $messages['pl'] = array(
 	'wikiavideo-not-supported' => 'Ta skórka nie obsługuje wstawiania wideo do galerii z trybu widoku.',
 	'wikiavideo-pixel' => ' pikseli',
 	'wikiavideo-deleted-old' => "Usunięto video '''[$1 $1]''' w wersji z $4, $3.",
+	'wikiavideo-intro-old' => "Usuwasz wersję '''[$1 $5]''' z [$4 $3, $2].",
 );
