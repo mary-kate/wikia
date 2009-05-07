@@ -121,7 +121,7 @@ class VideoPage extends Article {
                                 $url,
                                 $wgLang->date( $oldvideo, true ),
                                 $wgLang->time( $oldvideo, true ),
-				$url, // todo one should be old, one should be new
+				self::getOldUrl( $this->mTitle, $oldvideo ),
 				$this->mTitle->getText()				
                                 ) );			
 		}
@@ -231,11 +231,6 @@ class VideoPage extends Article {
 
 	function doCleanup () {
 		global $wgUser;
-
-
-
-
-
 
 	}
 
@@ -965,6 +960,46 @@ EOD;
 		$this->doEdit( $saved_text, $desc );
 		$dbw->immediateCommit();
 	}
+
+	// load old video
+	public static function getOldUrl( $title, $oldvideo ) {
+		$fname = 'VideoPage' . '::' . __FUNCTION__;
+		$dbr = wfGetDB( DB_SLAVE );
+		$row = $dbr->selectRow(
+			'oldimage',
+			'oi_metadata',
+			array(
+				'oi_name = ' . $dbr->addQuotes( self::getNameFromTitle( $title ) ) .' OR oi_name = ' . $dbr->addQuotes( $title->getPrefixedText() ),
+				'oi_timestamp' => $oldvideo
+			),
+			$fname
+		);
+		if ($row) {
+			$metadata = split( ",", $row->oi_metadata );
+			if ( is_array( $metadata ) ) {
+				$provider = $metadata[0];
+				$id = $metadata[1];
+				array_splice( $metadata, 0, 2 );
+				if ( count( $metadata ) > 0 ) {
+					foreach( $metadata as $data  ) {
+						$tdata[] = $data;
+					}
+				}
+			}
+		}
+
+		$ldata = array(
+				$provider,
+				$id,
+				$tdata[0]
+			     );
+
+
+		$ldata = implode( ",", $ldata ) ;
+		$url = self::getUrl( $ldata );
+		return $url;
+	}
+
 
 	public function load() {
 		$fname = get_class( $this ) . '::' . __FUNCTION__;
