@@ -1,8 +1,12 @@
-<b class="xtop"><b class="xb1"></b><b class="xb2"></b><b class="xb3"></b><b class="xb4"></b></b><div class="r_boxContent">
+<?php
+	global $wgExtensionsPath, $wgStyleVersion;
+?>
+<style type="text/css">
+	@import url('<?= $wgExtensionsPath ?>/wikia/ProblemReports/css/ProblemReports.css?<?= $wgStyleVersion ?>');
+</style>
+<div id="reportProblemForm" title="<?= htmlspecialchars(wfMsg('reportproblem')) ?> | <?= wfMsg( 'readonly' ) ?>">
 
 <form name="reportProblem" id="reportProblem">
-
-<div class="boxHeader color1"><?= htmlspecialchars(wfMsg('reportproblem')) ?> | <?= wfMsg( 'readonly' ) ?></div>
 
 <div class="reportProblemText">
 <h4><?= wfMsg('pr_read_only') ?></h4>
@@ -12,4 +16,5 @@
 
 </form>
 
-<div style="clear: both"></div></div><b class="xbottom"><b class="xb4"></b><b class="xb3"></b><b class="xb2"></b><b class="xb1"></b></b>
+<div style="clear: both"></div></div>
+</div>
