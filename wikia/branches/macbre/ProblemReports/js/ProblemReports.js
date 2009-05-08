@@ -2,9 +2,6 @@
 var ProblemReportsDialog = function () {};
 
 ProblemReportsDialog.prototype = {
-
-	panel: false,
-	form: false,
 	blocked: false,
 
 	// open pop-up
