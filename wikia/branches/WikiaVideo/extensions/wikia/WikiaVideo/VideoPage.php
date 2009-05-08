@@ -81,13 +81,20 @@ class VideoPage extends Article {
 			$url = self::getUrl( $data );
 
 			$wgOut->addHTML( wfMsgExt(
-                                "wikiavideo-deleted-old",
-                                'parse',
-				$url,
-                                $this->mTitle->getText(),
-                                $wgLang->date( $oldvideo, true ),
-                                $wgLang->time( $oldvideo, true )
-                                ) );
+						"wikiavideo-deleted-old",
+						'parse',
+						$url,
+						$this->mTitle->getText(),
+						$wgLang->date( $oldvideo, true ),
+						$wgLang->time( $oldvideo, true )
+						) );
+
+			$log = new LogPage( 'delete' );
+			$logComment = wfMsgForContent( 'deletedrevision', $oldvideo );
+			if( trim( $reason ) != '' )
+				$logComment .= ": {$reason}";
+			$log->addEntry( 'delete', $this->mTitle, $logComment );
+
 			$this->doPurge();
 			$wgOut->addReturnTo( $this->mTitle );
 		}
