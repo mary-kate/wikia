@@ -88,7 +88,7 @@ class VideoPage extends Article {
                                 $wgLang->date( $oldvideo, true ),
                                 $wgLang->time( $oldvideo, true )
                                 ) );
-
+			$this->doPurge();
 			$wgOut->addReturnTo( $this->mTitle );
 		}
 	}
