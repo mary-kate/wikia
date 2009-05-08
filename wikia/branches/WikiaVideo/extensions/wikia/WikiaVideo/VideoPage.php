@@ -96,7 +96,7 @@ class VideoPage extends Article {
 	public function confirmDelete( $reason ) {
 		global $wgOut, $wgUser, $wgRequest, $wgLang;
 
-		wfDebug( "Article::confirmDelete\n" );
+		wfDebug( "VideoPage::confirmDelete\n" );
 
 		$wgRequest->getVal( 'oldvideo' ) ? $oldvideo = $wgRequest->getVal( 'oldvideo' ) : $oldvideo = '';
 
@@ -248,10 +248,10 @@ class VideoPage extends Article {
 		);
 		
 		if(!$row) {
-			return; //no need to run 
+			return; // no need to run 
 		}			
 
-		// todo  move anything from image and oldimage into filearchive, because it wasn't moved before
+		// move anything from image and oldimage into filearchive, because it wasn't moved before
 		$this->doDBInserts();
 		$this->doDBDeletes();	
 	}
@@ -362,7 +362,7 @@ class VideoPage extends Article {
 					'fa_deleted_user'      => $encUserId,
 					'fa_deleted_timestamp' => $encTimestamp,
 					'fa_deleted_reason'    => $encReason,
-					'fa_name'         => 'oi_name',
+					'fa_name'         => self::getNameFromTitle( $this->mTitle ),
 					'fa_archive_name' => 'oi_archive_name',
 					'fa_size'         => 'oi_size',
 					'fa_width'        => 'oi_width',
