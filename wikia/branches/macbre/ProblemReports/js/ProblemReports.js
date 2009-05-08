@@ -45,7 +45,7 @@ ProblemReportsDialog.prototype = {
 		var browserInfo = this.getBrowserInfo();
 
 		// get problem reports form
-		$.get(wgScript + '?action=ajax&rs=wfProblemReportsAjaxGetDialog&title=' + encodeURIComponent(args.title) + '&uselang='+ wgUserLanguage + '&cb=' + wgMWrevId + '-' + wgStyleVersion, function(html) {
+		$.get(wgScript + '?action=ajax&rs=wfProblemReportsAjaxGetDialog&title=' + encodeURIComponent(args.title) + '&uselang='+ wgUserLanguage, function(html) {
 			$("#positioned_elements").append(html);
 			$('#reportProblemForm').makeModal({width: 580});
 			$('#pr_browser').html(browserInfo);
