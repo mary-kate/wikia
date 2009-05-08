@@ -7,38 +7,8 @@ ProblemReportsDialog.prototype = {
 	form: false,
 	blocked: false,
 
-	// add onlick event for 'report a problem' action tabs
-	/*
-	init: function(links) {
-		YAHOO.util.Event.addListener(links, "click", this.onClick, {title: wgPageName, obj: this});
-	},
-	*/
-
-	// onClick event handler for lazy loading approach
-	fire: function() {
-		this.onClick(false, {title: wgPageName, obj: this});
-	},
-
-	// keep "elem" value length below 512 (+ 1)
-	checkTextareaLength: function(elem) {
-		len = elem.textLength;
-
-		if ( (len > 512) && (false == this.blocked) ) {			
-			this.blocked = true;
-			// disable the submit button & show the alert to tell the user what went wrong...
-			$('#pr_summary'). addClass('errorField');
-			$('#pr_submit').attr('disabled', true);
-			this.infobox( pr_msg_exchead, pr_msg_exceeded, "OK", function() {this.hide()});
-		}
-		else if ((len <= 512) &&  (this.blocked)) {
-			$('#pr_summary').removeClass('errorField');
-			$('#pr_submit').attr('disabled', false);
-			this.blocked = false;
-		}
-	},
-
-	// callback for click on "report a problem" tab / link 
-	onClick: function(type,args) {
+	// open pop-up
+	open: function() {
 		// scroll to the top of the page
 		window.scrollTo(0,0);
 
@@ -46,7 +16,7 @@ ProblemReportsDialog.prototype = {
 
 		// get problem reports form
 		$().getModal(
-			wgScript + '?action=ajax&rs=wfProblemReportsAjaxGetDialog&title=' + encodeURIComponent(args.title),
+			wgScript + '?action=ajax&rs=wfProblemReportsAjaxGetDialog&title=' + encodeURIComponent(wgPageName),
 			'#reportProblemForm', 
 			{
 				width: 580,
@@ -119,6 +89,24 @@ ProblemReportsDialog.prototype = {
 
 		// show message from JSON
 		wikiaProblemReportsDialog.infobox(data.caption, data.msg, "OK", function() {this.hide()});
+	},
+
+	// keep "elem" value length below 512 (+ 1)
+	checkTextareaLength: function(elem) {
+		len = elem.textLength;
+
+		if ( (len > 512) && (false == this.blocked) ) {			
+			this.blocked = true;
+			// disable the submit button & show the alert to tell the user what went wrong...
+			$('#pr_summary'). addClass('errorField');
+			$('#pr_submit').attr('disabled', true);
+			this.infobox( pr_msg_exchead, pr_msg_exceeded, "OK", function() {this.hide()});
+		}
+		else if ((len <= 512) &&  (this.blocked)) {
+			$('#pr_summary').removeClass('errorField');
+			$('#pr_submit').attr('disabled', false);
+			this.blocked = false;
+		}
 	},
 
 	// get user data (browser, skin, theme, etc)

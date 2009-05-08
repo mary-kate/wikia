@@ -10,12 +10,12 @@ $(function() {
 			$.getScript(wgExtensionsPath + '/wikia/ProblemReports/js/ProblemReports.js?' + wgStyleVersion, function() {
 				$().log('ProblemReports: JS loaded');
 				wikiaProblemReportsDialog = new ProblemReportsDialog();
-				wikiaProblemReportsDialog.fire();
+				wikiaProblemReportsDialog.open();
 			});
 		}
 		else {
 			// already loaded, show pop-up
-			wikiaProblemReportsDialog.fire();
+			wikiaProblemReportsDialog.open();
 		}
 	});
 });
