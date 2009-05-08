@@ -864,6 +864,7 @@ function wfReportTime() {
 	global $wgReportTimeViaStomp;
 	if( $wgReportTimeViaStomp ) {
 		global $wgStompServer, $wgStompUser, $wgStompPassword;
+		global $pcache_info;
 		$stomp = new Stomp( $wgStompServer );
 		$stomp->connect( $wgStompUser, $wgStompPassword );
 		$stomp->sync = false;
@@ -871,6 +872,7 @@ function wfReportTime() {
 			Wikia::json_encode( array( 
 				'real' => $elapsed, 
 				'cpu' => $elapsedcpu,
+				'pcache_info' => $pcache_info,
 				'url' => 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'],
 			) ),
 			array( 'exchange' => 'amq.topic', 'bytes_message' => 1 )
