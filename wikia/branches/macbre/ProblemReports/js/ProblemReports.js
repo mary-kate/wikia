@@ -46,7 +46,7 @@ ProblemReportsDialog.prototype = {
 
 		// get problem reports form
 		$().getModal(
-			wgScript + '?action=ajax&rs=wfProblemReportsAjaxGetDialog&title=' + encodeURIComponent(args.title) + '&uselang='+ wgUserLanguage,
+			wgScript + '?action=ajax&rs=wfProblemReportsAjaxGetDialog&title=' + encodeURIComponent(args.title),
 			'#reportProblemForm', 
 			{
 				width: 580,
