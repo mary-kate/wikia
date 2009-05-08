@@ -239,9 +239,10 @@ class VideoPage extends Article {
 		// if we had at least one revision in image, that means we have to do this
 		// remember, this was deleted
 		$row = $dbr->selectRow(
-			'filearchive',
+			'image',
+			'img_name',
 			array(
-				'img_name = ' . $dbr->addQuotes( self::getNameFromTitle( $title ) ) .' OR img_name = ' . $dbr->addQuotes( $title->getPrefixedText() ),
+				'img_name = ' . $dbr->addQuotes( self::getNameFromTitle( $this->mTitle ) ) .' OR img_name = ' . $dbr->addQuotes( $this->mTitle->getPrefixedText() ),
 			),
 			$fname
 		);
