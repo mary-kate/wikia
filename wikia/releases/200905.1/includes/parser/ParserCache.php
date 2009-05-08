@@ -54,6 +54,7 @@ class ParserCache {
 
 		wfDebug( "Trying parser cache $key\n" );
 		$value = $this->mMemc->get( $key );
+global $pcache_info;
 		if ( is_object( $value ) ) {
 			wfDebug( "Found.\n" );
 			# Delete if article has changed since the cache was made
@@ -64,9 +65,11 @@ class ParserCache {
 				if ( !$canCache ) {
 					wfIncrStats( "pcache_miss_invalid" );
 					wfDebug( "Invalid cached redirect, touched $touched, epoch $wgCacheEpoch, cached $cacheTime\n" );
+$pcache_info = "pcache_miss_invalid";
 				} else {
 					wfIncrStats( "pcache_miss_expired" );
 					wfDebug( "Key expired, touched $touched, epoch $wgCacheEpoch, cached $cacheTime\n" );
+$pcache_info = "pcache_miss_expired";
 				}
 				$this->mMemc->delete( $key );
 				$value = false;
@@ -75,11 +78,13 @@ class ParserCache {
 					$article->mTimestamp = $value->mTimestamp;
 				}
 				wfIncrStats( "pcache_hit" );
+$pcache_info = "pcache_hit";
 			}
 		} else {
 			wfDebug( "Parser cache miss.\n" );
 			wfIncrStats( "pcache_miss_absent" );
 			$value = false;
+$pcache_info = "pcache_miss_absent";
 		}
 
 		wfProfileOut( $fname );
