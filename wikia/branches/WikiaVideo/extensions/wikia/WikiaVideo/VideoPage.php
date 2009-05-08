@@ -231,7 +231,28 @@ class VideoPage extends Article {
 
 	function doCleanup () {
 		global $wgUser;
+		// when we have a non-existing article (deleted) and upload a new video, perform cleanup for earlier image and oldimage versions
+		// if necessary
+		$fname = get_class( $this ) . '::' . __FUNCTION__;
 
+		$dbr = wfGetDB( DB_SLAVE );
+		// if we had at least one revision in image, that means we have to do this
+		// remember, this was deleted
+		$row = $dbr->selectRow(
+			'filearchive',
+			array(
+				'img_name = ' . $dbr->addQuotes( self::getNameFromTitle( $title ) ) .' OR img_name = ' . $dbr->addQuotes( $title->getPrefixedText() ),
+			),
+			$fname
+		);
+		
+		if(!$row) {
+			return; //no need to run 
+		}			
+
+		// todo  move anything from image and oldimage into filearchive, because it wasn't moved before
+		$this->doDBInserts();
+		$this->doDBDeletes();	
 	}
 
 	// take all given video's records from image and oldimage and put into filearchive or just one single old revision
@@ -894,6 +915,10 @@ EOD;
 			default:
 				$metadata = '';
 				break;
+		}
+
+		if( $this->mTitle->isDeleted() ) {
+			$this->doCleanup(); // if the article was previously deleted, and we're inserting a new one
 		}
 
                 $dbw->insert( 'image',
