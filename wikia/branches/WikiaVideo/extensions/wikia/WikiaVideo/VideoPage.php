@@ -362,7 +362,7 @@ class VideoPage extends Article {
 					'fa_deleted_user'      => $encUserId,
 					'fa_deleted_timestamp' => $encTimestamp,
 					'fa_deleted_reason'    => $encReason,
-					'fa_name'         => self::getNameFromTitle( $this->mTitle ),
+					'fa_name'         => $dbw->addQuotes( self::getNameFromTitle( $this->mTitle ) ),
 					'fa_archive_name' => 'oi_archive_name',
 					'fa_size'         => 'oi_size',
 					'fa_width'        => 'oi_width',
