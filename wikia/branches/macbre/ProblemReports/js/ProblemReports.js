@@ -52,6 +52,9 @@ ProblemReportsDialog.prototype = {
 				width: 580,
 				callback: function() {
 					$('#pr_browser').html(browserInfo);
+					$('#pr_cancel').click(function() {
+						$('.modalWrapper').closeModal();
+					});
 				}
 			});
 	},
