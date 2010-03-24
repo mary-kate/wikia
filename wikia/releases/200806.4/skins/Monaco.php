@@ -89,7 +89,7 @@ class SkinMonaco extends SkinTemplate {
 			$data_array['relatedcommunities'] = $this->getRelatedCommunitiesLinks();
 			wfProfileOut(__METHOD__ . ' - DATA ARRAY');
 			if($cache) {
-				$parserMemc->set($key, $data_array, 4 * 60 * 60 /* 6 hours */);
+				$parserMemc->set($key, $data_array, 4 * 60 * 60 /* 4 hours */);
 			}
 		}
 
@@ -419,7 +419,10 @@ class SkinMonaco extends SkinTemplate {
 			}
 			$articles = $this->getMostVisitedArticlesForCategory($name);
 			if(count($articles) == 0) {
-				$node = null;
+                                $node ['magic'] = true ;
+                                $node['href'] = Title::makeTitle(NS_CATEGORY, $name)->getLocalURL();
+                                $node ['text'] = $name ;
+                                $node['text'] = str_replace('_', ' ', $node['text']);
 			} else {
 				$node['magic'] = true;
 				$node['href'] = Title::makeTitle(NS_CATEGORY, $name)->getLocalURL();
