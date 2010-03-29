@@ -19,7 +19,8 @@ function wfSpecialUserRegister(){
 			$register =  Title::makeTitle( NS_SPECIAL  , "Userlogin"  );
 			$wgOut->redirect( $register->getFullURL( "type=signup" ) );
 	
-			$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"/extensions/wikia/LoginReg/LoginReg.css?{$wgStyleVersion}\"/>\n");
+			$wgOut->addScript("<link rel='stylesheet' type='text/css' href=\"/extensions/wikia/LoginReg/LoginReg.css?{$wgStyleVersion}\"/>\n");\
+			$wgOut->addScript("<script type=\"text/javascript\" src=\"/extensions/wikia/onejstorule.js\"></script>\n");
 			$wgOut->addScript("<script type=\"text/javascript\" src=\"/extensions/wikia/LoginReg/UserRegister.js\"></script>\n");
 			
 			if( session_id() == '' ) {
