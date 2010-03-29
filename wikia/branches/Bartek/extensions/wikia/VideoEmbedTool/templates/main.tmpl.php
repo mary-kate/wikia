@@ -14,14 +14,6 @@
 <?php
 	global $wgStylePath, $wgUser, $wgScriptPath, $wgExtensionsPath;
 ?>
-	<tr id="VideoEmbedSearch">
-		<td colspan="2">
-			<input onkeydown="VET_trySendQuery(event);" type="text" id="VideoQuery" />
-                        <input onclick="VET_trySendQuery(event);" type="button" id="VideoQuerySearch" value="<?= wfMsg('vet-find-btn') ?>" />
-		</td>		
-		<td>
-<a href="http://www.metacafe.com" class="image" title="Metacafe" target="_blank"><img alt="" src="<?= $wgExtensionsPath; ?>/wikia/VideoEmbedTool/images/metacafe.gif" height="17" width="60" border="0"></a>				
-		</td>
 	<tr id="VideoEmbedAdd">
 		<th><h1><?= wfMsg('vet-upload') ?></h1></th>
 
@@ -56,7 +48,6 @@
 <a href="http://en.sevenload.com" class="image" title="Sevenload" target="_blank"><img alt="" src="<?= $wgExtensionsPath; ?>/wikia/VideoEmbedTool/images/sevenload.jpg" height="11" width="60" border="0"></a><br/>
 <a href="http://www.vimeo.com" class="image" title="Vimeo" target="_blank"><img alt="" src="<?= $wgExtensionsPath; ?>/wikia/VideoEmbedTool/images/vimeo.png" height="36" width="60" border="0"></a>
 <a href="http://www.youtube.com" class="image" title="YouTube" target="_blank"><img alt="" src="<?= $wgExtensionsPath; ?>/wikia/VideoEmbedTool/images/youtube.jpg" height="42" width="60" border="0"></a>
-
 
 </td>
 </tr>
