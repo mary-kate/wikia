@@ -440,14 +440,14 @@ class EmailNotification {
 		# named variables when composing your notification emails while
 		# simply editing the Meta pages
 
-		$subject = wfMsgForContent( 'enotif_subject_' . strtolower($this->action) );
+		$subject = wfMsgExt( 'enotif_subject_' . strtolower($this->action), array( 'language' => $langCode ) );
 		if(wfEmptyMsg( 'enotif_subject_' . strtolower($this->action), $subject )) {
-			$subject = wfMsgForContent( 'enotif_subject' );
+			$subject = wfMsgExt( 'enotif_subject', array( 'language' => $langCode ) );
 		}
 
-		$body    = wfMsgForContent( 'enotif_body_' . strtolower($this->action) );
+		$body    = wfMsgExt( 'enotif_body_' . strtolower($this->action), array( 'language' => $langCode ) );
 		if(wfEmptyMsg( 'enotif_body_' . strtolower($this->action), $body )) {
-			$body   = wfMsgForContent( 'enotif_body' );
+			$body   = wfMsgExt( 'enotif_body', array( 'language' => $langCode ) );
 		}
 		$from    = ''; /* fail safe */
 		$replyto = ''; /* fail safe */
@@ -458,14 +458,14 @@ class EmailNotification {
 		# However, in the case of a new page which is already watched, we have no previous version to compare
 		if( $this->oldid ) {
 			$difflink = $this->title->getFullUrl( 'diff=0&oldid=' . $this->oldid );
-			$keys['$NEWPAGE'] = wfMsgForContent( 'enotif_lastvisited', $difflink );
+			$keys['$NEWPAGE'] = wfMsgExt( 'enotif_lastvisited', $difflink, array( 'language' => $langCode ) );
 			$keys['$OLDID']   = $this->oldid;
-			$keys['$CHANGEDORCREATED'] = wfMsgForContent( 'changed' );
+			$keys['$CHANGEDORCREATED'] = wfMsgExt( 'changed', array( 'language' => $langCode ) );
 		} else {
-			$keys['$NEWPAGE'] = wfMsgForContent( 'enotif_newpagetext' );
+			$keys['$NEWPAGE'] = wfMsgExt( 'enotif_newpagetext', array( 'language' => $langCode )  );
 			# clear $OLDID placeholder in the message template
 			$keys['$OLDID']   = '';
-			$keys['$CHANGEDORCREATED'] = wfMsgForContent( 'created' );
+			$keys['$CHANGEDORCREATED'] = wfMsgExt( 'created', array( 'language' => $langCode ) );
 		}
 
 		if ($wgEnotifImpersonal && $this->oldid)
@@ -514,7 +514,7 @@ class EmailNotification {
 			$utext = wfMsgForContent('enotif_anon_editor', $name);
 			$subject = str_replace('$PAGEEDITOR', $utext, $subject);
 			$keys['$PAGEEDITOR']       = $utext;
-			$keys['$PAGEEDITOR_EMAIL'] = wfMsgForContent( 'noemailtitle' );
+			$keys['$PAGEEDITOR_EMAIL'] = wfMsgExt( 'noemailtitle', array( 'language' => $langCode ) );
 		} else {
 			$subject = str_replace('$PAGEEDITOR', $name, $subject);
 			$keys['$PAGEEDITOR']          = $name;
